@@ -39,11 +39,13 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types, socket, cPickle, copy, glob
+    subprocess, re, types, socket, cPickle, copy, glob, tempfile, Cookie
 
 from collections import defaultdict, namedtuple
 from os.path import *
 from distutils import spawn
+
+defaultDb = "hg19"
 
 # the mysqldb module has to be installed with one of these commands:
 # - many common linuxes and OSX: pip install mysqldb
@@ -816,13 +818,13 @@ def getCladeAssemblyDb(clade, org, db):
 
     if db is not None and clade is None and org is None:
         dbToClade = dict()
-        # search to the right org for this db
+        # search for the right org for this db
         for o, dbList in orgInfo["orgToDbs"].items():
             for orgDb, desc in dbList:
                 if orgDb==db:
                     org = o
                     break
-        # search to the right clade for this org
+        # search for the right clade for this org
         for c, orgList in orgInfo["cladeToOrgs"].items():
             for o, _ in orgList:
                 if o==org:
@@ -1257,7 +1259,10 @@ def removeSomeTracksFromSearch(conn):
     cur = conn.cursor()
     for table in REMOVESEARCH:
         query = "DELETE FROM hgFindSpec WHERE searchTable='%s';" % table
-        cur.execute(query)
+        try:
+            cur.execute(query)
+        except MySQLdb.ProgrammingError:
+            pass
     cur.close()
 
 def hideSomeTracks(db, conn, trackNames):
@@ -1314,7 +1319,8 @@ def getLocalSizes(db):
     if runningAtUcsc():
         return sizes
 
-    sqlFname = TMPDIR+'localMysqlDirList.txt'
+    sqlFh = tempfile.NamedTemporaryFile()
+    sqlFname = sqlFh.name
     cmd = 'sudo -u mysql /bin/ls -l %s > %s' % (path, sqlFname)
     ret = runCmd(cmd, mustRun=False)
     if ret!=0:
@@ -1336,7 +1342,8 @@ def getLocalSizes(db):
     gbdbDir = join(getGbdbDir(), db)
     if isdir(gbdbDir):
         # get the size of all gbdb files
-        gbdbFname = TMPDIR+'localGbdbDirList.txt'
+        gbdbFh = tempfile.NamedTemporaryFile()
+        gbdbFname = gbdbFh.name
         # trailing slash is important
         cmd = 'find %s/ -type f > %s ' % (gbdbDir, gbdbFname)
         runCmd(cmd)
@@ -1402,10 +1409,27 @@ def checkGbdbMysqlAccess():
 
 def trackToTableNames(tableNames):
     " handle split tables and some spec cases by creating a dictionary trackName -> tableNames "
+    # as a heuristic to detect split tables, first get the counts of all suffixes 
+    # after the underscore
+    suffixCounts = defaultdict(int)
+    for t in tableNames:
+        if "_" in t and not t.startswith("uniGene"):
+            prefix, track = string.split(t, "_", maxsplit=1)
+            suffixCounts[track] += 1
+
     suffixDict = defaultdict(set)
     for t in tableNames:
         if "_" in t and not t.startswith("uniGene"):
-            dummy, track = string.split(t, "_", maxsplit=1)
+            prefix, track = string.split(t, "_", maxsplit=1)
+            # assume that any table a_b is not a split table
+            # if there are less than 5 tables with the suffix b
+            # the code in hgTracks is different, but we do not have a 
+            # list of chromosomes in here
+            if suffixCounts[track] < 5 and prefix!="all":
+                # the tracks all_mrna and all_est should be treated like
+                # split tables, as their track names are indeed mrna
+                # and est. sigh.
+                track = t
         else:
             track = t
 
@@ -1584,8 +1608,8 @@ def mustBeClean(str):
         #db = "hg19"
     #return db
 
-def getCgiVar(args, name):
-    return mustBeClean(args.getvalue(name, default=None))
+def getCgiVar(args, name, default=None):
+    return mustBeClean(args.getvalue(name, default=default))
 
 def addTableList(db, conn):
     " add a local file with rows to add to tableList for hg19 "
@@ -1600,7 +1624,10 @@ def getAllTrackNames(conn):
     cur = conn.cursor()
     names = []
     query = "SELECT tableName from trackDb";
-    cur.execute(query)
+    try:
+        cur.execute(query)
+    except MySQLdb.ProgrammingError:
+        return None
     for row in cur.fetchall():
         names.append(row[0])
     return names
@@ -1612,8 +1639,11 @@ def postRsyncChanges(db, localSizes):
     try:
         conn = sqlConnect(db, "local")
         tracks = getAllTrackNames(conn)
-        hideSomeTracks(db, conn, tracks)
-        removeSomeTracksFromSearch(conn)
+        if tracks is None:
+           print("mysql database %s has no trackDb" % db)
+        else:
+           hideSomeTracks(db, conn, tracks)
+           removeSomeTracksFromSearch(conn)
         addTableList(db, conn)
         conn.close()
     except MySQLdb.OperationalError, e:
@@ -1635,7 +1665,7 @@ def htmlMiddle(args):
 
     clade = getCgiVar(args, "clade")
     org   = getCgiVar(args, "org")
-    db    = getCgiVar(args, "db")
+    db    = getCgiVar(args, "db", defaultDb)
     orgInfo, clade, org, db = getCladeAssemblyDb(clade, org, db)
 
     if not "jobId" in args.keys():
@@ -1784,18 +1814,51 @@ def getAllLocalDbs():
     dbSet = dbSet - set(['information_schema', 'customTrash', 'hgFixed', 'hgTemp', 'hgcentral', 'mysql','performance_schema'])
     return dbSet
 
+def getCookies(cookieDb):
+    """ return db cookie value. Called usually before headers are printed.
+    Default value can be sent as argument.
+    """
+    cookie_string = os.environ.get('HTTP_COOKIE')
+    if cookie_string:
+        cookie = Cookie.SimpleCookie()
+        cookie.load(cookie_string)
+        if "db" in cookie:
+            cookieDb = cookie["db"].value
+    return cookieDb
+
+def setCookies(db):
+    """
+    Send a cookie header to set the "db" cookie to the value specified
+    """
+    cookie = Cookie.SimpleCookie()
+    cookie['db'] = db
+    cookie['db']['expires'] = 30 * 24 * 60 * 60
+    cookie['db']['comment'] = 'holds the last hgMirror database'
+    print cookie
+
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
-    if not isdir(TMPDIR):
-        os.makedirs(TMPDIR)
-
     if len(sys.argv)>1:
         dbSet = getAllLocalDbs()
         for db in dbSet:
             localSizes = getLocalSizes(db)
             postRsyncChanges(db, localSizes)
         sys.exit(0)
+
+    # the code above is not creating or using TMPDIR, as from the cronjob, we're
+    # root but as a CGI we're the apache user and cannot write to root-owned directories.
+    # Only create this directory when we're a CGI.
+    if not isdir(TMPDIR):
+        os.makedirs(TMPDIR)
+
+    global defaultDb
+    defaultDb = getCookies(defaultDb)
+
+    args = cgi.FieldStorage()
+
+    if "db" in args:
+        setCookies(args["db"].value)
 
     print "Content-type: text/html"
     print
@@ -1807,8 +1870,6 @@ def main():
         print("In the Genome-Browser-in-a-box VM, use the command gbibMirrorTracksOn.")
         sys.exit(0)
         
-    args = cgi.FieldStorage()
-
     if "debug" in args.keys():
         global DEBUG
         DEBUG = True

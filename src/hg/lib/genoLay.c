@@ -168,7 +168,7 @@ int margin = 3;
 struct slRef *refList = NULL, *ref, *left, *right;
 struct genoLayChrom *chrom;
 struct genoLay *gl;
-int autoCount, halfCount, bases, chromInLine;
+int autoCount, halfCount, bases;
 int leftLabelWidth=0, rightLabelWidth=0, labelWidth;
 int spaceWidth = mgFontCharWidth(font, ' ');
 int extraLabelPadding = 0;
@@ -275,7 +275,6 @@ else
     while (left || right)
 	{
 	bases = 0;
-	chromInLine = 0;
 	if (left)
 	    {
 	    chrom = left->val;
@@ -510,7 +509,6 @@ if (sqlTableExists(conn, bandTable) && !gl->allOneLine)
     int fontPixelHeight = mgFontPixelHeight(gl->font);
     for (chrom = gl->chromList; chrom != NULL; chrom = chrom->next)
 	{
-	boolean gotAny = FALSE;
 	struct sqlResult *sr;
 	char **row;
 	char query[256];
@@ -544,7 +542,6 @@ if (sqlTableExists(conn, bandTable) && !gl->allOneLine)
 		hCytoBandDrawAt(&band, hvg, x1+chrom->x, y+1, x2-x1, innerHeight, 
 			isDmel, gl->font, fontPixelHeight, MG_BLACK, bColor,
 		    shadesOfGray, maxShade);
-		gotAny = TRUE;
 		}
 	    }
 	sqlFreeResult(&sr);

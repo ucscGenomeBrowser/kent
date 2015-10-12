@@ -28,7 +28,7 @@ struct annoStreamVcf
 
 
 static void asvSetRegion(struct annoStreamer *vSelf, char *chrom, uint regionStart, uint regionEnd)
-/* Set region -- and free current sqlResult if there is one. */
+/* Set region and reset internal state. */
 {
 annoStreamerSetRegion(vSelf, chrom, regionStart, regionEnd);
 struct annoStreamVcf *self = (struct annoStreamVcf *)vSelf;
@@ -36,6 +36,9 @@ self->indelQ = self->nextPosQ = NULL;
 self->eof = FALSE;
 if (self->isTabix && chrom != NULL)
     {
+    // In order to include insertions at the start of region, decrement regionStart.
+    if (regionStart > 0)
+        regionStart--;
     // If this region is not in tabix index, set self->eof so we won't keep grabbing rows
     // from the old position.
     boolean gotRegion = lineFileSetTabixRegion(self->vcff->lf, chrom, regionStart, regionEnd);
@@ -87,6 +90,8 @@ else
     self->asWords[9] = "";
     }
 self->record = vcfRecordFromRow(self->vcff, words);
+vcfRecordTrimIndelLeftBase(self->record);
+vcfRecordTrimAllelesRight(self->record);
 return self->asWords;
 }
 
@@ -144,13 +149,23 @@ if (regionChrom != NULL && words != NULL)
 	// -- hopefully we'll just be skipping to the next row after region{Chrom,Start,End}.
 	lineFileSetTabixRegion(self->vcff->lf, regionChrom, regionStart, regionEnd);
 	}
+    // Skip to next row if this is on a previous chromosome, or is on regionChrom but
+    // ends before regionStart or ends at regionStart and is not an insertion.
+    struct vcfRecord *rec = self->record;
     while (words != NULL &&
 	   (strcmp(rowChrom, regionChrom) < 0 ||
-	    (sameString(rowChrom, regionChrom) && self->record->chromEnd < regionStart)))
+	    (sameString(rowChrom, regionChrom) &&
+             (rec->chromEnd < regionStart ||
+              (rec->chromStart != rec->chromEnd && rec->chromEnd == regionStart)))))
+        {
 	words = nextRowRaw(self);
+        rec = self->record;
+        }
     }
 // Tabix doesn't give us any rows past end of region, but if not using tabix,
-// detect when we're past end of region:
+// detect when we're past end of region.  It's possible for a non-indel to precede
+// an insertion that has the same VCF start coord but is actually to its left,
+// so we can't just quit as soon as we see anything with chromStart == regionEnd.
 if (words != NULL && !self->isTabix && sSelf->chrom != NULL
     && self->record->chromStart > sSelf->regionEnd)
     {
@@ -183,8 +198,6 @@ while (annoFilterRowFails(sSelf->filters, words, sSelf->numCols, &rightFail))
 	return NULL;
     }
 struct vcfRecord *rec = self->record;
-vcfRecordTrimIndelLeftBase(rec);
-vcfRecordTrimAllelesRight(rec);
 char *chrom = getProperChromName(self, rec->chrom);
 return annoRowFromStringArray(chrom, rec->chromStart, rec->chromEnd,
 			      rightFail, words, sSelf->numCols, callerLm);
@@ -222,7 +235,7 @@ return annoRowClone(row, sSelf->rowType, sSelf->numCols, self->qLm);
 }
 
 INLINE struct annoRow *asvPopQ(struct annoRow **pQ, struct annoStreamer *sSelf, struct lm *callerLm)
-/* Return the row at the head of the indel queue, cloned with caller's localmem. */
+/* Return the row at the head of the given queue, cloned with caller's localmem. */
 {
 return annoRowClone(slPopHead(pQ), sSelf->rowType, sSelf->numCols, callerLm);
 }
@@ -263,6 +276,13 @@ if (self->nextPosQ != NULL || self->eof)
 struct annoRow *nextRow = NULL;
 while ((nextRow = nextRowFiltered(self, minChrom, minEnd, callerLm)) != NULL)
     {
+    // nextRowUnfiltered may have to let a substitution past the end of the range
+    // slip through because the next line(s) of VCF may have an insertion touching the range
+    // that we can't discard.  Catch the non-insertions here.
+    if (sSelf->chrom != NULL &&
+        nextRow->start == sSelf->regionEnd && nextRow->start != nextRow->end)
+        continue;
+
     // nextRow has been allocated with callerLm; if we save it for later, we need a clone in qLm.
     // If we're popping a row from qLm, we need to clone back to the (probably new) callerLm.
     if (vcfAnnoRowIsIndel(nextRow))

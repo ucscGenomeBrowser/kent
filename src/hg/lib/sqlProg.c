@@ -102,8 +102,6 @@ int sqlMakeDefaultsFile(char* defaultFileName, char* profile, char* group)
 {
 int fileNo;
 char paddedGroup [256]; /* string with brackets around the group name */
-//char fileData[256];  /* constructed variable=value data for the mysql config file */
-//char field[256];  /* constructed profile.field name to pass to cfgVal */
 char path[1024];
 
 if ((fileNo=mkstemp(defaultFileName)) == -1)
@@ -195,7 +193,7 @@ void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc
  * The program is execvp-ed, this function does not return. 
  */
 {
-int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, defaultFileNo, returnStatus;
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6, returnStatus;
 pid_t child_id;
 char **nargv, defaultFileName[256], defaultFileArg[256], *homeDir;
 
@@ -213,7 +211,8 @@ for (i = 0; i < userArgc; i++)
 	profile=cloneString(userArgv[i]+strlen("-profile="));
 
 safef(defaultFileName, sizeof(defaultFileName), "%s/.hgsql.cnf-XXXXXX", homeDir);
-defaultFileNo=sqlMakeDefaultsFile(defaultFileName, profile, "client");
+// discard returned fileNo
+(void) sqlMakeDefaultsFile(defaultFileName, profile, "client");
 
 safef(defaultFileArg, sizeof(defaultFileArg), "--defaults-file=%s", defaultFileName);
 

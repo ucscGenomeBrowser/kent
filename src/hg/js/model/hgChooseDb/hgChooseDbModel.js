@@ -43,6 +43,7 @@ var HgChooseDbModel = ImModel.extend({
         } else {
             this.cartDo({ getPopularSpecies: {} });
         }
+        this.cart.flush();
     }
 
 }); // HgChooseDbModel

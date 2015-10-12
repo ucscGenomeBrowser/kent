@@ -1383,17 +1383,9 @@ int w=0, textWidth=0;
 boolean drawLabel = FALSE;
 Color exonColor;
 char buff[256];
-int conf = 0;
-if(se->conf > 9) 
-    conf = 9;
-else if(se->conf < 2) 
-    conf = 2;
-else
-    conf = (int)se->conf;
 w = x2-x1;
 if (w < 1)
     w = 1;
-//exonColor = shades[conf];
 exonColor = MG_BLACK;
 hvGfxBox(hvg, x1, y, w, heightPer/2, exonColor);
 if(drawLabel)

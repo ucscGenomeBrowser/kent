@@ -1,0 +1,928 @@
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzAncCey1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzAncCey1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs ancCey1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ancylostoma ceylanicum/A. ceylanicum - ancCey1
+SEQ2_DIR=/hive/data/genomes/ancCey1/ancCey1.2bit
+SEQ2_LEN=/hive/data/genomes/ancCey1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzAncCey1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m12.356s
+    cat fb.strRat2.chainAncCey1Link.txt
+    # 2993561 bases of 43150242 (6.938%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 ancCey1) > rbest.log 2>&1 &
+    # real 0m24.513s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ancCey1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/ancCey1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzAncCey1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.699s
+    cat fb.ancCey1.chainStrRat2Link.txt
+    # 3660266 bases of 300914990 (1.216%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ancCey1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m33.752s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzAscSuu1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzAscSuu1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzAscSuu1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m15.889s
+    cat fb.strRat2.chainAscSuu1Link.txt
+    # 3147688 bases of 43150242 (7.295%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 ascSuu1) > rbest.log 2>&1 &
+    # real 0m25.739s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzAscSuu1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m56.744s
+    cat fb.ascSuu1.chainStrRat2Link.txt
+    # 3490561 bases of 262604320 (1.329%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m37.372s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzBruMal2.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzBruMal2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzBruMal2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m2.192s
+    cat fb.strRat2.chainBruMal2Link.txt
+    # 4175213 bases of 43150242 (9.676%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 bruMal2) > rbest.log 2>&1 &
+    # real 0m26.831s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzBruMal2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m25.933s
+    cat fb.bruMal2.chainStrRat2Link.txt
+    # 4174239 bases of 87424120 (4.775%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 strRat2) \
+      > rbest.log 2>&1
+    # real 0m34.642s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzBurXyl1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzBurXyl1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzBurXyl1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m0.488s
+    cat fb.strRat2.chainBurXyl1Link.txt
+    # 4615585 bases of 43150242 (10.697%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 burXyl1) > rbest.log 2>&1 &
+    # real 0m26.920s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzBurXyl1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.432s
+    cat fb.burXyl1.chainStrRat2Link.txt
+    # 4710613 bases of 73100506 (6.444%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m34.233s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzDirImm1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzDirImm1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzDirImm1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m0.960s
+    cat fb.strRat2.chainDirImm1Link.txt
+    # 3937991 bases of 43150242 (9.126%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 dirImm1) > rbest.log 2>&1 &
+    # real 0m25.286s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzDirImm1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m1.174s
+    cat fb.dirImm1.chainStrRat2Link.txt
+    # 3935087 bases of 84923352 (4.634%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m38.462s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzHaeCon2.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzHaeCon2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzHaeCon2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m24.504s
+    cat fb.strRat2.chainHaeCon2Link.txt
+    # 2969153 bases of 43150242 (6.881%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 haeCon2) > rbest.log 2>&1 &
+    # real 0m23.929s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzHaeCon2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m20.610s
+    cat fb.haeCon2.chainStrRat2Link.txt
+    # 4244128 bases of 346001353 (1.227%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 strRat2) \
+      > rbest.log 2>&1
+    # real 0m49.338s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzLoaLoa1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzLoaLoa1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzLoaLoa1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m57.260s
+    cat fb.strRat2.chainLoaLoa1Link.txt
+    # 3782357 bases of 43150242 (8.766%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 loaLoa1) > rbest.log 2>&1 &
+    # real 0m25.898s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzLoaLoa1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.535s
+    cat fb.loaLoa1.chainStrRat2Link.txt
+    # 3615143 bases of 87533141 (4.130%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m31.850s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzMelHap1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzMelHap1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzMelHap1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m57.702s
+    cat fb.strRat2.chainMelHap1Link.txt
+    # 5520378 bases of 43150242 (12.793%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 melHap1) > rbest.log 2>&1 &
+    # real 0m26.555s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzMelHap1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m56.236s
+    cat fb.melHap1.chainStrRat2Link.txt
+    # 5246956 bases of 53017507 (9.897%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m34.342s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzMelInc2.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzMelInc2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzMelInc2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m27.195s
+    cat fb.strRat2.chainMelInc2Link.txt
+    # 3639872 bases of 43150242 (8.435%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 melInc2) > rbest.log 2>&1 &
+    # real 0m23.589s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzMelInc2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m56.416s
+    cat fb.melInc2.chainStrRat2Link.txt
+    # 4936952 bases of 82114761 (6.012%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 strRat2) \
+      > rbest.log 2>&1
+    # real 0m34.500s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Necator americanus/N. americanus - necAme1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzNecAme1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzNecAme1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs necAme1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Necator americanus/N. americanus - necAme1
+SEQ2_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ2_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzNecAme1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m13.818s
+    cat fb.strRat2.chainNecAme1Link.txt
+    # 3059487 bases of 43150242 (7.090%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 necAme1) > rbest.log 2>&1 &
+    # real 0m25.146s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/necAme1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/necAme1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzNecAme1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m58.876s
+    cat fb.necAme1.chainStrRat2Link.txt
+    # 3351287 bases of 208187215 (1.610%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` necAme1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m37.128s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzOncVol1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzOncVol1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzOncVol1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m1.911s
+    cat fb.strRat2.chainOncVol1Link.txt
+    # 4337430 bases of 43150242 (10.052%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 oncVol1) > rbest.log 2>&1 &
+    # real 0m37.848s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzOncVol1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.675s
+    cat fb.oncVol1.chainStrRat2Link.txt
+    # 4183657 bases of 94327777 (4.435%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m41.733s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Panagrellus redivivus/Microworm - panRed1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzPanRed1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzPanRed1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs panRed1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Panagrellus redivivus/Microworm - panRed1
+SEQ2_DIR=/hive/data/genomes/panRed1/panRed1.2bit
+SEQ2_LEN=/hive/data/genomes/panRed1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzPanRed1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m47.770s
+    cat fb.strRat2.chainPanRed1Link.txt
+    # 4723823 bases of 43150242 (10.947%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 panRed1) > rbest.log 2>&1 &
+    # real 0m27.682s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panRed1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/panRed1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzPanRed1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m31.730s
+    cat fb.panRed1.chainStrRat2Link.txt
+    # 4944725 bases of 62228262 (7.946%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panRed1 strRat2) \
+      > rbest.log 2>&1
+    # real 3m26.454s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzPriExs1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzPriExs1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzPriExs1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m0.692s
+    cat fb.strRat2.chainPriExs1Link.txt
+    # 2098934 bases of 43150242 (4.864%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 priExs1) > rbest.log 2>&1 &
+    # real 0m20.272s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzPriExs1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.411s
+    cat fb.priExs1.chainStrRat2Link.txt
+    # 2426876 bases of 166917800 (1.454%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m27.678s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzPriPac3.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzPriPac3.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzPriPac3.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m38.907s
+    cat fb.strRat2.chainPriPac3Link.txt
+    # 2091531 bases of 43150242 (4.847%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 priPac3) > rbest.log 2>&1 &
+    # real 0m21.386s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzPriPac3.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m52.542s
+    cat fb.priPac3.chainStrRat2Link.txt
+    # 2391493 bases of 153238914 (1.561%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 strRat2) \
+      > rbest.log 2>&1
+    # real 0m28.782s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzTriSpi1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzTriSpi1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzTriSpi1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 2m23.938s
+    cat fb.strRat2.chainTriSpi1Link.txt
+    # 2379633 bases of 43150242 (5.515%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 triSpi1) > rbest.log 2>&1 &
+    # real 0m21.912s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzTriSpi1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m45.395s
+    cat fb.triSpi1.chainStrRat2Link.txt
+    # 2532808 bases of 58558192 (4.325%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m23.597s
+
+########################################################################
+########################################################################
+# LASTZ Strongyloides ratti/Threadworm - strRat2 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/strRat2/bed/lastzTriSui1.2015-08-16
+    cd /hive/data/genomes/strRat2/bed/lastzTriSui1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# strRat2 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Strongyloides ratti/Threadworm - strRat2
+SEQ1_DIR=/hive/data/genomes/strRat2/strRat2.2bit
+SEQ1_LEN=/hive/data/genomes/strRat2/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/strRat2/bed/lastzTriSui1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m20.565s
+    cat fb.strRat2.chainTriSui1Link.txt
+    # 2064924 bases of 43150242 (4.785%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` strRat2 triSui1) > rbest.log 2>&1 &
+    # real 0m18.418s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.strRat2.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.strRat2.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/strRat2/bed/lastzTriSui1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m41.770s
+    cat fb.triSui1.chainStrRat2Link.txt
+    # 2121799 bases of 71825323 (2.954%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 strRat2) \
+      > rbest.log 2>&1
+    # real 0m22.335s
+
+########################################################################

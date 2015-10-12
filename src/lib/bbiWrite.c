@@ -3,6 +3,7 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
+#include "limits.h"
 #include "common.h"
 #include "hash.h"
 #include "linefile.h"
@@ -263,7 +264,7 @@ for (resTry = 0; resTry < resTryCount; ++resTry)
     resScales[resTry] = res;
     // if aveSize is large, then the initial value of res is large, and we
     // and we cannot do all 10 levels without overflowing res* integers and other related variables.
-    if (res > 1000000000) 
+    if (res > INT_MAX/bbiResIncrement) 
 	{
 	resTryCount = resTry + 1;  
 	verbose(2, "resTryCount reduced from 10 to %d\n", resTryCount);

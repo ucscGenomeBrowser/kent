@@ -478,7 +478,7 @@ bits32 sig = fofSig;
 bits32 elCount = 0;
 bits16 fileCount = inCount;
 struct fofRecList *recList = NULL, *rl;
-int i, fileIx, itemSize;
+int i, fileIx;
 char *lastName = "";
 int maxMod = 10000;
 
@@ -547,7 +547,6 @@ writeOne(out, sig);
 writeOne(out, elCount);
 writeOne(out, fileCount);
 writeOne(out, maxNameSize);
-itemSize = sizeof(bits32) +sizeof(bits32) + sizeof(UBYTE) + maxNameSize;
 for (i=0; i<inCount; ++i)
     {
     char *name = inFiles[i];

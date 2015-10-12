@@ -19,8 +19,6 @@ boolean saveId = FALSE;
 char *inputList = NULL;
 char *tempDir = "./";
 
-struct tempName tempName;
-
 
 void usage()
 /* Explain usage and exit. */
@@ -58,7 +56,7 @@ static void cfEof(struct chainFile **pCf, int level)
 /* deal with EOF */
 {
 struct chainFile *cf = *pCf;
-char fname[256];  /* order important next few lines */
+char fname[PATH_LEN];  /* order important next few lines */
 safef(fname,sizeof(fname),"%s",cf->lf->fileName);
 lineFileClose(&cf->lf);
 if (level > 0)          /* if not original input level, then */
@@ -133,9 +131,10 @@ void hierSort(char *inputList)
 /* Do a hierarchical merge sort so we don't run out of system file handles */
 {
 int level = 0;
-char thisName[256]; 
-char nextName[256]; 
-char sortName[256]; 
+char thisName[PATH_LEN]; 
+char nextName[PATH_LEN]; 
+char sortName[PATH_LEN]; 
+char tmpNameBuf[PATH_LEN]; 
 struct lineFile *thisLf = NULL;
 FILE *nextF = NULL;
 int sortCount = 0;
@@ -150,9 +149,8 @@ do
     {
     block=0;
     safef(thisName, sizeof(thisName), "%s", nextName);
-    safef(nextName, sizeof(nextName), "%sinputList%d-", tempDir, level+1);
-    makeTempName(&tempName, nextName, ".tmp");
-    safef(nextName, sizeof(nextName), "%s", tempName.forCgi);
+    safef(tmpNameBuf, sizeof(tmpNameBuf), "inputList%d-", level+1);
+    safecpy(nextName, sizeof(nextName), rTempName(tempDir, tmpNameBuf, ".tmp"));
     thisLf = lineFileOpen(thisName,TRUE);
     if (!thisLf)
 	errAbort("error  lineFileOpen(%s) returned NULL\n",thisName);
@@ -174,9 +172,8 @@ do
 	    {
 	    if (!nextF)
 		nextF = mustOpen(nextName,"w");
-	    safef(sortName, sizeof(sortName), "%ssort%d-", tempDir, sortCount++);
-	    makeTempName(&tempName, sortName, ".tmp");
-	    safef(sortName, sizeof(sortName), "%s", tempName.forCgi);
+	    safef(tmpNameBuf, sizeof(tmpNameBuf), "sort%d-", sortCount++);
+	    safecpy(sortName, sizeof(sortName), rTempName(tempDir, tmpNameBuf, ".tmp"));
 	    fprintf(nextF, "%s\n", sortName);
 	    sortF = mustOpen(sortName,"w");
 	    }
@@ -219,10 +216,8 @@ if (argc-1 <= MAXFILES && !inputList)
     }
 else 
     {
-    char *inp0 = addSuffix(tempDir,"inputList0-");
-    makeTempName(&tempName, inp0, ".tmp");
-    freez(&inp0);
-    inp0 = cloneString(tempName.forCgi);
+    char inp0[PATH_LEN];
+    safecpy(inp0, sizeof(inp0), rTempName(tempDir, "inputList0-", ".tmp"));
     if (!inputList)
 	{
 	FILE *f = mustOpen(inp0,"w");
@@ -237,7 +232,6 @@ else
     hierSort(inputList);
     if (sameString(inputList,inp0))
 	remove(inp0);
-    freez(&inp0);	    
     }
 return 0;
 }

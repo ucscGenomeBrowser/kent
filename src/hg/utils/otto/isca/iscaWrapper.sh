@@ -1,4 +1,4 @@
-#!/bin/sh -ex
+#!/bin/sh -e
 
 PATH=/cluster/bin/x86_64:$PATH
 EMAIL="braney@soe.ucsc.edu"

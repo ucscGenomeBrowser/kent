@@ -21,6 +21,7 @@
 #include "trackVersion.h"
 
 /* list of links to display in a menu */
+/* a link with an empty name is displayed as a horizontal separator line */
 struct hotLink
     {
     struct hotLink *next;
@@ -28,6 +29,7 @@ struct hotLink
     char *url;
     char *id;
     char *mouseOver;
+    char *onClick;
     boolean inactive; /* greyed out */
     boolean external;
     };
@@ -46,11 +48,20 @@ slAddTail(links, link);
 }
 
 static void appendLinkMaybeInactive(struct hotLink **links, char *url, char *name, char *id, 
-    boolean external, boolean inactive)
+    char *mouseOver, boolean external, boolean inactive)
 {
 appendLink(links, url, name, id, external);
 struct hotLink *le = slLastEl(links);
 le->inactive=inactive;
+le->mouseOver=mouseOver;
+}
+
+static void appendLinkWithOnclick(struct hotLink **links, char *url, char *name, char *id, 
+    char *mouseOver, char *onClick, boolean external, boolean inactive)
+{
+appendLinkMaybeInactive(links, url, name, id, mouseOver, external, inactive);
+struct hotLink *le = slLastEl(links);
+le->onClick=onClick;
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -162,14 +173,27 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
         safef(class, sizeof(class), "first");
     else if (i + 1 == len)
         safef(class, sizeof(class), "last");
+    else if (isEmpty(link->name))
+        safef(class, sizeof(class), "horizSep");
     else
         class[0] = 0;
     dyStringAppend(menuHtml, "<li");
     char *encodedName = htmlEncode(link->name);
     if(*class)
         dyStringPrintf(menuHtml, " class='%s'", class);
-    dyStringPrintf(menuHtml, "><a href='%s' id='%s'%s>%s</a></li>\n", link->url, link->id,
-        link->external ? " TARGET='_blank'" : "", encodedName);
+    dyStringPrintf(menuHtml, ">\n");
+
+    if (!isEmpty(link->name))
+        {
+        dyStringPrintf(menuHtml, "<a href='%s' ", link->url);
+        if (link->mouseOver)
+            dyStringPrintf(menuHtml, "title='%s' ", link->mouseOver); 
+        if (link->onClick)
+            dyStringPrintf(menuHtml, "onclick=\"%s\" ", link->onClick); 
+        dyStringPrintf(menuHtml, "id='%s'%s>%s</a>\n", link->id, 
+            link->external ? " TARGET='_blank'" : "", encodedName);
+        }
+    dyStringPrintf(menuHtml, "</li>\n");
     freez(&encodedName);
 
     freez(&link->name);
@@ -177,50 +201,6 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
     freez(&link->id);
     }
 slFreeList(links);
-}
-
-static void addSendToMenuItems(struct dyString *viewMenu, char* uiVars)
-/* add the "send to" menu to the "viewMenu" dyString */
-{
-struct hotLink *viewLinks = NULL;
-
-char url[4096];
-char label[4096];
-
-struct extTool *extTools = readExtToolRa("extTools.ra");
-struct extTool *et;
-for(et = extTools; et != NULL; et = et->next)
-    {
-    if (et->dbs!=NULL)
-        {
-        if (!slNameInList(et->dbs, database))
-            continue;
-        }
-    if (et->params==NULL)
-        {
-        char *replUrl = replaceInUrl(et->url, "", cart, database, chromName, winStart, winEnd, NULL, TRUE);
-        safef(url, sizeof(url), "%s", replUrl);
-        //safef(url, sizeof(url), "%s %s", chromName, database);
-        }
-    else
-        safef(url, sizeof(url), "hgTracks?%s&hgt.redirectTool=%s", uiVars, et->tool);
-    boolean inactive = FALSE;
-    if (et->maxSize!=0)
-        {
-        inactive = TRUE;
-        if (et->maxSize>1000)
-            safef(label, sizeof(label), "%s (< %d kbp)", et->shortLabel, et->maxSize/1000);
-        else
-            safef(label, sizeof(label), "%s (< %d bp)", et->shortLabel, et->maxSize);
-        }
-    else
-        safef(label, sizeof(label), "%s", et->shortLabel);
-        
-    appendLinkMaybeInactive(&viewLinks, url, label, "extTool", TRUE, inactive);
-    }
-
-freeLinksAndConvert(viewLinks, viewMenu);
-
 }
 
 void printMenuBar()
@@ -242,7 +222,14 @@ safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
 appendLink(&links, buf, "DNA", "dnaLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
-appendLink(&links, buf, "in other Genomes (Convert)", "convertMenuLink", FALSE);
+appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
+
+// add the sendTo menu
+if (fileExists("extTools.ra"))
+    {
+    appendLinkWithOnclick(&links, "#", "In External tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", FALSE, FALSE);
+    }
+
 
 // Add link-outs to other dbs as appropriate for this assembly
 if (differentWord(database,"susScr2"))
@@ -422,25 +409,18 @@ else if (sameString(database, "ce2"))
     }
 
 // finish View menu
+appendLink(&links, "", "", "", FALSE); // separator line
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", uiVars);
 appendLink(&links, buf, "Configure Browser", "configureMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
 appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
-appendLink(&links, "../cgi-bin/cartReset", "Reset all user settings", "cartResetMenuLink", FALSE);
+appendLink(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", FALSE);
 
-struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul style='display: none; visibility: hidden;'>\n");
+struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);
 dyStringAppend(viewMenu, "</ul>\n</li>\n");
-
-// add the sendTo menu
-if (fileExists("extTools.ra"))
-    {
-    dyStringAppend(viewMenu, "<li class=\"menuparent\" id=\"sendTo\"><span>Send To</span><ul>");
-    addSendToMenuItems(viewMenu, uiVars);
-    dyStringAppend(viewMenu, "</ul>\n</li>\n");
-    }
 
 menuStr = replaceChars(menuStr, "<!-- OPTIONAL_VIEW_MENU -->", dyStringCannibalize(&viewMenu));
 menuStr = replaceChars(menuStr, "id=\"main-menu-whole\"", "id=\"hgTracks-main-menu-whole\"");

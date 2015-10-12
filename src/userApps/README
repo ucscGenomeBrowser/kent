@@ -110,7 +110,7 @@ system package management tools.
 5. There are 'parasol' binaries built into ./userApps/kent/src/parasol/bin/
    Use these binaries to set up a job control system on a compute cluster
    or large machine with many CPU cores.  See also:
-     http://genecats.cse.ucsc.edu/eng/parasol.htm
+     http://genecats.cse.ucsc.edu/eng/parasol.html
    for more information.  The usage messages from each command will help
    with the setup.
 

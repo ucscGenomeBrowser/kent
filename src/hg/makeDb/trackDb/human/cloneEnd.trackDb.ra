@@ -11,7 +11,7 @@ subGroup1 source Source agencourt=Agencourt chori=Chori corielle=Coriell caltech
 dimensions dimensionX=source
 sortOrder source=+
 
-    track cloneEnd_ABC10
+    track cloneEndABC10
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC10
@@ -23,7 +23,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 1
 
-    track cloneEnd_ABC11
+    track cloneEndABC11
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC11
@@ -35,7 +35,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 2
 
-    track cloneEnd_ABC12
+    track cloneEndABC12
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC12
@@ -47,7 +47,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 3
 
-    track cloneEnd_ABC13
+    track cloneEndABC13
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC13
@@ -59,7 +59,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 4
 
-    track cloneEnd_ABC14
+    track cloneEndABC14
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC14
@@ -71,7 +71,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 5
 
-    track cloneEnd_ABC16
+    track cloneEndABC16
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC16
@@ -83,7 +83,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 6
 
-    track cloneEnd_ABC18
+    track cloneEndABC18
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC18
@@ -95,7 +95,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 7
 
-    track cloneEnd_ABC20
+    track cloneEndABC20
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC20
@@ -107,7 +107,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 8
 
-    track cloneEnd_ABC21
+    track cloneEndABC21
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC21
@@ -119,7 +119,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 9
 
-    track cloneEnd_ABC22
+    track cloneEndABC22
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC22
@@ -131,7 +131,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 10
 
-    track cloneEnd_ABC23
+    track cloneEndABC23
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC23
@@ -143,7 +143,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 11
 
-    track cloneEnd_ABC24
+    track cloneEndABC24
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC24
@@ -155,7 +155,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 12
 
-    track cloneEnd_ABC27
+    track cloneEndABC27
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC27
@@ -167,7 +167,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 13
 
-    track cloneEnd_ABC7
+    track cloneEndABC7
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC7
@@ -179,7 +179,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 14
 
-    track cloneEnd_ABC8
+    track cloneEndABC8
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC8
@@ -191,7 +191,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 15
 
-    track cloneEnd_ABC9
+    track cloneEndABC9
     parent cloneEndSuper off
     subGroups source=agencourt
     shortLabel ABC9
@@ -203,7 +203,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 16
 
-    track cloneEnd_CH17
+    track cloneEndCH17
     parent cloneEndSuper on
     subGroups source=chori
     shortLabel CH17
@@ -215,7 +215,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 17
 
-    track cloneEnd_COR02
+    track cloneEndCOR02
     parent cloneEndSuper off
     subGroups source=corielle
     shortLabel COR02
@@ -227,7 +227,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 18
 
-    track cloneEnd_COR2A
+    track cloneEndCOR2A
     parent cloneEndSuper off
     subGroups source=corielle
     shortLabel COR2A
@@ -239,7 +239,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 19
 
-    track cloneEnd_CTD
+    track cloneEndCTD
     parent cloneEndSuper on
     subGroups source=caltech
     shortLabel CTD
@@ -251,7 +251,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 20
 
-    track cloneEnd_RP11
+    track cloneEndRP11
     parent cloneEndSuper on
     subGroups source=rpci
     shortLabel RP11
@@ -263,7 +263,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 21
 
-    track cloneEnd_WI2
+    track cloneEndWI2
     parent cloneEndSuper off
     subGroups source=wibr
     shortLabel WI2
@@ -275,7 +275,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 22
 
-    track cloneEnd_multipleMaps
+    track cloneEndmultipleMaps
     parent cloneEndSuper off
     subGroups source=placements
     shortLabel Multiple mappings
@@ -287,7 +287,7 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 23
 
-    track cloneEnd_badEnds
+    track cloneEndbadEnds
     parent cloneEndSuper off
     subGroups source=placements
     shortLabel Bad end mappings
@@ -299,172 +299,172 @@ sortOrder source=+
     urlLabel NCBI CloneDB:
     priority 24
 
-    track cloneEnd_coverageForward
+    track cloneEndcoverageForward
     parent cloneEndSuper off
     subGroups source=placements
-    shortLabel Coverage forward strand
+    shortLabel Coverage forward
     longLabel Clone end placements overlap coverage on the forward strand
     type bigWig 0 5377
     visibility full
     autoScale on
     alwaysZero on
-    maxHeightPixels 128:16:16
+    maxHeightPixels 128:35:16
     windowingFunction mean
     priority 25
 
-    track cloneEnd_coverageReverse
+    track cloneEndcoverageReverse
     parent cloneEndSuper off
     subGroups source=placements
-    shortLabel Coverage reverse strand
+    shortLabel Coverage reverse
     longLabel Clone end placements overlap coverage on the reverse strand
     type bigWig 0 4112
     visibility full
     negateValues 1
     alwaysZero on
-    maxHeightPixels 128:16:16
+    maxHeightPixels 128:35:16
     windowingFunction mean
     autoScale on
     priority 26
 
-searchTable cloneEnd_ABC10
+searchTable cloneEndABC10
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC10-([0-9A-Z])+
 
-searchTable cloneEnd_ABC11
+searchTable cloneEndABC11
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC11-([0-9A-Z])+
 
-searchTable cloneEnd_ABC12
+searchTable cloneEndABC12
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC12-([0-9A-Z])+
 
-searchTable cloneEnd_ABC13
+searchTable cloneEndABC13
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC13-([0-9A-Z])+
 
-searchTable cloneEnd_ABC14
+searchTable cloneEndABC14
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC14-([0-9A-Z])+
 
-searchTable cloneEnd_ABC16
+searchTable cloneEndABC16
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC16-([0-9A-Z])+
 
-searchTable cloneEnd_ABC18
+searchTable cloneEndABC18
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC18-([0-9A-Z])+
 
-searchTable cloneEnd_ABC20
+searchTable cloneEndABC20
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC20-([0-9A-Z])+
 
-searchTable cloneEnd_ABC21
+searchTable cloneEndABC21
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC21-([0-9A-Z])+
 
-searchTable cloneEnd_ABC22
+searchTable cloneEndABC22
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC22-([0-9A-Z])+
 
-searchTable cloneEnd_ABC23
+searchTable cloneEndABC23
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC23-([0-9A-Z])+
 
-searchTable cloneEnd_ABC24
+searchTable cloneEndABC24
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC24-([0-9A-Z])+
 
-searchTable cloneEnd_ABC27
+searchTable cloneEndABC27
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC27-([0-9A-Z])+
 
-searchTable cloneEnd_ABC7
+searchTable cloneEndABC7
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC7-([0-9A-Z])+
 
-searchTable cloneEnd_ABC8
+searchTable cloneEndABC8
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC8-([0-9A-Z])+
 
-searchTable cloneEnd_ABC9
+searchTable cloneEndABC9
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex ABC9-([0-9A-Z])+
 
-searchTable cloneEnd_CH17
+searchTable cloneEndCH17
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex CH17-([0-9A-Z])+
 
-searchTable cloneEnd_COR02
+searchTable cloneEndCOR02
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex COR02-DD0002([0-9A-Z_])+
 
-searchTable cloneEnd_COR2A
+searchTable cloneEndCOR2A
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex COR2A-DD000([0-9A-Z_])+
 
-searchTable cloneEnd_CTD
+searchTable cloneEndCTD
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex CTD-([0-9A-Z])+
 
-searchTable cloneEnd_RP11
+searchTable cloneEndRP11
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex RP11-([0-9A-Z])+
 
-searchTable cloneEnd_WI2
+searchTable cloneEndWI2
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [GW][2I][24][-8]([0-9A-Z])+
 
-searchTable cloneEnd_multipleMaps
+searchTable cloneEndmultipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
 termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
 
-searchTable cloneEnd_badEnds
+searchTable cloneEndbadEnds
 searchType bed
 searchMethod prefix
 searchPriority 50

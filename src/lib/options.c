@@ -46,7 +46,6 @@ if (optionSpec == NULL)
 if (optionSpec == NULL)
     errAbort("-%s is not a valid option", name);
 
-long long discardMe = 0;
 switch (optionSpec->flags & OPTION_TYPE_MASK) {
 case OPTION_BOOLEAN:
     if (val != NULL)
@@ -59,7 +58,7 @@ case OPTION_STRING:
 case OPTION_INT:
     if (val == NULL)
         errAbort("int option -%s must have a value", name);
-    discardMe = strtol(val, &valEnd, 10);
+    (void) strtol(val, &valEnd, 10);  // ignore return
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid integer: \"%s\"",
                  name, val);
@@ -67,7 +66,7 @@ case OPTION_INT:
 case OPTION_LONG_LONG:
     if (val == NULL)
         errAbort("int option -%s must have a value", name);
-    discardMe = strtoll(val, &valEnd, 10);
+    (void) strtoll(val, &valEnd, 10);  // ignore return
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid long long: \"%s\"",
                  name, val);
@@ -75,7 +74,7 @@ case OPTION_LONG_LONG:
 case OPTION_FLOAT:
     if (val == NULL)
         errAbort("float option -%s must have a value", name);
-    discardMe = (long long)strtod(val, &valEnd);
+    (void) (long long)strtod(val, &valEnd);  // ignore return
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid float: \"%s\"",
                  name, val);
@@ -83,7 +82,7 @@ case OPTION_FLOAT:
 case OPTION_DOUBLE:
     if (val == NULL)
         errAbort("double option -%s must have a value", name);
-    discardMe = (long long)strtod(val, &valEnd);
+    (void) (long long)strtod(val, &valEnd);  // ignore return
     if ((*val == '\0') || (*valEnd != '\0'))
         errAbort("value of -%s is not a valid double: \"%s\"",
                  name, val);

@@ -793,4 +793,29 @@ http://genome.crg.es/genepredictions/B.taurus/bosTau8/geneid_v1.4/bosTau8.geneid
 # 44623578 bases of 2902896901 (1.537%) in intersection
 
 ##########################################################################
+# SGP GENE PREDICTIONS (DONE - 2015-07-20 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/bosTau8/bed/sgpGene
+    cd /hive/data/genomes/bosTau8/bed/sgpGene
+
+for F in 00README bosTau8.Hs-Mm.sgp2 bosTau8.Hs-Mm.sgp2.cds \
+    bosTau8.Hs-Mm.sgp2.gff bosTau8.Hs-Mm.sgp2.gff3 bosTau8.Hs-Mm.sgp2.gtf \
+    bosTau8.Hs-Mm.sgp2.prot
+do
+wget --timestamping \
+  http://genome.crg.es/genepredictions/B.taurus/bosTau8/SGP2/hg38/${F}
+done
+
+    ldHgGene -gtf -genePredExt bosTau8 sgpGene bosTau8.Hs-Mm.sgp2.gtf
+    # Read 35519 transcripts in 297667 lines in 1 files
+    # 35519 groups 364 seqs 1 sources 3 feature types
+    # 35519 gene predictions
+
+    featureBits -countGaps bosTau8 sgpGene
+# 36198709 bases of 2670044500 (1.356%) in intersection
+    featureBits -countGaps bosTau3 sgpGene
+# 40658543 bases of 2902896901 (1.401%) in intersection
+
+##########################################################################
+
 

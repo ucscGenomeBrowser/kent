@@ -1,0 +1,21 @@
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+# Test intersections of nonzero regions (some adjacent but not overlapping,
+# some substitutions and some deletions) and zero-length insertions:
+# primary    ><pil       -------p------            ><pi
+#                  -----pl------
+#                               -----pr-----
+# secondary  - <-> <---->   <>         <>   <>  <->
+#                                               <----->
+#                                                   <->
+#                       -jBS*          -jAS*       -leftPiS*
+#                        -leftS*      -rightS*      -rightPiS*
+#                       ><insLeft     ><insRight   ><insPi
+#                                                 ><insJBInsPi
+#                                                   ><insJAInsPi
+# track name=primary
+chr1	 20     pil	N	NA	1	PASS	.
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350
+chr1	400	pi	N	NA	1	PASS	.

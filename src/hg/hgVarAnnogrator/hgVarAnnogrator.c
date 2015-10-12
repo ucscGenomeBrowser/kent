@@ -1661,7 +1661,7 @@ if (isCustomTrack(src->selTable))
 if (startsWith("wig", tdb->type))
     {
     struct annoAssembly *assembly = getAnnoAssembly(db);
-    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, maxOutRows);
+    grator = annoGrateWigDbNew(dataDb, dbTable, assembly, agwmAverage, maxOutRows);
     }
 else
     {

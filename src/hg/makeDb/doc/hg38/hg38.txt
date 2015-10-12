@@ -5609,10 +5609,20 @@ done
 for L in `cat libs.over20K.list`
 do
     echo $L 1>&2
-    hgLoadBed -type=bed12 hg38 cloneEnd_${L} \
+    hgLoadBed -type=bed12 hg38 cloneEnd${L} \
        separateLibs/${L}/hg38.median3X.bed \
         > separateLibs/loadBed.${L}.log 2>&1
 done
+
+   # loading the dropped ends:
+   mkdir /hive/data/genomes/hg38/bed/cloneEnds/droppedTooBig
+   # link them to here
+   cat ../libs.over20K.list | while read L
+do
+  ln -s ../separateLibs/${L}/hg38.badMap.bed ${L}.badMap.bed
+done
+  # then load
+  hgLoadBed -type=bed12 hg38 cloneEndbadEnds *.badMap.bed
 
     # construct multiple mapped ends:
 for L in `cat libs.over20K.list`
@@ -5629,7 +5639,7 @@ done | sort -k4 > allEnds.bed
        -2 4 multiples.names.txt allEnds.bed | sort -k1,1 -k2,2n \
            > allEnds.multiple.locations.bed
 
-    hgLoadBed -type=bed12 hg38 cloneEnd_multipleMaps \
+    hgLoadBed -type=bed12 hg38 cloneEndmultipleMaps \
         allEnds.multiple.locations.bed > load.multipleMaps.log 2>&1
 
     awk '$6 == "+"' allEnds.bed | sort -k1,1 -k2,2n \
@@ -5640,20 +5650,20 @@ done | sort -k4 > allEnds.bed
 
     bedGraphToBigWig allEnds.forward.bedGraph \
        /hive/data/genomes/hg38/chrom.sizes \
-         cloneEnd_coverageForward.bw
+         cloneEndcoverageForward.bw
 
     bedGraphToBigWig allEnds.reverse.bedGraph \
        /hive/data/genomes/hg38/chrom.sizes \
-          cloneEnd_coverageReverse.bw
+          cloneEndcoverageReverse.bw
 
     mkdir /gbdb/hg38/bbi/cloneEnd
-    ln -s `pwd`/cloneEnd_coverageForward.bw /gbdb/hg38/bbi/cloneEnd
-    ln -s `pwd`/cloneEnd_coverageReverse.bw /gbdb/hg38/bbi/cloneEnd
+    ln -s `pwd`/cloneEndcoverageForward.bw /gbdb/hg38/bbi/cloneEnd
+    ln -s `pwd`/cloneEndcoverageReverse.bw /gbdb/hg38/bbi/cloneEnd
 
-    hgBbiDbLink hg38 cloneEnd_coverageForward \
-        /gbdb/hg38/bbi/cloneEnd/cloneEnd_coverageForward.bw
-    hgBbiDbLink hg38 cloneEnd_coverageReverse \
-        /gbdb/hg38/bbi/cloneEnd/cloneEnd_coverageReverse.bw
+    hgBbiDbLink hg38 cloneEndcoverageForward \
+        /gbdb/hg38/bbi/cloneEnd/cloneEndcoverageForward.bw
+    hgBbiDbLink hg38 cloneEndcoverageReverse \
+        /gbdb/hg38/bbi/cloneEnd/cloneEndcoverageReverse.bw
 
     ### Fixup the scores to indicate how many multiple mappings as mentioned
     ### in the hg19 bacEnds description page: one mapping: score = 1000
@@ -5666,11 +5676,11 @@ done | sort -k4 > allEnds.bed
     mkdir /hive/data/genomes/hg38/bed/cloneEnds/addCounts
     cd /hive/data/genomes/hg38/bed/cloneEnds/addCounts
     mkdir score withScore noScore withScore
-    for table in cloneEnd_ABC10 cloneEnd_ABC11 cloneEnd_ABC12 cloneEnd_ABC13 \
-cloneEnd_ABC14 cloneEnd_ABC16 cloneEnd_ABC18 cloneEnd_ABC20 cloneEnd_ABC21 \
-cloneEnd_ABC22 cloneEnd_ABC23 cloneEnd_ABC24 cloneEnd_ABC27 cloneEnd_ABC7 \
-cloneEnd_ABC8 cloneEnd_ABC9 cloneEnd_CH17 cloneEnd_COR02 cloneEnd_COR2A \
-cloneEnd_CTD cloneEnd_RP11 cloneEnd_WI2 cloneEnd_badEnds cloneEnd_multipleMaps
+    for table in cloneEndABC10 cloneEndABC11 cloneEndABC12 cloneEndABC13 \
+cloneEndABC14 cloneEndABC16 cloneEndABC18 cloneEndABC20 cloneEndABC21 \
+cloneEndABC22 cloneEndABC23 cloneEndABC24 cloneEndABC27 cloneEndABC7 \
+cloneEndABC8 cloneEndABC9 cloneEndCH17 cloneEndCOR02 cloneEndCOR2A \
+cloneEndCTD cloneEndRP11 cloneEndWI2 cloneEndbadEnds cloneEndmultipleMaps
 do
   hgsql -N -e "select name from $table;" hg38 | sort | uniq -c |
       awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
@@ -6284,3 +6294,48 @@ rm tmpChrom
 # ENCODE Regulatory tracks  (Kate & Chris)
 
 # see reg.txt
+#########################################################################
+2015-10-02: import of UCSC GENCODE group processing of GENCODE V23 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV23
+    cd /hive/data/genomes/hg38/bed/gencodeV23
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.
+    ## Important to make sure filter attrs.transcriptType matches current set
+    ## figured out with
+    select distinct transcriptType from wgEncodeGencodeAttrsV23 order by transcriptType;
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV22.ra human/hg38/wgEncodeGencodeV23.ra
+    cp human/hg38/wgEncodeGencodeV22.html human/hg38/wgEncodeGencodeV23.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV23.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg38/bed/gencodeV23
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################

@@ -15,11 +15,19 @@ void webSetStyle(char *style);
 void webStartText();
 /* output the head for a text page */
 
-void webStart(struct cart *theCart, char *db, char* format,...);
+void webStart(struct cart *theCart, char *db, char* format,...)
 /* output a CGI and HTML header with the given title in printf format */
+#if defined(__GNUC__)
+__attribute__((format(printf, 3, 4)))
+#endif
+;
 
-void webStartHeader(struct cart *theCart, char *db, char *header, char* format,...);
+void webStartHeader(struct cart *theCart, char *db, char *header, char* format,...)
 /* output a CGI and HTML header with the given title in printf format */
+#if defined(__GNUC__)
+__attribute__((format(printf, 4, 5)))
+#endif
+;
 
 void webStartWrapper(struct cart *theCart, char *db, char *format, va_list args, boolean withHttpHeader,
 	boolean withLogo);
@@ -47,8 +55,12 @@ void webStartSectionTables();
 void webFirstSection(char *title);
 /* Put up the first section (normally done by webStartWrap). */
 
-void webNewSection(char* format, ...);
+void webNewSection(char* format, ...)
 /* create a new section on the web page */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
 
 void webNewEmptySection();
 /* create a new section on the web page to maintain table layout */
@@ -76,8 +88,12 @@ void webVaWarn(char *format, va_list args);
 boolean webGotWarnings();
 /* Return TRUE if webVaWarn has been called. */
 
-void webAbort(char* title, char* format, ...);
+void webAbort(char* title, char* format, ...)
 /* an abort function that outputs a error page */
+#if defined(__GNUC__)
+__attribute__((format(printf, 2, 3)))
+#endif
+;
 
 void printCladeListHtml(char *genome, char *onChangeText);
 /* Make an HTML select input listing the clades. */

@@ -1,0 +1,392 @@
+track kap1SummitCoverage
+shortLabel Kap1 summit coverage
+longLabel Coverage of Kap1 MACS summits +- 10 bp
+group regulation
+visibility full
+color 0,0,200
+type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
+priority 50
+
+track kap1Summits
+shortLabel Kap1 summits
+longLabel Kap1 MACS summits +- 10 bp
+group regulation
+visibility hide
+color 30,30,0
+type psl xeno hg19
+otherDb hg19
+priority 52
+
+track ZNF486SummitCoverage
+shortLabel Znf486 Coverage
+longLabel Coverage of Znf486 MACS summits +- 10 bp
+group regulation
+visibility full
+color 0,100,0
+type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
+priority 50
+
+track H3K9m3SummitCoverage
+shortLabel H3K9m3 Coverage
+longLabel Coverage of H3K9m3 MACS summits +- 10 bp
+group regulation
+visibility full
+color 200,0,0
+type bigWig 0 130
+autoScale on
+maxHeightPixels 100:50:8
+priority 50
+
+
+# greenberg tracks
+track greenberg
+shortLabel Dave annotations
+longLabel Dave annotations
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+track hervAnnots
+shortLabel Manual Annotations
+longLabel Manual Annotations based on Experiments and Literature
+group map
+visibility pack
+color 30,30,100
+type psl .
+priority 30
+exonNumbers off
+
+track motifMatches
+shortLabel Selected Motifs
+longLabel Selected Motif Matches
+group map
+visibility dense
+color 30,30,30
+type bed 4
+exonNumbers off
+
+track vntr15
+shortLabel VNTR15 matches
+longLabel VNTR15 matches
+group x
+visibility hide
+color 30,30,100
+type psl .
+priority 30
+
+# ----------------
+#
+track kap1Tracks
+container multiWig
+shortLabel K1 Summits
+longLabel K1 44/83/84 ChipSeq Summits
+aggregate transparentOverlay
+group regulation
+type bigWig
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track Kap1S44SummitCov
+        shortLabel K1 44
+        longLabel Coverage of K1 44 summits +- 10 bp
+        visibility full
+        parent kap1Tracks
+        color 0,0,200
+        type bigWig
+
+        track Kap1S83SummitCov
+        shortLabel K1 83
+        longLabel Coverage of K1 83 summits +- 10 bp
+        visibility full
+        parent kap1Tracks
+        color 0,200,200
+        type bigWig
+
+        track Kap1S84SummitCov
+        shortLabel K1 84
+        longLabel Coverage of K1 84 summits +- 10 bp
+        visibility full
+        parent kap1Tracks
+        color 200,0,200
+        type bigWig
+
+track H3K4SummitCov
+container multiWig
+shortLabel H3K4nz Summits
+longLabel H3K4nz 148/149 ChipSeq Summits
+aggregate transparentOverlay
+group regulation
+type bigWig
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track H3K4nzS148SummitCov
+        shortLabel H3K4nz 148
+        longLabel Coverage of K4nz 184 summits +- 10 bp
+        visibility full
+        parent H3K4SummitCov
+        color 0,0,200
+        type bigWig
+
+        track H3K4nzS149SummitCov
+        shortLabel H3K4nz 149
+        longLabel Coverage of H3K4nz 184 summits +- 10 bp
+        visibility full
+        parent H3K4SummitCov
+        color 0,0,200
+        type bigWig
+
+track H3K4evSummitCov
+container multiWig
+shortLabel H3K4ev Summits
+longLabel H3K4ev 213/212 ChipSeq Summits
+aggregate transparentOverlay
+group regulation
+type bigWig
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track H3K4evS213SummitCov
+        shortLabel H3K4ev 213
+        longLabel Coverage of H3K4ev 213 summits +- 10 bp
+        visibility full
+        parent H3K4evSummitCov
+        color 0,0,200
+        type bigWig
+
+        track H3K4evS212SummitCov
+        shortLabel H3K4ev 212
+        longLabel Coverage of H3K4 212 summits +- 10 bp
+        visibility full
+        parent H3K4evSummitCov
+        color 0,0,200
+        type bigWig
+
+
+track H3K4z9SummitCov
+container multiWig
+shortLabel H3K4z9 Summits
+longLabel H3K4z9 214/215 ChipSeq Summits
+aggregate transparentOverlay
+group regulation
+type bigWig
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track H3K4z9S214SummitCov
+        shortLabel H3K4z9 214
+        longLabel Coverage of H3K4z9 214 summits +- 10 bp
+        visibility full
+        parent H3K4z9SummitCov
+        color 0,0,200
+        type bigWig
+
+        track H3K4z9S215SummitCov
+        shortLabel H3K4z9 215
+        longLabel Coverage of H3K4z9 215 summits +- 10 bp
+        visibility full
+        parent H3K4z9SummitCov
+        color 0,0,200
+        type bigWig
+
+track H3K9SummitCov
+container multiWig
+shortLabel H3K9 Summits
+longLabel H3K9 189/190 ChipSeq Summits
+aggregate transparentOverlay
+group regulation
+type bigWig
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track H3K9me3S189SummitCov
+        shortLabel H3K9m3 189
+        longLabel Coverage of H3K9m3 189 summits +- 10 bp
+        visibility full
+        parent H3K9SummitCov
+        color 0,0,200
+        type bigWig
+
+        track H3K9me3S190SummitCov
+        shortLabel H3K9m3 190
+        longLabel Coverage of H3K9m3 190 summits +- 10 bp
+        visibility full
+        parent H3K9SummitCov
+        color 0,0,200
+        type bigWig
+
+track znf486SummitCov
+container multiWig
+shortLabel Z4 Summits
+longLabel ZNF486 191/192 ChipSeq Summits
+group regulation
+type bigWig
+aggregate transparentOverlay
+autoScale on
+visibility full
+color 0,0,100
+priority 80
+viewLimits 0:80
+maxHeightPixels 100:48:8
+
+        track ZNF486S191SummitCov
+        shortLabel Z486 191
+        longLabel Coverage of Z486 191 summits +- 10 bp
+        visibility full
+        parent znf486SummitCov
+        color 0,0,200
+        type bigWig
+
+        track ZNF486S192SummitCov
+        shortLabel Z486 192
+        longLabel Coverage of Z486 192 summits +- 10 bp
+        visibility full
+        parent znf486SummitCov
+        color 0,0,200
+        type bigWig
+
+# CHAINS for znf93
+track z3chainedHits3280
+shortLabel Z3 Chained Matches 3/2/80
+longLabel Z3 Chained Matches, min 3 fingers, maximum inserts 2, min avg score 80%
+group x
+visibility hide
+color 30,30,100
+type bigBed 12
+priority 31
+
+track z3chainedHits3090
+shortLabel Z3 Chained Matches 3/0/90
+longLabel Z3 Chained Matches, min 3 fingers, maximum inserts 0, min avg score 90%
+group x
+visibility hide
+color 100,0,100
+type bigBed 12
+priority 31
+
+track z3chainedHits2090
+shortLabel Z3 Chained Matches 2/0/90
+longLabel Z3 Chained Matches, min 2 fingers, maximum inserts 0, min avg score 90%
+group x
+visibility hide
+color 0,100,0
+type bigBed 12
+priority 31
+
+track z3chainedHits4380
+shortLabel Z3 Chained Matches 4/3/80
+longLabel Z3 Chained Matches, min 4 fingers, maximum inserts 3, min avg score 80%
+group x
+visibility hide
+color 100,100,100
+type bigBed 12
+priority 31
+
+track hits7580
+shortLabel Single finger hits, 80%
+longLabel Persikov individual finger matches: minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit75802To11
+shortLabel ZNF91 hits, 80%, ZF2-11
+longLabel Persikov ZNF91, finger 2-11 matches: minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+track hit758012To22
+shortLabel ZNF91 hits, 80%, ZF12-22
+longLabel Persikov ZNF91, finger 12-22 matches: minimum relative score 80%
+group x
+visibility hide
+color 30,30,100
+type bed 5
+priority 29
+
+# CHAINS ---
+# ZNF91 - track names do not reflect the parameters anymore
+track z1chainedHits3290
+shortLabel z1 Chained Matches 3/2/80
+longLabel z1 Chained Matches, min 3 fingers, maximum inserts 2, min avg score 80%
+group x
+visibility hide
+color 30,30,100
+type bigBed 12
+priority 31
+
+track z1chainedHits3280
+shortLabel Z1 Chained Matches 3/2/70
+longLabel Z1 Chained Matches, min 3 fingers, maximum inserts 2, min avg score 70%
+group x
+visibility hide
+color 30,30,100
+type bigBed 12
+priority 31
+
+track z1chainedHits3090
+shortLabel Z1 Chained Matches 3/0/80
+longLabel Z1 Chained Matches, min 3 fingers, maximum inserts 0, min avg score 80%
+group x
+visibility hide
+color 100,0,100
+type bigBed 12
+priority 31
+
+track z1chainedHits2090
+shortLabel Z1 Chained Matches 2/0/80
+longLabel Z1 Chained Matches, min 2 fingers, maximum inserts 0, min avg score 80%
+group x
+visibility hide
+color 0,100,0
+type bigBed 12
+priority 31
+
+track z1chainedHits4380
+shortLabel Z1 Chained Matches 4/3/70
+longLabel Z1 Chained Matches, min 4 fingers, maximum inserts 3, min avg score 70%
+group x
+visibility hide
+color 100,100,100
+type bigBed 12
+priority 31
+
+track greenMin
+shortLabel mira
+longLabel Mira alignment
+group regulation
+visibility hide
+color 30,90,30
+type bed 12
+priority 69

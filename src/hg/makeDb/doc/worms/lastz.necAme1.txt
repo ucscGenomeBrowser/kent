@@ -1,0 +1,754 @@
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Ascaris suum/Pig roundworm - ascSuu1
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzAscSuu1.2015-08-16
+    cd /hive/data/genomes/necAme1/bed/lastzAscSuu1.2015-08-16
+
+    cat << '_EOF_' > DEF
+# necAme1 vs ascSuu1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Ascaris suum/Pig roundworm - ascSuu1
+SEQ2_DIR=/hive/data/genomes/ascSuu1/ascSuu1.2bit
+SEQ2_LEN=/hive/data/genomes/ascSuu1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzAscSuu1.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m37.442s
+    cat fb.necAme1.chainAscSuu1Link.txt
+    # 6515063 bases of 208187215 (3.129%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 ascSuu1) > rbest.log 2>&1 &
+    # real 0m38.856s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/ascSuu1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/ascSuu1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzAscSuu1.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m6.586s
+    cat fb.ascSuu1.chainNecAme1Link.txt
+    # 6291196 bases of 262604320 (2.396%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` ascSuu1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m47.705s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Brugia malayi/Filarial worm - bruMal2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzBruMal2.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzBruMal2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs bruMal2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Brugia malayi/Filarial worm - bruMal2
+SEQ2_DIR=/hive/data/genomes/bruMal2/bruMal2.2bit
+SEQ2_LEN=/hive/data/genomes/bruMal2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzBruMal2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m37.563s
+    cat fb.necAme1.chainBruMal2Link.txt
+    # 5289476 bases of 208187215 (2.541%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 bruMal2) > rbest.log 2>&1 &
+    # real 0m32.442s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/bruMal2/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/bruMal2/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzBruMal2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m35.867s
+    cat fb.bruMal2.chainNecAme1Link.txt
+    # 5414787 bases of 87424120 (6.194%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bruMal2 necAme1) \
+      > rbest.log 2>&1
+    # real 0m37.781s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzBurXyl1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzBurXyl1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs burXyl1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Bursaphelenchus xylophilus/Pine wood nematode - burXyl1
+SEQ2_DIR=/hive/data/genomes/burXyl1/burXyl1.2bit
+SEQ2_LEN=/hive/data/genomes/burXyl1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzBurXyl1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m42.354s
+    cat fb.necAme1.chainBurXyl1Link.txt
+    # 5035251 bases of 208187215 (2.419%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 burXyl1) > rbest.log 2>&1 &
+    # real 0m43.599s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/burXyl1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/burXyl1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzBurXyl1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m51.794s
+    cat fb.burXyl1.chainNecAme1Link.txt
+    # 4679604 bases of 73100506 (6.402%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` burXyl1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m35.511s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Dirofilaria immitis/Dog heartworm - dirImm1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzDirImm1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzDirImm1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs dirImm1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Dirofilaria immitis/Dog heartworm - dirImm1
+SEQ2_DIR=/hive/data/genomes/dirImm1/dirImm1.2bit
+SEQ2_LEN=/hive/data/genomes/dirImm1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzDirImm1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m45.566s
+    cat fb.necAme1.chainDirImm1Link.txt
+    # 5158372 bases of 208187215 (2.478%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 dirImm1) > rbest.log 2>&1 &
+    # real 0m32.728s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/dirImm1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/dirImm1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzDirImm1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m5.470s
+    cat fb.dirImm1.chainNecAme1Link.txt
+    # 5006918 bases of 84923352 (5.896%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dirImm1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m41.121s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Haemonchus contortus/Barber pole worm - haeCon2
+# (DONE - 2015-08-16 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzHaeCon2.2015-08-16
+    cd /hive/data/genomes/necAme1/bed/lastzHaeCon2.2015-08-16
+
+    cat << '_EOF_' > DEF
+# necAme1 vs haeCon2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Haemonchus contortus/Barber pole worm - haeCon2
+SEQ2_DIR=/hive/data/genomes/haeCon2/haeCon2.2bit
+SEQ2_LEN=/hive/data/genomes/haeCon2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzHaeCon2.2015-08-16
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 13m35.193s
+    cat fb.necAme1.chainHaeCon2Link.txt
+    # 29177064 bases of 208187215 (14.015%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 haeCon2) > rbest.log 2>&1 &
+    # real 1m24.226s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/haeCon2/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/haeCon2/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzHaeCon2.2015-08-16/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 5m11.770s
+    cat fb.haeCon2.chainNecAme1Link.txt
+    # 42769920 bases of 346001353 (12.361%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` haeCon2 necAme1) \
+      > rbest.log 2>&1
+    # real 2m48.118s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Loa loa/Eye worm - loaLoa1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzLoaLoa1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzLoaLoa1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs loaLoa1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Loa loa/Eye worm - loaLoa1
+SEQ2_DIR=/hive/data/genomes/loaLoa1/loaLoa1.2bit
+SEQ2_LEN=/hive/data/genomes/loaLoa1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzLoaLoa1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m16.166s
+    cat fb.necAme1.chainLoaLoa1Link.txt
+    # 5434476 bases of 208187215 (2.610%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 loaLoa1) > rbest.log 2>&1 &
+    # real 0m32.142s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/loaLoa1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/loaLoa1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzLoaLoa1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m55.240s
+    cat fb.loaLoa1.chainNecAme1Link.txt
+    # 5118183 bases of 87533141 (5.847%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` loaLoa1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m34.349s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Meloidogyne hapla/M. hapla - melHap1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzMelHap1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzMelHap1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs melHap1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne hapla/M. hapla - melHap1
+SEQ2_DIR=/hive/data/genomes/melHap1/melHap1.2bit
+SEQ2_LEN=/hive/data/genomes/melHap1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzMelHap1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 3m47.971s
+    cat fb.necAme1.chainMelHap1Link.txt
+    # 3069272 bases of 208187215 (1.474%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 melHap1) > rbest.log 2>&1 &
+    # real 0m29.791s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melHap1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzMelHap1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m47.464s
+    cat fb.melHap1.chainNecAme1Link.txt
+    # 2935804 bases of 53017507 (5.537%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melHap1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m25.202s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Meloidogyne incognita/M. incognita - melInc2
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzMelInc2.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzMelInc2.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs melInc2
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Meloidogyne incognita/M. incognita - melInc2
+SEQ2_DIR=/hive/data/genomes/melInc2/melInc2.2bit
+SEQ2_LEN=/hive/data/genomes/melInc2/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzMelInc2.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m3.474s
+    cat fb.necAme1.chainMelInc2Link.txt
+    # 2942687 bases of 208187215 (1.413%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 melInc2) > rbest.log 2>&1 &
+    # real 0m31.129s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/melInc2/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/melInc2/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzMelInc2.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m51.706s
+    cat fb.melInc2.chainNecAme1Link.txt
+    # 3870419 bases of 82114761 (4.713%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` melInc2 necAme1) \
+      > rbest.log 2>&1
+    # real 0m28.679s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Onchocerca volvulus/O. volvulus - oncVol1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzOncVol1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzOncVol1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs oncVol1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Onchocerca volvulus/O. volvulus - oncVol1
+SEQ2_DIR=/hive/data/genomes/oncVol1/oncVol1.2bit
+SEQ2_LEN=/hive/data/genomes/oncVol1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzOncVol1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 5m15.022s
+    cat fb.necAme1.chainOncVol1Link.txt
+    # 5425777 bases of 208187215 (2.606%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 oncVol1) > rbest.log 2>&1 &
+    # real 0m48.683s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oncVol1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/oncVol1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzOncVol1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m50.802s
+    cat fb.oncVol1.chainNecAme1Link.txt
+    # 5222030 bases of 94327777 (5.536%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oncVol1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m45.765s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Pristionchus exspectatus/P. exspectatus - priExs1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzPriExs1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzPriExs1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs priExs1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus exspectatus/P. exspectatus - priExs1
+SEQ2_DIR=/hive/data/genomes/priExs1/priExs1.2bit
+SEQ2_LEN=/hive/data/genomes/priExs1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzPriExs1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 6m48.147s
+    cat fb.necAme1.chainPriExs1Link.txt
+    # 6248632 bases of 208187215 (3.001%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 priExs1) > rbest.log 2>&1 &
+    # real 0m36.156s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priExs1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/priExs1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzPriExs1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m4.450s
+    cat fb.priExs1.chainNecAme1Link.txt
+    # 7309633 bases of 166917800 (4.379%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priExs1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m45.953s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Pristionchus pacificus/P. pacificus - priPac3
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzPriPac3.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzPriPac3.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs priPac3
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Pristionchus pacificus/P. pacificus - priPac3
+SEQ2_DIR=/hive/data/genomes/priPac3/priPac3.2bit
+SEQ2_LEN=/hive/data/genomes/priPac3/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzPriPac3.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 8m12.906s
+    cat fb.necAme1.chainPriPac3Link.txt
+    # 6353102 bases of 208187215 (3.052%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 priPac3) > rbest.log 2>&1 &
+    # real 0m52.411s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/priPac3/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/priPac3/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzPriPac3.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 1m10.392s
+    cat fb.priPac3.chainNecAme1Link.txt
+    # 7037296 bases of 153238914 (4.592%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` priPac3 necAme1) \
+      > rbest.log 2>&1
+    # real 0m47.455s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Trichinella spiralis/Trichinella - triSpi1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzTriSpi1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzTriSpi1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs triSpi1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichinella spiralis/Trichinella - triSpi1
+SEQ2_DIR=/hive/data/genomes/triSpi1/triSpi1.2bit
+SEQ2_LEN=/hive/data/genomes/triSpi1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzTriSpi1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m18.800s
+    cat fb.necAme1.chainTriSpi1Link.txt
+    # 2326522 bases of 208187215 (1.118%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 triSpi1) > rbest.log 2>&1 &
+    # real 0m26.185s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSpi1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/triSpi1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzTriSpi1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m45.081s
+    cat fb.triSpi1.chainNecAme1Link.txt
+    # 2400189 bases of 58558192 (4.099%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSpi1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m24.636s
+
+########################################################################
+########################################################################
+# LASTZ Necator americanus/N. americanus - necAme1 vs.
+#       Trichuris suis/Whipworm - triSui1
+# (DONE - 2015-08-17 - Hiram)
+    mkdir /hive/data/genomes/necAme1/bed/lastzTriSui1.2015-08-17
+    cd /hive/data/genomes/necAme1/bed/lastzTriSui1.2015-08-17
+
+    cat << '_EOF_' > DEF
+# necAme1 vs triSui1
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET:Necator americanus/N. americanus - necAme1
+SEQ1_DIR=/hive/data/genomes/necAme1/necAme1.2bit
+SEQ1_LEN=/hive/data/genomes/necAme1/chrom.sizes
+SEQ1_CHUNK=4000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Trichuris suis/Whipworm - triSui1
+SEQ2_DIR=/hive/data/genomes/triSui1/triSui1.2bit
+SEQ2_LEN=/hive/data/genomes/triSui1/chrom.sizes
+SEQ2_CHUNK=4000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/necAme1/bed/lastzTriSui1.2015-08-17
+TMPDIR=/dev/shm
+'_EOF_'
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 -workhorse=hgwdev \
+      -bigClusterHub=ku -smallClusterHub=ku -syntenicNet) > do.log 2>&1
+    # real 4m26.391s
+    cat fb.necAme1.chainTriSui1Link.txt
+    # 2789972 bases of 208187215 (1.340%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` necAme1 triSui1) > rbest.log 2>&1 &
+    # real 0m24.360s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/triSui1/bed/blastz.necAme1.swap
+    cd /hive/data/genomes/triSui1/bed/blastz.necAme1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/necAme1/bed/lastzTriSui1.2015-08-17/DEF \
+        -swap -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    # real 0m45.476s
+    cat fb.triSui1.chainNecAme1Link.txt
+    # 2695997 bases of 71825323 (3.754%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` triSui1 necAme1) \
+      > rbest.log 2>&1
+    # real 0m23.220s
+
+########################################################################

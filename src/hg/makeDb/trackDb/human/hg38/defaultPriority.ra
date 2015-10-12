@@ -2,7 +2,6 @@
 
 track gold override
 html gold
-visibility pack
 priority 1
 
 # track hg38ContigDiff override

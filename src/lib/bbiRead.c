@@ -745,10 +745,9 @@ else if (bbi->version == 1)
 	for (i=0; i<zoomSectionCount; ++i)
 	    {
 	    /* Read, but ignore, position. */
-	    bits32 chromId, chromStart, chromEnd;
-	    chromId = udcReadBits32(udc, isSwapped);
-	    chromStart = udcReadBits32(udc, isSwapped);
-	    chromEnd = udcReadBits32(udc, isSwapped);
+	    udcReadBits32(udc, isSwapped);  // chromId
+	    udcReadBits32(udc, isSwapped);  // chromStart
+	    udcReadBits32(udc, isSwapped);  // chromEnd
 
 	    /* First time through set values, rest of time add to them. */
 	    if (i == 0)

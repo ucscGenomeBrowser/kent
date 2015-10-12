@@ -208,9 +208,12 @@ ssl-key=/somepath/server-key.pem
 ssl-cert=/somepath/server-cert.pem
 ssl-ca=/somepath/ca.pem
 ssl-capath=/somepath/
+ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
+# mysql 5.6.3 or later
 ssl-crl=/someCrlPath/some-crl.pem
 ssl-crlpath=/someCrlPath/
-ssl-cipher=DHE-RSA-AES256-SHA:AES128-SHA
+# mysql5.7 or later require all connections to be encrypted
+require_secure_transport server 
 
 After making changes to my.cnf, be sure to restart your mysqld service.
 
@@ -238,15 +241,37 @@ or it can be a commercial authority like veriSign.
 This typically is used to sign the certificate for the 
 server and users. The capath is a directory where ca-certs exist (OpenSSL only).
 
-The crl is a certificate revocation list.
+The crl is a certificate revocation list. (OpenSSL only).
 The crlpath is a directory where revocation lists exist (OpenSSL only).
 This crl options are a new feature in 5.6.3, not sure it works right yet.
 
 After making a key for the server, and signing a cert for it with ca,
 you can create SSL connections.
 
+Do not specify a passphrase when creating your server keys.
+
 The cipher setting is a colon-separated list of SSL ciphers that are supported.
 
+The security files like certs etc. that are specified in the above settings
+must be readable by the unix account that mysqld runs under, default is "mysql".
+
+SELinux or apparmor may block access to certain locations.
+/etc/mysql is the default location for .pem files on some platforms.
+
+yaSSL, which is still often used with the MySQL Community Edition, 
+expects keys to be in the PKCS #1 format and doesn't support the PKCS #8 format used by OpenSSL 1.0 and newer. 
+You can convert the key to the old format using openssl rsa:
+ openssl rsa -in key_in_pkcs1_or_pkcs8.pem -out key_in_pkcs1.pem
+
+yaSSL requires that all components of the CA certificate tree be contained within a single CA certificate file
+and that each certificate in the file has a unique SubjectName value.
+To work around this limitation, concatenate the individual certificate files comprising the certificate tree
+into a new file and specify that file as the value of the --ssl-ca option. 
+For example,
+ cd my-certs-dir
+ cat ca-cert.pem server-cert.pem (etc) > yaSSL-ca-cert.pem
+ chmod +r yaSSL-ca-cert.pem
+Now use my-certs-dir/yaSSL-ca-cert.pem for certificate authority (ca) for clients.
 
 --------
 hg.conf:
@@ -291,7 +316,7 @@ GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
 
 
 You can tell mysql to use SSL for a user's account and to
-further require the client to user their key and x509 certificate to connect by saying:
+further require the client to use their key and x509 certificate to connect by saying:
 
 GRANT ALL PRIVILEGES ON *.* TO 'someuser'@'%'
   REQUIRE x509;

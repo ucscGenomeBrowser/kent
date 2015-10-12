@@ -139,47 +139,13 @@ while ((wordCount = lineFileChopNext(lf, words, ArraySize(words))) != 0)
     else
         slAddHead(&(hel->val), agp);
     }
-#ifndef DEBUG
-    {
-struct hashCookie cookie;
-struct hashEl *hel;
-cookie = hashFirst(agpHash);
-while ((hel = hashNext(&cookie)) != NULL)
-    {
-    struct agp *agpList;
-    agpList = (struct agp *)hel->val;
-    /*
-    for (agp = agpList; agp != NULL; agp = agp->next)
-        printf("isFrag: %d\n", agp->isFrag);
-        */
-    }
-    }
-#endif
 /* reverse AGP lists */
-//hashTraverseVals(agpHash, slReverse);
-#ifndef DEBUG
-    {
 struct hashCookie cookie;
-struct hashEl *hel;
 cookie = hashFirst(agpHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
-    struct agp *agpList;
     slReverse(&hel->val);
-    agpList = hel->val;
-    /*
-    agpList = (struct agp *)hel->val;
-    slReverse(&agpList);
-    hashRemove(agpHash, hel->name);
-    hashAdd(agpHash, hel->name, agpList);
-    */
-    /*
-    for (agp = agpList; agp != NULL; agp = agp->next)
-        printf("isFrag: %d\n", agp->isFrag);
-        */
     }
-    }
-#endif
 return agpHash;
 }
 

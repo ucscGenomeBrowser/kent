@@ -912,7 +912,7 @@ char *getIdField(char *db, struct trackDb *track, char *table,
 char *idField = NULL;
 if (hti != NULL && hti->nameField[0] != 0)
     idField = cloneString(hti->nameField);
-else if (track != NULL)
+else if (track != NULL && !tdbIsComposite(track))
     {
     struct hTableInfo *trackHti = maybeGetHtiOnDb(db, track->table);
     if (trackHti != NULL && isCustomTrack(table))
@@ -940,6 +940,16 @@ else if (track != NULL)
  * use the first field. */
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
+    char *dotPos = strstr(table, ".");
+    if (dotPos != NULL)
+        // if the database is part of the table name in mysql notation
+        // (= databaseName.tableName), split the table string and override db.
+        // The jksql table name/field cache cannot handle it otherwise
+        {
+            *dotPos = 0;
+            db = table;
+            table = dotPos+1;
+        }
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
     if (fieldList == NULL)

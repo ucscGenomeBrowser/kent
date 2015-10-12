@@ -602,8 +602,7 @@ while (fgets(lineBuf, sizeof(lineBuf), f))
     if (strncmp(lineBuf, orfName, nameLen) == 0 && lineBuf[nameLen] == ' ')
         {
         char *words[2];
-        int wordCount;
-        wordCount = chopLine(lineBuf, words);
+        chopLine(lineBuf, words);  // ignore return wordCount
         assert((int)strlen(words[1]) < bufSize);
         strncpy(geneNameBuf, words[1], bufSize);
         ok = TRUE;

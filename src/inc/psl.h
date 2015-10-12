@@ -197,10 +197,18 @@ struct psl *pslFromFakeFfAli(struct ffAli *ff,
 int pslOrientation(struct psl *psl);
 /* Translate psl strand + or - to orientation +1 or -1 */
 
-/* marcos to get query and target strand.  Target returns implied + when
+INLINE char pslQStrand(struct psl *psl)
+/* Get query strand. */
+{
+return psl->strand[0];
+}
+
+INLINE char pslTStrand(struct psl *psl)
+/* Get the target strand., Returns implied + when
  * it's not specific  */
-#define pslQStrand(p) ((p)->strand[0])
-#define pslTStrand(p) (((p)->strand[1] != '-') ? '+' : '-')
+{
+return (psl->strand[1] != '-') ? '+' : '-';
+}
 
 int pslWeightedIntronOrientation(struct psl *psl, struct dnaSeq *genoSeq, int offset);
 /* Return >0 if introns make it look like alignment is on + strand,
@@ -286,6 +294,9 @@ void pslGrow(struct psl *psl, int *blockSpacePtr);
  * should point the the current maximum number of blocks and will be
  * updated to with the new amount of space. */
 
+void pslComputeInsertCounts(struct psl *psl);
+/* compute numInsert and baseInsert fields from the blocks */
+
 struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
                              char *tName, int tSize, int tStart, int tEnd,
                              char* strand, char *cigar);
@@ -300,6 +311,18 @@ float pslIdent(struct psl *psl);
 float pslQueryAligned(struct psl *psl);
 /* compute fraction of query that was aligned */
 
+INLINE unsigned pslQStart(struct psl *psl, int blkIdx)
+/* return query start for the given block */
+{
+return psl->qStarts[blkIdx];
+}
+
+INLINE unsigned pslTStart(struct psl *psl, int blkIdx)
+/* return target start for the given block */
+{
+return psl->tStarts[blkIdx];
+}
+
 INLINE unsigned pslQEnd(struct psl *psl, int blkIdx)
 /* return query end for the given block */
 {
@@ -311,6 +334,9 @@ INLINE unsigned pslTEnd(struct psl *psl, int blkIdx)
 {
 return psl->tStarts[blkIdx] + psl->blockSizes[blkIdx];
 }
+
+struct psl* pslClone(struct psl *psl);
+/* clone a psl */
 
 #endif /* PSL_H */
 

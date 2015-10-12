@@ -582,5 +582,22 @@ void cartCheckForCustomTracks(struct cart *cart, struct dyString *dyMessage);
 /* Scan cart for ctfile_<db> variables.  Tally up the databases that have
  * live custom tracks and those that have expired custom tracks. */
 /* While we're at it, also look for saved blat results. */
+
+#define CART_HAS_DEFAULT_VISIBILITY "defaultsSet"
+
+extern void cartHideDefaultTracks(struct cart *cart);
+/* Hide all the tracks who have default visibilities in trackDb
+ * that are something other than hide.  Do this only if the
+ * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
+
+char *cartGetPosition(struct cart *cart, char *database);
+/* get the current position in cart as a string chr:start-end.
+ * This can handle the special CGI params 'default' and 'lastDbPos'
+ * Returned value has to be freed. Returns default position of assembly 
+ * if no position set in cart nor as CGI var.
+*/
+
+void cartSetDbPosition(struct cart *cart, char *database, char *position);
+/* set the 'position.db' variable in the cart */
 #endif /* CART_H */
 

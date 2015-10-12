@@ -10,6 +10,7 @@
 #include "portable.h"
 #include "linefile.h"
 #include "errAbort.h"
+#include "filePath.h"
 #ifndef GBROWSE
 #include "mime.h"
 #endif /* GBROWSE */
@@ -74,6 +75,22 @@ char *scriptName = getenv("SCRIPT_NAME");
 if (scriptName == NULL)
     scriptName = "cgiSpoofedScript";
 return scriptName;
+}
+
+char *cgiScriptDirUrl()
+/* Return the absolute cgi-bin directory on this webserver.
+ * This is not the local directory but the <path> part after the server
+ * in external URLs to this webserver.
+ * e.g. if CGI is called http://localhost/subdir/cgi-bin/cgiTest
+ * then returned value is /subdir/
+ * return value must be free'd. */
+{
+char* cgiPath = cloneString(cgiScriptName());
+char dir[PATH_LEN];
+splitPath(cgiPath, dir, NULL, NULL);
+char* dirStr = needMem(PATH_LEN);
+safecpy(dirStr, PATH_LEN, dir);
+return dirStr;
 }
 
 char *cgiServerName()
@@ -382,10 +399,10 @@ if (!startsWith("multipart/form-data",ct))
 
 for(mp=mp->multi;mp;mp=mp->next)
     {
-    char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL, *ct = NULL;
+    char *cd = NULL, *cdMain = NULL, *cdName = NULL, *cdFileName = NULL;
     cd = hashFindVal(mp->hdr,"content-disposition");
-    ct = hashFindVal(mp->hdr,"content-type");
     //debug
+    // char *ct = hashFindVal(mp->hdr,"content-type");
     //fprintf(stderr,"GALT: content-disposition: %s\n",cd);
     //fprintf(stderr,"GALT: content-type: %s\n",ct);
     //fflush(stderr);

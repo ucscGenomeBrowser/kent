@@ -19,3 +19,8 @@ visibility hide
 track nscanGene override
 informant Rabbit N-SCAN used human (hg19) as the informant for conservation.
 
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXn]+[0-9_]+(\.[0-9]+)?
+searchPriority 50

@@ -14,11 +14,13 @@ struct annoFormatTab
     FILE *f;                            // Output file handle
     struct hash *columnVis;             // Hash of columns that have been explicitly selected
                                         // or deselected by user.
+    boolean **columnFlags;              // 2D array[sources][columns] of flags for whether each
+                                        // column of each source is to be included in output.
+    int *columnFlagLengths;             // array[sources] of column counts (lengths of subarrays),
+                                        // for bounds-checking
+    int sourceCount;                    // Number of sources (primary + grators)
     boolean needHeader;			// TRUE if we should print out the header
     };
-
-//#*** config options: avg? more stats? list of values?
-static boolean doAvg = TRUE;
 
 static void makeFullColumnName(char *fullName, size_t size, char *sourceName, char *colName)
 /* If sourceName is non-empty, make fullName sourceName.colName, otherwise just colName. */
@@ -42,7 +44,7 @@ makeFullColumnName(fullName, sizeof(fullName), sourceName, colName);
 hashAddInt(self->columnVis, fullName, enabled);
 }
 
-static boolean columnIsIncluded(struct annoFormatTab *self, char *sourceName, char *colName)
+static boolean columnNameIsIncluded(struct annoFormatTab *self, char *sourceName, char *colName)
 // Return TRUE if column has not been explicitly deselected.
 {
 if (self->columnVis)
@@ -56,84 +58,97 @@ if (self->columnVis)
 return TRUE;
 }
 
-static boolean isWiggle(struct asColumn *colList)
-/* Recognize wiggle/bigWig data by its column signature. */
+static void addColumnFlagsForSource(struct annoFormatTab *self, struct annoStreamer *streamer)
+/* Make an array of flags for whether to include each column from streamer. */
 {
-return (slCount(colList) == 4 &&
-        sameString(colList->name, "chrom") &&
-        sameString(colList->next->name, "chromStart") &&
-        sameString(colList->next->next->name, "chromEnd") &&
-        sameString(colList->next->next->next->name, "value"));
+uint sourceIx = self->sourceCount;
+int colCount = slCount(streamer->asObj->columnList);
+AllocArray(self->columnFlags[sourceIx], colCount);
+self->columnFlagLengths[sourceIx] = colCount;
+struct asColumn *col;
+uint colIx;
+for (colIx = 0, col = streamer->asObj->columnList;  col != NULL;  col = col->next, colIx++)
+    self->columnFlags[sourceIx][colIx] = columnNameIsIncluded(self, streamer->name, col->name);
+self->sourceCount++;
+}
+
+static void makeColumnFlags(struct annoFormatTab *self, struct annoStreamer *primary,
+                            struct annoStreamer *integrators)
+/* Build arrays of flags for whether each column from each source is to be included
+ * in the output.  */
+{
+int sourceCount = 1 + slCount(integrators);
+AllocArray(self->columnFlags, sourceCount);
+AllocArray(self->columnFlagLengths, sourceCount);
+// self->sourceCount is incremented by each call to addColumnFlags
+self->sourceCount = 0;
+addColumnFlagsForSource(self, primary);
+struct annoStreamer *grator;
+for (grator = integrators;  grator != NULL;  grator = grator->next)
+    addColumnFlagsForSource(self, grator);
+assert(self->sourceCount == sourceCount);
+}
+
+INLINE boolean columnIsIncluded(struct annoFormatTab *self, uint sourceIx, uint colIx)
+/* Look up flag for whether this source's column is included in output. */
+{
+if (sourceIx >= self->sourceCount)
+    errAbort("annoFormatTab: illegal sourceIx %d (count is %d)", sourceIx, self->sourceCount);
+if (colIx >= self->columnFlagLengths[sourceIx])
+    errAbort("annoFormatTab: illegal colIx %d (lengths[%d] is %d) -- out-of-order sources?",
+             colIx, sourceIx, self->columnFlagLengths[sourceIx]);
+return self->columnFlags[sourceIx][colIx];
 }
 
 static void printHeaderColumns(struct annoFormatTab *self, struct annoStreamer *source,
-                               boolean isFirst)
+                               uint sourceIx, boolean *pIsFirst)
 /* Print names of included columns from this source. */
 {
 FILE *f = self->f;
 char *sourceName = source->name;
-boolean isAvg = isWiggle(source->asObj->columnList) && doAvg;
+boolean isFirst = (pIsFirst && *pIsFirst);
+uint colIx;
 struct asColumn *col;
-int i;
-for (col = source->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
+for (colIx = 0, col = source->asObj->columnList;  col != NULL;  col = col->next, colIx++)
     {
-    if (columnIsIncluded(self, sourceName, col->name))
+    if (columnIsIncluded(self, sourceIx, colIx))
         {
         if (isFirst)
-            {
-            fputc('#', f);
             isFirst = FALSE;
-            }
         else
             fputc('\t', f);
         char fullName[PATH_LEN];
         makeFullColumnName(fullName, sizeof(fullName), sourceName, col->name);
-        if (isAvg && sameString(col->name, "value"))
-            safecat(fullName, sizeof(fullName), "Average");
         fputs(fullName, f);
         }
     }
+if (pIsFirst != NULL)
+    *pIsFirst = isFirst;
 }
 
 static void aftInitialize(struct annoFormatter *vSelf, struct annoStreamer *primary,
 			  struct annoStreamer *integrators)
-/* Print header, regardless of whether we get any data after this. */
+/* Print header, regardless of whether we get any data after this.
+ * Also build arrays of flags for whether each column from each source is to be included
+ * in the output.  */
 {
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
+makeColumnFlags(self, primary, integrators);
 if (self->needHeader)
     {
     char *primaryHeader = primary->getHeader(primary);
+    boolean isFirst = TRUE;
     if (isNotEmpty(primaryHeader))
 	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
-    printHeaderColumns(self, primary, TRUE);
+    fputc('#', self->f);
+    printHeaderColumns(self, primary, 0, &isFirst);
+    uint sourceIx;
     struct annoStreamer *grator;
-    for (grator = integrators;  grator != NULL;  grator = grator->next)
-	printHeaderColumns(self, grator, FALSE);
+    for (sourceIx = 1, grator = integrators;  grator != NULL;  grator = grator->next, sourceIx++)
+	printHeaderColumns(self, grator, sourceIx, &isFirst);
     fputc('\n', self->f);
     self->needHeader = FALSE;
     }
-}
-
-static double wigRowAvg(struct annoRow *row)
-/* Return the average value of floats in row->data. */
-{
-float *vector = row->data;
-int len = row->end - row->start;
-int count = 0;
-double sum = 0.0;
-int i;
-for (i = 0;  i < len;  i++)
-    {
-    // skip NAN values so they don't convert sum to a NAN:
-    if (! isnan(vector[i]))
-        {
-        sum += vector[i];
-        count++;
-        }
-    }
-// I expected "double avg = sum / (double)count" to yield NAN if count is 0 --
-// but avg was negative NAN!  Avoid the fp exception and weird value by testing count:
-return (count > 0) ? sum / (double)count : NAN;
 }
 
 static char **bed4WordsFromAnnoRow(struct annoRow *row, char *fourth)
@@ -151,26 +166,31 @@ words[3] = cloneString(fourth);
 return words;
 }
 
-static char **wordsFromWigRowAvg(struct annoRow *row)
-/* Return chrom, chromStart, chromEnd and a string containing the average of values in row. */
+static char **wordsFromWigRow(struct annoRow *row, enum annoRowType rowType)
+/* Return chrom, chromStart, chromEnd and a string containing comma-sep per-base wiggle values
+ * if rowType is arWigVec, or one value if rowType is arWigSingle. */
 {
-double avg = wigRowAvg(row);
-if (isnan(avg))
-    return NULL;
-char avgStr[32];
-safef(avgStr, sizeof(avgStr), "%lf", avg);
-return bed4WordsFromAnnoRow(row, avgStr);
-}
-
-static char **wordsFromWigRowVals(struct annoRow *row)
-/* Return chrom, chromStart, chromEnd and a string containing comma-sep per-base wiggle values. */
-{
-float *vector = row->data;
-int len = row->end - row->start;
-struct dyString *dy = dyStringNew(10*len);
-int i;
-for (i = 0;  i < len;  i++)
-    dyStringPrintf(dy, "%g,", vector[i]);
+struct dyString *dy = NULL;
+if (rowType == arWigVec)
+    {
+    float *vector = row->data;
+    int len = row->end - row->start;
+    dy = dyStringNew(10*len);
+    int i;
+    for (i = 0;  i < len;  i++)
+        {
+        if (i > 0)
+            dyStringAppendC(dy, ',');
+        dyStringPrintf(dy, "%g", vector[i]);
+        }
+    }
+else if (rowType == arWigSingle)
+    {
+    double *pValue = row->data;
+    dy = dyStringCreate("%lf", *pValue);
+    }
+else
+    errAbort("wordsFromWigRow: invalid rowType %d", rowType);
 char **words = bed4WordsFromAnnoRow(row, dy->string);
 dyStringFree(&dy);
 return words;
@@ -186,12 +206,9 @@ boolean freeWhenDone = FALSE;
 char **words = NULL;
 if (source->rowType == arWords)
     words = row->data;
-else if (source->rowType == arWig)
+else if (source->rowType == arWigVec || source->rowType == arWigSingle)
     {
-    if (doAvg)
-	words = wordsFromWigRowAvg(row);
-    else
-	words = wordsFromWigRowVals(row);
+    words = wordsFromWigRow(row, source->rowType);
     if (words != NULL)
         freeWhenDone = TRUE;
     }
@@ -204,32 +221,31 @@ return words;
 }
 
 static void printColumns(struct annoFormatTab *self, struct annoStreamer *streamer,
-			 struct annoRow *row, boolean isFirst)
+			 uint sourceIx, struct annoRow *row, boolean isFirst)
 /* Print columns in streamer's row (if NULL, print the right number of empty fields). */
 {
 FILE *f = self->f;
-char *sourceName = streamer->name;
 boolean freeWhenDone = FALSE;
 char **words = wordsFromRow(row, streamer, &freeWhenDone);
 struct asColumn *col;
-int i;
-for (col = streamer->asObj->columnList, i = 0;  col != NULL;  col = col->next, i++)
+uint colIx;
+for (col = streamer->asObj->columnList, colIx = 0;  col != NULL;  col = col->next, colIx++)
     {
-    if (columnIsIncluded(self, sourceName, col->name))
+    if (columnIsIncluded(self, sourceIx, colIx))
         {
         if (isFirst)
             isFirst = FALSE;
         else
             fputc('\t', f);
         if (words != NULL)
-            fputs((words[i] ? words[i] : ""), f);
+            fputs((words[colIx] ? words[colIx] : ""), f);
         }
     }
-int wordCount = i;
+int wordCount = colIx;
 if (freeWhenDone)
     {
-    for (i = 0;  i < wordCount;  i++)
-        freeMem(words[i]);
+    for (colIx = 0;  colIx < wordCount;  colIx++)
+        freeMem(words[colIx]);
     freeMem(words);
     }
 }
@@ -251,7 +267,7 @@ static void aftFormatOne(struct annoFormatter *vSelf, struct annoStreamRows *pri
 struct annoFormatTab *self = (struct annoFormatTab *)vSelf;
 // Got one row from primary; what's the largest # of rows from any grator?
 int maxRows = 1;
-int iG;
+uint iG;
 for (iG = 0;  iG < gratorCount;  iG++)
     {
     int gratorRowCount = slCount(gratorData[iG].rowList);
@@ -262,11 +278,11 @@ for (iG = 0;  iG < gratorCount;  iG++)
 int iR;
 for (iR = 0;  iR < maxRows;  iR++)
     {
-    printColumns(self, primaryData->streamer, primaryData->rowList, TRUE);
+    printColumns(self, primaryData->streamer, 0, primaryData->rowList, TRUE);
     for (iG = 0;  iG < gratorCount;  iG++)
 	{
 	struct annoRow *gratorRow = slElementFromIx(gratorData[iG].rowList, iR);
-	printColumns(self, gratorData[iG].streamer, gratorRow, FALSE);
+	printColumns(self, gratorData[iG].streamer, 1+iG, gratorRow, FALSE);
 	}
     fputc('\n', self->f);
     }

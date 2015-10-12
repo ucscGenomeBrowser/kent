@@ -155,8 +155,9 @@ for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
     psl->qStarts[iBlk] = cBlk->qStart;
     psl->tStarts[iBlk] = cBlk->tStart;
     psl->match += psl->blockSizes[iBlk];
+    psl->blockCount++;
     }
-psl->blockCount = iBlk;
+pslComputeInsertCounts(psl);
 if (swapMap)
     pslSwap(psl, FALSE);
 return mapAlnNew(psl, ch->id, NULL);

@@ -999,7 +999,7 @@ sub makeDescription {
 <TABLE ALIGN=RIGHT BORDER=0 WIDTH=$borderWidth>
   <TR><TD ALIGN=RIGHT>
     <A HREF="http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId" TARGET=_blank>
-    <IMG SRC="/images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
+    <IMG SRC="../images/$sciUnderscore.$imgExtn" WIDTH=$width HEIGHT=$height ALT="$genome"></A>
   </TD></TR>
   <TR><TD ALIGN=RIGHT> 
     <FONT SIZE=-1><em>$scientificName</em><BR> 

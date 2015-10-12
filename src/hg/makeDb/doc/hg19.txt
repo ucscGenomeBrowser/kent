@@ -9252,7 +9252,7 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 7/27/15 angie)
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
 # Redmine #15767
 # previously done 9/13/13 #11200, 11/7/14 #14188
     # Beta last updated 2/11/13 #9401
@@ -9267,10 +9267,10 @@ _EOF_
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh37_hg19_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1879736 CNV     deletion
+#1879738 CNV     deletion
 # 153963 CNV     duplication
 # 879317 CNV     gain
 #   8657 CNV     gain+loss
@@ -9285,7 +9285,7 @@ _EOF_
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh37_hg19_variants_$release.txt | sort | uniq -c | head -100
-# 101259 CNV     deletion
+# 101257 CNV     deletion
 #  21360 CNV     duplication
 #  46452 CNV     gain
 #   6902 CNV     gain+loss
@@ -9305,10 +9305,11 @@ _EOF_
       GRCh37_hg19_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6563733 elements of size 22 from dgvSupporting.bed
+#Read 6563735 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg19 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 340651 elements of size 22 from dgvMerged.bed
+#Read 340649 elements of size 22 from dgvMerged.bed
+    rm bed.tab && gzip *.{txt,bed} &
 
 
 #######################################################################
@@ -29968,8 +29969,18 @@ cat > README.txt << 'EOF'
 This directory contains peptide sequences from the August 2014 Human Build of PeptideAtlas (peptideatlas.org).
 'EOF'
 
-tail -n +2 peptides.tab | \
-    hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+#tail -n +2 peptides.tab | \
+    #hgLoadSqlTab hgFixed peptideAtlas2014Peptides ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+
+
+# BUG FIX: RM #15998
+# Reload peptideAtlas2014Peptides table with columns in the right order
+# 2015-09-08 (kate)
+tail -n +2 peptides.tab | awk '{OFS="\t"}{ print $1, $2, $5, $3, $4}' | \
+    hgLoadSqlTab hgFixed peptideAtlas2014PeptidesFixed ~/kent/src/hg/lib/peptideAtlasPeptide.sql stdin
+hgsql hgFixed -e 'alter table peptideAtlas2014Peptides rename to peptideAtlas2014Peptides_old'
+hgsql hgFixed -e 'alter table peptideAtlas2014PeptidesFixed rename to peptideAtlas2014Peptides'
+
 
 # extract mappings with some metadata (biosequence matched (protein and gene)))
 # use number of samples where the peptide was observed as the score (to be scaled)
@@ -30756,7 +30767,9 @@ html gwipsvizRiboseq
 
 _EOF_
 ##############################################################################
-# DBSNP B144 / SNP144 (DONE 7/16/15)
+# DBSNP B144 / SNP144 (DONE 9/9/15)
+    # Originally done 7/16/15
+    # Updated 9/3/15 with additional alt mappings from dbSNP, see below
     # Redmine #15493
     mkdir -p /hive/data/outside/dbSNP/144/human_hg19
     cd /hive/data/outside/dbSNP/144/human_hg19
@@ -30841,26 +30854,111 @@ EOF
     # This time it was still in the loadDbSnp step, so no need to kill it.
 # *** All done!
 
+    # 9/3/2015: Sarah Hunt at EBI alerted dbSNP that there seemed to be a lot
+    # fewer mappings to alt sequences than in 142; dbSNP made new download files
+    # that seem to be an updated b144_SNPContigLoc trimmed to contain only the
+    # rows on alt sequences.
+    cd /hive/data/outside/dbSNP/144/human_hg19/data
+    wget ftp://ftp.ncbi.nih.gov/snp/temp/EBI/b144_alt/b144_SNPContigLoc_alt_only_105.bcp.gz
+    gunzip b144_SNPContigLoc_alt_only_105.bcp.gz
+    gunzip b144_SNPContigLoc_105.bcp.gz
+    # Check sorting so we can merge-sort (quicker):
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_105.bcp
+    # No output, good.
+    sort -c -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_alt_only_105.bcp
+#sort: b144_SNPContigLoc_alt_only_105.bcp:201: disorder: rs      1707    224515579       1098938 1098938                 1098937 1098939 2               144     2015-04-14 09:01:00.0   128     0       T               1.0
+    # Sort the new file, fortunately much smaller than the old file:
+    sort -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_alt_only_105.bcp \
+      > b144_SNPContigLoc_alt_only_105_sorted.bcp
+    # Merge-sort the files, discarding lines with the same values in columns 2-5:
+    sort -m -u -k 2n,2n -k3n,3n -k4n,4n -k5n,5n b144_SNPContigLoc_105.bcp \
+      b144_SNPContigLoc_alt_only_105_sorted.bcp \
+      > b144_SNPContigLoc_105_merged.bcp
+    wc -l b144_SNPContigLoc_105.bcp b144_SNPContigLoc_alt_only_105_sorted.bcp \
+      b144_SNPContigLoc_105_merged.bcp
+#  153282211 b144_SNPContigLoc_105.bcp
+#    1831401 b144_SNPContigLoc_alt_only_105_sorted.bcp
+#  153654053 b144_SNPContigLoc_105_merged.bcp
+    # How many of the 1831401 alt mappings were already in b144_SNPContigLoc_105.bcp?
+    expr 153282211 + 1831401 - 153654053
+#1459559
+    # How many new mappings were added?
+    expr 153654053 - 153282211
+#371842
+    # Make sure they're really unique in columns 2-5:
+    cut -f 2-5 b144_SNPContigLoc_105_merged.bcp | sort -k1n,1n -k2n,2n -k3n,3n -k4n,4n > 1
+    uniq 1 > 2
+    cmp 1 2
+    rm 1 2
+    # Install the merged file in place of the original b144_SNPContigLoc_105.bcp.gz
+    gzip b144_SNPContigLoc_105_merged.bcp &
+    mv b144_SNPContigLoc_105{,_orig}.bcp
+    gzip b144_SNPContigLoc_105_orig.bcp &
+    ln -s b144_SNPContigLoc_105_merged.bcp.gz b144_SNPContigLoc_105.bcp.gz
+    rm b144_SNPContigLoc_alt_only_105_sorted.bcp
+    # Run the pipeline again when the gzip of b144_SNPContigLoc_105_merged.bcp is complete.
+    cd /hive/data/outside/dbSNP/144/human_hg19
+    hgsql hg19 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.orig
+    mkdir origFiles
+    mv snp144*.{bed,tab}*.gz do.log origFiles/
+    hgsql '' -e 'drop database hg19snp144'
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
+    tail -f do.log
+    # While that's reloading the database, see if we need to fetch more fasta:
+    zcat data/b144_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#34 missingFromRsFasta.txt
+    # It was only 7 before, so let's get sequence from dbSNP again.
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab!
+    # Excerpt from email:
+#dbSNP BATCH QUERY REPORT: FASTA
+#============================================================
+#Total number of Submitted ID:           34
+#============================================================
+#Total number of ID processed:           34
+#============================================================
+#These rs have been merged (submitted_rs -> new_rs)
+#________________________________________________
+    # Download the gzipped fasta file and move/rename it to rs_chBatchQuery.fas.gz.
+    faSize rs_chBatchQuery.fas.gz
+#4134 bases (34 N's 4100 real 4100 upper 0 lower) in 34 sequences in 1 files
+    # Good -- unlike hg38, they all came through -- even the 7 that were deleted before.
+    # There was no pre-existing rs_chBatchQuery.fas.gz so move this one into rs_fasta/.
+    mv rs_chBatchQuery.fas.gz rs_fasta/
+    tail -f do.log
+    hgsql hg19 -NBe 'select chrom, count(*) from snp144 group by chrom order by chrom' \
+      > chromCounts.merged
+    sdiff chromCounts.{orig,merged} | less
+    # The _hap* sequences have more mappings now, good.
+
 
 ##############################################################################
-# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/16/15 angie)
+# SNP144 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 9/9/15 angie)
+    # Originally done 7/16/15
     # Redmine #15493
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/bed/snp144Ortho.2015-07-16
-    cd /hive/data/genomes/hg19/bed/snp144Ortho.2015-07-16
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp144Ortho.2015-09-09
+    cd /hive/data/genomes/hg19/bed/snp144Ortho.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 144 \
       >>& do.log & tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# SNPMASKED SEQUENCE FOR SNP144 (DONE 7/16/15 angie)
+# SNPMASKED SEQUENCE FOR SNP144 (DONE 9/9/15 angie)
+    # Originally done 7/16/15
     # Redmine #15493
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 144 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/snp144Mask.2015-07-16
-    cd /hive/data/genomes/hg19/snp144Mask.2015-07-16
+# *** Steps were performed in /hive/data/genomes/hg19/snp144Mask.2015-09-09
+    cd /hive/data/genomes/hg19/snp144Mask.2015-09-09
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 144 \
       >>& do.log & tail -f do.log
 # *** All done!
@@ -30873,7 +30971,7 @@ EOF
 cd /cluster/data/hg19/bed/mafSnp
 cp /cluster/data/hg19/bed/multiz100way/species.list species.lst
 echo "select * from ensGene" | hgsql hg19 | tail -n +2 | cut -f 2-16 |   genePredSingleCover stdin stdout > ensSingle.gp
-hgLoadGenePred -genePredExt hg19 ensSingle ensSingle.gp     
+hgLoadGenePred -genePredExt hg19 ensSingle ensSingle.gp
 mkdir syn nonsyn
 sort -nk 2 /cluster/data/hg19/chrom.sizes | awk '{print $1}' | while read chrom
 do
@@ -30897,3 +30995,73 @@ awk '{print $1,$2,$3,$4,$5}' output.bed > load.bed
 out=mafSnp100way
 hgLoadBed hg19 $out load.bed
 
+##############################################################################
+# LASTZ Zebrafish DanRer10 (DONE - 2010-12-17 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+    cd /hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+
+    printf "%s\n" \
+'# human vs zebrafish
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+
+# TARGET: Human hg19
+SEQ1_DIR=/scratch/data/hg19/nib
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=80
+
+# QUERY: zebrafish danRer10
+SEQ2_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ2_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18
+TMPDIR=/dev/shm' > DEF
+
+    #	establish a screen to control this job
+    screen
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    #	real    2282m56.714s
+    # chaining hg19 manually (ran out of memory on ku nodes):
+    #  real    166m31.444s
+    # -rw-rw-r-- 1 991457195 Sep 24 14:55 chr19.nib:chr19:.chain
+    # continuing:
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+	-continue=chainMerge -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) \
+      > chainMerge.log 2>&1
+    # real    43m9.651s
+
+    cat fb.hg19.chainDanRer10Link.txt
+    #	83602869 bases of 2897316137 (2.886%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` hg19 danRer10) > rbest.log 2>&1 &
+    # real    7m40.903s
+
+    #	running the swap
+    mkdir /hive/data/genomes/danRer10/bed/blastz.hg19.swap
+    cd /hive/data/genomes/danRer10/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/hg19/bed/lastzDanRer10.2015-09-18/DEF \
+	-noLoadChainSplit -chainMinScore=5000 -chainLinearGap=loose \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-swap) > swap.log 2>&1
+    #	real    43m15.435s
+
+    cat fb.danRer10.chainHg19Link.txt
+    #	83856287 bases of 1369683683 (6.122%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 hg19) > rbest.log 2>&1
+    # real    8m8.619s
+
+##############################################################################

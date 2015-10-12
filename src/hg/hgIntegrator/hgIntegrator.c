@@ -372,17 +372,17 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     struct slRef *leafRef = slLastEl(trackPath);
     struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
     char *leafTrack = jsonStringVal(leafEl, "leaf");
-    char *track = jsonStringVal(trackEl, "track");
+    char *topTrack = jsonStringVal(trackEl, "track");
     struct trackDb *tdb = tdbForTrack(db, leafTrack, &fullTrackList);
     if (!tdb)
-        tdb = tdbForTrack(db, track, &fullTrackList);
+        tdb = tdbForTrack(db, topTrack, &fullTrackList);
     if (!tdb)
-        errAbort("doQuery: no tdb for track %s, leaf %s", track, leafTrack);
+        errAbort("doQuery: no tdb for track %s, leaf %s", topTrack, leafTrack);
     char *table = tdb->table;
     if (i == 0)
         {
         primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT);
-        annoStreamerSetName(primary, table);
+        annoStreamerSetName(primary, tdb->track);
         }
     else
         {
@@ -390,11 +390,11 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
                                                            ANNO_NO_LIMIT, NULL, agoNoConstraint);
         if (grator)
             {
-            annoStreamerSetName((struct annoStreamer *)grator, table);
+            annoStreamerSetName((struct annoStreamer *)grator, tdb->track);
             slAddHead(&gratorList, grator);
             }
         else
-            errAbort("doQuery: no grator for track %s, table %s", track, table);
+            errAbort("doQuery: no grator for track %s, table %s", tdb->track, table);
         }
     }
 slReverse(&gratorList);

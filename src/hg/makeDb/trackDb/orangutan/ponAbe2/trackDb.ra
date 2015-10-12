@@ -57,3 +57,9 @@ track nscanGene override
 informant Orangutan N-SCAN uses mouse (mm9) as the informant.
 
 include trackDb.chainNet.ra
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex chr[0-9MUXabn]+[0-9_]+(random_)?(\.[0-9]+)?
+searchPriority 50

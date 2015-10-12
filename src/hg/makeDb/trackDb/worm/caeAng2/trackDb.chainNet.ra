@@ -1,0 +1,150 @@
+track chainNetCaeSp51 override
+priority 210.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCaeSp111 override
+priority 210.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCaeJap4 override
+priority 220.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCb4 override
+priority 230.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCaeRem4 override
+priority 240.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCaePb3 override
+priority 250.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetCe11 override
+priority 260.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHetBac1 override
+priority 270.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetPanRed1 override
+priority 280.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetStrRat2 override
+priority 290.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHaeCon2 override
+priority 300.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetNecAme1 override
+priority 310.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetAncCey1 override
+priority 320.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetAscSuu1 override
+priority 330.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetPriPac3 override
+priority 340.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetPriExs1 override
+priority 350.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetBurXyl1 override
+priority 360.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMelInc2 override
+priority 370.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetMelHap1 override
+priority 380.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetBruMal2 override
+priority 390.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetOncVol1 override
+priority 400.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetLoaLoa1 override
+priority 410.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetDirImm1 override
+priority 420.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetTriSui1 override
+priority 430.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetTriSpi1 override
+priority 440.3
+chainLinearGap loose
+chainMinScore 1000
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+

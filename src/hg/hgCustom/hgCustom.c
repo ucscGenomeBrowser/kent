@@ -99,32 +99,30 @@ void addIntro()
 /* display overview and help message for "add" screen */
 {
 puts(" Data must be formatted in\n"
-" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1'>BED</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigBed.html'>bigBed</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bigGenePred.html'>bigGenePred</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/bam.html'>BAM</A>,\n"
+" <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1'>BED</A>,\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/bedgraph.html'>bedGraph</A>,\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format13'>broadPeak</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format3'>GFF</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format4'>GTF</A>,\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>,\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/bigWig.html'>bigWig</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format5'>MAF</A>,\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/bam.html'>BAM</A>,\n"
-" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format1.7'>BED detail</A>,\n"
-" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
-" <A TARGET=_BLANK HREF='../goldenPath/help/vcf.html'>VCF</A>,\n"
-" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format13'>broadPeak</A>,\n"
 " <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format12'>narrowPeak</A>,\n"
-" or <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format10'>Personal Genome SNP,</A>\n"
+" <A TARGET=_BLANK HREF='../FAQ/FAQformat.html#format2'>PSL</A>,\n"
+" or <A TARGET=_BLANK HREF='../goldenPath/help/wiggle.html'>WIG</A>\n"
 " formats. To configure the display, set\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#TRACK'>track</A>\n"
 " and"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#BROWSER'>browser</A>\n"
 " line attributes as described in the \n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html'>User's Guide</A>.\n"
-" Data in the bigBed, bigWig, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
+" Data in the bigBed, bigWig, bigGenePred, BAM and VCF formats can be provided via only a URL or embedded in a track\n"
 " line in the box below.\n"
-" Publicly available custom tracks are listed\n"
-" <A HREF='../goldenPath/customTracks/custTracks.html'>here</A>.\n"
 " Examples are\n"
 " <A TARGET=_BLANK HREF='../goldenPath/help/customTrack.html#EXAMPLE1'>here</A>.\n"
 );
@@ -658,16 +656,16 @@ static void makeOtherCgiForm(char *pos)
 {
 struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
 // Default to the first CGI in the menu.
+#define hgCtNavDest "hgct_navDest"
 char *defaultCgi = valsAndLabels->name;
+char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
 printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""
-       " ACTION=\"%s\">\n", defaultCgi);
+       " ACTION=\"%s\">\n", selected);
 cartSaveSession(cart);
 if (pos)
     cgiMakeHiddenVar("position", pos);
 printf("view in ");
 // Construct a menu of destination CGIs
-#define hgCtNavDest "hgct_navDest"
-char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
 char *extraHtml = "id=\"navSelect\" "
     "onChange=\"var newVal = $('#navSelect').val(); $('#navForm').attr('action', newVal);\"";
 puts(cgiMakeSingleSelectDropList(hgCtNavDest, valsAndLabels, selected, NULL, NULL, extraHtml));

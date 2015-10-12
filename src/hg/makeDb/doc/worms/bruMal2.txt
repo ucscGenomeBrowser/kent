@@ -24,8 +24,34 @@ ftp://ftp.sanger.ac.uk/pub/wormbase/releases/WS245/species/PRJNA10729
 
     hgFakeAgp bruMal2.fa.gz bruMal2.agp
 
+    # rerun this assembly, adding in the wolbachia sequence 2015-08-11
+    mkdir  /hive/data/genomes/bruMal2/wolbachia
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/all/GCA_000008385.1_ASM838v1/ ./GCA_000008385.1/
+
+    zcat GCA_000008385.1/GCA_000008385.1_ASM838v1_genomic.fna.gz | sed -e 's/^>.*/>wolbachia/;' | gzip -c > ../ucsc/wolbachia.fa.gz
+
+    # find the accession from the fna.gz file:
+    zcat GCA_000008385.1/GCA_000008385.1_ASM838v1_genomic.fna.gz | head -1
+>AE017321.1 Wolbachia endosymbiont strain TRS of Brugia malayi, complete genome
+
+    # and the size
+    faSize ../ucsc/wolbachia.fa.gz
+    # use those values in this echo statement:
+    echo -e 'wolbachia\t1\t1080084\t1\tF\tAE017321.1\t1\t1080084\t+' \
+       > ../ucsc/wolbachia.agp
+
+    # obtain photo from CDC
+    mkdir /hive/data/genomes/bruMal2/photo
+    wget --timestamping \
+http://www.cdc.gov/dpdx/images/lymphaticFilariasis/Brugia_malayi.jpg
+    # already 300x300, good to go as is
+    identify Brugia_malayi.jpg
+Brugia_malayi.jpg JPEG 300x300 300x300+0+0 8-bit DirectClass 8.43kb
+
 #############################################################################
 #  Initial database build (DONE - 2015-07-07 - Hiram)
+    # rerun build with wolbachia sequence included 2015-08-11
 
     cd /hive/data/genomes/bruMal2
     cat << '_EOF_' > bruMal2.config.ra
@@ -34,14 +60,14 @@ db bruMal2
 clade worm
 # genomeCladePriority 80
 scientificName Brugia malayi
-commonName B. malayi
+commonName Filarial worm
 assemblyDate May. 2014
 assemblyLabel University of Pittsburgh B. malayi genome project
 assemblyShortLabel WS244/B_malayi-3.1
 orderKey 2009
 mitoAcc AF538716.1
-fastaFiles /hive/data/genomes/bruMal2/ucsc/bruMal2.fa.gz
-agpFiles /hive/data/genomes/bruMal2/ucsc/bruMal2.agp
+fastaFiles /hive/data/genomes/bruMal2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/bruMal2/ucsc/*.agp
 # qualFiles none
 dbDbSpeciesDir worm
 photoCreditURL https://www.wormbase.org/species/b_malayi
@@ -59,17 +85,17 @@ taxId 6279
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
          -stop=agp bruMal2.config.ra) > agp.log 2>&1
     # *** All done!  (through the 'agp' step)
-    # real    0m23.957s
+    # real    0m23.549s
 
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db bruMal2.config.ra) > db.log 2>&1
-    # real    0m57.519s
+    # real    1m8.033s
 
     # check in the trackDb files created and add to trackDb/makefile
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (DONE - 2015-07-07 - Hiram)
+# cpgIslands on UNMASKED sequence (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/cpgIslandsUnmasked
     cd /hive/data/genomes/bruMal2/bed/cpgIslandsUnmasked
 
@@ -77,13 +103,13 @@ taxId 6279
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/bruMal2/bruMal2.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku bruMal2) > do.log 2>&1
-    # real    7m48.368s
+    # real    19m51.235s
 
     cat fb.bruMal2.cpgIslandExtUnmasked.txt
-    # 159101 bases of 86344036 (0.184%) in intersection
+    # 159469 bases of 87424120 (0.182%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (DONE - 2015-07-07 - Hiram)
+# cytoBandIdeo - (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/cytoBand
     cd /hive/data/genomes/bruMal2/bed/cytoBand
     makeCytoBandIdeo.csh bruMal2
@@ -118,12 +144,11 @@ taxId 6279
     # 2053849526 bases of 2053849526 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (DONE - 2015-07-09 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2015-08-11 - Hiram)
     hgsql -N -e "select frag from gold;" bruMal2 | sort | head -3
+AE017321.1
 AF538716.1
 Bmal_v3_scaffold1000_1
-Bmal_v3_scaffold1001_1
-
 
     hgsql -N -e "select frag from gold;" bruMal2 | sort | tail -2
 Bmal_v3_scaffold9_8
@@ -131,70 +156,70 @@ Bmal_v3_scaffold9_9
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" bruMal2 | wc -l
-    # 11906
+    # 11907
 
     hgsql -N -e "select frag from gold;" bruMal2 \
-      | egrep -e '(Bmal_v3_scaffold|AF538716)[0-9]*([\._][0-9]*)?' \
+      | egrep -e '(Bmal_v3_scaffold|AF538716|AE017321)[0-9]*([\._][0-9]*)?' \
         | wc -l
-    # 11906
+    # 11907
 
     hgsql -N -e "select frag from gold;" bruMal2 \
-      | egrep -v -e '(Bmal_v3_scaffold|AF538716)[0-9]*([\._][0-9]*)?' \
+      | egrep -v -e '(Bmal_v3_scaffold|AF538716|AE017321)[0-9]*([\._][0-9]*)?' \
        | wc -l
     # 0
 
     # hence, add to trackDb/worm/bruMal2/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex (Bmal_v3_scaffold|AF538716)[0-9]*([\._][0-9]*)?
+termRegex (Bmal_v3_scaffold|AF538716|AE017321)[0-9]*([\._][0-9]*)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
 ##########################################################################
-# running repeat masker (DONE - 2015-07-07 - Hiram)
+# running repeat masker (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/repeatMasker
     cd /hive/data/genomes/bruMal2/bed/repeatMasker
     time (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku bruMal2) > do.log 2>&1
-    # real    53m54.270s
+    # real    78m37.643s
 
     cat faSize.rmsk.txt
-    # 94076581 bases (7759220 N's 86317361 real 77216214 upper
-    #    9101147 lower) in 9780 sequences in 1 files
-    # Total size: mean 9619.3 sd 94348.1 min 312 (Bmal_v3_scaffold9829)
-    #    max 5235760 (Bmal_v3_scaffold1) median 1340
-    # %9.67 masked total, %10.54 masked real
+    # 95156665 bases (7759220 N's 87397445 real 78291306 upper 9106139 lower)
+    #   in 9781 sequences in 1 files
+    # Total size: mean 9728.7 sd 94962.2 min 312 (Bmal_v3_scaffold9829)
+    #   max 5235760 (Bmal_v3_scaffold1) median 1340
+    # %9.57 masked total, %10.42 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
     #    January 31 2015 (open-4-0-5) version of RepeatMasker
-    # CC   RELEASE 20140131;    
+    # CC   RELEASE 20140131;
 
     time featureBits -countGaps bruMal2 rmsk
-    # 9101853 bases of 94076581 (9.675%) in intersection
-    # real    0m5.781s
+    # 9106845 bases of 95156665 (9.570%) in intersection
+    # real    0m5.110s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
     #   separates out the N's from the bases, it doesn't show lower case N's
 
 ##########################################################################
-# running simple repeat (DONE - 2015-07-07 - Hiram)
+# running simple repeat (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/simpleRepeat
     cd /hive/data/genomes/bruMal2/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         bruMal2) > do.log 2>&1
-    # real    25m17.870s
+    # real    25m44.704s
 
     cat fb.simpleRepeat
-    # 7316524 bases of 86344036 (8.474%) in intersection
+    # 7317611 bases of 87424120 (8.370%) in intersection
 
     # using the Window Masker result as indicated below
 
 ##########################################################################
-# CREATE MICROSAT TRACK (DONE - 2015-07-08 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2015-08-11 - Hiram)
      ssh hgwdev
      mkdir /cluster/data/bruMal2/bed/microsat
      cd /cluster/data/bruMal2/bed/microsat
@@ -204,23 +229,23 @@ searchPriority 8
     #	Read 707 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2015-07-08 - Hiram)
+## WINDOWMASKER (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/windowMasker
     cd /hive/data/genomes/bruMal2/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev bruMal2) > do.log 2>&1
-    # real    6m23.693s
+    # real    6m24.960s
 
     # Masking statistics
     cat faSize.bruMal2.cleanWMSdust.txt
-    # 94076581 bases (7759220 N's 86317361 real 53355373 upper
-    #    32961988 lower) in 9780 sequences in 1 files
-    # Total size: mean 9619.3 sd 94348.1 min 312 (Bmal_v3_scaffold9829)
+    # 95156665 bases (7759220 N's 87397445 real 54180115 upper 33217330 lower)
+    #    in 9781 sequences in 1 files
+    # Total size: mean 9728.7 sd 94962.2 min 312 (Bmal_v3_scaffold9829)
     #    max 5235760 (Bmal_v3_scaffold1) median 1340
-    # %35.04 masked total, %38.19 masked real
+    # %34.91 masked total, %38.01 masked real
 
     cat fb.bruMal2.rmsk.windowmaskerSdust.txt
-    # 8054335 bases of 94076581 (8.561%) in intersection
+    # 8059725 bases of 95156665 (8.470%) in intersection
 
     # using this Window Masker result for final masking::
     cd /hive/data/genomes/bruMal2
@@ -231,29 +256,29 @@ searchPriority 8
     # measure the final masking:
     twoBitToFa bruMal2.2bit stdout | faSize stdin > faSize.bruMal2.2bit.txt
     cat faSize.bruMal2.2bit.txt
-    # 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
-    #    in 9780 sequences in 1 files
-    # Total size: mean 9619.3 sd 94348.1 min 312 (Bmal_v3_scaffold9829)
+    # 95156665 bases (7759220 N's 87397445 real 54166263 upper 33231182 lower)
+    #    in 9781 sequences in 1 files
+    # Total size: mean 9728.7 sd 94962.2 min 312 (Bmal_v3_scaffold9829)
     #    max 5235760 (Bmal_v3_scaffold1) median 1340
-    # %35.05 masked total, %38.20 masked real
+    # %34.92 masked total, %38.02 masked real
 
     # and reset the symlink
     rm /gbdb/bruMal2/bruMal2.2bit
     ln -s /hive/data/genomes/bruMal2/bruMal2.2bit /gbdb/bruMal2/bruMal2.2bit
 
 ##########################################################################
-# cpgIslands - (DONE - 2015-07-08 - Hiram)
+# cpgIslands - (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/cpgIslands
     cd /hive/data/genomes/bruMal2/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku bruMal2) > do.log 2>&1 &
-    # real    8m10.474s
+    # real    14m32.864s
 
     cat fb.bruMal2.cpgIslandExt.txt
-    # 29350 bases of 86344036 (0.034%) in intersection
+    # 29718 bases of 87424120 (0.034%) in intersection
 
 #########################################################################
-# augustus - (DONE - 2015-07-08 - Hiram)
+# augustus - (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/augustus
     cd /hive/data/genomes/bruMal2/bed/augustus
     #  XXX this is not specifically correct, the species caenorhabditis
@@ -261,24 +286,29 @@ searchPriority 8
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
       -species=caenorhabditis -dbHost=hgwdev \
          -workhorse=hgwdev bruMal2) > do.log 2>&1
-    # real    49m33.584s
+    # real    64m6.834s
 
     cat fb.bruMal2.augustusGene.txt
-    # 5950506 bases of 86344036 (6.892%) in intersection
+    # 6111555 bases of 87424120 (6.991%) in intersection
 
 #########################################################################
-# genscan - (DONE - 2015-07-08 - Hiram)
+# genscan - (DONE - 2015-08-11 - Hiram)
     mkdir /hive/data/genomes/bruMal2/bed/genscan
     cd /hive/data/genomes/bruMal2/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku bruMal2) > do.log 2>&1
-    # real    9m51.838s
+    # real    15m30.549s
+    # for some odd reason, one of the jobs failed, needed to be completed
+    # on hgwdev with window size of 2,000,000 - then continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku bruMal2) > makeBed.log 2>&1
+    # real    1m25.250s
 
     cat fb.bruMal2.genscan.txt
-    #   3196210 bases of 86344036 (3.702%) in intersection
+    #   3314831 bases of 87424120 (3.792%) in intersection
 
     cat fb.bruMal2.genscanSubopt.txt
-    #   2410491 bases of 86344036 (2.792%) in intersection
+    #   2620574 bases of 87424120 (2.998%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2015-07-08 - Hiram)
@@ -301,8 +331,8 @@ searchPriority 8
     time blat bruMal2.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/bruMal2.11.ooc \
         -repMatch=100
-    # Wrote 8527 overused 11-mers to jkStuff/bruMal2.11.ooc
-    #  real    0m1.846s
+    # Wrote 8609 overused 11-mers to jkStuff/bruMal2.11.ooc
+    #  real    0m1.669s
 
     # there are a few non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
@@ -421,8 +451,8 @@ bruMal2.perChromTables = no
 
 #############################################################################
 # LIFTOVER TO bruMal1 (DONE - 2015-07-08 - Hiram )
-    mkdir /hive/data/genomes/bruMal2/bed/blat.bruMal1.2015-07-08
-    cd /hive/data/genomes/bruMal2/bed/blat.bruMal1.2015-07-08
+    mkdir /hive/data/genomes/bruMal2/bed/blat.bruMal1.2015-08-11
+    cd /hive/data/genomes/bruMal2/bed/blat.bruMal1.2015-08-11
     # -debug run to create run dir, preview scripts...
     doSameSpeciesLiftOver.pl \
 	-buildDir=`pwd` \
@@ -433,8 +463,14 @@ bruMal2.perChromTables = no
       -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
        -ooc=/hive/data/genomes/bruMal2/jkStuff/bruMal2.11.ooc bruMal2 bruMal1) \
 		> do.log 2>&1
+XXX
     #	real    3m44.490s
 
     # verify it works on genome-test
+
+#############################################################################
+# improve common name (DONE - 2015-07-24 - Hiram)
+
+    hgsql -e 'update dbDb set organism="Filarial worm" where name="bruMal2";' hgcentraltest
 
 #############################################################################

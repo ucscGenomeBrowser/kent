@@ -140,10 +140,10 @@ else
     }
 if (db == NULL)
     db = hDefaultDb();
-boolean dbIsFound = hDbExists(db);
-boolean haveBlat = FALSE;
-if (dbIsFound)
-    haveBlat = hIsBlatIndexedDatabase(db);
+// boolean dbIsFound = hDbExists(db);
+// boolean haveBlat = FALSE;  unfortunately this feature has disappeared
+// if (dbIsFound)             this needs to be resurrected in the new menu
+//    haveBlat = hIsBlatIndexedDatabase(db);   bar system in menuBar()
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -464,7 +464,7 @@ va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-    webStart(errCart, NULL, title);
+    webStart(errCart, NULL, "%s", title);
 
 /* in text mode, have a different error */
 if(webInTextMode)
@@ -1334,7 +1334,7 @@ if(scriptName)
 if(scriptName)
     {
     // Provide view menu for some CGIs.
-    struct dyString *viewItems = dyStringCreate("");
+    struct dyString *viewItems = dyStringCreate("%s","");
     boolean hasViewMenu = TRUE;
     if (endsWith(scriptName, "hgGenome"))
         {
@@ -1385,6 +1385,11 @@ if(scriptName)
         {
         link = "../goldenPath/help/hgTablesHelp.html";
         label = "Help on Table Browser";
+        }
+    else if (endsWith(scriptName, "hgIntegrator"))
+        {
+        link = "../goldenPath/help/hgIntegratorHelp.html";
+        label = "Help on Data Integrator";
         }
     else if (endsWith(scriptName, "hgGenome"))
         {

@@ -31,6 +31,9 @@
 #define hgHubDataText      "hubUrl"
 /* name of cgi variable containing new hub name */
 
+#define hgHubGenome        "genome"
+/* name of the cgi variable to specify a db within an assembly hub */
+
 #define hgHubDataClearText      "hubClear"
 /* name of cgi variable containing new hub name */
 

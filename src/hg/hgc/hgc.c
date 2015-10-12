@@ -2874,8 +2874,21 @@ if (start == end)
     ivEnd++;
     }  
 
-struct bigBedInterval *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
-pslList = pslFromBigPsl(seqName, bbList,  hChromSize(database, seqName), NULL, NULL);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, ivStart, ivEnd, 0, lm);
+
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, 4);
+    struct bed *bed = bedLoadN(bedRow, 4);
+    if (sameString(bed->name, item))
+	{
+	bb->next = NULL;
+	break;
+	}
+    }
+pslList = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
 printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
@@ -18982,7 +18995,7 @@ if (row != NULL)
 	}
 
     safef(title, sizeof title, "Genomic alignments of %s:", lfLabel);
-    webNewSection(title);
+    webNewSection("%s",title);
 
     for (i = 0; i < lfs->lfCount; i++)
         {

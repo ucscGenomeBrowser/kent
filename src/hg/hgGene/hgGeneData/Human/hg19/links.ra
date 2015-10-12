@@ -23,9 +23,3 @@ idSql select value from knownToWikipedia where name = '%s';
 url http://api.genewikiplus.org/biogps-plugins/wp/%s
 priority 11
 
-name gtex
-shortLabel GTEx
-tables wgEncodeGencodeAttrsV19 knownToGencodeV19
-idSql select wgEncodeGencodeAttrsV19.geneId from knownToGencodeV19, wgEncodeGencodeAttrsV19 where knownToGencodeV19.name = '%s' and wgEncodeGencodeAttrsV19.transcriptId = knownToGencodeV19.value;
-url http://www.gtexportal.org/home/gene/%s
-priority 10

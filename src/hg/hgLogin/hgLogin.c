@@ -330,11 +330,12 @@ char *getReturnToURL()
 {
 char *returnURL = cartUsualString(cart, "returnto", "");
 char *hgLoginHost = wikiLinkHost();
+char *cgiDir = cgiScriptDirUrl();
 char returnTo[2048];
 if (!returnURL || sameString(returnURL,""))
    safef(returnTo, sizeof(returnTo),
-        "http%s://%s/cgi-bin/hgSession?hgS_doMainPage=1", 
-        cgiAppendSForHttps(), hgLoginHost);
+        "http%s://%s%shgSession?hgS_doMainPage=1",
+        cgiAppendSForHttps(), hgLoginHost, cgiDir);
 else
    safecpy(returnTo, sizeof(returnTo), returnURL);
 return cloneString(returnTo);
@@ -359,12 +360,13 @@ static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
 char *hgLoginHost = wikiLinkHost();
+char *cgiDir = cgiScriptDirUrl();
 hPrintf("<script  language=\"JavaScript\">\n"
     "<!-- \n"
-    "window.location =\"http%s://%s/cgi-bin/hgLogin?%s\""
+    "window.location =\"http%s://%s%shgLogin?%s\""
     "//-->"
     "\n"
-    "</script>", cgiAppendSForHttps(), hgLoginHost, paramStr);
+    "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, paramStr);
 }
     
 void  displayActMailSuccess()
@@ -459,6 +461,7 @@ void sendMailOut(char *email, char *subject, char *msg)
 {
 char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
+char *cgiDir = cgiScriptDirUrl();
 int result;
 result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
@@ -476,10 +479,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccess=1\""
+        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost);
+        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir);
     }
 }
 
@@ -525,6 +528,7 @@ void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
 /* send password reset mail to user at registered email address */
 {
 char *hgLoginHost = wikiLinkHost();
+char *cgiDir = cgiScriptDirUrl();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
 result = mailViaPipe(email, subject, msg, returnAddr);
@@ -543,10 +547,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost, username);
+        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, username);
     }
 }
 
@@ -674,10 +678,11 @@ char msg[4096];
 char activateURL[256];
 char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
+char *cgiDir = cgiScriptDirUrl();
 
 safef(activateURL, sizeof(activateURL),
-    "http%s://%s/cgi-bin/hgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
-    cgiAppendSForHttps(), hgLoginHost,
+    "http%s://%s%shgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
+    cgiAppendSForHttps(), hgLoginHost, cgiDir,
     cgiEncode(username),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
@@ -1388,7 +1393,7 @@ long enteredMainTime = clock1000();
 pushCarefulMemHandler(100000000);
 setUdcCacheDir();
 cgiSpoof(&argc, argv);
-htmlSetStyleSheet("/style/userAccounts.css");
+htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");

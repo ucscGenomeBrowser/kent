@@ -41,9 +41,9 @@ errAbort(
   "   -extra=[file|url]     - accept settings in this file (or url)\n"
   "   -level=base|required  - reject settings below this support level\n"
   "   -settings             - just list settings with support level\n"
-  "                           Will create this directory if not existing\n"
   "   -udcDir=/dir/to/cache - place to put cache for remote bigBed/bigWigs.\n"
-  "   -cacheTime=N - set cache refresh time in seconds, default %d\n"
+  "                                     Will create this directory if not existing\n"
+  "   -cacheTime=N          - set cache refresh time in seconds, default %d\n"
   "   -verbose=2            - output verbosely\n"
   , cacheTime
   );
@@ -132,7 +132,7 @@ return result;
 static char *suggestSetting(char *setting, struct trackHubCheckOptions *options)
 /* Suggest a similar word from settings lists.  Suggest only if there is a single good match */
 {
-char *best;
+char *best = NULL;
 int bestScore = 0;
 int bestCount = 0;
 struct slName *suggest;

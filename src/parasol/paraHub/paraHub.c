@@ -3359,7 +3359,7 @@ startSpokes();
 logDebug("sockSuck,Heartbeat,Spokes have been started");
 
 /* Bump up our priority to just shy of real-time. */
-nice(-40);
+(void) nice(-40);  // ignore return value
 
 /* Main event loop. */
 for (;;)

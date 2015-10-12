@@ -124,3 +124,9 @@ priority 1
 	exonArrows off
 	showTopScorers 200
         priority 23
+
+searchTable geneid
+searchType genePred
+searchMethod prefix
+termRegex ^(CABD|FN|chr)[0-9ABMX]+[0-9_]+(\.[0-9]+)?
+searchPriority 50

@@ -8,6 +8,7 @@ if [ $# -ne 1 ]; then
     exit 255
 fi
 
+
 export F=$1
 
 /cluster/bin/phast/tree_doctor \
@@ -152,8 +153,8 @@ aptFor1 -> Emperor_penguin ;
 carCri1 -> Red_legged_seriema ;
 mesUni1 -> Brown_roatelo ;
 eurHel1 -> Sunbittern ;
-balPav1 -> Crowned_crain ;
-chlUnd1 -> Houbara_bustard ;
+balPav1 -> Grey_crowned_crain ;
+chlUnd1 -> Macqueen_s_bustard ;
 colLiv1 -> Rock_pigeon ;
 apaVit1 -> Rock_pigeon ;
 phoRub1 -> American_flamingo ;
@@ -176,6 +177,10 @@ ficAlb1 -> Collared_flycatcher ;
 amaVit1 -> Puerto_Rican_parrot ;
 araMac1 -> Scarlet_macaw ;
 falChe1 -> Saker_falcon ;
+catAur1 -> Turkey_vulture ;
+chaPel1 -> Chimney_swift ;
+nesNot1 -> Kea ;
+podCri1 -> Great_crested_grebe ;
 aquChr1 -> Golden_eagle ;
 aquChr2 -> Golden_eagle ;
 halAlb1 -> White_tailed_eagle ;
@@ -252,6 +257,32 @@ gadMor1 -> Atlantic_cod ;
 lipVex1 -> Yangtze_river_dolphin ;
 calMil1 -> Elephant_shark ;
 letCam1 -> Arctic_lamprey ;
+ce11 -> C__elegans;
+caePb3 -> C__brenneri;
+caeRem4 -> C__remanei;
+cb4 -> C__briggsae;
+caeJap4 -> C__japonica;
+caeSp111 -> C__tropicalis;
+caeAng2 -> C__angaria;
+caeSp51 -> C__sp__5_ju800;
+hetBac1 -> H__bacteriophora/m31e;
+strRat2 -> Threadworm;
+panRed1 -> Microworm;
+ancCey1 -> A__ceylanicum;
+necAme1 -> N__americanus;
+haeCon2 -> Barber_pole_worm;
+ascSuu1 -> Pig_roundworm;
+priExs1 -> P__exspectatus;
+priPac3 -> P__pacificus;
+melHap1 -> M__hapla;
+melInc2 -> M__incognita;
+burXyl1 -> Pine_wood_nematode;
+dirImm1 -> Dog_heartworm;
+loaLoa1 -> Eye_worm;
+oncVol1 -> O__volvulus;
+bruMal2 -> Filarial_worm;
+triSpi1 -> Trichinella;
+triSui1 -> Whipworm;
 petMar1 -> Lamprey ;
 petMar2 -> Lamprey ;" \
-	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g"
+	${F} | sed -e "s/X_trop/X._trop/; s/Burton_s/Burton's/; s/Brand_s/Brand's/; s/David_s/David's/; s/Parnell_s/Parnell's/; s/queen_s/queen's/; s/will_s/will's/; s/Anna_s/Anna's/; s/_nosed/-nosed/; s/00*)/)/g; s/00*,/,/g"

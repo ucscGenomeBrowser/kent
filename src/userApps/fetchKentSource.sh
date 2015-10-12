@@ -127,12 +127,10 @@ src/hg/hgSelect \
 src/hg/hgSpeciesRna \
 src/hg/hgTablesTest \
 src/hg/hgsql \
-src/hg/hgsqlLocal \
 src/hg/hgsqlSwapTables \
 src/hg/hgsqlTableDate \
 src/hg/hgsqladmin \
 src/hg/hgsqldump \
-src/hg/hgsqldumpLocal \
 src/hg/hgsqlimport \
 src/hg/inc \
 src/hg/intronEnds \

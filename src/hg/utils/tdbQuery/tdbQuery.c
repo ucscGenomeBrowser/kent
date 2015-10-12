@@ -700,12 +700,10 @@ char buf[len+1];
 strcpy(buf, parentLine);
 char *parentName = firstWordInLine(buf);
 struct hashEl *hel;
-boolean gotParentSomeRelease = FALSE;
 struct tdbRecord *closestParent = NULL;
 int closestDistance = BIGNUM;
 for (hel = hashLookup(hash, parentName); hel != NULL; hel = hashLookupNext(hel))
     {
-    gotParentSomeRelease = TRUE;
     struct tdbRecord *parent = hel->val;
     if (compatibleReleases(release, tdbRecordFieldVal(parent, "release")))
 	{

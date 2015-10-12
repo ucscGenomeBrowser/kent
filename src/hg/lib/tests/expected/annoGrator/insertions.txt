@@ -1,0 +1,312 @@
+# BED files
+# region: chr1   0  500
+#input/annoGrator/insertionsPrimary.bed.chrom	input/annoGrator/insertionsPrimary.bed.chromStart	input/annoGrator/insertionsPrimary.bed.chromEnd	input/annoGrator/insertionsPrimary.bed.name	input/annoGrator/insertionsSecondary.bed.chrom	input/annoGrator/insertionsSecondary.bed.chromStart	input/annoGrator/insertionsSecondary.bed.chromEnd	input/annoGrator/insertionsSecondary.bed.name
+chr1	20	20	pil	chr1	19	20	jBPil
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+# region: chr1 100  200
+#input/annoGrator/insertionsPrimary.bed.chrom	input/annoGrator/insertionsPrimary.bed.chromStart	input/annoGrator/insertionsPrimary.bed.chromEnd	input/annoGrator/insertionsPrimary.bed.name	input/annoGrator/insertionsSecondary.bed.chrom	input/annoGrator/insertionsSecondary.bed.chromStart	input/annoGrator/insertionsSecondary.bed.chromEnd	input/annoGrator/insertionsSecondary.bed.name
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+# region: chr1 200  300
+#input/annoGrator/insertionsPrimary.bed.chrom	input/annoGrator/insertionsPrimary.bed.chromStart	input/annoGrator/insertionsPrimary.bed.chromEnd	input/annoGrator/insertionsPrimary.bed.name	input/annoGrator/insertionsSecondary.bed.chrom	input/annoGrator/insertionsSecondary.bed.chromStart	input/annoGrator/insertionsSecondary.bed.chromEnd	input/annoGrator/insertionsSecondary.bed.name
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	300	insRight
+# region: chr1 300  400
+#input/annoGrator/insertionsPrimary.bed.chrom	input/annoGrator/insertionsPrimary.bed.chromStart	input/annoGrator/insertionsPrimary.bed.chromEnd	input/annoGrator/insertionsPrimary.bed.name	input/annoGrator/insertionsSecondary.bed.chrom	input/annoGrator/insertionsSecondary.bed.chromStart	input/annoGrator/insertionsSecondary.bed.chromEnd	input/annoGrator/insertionsSecondary.bed.name
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+# region: chr1 400  500
+#input/annoGrator/insertionsPrimary.bed.chrom	input/annoGrator/insertionsPrimary.bed.chromStart	input/annoGrator/insertionsPrimary.bed.chromEnd	input/annoGrator/insertionsPrimary.bed.name	input/annoGrator/insertionsSecondary.bed.chrom	input/annoGrator/insertionsSecondary.bed.chromStart	input/annoGrator/insertionsSecondary.bed.chromEnd	input/annoGrator/insertionsSecondary.bed.name
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+# BigBed files
+# region: chr1   0  500
+#input/annoGrator/insertionsPrimary.bb.chrom	input/annoGrator/insertionsPrimary.bb.chromStart	input/annoGrator/insertionsPrimary.bb.chromEnd	input/annoGrator/insertionsPrimary.bb.name	input/annoGrator/insertionsSecondary.bb.chrom	input/annoGrator/insertionsSecondary.bb.chromStart	input/annoGrator/insertionsSecondary.bb.chromEnd	input/annoGrator/insertionsSecondary.bb.name
+chr1	20	20	pil	chr1	19	20	jBPil
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+# region: chr1 100  200
+#input/annoGrator/insertionsPrimary.bb.chrom	input/annoGrator/insertionsPrimary.bb.chromStart	input/annoGrator/insertionsPrimary.bb.chromEnd	input/annoGrator/insertionsPrimary.bb.name	input/annoGrator/insertionsSecondary.bb.chrom	input/annoGrator/insertionsSecondary.bb.chromStart	input/annoGrator/insertionsSecondary.bb.chromEnd	input/annoGrator/insertionsSecondary.bb.name
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+# region: chr1 200  300
+#input/annoGrator/insertionsPrimary.bb.chrom	input/annoGrator/insertionsPrimary.bb.chromStart	input/annoGrator/insertionsPrimary.bb.chromEnd	input/annoGrator/insertionsPrimary.bb.name	input/annoGrator/insertionsSecondary.bb.chrom	input/annoGrator/insertionsSecondary.bb.chromStart	input/annoGrator/insertionsSecondary.bb.chromEnd	input/annoGrator/insertionsSecondary.bb.name
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	300	insRight
+# region: chr1 300  400
+#input/annoGrator/insertionsPrimary.bb.chrom	input/annoGrator/insertionsPrimary.bb.chromStart	input/annoGrator/insertionsPrimary.bb.chromEnd	input/annoGrator/insertionsPrimary.bb.name	input/annoGrator/insertionsSecondary.bb.chrom	input/annoGrator/insertionsSecondary.bb.chromStart	input/annoGrator/insertionsSecondary.bb.chromEnd	input/annoGrator/insertionsSecondary.bb.name
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+# region: chr1 400  500
+#input/annoGrator/insertionsPrimary.bb.chrom	input/annoGrator/insertionsPrimary.bb.chromStart	input/annoGrator/insertionsPrimary.bb.chromEnd	input/annoGrator/insertionsPrimary.bb.name	input/annoGrator/insertionsSecondary.bb.chrom	input/annoGrator/insertionsSecondary.bb.chromStart	input/annoGrator/insertionsSecondary.bb.chromEnd	input/annoGrator/insertionsSecondary.bb.name
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	400	insPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+# BED tables
+# region: chr1   0  500
+#test.insertionsPrimary.chrom	test.insertionsPrimary.chromStart	test.insertionsPrimary.chromEnd	test.insertionsPrimary.name	test.insertionsSecondary.chrom	test.insertionsSecondary.chromStart	test.insertionsSecondary.chromEnd	test.insertionsSecondary.name
+chr1	20	20	pil	chr1	19	20	jBPil
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+chr1	400	400	pi	chr1	400	400	insPi
+# region: chr1 100  200
+#test.insertionsPrimary.chrom	test.insertionsPrimary.chromStart	test.insertionsPrimary.chromEnd	test.insertionsPrimary.name	test.insertionsSecondary.chrom	test.insertionsSecondary.chromStart	test.insertionsSecondary.chromEnd	test.insertionsSecondary.name
+chr1	150	250	pl	chr1	150	200	justBefore
+chr1	150	250	pl	chr1	200	200	insLeft
+# region: chr1 200  300
+#test.insertionsPrimary.chrom	test.insertionsPrimary.chromStart	test.insertionsPrimary.chromEnd	test.insertionsPrimary.name	test.insertionsSecondary.chrom	test.insertionsSecondary.chromStart	test.insertionsSecondary.chromEnd	test.insertionsSecondary.name
+chr1	150	250	pl	chr1	200	200	insLeft
+chr1	150	250	pl	chr1	220	230	inThere
+chr1	200	300	p	chr1	200	200	insLeft
+chr1	200	300	p	chr1	220	230	inThere
+chr1	200	300	p	chr1	300	300	insRight
+chr1	250	350	pr	chr1	300	300	insRight
+# region: chr1 300  400
+#test.insertionsPrimary.chrom	test.insertionsPrimary.chromStart	test.insertionsPrimary.chromEnd	test.insertionsPrimary.name	test.insertionsSecondary.chrom	test.insertionsSecondary.chromStart	test.insertionsSecondary.chromEnd	test.insertionsSecondary.name
+chr1	250	350	pr	chr1	300	320	justAfter
+chr1	250	350	pr	chr1	300	300	insRight
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	380	400	jBInsPi
+chr1	400	400	pi	chr1	400	400	insPi
+# region: chr1 400  500
+#test.insertionsPrimary.chrom	test.insertionsPrimary.chromStart	test.insertionsPrimary.chromEnd	test.insertionsPrimary.name	test.insertionsSecondary.chrom	test.insertionsSecondary.chromStart	test.insertionsSecondary.chromEnd	test.insertionsSecondary.name
+chr1	400	400	pi	chr1	380	420	aroundPi
+chr1	400	400	pi	chr1	400	420	jAInsPi
+chr1	400	400	pi	chr1	400	400	insPi
+# VCF files (uncompressed)
+# region: chr1   0  500
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.chrom	input/annoGrator/insertionsPrimary.vcf.pos	input/annoGrator/insertionsPrimary.vcf.id	input/annoGrator/insertionsPrimary.vcf.ref	input/annoGrator/insertionsPrimary.vcf.alt	input/annoGrator/insertionsPrimary.vcf.qual	input/annoGrator/insertionsPrimary.vcf.filter	input/annoGrator/insertionsPrimary.vcf.info	input/annoGrator/insertionsPrimary.vcf.format	input/annoGrator/insertionsPrimary.vcf.genotypes	input/annoGrator/insertionsSecondary.vcf.chrom	input/annoGrator/insertionsSecondary.vcf.pos	input/annoGrator/insertionsSecondary.vcf.id	input/annoGrator/insertionsSecondary.vcf.ref	input/annoGrator/insertionsSecondary.vcf.alt	input/annoGrator/insertionsSecondary.vcf.qual	input/annoGrator/insertionsSecondary.vcf.filter	input/annoGrator/insertionsSecondary.vcf.info	input/annoGrator/insertionsSecondary.vcf.format	input/annoGrator/insertionsSecondary.vcf.genotypes
+chr1	20	pil	N	NA	1	PASS	.			chr1	20	jBPil	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	jBS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	justAfter	<INS>	<DEL>	1	PASS	END=320		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS1	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	jBInsPi	<INS>	<DEL>	1	PASS	END=400		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	396	leftPiS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	leftPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	jAInsPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS5	NNNNN	AAAAA	1	PASS	.		
+# region: chr1 100  200
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.chrom	input/annoGrator/insertionsPrimary.vcf.pos	input/annoGrator/insertionsPrimary.vcf.id	input/annoGrator/insertionsPrimary.vcf.ref	input/annoGrator/insertionsPrimary.vcf.alt	input/annoGrator/insertionsPrimary.vcf.qual	input/annoGrator/insertionsPrimary.vcf.filter	input/annoGrator/insertionsPrimary.vcf.info	input/annoGrator/insertionsPrimary.vcf.format	input/annoGrator/insertionsPrimary.vcf.genotypes	input/annoGrator/insertionsSecondary.vcf.chrom	input/annoGrator/insertionsSecondary.vcf.pos	input/annoGrator/insertionsSecondary.vcf.id	input/annoGrator/insertionsSecondary.vcf.ref	input/annoGrator/insertionsSecondary.vcf.alt	input/annoGrator/insertionsSecondary.vcf.qual	input/annoGrator/insertionsSecondary.vcf.filter	input/annoGrator/insertionsSecondary.vcf.info	input/annoGrator/insertionsSecondary.vcf.format	input/annoGrator/insertionsSecondary.vcf.genotypes
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	jBS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+# region: chr1 200  300
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.chrom	input/annoGrator/insertionsPrimary.vcf.pos	input/annoGrator/insertionsPrimary.vcf.id	input/annoGrator/insertionsPrimary.vcf.ref	input/annoGrator/insertionsPrimary.vcf.alt	input/annoGrator/insertionsPrimary.vcf.qual	input/annoGrator/insertionsPrimary.vcf.filter	input/annoGrator/insertionsPrimary.vcf.info	input/annoGrator/insertionsPrimary.vcf.format	input/annoGrator/insertionsPrimary.vcf.genotypes	input/annoGrator/insertionsSecondary.vcf.chrom	input/annoGrator/insertionsSecondary.vcf.pos	input/annoGrator/insertionsSecondary.vcf.id	input/annoGrator/insertionsSecondary.vcf.ref	input/annoGrator/insertionsSecondary.vcf.alt	input/annoGrator/insertionsSecondary.vcf.qual	input/annoGrator/insertionsSecondary.vcf.filter	input/annoGrator/insertionsSecondary.vcf.info	input/annoGrator/insertionsSecondary.vcf.format	input/annoGrator/insertionsSecondary.vcf.genotypes
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+# region: chr1 300  400
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.chrom	input/annoGrator/insertionsPrimary.vcf.pos	input/annoGrator/insertionsPrimary.vcf.id	input/annoGrator/insertionsPrimary.vcf.ref	input/annoGrator/insertionsPrimary.vcf.alt	input/annoGrator/insertionsPrimary.vcf.qual	input/annoGrator/insertionsPrimary.vcf.filter	input/annoGrator/insertionsPrimary.vcf.info	input/annoGrator/insertionsPrimary.vcf.format	input/annoGrator/insertionsPrimary.vcf.genotypes	input/annoGrator/insertionsSecondary.vcf.chrom	input/annoGrator/insertionsSecondary.vcf.pos	input/annoGrator/insertionsSecondary.vcf.id	input/annoGrator/insertionsSecondary.vcf.ref	input/annoGrator/insertionsSecondary.vcf.alt	input/annoGrator/insertionsSecondary.vcf.qual	input/annoGrator/insertionsSecondary.vcf.filter	input/annoGrator/insertionsSecondary.vcf.info	input/annoGrator/insertionsSecondary.vcf.format	input/annoGrator/insertionsSecondary.vcf.genotypes
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	justAfter	<INS>	<DEL>	1	PASS	END=320		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS1	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	jBInsPi	<INS>	<DEL>	1	PASS	END=400		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	396	leftPiS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	leftPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+# region: chr1 400  500
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.chrom	input/annoGrator/insertionsPrimary.vcf.pos	input/annoGrator/insertionsPrimary.vcf.id	input/annoGrator/insertionsPrimary.vcf.ref	input/annoGrator/insertionsPrimary.vcf.alt	input/annoGrator/insertionsPrimary.vcf.qual	input/annoGrator/insertionsPrimary.vcf.filter	input/annoGrator/insertionsPrimary.vcf.info	input/annoGrator/insertionsPrimary.vcf.format	input/annoGrator/insertionsPrimary.vcf.genotypes	input/annoGrator/insertionsSecondary.vcf.chrom	input/annoGrator/insertionsSecondary.vcf.pos	input/annoGrator/insertionsSecondary.vcf.id	input/annoGrator/insertionsSecondary.vcf.ref	input/annoGrator/insertionsSecondary.vcf.alt	input/annoGrator/insertionsSecondary.vcf.qual	input/annoGrator/insertionsSecondary.vcf.filter	input/annoGrator/insertionsSecondary.vcf.info	input/annoGrator/insertionsSecondary.vcf.format	input/annoGrator/insertionsSecondary.vcf.genotypes
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	jAInsPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS5	NNNNN	AAAAA	1	PASS	.		
+# VCF files (tabix)
+# region: chr1   0  500
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.gz.chrom	input/annoGrator/insertionsPrimary.vcf.gz.pos	input/annoGrator/insertionsPrimary.vcf.gz.id	input/annoGrator/insertionsPrimary.vcf.gz.ref	input/annoGrator/insertionsPrimary.vcf.gz.alt	input/annoGrator/insertionsPrimary.vcf.gz.qual	input/annoGrator/insertionsPrimary.vcf.gz.filter	input/annoGrator/insertionsPrimary.vcf.gz.info	input/annoGrator/insertionsPrimary.vcf.gz.format	input/annoGrator/insertionsPrimary.vcf.gz.genotypes	input/annoGrator/insertionsSecondary.vcf.gz.chrom	input/annoGrator/insertionsSecondary.vcf.gz.pos	input/annoGrator/insertionsSecondary.vcf.gz.id	input/annoGrator/insertionsSecondary.vcf.gz.ref	input/annoGrator/insertionsSecondary.vcf.gz.alt	input/annoGrator/insertionsSecondary.vcf.gz.qual	input/annoGrator/insertionsSecondary.vcf.gz.filter	input/annoGrator/insertionsSecondary.vcf.gz.info	input/annoGrator/insertionsSecondary.vcf.gz.format	input/annoGrator/insertionsSecondary.vcf.gz.genotypes
+chr1	20	pil	N	NA	1	PASS	.			chr1	20	jBPil	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	jBS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	justAfter	<INS>	<DEL>	1	PASS	END=320		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS1	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	jBInsPi	<INS>	<DEL>	1	PASS	END=400		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	396	leftPiS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	leftPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	jAInsPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS5	NNNNN	AAAAA	1	PASS	.		
+# region: chr1 100  200
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.gz.chrom	input/annoGrator/insertionsPrimary.vcf.gz.pos	input/annoGrator/insertionsPrimary.vcf.gz.id	input/annoGrator/insertionsPrimary.vcf.gz.ref	input/annoGrator/insertionsPrimary.vcf.gz.alt	input/annoGrator/insertionsPrimary.vcf.gz.qual	input/annoGrator/insertionsPrimary.vcf.gz.filter	input/annoGrator/insertionsPrimary.vcf.gz.info	input/annoGrator/insertionsPrimary.vcf.gz.format	input/annoGrator/insertionsPrimary.vcf.gz.genotypes	input/annoGrator/insertionsSecondary.vcf.gz.chrom	input/annoGrator/insertionsSecondary.vcf.gz.pos	input/annoGrator/insertionsSecondary.vcf.gz.id	input/annoGrator/insertionsSecondary.vcf.gz.ref	input/annoGrator/insertionsSecondary.vcf.gz.alt	input/annoGrator/insertionsSecondary.vcf.gz.qual	input/annoGrator/insertionsSecondary.vcf.gz.filter	input/annoGrator/insertionsSecondary.vcf.gz.info	input/annoGrator/insertionsSecondary.vcf.gz.format	input/annoGrator/insertionsSecondary.vcf.gz.genotypes
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	150	justBefore	<INS>	<DEL>	1	PASS	END=200		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	196	jBS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	jBS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+# region: chr1 200  300
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.gz.chrom	input/annoGrator/insertionsPrimary.vcf.gz.pos	input/annoGrator/insertionsPrimary.vcf.gz.id	input/annoGrator/insertionsPrimary.vcf.gz.ref	input/annoGrator/insertionsPrimary.vcf.gz.alt	input/annoGrator/insertionsPrimary.vcf.gz.qual	input/annoGrator/insertionsPrimary.vcf.gz.filter	input/annoGrator/insertionsPrimary.vcf.gz.info	input/annoGrator/insertionsPrimary.vcf.gz.format	input/annoGrator/insertionsPrimary.vcf.gz.genotypes	input/annoGrator/insertionsSecondary.vcf.gz.chrom	input/annoGrator/insertionsSecondary.vcf.gz.pos	input/annoGrator/insertionsSecondary.vcf.gz.id	input/annoGrator/insertionsSecondary.vcf.gz.ref	input/annoGrator/insertionsSecondary.vcf.gz.alt	input/annoGrator/insertionsSecondary.vcf.gz.qual	input/annoGrator/insertionsSecondary.vcf.gz.filter	input/annoGrator/insertionsSecondary.vcf.gz.info	input/annoGrator/insertionsSecondary.vcf.gz.format	input/annoGrator/insertionsSecondary.vcf.gz.genotypes
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	150	pl	<INS>	<DEL>	1	PASS	END=250			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	197	leftS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	200	insLeft	N	NA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	201	leftS1	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	220	inThere	<INS>	<DEL>	1	PASS	END=230		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	200	p	<INS>	<DEL>	1	PASS	END=300			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1a	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS1b	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+# region: chr1 300  400
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.gz.chrom	input/annoGrator/insertionsPrimary.vcf.gz.pos	input/annoGrator/insertionsPrimary.vcf.gz.id	input/annoGrator/insertionsPrimary.vcf.gz.ref	input/annoGrator/insertionsPrimary.vcf.gz.alt	input/annoGrator/insertionsPrimary.vcf.gz.qual	input/annoGrator/insertionsPrimary.vcf.gz.filter	input/annoGrator/insertionsPrimary.vcf.gz.info	input/annoGrator/insertionsPrimary.vcf.gz.format	input/annoGrator/insertionsPrimary.vcf.gz.genotypes	input/annoGrator/insertionsSecondary.vcf.gz.chrom	input/annoGrator/insertionsSecondary.vcf.gz.pos	input/annoGrator/insertionsSecondary.vcf.gz.id	input/annoGrator/insertionsSecondary.vcf.gz.ref	input/annoGrator/insertionsSecondary.vcf.gz.alt	input/annoGrator/insertionsSecondary.vcf.gz.qual	input/annoGrator/insertionsSecondary.vcf.gz.filter	input/annoGrator/insertionsSecondary.vcf.gz.info	input/annoGrator/insertionsSecondary.vcf.gz.format	input/annoGrator/insertionsSecondary.vcf.gz.genotypes
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	rightS5	NNNNN	AAAAA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	insRight	N	NA	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	300	justAfter	<INS>	<DEL>	1	PASS	END=320		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS1	N	A	1	PASS	.		
+chr1	250	pr	<INS>	<DEL>	1	PASS	END=350			chr1	301	jAS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	jBInsPi	<INS>	<DEL>	1	PASS	END=400		
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	396	leftPiS5	NNNNN	AAAAA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	leftPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+# region: chr1 400  500
+# Header from primary input:
+##fileformat=VCFv4.0
+#CHROM  POS     ID      REF     ALT     QUAL    FILTER  INFO    
+#input/annoGrator/insertionsPrimary.vcf.gz.chrom	input/annoGrator/insertionsPrimary.vcf.gz.pos	input/annoGrator/insertionsPrimary.vcf.gz.id	input/annoGrator/insertionsPrimary.vcf.gz.ref	input/annoGrator/insertionsPrimary.vcf.gz.alt	input/annoGrator/insertionsPrimary.vcf.gz.qual	input/annoGrator/insertionsPrimary.vcf.gz.filter	input/annoGrator/insertionsPrimary.vcf.gz.info	input/annoGrator/insertionsPrimary.vcf.gz.format	input/annoGrator/insertionsPrimary.vcf.gz.genotypes	input/annoGrator/insertionsSecondary.vcf.gz.chrom	input/annoGrator/insertionsSecondary.vcf.gz.pos	input/annoGrator/insertionsSecondary.vcf.gz.id	input/annoGrator/insertionsSecondary.vcf.gz.ref	input/annoGrator/insertionsSecondary.vcf.gz.alt	input/annoGrator/insertionsSecondary.vcf.gz.qual	input/annoGrator/insertionsSecondary.vcf.gz.filter	input/annoGrator/insertionsSecondary.vcf.gz.info	input/annoGrator/insertionsSecondary.vcf.gz.format	input/annoGrator/insertionsSecondary.vcf.gz.genotypes
+chr1	400	pi	N	NA	1	PASS	.			chr1	380	aroundPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	aroundPiS2	NN	AA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	insPi	N	NA	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	400	jAInsPi	<INS>	<DEL>	1	PASS	END=420		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS1	N	A	1	PASS	.		
+chr1	400	pi	N	NA	1	PASS	.			chr1	401	rightPiS5	NNNNN	AAAAA	1	PASS	.		
