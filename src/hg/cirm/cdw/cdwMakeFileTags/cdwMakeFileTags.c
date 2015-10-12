@@ -55,13 +55,16 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	    }
 	else
 	    {
+	    int len = strlen(val);
+	    char *stringType = (len < 255 ? "string" : "lstring");
 	    if (oldType == NULL)
 	        {
-		hashAdd(hash, tag, "string");
+		hashAdd(hash, tag, stringType);
 		}
 	    else 
 	        {
-		oldHel->val = "string";
+		if (!sameString(oldHel->val, "lstring"))
+		    oldHel->val = stringType;
 		}
 	    }
 	}
@@ -106,6 +109,10 @@ for (field = fieldList; field != NULL; field = field->next)
     if (sameString(type, "string"))
         {
 	sqlType = "varchar(255)";
+	}
+    else if (sameString(type, "lstring"))
+        {
+	sqlType = "longblob";
 	}
     else if (sameString(type, "float"))
         {
