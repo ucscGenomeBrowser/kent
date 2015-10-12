@@ -13,19 +13,19 @@ if [ $# -lt 2 ]; then
     exit 255
 fi
 
-export expectTextFile="$1"
+expectTextFile="$1"
 if [ ! -s "${expectTextFile}" ]; then
     echo "ERROR: can not read expectedStderr.txt file: $expectTextFile" 1>&2
     usage
 fi
-export command="$2"
-export stderrOut="/dev/shm/errCheck.err.$$"
-export stdoutOut="/dev/shm/errCheck.out.$$"
+command="$2"
+stderrOut="${TMPDIR:-/tmp}/errCheck.err.$$"
+stdoutOut="${TMPDIR:-/tmp}/errCheck.out.$$"
 shift 2
 echo "# ${command} $*" 1>&2
 ${command} $* 2> "${stderrOut}" > "${stdoutOut}"
-export returnCode=$?
-export exitValue=0
+returnCode=$?
+exitValue=0
 if [ "${returnCode}" -ne 0 ]; then
     diffCount=`diff "${stderrOut}" "${expectTextFile}" 2> /dev/null | wc -l`
     if [ "${diffCount}" -ne 0 ]; then

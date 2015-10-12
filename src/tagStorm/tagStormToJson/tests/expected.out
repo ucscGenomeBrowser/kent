@@ -1,0 +1,1 @@
+[ { "campus": "ucsc", "children": [ { "college": "oaks", "students": "250"} , { "college": "eight", "hasFood": "1", "students": "350"} , { "college": "nine", "hasParking": "No", "students": "120"} ] } ] 

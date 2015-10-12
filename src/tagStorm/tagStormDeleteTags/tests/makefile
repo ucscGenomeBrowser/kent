@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-PROG = ../tagStormDeleteTags
+PROG = tagStormDeleteTags
 
 test: oneTest
 	echo tested all
