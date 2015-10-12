@@ -39,11 +39,13 @@ import cgitb; cgitb.enable()
 
 # these are default python modules on python 2.7, no errors expected here
 import urllib, urllib2, zlib, collections, StringIO, gzip, string, sys, os, random, \
-    subprocess, re, types, socket, cPickle, copy, glob, tempfile
+    subprocess, re, types, socket, cPickle, copy, glob, tempfile, Cookie
 
 from collections import defaultdict, namedtuple
 from os.path import *
 from distutils import spawn
+
+defaultDb = "hg19"
 
 # the mysqldb module has to be installed with one of these commands:
 # - many common linuxes and OSX: pip install mysqldb
@@ -816,13 +818,13 @@ def getCladeAssemblyDb(clade, org, db):
 
     if db is not None and clade is None and org is None:
         dbToClade = dict()
-        # search to the right org for this db
+        # search for the right org for this db
         for o, dbList in orgInfo["orgToDbs"].items():
             for orgDb, desc in dbList:
                 if orgDb==db:
                     org = o
                     break
-        # search to the right clade for this org
+        # search for the right clade for this org
         for c, orgList in orgInfo["cladeToOrgs"].items():
             for o, _ in orgList:
                 if o==org:
@@ -1606,8 +1608,8 @@ def mustBeClean(str):
         #db = "hg19"
     #return db
 
-def getCgiVar(args, name):
-    return mustBeClean(args.getvalue(name, default=None))
+def getCgiVar(args, name, default=None):
+    return mustBeClean(args.getvalue(name, default=default))
 
 def addTableList(db, conn):
     " add a local file with rows to add to tableList for hg19 "
@@ -1663,7 +1665,7 @@ def htmlMiddle(args):
 
     clade = getCgiVar(args, "clade")
     org   = getCgiVar(args, "org")
-    db    = getCgiVar(args, "db")
+    db    = getCgiVar(args, "db", defaultDb)
     orgInfo, clade, org, db = getCladeAssemblyDb(clade, org, db)
 
     if not "jobId" in args.keys():
@@ -1812,6 +1814,28 @@ def getAllLocalDbs():
     dbSet = dbSet - set(['information_schema', 'customTrash', 'hgFixed', 'hgTemp', 'hgcentral', 'mysql','performance_schema'])
     return dbSet
 
+def getCookies(cookieDb):
+    """ return db cookie value. Called usually before headers are printed.
+    Default value can be sent as argument.
+    """
+    cookie_string = os.environ.get('HTTP_COOKIE')
+    if cookie_string:
+        cookie = Cookie.SimpleCookie()
+        cookie.load(cookie_string)
+        if "db" in cookie:
+            cookieDb = cookie["db"].value
+    return cookieDb
+
+def setCookies(db):
+    """
+    Send a cookie header to set the "db" cookie to the value specified
+    """
+    cookie = Cookie.SimpleCookie()
+    cookie['db'] = db
+    cookie['db']['expires'] = 30 * 24 * 60 * 60
+    cookie['db']['comment'] = 'holds the last hgMirror database'
+    print cookie
+
 def main():
     # hide some tracks if any argument specified. makes this tool usable from command line, 
     # from cronjobs that only need to run this function
@@ -1828,6 +1852,14 @@ def main():
     if not isdir(TMPDIR):
         os.makedirs(TMPDIR)
 
+    global defaultDb
+    defaultDb = getCookies(defaultDb)
+
+    args = cgi.FieldStorage()
+
+    if "db" in args:
+        setCookies(args["db"].value)
+
     print "Content-type: text/html"
     print
 
@@ -1838,8 +1870,6 @@ def main():
         print("In the Genome-Browser-in-a-box VM, use the command gbibMirrorTracksOn.")
         sys.exit(0)
         
-    args = cgi.FieldStorage()
-
     if "debug" in args.keys():
         global DEBUG
         DEBUG = True
