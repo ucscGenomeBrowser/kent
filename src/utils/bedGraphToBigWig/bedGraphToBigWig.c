@@ -374,7 +374,7 @@ double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, NULL, 
-    &minDiff, &aveSize, &bedCount);
+    &minDiff, &aveSize, &bedCount, FALSE);
 verboseTime(2, "pass1");
 verbose(2, "%d chroms in %s, minDiff=%d, aveSize=%g, bedCount=%lld\n", 
     slCount(usageList), inName, minDiff, aveSize, bedCount);
