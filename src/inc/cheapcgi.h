@@ -574,4 +574,10 @@ struct cgiParsedVars *cgiParsedVarsNew(char *cgiString);
 void cgiParsedVarsFree(struct cgiParsedVars **pTags);
 /* Free up memory associated with cgiParsedVars */
 
+char *cgiScriptDirUrl();
+/* Return the cgi-bin directory path on this webserver.
+ * This is not the local directory but the <path> part after the server
+ * in external URLs to this webserver.
+ * e.g. if CGI is called via http://localhost/subdir/cgi-bin/cgiTest
+ * the returned string is /subdir/. Must be free'd. */
 #endif /* CHEAPCGI_H */
