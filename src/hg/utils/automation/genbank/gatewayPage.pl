@@ -36,13 +36,14 @@ $ftpName =~ s#/hive/data/inside/ncbi/##;
 my $urlDirectory = `basename $ftpName`;
 chomp $urlDirectory;
 my $urlPath = $ftpName;
-$urlPath =~ s#genomes/genbank/##;;
+my $asmType = "genbank";
+$asmType = "refseq" if ( $urlPath =~ m#/refseq/#);
+$urlPath =~ s#genomes/$asmType/##;;
 $urlPath =~ s#/.*##;;
-# genbank/vertebrate_mammalian/Tursiops_truncatus/latest_assembly_versions/GCA_000151865.3_Ttru_1.4/
 
 my %taxIdCommonName;  # key is taxId, value is common name
                       # from NCBI taxonomy database dump
-open (FH, "</hive/data/inside/ncbi/genomes/genbank/scripts/taxId.comName.tab") or die "can not read taxId.comName.tab";
+open (FH, "<$ENV{'HOME'}/kent/src/hg/utils/automation/genbank/taxId.comName.tab") or die "can not read taxId.comName.tab";
 while (my $line = <FH>) {
   chomp $line;
   my ($taxId, $comName) = split('\t', $line);
@@ -59,7 +60,7 @@ my $asmDate = "(n/a)";
 my $asmAccession = "(n/a)";
 my $commonName = "(n/a)";
 my $bioSample = "(n/a)";
-my $asmType = "(n/a)";
+my $descrAsmType = "(n/a)";
 my $asmLevel = "(n/a)";
 
 open (FH, "<$asmReport") or die "can not read $asmReport";
@@ -78,9 +79,9 @@ while (my $line = <FH>) {
      $bioSample = $line;
   }
   if ($line =~ m/assembly\s+type:\s+/i) {
-     next if ($asmType !~ m#\(n/a#);
+     next if ($descrAsmType !~ m#\(n/a#);
      $line =~ s/.*assembly\s+type:\s+//i;
-     $asmType = $line;
+     $descrAsmType = $line;
   }
   if ($line =~ m/assembly\s+level:\s+/i) {
      next if ($asmLevel !~ m#\(n/a#);
@@ -102,9 +103,9 @@ while (my $line = <FH>) {
      $line =~ s/.*submitter:\s+//i;
      $submitter = $line;
   }
-  if ($line =~ m/genbank\s+assembly\s+accession:\s+/i) {
+  if ($line =~ m/$asmType\s+assembly\s+accession:\s+/i) {
      next if ($asmAccession !~ m#\(n/a#);
-     $line =~ s/.*genbank\s+assembly\s+accession:\s+//i;
+     $line =~ s/.*$asmType\s+assembly\s+accession:\s+//i;
      $asmAccession = $line;
      $asmAccession =~ s/ .*//;
   }
@@ -128,7 +129,7 @@ printf STDERR "%s\t", $submitter;
 printf STDERR "%s\t", $asmName;
 printf STDERR "%s\t", $orgName;
 printf STDERR "%s\t", $bioSample;
-printf STDERR "%s\t", $asmType;
+printf STDERR "%s\t", $descrAsmType;
 printf STDERR "%s\t", $asmLevel;
 printf STDERR "%s\t", $asmDate;
 printf STDERR "%s\n", $asmAccession;
@@ -141,11 +142,11 @@ printf "<p>
 <b>Assembly type:</b> %s<br>
 <b>Assembly level:</b> %s<br>
 <b>Biosample:</b> <a href=\"http://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a><br>
-<b>GenBank accession ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
-<b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/%s\" target=\"_blank\">%s</a><br>
-<b>UCSC downloads directory:</b> <a href=\"http://genome-test.cse.ucsc.edu/~hiram/hubs/genbank/%s/%s/\" target=\"_blank\">%s_%s</a><br>
-</p>\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $asmType,
-  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $ftpName, $asmName, $urlPath, $urlDirectory, $asmAccession, $asmName;
+<b>Assembly accession ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
+<b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
+<b>UCSC downloads directory:</b> <a href=\"http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/%s/%s/\" target=\"_blank\">%s_%s</a><br>
+</p>\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
+  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $asmName, $urlPath, $urlDirectory, $asmAccession, $asmName;
 
 printf "<hr>
 <p>
@@ -172,34 +173,25 @@ to find Genome Browser tracks that match specific selection criteria.
 
 __END__
 
-/hive/data/outside/ncbi/genomes/genbank/vertebrate_mammalian/Sus_scrofa/all_assembly_versions/GCA_000003025.4_Sscrofa10.2/GCA_000003025.4_Sscrofa10.2_assembly_report.txt
+/hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCF_000001405.30_GRCh38.p4/GCF_000001405.30_GRCh38.p4_assembly_report.txt
 
-# Assembly Name:  Sscrofa10.2
-# Organism name:  Sus scrofa
-# Taxid:          9823
-# Submitter:      The Swine Genome Sequencing Consortium (SGSC)
-# Date:           2011-9-7
-# BioSample:      SAMN02953785
-# Assembly type:  haploid
-# Release type:   major
+# Assembly Name:  GRCh38.p4
+# Description:    Genome Reference Consortium Human Build 38 patch release 4 (GRCh38.p4)
+# Organism name:  Homo sapiens (human)
+# Taxid:          9606
+# Submitter:      Genome Reference Consortium
+# Date:           2015-6-25
+# Assembly type:  haploid-with-alt-loci
+# Release type:   patch
 # Assembly level: Chromosome
 # Genome representation: full
-# GenBank Assembly Accession: GCA_000003025.4 (latest)
-# RefSeq Assembly Accession: GCF_000003025.5 (species-representative latest)
-# RefSeq Assembly and GenBank Assemblies Identical: no
+# GenBank Assembly Accession: GCA_000001405.19 (latest)
+# RefSeq Assembly Accession: GCF_000001405.30 (latest)
+# RefSeq Assembly and GenBank Assemblies Identical: yes
 #
 ## Assembly-Units:
 ## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
-## GCA_000000215.4      GCF_000000215.5 Primary Assembly
-##      GCF_000090915.1 non-nuclear
-#
-# Ordered by chromosome/plasmid; the chromosomes/plasmids are followed by
-# unlocalized scaffolds.
-# Unplaced scaffolds are listed at the end.
-# RefSeq is equal or derived from GenBank object.
-#
-# Sequence-Name Sequence-Role   Assigned-Molecule       Assigned-Molecule-Location/Type GenBank-Accn    Relationship    RefSeq-Accn     Assembly-Unit
-chr1    assembled-molecule      1       Chromosome      CM000812.4      =       NC_010443.4     Primary Assembly
-chr2    assembled-molecule      2       Chromosome      CM000813.4      =       NC_010444.3     Primary Assembly
-chr3    assembled-molecule      3       Chromosome      CM000814.4      =       NC_010445.3     Primary Assembly
+## GCA_000001305.2      GCF_000001305.14        Primary Assembly
+## GCA_000005045.17     GCF_000005045.16        PATCHES
+## GCA_000001315.2      GCF_000001315.2 ALT_REF_LOCI_1
 

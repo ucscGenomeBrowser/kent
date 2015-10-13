@@ -170,7 +170,7 @@ for (i=0; i<eim->indexCount; ++i)
 }
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
-	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount)
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep)
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
  * collect max field sizes there too. */
 {
@@ -186,7 +186,12 @@ lineFileRemoveInitialCustomTrackLines(lf);
 
 for (;;)
     {
-    int rowSize = lineFileChopNext(lf, row, maxRowSize);
+    int rowSize = 0;
+
+    if (tabSep)
+        rowSize = lineFileChopCharNext(lf, '\t', row, maxRowSize);
+    else
+        rowSize = lineFileChopNext(lf, row, maxRowSize);
     if (rowSize == 0)
         break;
     lineFileExpectAtLeast(lf, maxRowSize, rowSize);

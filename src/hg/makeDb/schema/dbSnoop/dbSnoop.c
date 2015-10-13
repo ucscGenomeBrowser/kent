@@ -292,9 +292,9 @@ struct indexInfo
     struct indexInfo *next;
     char *table;		/* Name of table. */
     boolean nonUnique;		/* True if can have duplicates. */
-    char *name;			/* Name of this index. */
+    char *indexName;		/* Name of this index. Usually but not always same as field. */
     int seqInIndex;		/* For multiple part indexes, which part. */
-    char *field;		/* Name of field . */
+    char *field;		/* Name of field. */
     long long cardinality;		/* Cardinality of index. */
     };
 
@@ -305,7 +305,7 @@ struct indexInfo *ii;
 AllocVar(ii);
 ii->table = cloneString(row[0]);
 ii->nonUnique = sqlUnsigned(row[1]);
-ii->name = cloneString(row[2]);
+ii->indexName = cloneString(row[2]);
 ii->seqInIndex = sqlUnsigned(row[3]);
 ii->field = cloneString(row[4]);
 if (row[6] != NULL)
@@ -368,11 +368,11 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ii = indexInfoLoad(row);
-    group = hashFindVal(groupHash, ii->name);
+    group = hashFindVal(groupHash, ii->field);
     if (group == NULL)
         {
 	AllocVar(group);
-	hashAddSaveName(groupHash, ii->name, group, &group->name);
+	hashAddSaveName(groupHash, ii->field, group, &group->name);
 	slAddTail(&groupList, group);
 	}
     slAddTail(&group->fieldList, ii);

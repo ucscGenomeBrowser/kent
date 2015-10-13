@@ -578,7 +578,7 @@ double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
-    &minDiff, &aveSize, &bedCount);
+    &minDiff, &aveSize, &bedCount, tabSep);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSize);
 

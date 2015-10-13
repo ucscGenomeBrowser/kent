@@ -1,9 +1,7 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
-/* Implement portable stuff.... */
+/* Implement portable stuff.... 
+ * 
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 /* There is one of the following structures for each web server
  * we support.  During run time looking at the environment variable

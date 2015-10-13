@@ -38,9 +38,6 @@ struct fieldInfo
      int ix;	    /* Field position */
      struct hash *valHash;   /* Each unique value */
      struct slRef *valList;  /* String valued list of possible values for this field */
-     struct slRef *valCursor; /* Where we are in valList */
-     boolean captured;	/* Used internally when finding best partitioning */
-     boolean chosen;	/* Used internally to mark best partition */
      };
 
 void fieldInfoFree(struct fieldInfo **pField)
@@ -81,21 +78,20 @@ for (fi = list; fi != NULL; fi = fi->next)
 return NULL;
 }
 
-boolean fieldsAreLocked(struct fieldedTable *table, struct fieldInfo *a, struct fieldInfo *b)
-/* Return TRUE if fields are locked in the sense that you can predict the value of one field
- * from the value of the other. */
+boolean aPredictsB(struct fieldedTable *table, struct fieldInfo *a, struct fieldInfo *b)
+/* Return TRUE if fields are locked in the sense that you can predict the value of b from the value of a */
 {
 /* A field is always locked to itself! */
 if (a == b)
     return TRUE;
 
-/* If they don't have same number of values they can't be locked */
-if (a->valHash->elCount != b->valHash->elCount)
+/* If a doesnt have as many vales as b, no way can b be locked to a */
+if (a->valHash->elCount < b->valHash->elCount)
     return FALSE;
 
 /* Ok, have to do hard work of checking values move in step.  Do this with aid of
  * hash keyed by a with values from b. */
-boolean areLocked = TRUE;
+boolean arePredictable = TRUE;
 struct hash *hash = hashNew(0);
 int aIx = a->ix, bIx = b->ix;
 struct fieldedRow *row;
@@ -108,7 +104,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	{
 	if (!sameString(bVal, bOldVal))
 	    {
-	    areLocked = FALSE;
+	    arePredictable = FALSE;
 	    break;
 	    }
 	}
@@ -118,7 +114,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 	}
     }
 hashFree(&hash);
-return areLocked;
+return arePredictable;
 }
 
 struct fieldInfo *makeFieldInfo(struct fieldedTable *table)
@@ -149,7 +145,7 @@ slReverse(&fieldList);
 return fieldList;
 }
 
-struct slRef *findLockedFields(struct fieldedTable *table, struct fieldInfo *fieldList,
+struct slRef *findPredictableFields(struct fieldedTable *table, struct fieldInfo *fieldList,
     struct fieldInfo *primaryField, struct slName *exceptList)
 /* Return list of fields from fieldList that move in lock-step with primary field */
 {
@@ -158,7 +154,7 @@ struct fieldInfo *field;
 for (field = fieldList; field != NULL; field = field->next)
     {
     if (slNameFind(exceptList, field->name) == NULL)
-	if (field->captured == FALSE && fieldsAreLocked(table, primaryField, field))
+	if (aPredictsB(table, primaryField, field))
 	    refAdd(&list, field);
     }
 slReverse(&list);
@@ -166,102 +162,92 @@ return list;
 }
 
 boolean findBestParting(struct fieldedTable *table, struct fieldInfo *allFields,
-    struct slRef **retFields)
+    struct slRef **retFields, struct fieldInfo **retField)
 /* Return list of fields that make best partition of table so that it will
  * cause the most information from table to be moved to a higher level.  All the
  * returned fields will move in lock-step. */
 {
-
-/* Find count of number of values in field with fewest values */
-int smallestValCount = BIGNUM;
-struct fieldInfo *field;
-for (field = allFields; field != NULL; field = field->next)
-    {
-    int valCount = field->valHash->elCount;
-    if (valCount < smallestValCount)
-         smallestValCount = valCount;
-    }
-if (smallestValCount >= slCount(table->rowList)/2)
-    {
-    retFields = NULL;
-    return FALSE;
-    }
+double bestLinesSaved = 0;
+struct slRef *partingList = NULL;
+struct fieldInfo *partingField = NULL;
+int tableRows = slCount(table->rowList);
+int oldLineCount = tableRows * (table->fieldCount + 1);
+verbose(2, "Find best parting on table with %d rows and %d fields\n", tableRows, table->fieldCount);
 
 /* Of the ones that have the smallest number of values, find the set with the
  * most fields locked together */
-int mostLocked = 0;
-struct slRef *mostLockedList = NULL;
+struct fieldInfo *field;
 for (field = allFields; field != NULL; field = field->next)
     {
-    if (field->valHash->elCount == smallestValCount && !field->captured)
+    /* Get list of fields locked to this one, list includes self */
+    struct slRef *lockedFields = findPredictableFields(table, allFields, field, NULL);
+
+    /* We do some weighting to reduce the value of fields which are predictable but move slower 
+     * than we do. Indirectly this lets these form a higher level structure on top of us. */
+    double fieldValCount = field->valHash->elCount;
+    double q = 1.0/fieldValCount; 
+    double lockWeight = 0;
+    struct slRef *ref;
+    for (ref = lockedFields; ref != NULL; ref = ref->next)
         {
-	/* Get list of fields locked to this one, list includes self */
-	struct slRef *lockedFields = findLockedFields(table, field, field, NULL);
-
-	/* Mark these fields as captured */
-	struct slRef *ref;
-	for (ref = lockedFields; ref != NULL; ref = ref->next)
-	    {
-	    struct fieldInfo *info = ref->val;
-	    info->captured = TRUE;
-	    }
-
-	/* See if we've got more fields than before, and if so update best one. */
-	int lockedCount = slCount(lockedFields);
-	if (lockedCount > mostLocked)
-	    {
-	    slFreeList(&mostLockedList);
-	    mostLockedList = lockedFields;
-	    mostLocked = lockedCount;
-	    }
+        struct fieldInfo *fi = ref->val;
+	double ratio = fi->valHash->elCount * q;
+	if (ratio > 1)
+	    ratio = 1;
+	lockWeight += ratio;
 	}
-    }
 
-/* Mark the fields in the best partition as chosen */
-struct slRef *ref;
-for (ref = mostLockedList; ref != NULL; ref = ref->next)
-    {
-    struct fieldInfo *info = ref->val;
-    info->chosen = TRUE;
+    double varyCount = table->fieldCount - lockWeight;
+    double newLineCount = field->valHash->elCount * (1 + lockWeight) + tableRows * (1 + varyCount);
+    double linesSaved = oldLineCount - newLineCount;
+    verbose(2, "field %s, %d vals, %g locked, %g lines saved\n", field->name, 
+	field->valHash->elCount, lockWeight, linesSaved);
+    if (linesSaved > bestLinesSaved)
+	{
+	bestLinesSaved = linesSaved;
+	slFreeList(&partingList);
+	partingList = lockedFields;
+	partingField = field;
+	lockedFields = NULL;
+	}
+    else
+	slFreeList(&lockedFields);
     }
-
-/* Move chosen fields to return list, and free the rest */
-struct slRef *retList = NULL;
-for (field = allFields; field != NULL; field = field->next)
-    {
-    if (field->chosen)
-	refAdd(&retList, field);
-    }
-slReverse(&retList);
-*retFields = retList;
-return TRUE;
+*retFields = partingList;
+*retField = partingField;
+return partingList != NULL;
 }
 
 struct slRef *partOnField(struct fieldedTable *table, struct fieldInfo *allFields,
-    char *keyName, struct slName *except)
+    char *keyName, struct slName *except, struct fieldInfo **retKeyField)
 /* Return list of all fields that covary with keyField */
 {
 struct fieldInfo *keyField = fieldInfoFind(allFields, keyName);
 if (keyField == NULL)
     errAbort("%s not found in fields", keyName);
-return findLockedFields(table, allFields, keyField, except);
+*retKeyField = keyField;
+return findPredictableFields(table, allFields, keyField, except);
 }
 
 
 boolean doParting(struct fieldedTable *table, struct fieldInfo *allFields,
-    boolean doPrepart, struct slName *preparting, struct slRef **retFields)
-/* Partition table factoring out all fields that move in lockstep at this level
- * or all remaining fields if down to lowest level. */
+    boolean doPrepart, struct slName *preparting, struct slRef **retFields,
+    struct fieldInfo **retField)
+/* Partition table factoring out fields that move together.  
+ * Return TRUE  and leave a list of references to fieldInfo's in *retField if can find
+ * a useful partitioning, otherwise return FALSE. 
+ *    The retFields returns a list of references to all fields to factor out in the partitioning.
+ *    The retField contains the parting field itself (which is also in retFields) */
 {
 if (doPrepart)
     {
     if (preparting == NULL || preparting->next == NULL)
         return FALSE;
-    *retFields = partOnField(table, allFields, preparting->name, preparting->next);
+    *retFields = partOnField(table, allFields, preparting->name, preparting->next, retField);
     return TRUE;
     }
 else
-    return findBestParting(table, allFields, retFields);
+    return findBestParting(table, allFields, retFields, retField);
 }
 
 static boolean inFieldRefList(struct slRef *fieldRefList, char *name)
@@ -277,10 +263,13 @@ for (ref = fieldRefList; ref != NULL; ref = ref->next)
 return FALSE;
 }
 
-void makeSubtableExcluding(struct fieldedTable *table, struct slRef *excludedFields,
+void makeSubtableExcluding(struct fieldedTable *table, 
+    int partingFieldIx, char *partingVal,
+    struct slRef *excludedFields,
     struct fieldedTable **retSubtable, int ixTranslator[])
 /* Make up a subtable that contains all the fields of the table except the excluded ones */
 {
+/* Make new subtable with correct fields */
 int excludedCount = slCount(excludedFields);
 int subFieldCount = table->fieldCount - excludedCount;
 assert(subFieldCount > 0);
@@ -299,6 +288,26 @@ for (i=0; i<table->fieldCount; ++i)
     }
 assert(subI == subFieldCount);
 struct fieldedTable *subtable = fieldedTableNew("subtable", subFields, subFieldCount);
+
+/* Populate rows of subtable with subsets of rows of original table where the partingField
+ * matches the parting value */
+char *subrow[subFieldCount];
+struct fieldedRow *row;
+for (row = table->rowList; row != NULL; row = row->next)
+    {
+    if (sameString(row->row[partingFieldIx], partingVal))
+	{
+	int i;
+	for (i=0; i<table->fieldCount; ++i)
+	    {
+	    int subi = ixTranslator[i];
+	    if (subi >= 0)
+		subrow[subi] = row->row[i];
+	    }
+	fieldedTableAdd(subtable, subrow, subFieldCount, row->id);
+	}
+    }
+
 *retSubtable = subtable;
 }
 
@@ -307,7 +316,6 @@ void rPartition(struct fieldedTable *table, struct tagStorm *tagStorm, struct ta
 /* Recursively partition table and add to tagStorm. */
 {
 struct fieldInfo *allFields = makeFieldInfo(table);
-struct slRef *partingFields = NULL;
 struct slName *nextPrepart = NULL;
 if (doPrepart)
     {
@@ -318,7 +326,9 @@ else
     {
     prepartField = NULL;
     }
-if (!doParting(table, allFields, doPrepart, prepartField, &partingFields))
+struct slRef *partingFields = NULL;
+struct fieldInfo *partingField = NULL;
+if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &partingField))
     {
     // Here is where we should output whole table... 
     struct fieldedRow *row;
@@ -332,62 +342,53 @@ if (!doParting(table, allFields, doPrepart, prepartField, &partingFields))
     return;
     }
 
-/* Position field cursors within partingFields */
-struct slRef *ref;
-for (ref = partingFields; ref != NULL; ref = ref->next)
-    {
-    struct fieldInfo *field = ref->val;
-    field->valCursor = field->valList;
-    }
-
-struct fieldInfo *partingField = partingFields->val;
 int partingFieldIx = partingField->ix;
 
-/* Since the parting values are sorted by where they appear in table, we can
- * just scan through the table once.  We'll output the values at the first
- * place they appear. */
-struct slRef *partVal;
-for (partVal = partingField->valList; partVal != NULL; partVal = partVal->next)
+
+/* Scan through table once outputting constant bits into a tag-storm */
+struct hash *uniq = hashNew(0);
+struct slRef *partValList = partingField->valList;
+char *partVal = NULL;
+struct fieldedRow *fieldedRow;
+for (fieldedRow = table->rowList; fieldedRow != NULL; fieldedRow = fieldedRow->next)
     {
-    /* Add constant bits to tagStorm */
-    struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
-    for (ref = partingFields; ref != NULL; ref = ref->next)
+    char **row = fieldedRow->row;
+    char *keyVal = row[partingFieldIx];
+    if (partVal == NULL || differentString(partVal, keyVal))
         {
-	struct fieldInfo *field = ref->val;
-	char *val = field->valCursor->val;
-	field->valCursor = field->valCursor->next;
-	tagStanzaAdd(tagStorm, stanza, field->name, val);
-	}
-    slReverse(&stanza->tagList);
-
-    /* Make subtable with nonconstant bits starting with header. */
-    char *val = partVal->val;
-    int ixTranslator[table->fieldCount];
-    struct fieldedTable *subtable = NULL;
-    makeSubtableExcluding(table, partingFields, &subtable, ixTranslator);
-
-    /* Loop through old table saving parts from nonconstant tags in subtable */
-    int subcount = subtable->fieldCount;
-    char *subrow[subcount];
-    struct fieldedRow *row = table->rowList;
-    for (row = table->rowList; row != NULL; row = row->next)
-        {
-	if (sameString(row->row[partingFieldIx], val))
+	if (hashLookup(uniq, keyVal) == NULL)
 	    {
-	    int i;
-	    for (i=0; i<table->fieldCount; ++i)
-	        {
-		int subi = ixTranslator[i];
-		if (subi >= 0)
-		    subrow[subi] = row->row[i];
+	    hashAdd(uniq, keyVal, NULL);
+
+	    /* Add current values of parting field to stanza */
+	    struct tagStanza *stanza = tagStanzaNew(tagStorm, parent);
+	    struct slRef *ref;
+	    for (ref = partingFields; ref != NULL; ref = ref->next)
+		{
+		struct fieldInfo *field = ref->val;
+		tagStanzaAdd(tagStorm, stanza, field->name, row[field->ix]);
 		}
-	    fieldedTableAdd(subtable, subrow, subcount, row->id);
+	    slReverse(&stanza->tagList);
+
+	    /* Advance to next value */
+	    assert(partValList != NULL);
+	    partVal = partValList->val;
+	    partValList = partValList->next;
+
+	    /* Make subtable with nonconstant bits starting with header. */
+	    verbose(2, "parting on %s=%s\n", partingField->name, partVal);
+	    int ixTranslator[table->fieldCount];
+	    struct fieldedTable *subtable = NULL;
+	    makeSubtableExcluding(table, partingFieldIx, partVal,
+		partingFields, &subtable, ixTranslator);
+
+	    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
 	    }
 	}
 
-
-    rPartition(subtable, tagStorm, stanza, doPrepart, nextPrepart);
     }
+hashFree(&uniq);
+
 slFreeList(&partingFields);
 fieldInfoFreeList(&allFields);
 }

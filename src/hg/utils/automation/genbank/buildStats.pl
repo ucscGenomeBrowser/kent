@@ -23,7 +23,7 @@ if ($argc < 1) {
 
 my $ix = 0;
 while (my $sizeFile = shift) {
-    my $sizeCount = 0;
+    my $contigCount = 0;
 
     my %sizes;	# key is contigName, value is size
 
@@ -31,7 +31,7 @@ while (my $sizeFile = shift) {
 #	printf STDERR "#\treading: stdin\n";
 	while (my $line = <>) {
 	    next if ($line =~ m/^\s*#/);
-	    ++$sizeCount;
+	    ++$contigCount;
 	    chomp ($line);
 	    my ($name, $size, $rest) = split('\s+', $line, 3);
 	    my $key = sprintf("%s_X_%d", $name, $ix++);
@@ -42,7 +42,7 @@ while (my $sizeFile = shift) {
 	open (FH, "<$sizeFile") or die "can not read $sizeFile";
 	while (my $line = <FH>) {
 	    next if ($line =~ m/^\s*#/);
-	    ++$sizeCount;
+	    ++$contigCount;
 	    chomp ($line);
 	    my ($name, $size, $rest) = split('\s+', $line, 3);
 	    my $key = sprintf("%s_X_%d", $name, $ix++);
@@ -57,17 +57,16 @@ while (my $sizeFile = shift) {
     }
     my $n50Size = $totalSize / 2;
 
-    my $fullSize = $totalSize;
+    my $genomeSize = $totalSize;
     printf "<b>contig count:</b> %s<br>
-<b>total size:</b> %s bases<br>\n", commify($sizeCount), commify($totalSize);
+<b>total size:</b> %s bases<br>\n", commify($contigCount), commify($totalSize);
 
     my $prevContig = "";
     my $prevSize = 0;
 
     $totalSize = 0;
-    my $contigCount =0;
+    # work through the sizes until reaching the N50 size
     foreach my $key (sort { $sizes{$b} <=> $sizes{$a} } keys %sizes) {
-	++$contigCount;
 	$totalSize += $sizes{$key};
 	if ($totalSize > $n50Size) {
 	    my $prevName = $prevContig;
@@ -75,7 +74,8 @@ while (my $sizeFile = shift) {
 	    my $origName = $key;
 	    $origName =~ s/_X_[0-9]+//;
 	    printf "<b>N50 size:</b> %s<br>\n<hr>\n", commify($sizes{$key});
-            printf STDERR "%d\t%d\t%d\n", $sizeCount, $fullSize, $sizes{$key};
+            # the third number here is N50 size
+            printf STDERR "%d\t%d\t%d\n", $contigCount, $genomeSize, $sizes{$key};
 	    last;
 	}
 	$prevContig = $key;

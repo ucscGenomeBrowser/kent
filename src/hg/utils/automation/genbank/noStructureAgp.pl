@@ -35,17 +35,22 @@ open (FH, "<$asmReport") or die "can not read $asmReport";
 while (my $line = <FH>) {
   next if ($line =~ m/^#/);
   chomp $line;
-  my ($seqName, $seqRole, $assignedMolecule, $moleculeType, $genbankAcc, $relationship, $refseqAcc, $asmUnit) = split('\s+', $line);
-  die "can not find $genbankAcc in $chrSizes" if (!exists($chrSizes{$genbankAcc}));
-  my $size = $chrSizes{$genbankAcc};
-## XXX trying without the v name translation
-##  $seqName =~ s/\.\([0-9]+\)/v$1/;
+  my $size = 0;
+  my $ncbiName = "";
+  my ($seqName, $seqRole, $assignedMolecule, $moleculeType, $genbankAcc, $relationship, $refseqAcc, $asmUnit, $seqLength, $ucscName) = split('\t', $line);
+  if (!exists($chrSizes{$genbankAcc})) {
+     die "can not find $genbankAcc or $refseqAcc in $chrSizes" if (!exists($chrSizes{$refseqAcc}));
+     $ncbiName = $refseqAcc;
+  } else {
+     $ncbiName = $genbankAcc;
+  }
+  $size = $chrSizes{$ncbiName};
   my $partName = $seqName;  # assume ucsc naming first
-  $partName = $genbankAcc if ($ncbiUcsc eq "ncbi");
+  $partName = $ncbiName if ($ncbiUcsc eq "ncbi");
   my $chrPrefix = "chr";
   $chrPrefix = "" if ($ncbiUcsc eq "ncbi");
   if (($seqRole =~ m/assembled-molecule/) && ($moleculeType =~ m/Chromosome/)) {
-    printf "%s%s\t1\t%d\t%d\tF\t%s\t1\t%d\t+\n", $chrPrefix, $partName, $size, ++$partNum, $genbankAcc, $size;
+    printf "%s%s\t1\t%d\t%d\tF\t%s\t1\t%d\t+\n", $chrPrefix, $partName, $size, ++$partNum, $ncbiName, $size;
   } else {
     printf "%s\t1\t%d\t%d\tF\t%s\t1\t%d\t+\n", $partName, $size, ++$partNum, $genbankAcc, $size;
   }

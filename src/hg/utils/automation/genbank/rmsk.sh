@@ -59,7 +59,7 @@ score  div. del. ins.  sequence    begin     end    (left)    repeat         cla
           bbi/${accessionAsmName}.rmsk.RNA.bb
   fi
   printf "# %s checking ls rmskClass/*.tab | egrep -v \"/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab\" " "${dateStamp}"
-  otherCount=`(ls rmskClass/*.tab 2> /dev/null || true | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" || true) | wc -l`
+  otherCount=`(ls rmskClass/*.tab 2> /dev/null || true) | (egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" || true) | wc -l`
   if [ "${otherCount}" -gt 0 ]; then
     printf "# %s bedToBigBed on: " "${dateStamp}"
     ls rmskClass/*.tab | egrep -v "/SIN|/LIN|/LT|/DN|/Simple|/Low_complexity|/Satellit|RNA.tab" | xargs echo | sed -e 's#rmskClass/##g;'

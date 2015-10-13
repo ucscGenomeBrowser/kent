@@ -1,8 +1,7 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
+/* snofmake.h - Sorted Name Offset File creation functions. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 boolean snofMakeIndex(FILE *inFile, char *outName, 
     boolean (*nextRecord)(FILE *inFile, void *data, char **rName, int *rNameLen), 

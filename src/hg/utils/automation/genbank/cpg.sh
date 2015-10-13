@@ -34,7 +34,7 @@ if [ ! -f "bbi/${asmName}.cpgIslandExtUnmasked.ncbi.bb" ]; then
           -maskedSeq="${asmDirectory}/cpg/ncbi.noMask.2bit" -workhorse=hgwdev \
               -smallClusterHub=ku "${asmName}" > cpg/do.log 2>&1
   mv "cpg/${asmName}.cpgIslandExtUnmasked.ncbi.bb" bbi
-  ssh ku 'cd "${asmDirectory}/cpg"; para clearSickNodes; para flushResults; para resetCounts; para freeBatch'
+  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
   rm -f ncbi.noMask.2bit
   rm -fr cpg
@@ -55,7 +55,7 @@ if [ ! -f "bbi/${asmName}.cpgIslandExt.ncbi.bb" ]; then
           -maskedSeq="${asmDirectory}/${asmName}.ncbi.2bit" -workhorse=hgwdev \
               -smallClusterHub=ku "${asmName}" > cpg/do.log 2>&1
   mv "cpg/${asmName}.cpgIslandExt.ncbi.bb" bbi
-  ssh ku 'cd "${asmDirectory}/cpg"; para clearSickNodes; para flushResults; para resetCounts; para freeBatch'
+  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
   rm -fr cpg
   sleep 1

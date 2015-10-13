@@ -7,11 +7,14 @@ function tableHeader() {
 printf "<tr><th>Taxon ID</th>
   <th>date</th><th>common<br>name</th><th>scientific<br>name</th>
   <th>biosample</th><th>contig<br>count</th><th>genome<br>size</th>
-  <th>N50&nbsp;size</th><th>accession</th><th>assembly<br>name</th><th>assembly<br>type</th>
+  <th>N50&nbsp;size</th><th>GC&nbsp;percent</th>
+  <th>unknown&nbsp;bases<br>count/percent</th>
+  <th>gene&nbsp;count<br>bases<br>percent</th>
+  <th>accession</th><th>assembly<br>name</th><th>assembly<br>type</th>
   <th>assembly<br>level</th><th>submitter</th></tr>\n"
 }
 
-cd /hive/data/inside/ncbi/genomes/genbank/hubs
+cd /hive/data/inside/ncbi/genomes/refseq/hubs
 
 declare -A pageTitles
 
@@ -24,21 +27,23 @@ pageTitles=( ["plant"]="Plant assembly hub" \
   ["vertebrate_other"]="non-Mammalian other Vertebrate assembly hub" \
   ["invertebrate"]="Invertebrates assembly hub" )
 
-declare -A hubLinks
+export inside="/hive/data/inside/ncbi/genomes/refseq"
 
-hubLinks=( ["plant"]="gbkPlant" ["fungi"]="gbkFungi" ["other"]="gbkOther" \
-  ["archaea"]="gbkArchaea" ["protozoa"]="gbkProtozoa" \
-  ["vertebrate_mammalian"]="gbkVertebrateMammalian" \
-  ["vertebrate_other"]="gbkVertebrateOther" \
-  ["invertebrate"]="gbkInvertebrate" )
+# archaea
+# fungi
+# invertebrate
+# plant
+# protozoa
+# vertebrate_mammalian
+# vertebrate_other
 
-export inside="/hive/data/inside/ncbi/genomes/genbank"
+# for groupName in archaea fungi invertebrate other plant protozoa vertebrate_mammalian vertebrate_other
 
-for groupName in archaea fungi invertebrate other plant protozoa vertebrate_mammalian vertebrate_other
+# for groupName in archaea fungi invertebrate plant protozoa vertebrate_mammalian vertebrate_other
+for groupName in plant protozoa invertebrate vertebrate_other vertebrate_mammalian fungi archaea
 do
 
-# hubLink="${hubLinks["$groupName"]}"
-hubLink="genbank/${groupName}"
+hubLink="refseq/${groupName}"
 pageTitle="${pageTitles["$groupName"]}"
 
 htmlFile="${groupName}/${groupName}.ncbi.html"
@@ -66,6 +71,7 @@ tableHeader >> "${htmlFile}"
 # every number of lines, print the table header row
 export headerFrequency=15
 export lineCount=0
+export lastHeader=0
 
 sort -t'	' -k6,6 -u ${groupName}.order.tab \
   |sort  -t'	' -k4,4f -k3,3nr -k2,2Mr -k1,1nr | cut -f7 | sed -e '/^$/d;' \
@@ -77,12 +83,16 @@ do
   ./hubHtml.pl "${hubLink}" "${srcDir}/${B}" >> "${htmlFile}"
   printf "%s %s %s %s\n" ${groupName} ${hubLink} ${B} ${srcDir}/${B} 1>&2
   lineCount=$(( lineCount+=1 ))
+  lastHeader=$(( lastHeader+=1 ))
   if [ 0 -eq $(( $lineCount % $headerFrequency )) ]; then
      tableHeader >> "${htmlFile}"
+     lastHeader=0
   fi
 done
 
-tableHeader >> "${htmlFile}"
+if [ $lastHeader -gt 10 ]; then
+ tableHeader >> "${htmlFile}"
+fi
 LC_NUMERIC=en_US /usr/bin/printf \
 "<tr><th align=center colspan=3>total species:&nbsp;%'d</th>
   <th align=center colspan=3>total assemblies:&nbsp;%'d</th>

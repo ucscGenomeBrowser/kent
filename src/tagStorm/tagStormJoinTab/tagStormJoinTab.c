@@ -38,7 +38,7 @@ struct tagStorm *tags = tagStormFromFile(inTags);
 verbose(2, "Got %d trees in %s\n", slCount(tags->forest), inTags);
 // hash is a hash table that connects the user supplied key joinTag with the corresponding
 // values in the user supplied tagStorm file inTags. 
-struct hash *hash = tagStormIndex(tags, joinTag);
+struct hash *hash = tagStormIndexExtended(tags, joinTag, TRUE, FALSE);
 if (hash->elCount == 0)
     errAbort("No %s tags in %s", joinTag, inTags);
 int joinIx = stringArrayIx(joinTag, table->fields, table->fieldCount);

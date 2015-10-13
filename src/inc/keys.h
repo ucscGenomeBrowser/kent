@@ -1,10 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* keys.h - Stuff to manage a little key/value table and
- * evaluate expressions on it. */
+ * evaluate expressions on it. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef KEYS_H
 #define KEYS_H
 

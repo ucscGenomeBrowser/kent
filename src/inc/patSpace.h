@@ -1,10 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* patSpace - a homology finding algorithm that occurs mostly in 
- * pattern space (as opposed to offset space). */
+ * pattern space (as opposed to offset space). 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 #ifndef PATSPACE_H
 #define PATSPACE_H

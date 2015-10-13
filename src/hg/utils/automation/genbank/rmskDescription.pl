@@ -28,7 +28,9 @@ chomp $bbiCount;
 exit 0 if ( $bbiCount < 1);
 
 my $groupName = $wrkDir;
-$groupName =~ s#.*/genbank/##;
+my $asmType = "genbank";
+$asmType = "refseq" if ( $groupName =~ m#/refseq/#);
+$groupName =~ s#.*/$asmType/##;
 $groupName =~ s#/.*##;
 my $selfUrl = "${groupName}/${accAsm}";
 

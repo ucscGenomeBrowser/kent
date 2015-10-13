@@ -237,12 +237,21 @@ char *cdwAllowedTags[] = {
     "submission_date",
     "update_date",
     "disease",
+    "disease_stage",
     "inputs",
     "ucsc_db",
     "pipeline",
     "output",
     "meta",
     "chrom",
+    "ncbi_bio_project",
+    "ncbi_bio_sample",
+    "biomaterial_provider",
+    "sra_study",
+    "sra_sample",
+    "sra_run",
+    "geo_series",
+    "geo_sample",
     };
 
 struct hash *cdwAllowedTagsHash()
@@ -262,7 +271,7 @@ return allowedHash;
 boolean cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
-if (startsWith("lab_", tag) || startsWith("user_", tag) || startsWith("GEO_", tag))
+if (startsWith("lab_", tag) || startsWith("user_", tag) || startsWith("GEO_", tag) || startsWith("SRA_", tag))
     {
     return TRUE;
     }
@@ -304,6 +313,7 @@ if (list == NULL)
 	"rcc A Nanostring RCC file",
 	"text	Unicode 8-bit formatted text file",
 	"vcf Variant call format",
+	"kallisto_abundance abundance.txt file output from Kallisto containing RNA abundance info",
 	"unknown	File is in  format unknown to the data hub.  No validations are applied",
 	};
     int i;

@@ -1,13 +1,11 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* Memgfx - stuff to do graphics in memory buffers.
  * Typically will just write these out as .gif or .png files.
  * This stuff is byte-a-pixel for simplicity.
  * It can do 256 colors.
- */
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #ifndef MEMGFX_H
 #define MEMGFX_H
 

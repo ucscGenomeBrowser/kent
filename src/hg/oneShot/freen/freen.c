@@ -22,30 +22,15 @@ errAbort("freen - test some hairbrained thing.\n"
  //  {NULL, 0},
 //};
 
+int squareP(int a)
+{
+return a*a;
+}
+
 void freen(char *chrom)
 /* Test something */
 {
-uglyTime(NULL);
-struct sqlConnection *conn = sqlConnect("hg19");
-uglyTime("connect");
-char query[512];
-sqlSafef(query, sizeof(query), "select * from knownGene where chrom='%s'", chrom);
-struct sqlResult *sr = sqlGetResult(conn, query);
-uglyTime("get result");
-char **row;
-struct rbTree *rt = rangeTreeNew();
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct genePred *gp = genePredLoad(row);
-    int i;
-    int exonCount = gp->exonCount;
-    for (i=0; i<exonCount; ++i)
-        rangeTreeAdd(rt, gp->exonStarts[i], gp->exonEnds[i]);
-    }
-uglyTime("Add rows");
-struct range *list = rangeTreeList(rt);
-uglyTime("Did list");
-uglyf("%d items in chrom %s\n", slCount(list), chrom);
+printf("%'d\n", squareP(1000));
 }
 
 int main(int argc, char *argv[])

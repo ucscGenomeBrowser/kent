@@ -1,10 +1,9 @@
-/*****************************************************************************
- * Copyright (C) 2000 Jim Kent.  This source code may be freely used         *
- * for personal, academic, and non-profit purposes.  Commercial use          *
- * permitted only by explicit agreement with Jim Kent (jim_kent@pacbell.net) *
- *****************************************************************************/
 /* fof.h - Manages a fof-type index file.  This index refers
- * to records in multiple external files. */
+ * to records in multiple external files. 
+ *
+ * This file is copyright 2000 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 
 struct fofPos
 /* This holds the result of a FOF search. */

@@ -52,8 +52,11 @@ if (clRemove)
 else
     sqlSafef(query, sizeof(query), "insert cdwGroupFile (fileId,groupId) values (%u,%u)",
 	vf->fileId, group->id);
-if (!clDry)
+if (clDry)
+    printf("%s\n", query);
+else
     sqlUpdate(conn, query);
+
 }
 
 void cdwGroupFile(char *groupName, char *where)

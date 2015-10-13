@@ -269,14 +269,14 @@ return NULL;
 
 static void rAddIndex(struct tagStorm *tagStorm, struct tagStanza *list, 
     struct hash *hash, char *tag, char *parentVal,
-    boolean unique)
+    boolean unique, boolean inherit)
 /* Add stanza to hash index if it has a value for tag, or if val is passed in. */
 {
 struct tagStanza *stanza;
 for (stanza = list; stanza != NULL; stanza = stanza->next)
     {
     char *val = slPairFindVal(stanza->tagList, tag);
-    if (val == NULL)
+    if (val == NULL && inherit)
 	val = parentVal;
     if (val != NULL)
 	{
@@ -289,25 +289,34 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	hashAdd(hash, val, stanza);
 	}
     if (stanza->children != NULL)
-        rAddIndex(tagStorm, stanza->children, hash, tag, val, unique);
+        rAddIndex(tagStorm, stanza->children, hash, tag, val, unique, inherit);
     }
+}
+
+
+struct hash *tagStormIndexExtended(struct tagStorm *tagStorm, char *tag, 
+    boolean unique, boolean inherit)
+/* Produce a hash of stanzas containing a tag keyed by tag value. 
+ * If unique parameter is set then the tag values must all be unique
+ * If inherit is set then tags set in parent stanzas will be considered too. */
+{
+struct hash *hash = hashNew(0);
+rAddIndex(tagStorm, tagStorm->forest, hash, tag, NULL, unique, inherit);
+return hash;
 }
 
 struct hash *tagStormIndex(struct tagStorm *tagStorm, char *tag)
 /* Produce a hash of stanzas containing a tag keyed by tag value */
 {
-struct hash *hash = hashNew(0);
-rAddIndex(tagStorm, tagStorm->forest, hash, tag, NULL, FALSE);
-return hash;
+return tagStormIndexExtended(tagStorm, tag, FALSE, TRUE);
 }
+
 
 struct hash *tagStormUniqueIndex(struct tagStorm *tagStorm, char *tag)
 /* Produce a hash of stanzas containing a tag where tag is unique across
  * stanzas */
 {
-struct hash *hash = hashNew(0);
-rAddIndex(tagStorm, tagStorm->forest, hash, tag, NULL, TRUE);
-return hash;
+return tagStormIndexExtended(tagStorm, tag, TRUE, TRUE);
 }
 
 static void rTsWrite(struct tagStanza *list, FILE *f, int maxDepth, int depth)
