@@ -477,7 +477,7 @@ Drupal.theme.prototype = {
       // Apply a generic hover class.
       hoverClass: 'over',
       // Disable generation of arrow mark-up.
-      autoArrows: true,
+      autoArrows: false,
       // Disable drop shadows.
       dropShadows: false,
       // Mouse delay.
