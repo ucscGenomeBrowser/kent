@@ -198,10 +198,9 @@ static void msBedPrintTable(struct bed *bedList, struct hash *erHash,
 	enum expColorType colorScheme)
 /* prints out a table from the data present in the bedList */
 {
-int i,featureCount=0;
+int i;
 if(bedList == NULL)
     errAbort("hgc::msBedPrintTable() - bedList is NULL");
-featureCount = slCount(bedList);
 /* time to write out some html, first the table and header */
 if(printKey != NULL)
     printKey(minScore, maxScore, stepSize, base, getColor, colorScheme);

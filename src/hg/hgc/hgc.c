@@ -1346,17 +1346,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 printf("</A>");
 sqlFreeResult(&sr);
 
-#if 0
-//struct tempName launchFile;
-char *fileName = "../trash/braney.launch";
-FILE *launchF;
-//trashDirFile(&launchFile, "braney", "launch", ".txt");
-//printf("writing %s\n",fileName);
-launchF = mustOpen(fileName, "w");
-fprintf(launchF, "%s\n", item);
-fclose(launchF);
-#endif
-
 if (!sameString("atom20080226d", table))
     return;
 
@@ -2310,7 +2299,7 @@ struct axt *getAxtListForGene(struct genePred *gp, char *nib, char *fromDb, char
 struct axt *axt, *axtGap;
 struct axt *axtList = NULL;
 int prevEnd = gp->txStart;
-int prevStart = gp->txEnd;
+// int prevStart = gp->txEnd;  unused variable
 int tmp;
 
 while ((axt = axtRead(lf)) != NULL)
@@ -2342,7 +2331,7 @@ while ((axt = axtRead(lf)) != NULL)
             }
         slAddHead(&axtList, axt);
         prevEnd = axt->tEnd;
-        prevStart = axt->tStart;
+        // prevStart = axt->tStart;  unused variable
         }
     if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd))
         {
@@ -2383,7 +2372,7 @@ struct lineFile *lf ;
 struct axt *axt, *axtGap;
 struct axt *axtList = NULL;
 int prevEnd = gp->txStart;
-int prevStart = gp->txEnd;
+// int prevStart = gp->txEnd;  unused variable
 int tmp;
 
 lf = lineFileOpen(getAxtFileName(gp->chrom, toDb, alignment, fromDb), TRUE);
@@ -2419,7 +2408,7 @@ while ((axt = axtRead(lf)) != NULL)
             }
         slAddHead(&axtList, axt);
         prevEnd = axt->tEnd;
-        prevStart = axt->tStart;
+        // prevStart = axt->tStart;  unused variable
         }
     if (sameString(gp->chrom, axt->tName) && (axt->tStart > gp->txEnd+20000))
         {
@@ -3490,8 +3479,6 @@ void tfbsConsSites(struct trackDb *tdb, char *item)
 {
 boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -3506,9 +3493,7 @@ struct tfbsConsFactors *tfbsConsFactorList = NULL;
 boolean firstTime = TRUE;
 char *mappedId = NULL;
 
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -3577,7 +3562,6 @@ if (tfbsConsFactorList)
     }
 
 printTrackHtml(tdb);
-freez(&dupe);
 hFreeConn(&conn);
 }
 
@@ -3587,8 +3571,6 @@ void tfbsCons(struct trackDb *tdb, char *item)
 boolean printFactors = FALSE;
 boolean printedPlus = FALSE;
 boolean printedMinus = FALSE;
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -3602,9 +3584,7 @@ struct tfbsConsMap tfbsConsMap;
 boolean firstTime = TRUE;
 char *mappedId = NULL;
 
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -3677,14 +3657,11 @@ if (printFactors)
     }
 
 printTrackHtml(tdb);
-freez(&dupe);
 hFreeConn(&conn);
 }
 
 void firstEF(struct trackDb *tdb, char *item)
 {
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -3696,9 +3673,7 @@ char **row;
 boolean firstTime = TRUE;
 
 /* itemForUrl = item; */
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
 /* printCustomUrl(tdb, itemForUrl, item == itemForUrl); */
 
@@ -3720,7 +3695,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     printPos(bed->chrom, bed->chromStart, bed->chromEnd, NULL, TRUE, bed->name);
     }
 printTrackHtml(tdb);
-freez(&dupe);
 hFreeConn(&conn);
 }
 
@@ -5299,7 +5273,7 @@ struct sqlResult *sr;
 char **row;
 char query[512];
 char *seqid, *accession, *comment;
-char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;
+// char *qualifier, *anntext, *datasrc, *srckey, *href, *evidence;
 
 accession = acc;
 sqlSafef(query, sizeof(query),
@@ -5321,12 +5295,12 @@ if (row != NULL)
 
     while (row !=NULL)
 	{
-	qualifier = row[0];
-	anntext   = row[1];
-	datasrc   = row[2];
-	srckey    = row[3];
-	href      = row[4];
-        evidence  = row[5];
+	// qualifier = row[0];  unused variable
+	// anntext   = row[1];  unused variable
+	// datasrc   = row[2];  unused variable
+	// srckey    = row[3];  unused variable
+	// href      = row[4];  unused variable
+        // evidence  = row[5];  unused variable
         row = sqlNextRow(sr);
         }
 
@@ -5447,12 +5421,13 @@ struct sqlResult *sr;
 char **row;
 char rgdEstId[512];
 char query[256];
-char *type,*direction,*source,*orgFullName,*library,*clone,*sex,*tissue,
+char *type,*direction,*orgFullName,*library,*clone,*sex,*tissue,
     *development,*cell,*cds,*description, *author,*geneName,
     *date,*productName;
-int seqSize,fileSize;
-long fileOffset;
-char *ext_file;
+// char *source;  unused variable
+// int seqSize,fileSize;  unused variables
+// long fileOffset;  unused variable
+// char *extFile;    unused variable
 boolean hasVersion = hHasField(database, "gbCdnaInfo", "version");
 boolean haveGbSeq = sqlTableExists(conn, "gbSeq");
 char *seqTbl = haveGbSeq ? "gbSeq" : "seq";
@@ -5513,14 +5488,16 @@ sr = sqlMustGetResult(conn, dy->string);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    type=row[0];direction=row[1];source=row[2];orgFullName=row[3];library=row[4];clone=row[5];
+    type=row[0];direction=row[1];
+      // source=row[2];  unused variable
+    orgFullName=row[3];library=row[4];clone=row[5];
     sex=row[6];tissue=row[7];development=row[8];cell=row[9];cds=row[10];description=row[11];
     author=row[12];geneName=row[13];productName=row[14];
-    seqSize = sqlUnsigned(row[15]);
+    // seqSize = sqlUnsigned(row[15]);   unused variable
     date = row[16];
-    ext_file = row[17];
-    fileOffset=sqlUnsigned(row[18]);
-    fileSize=sqlUnsigned(row[19]);
+    // ext_file = row[17];  unused variable
+    // fileOffset=sqlUnsigned(row[18]);  unused variable
+    // fileSize=sqlUnsigned(row[19]);    unused variable
     boolean isEst = sameWord(type, "est");
 
     if (hasVersion)
@@ -6363,8 +6340,9 @@ int start = cartInt(cart, "o");
 boolean hasBin;
 char splitTable[64];
 char *chp;
-char *accession1, *accession2, *spanner, *evaluation, *variation, *varEvidence,
+char *accession1, *accession2, *spanner, *variation, *varEvidence,
     *contact, *remark, *comment;
+// char *evaluation;  unused variable
 char *secondAcc, *secondAccVer;
 char *tmpString;
 int first;
@@ -6424,7 +6402,7 @@ if (hTableExists(database, "certificate"))
         accession1      = row2[0];
         accession2      = row2[1];
         spanner         = row2[2];
-        evaluation      = row2[3];
+        // evaluation      = row2[3];  unused variable
         variation       = row2[4];
         varEvidence     = row2[5];
         contact         = row2[6];
@@ -8596,7 +8574,7 @@ void printEnsemblCustomUrl(struct trackDb *tdb, char *itemName, boolean encode,
 /* Print Ensembl Gene URL. */
 {
 char *shortItemName;
-char *genomeStr = "";
+// char *genomeStr = ""; unused variable
 char *genomeStrEnsembl = "";
 struct sqlConnection *conn = hAllocConn(database);
 char cond_str[256], cond_str2[256], cond_str3[256];
@@ -8643,13 +8621,10 @@ if (hTableExists(database, "ensemblSource"))
     ensemblSource = sqlQuickString(conn, query);
     }
 
-boolean nonCoding = FALSE;
 sqlSafefFrag(query, sizeof(query), "name = \"%s\"", itemName);
 struct genePred *gpList = genePredReaderLoadQuery(conn, "ensGene", query);
 if (gpList && gpList->name2)
     {
-    if (gpList->cdsStart == gpList->cdsEnd)
-	nonCoding = TRUE;
     printf("<B>Ensembl Gene Link: </B>");
     if ((strlen(gpList->name2) < 1) || sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
@@ -8709,6 +8684,7 @@ if (hTableExists(database, "superfamily"))
         printf("%s</A><BR>\n", proteinID);
         }
 
+#ifdef NOT
     /* get genomeStr to be used in Superfamily URL */
     if (sameWord(organism, "human"))
         {
@@ -8740,7 +8716,6 @@ if (hTableExists(database, "superfamily"))
                 }
             }
         }
-#ifdef NOT
 /* superfamily does not update with ensGene updates, stop printing an
 	invalid URL */
     sqlSafefFrag(cond_str, "name='%s'", shortItemName);
@@ -9126,7 +9101,6 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *chrom, *chromStart, *chromEnd;
 char *chp;
 char *omimId, *avSubFdId;
 char *avDescStartPos, *avDescLen;
@@ -9146,12 +9120,6 @@ sr = sqlGetResult(conn, query);
 
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s in omimAv table - database inconsistency.", avName);
-else
-    {
-    chrom       = cloneString(row[1]);
-    chromStart  = cloneString(row[2]);
-    chromEnd    = cloneString(row[3]);
-    }
 sqlFreeResult(&sr);
 
 omimId = strdup(avName);
@@ -9492,7 +9460,8 @@ char *chp;
 char indent1[40] = {"&nbsp;&nbsp;&nbsp;&nbsp;"};
 char indent2[40] = {""};
 
-char *source, *cosmic_mutation_id, *gene_name, *accession_number;
+char *gene_name, *accession_number;
+// char $source, *cosmic_mutation_id;  unused variable
 char *mut_description, *mut_syntax_cds, *mut_syntax_aa;
 char *chromosome, *grch37_start, *grch37_stop, *mut_nt;
 char *mut_aa, *tumour_site, *mutated_samples, *examined_samples, *mut_freq;
@@ -9519,8 +9488,8 @@ if (row != NULL)
 
     ii=0;
 
-    source              = row[ii];ii++;
-    cosmic_mutation_id  = row[ii];ii++;
+    ii++; // source              = row[ii];ii++;  unused variable
+    ii++; // cosmic_mutation_id  = row[ii];ii++;  unused variable
     gene_name           = row[ii];ii++;
     accession_number    = row[ii];ii++;
     mut_description     = row[ii];ii++;
@@ -10370,11 +10339,9 @@ char *url = tdb->url;
 char *title1 = NULL;
 char *title2 = NULL;
 char *chrom, *chromStart, *chromEnd;
-char *omimId;
 char *avId;
 char *dbSnpId;
 char *chp;
-char *seqId = NULL;
 char avString[255];
 char *avDesc = NULL;
 
@@ -10391,7 +10358,6 @@ safef(avString, sizeof(avString), "%s", itemName);
 
 chp = strstr(itemName, ".");
 *chp = '\0';
-omimId = strdup(itemName);
 
 chp = avString;
 chp = strstr(avString, ".");
@@ -10408,7 +10374,6 @@ if (url != NULL && url[0] != 0)
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	seqId = strdup(row[2]);
 	if (row[0] != NULL)
 	    {
 	    title1 = cloneString(row[0]);
@@ -10760,7 +10725,6 @@ char *sqlRnaName = rgdGeneId;
 char *rgdId = NULL;
 char *chp;
 char *GeneID, *Name, *note;
-char *rgdPathwayId;
 char *rgdPathwayName;
 
 /* Make sure to escape single quotes for DB parseability */
@@ -10780,7 +10744,7 @@ else
     errAbort("Couldn't find %s.", rgdGeneId);
     }
 
-sqlSafef(query, sizeof(query), "select GeneID, Name, note from rgdGeneXref where rgdGeneId = '%s'", rgdGeneId);
+sqlSafef(query, sizeof(query), "select GeneID, Name, note from rgdGeneXref where rgdGeneId = '%s'", sqlRnaName);
 
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
@@ -10856,7 +10820,6 @@ if ((row = sqlNextRow(sr)) == NULL)
 printf("<UL>");
 while (row != NULL)
     {
-    rgdPathwayId   = cloneString(row[0]);
     rgdPathwayName = cloneString(row[1]);
     printf("<LI><B>%s</B><BR>", rgdPathwayName);
     row = sqlNextRow(sr);
@@ -12259,17 +12222,13 @@ struct tRNAs *trna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *dupe, *words[16];
 char **row;
-int wordCount;
 int rowOffset;
 
 int start   = cartInt(cart, "o");
 int end     = cartInt(cart, "t");
 
 genericHeader(tdb,trnaName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sqlSafef(query, ArraySize(query),
@@ -13481,12 +13440,11 @@ if (hTableExists(database, chainTable_chrom) )
 
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        int chainId = 0, score;
+        int chainId = 0;
         unsigned int qStart, qEnd, qSize;
         struct chain *chain = NULL;
         char qStrand;
         chainId = sqlUnsigned(row[0]);
-        score = sqlUnsigned(row[1]);
         qStart = sqlUnsigned(row[2]);
         qEnd = sqlUnsigned(row[3]);
         qStrand =row[4][0];
@@ -15366,7 +15324,6 @@ if (hTableExists(database, "knownGene") && hTableExists(database, "refLink") &&
     struct sqlResult *sr;
     char **row;
     char query[512];
-    int rowOffset;
 
     sqlSafef(query, sizeof(query),
 	  "select distinct        "
@@ -15382,7 +15339,6 @@ if (hTableExists(database, "knownGene") && hTableExists(database, "refLink") &&
 	  "  and  kg.txStart < snp.chromStart "
 	  "  and  kg.txEnd   > snp.chromEnd   "
 	  "  and  snp.name   = '%s'", table, name);
-    rowOffset = hOffsetPastBin(database, seqName, table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -18430,7 +18386,6 @@ char query[512];
 char aliasTable[256], phenoTable[256];
 struct slName *phenoList = NULL, *pheno = NULL;
 boolean first = TRUE;
-int chromStart=0, chromEnd=0;
 char *selectedPheno = NULL;
 
 /* Parse out the selected phenotype passed in from hgTracks. */
@@ -18469,8 +18424,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	printPos(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
 		 FALSE, NULL);
-	chromStart = bed->chromStart;
-	chromEnd = bed->chromEnd;
 	bedFree(&bed);
 	}
     pheno = slNameNew(row[hasBin+12]);
@@ -19480,8 +19433,6 @@ hFreeConn(&conn);
 
 void perlegenDetails(struct trackDb *tdb, char *item)
 {
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -19495,9 +19446,7 @@ int numSnpsReq = -1;
 if(tdb == NULL)
     errAbort("TrackDb entry null for perlegen, item=%s\n", item);
 
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, FALSE);
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -19554,8 +19503,6 @@ hFreeConn(&conn);
 
 void haplotypeDetails(struct trackDb *tdb, char *item)
 {
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -19568,9 +19515,7 @@ boolean firstTime = TRUE;
 if(tdb == NULL)
     errAbort("TrackDb entry null for haplotype, item=%s\n", item);
 
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -19599,8 +19544,6 @@ hFreeConn(&conn);
 
 void mitoDetails(struct trackDb *tdb, char *item)
 {
-char *dupe, *words[16];
-int wordCount;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
@@ -19614,9 +19557,7 @@ int numSnpsReq = -1;
 if(tdb == NULL)
     errAbort("TrackDb entry null for mitoSnps, item=%s\n", item);
 
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
@@ -19672,8 +19613,6 @@ hFreeConn(&conn);
 
 void ancientRDetails(struct trackDb *tdb, char *item)
 {
-char *dupe, *words[16];
-int wordCount;
 struct sqlConnection *conn = hAllocConn(database);
 char table[64];
 boolean hasBin;
@@ -19687,9 +19626,7 @@ struct ancientRref *ar = NULL;
 
 if(tdb == NULL)
     errAbort("TrackDb entry null for ancientR, item=%s\n", item);
-dupe = cloneString(tdb->type);
 genericHeader(tdb, item);
-wordCount = chopLine(dupe, words);
 printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(database, seqName, tdb->table, table, &hasBin);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s'",
@@ -20447,7 +20384,6 @@ boolean firstTime = TRUE;
 struct psl *thisPsl;
 char str[256];
 char thisItem[256];
-char *cgiItem;
 char otherString[256] = "";
 struct sqlResult *pslSr;
 struct sqlConnection *conn2 = hAllocConn(database);
@@ -20483,7 +20419,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    snprintf(thisItem, 256, "%s:%d-%d %s:%d-%d", thisPsl->qName,
 		     thisPsl->qStart, thisPsl->qEnd, thisPsl->tName,
 		     thisPsl->tStart, thisPsl->tEnd );
-	    cgiItem = cgiEncode(thisItem);
 	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
 			      otherDb, thisPsl, pslTableName );
 	    safef(otherString, sizeof otherString, "%d&win=T", thisPsl->tStart );
@@ -20581,7 +20516,7 @@ void humMusClickHandler(struct trackDb *tdb, char *item,
         char *targetName, char *targetDb, char *targetTable, boolean printWindowFlag )
 /* Put up sample track info. */
 {
-char *type, *words[16], *dupe = cloneString(tdb->type);
+char *words[16], *dupe = cloneString(tdb->type);
 int num;
 int wordCount;
 int start = cartInt(cart, "o");
@@ -20591,7 +20526,6 @@ genericHeader(tdb, item);
 wordCount = chopLine(dupe, words);
 if (wordCount > 0)
     {
-    type = words[0];
     num = 0;
     if (wordCount > 1)
 	num = atoi(words[1]);
@@ -20606,7 +20540,7 @@ hFreeConn(&conn);
 void footPrinterClickHandler(struct trackDb *tdb, char *item )
 /* Put up generic track info. */
 {
-char *type, *words[16], *dupe = cloneString(tdb->type);
+char *words[16], *dupe = cloneString(tdb->type);
 int num;
 int wordCount;
 int start = cartInt(cart, "o");
@@ -20615,7 +20549,6 @@ struct sqlConnection *conn = hAllocConn(database);
 wordCount = chopLine(dupe, words);
 if (wordCount > 0)
     {
-    type = words[0];
     num = 0;
     if (wordCount > 1)
 	num = atoi(words[1]);
@@ -21267,8 +21200,7 @@ void doScaffoldEcores(struct trackDb *tdb, char *item)
 /* Creates details page and gets the scaffold co-ordinates for unmapped */
 /* genomes for display and to use to create the correct outside link URL */
 {
-char *dupe, *words[16];
-int wordCount;
+char *words[16];
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 int num;
@@ -21283,8 +21215,6 @@ char *old = "_";
 char *new = "";
 char *pat = "fold";
 int hasBin = 1;
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
 /* get bed size */
 num = 0;
 num = atoi(words[1]);
@@ -21312,7 +21242,6 @@ genericBedClick(conn, tdb, item, start, num);
 printTrackHtml(tdb);
 
 dyStringFree(&itemUrl);
-freez(&dupe);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
@@ -22571,13 +22500,11 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr = NULL;
 char **row, table[256], query[256], *parts[6];
 struct putaInfo *info = NULL;
-struct psl *psl = NULL;
 int start = cartInt(cart, "o"),  end = cartInt(cart, "t");
 char *db = cgiString("db");
 char *name = cartString(cart, "i"),  *chr = cartString(cart, "c");
 char pslTable[256];
-char otherString[256], *tempName = NULL;
-int partCount;
+char otherString[256];
 
 safef(table, sizeof table, "putaInfo");
 safef(pslTable, sizeof pslTable, "potentPsl");
@@ -22600,8 +22527,8 @@ else
     }
 sqlFreeResult(&sr);
 
-tempName = cloneString(name);
-partCount = chopByChar(tempName, '|',parts, 4);
+char *tempName = cloneString(name);
+chopByChar(tempName, '|',parts, 4);
 
 printf("<B>%s</B> is homologous to the known gene: <A HREF=\"", name);
 printEntrezNucleotideUrl(stdout, parts[0]);
@@ -22657,7 +22584,6 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if(row != NULL)
     {
-    psl = pslLoad(row+1);
     safef(otherString, sizeof otherString, "&db=%s&pslTable=%s&chrom=%s&cStart=%d&cEnd=%d&strand=%s&qStrand=%s",
 	    database, pslTable, info->chrom,info->chromStart, info->chromEnd, info->strand, parts[2]);
     hgcAnchorSomewhere("potentPsl", cgiEncode(parts[0]), otherString, info->chrom);
@@ -24116,7 +24042,7 @@ char *table = tdb->table;
 char *cliniTable=NULL, *key=NULL;
 char query[256];
 struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr, *startSr;
+struct sqlResult *sr;
 char **row;
 
 if (sameString(table, "CGHBreastCancerUCSF") || sameString(table, "expBreastCancerUCSF"))
@@ -24301,8 +24227,6 @@ sqlSafef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    startSr = sr;
-
     int numFields = sqlCountColumns(sr);
     int i;
     char *fieldName=NULL, *value=NULL;
