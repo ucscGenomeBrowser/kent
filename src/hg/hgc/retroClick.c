@@ -130,7 +130,6 @@ static struct mappingInfo *mappingInfoNew(struct sqlConnection *conn,
 /* load mapping info for a mapped gene */
 {
 struct mappingInfo *mi;
-int preLen;
 char *suffix = containsStringNoCase(tbl,"Info");
 int suffixLen = 4;
 AllocVar(mi);
@@ -152,7 +151,6 @@ if (suffix != NULL)
     safef(mi->suffix,ID_BUFSZ,"%s",suffix);
     }
 
-preLen = strlen(mi->tblPre);
 if (startsWith("retroAugust", tbl))
     safef(mi->geneSet, sizeof(mi->geneSet), "August");
 else if (startsWith("retro", tbl))
@@ -310,7 +308,7 @@ return total;
 
 void printBlocks (struct psl *psl, int maxBlockGap, struct psl *nestedPsl)
 {
-int i, qsStart = 0;
+int i;
 int exonsCovered = 0;
 int totalBases = 0;
 int totalExons = 0;
@@ -330,7 +328,6 @@ for (i = 0 ; i < psl->blockCount ; i++)
     int qsNext = 0;
     float coverage = 0;
     int bases = 0;
-    int oldte = te;
     int gapRatio = 0;
     if (i < psl->blockCount -1)
         {
@@ -342,7 +339,6 @@ for (i = 0 ; i < psl->blockCount ; i++)
     else
         tdiff = 9999999;
     cumTdiff = tdiff;
-    qsStart = qs;
 /* combine blocks that are close together */
     while (tdiff < maxBlockGap && i< (psl->blockCount)-1)
         {
@@ -359,7 +355,6 @@ for (i = 0 ; i < psl->blockCount ; i++)
         else
             tdiff = 9999999;
         cumTdiff += tdiff;
-        oldte = te;
         }
     oqs = qs; oqe = qe;
     if (psl->strand[0] == '-')

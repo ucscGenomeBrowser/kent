@@ -1656,9 +1656,7 @@ void omimLocationConfig(struct trackDb *tdb)
 /* Put up OMIM Location track controls */
 {
 char varName[64];
-char *geneLabel;
 safef(varName, sizeof(varName), "%s.label", tdb->track);
-geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
@@ -1680,9 +1678,7 @@ void omimGene2Config(struct trackDb *tdb)
 /* Put up OMIM Genes track controls */
 {
 char varName[64];
-char *geneLabel;
 safef(varName, sizeof(varName), "%s.label", tdb->track);
-geneLabel = cartUsualString(cart, varName, "OMIM ID");
 printf("<BR><B>Include Entries of:</B> ");
 printf("<UL>\n");
 printf("<LI>");
@@ -1984,7 +1980,7 @@ void zooWiggleUi(struct trackDb *tdb )
  * and checkboxes to toggle each of them on/off*/
 {
 char options[7][256];
-int thisHeightPer, thisLineGap;
+int thisHeightPer;
 float thisMinYRange, thisMaxYRange;
 char *interpolate, *fill;
 
@@ -2010,7 +2006,6 @@ interpolate = cartUsualString(cart, &options[1][0], "Linear Interpolation");
 fill = cartUsualString(cart, &options[3][0], "1");
 thisMinYRange = atof(cartUsualString(cart, &options[4][0], "0.0"));
 thisMaxYRange = atof(cartUsualString(cart, &options[5][0], "1000.0"));
-thisLineGap = atoi(cartUsualString(cart, &options[6][0], "200"));
 
 printf("<p><b>Interpolation: </b> ");
 wiggleDropDown(&options[1][0], interpolate );

@@ -179,7 +179,6 @@ boolean doSearch = sameWord(cartUsualString(cart, FILE_SEARCH,"no"), "search");
 #ifdef ONE_FUNC
 struct hash *parents = newHash(4);
 #endif///def ONE_FUNC
-boolean searchTermsExist = FALSE;  // FIXME: Why is this needed?
 int cols;
 
 #ifdef USE_TABS
@@ -197,7 +196,6 @@ else if (sameString(currentTab, "filesTab"))
     descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
     }
 #else///ifndef USE_TABS
-enum searchTab selectedTab = filesTab;
 descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
 #endif///ndef USE_TABS
 
@@ -236,8 +234,6 @@ printf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td col
 printf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
        "style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
        TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
-if (selectedTab==simpleTab && descSearch)
-    searchTermsExist = TRUE;
 
 printf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 printf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n",
@@ -274,8 +270,6 @@ printf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnE
        "width:536px; font-size:.9em;'>",
        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 printf("</td></tr>\n");
-if (selectedTab==filesTab && descSearch)
-    searchTermsExist = TRUE;
 
 // Set up Group dropdown
 struct grp *grps = hLoadGrps(db);
@@ -301,8 +295,6 @@ char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
 cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, 
                     "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 printf("</td></tr>\n");
-if (selectedTab==filesTab && groupSearch)
-    searchTermsExist = TRUE;
 
 // Track Type is (drop down)
 printf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
@@ -317,8 +309,6 @@ if (dropDownHtml)
     freeMem(dropDownHtml);
     }
 printf("</td></tr>\n");
-if (selectedTab==filesTab && fileTypeSearch)
-    searchTermsExist = TRUE;
 
 // mdb selects
 struct slPair *mdbSelects = NULL;

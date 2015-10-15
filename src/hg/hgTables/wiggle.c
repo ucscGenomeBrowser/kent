@@ -908,10 +908,10 @@ struct wigAsciiData *getWiggleAsData(struct sqlConnection *conn, char *table,
 {
 int maxOut = 0;
 struct wigAsciiData *data = NULL;
-int outCount;
 
 maxOut = bigFileMaxOutput();
-outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data, 0);
+// ignore return outCount from wigOutRegion:
+wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data, 0);
 
 return data;
 }
@@ -922,9 +922,8 @@ struct wigAsciiData *getWiggleData(struct sqlConnection *conn, char *table,
  *	a different data limit count, return the wigAsciiData list	*/
 {
 struct wigAsciiData *data = NULL;
-int outCount;
 
-outCount = wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data,
+wigOutRegion(table, conn, region, maxOut, wigDataNoPrint, &data,
 	spanConstraint);
 
 return data;

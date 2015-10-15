@@ -108,10 +108,9 @@ static struct joinedTables *joinedTablesNew(int fieldCount,
 /* Make up new empty joinedTables. */
 {
 struct joinedTables *jt;
-struct lm *lm;
 
 AllocVar(jt);
-lm = jt->lm = lmInit(64*1024);
+jt->lm = lmInit(64*1024);
 jt->fieldCount = fieldCount;
 jt->keyCount = keyCount;
 jt->maxRowCount = maxRowCount;
@@ -568,13 +567,14 @@ int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
 struct sqlConnection *conn = hAllocConn(tj->database);
 char *identifierFilter = NULL;
-char *filter;
 boolean needUpdateFilter = FALSE;
 struct joinedRow *jr;
 
 if (isFirst)
     identifierFilter = identifierWhereClause(idField, idHash);
-filter = filterClause(tj->database, tj->table, regionList->chrom, identifierFilter);
+
+// ignore returned filter from this call to filterClause:
+filterClause(tj->database, tj->table, regionList->chrom, identifierFilter);
 
 /* Record combined filter. */
 // Show only the SQL filter built from filter page options, not identifierFilter,

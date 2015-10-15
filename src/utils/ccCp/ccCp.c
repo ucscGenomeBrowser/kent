@@ -261,7 +261,6 @@ struct dlList *finishedList = newDlList();	/* All done here. */
 struct dlList *sourceList = newDlList();        /* These are sources for copies. */
 struct dlList *workingList = newDlList();       /* These are copying data to themselves. */
 struct dlList *errList = newDlList();           /* These are messed up 3x or more. */
-bool firstOk = FALSE;
 struct dlNode *finNode, *node, *sourceNode, *destNode;
 struct dyString *cmd = newDyString(256);
 int machineCount;
@@ -299,7 +298,6 @@ for (node = toDoList->head; node->next != NULL; node = node->next)
 	if (sameString(source, dest))
 	    {
 	    /* Hey, this is too easy. */
-	    firstOk = TRUE;
 	    ++machinesFinished;
 	    break;
 	    }
@@ -316,7 +314,6 @@ for (node = toDoList->head; node->next != NULL; node = node->next)
 	{
 	dlRemove(node);
 	dlAddTail(finishedList, node);
-	firstOk = TRUE;
 	++machinesFinished;
 	break;
 	}
