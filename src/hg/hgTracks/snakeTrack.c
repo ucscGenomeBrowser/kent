@@ -897,9 +897,10 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 	y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
 
-    int sx=0, ex;
+    int sx, ex;
     if (!positiveRangeIntersection(winStart, winEnd, s, e))
 	continue;
+    sx = round((double)((int)s-winStart)*scale) + xOff;
     ex = round((double)((int)e-winStart)*scale) + xOff;
 
     // color by strand
