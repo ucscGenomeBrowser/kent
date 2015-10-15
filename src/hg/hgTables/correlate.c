@@ -2366,7 +2366,7 @@ void doCorrelateMore(struct sqlConnection *conn)
 /* Continue working in correlate page. */
 {
 struct trackDb *tdb2;
-char *tableName2;
+// char *tableName2;  unused variable
 char *onChange = onChangeEither();
 /*char *op;*/
 char *table2onEntry;
@@ -2412,7 +2412,7 @@ cartSaveSession(cart);
 tdb2 = showGroupTrackRowLimited(hgtaNextCorrelateGroup, onChange,
     hgtaNextCorrelateTrack, onChange, hgtaNextCorrelateTable, &table2);
 
-tableName2 = tdb2->shortLabel;
+// tableName2 = tdb2->shortLabel;  unused variable
 
 maxLimitCountStr = cartUsualString(cart, hgtaCorrelateMaxLimitCount,
 	maxResultsMenu[1]);
