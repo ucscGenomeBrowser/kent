@@ -1185,7 +1185,6 @@ if (track->isBigBed)
     {
     struct lm *lm = lmInit(0);
     struct bigBedInterval *bb, *bbList = bigBedSelectRangeExtra(track, chromName, seqStart, seqEnd, lm, "summary");
-    printf("bbiList %p\n", bbList);
     char *bedRow[7];
     char startBuf[16], endBuf[16];
 
