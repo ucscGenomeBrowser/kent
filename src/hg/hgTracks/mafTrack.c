@@ -583,7 +583,6 @@ int height1 = height-2;
 int ixMafAli = 0;       /* alignment index, to allow alternating color */
 int x1, x2;
 int lastAlignX2 = -1;
-int lastChainX2 = -1;
 double scale = scaleForPixels(width);
 if (doSnpMode)
     mafScoreUseSimple();
@@ -630,7 +629,6 @@ for (full = mafList; full != NULL; full = full->next)
                 }
             if (!chainBreaks)
                 continue;
-            lastChainX2 = x2+1;
             /* no alignment here -- just a gap/break annotation */
             if ((mc->leftStatus == MAF_MISSING_STATUS ) && (mc->rightStatus == MAF_MISSING_STATUS))
 		{

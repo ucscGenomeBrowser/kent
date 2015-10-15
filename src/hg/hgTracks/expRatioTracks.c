@@ -1153,7 +1153,6 @@ else
 Color expRatioColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion  */
 {
-struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
 if(!exprBedColorsMade)
     makeRedGreenShades(hvg);
@@ -1169,7 +1168,6 @@ if(tg->visibility == tvDense)
     }
 else
     {
-    lf = item;
     return expressionColor(tg, item, hvg, tg->expScale, tg->expScale);
     }
 }
@@ -1196,7 +1194,6 @@ else
 Color loweRatioColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* Does the score->color conversion  */
 {
-struct linkedFeatures *lf;
 struct linkedFeaturesSeries *lfs;
 if(!exprBedColorsMade)
     makeRedGreenShades(hvg);
@@ -1212,7 +1209,6 @@ if(tg->visibility == tvDense)
     }
 else
     {
-    lf = item;
     return loweExpressionColor(tg, item, hvg, tg->expScale, tg->expScale);
     }
 }

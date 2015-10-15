@@ -225,8 +225,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	safef(joinedName, sizeof(joinedName), "%sTo%s", parentTable->name,
 	  table->name);
 	upperAt = strlen(parentTable->name) + 2;
-  if (upperAt < strlen(joinedName))
-  	joinedName[upperAt] = toupper(joinedName[upperAt]);
+	joinedName[upperAt] = toupper(joinedName[upperAt]);
 	assocTableName = renameUnique(tableHash, joinedName);
 	hashAdd(tableHash, assocTableName, NULL);
 	assocTable = tableNew(assocTableName, NULL, NULL);

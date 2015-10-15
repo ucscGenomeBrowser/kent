@@ -616,7 +616,6 @@ MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct hvGfx *hvg;
 boolean doIdeo = TRUE;
-boolean ideogramAvail = FALSE;
 int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
@@ -635,7 +634,6 @@ else if(trackImgOnly && !ideogramToo)
     }
 else
     {
-    ideogramAvail = TRUE;
     /* Remove the track from the group and track list. */
     removeTrackFromGroup(ideoTrack);
     slRemoveEl(pTrackList, ideoTrack);
@@ -1152,7 +1150,6 @@ char minRangeStr[32];
 char maxRangeStr[32];
 
 int ymin, ymax;
-int start;
 int newy;
 char o4[256];
 char o5[256];
@@ -1234,7 +1231,6 @@ switch (vis)
     case tvFull:
         if (isCenterLabelIncluded(track))
             y += fontHeight;
-        start = 1;
 
         if( track->subType == lfSubSample && track->items == NULL )
             y += track->height;
@@ -1291,7 +1287,6 @@ switch (vis)
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                                 itemHeight, track->ixColor, font, rootName );
                 freeMem( rootName );
-                start = 0;
                 y = newy;
                 }
             else
@@ -1700,10 +1695,9 @@ static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart
 int boxes = 30;
 int winWidth = winEnd - winStart;
 int newWinWidth = winWidth;
-int i, ws, we = 0, ps, pe = 0;
+int i, ws, we = 0;
 int mid, ns, ne;
 double wScale = (double)winWidth/boxes;
-double pScale = (double)insideWidth/boxes;
 char message[32];
 char *zoomType = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 
@@ -1726,9 +1720,7 @@ if (newWinWidth < 1)
 
 for (i=1; i<=boxes; ++i)
     {
-    ps = pe;
     ws = we;
-    pe = round(pScale*i);
     we = round(wScale*i);
     mid = (ws + we)/2 + winStart;
     ns = mid-newWinWidth/2;
@@ -2100,6 +2092,7 @@ struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
 //struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
 struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
+
 // Set up imgBox dimensions
 int sliceWidth[stMaxSliceTypes]; // Just being explicit
 int sliceOffsetX[stMaxSliceTypes];
@@ -2110,7 +2103,6 @@ if (theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
-    rulerTtl = "drag select or click to zoom";
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2275,6 +2267,7 @@ else
         theOneImg = imgBoxImageAdd(theImgBox,pngTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
         theSideImg = theOneImg; // Unlkess this is overwritten below, there is a single image
         }
+
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
 
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
@@ -4418,7 +4411,6 @@ boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
-char *clearButtonJavascript;
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4440,7 +4432,6 @@ jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 
 if (hPrintStatus()) cartSaveSession(cart);
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -4734,7 +4725,6 @@ if (!hideControls)
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
-	clearButtonJavascript = "document.TrackForm.position.value=''; document.getElementById('suggest').value='';";
 	hPrintf("<CENTER>");
 	}
 

@@ -219,10 +219,6 @@ if (speciesOff)
         hashAdd(speciesOffHash, defaultOff[i], NULL);
     }
 
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
-
 /* Make up items for other organisms by scanning through group & species
    track settings */
 struct wigMafItem *mi = NULL, *miList = NULL;
@@ -1141,10 +1137,6 @@ boolean useIrowChains = TRUE;
 if (miList == NULL)
     return FALSE;
 
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
-
 /* get summary table name from trackDb */
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
@@ -1363,10 +1355,6 @@ int graphHeight = 0;
 Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
 boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
-
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = track->tdb->parent->track;
 
 struct mafPriv *mp = getMafPriv(track);
 if (miList == NULL || mp->list == NULL)
@@ -1824,7 +1812,7 @@ struct wigMafItem *mi;
 struct mafAli *mafList, *maf, *sub;
 struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
-char **lines = NULL, *selfLine, *insertLine;
+char **lines = NULL, *selfLine;
 int *insertCounts;
 int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
@@ -1852,10 +1840,6 @@ char *mafFile = NULL;
 struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
-
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
 
 if (mp->ct != NULL)
     {
@@ -1952,7 +1936,6 @@ for (i=1; i<lineCount; ++i)
     }
 
 /* Give nice names to first two. */
-insertLine = lines[0];
 selfLine = lines[1];
 
 /* Allocate a line for recording gap sizes in reference */

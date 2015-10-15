@@ -38,8 +38,6 @@ struct altGraphX *ag = NULL;
 struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;
 int maxEnd = 0, maxDiff = 0, minStart = BIGNUM;
-int winStartOffset = 0;
-int extendedWidth = 0;
 int rowCount = 0;
 double scale = (double)insideWidth/(winEnd - winStart);
 spaceSaverFree(&tg->ss);
@@ -51,10 +49,6 @@ for(ag = tg->items; ag != NULL; ag = ag->next)
     }
 if(maxDiff*scale < .3*insideWidth)
     return altGraphXMaxRows;
-/* Have to pretend we have a wider screen to do all the exons,
-   even if they aren't visable still want to have links to them. */
-extendedWidth = (maxEnd - minStart) * scale;
-winStartOffset = max(0,winStart - minStart);
 altGraphXLayout(tg->items, winStart, winEnd, scale, maxRows,
 		&ssList, &heightHash, &rowCount);
 tg->ss = ssList;
