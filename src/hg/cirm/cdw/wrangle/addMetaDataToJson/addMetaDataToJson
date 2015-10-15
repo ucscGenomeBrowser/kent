@@ -1,0 +1,69 @@
+#!/usr/bin/env python2.7
+# addMetaDataToJson
+"""Add meta data to a .json clustered file, ie a .json created by expMatrixToJson"""
+import os
+import sys
+import collections
+import argparse
+
+# import the UCSC kent python library
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("jsonFile",
+    help = " The input json file. ",
+    type = argparse.FileType("r"))
+    parser.add_argument ("metaDataFile",
+    help = " The input meta data file ",
+    type = argparse.FileType("r"))
+    parser.add_argument ("outputFile",
+    help = " The output file. ",
+    type =argparse.FileType("w"))
+    parser.add_argument ("--keyCol",
+    help = " The meta data key column. ",
+    type = int)
+    parser.set_defaults(keyCol = 5)
+    options = parser.parse_args()
+    return options
+
+def findLastQuotation(string):
+    """
+    """
+    count = 0
+    for char in string[::-1]:
+        if (char == "\""):
+            return len(string) - count
+        count +=1
+    return -1 
+
+def addJsonNameValPair(string, name, val):
+    """
+    """
+    result = string[:findLastQuotation(string)]
+    nameVal = ",\"%s\":\"%s\""%(name,val)
+    result += nameVal + string[findLastQuotation(string):-1]
+    return result
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    metaData = common.readInTable(options.metaDataFile, options.keyCol, "\t") 
+    print (metaData.keys())
+    for line in options.jsonFile: 
+        if "name" in line: 
+            elements = line.split(",")
+            name = elements[0].split(":")[1].replace("\"","").replace(" ","")
+            if name != "":
+                if metaData.get(name):
+                    newLine = addJsonNameValPair(line, "metaField1", metaData[name][0])
+                    print (newLine)
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))
