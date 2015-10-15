@@ -939,19 +939,6 @@ boolean isBedGr = tdb ? tdbIsBedGraph(tdb) : isBedGraph(rootTable);
 boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLookupName);
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
-int bedGraphColumn = 5;		/*	default score column	*/
-
-if (isBedGr)
-    {
-    int wordCount;
-    char *words[8];
-    char *typeLine = cloneString(tdb->type);
-
-    wordCount = chopLine(typeLine,words);
-    if (wordCount > 1)
-        bedGraphColumn = sqlUnsigned(words[1]);
-    freez(&typeLine);
-    }
 
 if (isWig)
     {

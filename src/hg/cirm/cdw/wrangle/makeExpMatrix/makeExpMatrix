@@ -1,5 +1,5 @@
 #!/usr/bin/env python2.7
-# 
+# makeExpMatrix 
 # Chris Eisenhart 09/08/2015 
 # ceisenha@ucsc.edu/ceisenhart@soe.ucsc.edu
 """
@@ -9,7 +9,9 @@ To run simply provide the kallisto output directory and a matrix name.
 
 from __future__ import print_function  
 import  sys, operator, fileinput, collections, string, os.path
-import  re, argparse, subprocess, time, subprocess
+import  re, argparse, subprocess, time, tempfile, math 
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
 
 
 startTime = time.time()
@@ -33,19 +35,16 @@ def parseArgs(args):
     parser.add_argument ("--dirtyMatrix",
     help = " Do not clean the matrix of 'nan' and '-nan' values. ", 
     action = "store_true") 
+    parser.add_argument ("--sigmoidTransform",
+    help = " Transform the matrix values using a sigmoid transform.  ", 
+    action = "store_true") 
     parser.set_defaults(pNan = "0")
     parser.set_defaults(nNan = "0")
     parser.set_defaults(dirtyMatrix = False)
+    parser.set_defaults(sigmoidTransform = False)
     options = parser.parse_args()
     return options
 
-def cleanup():
-    os.system("rm .startFile")
-    os.system("rm .intermediateFile")
-    os.system("rm .columnFile")
-    os.system("rm .kalDirList")
-    os.system("rm .finalFile") 
-    os.system("rm .abundanceFiles") 
 
 def matrixCleanup(matrixFile, pNan, nNan):
     """
@@ -64,7 +63,7 @@ def matrixCleanup(matrixFile, pNan, nNan):
         os.system("sed -i 's/nan/%s/g' .dirtyMatrix"  %(pNan))
     os.system("cat .dirtyMatrix | tr \"*\" \"-\" > %s "%(matrixFile))
 
-def getAbundanceFileList(location):
+def getAbundanceFileList(location, kalDirListFile):
     """
     Gets a list of valid kal out dirs, and generates a column row for the matrix.
     Makes use of some shiesty tactitcs to ensure that the list only contains valid 
@@ -72,33 +71,40 @@ def getAbundanceFileList(location):
     any stray names will ruin the entire program. 
     """ 
     if not location.endswith("/"): location += "/" 
-    os.system("ls -d %s*/abundance.txt > .abundanceFiles"%(location))
+    abundanceFiles = tempfile.NamedTemporaryFile()
+    os.system("ls -d %s*/abundance.t* > %s"%(location, abundanceFiles.name))
     # Read all the items into a list. 
     abundanceFileList = []
-    kalDirListFile = open(".kalDirList", "w")
+    #kalDirListFile = open(".kalDirList", "w")
     kalDirListFile.write("transripts\n")
-    for line in open(".abundanceFiles", "r"):    
+    for line in abundanceFiles:    
         abundanceFileList.append(line[:-1])
         dirName = line.split("/")[-2]
         kalDirListFile.write(dirName+ "\n")
     kalDirListFile.close()
     return abundanceFileList
 
-
-def main(args):
+def sigmoid(columnFile, transformColumnFile):
     """
-    Make an expression matrix using a number of in house programs and unix commands.
-    Makes use of hidden files, which could potentially overwrite existing ones 
-    (hopefully the names are obscure enough that this wont happen).
+    Performs a sigmoid transform on the matrix values. 
     """
-    options = parseArgs(args)
-    location = options.kallistoPath
-    
-    # Before the matrix can be make we first need to generate a list of kallisto output names.  
-    abundanceFileList = getAbundanceFileList(location)
-    
+    #skip = True
+    transformColumnFile.write(columnFile[0])
+    for line in columnFile[1:]:
+        #if (skip):
+        #    skip = False
+        #    transformColumnFile.write(line)
+        #    continue
+        prefiltered = float(line[:-1])/1000.0
+        output = 1.0/(1.0 + math.exp(prefiltered))
+        transformColumnFile.write("%f\n"%(output))
+     
+def generateMatrix(startFile, abundanceFileList, sigmoidTransform):
+    """
+    Fill the matrix values in.
+    """
     # Snag a starting column from an abundance file (these are the transcript names) 
-    os.system("cut -f 1 %s | sed '1d'  > .startFile"%(abundanceFileList[0])) 
+    os.system("cut -f 1 %s | sed '1d'  > %s"%(abundanceFileList[0], startFile.name)) 
     # Get the values for the matrix, this is the most time consumptive step. 
     print ("Generating the raw matrix...")
     count = 0
@@ -116,24 +122,49 @@ def main(args):
         if ((count/float(len(abundanceFileList))) > .75):
             if p75: print ("75% complete...")
             p75 = False  
-        os.system("cut -f 4 %s | sed '1d' > .columnFile"%(file))
-        os.system("cat .startFile > .intermediateFile")
-        os.system("paste .intermediateFile .columnFile > .startFile")
+        columnFile = tempfile.NamedTemporaryFile()
+        os.system("cut -f 5 %s | sed '1d' > %s"%(file, columnFile.name))
+        intermediateFile = tempfile.NamedTemporaryFile()
+        os.system("cat %s > %s"%(startFile.name,intermediateFile.name))
+        if (sigmoidTransform):
+            transformColumnFile = tempfile.NamedTemporaryFile()
+            sigmoid(columnFile,transformColumnFile)
+            os.system("paste %s %s > %s" %(intermediateFile.name, transformColumnFile.name, startFile.name))
+        else: os.system("paste %s %s > %s"%(intermediateFile.name, columnFile.name, startFile.name))
     print ("Raw matrix complete! Adding in the column names...")
+
+
+
+def main(args):
+    """
+    Make an expression matrix using a number of in house programs and unix commands.
+    Makes use of hidden files, which could potentially overwrite existing ones 
+    (hopefully the names are obscure enough that this wont happen).
+    """
+    options = parseArgs(args)
+    location = options.kallistoPath
+    
+    # Before the matrix can be make we first need to generate a list of kallisto output names.  
+    kalDirListFile = open(tempfile.NamedTemporaryFile().name, "w")
+    abundanceFileList = getAbundanceFileList(location, kalDirListFile)
+    startFile = tempfile.NamedTemporaryFile()
+    generateMatrix(startFile, abundanceFileList, options.sigmoidTransform)
     # Transpose the matrix, then pase in the column names 
-    os.system("rowsToCols .startFile .middleFile")
-    os.system("paste .kalDirList .middleFile > .finalFile ")
+    middleFile = tempfile.NamedTemporaryFile()
+    os.system("rowsToCols %s %s"%(startFile.name, middleFile.name))
+    finalFile = tempfile.NamedTemporaryFile()
+    os.system("paste %s %s > %s"%(kalDirListFile.name, middleFile.name, finalFile.name))
     print ("Transposing matrix into its final form...")
 
     # Transpose it back to it's original glory 
-    call = ("rowsToCols .finalFile %s"%(options.outputFile)) 
+    call = ("rowsToCols %s %s"%(finalFile.name,options.outputFile)) 
     os.system(call)
     # Do some matrix cleanup...
     if not options.dirtyMatrix: 
         print ("Verifying the matrix values...")
         matrixCleanup(options.outputFile, options.pNan, options.nNan)
     # File cleanup!
-    cleanup()
+    os.system("rm %s"%(kalDirListFile.name))
     print ("Completed! The program took %s seconds to complete. The output was"
             " written to %s." %(time.time()-startTime,options.outputFile))
 

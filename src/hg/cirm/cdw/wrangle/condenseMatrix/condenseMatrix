@@ -1,0 +1,115 @@
+#!/usr/bin/env python2.7
+# condenseMatrix
+"""
+Condense an expression matrix from transcript rows to gene rows. 
+Currently only works for human expression matrices with ensemble transcripts. 
+"""
+import os, sys, collections, argparse
+
+# import the UCSC kent python library
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+import tempfile
+import subprocess
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+    help = " The input file. ",
+    type = argparse.FileType("r"))
+    parser.add_argument ("outputFile",
+    help = " The output file. ",
+    type =argparse.FileType("w"))
+    options = parser.parse_args()
+    return options
+
+def convertNames(inputFile, intermediateFile, ensembleExonToGene):
+    """
+    Input:
+        inputFile - an opened file (r).
+        intermediateFile - an opened file (w).
+        ensembleExonToGene - a dict, string keys map to string values. 
+    Takes in an input matrix and converts the transcript names into gene
+    names.  The new matrix is written to intermediateFile.  The conversion
+    is accomplished with the ensembleExonToGene table. 
+    """
+    firstLine = True 
+    for line in inputFile:
+        if firstLine: # Skip the first line
+            firstLine = False
+            intermediateFile.write(line)
+            continue 
+        splitLine = line.split()
+        if (ensembleExonToGene.get(splitLine[0])):
+            intermediateFile.write(ensembleExonToGene[splitLine[0]] + "\t"+ "\t".join(splitLine[1:]) + "\n")
+
+def collapseRows(intermediateFile, outputFile):
+    """
+    Input:
+        intermediateFile - an opened file (r). 
+        outputFile - an opened file (w). 
+    Goes through the intermediateFile and collapses the rows. This 
+    function assumes that the intermediate file has been sorted. The collapsed
+    matrix is printed to outputFile. 
+    """
+    firstLine = True
+    newRow = []
+    rowsInBlock = 0
+    skip = True
+    for line in intermediateFile:
+        if skip: # Skip the first row (header names)
+            skip = False
+            outputFile.write(line)
+            continue 
+        splitLine = line.split()
+        if firstLine: # This is the first line of the actual matrix
+            firstLine = False
+            newRow = splitLine 
+            rowsInBlock = 1
+            continue
+        if (splitLine[0]==newRow[0]): #Inside the same block, keep a summation of the items in this block. 
+            itemCount = 1
+            rowsInBlock += 1
+            for item in splitLine[1:]: 
+                newRow[itemCount] = float(newRow[itemCount]) + float(splitLine[itemCount])
+                itemCount +=1 
+        else:  # This is a flush statement, the current 'block' is complete and the collapsing occurs. 
+            itemCount = 1
+            for item in newRow[1:]:
+                newRow[itemCount] = str(float(newRow[itemCount])/float(rowsInBlock))
+                itemCount += 1
+            outputFile.write("\t".join(newRow) + "\n")
+            newRow = splitLine 
+            rowsInBlock = 1 
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    ensembleExonToGene = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/ensemble_exon_to_gene.tab", True)
+    
+    # Convert names
+    intermediateFile = open(".convertedGeneNames","w")
+    print ("Converting names...")
+    convertNames(options.inputFile, intermediateFile, ensembleExonToGene)
+    intermediateFile.close()
+    
+    # Sort
+    print ("Sorting...")
+    os.system("sort -k 1 -r .convertedGeneNames > .sortedGeneNames")
+    
+    # Collapse
+    finalFile = open(".sortedGeneNames","r")
+    print ("Collapsing matrix...")
+    collapseRows(finalFile,options.outputFile)
+    
+    # Remove temp files
+    os.system("rm .convertedGeneNames")
+    os.system("rm .sortedGeneNames") 
+    
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))
