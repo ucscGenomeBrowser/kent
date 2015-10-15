@@ -119,8 +119,6 @@ void cytoBandIdeoDraw(struct track *tg,
 {
 double scale = 0;
 int xBorder = 4;
-int lineHeight = 0;
-int heightPer = 0;
 int x1, x2;
 int yBorder = 0;
 int chromSize = hChromSize(database, chromName);
@@ -130,8 +128,6 @@ scale = (double) (width - (2 * xBorder)) / chromSize;
 /* Subtrack 10 for the 5 pixels buffer on either side. */
 tg->heightPer -= 11;
 tg->lineHeight -= 11;
-lineHeight = tg->lineHeight;
-heightPer = tg->heightPer;
 
 /* Time to draw the bands. */
 hvGfxSetClip(hvg, xOff, yOff, width, tg->height);

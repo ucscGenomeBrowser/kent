@@ -270,7 +270,7 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 
     AllocArray( st->levels, slCount(&detailList));
 
-    int crChromStart, crChromEnd;
+    int crChromEnd;
     while (detailList)
         {
         st->levels[st->levelCount++] = detailList;
@@ -284,7 +284,6 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
 
         struct Extents *ext = NULL;
         ext = getExtents(cr);
-        crChromStart = ext->start;
         crChromEnd = ext->end;
 
 
@@ -309,7 +308,6 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
                      {
                      cr->next = rm;
                      cr = rm;
-                     crChromStart = rmChromStart;
                      crChromEnd = rmChromEnd;
                      if (prev)
                          prev->next = rm->next;

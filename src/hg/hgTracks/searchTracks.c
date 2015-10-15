@@ -608,7 +608,6 @@ boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search")
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int tracksFound = 0;
-boolean searchTermsExist = FALSE;
 int cols;
 char buf[512];
 
@@ -673,8 +672,6 @@ hPrintf("<table id='simpleTable' style='width:100%%; font-size:.9em;'><tr><td co
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' "
         "style='max-width:1000px; width:100%%;' onkeyup='findTracks.searchButtonsEnable(true);'>\n",
         TRACK_SEARCH_SIMPLE,simpleEntry == NULL ? "" : simpleEntry);
-if (selectedTab==simpleTab && simpleEntry)
-    searchTermsExist = TRUE;
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 //hPrintf("</td></tr></table>");
@@ -711,8 +708,6 @@ hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOn
         "style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && !isEmpty(descSearch))
-    searchTermsExist = TRUE;
 
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
 hPrintf("<td><b style='max-width:100px;'>Group:</b></td>");
@@ -721,8 +716,6 @@ hPrintf("<td colspan='%d'>", cols - 4);
 cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch,
                     "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && !isEmpty(groupSearch) && !sameString(groupSearch,ANYLABEL))
-    searchTermsExist = TRUE;
 
 // Track Type is (drop down)
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
@@ -735,8 +728,6 @@ int formatCount = getFormatTypes(&formatLabels, &formatTypes);
 cgiMakeDropListFull(TRACK_SEARCH_ON_TYPE, formatLabels, formatTypes, formatCount, typeSearch,
                     "class='typeSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
-if (selectedTab==advancedTab && !isEmpty(typeSearch) && !sameString(typeSearch,ANYLABEL))
-    searchTermsExist = TRUE;
 
 // mdb selects
 struct slPair *mdbSelects = NULL;

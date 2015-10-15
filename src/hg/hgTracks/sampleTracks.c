@@ -244,8 +244,6 @@ int leftSide, rightSide;
 int noZoom = 1;
 enum wiggleOptEnum wiggleType;
 char *interpolate = NULL;
-char *aa = NULL; 
-boolean antiAlias = FALSE;
 int fill; 
 int lineGapSize;
 double min0, max0;
@@ -279,8 +277,6 @@ safef( o6, 128,"%s.interp.gap", tg->track);
 
 interpolate = cartUsualString(cart, o1, "Linear Interpolation");
 wiggleType = wiggleStringToEnum(interpolate);
-aa = cartUsualString(cart, o2, "on");
-antiAlias = sameString(aa, "on");
 
 //don't fill gcPercent track by default (but fill others)
 if(sameString( tg->table, "pGC") && sameString(database,"zooHuman3"))
@@ -578,12 +574,9 @@ char *hasDense = NULL;
 char *where = NULL;
 char tableName[256];
 int z;
-float pixPerBase = 0;
 
 if(tl.picWidth == 0)
     errAbort("hgTracks.c::loadHumMusL() - can't have pixel width of 0");
-pixPerBase = (winEnd - winStart)/ tl.picWidth;
-
 
 /* Determine zoom level. */
  if (!strstr(tg->table,"HMRConservation"))

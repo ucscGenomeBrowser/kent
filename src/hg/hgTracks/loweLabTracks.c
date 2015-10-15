@@ -323,7 +323,6 @@ void loadCodeBlast(struct track *tg)
 struct linkedFeaturesSeries *lfs = NULL, *originalLfs, *codeLfs, *lfsList = NULL;
 struct linkedFeatures *lf;
 struct slName *codes = NULL, *track=NULL, *scores=NULL;
-struct codeBlast *bedList;
 struct codeBlast *cb, *list=NULL;
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
@@ -442,7 +441,6 @@ for(cb = list; cb != NULL; cb = cb->next)
     }
 
 tg->items=lfsList;
-bedList=tg->items;
 lfsList=NULL;
 
 if(tg->limitedVis != tvDense)

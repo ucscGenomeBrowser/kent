@@ -135,10 +135,7 @@ bedLoadRnaLpFoldItemByQuery(tg, table, NULL, loader);
 void rnaPLFoldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
-int count = 0;
-
 bedLoadRnaLpFoldItem(tg, tg->table, (ItemLoader)rnaPLFoldLoad);
-count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
 }
 

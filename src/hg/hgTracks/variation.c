@@ -1101,10 +1101,7 @@ char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
-int    index1 = 0;
 int    index2 = 0;
-
-index1 =  stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize);
 
 switch (stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize))
     {

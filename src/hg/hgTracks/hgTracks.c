@@ -616,7 +616,6 @@ MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct hvGfx *hvg;
 boolean doIdeo = TRUE;
-boolean ideogramAvail = FALSE;
 int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
@@ -635,7 +634,6 @@ else if(trackImgOnly && !ideogramToo)
     }
 else
     {
-    ideogramAvail = TRUE;
     /* Remove the track from the group and track list. */
     removeTrackFromGroup(ideoTrack);
     slRemoveEl(pTrackList, ideoTrack);
@@ -1152,7 +1150,6 @@ char minRangeStr[32];
 char maxRangeStr[32];
 
 int ymin, ymax;
-int start;
 int newy;
 char o4[256];
 char o5[256];
@@ -1234,7 +1231,6 @@ switch (vis)
     case tvFull:
         if (isCenterLabelIncluded(track))
             y += fontHeight;
-        start = 1;
 
         if( track->subType == lfSubSample && track->items == NULL )
             y += track->height;
@@ -1291,7 +1287,6 @@ switch (vis)
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                                 itemHeight, track->ixColor, font, rootName );
                 freeMem( rootName );
-                start = 0;
                 y = newy;
                 }
             else
@@ -1700,10 +1695,9 @@ static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart
 int boxes = 30;
 int winWidth = winEnd - winStart;
 int newWinWidth = winWidth;
-int i, ws, we = 0, ps, pe = 0;
+int i, ws, we = 0;
 int mid, ns, ne;
 double wScale = (double)winWidth/boxes;
-double pScale = (double)insideWidth/boxes;
 char message[32];
 char *zoomType = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 
@@ -1726,9 +1720,7 @@ if (newWinWidth < 1)
 
 for (i=1; i<=boxes; ++i)
     {
-    ps = pe;
     ws = we;
-    pe = round(pScale*i);
     we = round(wScale*i);
     mid = (ws + we)/2 + winStart;
     ns = mid-newWinWidth/2;
@@ -2094,23 +2086,14 @@ pixWidth = tl.picWidth;
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 
-struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
-struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
-                                 //    the side label gets seen. Therefore we need 2 images!!
-//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
-struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 // Set up imgBox dimensions
 int sliceWidth[stMaxSliceTypes]; // Just being explicit
 int sliceOffsetX[stMaxSliceTypes];
 int sliceHeight        = 0;
-int sliceOffsetY       = 0;
-char *rulerTtl = NULL;
 if (theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
-    rulerTtl = "drag select or click to zoom";
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2269,12 +2252,6 @@ else
     trashDirFile(&pngTn, "hgt", "hgt", ".png");
     hvg = hvGfxOpenPng(pixWidth, pixHeight, pngTn.forCgi, transparentImage);
 
-    if (theImgBox)
-        {
-        // Adds one single image for all tracks (COULD: build the track by track images)
-        theOneImg = imgBoxImageAdd(theImgBox,pngTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
-        theSideImg = theOneImg; // Unlkess this is overwritten below, there is a single image
-        }
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
 
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
@@ -2286,7 +2263,6 @@ else
         hvgSide = hvGfxOpenPng(pixWidth, pixHeight, pngTnSide.forCgi, transparentImage);
 
         // Also add the side image
-        theSideImg = imgBoxImageAdd(theImgBox,pngTnSide.forHtml,NULL,pixWidth, pixHeight,FALSE);
         hvgSide->rc = revCmplDisp;
         initColors(hvgSide);
         }
@@ -2345,11 +2321,7 @@ if (withLeftLabels && psOutput == NULL)
             {
             // Mini-buttons (side label slice) for ruler
             sliceHeight      = height + 1;
-            sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
-                                                   sliceWidth[stButton],sliceHeight,
-                                                   sliceOffsetX[stButton],sliceOffsetY);
             }
         else if (!trackImgOnly) // Side buttons only need to be drawn when drawing page with js
             {                   // advanced features off  // TODO: Should remove wasted pixels too
@@ -2378,11 +2350,7 @@ if (withLeftLabels && psOutput == NULL)
                 {
                 // Mini-buttons (side label slice) for tracks
                 sliceHeight      = yEnd - yStart;
-                sliceOffsetY     = yStart - 1;
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
-                                                       sliceWidth[stButton],sliceHeight,
-                                                       sliceOffsetX[stButton],sliceOffsetY);
                 }
             else if (!trackImgOnly) // Side buttons only need to be drawn when drawing page
                 {                   // with js advanced features off
@@ -2427,12 +2395,7 @@ if (withLeftLabels)
             {
             // side label slice for ruler
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
-            sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
-                                                   sliceWidth[stSide],sliceHeight,
-                                                   sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
             {
@@ -2495,12 +2458,7 @@ if (withLeftLabels)
             {
             // side label slice for tracks
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
-            sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
-                                                   sliceWidth[stSide],sliceHeight,
-                                                   sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
@@ -2566,12 +2524,7 @@ if (rulerMode != tvHide)
         {
         // data slice for ruler
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
-        sliceOffsetY     = 0;
         curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-        curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,
-                                               sliceWidth[stData],sliceHeight,
-                                               sliceOffsetX[stData],sliceOffsetY);
-        curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
     y = doDrawRuler(hvg,&newWinWidth,&rulerClickHeight,rulerHeight,yAfterRuler,yAfterBases,font,
                     fontHeight,rulerCds);
@@ -2592,12 +2545,7 @@ if (withCenterLabels)
             {
             // center label slice of tracks Must always make, even if the centerLabel is empty
             sliceHeight      = fontHeight;
-            sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
-                                                   sliceWidth[stData],sliceHeight,
-                                                   sliceOffsetX[stData],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             if (isCenterLabelConditional(track))
                 imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track) ?
                                                                             clNowSeen : clNotSeen);
@@ -2628,16 +2576,8 @@ if (withCenterLabels)
         if (theImgBox)
             {
             // data slice of tracks
-            sliceOffsetY     = yStart;
             sliceHeight      = yEnd - yStart - 1;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            if (sliceHeight > 0)
-                {
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,
-                                                       sliceWidth[stData],sliceHeight,
-                                                       sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
-                }
             }
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
@@ -2669,12 +2609,7 @@ if (withLeftLabels)
             {
             // side label slice of tracks
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
-            sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
-                                                   sliceWidth[stSide],sliceHeight,
-                                                   sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
         if (trackShouldUseAjaxRetrieval(track))
@@ -2703,7 +2638,6 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
             {
             // Set imgTrack in case any map items will be set
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
-            sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             }
         doTrackMap(track, hvg, y, fontHeight, trackPastTabX, trackPastTabWidth);
@@ -4418,7 +4352,6 @@ boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
-char *clearButtonJavascript;
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4440,7 +4373,6 @@ jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 
 if (hPrintStatus()) cartSaveSession(cart);
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -4734,7 +4666,6 @@ if (!hideControls)
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
-	clearButtonJavascript = "document.TrackForm.position.value=''; document.getElementById('suggest').value='';";
 	hPrintf("<CENTER>");
 	}
 
