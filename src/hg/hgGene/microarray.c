@@ -272,12 +272,12 @@ float ratioMax = atof(hashOptionalVal(col->settings, "max", "3.0"));
 char *dupe = cloneString(col->type);
 char *s = dupe;
 char *repString = cloneString(hashMustFindVal(col->settings, "representatives"));
-char *shortType, *lookupTable, *expTable, *ratioTable;
+char *expTable, *ratioTable;
 int representativeCount, *representatives = NULL;
 int repSize, repStart, maxInRow=40;
 
-shortType = nextWord(&s);
-lookupTable = nextWord(&s);
+nextWord(&s);  // ignore shortType returned
+nextWord(&s);  // ignore lookupTable returned
 ratioTable = nextWord(&s);
 expTable = nextWord(&s);
 if (expTable == NULL)
