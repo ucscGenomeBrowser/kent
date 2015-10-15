@@ -10,6 +10,8 @@ To run simply provide the kallisto output directory and a matrix name.
 from __future__ import print_function  
 import  sys, operator, fileinput, collections, string, os.path
 import  re, argparse, subprocess, time, tempfile, math 
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
 
 
 startTime = time.time()
@@ -70,7 +72,7 @@ def getAbundanceFileList(location, kalDirListFile):
     """ 
     if not location.endswith("/"): location += "/" 
     abundanceFiles = tempfile.NamedTemporaryFile()
-    os.system("ls -d %s*/abundance.txt > %s"%(location, abundanceFiles.name))
+    os.system("ls -d %s*/abundance.t* > %s"%(location, abundanceFiles.name))
     # Read all the items into a list. 
     abundanceFileList = []
     #kalDirListFile = open(".kalDirList", "w")
