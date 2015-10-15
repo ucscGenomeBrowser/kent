@@ -1,6 +1,10 @@
 #!/usr/bin/env python2.7
 # addMetaDataToJson
-"""Add meta data to a .json clustered file, ie a .json created by expMatrixToJson"""
+"""
+Add meta data to a .json clustered file, ie a .json created by expMatrixToJson.  
+List the fields that you would like to be added using the fields option, select 
+the column in the meta data file the connects to the .json 'names' field.
+"""
 import os
 import sys
 import collections
@@ -27,12 +31,22 @@ def parseArgs(args):
     parser.add_argument ("--keyCol",
     help = " The meta data key column. ",
     type = int)
+    parser.add_argument ("--fields", 
+    nargs="+",
+    type = int)
     parser.set_defaults(keyCol = 5)
+    parser.set_defaults(fields = [1]) 
     options = parser.parse_args()
     return options
 
 def findLastQuotation(string):
     """
+    Input:
+        string - A string.
+    Output
+        result - An int.
+    Returns the location of the last quotation mark in the string. 
+    Returns -1 if not found. 
     """
     count = 0
     for char in string[::-1]:
@@ -43,10 +57,18 @@ def findLastQuotation(string):
 
 def addJsonNameValPair(string, name, val):
     """
+    Input:
+        string - A string
+        name - A string
+        val - A string
+    Output:
+        result - A string
+    Add a name value pair to a .json entry. Keep the json ending since 
+    json format is picky about commas. 
     """
     result = string[:findLastQuotation(string)]
     nameVal = ",\"%s\":\"%s\""%(name,val)
-    result += nameVal + string[findLastQuotation(string):-1]
+    result += nameVal + string[findLastQuotation(string):]
     return result
 
 def main(args):
@@ -55,15 +77,21 @@ def main(args):
     """
     options = parseArgs(args)
     metaData = common.readInTable(options.metaDataFile, options.keyCol, "\t") 
-    print (metaData.keys())
-    for line in options.jsonFile: 
+    for line in options.jsonFile: # Lets abuse python's string manipulation a bit...
         if "name" in line: 
             elements = line.split(",")
             name = elements[0].split(":")[1].replace("\"","").replace(" ","")
             if name != "":
-                if metaData.get(name):
-                    newLine = addJsonNameValPair(line, "metaField1", metaData[name][0])
-                    print (newLine)
+                if metaData.get(name): # We're here! This is the json entries that correspond to the leaf nodes...
+                    newLine = line[:-1]
+                    count = 0
+                    for item in options.fields: # Add in the new meta data fields to the json entry
+                        swap = addJsonNameValPair(newLine, "metaField" + str(count), metaData[name][item])
+                        newLine = swap 
+                        count +=1
+                    options.outputFile.write(newLine+"\n") # Print the json entry
+                    continue 
+        options.outputFile.write(line) # Print everything else
 
 if __name__ == "__main__" : 
     sys.exit(main(sys.argv))
