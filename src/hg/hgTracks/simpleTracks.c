@@ -12686,6 +12686,16 @@ else if (sameWord(type, "bigBed"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "bigMaf"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "3";
+    wigMafMethods(track, tdb, wordCount, words);
+    track->isBigBed = TRUE;
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigPsl"))
     {
     tdb->canPack = TRUE;

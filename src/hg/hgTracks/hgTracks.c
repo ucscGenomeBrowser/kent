@@ -427,6 +427,7 @@ if (!IS_KNOWN(track->remoteDataSource))
 	startsWithWord("halSnake",track->tdb->type) ||
 	startsWithWord("bigPsl",track->tdb->type) ||
 	startsWithWord("bigGenePred",track->tdb->type) ||
+	startsWithWord("bigMaf",track->tdb->type) ||
 	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
@@ -1217,7 +1218,7 @@ else
    display a left label in pack mode.  To use the full mode
    labeling, temporarily set visibility to full.
    Restore savedVis later */
-if (startsWith("wigMaf", track->tdb->type) || startsWith("maf", track->tdb->type))
+if (startsWith("bigMaf", track->tdb->type) || startsWith("wigMaf", track->tdb->type) || startsWith("maf", track->tdb->type))
     vis = tvFull;
 
 switch (vis)
@@ -3267,7 +3268,7 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -3276,6 +3277,8 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
     char typeBuf[64];
     if (sameString(type, "bigGenePred"))
 	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
+    else if (sameString(type, "bigMaf"))
+	safef(typeBuf, sizeof(typeBuf), "bigMaf");
     else if (sameString(type, "bigPsl"))
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else
@@ -4203,6 +4206,7 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
+     || startsWithWord("bigMaf"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))

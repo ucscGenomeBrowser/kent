@@ -695,6 +695,14 @@ if (hel != NULL)
     freeMem(oldVal);
     }
 
+hel = hashLookup(tdb->settingsHash, "summary");
+if (hel != NULL)
+    {
+    char *oldVal = hel->val;
+    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
+    freeMem(oldVal);
+    }
+
 hel = hashLookup(tdb->settingsHash, "searchTrix");
 if (hel != NULL)
     {
@@ -753,6 +761,7 @@ else
 #endif
           startsWithWord("vcfTabix", type) ||
           startsWithWord("bigPsl", type) ||
+          startsWithWord("bigMaf", type) ||
           startsWithWord("bigGenePred", type) ||
           startsWithWord("bam", type)))
 	{

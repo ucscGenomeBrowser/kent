@@ -684,6 +684,10 @@ struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
 
+struct bigBedInterval *bigBedSelectRangeExtra(struct track *track,
+	char *chrom, int start, int end, struct lm *lm, char *variableName);
+/* Return list of intervals in range. */
+
 struct bigBedInterval *bigBedSelectRange(struct track *track,
 	char *chrom, int start, int end, struct lm *lm);
 /* Return list of intervals in range. */

@@ -17,6 +17,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 #include "customTrack.h"
+#include "hubConnect.h"
 
 
 struct mafItem
@@ -589,7 +590,7 @@ if (doSnpMode)
 else
     mafScoreUseTraditional();
 
-safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
+safef(dbChrom, sizeof(dbChrom), "%s.%s", hubConnectSkipHubPrefix(database), chromName);
 for (full = mafList; full != NULL; full = full->next)
     {
     double *pixelScores = NULL;
