@@ -90,7 +90,7 @@ void cdwMakeFileTags(char *database, char *table)
 struct sqlConnection *conn = cdwConnect(database);
 struct tagStorm *tags = cdwTagStorm(conn);
 struct slName *field, *fieldList = tagStormFieldList(tags);
-slSort(&fieldList, slNameCmp);
+slSort(&fieldList, slNameCmpCase);
 struct hash *fieldHash = tagStormFieldHash(tags);
 
 /* Build up hash of column types */
