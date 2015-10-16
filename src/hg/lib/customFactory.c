@@ -1999,23 +1999,40 @@ if (hashLookup(settings, "viewLimits") == NULL)
     }
 }
 
+boolean isValidBigDataUrl(char *url, boolean doAbort)
+/* return True if the URL is a valid bigDataUrl. 
+ * It can be a local filename if this is allowed by udc.localDir 
+ */
+{
+if ((startsWith("http://", url)
+   || startsWith("https://", url)
+   || startsWith("ftp://", url)))
+return TRUE;
+
+char *prefix = cfgOption("udc.localDir");
+if (prefix == NULL)
+    {
+    if (doAbort)
+        errAbort("Only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
+    return FALSE;
+    }
+
+if (!startsWith(prefix, url))
+    {
+    if (doAbort)
+        errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
+    return FALSE;
+    }
+        
+return TRUE;
+}
+
 static void checkAllowedBigDataUrlProtocols(char *url)
 /* Abort if url is not using one of the allowed bigDataUrl network protocols.
- * In particular, do not allow a local file reference, unless explicitely allowed 
- * by hg.conf. */
+ * In particular, do not allow a local file reference, unless explicitely
+ * allowed by hg.conf's udc.localDir directive. */
 {
-    if (!(startsWith("http://", url)
-       || startsWith("https://", url)
-       || startsWith("ftp://", url)
-    ))
-        {
-        char *prefix = cfgOption("udc.localDir");
-        if (prefix == NULL)
-            errAbort("only network protocols http, https, or ftp allowed in bigDataUrl: '%s'", url);
-        else if (!startsWith(prefix, url))
-            errAbort("bigDataUrl '%s' on local file system has to start with '%s' (see udc.localDir directive in cgi-bin/hg.conf)", url, prefix);
-            
-        }
+isValidBigDataUrl(url, TRUE);
 }
 
 static char *bigDataDocPath(char *type)

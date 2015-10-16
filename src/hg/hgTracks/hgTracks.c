@@ -63,6 +63,7 @@
 #include "botDelay.h"
 #include "chromInfo.h"
 #include "extTools.h"
+#include "customFactory.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -4213,7 +4214,8 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
-     && (bdu && strstr(bdu,"://"))
+     // XX code-review: shouldn't we error abort if the URL is not valid?
+     && (bdu && isValidBigDataUrl(bdu, FALSE))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL);
 }
