@@ -941,7 +941,7 @@ else if (track != NULL && !tdbIsComposite(track))
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
     char *dotPos = strstr(table, ".");
-    if (dotPos != NULL)
+    if (isHubTrack(table) && dotPos != NULL)
         // if the database is part of the table name in mysql notation
         // (= databaseName.tableName), split the table string and override db.
         // The jksql table name/field cache cannot handle it otherwise
