@@ -15,7 +15,6 @@ void encodePeakUi(struct trackDb *tdb, struct customTrack *ct)
 /* ENCODE peak UI options. */
 {
 struct sqlConnection *conn;
-char *table;
 char *trackName = tdb->track;
 char pValVarName[256];
 char qValVarName[256];
@@ -24,12 +23,10 @@ boolean useScore = FALSE;
 if (ct)
     {
     conn = hAllocConn(CUSTOM_TRASH);
-    table = ct->dbTableName;
     }
 else
     {
     conn = hAllocConn(database);
-    table = tdb->table;
     if (!trackDbSettingOn(tdb, "filterPvalQval"))
         useScore = TRUE;
     }

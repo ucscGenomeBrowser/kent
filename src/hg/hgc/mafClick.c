@@ -103,11 +103,12 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	{
 	char dbOnly[128];
 	int len;
-	char *chrom, *org;
+//	char *chrom;  unused variable
+	char *org;
 
 	memset(dbOnly, 0, sizeof(dbOnly));
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+//	chrom = chopPrefix(dbOnly);  unused variable
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    len = strlen(dbOnly);
@@ -866,11 +867,12 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	{
 	char dbOnly[128];
 	int len;
-	char *chrom, *org;
+//	char *chrom;  unused variable
+	char *org;
 
 	memset(dbOnly, 0, sizeof(dbOnly));
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	// chrom = chopPrefix(dbOnly);  unused variable
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    len = strlen(dbOnly);
@@ -916,14 +918,14 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	int s = mc->start;
 	int e = s + mc->size;
 	char *org;
-	char *revComp = "";
-	char strand = mc->strand;
+//	char *revComp = "";  unused variable
 	struct dyString *dy = newDyString(512);
 #ifdef REVERSESTRAND
+	char strand = mc->strand;
 	if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    strand = (strand == '+') ? '-' : '+';
 #endif
-	if (strand == '-') revComp = "&hgSeq.revComp=on";
+//	if (strand == '-') revComp = "&hgSeq.revComp=on";  unused variable
 
 	dyStringClear(dy);
 
@@ -1010,7 +1012,8 @@ if (haveInserts)
     fprintf(f, "<B>Inserts between block %d and %d in window</B>\n",blockNo, blockNo+1);
     for (mc = maf->components; mc != NULL; mc = mc->next)
 	{
-	char dbOnly[128], *chrom;
+	char dbOnly[128];
+	// char *chrom;  unused variable
 	int s = mc->start + mc->size;
 	int e = s + mc->rightLen;
 	char *org;
@@ -1022,7 +1025,7 @@ if (haveInserts)
 	    reverseIntRange(&s, &e, mc->srcSize);
 
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-	chrom = chopPrefix(dbOnly);
+	// chrom = chopPrefix(dbOnly);  unused variable
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    org = dbOnly;
@@ -1031,14 +1034,14 @@ if (haveInserts)
 	    {
 	    if (hDbIsActive(dbOnly))
 		{
-		char *revComp = "";
-		char strand = mc->strand;
 #ifdef REVERSESTRAND
+		char strand = mc->strand;
 		if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 		    strand = (strand == '+') ? '-' : '+';
 #endif
-		if (strand == '-') revComp = "&hgSeq.revComp=on";
 		/*
+		char *revComp = "";
+		if (strand == '-') revComp = "&hgSeq.revComp=on";
 		linkToOtherBrowser(dbOnly, chrom, s, e);
 		fprintf(f,"B");
 		fprintf(f, "</A>");

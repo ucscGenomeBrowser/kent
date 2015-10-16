@@ -145,10 +145,7 @@ if (tg->preDrawContainer)
 
 struct bedGraphItem *wi;
 double pixelsPerBase = scaleForPixels(width);
-double basesPerPixel = 1.0;
 int i;				/* an integer loop counter	*/
-if (pixelsPerBase > 0.0)
-    basesPerPixel = 1.0 / pixelsPerBase;
 
 /* Allocate predraw and save it and related info in the track. */
 struct preDrawContainer *pre = tg->preDrawContainer = initPreDrawContainer(width);
@@ -169,7 +166,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
     *	The drawing window, in pixels:
     *	xOff = left margin, yOff = top margin, h = height of drawing window
     *	drawing window in chrom coords: seqStart, seqEnd
-    *	'basesPerPixel' is known, 'pixelsPerBase' is known
+    *	'pixelsPerBase' is known
     */
     /*	let's check end point screen coordinates.  If they are
      *	the same, then this entire data block lands on one pixel,

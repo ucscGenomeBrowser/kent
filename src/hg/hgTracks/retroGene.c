@@ -54,10 +54,10 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
-int colCount ;
+// int colCount ;
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
-colCount = sqlCountColumns(sr);
+// colCount = sqlCountColumns(sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     //if (colCount == 56) 

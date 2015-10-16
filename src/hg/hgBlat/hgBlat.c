@@ -703,7 +703,8 @@ void askForSeq(char *organism, char *db)
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-struct serverTable *serve = NULL;
+/* ignore struct serverTable* return, but can error out if not found */
+findServer(db, FALSE);
 
 /* JavaScript to update form when org changes */
 char *onChangeText = "onchange=\""
@@ -711,8 +712,6 @@ char *onChangeText = "onchange=\""
     "document.mainForm.submit();\"";
 
 char *userSeq = NULL;
-
-serve = findServer(db, FALSE);
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"

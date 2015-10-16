@@ -22,6 +22,8 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 #include "soTerm.h"
+#include "bigBed.h"
+#include "hubConnect.h"
 
 
 #define GAP_ITEM_LABEL  "Gaps"
@@ -219,10 +221,6 @@ if (speciesOff)
         hashAdd(speciesOffHash, defaultOff[i], NULL);
     }
 
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
-
 /* Make up items for other organisms by scanning through group & species
    track settings */
 struct wigMafItem *mi = NULL, *miList = NULL;
@@ -289,6 +287,26 @@ if (fileName == NULL)
 return fileName;
 }
 
+static struct mafAli *bigMafLoadInRegion( struct track *track, char *chrom, int start, int end)
+/* Read in MAF blocks from bigBed. */
+{
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList = bigBedSelectRange(track, chrom, start, end, lm);
+struct mafAli *mafList = NULL;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    // the MAF block in the record as \001 instead of newlines 
+    char *mafText = replaceChars(bb->rest, "\001","\n");
+
+    struct mafFile mf;
+    mf.lf = lineFileOnString(NULL, TRUE, mafText);
+
+    struct mafAli *maf = mafNext(&mf);
+    slAddHead(&mafList, maf);
+    }
+return mafList;
+}
+
 static void loadMafsToTrack(struct track *track)
 /* load mafs in region to track custom pointer */
 {
@@ -312,7 +330,12 @@ if (begin < 0)
  * the scoredRefs (whereas now we just use
  * one statically loaded scoredRef).
  */
-if (mp->ct)
+
+if (track->isBigBed)
+    {
+    mp->list = bigMafLoadInRegion(track, chromName, begin, winEnd+2);
+    }
+else if (mp->ct)
     {
     char *fileName = getCustomMafFile(track);
 
@@ -511,7 +534,11 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
     struct mafPriv *mp = getMafPriv(track);
     struct sqlConnection *conn, *conn2;
 
-    if (mp->ct)
+    if (track->isBigBed)
+        {
+        mp->list = bigMafLoadInRegion(track, chromName, winStart, winEnd);
+        }
+    else if (mp->ct)
 	{
 	char *fileName = getCustomMafFile(track);
 	conn = hAllocConn(CUSTOM_TRASH);
@@ -740,7 +767,7 @@ static char *wigMafItemName(struct track *track, void *item)
 /* Return name of maf level track. */
 {
 struct wigMafItem *mi = item;
-return mi->name;
+return hubConnectSkipHubPrefix(mi->name);
 }
 
 static void processInserts(char *text, struct mafAli *maf,
@@ -1141,10 +1168,6 @@ boolean useIrowChains = TRUE;
 if (miList == NULL)
     return FALSE;
 
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
-
 /* get summary table name from trackDb */
 if ((summary = summarySetting(track)) == NULL)
     return FALSE;
@@ -1158,54 +1181,75 @@ else
 	useIrowChains = FALSE;
     }
 
-/* Create SQL where clause that will load up just the
- * summaries for the species that we are including. */
-conn = hAllocConn(database);
-dyStringAppend(where, "src in (");
-for (mi = miList; mi != NULL; mi = mi->next)
+if (track->isBigBed)
     {
-    if (!isPairwiseItem(mi))
-	/* exclude non-species items (e.g. conservation wiggle */
-	continue;
-    dyStringPrintf(where, "'%s'", mi->db);
-    if (mi->next != NULL)
-	dyStringAppend(where, ",");
+    struct lm *lm = lmInit(0);
+    struct bigBedInterval *bb, *bbList = bigBedSelectRangeExtra(track, chromName, seqStart, seqEnd, lm, "summary");
+    char *bedRow[7];
+    char startBuf[16], endBuf[16];
+
+    for (bb = bbList; bb != NULL; bb = bb->next)
+        {
+        bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+        ms = mafSummaryLoad(bedRow);
+        if ((hel = hashLookup(componentHash, ms->src)) == NULL)
+            hashAdd(componentHash, ms->src, ms);
+        else
+            slAddHead(&(hel->val), ms);
+        }
     }
-dyStringAppend(where, ")");
-/* check for empty where clause */
-if (!sameString(where->string,"src in ()"))
-    whereClause = where->string;
-sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
-                        whereClause, &rowOffset);
-
-boolean hasFieldLeftStatus = hHasField(database, summary, "leftStatus");
-
-/* Loop through result creating a hash of lists of maf summary blocks.
- * The hash is keyed by species. */
-while ((row = sqlNextRow(sr)) != NULL)
+else 
     {
-    if (hasFieldLeftStatus)
-        ms = mafSummaryLoad(row + rowOffset);
-    else
-        /* previous table schema didn't have status fields */
-        ms = mafSummaryMiniLoad(row + rowOffset);
-    /* prune to fit in window bounds */
-    if (ms->chromStart < seqStart)
-        ms->chromStart = seqStart;
-    if (ms->chromEnd > seqEnd)
-        ms->chromEnd = seqEnd;
-    if ((hel = hashLookup(componentHash, ms->src)) == NULL)
-        hashAdd(componentHash, ms->src, ms);
-    else
-        slAddHead(&(hel->val), ms);
+    /* Create SQL where clause that will load up just the
+     * summaries for the species that we are including. */
+    conn = hAllocConn(database);
+    dyStringAppend(where, "src in (");
+    for (mi = miList; mi != NULL; mi = mi->next)
+        {
+        if (!isPairwiseItem(mi))
+            /* exclude non-species items (e.g. conservation wiggle */
+            continue;
+        dyStringPrintf(where, "'%s'", mi->db);
+        if (mi->next != NULL)
+            dyStringAppend(where, ",");
+        }
+    dyStringAppend(where, ")");
+    /* check for empty where clause */
+    if (!sameString(where->string,"src in ()"))
+        whereClause = where->string;
+    sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
+                            whereClause, &rowOffset);
+
+    boolean hasFieldLeftStatus = hHasField(database, summary, "leftStatus");
+
+    /* Loop through result creating a hash of lists of maf summary blocks.
+     * The hash is keyed by species. */
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        if (hasFieldLeftStatus)
+            ms = mafSummaryLoad(row + rowOffset);
+        else
+            /* previous table schema didn't have status fields */
+            ms = mafSummaryMiniLoad(row + rowOffset);
+        /* prune to fit in window bounds */
+        if (ms->chromStart < seqStart)
+            ms->chromStart = seqStart;
+        if (ms->chromEnd > seqEnd)
+            ms->chromEnd = seqEnd;
+        if ((hel = hashLookup(componentHash, ms->src)) == NULL)
+            hashAdd(componentHash, ms->src, ms);
+        else
+            slAddHead(&(hel->val), ms);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 
 /* reverse summary lists */
 cookie = hashFirst(componentHash);
 while ((hel = hashNext(&cookie)) != NULL)
     slReverse(&hel->val);
-hFreeConn(&conn);
+if (!track->isBigBed)
+    hFreeConn(&conn);
 
 /* display pairwise items */
 for (mi = miList; mi != NULL; mi = mi->next)
@@ -1364,10 +1408,6 @@ Color pairColor = (vis == tvFull ? track->ixAltColor : color);
 boolean useIrowChains = TRUE;
 boolean doSnpMode = (vis == tvPack) &&(trackDbSetting(track->tdb, "snpMode") != NULL);
 
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = track->tdb->parent->track;
-
 struct mafPriv *mp = getMafPriv(track);
 if (miList == NULL || mp->list == NULL)
     return FALSE;
@@ -1415,7 +1455,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
         mcPair->rightStatus = mcThis->rightStatus;
         mcPair->rightLen = mcThis->rightLen;
 
-        mcThis = mafFindCompSpecies(maf, database, '.');
+        mcThis = mafFindCompSpecies(maf, hubConnectSkipHubPrefix(database), '.');
         AllocVar(mcMaster);
         mcMaster->src = cloneString(mcThis->src);
         mcMaster->srcSize = mcThis->srcSize;
@@ -1824,7 +1864,7 @@ struct wigMafItem *mi;
 struct mafAli *mafList, *maf, *sub;
 struct mafComp *mc, *mcMaster;
 int lineCount = slCount(miList);
-char **lines = NULL, *selfLine, *insertLine;
+char **lines = NULL, *selfLine;
 int *insertCounts;
 int i, x = xOff, y = yOff;
 struct dnaSeq *seq = NULL;
@@ -1844,18 +1884,12 @@ char *defaultCodonSpecies = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
 char *codonTransMode = NULL;
 boolean startSub2 = FALSE;
 
-int mafOrig = 0;
 int mafOrigOffset = 0;
-char query[256];
 struct mafPriv *mp = getMafPriv(track);
 char *mafFile = NULL;
 struct sqlConnection *conn2 = NULL;
 struct sqlConnection *conn3 = NULL;
 char *tableName = NULL;
-
-char *prefix = track->track; // use when setting things to the cart
-if (tdbIsContainerChild(track->tdb))
-    prefix = tdbGetContainer(track->tdb)->track;
 
 if (mp->ct != NULL)
     {
@@ -1864,25 +1898,12 @@ if (mp->ct != NULL)
     tableName = mp->ct->dbTableName;
     mafFile = getCustomMafFile(track);
     }
-else
+else if (!track->isBigBed)
     {
     conn2 = hAllocConn(database);
     conn3 = hAllocConn(database);
     tableName = track->table;
     mafFile = getTrackMafFile(track);  // optional
-    }
-
-if (hIsGsidServer())
-    {
-    /* decide the value of mafOrigOffset to be used to display xxAaMaf tracks. */
-    struct sqlConnection *conn = hAllocConn(database);
-    sqlSafef(query, sizeof(query), "select chromStart from %s", track->table);
-    mafOrig = atoi(sqlNeedQuickString(conn, query));
-    mafOrigOffset = (mafOrig % 3) - 1;
-    /* offset has to be non-negative */
-    if (mafOrigOffset < 0) mafOrigOffset = mafOrigOffset +3;
-
-    hFreeConn(&conn);
     }
 
 if (defaultCodonSpecies == NULL)
@@ -1952,7 +1973,6 @@ for (i=1; i<lineCount; ++i)
     }
 
 /* Give nice names to first two. */
-insertLine = lines[0];
 selfLine = lines[1];
 
 /* Allocate a line for recording gap sizes in reference */
@@ -1975,7 +1995,7 @@ for (mi = miList; mi != NULL; mi = mi->next)
 
 /* Go through the mafs saving relevant info in lines. */
 mafList = mp->list;
-safef(dbChrom, sizeof(dbChrom), "%s.%s", database, chromName);
+safef(dbChrom, sizeof(dbChrom), "%s.%s", hubConnectSkipHubPrefix(database), chromName);
 
 for (maf = mafList; maf != NULL; maf = maf->next)
     {

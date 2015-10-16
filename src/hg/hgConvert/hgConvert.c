@@ -196,7 +196,9 @@ struct lineFile *lf = netLineFileOpen(fileName);
 char *line;
 int chromNameSize = strlen(chrom);
 struct chain *chainList = NULL, *chain;
+#ifdef SOON	/* Put in if we index. */
 boolean gotChrom = FALSE;
+#endif  /* SOON */
 int chainCount = 0;
 
 while (lineFileNextReal(lf, &line))
@@ -208,7 +210,9 @@ while (lineFileNextReal(lf, &line))
 	line = skipWord(line);	/* Skip over chain score */
 	if (startsWith(chrom, line) && isspace(line[chromNameSize]))
 	    {
+#ifdef SOON	/* Put in if we index. */
 	    gotChrom = TRUE;
+#endif  /* SOON */
 	    lineFileReuse(lf);
 	    chain = chainReadChainLine(lf);
 	    if (rangeIntersection(chain->tStart, chain->tEnd, start, end) > 0)

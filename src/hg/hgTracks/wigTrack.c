@@ -411,7 +411,6 @@ struct wiggle wiggle;
 struct wigItem *wiList = NULL;
 char *whereNULL = NULL;
 int itemsLoaded = 0;
-char *previousFileName;
 struct hash *spans = NULL;	/* Spans encountered during load */
 /*	Check our scale from the global variables that exist in
  *	hgTracks.c - This can give us a guide about which rows to load.
@@ -518,7 +517,6 @@ spans = newHash(4);
 /*	Each row read will be turned into an instance of a wigItem
  *	A growing list of wigItems will be the items list to return
  */
-previousFileName = "";
 itemsLoaded = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1220,8 +1218,6 @@ void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
  * This code is shared by wig, bigWig, and bedGraph drawers. */
 {
 wigTrackSetGraphOutputDefault(tg, xOff, yOff, hvg);
-enum wiggleYLineMarkEnum yLineOnOff;
-double yLineMark;
 
 /*	determined from data	*/
 double graphUpperLimit=0;	/*	scaling choice will set these	*/
@@ -1229,9 +1225,6 @@ double graphLowerLimit=0;	/*	scaling choice will set these	*/
 double graphRange=0;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
 struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
-
-yLineOnOff = wigCart->yLineOnOff;
-yLineMark = wigCart->yLineMark;
 
 /*	width - width of drawing window in pixels
  *	pixelsPerBase - pixels per base
@@ -1331,7 +1324,6 @@ usingDataSpan = wigFindSpan(tg, basesPerPixel);
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
-    size_t bytesRead;		/* to check fread being OK */
     int dataOffset = 0;		/*	within data block during drawing */
 
     ++itemCount;
@@ -1401,7 +1393,7 @@ double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixels
 	    unsigned char *readData;	/* the bytes read in from the file */
 	    udcSeek(wibFH, wi->offset);
 	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	    bytesRead = udcRead(wibFH, readData,
+	    udcRead(wibFH, readData,
 		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    /*	walk through all the data in this block	*/
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)

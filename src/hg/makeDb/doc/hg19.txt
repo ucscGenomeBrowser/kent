@@ -30081,13 +30081,16 @@ wc -l peptides.unmapped.txt
 
 
 ##############################################################################
-# DBSNP B142 / SNP142 (DONE 11/18/14; snp142ExceptionDesc reloaded 1/23/15)
+# DBSNP B142 / SNP142 (DONE 10/14/15)
 # originally done 11/03/14
 # 11/17/14: Allele dump file was outdated at time of download -- it was re-dumped a couple weeks
 #           after release.  snp142 was missing some frequencies due to incomplete join with Allele.
 #           Rebuilding all tables that have allele frequencies (just the track tables & exceptions).
-# 2/17/14: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
+# 2/17/15: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
 #          had been updated 1/30/15, argh.  Rebuilding parts that depend on the SNP table.
+# 10/14/15: Zero out the allele freq columns for snp142 rows on the '-' strand that include
+#           1000GENOMES in submitters, because they are incorrect (Bug #16204).
+#           Regenerate snp142{Common,Flagged,Mult}.
     # Redmine #14189
     mkdir -p /hive/data/outside/dbSNP/142/human_hg19
     cd /hive/data/outside/dbSNP/142/human_hg19
@@ -30237,6 +30240,7 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin \
       >>& do.log & tail -f do.log
 
+    #########################################################################
     # 1/23/15: Jonathan noticed that NonIntegerChromCount's count in snp142ExceptionDesc
     # was much higher than the number of snp142 rows with NonIntegerChromCount; turns out
     # it was tallied per allele not per variant.  Fixed, regenerate;
@@ -30254,7 +30258,8 @@ EOF
       snp142ExceptionDesc.tab
     rm snp142RedoExceptionDesc*
 
-    # 2/17/14: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
+    #########################################################################
+    # 2/17/15: User reported missing validation info (#14836); Jonathan found that SNP.bcp.gz
     #          had been updated 1/30/15, argh.  Rebuilding parts that depend on the SNP table.
     # First get a baseline, so we know whether the updated file has fixed the problem:
     hgsql hg19 -e 'select count(*) from snp142 where valid = "unens"'
@@ -30284,6 +30289,26 @@ EOF
 #| 24180022 |
     # 24M out of 113M is significantly less than 107M/113M, but still -- that's a lot!!
     # By way of comparison, snp138 has -- wow, 20M out of 65M!  Never realized it was that bad.
+
+    #########################################################################
+    # 10/14/15: Zero out the allele freq columns for snp142 rows on the '-' strand that include
+    #           1000GENOMES in submitters, because they are incorrect (Bug #16204).
+    #           Regenerate snp142{Common,Flagged,Mult}.
+    cd /hive/data/outside/dbSNP/142/human_hg19
+    hgsql hg19 -e 'update snp142 \
+                     set alleleFreqCount=0, alleles="", alleleNs="", alleleFreqs="" \
+                     where strand = "-" and find_in_set("1000GENOMES", submitters);'
+    mv snp142.bed.gz snp142.150219.bed.gz
+    zcat snp142.150219.bed.gz \
+    | awk -F"\t" 'BEGIN{OFS="\t";} \
+        ($6 == "-" && $20 ~ /1000GENOMES/) { $21=0; $22 = ""; $23 = ""; $24 = ""; } {print;}' \
+    > snp142.bed
+    # Make sure the changes are as intended:
+    zcat snp142.150219.bed.gz | diff - snp142.bed | less
+    gzip snp142.bed
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=filter -stop=filter \
+      >>& do.log & tail -f do.log
+# *** All done!  (through the 'filter' step)
 
 
 ##############################################################################

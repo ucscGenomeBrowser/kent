@@ -1475,12 +1475,13 @@ void aladdin(DNA *dna, int dnaSize, FILE *out)
 /* Get codon tables and call HMM thing. */
 {
 long start, end;
-long loadTime, dynTime;
+// long loadTime;  unused variable
+long dynTime;
 
 start = clock1000();
 makeMarkovModels(FALSE);
 end = clock1000();
-loadTime = end-start;
+// loadTime = end-start;
 
 makeTransitionProbs();
 

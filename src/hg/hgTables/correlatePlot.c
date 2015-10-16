@@ -111,7 +111,6 @@ int x1 = 0;
 int y1 = 0;
 int x2 = 0;
 int y2 = 0;
-int shortLabelSize = 0;
 int longLabelSize = 0;
 int textWidth = 0;
 
@@ -139,8 +138,6 @@ y1 = totalHeight-PLOT_MARGIN-fontHeight;
 x2 = totalWidth-PLOT_MARGIN;
 y2 = totalHeight-PLOT_MARGIN;
 
-if (shortLabel)
-    shortLabelSize = mgFontStringWidth(font, shortLabel);
 if (longLabel)
     longLabelSize = mgFontStringWidth(font, longLabel);
 
@@ -217,7 +214,6 @@ double log_2 = log(2.0);
 int i, j;
 int densityMin = BIGNUM;
 int densityMax = 0;
-int densityRange = 0;
 
 #define LOG2(x) (log(x)/log_2)
 
@@ -260,8 +256,6 @@ for (i=0; i<=maxShade; ++i)
     shadesOfGray[i] = vgFindColorIx(vg, rgb.r, rgb.g, rgb.b);
     }
 shadesOfGray[maxShade+1] = MG_RED;
-
-densityRange = densityMax - densityMin;
 
 /* only need to draw every other one since they were reduced by two above */
 for (j = 0; j < GRAPH_HEIGHT; ++j)

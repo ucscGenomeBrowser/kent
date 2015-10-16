@@ -247,11 +247,11 @@ for(ii=0; ii <= maxLevel; ii++)
     Levels[ii].blocks = NULL;
     }
 
-struct snakeFeature *sf, *prev = NULL, *next;
+struct snakeFeature *sf, *next;
 int prevLevel = -1;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 
-for(sf=sfList; sf; prev = sf, sf = next)
+for(sf=sfList; sf; sf = next)
     {
     next = sf->next;
 
@@ -878,10 +878,9 @@ int lastE = -1;
 int lastS = -1;
 int offY = y;
 int lineHeight = tg->lineHeight ;
-int tStart, tEnd, qStart;
 int  qs, qe;
 int heightPer = tg->heightPer;
-int lastX = -1,lastY = y;
+int lastX = -1;
 int lastQEnd = 0;
 int lastLevel = -1;
 int e;
@@ -897,13 +896,11 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
     else if (vis == tvFull)
 	y = offY + (sf->level * 2) * lineHeight;
     s = sf->start; e = sf->end;
-    tEnd = sf->end;
-    int osx;
 
     int sx, ex;
     if (!positiveRangeIntersection(winStart, winEnd, s, e))
 	continue;
-    osx = sx = round((double)((int)s-winStart)*scale) + xOff;
+    sx = round((double)((int)s-winStart)*scale) + xOff;
     ex = round((double)((int)e-winStart)*scale) + xOff;
 
     // color by strand
@@ -1041,10 +1038,6 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 
 	}
     sf->drawn = TRUE;
-    tEnd = e;
-    tStart = s;
-    qStart = sf->qStart;
-    lastY = y;
     lastLevel = sf->level;
     //lastX = x;
     }
@@ -1054,7 +1047,7 @@ if (vis != tvFull)
 
 // now we're going to draw the lines between the blocks
 
-lastX = -1,lastY = y;
+lastX = -1;
 lastQEnd = 0;
 lastLevel = 0;
 qe = lastQEnd = 0;
@@ -1174,9 +1167,6 @@ for (sf =  (struct snakeFeature *)lf->components; sf != NULL; lastQEnd = qe, pre
 		}
 	    }
 	}
-    tEnd = e;
-    tStart = s;
-    qStart = sf->qStart;
     if (sf->orientation == -1)
 	lastX = sx;
     else

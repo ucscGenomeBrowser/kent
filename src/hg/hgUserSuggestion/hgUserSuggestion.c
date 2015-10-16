@@ -402,8 +402,8 @@ safef(msg, sizeof(msg),
     suggestID, sName, sEmail, sCategory, sSummary, sDetails);
 
 safef(subject, sizeof(subject),"%s %s", filter, suggestID);   
-int result;
-result = mailViaPipe(mailTo, subject, msg, mailFrom);
+// ignore returned result
+mailViaPipe(mailTo, subject, msg, mailFrom);
 }
 
 void sendConfirmMail(char *emailAddr, char *suggestID, char *summary, char *details)
@@ -424,8 +424,8 @@ safef(subject, sizeof(subject),"Thank you for your suggestion to the %s", brwNam
 safef(msg, sizeof(msg),
     "  Someone (probably you, from IP address %s) submitted a suggestion to the %s regarding \"%s\".\n\n  The suggestion has been assigned a reference number of \"%s\". If you wish to follow up on the progress of this suggestion with browser staff, you may contact us at %s. Please include the reference number of your suggestion in the email.\n\nThank you for your input,\n%s\n\nYour suggestion summary:\n%s\n\nYour suggestion details:\n%s",
 remoteAddr, brwName, summary, suggestID, returnAddr, signature, summary, details);
-int result;
-result = mailViaPipe(userEmailAddr, subject, msg, returnAddr);
+// ignore returned result
+mailViaPipe(userEmailAddr, subject, msg, returnAddr);
 }
 
 void askForSuggest(char *organism, char *db)

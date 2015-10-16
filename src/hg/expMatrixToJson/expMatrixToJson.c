@@ -19,6 +19,8 @@ int clMemLim = 4; // The amount of memeory the program can use, read in Gigabyte
 int target = 0;  // Used for the target value in rlinkJson.
 float longest = 0;  // Used to normalize link distances in rlinkJson.
 char* clDescFile = NULL; // The user can provide a description file 
+char* clAttributeTable = NULL; // The user can provide an attributes table... this may get removed soon.  
+int nodeCount; //The number of nodes. 
 
 void usage()
 /* Explain usage and exit. */
@@ -30,7 +32,7 @@ errAbort(
     "usage:\n"
     "   expMatrixToJson [options] matrix output\n"
     "options:\n"
-    "    -multiThread    The program will run on multiple threads. \n"
+    "    -multiThreads    The program will run on multiple threads. \n"
     "    -forceLayout    Prints the output in .json format for d3 forceLayouts. NOTE no .html file will be \n"
     "                    generated using this option.\n"
     "    -CSV    The input matrix is in .csv format. \n"
@@ -47,12 +49,13 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"multiThread", OPTION_BOOLEAN},
+   {"multiThreads", OPTION_BOOLEAN},
    {"forceLayout", OPTION_BOOLEAN},
    {"CSV", OPTION_BOOLEAN},
    {"threads", OPTION_INT},
    {"memLim", OPTION_INT},
    {"descFile", OPTION_STRING},
+   {"attributeTable", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -85,6 +88,19 @@ struct bioExpVector
     int children;   // Number of bioExpVectors used to build the current 
     };
 
+double stringToDouble(char *s)
+/* Convert string to a double.  Assumes all of string is number
+ * and aborts on an error. */
+{
+char* end;
+double val = strtod(s, &end);
+
+if (val != val) errAbort("A value of %f was encountered. Please change this value then re run the program.", val); 
+if ((end == s) || (*end != '\0'))
+    errAbort("invalid double: %s", s);
+return val;
+}
+
 struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
 // Read a tab-delimited file and return list of bioExpVector.
 {
@@ -92,8 +108,9 @@ int vectorSize = 0;
 struct lineFile *lf = lineFileOpen(matrixFile, TRUE);
 char *line, **row = NULL;
 struct bioExpVector *list = NULL, *el;
-while (lineFileNextReal(lf, &line))    
+while (lineFileNextReal(lf, &line))
     {
+    ++nodeCount; 
     if (vectorSize == 0)
         {
 	// Detect first row.
@@ -107,7 +124,7 @@ while (lineFileNextReal(lf, &line))
 //    assert(el->count == vectorSize);
     int i;
     for (i = 0; i < el->count; ++i)
-	el->vector[i] = sqlDouble(row[i]);
+	el->vector[i] = stringToDouble(row[i]);
     el->children = 1;
     slAddHead(&list, el);
     }
@@ -342,23 +359,28 @@ if (tree->left == NULL && tree->right == NULL)
     // Print the leaf nodes
     {
     if (bio->desc)
-	fprintf(f, "{\"name\":\"%s\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, bio->desc, colors.r, colors.g, colors.b); 
+	fprintf(f, "{\"name\":\"%s\",\"kids\":\"%i\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, 0, bio->desc, colors.r, colors.g, colors.b); 
     else
-	fprintf(f, "{\"name\":\"%s\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, " ", colors.r, colors.g, colors.b); 
+	fprintf(f, "{\"name\":\"%s\",\"kids\":\"%i\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, 0, " ", colors.r, colors.g, colors.b); 
     return;
     }
 else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
 
-// Prints out the node object and opens a new children block
-fprintf(f, "{\"%s\"%s \"%s\"%s", "name", ":", " ", ",");
-fprintf(f, "\"colorGroup\": \"rgb(%i,%i,%i)\",", colors.r, colors.g, colors.b );
+// Prints out the node object and opens a new children block.
+//fprintf(f, "{\"%s\"%s \"%s\"%s", "name", ":", " ", ",");
+fprintf(f, "{\"name\": \" \", \"kids\": \"%f\",  \"colorGroup\": \"rgb(%i,%i,%i)\",",sqrt(bio->children), colors.r,colors.g,colors.b);
+//fprintf(f, "\"colorGroup\": \"rgb(%i,%i,%i)\",", colors.r, colors.g, colors.b );
 distance = tree->childDistance/longest; 
 if (distance != distance) distance = 0;
-fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", 100*distance, ",");
+//fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", 100*distance, ",");
+struct rgbColor wTB; 
+if (distance == 0) {wTB = whiteToBlackRainbowAtPos(.95-(distance*.95));}
+else  {wTB = whiteToBlackRainbowAtPos(.95-(sqrt(distance)*.95));}
+fprintf(f, "\"distance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\",\n", 100*distance, wTB.r, wTB.g, wTB.b);
 for (i = 0;  i < level + 1;  i++)
     fputc(' ', f);
-fprintf(f, "\"%s\"%s\n", "children", ": [");
+fprintf(f, "\"children\":[\n");
 rPrintHierarchicalJson(f, tree->left, level+1, distance);
 fputs(",\n", f);
 rPrintHierarchicalJson(f, tree->right, level+1, distance);
@@ -396,11 +418,9 @@ const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
 const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
 int j;
 double diff = 0, sum = 0;
-float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
-float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
 for (j = 0; j < kid1->count; ++j)
     {
-    diff = (kid1Weight*kid1->vector[j]) - (kid2Weight*kid2->vector[j]);
+    diff = kid1->vector[j] - kid2->vector[j]; 
     sum += (diff * diff);
     }
 return sqrt(sum);
@@ -452,6 +472,7 @@ for (el = leafList; el != NULL; el = nextEl)
    if (distance != distance ) distance = 0;
    total += distance;
     }
+if (total == 0) errAbort("There doesn't seem to be any difference between these matrix columns"); 
 /* Loop through list a second time to generate actual colors. */
 double soFar = 0;
 for (el = leafList; el != NULL; el = nextEl)
@@ -465,13 +486,43 @@ for (el = leafList; el != NULL; el = nextEl)
    if (distance != distance ) distance = 0 ;
    soFar += distance;
    double normalized = soFar/total;
-   bio2->color = saturatedRainbowAtPos(normalized * purplePos);
+   bio2->color = saturatedRainbowAtPos(normalized*purplePos);// *purplePos
    }
 
 /* Set first color to correspond to 0, since not set in above loop */
 struct bioExpVector *bio = leafList->val;
 bio->color = saturatedRainbowAtPos(0);
 }
+
+
+void colorLeavesFromAttbFile(struct slRef *leafList, char *attributef, char *colorHash)
+/* Assign colors of rainbow to leaves using a weird attribute file. 
+ * And a hashing file that corresponds the group to a color. */
+{
+struct hash *hT = hashTwoColumnFile(attributef);
+struct slRef *el, *nextEl;
+for (el = leafList; el != NULL; el = nextEl)
+    {
+    nextEl = el->next;
+    if (nextEl == NULL)
+	break;
+    struct bioExpVector *bio = el->val;
+    struct hashEl *hEl = hashLookup(hT, bio->name);
+    float *something = hEl->val; 
+    double normalized = *something / 10.0 ;
+    bio->color = saturatedRainbowAtPos(normalized); 
+    }
+
+}
+
+//void verifyInput(char *expMatrix)
+/* This program keeps on breaking on weird matrix column values, hopefully this 
+ * function will weed these issues out.  It will be set on by default and can be
+ * turned off for speed with a flag */ 
+//{
+//char cmd1[1024], cmd2[1024]; 
+//}
+
 
 void convertInput(char *expMatrix, char *descFile, bool csv)
 /* Takes in a expression matrix and makes the inputs that this program will use. 
@@ -514,12 +565,22 @@ else
 }
 
 void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
-// Generates a new .html file for the dendrogram. 
+// Generates a new .html file for the dendrogram. Will do some size calculations as well. 
 {
 char *pageName = cloneString(jsonFile);
 chopSuffix(pageName);
-fprintf(outputFile, "<!DOCTYPE html> <meta charset=\"utf-8\"> <title> %s Radial Dendrogram</title> <style>  .node circle {   fill: #fff;   stroke: steelblue;   stroke-width: 1.5px; }  .node {   font: 10px sans-serif; }  .link {   fill: none;   stroke: #ccc;	stroke-width: 1.5px; }  .selectedLink{   fill: none;   stroke: #ccc;   stroke-width: 3.0px; }  .selected{   fill: red; }  </style> <body> <script src=\"http://d3js.org/d3.v3.min.js\"></script> <script> var color = d3.scale.category20();  var radius = 1080 / 2;  var cluster = d3.layout.cluster()     .size([360, radius - %i]) ;  var diagonal = d3.svg.diagonal.radial()     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });  var svg = d3.select(\"body\").append(\"svg\")     .attr(\"width\", radius * 2)     .attr(\"height\", radius * 2)   .append(\"g\")     .attr(\"transform\", \"translate(\" + radius + \",\" + radius + \")\");  d3.json(\"%s\", function(error, root)", pageName, 10+nameSize*5, jsonFile);
-fprintf(outputFile, "{   var nodes = cluster.nodes(root);    var link = svg.selectAll(\"path.link\")       .data(cluster.links(nodes))     .enter().append(\"path\")       .attr(\"class\", \"link\")       .on(\"click\", function() {               d3.select(\".selectedLink\").classed(\"selectedLink\", false);               d3.select(this).classed(\"selectedLink\",true);       })       .attr(\"d\", diagonal);   var node = svg.selectAll(\"g.node\")       .data(nodes)       .enter().append(\"g\")       .attr(\"class\", \"node\")       .attr(\"transform\", function(d) { return \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\"; })        .on(\"click\", function() {               d3.select(\".selected\").classed(\"selected\", false);               d3.select(this).classed(\"selected\",true);       })       .on(\"mouseover\", function(d) {           var g = d3.select(this);           var info = g.append('text')               .classed('info', true)              .attr('x', 20)              .attr('y', 10)               .attr(\"transform\", function(d) { return \"rotate(\"+ (90 - d.x) +\")\";  })              .text(d.distance);       })       .on(\"mouseout\", function() {                   d3.select(this).select('text.info').remove();          });      node.append(\"circle\")    .attr(\"r\", function (d) {        if (d.name != \" \")       {         return 5;       }       })       .style(\"fill\", function (d) {          if (d.name != \" \") {           return d3.rgb(d.colorGroup);         }         });        node.append(\"circle\")       .attr(\"r\", function(d) {            return d.distance/5;})               .on(\"click\", function() {               d3.select(\".selected\").classed(\"selected\", false);               d3.select(this).classed(\"selected\",true);       })              .style(\"fill\",  \"white\");      node.append(\"text\")       .attr(\"dy\", \".55em\")       .attr(\"text-anchor\", function(d) { return d.x < 180 ? \"start\" : \"end\"; })       .attr(\"transform\", function(d) { return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\"; })       .text(function(d) { return d.name; }); });  d3.select(self.frameElement).style(\"height\", radius * 2 + \"px\");  </script>");  
+int textSize = 12 - log(nodeCount);  
+int radius = 540 + 270*log10(nodeCount);  
+int labelLength = 10+nameSize*(15-textSize);
+if (labelLength > 100) labelLength = 100;
+fprintf(outputFile,"<!DOCTYPE html> <meta charset=\"utf-8\"><title>%s</title><style>.node circle{fill: #fff; stroke: steelblue; stroke-width: .25px; }.node{font: %ipx sans-serif; }.link{fill: none; stroke: #ccc; stroke-width: 1.5px;}.selectedL", pageName, textSize);
+fprintf(outputFile,"ink{ fill: none; stroke: #ccc; stroke-width: 3.0px;}.selected{ fill: red;}</style><bod> <script src=\"http://d3js.org/d3.v3.min.js\"    ></script> <script>var color=d3.scale.category20();var radius=%i / 2; var     cluster=d3.layout.cluster().size([360, radiu",radius);
+fprintf(outputFile,"s - %i]); var diagonal=d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];})    ; var svg=d3.select(\"body\") .append(\"svg\") .attr(\"width\", radius * 2) .attr(    \"height\", radius * 2) .append(\"g\") .attr(\"transform\", \"translate(\"", labelLength);
+fprintf(outputFile," + radius     + \",\" + radius + \")\"); d3.json(\"%s\", function(error,root){ var nodes=cluster.nodes(root); var link=svg.selectAll(\"path.link\")  .data(cluster.links(nodes)).enter().append(\"path\").attr(\"class\", \"link\").on(\"click\", func", jsonFile);
+fprintf(outputFile,"tion(){d3.select(\".selectedLink\").classed(\"selectedLink\", false)    ; d3.select(this).classed(\"selectedLink\", true);}).attr(\"d\", diagonal); var     node=svg.selectAll(\"g.node\") .data(nodes).enter().append(\"g\").attr(\"class\",     \"node\").attr(\"transform\", function(d){return \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";}).on(\"click\", function(){ d3.select(\".selected\").classed(\"selected\", false); d3.select(this).classed(\"selected\", true);}).on(\"mouseover\", function(d){ var g=d3.select(this); var info=g.ap");
+fprintf(outputFile,"pend('text') .classed('info', true) .attr('x', 20) .attr('y', 10) .attr(\"transform\", function(d)    {return \"rotate(\" + (90 - d.x) + \")\";}) .text(d.distance) .style(\"font-size\"    ,\"15px\")  .style(\"font-weight\", \"bold\");}).on(\"mouseout\", function(){ d3.select(this).select('text.info').remove();}); node.append(\"circle\")  .attr(\"r\",     function(d){ if (d.name==\" \"){ return d.kids;}else return 5; }).style(\"fill\", function(d){if (d.name==\" \"){return d.whiteToBlack;}else return d3.rgb(d.    colorGroup);}); node.ap");
+fprintf(outputFile,"pend(\"text\").attr(\"dy\", \".55em\").attr(\"text-anchor\",     function(d){return d.x < 180 ? \"start\" : \"end\";}).attr(\"transform\", function    (d){return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\";}).text(function(d){return d.name;});}); d3.select(self.frameElement).style(\"height\",radius * 2 + \"px\"); </script>");
+carefulClose(&outputFile); 
 }
 
 
@@ -538,11 +599,13 @@ int size = fillInNames(list, catTwoStrings(matrixFile,".cellNames"));
 struct hacTree *clusters = NULL;
 if (clMultiThreads)
     {
+    uglyf("Using %i threads. \n", clThreads);  
     clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem,
   					    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
     }
 else
     {
+    uglyf("Using 1 threads. \n");  
     clusters = hacTreeFromItems((struct slList *)list, localMem,
 						slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
     }
@@ -556,9 +619,11 @@ else{
     generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
     }
 // Remove temporary files
-char cleanup[1024];
-safef(cleanup, 1024, "rm %s", catTwoStrings(matrixFile, ".*")); 
+char cleanup[1024], cleanup2[1024];
+safef(cleanup, 1024, "rm %s.cellNames", matrixFile); 
+safef(cleanup2, 1024, "rm %s.transposedMatrix", matrixFile); 
 mustSystem(cleanup);
+mustSystem(cleanup2);
 verbose(2,"%lld allocated at end\n", (long long)carefulTotalAllocated());
 }
 
