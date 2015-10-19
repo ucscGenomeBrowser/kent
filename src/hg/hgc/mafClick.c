@@ -15,6 +15,7 @@
 #include "hgMaf.h"
 #include "hui.h"
 #include "hCommon.h"
+#include "hubConnect.h"
 
 
 #define ADDEXONCAPITAL
@@ -513,7 +514,7 @@ if (winEnd - winStart > 30000)
     }
 else
     {
-    struct mafAli *mafList, *maf, *subList = NULL;
+    struct mafAli *mafList = NULL, *maf, *subList = NULL;
     int aliIx = 0, realCount = 0;
     char dbChrom[64];
     char option[128];
@@ -545,9 +546,16 @@ else
             }
         }
 
-    mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd,
-                                    axtOtherDb, fileName);
-    safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
+    if (sameString(tdb->type, "bigMaf"))
+        {
+        char *fileName = trackDbSetting(tdb, "bigDataUrl");
+        struct bbiFile *bbi = bigBedFileOpen(fileName);
+        mafList = bigMafLoadInRegion(bbi, seqName, winStart, winEnd);
+        }
+    else
+        mafList = mafOrAxtLoadInRegion2(conn,conn2, tdb, seqName, winStart, winEnd,
+                                        axtOtherDb, fileName);
+    safef(dbChrom, sizeof(dbChrom), "%s.%s", hubConnectSkipHubPrefix(database), seqName);
 
     safef(option, sizeof(option), "%s.speciesOrder", tdb->track);
     speciesOrder = cartUsualString(cart, option, NULL);
@@ -783,7 +791,9 @@ else
 
 static void mafOrAxtClick(struct sqlConnection *conn, struct trackDb *tdb, char *axtOtherDb)
 {
-struct sqlConnection *conn2 = hAllocConn(database);
+struct sqlConnection *conn2 = NULL;
+if (!isHubTrack(tdb->track))
+    conn2 = hAllocConn(database);
 // MAF file location is optionally in trackDb
 char *mafFile = hashFindVal(tdb->settingsHash, "mafFile");
 

@@ -3867,7 +3867,7 @@ headerItem = cloneString(item);
 if (container == NULL && wordCount > 0)
     {
     type = words[0];
-    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign")
+    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
     else if ((  sameString(type, "narrowPeak")
@@ -3962,7 +3962,7 @@ else if (wordCount > 0)
         {
 	genericMafClick(conn, tdb, item, start);
 	}
-    else if (sameString(type, "wigMaf"))
+    else if (sameString(type, "wigMaf") ||  sameString(type, "bigMaf"))
         {
 	genericMafClick(conn, tdb, item, start);
         }

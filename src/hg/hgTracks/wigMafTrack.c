@@ -287,25 +287,6 @@ if (fileName == NULL)
 return fileName;
 }
 
-static struct mafAli *bigMafLoadInRegion( struct track *track, char *chrom, int start, int end)
-/* Read in MAF blocks from bigBed. */
-{
-struct lm *lm = lmInit(0);
-struct bigBedInterval *bb, *bbList = bigBedSelectRange(track, chrom, start, end, lm);
-struct mafAli *mafList = NULL;
-for (bb = bbList; bb != NULL; bb = bb->next)
-    {
-    // the MAF block in the record as \001 instead of newlines 
-    char *mafText = replaceChars(bb->rest, "\001","\n");
-
-    struct mafFile mf;
-    mf.lf = lineFileOnString(NULL, TRUE, mafText);
-
-    struct mafAli *maf = mafNext(&mf);
-    slAddHead(&mafList, maf);
-    }
-return mafList;
-}
 
 static void loadMafsToTrack(struct track *track)
 /* load mafs in region to track custom pointer */
@@ -321,6 +302,12 @@ int begin = winStart - 2;
 if (begin < 0)
     begin = 0;
 
+if (track->isBigBed)
+    {
+    mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, begin, winEnd+2);
+    }
+else if (mp->ct)
+    {
 /* we open two connections to the database
  * that has the maf track in it.  One is
  * for the scoredRefs, the other to access
@@ -331,12 +318,6 @@ if (begin < 0)
  * one statically loaded scoredRef).
  */
 
-if (track->isBigBed)
-    {
-    mp->list = bigMafLoadInRegion(track, chromName, begin, winEnd+2);
-    }
-else if (mp->ct)
-    {
     char *fileName = getCustomMafFile(track);
 
     conn = hAllocConn(CUSTOM_TRASH);
@@ -536,7 +517,7 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
 
     if (track->isBigBed)
         {
-        mp->list = bigMafLoadInRegion(track, chromName, winStart, winEnd);
+        mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, winStart, winEnd);
         }
     else if (mp->ct)
 	{
@@ -1184,7 +1165,9 @@ else
 if (track->isBigBed)
     {
     struct lm *lm = lmInit(0);
-    struct bigBedInterval *bb, *bbList = bigBedSelectRangeExtra(track, chromName, seqStart, seqEnd, lm, "summary");
+    char *fileName = trackDbSetting(track->tdb, "summary");
+    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
     char *bedRow[7];
     char startBuf[16], endBuf[16];
 

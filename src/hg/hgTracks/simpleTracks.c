@@ -1742,7 +1742,6 @@ hFreeConn(&conn);
 struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
 /* load bigBed for a range, as a bed list (for next item button). Just grab one item */
 {
-extern struct bbiFile *fetchBbiForTrack(struct track *track);
 struct bbiFile *bbiFile = fetchBbiForTrack(tg);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr,

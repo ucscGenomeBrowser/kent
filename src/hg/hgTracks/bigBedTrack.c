@@ -54,8 +54,8 @@ if (bbi == NULL)
 return bbi;
 }
 
-struct bigBedInterval *bigBedSelectRangeExtra(struct track *track,
-	char *chrom, int start, int end, struct lm *lm, char *variableName)
+struct bigBedInterval *bigBedSelectRange(struct track *track,
+	char *chrom, int start, int end, struct lm *lm)
 /* Return list of intervals in range. */
 {
 struct bigBedInterval *result = NULL;
@@ -63,14 +63,7 @@ struct bigBedInterval *result = NULL;
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
     {
-    struct bbiFile *bbi;
-    if (variableName == NULL)
-        bbi = fetchBbiForTrack(track);
-    else
-        {
-	char *fileName = trackDbSetting(track->tdb, variableName);
-        bbi =  bigBedFileOpen(fileName);
-        }
+    struct bbiFile *bbi = fetchBbiForTrack(track);
     int maxItems = min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track)); // do not allow it to exceed BIGBEDMAXIMUMITEMS for bigBed
     result = bigBedIntervalQuery(bbi, chrom, start, end, maxItems + 1, lm);
     if (slCount(result) > maxItems)
@@ -109,13 +102,6 @@ if (errCatch->gotError)
 errCatchFree(&errCatch);
 
 return result;
-}
-
-struct bigBedInterval *bigBedSelectRange(struct track *track,
-	char *chrom, int start, int end, struct lm *lm)
-/* Return list of intervals in range. */
-{
-return bigBedSelectRangeExtra(track, chrom, start, end, lm, NULL);
 }
 
 int bbExtraFieldIndex(struct trackDb *tdb, char* fieldName)
