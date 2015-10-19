@@ -8,6 +8,7 @@
 #include "hdb.h"
 #include "trashDir.h"
 #include "hgc.h"
+#include "jsHelper.h"
 
 #include "rainbow.h"
 #include "hvGfx.h"
@@ -15,6 +16,44 @@
 #include "gtexGeneBed.h"
 #include "gtexTissue.h"
 #include "gtexSampleData.h"
+
+boolean doLogTransform = FALSE;
+struct gtexGeneBed *gtexGene = NULL;
+
+struct tissueSampleVals
+/* RPKM expression values for multiple samples */
+    {
+    struct tissueSampleVals *next;
+    char *description;  /* GTEx tissue description */
+    int color;          /* GTEx tissue color */
+    int count;          /* number of samples */
+    double *vals;       /* RPKM values */
+    double min, max;    /* minimum, maximum value */
+    double q1, median, q3;      /* quartiles */
+    struct slDouble *valList;   /* used to create val array */
+    };
+
+int cmpTissueSampleValsMedianScore(const void *va, const void *vb)
+/* Compare RPKM scores */
+{
+const struct tissueSampleVals *a = *((struct tissueSampleVals **)va);
+const struct tissueSampleVals *b = *((struct tissueSampleVals **)vb);
+if (a->median == b->median)
+    return 0;
+return (a->median > b->median ? 1: -1);
+}
+
+void d3GtexBoxplot(struct tissueSampleVals *tsvList)
+{
+//puts("<script src='http://www.d3plus.org/js/d3.js'></script>\n");
+//puts("<script src='http://www.d3plus.org/js/d3plus.js'></script>\n");
+printf("<div id='expGraph'></div>\n");
+jsIncludeFile("d3.min.js", NULL);
+jsIncludeFile("d3plus.gtex.js", NULL);
+jsTrackingVar("geneName", gtexGene->name);
+jsTrackingVar("geneId", gtexGene->geneId);
+jsIncludeFile("gtex.js", NULL);
+}
 
 /* Dimensions of image parts */
 int pad = 2;
@@ -51,19 +90,6 @@ struct rgbColor rgbFromIntColor(int color)
 return (struct rgbColor){.r=COLOR_32_BLUE(color), .g=COLOR_32_GREEN(color), .b=COLOR_32_RED(color)};
 }
 
-struct tissueSampleVals
-/* RPKM expression values for multiple samples */
-    {
-    struct tissueSampleVals *next;
-    char *description;  /* GTEx tissue description */
-    int color;          /* GTEx tissue color */
-    int count;          /* number of samples */
-    double *vals;       /* RPKM values */
-    double min, max;    /* minimum, maximum value */
-    double q1, median, q3;      /* quartiles */
-    struct slDouble *valList;   /* used to create val array */
-    };
-
 int valToY(double val, double maxVal, int height)
 /* Convert a value from 0 to maxVal to 0 to height-1 */
 {
@@ -95,16 +121,6 @@ for (i=0; i<size; ++i)
         hvGfxDot(hvg, xOff, y+1, colorIx);
         }
     }
-}
-
-int cmpTissueSampleValsMedianScore(const void *va, const void *vb)
-/* Compare RPKM scores */
-{
-const struct tissueSampleVals *a = *((struct tissueSampleVals **)va);
-const struct tissueSampleVals *b = *((struct tissueSampleVals **)vb);
-if (a->median == b->median)
-    return 0;
-return (a->median > b->median ? 1: -1);
 }
 
 void drawBoxAndWhiskers(struct hvGfx *hvg, int fillColorIx, int x, int y, 
@@ -164,103 +180,9 @@ if (tsv->count > 1)
     }
 }
 
-void doGtexGeneExpr(struct trackDb *tdb, char *item)
-/* Details of GTEX gene expression item */
+
+void drawGtexBoxplot(struct tissueSampleVals *tsList, double maxVal)
 {
-// Load item from table */
-
-// TODO:  Get full details from Data table 
-//char sampleTable[128];
-//safef(sampleTable, sizeof(able), "%sSampleData", tdb->table);
-
-struct sqlConnection *conn = hAllocConn(database);
-char **row;
-char query[512];
-struct sqlResult *sr;
-struct gtexGeneBed *gtexGene = NULL;
-int expCount = 0;
-if (sqlTableExists(conn, tdb->table))
-    {
-    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, item);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row != NULL)
-        {
-        gtexGene = gtexGeneBedLoad(row);
-        expCount = gtexGene->expCount;
-        }
-    sqlFreeResult(&sr);
-    }
-hFreeConn(&conn);
-
-genericHeader(tdb, item);
-
-if (gtexGene != NULL)
-    {
-    // TODO: link to UCSC gene
-    printf("<b>Gene:</b> %s</a></br>", gtexGene->name);
-    printf("<b>Ensembl ID:</b> %s<br>\n", gtexGene->geneId);
-    printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
-    puts("<p>");
-    }
-
-// Get full sample data for this gene
-char *sampleDataTable = "gtexSampleData";
-conn = hAllocConn("hgFixed");
-assert(sqlTableExists(conn, sampleDataTable));
-sqlSafef(query, sizeof(query), "select * from %s where geneId='%s'", 
-                sampleDataTable, gtexGene->geneId);
-sr = sqlGetResult(conn, query);
-struct hash *tsHash = hashNew(0);
-struct tissueSampleVals *tsv;
-struct hashEl *hel;
-struct slDouble *val;
-double maxVal = 0;
-struct gtexSampleData *sd = NULL;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    sd = gtexSampleDataLoad(row);
-    if ((hel = hashLookup(tsHash, sd->tissue)) == NULL)
-        {
-        AllocVar(tsv);
-        hashAdd(tsHash, sd->tissue, tsv);
-        }
-    else
-        tsv = (struct tissueSampleVals *)hel->val;
-    maxVal = max(maxVal, sd->score);
-    val = slDoubleNew(sd->score);
-    slAddHead(&tsv->valList, val);
-    }
-
-// Fill in tissue descriptions, fill values array and calculate stats for plotting
-// Then make a list, suitable for sorting by tissue or score
-struct gtexTissue *tis = NULL, *tissues = gtexGetTissues();
-struct tissueSampleVals *tsList = NULL;
-int i;
-boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
-                                                GTEX_LOG_TRANSFORM_DEFAULT);
-if (doLogTransform)
-    maxVal = log10(maxVal+1.0);
-for (tis = tissues; tis != NULL; tis = tis->next)
-    {
-    tsv = hashMustFindVal(tsHash, tis->name);
-    tsv->description = tis->description;
-    tsv->color = tis->color;
-    int count = tsv->count = slCount(tsv->valList);
-    double *vals = AllocArray(tsv->vals, count);
-    for (i=0; i<count; i++)
-        {
-        val = slPopHead(&tsv->valList);
-        if (doLogTransform)
-            vals[i] = log10(val->val+1.0);
-        else
-            vals[i] = val->val;
-        }
-    doubleBoxWhiskerCalc(tsv->count, tsv->vals, 
-                                &tsv->min, &tsv->q1, &tsv->median, &tsv->q3, &tsv->max);
-    slAddHead(&tsList, tsv);
-    }
-
 // Tissue list is now sorted by GTEx tissue ordering.  
 // Sort by score descending.
 slSort(&tsList, cmpTissueSampleValsMedianScore);
@@ -276,6 +198,7 @@ struct hvGfx *hvg = hvGfxOpenPng(imageWidth, imageHeight, pngTn.forCgi, FALSE);
 //hvGfxSetClip(hvg, 0, 0, imageWidth, imageHeight); // needed ?
 
 int x=innerXoff + pad, y = innerYoff + pad;
+struct tissueSampleVals *tsv;
 for (tsv = tsList; tsv != NULL; tsv = tsv->next)
     {
     struct rgbColor fillColor = rgbFromIntColor(tsv->color);
@@ -352,6 +275,107 @@ printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
                 pngTn.forHtml, imageWidth, imageHeight);
 */
 //cloneString(gifTn.forHtml);
+}
+void doGtexGeneExpr(struct trackDb *tdb, char *item)
+/* Details of GTEX gene expression item */
+{
+// Load item from table */
+
+// TODO:  Get full details from Data table 
+//char sampleTable[128];
+//safef(sampleTable, sizeof(able), "%sSampleData", tdb->table);
+
+struct sqlConnection *conn = hAllocConn(database);
+char **row;
+char query[512];
+struct sqlResult *sr;
+int expCount = 0;
+if (sqlTableExists(conn, tdb->table))
+    {
+    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", tdb->table, item);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        gtexGene = gtexGeneBedLoad(row);
+        expCount = gtexGene->expCount;
+        }
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+
+genericHeader(tdb, item);
+
+if (gtexGene != NULL)
+    {
+    // TODO: link to UCSC gene
+    printf("<b>Gene:</b> %s</a></br>", gtexGene->name);
+    printf("<b>Ensembl ID:</b> %s<br>\n", gtexGene->geneId);
+    printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
+    puts("<p>");
+    }
+
+// Get full sample data for this gene
+char *sampleDataTable = "gtexSampleData";
+conn = hAllocConn("hgFixed");
+assert(sqlTableExists(conn, sampleDataTable));
+sqlSafef(query, sizeof(query), "select * from %s where geneId='%s'", 
+                sampleDataTable, gtexGene->geneId);
+sr = sqlGetResult(conn, query);
+struct hash *tsHash = hashNew(0);
+struct tissueSampleVals *tsv;
+struct hashEl *hel;
+struct slDouble *val;
+double maxVal = 0;
+struct gtexSampleData *sd = NULL;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sd = gtexSampleDataLoad(row);
+    if ((hel = hashLookup(tsHash, sd->tissue)) == NULL)
+        {
+        AllocVar(tsv);
+        hashAdd(tsHash, sd->tissue, tsv);
+        }
+    else
+        tsv = (struct tissueSampleVals *)hel->val;
+    maxVal = max(maxVal, sd->score);
+    val = slDoubleNew(sd->score);
+    slAddHead(&tsv->valList, val);
+    }
+
+// Fill in tissue descriptions, fill values array and calculate stats for plotting
+// Then make a list, suitable for sorting by tissue or score
+struct gtexTissue *tis = NULL, *tissues = gtexGetTissues();
+struct tissueSampleVals *tsList = NULL;
+int i;
+doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
+                                                GTEX_LOG_TRANSFORM_DEFAULT);
+if (doLogTransform)
+    maxVal = log10(maxVal+1.0);
+for (tis = tissues; tis != NULL; tis = tis->next)
+    {
+    tsv = hashMustFindVal(tsHash, tis->name);
+    tsv->description = tis->description;
+    tsv->color = tis->color;
+    int count = tsv->count = slCount(tsv->valList);
+    double *vals = AllocArray(tsv->vals, count);
+    for (i=0; i<count; i++)
+        {
+        val = slPopHead(&tsv->valList);
+        if (doLogTransform)
+            vals[i] = log10(val->val+1.0);
+        else
+            vals[i] = val->val;
+        }
+    doubleBoxWhiskerCalc(tsv->count, tsv->vals, 
+                                &tsv->min, &tsv->q1, &tsv->median, &tsv->q3, &tsv->max);
+    slAddHead(&tsList, tsv);
+    }
+// TODO: Remove one
+if (cgiBoolean("d3"))
+    d3GtexBoxplot(tsList);
+else
+    drawGtexBoxplot(tsList, maxVal);
 
 // Track description
 printTrackHtml(tdb);
