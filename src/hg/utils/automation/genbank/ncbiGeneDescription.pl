@@ -83,7 +83,8 @@ in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/"
 <b>genePred file format: </b><a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/$accAsm.ncbiGene.ncbi.genePred.gz" target=_blank>$accAsm.ncbiGene.ncbi.genePred.gz</a>
 </p>
 <p>
-Return to <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
+Return to UCSC naming <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.html">$groupName</a> assembly hub index.<br>
+Return to NCBI naming <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
 </p>
 _EOF_
    ;
