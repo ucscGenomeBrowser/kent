@@ -197,6 +197,7 @@ if (withHtmlHeader)
     *ptr1 = 0;
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
+    printf ("<base href=\".\">\n");
     webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
