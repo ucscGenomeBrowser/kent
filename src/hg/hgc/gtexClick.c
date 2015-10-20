@@ -43,6 +43,48 @@ if (a->median == b->median)
 return (a->median > b->median ? 1: -1);
 }
 
+void RGtexBoxplot(struct tissueSampleVals *tsvList)
+{
+// Tissue list is now sorted by GTEx tissue ordering.  
+// Sort by score descending.
+slSort(&tsvList, cmpTissueSampleValsMedianScore);
+slReverse(&tsvList);
+
+// Create R data frame
+struct tempName dfTn;
+trashDirFile(&dfTn, "hgc", "gtexGene", ".df.txt");
+FILE *f = fopen(dfTn.forCgi, "w");
+if (f == NULL)
+    errAbort("can't create temp file %s", dfTn.forCgi);
+fprintf(f, "sample\ttissue\trpkm\n");
+struct tissueSampleVals *tsv;
+int i;
+int sampleId=1;
+for (tsv = tsvList; tsv != NULL; tsv = tsv->next)
+    {
+    int count = tsv->count;
+    for (i=0; i<count; i++)
+        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->description, tsv->vals[i]);
+    }
+fclose(f);
+
+// Plot to PNG file
+struct tempName pngTn;
+trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
+char cmd[256];
+// Exec R in quiet mode, without reading/saving environment or workspace
+safef(cmd, sizeof(cmd), "Rscript --gui=X11 --vanilla --slave gtex/geneBoxplot.R %s %s %s",  
+                                gtexGene->name, dfTn.forCgi, pngTn.forHtml);
+int ret = system(cmd);
+if (ret == 0)
+    {
+    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    /*printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
+                    pngTn.forHtml, imageWidth, imageHeight);
+    */
+    }
+}
+
 void d3GtexBoxplot(struct tissueSampleVals *tsvList)
 {
 //puts("<script src='http://www.d3plus.org/js/d3.js'></script>\n");
@@ -309,7 +351,7 @@ genericHeader(tdb, item);
 if (gtexGene != NULL)
     {
     // TODO: link to UCSC gene
-    printf("<b>Gene:</b> %s</a></br>", gtexGene->name);
+    printf("<b>Gene:</b> %s<br>", gtexGene->name);
     printf("<b>Ensembl ID:</b> %s<br>\n", gtexGene->geneId);
     printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
     puts("<p>");
@@ -372,8 +414,11 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     slAddHead(&tsList, tsv);
     }
 // TODO: Remove one
-if (cgiBoolean("d3"))
+char *viz = cgiUsualString("viz", "c");
+if (sameString(viz, "d3"))
     d3GtexBoxplot(tsList);
+else if (sameString(viz, "R"))
+    RGtexBoxplot(tsList);
 else
     drawGtexBoxplot(tsList, maxVal);
 
