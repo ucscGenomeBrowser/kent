@@ -418,13 +418,13 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     slAddHead(&tsList, tsv);
     }
 // TODO: Remove one
-char *viz = cgiUsualString("viz", "c");
+char *viz = cgiUsualString("viz", "R");
 if (sameString(viz, "d3"))
     d3GtexBoxplot(tsList);
-else if (sameString(viz, "R"))
-    RGtexBoxplot(tsList);
-else
+else if (sameString(viz, "c"))
     drawGtexBoxplot(tsList, maxVal);
+else
+    RGtexBoxplot(tsList);
 
 // Track description
 printTrackHtml(tdb);
