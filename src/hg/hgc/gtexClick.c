@@ -74,15 +74,17 @@ struct tempName pngTn;
 trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
 char cmd[256];
 // Exec R in quiet mode, without reading/saving environment or workspace
-safef(cmd, sizeof(cmd), "Rscript --gui=X11 --vanilla --slave gtex/geneBoxplot.R %s %s %s",  
-                                gtexGene->name, dfTn.forCgi, pngTn.forHtml);
+//safef(cmd, sizeof(cmd), "Rscript --gui=X11 --vanilla --slave gtex/geneBoxplot.R %s %s %s",  
+safef(cmd, sizeof(cmd), "Rscript --vanilla --slave gtex/geneBoxplot.R %s %s %s %s",  
+                                gtexGene->name, dfTn.forCgi, pngTn.forHtml, 
+                                doLogTransform ? "log=TRUE" : "log=FALSE");
 int ret = system(cmd);
 if (ret == 0)
     {
-    //printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
-    printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
+    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    //printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
                     //pngTn.forHtml, imageWidth, imageHeight);
-                    pngTn.forHtml, 900, 500);
+                    //pngTn.forHtml, 900, 500);
     }
 }
 
