@@ -24,6 +24,7 @@ struct tissueSampleVals
 /* RPKM expression values for multiple samples */
     {
     struct tissueSampleVals *next;
+    char *name;         /* GTEx tissue name */
     char *description;  /* GTEx tissue description */
     int color;          /* GTEx tissue color */
     int count;          /* number of samples */
@@ -64,7 +65,7 @@ for (tsv = tsvList; tsv != NULL; tsv = tsv->next)
     {
     int count = tsv->count;
     for (i=0; i<count; i++)
-        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->description, tsv->vals[i]);
+        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->name, tsv->vals[i]);
     }
 fclose(f);
 
@@ -78,10 +79,10 @@ safef(cmd, sizeof(cmd), "Rscript --gui=X11 --vanilla --slave gtex/geneBoxplot.R 
 int ret = system(cmd);
 if (ret == 0)
     {
-    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
-    /*printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
-                    pngTn.forHtml, imageWidth, imageHeight);
-    */
+    //printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
+                    //pngTn.forHtml, imageWidth, imageHeight);
+                    pngTn.forHtml, 900, 500);
     }
 }
 
@@ -397,6 +398,7 @@ if (doLogTransform)
 for (tis = tissues; tis != NULL; tis = tis->next)
     {
     tsv = hashMustFindVal(tsHash, tis->name);
+    tsv->name = tis->name;
     tsv->description = tis->description;
     tsv->color = tis->color;
     int count = tsv->count = slCount(tsv->valList);
