@@ -11,13 +11,11 @@
 #include "hacTree.h"
 #include "rainbow.h" 
 
-boolean clForceLayout = FALSE; // Prints the data in .json format for d3 force layout visualizations
 boolean clCSV = FALSE; // Converts the comma separated matrix into a tab based file. 
 boolean clMultiThreads = FALSE; // Allows the user to run the program with multiple threads, default is off. 
 int clThreads = 10; // The number of threads to run with the multiThreads option
 int clMemLim = 4; // The amount of memeory the program can use, read in Gigabytes. 
-int target = 0;  // Used for the target value in rlinkJson.
-float longest = 0;  // Used to normalize link distances in rlinkJson.
+float clLongest = 0;  // Used to normalize link distances in rlinkJson.
 char* clDescFile = NULL; // The user can provide a description file 
 char* clAttributeTable = NULL; // The user can provide an attributes table... this may get removed soon.  
 int nodeCount; //The number of nodes. 
@@ -32,25 +30,22 @@ errAbort(
     "usage:\n"
     "   expMatrixToJson [options] matrix output\n"
     "options:\n"
-    "    -multiThreads    The program will run on multiple threads. \n"
-    "    -forceLayout    Prints the output in .json format for d3 forceLayouts. NOTE no .html file will be \n"
-    "                    generated using this option.\n"
-    "    -CSV    The input matrix is in .csv format. \n"
-    "    -threads=int    Sets the thread count for the multiThreads option, default is 10 \n"
-    "    -memLim=int    Sets the amount of memeory the program can use before aborting. The default is 4G. \n"
-    "    -descFile=string    The user is providing a description file. The description file must provide a \n"
-    "                  description for each cell line in the expression matrix. There should be one description per \n" 
-    "                  line, starting on the left side of the expression matrix. The description will appear over a \n" 
-    "                  leaf node when hovered over.\n"
-    "    -verbose=2    Show basic run stats. \n"
-    "    -verbose=3    Show all run stats. \n" 
+    "    -multiThreads      The program will run on multiple threads. \n"
+    "    -CSV               The input matrix is in .csv format. \n"
+    "    -threads=int       Sets the thread count for the multiThreads option, default is 10 \n"
+    "    -memLim=int        Sets the amount of memeory the program can use before aborting. The default is 4G. \n"
+    "    -verbose=2         Show basic run stats. \n"
+    "    -verbose=3         Show all run stats. Very ugly, avoid at all costs. \n" 
+    "    -descFile=string   The user is providing a description file. The description file must provide a \n"
+    "                       description for each cell line in the expression matrix. There should be one description per \n" 
+    "                       line, starting on the left side of the expression matrix. The description will appear over a \n" 
+    "                       leaf node when hovered over.\n"
     );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"multiThreads", OPTION_BOOLEAN},
-   {"forceLayout", OPTION_BOOLEAN},
    {"CSV", OPTION_BOOLEAN},
    {"threads", OPTION_INT},
    {"memLim", OPTION_INT},
@@ -58,23 +53,6 @@ static struct optionSpec options[] = {
    {"attributeTable", OPTION_STRING},
    {NULL, 0},
 };
-
-struct jsonNodeLine
-/* Stores the information for a single json node line */
-    {
-    struct jsonNodeLine *next;
-    char* name;		// the source for a given link
-    double distance;	// the distance for a given link
-    };
-
-struct jsonLinkLine
-/* Stores the information for a single json link line */
-    {
-    struct jsonLinkLine *next;
-    int source;		// the source for a given link
-    int target;		// the target for a given link
-    double distance;	// the distance for a given link
-    };
 
 struct bioExpVector
 /* Contains expression information for a biosample on many genes. */
@@ -90,7 +68,7 @@ struct bioExpVector
 
 double stringToDouble(char *s)
 /* Convert string to a double.  Assumes all of string is number
- * and aborts on an error. */
+ * and aborts on an error. Errors on 'nan'*/
 {
 char* end;
 double val = strtod(s, &end);
@@ -102,7 +80,7 @@ return val;
 }
 
 struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
-// Read a tab-delimited file and return list of bioExpVector.
+/* Read a tab-delimited file and return list of bioExpVectors */
 {
 int vectorSize = 0;
 struct lineFile *lf = lineFileOpen(matrixFile, TRUE);
@@ -121,7 +99,7 @@ while (lineFileNextReal(lf, &line))
     AllocVar(el);
     AllocArray(el->vector, vectorSize);
     el->count = chopByWhite(line, row, vectorSize);
-//    assert(el->count == vectorSize);
+    assert(el->count == vectorSize);
     int i;
     for (i = 0; i < el->count; ++i)
 	el->vector[i] = stringToDouble(row[i]);
@@ -132,7 +110,6 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
-
 
 int fillInNames(struct bioExpVector *list, char *nameFile)
 /* Fill in name field from file. */
@@ -160,165 +137,13 @@ while (lineFileNextReal(lf, &line))
        else
            el->desc = cloneString("0");
        }
-
     el = el->next;
     }
-
 if (el != NULL)
     errAbort("More items in matrix file than %s", nameFile);
-
 lineFileClose(&lf);
 return maxSize; 
 }
-
-void printJsonNodeLine(FILE *f, struct jsonNodeLine *node)
-{
-fprintf(f,"    %s\"%s\"%s\"%s\"%s", "{","name", ":", node->name, ",");
-fprintf(f,"\"%s\"%s%0.31f%s\n", "y", ":" , node->distance, "},");
-}
-
-void printEndJsonNodeLine(FILE *f, struct jsonNodeLine *node)
-{
-fprintf(f,"    %s\"%s\"%s\"%s\"%s", "{","name", ":", node->name, ",");
-fprintf(f,"\"%s\"%s%0.31f%s\n", "y", ":" , node->distance, "}");
-}
-
-void printJsonLinkLine(FILE *f, struct jsonLinkLine *links)
-/* Prints out a single json link line */
-{
-fprintf(f,"    %s\"%s\"%s%d%s", "{","source", ":", links->source, ",");
-fprintf(f,"\"%s\"%s%d%s", "target", ":" , links->target, ",");  
-fprintf(f,"\"%s\"%s%0.31f%s\n", "distance", ":" , links->distance , "},");  
-}
-
-void printEndJsonLinkLine(FILE *f, struct jsonLinkLine *links)
-/* Prints out a single json link line */
-{
-fprintf(f,"    %s\"%s\"%s%d%s", "{","source", ":", links->source, ",");
-fprintf(f,"\"%s\"%s%d%s", "target", ":" , links->target, ",");  
-fprintf(f,"\"%s\"%s%0.31f%s\n", "distance", ":" , links->distance , "}");  
-}
-
-void rPrintNodes(FILE *f, struct hacTree *tree, struct jsonNodeLine *nodes)
-// Recursively adds the node information to a linked list
-{
-char *tissue = ((struct bioExpVector *)(tree->itemOrCluster))->name;
-if (tree->childDistance != 0) 
-    // If the current object is a node then we assign no name.
-    {
-    struct jsonNodeLine *nNode;
-    AllocVar(nNode);
-    nNode->name = " ";
-    nNode->distance = tree->childDistance;
-    slAddHead(nodes, nNode); // add the node
-    }
-else {
-    // Otherwise the current object is a leaf, and the tissue name is printed. 
-    struct jsonNodeLine *lNode;
-    AllocVar(lNode);
-    lNode->name = tissue;
-    lNode->distance = tree->childDistance;
-    slAddHead(nodes, lNode); // add the node
-    }
-
-if (tree->left == NULL && tree->right == NULL)
-    // Stop at the last element
-    { 
-    return;
-    }
-else if (tree->left == NULL || tree->right == NULL)
-    errAbort("\nHow did we get a node with one NULL kid??");
-rPrintNodes(f, tree->left, nodes);
-rPrintNodes(f, tree->right, nodes);
-}
-
-
-void rPrintLinks(FILE *f, struct hacTree *tree, int source, struct jsonLinkLine *links)
-// Recursively loadslist->children = 0 ;  the link information into a linked list
-{
-if (tree->childDistance > longest)
-    // the first distance will be the longest, and is used for normalization
-    longest = tree->childDistance;
-if (tree->left == NULL && tree->right == NULL)
-    // Stop at the last element
-    { 
-    return;
-    }
-else if (tree->left == NULL || tree->right == NULL)
-    errAbort("\nHow did we get a node with one NULL kid??");
-
-// Left recursion.
-struct jsonLinkLine *lLink;
-AllocVar(lLink);
-++target;
-lLink->source = target - 1;	 // The source and target are always ofset by 1. 
-lLink->target = target;
-lLink->distance = 100*(tree->childDistance/longest);	//Calculates the link distance
-source = target;		// Prepares the source for the right recursion. 
-slAddHead(links, lLink); 	// Add the link
-rPrintLinks(f, tree->left, source, links);
-
-// Right recursion.
-struct jsonLinkLine *rLink;
-AllocVar(rLink);
-++target;
-rLink->source = source - 1;	// The source is dependent on the last target of the left recursion
-rLink->target = target;	
-rLink->distance = 100*(tree->childDistance/longest);
-slAddHead(links, rLink);		// Add the link
-rPrintLinks(f, tree->right, ++source, links);
-}
-
-void printForceLayoutJson(FILE *f, struct hacTree *tree)
-// Prints the hacTree into a .json file format for d3 forceLayout visualizations.
-{
-// Basic json template for d3 visualizations
-fprintf(f,"%s\n", "{");
-fprintf(f,"  \"%s\"%s\n", "nodes", ":[" );
-
-// Print the nodes
-struct jsonNodeLine *nodes;
-AllocVar(nodes);
-rPrintNodes(f, tree, nodes);
-slReverse(&nodes);
-int nodeCount = slCount(nodes);
-int j;
-for (j = 0; j < nodeCount -1; ++j)
-   // iterate through the linked nodelist printing nodes
-   {
-   if (j == nodeCount - 2)
-       printEndJsonNodeLine(f, nodes);
-   else
-       {
-       printJsonNodeLine(f, nodes);
-       nodes = nodes -> next;
-       }
-   }
-fprintf(f,  "%s\n", "],");
-fprintf(f,  "\"%s\"%s\n", "links", ":[" );
-
-// Print the links
-struct jsonLinkLine *links;
-AllocVar(links);
-rPrintLinks(f,tree, 0, links);
-slReverse(&links);
-int linkCount = slCount(links);
-int i;
-for (i = 0; i< linkCount -1; ++i)
-   // iterate through the linked linklist printing links
-   {
-   if (i == linkCount - 2)
-       printEndJsonLinkLine(f, links);
-   else
-       {
-       printJsonLinkLine(f, links);
-       links = links -> next;
-       }
-   }
-fprintf(f,"  %s\n", "]");
-fprintf(f,"%s\n", "}");
-}
-
 
 static void rAddLeaf(struct hacTree *tree, struct slRef **pList)
 /* Recursively add leaf to list */
@@ -348,9 +173,9 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
 struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
 char *tissue = bio->name;
 struct rgbColor colors = bio->color;
-if (tree->childDistance > longest)
-    // the first distance will be the longest, and is used for normalization
-    longest = tree->childDistance;
+if (tree->childDistance > clLongest)
+    /* In practice the first distance will be the longest, and is used for normalization. */ 
+    clLongest = tree->childDistance;
 int i;
 for (i = 0;  i < level;  i++)
     fputc(' ', f); // correct spacing for .json format
@@ -368,14 +193,13 @@ else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
 
 // Prints out the node object and opens a new children block.
-//fprintf(f, "{\"%s\"%s \"%s\"%s", "name", ":", " ", ",");
-fprintf(f, "{\"name\": \" \", \"kids\": \"%f\",  \"colorGroup\": \"rgb(%i,%i,%i)\",",sqrt(bio->children), colors.r,colors.g,colors.b);
-//fprintf(f, "\"colorGroup\": \"rgb(%i,%i,%i)\",", colors.r, colors.g, colors.b );
-distance = tree->childDistance/longest; 
+fprintf(f, "{\"name\": \" \", \"longestDistance\":\"%f\", \"tpmDistance\": \"%f\", \"kids\": \"%f\",  \"colorGroup\": \"rgb(%i,"
+	    "%i,%i)\",",clLongest,tree->childDistance,sqrt(bio->children), colors.r,colors.g,colors.b);
+distance = tree->childDistance/clLongest; 
 if (distance != distance) distance = 0;
 //fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", 100*distance, ",");
 struct rgbColor wTB; 
-if (distance == 0) {wTB = whiteToBlackRainbowAtPos(.95-(distance*.95));}
+if (distance == 0) {wTB = whiteToBlackRainbowAtPos(.95);}
 else  {wTB = whiteToBlackRainbowAtPos(.95-(sqrt(distance)*.95));}
 fprintf(f, "\"distance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\",\n", 100*distance, wTB.r, wTB.g, wTB.b);
 for (i = 0;  i < level + 1;  i++)
@@ -456,73 +280,45 @@ return (struct slList *)(el);
 void colorLeaves(struct slRef *leafList)
 /* Assign colors of rainbow to leaves. */
 {
-/* Loop through list once to figure out total, since we need to
- * normalize */
 float total = 0.0;
 double purplePos = 0.80;
 struct slRef *el, *nextEl;
-for (el = leafList; el != NULL; el = nextEl)
-   {
-   nextEl = el->next;
-   if (nextEl == NULL)
-       break;
-   struct bioExpVector *bio1 = el->val;
-   struct bioExpVector *bio2 = nextEl->val;
-   double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
-   if (distance != distance ) distance = 0;
-   total += distance;
-    }
-if (total == 0) errAbort("There doesn't seem to be any difference between these matrix columns"); 
-/* Loop through list a second time to generate actual colors. */
-double soFar = 0;
-for (el = leafList; el != NULL; el = nextEl)
-   {
-   nextEl = el->next;
-   if (nextEl == NULL)
-       break;
-   struct bioExpVector *bio1 = el->val;
-   struct bioExpVector *bio2 = nextEl->val;
-   double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
-   if (distance != distance ) distance = 0 ;
-   soFar += distance;
-   double normalized = soFar/total;
-   bio2->color = saturatedRainbowAtPos(normalized*purplePos);// *purplePos
-   }
 
-/* Set first color to correspond to 0, since not set in above loop */
-struct bioExpVector *bio = leafList->val;
-bio->color = saturatedRainbowAtPos(0);
-}
-
-
-void colorLeavesFromAttbFile(struct slRef *leafList, char *attributef, char *colorHash)
-/* Assign colors of rainbow to leaves using a weird attribute file. 
- * And a hashing file that corresponds the group to a color. */
-{
-struct hash *hT = hashTwoColumnFile(attributef);
-struct slRef *el, *nextEl;
+/* Loop through list once to figure out total, since we need to normalize */
 for (el = leafList; el != NULL; el = nextEl)
     {
     nextEl = el->next;
     if (nextEl == NULL)
 	break;
-    struct bioExpVector *bio = el->val;
-    struct hashEl *hEl = hashLookup(hT, bio->name);
-    float *something = hEl->val; 
-    double normalized = *something / 10.0 ;
-    bio->color = saturatedRainbowAtPos(normalized); 
+    struct bioExpVector *bio1 = el->val;
+    struct bioExpVector *bio2 = nextEl->val;
+    double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+    if (distance != distance ) distance = 0;
+    total += distance;
     }
 
+if (total == 0) errAbort("There doesn't seem to be any difference between these matrix columns. Aborting."); 
+
+double soFar = 0;
+/* Loop through list a second time to generate actual colors. */
+for (el = leafList; el != NULL; el = nextEl)
+    {
+    nextEl = el->next;
+    if (nextEl == NULL)
+	break;
+    struct bioExpVector *bio1 = el->val;
+    struct bioExpVector *bio2 = nextEl->val;
+    double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
+    if (distance != distance ) distance = 0 ;
+    soFar += distance;
+    double normalized = soFar/total;
+    bio2->color = saturatedRainbowAtPos(normalized*purplePos);
+    }
+
+/* Set first color to correspond to 0, since not set in above loop */
+struct bioExpVector *bio = leafList->val;
+bio->color = saturatedRainbowAtPos(0);
 }
-
-//void verifyInput(char *expMatrix)
-/* This program keeps on breaking on weird matrix column values, hopefully this 
- * function will weed these issues out.  It will be set on by default and can be
- * turned off for speed with a flag */ 
-//{
-//char cmd1[1024], cmd2[1024]; 
-//}
-
 
 void convertInput(char *expMatrix, char *descFile, bool csv)
 /* Takes in a expression matrix and makes the inputs that this program will use. 
@@ -538,6 +334,7 @@ if (csv)
     verbose(2,"%s\n", cmd3);
     mustSystem(cmd3); 
     }
+
 safef(cmd1, 1024, "cat %s | sed '1d' | rowsToCols stdin %s.transposedMatrix", expMatrix, expMatrix); 
 /* Exp matrices are X axis of cell lines and Y axis of transcripts. This causes long Y axis and short
  * X axis, which are not handled well in C.  The matrix is transposed to get around this issue. */ 
@@ -589,6 +386,10 @@ void expData(char *matrixFile, char *outDir, char *descFile)
 /* Read matrix and names into a list of bioExpVectors, run hacTree to
  * associate them, and write output. */
 {
+verbose(2,"Start binary clustering of the expression matrix by euclidean distance (expMatrixToJson).\n");
+clock_t begin, end; 
+begin = clock(); 
+
 convertInput(matrixFile, descFile, clCSV); 
 struct bioExpVector *list = bioExpVectorListFromFile(catTwoStrings(matrixFile,".transposedMatrix"));
 verbose(2,"%lld allocated after bioExpVectorListFromFile\n", (long long)carefulTotalAllocated());
@@ -597,41 +398,42 @@ struct lm *localMem = lmInit(0);
 int size = fillInNames(list, catTwoStrings(matrixFile,".cellNames"));
 /* Allocate new string that is a concatenation of two strings. */
 struct hacTree *clusters = NULL;
+
 if (clMultiThreads)
     {
-    uglyf("Using %i threads. \n", clThreads);  
+    verbose(2,"Using %i threads. \n", clThreads);  
     clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem,
   					    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
     }
 else
     {
-    uglyf("Using 1 threads. \n");  
+    verbose(2,"Using 1 threads. \n");  
     clusters = hacTreeFromItems((struct slList *)list, localMem,
 						slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
     }
+
 struct slRef *orderedList = getOrderedLeafList(clusters);
 colorLeaves(orderedList);
-if (clForceLayout)
-    printForceLayoutJson(f,clusters);
-else{
-    printHierarchicalJson(f, clusters);
-    FILE *htmlF = mustOpen(catTwoStrings(outDir,".html"),"w");
-    generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
-    }
+printHierarchicalJson(f, clusters);
+FILE *htmlF = mustOpen(catTwoStrings(outDir,".html"),"w");
+generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
+
 // Remove temporary files
 char cleanup[1024], cleanup2[1024];
 safef(cleanup, 1024, "rm %s.cellNames", matrixFile); 
 safef(cleanup2, 1024, "rm %s.transposedMatrix", matrixFile); 
 mustSystem(cleanup);
 mustSystem(cleanup2);
-verbose(2,"%lld allocated at end\n", (long long)carefulTotalAllocated());
+end = clock(); 
+verbose(2,"%lld allocated at end. The program took %f seconds to complete.\n", (long long)carefulTotalAllocated(), (double)(end-begin)/CLOCKS_PER_SEC);
+
+verbose(2,"Completed binary clustering of the expression matrix by euclidean distance (expMatrixToJson).\n");
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-clForceLayout = optionExists("forceLayout");
 clCSV = optionExists("CSV");
 clMultiThreads = optionExists("multiThreads");
 clThreads = optionInt("threads", clThreads);
