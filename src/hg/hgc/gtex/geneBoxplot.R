@@ -27,8 +27,9 @@ tissueMedianFrame <- data.frame(orderedLevels, 1:count)
 # TODO: rename columns
 dfColors <- merge(tissueMedianFrame, tissueColors, by.x="orderedLevels", by.y="labels")
 orderedColors <- as.vector(dfColors[with(dfColors, order(X1.count)),]$colorsHex)
+orderedLabels <- as.vector(dfColors[with(dfColors, order(X1.count)),]$orderedLevels)
 colorsHex <- orderedColors
-labels <- names(table(tissueMedianFrame$orderedLevels))
+labels <- orderedLabels
 
 # draw graph
 png(file=outFile, width=900, height=500)

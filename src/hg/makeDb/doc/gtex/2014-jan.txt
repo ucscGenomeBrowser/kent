@@ -199,3 +199,18 @@ cd /hive/data/outside/GTEx/2014-01-17/outDirs/
 hgLoadSqlTab hgFixed gtex2TissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql output6/gtex2TissueMedian.tab
 
 
+# Experiment with R plots of per-gene expression data, candidate for details page boxplot
+
+cd /hive/data/outside/GTEx/V4
+
+cat > makeExprDf.csh << 'EOF'
+# Make R data frame from gene expression for a single gene from data in gtexSampleData table
+#
+# Format:   sampleId, tissue, rpkm
+
+set gene = $1
+set geneId = `hgsql hg19 -Ne "select geneId from gtexGene where name='$gene' limit 1"`
+hgsql hgFixed -e "select sample, tissue, score as rpkm from gtexSampleData where geneId='$geneId'"
+'EOF'
+
+csh makeExprDf.csh BRCA1 > BRCA1.df.txt
