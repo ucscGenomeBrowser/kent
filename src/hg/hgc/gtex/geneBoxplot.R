@@ -10,8 +10,6 @@ dataFile <- args[2]
 outFile <- args[3]
 isLog <- args[4] == "log=TRUE"
 
-#gene <- "BRCA1"
-#df <- read.table("BRCA1.df.txt", sep="\t", header=TRUE)
 df <- read.table(dataFile, sep="\t", header=TRUE)
 
 # order by median descending
@@ -22,6 +20,15 @@ source("gtex/tissueColors.R")
 
 labels <- names(table(df$tissue))
 count <- length(labels)
+
+tissueColors <- data.frame(labels, colorsHex)
+orderedLevels <- levels(tissueMedian)
+tissueMedianFrame <- data.frame(orderedLevels, 1:count)
+# TODO: rename columns
+dfColors <- merge(tissueMedianFrame, tissueColors, by.x="orderedLevels", by.y="labels")
+orderedColors <- as.vector(dfColors[with(dfColors, order(X1.count)),]$colorsHex)
+colorsHex <- orderedColors
+labels <- names(table(tissueMedianFrame$orderedLevels))
 
 # draw graph
 png(file=outFile, width=900, height=500)
