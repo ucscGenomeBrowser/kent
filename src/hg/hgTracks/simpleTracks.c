@@ -11086,6 +11086,17 @@ else if (sameString(details->attrVal, "TRANSCRIPTION FACTOR BINDING SITE"))
     itemColor = hvGfxFindColorIx(hvg, 165, 165, 65);  /* tan, darkened some */
 else if (sameString(details->attrVal, "REGULATORY REGION"))
     itemColor = hvGfxFindColorIx(hvg, 102, 102, 0);  /* dark green */
+/* New ORegAnno colors (colorblind friendly) */
+else if (sameString(details->attrVal, "Regulatory Polymorphism"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 114, 178); /* Blue */
+else if (sameString(details->attrVal, "Transcription Factor Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 230, 159, 0);  /* Orange */
+else if (sameString(details->attrVal, "Regulatory Region"))
+    itemColor = hvGfxFindColorIx(hvg, 86, 180, 233);  /* Sky Blue */
+else if (sameString(details->attrVal, "Regulatory Haplotype"))
+    itemColor = hvGfxFindColorIx(hvg, 213, 94, 0);  /* Vermillion */
+else if (sameString(details->attrVal, "miRNA Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 158, 115);  /* bluish Green */
 oregannoAttrFreeList(&details);
 hFreeConn(&conn);
 return itemColor;
