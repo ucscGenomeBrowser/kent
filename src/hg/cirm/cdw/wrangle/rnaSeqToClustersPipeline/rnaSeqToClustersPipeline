@@ -1,0 +1,176 @@
+#!/usr/bin/env python2.7
+# rnaSeqToClustersPipeline
+"""
+Take raw RNA seq data, fastq files, and cluster them. I do this all manually normally
+and to be quite honest... Python will do it better than I could. -Chris  
+"""
+import os
+import sys
+import collections
+import argparse
+import subprocess
+
+# import the UCSC kent python library
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inDir",
+    help = " kallisto output directory, start of the pipeline for now. ",
+    action = 'store')
+    parser.add_argument ("dataSetId",
+    help = " The data set id, ie quakeBrainGeo1. Output files will be placed in this directory. ",
+    action = 'store')
+    parser.add_argument ("--verbose",
+    help = " Spit runtime messages to stdout. ", 
+    action = 'store_true')
+    parser.add_argument ("--noKallisto",
+    help = " Do not do the kallisto step." ,
+    action = 'store_true')
+    parser.add_argument ("--noMakeExpMatrix",
+    help = " Do not do the makeExpMatrix step.", 
+    action = 'store_true')
+    parser.add_argument ("--noCondenseMatrix",
+    help = " Do not do the noCondenseMatrix step.", 
+    action = 'store_true')
+    parser.add_argument ("--noExpMatrixToJson",
+    help = " Do not do the noExpMatrixToJson step.", 
+    action = 'store_true')
+    parser.add_argument ("--noAddMetaDataToJson",
+    help = " Do not do the noAddMetaDataToJson step.", 
+    action = 'store_true')
+
+    parser.set_defaults(noKallisto = False)
+    parser.set_defaults(noMakeExpMatrix = False)
+    parser.set_defaults(noCondenseMatrix = False)
+    parser.set_defaults(noExpMatrixToJson = False)
+    parser.set_defaults(noAddMetaDataToJson = False)
+    parser.set_defaults(verbose = False)
+    options = parser.parse_args()
+    return options
+
+def doKallisto(inDir, outDir):
+    """
+    Input:
+        inDir - A string
+        outDir - A string
+    Takes in a directory name. The directory is assumed to have rnaSeq fastq files
+    in a .gz format.  The files are ran through the RNA quantifiaction program Kallisto
+    which generates output files into a new directory. 
+    """
+
+def doMakeExpMatrix(inDir, mxFileName, verbose):
+    """
+    Input:
+        inDir - A string
+        mxFileName - A string
+    Takes in a directory name. The directory is assumed to have kallisto output
+    files in it. These files are used to generate an expression matrix. The
+    expression matrix is generated in the current directory with the name mxFileName. 
+    """
+    args = ["makeExpMatrix", inDir, mxFileName]
+    if (verbose): args.append("--verbose")
+    p = subprocess.Popen(args)
+    stdout, stderr = p.communicate()
+
+def doExpMatrixToJson(mxFileName, clusteringName, verbose):
+    """
+    Input:
+        mxFileName - A string
+    Takes in the matrix file name and performs a euclidean clustering.  Two output
+    files are generated clusteringName.html and clusteringName.json.  
+    """
+    args = ["expMatrixToJson", "-multiThreads",mxFileName,clusteringName]
+    if (verbose): args.append("-verbose=2")
+    p = subprocess.Popen(args)
+    stdout, stderr = p.communicate()
+
+
+def doCondenseMatrix(mxFileName, condensedMxFileName, verbose):
+    """
+    Input:
+        mxFileName - A string
+        condensedMxFileName - A string
+    Takes in a matrix file and generates a condensed matrix file. Assumes that the
+    matrix is using human transcripts.  
+    """
+    args = ["condenseMatrix",mxFileName, condensedMxFileName]
+    if (verbose): args.append("--verbose")
+    p = subprocess.Popen(args)
+    stdout, stderr = p.communicate()
+
+def doAddMetaDataToJson(jsonFileName, metaDataFileName, keyCol, fields):
+    """
+    Input:
+        jsonFileName - A string
+        metaDataFileName - A string
+        keyCol - An integer
+        fields - A list of integers
+    Adds meta data to a .json file.  The metaDataFile should have a column that 
+    links the .json file entries to the rest of the meta data (keyCol). The corresponding meta data
+    values that correspond to the entries in 'fields' are added to each .json entry.
+    """
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    inDir = ""
+    if options.inDir.startswith("/"):
+        inDir = options.inDir
+    else: inDir = os.getcwd() + "/" + options.inDir
+    dir = os.getcwd()+ "/" +options.dataSetId
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+        os.chdir(dir)
+   
+    # Kallisto
+    if options.noKallisto:
+        if options.verbose: print ("Skipping the kallisto step.")
+    else:
+        if options.verbose: print ("#######################################################")
+        #doKallisto()
+        if options.verbose: print ("#######################################################")
+    
+    # MakeExpMatrix
+    if options.noMakeExpMatrix:
+        if options.verbose: print ("Skipping the makeExpMatrix step.")
+    else: 
+        if options.verbose: print ("#######################################################")
+        doMakeExpMatrix(inDir, "trscrptExpMatrix.mx", options.verbose)
+        if options.verbose: print ("#######################################################")
+    
+    # CondenseMatrix
+    if options.noCondenseMatrix: 
+        if options.verbose: print ("Skipping the condenseMatrix step.")
+    else:  
+        if options.verbose: print ("#######################################################")
+        doCondenseMatrix("trscrptExpMatrix.mx", "geneExpMatrix.mx", options.verbose)
+        if options.verbose: print ("#######################################################")
+    
+    # ExpMatrixToJson
+    if options.noExpMatrixToJson: 
+        if options.verbose: print ("Skipping the expMatrixToJson step.")
+    else: 
+        if options.verbose: print ("#######################################################")
+        doExpMatrixToJson("trscrptExpMatrix.mx", "trscrptClustering", options.verbose)
+        doExpMatrixToJson("geneExpMatrix.mx", "geneClustering", options.verbose)
+        if options.verbose: print ("#######################################################")
+    
+    # AddMetaDataToJson
+    if options.noAddMetaDataToJson:
+        if options.verbose: print ("Skipping the addMetaDataToJson step.")
+    else:
+        if options.verbose: print ("#######################################################")
+        doAddMetaDataToJson()
+        doAddMetaDataToJson()
+        if options.verbose: print ("#######################################################")
+
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))
