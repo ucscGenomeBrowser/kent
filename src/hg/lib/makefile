@@ -59,7 +59,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
     growthCondition.o grp.o \
     gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o gtexSampleData.o \
-    gtexTissue.o gtexTissueData.o gtexTissueMedian.o \
+    gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
     gwasCatalog.o hAnno.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \

@@ -5,30 +5,36 @@
 #ifndef GTEXUI_H
 #define GTEXUI_H
 
-#include "cart.h"
-#include "trackDb.h"
+/* Color scheme */
+#define GTEX_COLORS                     "colorScheme"
+#define GTEX_COLORS_RAINBOW             "rainbow"
 
-// Color scheme
-#define GTEX_COLORS             "colorScheme"
-#define GTEX_COLORS_RAINBOW     "rainbow"
-// color scheme from GTEX papers and portal
-#define GTEX_COLORS_GTEX        "gtex"
-#define GTEX_COLORS_DEFAULT     GTEX_COLORS_GTEX
+/* Color scheme from GTEX papers and portal */
+#define GTEX_COLORS_GTEX                "gtex"
+#define GTEX_COLORS_DEFAULT             GTEX_COLORS_GTEX
 
-// Data transform
-#define GTEX_LOG_TRANSFORM       "logTransform"
-#define GTEX_LOG_TRANSFORM_DEFAULT       TRUE
+/* Data transform */
+#define GTEX_LOG_TRANSFORM              "logTransform"
+#define GTEX_LOG_TRANSFORM_DEFAULT      TRUE
 
-// Graph type
+/* Viewing limits */
+#define GTEX_MAX_LIMIT                  "maxLimit"
+/* Get default from gtexInfo table */
+
+/* Sample selection and comparison */
+#define GTEX_SAMPLES                    "samples"
+#define GTEX_SAMPLES_ALL                "all"
+#define GTEX_SAMPLES_COMPARE_SEX        "sex"
+#define GTEX_SAMPLES_DEFAULT            GTEX_SAMPLES_ALL
+
+#define GTEX_SAMPLES_COMPARE_AGE        "age"
+#define GTEX_COMPARE_AGE_YEARS          "years"
+#define GTEX_COMPARE_AGE_DEFAULT        50
+
+/* Graph type */
 #define GTEX_GRAPH              "graphType"
 #define GTEX_GRAPH_RAW          "raw"
 #define GTEX_GRAPH_NORMAL       "normalized"
-// comparison graphs
-#define GTEX_GRAPH_SEX          "sex"
-#define GTEX_GRAPH_AGE          "age"
-#define GTEX_GRAPH_AGE_YEARS    "years"
-#define GTEX_GRAPH_AGE_DEFAULT   50
-
 #define GTEX_GRAPH_DEFAULT      GTEX_GRAPH_RAW
 
 #endif /* GTEXUI_H */

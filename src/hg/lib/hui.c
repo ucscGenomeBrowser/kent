@@ -6706,65 +6706,6 @@ indelShowOptionsWithNameExt(cart, tdb, name, "LRG transcript sequence", FALSE, F
 cfgEndBox(boxed);
 }
 
-void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
-/* GTEx (Genotype Tissue Expression) per gene data */
-{
-boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
-
-char cartVarName[1024];
-
-// Color scheme
-printf("<B>Tissue color scheme:</B>\n");
-safef(cartVarName, sizeof(cartVarName), "%s.%s", name, GTEX_COLORS);
-char *selected = cartCgiUsualString(cart, cartVarName, GTEX_COLORS_DEFAULT); 
-boolean isGtexColors = sameString(selected, GTEX_COLORS_GTEX);
-cgiMakeRadioButton(cartVarName, GTEX_COLORS_GTEX, isGtexColors);
-printf("GTEx\n");
-cgiMakeRadioButton(cartVarName, GTEX_COLORS_RAINBOW, !isGtexColors);
-printf("rainbow\n");
-
-// Data transform
-printf("<p><B>Log transform:</B>\n");
-safef(cartVarName, sizeof(cartVarName), "%s.%s", name, GTEX_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVarName, GTEX_LOG_TRANSFORM_DEFAULT);
-cgiMakeCheckBox(cartVarName, isLogTransform);
-printf("</p>\n");
-
-// Graph type
-printf("<p><b>Expression graph:</b><br>\n");
-safef(cartVarName, sizeof(cartVarName), "%s.%s", name, GTEX_GRAPH);
-char *graphType = cartCgiUsualString(cart, cartVarName, GTEX_GRAPH_DEFAULT); 
-
-boolean isRaw = differentString(graphType, GTEX_GRAPH_NORMAL);
-printf("&nbsp;&nbsp;&nbsp;\n");
-cgiMakeRadioButton(cartVarName, GTEX_GRAPH_RAW, isRaw);
-printf("raw<br>\n");
-
-boolean isSex = sameString(graphType, GTEX_GRAPH_SEX);
-printf("&nbsp;&nbsp;&nbsp;\n");
-printf("&nbsp;&nbsp;&nbsp;\n");
-cgiMakeRadioButton(cartVarName, GTEX_GRAPH_SEX, isSex);
-printf("compare by sex<br>\n");
-
-boolean isAge = sameString(graphType, GTEX_GRAPH_AGE);
-printf("&nbsp;&nbsp;&nbsp;\n");
-printf("&nbsp;&nbsp;&nbsp;\n");
-cgiMakeRadioButton(cartVarName, GTEX_GRAPH_SEX, isAge);
-printf("compare by age\n");
-
-char cartVarAge[1024];
-safef(cartVarAge, sizeof(cartVarAge), "%s.%s", name, GTEX_GRAPH_AGE_YEARS);
-cgiMakeIntVarInRange(cartVarAge, GTEX_GRAPH_AGE_DEFAULT, "age range is 20-70 years", 2, "20", "70");
-printf("years<br>\n");
-
-printf("&nbsp;&nbsp;&nbsp;\n");
-cgiMakeRadioButton(cartVarName, GTEX_GRAPH_NORMAL, !isRaw);
-printf("normalized\n");
-
-cfgEndBox(boxed);
-}
-
 struct trackDb *rFindView(struct trackDb *forest, char *view)
 // Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents
 {

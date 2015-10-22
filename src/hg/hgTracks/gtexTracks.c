@@ -369,10 +369,10 @@ AllocVar(extras);
 tg->extraUiData = extras;
 
 // TODO: move test to lib
-char *graphType = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_GRAPH, 
-                                                GTEX_GRAPH_DEFAULT);
-extras->graphType = cloneString(graphType);
-if (sameString(graphType, GTEX_GRAPH_AGE) || sameString(graphType, GTEX_GRAPH_SEX))
+char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_SAMPLES, 
+                                                GTEX_SAMPLES_DEFAULT);
+extras->graphType = cloneString(samples);
+if (sameString(samples, GTEX_SAMPLES_COMPARE_SEX))
     extras->isComparison = TRUE;
 
 extras->maxMedian = gtexMaxMedianScore(NULL);
