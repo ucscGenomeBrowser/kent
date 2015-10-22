@@ -39,7 +39,8 @@ printf("</p>\n");
 printf("<p><B>View limits maximum:</B>\n");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, GTEX_MAX_LIMIT);
 // TODO: set max and initial limits from gtexInfo table
-cgiMakeDoubleVarWithLimits(cartVarName, 100, NULL, 5, 10, 178200);
+int viewMax = cartCgiUsualInt(cart, cartVarName, GTEX_MAX_LIMIT_DEFAULT);
+cgiMakeIntVar(cartVarName, viewMax, 4);
 printf("RKPM (range 10-180000)<br>\n");
 
 /* Color scheme */

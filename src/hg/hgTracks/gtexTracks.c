@@ -14,7 +14,8 @@
 #include "gtexUi.h"
 
 // NOTE: Sections to change for multi-region (vertical slice) display 
-//       are marked with #ifdef MULTI_REGION
+//       are marked with #ifdef MULTI_REGION.  WARNING: These sections
+//       are a bit out-of-date (refer to #ifndef MULTI code when integrating)
 
 struct gtexGeneExtras 
 /* Track info */
@@ -357,15 +358,8 @@ static int gtexGraphX(struct gtexGeneBed *gtex)
 /* Locate graph on X, relative to viewport. Return -1 if it won't fit */
 {
 int start = max(gtex->chromStart, winStart);
-//int end = min(gtex->chromEnd, winEnd);
-//if (start > end)
-    //return -1;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
 int x1 = round((start - winStart) * scale);
-//int x2 = round((end - winStart) * scale);
-//int width = gtexGraphWidth(gtex);
-//if (x1 + width > x2)
-    //return -1;
 return x1;
 }
 
@@ -432,8 +426,7 @@ int yZero = gtexGraphHeight() + y-1;  // yZero is bottom of graph
 
 #ifndef MULTI_REGION
 int x1 = xOff + graphX;         // x1 is at left of graph
-
-int keepX = x1;
+int keepX = x1;                 // FIXME:  Too many X's!
 drawGraphBase(hvg, keepX, yZero+1, geneInfo);
 
 int startX = x1;
@@ -447,6 +440,9 @@ int graphPadding = gtexGraphPadding();
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
                         GTEX_COLORS_DEFAULT);
 Color labelColor = MG_GRAY;
+Color clipColor = MG_MAGENTA;
+
+double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 
 // add labels to comparison graphs
 // TODO: generalize
@@ -457,6 +453,9 @@ if (geneInfo->medians2)
     startX = startX + tl.mWidth+2;
     x1 = startX;
     }
+
+// draw bar graph
+// TODO: share this code with other graph
 for (i=0; i<expCount; i++)
     {
     struct rgbColor fillColor = extras->colors[i];
@@ -468,11 +467,21 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
 
     double expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
+    double useScore = expScore;
+    double useMax = maxMedian;
+    if (!doLogTransform)
+        {
+        useMax = viewMax;
+        if (expScore > viewMax)
+            useScore = viewMax;
+        }
+    int height = valToHeight(useScore, useMax, gtexGraphHeight(), doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
+    if (useScore != expScore)
+        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 #endif
@@ -489,7 +498,7 @@ if (!geneInfo->medians2)
     return;
 
 #ifndef MULTI_REGION
-// draw comparison graph (upside down)
+// draw comparison bar graph (upside down)
 x1 = startX;
 yZero = yGene + gtexGeneHeight() + 1; // yZero is at top of graph
 drawGraphBase(hvg, keepX, yZero-1, geneInfo);
@@ -506,11 +515,21 @@ for (i=0; i<expCount; i++)
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneInfo->medians2[i];
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
+    double useScore = expScore;
+    double useMax = maxMedian;
+    if (!doLogTransform)
+        {
+        useMax = viewMax;
+        if (expScore > viewMax)
+            useScore = viewMax;
+        }
+    int height = valToHeight(useScore, useMax, gtexGraphHeight(), doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
+    if (useScore != expScore)
+        hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 #endif
@@ -675,6 +694,7 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     double expScore = geneBed->expScores[i];
     int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
     int yMedian = yZero - height;
+// FIXME: need proper scaling for clipped (non-log) display
     mapBoxHc(hvg, start, end, x1, yMedian+1, barWidth, height, tg->track, mapItemName, tissue->description);
     // add map box to comparison graph
     if (geneInfo->medians2)
@@ -703,7 +723,6 @@ if ((item == NULL) || (tg->visibility == tvSquish) || (tg->visibility == tvDense
 int extra = 0;
 if (((struct gtexGeneExtras *)tg->extraUiData)->isComparison)
     extra = gtexGraphHeight() + 2;
-//uglyf("GTEX itemHeight extra = %d<br>", extra);
 return gtexGraphHeight() + gtexGeneMargin() + gtexGeneHeight() + extra;
 }
 
@@ -718,7 +737,6 @@ if (tg->visibility == tvSquish || tg->visibility == tvDense)
     height = 10;
 else 
     height = gtexGraphHeight() + gtexGeneMargin() + gtexGeneHeight() + extra;
-//uglyf("GTEX totalHeight = %d<br>", height);
 return tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
 }
 

@@ -19,7 +19,8 @@
 
 /* Viewing limits */
 #define GTEX_MAX_LIMIT                  "maxLimit"
-/* Get default from gtexInfo table */
+#define GTEX_MAX_LIMIT_DEFAULT          100
+/* TODO: Get default from gtexInfo table */
 
 /* Sample selection and comparison */
 #define GTEX_SAMPLES                    "samples"
