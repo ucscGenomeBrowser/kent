@@ -360,4 +360,5 @@ termRegex (chr)?.*\.[0-9a-z]+\.[0-9]+\.[a-z]+
 searchPriority 50
 
 track oreganno override
+release beta,public
 html oregannoOld
