@@ -388,6 +388,21 @@ if (scaled < 0)
 return (scaled * (maxHeight-1));
 }
 
+static int valToClippedHeight(double val, double maxVal, int maxView, int maxHeight, 
+                                        boolean doLogTransform)
+/* Convert a value from 0 to maxVal to 0 to maxHeight-1, with clipping, or log transform the value */
+{
+double useVal = val;
+double useMax = maxVal;
+if (!doLogTransform)
+    {
+    useMax = maxView;
+    if (val > maxView)
+        useVal = maxView;
+    }
+return valToHeight(useVal, useMax, gtexGraphHeight(), doLogTransform);
+}
+
 static void drawGraphBase(struct hvGfx *hvg, int x, int y, struct gtexGeneInfo *geneInfo)
 /* Draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression) */
 {
@@ -422,7 +437,7 @@ int heightPer = tg->heightPer;
 int graphX = gtexGraphX(geneBed);
 if (graphX < 0)
     return;
-int yZero = gtexGraphHeight() + y-1;  // yZero is bottom of graph
+int yZero = gtexGraphHeight() + y - 1;  // yZero is bottom of graph
 
 #ifndef MULTI_REGION
 int x1 = xOff + graphX;         // x1 is at left of graph
@@ -441,8 +456,8 @@ char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLO
                         GTEX_COLORS_DEFAULT);
 Color labelColor = MG_GRAY;
 Color clipColor = MG_MAGENTA;
-
-double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
+double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
+                                GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 
 // add labels to comparison graphs
 // TODO: generalize
@@ -465,22 +480,15 @@ for (i=0; i<expCount; i++)
         fillColor = gtexTissueBrightenColor(fillColor);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
-
     double expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
-    double useScore = expScore;
-    double useMax = maxMedian;
-    if (!doLogTransform)
-        {
-        useMax = viewMax;
-        if (expScore > viewMax)
-            useScore = viewMax;
-        }
-    int height = valToHeight(useScore, useMax, gtexGraphHeight(), doLogTransform);
+    int height = valToClippedHeight(expScore, maxMedian, viewMax, 
+                                        gtexGraphHeight(), doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
-    if (useScore != expScore)
+    // mark clipped bar with magenta tip
+    if (!doLogTransform && expScore > viewMax)
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
@@ -515,20 +523,12 @@ for (i=0; i<expCount; i++)
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneInfo->medians2[i];
-    double useScore = expScore;
-    double useMax = maxMedian;
-    if (!doLogTransform)
-        {
-        useMax = viewMax;
-        if (expScore > viewMax)
-            useScore = viewMax;
-        }
-    int height = valToHeight(useScore, useMax, gtexGraphHeight(), doLogTransform);
+    int height = valToClippedHeight(expScore, maxMedian, viewMax, gtexGraphHeight(), doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
-    if (useScore != expScore)
+    if (!doLogTransform && expScore > viewMax)
         hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
@@ -689,18 +689,18 @@ int i = 0;
 int yZero = gtexGraphHeight() + y - 1;
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
+double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
+                                GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
-    double expScore = geneBed->expScores[i];
-    int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
-    int yMedian = yZero - height;
-// FIXME: need proper scaling for clipped (non-log) display
-    mapBoxHc(hvg, start, end, x1, yMedian+1, barWidth, height, tg->track, mapItemName, tissue->description);
+    int height = valToClippedHeight(geneBed->expScores[i], maxMedian, viewMax, 
+                                        gtexGraphHeight(), doLogTransform);
+    mapBoxHc(hvg, start, end, x1, yZero-height, barWidth, height, tg->track, mapItemName, tissue->description);
     // add map box to comparison graph
     if (geneInfo->medians2)
         {
         double expScore = geneInfo->medians2[i];
-        int height = valToHeight(expScore, maxMedian, gtexGraphHeight(), doLogTransform);
+        int height = valToClippedHeight(expScore, maxMedian, viewMax, gtexGraphHeight(), doLogTransform);
         int y = yZero + gtexGeneHeight() + gtexGeneMargin();
         mapBoxHc(hvg, start, end, x1, y, barWidth, height, tg->track, mapItemName, tissue->description);
         }

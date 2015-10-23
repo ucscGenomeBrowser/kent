@@ -19,7 +19,7 @@
 
 /* Viewing limits */
 #define GTEX_MAX_LIMIT                  "maxLimit"
-#define GTEX_MAX_LIMIT_DEFAULT          100
+#define GTEX_MAX_LIMIT_DEFAULT          300
 /* TODO: Get default from gtexInfo table */
 
 /* Sample selection and comparison */
