@@ -3684,7 +3684,7 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense &&  baseColorCanDraw(tg))
+if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
@@ -12913,6 +12913,8 @@ else if (sameWord(type, "gvf"))
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
+else if (startsWith("gtexGene", track->track))
+    gtexGeneMethods(track);
 #endif /* GBROWSE */
 }
 

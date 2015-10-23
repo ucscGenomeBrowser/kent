@@ -13,6 +13,15 @@ include trackDb.denisova.ra
 # Genome variants aka pgSnp aka personal genomes
 include trackDb.pgSnp.ra
 
+# Genotype Tissue Expresssion (GTEx)
+include trackDb.gtex.ra
+#track gtexGene
+#type bed 6 +
+#shortLabel GTEx
+#longLabel Gene Expression in 53 tissues from GTEX RNA-seq of 2921 samples (214 donors)
+#html gtexGeneExpr
+#group expression
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)

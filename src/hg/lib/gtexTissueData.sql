@@ -3,11 +3,16 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#GTEX Expression median level by tissue (RPKM levels, unmapped)
+#GTEX Expression data summarized by tissue (RPKM)
 CREATE TABLE gtexTissueData (
     geneId varchar(255) not null,	# Gene identifier (ensembl)
-    tissueCount int unsigned not null,	# Number of tissues
-    scores longblob not null,	# RPKM median expression levels
+    tissue varchar(255) not null,	# Tissue short name
+    min double not null,	# Minimum expression level
+    q1 double not null,	# 1st quartile expression level
+    median double not null,	# Median expression level
+    q3 double not null,	# 3rd quartile expression level
+    max double not null,	# Maximum expression level
               #Indices
-    PRIMARY KEY(geneId)
+    INDEX(geneId),
+    INDEX(tissue)
 );

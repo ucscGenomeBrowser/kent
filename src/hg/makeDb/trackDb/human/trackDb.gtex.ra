@@ -1,0 +1,511 @@
+track gtexSnp
+type bed 4
+shortLabel GTEx Variant
+longLabel Genetic variants imputed from genotyping of GTEx samples (209 donors)
+group expression
+html getxEqtlSnp
+priority 10.15
+
+track gtexEqtlSnp
+type bed 4
+shortLabel GTEx eQTL
+longLabel Genetic variants identified by GTEx as significantly affecting gene expression
+group expression
+priority 10.16
+
+track gtexGene
+type bed 6 +
+shortLabel GTEx Gene
+longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 2921 samples (209 donors)
+html gtexGeneExpr
+group expression
+priority 10.1
+
+track gtexExon
+compositeTrack on
+shortLabel GTEx Exon
+longLabel Exon Expression in 53 tissues from GTEx RNA-seq of 2921 samples (209 donors)
+dragAndDrop subTracks
+group expression
+priority 10.2
+type bed 6
+exonArrows off
+minGrayLevel 2
+subGroup1 tissue Tissue \
+		adiposeSubcut=adiposeSubcut \
+		adiposeVisceral=adiposeVisceral \
+		adrenalGland=adrenalGland \
+		arteryAorta=arteryAorta \
+		arteryCoronary=arteryCoronary \
+		arteryTibial=arteryTibial \
+		bladder=bladder \
+		brainAmygdala=brainAmygdala \
+		brainAnCinCortex=brainAnCinCortex \
+		brainCaudate=brainCaudate \
+		brainCerebelHemi=brainCerebelHemi \
+		brainCerebellum=brainCerebellum \
+		brainCortex=brainCortex \
+		brainFrontCortex=brainFrontCortex \
+		brainHippocampus=brainHippocampus \
+		brainHypothalamus=brainHypothalamus \
+		brainNucAccumbens=brainNucAccumbens \
+		brainPutamen=brainPutamen \
+		brainSpinalcord=brainSpinalcord \
+		brainSubstanNigra=brainSubstanNigra \
+		breastMamTissue=breastMamTissue \
+		xformedlymphocytes=xformedlymphocytes \
+		xformedfibroblasts=xformedfibroblasts \
+		ectocervix=ectocervix \
+		endocervix=endocervix \
+		colonSigmoid=colonSigmoid \
+		colonTransverse=colonTransverse \
+		esophagusJunction=esophagusJunction \
+		esophagusMucosa=esophagusMucosa \
+		esophagusMuscular=esophagusMuscular \
+		fallopianTube=fallopianTube \
+		heartAtrialAppend=heartAtrialAppend \
+		heartLeftVentricl=heartLeftVentricl \
+		kidneyCortex=kidneyCortex \
+		liver=liver \
+		lung=lung \
+		minorSalivGland=minorSalivGland \
+		muscleSkeletal=muscleSkeletal \
+		nerveTibial=nerveTibial \
+		ovary=ovary \
+		pancreas=pancreas \
+		pituitary=pituitary \
+		prostate=prostate \
+		skinNotExposed=skinNotExposed \
+		skinExposed=skinExposed \
+		smallIntestine=smallIntestine \
+		spleen=spleen \
+		stomach=stomach \
+		testis=testis \
+		thyroid=thyroid \
+		uterus=uterus \
+		vagina=vagina \
+		wholeBlood=wholeBlood
+
+	track gtexTissueExonMedianAdiposeSubcut
+	parent gtexExon
+	shortLabel adiposeSubcut
+	longLabel Exon Expression in Adipose - Subcutaneous from GTEx RNA-seq of 128 samples
+	subGroups tissue=adiposeSubcut
+	color 255,165,79
+	spectrum on
+
+	track gtexTissueExonMedianAdiposeVisceral
+	parent gtexExon
+	shortLabel adiposeVisceral
+	longLabel Exon Expression in Adipose - Visceral (Omentum) from GTEx RNA-seq of 31 samples
+	subGroups tissue=adiposeVisceral
+	color 238,154,0
+	spectrum on
+
+	track gtexTissueExonMedianAdrenalGland
+	parent gtexExon
+	shortLabel adrenalGland
+	longLabel Exon Expression in Adrenal Gland from GTEx RNA-seq of 52 samples
+	subGroups tissue=adrenalGland
+	color 116,215,116
+	spectrum on
+
+	track gtexTissueExonMedianArteryAorta
+	parent gtexExon
+	shortLabel arteryAorta
+	longLabel Exon Expression in Artery - Aorta from GTEx RNA-seq of 82 samples
+	subGroups tissue=arteryAorta
+	color 164,3,104
+	spectrum on
+
+	track gtexTissueExonMedianArteryCoronary
+	parent gtexExon
+	shortLabel arteryCoronary
+	longLabel Exon Expression in Artery - Coronary from GTEx RNA-seq of 44 samples
+	subGroups tissue=arteryCoronary
+	color 255,95,63
+	spectrum on
+
+	track gtexTissueExonMedianArteryTibial
+	parent gtexExon
+	shortLabel arteryTibial
+	longLabel Exon Expression in Artery - Tibial from GTEx RNA-seq of 137 samples
+	subGroups tissue=arteryTibial
+	color 255,0,0
+	spectrum on
+
+	track gtexTissueExonMedianBladder
+	parent gtexExon
+	shortLabel bladder
+	longLabel Exon Expression in Bladder from GTEx RNA-seq of 11 samples
+	subGroups tissue=bladder
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianBrainAmygdala
+	parent gtexExon
+	shortLabel brainAmygdala
+	longLabel Exon Expression in Brain - Amygdala from GTEx RNA-seq of 26 samples
+	subGroups tissue=brainAmygdala
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainAnCinCortex
+	parent gtexExon
+	shortLabel brainAnCinCortex
+	longLabel Exon Expression in Brain - Anterior cingulate cortex (BA24) from GTEx RNA-seq of 22 samples
+	subGroups tissue=brainAnCinCortex
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainCaudate
+	parent gtexExon
+	shortLabel brainCaudate
+	longLabel Exon Expression in Brain - Caudate (basal ganglia) from GTEx RNA-seq of 36 samples
+	subGroups tissue=brainCaudate
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainCerebelHemi
+	parent gtexExon
+	shortLabel brainCerebelHemi
+	longLabel Exon Expression in Brain - Cerebellar Hemisphere from GTEx RNA-seq of 29 samples
+	subGroups tissue=brainCerebelHemi
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainCerebellum
+	parent gtexExon
+	shortLabel brainCerebellum
+	longLabel Exon Expression in Brain - Cerebellum from GTEx RNA-seq of 31 samples
+	subGroups tissue=brainCerebellum
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainCortex
+	parent gtexExon
+	shortLabel brainCortex
+	longLabel Exon Expression in Brain - Cortex from GTEx RNA-seq of 25 samples
+	subGroups tissue=brainCortex
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainFrontCortex
+	parent gtexExon
+	shortLabel brainFrontCortex
+	longLabel Exon Expression in Brain - Frontal Cortex (BA9) from GTEx RNA-seq of 28 samples
+	subGroups tissue=brainFrontCortex
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainHippocampus
+	parent gtexExon
+	shortLabel brainHippocampus
+	longLabel Exon Expression in Brain - Hippocampus from GTEx RNA-seq of 28 samples
+	subGroups tissue=brainHippocampus
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainHypothalamus
+	parent gtexExon
+	shortLabel brainHypothalamus
+	longLabel Exon Expression in Brain - Hypothalamus from GTEx RNA-seq of 30 samples
+	subGroups tissue=brainHypothalamus
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainNucAccumbens
+	parent gtexExon
+	shortLabel brainNucAccumbens
+	longLabel Exon Expression in Brain - Nucleus accumbens (basal ganglia) from GTEx RNA-seq of 32 samples
+	subGroups tissue=brainNucAccumbens
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainPutamen
+	parent gtexExon
+	shortLabel brainPutamen
+	longLabel Exon Expression in Brain - Putamen (basal ganglia) from GTEx RNA-seq of 24 samples
+	subGroups tissue=brainPutamen
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainSpinalcord
+	parent gtexExon
+	shortLabel brainSpinalcord
+	longLabel Exon Expression in Brain - Spinal cord (cervical c-1) from GTEx RNA-seq of 19 samples
+	subGroups tissue=brainSpinalcord
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBrainSubstanNigra
+	parent gtexExon
+	shortLabel brainSubstanNigra
+	longLabel Exon Expression in Brain - Substantia nigra from GTEx RNA-seq of 27 samples
+	subGroups tissue=brainSubstanNigra
+	color 238,238,0
+	spectrum on
+
+	track gtexTissueExonMedianBreastMamTissue
+	parent gtexExon
+	shortLabel breastMamTissue
+	longLabel Exon Expression in Breast - Mammary Tissue from GTEx RNA-seq of 66 samples
+	subGroups tissue=breastMamTissue
+	color 0,205,205
+	spectrum on
+
+	track gtexTissueExonMedianXformedlymphocytes
+	parent gtexExon
+	shortLabel xformedlymphocytes
+	longLabel Exon Expression in Cells - EBV-transformed lymphocytes from GTEx RNA-seq of 54 samples
+	subGroups tissue=xformedlymphocytes
+	color 255,113,255
+	spectrum on
+
+	track gtexTissueExonMedianXformedfibroblasts
+	parent gtexExon
+	shortLabel xformedfibroblasts
+	longLabel Exon Expression in Cells - Transformed fibroblasts from GTEx RNA-seq of 155 samples
+	subGroups tissue=xformedfibroblasts
+	color 131,203,228
+	spectrum on
+
+	track gtexTissueExonMedianEctocervix
+	parent gtexExon
+	shortLabel ectocervix
+	longLabel Exon Expression in Cervix - Ectocervix from GTEx RNA-seq of 6 samples
+	subGroups tissue=ectocervix
+	color 247,205,200
+	spectrum on
+
+	track gtexTissueExonMedianEndocervix
+	parent gtexExon
+	shortLabel endocervix
+	longLabel Exon Expression in Cervix - Endocervix from GTEx RNA-seq of 3 samples
+	subGroups tissue=endocervix
+	color 247,205,200
+	spectrum on
+
+	track gtexTissueExonMedianColonSigmoid
+	parent gtexExon
+	shortLabel colonSigmoid
+	longLabel Exon Expression in Colon - Sigmoid from GTEx RNA-seq of 13 samples
+	subGroups tissue=colonSigmoid
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianColonTransverse
+	parent gtexExon
+	shortLabel colonTransverse
+	longLabel Exon Expression in Colon - Transverse from GTEx RNA-seq of 61 samples
+	subGroups tissue=colonTransverse
+	color 255,199,128
+	spectrum on
+
+	track gtexTissueExonMedianEsophagusJunction
+	parent gtexExon
+	shortLabel esophagusJunction
+	longLabel Exon Expression in Esophagus - Gastroesophageal Junction from GTEx RNA-seq of 22 samples
+	subGroups tissue=esophagusJunction
+	color 172,119,52
+	spectrum on
+
+	track gtexTissueExonMedianEsophagusMucosa
+	parent gtexExon
+	shortLabel esophagusMucosa
+	longLabel Exon Expression in Esophagus - Mucosa from GTEx RNA-seq of 106 samples
+	subGroups tissue=esophagusMucosa
+	color 172,119,52
+	spectrum on
+
+	track gtexTissueExonMedianEsophagusMuscular
+	parent gtexExon
+	shortLabel esophagusMuscular
+	longLabel Exon Expression in Esophagus - Muscularis from GTEx RNA-seq of 99 samples
+	subGroups tissue=esophagusMuscular
+	color 232,173,98
+	spectrum on
+
+	track gtexTissueExonMedianFallopianTube
+	parent gtexExon
+	shortLabel fallopianTube
+	longLabel Exon Expression in Fallopian Tube from GTEx RNA-seq of 6 samples
+	subGroups tissue=fallopianTube
+	color 247,205,200
+	spectrum on
+
+	track gtexTissueExonMedianHeartAtrialAppend
+	parent gtexExon
+	shortLabel heartAtrialAppend
+	longLabel Exon Expression in Heart - Atrial Appendage from GTEx RNA-seq of 38 samples
+	subGroups tissue=heartAtrialAppend
+	color 200,49,238
+	spectrum on
+
+	track gtexTissueExonMedianHeartLeftVentricl
+	parent gtexExon
+	shortLabel heartLeftVentricl
+	longLabel Exon Expression in Heart - Left Ventricle from GTEx RNA-seq of 95 samples
+	subGroups tissue=heartLeftVentricl
+	color 139,26,168
+	spectrum on
+
+	track gtexTissueExonMedianKidneyCortex
+	parent gtexExon
+	shortLabel kidneyCortex
+	longLabel Exon Expression in Kidney - Cortex from GTEx RNA-seq of 8 samples
+	subGroups tissue=kidneyCortex
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianLiver
+	parent gtexExon
+	shortLabel liver
+	longLabel Exon Expression in Liver from GTEx RNA-seq of 34 samples
+	subGroups tissue=liver
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianLung
+	parent gtexExon
+	shortLabel lung
+	longLabel Exon Expression in Lung from GTEx RNA-seq of 133 samples
+	subGroups tissue=lung
+	color 167,243,12
+	spectrum on
+
+	track gtexTissueExonMedianMinorSalivGland
+	parent gtexExon
+	shortLabel minorSalivGland
+	longLabel Exon Expression in Minor Salivary Gland from GTEx RNA-seq of 5 samples
+	subGroups tissue=minorSalivGland
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianMuscleSkeletal
+	parent gtexExon
+	shortLabel muscleSkeletal
+	longLabel Exon Expression in Muscle - Skeletal from GTEx RNA-seq of 157 samples
+	subGroups tissue=muscleSkeletal
+	color 110,86,255
+	spectrum on
+
+	track gtexTissueExonMedianNerveTibial
+	parent gtexExon
+	shortLabel nerveTibial
+	longLabel Exon Expression in Nerve - Tibial from GTEx RNA-seq of 114 samples
+	subGroups tissue=nerveTibial
+	color 255,215,0
+	spectrum on
+
+	track gtexTissueExonMedianOvary
+	parent gtexExon
+	shortLabel ovary
+	longLabel Exon Expression in Ovary from GTEx RNA-seq of 35 samples
+	subGroups tissue=ovary
+	color 255,182,193
+	spectrum on
+
+	track gtexTissueExonMedianPancreas
+	parent gtexExon
+	shortLabel pancreas
+	longLabel Exon Expression in Pancreas from GTEx RNA-seq of 65 samples
+	subGroups tissue=pancreas
+	color 234,168,0
+	spectrum on
+
+	track gtexTissueExonMedianPituitary
+	parent gtexExon
+	shortLabel pituitary
+	longLabel Exon Expression in Pituitary from GTEx RNA-seq of 22 samples
+	subGroups tissue=pituitary
+	color 167,252,167
+	spectrum on
+
+	track gtexTissueExonMedianProstate
+	parent gtexExon
+	shortLabel prostate
+	longLabel Exon Expression in Prostate from GTEx RNA-seq of 42 samples
+	subGroups tissue=prostate
+	color 228,206,206
+	spectrum on
+
+	track gtexTissueExonMedianSkinNotExposed
+	parent gtexExon
+	shortLabel skinNotExposed
+	longLabel Exon Expression in Skin - Not Sun Exposed (Suprapubic) from GTEx RNA-seq of 41 samples
+	subGroups tissue=skinNotExposed
+	color 21,77,242
+	spectrum on
+
+	track gtexTissueExonMedianSkinExposed
+	parent gtexExon
+	shortLabel skinExposed
+	longLabel Exon Expression in Skin - Sun Exposed (Lower leg) from GTEx RNA-seq of 126 samples
+	subGroups tissue=skinExposed
+	color 30,144,255
+	spectrum on
+
+	track gtexTissueExonMedianSmallIntestine
+	parent gtexExon
+	shortLabel smallIntestine
+	longLabel Exon Expression in Small Intestine - Terminal Ileum from GTEx RNA-seq of 17 samples
+	subGroups tissue=smallIntestine
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianSpleen
+	parent gtexExon
+	shortLabel spleen
+	longLabel Exon Expression in Spleen from GTEx RNA-seq of 34 samples
+	subGroups tissue=spleen
+	color 227,184,136
+	spectrum on
+
+	track gtexTissueExonMedianStomach
+	parent gtexExon
+	shortLabel stomach
+	longLabel Exon Expression in Stomach from GTEx RNA-seq of 81 samples
+	subGroups tissue=stomach
+	color 255,211,155
+	spectrum on
+
+	track gtexTissueExonMedianTestis
+	parent gtexExon
+	shortLabel testis
+	longLabel Exon Expression in Testis from GTEx RNA-seq of 60 samples
+	subGroups tissue=testis
+	color 193,139,139
+	spectrum on
+
+	track gtexTissueExonMedianThyroid
+	parent gtexExon
+	shortLabel thyroid
+	longLabel Exon Expression in Thyroid from GTEx RNA-seq of 120 samples
+	subGroups tissue=thyroid
+	color 0,139,69
+	spectrum on
+
+	track gtexTissueExonMedianUterus
+	parent gtexExon
+	shortLabel uterus
+	longLabel Exon Expression in Uterus from GTEx RNA-seq of 36 samples
+	subGroups tissue=uterus
+	color 247,205,200
+	spectrum on
+
+	track gtexTissueExonMedianVagina
+	parent gtexExon
+	shortLabel vagina
+	longLabel Exon Expression in Vagina from GTEx RNA-seq of 34 samples
+	subGroups tissue=vagina
+	color 247,205,200
+	spectrum on
+
+	track gtexTissueExonMedianWholeBlood
+	parent gtexExon
+	shortLabel wholeBlood
+	longLabel Exon Expression in Whole Blood from GTEx RNA-seq of 191 samples
+	subGroups tissue=wholeBlood
+	color 255,0,255
+	spectrum on

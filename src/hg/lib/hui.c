@@ -42,6 +42,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "gtexUi.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -6695,7 +6696,6 @@ baseColorDrawOptDropDown(cart, tdb);
 indelShowOptionsWithNameExt(cart, tdb, name, "LRG transcript sequence", FALSE, FALSE);
 cfgEndBox(boxed);
 }
-
 
 struct trackDb *rFindView(struct trackDb *forest, char *view)
 // Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents
