@@ -6,11 +6,12 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "gtexTissue.h"
 
 
 
-char *gtexTissueCommaSepFieldNames = "id,name,description,organ";
+char *gtexTissueCommaSepFieldNames = "id,name,description,organ,color";
 
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret)
 /* Load a row from gtexTissue table into ret.  The contents of ret will
@@ -21,6 +22,43 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = row[1];
 ret->description = row[2];
 ret->organ = row[3];
+ret->color = sqlUnsigned(row[4]);
+}
+
+struct gtexTissue *gtexTissueLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all gtexTissue from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexTissueFreeList(). */
+{
+struct gtexTissue *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = gtexTissueLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void gtexTissueSaveToDb(struct sqlConnection *conn, struct gtexTissue *el, char *tableName, int updateSize)
+/* Save gtexTissue as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%u)", 
+	tableName,  el->id,  el->name,  el->description,  el->organ,  el->color);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
 }
 
 struct gtexTissue *gtexTissueLoad(char **row)
@@ -34,6 +72,7 @@ ret->id = sqlUnsigned(row[0]);
 ret->name = cloneString(row[1]);
 ret->description = cloneString(row[2]);
 ret->organ = cloneString(row[3]);
+ret->color = sqlUnsigned(row[4]);
 return ret;
 }
 
@@ -43,7 +82,7 @@ struct gtexTissue *gtexTissueLoadAll(char *fileName)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +100,7 @@ struct gtexTissue *gtexTissueLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[4];
+char *row[5];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -86,6 +125,7 @@ ret->id = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
 ret->organ = sqlStringComma(&s);
+ret->color = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -132,11 +172,12 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->organ);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->color);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 void gtexTissueCreateTable(struct sqlConnection *conn, char *table)
 /* Create expression record format table of given name. */
 {
@@ -144,12 +185,33 @@ char query[1024];
 
 sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
-"    id int unsigned not null,	# internal id\n"
+"    id int unsigned not null, # internal id\n"
 "    name varchar(255) not null,       # short UCSC identifier\n"
 "    description varchar(255) not null, # GTEx tissue type detail\n"
 "    organ varchar(255) not null,      # GTEx tissue collection area\n"
+"    color int unsigned not null,      # GTEx assigned color\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
 ")\n",   table);
 sqlRemakeTable(conn, table, query);
 }
+
+struct gtexTissue *gtexGetTissues()
+/* Get tissue id, descriptions, colors, etc. */
+{
+char query[1024];
+struct sqlConnection *conn = hAllocConn("hgFixed");
+sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
+struct gtexTissue *gtexTissues = gtexTissueLoadByQuery(conn, query);
+hFreeConn(&conn);
+return gtexTissues;
+}
+
+struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb)
+/* Increase brightness for better visibility of small items */
+{
+struct hslColor hsl = mgRgbToHsl(rgb);
+hsl.s = min(1000, hsl.s + 300);
+return mgHslToRgb(hsl);
+}
+

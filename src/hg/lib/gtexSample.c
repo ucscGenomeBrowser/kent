@@ -10,16 +10,24 @@
 
 
 
-char *gtexSampleCommaSepFieldNames = "name,tissue,donor";
+char *gtexSampleCommaSepFieldNames = "sampleId,tissue,donor,autolysisScore,ischemicTime,rin,collectionSites,batchId,isolationType,isolationDate,pathNotes";
 
 void gtexSampleStaticLoad(char **row, struct gtexSample *ret)
 /* Load a row from gtexSample table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->name = row[0];
+ret->sampleId = row[0];
 ret->tissue = row[1];
 ret->donor = row[2];
+ret->autolysisScore = sqlSigned(row[3]);
+ret->ischemicTime = row[4];
+ret->rin = sqlFloat(row[5]);
+ret->collectionSites = row[6];
+ret->batchId = row[7];
+ret->isolationType = row[8];
+ret->isolationDate = row[9];
+ret->pathNotes = row[10];
 }
 
 struct gtexSample *gtexSampleLoad(char **row)
@@ -29,9 +37,17 @@ struct gtexSample *gtexSampleLoad(char **row)
 struct gtexSample *ret;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
+ret->sampleId = cloneString(row[0]);
 ret->tissue = cloneString(row[1]);
 ret->donor = cloneString(row[2]);
+ret->autolysisScore = sqlSigned(row[3]);
+ret->ischemicTime = cloneString(row[4]);
+ret->rin = sqlFloat(row[5]);
+ret->collectionSites = cloneString(row[6]);
+ret->batchId = cloneString(row[7]);
+ret->isolationType = cloneString(row[8]);
+ret->isolationDate = cloneString(row[9]);
+ret->pathNotes = cloneString(row[10]);
 return ret;
 }
 
@@ -41,7 +57,7 @@ struct gtexSample *gtexSampleLoadAll(char *fileName)
 {
 struct gtexSample *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -59,7 +75,7 @@ struct gtexSample *gtexSampleLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexSample *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -80,9 +96,17 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->name = sqlStringComma(&s);
+ret->sampleId = sqlStringComma(&s);
 ret->tissue = sqlStringComma(&s);
 ret->donor = sqlStringComma(&s);
+ret->autolysisScore = sqlSignedComma(&s);
+ret->ischemicTime = sqlStringComma(&s);
+ret->rin = sqlFloatComma(&s);
+ret->collectionSites = sqlStringComma(&s);
+ret->batchId = sqlStringComma(&s);
+ret->isolationType = sqlStringComma(&s);
+ret->isolationDate = sqlStringComma(&s);
+ret->pathNotes = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -94,9 +118,15 @@ void gtexSampleFree(struct gtexSample **pEl)
 struct gtexSample *el;
 
 if ((el = *pEl) == NULL) return;
-freeMem(el->name);
+freeMem(el->sampleId);
 freeMem(el->tissue);
 freeMem(el->donor);
+freeMem(el->ischemicTime);
+freeMem(el->collectionSites);
+freeMem(el->batchId);
+freeMem(el->isolationType);
+freeMem(el->isolationDate);
+freeMem(el->pathNotes);
 freez(pEl);
 }
 
@@ -117,7 +147,7 @@ void gtexSampleOutput(struct gtexSample *el, FILE *f, char sep, char lastSep)
 /* Print out gtexSample.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->name);
+fprintf(f, "%s", el->sampleId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -127,23 +157,59 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->donor);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->autolysisScore);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ischemicTime);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%g", el->rin);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->collectionSites);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->batchId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->isolationType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->isolationDate);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->pathNotes);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 void gtexSampleCreateTable(struct sqlConnection *conn, char *table)
-/* Create expression record format table of given name. */
+/* Create GTEx sample table of given name. */
 {
 char query[1024];
 
 sqlSafef(query, sizeof(query),
 "CREATE TABLE %s (\n"
-"    name varchar(255) not null,       # GTEx sample identifier\n"
+"    sampleId varchar(255) not null,   # GTEx sample identifier\n"
 "    tissue varchar(255) not null,     # Tissue name\n"
 "    donor varchar(255) not null,      # GTEx subject identifier\n"
+"    autolysisScore int not null default '-1',	# Level of tissue self-digestion (0-3; none,mild,moderate,severe, -1 if unknown)\n"
+"    ischemicTime varchar(255) not null default 'unknown',	# Time from tissue removal to preservation, in 4hr intervals\n"
+"    rin float not null default '0.0',	# RNA Integrity Number\n"
+"    collectionSites varchar(255) not null,	# GTEx Biospecimen Source Site list\n"
+"    batchId varchar(255) not null,	# Nucleic acid isolation batch ID\n"
+"    isolationType varchar(255) not null,	# Type of nucleic acid isolation\n"
+"    isolationDate varchar(255) not null,	# Date of nucleic acid isolation\n"
+"    pathNotes varchar(1024) not null default '',	# Pathology report notes\n"
 "              #Indices\n"
-"    PRIMARY KEY(name)\n"
+"    PRIMARY KEY(sampleId)\n"
 ")\n",   table);
 sqlRemakeTable(conn, table, query);
 }

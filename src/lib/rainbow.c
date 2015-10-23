@@ -193,3 +193,20 @@ struct rgbColor whiteToBlackRainbowAtPos(double pos)
 {
 return interpolatedHue(whiteToBlackRainbowTable, ArraySize(whiteToBlackRainbowTable), pos);
 }
+
+struct rgbColor *getRainbow(struct rgbColor (*rainbowAtPos)(double pos), int size)
+/* Return array filled with rainbow of colors */
+{
+struct rgbColor *colors;
+AllocArray(colors, size);
+double invCount = 1.0/size;
+double pos;
+int i;
+for (i = 0; i < size; i++)
+    {
+    pos = invCount * i;
+    colors[i] = (*rainbowAtPos)(pos);
+    }
+return colors;
+}
+

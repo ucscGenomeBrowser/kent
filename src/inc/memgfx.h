@@ -15,9 +15,10 @@
 
 typedef unsigned int Color;
 
-// BIGENDIAN machines:
 
 #if defined(__sgi__) || defined(__sgi) || defined(__powerpc__) || defined(sparc) || defined(__ppc__) || defined(__s390__) || defined(__s390x__)
+
+// BIGENDIAN machines:
 
 #define MEMGFX_BIGENDIAN	1
 #define MG_WHITE   0xffffffff
@@ -36,6 +37,8 @@ typedef unsigned int Color;
 #define COLOR_32_BLUE(c) (((c)>>8)&0xff)
 
 #else
+
+// LITTLE ENDIAN machines:
 
 #define MG_WHITE   0xffffffff
 #define MG_BLACK   0xff000000

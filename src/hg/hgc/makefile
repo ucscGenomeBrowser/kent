@@ -7,7 +7,7 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 A = hgc
 
 O = $A.o bamClick.o bigBedClick.o dbRIP.o ccdsClick.o cgapSageClick.o encodeClick.o expClick.o \
-	gencodeClick.o gvfClick.o hgdpClick.o \
+	gencodeClick.o gtexClick.o gvfClick.o hgdpClick.o \
 	lowelab.o lrgClick.o \
 	mafClick.o makeItemsClick.o mgcClick.o \
 	parClick.o peakClusters.o regMotif.o retroClick.o rmskJoinedClick.o \
@@ -35,6 +35,6 @@ alpha::
 	chmod -R a+rX,g+w ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
 
 beta::
-	rm -fr ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
+	rm -fr ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
 	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-beta/
-	chmod -R a+rX,g+w ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
+	chmod -R a+rX,g+w ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
