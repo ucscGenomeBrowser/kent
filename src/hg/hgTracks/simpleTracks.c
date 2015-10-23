@@ -1701,10 +1701,10 @@ if (attr == NULL)
     }
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
-    if (!cartVarExists(cart, oregannoTypeString[cnt])
-    ||  (  cartString(cart, oregannoTypeString[cnt]) != NULL
-        && differentString(cartString(cart, oregannoTypeString[cnt]), "0")
-        && sameString(oregannoTypeDbValue[cnt], attr->attrVal)))
+    if ((!cartVarExists(cart, oregannoTypeString[cnt])
+    ||  (cartString(cart, oregannoTypeString[cnt]) != NULL
+        && differentString(cartString(cart, oregannoTypeString[cnt]), "0")))
+        && (cmpWordsWithEmbeddedNumbers(oregannoTypeDbValue[cnt], attr->attrVal))==0)
         {
         oregannoAttrFree(&attr);
         return TRUE; /* include this type */
