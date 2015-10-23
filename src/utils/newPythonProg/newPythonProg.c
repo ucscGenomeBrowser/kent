@@ -46,7 +46,7 @@ else
     upLevel = cloneString("../../../../..");
     }
 fprintf(f, 
-"normal::\n\t cp -p %s /cluster/home/${USER}/bin\n\t cp -p %s /cluster/home/${USER}/kent/src/pyLib/scripts\n"
+"normal::\n\t cp -p %s ${HOME}/bin\n\t cp -p %s ${HOME}/kent/src/pyLib/scripts\n"
 "test::\n\t@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \\ " 
 "\n\telse echo \"# no tests directory (or perhaps no tests/makefile) in $(CURDIR)\"; fi"
 , progName, progName);
@@ -69,7 +69,8 @@ fprintf(programFile, "def parseArgs(args):\n    \"\"\"\n    Parse the command li
 		    "= argparse.ArgumentParser(description = __doc__)\n    parser.add_argument (\"inpu"
 		    "tFile\",\n    help = \" The input file. \",\n    type = argparse.FileType(\"r\"))\n    ");
 fprintf(programFile, "parser.add_argument (\"outputFile\",\n    help = \" The output file. \",\n    type =" 
-		    "argparse.FileType(\"w\"))\n    options = parser.parse_args()\n    return options\n\n"); 
+		    "argparse.FileType(\"w\"))\n    if (len(sys.argv) == 1):\n        parser.print_help()\n"
+		    "        exit(1)\n    options = parser.parse_args()\n    return options\n\n"); 
 fprintf(programFile, "def main(args):\n    \"\"\"\n    Initialized options and calls other functions.\n    \"\"\"\n    "
 		    "options = parseArgs(args)\n\nif __name__ == \""
 		    "__main__\" : \n    sys.exit(main(sys.argv))"); 

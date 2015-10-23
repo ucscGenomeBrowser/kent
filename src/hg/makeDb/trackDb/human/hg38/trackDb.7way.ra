@@ -1,5 +1,5 @@
 track cons7way
-shortLabel 7-way Cons
+shortLabel Cons 7 Verts
 compositeTrack on
 longLabel Multiz Alignment & Conservation (7 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
@@ -48,7 +48,7 @@ group compGeno
         track phyloP7way
         subTrack cons7wayViewphyloP off
         subGroups view=phyloP
-        shortLabel 7 Vert. Cons
+        shortLabel Cons 7 Verts
         longLabel 7 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -72,7 +72,7 @@ group compGeno
         track phastCons7way
         subTrack cons7wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 7 Vert. Cons
+        shortLabel Cons 7 Verts
         longLabel 7 vertebrates conservation by PhastCons
         noInherit on
         configurable on

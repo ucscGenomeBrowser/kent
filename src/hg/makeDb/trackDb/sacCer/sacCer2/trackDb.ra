@@ -63,4 +63,5 @@ xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex [A-Z12][-A-Z0-9_)(]+
 
 track oreganno override
+release beta,public
 html oregannoOld

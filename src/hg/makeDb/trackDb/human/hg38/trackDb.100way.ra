@@ -59,7 +59,7 @@ priority 1
         track phyloP100way
         subTrack cons100wayViewphyloP on
         subGroups view=phyloP clade=all
-        shortLabel 100 Vert. Cons
+        shortLabel Cons 100 Verts
         longLabel 100 vertebrates Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -83,7 +83,7 @@ priority 1
         track phastCons100way
         subTrack cons100wayViewphastcons off
         subGroups view=phastcons clade=all
-        shortLabel 100 Vert. Cons
+        shortLabel Cons 100 Verts
         longLabel 100 vertebrates conservation by PhastCons
         noInherit on
         configurable on

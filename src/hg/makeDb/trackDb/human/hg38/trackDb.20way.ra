@@ -1,6 +1,6 @@
 track cons20way
 compositeTrack on
-shortLabel Cons Primates
+shortLabel Cons 20 Mammals
 longLabel Primates Multiz Alignment & Conservation (20 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
@@ -49,7 +49,7 @@ group compGeno
         track phyloP20way
         subTrack cons20wayViewphyloP off
         subGroups view=phyloP
-        shortLabel 20 mammals Cons
+        shortLabel Cons 20 Mammals
         longLabel 20 mammals (17 primates) Basewise Conservation by PhyloP
         noInherit on
         configurable on
@@ -73,7 +73,7 @@ group compGeno
         track phastCons20way
         subTrack cons20wayViewphastcons off
         subGroups view=phastcons
-        shortLabel 20-way Cons
+        shortLabel Cons 20 Mammals
         longLabel 20 mammals (17 primates) conservation by PhastCons
         noInherit on
         configurable on
