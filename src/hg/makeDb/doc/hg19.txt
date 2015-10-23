@@ -30736,9 +30736,9 @@ hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_co
 
 
 
-
+EOF
 #############################################################################
-# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 4/8/15 angie)
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie)
     # It was kind of a pain to get the Aspera command line client ascp this time around --
     # turns out it's included in their web browser plugin package, which I didn't think to
     # obtain because I need a command-line tool not a web browser plugin.  Anyway,
@@ -30760,7 +30760,7 @@ hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_co
       echo $f
       tabix -p vcf $f
     end
-
+    # Install the files
     mkdir /gbdb/hg19/1000Genomes/phase3
     ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/phase3/
     cp /dev/null tgpPhase3.txt
@@ -30771,7 +30771,7 @@ hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_co
     # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
     hgLoadSqlTab hg19 tgpPhase3 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase3.txt
     # Make a chromosomes line for trackDb:
-    use hg19 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
+    hgsql hg19 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
 #chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 
@@ -30794,6 +30794,10 @@ hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_co
     rm tmp.bed
     ln -s `pwd`/2014*.bb /gbdb/hg19/1000Genomes/phase3/
     # Use trackDb's bigDataUrl setting instead of hgBbiDbLink tiny table
+    # Make a chromosomes line for trackDb:
+    bigBedInfo -chroms /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb \
+    | egrep '^[[:space:]]+chr' | awk '{print $1;}' | xargs echo | sed -e 's/ /,/g'
+#chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 
 ############################################################################
