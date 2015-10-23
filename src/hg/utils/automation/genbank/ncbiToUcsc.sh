@@ -34,6 +34,7 @@ fi
 
 outside="/hive/data/outside/ncbi/genomes/$asmType"
 inside="/hive/data/inside/ncbi/genomes/$asmType"
+export scripts="${inside}/scripts"
 
 export fnaFile=$2
 
@@ -64,13 +65,15 @@ fi
 
 # if checkAgpStatusOK.txt does not exist, run through that construction
 #   procedure, else continue with bbi file construction
+### XXX temporary run everything
+### rm -f "${inside}/${D}/${B}.checkAgpStatusOK.txt"
 if [ ! -s "${inside}/${D}/${B}.checkAgpStatusOK.txt" ]; then
 
 ###########################################################################
 # there will always be a 2bit file constructed from the fnaFile
 mkdir -p "${inside}/${D}"
 if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.ncbi.2bit" ]; then
-  echo "# ${dateStamp} NCBI 2bit ${B}" 1>&2
+  printf "# %s NCBI 2bit $s\n" "${dateStamp}" "${B}" 1>&2
   faToTwoBit "${outside}/${fnaFile}" "${inside}/${D}/${B}.ncbi.2bit"
   twoBitInfo "${inside}/${D}/${B}.ncbi.2bit" stdout \
     | sort -k2nr > "${inside}/${D}/${B}.ncbi.chrom.sizes"
@@ -81,20 +84,30 @@ fi
 ###########################################################################
 # first part could be assembled chromosomes
 if [ -s "${chr2acc}" ]; then
-  echo "# ${dateStamp} chroms ${B}" 1>&2
+  printf "# %s chroms %s\n" "${dateStamp}" "${B}" 1>&2
   unplacedOnly=0
-  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.chr.fa.gz ]; then
-    ${inside}/scripts/compositeAgp.pl ucsc "${primaryAsm}" \
-      | gzip -c > "${inside}/${D}/${B}.chr.agp.gz"
-    touch -r "${chr2acc}" "${inside}/${D}/${B}.chr.agp.gz"
-    ${inside}/scripts/compositeAgp.pl ncbi "${primaryAsm}" \
+### XXX temporary rebuild agp.gz
+###  rm -f ${inside}/${D}/${B}.chr.agp.gz ${inside}/${D}/${B}.chr.fa.gz
+  if [ "${chr2acc}" -nt ${inside}/${D}/${B}.chr.agp.gz ]; then
+    ${scripts}/compositeAgp.pl ucsc "${primaryAsm}" \
+      2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.chr.names") \
+         | gzip -c > "${inside}/${D}/${B}.chr.agp.gz"
+    touch -r "${chr2acc}" "${inside}/${D}/${B}.chr.agp.gz" \
+      "${inside}/${D}/${B}.ucsc.to.ncbi.chr.names"
+  fi
+  if [ "${chr2acc}" -nt ${inside}/${D}/${B}.chr.agp..ncbi.gz ]; then
+    ${scripts}/compositeAgp.pl ncbi "${primaryAsm}" \
       | gzip -c > "${inside}/${D}/${B}.chr.agp.ncbi.gz"
     touch -r "${chr2acc}" "${inside}/${D}/${B}.chr.agp.ncbi.gz"
-    ${inside}/scripts/compositeFasta.pl ucsc \
+  fi
+  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.chr.fa.gz ]; then
+    ${scripts}/compositeFasta.pl ucsc \
       "${primaryAsm}" "${inside}/${D}/${B}.ncbi.2bit" \
         | gzip -c > ${inside}/${D}/${B}.chr.fa.gz
     touch -r "${outside}/${fnaFile}" ${inside}/${D}/${B}.chr.fa.gz
-    ${inside}/scripts/compositeFasta.pl ncbi \
+  fi
+  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.chr.fa.ncbi.gz ]; then
+    ${scripts}/compositeFasta.pl ncbi \
       "${primaryAsm}" "${inside}/${D}/${B}.ncbi.2bit" \
         | gzip -c > ${inside}/${D}/${B}.chr.fa.ncbi.gz
     touch -r "${outside}/${fnaFile}" ${inside}/${D}/${B}.chr.fa.ncbi.gz
@@ -109,25 +122,28 @@ fi
 if [ -s "${chr2scaf}" ]; then
   echo "# ${dateStamp} unlocalized_scaffolds ${B}" 1>&2
   unplacedOnly=0
+### XXX temporary rebuild agp
+###  rm -f "${inside}/${D}/${B}.unlocalized.agp.gz" "${inside}/${D}/${B}.unlocalized.fa.gz"
   if [ "${chr2scaf}" -nt "${inside}/${D}/${B}.unlocalized.agp.gz" ]; then
-    ${inside}/scripts/unlocalizedAgp.pl ucsc "${primaryAsm}" \
+    ${scripts}/unlocalizedAgp.pl ucsc "${primaryAsm}" \
+      2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.unlocalized.names") \
         | gzip -c > "${inside}/${D}/${B}.unlocalized.agp.gz"
     touch -r "${chr2scaf}" "${inside}/${D}/${B}.unlocalized.agp.gz"
   fi
   if [ "${chr2scaf}" -nt "${inside}/${D}/${B}.unlocalized.agp.ncbi.gz" ]; then
-    ${inside}/scripts/unlocalizedAgp.pl ncbi "${primaryAsm}" \
+    ${scripts}/unlocalizedAgp.pl ncbi "${primaryAsm}" \
         | gzip -c > "${inside}/${D}/${B}.unlocalized.agp.ncbi.gz"
     touch -r "${chr2scaf}" "${inside}/${D}/${B}.unlocalized.agp.ncbi.gz"
   fi
   if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.unlocalized.fa.gz" ]; then
-    ${inside}/scripts/unlocalizedFasta.pl ucsc "${primaryAsm}" \
+    ${scripts}/unlocalizedFasta.pl ucsc "${primaryAsm}" \
        "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
           > "${inside}/${D}/${B}.unlocalized.fa.gz"
     touch -r "${outside}/${fnaFile}" \
         "${inside}/${D}/${B}.unlocalized.fa.gz"
   fi
   if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.unlocalized.fa.ncbi.gz" ]; then
-    ${inside}/scripts/unlocalizedFasta.pl ncbi "${primaryAsm}" \
+    ${scripts}/unlocalizedFasta.pl ncbi "${primaryAsm}" \
        "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
           > "${inside}/${D}/${B}.unlocalized.fa.ncbi.gz"
     touch -r "${outside}/${fnaFile}" \
@@ -145,11 +161,27 @@ fi
 altCount=`(find "${asmStructure}" -type f | grep alt.scaf.agp.gz || true) | wc -l`
 
 if [ "${altCount}" -gt 0 -a ! -s "${B}_alternates.agp.ncbi.gz" ]; then
-  echo "# ${dateStamp} alternates ${B}" 1>&2
-  ${inside}/scripts/alternatesAgp.pl ncbi "" "${asmStructure}" \
+  printf "# %s alternates %s" "${dateStamp}" "${B}" 1>&2
+  ${scripts}/alternatesAgp.pl ncbi "" "${asmStructure}" \
      | gzip -c > "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
   partCount=`echo $partCount | awk '{printf "%d", $1+1}'`
   touch -r "${inside}/${D}/${B}.ncbi.2bit" "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
+fi
+
+${scripts}/ucscPatchNames.sh "${outside}/${asmReport}" \
+  > "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names"
+if [ ! -s "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names" ]; then
+ rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names"
+else
+ printf "# %s patches built %s\n" "${dateStamp}" "${B}"
+fi
+
+${scripts}/ucscAltNames.sh "${outside}/${asmReport}" \
+  > "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names"
+if [ ! -s "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names" ]; then
+ rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names"
+else
+ printf "# %s alternates built %s\n" "${dateStamp}" "${B}"
 fi
 
 ###########################################################################
@@ -158,31 +190,37 @@ fi
 # contig identifiers.
 if [ -s "${unplacedScafAgp}" ]; then
   echo "# ${dateStamp} unplaced_scaffolds ${B}" 1>&2
+### XXX temporary rebuild agp
+###  rm -f "${inside}/${D}/${B}.unplaced.agp.gz"
   if [ "${unplacedScafAgp}" -nt "${inside}/${D}/${B}.unplaced.agp.gz" ]; then
     if [ "${unplacedOnly}" -gt 0 ]; then
-      ${inside}/scripts/unplacedAgp.pl ucsc "" "${unplacedScafAgp}" \
-         | gzip -c > "${inside}/${D}/${B}.unplaced.agp.gz"
+      ${scripts}/unplacedAgp.pl ucsc "" "${unplacedScafAgp}" \
+        2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.unplaced.names") \
+           | gzip -c > "${inside}/${D}/${B}.unplaced.agp.gz"
     else
-      ${inside}/scripts/unplacedAgp.pl ucsc "chrUn_" "${unplacedScafAgp}" \
-         | gzip -c > "${inside}/${D}/${B}.unplaced.agp.gz"
+      ${scripts}/unplacedAgp.pl ucsc "chrUn_" "${unplacedScafAgp}" \
+        2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.unplaced.names") \
+           | gzip -c > "${inside}/${D}/${B}.unplaced.agp.gz"
     fi
     touch -r "${unplacedScafAgp}" "${inside}/${D}/${B}.unplaced.agp.gz"
-    ${inside}/scripts/unplacedAgp.pl ncbi "" "${unplacedScafAgp}" \
+    ${scripts}/unplacedAgp.pl ncbi "" "${unplacedScafAgp}" \
          | gzip -c > "${inside}/${D}/${B}.unplaced.agp.ncbi.gz"
     touch -r "${unplacedScafAgp}" "${inside}/${D}/${B}.unplaced.agp.ncbi.gz"
   fi
+### XXX temporary rebuild fa
+###  rm -f "${inside}/${D}/${B}.unplaced.fa.gz"
   if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.unplaced.fa.gz" ]; then
     if [ "${unplacedOnly}" -gt 0 ]; then
-      ${inside}/scripts/unplacedFasta.pl ucsc "" "${unplacedScafAgp}" \
+      ${scripts}/unplacedFasta.pl ucsc "" "${unplacedScafAgp}" \
          "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
             > "${inside}/${D}/${B}.unplaced.fa.gz"
     else
-      ${inside}/scripts/unplacedFasta.pl ucsc "chrUn_" "${unplacedScafAgp}" \
+      ${scripts}/unplacedFasta.pl ucsc "chrUn_" "${unplacedScafAgp}" \
          "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
             > "${inside}/${D}/${B}.unplaced.fa.gz"
     fi
     touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.unplaced.fa.gz"
-    ${inside}/scripts/unplacedFasta.pl ncbi "" "${unplacedScafAgp}" \
+    ${scripts}/unplacedFasta.pl ncbi "" "${unplacedScafAgp}" \
        "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
           > "${inside}/${D}/${B}.unplaced.fa.ncbi.gz"
     touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.unplaced.fa.ncbi.gz"
@@ -196,23 +234,30 @@ fi
 # non-nuclear business
 if [ -s "${nonNucChr2acc}" ]; then
   printf "# %s non-nuclear chroms %s\n" "${dateStamp}" "${B}" 1>&2
-  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.nonNucChr.fa.gz ]; then
+### XXX temporary rebuild agp
+###  rm -f ${inside}/${D}/${B}.nonNucChr.agp.gz
+  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.nonNucChr.agp.gz ]; then
     printf "# %s compositeAgp.pl ucsc %s\n" "${dateStamp}" "${nonNucAsm}" 1>&2
-    ${inside}/scripts/compositeAgp.pl ucsc "${nonNucAsm}" \
-      | gzip -c > "${inside}/${D}/${B}.nonNucChr.agp.gz"
+    ${scripts}/compositeAgp.pl ucsc "${nonNucAsm}" \
+      2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.nonNucChr.names") \
+         | gzip -c > "${inside}/${D}/${B}.nonNucChr.agp.gz"
     touch -r "${nonNucChr2acc}" "${inside}/${D}/${B}.nonNucChr.agp.gz"
-    ${inside}/scripts/compositeFasta.pl ucsc \
+  fi
+### XXX temporary rebuild fa
+###  rm -f ${inside}/${D}/${B}.nonNucChr.fa.gz
+  if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.nonNucChr.fa.gz ]; then
+    ${scripts}/compositeFasta.pl ucsc \
       "${nonNucAsm}" "${inside}/${D}/${B}.ncbi.2bit" \
         | gzip -c > ${inside}/${D}/${B}.nonNucChr.fa.gz
     touch -r "${outside}/${fnaFile}" ${inside}/${D}/${B}.nonNucChr.fa.gz
   fi
   if [ "${outside}/${fnaFile}" -nt ${inside}/${D}/${B}.nonNucChr.fa.ncbi.gz ]; then
     printf "# %s compositeAgp.pl ncbi %s\n" "${dateStamp}" "${nonNucAsm}" 1>&2
-    ${inside}/scripts/compositeAgp.pl ncbi "${nonNucAsm}" \
+    ${scripts}/compositeAgp.pl ncbi "${nonNucAsm}" \
       | gzip -c > "${inside}/${D}/${B}.nonNucChr.agp.ncbi.gz"
     touch -r "${nonNucChr2acc}" "${inside}/${D}/${B}.nonNucChr.agp.ncbi.gz"
-    echo "${inside}/scripts/compositeFasta.pl" "${nonNucAsm}" "${inside}/${D}/${B}.ncbi.2bit" 1>&2
-    ${inside}/scripts/compositeFasta.pl ncbi \
+    echo "${scripts}/compositeFasta.pl" "${nonNucAsm}" "${inside}/${D}/${B}.ncbi.2bit" 1>&2
+    ${scripts}/compositeFasta.pl ncbi \
       "${nonNucAsm}" "${inside}/${D}/${B}.ncbi.2bit" \
         | gzip -c > ${inside}/${D}/${B}.nonNucChr.fa.ncbi.gz
     touch -r "${outside}/${fnaFile}" ${inside}/${D}/${B}.nonNucChr.fa.ncbi.gz
@@ -221,26 +266,31 @@ if [ -s "${nonNucChr2acc}" ]; then
 fi
 if [ -s "${nonNucChr2scaf}" ]; then
   echo "# ${dateStamp} non-nuclear unlocalized_scaffolds ${B}" 1>&2
+### XXX temporary rebuild agp
+###  rm -f "${inside}/${D}/${B}.nonNucUnlocalized.agp.gz"
   if [ "${nonNucChr2scaf}" -nt "${inside}/${D}/${B}.nonNucUnlocalized.agp.gz" ]; then
-    ${inside}/scripts/unlocalizedAgp.pl ucsc "${nonNucAsm}" \
+    ${scripts}/unlocalizedAgp.pl ucsc "${nonNucAsm}" \
+   2> >(sort -u > "${inside}/${D}/${B}.ucsc.to.ncbi.nonNucUnlocalized.names") \
         | gzip -c > "${inside}/${D}/${B}.nonNucUnlocalized.agp.gz"
     touch -r "${nonNucChr2scaf}" "${inside}/${D}/${B}.nonNucUnlocalized.agp.gz"
   fi
   if [ "${nonNucChr2scaf}" -nt "${inside}/${D}/${B}.nonNucUnlocalized.agp.ncbi.gz" ]; then
     printf "# %s unlocalizedAgp.pl ncbi %s\n" "${dateStamp}" "${nonNucAsm}" 1>&2
-    ${inside}/scripts/unlocalizedAgp.pl ncbi "${nonNucAsm}" \
+    ${scripts}/unlocalizedAgp.pl ncbi "${nonNucAsm}" \
         | gzip -c > "${inside}/${D}/${B}.nonNucUnlocalized.agp.ncbi.gz"
     touch -r "${nonNucChr2scaf}" "${inside}/${D}/${B}.nonNucUnlocalized.agp.ncbi.gz"
   fi
+### XXX temporary rebuild fa
+###  rm -f "${inside}/${D}/${B}.nonNucUnlocalized.fa.gz"
   if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.nonNucUnlocalized.fa.gz" ]; then
-    ${inside}/scripts/unlocalizedFasta.pl ucsc "${nonNucAsm}" \
+    ${scripts}/unlocalizedFasta.pl ucsc "${nonNucAsm}" \
        "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
           > "${inside}/${D}/${B}.nonNucUnlocalized.fa.gz"
     touch -r "${outside}/${fnaFile}" \
         "${inside}/${D}/${B}.nonNucUnlocalized.fa.gz"
   fi
   if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.nonNucUnlocalized.fa.ncbi.gz" ]; then
-    ${inside}/scripts/unlocalizedFasta.pl ncbi "${nonNucAsm}" \
+    ${scripts}/unlocalizedFasta.pl ncbi "${nonNucAsm}" \
        "${inside}/${D}/${B}.ncbi.2bit" | gzip -c \
           > "${inside}/${D}/${B}.nonNucUnlocalized.fa.ncbi.gz"
     touch -r "${outside}/${fnaFile}" \
@@ -252,10 +302,28 @@ fi
 ###########################################################################
 # finally, construct the UCSC 2bit file if there are parts to go into
 # this assembly.  For no parts, make a noStructure assembly.
-echo "# ${dateStamp} partCount: ${partCount}" 1>&2
+printf "# %s partCount: %s\n" "${dateStamp}" "${partCount}" 1>&2
 
-# XXX temporary avoid UCSC 2bit construction
-### if [ 0 -eq 1 ]; then
+namesCount=`(ls ${inside}/${D}/*.ucsc.to.ncbi.*.names || true) | wc -l`
+
+if [ "${namesCount}" -gt 0 ]; then
+  newestName=`ls -rt ${inside}/${D}/*.ucsc.to.ncbi.*.names | tail -1`
+### XXX temporarily force rebuild agp.ucsc
+###  rm -f "${inside}/${D}/${B}.agp.ucsc.gz"
+  if [ "${newestName}" -nt "${inside}/${D}/${B}.agp.ucsc.gz" ]; then
+    printf "# %s constructing %s UCSC agp file\n", "${dateStamp}" "${B}" 1>&2
+    cat ${inside}/${D}/*.ucsc.to.ncbi.*.names \
+       > "${inside}/${D}/ucscToNcbi.name.txt"
+    zcat ${inside}/${D}/*.agp.ncbi.gz | ${scripts}/agpNameTranslate.pl \
+      "${inside}/${D}/ucscToNcbi.name.txt" /dev/stdin \
+        | gzip -c > "${inside}/${D}/${B}.agp.ucsc.gz"
+    touch -r "${newestName}" "${inside}/${D}/${B}.agp.ucsc.gz" \
+       "${inside}/${D}/${B}.ncbi.to.ucsc.sed"
+    rm -f "${inside}/${D}/ucscToNcbi.name.txt"
+    ${scripts}/ucscPatchAltsFa.sh "${inside}/${D}"
+  fi
+fi
+
 if [ ${partCount} -eq 0 ]; then
   echo "# ${dateStamp} constructing no structure assembly" 1>&2
   echo "# ${dateStamp} rm -f \"${inside}/${D}/${B}_noStructure.agp.ncbi.gz\"" 1>&2
@@ -269,21 +337,21 @@ if [ ${partCount} -eq 0 ]; then
     if [ "${contigCount}" -gt 0 ]; then
 ### XXX temporary disable UCSC construction
 if [ 0 -eq 1 ]; then
-    echo "${inside}/scripts/noStructureAgp.pl ucsc \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure.agp.gz\"" 1>&2
-    ${inside}/scripts/noStructureAgp.pl ucsc "${outside}/${asmReport}" \
+    echo "${scripts}/noStructureAgp.pl ucsc \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure.agp.gz\"" 1>&2
+    ${scripts}/noStructureAgp.pl ucsc "${outside}/${asmReport}" \
       "${inside}/${D}/${B}.ncbi.chrom.sizes" | gzip -c \
         > "${inside}/${D}/${B}_noStructure.agp.gz"
     touch -r "${outside}/${asmReport}" "${inside}/${D}/${B}_noStructure.agp.gz"
 fi ### XXX temporary disable UCSC construction
-    echo "${inside}/scripts/noStructureAgp.pl ncbi \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure..agp.ncbi.gz\"" 1>&2
-    ${inside}/scripts/noStructureAgp.pl ncbi "${outside}/${asmReport}" \
+    echo "${scripts}/noStructureAgp.pl ncbi \"${outside}/${asmReport}\" \"${inside}/${D}/${B}.ncbi.chrom.sizes\" | gzip -c > \"${inside}/${D}/${B}_noStructure..agp.ncbi.gz\"" 1>&2
+    ${scripts}/noStructureAgp.pl ncbi "${outside}/${asmReport}" \
       "${inside}/${D}/${B}.ncbi.chrom.sizes" | gzip -c \
         > "${inside}/${D}/${B}_noStructure.agp.ncbi.gz"
     touch -r "${outside}/${asmReport}" "${inside}/${D}/${B}_noStructure.agp.ncbi.gz"
 ### XXX temporary disable UCSC construction
 if [ 0 -eq 1 ]; then
-    echo "${inside}/scripts/noStructureFasta.pl ucsc \"${inside}/${D}/${B}_noStructure.agp.gz\" \"${outside}/${fnaFile}\" | faToTwoBit stdin \"${inside}/${D}/${B}.ucsc.2bit\"" 1>&2
-    ${inside}/scripts/noStructureFasta.pl ucsc \
+    echo "${scripts}/noStructureFasta.pl ucsc \"${inside}/${D}/${B}_noStructure.agp.gz\" \"${outside}/${fnaFile}\" | faToTwoBit stdin \"${inside}/${D}/${B}.ucsc.2bit\"" 1>&2
+    ${scripts}/noStructureFasta.pl ucsc \
       "${inside}/${D}/${B}_noStructure.agp.gz" "${outside}/${fnaFile}" \
          | faToTwoBit stdin "${inside}/${D}/${B}.ucsc.2bit"
     twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
@@ -293,7 +361,7 @@ if [ 0 -eq 1 ]; then
     touch -r "${outside}/${fnaFile}" \
         "${inside}/${D}/${B}.ucsc.chrom.sizes"
     # verify contig name lengths are less than 31
-    maxNameLength=`cut -f1 "${inside}/${D}/${B}.ucsc.chrom.sizes" | awk '{print length($1)}' | sort -nr | head -1`
+    maxNameLength=`(cut -f1 "${inside}/${D}/${B}.ucsc.chrom.sizes" | awk '{print length($1)}' | sort -nr | head -1 || true)`
 fi ### XXX temporary disable UCSC construction
        maxNameLength=32
     else
@@ -301,65 +369,72 @@ fi ### XXX temporary disable UCSC construction
     fi
     # if not, then rebuild ucsc.2bit from ncbi.2bit
     if [ "${maxNameLength}" -gt 31 ]; then
-### XXX temporary disable UCSC construction
-if [ 0 -eq 1 ]; then
        echo "# ${dateStamp} rebuilding UCSC no structure assembly from ncbi $maxNameLength" 1>&2
        rm -f "${inside}/${D}/${B}.ucsc.2bit"
        rm -f "${inside}/${D}/${B}.ucsc.chrom.sizes"
+       rm -f ${inside}/${D}/*.ucsc.to.ncbi.*.names
+       twoBitInfo "${inside}/${D}/${B}.ncbi.2bit" stdout \
+         | cut -f1 | sed -e 's#\(.*\)\.\([0-9][0-9]*$\)#\1v\2\t\1.\2#;' \
+            > ${inside}/${D}/${B}.ucsc.to.ncbi.fake.names
        twoBitToFa "${inside}/${D}/${B}.ncbi.2bit" stdout \
          | sed -e 's#\.\([0-9][0-9]*$\)#v\1#;' \
             | faToTwoBit stdin "${inside}/${D}/${B}.ucsc.2bit"
        touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.2bit"
        twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
            | sort -k2nr > "${inside}/${D}/${B}.ucsc.chrom.sizes"
-       rm -f ${inside}/${D}/*agp.gz
+       rm -f ${inside}/${D}/*agp.gz ${inside}/${D}/*agp.ucsc.gz
        twoBitToFa "${inside}/${D}/${B}.ucsc.2bit" stdout \
          | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.gz"
      touch -r "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.fake.agp.gz"
-fi ### XXX temporary disable UCSC construction
+       cp -p "${inside}/${D}/${B}.fake.agp.gz" "${inside}/${D}/${B}.agp.ucsc.gz"
        rm -f ${inside}/${D}/*agp.ncbi.gz
        twoBitToFa "${inside}/${D}/${B}.ncbi.2bit" stdout \
     | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.ncbi.gz"
  touch -r "${inside}/${D}/${B}.ncbi.2bit" "${inside}/${D}/${B}.fake.agp.ncbi.gz"
     fi
   fi
-else
-  if [ -s "${nonNucChr2scaf}" -o -s "${nonNucChr2acc}" ]; then
-    rm -f "${inside}/${D}/${B}.ucsc.2bit"
-  fi
-### XXX temporary disable UCSC construction
-if [ 0 -eq 1 ]; then
-  echo "# ${dateStamp} constructing UCSC 2bit file ${B}" 1>&2
-  if [ ! -s "${inside}/${D}/${B}.ucsc.2bit" ]; then
-    faToTwoBit ${inside}/${D}/${B}.*.fa.gz \
-        "${inside}/${D}/${B}.ucsc.2bit"
-    twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
-        | sort -k2nr > "${inside}/${D}/${B}.ucsc.chrom.sizes"
-    touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.2bit"
-    touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.chrom.sizes"
-    # verify contig name lengths are less than 31
-    maxNameLength=`cut -f1 "${inside}/${D}/${B}.ucsc.chrom.sizes" | awk '{print length($1)}' | sort -nr | head -1`
-    # if not, then rebuild ucsc.2bit from ncbi.2bit
-    if [ "${maxNameLength}" -gt 31 ]; then
-       rm -f "${inside}/${D}/${B}.ucsc.2bit"
-       rm -f "${inside}/${D}/${B}.ucsc.chrom.sizes"
-       twoBitToFa "${inside}/${D}/${B}.ncbi.2bit" stdout \
-         | sed -e 's#\.\([0-9][0-9]*$\)#v\1#;' \
-            | faToTwoBit stdin "${inside}/${D}/${B}.ucsc.2bit"
-       touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.2bit"
-       twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
-           | sort -k2nr > "${inside}/${D}/${B}.ucsc.chrom.sizes"
-       rm -f ${inside}/${D}/*agp.gz
-       twoBitToFa "${inside}/${D}/${B}.ucsc.2bit" stdout \
-         | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.gz"
-     touch -r "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.fake.agp.gz"
+else  ### there are part counts, build UCSC 2bit file from the parts
+### XXX force rebuild of ucsc.2bit file
+###  rm -f "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.ucsc.chrom.sizes"
+  if [ -s "${inside}/${D}/${B}.agp.ucsc.gz" ]; then
+    if [ -s "${nonNucChr2scaf}" -o -s "${nonNucChr2acc}" ]; then
+      rm -f "${inside}/${D}/${B}.ucsc.2bit"
+    fi
+    printf "# %s constructing UCSC 2bit file %s\n" "${dateStamp}" "${B}" 1>&2
+    if [ ! -s "${inside}/${D}/${B}.ucsc.2bit" ]; then
+      printf "# %s faToTwoBit %s/%s/%s.*.fa.gz\n" "${dateStamp}" "${inside}" "${D}" "${B}" 1>&2
+      faToTwoBit ${inside}/${D}/${B}.*.fa.gz \
+          "${inside}/${D}/${B}.ucsc.2bit"
+      twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
+          | sort -k2nr > "${inside}/${D}/${B}.ucsc.chrom.sizes"
+      touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.2bit"
+      touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.chrom.sizes"
+      # verify contig name lengths are less than 31
+      maxNameLength=`(cut -f1 "${inside}/${D}/${B}.ucsc.chrom.sizes" | awk '{print length($1)}' | sort -nr | head -1 || true)`
+      # if not, then rebuild ucsc.2bit from ncbi.2bit
+      if [ "${maxNameLength}" -gt 31 ]; then
+         printf "# %s rebuilding ucsc.2bit due to names > 31 characters %d\n" "${dateStamp}" "${maxNameLength}"
+         rm -f "${inside}/${D}/${B}.ucsc.2bit"
+         rm -f "${inside}/${D}/${B}.ucsc.chrom.sizes"
+         rm -f ${inside}/${D}/*.ucsc.to.ncbi.*.names
+         twoBitInfo "${inside}/${D}/${B}.ncbi.2bit" stdout \
+           | cut -f1 | sed -e 's#\(.*\)\.\([0-9][0-9]*$\)#\1v\2\t\1.\2#;' \
+              > ${inside}/${D}/${B}.ucsc.to.ncbi.fake.names
+         twoBitToFa "${inside}/${D}/${B}.ncbi.2bit" stdout \
+           | sed -e 's#\.\([0-9][0-9]*$\)#v\1#;' \
+              | faToTwoBit stdin "${inside}/${D}/${B}.ucsc.2bit"
+         touch -r "${outside}/${fnaFile}" "${inside}/${D}/${B}.ucsc.2bit"
+         twoBitInfo "${inside}/${D}/${B}.ucsc.2bit" stdout \
+             | sort -k2nr > "${inside}/${D}/${B}.ucsc.chrom.sizes"
+         rm -f ${inside}/${D}/*agp.gz "${inside}/${D}/${B}.agp.ucsc.gz"
+         twoBitToFa "${inside}/${D}/${B}.ucsc.2bit" stdout \
+          | hgFakeAgp stdin stdout | gzip -c > "${inside}/${D}/${B}.fake.agp.gz"
+      touch -r "${inside}/${D}/${B}.ucsc.2bit" "${inside}/${D}/${B}.fake.agp.gz"
+       cp -p "${inside}/${D}/${B}.fake.agp.gz" "${inside}/${D}/${B}.agp.ucsc.gz"
+      fi
     fi
   fi
-fi ### XXX temporary disable UCSC construction
 fi
-
-# XXX temporary avoid UCSC 2bit construction
-### fi
 
 ###########################################################################
 # error report
@@ -390,8 +465,9 @@ if [ "${wcNcbi}" -ne "${wcUcsc}" ]; then
   echo "# ${inside}/${D}" 1>&2
 fi
 
+printf "# %s verify UCSC 2bit file %s\n" "${dateStamp}" "${B}"  1>&2
 if [ -s "${inside}/${D}/${B}.ucsc.2bit" ]; then
-  checkAgp=`zcat ${inside}/${D}/*.agp.gz | grep -v "^#" | checkAgpAndFa stdin "${inside}/${D}/${B}.ucsc.2bit" 2>&1 | tail -1`
+  checkAgp=`zcat ${inside}/${D}/${B}.agp.ucsc.gz | grep -v "^#" | checkAgpAndFa stdin "${inside}/${D}/${B}.ucsc.2bit" 2>&1 | tail -1`
   if [ "${checkAgp}" != "All AGP and FASTA entries agree - both files are valid" ]; then
     echo "# ${dateStamp} ERROR: UCSC checkAgpAndFa failed" 1>&2
     echo "# ${inside}/${D}" 1>&2
@@ -404,46 +480,49 @@ fi
 ###########################################################################
 # bbi track file construction
 
+### XXX temprorary rebuild lift files
+rm -f "${inside}/${D}/${B}.ucscToNcbi.lift"
+if [ ! -s "${inside}/${D}/${B}.ucscToNcbi.lift" ]; then
+  join -t'	' <(sort ${inside}/${D}/${B}.ucsc.chrom.sizes) \
+     <(sort ${inside}/${D}/${B}.*.names) \
+      | awk 'BEGIN{OFS="\t"}{printf "0\t%s\t%d\t%s\t%d\n",  $1,$2,$3,$2}' \
+        > "${inside}/${D}/${B}.ucscToNcbi.lift"
+  join -t'	' <(sort ${inside}/${D}/${B}.ucsc.chrom.sizes) \
+     <(sort ${inside}/${D}/${B}.*.names) \
+      | awk 'BEGIN{OFS="\t"}{printf "0\t%s\t%d\t%s\t%d\n",  $3,$2,$1,$2}' \
+        > "${inside}/${D}/${B}.ncbiToUcsc.lift"
+fi
 if [ -s "${inside}/${D}/${B}.checkAgpStatusOK.txt" ]; then
   echo "# ${dateStamp} constructing bbi files" 1>&2
 
   mkdir -p "${inside}/${D}/bbi"
-# XXX disable ucsc build
-if [ 0 -eq 1 ]; then
+### XXX temporary rebuild assembly files and indexes
+###  rm -f "${inside}/${D}/bbi/${B}.assembly.ncbi.bb"
   if [ "${inside}/${D}/${B}.checkAgpStatusOK.txt" -nt "${inside}/${D}/bbi/${B}.assembly.bb" ]; then
     echo "# ${dateStamp} constructing ucsc assembly bbi" 1>&2
-    ${inside}/scripts/agpToBbi.sh ucsc "${B}" \
+    ${scripts}/agpToBbi.sh ucsc "${B}" \
       "${inside}/${D}/${B}.ucsc.chrom.sizes" \
          "${inside}/${D}" "${inside}/${D}/bbi" 
   fi
-fi
   if [ "${inside}/${D}/${B}.checkAgpStatusOK.txt" -nt "${inside}/${D}/bbi/${B}.assembly.ncbi.bb" ]; then
     echo "# ${dateStamp} constructing ncbi assembly bbi" 1>&2
-    ${inside}/scripts/agpToBbi.sh ncbi "${B}" \
+    ${scripts}/agpToBbi.sh ncbi "${B}" \
       "${inside}/${D}/${B}.ncbi.chrom.sizes" \
          "${inside}/${D}" "${inside}/${D}/bbi" 
   fi
 
-  # XXX temporary force rebuild description.html
+  # XXX always want to force rebuild of description.html
   rm -f "${inside}/${D}/${B}.description.html"
   if [ "${outside}/${asmReport}" -nt "${inside}/${D}/${B}.description.html" ]; then
     echo "# ${dateStamp} constructing description.html" 1>&2
-    ${inside}/scripts/gatewayPage.pl ${outside}/${asmReport} \
+    ${scripts}/gatewayPage.pl ${outside}/${asmReport} \
       > "${inside}/${D}/${B}.description.html" \
       2> "${inside}/${D}/${B}.names.tab"
-    ${inside}/scripts/buildStats.pl "${inside}/${D}/${B}.ncbi.chrom.sizes" \
+    ${scripts}/buildStats.pl "${inside}/${D}/${B}.ncbi.chrom.sizes" \
       >> "${inside}/${D}/${B}.description.html" \
         2> "${inside}/${D}/${B}.build.stats.txt"
-# XXX disable ucsc build
-if [ 0 -eq 1 ]; then
-    ${inside}/scripts/buildStats.pl "${inside}/${D}/${B}.ucsc.chrom.sizes" \
-      >> "${inside}/${D}/${B}.description.html" \
-        2> "${inside}/${D}/${B}.build.stats.txt"
-fi
   fi
 
-# XXX disable ucsc build
-if [ 0 -eq 1 ]; then
   if [ "${inside}/${D}/${B}.ucsc.2bit" -nt "${inside}/${D}/bbi/${B}.gc5Base.bw" ]; then
     echo "# ${dateStamp} constructing ucsc gc5Base.bw" 1>&2
     hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \
@@ -454,7 +533,6 @@ if [ 0 -eq 1 ]; then
          "${inside}/${D}/bbi/${B}.gc5Base.bw"
     rm -f ${inside}/${D}/${B}.gc5Base.wigVarStep.gz
   fi
-fi
   if [ "${inside}/${D}/${B}.ncbi.2bit" -nt "${inside}/${D}/bbi/${B}.gc5Base.ncbi.bw" ]; then
     echo "# ${dateStamp} constructing ncbi gc5Base.bw" 1>&2
     hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \
@@ -465,9 +543,11 @@ fi
          "${inside}/${D}/bbi/${B}.gc5Base.ncbi.bw"
     rm -f ${inside}/${D}/${B}.gc5Base.wigVarStep.ncbi.gz
   fi
+### XXX - rerun rmsk to get both done
+###   rm -f "${inside}/${D}/${B}.rmsk.class.profile.txt"
   if [ "${rmOut}" -nt "${inside}/${D}/${B}.rmsk.class.profile.txt" ]; then
-     echo "# ${dateStamp} ${inside}/scripts/rmsk.sh \"${rmOut}\" \"${inside}/${D}/\"" 1>&2
-     ${inside}/scripts/rmsk.sh "${rmOut}" "${inside}/${D}/" \
+     echo "# ${dateStamp} ${scripts}/rmsk.sh \"${rmOut}\" \"${inside}/${D}/\"" 1>&2
+     ${scripts}/rmsk.sh "${rmOut}" "${inside}/${D}/" \
         >> "${inside}/${D}/rmsk.process.log" 2>&1 || true
      if [ -s "${inside}/${D}/${B}.rmsk.class.profile.txt" ]; then
        touch -r "${rmOut}" "${inside}/${D}/${B}.rmsk.class.profile.txt"
@@ -476,11 +556,11 @@ fi
 
   # ncbiGene.sh will do its own checking to see if it needs to run
   printf "# %s ncbiGene.sh %s\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/ncbiGene.sh "${gffFile}" "${inside}/${D}/"
+  ${scripts}/ncbiGene.sh "${gffFile}" "${inside}/${D}/"
 
   # cpg.sh will do its own checking to see if it needs to run
 #   printf "# %s cpg.sh %s\n" "${dateStamp}" "${B}" 1>&2
-#   ${inside}/scripts/cpg.sh "${inside}/${D}"
+#   ${scripts}/cpg.sh "${inside}/${D}"
 
   # construct a signature from faCount totals to compare with UCSC existing
   #  genome browsers
@@ -493,14 +573,14 @@ fi
   fi
 
   # XXX always rebuild trackDb.txt
-  rm -f "${inside}/${D}/trackDb.txt"
-  ${inside}/scripts/trackDb.sh ucsc "${B}" "${inside}/${D}" \
+  rm -f "${inside}/${D}/trackDb.txt" "${inside}/${D}/${B}.trackDb.ncbi.txt"
+  ${scripts}/trackDb.sh ucsc "${B}" "${inside}/${D}" \
       > "${inside}/${D}/${B}.trackDb.txt"
   # might be zero length, if so remove it
   if [ ! -s "${inside}/${D}/${B}.trackDb.txt" ]; then
      rm -f "${inside}/${D}/${B}.trackDb.txt"
   fi
-  ${inside}/scripts/trackDb.sh ncbi "${B}" "${inside}/${D}" \
+  ${scripts}/trackDb.sh ncbi "${B}" "${inside}/${D}" \
       > "${inside}/${D}/${B}.trackDb.ncbi.txt"
   # might be zero length, if so remove it
   if [ ! -s "${inside}/${D}/${B}.trackDb.ncbi.txt" ]; then
@@ -508,17 +588,17 @@ fi
   fi
 
   printf "# %s %s.assembly.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/assemblyDescription.pl "${inside}/${D}"
+  ${scripts}/assemblyDescription.pl "${inside}/${D}"
   printf "# %s %s.gap.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/gapDescription.pl "${inside}/${D}"
+  ${scripts}/gapDescription.pl "${inside}/${D}"
   printf "# %s %s.cpgIslands.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/cpgDescription.pl "${inside}/${D}"
+  ${scripts}/cpgDescription.pl "${inside}/${D}"
   printf "# %s %s.gc5Base.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/gc5Description.pl "${inside}/${D}"
+  ${scripts}/gc5Description.pl "${inside}/${D}"
   printf "# %s %s.repeatMasker.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/rmskDescription.pl "${inside}/${D}"
+  ${scripts}/rmskDescription.pl "${inside}/${D}"
   printf "# %s %s.ncbiGene.html\n" "${dateStamp}" "${B}" 1>&2
-  ${inside}/scripts/ncbiGeneDescription.pl "${inside}/${D}"
+  ${scripts}/ncbiGeneDescription.pl "${inside}/${D}"
 
 fi
 

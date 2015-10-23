@@ -5247,7 +5247,8 @@ boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct cu
  * custom track by name, otherwise pass NULL
  */
 {
-return trackIsType(database, table, parent, "bigBed", ctLookupName);
+return trackIsType(database, table, parent, "bigBed", ctLookupName) ||
+    trackIsType(database, table, parent, "bigMaf", ctLookupName);
 }
 
 static char *bbiNameFromTableChrom(struct sqlConnection *conn, char *table, char *seqName)

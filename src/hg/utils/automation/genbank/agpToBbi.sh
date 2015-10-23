@@ -25,7 +25,8 @@ zcat "${agpDirectory}"/*.agp.gz | grep -v "^#" | awk '$5 == "N" || $5 == "U"' \
       | sort -k1,1 -k2,2n > ${bbiDir}/${dbPrefix}.gap.bed
 
 if [ -s ${bbiDir}/${dbPrefix}.assembly.bed ]; then
-  bedToBigBed -verbose=0 ${bbiDir}/${dbPrefix}.assembly.bed ${chromSizes} \
+  bedToBigBed -extraIndex=name -verbose=0 \
+    ${bbiDir}/${dbPrefix}.assembly.bed ${chromSizes} \
       ${bbiDir}/${dbPrefix}.assembly.bb
 fi
 if [ -s ${bbiDir}/${dbPrefix}.gap.bed ]; then
@@ -45,13 +46,23 @@ zcat "${agpDirectory}"/*.agp.ncbi.gz | grep -v "^#" | awk '$5 == "N" || $5 == "U
       | sort -k1,1 -k2,2n > ${bbiDir}/${dbPrefix}.gap.ncbi.bed
 
 if [ -s ${bbiDir}/${dbPrefix}.assembly.ncbi.bed ]; then
-  bedToBigBed -verbose=0 ${bbiDir}/${dbPrefix}.assembly.ncbi.bed ${chromSizes} \
+  bedToBigBed -extraIndex=name -verbose=0 \
+    ${bbiDir}/${dbPrefix}.assembly.ncbi.bed ${chromSizes} \
       ${bbiDir}/${dbPrefix}.assembly.ncbi.bb
+  /hive/data/inside/ncbi/genomes/refseq/scripts/nameToIx.pl \
+     ${bbiDir}/${dbPrefix}.assembly.ncbi.bed | sort -u \
+        > "${agpDirectory}/assembly.ix.txt"
+  if [ -s "${agpDirectory}/assembly.ix.txt" ]; then
+    ixIxx "${agpDirectory}/assembly.ix.txt" \
+      ${agpDirectory}/${dbPrefix}.assembly.ix \
+       ${agpDirectory}/${dbPrefix}.assembly.ixx
+  fi
 fi
 if [ -s ${bbiDir}/${dbPrefix}.gap.ncbi.bed ]; then
   bedToBigBed -verbose=0 ${bbiDir}/${dbPrefix}.gap.ncbi.bed ${chromSizes} \
       ${bbiDir}/${dbPrefix}.gap.ncbi.bb
 fi
-rm -f ${bbiDir}/${dbPrefix}.assembly.ncbi.bed ${bbiDir}/${dbPrefix}.gap.ncbi.bed
+rm -f "${bbiDir}/${dbPrefix}.assembly.ncbi.bed" \
+    "${bbiDir}/${dbPrefix}.gap.ncbi.bed" "${agpDirectory}/assembly.ix.txt"
 
 fi

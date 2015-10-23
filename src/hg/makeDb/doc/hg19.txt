@@ -30648,6 +30648,94 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
 
+##############################################################################
+# GTEX Genotype-Tissue Expression(2015-03-09 Kate)
+#
+# Data and sample info (metadata) loaded rom http://www.gtexportal.org to
+# tables in hgFixed.  Methods here:
+# kent/src/hg/makeDb/doc/gtex/2014.jan.txt
+
+# Load BED15ish table with tissue medians for each gene.  Coordinates are the
+# UCSC known genes canonical transcript for the ENSembl gene reported by GTEX.
+
+cd /hive/data/genomes/hg19/bed
+mkdir gtex; cd gtex
+
+# Map GENCODE to known genes for cannonical transcript selection
+hgMapToGene hg19 wgEncodeGencodeCompV19 knownGene knownToGencodeV19
+
+hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
+# 75623
+# compared to 80184 for hg38 V20 GENCODE
+
+
+hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
+# reload 9/23/15 to repair tissue ordering problem
+
+# GTEX gene models are based on GENCODE V18.  Need a knownToGencodeV18 table to make this work
+#hgGtexGeneBed hg19 -gencodeVersion=V18 gtexGene >&! log.v18.txt
+
+wc -l log.txt 
+# 31823 errs - Can't find gene
+# Needs investigating. 
+
+hgsql hg19 -Ne 'select count(*) from gtexGene'
+# 24170
+# Compared to 23911 for hg38 GENCODE V20 (which also had errs IFIRC)
+
+# Load exon data
+cd /hive/data/outside/GTEx/2014-01-17
+cd exonReads
+alias hgGtex ~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex
+hgGtex -exon -noLoad -tab=output gtex V4 \
+    GTEx_Analysis_V4_RNA-seq_RNA-SeQCv1.1.8_exon_reads.txt \
+    ../GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    ../GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    ../portal/gtexColorTissue.dec.tab
+
+cd output
+hgLoadSqlTab hgFixed gtexExonTissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql \
+        gtexExonTissueMedian.tab
+
+alias hgGtexExonBed ~kate/kent/src/hg/makeDb/outside/hgGtexExonBed/hgGtexExonBed
+hgGtexExonBed hg19 gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
+
+# rename  and split out whole genes (exon _0).  NOTE: these include a few on chrM (called chrMT)
+foreach f (*.tab)
+    set r = $f:r
+    set t = `echo $r | sed 's/gtexTissueExonMedian//'`
+    grep -v '_0' $f | sed 's/chrMT/chrM/' > gtexTissueExonMedian$t.bed
+    grep '_0' $f | sed 's/chrMT/chrM/' > gtexTissueExon0Median$t.bed
+end
+
+# add scores (100-1000)
+cd scored
+bedScore -method=reg -uniform -col=7 -minScore=100 gtexTissueExonMedian*.bed scored/
+bedScore -method=reg -uniform -col=7 -minScore=100 gtexTissueExon0Median*.bed scored/
+
+# load
+cat > load.csh << 'EOF'
+foreach f (gtexTissueExon0Median*.bed)
+    set r = $f:r
+    hgLoadBed hg19 $r $f -sqlTable=/cluster/home/kate/kent/src/hg/lib/bed6FloatVal.sql -renameSqlTable -tab
+end
+foreach f (gtexTissueExonMedian*.bed)
+    set r = $f:r
+    hgLoadBed hg19 $r $f -sqlTable=/cluster/home/kate/kent/src/hg/lib/bed6FloatVal.sql -renameSqlTable -tab
+end
+'EOF'
+
+csh load.csh >&! load.log &
+cd ..
+
+# redo trackDb
+
+hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
+
+
+
+
+
 
 #############################################################################
 # 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 4/8/15 angie)

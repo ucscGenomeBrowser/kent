@@ -1742,7 +1742,6 @@ hFreeConn(&conn);
 struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
 /* load bigBed for a range, as a bed list (for next item button). Just grab one item */
 {
-extern struct bbiFile *fetchBbiForTrack(struct track *track);
 struct bbiFile *bbiFile = fetchBbiForTrack(tg);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr,
@@ -3685,7 +3684,7 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense &&  baseColorCanDraw(tg))
+if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
@@ -11087,6 +11086,17 @@ else if (sameString(details->attrVal, "TRANSCRIPTION FACTOR BINDING SITE"))
     itemColor = hvGfxFindColorIx(hvg, 165, 165, 65);  /* tan, darkened some */
 else if (sameString(details->attrVal, "REGULATORY REGION"))
     itemColor = hvGfxFindColorIx(hvg, 102, 102, 0);  /* dark green */
+/* New ORegAnno colors (colorblind friendly) */
+else if (sameString(details->attrVal, "Regulatory Polymorphism"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 114, 178); /* Blue */
+else if (sameString(details->attrVal, "Transcription Factor Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 230, 159, 0);  /* Orange */
+else if (sameString(details->attrVal, "Regulatory Region"))
+    itemColor = hvGfxFindColorIx(hvg, 86, 180, 233);  /* Sky Blue */
+else if (sameString(details->attrVal, "Regulatory Haplotype"))
+    itemColor = hvGfxFindColorIx(hvg, 213, 94, 0);  /* Vermillion */
+else if (sameString(details->attrVal, "miRNA Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 158, 115);  /* bluish Green */
 oregannoAttrFreeList(&details);
 hFreeConn(&conn);
 return itemColor;
@@ -12903,6 +12913,8 @@ else if (sameWord(type, "gvf"))
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
+else if (startsWith("gtexGene", track->track))
+    gtexGeneMethods(track);
 #endif /* GBROWSE */
 }
 

@@ -23,33 +23,68 @@ def parseArgs(args):
     parser.add_argument ("outputFile",
     help = " The output file. ",
     type =argparse.FileType("w"))
+    parser.add_argument ("--verbose",
+    help = " Spit out messages during runtime. ",
+    action = "store_true")
+
+    parser.set_defaults(verbose = False)
     options = parser.parse_args()
     return options
 
-def convertNames(inputFile, intermediateFile, ensembleExonToGene):
+def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
     """
     Input:
         inputFile - an opened file (r).
-        intermediateFile - an opened file (w).
+        intermediateFile - a namedTemporaryFile.
         ensembleExonToGene - a dict, string keys map to string values. 
     Takes in an input matrix and converts the transcript names into gene
     names.  The new matrix is written to intermediateFile.  The conversion
     is accomplished with the ensembleExonToGene table. 
     """
-    firstLine = True 
+    firstLine = True
+    expCol = 0
+    count = 0 
     for line in inputFile:
         if firstLine: # Skip the first line
             firstLine = False
             intermediateFile.write(line)
+            expCol = len(line.split())
+            count +=1
             continue 
         splitLine = line.split()
-        if (ensembleExonToGene.get(splitLine[0])):
-            intermediateFile.write(ensembleExonToGene[splitLine[0]] + "\t"+ "\t".join(splitLine[1:]) + "\n")
+        if (len(splitLine)!=expCol):
+            print ("The matrix has been corrupted on line %i. Aborting"%(count))
+            exit(1)
+        count +=1
+        if (humanMap.get(splitLine[0])): 
+            count = 0 
+            for item in splitLine:
+                if (count == 0):
+                    intermediateFile.write(humanMap[splitLine[0]] + "\t")
+                    count += 1
+                    continue
+                intermediateFile.write(splitLine[count] + "\t")
+                count +=1 
+            intermediateFile.write("\n")
+        elif (mouseMap.get(splitLine[0])): 
+            count = 0 
+            for item in splitLine:
+                if (count == 0):
+                    intermediateFile.write(mouseMap[splitLine[0]] + "\t")
+                    count += 1
+                    continue
+                intermediateFile.write(splitLine[count] + "\t")
+                count +=1 
+            intermediateFile.write("\n")
+        else: 
+            print ("The transcript, %s, was not found in the hash table. Aborting."%(splitLine[0]))
+            exit(1)
+        splitLine = None
 
 def collapseRows(intermediateFile, outputFile):
     """
     Input:
-        intermediateFile - an opened file (r). 
+        intermediateFile - a namedTemporaryFile. 
         outputFile - an opened file (w). 
     Goes through the intermediateFile and collapses the rows. This 
     function assumes that the intermediate file has been sorted. The collapsed
@@ -59,12 +94,18 @@ def collapseRows(intermediateFile, outputFile):
     newRow = []
     rowsInBlock = 0
     skip = True
+    count = 0
     for line in intermediateFile:
+        splitLine = line.split()
         if skip: # Skip the first row (header names)
             skip = False
             outputFile.write(line)
+            expCols = len(splitLine) # Lets verify this is actually a matrix while we make it.
+            count += 1
             continue 
-        splitLine = line.split()
+        if (len(splitLine) != expCols): 
+            print ("The matrix has been corrupted on line %i. Aborting."%(count))
+            exit(1)
         if firstLine: # This is the first line of the actual matrix
             firstLine = False
             newRow = splitLine 
@@ -83,33 +124,50 @@ def collapseRows(intermediateFile, outputFile):
                 itemCount += 1
             outputFile.write("\t".join(newRow) + "\n")
             newRow = splitLine 
-            rowsInBlock = 1 
+            rowsInBlock = 1
+        count +=1
 
 def main(args):
     """
-    Initialized options and calls other functions.
+    Initialized options and calls other functions. Read in a hash table that maps the transcripts
+    to genes. Go through the matrix and convert every transcript name to gene names. Then call the
+    unix sort (fast) to sort the new matrix.  This generates 'blocks' of transcripts where all the 
+    transcripts for a given gene are next to each other.  Go through the blocked transcript  matrix
+    and compress it one block at a time, printing the compressed gene matrix one row at a time.  
     """
     options = parseArgs(args)
-    ensembleExonToGene = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/ensemble_exon_to_gene.tab", True)
+    if (options.verbose): print ("Start condensing the expression matrix from transcripts to genes (condenseMatrix).")
+    result = common.sqlQuery("hg38","select transcript, gene from ensGtp") 
+    
+    #Mappings were made with this command
+    #zcat /hive/groups/cirm/software/kallisto/transcripts/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz | grep \> | cut -d' ' -f1,4 | tr -d '>' | sed -e 's/gene://'
+
+    humanMap = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
+    mouseMap = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
+    #ensembleExonToGene = dict()
+    #for t in result.fetchall(): 
+    #    if (ensembleExonToGene.get(t[0])):    
+    #        print("A duplicate transcript was found. Something has gone wrong, aborting.")
+    #        exit(1) 
+    #    else: ensembleExonToGene.setdefault(t[0], t[1])
+    intermediateFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    finalFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
     
     # Convert names
-    intermediateFile = open(".convertedGeneNames","w")
-    print ("Converting names...")
-    convertNames(options.inputFile, intermediateFile, ensembleExonToGene)
-    intermediateFile.close()
+    if (options.verbose): print ("Converting names...")
+    convertNames(options.inputFile, intermediateFile, humanMap, mouseMap)
     
     # Sort
-    print ("Sorting...")
-    os.system("sort -k 1 -r .convertedGeneNames > .sortedGeneNames")
+    if (options.verbose): print ("Sorting...")
+    os.system("sort -k 1 -r %s > %s"%(intermediateFile.name, finalFile.name))
     
     # Collapse
-    finalFile = open(".sortedGeneNames","r")
-    print ("Collapsing matrix...")
+    if (options.verbose): print ("Collapsing matrix...")
     collapseRows(finalFile,options.outputFile)
     
-    # Remove temp files
-    os.system("rm .convertedGeneNames")
-    os.system("rm .sortedGeneNames") 
+    intermediateFile.close()
+    finalFile.close()
+    if (options.verbose): print ("Completed condensing the expression matrix from transcripts to genes (condenseMatrix).")
     
 if __name__ == "__main__" : 
     sys.exit(main(sys.argv))

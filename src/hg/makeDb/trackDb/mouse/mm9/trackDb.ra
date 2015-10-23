@@ -1068,3 +1068,7 @@ searchType bed
 termRegex PAp[0-9]{8}
 semiShortCircuit 1
 searchPriority 3.6
+
+track oreganno override
+release beta,public
+html oregannoOld

@@ -5,7 +5,7 @@
 #ifndef GTEXSAMPLE_H
 #define GTEXSAMPLE_H
 
-#define GTEXSAMPLE_NUM_COLS 3
+#define GTEXSAMPLE_NUM_COLS 11
 
 extern char *gtexSampleCommaSepFieldNames;
 
@@ -13,9 +13,17 @@ struct gtexSample
 /* GTEx sample description */
     {
     struct gtexSample *next;  /* Next in singly linked list. */
-    char *name;	/* GTEX sample identifier */
-    char *tissue;	/* Tissue name */
-    char *donor;	/* GTEX subject identifier */
+    char *sampleId;	/* GTEx sample identifier */
+    char *tissue;	/* Tissue name. Links to tissue table */
+    char *donor;	/* GTEx subject identifier. Links to donor table */
+    int autolysisScore;	/* Level of tissue self-digestion (0-3; none,mild,moderate,severe, -1 if unknown) */
+    char *ischemicTime;	/* Time from tissue removal to preservation, in 4hr intervals */
+    float rin;	/* RNA Integrity Number */
+    char *collectionSites;	/* GTEx Biospecimen Source Site list */
+    char *batchId;	/* Nucleic acid isolation batch ID */
+    char *isolationType;	/* Type of nucleic acid isolation */
+    char *isolationDate;	/* Date of nucleic acid isolation */
+    char *pathNotes;	/* Pathology report notes */
     };
 
 void gtexSampleStaticLoad(char **row, struct gtexSample *ret);
@@ -61,8 +69,7 @@ void gtexSampleOutput(struct gtexSample *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-void gtexSampleCreateTable(struct sqlConnection *conn, char *table);
-/* Create expression record format table of given name. */
-
 #endif /* GTEXSAMPLE_H */
 
+void gtexSampleCreateTable(struct sqlConnection *conn, char *table);
+/* Create GTEx sample table of given name. */

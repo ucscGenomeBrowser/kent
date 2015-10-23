@@ -40,20 +40,20 @@
 #include "trackHub.h"
 #include "pcrResult.h"
 #include "dgv.h"
-#include "transMapStuff.h"
-#include "vcfUi.h"
+#include "transMapStuff.h" 
+#include "vcfUi.h" 
 #include "bbiFile.h"
 #include "ensFace.h"
 #include "microarray.h"
 #include "trackVersion.h"
-
-#ifdef USE_HAL
+#include "gtexUi.h"
+    
+#ifdef USE_HAL 
 #include "halBlockViz.h"
-#endif
+#endif 
 
 #define MAIN_FORM "mainForm"
 #define WIGGLE_HELP_PAGE  "../goldenPath/help/hgWiggleTrackHelp.html"
-
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2987,6 +2987,8 @@ else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrgTranscriptAli"))
     lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
+else if (startsWith(track, "gtexGene"))
+    gtexGeneUi(cart, tdb, tdb->track, NULL, boxed);
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.

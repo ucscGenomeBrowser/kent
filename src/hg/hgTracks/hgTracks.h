@@ -684,10 +684,6 @@ struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
 
-struct bigBedInterval *bigBedSelectRangeExtra(struct track *track,
-	char *chrom, int start, int end, struct lm *lm, char *variableName);
-/* Return list of intervals in range. */
-
 struct bigBedInterval *bigBedSelectRange(struct track *track,
 	char *chrom, int start, int end, struct lm *lm);
 /* Return list of intervals in range. */
@@ -1371,6 +1367,9 @@ void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemNam
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
 
+void gtexGeneMethods(struct track *tg);
+/* Gene-Tissue Expression (GTEX) gene track*/
+
 void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */
@@ -1424,6 +1423,9 @@ void checkIfWiggling(struct cart *cart, struct track *tg);
 #define measureTime uglyTime
 
 #define SUPPORT_CONTENT_TYPE 1
+
+struct bbiFile *fetchBbiForTrack(struct track *track);
+/* Fetch bbiFile from track, opening it if it is not already open. */
 
 #endif /* HGTRACKS_H */
 

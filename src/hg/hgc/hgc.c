@@ -3867,7 +3867,7 @@ headerItem = cloneString(item);
 if (container == NULL && wordCount > 0)
     {
     type = words[0];
-    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "netAlign")
+    if (sameString(type, "maf") || sameString(type, "wigMaf") || sameString(type, "bigMaf") || sameString(type, "netAlign")
         || sameString(type, "encodePeak"))
         headerItem = NULL;
     else if ((  sameString(type, "narrowPeak")
@@ -3962,7 +3962,7 @@ else if (wordCount > 0)
         {
 	genericMafClick(conn, tdb, item, start);
 	}
-    else if (sameString(type, "wigMaf"))
+    else if (sameString(type, "wigMaf") ||  sameString(type, "bigMaf"))
         {
 	genericMafClick(conn, tdb, item, start);
         }
@@ -4193,7 +4193,6 @@ return (sameString("cytoBand", track) ||
 	sameString("gap", track) ||
 	startsWith("mouseSyn", track));
 }
-
 
 struct customTrack *getCtList()
 /* initialize theCtList if necessary and return it */
@@ -25808,6 +25807,10 @@ else if (startsWith("peptideAtlas", table))
     {
     doPeptideAtlas(tdb, item);
     }
+else if (startsWith("gtexGene", table))
+    {
+    doGtexGeneExpr(tdb, item);
+    }
 else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
@@ -25867,3 +25870,5 @@ cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 cgiExitTime("hgc", enteredMainTime);
 return 0;
 }
+
+

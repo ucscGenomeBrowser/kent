@@ -17,10 +17,10 @@
 #include "linefile.h"
 // TODO: Consider using Appris to pick 'functional' transcript
 #include "encode/wgEncodeGencodeAttrs.h"
-#include "gtexTissueData.h"
+#include "gtexTissueMedian.h"
 #include "gtexGeneBed.h"
 
-#define GTEX_TISSUE_DATA_TABLE  "gtexTissueData"
+#define GTEX_TISSUE_MEDIAN_TABLE  "gtexTissueMedian"
 
 // Versions are used to suffix tablenames
 char *gtexVersion = "";
@@ -45,8 +45,8 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
-    {"-gtexVersion", OPTION_STRING},
-    {"-gencodeVersion", OPTION_STRING},
+    {"gtexVersion", OPTION_STRING},
+    {"gencodeVersion", OPTION_STRING},
     {"noLoad", OPTION_BOOLEAN},
     {NULL, 0},
 };
@@ -153,25 +153,25 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 // Get data (experiment count and scores), and create BEDs
-verbose(2, "Reading gtexTissueData table\n");
+verbose(2, "Reading gtexTissueMedian table\n");
 struct gtexGeneBed *geneBed, *geneBeds = NULL;
-struct gtexTissueData *gtexData;
+struct gtexTissueMedian *gtexData;
 struct sqlConnection *connFixed = sqlConnect("hgFixed");
-sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_DATA_TABLE, gtexVersion);
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, gtexVersion);
 sr = sqlGetResult(connFixed, query);
 float maxVal = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    gtexData = gtexTissueDataLoad(row);
+    gtexData = gtexTissueMedianLoad(row);
     AllocVar(geneBed);
     char *geneId = gtexData->geneId;
-    chopSuffix(geneId);
-    geneBed->geneId = geneId;
+    geneBed->geneId = cloneString(geneId);
     geneBed->expCount = gtexData->tissueCount;
     geneBed->expScores = CloneArray(gtexData->scores, gtexData->tissueCount);
 
     // Get canonical transcript
     verbose(3, "...Looking up geneId %s in geneHash \n", geneId);
+    chopSuffix(geneId);
     struct hashEl *el = hashLookup(geneHash, geneId);
     // TODO:  Handle genes not in canonical table (there are 3 of them)
     if (el == NULL)

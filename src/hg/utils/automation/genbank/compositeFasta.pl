@@ -33,7 +33,8 @@ open (FH, "<$primary/assembled_chromosomes/chr2acc") or
 while (my $line = <FH>) {
     next if ($line =~ m/^#/);
     chomp $line;
-    my ($chrN, $acc) = split('\s+', $line);
+    my ($chrN, $acc) = split('\t+', $line);
+    $chrN =~ s/ /_/g;
     if ($ncbiUcsc eq "ncbi") {
        $accToChr{$acc} = $acc;
     } else {
@@ -60,7 +61,11 @@ while (my $line = <FH>) {
       if ($ncbiUcsc eq "ncbi") {
          printf ">%s\n", $accToChr{$line};
       } else {
-         printf ">chr%s\n", $accToChr{$line};
+         if ( $accToChr{$line} eq "MT" ) {
+           printf ">chrM\n";
+         } else {
+           printf ">chr%s\n", $accToChr{$line};
+         }
       }
    } else {
       print $line;

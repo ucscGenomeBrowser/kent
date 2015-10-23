@@ -23,4 +23,7 @@ struct rgbColor whiteToBlackRainbowAtPos(double pos);
 /* Given pos, a number between 0 and 1, return a blackToWhite rainbow rgbColor
  * where 0 maps to white,  0.1 is grey, and 1 is black. */
 
+struct rgbColor *getRainbow(struct rgbColor (*rainbowAtPos)(double), int size);
+/* Return array filled with rainbow of colors */
+
 #endif /* RAINBOW_H */

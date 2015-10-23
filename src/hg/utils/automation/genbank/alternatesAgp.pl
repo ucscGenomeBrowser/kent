@@ -9,6 +9,9 @@ sub usage() {
   printf STDERR "    the first argument is the chrUn_ prefix to add to the\n";
   printf STDERR "    contig names, can be empty string quoted \"\" to have\n";
   printf STDERR "    no prefix.\n";
+  printf STDERR "reroute stderr output thru a 'sort -u' to write a file\n";
+  printf STDERR "    of the UCSC to NCBI name correspondence, e.g.:\n";
+  printf STDERR "       2> >(sort -u > xxx.ucsc.to.ncbi.alternates.names)\n";
   printf STDERR "the ucsc|ncbi selects the naming scheme\n";
 }
 

@@ -18,6 +18,14 @@ if [ "${ncbiUcsc}" = "ncbi" ]; then
   suffix=".ncbi"
 fi
 
+# may or may not have a searchTrix for assembly, assume none
+export searchTrix=""
+# check to see if there is a searchTrix assembly index
+if [ -s ${buildDir}/${dbPrefix}.assembly.ix ]; then
+  searchTrix="
+searchTrix ${dbPrefix}.assembly.ix"
+fi
+
 if [ -s ${buildDir}/bbi/${dbPrefix}.assembly${suffix}.bb ]; then
 printf "track assembly
 longLabel Assembly 
@@ -30,13 +38,24 @@ altColor 230,170,40
 bigDataUrl bbi/%s.assembly%s.bb
 type bigBed 6
 html %s.assembly
+searchIndex name%s
 url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
-group map\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
+group map\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${searchTrix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.ncbiGene${suffix}.bb ]; then
-printf "track ncbiGene
+# may or may not have a searchTrix for ncbiGene, assume none
+searchTrix=""
+# check to see if there is a index for ncbiGene
+if [ -s ${buildDir}/${dbPrefix}.ncbiGene.ix ]; then
+  searchTrix="
+searchTrix ${dbPrefix}.ncbiGene.ix"
+fi
+
+if [ "${ncbiUcsc}" = "ncbi" ]; then
+
+  if [ -s ${buildDir}/bbi/${dbPrefix}.ncbiGene${suffix}.bb ]; then
+  printf "track ncbiGene
 longLabel ncbiGene - gene predictions delivered with assembly from NCBI
 shortLabel ncbiGene
 priority 12
@@ -47,12 +66,34 @@ colorByStrand 0,80,150 150,80,0
 bigDataUrl bbi/%s.ncbiGene%s.bb
 type bigGenePred
 html %s.ncbiGene
-searchIndex name
-searchTrix %s.ncbiGene.ix
+searchIndex name%s
 url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
-group genes\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${dbPrefix}"
+group genes\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}" "${searchTrix}"
+  fi
+
+else
+
+  if [ -s ${buildDir}/bbi/${dbPrefix}.ncbiGene.ucsc.bb ]; then
+  printf "track ncbiGene
+longLabel ncbiGene - gene predictions delivered with assembly from NCBI
+shortLabel ncbiGene
+priority 12
+visibility pack
+color 0,80,150
+altColor 150,80,0
+colorByStrand 0,80,150 150,80,0
+bigDataUrl bbi/%s.ncbiGene%s.bb
+type bigGenePred
+html %s.ncbiGene
+searchIndex name%s
+url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+urlLabel NCBI Nucleotide database
+group genes\n\n" "${dbPrefix}" ".ucsc" "${dbPrefix}" "${searchTrix}"
+  fi
+
 fi
+
 
 if [ -s ${buildDir}/bbi/${dbPrefix}.gap${suffix}.bb ]; then
 printf "track gap
@@ -87,12 +128,15 @@ bigDataUrl bbi/%s.gc5Base%s.bw
 html %s.gc5Base\n\n" "${dbPrefix}" "${suffix}" "${dbPrefix}"
 fi
 
-if [ "${ncbiUcsc}" != "ncbi" ]; then
-  exit 0
-fi
+if [ "${ncbiUcsc}" = "ncbi" ]; then
+
+export rmskCount=`(ls ${buildDir}/bbi/${dbPrefix}.rmsk.*.ncbi.bb | wc -l) || true`
+
+else
+
 export rmskCount=`(ls ${buildDir}/bbi/${dbPrefix}.rmsk.*.bb | wc -l) || true`
 
-# if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.SINE.bb -o -s ${buildDir}/bbi/${dbPrefix}.rmsk.LINE.bb ]; then
+fi
 
 if [ "${rmskCount}" -gt 0 ]; then
 printf "track repeatMasker
@@ -107,7 +151,7 @@ noInherit on
 html %s.repeatMasker\n\n" "${dbPrefix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.SINE.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.SINE${suffix}.bb ]; then
 printf "    track repeatMaskerSINE
     parent repeatMasker
     shortLabel SINE
@@ -117,10 +161,10 @@ printf "    track repeatMaskerSINE
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.SINE.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.SINE%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.LINE.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.LINE${suffix}.bb ]; then
 printf "    track repeatMaskerLINE
     parent repeatMasker
     shortLabel LINE
@@ -130,10 +174,10 @@ printf "    track repeatMaskerLINE
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.LINE.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.LINE%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.LTR.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.LTR${suffix}.bb ]; then
 printf "    track repeatMaskerLTR
     parent repeatMasker
     shortLabel LTR
@@ -143,10 +187,10 @@ printf "    track repeatMaskerLTR
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.LTR.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.LTR%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.DNA.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.DNA${suffix}.bb ]; then
 printf "    track repeatMaskerDNA
     parent repeatMasker
     shortLabel DNA
@@ -156,10 +200,10 @@ printf "    track repeatMaskerDNA
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.DNA.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.DNA%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Simple.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Simple${suffix}.bb ]; then
 printf "    track repeatMaskerSimple
     parent repeatMasker
     shortLabel Simple
@@ -169,10 +213,10 @@ printf "    track repeatMaskerSimple
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.Simple.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.Simple%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Low_complexity.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Low_complexity${suffix}.bb ]; then
 printf "    track repeatMaskerLowComplexity
     parent repeatMasker
     shortLabel Low Complexity
@@ -182,10 +226,10 @@ printf "    track repeatMaskerLowComplexity
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.Low_complexity.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.Low_complexity%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Satellite.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Satellite${suffix}.bb ]; then
 printf "    track repeatMaskerSatellite
     parent repeatMasker
     shortLabel Satellite
@@ -195,10 +239,10 @@ printf "    track repeatMaskerSatellite
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.Satellite.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.Satellite%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.RNA.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.RNA${suffix}.bb ]; then
 printf "    track repeatMaskerRNA
     parent repeatMasker
     shortLabel RNA
@@ -208,10 +252,10 @@ printf "    track repeatMaskerRNA
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.RNA.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.RNA%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
-if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Other.bb ]; then
+if [ -s ${buildDir}/bbi/${dbPrefix}.rmsk.Other${suffix}.bb ]; then
 printf "    track repeatMaskerOther
     parent repeatMasker
     shortLabel Other
@@ -221,7 +265,7 @@ printf "    track repeatMaskerOther
     maxWindowToDraw 10000000
     colorByStrand 50,50,150 150,50,50
     type bigBed 6 +
-    bigDataUrl bbi/%s.rmsk.Other.bb\n\n" "${dbPrefix}"
+    bigDataUrl bbi/%s.rmsk.Other%s.bb\n\n" "${dbPrefix}" "${suffix}"
 fi
 
 ###################################################################
