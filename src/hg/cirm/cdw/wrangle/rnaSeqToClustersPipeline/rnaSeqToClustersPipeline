@@ -9,6 +9,8 @@ import sys
 import collections
 import argparse
 import subprocess
+import tempfile
+import time
 
 # import the UCSC kent python library
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
@@ -19,14 +21,17 @@ def parseArgs(args):
     Parse the command line arguments.
     """
     parser= argparse.ArgumentParser(description = __doc__)
-    parser.add_argument ("inDir",
-    help = " kallisto output directory, start of the pipeline for now. ",
+    parser.add_argument ("manifestFastq",
+    help = " The manifest file for the fastq files. ",
     action = 'store')
     parser.add_argument ("dataSetId",
     help = " The data set id, ie quakeBrainGeo1. Output files will be placed in this directory. ",
     action = 'store')
     parser.add_argument ("--verbose",
     help = " Spit runtime messages to stdout. ", 
+    action = 'store_true')
+    parser.add_argument ("--isMouse",
+    help = " This is a mouse submission. ", 
     action = 'store_true')
     parser.add_argument ("--noKallisto",
     help = " Do not do the kallisto step." ,
@@ -43,25 +48,35 @@ def parseArgs(args):
     parser.add_argument ("--noAddMetaDataToJson",
     help = " Do not do the noAddMetaDataToJson step.", 
     action = 'store_true')
+    parser.add_argument ("--reRun",
+    help = " Pick up where the pipeline left off, overwrite names",
+    action = 'store_true')
 
     parser.set_defaults(noKallisto = False)
     parser.set_defaults(noMakeExpMatrix = False)
     parser.set_defaults(noCondenseMatrix = False)
     parser.set_defaults(noExpMatrixToJson = False)
     parser.set_defaults(noAddMetaDataToJson = False)
+    parser.set_defaults(reRun = False)
+    parser.set_defaults(isMouse = False)
     parser.set_defaults(verbose = False)
     options = parser.parse_args()
     return options
 
-def doKallisto(inDir, outDir):
+def doKallisto(manifestFileName, outDirName, isMouse, verbose):
     """
     Input:
-        inDir - A string
-        outDir - A string
+        manifestFileName - A string
+        outDirName - A string
     Takes in a directory name. The directory is assumed to have rnaSeq fastq files
     in a .gz format.  The files are ran through the RNA quantifiaction program Kallisto
     which generates output files into a new directory. 
     """
+    args = ["kallistoOnFastqMani", manifestFileName, outDirName]
+    if (verbose): args.append("--verbose")
+    if (isMouse): args.append("--isMouse")
+    p = subprocess.Popen(args)
+    stdout, stderr = p.communicate()
 
 def doMakeExpMatrix(inDir, mxFileName, verbose):
     """
@@ -76,7 +91,7 @@ def doMakeExpMatrix(inDir, mxFileName, verbose):
     if (verbose): args.append("--verbose")
     p = subprocess.Popen(args)
     stdout, stderr = p.communicate()
-
+    
 def doExpMatrixToJson(mxFileName, clusteringName, verbose):
     """
     Input:
@@ -115,36 +130,67 @@ def doAddMetaDataToJson(jsonFileName, metaDataFileName, keyCol, fields):
     values that correspond to the entries in 'fields' are added to each .json entry.
     """
 
+def checkKallistoProgress(manifestFileName, kallistoLoc):
+    """
+    INPUT:
+        manifestFile - A string.
+        kallistoLoc - A string. 
+    Check if kallisto is still running. Return False if finished, true if still
+    running. 
+    """
+    fastqFileCount = len(open(manifestFileName,"r").readlines()) - 1  # Don't consider the header
+    kallistoFiles = tempfile.NamedTemporaryFile()
+    while(not os.path.exists(kallistoLoc)):
+        time.sleep(10)
+        
+    os.system("ls %s/*/abundance.t* > %s"%(kallistoLoc,kallistoFiles.name))
+    kallistoFileCount = len(kallistoFiles.readlines()) 
+    if (fastqFileCount == (kallistoFileCount*2)): return False 
+    return True 
+
+
 def main(args):
     """
     Initialized options and calls other functions.
     """
     options = parseArgs(args)
-    inDir = ""
-    if options.inDir.startswith("/"):
-        inDir = options.inDir
-    else: inDir = os.getcwd() + "/" + options.inDir
-    dir = os.getcwd()+ "/" +options.dataSetId
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-        os.chdir(dir)
-   
     # Kallisto
+    try:
+        open(options.manifestFastq, "r")
+    except IOError: 
+        print ("Manifest file not found, aborting") 
+        exit(1)
+    
     if options.noKallisto:
         if options.verbose: print ("Skipping the kallisto step.")
     else:
         if options.verbose: print ("#######################################################")
-        #doKallisto()
+        doKallisto(options.manifestFastq, "kallistoOut" ,options.isMouse, options.verbose)
         if options.verbose: print ("#######################################################")
+    
+    dir = os.getcwd()+ "/" +options.dataSetId
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+        os.chdir(dir)
+    else:
+        if (not options.reRun):
+            print ("The data set ID provided, %s, is already in use. Aborting."%(options.dataSetId))
+            exit(1)
+        else:
+            os.chdir(dir)
     
     # MakeExpMatrix
     if options.noMakeExpMatrix:
         if options.verbose: print ("Skipping the makeExpMatrix step.")
     else: 
+        kallistoLoc = "../kallistoOut"
         if options.verbose: print ("#######################################################")
-        doMakeExpMatrix(inDir, "trscrptExpMatrix.mx", options.verbose)
+        print (os.getcwd())
+        while checkKallistoProgress("../"+options.manifestFastq, kallistoLoc):
+            time.sleep(10)
+        doMakeExpMatrix(kallistoLoc, "trscrptExpMatrix.mx", options.verbose)
         if options.verbose: print ("#######################################################")
-    
+   
     # CondenseMatrix
     if options.noCondenseMatrix: 
         if options.verbose: print ("Skipping the condenseMatrix step.")
@@ -163,13 +209,13 @@ def main(args):
         if options.verbose: print ("#######################################################")
     
     # AddMetaDataToJson
-    if options.noAddMetaDataToJson:
-        if options.verbose: print ("Skipping the addMetaDataToJson step.")
-    else:
-        if options.verbose: print ("#######################################################")
-        doAddMetaDataToJson()
-        doAddMetaDataToJson()
-        if options.verbose: print ("#######################################################")
+    #if options.noAddMetaDataToJson:
+    #    if options.verbose: print ("Skipping the addMetaDataToJson step.")
+    #else:
+    #    if options.verbose: print ("#######################################################")
+    #    doAddMetaDataToJson()
+    #    doAddMetaDataToJson()
+    #    if options.verbose: print ("#######################################################")
 
 
 if __name__ == "__main__" : 
