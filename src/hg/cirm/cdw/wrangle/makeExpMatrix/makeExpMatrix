@@ -71,7 +71,7 @@ def matrixCleanup(matrixFile, pNan, nNan, verbose, allowNan, outputFileName, kal
             os.system("rm %s"%(kalDirListFileName))
             os.system("rm %s"%(outputFileName))
             print ("An invalid value of '-nan' was found. Aborting.")
-            exit(1) 
+            sys.exit(1) 
     posProcess = subprocess.Popen(["grep", "nan", "-c", dirtyMatrix.name], stdout = subprocess.PIPE)
     posOut, posErr = posProcess.communicate()
     if int(posOut) > 0: 
@@ -82,7 +82,7 @@ def matrixCleanup(matrixFile, pNan, nNan, verbose, allowNan, outputFileName, kal
             os.system("rm %s"%(kalDirListFileName))
             os.system("rm %s"%(outputFileName))
             print ("An invalid value of 'nan' was found. Aborting.") 
-            exit(1) 
+            sys.exit(1) 
     os.system("cat %s | tr \"*\" \"-\" > %s "%(dirtyMatrix.name,matrixFile))
 
 def getAbundanceFileList(location, kalDirListFile):
@@ -94,10 +94,8 @@ def getAbundanceFileList(location, kalDirListFile):
     """ 
     if not location.endswith("/"): location += "/" 
     abundanceFiles = tempfile.NamedTemporaryFile()
-    os.system("ls -d %s*/abundance.t* > %s"%(location, abundanceFiles.name))
-    # Read all the items into a list. 
+    os.system("ls %s*/abundance.t* > %s"%(location, abundanceFiles.name))
     abundanceFileList = []
-    #kalDirListFile = open(".kalDirList", "w")
     kalDirListFile.write("transripts\n")
     for line in abundanceFiles:    
         abundanceFileList.append(line[:-1])
