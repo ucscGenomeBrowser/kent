@@ -66,6 +66,43 @@ def readInTable(file, keyColumn, separator):
         result.setdefault(splitLine[keyColumn],list)
     return result 
 
+def parseConf(fname):
+    """ parse a hg.conf style file,
+        return a dict key -> value (both are strings)
+    """
+
+    conf = {}
+    for line in open(fname):
+        line = line.strip()
+        if line.startswith("#"):
+            continue
+        elif line.startswith("include "):
+            inclFname = line.split()[1]
+            inclPath = join(dirname(fname), inclFname)
+            if isfile(inclPath):
+                inclDict = parseConf(inclPath)
+                conf.update(inclDict)
+        elif "=" in line: # string search for "="
+            key, value = line.split("=")
+            conf[key] = value
+    return conf
+
+hgConf = None
+
+def parseHgConf(confDir="."):
+    """ return hg.conf as dict key:value """
+    global hgConf
+    if hgConf is not None:
+        return hgConf
+
+    hgConf = dict() # python dict = hash table
+    fname = join(currDir, confDir, "hg.conf")
+    if not isfile(fname):
+        return {}
+    hgConf = parseConf(fname)
+
+    return hgConf
+
 def getSQLLoginInfo():
     """
     Output: 

@@ -12,6 +12,8 @@ char *oregannoTypeLabel[] = {
     "regulatory polymorphism",
     "transcription factor binding site",
     "regulatory region",
+    "miRNA binding site",
+    "regulatory haplotype",
 };
 
 /* names for checkboxes */
@@ -19,13 +21,17 @@ char *oregannoTypeString[] = {
     "oreganno.filter.poly",
     "oreganno.filter.tfbs",
     "oreganno.filter.reg",
+    "oreganno.filter.mirna",
+    "oreganno.filter.haplo",
 };
 
 /* values in the db */
 char *oregannoTypeDbValue[] = {
-    "REGULATORY POLYMORPHISM",
-    "TRANSCRIPTION FACTOR BINDING SITE",
-    "REGULATORY REGION",
+    "Regulatory Polymorphism",
+    "Transcription Factor Binding Site",
+    "Regulatory Region",
+    "miRNA Binding Site",
+    "Regulatory Haplotype",
 };
 
 int oregannoTypeSize = ArraySize(oregannoTypeString);
