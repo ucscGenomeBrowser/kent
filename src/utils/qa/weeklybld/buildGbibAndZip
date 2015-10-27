@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "do not use this"
+echo "use buildGbibAndZip.csh instead"
+exit 0
+
 # this scripts starts the main gbib VM on hgwdev, creates an ssh key on it, adds this key to the build account
 # the triggers an update on the box using the build account
 # it finally cleans the VM, stops and zips it into gbibBeta.zip
