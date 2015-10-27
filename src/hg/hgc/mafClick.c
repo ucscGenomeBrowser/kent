@@ -104,12 +104,11 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	{
 	char dbOnly[128];
 	int len;
-//	char *chrom;  unused variable
 	char *org;
 
 	memset(dbOnly, 0, sizeof(dbOnly));
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-//	chrom = chopPrefix(dbOnly);  unused variable
+	chopPrefix(dbOnly);
 
 	if ((org = hOrganism(dbOnly)) == NULL)
 	    len = strlen(dbOnly);

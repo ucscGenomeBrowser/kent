@@ -5,9 +5,9 @@ setenv LASTREVIEWDAY 2015-09-21         # v323 preview
 setenv REVIEW2DAY 2015-10-19        # v324 preview2, increment vNNN and today
 setenv LASTREVIEW2DAY 2015-09-28    # v323 preview2
 # set these three for final build:  move date and vNNN from TODAY to LASTWEEK
-setenv BRANCHNN 323                    # increment for new build
-setenv TODAY 2015-10-05                # v323 final, increment vNNN and today
-setenv LASTWEEK 2015-09-14             # v322 final
+setenv BRANCHNN 324                    # increment for new build
+setenv TODAY 2015-10-26                # v324 final, increment vNNN and today
+setenv LASTWEEK 2015-10-05             # v323 final
 
 setenv BUILDHOME /hive/groups/browser/newBuild
 setenv WEEKLYBLD ${BUILDHOME}/kent/src/utils/qa/weeklybld
