@@ -25,10 +25,14 @@ def parseArgs(args):
     parser.add_argument ("--isMouse",
     help = " This is mouse data, use a mouse transcriptome.",
     action = "store_true")
+    parser.add_argument ("--dry",
+    help = " This is a dry run, print out one of the commands from the jobList then stop.",
+    action = "store_true")
     parser.add_argument ("--verbose",
     help = " Spit out messages during runtime. ",
     action = "store_true")
 
+    parser.set_defaults(dry = False)
     parser.set_defaults(verbose = False)
     parser.set_defaults(isMouse = False)
     options = parser.parse_args()
@@ -106,6 +110,12 @@ def main(args):
     if options.verbose: print ("Start run kallisto on a batch of fastq files (kallistoOnFastqMani).")
     if options.verbose: print ("Making the job list...")
     makeJobList(options.manifestFile,"jobList", options.isMouse)
+    
+    if options.dry:
+        print ("The first command generated is...")
+        os.system("head -1 jobList")
+        print ("You have selected a dry run, the program is stopping now.")
+        exit(1)
     if options.verbose: print ("Starting the parasol run...")
     paraRunKallisto(options.verbose)
     if options.verbose: print ("Completed run kallisto on a batch of fastq files (kallistoOnFastqMani).")
