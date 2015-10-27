@@ -35,6 +35,6 @@ alpha::
 	chmod -R a+rX,g+w ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
 
 beta::
-	rm -fr ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
+	rm -fr ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
 	rsync -aO --exclude=CVS/ --exclude=.svn/ --delete hgcData ../lib/lsSnpPdbChimera.py ${CGI_BIN}-beta/
-	chmod -R a+rX,g+w ${CGI_BIN}/hgcData ${CGI_BIN}/lsSnpPdbChimera.py
+	chmod -R a+rX,g+w ${CGI_BIN}-beta/hgcData ${CGI_BIN}-beta/lsSnpPdbChimera.py
