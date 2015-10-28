@@ -6,7 +6,7 @@ if ( "$HOST" != "hgwdev" ) then
 endif
 
 # run on hgwdev, but using hgwbeta HG.CONF settings for the database
-set log = TrackCheck-v${BRANCHNN}.log
+set log = v${BRANCHNN}.TrackCheck.log
 set HGDB_CONF = $HOME/.hg.conf.beta
 cd $JAVABUILD/kent/java/classes/edu/ucsc/genome/qa/cgiCheck
 nohup TrackCheck $JAVABUILD/kent/java/src/edu/ucsc/genome/qa/cgiCheck/full.props >& $WEEKLYBLD/logs/$log 
