@@ -5,17 +5,18 @@ cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/near/hgNearTest
 make 
 cd $WEEKLYBLD
 setenv HGDB_CONF "$HOME/.hg.conf.beta"
-$HOME/bin/$MACHTYPE/hgNearTest hgwbeta.cse.ucsc.edu/cgi-bin/hgNear ./logs/hgNear-v${BRANCHNN}.log
+set log = v${BRANCHNN}.hgNear.log
+$HOME/bin/$MACHTYPE/hgNearTest hgwbeta.cse.ucsc.edu/cgi-bin/hgNear ./logs/$log
 
 # creates branch.hgNear.log - look for unusual errors
 
 #-- to check for errors: 
-set res = "`cat ./logs/hgNear-v${BRANCHNN}.log | egrep 'Total'`"
+set res = "`cat ./logs/$log | egrep 'Total'`"
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" == "0" ) then
  echo "error occurred:"
- echo "$HOME/bin/$MACHTYPE/hgNearTest failed to log any results to ./logs/hgNear-v${BRANCHNN}.log"
- mail -s "hgNearTestRobot on $HOST failed to log results to ./logs/hgNear-v${BRANCHNN}.log" $USER@soe.ucsc.edu ${BUILDMEISTER} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+ echo "$HOME/bin/$MACHTYPE/hgNearTest failed to log any results to ./logs/$log"
+ mail -s "hgNearTestRobot on $HOST failed to log results to ./logs/$log" $USER@soe.ucsc.edu ${BUILDMEISTER} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
  exit 1
 endif
 
