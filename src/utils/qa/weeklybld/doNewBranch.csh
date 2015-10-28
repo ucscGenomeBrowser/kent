@@ -126,8 +126,8 @@ echo "Build branch sandbox on beta [${0}: `date`]"
 ./buildBeta.csh
 if ( $status ) then
      echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
-    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER ${BUILDMEISTER} galt browser-qa
-    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER ${BUILDMEISTER}
+    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER@soe.ucsc.edu ${BUILDMEISTER}@soe.ucsc.edu 
+    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER@soe.ucsc.edu ${BUILDMEISTER}@soe.ucsc.edu
     echo "Waiting for any other processes to finish"
     wait
     exit 1
