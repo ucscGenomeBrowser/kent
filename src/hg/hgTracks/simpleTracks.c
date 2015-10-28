@@ -3684,7 +3684,7 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
+if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
