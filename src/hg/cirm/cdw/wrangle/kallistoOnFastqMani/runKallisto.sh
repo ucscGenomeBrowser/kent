@@ -50,6 +50,11 @@ else
         fname4=$TMPDIR/`basename $4 .sra`_2.fastq
 fi
 
+if [ $# -lt 4 ]; then
+    echo running kallisto single 
+    $myDir/kallisto quant -i $1 -o $2 $fname1 $fname2 $fname3 $fname4 --single -l 75 -s 1 
+    exit
+fi
 echo running kallisto
 $myDir/kallisto quant -i $1 -o $2 $fname1 $fname2 $fname3 $fname4
 #rm -f $fname1 $fname2 $fname3 $fname4
