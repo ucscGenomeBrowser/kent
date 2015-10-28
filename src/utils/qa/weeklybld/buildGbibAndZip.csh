@@ -16,6 +16,15 @@ echo "runCount=$runCount"
 if ( "$runCount" == "0" ) then
     VBoxHeadless -s browserbox &
     sleep 15
+    while ( 1 )
+        set runCount=`VBoxManage list runningvms | grep -c '"browserbox"'`
+        echo "runCount=$runCount"
+        if ( "$runCount" == "1" ) then
+            break
+        endif
+        echo "waiting for vm browserbox to start"
+        sleep 15
+    end
 endif
 
 echo logging into box and creating new public key
@@ -44,7 +53,7 @@ ssh box 'sudo shred -n 1 -zu /root/.ssh/{id_dsa,id_dsa.pub}'
 sed -i '/browserbox/d' ~/.ssh/authorized_keys
 
 echo running boxRelease
-boxRelease.csh beta
+./boxRelease.csh beta
 
 echo copying gbibBeta.zip to gbibV${BRANCHNN}.zip
 cp -p /usr/local/apache/htdocs/gbib/gbibBeta.zip /hive/groups/browser/vBox/gbibV${BRANCHNN}.zip
