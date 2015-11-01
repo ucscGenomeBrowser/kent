@@ -12715,6 +12715,16 @@ else if (sameWord(type, "bigPsl"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "bigChain"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "11";
+    track->isBigBed = TRUE;
+    chainMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigGenePred"))
     {
     tdb->canPack = TRUE;
