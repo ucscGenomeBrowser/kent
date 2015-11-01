@@ -12,13 +12,14 @@ sed -i '/browserbox/d' ~/.ssh/authorized_keys
 # start the box
 echo "start the box"
 set runCount=`VBoxManage list runningvms | grep -c '"browserbox"'`
-echo "runCount=$runCount"
+#echo "runCount=$runCount"
 if ( "$runCount" == "0" ) then
-    VBoxHeadless -s browserbox &
+    #VBoxHeadless -s browserbox &
+    VBoxManage startvm "browserbox" --type headless
     sleep 15
     while ( 1 )
         set runCount=`VBoxManage list runningvms | grep -c '"browserbox"'`
-        echo "runCount=$runCount"
+        #echo "runCount=$runCount"
         if ( "$runCount" == "1" ) then
             break
         endif
@@ -38,7 +39,7 @@ ssh box sudo cat /root/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 # may automatically rsync if it has not been run for weeks.
 while ( 1 )
     set rsyncCount=`ssh box ps -ef | grep -c rsync`
-    echo "rsyncCount=$rsyncCount"
+    #echo "rsyncCount=$rsyncCount"
     if ( "$rsyncCount" == "0" ) then
         break
     endif
