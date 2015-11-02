@@ -94,8 +94,11 @@ set runCount=`VBoxManage list runningvms | grep -c '"browserboxbeta"'`
 #echo "runCount=$runCount"
 if ( "$runCount" == "0" ) then
     echo "starting browserboxbeta"
+    #nice -n +19 # this must be bash syntax, does not work in tcshell here.
     #VBoxHeadless -s browserboxbeta &
     VBoxManage startvm "browserboxbeta" --type headless
+    #when I switched to using VBoxManage instead of VBoxHeadless,
+    # I had no problems with returning to the prompt after the script runs.
     echo "waiting for browserboxbeta"
     sleep 15
     while ( 1 )
