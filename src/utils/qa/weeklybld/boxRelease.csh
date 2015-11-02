@@ -19,6 +19,12 @@ endif
 
 echo cleaning the box
 ssh box sudo /root/cleanVm.sh
+echo one final check that dsa keys should not be found on browserbox root
+ssh box sudo ls /root/.ssh/{id_dsa,id_dsa.pub}
+if ( $status != 2) then
+    echo "DSA SSH KEYS FOUND. THIS IS SHOULD NOT HAPPEN!"
+    exit 1
+endif
 echo shutting down the box
 VBoxManage  controlvm  browserbox acpipowerbutton
 while (1) 
