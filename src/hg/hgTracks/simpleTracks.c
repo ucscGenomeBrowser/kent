@@ -3684,7 +3684,7 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
+if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
@@ -12712,6 +12712,16 @@ else if (sameWord(type, "bigPsl"))
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "bigChain"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "11";
+    track->isBigBed = TRUE;
+    chainMethods(track, tdb, wordCount, words);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }

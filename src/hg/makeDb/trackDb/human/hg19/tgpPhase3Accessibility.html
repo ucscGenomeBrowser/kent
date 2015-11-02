@@ -6,23 +6,28 @@ genome sequencing data from Phase 3 of the
 <A HREF="http://www.1000genomes.org/"
 TARGET=_BLANK>1000 Genomes Project</A> and shows two
 levels of stringency:  &quot;pilot&quot; stringency regions (see below) cover 94.5%
-of non-N bases in the genome (excluding alternate haplotype sequences and unplaced contigs)
-and &quot;strict&quot; regions cover 75.5%.  Each site which meets
+of non-N bases in the genome (excluding alternate haplotype sequences and unplaced contigs;
+95.9% on autosomes)
+and &quot;strict&quot; regions cover 75.5% (76.9% on autosomes).  Each site which meets
 &quot;strict&quot; criteria also passes the &quot;pilot&quot; criteria.</P>
 <P>
 This track does <B><I>not</I></B> show a mask of regions in which variant calls can
 or cannot be made.
 Some 1000 Genomes Phase 3 variant calls are in regions that do not meet the
 &quot;strict&quot; criteria.
-Phase 3 variant calls are filtered using the
+Phase 3 variant calls are filtered using various tools such as the
 <A HREF="http://www.broadinstitute.org/gatk/gatkdocs/org_broadinstitute_gatk_tools_walkers_variantrecalibration_VariantRecalibrator.html"
 TARGET=_BLANK>Variant Quality Score Recalibrator (VQSR)</A>
 method (implemented in the
 <A HREF="http://www.broadinstitute.org/gatk/"
 TARGET=_BLANK>Genome Analysis Toolkit (GATK)</A>)
-without regard to the thresholds applied here.  VQSR assesses the evidence for
-variation at sites where there is evidence, but says nothing about the remaining
-sites.</P>
+without regard to the thresholds applied here.
+VQSR and similar tools assess the evidence for variation at sites where a variant is called,
+but say nothing about the remaining sites.
+The 1000 Genomes Project Phase 3 variant calls combine information from low coverage sequencing,
+exome sequencing and array genotyping for improved sensitivity and specificity.
+The coverage masks are based on low coverage sequencing only.
+</P>
 <P>
 These regions will be useful for (a) comparing accessibility using current technologies
 to accessibility in the 1000 Genomes Pilot Project, and (b) population genetic
@@ -36,8 +41,8 @@ The total depth of mapped sequence reads, the average mapping quality score
 and the fraction of reads with mapping quality zero (meaning that this read maps
 equally well to more than one location in the genome) are tabulated from
 1000 Genomes Project Phase 3 .bam files.
-This combines low coverage whole genome sequence information from 2,504
-individuals, giving a genome wide average total depth of coverage of 17,920 reads.
+This combines whole genome sequence data from 2,504 individuals,
+giving a genome wide average depth of coverage of 17,920 reads.
 Both &quot;pilot&quot; and &quot;strict&quot; tracks are .bed file conversions of the
 &quot;pass&quot; regions from
 <A HREF="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/supporting/accessible_genome_masks/"

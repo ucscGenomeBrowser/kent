@@ -12,10 +12,20 @@ sed -i '/browserbox/d' ~/.ssh/authorized_keys
 # start the box
 echo "start the box"
 set runCount=`VBoxManage list runningvms | grep -c '"browserbox"'`
-echo "runCount=$runCount"
+#echo "runCount=$runCount"
 if ( "$runCount" == "0" ) then
-    VBoxHeadless -s browserbox &
+    #VBoxHeadless -s browserbox &
+    VBoxManage startvm "browserbox" --type headless
     sleep 15
+    while ( 1 )
+        set runCount=`VBoxManage list runningvms | grep -c '"browserbox"'`
+        #echo "runCount=$runCount"
+        if ( "$runCount" == "1" ) then
+            break
+        endif
+        echo "waiting for vm browserbox to start"
+        sleep 15
+    end
 endif
 
 echo logging into box and creating new public key
@@ -29,7 +39,7 @@ ssh box sudo cat /root/.ssh/id_dsa.pub >> ~/.ssh/authorized_keys
 # may automatically rsync if it has not been run for weeks.
 while ( 1 )
     set rsyncCount=`ssh box ps -ef | grep -c rsync`
-    echo "rsyncCount=$rsyncCount"
+    #echo "rsyncCount=$rsyncCount"
     if ( "$rsyncCount" == "0" ) then
         break
     endif
@@ -44,7 +54,7 @@ ssh box 'sudo shred -n 1 -zu /root/.ssh/{id_dsa,id_dsa.pub}'
 sed -i '/browserbox/d' ~/.ssh/authorized_keys
 
 echo running boxRelease
-boxRelease.csh beta
+./boxRelease.csh beta
 
 echo copying gbibBeta.zip to gbibV${BRANCHNN}.zip
 cp -p /usr/local/apache/htdocs/gbib/gbibBeta.zip /hive/groups/browser/vBox/gbibV${BRANCHNN}.zip

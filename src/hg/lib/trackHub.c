@@ -701,6 +701,7 @@ static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
 expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
 }
 
@@ -755,6 +756,7 @@ else
           startsWithWord("bigPsl", type) ||
           startsWithWord("bigMaf", type) ||
           startsWithWord("bigGenePred", type) ||
+          startsWithWord("bigChain", type) ||
           startsWithWord("bam", type)))
 	{
 	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,
