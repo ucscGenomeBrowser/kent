@@ -1391,7 +1391,11 @@ while(TRUE)
 	if (nread != 1)
 	    {
 	    if (nread == -1)
+		{
+		if (errno == EINTR)
+		    continue;
     		warn("Error (%s) reading http header on %s", strerror(errno), url);
+		}
 	    else if (nread == 0)
     		warn("Error unexpected end of input reading http header on %s", url);
 	    else
