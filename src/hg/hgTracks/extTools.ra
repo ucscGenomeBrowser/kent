@@ -281,6 +281,18 @@ param shape_conv_cutoff 0.25
 param shape_intercept -0.7
 param PAGE 2
 
+tool pfam
+shortLabel PFAM Search
+longLabel Annotation of protein domains by the EBI Pfam database
+email pfam-help@ebi.ac.uk
+url http://pfam.xfam.org/search/sequence
+param submit Submit
+param seq $seq
+maxSize 80000
+param chrom $s
+param start $start1
+param db $db
+
 tool promoter2
 shortLabel Promoter 2
 longLabel Vertebrate Transcription Start Site Prediction
