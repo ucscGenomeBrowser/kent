@@ -3,6 +3,7 @@
 # $s - chrom name, stripping "chr"
 # $S - full chrom name, leaving "chr"
 # $[ - start position of window
+# $start1 - start position of window + 1
 # $] - end position of window
 # $n - current organism name, spaces replaced with underscores
 # $D - current database, like hg19
@@ -28,7 +29,7 @@ onlyDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 param build previous
 
@@ -41,7 +42,7 @@ notDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 
 tool ensemblArch
@@ -52,7 +53,7 @@ onlyDbs hg38
 email helpdesk@ensembl.org
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool ensembl
@@ -63,7 +64,7 @@ email helpdesk@ensembl.org
 notDbs hg38
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool primer3Plus
