@@ -13,6 +13,7 @@ var HgIntegratorModel = ImModel.extend({
 
     handleCartVar: function(mutState, cartVar, newValue) {
         // Some cart variables require special action (not simply being merged into top-level state)
+        var range;
         if (cartVar === 'hgi_querySpec') {
             if (newValue === '') {
                 // No querySpec in cart yet -- make an empty one for rendering:
@@ -35,7 +36,8 @@ var HgIntegratorModel = ImModel.extend({
         } else if (cartVar === 'userRegions') {
             // If we just changed db and there are no defined regions for this db,
             // hgi_range can't be 'userRegions'.
-            if (! newValue || newValue === '') {
+            range = mutState.getIn(['regionSelect', 'hgi_range']);
+            if ((! newValue || newValue === '') && range === 'userRegions') {
                 this.clearUserRegions(mutState);
             }
         } else if (cartVar === 'tableFields') {
