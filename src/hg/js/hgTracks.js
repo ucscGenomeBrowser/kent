@@ -2714,7 +2714,7 @@ function showExtToolDialog() {
         htmlLines.push("</ul>");
         content = htmlLines.join("");
             
-        var title = hgTracks.chromName + ":" + hgTracks.winStart + "-" + hgTracks.winEnd + " on another website";
+        var title = hgTracks.chromName + ":" + (hgTracks.winStart+1) + "-" + hgTracks.winEnd + " on another website";
         $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
 
         // copied from the hgTrackUi function below

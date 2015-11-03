@@ -180,6 +180,9 @@ char *pos = cartString(cart, "position");
 findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
 int len = winEnd-winStart;
 
+char start1[255];
+safef(start1, sizeof(start1), "%d", winStart+1);
+
 char *url = replaceInUrl(et->url, "", cart, db, chromName, winStart, winEnd, NULL, TRUE);
 
 char *method = "POST";
@@ -209,6 +212,8 @@ for (slp=et->params; slp!=NULL; slp=slp->next)
         val = db;
     if (sameWord(val, "$position"))
         val = pos;
+    if (sameWord(val, "$start1"))
+        val = start1;
     if (sameWord(val, "$returnUrl"))
         {
         // get the full URL of this hgTracks page, so external page can construct a custom track

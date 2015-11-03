@@ -29,13 +29,16 @@ def parseArgs(args):
     help = " The output file. ",
     type =argparse.FileType("w"))
     parser.add_argument ("--keyCol",
-    help = " The meta data key column. ",
+    help = " The meta data key column. Defaults to 'meta' column. ",
     type = int)
     parser.add_argument ("--fields", 
     nargs="+",
-    type = int)
-    parser.set_defaults(keyCol = 5)
-    parser.set_defaults(fields = [1]) 
+    action = "store")
+    parser.set_defaults(keyCol = None)
+    parser.set_defaults(fields = ["age"]) 
+    if (len(sys.argv) == 1): 
+        parser.print_help()
+        exit(1)
     options = parser.parse_args()
     return options
 
@@ -76,7 +79,12 @@ def main(args):
     Initialized options and calls other functions.
     """
     options = parseArgs(args)
-    metaData = common.readInTable(options.metaDataFile, options.keyCol, "\t") 
+    firstLine = options.metaDataFile.readline()[:-1].split("\t")
+    metaData = common.readInTable(options.metaDataFile, firstLine.index("meta"), "\t")
+    metaFieldToCol = dict()
+    for item in options.fields: 
+        metaFieldToCol.setdefault(item,firstLine.index(item))
+        
     for line in options.jsonFile: # Lets abuse python's string manipulation a bit...
         if "name" in line: 
             elements = line.split(",")
@@ -86,7 +94,7 @@ def main(args):
                     newLine = line[:-1]
                     count = 0
                     for item in options.fields: # Add in the new meta data fields to the json entry
-                        swap = addJsonNameValPair(newLine, "metaField" + str(count), metaData[name][item])
+                        swap = addJsonNameValPair(newLine, item, metaData[name][metaFieldToCol[item]])
                         newLine = swap 
                         count +=1
                     options.outputFile.write(newLine+"\n") # Print the json entry

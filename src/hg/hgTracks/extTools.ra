@@ -3,6 +3,7 @@
 # $s - chrom name, stripping "chr"
 # $S - full chrom name, leaving "chr"
 # $[ - start position of window
+# $start1 - start position of window + 1
 # $] - end position of window
 # $n - current organism name, spaces replaced with underscores
 # $D - current database, like hg19
@@ -28,7 +29,7 @@ onlyDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 param build previous
 
@@ -41,7 +42,7 @@ notDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 
 tool ensemblArch
@@ -52,7 +53,7 @@ onlyDbs hg38
 email helpdesk@ensembl.org
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool ensembl
@@ -63,7 +64,7 @@ email helpdesk@ensembl.org
 notDbs hg38
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool primer3Plus
@@ -279,6 +280,18 @@ param noLP on
 param shape_conv_cutoff 0.25
 param shape_intercept -0.7
 param PAGE 2
+
+tool pfam
+shortLabel PFAM Search
+longLabel Annotation of protein domains by the EBI Pfam database
+email pfam-help@ebi.ac.uk
+url http://pfam.xfam.org/search/sequence
+param submit Submit
+param seq $seq
+maxSize 80000
+param chrom $s
+param start $start1
+param db $db
 
 tool promoter2
 shortLabel Promoter 2

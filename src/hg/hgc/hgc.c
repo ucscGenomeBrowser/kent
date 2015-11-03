@@ -21199,7 +21199,7 @@ void doScaffoldEcores(struct trackDb *tdb, char *item)
 /* Creates details page and gets the scaffold co-ordinates for unmapped */
 /* genomes for display and to use to create the correct outside link URL */
 {
-char *words[16];
+char *dupe, *words[16];
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn(database);
 int num;
@@ -21214,6 +21214,8 @@ char *old = "_";
 char *new = "";
 char *pat = "fold";
 int hasBin = 1;
+dupe = cloneString(tdb->type);
+chopLine(dupe,words);
 /* get bed size */
 num = 0;
 num = atoi(words[1]);
@@ -21241,6 +21243,7 @@ genericBedClick(conn, tdb, item, start, num);
 printTrackHtml(tdb);
 
 dyStringFree(&itemUrl);
+freez(&dupe);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
