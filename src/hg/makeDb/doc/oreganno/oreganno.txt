@@ -1,0 +1,136 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes the process for parsing and loading data
+# from ORegAnno Open Regulatory Annotation (www.oreganno.org).
+
+##############################################################################
+## Create annotation tracks (DONE - 2015-09-17 - Jonathan)
+## Files obtained from Robert Lesurf at WUSTL, refs #15957
+
+# Example file header:
+# ORegAnno_ID Species Outcome Type  Gene_Symbol Gene_ID Gene_Source
+# Regulatory_Element_Symbol Regulatory_Element_ID Regulatory_Element_Source
+# dbSNP_ID  PMID  Dataset hg38_Strand hg38_Chrom  hg38_Start  hg38_End
+    cd /hive/data/outside/oreganno/09-17-2015
+    unzip ucsc.zip
+    # Fix db in filename to match file-internal name (and our database name)
+    mv Caenorhabditis_briggsae_CB3_Filtered_2015.09.11.txt Caenorhabditis_briggsae_cb3_Filtered_2015.09.11.txt
+
+    mkdir /hive/data/inside/oreganno/09-17-2015
+    cd /hive/data/inside/oreganno/09-17-2015
+    mkdir bedResults
+
+    ls /hive/data/outside/oreganno/09-17-2015/ucsc/ \
+    | sed -E 's/.*_([^_]+)_Filtered.*/\1/' > db.list
+
+    for db in `cat db.list`; do for mode in `echo oreganno attr link`
+    do ./oreganno.pl $(find /hive/data/outside/oreganno/09-17-2015/ucsc/ \
+    | grep $db) $mode > bedResults/$db.$mode.bed; done; done
+
+    # featureBits reported items out of range
+    # $ featureBits hg38 hg38.oreganno.bed
+    # Coordinate out of allowed range [0,50818468) for chr22 near line 26392 of hg38.oreganno.bed
+    #
+    # obtained repaired files from data provider with a list of records to
+    # omit: out-of-range_9_29_15.txt and ucsc_fixed_9_29_15.zip
+
+    # fixing CRLF for unix
+    cd /hive/data/outside/oreganno/09-17-2015
+    tr '^M' '\n' < out-of-range_9_29_15.txt | awk '/OMIT/ {print $2}' > omit.txt
+
+    rm -rf ucsc/
+    unzip ucsc_fixed_9_29_15.zip
+    # Fix db in filename to match file-internal name (and our database name)
+    mv Caenorhabditis_briggsae_CB3_Filtered_2015.09.11.txt Caenorhabditis_briggsae_cb3_Filtered_2015.09.11.txt
+
+    cd /hive/data/inside/oreganno/09-17-2015
+    OMIMDIR=/hive/data/outside/oreganno/09-17-2015
+    for db in `cat db.list`; do for mode in `echo oreganno attr link`
+    do grep -v -f $OMIMDIR/omit.txt $(find $OMIMDIR/ucsc/ | grep -i "_${db}_") | ./oreganno.pl \
+    $mode > bedResults/$db.$mode.bed; done; done
+    
+    # fixing chromosome names on two entries for fr3, based on communication
+    # with data provider.
+    sed -ri 's/HE598491/HE591800/' fr3.oreganno.bed
+
+    # list of the assemblies that we will actually construct tracks for
+    printf \
+    "dm6
+    canFam3
+    hg19
+    hg38
+    mm10
+    mm9
+    sacCer3" > load.list
+
+    # sacCer3 coordinates weren't provided - gotta lift it
+    cd /hive/data/inside/oreganno/09-17-2015/bedResults
+    liftOver  -bedPlus=4 sacCer1.oreganno.bed /gbdb/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
+    sacCer3.oreganno.bed sacCer3.unmapped.bed
+    cp -p sacCer1.attr.bed sacCer3.attr.bed
+    cp -p sacCer1.link.bed sacCer3.link.bed
+
+    # Fixing naming schemes to due to some UPPER CASE and
+    # some Mixed Case type names.
+    cd /hive/data/inside/oreganno/09-17-2015/bedResults
+    sed -i -e 's/REGULATORY HAPLOTYPE/Regulatory Haplotype/' *.attr.bed
+    sed -i -e 's/REGULATORY POLYMORPHISM/Regulatory Polymorphism/' *.attr.bed
+    sed -i -e 's/REGULATORY REGION/Regulatory Region/' *.attr.bed
+    sed -i -e 's/TRANSCRIPTION FACTOR BINDING SITE/Transcription Factor Binding Site/' *.attr.bed
+    sed -i -e 's/miRNA BINDING SITE/miRNA Binding Site/' *.attr.bed
+
+    # Fixing the chromosome for a couple of records in hg18 and hg19
+    sed -iP 's/^chr\t/chr22\t/' hg19.oreganno.bed
+    sed -iP 's/^chrNA\t/chr22\t/' hg18.oreganno.bed
+
+    cd /hive/data/inside/oreganno/09-17-2015/bedResults
+    for db in `cat ../load.list`; do
+    hgsql -Ne 'drop table if exists oreganno, oregannoAttr, oregannoLink' $db
+    hgsql $db < ~/kent/src/hg/lib/oreganno.sql 
+    hgLoadBed $db oreganno $db.oreganno.bed -tab -oldTable
+    hgLoadSqlTab -oldTable $db oregannoAttr ~/kent/src/hg/lib/oreganno.sql $db.attr.bed
+    hgLoadSqlTab -oldTable $db oregannoLink ~/kent/src/hg/lib/oreganno.sql $db.link.bed
+    done
+
+    # Read 4242 elements of size 6 from dm6.oreganno.bed
+    # Read 29176 elements of size 6 from canFam3.oreganno.bed
+    # Read 1449726 elements of size 6 from hg19.oreganno.bed
+    # Read 1449133 elements of size 6 from hg38.oreganno.bed
+    # Read 415390 elements of size 6 from mm10.oreganno.bed
+    # Read 416691 elements of size 6 from mm9.oreganno.bed
+    # Read 7299 elements of size 6 from sacCer3.oreganno.bed
+
+    # Decided to also load data for the rest of the assemblies
+    # with old ORegAnno data, as that should simplify the
+    # display code and documentation.
+    # dm2, dm3, sacCer1, sacCer2, hg18
+
+    cd /hive/data/inside/oreganno/09-17-2015
+    printf \
+    "dm2
+    dm3
+    sacCer1
+    sacCer2
+    hg18" > loadOld.list
+
+    # lifting coordinates from sacCer1 to sacCer2
+    cd /hive/data/inside/oreganno/09-17-2015/bedResults
+    liftOver  -bedPlus=4 sacCer1.oreganno.bed /gbdb/sacCer1/liftOver/sacCer1ToSacCer2.over.chain.gz \
+    sacCer2.oreganno.bed sacCer2.unmapped.bed
+    cp -p sacCer1.attr.bed sacCer2.attr.bed
+    cp -p sacCer1.link.bed sacCer2.link.bed
+
+    cd /hive/data/inside/oreganno/09-17-2015/bedResults
+    for db in `cat ../loadOld.list`; do
+    hgsql -Ne 'drop table if exists oreganno, oregannoAttr, oregannoLink' $db
+    hgsql $db < ~/kent/src/hg/lib/oreganno.sql 
+    hgLoadBed $db oreganno $db.oreganno.bed -tab -oldTable
+    hgLoadSqlTab -oldTable $db oregannoAttr ~/kent/src/hg/lib/oreganno.sql $db.attr.bed
+    hgLoadSqlTab -oldTable $db oregannoLink ~/kent/src/hg/lib/oreganno.sql $db.link.bed
+    done
+
+    # Read 2071 elements of size 6 from dm2.oreganno.bed
+    # Read 4242 elements of size 6 from dm3.oreganno.bed
+    # Read 7302 elements of size 6 from sacCer1.oreganno.bed
+    # Read 7302 elements of size 6 from sacCer2.oreganno.bed
+    # Read 1449113 elements of size 6 from hg18.oreganno.bed
