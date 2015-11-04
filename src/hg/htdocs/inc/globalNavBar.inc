@@ -15,8 +15,8 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgTracks?db=hg38&position=lastDbPos">Human GRCh38/hg38</a></li>
 	<li><a href="../cgi-bin/hgTracks?db=hg19&position=lastDbPos">Human GRCh37/hg19</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm10&position=lastDbPos">Mouse NCBI37/mm10</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm9&position=lastDbPos">Mouse GRCh38/mm9</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm10&position=lastDbPos">Mouse GRCh38/mm10</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm9&position=lastDbPos">Mouse NCBI37/mm9</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
 </li>
