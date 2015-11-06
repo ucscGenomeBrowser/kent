@@ -454,7 +454,7 @@ struct mafAli *mafList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     // the MAF block in the record as \001 instead of newlines 
-    char *mafText = replaceChars(bb->rest, "\001","\n");
+    char *mafText = replaceChars(bb->rest, ";","\n");
 
     struct mafFile mf;
     mf.lf = lineFileOnString(NULL, TRUE, mafText);
