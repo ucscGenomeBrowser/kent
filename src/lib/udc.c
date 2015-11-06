@@ -38,6 +38,7 @@
 #include <dirent.h>
 #include <openssl/sha.h>
 
+FILE *udcLogStream = NULL;
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -77,6 +78,14 @@ struct udcProtocol
     UdcInfoCallback fetchInfo;	/* Timestamp & size fetcher */
     };
 
+struct ioStats
+/* Statistics concerning reads and seeks. */
+    {
+    bits64 numSeeks;
+    bits64 numReads;
+    bits64 bytesRead;
+    };
+
 struct udcFile
 /* A file handle for our caching system. */
     {
@@ -100,6 +109,7 @@ struct udcFile
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
     struct connInfo connInfo;   /* Connection info for open net connection. */
+    struct ioStats ioStats;     /* Statistics on file access. */
     };
 
 struct udcBitmap
@@ -961,6 +971,8 @@ struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
 verbose(4, "udcfileOpen(%s, %s)\n", url, cacheDir);
+if (udcLogStream)
+    fprintf(udcLogStream, "Open %s\n", url);
 /* Parse out protocol.  Make it "transparent" if none specified. */
 char *protocol = NULL, *afterProtocol = NULL, *colon;
 boolean isTransparent = FALSE;
@@ -1089,6 +1101,11 @@ void udcFileClose(struct udcFile **pFile)
 struct udcFile *file = *pFile;
 if (file != NULL)
     {
+    if (udcLogStream)
+        {
+        fprintf(udcLogStream, "Close %s %lld %lld %lld\n", file->url, 
+            file->ioStats.numSeeks, file->ioStats.numReads, file->ioStats.bytesRead);
+        }
     if (file->connInfo.socket != 0)
 	mustCloseFd(&(file->connInfo.socket));
     if (file->connInfo.ctrlSocket != 0)
@@ -1395,11 +1412,13 @@ return ok;
 bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
+file->ioStats.numReads++;
 // if not caching, just fetch the data
 if (!udcCacheEnabled() && !sameString(file->protocol, "transparent"))
     {
     int actualSize = file->prot->fetchData(file->url, file->offset, size, buf, &(file->connInfo));
     file->offset += actualSize;
+    file->ioStats.bytesRead += actualSize;
     return actualSize;
     }
 
@@ -1435,6 +1454,7 @@ while(TRUE)
 	    start = raEnd;
 	    size -= sizeInBuf;
 	    file->offset += sizeInBuf;
+            file->ioStats.bytesRead += sizeInBuf;
 	    if (size == 0)
 		break;
 	    }
@@ -1488,6 +1508,7 @@ while(TRUE)
 	{
 	mustReadFd(file->fdSparse, cbuf, size);
 	file->offset += size;
+        file->ioStats.bytesRead += size;
 	bytesRead += size;
 	break;
 	}
@@ -1660,6 +1681,7 @@ return lineFileOnString(url, TRUE, buf);
 void udcSeekCur(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
+file->ioStats.numSeeks++;
 file->offset += offset;
 if (udcCacheEnabled())
     mustLseek(file->fdSparse, offset, SEEK_CUR);
@@ -1668,6 +1690,7 @@ if (udcCacheEnabled())
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
+file->ioStats.numSeeks++;
 file->offset = offset;
 if (udcCacheEnabled())
     mustLseek(file->fdSparse, offset, SEEK_SET);
@@ -1836,4 +1859,9 @@ boolean udcExists(char *url)
 /* return true if a local or remote file exists */
 {
 return udcFileSize(url)!=-1;
+}
+
+void udcSetLog(FILE *fp)
+{
+udcLogStream = fp;
 }

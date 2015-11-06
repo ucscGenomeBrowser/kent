@@ -304,7 +304,10 @@ if (begin < 0)
 
 if (track->isBigBed)
     {
-    mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, begin, winEnd+2);
+    struct bbiFile *bbi = fetchBbiForTrack(track);
+    mp->list = bigMafLoadInRegion(bbi, chromName, begin, winEnd+2);
+    bbiFileClose(&bbi);
+    track->bbiFile = NULL;
     }
 else if (mp->ct)
     {
@@ -517,7 +520,10 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
 
     if (track->isBigBed)
         {
+        struct bbiFile *bbi = fetchBbiForTrack(track);
         mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, winStart, winEnd);
+        bbiFileClose(&bbi);
+        track->bbiFile = NULL;
         }
     else if (mp->ct)
 	{
@@ -1180,6 +1186,7 @@ if (track->isBigBed)
         else
             slAddHead(&(hel->val), ms);
         }
+    bbiFileClose(&bbi);
     }
 else 
     {
@@ -1904,6 +1911,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     slAddHead(&mfList, mf);
     }
 
+bbiFileClose(&bbi);
 slReverse(&mfList);
 return mfList;
 }

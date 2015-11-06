@@ -165,4 +165,6 @@ boolean udcExists(char *url);
 boolean udcIsLocal(char *url);
 /* return true if url is not a http or ftp file, just a normal local file path */
 
+void udcSetLog(FILE *fp);
+/* Tell UDC where to log its statistics. */
 #endif /* UDC_H */

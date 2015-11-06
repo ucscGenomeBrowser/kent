@@ -5931,6 +5931,14 @@ int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
 
+// tell UDC where to put its statistics file
+char *udcLogFile;
+if ((udcLogFile =  cfgOption("udcLog")) != NULL)
+    {
+    FILE *fp = mustOpen(udcLogFile, "a");
+    udcSetLog(fp);
+    }
+
 initTl();
 
 char *configPageCall = cartCgiUsualString(cart, "hgTracksConfigPage", "notSet");
