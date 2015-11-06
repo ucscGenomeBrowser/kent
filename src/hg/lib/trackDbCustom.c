@@ -697,7 +697,7 @@ else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("b
 	    }
 	}
     }
-else if(startsWith("chain",type))
+else if(startsWith("chain",type) || startsWith("bigChain",type))
     cType = cfgChain;
 else if (startsWith("bamWig", type))
     cType = cfgWig;

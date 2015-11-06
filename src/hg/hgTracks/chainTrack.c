@@ -328,8 +328,8 @@ struct cartOptions *chainCart;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-optionChrStr = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
-	"chromFilter", "All");
+optionChrStr = cartStringClosestToHome(cart, tg->tdb, FALSE,
+	"chromFilter");
 
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
 struct lm *lm = lmInit(0);
@@ -341,6 +341,16 @@ char startBuf[16], endBuf[16];
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if ((optionChrStr != NULL) && !startsWith(optionChrStr, bedRow[7]))
+        continue;
+
+    if (chainCart->scoreFilter >0) 
+        {
+        unsigned score = sqlUnsigned(bedRow[4]);
+        if  (score < chainCart->scoreFilter)
+            continue;
+        }
+
     struct bed *bed = bedLoadN(bedRow, 6);
     lf = bedMungToLinkedFeatures(&bed, tg->tdb, fieldCount,
         0, 1000, FALSE);
