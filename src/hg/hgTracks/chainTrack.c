@@ -328,7 +328,7 @@ struct cartOptions *chainCart;
 
 chainCart = (struct cartOptions *) tg->extraUiData;
 
-optionChrStr = cartStringClosestToHome(cart, tg->tdb, FALSE,
+optionChrStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE,
 	"chromFilter");
 
 struct bbiFile *bbi =  fetchBbiForTrack(tg);
