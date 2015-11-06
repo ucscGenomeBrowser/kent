@@ -38,7 +38,7 @@ struct bamTrackData
     };
 
 
-struct psl *pslFromBam(const bam1_t *bam)
+static struct psl *pslFromBam(const bam1_t *bam)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
  * no scoring info) */
 {
@@ -93,6 +93,13 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    errAbort("pslFromBam: unrecognized CIGAR op %c -- update me", op);
 	}
     }
+
+if (blockCount == 0)
+    {
+    // sometimes BAM's have alignments with no alignment
+    return NULL;  // leaks allocated PSL.
+    }
+
 psl->tSize = hChromSize(database, chromName);
 psl->tStart = tStarts[0];
 psl->tEnd = tStarts[blockCount-1] + blockSizes[blockCount-1];
@@ -219,6 +226,10 @@ struct linkedFeatures *bamToLf(const bam1_t *bam, void *data)
 struct bamTrackData *btd = (struct bamTrackData *)data;
 const bam1_core_t *core = &bam->core;
 struct linkedFeatures *lf;
+struct psl *original = pslFromBam(bam);
+if (original == NULL)
+    return NULL;
+
 AllocVar(lf);
 lf->score = core->qual;
 lf->name = cloneString(bam1_qname(bam));
@@ -228,7 +239,7 @@ lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
 lf->extra = bamGetQuerySequence(bam, FALSE); // cds.c reverses if psl != NULL
-lf->original = pslFromBam(bam);
+lf->original = original;
 int clippedQLen;
 bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
@@ -298,8 +309,11 @@ struct bamTrackData *btd = (struct bamTrackData *)data;
 if (!passesFilters(bam, btd))
     return 0;
 struct linkedFeatures *lf = bamToLf(bam, data);
-struct track *tg = btd->tg;
-slAddHead(&(tg->items), lf);
+if (lf)
+    {
+    struct track *tg = btd->tg;
+    slAddHead(&(tg->items), lf);
+    }
 return 0;
 }
 
