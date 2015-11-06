@@ -728,6 +728,11 @@ identifier encodePseudogeneYale dependency
     $hg.encodePseudogeneYale.name
     $hg.encodePseudogeneClass.name minCheck=0.16 unique
 
+identifier pseudoYale60
+"Link together Yale Pseudogenes 60 table with class table"
+    hg19.pseudoYale60.name
+    hg19.pseudoYale60Class.name
+
 identifier wgEncodeNhgriBip
 "Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
     hg18.wgEncodeNhgriBip.name dupeOk
