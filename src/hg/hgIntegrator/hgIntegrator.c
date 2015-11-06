@@ -434,6 +434,7 @@ void doQuery()
 char *db = cartString(cart, "db");
 char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
 struct bed4 *regionList = NULL;
+char regionDesc[PATH_LEN];
 if (sameString(regionType, "position"))
     {
     char *chrom = NULL;
@@ -445,16 +446,19 @@ if (sameString(regionType, "position"))
     regionList->chrom = cloneString(chrom);
     regionList->chromStart = start;
     regionList->chromEnd = end;
+    safef(regionDesc, sizeof(regionDesc), "%s:%d-%d", chrom, start+1, end);
     }
 else if (sameString(regionType, hgtaRegionTypeUserRegions))
     {
     regionList = userRegionsGetBedList();
     slSort(&regionList, bedCmp);
+    safecpy(regionDesc, sizeof(regionDesc), "defined-regions");
     }
 else
     {
     // genome-wide query: chrom=NULL, start=end=0
     AllocVar(regionList);
+    safecpy(regionDesc, sizeof(regionDesc), "genome");
     }
 struct annoAssembly *assembly = hAnnoGetAssembly(db);
 // Decode and parse CGI-encoded querySpec.
@@ -467,6 +471,9 @@ struct jsonElement *queryObj = jsonParse(querySpecDecoded);
 int savedStdout = -1;
 struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
 webStartText();
+// Print a simple output header
+time_t now = time(NULL);
+printf("# hgIntegrator: database=%s region=%s %s", db, regionDesc, ctime(&now));
 // Make an annoFormatter to print output.
 // For now, tab-separated output is it.
 struct annoFormatter *formatter = makeTabFormatter(queryObj);
@@ -487,6 +494,9 @@ cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 struct bed4 *region;
 for (region = regionList;  region != NULL;  region = region->next)
     {
+    if (sameString(regionType, hgtaRegionTypeUserRegions))
+        printf("# region=%s:%d-%d\n",
+               region->chrom, region->chromStart+1, region->chromEnd);
     regionQuery(assembly, region, dataSources, fullTrackList, formatter);
     }
 
