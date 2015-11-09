@@ -77,9 +77,8 @@ endif
 
 echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
 
-# NOTE: THE BUILDMEISTER address is already a full address
 #echo debug: disabled sending email
-echo "Ready for pairings, day 9, Git reports completed for v${NEXTNN} preview2 http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${NEXTNN} preview2)." $USER@soe.ucsc.edu ${BUILDMEISTER} kuhn@soe.ucsc.edu ann@soe.ucsc.edu kate@soe.ucsc.edu luvina@soe.ucsc.edu braney@soe.ucsc.edu steve@soe.ucsc.edu
+echo "Ready for pairings, day 9, Git reports completed for v${NEXTNN} preview2 http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${NEXTNN} preview2)." $USER@soe.ucsc.edu ${BUILDMEISTEREMAIL} kuhn@soe.ucsc.edu ann@soe.ucsc.edu kate@soe.ucsc.edu luvina@soe.ucsc.edu braney@soe.ucsc.edu steve@soe.ucsc.edu
 
 
 #---------------------
