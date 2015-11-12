@@ -69,7 +69,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodeBasicVM4
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM4ViewGenes on
+        subTrack wgEncodeGencodeVM4ViewGenes off
         shortLabel Basic
         subGroups view=aGenes name=Basic
         longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version M4 (Ensembl 78)
@@ -87,7 +87,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodePseudoGeneVM4
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM4ViewGenes on
+        subTrack wgEncodeGencodeVM4ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M4 (Ensembl 78)
