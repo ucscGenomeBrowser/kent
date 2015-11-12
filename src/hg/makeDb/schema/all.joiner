@@ -1998,7 +1998,7 @@ identifier wgEncodeGencodePseudoGeneAttrsVM7
 identifier wgEncodeGencodeExonSupportVM7
 "Link together Gencode Exon Support table with Attributes table"
     mm10.wgEncodeGencodeExonSupportVM7.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.97
+    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.96
 
 identifier wgEncodeGencodeGeneSourceVM7
 "Link together Gencode Gene Source table with Attributes table"
@@ -2008,7 +2008,7 @@ identifier wgEncodeGencodeGeneSourceVM7
 identifier wgEncodeGencodePdbVM7
 "Link together Gencode Pdb table with Attributes table"
     mm10.wgEncodeGencodePdbVM7.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.02
+    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.017
 
 identifier wgEncodeGencodePubMedVM7
 "Link together Gencode Pubmed table with Attributes table"
