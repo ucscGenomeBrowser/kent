@@ -141,7 +141,6 @@ struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
-struct sqlConnection *conn = NULL;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
@@ -311,9 +310,13 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 for (lf = tg->items; lf != NULL; lf = lf->next)
     lf->components = NULL;
 
+if (tg->isBigBed)
+    bbiFileClose(&bbClosure.bbi);
+else
+    hFreeConn(&sqlClosure.conn);
+
 lmCleanup(&lm);
 freeHash(&hash);
-hFreeConn(&conn);
 }
 
 void bigChainLoadItems(struct track *tg)
@@ -385,6 +388,7 @@ else
     slReverse(&list);
 tg->items = list;
 
+bbiFileClose(&bbi);
 }
 
 void chainLoadItems(struct track *tg)
