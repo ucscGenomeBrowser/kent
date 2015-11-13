@@ -29,32 +29,39 @@ var PositionSearch = React.createClass({
                  className: pt.string   // class(es) to pass to wrapper div
                },
 
-    autoCompleteSourceFactory: function(db) {
+    autoCompleteSourceFactory: function() {
 	// This returns a 'source' callback function for jqueryui.autocomplete.
-	var baseUrl = '../cgi-bin/hgSuggest?db=' + db + '&prefix=';
 	// We get a lot of duplicate requests (especially the first letters of
 	// words), so we keep a cache of the suggestions lists we've retreived.
 	var cache = {};
+
+        function makeUrl(db, key) {
+	    return '../cgi-bin/hgSuggest?db=' + db + '&prefix=' + encodeURIComponent(key);
+        }
 
 	return function (request, acCallback) {
 	    // This is a callback for jqueryui.autocomplete: when the user types
 	    // a character, this is called with the input value as request.term and an acCallback
 	    // for this to return the result to autocomplete.
 	    // See http://api.jqueryui.com/autocomplete/#option-source
-            var key = request.term;
-            if (cache[key]) {
-		acCallback(cache[key]);
-            } else {
-		var url = baseUrl + encodeURIComponent(key);
-		$.getJSON(url)
+            if (this.props.positionInfo.get('geneSuggestTrack')) {
+                var key = request.term;
+                var db = this.props.db;
+                if (cache[db] && cache[db][key]) {
+                    acCallback(cache[db][key]);
+                } else {
+		    var url = makeUrl(db, key);
+		    $.getJSON(url)
 		    .done(function(result) {
-			cache[key] = result;
-			acCallback(result);
-		    });
-		// ignore errors to avoid spamming people on flaky network connections
-		// with tons of error messages (#8816).
+                            cache[db] = cache[db] || {};
+                            cache[db][key] = result;
+                            acCallback(result);
+                    });
+		    // ignore errors to avoid spamming people on flaky network connections
+		    // with tons of error messages (#8816).
+                }
             }
-	};
+	}.bind(this);
     },
 
     autoCompleteMenuOpen: function() {
@@ -77,56 +84,53 @@ var PositionSearch = React.createClass({
         }
     },
 
-    autoCompleteSelectFactory: function(geneTrack) {
-	// This returns a 'select' event callback function for jquery.autocomplete.
-	return function(event, ui) {
-	    // This is a callback for autocomplete to let us know that the user selected
-	    // a gene from the list.
-	    // See http://api.jqueryui.com/autocomplete/#event-select
-            this.setState({position: ui.item.id,
-	                   // highlight genes choosen from suggest list (#6330)
-	                   hgFindParams: { 'track': geneTrack,
-				           'vis': 'pack',
-				           'extraSel': '',
-				           'matches': ui.item.internalId }
-                           });
-            this.props.update(this.props.path.concat('position'), ui.item.id);
-            // Don't let autocomplete whack the input's value:
-            event.preventDefault();
-	}.bind(this);
+    autoCompleteSelect: function(event, ui) {
+	// This is a callback for autocomplete to let us know that the user selected
+	// a gene from the list.
+	// See http://api.jqueryui.com/autocomplete/#event-select
+        var geneTrack = this.props.positionInfo.get('geneSuggestTrack');
+        this.setState({position: ui.item.id,
+
+                       //#*** TODO: This currently does nothing.  Hook it up to the model.
+	               // highlight genes choosen from suggest list (#6330)
+	               hgFindParams: { 'track': geneTrack,
+				       'vis': 'pack',
+				       'extraSel': '',
+				       'matches': ui.item.internalId }
+                       });
+        this.props.update(this.props.path.concat('position'), ui.item.id);
+        // Don't let autocomplete whack the input's value:
+        event.preventDefault();
     },
 
     componentDidMount: function() {
         // If we have a geneSuggest track, set up autocomplete.
         var inputNode, $input;
-        var geneSuggestTrack = this.props.positionInfo.get('geneSuggestTrack');
-        if (geneSuggestTrack) {
-            inputNode = this.refs.input.getDOMNode();
-            $input = $(inputNode);
-            $input.autocomplete({
-                    delay: 500,
-                    minLength: 2,
-                    source: this.autoCompleteSourceFactory(this.props.db),
-                    open: this.autoCompleteMenuOpen,
-                    select: this.autoCompleteSelectFactory(geneSuggestTrack)
-	    });
-            // IE8 voodoo... I tried logging all events on input node and disabling
-            // ones that looked weird until I found something that prevented buggy behavior.
-            // Without the following, if you click on an autocomplete item in IE8, then
-            // IE8 only acts on the blur on the position field (causing an hgFind request)
-            // and totally loses the select action (jquery-ui's autocomplete never gets
-            // the select event).  This prevents the premature blur action when we click
-            // on an autocomplete item, as long as jquery-ui className doesn't change...
-            if (inputNode.onbeforedeactivate !== undefined) {
-                console.log('IE8 onbeforedeactivate hack');
-                $input.on('beforedeactivate', function(ev) {
-                    if (ev.originalEvent &&
-                        ev.originalEvent.toElement &&
-                        /ui-state-focus/.test(ev.originalEvent.toElement.className)) {
-                        ev.preventDefault();
-                    }
-                });
-            }
+        inputNode = this.refs.input.getDOMNode();
+        $input = $(inputNode);
+        $input.autocomplete({
+            delay: 500,
+            minLength: 2,
+            source: this.autoCompleteSourceFactory(),
+            open: this.autoCompleteMenuOpen,
+            select: this.autoCompleteSelect
+	});
+        // IE8 voodoo... I tried logging all events on input node and disabling
+        // ones that looked weird until I found something that prevented buggy behavior.
+        // Without the following, if you click on an autocomplete item in IE8, then
+        // IE8 only acts on the blur on the position field (causing an hgFind request)
+        // and totally loses the select action (jquery-ui's autocomplete never gets
+        // the select event).  This prevents the premature blur action when we click
+        // on an autocomplete item, as long as jquery-ui className doesn't change...
+        if (inputNode.onbeforedeactivate !== undefined) {
+            console.log('IE8 onbeforedeactivate hack');
+            $input.on('beforedeactivate', function(ev) {
+                if (ev.originalEvent &&
+                    ev.originalEvent.toElement &&
+                    /ui-state-focus/.test(ev.originalEvent.toElement.className)) {
+                    ev.preventDefault();
+                }
+            });
         }
     },
 
