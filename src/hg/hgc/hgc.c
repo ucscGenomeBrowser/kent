@@ -3141,7 +3141,17 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-chain = chainLoadIdRange(database, tdb->table, seqName, winStart, winEnd, atoi(item));
+if (isHubTrack(tdb->track))
+    {
+    char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
+    char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
+    chain = chainLoadIdRangeHub(fileName, linkFileName, seqName, winStart, winEnd, atoi(item));
+    }
+else
+    {
+    chain = chainLoadIdRange(database, tdb->table, seqName, winStart, winEnd, atoi(item));
+    }
+
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 
 if (subChain == NULL)
@@ -3952,7 +3962,7 @@ else if (wordCount > 0)
 	    errAbort("Missing field in netAlign track type field");
 	genericNetClick(conn, tdb, item, start, words[1], words[2]);
 	}
-    else if (sameString(type, "chain"))
+    else if (sameString(type, "chain") || sameString(type, "bigChain") )
         {
 	if (wordCount < 2)
 	    errAbort("Missing field in chain track type field");
