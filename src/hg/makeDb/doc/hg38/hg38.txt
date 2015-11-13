@@ -3251,6 +3251,18 @@ cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
 
 hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
 
+## tRNAs track (2015-10-04, Chris FINISHING BUILD FOR RELEASE) 
+    cd /hive/data/genomes/hg38/bed/tRNAs
+    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed hg38-tRNAs2.bed
+    hgsql hg38 -e 'drop table if exists tRNAs' 
+    hgLoadBed -tab hg38 tRNAs hg38-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+    mkdir gif
+    cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg38/images/* gif
+    cd /hive/data/gbdb/hg38
+    ln -s /hive/data/genomes/hg38/bed/tRNAs/gif RNA-img 
+    cd /usr/local/apache/htdocs-ceisenhart/RNA-img
+    ln -s /gbdb/hg38/RNA-img hg38
+
 ############################################################################
 # EXONIPHY , lifted from hg19 (DONE - braney 2014-02-19)
 #	needed for ucscGenes building

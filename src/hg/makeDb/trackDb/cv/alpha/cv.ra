@@ -2567,7 +2567,7 @@ type Cell Line
 description astrocytes-cerebellar
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1810
+orderUrl http://www.sciencellonline.com/human-astrocytes-cerebellar.html
 organism human
 protocol Stam:HAc_Stam_protocol.pdf
 sex U
@@ -2583,7 +2583,7 @@ tag HAE
 type Cell Line
 description amniotic epithelial cells
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7110
+orderUrl http://www.sciencellonline.com/haepic.html
 organism human
 protocol Stam:HAEpiC_Stam_protocol.pdf
 sex U
@@ -2600,7 +2600,7 @@ type Cell Line
 description astrocytes-hippocampal
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1830
+orderUrl http://www.sciencellonline.com/human-astrocytes-hippocampal.html
 organism human
 protocol Stam:HAh_Stam_protocol.pdf
 sex U
@@ -2746,7 +2746,7 @@ type Cell Line
 description astrocytes spinal cord
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1820
+orderUrl http://www.sciencellonline.com/human-astrocytes-spinal-cord.html
 organism human
 protocol Stam:HA-sp_Stam_protocol.pdf
 sex U
@@ -2763,7 +2763,7 @@ type Cell Line
 description brain microvascular endothelial cells
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1000
+orderUrl http://www.sciencellonline.com/human-brain-microvascular-endothelial-cells.html
 organism human
 protocol Stam:HBMEC_Stam_protocol.pdf
 sex U
@@ -2797,7 +2797,7 @@ type Cell Line
 description brain vascular smooth muscle cells.
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1100
+orderUrl http://www.sciencellonline.com/human-brain-vascular-smooth-muscle-cells.html
 organism human
 protocol Stam:HBVSMC_Stam_protocol.pdf
 sex F
@@ -2814,7 +2814,7 @@ type Cell Line
 description cardiac fibroblasts- adult atrial
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6320
+orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.htm
 organism human
 protocol Stam:HCFaa_Stam_protocol.pdf
 sex F
@@ -2831,7 +2831,7 @@ type Cell Line
 description cardiac fibroblasts
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6300
+orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts.html
 organism human
 protocol Stam:HCF_Stam_protocol.pdf
 sex U
@@ -2903,7 +2903,7 @@ tag HCONF
 type Cell Line
 description conjunctival fibroblast
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6570
+orderUrl http://www.sciencellonline.com/hconf.html
 organism human
 protocol Stam:HConF_Stam_protocol.pdf
 sex U
@@ -2920,7 +2920,7 @@ type Cell Line
 description cardiac myocytes
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6200
+orderUrl http://www.sciencellonline.com/human-cardiac-myocytes.html
 organism human
 protocol Stam:HCM_Stam_protocol.pdf
 sex U
@@ -2937,7 +2937,7 @@ type Cell Line
 description choroid plexus epithelial cells
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1310
+orderUrl http://www.sciencellonline.com/human-choroid-plexus-epithelial-cells.html
 organism human
 protocol Stam:HCPEpiC_Stam_protocol.pdf
 sex U
@@ -2988,7 +2988,7 @@ type Cell Line
 description esophageal epithelial cells
 karyotype normal
 lineage endoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2720
+orderUrl http://www.sciencellonline.com/heepic.html
 organism human
 protocol Stam:HEEpiC_Stam_protocol.pdf
 sex U
@@ -3212,7 +3212,7 @@ tag HGF
 type Cell Line
 description gingival fibroblasts
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2620
+orderUrl http://www.sciencellonline.com/human-gingival-fibroblasts.html
 organism human
 protocol Stam:HGF_Stam_protocol.pdf
 sex U
@@ -3245,7 +3245,7 @@ type Cell Line
 description iris pigment epithelial cells
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6560
+orderUrl http://www.sciencellonline.com/hipepic.html
 organism human
 protocol Stam:HIPEpiC_Stam_protocol.pdf
 sex U
@@ -3331,7 +3331,7 @@ term HMF
 tag HMF
 type Cell Line
 description mammary fibroblasts
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7630
+orderUrl http://www.sciencellonline.com/hmf.html
 organism human
 protocol Stam:HMF_Stam_protocol.pdf
 sex F
@@ -3762,7 +3762,7 @@ tag HNPCE
 type Cell Line
 description non-pigment ciliary epithelial cells
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6580
+orderUrl http://www.sciencellonline.com/hnpcepic.html
 organism human
 protocol Stam:HNPCEpiC_Stam_protocol.pdf
 sex U
@@ -3868,7 +3868,7 @@ type Cell Line
 description pulmonary artery fibroblasts
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3120
+orderUrl http://www.sciencellonline.com/hpaaf.html
 organism human
 protocol Stam:HPAF_Stam_protocol.pdf
 sex U
@@ -3973,7 +3973,7 @@ tag HPF
 type Cell Line
 description pulmonary fibroblasts isolated from lung tissue
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3300
+orderUrl http://www.sciencellonline.com/hpf.html
 organism human
 protocol Stam:HPF_Stam_protocol.pdf
 sex U
@@ -4080,7 +4080,7 @@ type Cell Line
 description renal glomerular endothelial cells
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=4000
+orderUrl http://www.sciencellonline.com/human-renal-glomerular-endothelial-cells.html
 organism human
 protocol Stam:HRGEC_Stam_protocol.pdf
 sex U
@@ -4097,7 +4097,7 @@ type Cell Line
 description retinal pigment epithelial cells
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=6540
+orderUrl http://www.sciencellonline.com/hrpepic.html
 organism human
 protocol Stam:HRPEpiC_Stam_protocol.pdf
 sex U
@@ -4393,7 +4393,7 @@ tag HVMF
 type Cell Line
 description villous mesenchymal fibroblast cells
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=7130
+orderUrl http://www.sciencellonline.com/hvmf.html
 organism human
 protocol Stam:HVMF_Stam_protocol.pdf Gingeras:HVMF6100401.3_Gingeras_protocol.pdf Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
 sex U

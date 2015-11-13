@@ -2723,6 +2723,7 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel GRC Incident:
 
 track tRNAs
+release alpha
 shortLabel tRNA Genes
 longLabel Transfer RNA Genes Identified with tRNAscan-SE
 group genes
