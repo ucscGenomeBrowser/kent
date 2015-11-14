@@ -365,6 +365,7 @@ param org $db
 param pos $position
 param pam NGG
 maxSize 1000
+onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,sacCer3,xenTro3,galGal4
 
 tool chopchop
 url https://chopchop.rc.fas.harvard.edu/search.php
@@ -401,4 +402,3 @@ param sitePadding 20
 param chrom $s
 param start $[
 param db $db
-onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,sacCer3,xenTro3,galGal4
