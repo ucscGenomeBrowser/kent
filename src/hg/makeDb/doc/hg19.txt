@@ -9141,6 +9141,15 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     mkdir /hive/data/gbdb/hg19/RNA-img
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
+# tRNAs track (2015-10-04, Chris RE-BUILD WITH UPDATED DATA FROM TODD LOWE) 
+    cd /hive/data/genomes/hg19/bed/tRNAs
+    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg19/hg19-tRNAs.bed hg19-tRNAs2.bed
+    hgsql hg19 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab hg19 tRNAs hg19-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+    mv gif gif.old 
+    mkdir gif
+    cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg19/images/* gif
+
 #####################################################################
 # calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-01-21 - Hiram)
     screen # use a screen to manage this multi-day job
