@@ -3604,6 +3604,28 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
 hvGfxUnclip(hvg);
 }
 
+void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                            double scale, Color color, enum trackVisibility vis)
+/* Draw next item buttons and map boxes */
+//TODO: Use this to clean up genericDrawItemsFullDense (will require wading thru ifdefs)
+{
+boolean isNextItemCompatible = nextItemCompatible(tg);
+boolean isExonNumberMapsCompatible = exonNumberMapsCompatible(tg, vis);
+if (!isNextItemCompatible && !isExonNumberMapsCompatible)
+    return;
+boolean doButtons = (isExonNumberMapsCompatible ? FALSE: TRUE);
+
+// Convert start/end coordinates to pix
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, 
+                            doButtons); 
+}
+
 static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
                                       struct hvGfx *hvg, int xOff, int yOff, int width,
                                       MgFont *font, Color color, enum trackVisibility vis)
