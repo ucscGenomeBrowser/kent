@@ -3,7 +3,7 @@
 ##############################################################################
 # hg38 patch 5 build
 ##############################################################################
-##  download sequence, prepare files (TBD - 2015-04-08 - tbd)
+##  download sequence, prepare files (WORKING - 2015-11-16 - Jonathan)
 ##############################################################################
 
 mkdir /hive/data/genomes/hg38/bed/hg38Patch5
@@ -12,7 +12,7 @@ mkdir genbank
 cd genbank
 time rsync -L -a -P \
 rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.20_GRCh38.p5/ ./
-real    3m21.710s
+# real    3m21.710s
 
 # appears to be the entire assembly:
 faSize GCA_000001405.20_GRCh38.p5_genomic.fna.gz
