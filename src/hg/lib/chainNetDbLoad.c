@@ -219,8 +219,82 @@ slSort(&list, cBlockCmpTarget);
 chain->blockList = list;
 }
 
+struct chain *chainLoadIdRangeHub(char *fileName, char *linkFileName,   char *chrom, int start, int end, int id)
+/* Load parts of chain of given ID from bigChain file.  Note the chain header
+ * including score, tStart, tEnd, will still reflect the whole chain,
+ * not just the part in range.  However only the blocks of the chain
+ * overlapping the range will be loaded. */
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi =  bigBedFileOpen(fileName);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+char *bedRow[11];
+char startBuf[16], endBuf[16];
+bbiFileClose(&bbi);
+boolean loadAll = FALSE;
+
+struct chain *chain;
+AllocVar(chain);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+
+    unsigned chainId = sqlUnsigned(bedRow[3]);
+    if (chainId == id)
+        break;
+    }
+
+if (bb == NULL)
+    errAbort("chain %d is not in %s", id, fileName);
+
+chain->tName = cloneString(chrom);
+chain->tSize = sqlUnsigned(bedRow[6]);
+chain->tStart = sqlUnsigned(bedRow[1]);
+chain->tEnd = sqlUnsigned(bedRow[2]);
+chain->qName = cloneString(bedRow[7]);
+chain->qSize = sqlUnsigned(bedRow[8]);
+chain->qStrand = *bedRow[5];
+chain->qStart = sqlUnsigned(bedRow[9]);
+chain->qEnd = sqlUnsigned(bedRow[10]);
+chain->id = id;
+
+// Now load the links.
+bbi =  bigBedFileOpen(linkFileName);
+if (loadAll)
+    {
+    start = chain->tStart;
+    end = chain->tEnd;
+    }
+bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+bbiFileClose(&bbi);
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    unsigned chainId = sqlUnsigned(bedRow[3]);
+    printf("chainId %d\n", chainId);
+    if (chainId == id)
+        {
+        struct cBlock *cBlock;
+
+        AllocVar(cBlock);
+        slAddHead(&chain->blockList, cBlock);
+        cBlock->tStart = sqlUnsigned(bedRow[1]);
+        cBlock->tEnd = sqlUnsigned(bedRow[2]);
+        unsigned size = cBlock->tEnd - cBlock->tStart;
+        cBlock->qStart = sqlUnsigned(bedRow[4]);
+        cBlock->qStart = cBlock->qStart + size;
+        }
+    }
+slReverse(&chain->blockList);
+
+lmCleanup(&lm);
+return chain;
+}
+
 static struct chain *chainLoadIdSome(char *database, char *track, char *chrom, 
-	int start, int end, int id, boolean loadAll)
+        int start, int end, int id, boolean loadAll)
 /* Load some or all of chain. */
 {
 struct sqlConnection *conn;
