@@ -3,7 +3,7 @@ table cdwDataset
     (
     string name unique;  "Short name of this dataset, one word, no spaces"
     string label;  "short title of the dataset, a few words"
-    string description;  "Description of dataset, can be a complete html paragraph."
+    lstring description;  "Description of dataset, can be a complete html paragraph."
     string pmid;  "Pubmed ID of abstract"
     string pmcid;  "PubmedCentral ID of paper full text"
     )

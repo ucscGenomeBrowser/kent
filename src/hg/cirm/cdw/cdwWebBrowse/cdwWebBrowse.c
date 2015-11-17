@@ -760,13 +760,14 @@ for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
         desc = "Missing description in table cdw.cdwDataset";
         }
 
-    printf("<B><A href=\"../cdwDatasets/%s.html\">%s</A></B><BR>", hel->name, label);
-    printf("%s (%d files)", desc, ptToInt(hel->val));
+    char *datasetId = hel->name;
+    printf("<B><A href=\"../cdwDatasets/%s/\">%s</A></B><BR>", datasetId, label);
+    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
     printf("</LI>\n");
+    cdwDatasetFree(&dataset);
     }
 printf("</UL>\n");
-//hashTraverseVals(descs, cdwDatasetFreeList);
-//hashFree(descs);
+hashFree(&descs);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
