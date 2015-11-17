@@ -46,7 +46,7 @@ else
     upLevel = cloneString("../../../../..");
     }
 fprintf(f, 
-"normal::\n\t cp -p %s ${HOME}/bin\n\t cp -p %s ${HOME}/kent/src/pyLib/scripts\n"
+"all::\n\t cp -p %s ${HOME}/bin\n\t cp -p %s ${HOME}/kent/src/pyLib/scripts\n"
 "test::\n\t@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \\ " 
 "\n\telse echo \"# no tests directory (or perhaps no tests/makefile) in $(CURDIR)\"; fi"
 , progName, progName);

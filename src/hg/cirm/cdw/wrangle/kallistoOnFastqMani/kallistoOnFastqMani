@@ -28,15 +28,48 @@ def parseArgs(args):
     parser.add_argument ("--dry",
     help = " This is a dry run, print out one of the commands from the jobList then stop.",
     action = "store_true")
+    parser.add_argument ("--single",
+    help = " This is single data (not paired end data).",
+    action = "store_true")
     parser.add_argument ("--verbose",
     help = " Spit out messages during runtime. ",
     action = "store_true")
 
+    parser.set_defaults(single = False)
     parser.set_defaults(dry = False)
     parser.set_defaults(verbose = False)
     parser.set_defaults(isMouse = False)
     options = parser.parse_args()
     return options
+
+
+def makeJobListSingle(manifestFile, outputFile, isMouse): 
+    """
+    """
+    
+    firstLine = True
+    pair = 1
+    binFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/runKallisto.sh"
+    if isMouse: 
+        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
+    else: 
+        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
+    
+    ofh = open(outputFile, "w", 1)
+    for line in open("../"+manifestFile,"r"): 
+        if firstLine:
+            firstLine = False 
+            print (line)
+            splitLine = line.split("\t")
+            metaCol = splitLine.index("meta") 
+            fileCol = splitLine.index("file")
+            continue 
+        splitLine = line.split("\t")
+        meta = splitLine[metaCol]
+        file = "../"+splitLine[fileCol]
+        cmd = "%(binFname)s %(transFname)s %(meta)s %(file)s\n" % locals()
+        ofh.write(cmd)
+    ofh.close() 
 
 def makeJobList(manifestFile, outputFile, isMouse):
     """
@@ -54,18 +87,27 @@ def makeJobList(manifestFile, outputFile, isMouse):
 
     # create a dict with meta -> (list of forw read fnames, list of rev read fnames)
     files = dict()
-    for line in open("../"+manifestFile).read().splitlines()[1:]:
+    firstLine = True 
+    maniFile =  open("../"+manifestFile).read().splitlines()
+    maniIndex = maniFile[0].strip("#").split("\t")
+    for line in maniFile[1:]:
         fs = line.split()
-        fname = fs[0]
-        meta = fs[3]
+        fname = fs[maniIndex.index("file")]
+        meta = fs[maniIndex.index("meta")]
         if meta not in files:
             files[meta] = ([], [])
-        pairedEnd = fs[6]
+        pairedEnd = fs[maniIndex.index("paired_end")]
         filePart = fs[7]
-        if pairedEnd=="1":
-            files[meta][0].append(dataDir+fname)
+        if not fname.startswith("/"):
+            if pairedEnd=="1":
+                files[meta][0].append(dataDir+fname)
+            else:
+                files[meta][1].append(dataDir+fname)
         else:
-            files[meta][1].append(dataDir+fname)
+            if pairedEnd=="1":
+                files[meta][0].append(fname)
+            else:
+                files[meta][1].append(fname)
     ofh = open(outputFile, "w", 1)
     # iterate over dict and write joblist
     binFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/runKallisto.sh"
@@ -81,6 +123,7 @@ def makeJobList(manifestFile, outputFile, isMouse):
         cmd = "%(binFname)s %(transFname)s %(meta)s %(pair1Str)s  %(pair2Str)s" % locals()
         ofh.write(cmd+"\n")
     ofh.close()
+
 
 def paraRunKallisto(verbose):
     """
@@ -109,7 +152,8 @@ def main(args):
 
     if options.verbose: print ("Start run kallisto on a batch of fastq files (kallistoOnFastqMani).")
     if options.verbose: print ("Making the job list...")
-    makeJobList(options.manifestFile,"jobList", options.isMouse)
+    if options.single: makeJobListSingle(options.manifestFile, "jobList", options.isMouse)
+    else: makeJobList(options.manifestFile,"jobList", options.isMouse)
     
     if options.dry:
         print ("The first command generated is...")
