@@ -1,0 +1,10 @@
+KEEP THESE FILES; 
+fastqFiles
+manifest.txt
+
+To test, remove these files, 
+ rm -rf testMouse
+ rm -rf kallistoOut 
+
+Then run the following command; 
+rnaSeqToClustersPipeline --isMouse --verbose manifest.txt testMouse
