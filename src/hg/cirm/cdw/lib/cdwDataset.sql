@@ -7,7 +7,7 @@
 CREATE TABLE cdwDataset (
     name varchar(255) not null,	# Short name of this dataset, one word, no spaces
     label varchar(255) not null,	# short title of the dataset, a few words
-    description varchar(255) not null,	# Description of dataset, can be a complete html paragraph.
+    description longblob not null,	# Description of dataset, can be a complete html paragraph.
     pmid varchar(255) not null,	# Pubmed ID of abstract
     pmcid varchar(255) not null,	# PubmedCentral ID of paper full text
               #Indices
