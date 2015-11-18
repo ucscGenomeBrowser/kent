@@ -49,6 +49,7 @@ struct commit
     char *commitId;
     char *merge;  
     char *author;
+    char *fullAuthor;
     char *date;
     char *comment;
     struct files *files;
@@ -132,6 +133,9 @@ while (lineFileNext(lf, &line, &lineSize))
 	}
     if (!sameString("Author:", w))
 	errAbort("expected keyword Author: parsing commits.tmp\n");
+
+    /* Full author information */
+    commit->fullAuthor = cloneString(line);
 
     /* by request, keep just the email account name */
     char *lc = strchr(line, '<');
@@ -790,7 +794,7 @@ for(c = commits; c; c = c->next)
     
     if (!hashLookup(userHash, c->author))
 	{
-	hashStore(userHash, c->author);
+	hashAdd(userHash, c->author, cloneString(c->fullAuthor));
 	struct slName *name = newSlName(c->author);
 	slAddHead(&users, name);
 	}
@@ -821,8 +825,6 @@ fprintf(h, "<h1>Changes By User</h1>\n");
 fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
 
 fprintf(h, "<ul>\n");
-
-
 
 struct slName*u;
 for(u = users; u; u = u->next)
@@ -870,9 +872,32 @@ else
     fprintf(h, "<li>  files changed: %d</li>\n", totalChangedFiles);
     fprintf(h, "</ul>\n");
     }
+    fprintf(h, "<br><A href=\"authors.html\">View Full Authors Details</A><br>");
 fprintf(h, "</body>\n</html>\n");
 
 fclose(h);
+
+
+
+// Authors Details page
+char authorsPath[1024];
+safef(authorsPath, sizeof(authorsPath), "%s/%s/%s/authors.html", outDir, outPrefix, "user");
+
+h = mustOpen(authorsPath, "w");
+fprintf(h, "<html>\n<head>\n<title>Full Authors Details</title>\n</head>\n</body>\n");
+fprintf(h, "<h1>Full Authors Details</h1>\n");
+fprintf(h, "<h2>%s to %s (%s to %s) %s</h2>\n", startTag, endTag, startDate, endDate, title);
+fprintf(h, "<ul>\n");
+for(u = users; u; u = u->next)
+    {
+    struct hashEl *hel = hashLookup(userHash, u->name);
+    char *fullAuthor = hel->val;
+    fprintf(h, "%s<br>\n", htmlEncode(fullAuthor));
+    }
+fprintf(h, "</ul>\n");
+fprintf(h, "</body>\n</html>\n");
+fclose(h);
+
 
 // make index of all files view
 doUserFiles(NULL, commits);

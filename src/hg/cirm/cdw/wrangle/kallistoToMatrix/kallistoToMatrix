@@ -5,27 +5,42 @@
 # and merges everything into a single matrix that can be read with one line in R
 # also outputs a binary hash files that can be read from python with one line
 
-import logging, sys, optparse
+import logging, sys, optparse, gzip, gc
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, isdir, splitext
 import os, marshal, glob
 from multiprocessing.dummy import Pool as ThreadPool 
 
+# no garbage collection needed in here
+gc.disable()
+
 # === command line interface, options and help ===
-parser = optparse.OptionParser("""usage: %prog [options] dirName outFname - collect expression counts from the files abundance.tsv, given a directory containing kallisto output directories.
+def parseArgs():
+    parser = optparse.OptionParser("""usage: %prog [options] dirName outFname - collect expression counts from the files abundance.tsv, given a directory containing kallisto output directories.
 
-Example:
-kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1.tab -t 20
-""")
+    Ctrl-c does not work for this program. Do ctrl-z and then 'kill %%'.
 
-parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10) 
-(options, args) = parser.parse_args()
+    Example:
+    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1.tab -t 20
+    """)
 
-if options.debug:
-    logging.basicConfig(level=logging.DEBUG)
-else:
-    logging.basicConfig(level=logging.INFO)
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
+    parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and report the sum of all transcript TPMs")
+    parser.add_option("", "--transFile", dest="transFile", action="store", help="for the -g option, the text file with the mapping transcript-gene, one per line. default %default", default="/hive/data/outside/gencode/release_22/gencode.v22.metadata.HGNC.gz")
+    (options, args) = parser.parse_args()
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
+    return args, options
+
 # ==== functions =====
     
 def iterAbundPaths(dirname):
@@ -51,6 +66,22 @@ def parseKallisto(fname):
         if fs[3]!="0":
             d[fs[0]] = float(fs[3])
     return d
+        
+def parseDict(fname, stripDot=False):
+    " open (gzip) file with key-val one per line and return as dict "
+    if fname.endswith(".gz"):
+        ifh = gzip.open(fname)
+    else:
+        ifh = open(fname)
+
+    ret = {}
+    for line in ifh:
+        fs = line.rstrip("\n").split()
+        if stripDot:
+            fs[0] = fs[0].split('.')[0]
+            fs[1] = fs[1].split('.')[0]
+        ret[fs[0]]=fs[1]
+    return ret
         
 def outputBigMatrix(names, results, outFname):
     """
@@ -106,40 +137,84 @@ def outputBigMatrix(names, results, outFname):
         #ofh.write("\n")
     #ofh.close()
     
-# ----------- main --------------
-if args==[]:
-    parser.print_help()
-    exit(1)
+def addGencodeSpecial(transFile, transToGene):
+    """ special code for gencode: their file does not include a mapping of
+    transcripts that do not have symbols. So I added a special file and
+    detect and merge it here
+    """
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if not isfile(transFile2):
+        return transToGene
 
-inDir = args[0]
-outFname = args[1]
+    transToGene2 = parseDict(transFile, stripDot=True)
 
-inFnames = list(iterAbundPaths(inDir))
-logging.info("Found %d input files" % len(inFnames))
+    for transId, geneId in transToGene2:
+        if transId not in transToGene:
+            transToGene[transId] = geneId
+    return transToGene
 
-threadCount = options.threads
-logging.info("Using %d threads to parse input files" % threadCount)
+def sumTransToGene(transDictList, transFile):
+    """ given a list of dict transcript -> tpm, and a map transcript -> gene,
+    map all transcripts to genes and return a list of gene -> sum of tpms
+    If we have no gene name, leave the transcript names in there.
+    """
+    transToGene = parseDict(transFile, stripDot=True)
+    transToGene = addGencodeSpecial(transFile, transToGene)
+    # special code for gencode: their file does not include a mapping of
+    # transcripts that do not have symbols. So I added a special file and
+    # detect and merge it here
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if isfile(transFile2):
+        transToGene2 = parseDict(transFile, stripDot=True)
+    for transId, geneId in transToGene2:
+        if transId not in transToGene:
+            transToGene[transId] = geneId
 
-# multithreading in only 4 lines
-pool = ThreadPool(threadCount)
-results = pool.map(parseKallisto,inFnames)
-pool.close()
-pool.join()
+    newRes = []
+    for transCounts in transDictList:
+        geneCounts = defaultdict(float)
+        for transId, count in transCounts.iteritems():
+            geneId = transToGene.get(transId, transId)
+            geneCounts[geneId]+=count
+        newRes.append(dict(geneCounts))
+    return newRes
+    
+def main():
+    args, options = parseArgs()
+    inDir = args[0]
+    outFname = args[1]
 
-# reduce the filenames to only their parent directory names
-cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
+    inFnames = list(iterAbundPaths(inDir))
+    logging.info("Found %d input files" % len(inFnames))
 
-#outputBigMatrixSparse(cellNames, results, outFname)
-outputBigMatrix(cellNames, results, outFname)
+    threadCount = options.threads
+    logging.info("Using %d threads to parse input files" % threadCount)
 
-# also output as a binary file for now
-# it's a lot easier and faster to parse, at least for python scripts
-# can be read from python with a single line:
-# matrix = marshal.load(open("data.tab.marshal"))
-# matrix is then a nested hash: cellName -> transcript -> count
-binPath = outFname+".marshal"
-logging.info("Writing %s" % binPath)
-allData = {}
-for name, transDict in zip(cellNames, results):
-    allData[name] = transDict
-marshal.dump(allData, open(binPath, "wb"))
+    # multithreading in only 4 lines
+    pool = ThreadPool(threadCount)
+    results = pool.map(parseKallisto,inFnames)
+    pool.close()
+    pool.join()
+
+    # reduce the filenames to only their parent directory names
+    cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
+
+    #outputBigMatrixSparse(cellNames, results, outFname)
+    if options.geneLevel:
+        results = sumTransToGene(results, options.transFile)
+
+    outputBigMatrix(cellNames, results, outFname)
+
+    # also output as a binary file for now
+    # it's a lot easier and faster to parse, at least for python scripts
+    # can be read from python with a single line:
+    # matrix = marshal.load(open("data.tab.marshal"))
+    # matrix is then a nested hash: cellName -> transcript -> count
+    binPath = outFname+".marshal"
+    logging.info("Writing %s" % binPath)
+    allData = {}
+    for name, transDict in zip(cellNames, results):
+        allData[name] = transDict
+    marshal.dump(allData, open(binPath, "wb"))
+
+main()
