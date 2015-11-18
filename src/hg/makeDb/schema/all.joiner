@@ -5314,7 +5314,8 @@ tablesIgnored hg38
     altLocations
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
-    centromeres
+    centromeresi
+    coriellDelDup
     hg38Patch3Haplotypes
     hg38Patch3Patches
     hg38Patch2Haplotypes
