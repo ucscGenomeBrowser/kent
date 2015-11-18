@@ -5855,6 +5855,7 @@ hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();retur
 hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+hPrintf("Mousetrap.bind('s d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");

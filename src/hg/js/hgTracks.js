@@ -2744,6 +2744,13 @@ function showExtToolDialog() {
         $('#extToolDialog').dialog('open');
 }
 
+// a function for the keyboard shortcut:
+// Jump to the "Get DNA" page
+function gotoGetDnaPage() {
+    var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+hgTracks.chromName+"&l="+hgTracks.winStart+"&r="+hgTracks.winEnd+"&db="+getDb();
+    window.location.href = url;
+}
+
   //////////////////////////////////
  //// popup (aka modal dialog) ////
 //////////////////////////////////
