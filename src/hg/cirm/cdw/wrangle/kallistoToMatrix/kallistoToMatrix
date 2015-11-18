@@ -79,6 +79,7 @@ def parseDict(fname, stripDot=False):
         fs = line.rstrip("\n").split()
         if stripDot:
             fs[0] = fs[0].split('.')[0]
+            fs[1] = fs[1].split('.')[0]
         ret[fs[0]]=fs[1]
     return ret
         
@@ -136,12 +137,39 @@ def outputBigMatrix(names, results, outFname):
         #ofh.write("\n")
     #ofh.close()
     
+def addGencodeSpecial(transFile, transToGene):
+    """ special code for gencode: their file does not include a mapping of
+    transcripts that do not have symbols. So I added a special file and
+    detect and merge it here
+    """
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if not isfile(transFile2):
+        return transToGene
+
+    transToGene2 = parseDict(transFile, stripDot=True)
+
+    for transId, geneId in transToGene2:
+        if transId not in transToGene:
+            transToGene[transId] = geneId
+    return transToGene
+
 def sumTransToGene(transDictList, transFile):
     """ given a list of dict transcript -> tpm, and a map transcript -> gene,
     map all transcripts to genes and return a list of gene -> sum of tpms
     If we have no gene name, leave the transcript names in there.
     """
     transToGene = parseDict(transFile, stripDot=True)
+    transToGene = addGencodeSpecial(transFile, transToGene)
+    # special code for gencode: their file does not include a mapping of
+    # transcripts that do not have symbols. So I added a special file and
+    # detect and merge it here
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if isfile(transFile2):
+        transToGene2 = parseDict(transFile, stripDot=True)
+    for transId, geneId in transToGene2:
+        if transId not in transToGene:
+            transToGene[transId] = geneId
+
     newRes = []
     for transCounts in transDictList:
         geneCounts = defaultdict(float)
