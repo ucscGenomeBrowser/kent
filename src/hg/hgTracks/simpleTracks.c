@@ -3345,7 +3345,22 @@ if (tg->itemNameColor != NULL)
     if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
 	labelColor = somewhatDarkerColor(hvg, color);
     }
-int y = yOff + tg->lineHeight * sn->row;
+
+// get y offset for item in pack mode
+int yRow = 0;
+if (tg->ss && tg->ss->rowSizes != NULL)
+    {
+    int i;
+    for (i=0; i < sn->row; i++)
+        yRow += tg->ss->rowSizes[i];
+    int itemHeight = tg->itemHeight(tg, item);
+    yRow += (tg->ss->rowSizes[sn->row] - itemHeight + 1);
+    tg->heightPer = itemHeight;
+    }
+else
+    yRow = tg->lineHeight * sn->row;
+int y = yOff + yRow;
+
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
 /* pgSnpDrawAt may change withIndividualLabels between items */

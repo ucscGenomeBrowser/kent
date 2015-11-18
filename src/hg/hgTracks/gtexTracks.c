@@ -12,6 +12,8 @@
 #include "gtexTissue.h"
 #include "gtexTissueData.h"
 #include "gtexUi.h"
+// TODO: move spaceSaver code to simpleTracks
+#include "spaceSaver.h"
 
 // NOTE: Sections to change for multi-region (vertical slice) display 
 //       are marked with #ifdef MULTI_REGION.  WARNING: These sections
@@ -36,6 +38,7 @@ struct gtexGeneInfo
     struct genePred *geneModel; /* Gene structure from model table */
     double *medians1;            /* Computed medians */
     double *medians2;            /* Computed medians for comparison (inverse) graph */
+    int height;                  /* Item height in pixels */
     };
 
 /***********************************************/
@@ -226,6 +229,8 @@ else
     }
 }
 
+static int gtexGeneItemHeight(struct track *tg, void *item);
+
 static void gtexGeneLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -275,6 +280,7 @@ while (geneBed != NULL)
     if (extras->isComparison && (tg->visibility == tvFull || tg->visibility == tvPack))
         // compute medians based on configuration (comparisons, and later, filters)
         loadComputedMedians(geneInfo, extras);
+    geneInfo->height = gtexGeneItemHeight(tg, geneInfo);
     }
 slReverse(&list);
 tg->items = list;
@@ -461,10 +467,7 @@ if (graphX < 0)
     return;
 
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
-if (geneInfo->medians2)
-    topGraphHeight = max(topGraphHeight, tl.fontHeight);
-if (vis == tvPack)
-    topGraphHeight = gtexMaxGraphHeight();
+topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 
 #ifndef MULTI_REGION
@@ -486,8 +489,8 @@ Color clipColor = MG_MAGENTA;
 // TODO: generalize
 if (geneInfo->medians2)
     {
-    hvGfxText(hvg, x1, yZero - tl.fontHeight, labelColor, font, "F");
-    hvGfxText(hvg, x1, yZero + gtexGeneModelHeight() + gtexGeneMargin(), labelColor, font, "M");
+    hvGfxText(hvg, x1, yZero - tl.fontHeight + 1, labelColor, font, "F");
+    hvGfxText(hvg, x1, yZero + gtexGeneModelHeight() + gtexGeneMargin() + 1, labelColor, font, "M");
     startX = startX + tl.mWidth+2;
     x1 = startX;
     }
@@ -696,14 +699,16 @@ if (isMax)
 if (item == NULL)
     return 0;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+if (geneInfo->height != 0)
+    return geneInfo->height;
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
+topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int bottomGraphHeight = 0;
 boolean isComparison = ((struct gtexGeneExtras *)tg->extraUiData)->isComparison;
 if (isComparison)
     {
-    topGraphHeight = max(topGraphHeight, tl.fontHeight);
     bottomGraphHeight = max(gtexGeneGraphHeight(tg, geneInfo, doLogTransform, FALSE),
                                 tl.fontHeight) + gtexGeneMargin();
     }
@@ -786,10 +791,7 @@ int i = 0;
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
-if (geneInfo->medians2)
-    topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
-if (tg->visibility == tvPack)
-    topGraphHeight = gtexGeneMaxHeight(tg);
+topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of (top) graph
 
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
@@ -823,6 +825,13 @@ struct gtexGeneBed *geneBed = geneInfo->geneBed;
 return geneBed->name;
 }
 
+static int gtexGeneHeight(void *item)
+{
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+assert(geneInfo->height != 0);
+return geneInfo->height;
+}
+
 static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Figure out total height of track. Set in track and also return it */
 {
@@ -839,9 +848,17 @@ else if (tg->visibility == tvFull)
     }
 else if (tg->visibility == tvPack)
     {
-    // layout as fixed height
-    int maxHeight = gtexGeneMaxHeight(tg);
-    height = tgFixedTotalHeightOptionalOverflow(tg, vis, maxHeight, maxHeight, FALSE); // TODO: allow oflow ?
+    if (!tg->ss)
+        {
+        // layout -- initially as fixed height
+        int height = gtexGeneMaxHeight(tg);
+        tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE); // TODO: allow oflow ?
+        }
+    // set variable height rows
+    if (!tg->ss->rowSizes)
+        height = spaceSaverSetRowHeights(tg->ss, gtexGeneHeight);
+    else
+        height = spaceSaverGetRowHeightsTotal(tg->ss);
     }
 tg->height = height;
 return height;
