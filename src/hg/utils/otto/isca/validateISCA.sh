@@ -14,7 +14,8 @@ done
 
 for i in `cat ../../isca.tables`
 do 
-    if test $i == "iscaPathGainCum" -o $i == "iscaPathLossCum"
+    if test $i == "iscaPathGainCum" -o $i == "iscaPathLossCum" \
+         -o $i == "iscaBenignGainCum" -o $i == "iscaBenignLossCum"
     then
 	fields='*'
     else

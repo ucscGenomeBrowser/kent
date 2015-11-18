@@ -5,5 +5,7 @@ iscaLikelyBenign
 iscaLikelyPathogenic
 iscaPathGainCum
 iscaPathLossCum
+iscaBenignGainCum
+iscaBenignLossCum
 iscaPathogenic
 iscaUncertain

@@ -4095,6 +4095,22 @@ type bedDetail 7
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track iscaComposite
+release alpha
+compositeTrack on
+shortLabel ClinGen CNVs
+longLabel Clinical Genome Resource (ClinGen) CNVs
+group phenDis
+visibility hide
+subGroup1 view Views atot=Total cnv=CNVs
+subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
+subGroup3 level Confidence cur=Curated det=Determined lik=Likely unc=Uncertain
+dimensions dimensionY=phen dimensionX=level
+sortOrder phen=+ level=+ view=+
+type bed 3
+
+track iscaComposite
+release beta,public
+html iscaCompositeOld
 compositeTrack on
 shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
@@ -4131,6 +4147,22 @@ type bed 3
 	longLabel ClinGen CNVs: Pathogenic Loss Total
 	color 200,0,0
         subGroups view=atot phen=path level=det
+
+	track iscaBenignGainCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Gain
+	longLabel ClinGen CNVs: Benign Gain Total
+	color 0,0,200
+        subGroups view=atot phen=ben level=det
+
+	track iscaBenignLossCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Loss
+	longLabel ClinGen CNVs: Benign Loss Total
+	color 200,0,0
+        subGroups view=atot phen=ben level=det
 
     track iscaViewDetail
     shortLabel CNVs

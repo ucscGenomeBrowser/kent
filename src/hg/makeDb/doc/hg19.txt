@@ -17550,6 +17550,35 @@ TMPDIR=/scratch/tmp
   #  new html page using override in trackDb/human/hg19/trackDb.ra
 
 
+##############################################################################
+# ISCA AGGREGATE BENIGN TRACKS (DONE 2015-11-18 jcasper)
+
+    cd /hive/data/outside/otto/isca/2015-09-16/
+    for db in hg19 hg38; do
+
+    # make bedGraphs
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_gain%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignGain.bedGraph
+
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_loss%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignLoss.bedGraph
+
+  # load tables
+  hgLoadBed -bedGraph=4 $db iscaBenignGainCum $db/iscaBenignGain.bedGraph
+  hgLoadBed -bedGraph=4 $db iscaBenignLossCum $db/iscaBenignLoss.bedGraph
+    done
+    # hg19
+    # Read 1889 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1252 elements of size 4 from iscaBenignLoss.bedGraph
+    # hg38
+    # Read 1861 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1265 elements of size 4 from iscaBenignLoss.bedGraph
+
+  # Plus changes made to the scripts in kent/src/hg/utils/otto/isca/
+  # to ensure that these tables are re-built and tested with the rest
+
 ############################################################################
 # LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
 # Human lincRNA Catalog
