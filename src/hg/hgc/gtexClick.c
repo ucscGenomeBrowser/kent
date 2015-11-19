@@ -339,7 +339,14 @@ if (doLogTransform)
     maxVal = log10(maxVal+1.0);
 for (tis = tissues; tis != NULL; tis = tis->next)
     {
-    tsv = hashMustFindVal(tsHash, tis->name);
+    tsv = hashFindVal(tsHash, tis->name);
+    if (tsv == NULL)
+        {
+        /* no non-zero values for this tissue/gene */
+        AllocVar(tsv);
+        val = slDoubleNew(0.0);
+        slAddHead(&tsv->valList, val);
+        }
     tsv->name = tis->name;
     tsv->description = tis->description;
     tsv->color = tis->color;
