@@ -674,6 +674,10 @@ else
 		{
 		printf("\ngsBig: skipping %s[%d:%d] -- it's all N's.\n\n",
 		       seqName, offset, (offset+sizeOne-1));
+    AllocVar(seg);
+    seg->start = offset;
+    seg->end = offset+sizeOne;
+		slAddHead(&segList, seg);
 		}
 	    else
 		{

@@ -1708,7 +1708,7 @@ identifier wgEncodeGencodeTranscriptSourceV23
 identifier wgEncodeGencodeTranscriptSupportV23
 "Link together Gencode Transcript Support table with Attributes table"
     hg38.wgEncodeGencodeTranscriptSupportV23.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.23
+    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.2297
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV23
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -5314,7 +5314,8 @@ tablesIgnored hg38
     altLocations
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
-    centromeres
+    centromeresi
+    coriellDelDup
     hg38Patch3Haplotypes
     hg38Patch3Patches
     hg38Patch2Haplotypes

@@ -1765,8 +1765,8 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
 {
 struct cart *cart;
 char *db, *org, *pos;
-char titlePlus[128];
-char extra[128];
+char titlePlus[2048];
+char extra[2048];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);

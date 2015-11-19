@@ -178,6 +178,9 @@ param PRIMER_MAX_DIFF_TM 3
 param MAX_CANDIDATE_PRIMER 500
 param CUSTOM_DB 
 param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING 24.00
+param chrom $s
+param start $[
+param db $db
 
 tool nebcutter
 shortLabel NEBCutter
@@ -201,6 +204,9 @@ param cut_from 0
 param circular 0
 param add_homing 0
 param enz_suppl 1
+param chrom $s
+param start $[
+param db $db
 
 tool regrna2
 shortLabel RegRNA 2
@@ -247,6 +253,9 @@ param accessibility_window_size 100
 param LongStem_len 40
 param RiboSW ON
 param Size 950
+param chrom $s
+param start $[
+param db $db
 
 tool RnaFold
 shortLabel RNAfold
@@ -280,6 +289,9 @@ param noLP on
 param shape_conv_cutoff 0.25
 param shape_intercept -0.7
 param PAGE 2
+param chrom $s
+param start $[
+param db $db
 
 tool pfam
 shortLabel PFAM Search
@@ -290,7 +302,7 @@ param submit Submit
 param seq $seq
 maxSize 80000
 param chrom $s
-param start $start1
+param start $[
 param db $db
 
 tool promoter2
@@ -302,10 +314,14 @@ maxSize 50000
 param configfile /usr/opt/www/pub/CBS/services/Promoter-2.0/Promoter.cf
 param SEQPASTE $seq
 param SEQSUB 
+# these trigger error messages
+#param chrom $s
+#param start $[
+#param db $db
 
 tool rsatMeta
 shortLabel RSAT Metazoa
-longLabel Regulatory Sequence Analysis Tools for Metazoa. Can search for Transcription Factor binding sites and over-represented words.
+longLabel Regulatory Sequence Analysis Tools for Metazoa. Can search for Transcription Factor binding sites and over-represented oligo-nucleotides.
 url http://rsat.sb-roscoff.fr/convert-seq.cgi 
 email Jacques.van-Helden@univ-amu.fr
 maxSize 50000
@@ -340,15 +356,16 @@ param user_email
 #param dnaFile 
 #param dnaFormat textarea
 
-#tool crispor
-#url http://tefor.net/crisporMax/crispor.cgi
-#email services@tefor.net
-#shortLabel CRISPOR
-#longLabel CRISPR/Cas9 target selector: off-target and activity predictions, primer design 
-#param org $db
-#param pos $position
-#param pam NGG
-#maxSize 1000
+tool crispor
+url http://tefor.net/crispor/crispor.cgi
+email services@tefor.net
+shortLabel CRISPOR
+longLabel CRISPR/Cas9 target selector: off-target, activity predictions and primer design 
+param org $db
+param pos $position
+param pam NGG
+maxSize 1000
+onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,sacCer3,xenTro3,galGal4
 
 tool chopchop
 url https://chopchop.rc.fas.harvard.edu/search.php
@@ -382,3 +399,6 @@ param PRIMER_MIN_TM 57
 param PRIMER_MAX_TM 63
 param PRIMER_OPT_TM 60
 param sitePadding 20
+param chrom $s
+param start $[
+param db $db

@@ -118,9 +118,11 @@ def collapseRows(intermediateFile, outputFile):
                 newRow[itemCount] = float(newRow[itemCount]) + float(splitLine[itemCount])
                 itemCount +=1 
         else:  # This is a flush statement, the current 'block' is complete and the collapsing occurs. 
+            # Disable the averaging for now...
             itemCount = 1
             for item in newRow[1:]:
-                newRow[itemCount] = str(float(newRow[itemCount])/float(rowsInBlock))
+                newRow[itemCount] = str(float(newRow[itemCount]))
+            #    newRow[itemCount] = str(float(newRow[itemCount])/float(rowsInBlock))
                 itemCount += 1
             outputFile.write("\t".join(newRow) + "\n")
             newRow = splitLine 
@@ -137,13 +139,13 @@ def main(args):
     """
     options = parseArgs(args)
     if (options.verbose): print ("Start condensing the expression matrix from transcripts to genes (condenseMatrix).")
-    result = common.sqlQuery("hg38","select transcript, gene from ensGtp") 
+    #result = common.sqlQuery("hg38","select transcript, gene from ensGtp") 
     
     #Mappings were made with this command
     #zcat /hive/groups/cirm/software/kallisto/transcripts/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz | grep \> | cut -d' ' -f1,4 | tr -d '>' | sed -e 's/gene://'
 
-    humanMap = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
-    mouseMap = common.dictFromTwoTabFile("/cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
+    humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
+    mouseMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
     #ensembleExonToGene = dict()
     #for t in result.fetchall(): 
     #    if (ensembleExonToGene.get(t[0])):    

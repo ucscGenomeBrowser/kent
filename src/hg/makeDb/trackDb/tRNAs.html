@@ -4,13 +4,10 @@ This track displays tRNA genes predicted by using
 <A HREF="http://lowelab.ucsc.edu/tRNAscan-SE/" TARGET=_blank>tRNAscan-SE</A> v.1.23. 
 </P>
 <P>
-tRNAscan-SE is an integrated program that uses tRNAscan (Fichant) and an A/B box motif detection 
-algorithm (Pavesi) as pre-filters to obtain an initial list of tRNA candidates. 
-The program then filters these candidates with a covariance model-based 
-search program <A HREF="ftp://selab.janelia.org/pub/software/cove/" TARGET=_blank>
-COVE</A> (Eddy) to obtain a highly specific set of primary sequence 
-and secondary structure predictions that represent 99-100% of true tRNAs 
-with a false positive rate of fewer than 1 per 15 gigabases.</P>
+The new version of tRNAscan-SE uses <A HREF="http://www.ncbi.nlm.nih.gov/pubmed/24008419" 
+TARGET=_blank> Infernal 1.1 </A> (Nawrocki and Eddy, 2013)
+ and isotype-specific covariance models to detect and predict the isotype.
+</P>
 <P>
 Detailed tRNA annotations for eukaryotes, bacteria, and archaea are available at
 <A HREF="http://gtrnadb.ucsc.edu" TARGET=_blank>Genomic tRNA Database (GtRNAdb)</A>. 

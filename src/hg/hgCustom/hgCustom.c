@@ -584,7 +584,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
                 ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             {
-            char js[1024];
+            char js[2048];
             safef(js, sizeof(js), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
             cgiMakeCheckBoxJS(buf, setAllUpdate, js);
             }

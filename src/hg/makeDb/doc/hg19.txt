@@ -9141,6 +9141,15 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     mkdir /hive/data/gbdb/hg19/RNA-img
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
+# tRNAs track (2015-10-04, Chris RE-BUILD WITH UPDATED DATA FROM TODD LOWE) 
+    cd /hive/data/genomes/hg19/bed/tRNAs
+    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg19/hg19-tRNAs.bed hg19-tRNAs2.bed
+    hgsql hg19 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab hg19 tRNAs hg19-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+    mv gif gif.old 
+    mkdir gif
+    cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg19/images/* gif
+
 #####################################################################
 # calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-01-21 - Hiram)
     screen # use a screen to manage this multi-day job
@@ -17540,6 +17549,35 @@ TMPDIR=/scratch/tmp
       color 200,0,0 (Loss)
   #  new html page using override in trackDb/human/hg19/trackDb.ra
 
+
+##############################################################################
+# ISCA AGGREGATE BENIGN TRACKS (DONE 2015-11-18 jcasper)
+
+    cd /hive/data/outside/otto/isca/2015-09-16/
+    for db in hg19 hg38; do
+
+    # make bedGraphs
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_gain%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignGain.bedGraph
+
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_loss%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignLoss.bedGraph
+
+  # load tables
+  hgLoadBed -bedGraph=4 $db iscaBenignGainCum $db/iscaBenignGain.bedGraph
+  hgLoadBed -bedGraph=4 $db iscaBenignLossCum $db/iscaBenignLoss.bedGraph
+    done
+    # hg19
+    # Read 1889 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1252 elements of size 4 from iscaBenignLoss.bedGraph
+    # hg38
+    # Read 1861 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1265 elements of size 4 from iscaBenignLoss.bedGraph
+
+  # Plus changes made to the scripts in kent/src/hg/utils/otto/isca/
+  # to ensure that these tables are re-built and tested with the rest
 
 ############################################################################
 # LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)

@@ -8,7 +8,8 @@ WRANGLE_APPLIST = \
 	kallistoOnFastqMani\
 	makeExpMatrix\
 	matrixFilter\
-	rnaSeqToClustersPipeline
+	rnaSeqToClustersPipeline\
+	kallistoToMatrix
 
 # List of all directories to build
 
