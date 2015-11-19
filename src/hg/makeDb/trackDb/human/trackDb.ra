@@ -1044,7 +1044,6 @@ hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 priority 1
 html snp142Common_bugFix
-release alpha
 
 track snp142Flagged
 shortLabel Flagged SNPs(142)
@@ -1064,7 +1063,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
-release alpha
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -1086,7 +1084,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
-release alpha
 
 track snp142
 shortLabel All SNPs(142)
@@ -1105,7 +1102,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
-release alpha
 
 ##### end SNP142 BUG FIX RE-RELEASE
 
