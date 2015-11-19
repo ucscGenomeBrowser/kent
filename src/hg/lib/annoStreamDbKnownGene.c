@@ -164,7 +164,7 @@ struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, annoStreamDbKnownGeneAsObj(), "knownGene");
 streamer->rowType = arWords;
 // Get internal streamer for knownGene
-self->mySource = annoStreamDbNew(db, "knownGene", aa, knownGeneAsObj(), maxOutRows);
+self->mySource = annoStreamDbNew(db, "knownGene", aa, maxOutRows, NULL);
 // Slurp in data from kgXref
 self->geneSymbols = hashNew(7);
 getGeneSymbols(self, db);

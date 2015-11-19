@@ -208,7 +208,7 @@ struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, annoStreamDbFactorSourceAsObj(), trackTable);
 streamer->rowType = arWords;
 // Get internal streamer for trackTable
-self->mySource = annoStreamDbNew(db, trackTable, aa, factorSourceAsObj(), maxOutRows);
+self->mySource = annoStreamDbNew(db, trackTable, aa, maxOutRows, NULL);
 // Slurp in data from small related tables
 getExperimentData(self, db, sourceTable, inputsTable);
 // Override methods that need to pass through to internal source:

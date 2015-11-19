@@ -667,6 +667,7 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     struct jsonElement *dsObj = dsRef->val;
     struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
                                           "trackPath");
+    struct jsonElement *configEl = jsonFindNamedField(dsObj, "dataSource", "config");
     // The first item in trackPath is group.  The second is track (or composite):
     struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
     // and the last item in trackPath is track or leaf subtrack.
@@ -682,13 +683,15 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     char *table = tdb->table;
     if (i == 0)
         {
-        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT);
+        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT,
+                                           configEl);
         annoStreamerSetName(primary, tdb->track);
         }
     else
         {
         struct annoGrator *grator = hAnnoGratorFromTrackDb(assembly, table, tdb, region->chrom,
-                                                           ANNO_NO_LIMIT, NULL, agoNoConstraint);
+                                                           ANNO_NO_LIMIT, NULL, agoNoConstraint,
+                                                           configEl);
         if (grator)
             {
             annoStreamerSetName((struct annoStreamer *)grator, tdb->track);

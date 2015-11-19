@@ -5,6 +5,7 @@
 
 #include "annoGrator.h"
 #include "jksql.h"
+#include "jsonParse.h"
 #include "trackDb.h"
 
 // Represent "unlimited" as limit==0.
@@ -15,7 +16,8 @@ struct annoAssembly *hAnnoGetAssembly(char *db);
 /* Make annoAssembly for db. */
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
-                                              struct trackDb *tdb, char *chrom, int maxOutRows);
+                                              struct trackDb *tdb, char *chrom, int maxOutRows,
+                                              struct jsonElement *config);
 /* Figure out the source and type of data and make an annoStreamer. */
 
 struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
@@ -25,7 +27,8 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembl
 struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                           struct trackDb *tdb, char *chrom, int maxOutRows,
                                           struct asObject *primaryAsObj,
-                                          enum annoGratorOverlap overlapRule);
+                                          enum annoGratorOverlap overlapRule,
+                                          struct jsonElement *config);
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 

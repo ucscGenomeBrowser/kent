@@ -6,6 +6,7 @@
 #include "annoStreamDb.h"
 #include "annoGratorQuery.h"
 #include "binRange.h"
+#include "hAnno.h"
 #include "hdb.h"
 #include "sqlNum.h"
 
@@ -13,7 +14,8 @@ struct annoStreamDb
     {
     struct annoStreamer streamer;	// Parent class members & methods
     // Private members
-    struct sqlConnection *conn;		// Database connection (e.g. hg19 or customTrash)
+    char *db;                           // Database name (e.g. hg19 or customTrash)
+    struct sqlConnection *conn;	        // Database connection
     struct sqlResult *sr;		// SQL query result from which we grab rows
     char *table;			// Table name, must exist in database
 
@@ -684,26 +686,65 @@ static boolean isPubsTable(char *table)
 return startsWith("pubs", table);
 }
 
+static struct asObject *asdParseConfig(struct annoStreamDb *self, struct jsonElement *configEl)
+/* Extract the autoSql for self->table from the database.
+ * If configEl is not NULL, expect it to be a description of related tables and fields like this:
+ * config = { "relatedTables": [ { "table": "hg19.kgXref",
+ *                                 "fields": ["geneSymbol", "description"] },
+ *                               { "table": "hg19.knownCanonical",
+ *                                 "fields": ["clusterId"] }
+ *                             ] }
+ * If so, unpack the [db.]tables and fields into self->tableFieldList and append autoSql
+ * column descriptions for each field to the autoSql object that describes our output. */
+{
+//#*** TODO: hAnnoGetAutoSqlForDbTable should do its own split-table checking
+char maybeSplitTable[HDB_MAX_TABLE_STRING];
+if (!hFindSplitTable(self->db, NULL, self->table, maybeSplitTable, NULL))
+    errAbort("annoStreamDbNew: can't find table (or split table) for '%s.%s'",
+             self->db, self->table);
+struct asObject *asObj = hAnnoGetAutoSqlForDbTable(self->db, maybeSplitTable, NULL, TRUE);
+if (configEl != NULL)
+    {
+    uglyf("Implement me!\n");
+    }
+return asObj;
+}
+
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
-				     struct asObject *asObj, int maxOutRows)
-/* Create an annoStreamer (subclass) object from a database table described by asObj. */
+				     int maxOutRows, struct jsonElement *configEl)
+/* Create an annoStreamer (subclass) object from a database table.
+ * If config is NULL, then the streamer produces output from all fields
+ * (except bin, unless table's autoSql includes bin).
+ * Otherwise, config is a json object with a member 'relatedTables' that specifies
+ * related tables and fields to join with table, for example:
+ * config = { "relatedTables": [ { "table": "hg19.kgXref",
+ *                                 "fields": ["geneSymbol", "description"] },
+ *                               { "table": "hg19.knownCanonical",
+ *                                 "fields": ["clusterId"] }
+ *                             ] }
+ * -- the streamer's autoSql will be constructed by appending autoSql column
+ * descriptions to the columns of table.
+ * Caller may free db, table, and dbTableFieldList when done with them, but must keep the
+ * annoAssembly aa alive for the lifetime of the returned annoStreamer. */
 {
 struct sqlConnection *conn = hAllocConn(db);
 if (!sqlTableExists(conn, table))
     errAbort("annoStreamDbNew: table '%s' doesn't exist in database '%s'", table, db);
 struct annoStreamDb *self = NULL;
 AllocVar(self);
+self->conn = conn;
+self->db = cloneString(db);
+self->table = cloneString(table);
+struct asObject *asObj = asdParseConfig(self, configEl);
 struct annoStreamer *streamer = &(self->streamer);
 int dbtLen = strlen(db) + strlen(table) + 2;
-char dbTable[dbtLen];
-safef(dbTable, dbtLen, "%s.%s", db, table);
-annoStreamerInit(streamer, aa, asObj, dbTable);
+char streamerName[dbtLen];
+safef(streamerName, sizeof(streamerName), "%s.%s", db, table);
+annoStreamerInit(streamer, aa, asObj, streamerName);
 streamer->rowType = arWords;
 streamer->setRegion = asdSetRegion;
 streamer->nextRow = asdNextRow;
 streamer->close = asdClose;
-self->conn = conn;
-self->table = cloneString(table);
 char *asFirstColumnName = streamer->asObj->columnList->name;
 if (sqlFieldIndex(self->conn, self->table, "bin") == 0)
     {

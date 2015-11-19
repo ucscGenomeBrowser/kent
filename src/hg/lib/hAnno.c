@@ -162,7 +162,8 @@ return matches;
 }
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
-                                              struct trackDb *tdb, char *chrom, int maxOutRows)
+                                              struct trackDb *tdb, char *chrom, int maxOutRows,
+                                              struct jsonElement *config)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
 struct annoStreamer *streamer = NULL;
@@ -221,12 +222,7 @@ else if (trackHubDatabase(db))
     errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
-    char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
-        errAbort("hAnnoStreamerFromTrackDb: can't find table (or split table) for '%s.%s'",
-                 dataDb, dbTable);
-    struct asObject *asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
+    streamer = annoStreamDbNew(dataDb, dbTable, assembly, maxOutRows, config);
     }
 return streamer;
 }
@@ -257,7 +253,8 @@ return grator;
 struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                           struct trackDb *tdb, char *chrom, int maxOutRows,
                                           struct asObject *primaryAsObj,
-                                          enum annoGratorOverlap overlapRule)
+                                          enum annoGratorOverlap overlapRule,
+                                          struct jsonElement *config)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
@@ -297,7 +294,7 @@ else if (startsWithWord("bigWig", tdb->type))
 else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
-                                                             maxOutRows);
+                                                             maxOutRows, config);
     if (primaryIsVariants &&
         (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
          asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
