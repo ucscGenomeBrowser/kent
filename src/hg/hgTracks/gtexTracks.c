@@ -23,8 +23,9 @@ struct gtexGeneExtras
 /* Track info */
     {
     double maxMedian;           /* Maximum median rpkm for all tissues */
-    boolean isComparison;       /* Comparison of two sample sets (e.g. male/female).
-                                       Displayed as two graphs, one oriented downward */
+    boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
+    boolean isDifference;       /* True if comparison is shown as a single difference graph. 
+                                   False if displayed as two graphs, one oriented downward */
     char *graphType;            /* Additional info about graph (e.g. type of comparison graph */
     struct rgbColor *colors;    /* Color palette for tissues */
     };
@@ -220,8 +221,25 @@ if (extras->isComparison)
         if (scores)
             medians2[i] = slDoubleMedian(scores);
         }
+    if (extras->isDifference)
+        {
+        for (i=0; i<geneBed->expCount; i++)
+            {
+            if (medians1[i] >= medians2[i])
+                {
+                medians1[i] -= medians2[i];
+                medians2[i] = 0;
+                }
+            else
+                {
+                medians2[i] -= medians1[i];
+                medians1[i] = 0;
+                }
+            }
+        }
     geneInfo->medians1 = medians1;
     geneInfo->medians2 = medians2;
+
     }
 else
     {
@@ -243,6 +261,9 @@ char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE,
 extras->graphType = cloneString(samples);
 if (sameString(samples, GTEX_SAMPLES_COMPARE_SEX))
     extras->isComparison = TRUE;
+char *comparison = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COMPARISON_DISPLAY,
+                        GTEX_COMPARISON_DEFAULT);
+extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FALSE;
 extras->maxMedian = gtexMaxMedianScore(NULL);
 
 /* Get geneModels in range */
@@ -758,6 +779,19 @@ else if (vis == tvPack)
     genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
 }
 
+static char *tissueExpressionText(struct gtexTissue *tissue, double expScore, 
+                                        boolean doLogTransform, char *qualifier)
+/* Construct mouseover text for tissue graph */
+{
+static char buf[128];
+safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description, 
+                                doLogTransform ? log10(expScore+1.0) : expScore,
+                                qualifier != NULL ? qualifier : "",
+                                qualifier != NULL ? " " : "",
+                                doLogTransform ? "log " : "");
+return buf;
+}
+
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box for each tissue (bar in the graph) or a single map for squish/dense modes */
@@ -767,6 +801,7 @@ if (tg->visibility == tvDense || tg->visibility == tvSquish)
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
     }
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexTissue *tissues = getTissues();
 struct gtexTissue *tissue = NULL;
 struct gtexGeneInfo *geneInfo = item;
@@ -801,8 +836,11 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     double expScore =  (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         gtexMaxGraphHeight(), doLogTransform);
-    mapBoxHc(hvg, start, end, x1, yZero-height, barWidth, height, tg->track, mapItemName, 
-                tissue->description);
+    char *qualifier = NULL;
+    if (extras->isComparison && extras->isDifference)
+        qualifier = "F-M";
+    mapBoxHc(hvg, start, end, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
+                tissueExpressionText(tissue, expScore, doLogTransform, qualifier));
     // add map box to comparison graph
     if (geneInfo->medians2)
         {
@@ -810,8 +848,10 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
         int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         gtexMaxGraphHeight(), doLogTransform);
         int y = yZero + gtexGeneModelHeight() + gtexGeneMargin();  // y is top of bottom graph
-        mapBoxHc(hvg, start, end, x1, y, barWidth, height, tg->track, mapItemName, 
-                        tissue->description);
+        if (extras->isComparison && extras->isDifference)
+            qualifier = "M-F";
+        mapBoxHc(hvg, start, end, x1, y, barWidth, height, tg->track, mapItemName,
+                tissueExpressionText(tissue, expScore, doLogTransform, qualifier));
         }
     x1 = x1 + barWidth + padding;
     }

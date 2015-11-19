@@ -32,6 +32,11 @@
 #define GTEX_COMPARE_AGE_YEARS          "years"
 #define GTEX_COMPARE_AGE_DEFAULT        50
 
+#define GTEX_COMPARISON_DISPLAY         "comparison"
+#define GTEX_COMPARISON_MIRROR          "mirror"
+#define GTEX_COMPARISON_DIFF            "difference"
+#define GTEX_COMPARISON_DEFAULT         GTEX_COMPARISON_MIRROR
+
 /* Graph type */
 #define GTEX_GRAPH              "graphType"
 #define GTEX_GRAPH_RAW          "raw"
