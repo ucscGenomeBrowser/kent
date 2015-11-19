@@ -70,13 +70,6 @@ return asParseText(kgAutoSqlString);
 
 #define KNOWNGENE_NUM_COLS 12
 
-static void askgSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj)
-/* Abort if something external tries to change the autoSql object. */
-{
-errAbort("annoStreamDbKnownGene %s: can't change autoSqlObject.",
-	 ((struct annoStreamer *)self)->name);
-}
-
 static void askgSetRegion(struct annoStreamer *sSelf, char *chrom, uint rStart, uint rEnd)
 /* Pass setRegion down to internal source. */
 {
@@ -169,7 +162,6 @@ self->mySource = annoStreamDbNew(db, "knownGene", aa, maxOutRows, NULL);
 self->geneSymbols = hashNew(7);
 getGeneSymbols(self, db);
 // Override methods that need to pass through to internal source:
-streamer->setAutoSqlObject = askgSetAutoSqlObject;
 streamer->setRegion = askgSetRegion;
 streamer->nextRow = askgNextRow;
 streamer->close = askgClose;

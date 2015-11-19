@@ -42,13 +42,6 @@ struct asObject *annoStreamDbFactorSourceAsObj()
 return asParseText(asfsAutoSqlString);
 }
 
-static void asdfsSetAutoSqlObject(struct annoStreamer *self, struct asObject *asObj)
-/* Abort if something external tries to change the autoSql object. */
-{
-errAbort("annoStreamDbFactorSource %s: can't change autoSqlObject.",
-	 ((struct annoStreamer *)self)->name);
-}
-
 static void asdfsSetRegion(struct annoStreamer *sSelf, char *chrom, uint rStart, uint rEnd)
 /* Pass setRegion down to internal source. */
 {
@@ -212,7 +205,6 @@ self->mySource = annoStreamDbNew(db, trackTable, aa, maxOutRows, NULL);
 // Slurp in data from small related tables
 getExperimentData(self, db, sourceTable, inputsTable);
 // Override methods that need to pass through to internal source:
-streamer->setAutoSqlObject = asdfsSetAutoSqlObject;
 streamer->setRegion = asdfsSetRegion;
 streamer->nextRow = asdfsNextRow;
 streamer->close = asdfsClose;
