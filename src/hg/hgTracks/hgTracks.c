@@ -158,7 +158,6 @@ for (track = trackList; track != NULL; track = track->next)
     if (stringIn("FaireH1h", track->track))
 	{
 	repeatCharOut(uglyOut, '+', depth);
-        uglyf("%s pri=%g defPri=%g<BR>\n", track->track, track->priority, track->defaultPriority);
 	}
     uglySnoopTrackList(depth+1, track->subtracks);
     }

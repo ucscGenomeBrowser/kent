@@ -74,6 +74,16 @@ hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaPathogenicNew \
     WHERE attrVals LIKE '%number_loss%'" $db | sort \
 | bedItemOverlapCount $db stdin > iscaPathLoss.bedGraph
 
+hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenignNew \
+    WHERE attrVals LIKE '%number_gain%'" $db | sort \
+| bedItemOverlapCount $db stdin > iscaBenignGain.bedGraph
+
+hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenignNew \
+    WHERE attrVals LIKE '%number_loss%'" $db | sort \
+| bedItemOverlapCount $db stdin > iscaBenignLoss.bedGraph
+
 # load tables
 hgLoadBed -bedGraph=4 $db iscaPathGainCumNew iscaPathGain.bedGraph
 hgLoadBed -bedGraph=4 $db iscaPathLossCumNew iscaPathLoss.bedGraph
+hgLoadBed -bedGraph=4 $db iscaBenignGainCumNew iscaBenignGain.bedGraph
+hgLoadBed -bedGraph=4 $db iscaBenignLossCumNew iscaBenignLoss.bedGraph

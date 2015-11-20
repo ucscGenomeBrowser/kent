@@ -944,85 +944,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
-track snp142Common
-shortLabel Common SNPs(142)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
-group varRep
-visibility dense
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
-snpSeq snp142Seq
-snpExceptionDesc snp142ExceptionDesc
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp142CodingDbSnp,
-priority 1
-release beta,public
-
-track snp142Flagged
-shortLabel Flagged SNPs(142)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Flagged by dbSNP as Clinically Assoc
-group varRep
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP: 
-snpSeq snp142Seq
-snpExceptionDesc snp142ExceptionDesc
-defaultGeneTracks knownGene
-type bed 6 +
-chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp142CodingDbSnp,
-release beta,public
-
-track snp142Mult
-shortLabel Mult. SNPs(142)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 142) That Map to Multiple Genomic Loci
-group varRep
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
-snpSeq snp142Seq
-snpExceptionDesc snp142ExceptionDesc
-defaultGeneTracks knownGene
-defaultMaxWeight 3
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp142CodingDbSnp,
-release beta,public
-
-track snp142
-shortLabel All SNPs(142)
-longLabel Simple Nucleotide Polymorphisms (dbSNP 142)
-group varRep
-visibility hide
-url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
-defaultGeneTracks knownGene
-maxWindowToDraw 10000000
-type bed 6 +
-chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
-orangDb ponAbe2
-macaqueDb rheMac2
-hapmapPhase III
-codingAnnotations snp142CodingDbSnp,
-release beta,public
-
 ##### begin SNP142 BUG FIX RE-RELEASE
 track snp142Common
 shortLabel Common SNPs(142)
@@ -1044,7 +965,6 @@ hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 priority 1
 html snp142Common_bugFix
-release alpha
 
 track snp142Flagged
 shortLabel Flagged SNPs(142)
@@ -1064,7 +984,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
-release alpha
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -1086,7 +1005,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
-release alpha
 
 track snp142
 shortLabel All SNPs(142)
@@ -1105,7 +1023,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
-release alpha
 
 ##### end SNP142 BUG FIX RE-RELEASE
 
@@ -4095,6 +4012,22 @@ type bedDetail 7
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track iscaComposite
+release alpha
+compositeTrack on
+shortLabel ClinGen CNVs
+longLabel Clinical Genome Resource (ClinGen) CNVs
+group phenDis
+visibility hide
+subGroup1 view Views atot=Total cnv=CNVs
+subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
+subGroup3 level Confidence cur=Curated det=Determined lik=Likely unc=Uncertain
+dimensions dimensionY=phen dimensionX=level
+sortOrder phen=+ level=+ view=+
+type bed 3
+
+track iscaComposite
+release beta,public
+html iscaCompositeOld
 compositeTrack on
 shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
@@ -4131,6 +4064,22 @@ type bed 3
 	longLabel ClinGen CNVs: Pathogenic Loss Total
 	color 200,0,0
         subGroups view=atot phen=path level=det
+
+	track iscaBenignGainCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Gain
+	longLabel ClinGen CNVs: Benign Gain Total
+	color 0,0,200
+        subGroups view=atot phen=ben level=det
+
+	track iscaBenignLossCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Loss
+	longLabel ClinGen CNVs: Benign Loss Total
+	color 200,0,0
+        subGroups view=atot phen=ben level=det
 
     track iscaViewDetail
     shortLabel CNVs

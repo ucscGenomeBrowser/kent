@@ -3345,7 +3345,22 @@ if (tg->itemNameColor != NULL)
     if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
 	labelColor = somewhatDarkerColor(hvg, color);
     }
-int y = yOff + tg->lineHeight * sn->row;
+
+// get y offset for item in pack mode
+int yRow = 0;
+if (tg->ss && tg->ss->rowSizes != NULL)
+    {
+    int i;
+    for (i=0; i < sn->row; i++)
+        yRow += tg->ss->rowSizes[i];
+    int itemHeight = tg->itemHeight(tg, item);
+    yRow += (tg->ss->rowSizes[sn->row] - itemHeight + 1);
+    tg->heightPer = itemHeight;
+    }
+else
+    yRow = tg->lineHeight * sn->row;
+int y = yOff + yRow;
+
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
 /* pgSnpDrawAt may change withIndividualLabels between items */
@@ -3602,6 +3617,28 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
     }
 
 hvGfxUnclip(hvg);
+}
+
+void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                            double scale, Color color, enum trackVisibility vis)
+/* Draw next item buttons and map boxes */
+//TODO: Use this to clean up genericDrawItemsFullDense (will require wading thru ifdefs)
+{
+boolean isNextItemCompatible = nextItemCompatible(tg);
+boolean isExonNumberMapsCompatible = exonNumberMapsCompatible(tg, vis);
+if (!isNextItemCompatible && !isExonNumberMapsCompatible)
+    return;
+boolean doButtons = (isExonNumberMapsCompatible ? FALSE: TRUE);
+
+// Convert start/end coordinates to pix
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, 
+                            doButtons); 
 }
 
 static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
