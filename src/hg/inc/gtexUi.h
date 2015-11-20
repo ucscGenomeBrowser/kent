@@ -35,7 +35,7 @@
 #define GTEX_COMPARISON_DISPLAY         "comparison"
 #define GTEX_COMPARISON_MIRROR          "mirror"
 #define GTEX_COMPARISON_DIFF            "difference"
-#define GTEX_COMPARISON_DEFAULT         GTEX_COMPARISON_MIRROR
+#define GTEX_COMPARISON_DEFAULT         GTEX_COMPARISON_DIFF
 
 /* Graph type */
 #define GTEX_GRAPH              "graphType"
