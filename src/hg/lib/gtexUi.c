@@ -34,10 +34,10 @@ printf("<p><b>Comparison display:</b>\n");
 safef(cartVarName, sizeof(cartVarName), "%s.%s", name, GTEX_COMPARISON_DISPLAY);
 selected = cartCgiUsualString(cart, cartVarName, GTEX_COMPARISON_DEFAULT); 
 boolean isMirror = sameString(selected, GTEX_COMPARISON_MIRROR);
-cgiMakeRadioButton(cartVarName, GTEX_COMPARISON_MIRROR, isMirror);
-printf("Two graphs\n");
 cgiMakeRadioButton(cartVarName, GTEX_COMPARISON_DIFF, !isMirror);
 printf("Difference graph\n");
+cgiMakeRadioButton(cartVarName, GTEX_COMPARISON_MIRROR, isMirror);
+printf("Two graphs\n");
 printf("</p>");
 
 /* Data transform */
