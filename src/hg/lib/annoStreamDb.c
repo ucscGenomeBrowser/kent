@@ -223,17 +223,6 @@ rowBuf->size = size;
 lmAllocArray(rowBuf->lm, rowBuf->buf, size);
 }
 
-static char **lmCloneRow(struct lm *lm, char **row, int colCount)
-/* Use lm to allocate an array of strings and its contents copied from row. */
-{
-char **cloneRow = NULL;
-lmAllocArray(lm, cloneRow, colCount);
-int i;
-for (i = 0;  i < colCount;  i++)
-    cloneRow[i] = lmCloneString(lm, row[i]);
-return cloneRow;
-}
-
 static void updateNextChunkState(struct annoStreamDb *self, int queryMaxItems)
 /* If the just-fetched interval list was limited to ASD_CHUNK_SIZE, set doNextChunk
  * and trim the last row(s) so that when we query the next chunk, we don't get
