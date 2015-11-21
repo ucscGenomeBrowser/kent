@@ -969,7 +969,7 @@ return dtf;
 struct joinerDtf *joinerDtfClone(struct joinerDtf *dtf)
 /* Return duplicate (deep copy) of joinerDtf. */
 {
-return joinerDtfNew(dtf->database, dtf->table, dtf->field);
+return dtf ? joinerDtfNew(dtf->database, dtf->table, dtf->field) : NULL;
 }
 
 static void notTriple(char *s)
@@ -996,6 +996,48 @@ if (e == NULL)
 dtf->table = cloneStringZ(s, e-s);
 dtf->field = cloneString(e+1);
 return dtf;
+}
+
+boolean joinerDtfSame(struct joinerDtf *dtfA, struct joinerDtf *dtfB)
+/* Return TRUE if both are NULL or if both have same db, table and field. */
+{
+if (dtfA == NULL && dtfB == NULL)
+    return TRUE;
+else if (dtfA != NULL && dtfB != NULL)
+    return (sameString(dtfA->database, dtfB->database) &&
+            sameString(dtfA->table, dtfB->table) &&
+            sameString(dtfA->field, dtfB->field));
+return FALSE;
+}
+
+struct joinerDtf *joinerDtfFind(struct joinerDtf *dtfList, struct joinerDtf *dtf)
+/* Return the first element of dtfList that is joinerDtfSame as dtf, or NULL if no such. */
+{
+struct joinerDtf *el;
+for (el = dtfList;  el != NULL;  el = el->next)
+    if (joinerDtfSame(el, dtf))
+        return el;
+return NULL;
+}
+
+void joinerDtfToSqlFieldString(struct joinerDtf *dtf, char *db, char *buf, size_t bufSize)
+/* If dtf->database is different from db (or db is NULL), write database.table.field info buf,
+ * otherwise just table.field. */
+{
+if (differentString(dtf->database, db))
+    safef(buf, bufSize, "%s.%s.%s", dtf->database, dtf->table, dtf->field);
+else
+    safef(buf, bufSize, "%s.%s", dtf->table, dtf->field);
+}
+
+void joinerDtfToSqlTableString(struct joinerDtf *dtf, char *db, char *buf, size_t bufSize)
+/* If dtf->database is different from db (or db is NULL), write database.table info buf,
+ * otherwise just table. */
+{
+if (db == NULL || differentString(dtf->database, db))
+    safef(buf, bufSize, "%s.%s", dtf->database, dtf->table);
+else
+    safef(buf, bufSize, "%s", dtf->table);
 }
 
 void joinerDtfFree(struct joinerDtf **pDtf)
@@ -1086,11 +1128,11 @@ if (isNotEmpty(splitPrefix))
 else
     safef(t2, sizeof(t2), "%s", table);
 boolean hasSqlWildcard = (strchr(t2, '%') || strchr(t2, '_'));
-boolean exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
+boolean exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : hTableExists(database, t2);
 if (!exists && isNotEmpty(splitPrefix))
     {
     hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
-    exists = hasSqlWildcard ? sqlTableWildExists(conn, table) : sqlTableExists(conn, table);
+    exists = hasSqlWildcard ? sqlTableWildExists(conn, table) : hTableExists(database, table);
     }
 hFreeConn(&conn);
 return exists;
@@ -1121,6 +1163,32 @@ for (parent = js; parent != NULL; parent = parent->parent)
 addChildren(js, &list);
 slReverse(&list);
 return list;
+}
+
+struct joinerField *joinerSetFindField(struct joinerSet *js, struct joinerDtf *dtf)
+/* Find field in set if any that matches dtf */
+{
+struct slRef *chain = joinerSetInheritanceChain(js), *link;
+struct joinerField *jf, *ret = NULL;
+for (link = chain; link != NULL; link = link->next)
+    {
+    js = link->val;
+    for (jf = js->fieldList; jf != NULL; jf = jf->next)
+	 {
+	 if (sameString(dtf->table, jf->table) && sameString(dtf->field, jf->field))
+	     {
+	     if (slNameInList(jf->dbList, dtf->database))
+		 {
+		 ret = jf;
+		 break;
+		 }
+	     }
+	 }
+    if (ret != NULL)
+        break;
+    }
+slFreeList(&chain);
+return ret;
 }
 
 static struct joinerPair *joinerToField(
@@ -1370,3 +1438,66 @@ joinerPairRemoveDupes(&fullRoute);
 return fullRoute;
 }
 
+char *joinerFieldChopKey(struct joinerField *jf, char *key)
+/* If jf includes chopBefore and/or chopAfter, apply those to key and return a starting
+ * offset in key, which may be modified. */
+{
+struct slName *n;
+for (n = jf->chopBefore; n != NULL; n = n->next)
+    {
+    if (startsWith(n->name, key))
+        {
+        key += strlen(n->name);
+        break;
+        }
+    }
+for (n = jf->chopAfter; n!=NULL; n = n->next)
+    {
+    char *e = strstr(key, n->name);
+    if (e != NULL)
+        {
+	*e = 0;
+	break;
+	}
+    }
+return key;
+}
+
+void joinerFieldIterateKey(struct joinerField *jf, void(*callback)(void *context, char *key),
+                           void *context, char *key)
+/* Process key according to jf -- if jf->separator, may result in list of processed keys --
+ * and invoke callback with each nonempty processed key and context. */
+{
+if (isNotEmpty(jf->separator) || jf->chopBefore || jf->chopAfter)
+    {
+    int len = strlen(key);
+    char keyClone[len+1];
+    safencpy(keyClone, sizeof(keyClone), key, len);
+    if (isEmpty(jf->separator))
+        {
+        // No separator; just chop.
+        char *choppedKey = joinerFieldChopKey(jf, keyClone);
+        if (isNotEmpty(choppedKey))
+            callback(context, choppedKey);
+        }
+    else
+        {
+        // Scan for separator; chop each separated key.
+        char *s = keyClone, *e;
+        char sep = jf->separator[0];
+        while (isNotEmpty(s))
+            {
+            e = strchr(s, sep);
+            if (e != NULL)
+                *e++ = 0;
+            s = joinerFieldChopKey(jf, s);
+            if (s[0] != 0)
+                callback(context, s);
+            s = e;
+            }
+        }
+    }
+else if (isNotEmpty(key))
+    // Just use the plain old key.
+    callback(context, key);
+}

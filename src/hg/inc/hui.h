@@ -1368,8 +1368,12 @@ void extraFieldsFree(struct extraField **pExtras);
 #endif///def EXTRA_FIELDS_SUPPORT
 
 
+struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table);
+// If there is a tableDescriptions table and it has an entry for table, return
+// a parsed autoSql object; otherwise return NULL.
+
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb);
-// Get autoSQL description if any associated with table.
+// Get autoSQL description if any associated with table, ignoring errAborts if any.
 
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 // Return named column.

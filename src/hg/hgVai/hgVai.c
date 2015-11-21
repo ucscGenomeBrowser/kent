@@ -1194,7 +1194,7 @@ if (fileName != NULL)
     grator = hAnnoGratorFromBigFileUrl(fileName, assembly, ANNO_NO_LIMIT, overlapRule);
 else
     grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT,
-                                    NULL, overlapRule);
+                                    NULL, overlapRule, NULL);
 if (grator != NULL)
     hashAdd(gratorsByName, tdb->table, grator);
 return grator;
@@ -1454,7 +1454,7 @@ for (trackVar = trackVars;  trackVar != NULL;  trackVar = trackVar->next)
 	if (tdb != NULL)
 	    {
 	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
-                                            agoNoConstraint);
+                                            agoNoConstraint, NULL);
 	    if (grator != NULL)
 		{
 		//#*** Need something more sophisticated but this works for our
@@ -1505,7 +1505,7 @@ if (cartUsualBoolean(cart, "hgva_require_consEl", FALSE))
 	struct trackDb *tdb = tdbForTrack(database, consElTrack, &fullTrackList);
 	if (tdb != NULL)
 	    grator = hAnnoGratorFromTrackDb(assembly, tdb->table, tdb, chrom, ANNO_NO_LIMIT, NULL,
-                                            agoMustOverlap);
+                                            agoMustOverlap, NULL);
 	updateGratorList(grator, pGratorList);
 	}
     else
@@ -1752,7 +1752,7 @@ boolean forceRebuild = cartUsualBoolean(cart, "hgva_rebuildSampleVariants", FALS
 if (! fileExists(sampleFile) || forceRebuild)
     {
     struct annoStreamer *geneStream = hAnnoStreamerFromTrackDb(assembly, geneTdb->table, geneTdb,
-                                                               NULL, ANNO_NO_LIMIT);
+                                                               NULL, ANNO_NO_LIMIT, NULL);
     boolean isBig = sameString(geneTdb->type, "bigGenePred");
     boolean gotCoding = FALSE, gotNonCoding = FALSE;
     struct genePred *gpList = genesFromPosition(geneStream, isBig, &gotCoding, &gotNonCoding);
@@ -2152,6 +2152,31 @@ else
 return varTdb;
 }
 
+static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb)
+/* Add VAI-specific config options, if applicable. */
+{
+struct jsonElement *config = NULL;
+char *track = tdb->track;
+// If track is sql-based knownGene and we have kgXref, then add kgXref.geneSymbol after
+// the columns of knownGene.
+if (sameString(track, "knownGene") && !isCustomTrack(track) && !isHubTrack(track) &&
+    !trackDbSetting(tdb, "bigDataUrl"))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    if (sqlTableExists(conn, "kgXref"))
+        {
+        char jsonStr[PATH_LEN];
+        safef(jsonStr, sizeof(jsonStr),
+              "{ \"relatedTables\":"
+              "    [ { \"table\": \"%s.kgXref\", \"fields\": [\"geneSymbol\"] } ] }",
+              db);
+        config = jsonParse(jsonStr);
+        }
+    hFreeConn(&conn);
+    }
+return config;
+}
+
 static void adjustGpVarOverlapRule(struct annoGrator *gpVarGrator, boolean haveRegulatory)
 /* If we're able to detect regulatory elements, and want to keep those annotations, loosen up
  * gpVarGrator's overlap rule from the default (must overlap). */
@@ -2208,13 +2233,15 @@ else
 	doUi();
 	return;
 	}
-    primary = hAnnoStreamerFromTrackDb(assembly, varTdb->table, varTdb, chrom, maxVarRows);
+    primary = hAnnoStreamerFromTrackDb(assembly, varTdb->table, varTdb, chrom, maxVarRows, NULL);
     primaryLongLabel = varTdb->longLabel;
     }
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
+struct jsonElement *gpConfig = configForStreamer(database, geneTdb);
 struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
-						   ANNO_NO_LIMIT, primary->asObj, geneOverlapRule);
+                                                        ANNO_NO_LIMIT, primary->asObj,
+                                                        geneOverlapRule, gpConfig);
 setGpVarFuncFilter(gpVarGrator);
 
 // Some grators may be used as both filters and output values. To avoid making

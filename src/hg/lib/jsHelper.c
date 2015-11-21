@@ -240,11 +240,11 @@ void jsIncludeReactLibs()
 // We need a module system... webpack?
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
 puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-puts("<script src=\"../js/lodash.3.3.1.compat.min.js\"></script>");
+puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/jquery-1.9.1.min.js\"></script>");
 puts("<script src=\"//code.jquery.com/ui/1.10.3/jquery-ui.min.js\"></script>");
 puts("<script src=\"../js/react-with-addons-0.12.2.min.js\"></script>");
-puts("<script src=\"../js/immutable.3.2.1.min.js\"></script>");
+puts("<script src=\"../js/immutable.3.7.4.min.js\"></script>");
 puts("<script src=\"../js/jquery.bifrost.1.0.1.min.js\"></script>");
 puts("<script src=\"../js/BackboneExtend.js\"></script>");
 puts("<script src=\"../js/cart.js\"></script>");

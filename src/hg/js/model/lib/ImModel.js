@@ -247,6 +247,16 @@ var ImModel = (function() {
             return handler;
         },
 
+        parseCartJsonString: function (cartJsonStr) {
+            // If cartJsonStr is empty, return null; otherwise decode and parse cartJsonStr and
+            // return the result.
+            var obj = null;
+            if (cartJsonStr && cartJsonStr !== '') {
+                obj = JSON.parse(decodeURIComponent(cartJsonStr));
+            }
+            return obj;
+        },
+
         cartDo: function(commandObj, errorHandler) {
             // Send a command to the server, expecting a response.
             var handler = this.handlerForErrorHandler(errorHandler);
@@ -266,7 +276,22 @@ var ImModel = (function() {
 
         cartSet: function(cartVar, newValue) {
             // Tell server about cart var's new value, no need to handle server reponse.
+            // If newValue is an Immutable or plain object, convert it to a JSON string.
+            // If it's still not a string, try to stringify it.
             var setting = {};
+            if (_.isFunction(newValue.isIterable) && _.isFunction(newValue.toJS)) {
+                newValue = newValue.toJS();
+            }
+            if (_.isObject(newValue)) {
+                newValue = JSON.stringify(newValue);
+            }
+            if (! _.isString(newValue)) {
+                if (_.isFunction(newValue.toString)) {
+                    newValue = newValue.toString();
+                } else {
+                    newValue = "" + newValue;
+                }
+            }
             setting[cartVar] = newValue;
             this.cartSend({cgiVar: setting});
         },
@@ -278,6 +303,30 @@ var ImModel = (function() {
             var cartVar = path.pop();
             this.cartSet(cartVar, newValue);
             this.render();
+        },
+
+        // Special path in mutState for storing various choices by the user that are
+        // specific to this app
+        uiChoicesPath: ['uiCh0ices'],
+
+        setUiChoice: function(mutState, path, newValue) {
+            // Remember this user choice so we can show it as the default later
+            mutState.setIn(this.uiChoicesPath.concat(path), newValue);
+        },
+
+        removeUiChoice: function(mutState, path) {
+            // Remove a previously saved user choice if it exists in mutState.uiChoices.
+            return mutState.removeIn(this.uiChoicesPath.concat(path));
+        },
+
+        getUiChoice: function(mutState, path) {
+            // Retrieve a previously saved user choice if it exists in mutState.uiChoices.
+            return mutState.getIn(this.uiChoicesPath.concat(path));
+        },
+
+        cartUpdateUiChoices: function(mutState, cartVar) {
+            // Send latest user choices to server.
+            this.cartSet(cartVar, mutState.getIn(this.uiChoicesPath) || {});
         }
 
     });

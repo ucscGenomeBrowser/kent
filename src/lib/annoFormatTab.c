@@ -138,8 +138,9 @@ if (self->needHeader)
     {
     char *primaryHeader = primary->getHeader(primary);
     boolean isFirst = TRUE;
+    char *newlineAtEnd = (lastChar(primaryHeader) == '\n') ? "" : "\n";
     if (isNotEmpty(primaryHeader))
-	fprintf(self->f, "# Header from primary input:\n%s", primaryHeader);
+	fprintf(self->f, "# Header from primary input:\n%s%s", primaryHeader, newlineAtEnd);
     fputc('#', self->f);
     printHeaderColumns(self, primary, 0, &isFirst);
     uint sourceIx;

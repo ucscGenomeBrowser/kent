@@ -28,6 +28,16 @@ if (jel)
 return NULL;
 }
 
+char *cartJsonParamDefault(struct hash *paramHash, char *name, char *defaultVal)
+/* Convenience function for a CartJsonHandler function: Look up name in paramHash.
+ * Return the string contained in its jsonElement value, or defaultVal if not found. */
+{
+struct jsonElement *jel = hashFindVal(paramHash, name);
+if (jel)
+    return jsonStringVal(jel, name);
+return defaultVal;
+}
+
 char *cartJsonRequiredParam(struct hash *paramHash, char *name, struct jsonWrite *jw, char *context)
 /* Convenience function for a CartJsonHandler function: Look up name in paramHash.
  * If found, return the string contained in its jsonElement value.

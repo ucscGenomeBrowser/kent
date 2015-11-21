@@ -22,8 +22,9 @@ struct annoStreamer
 
     // Public methods
     struct asObject *(*getAutoSqlObject)(struct annoStreamer *self);
-    void (*setAutoSqlObject)(struct annoStreamer *self, struct asObject *asObj);
-    /* Get and set autoSql representation (do not modify or free asObj!) */
+    /* Get autoSql representation (do not modify or free asObj!)
+     * There is no setter because changing the asObj should never be externally imposed.
+     * Subclasses must use annoStreamerSetAutoSqlObject to change their internal asObj. */
 
     char *(*getName)(struct annoStreamer *self);
     void (*setName)(struct annoStreamer *self, char *name);

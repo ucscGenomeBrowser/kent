@@ -937,6 +937,24 @@ if (startsWith("chr", table) || startsWith("Group", table))
     }
 }
 
+void hParseDbDotTable(char *dbIn, char *dbDotTable, char *dbOut, size_t dbOutSize,
+                      char *tableOut, size_t tableOutSize)
+/* If dbDotTable contains a '.', then assume it is db.table and parse out into dbOut and tableOut.
+ * If not, then it's just a table; copy dbIn into dbOut and dbDotTable into tableOut. */
+{
+char *dot = strchr(dbDotTable, '.');
+char *table = dbDotTable;
+if (dot != NULL)
+    {
+    safencpy(dbOut, dbOutSize, dbDotTable, dot - dbDotTable);
+    table = &dot[1];
+    }
+else
+    safecpy(dbOut, dbOutSize, dbIn);
+safecpy(tableOut, tableOutSize, table);
+}
+
+
 int hChromSize(char *db, char *chromName)
 /* Return size of chromosome. */
 {
