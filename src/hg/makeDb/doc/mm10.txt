@@ -11362,12 +11362,11 @@ TMPDIR=/dev/shm
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
-##############################################################################
-# DBSNP B142 / SNP142 (working braney)
+# DBSNP 142 / SNP142 (DONE 2015-11-20 braney)
     # RedMine #15934
     screen -S mm10dbSnp
-    mkdir -p /hive/data/outside/dbSNP/142/mouse
-    cd /hive/data/outside/dbSNP/142/mouse
+    mkdir -p /hive/data/outside/dbSNP/142/mouse_mm10
+    cd /hive/data/outside/dbSNP/142/mouse_mm10
     # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
     # to find the subdir name to use as orgDir below (mouse_10090 in this case).
     # Then click into that directory and look for file names like
@@ -11380,131 +11379,29 @@ db mm10
 orgDir mouse_10090
 build 142
 buildAssembly
-EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
-    # Some trial and error was required to get the config.ra just right.
-    # First stop: need a refAssemblyLabel:
-# *** This release contains more than one assembly label.
-# *** Please examine this list in case we need to exclude any of these:
-#
-#GRCm38.p1
-#Mm_Celera
-# *** Add refAssemblyLabel to config.ra.  If keeping all labels, it will
-# *** look like this:
-#
-#refAssemblyLabel GRCm38.p1,Mm_Celera
-#
-# *** Edit out any of those that are not included in mm10 (e.g. Celera).
-# *** Then restart this script with -continue=loadDbSnp .
-    cat >> config.ra <<EOF
-refAssemblyLabel GRCm38.p1
-EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
-    tail -f do.log
-    # Second stop: need to grab the NCBI Assembly Reports file for GRCm38; the
-    # script will do its best to deduce the needed liftUp entries and contigs
-    # to ignore (because they are for alternate mouse strains, or patch contigs etc).
-#*** b142_ContigInfo has coords for 119 sequences; these have been written to
-#*** /hive/data/outside/dbSNP/142/mouse/suggested.lft .
-#*** 152 lines of b142_ContigInfo.bcp.gz either had no lift-coords
-#*** or had unrecognized chrom names; see
-#*** /hive/data/outside/dbSNP/142/mouse/cantLiftUpSeqNames.txt .
-#
-#*** You must account for those in config.ra, in the liftUp file
-#*** and/or ignoreDbSnpContigsFile or the ignoreDbSnpContigs regex.
-#*** Then run again with -continue=loadDbSnp .
-#
-#*** NOTE: If you add the ncbiAssemblyReportFile setting to config.ra and
-#***       run again with -continue=loadDbSnp, this script may be able to
-#***       construct those files for you.
-    # Look at the doDbSnp.pl -help message for instructions about how to find the
-    # Assembly Reports file for GRCm38 on the NCBI web site.
-    wget ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/GCF_000001635.22.assembly.txt
-    cat >> config.ra <<EOF
+refAssemblyLabel GRCm38.p2
 ncbiAssemblyReportFile GCF_000001635.22.assembly.txt
-EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
-    tail -f do.log
-    # Third stop: review the list of dbSNP contigs that we can't map, and if they're
-    # all contigs not in our assembly, tell config.ra to ignore them.
-#*** b142_ContigInfo has coords for 119 sequences; these have been written to
-#*** /hive/data/outside/dbSNP/142/mouse/suggested.lft .
-#
-#*** GCF_000001635.22.assembly.txt has mappings for 44 sequences;
-#*** these have been written to
-#*** /hive/data/outside/dbSNP/142/mouse/suggested.lft .
-#
-#*** 108 lines of b142_ContigInfo.bcp.gz contained contig names that
-#*** could not be mapped to chrom.size via their GenBank contig mappings; see
-#*** /hive/data/outside/dbSNP/142/mouse/cantLiftUpSeqNames.txt .
-#
-#*** You must account for all 271 contig_acc values in config.ra,
-#*** in the liftUp file and/or ignoreDbSnpContigsFile.
-#*** Then run again with -continue=loadDbSnp .
-    cut -f 2 cantLiftUpSeqNames.txt > contigsNotInUCSC.txt
-    cat >> config.ra <<EOF
+ignoreDbSnpContigsFile dbSnpContigsNotInUcsc.txt
 liftUp suggested.lft
-ignoreDbSnpContigsFile contigsNotInUCSC.txt
 EOF
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >>& do.log &
-    tail -f do.log
 
-    # The script died with an error implying that a perl command in a pipe got
-    # empty input from sort which was getting input from an hgsql query to join
-    # Batch submitter handles with rs# snp_id's.  Looks like the mysql connection
-    # was lost or something.  Anyway, re-running that part of addToDbSnp.csh
-    # in 2 parts and continuing manually through the end of addToDbSnp.csh:
-    pushd `cat workingDir `
-    hgsql mm10snp142 -NBe 'select SNPSubSNPLink.snp_id, handle from SubSNP, SNPSubSNPLink, Batch \
-                       where SubSNP.subsnp_id = SNPSubSNPLink.subsnp_id and \
-                             SubSNP.batch_id = Batch.batch_id' \
-    | sort -k1n,1n -k2,2 -u \
-      > tmp.txt
-    perl -we 'while (<>) { \
-              chomp; my ($id, $handle) = split("\t"); \
-              if (defined $prevId && $prevId != $id) { \
-                print "$prevId\t$handleCount\t$handleBlob\n"; \
-                $handleCount = 0;  $handleBlob = ""; \
-              } \
-              $handleCount++; \
-              $handleBlob .= "$handle,"; \
-              $prevId = $id; \
-            } \
-            print "$prevId\t$handleCount\t$handleBlob\n";' \
-      tmp.txt > ucscHandles.txt
+#actually ran the script a few times to get the above config.ra with values suggested
 
-    cat > ucscHandles.sql <<EOF
-CREATE TABLE ucscHandles (
-        snp_id int NOT NULL,
-        handleCount int unsigned NOT NULL,
-        handles longblob NOT NULL,
-        INDEX snp_id (snp_id)
-);
-EOF
-    hgLoadSqlTab mm10snp142 ucscHandles{,.sql,.txt}
-
-    # I added 'if (0) then' around the parts of addToDbSnp.csh that completed successfully;
-    # complete the step by running the modified script:
-    # Pop back out of workingDir
-    popd
-    addToDbSnp.csh >>& do.log &
-    tail -f do.log
-
-    # Now continue with the next step:
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=bigJoin >>& do.log &
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
     tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# FILTER SNP142 (DONE 1/17/14 angie)
-   cd /hive/data/outside/dbSNP/142/mouse
+# FILTER SNP142 (DONE 2015-11-21 braney)
+   cd /hive/data/outside/dbSNP/142/mouse_mm10
    zcat snp142.bed.gz \
    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
-#Mult:     3066546
-#Common:   8082414
+#Mult:     3276456
+#Common:   8213470
 #Flagged:  0
-#leftover: 60824824
+#leftover: 70731318
+
    foreach f ({Mult,Common}.bed.gz)
      mv $f snp142$f
    end
@@ -11516,8 +11413,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (142) (DONE 1/17/14 angie)
-   cd /hive/data/outside/dbSNP/142/mouse
+# DBSNP CODING ANNOTATIONS (142) (DONE 2015-11-21 braney)
+   cd /hive/data/outside/dbSNP/142/mouse-mm10
    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
    # For anything except an insertion (0 bases between flanks),
    # we need to add 1 to the end coord.  For an insertion, we need
@@ -11545,17 +11442,18 @@ EOF
    | uniq \
      > ncbiCodingAnnotations.txt
    wc -l ncbiCodingAnnotations.txt
-#1584257 ncbiCodingAnnotations.txt
+#3854299 ncbiCodingAnnotations.txt
    # How many & what kinds of function types?
    cut -f 6 ncbiCodingAnnotations.txt \
    | sort -n | uniq -c
-# 372821 3   (coding-synon)
-# 552828 8   (cds-reference -- ignored)
-#    376 41  (nonsense)
-# 181984 42  (missense)
-#     49 43  (stop-loss)
-#   3382 44  (frameshift)
-# 472817 45  (cds-indel)
+# 1258578 3 (coding-synon)
+# 1882006 8 (cds-reference -- ignored)
+#    4717 41  (nonsense)
+#  624020 42  (missense)
+#     745 43  (stop-loss)
+#   14806 44  (frameshift)
+#   69427 45  (cds-indel)
+
 
    # In b142, the functional annotations include non-coding (frame = NULL),
    # which we'll exclude here because this is supposed to be just coding stuff...
@@ -11600,5 +11498,4 @@ EOF
    hgLoadBed mm10 snp142CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
      snp142CodingDbSnp.bed
-#Read 1025678 elements of size 11 from snp142CodingDbSnp.bed
-}
+#Read 1951211 elements of size 11 from snp142CodingDbSnp.bed
