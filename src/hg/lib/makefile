@@ -63,14 +63,14 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     gwasCatalog.o hAnno.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
-    hCommon.o \
+    hashJoin.o hCommon.o \
     hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
     hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgRelate.o hgSeq.o hgdpGeo.o hPrint.o hVarSubst.o hvGfx.o \
     HInv.o hubConnect.o hui.o humanParalog.o \
     imageClone.o isochores.o ispyTables.o itemAttr.o itemConf.o itemDetailsHtml.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o jsHelper.o kg1ToKg2.o \
-    jgiGene.o \
+    jgiGene.o joinMixer.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     lav.o ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
     llaInfo.o lrg.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o \
