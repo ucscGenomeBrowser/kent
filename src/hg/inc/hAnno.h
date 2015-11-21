@@ -32,4 +32,12 @@ struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *s
 struct asObject *hAnnoGetAutoSqlForTdb(char *db, char *chrom, struct trackDb *tdb);
 /* If possible, return the asObj that a streamer for this track would use, otherwise NULL. */
 
+struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
+                                           boolean skipBin);
+/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+ * if it doesn't match columns, make one up from db.table sql fields.
+ * Some subtleties are lost in translation from .as to .sql, that's why
+ * we try tdb & db.tableDescriptions first.  But ultimately we need to return
+ * an asObj whose columns match all fields of the table. */
+
 #endif // HANNO_H

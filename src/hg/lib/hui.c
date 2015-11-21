@@ -8390,35 +8390,12 @@ else if (sameWord("bedDetail", tdb->type))
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else
-    {
-    if (sqlTableExists(conn, "tableDescriptions"))
-        {
-        char query[256];
-        char *asText = NULL;
-
-        // Try unsplit table first.
-        sqlSafef(query, sizeof(query),
-              "select autoSqlDef from tableDescriptions where tableName='%s'",tdb->table);
-        asText = sqlQuickString(conn, query);
-
-        // If no result try split table.
-        if (asText == NULL)
-            {
-            sqlSafef(query, sizeof(query),
-                  "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",tdb->table);
-            asText = sqlQuickString(conn, query);
-            }
-
-        if (asText != NULL && asText[0] != 0)
-            asObj = asParseText(asText);
-        freez(&asText);
-        }
-    }
+    asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;
 }
 
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb)
-// Get autoSQL description if any associated with table.
+// Get autoSQL description if any associated with table, ignoring errAborts if any.
 {
 struct errCatch *errCatch = errCatchNew();
 struct asObject *asObj = NULL;

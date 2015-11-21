@@ -227,6 +227,11 @@ void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING]
 /* Parse an actual table name like "chr17_random_blastzWhatever" into
  * the track name (blastzWhatever) and chrom (chr17_random). */
 
+void hParseDbDotTable(char *dbIn, char *dbDotTable, char *dbOut, size_t dbOutSize,
+                      char *tableOut, size_t tableOutSize);
+/* If dbDotTable contains a '.', then assume it is db.table and parse out into dbOut and tableOut.
+ * If not, then it's just a table; copy dbIn into dbOut and dbDotTable into tableOut. */
+
 int hChromSize(char *db, char *chromName);
 /* Return size of chromosome. */
 

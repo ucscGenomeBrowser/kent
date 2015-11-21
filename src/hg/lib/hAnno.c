@@ -106,7 +106,7 @@ dyStringAppend(dy, "    )\n");
 return asParseText(dy->string);
 }
 
-static struct asObject *getAutoSqlForTable(char *db, char *table, struct trackDb *tdb,
+struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
 /* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
  * if it doesn't match columns, make one up from db.table sql fields.
@@ -119,11 +119,15 @@ struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
     asObj = asForTdb(conn, tdb);
+if (asObj == NULL)
+    asObj = asFromTableDescriptions(conn, table);
 hFreeConn(&conn);
 if (columnsMatch(asObj, fieldList))
     return asObj;
 else
+    {
     return asObjectFromFields(table, fieldList, skipBin);
+    }
 }
 
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
@@ -221,7 +225,7 @@ if (streamer == NULL)
     if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
         errAbort("hAnnoStreamerFromTrackDb: can't find table (or split table) for '%s.%s'",
                  dataDb, dbTable);
-    struct asObject *asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
+    struct asObject *asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
     streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
     }
 return streamer;
@@ -368,7 +372,7 @@ if (!asObj && !isHubTrack(tdb->track))
     if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
         errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
                  dataDb, dbTable);
-    asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
+    asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
     }
 return asObj;
 }
