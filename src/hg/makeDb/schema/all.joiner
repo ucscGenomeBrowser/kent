@@ -53,7 +53,7 @@ set galGal galGal2,galGal3,galGal4
 set geoFor geoFor1
 set melGal melGal1
 set gasAcu gasAcu1
-set gorGor gorGor1,gorGor3
+set gorGor gorGor1,gorGor3,gorGor4
 set haeCon haeCon1
 set hetGla hetGla1,hetGla2
 set hg hg16,hg17,hg18,hg19,hg38
