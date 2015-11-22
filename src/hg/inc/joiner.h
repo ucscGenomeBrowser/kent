@@ -129,6 +129,20 @@ struct joinerDtf *joinerDtfNew(char *database, char *table, char *field);
 struct joinerDtf *joinerDtfClone(struct joinerDtf *dtf);
 /* Return duplicate (deep copy) of joinerDtf. */
 
+boolean joinerDtfSame(struct joinerDtf *dtfA, struct joinerDtf *dtfB);
+/* Return TRUE if both are NULL or if both have same db, table and field. */
+
+struct joinerDtf *joinerDtfFind(struct joinerDtf *dtfList, struct joinerDtf *dtf);
+/* Return the first element of dtfList that is joinerDtfSame as dtf, or NULL if no such. */
+
+void joinerDtfToSqlFieldString(struct joinerDtf *dtf, char *db, char *buf, size_t bufSize);
+/* If dtf->database is different from db (or db is NULL), write database.table.field info buf,
+ * otherwise just table.field. */
+
+void joinerDtfToSqlTableString(struct joinerDtf *dtf, char *db, char *buf, size_t bufSize);
+/* If dtf->database is different from db (or db is NULL), write database.table info buf,
+ * otherwise just table. */
+
 void joinerDtfFree(struct joinerDtf **pDtf);
 /* Free up memory associated with joinerDtf. */
 
@@ -166,6 +180,9 @@ struct slRef *joinerSetInheritanceChain(struct joinerSet *js);
 /* Return list of self, children, and parents (but not siblings).
  * slFreeList result when done. */
 
+struct joinerField *joinerSetFindField(struct joinerSet *js, struct joinerDtf *dtf);
+/* Find field in set if any that matches dtf */
+
 boolean joinerDtfSameTable(struct joinerDtf *a, struct joinerDtf *b);
 /* Return TRUE if they are in the same database and table. */
 
@@ -181,5 +198,14 @@ struct joinerPair *joinerFindRouteThroughAll(struct joiner *joiner,
 	struct joinerDtf *tableList);
 /* Return route that gets to all tables in fieldList.  Note that
  * the field element of the items in tableList can be NULL. */
+
+char *joinerFieldChopKey(struct joinerField *jf, char *key);
+/* If jf includes chopBefore and/or chopAfter, apply those to key and return a starting
+ * offset in key, which may be modified. */
+
+void joinerFieldIterateKey(struct joinerField *jf, void(*callback)(void *context, char *key),
+                           void *context, char *key);
+/* Process key according to jf -- if jf->separator, may result in list of processed keys --
+ * and invoke callback with each processed key. */
 
 #endif /* JOINER_H */

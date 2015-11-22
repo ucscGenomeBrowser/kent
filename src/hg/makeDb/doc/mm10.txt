@@ -11362,3 +11362,213 @@ TMPDIR=/dev/shm
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
+# DBSNP 142 / SNP142 (DONE 2015-11-20 braney)
+    # RedMine #15934
+    screen -S mm10dbSnp
+    mkdir -p /hive/data/outside/dbSNP/142/mouse_mm10
+    cd /hive/data/outside/dbSNP/142/mouse_mm10
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (mouse_10090 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    cat > config.ra <<EOF
+db mm10
+orgDir mouse_10090
+build 142
+buildAssembly
+refAssemblyLabel GRCm38.p2
+ncbiAssemblyReportFile GCF_000001635.22.assembly.txt
+ignoreDbSnpContigsFile dbSnpContigsNotInUcsc.txt
+liftUp suggested.lft
+EOF
+
+#actually ran the script a few times to get the above config.ra with values suggested
+
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# FILTER SNP142 (DONE 2015-11-21 braney)
+   cd /hive/data/outside/dbSNP/142/mouse_mm10
+   zcat snp142.bed.gz \
+   | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     3276456
+#Common:   8213470
+#Flagged:  0
+#leftover: 70731318
+
+   foreach f ({Mult,Common}.bed.gz)
+     mv $f snp142$f
+   end
+   # Load tables
+   foreach subset (Mult Common)
+     hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+       mm10 snp142$subset -sqlTable=snp142.sql snp142$subset.bed.gz
+   end
+
+
+##############################################################################
+# DBSNP CODING ANNOTATIONS (142) (DONE 2015-11-21 braney)
+   cd /hive/data/outside/dbSNP/142/mouse-mm10
+   # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.
+   # For anything except an insertion (0 bases between flanks),
+   # we need to add 1 to the end coord.  For an insertion, we need
+   # to add 1 to the start coord.  Make a hash of the insertion IDs,
+   # then look up each ID in ncbiFuncAnnotations.txt to tell which
+   # transform to apply.
+   # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+   zcat ncbiFuncAnnotations.txt.gz \
+   | perl -we 'open($IDS, "zcat ncbiFuncInsertions.ctg.bed.gz |") || die "ids: $!"; \
+             while (<$IDS>) { chomp; $ids{$_} = 1; } \
+             close($IDS); \
+             %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 43=>1, 44=>1, 45=>1); \
+             while (<>) { \
+               chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+               next unless $coding{$w[5]}; \
+               $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+               if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                 $w[2]++; # 2-base insertions: increment start coord \
+               } else { \
+                 $w[3]++; # increment end coord to get half-open \
+               } \
+               print join("\t", @w) . "\n"; \
+             }' \
+   | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+   | uniq \
+     > ncbiCodingAnnotations.txt
+   wc -l ncbiCodingAnnotations.txt
+#3854299 ncbiCodingAnnotations.txt
+   # How many & what kinds of function types?
+   cut -f 6 ncbiCodingAnnotations.txt \
+   | sort -n | uniq -c
+# 1258578 3 (coding-synon)
+# 1882006 8 (cds-reference -- ignored)
+#    4717 41  (nonsense)
+#  624020 42  (missense)
+#     745 43  (stop-loss)
+#   14806 44  (frameshift)
+#   69427 45  (cds-indel)
+
+
+   # In b142, the functional annotations include non-coding (frame = NULL),
+   # which we'll exclude here because this is supposed to be just coding stuff...
+   # probably need to update how we show dbSNP's func annos anyway, e.g.
+   # it is a shame that we toss out codon number and transcript offset.
+   # Gather up multiple annotation lines into one line per {snp, gene, frame}:
+   perl -e  'while (<>) { chomp; \
+               my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
+               next if ($fxn == 8 && ($frm eq "NULL" && $aa eq "NULL" && $codon eq "NULL")); \
+               if (defined $lastRs && \
+                   ($lastRs != $rsId || $lastCtg ne $ctg || $lastS != $s || \
+                    $lastTx ne $txId || $lastFrm ne $frm)) { \
+                 if (defined $refRow) { \
+                   $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+                   $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+                 } \
+                 $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                       "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+                 $lineOut =~ s@NULL@n/a@g; \
+                 print $lineOut; \
+                 $refRow = undef;  @rows = ();  ($count, $fxns, $nts, $codons, $aas) = (); \
+               } \
+               ($lastRs, $lastCtg, $lastS, $lastE, $lastTx, $lastFrm) = \
+                   ($rsId, $ctg, $s, $e, $txId, $frm); \
+               $count++; \
+               if ($fxn == 8) { \
+                 $refRow = [$fxn, $nt, $aa, $codon]; \
+               } else { \
+                $fxns .= "$fxn,";  $nts .= "$nt,";  $aas .= "$aa,";  $codons .= "$codon,"; \
+               } \
+             } \
+             if (defined $refRow) { \
+               $fxns = "$refRow->[0],$fxns";  $nts = "$refRow->[1],$nts"; \
+               $aas = "$refRow->[2],$aas";    $codons = "$refRow->[3],$codons"; \
+             } \
+             $lineOut = "$lastCtg\t$lastS\t$lastE\trs$lastRs\t$lastTx\t$lastFrm\t" . \
+                   "$count\t$fxns\t$nts\t$codons\t$aas\n"; \
+             $lineOut =~ s@NULL@n/a@g; \
+             print $lineOut;' \
+     ncbiCodingAnnotations.txt \
+   | liftUp snp142CodingDbSnp.bed suggested.lft warn stdin
+   hgLoadBed mm10 snp142CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+     -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
+     snp142CodingDbSnp.bed
+#Read 1951211 elements of size 11 from snp142CodingDbSnp.bed
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP142 (DONE 2015-11-21 braney)
+    mkdir /hive/data/genomes/mm10/snp142Mask
+    cd /hive/data/genomes/mm10/snp142Mask
+    # Identify rsIds with various problems -- we will exclude those.
+    zcat /hive/data/outside/dbSNP/142/mouse_mm10/snp142.bed.gz \
+    | awk '$18 ~ /MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved/ {print $4;}' \
+      | sort -u \
+      > snp142ExcludeRsIds.txt
+    zcat /hive/data/outside/dbSNP/142/mouse_mm10/snp142.bed.gz \
+    | grep -vFwf snp142ExcludeRsIds.txt \
+      > snp142Cleaned.bed
+    wc -l snp142Cleaned.bed
+#76837455 snp142Cleaned.bed
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp142Cleaned.bed /hive/data/genomes/mm10/mm10.2bit stdout diffObserved.txt \
+    | faSplit byname stdin substitutions/
+#Masked 66976283 snps in 66976283 out of 2729124706 genomic bases
+# /hive/data/genomes/mm10/mm10.2bit has 2730871774 total bases, 
+#but the total number of bases in sequences for which we masked snps is 2729124706 (difference is 1747068)
+
+    # Check that 1747068 is the total #bases in sequences with nothing in snp142Cleaned:
+    grep -Fw single snp142Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
+    grep -vwf /data/tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#1726860
+    calc 1747068-1726860
+#20208
+
+    # warnings about differing observed strings at same base position:
+    wc -l diffObserved.txt
+#2 diffObserved.txt
+    # peanuts!  good.
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp $f ../ucsc/$f:t.gz |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10107 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 60493 (R != A)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+    end
+    # Fire off a bunch of gzip jobs in parallel:
+    ls -1 substitutions/*.fa | split -l 5
+    foreach f (x??)
+      gzip `cat $f` &
+    end
+    # Wait for backgrounded gzip jobs to complete
+    rm x??
+
+    # Insertions & deletions not done.  To date we have only offered substs for download.
+    # If there is user demand, use template from snp131 above.
+
+    # Clean up and prepare for download:
+    gzip snp142Cleaned.bed &
+    foreach d (substitutions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        cp /hive/data/genomes/hg38/snp142Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt.
+
+    # Create download links on hgwdev.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask
+    ln -s /hive/data/genomes/mm10/snp142Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask/

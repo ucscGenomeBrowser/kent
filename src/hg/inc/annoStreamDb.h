@@ -7,9 +7,23 @@
 #define ANNOSTREAMDB_H
 
 #include "annoStreamer.h"
+#include "jsonParse.h"
 
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
-				     struct asObject *asObj, int maxOutRows);
-/* Create an annoStreamer (subclass) object from a database table described by asObj. */
+				     int maxOutRows, struct jsonElement *config);
+/* Create an annoStreamer (subclass) object from a database table.
+ * If config is NULL, then the streamer produces output from all fields
+ * (except bin, unless table's autoSql includes bin).
+ * Otherwise, config is a json object with a member 'relatedTables' that specifies
+ * related tables and fields to join with table, for example:
+ * config = { "relatedTables": [ { "table": "hg19.kgXref",
+ *                                 "fields": ["geneSymbol", "description"] },
+ *                               { "table": "hg19.knownCanonical",
+ *                                 "fields": ["clusterId"] }
+ *                             ] }
+ * -- the streamer's autoSql will be constructed by appending autoSql column
+ * descriptions to the columns of table.
+ * Caller may free db, table, and dbTableFieldList when done with them, but must keep the
+ * annoAssembly aa alive for the lifetime of the returned annoStreamer. */
 
 #endif//ndef ANNOSTREAMDB_H

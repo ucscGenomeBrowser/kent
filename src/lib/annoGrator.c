@@ -270,14 +270,6 @@ self->mySource->setRegion((struct annoStreamer *)(self->mySource), chrom, rStart
 agReset(self);
 }
 
-static void agSetAutoSqlObject(struct annoStreamer *sSelf, struct asObject *asObj)
-/* Use new asObj and update internal state derived from asObj. */
-{
-struct annoGrator *gSelf = (struct annoGrator *)sSelf;
-annoStreamerSetAutoSqlObject(sSelf, asObj);
-gSelf->haveRJIncludeFilter = filtersHaveRJInclude(sSelf->filters);
-}
-
 void agSetOverlapRule(struct annoGrator *self, enum annoGratorOverlap rule)
 /* Tell annoGrator how to handle overlap of its rows with primary row. */
 {
@@ -293,7 +285,6 @@ struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, mySource->assembly, mySource->getAutoSqlObject(mySource),
 		 mySource->name);
 streamer->rowType = mySource->rowType;
-streamer->setAutoSqlObject = agSetAutoSqlObject;
 streamer->setFilters = agSetFilters;
 streamer->addFilters = agAddFilters;
 streamer->setRegion = annoGratorSetRegion;
@@ -305,6 +296,14 @@ self->setOverlapRule = agSetOverlapRule;
 self->overlapRule = agoNoConstraint;
 self->mySource = mySource;
 self->haveRJIncludeFilter = filtersHaveRJInclude(streamer->filters);
+}
+
+void annoGratorSetAutoSqlObject(struct annoStreamer *sSelf, struct asObject *asObj)
+/* Use new asObj and update internal state derived from asObj. */
+{
+struct annoGrator *gSelf = (struct annoGrator *)sSelf;
+annoStreamerSetAutoSqlObject(sSelf, asObj);
+gSelf->haveRJIncludeFilter = filtersHaveRJInclude(sSelf->filters);
 }
 
 struct annoGrator *annoGratorNew(struct annoStreamer *mySource)

@@ -145,7 +145,7 @@ struct annoStreamer *annoStreamWigDbNew(char *db, char *table, struct annoAssemb
 {
 struct annoStreamWig *self = NULL;
 AllocVar(self);
-self->wigStr = annoStreamDbNew(db, table, aa, asParseText(wiggleAsText), maxOutput);
+self->wigStr = annoStreamDbNew(db, table, aa, maxOutput, NULL);
 struct annoStreamer *streamer = &(self->streamer);
 annoStreamerInit(streamer, aa, asParseText(annoRowWigAsText), self->wigStr->name);
 streamer->rowType = arWigVec;

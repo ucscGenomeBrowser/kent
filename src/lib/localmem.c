@@ -198,3 +198,24 @@ strcpy(n->name, name);
 return n;
 }
 
+char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize)
+/* Allocate an array of strings with rowOutSize elements.  Clone the first rowInSize elements
+ * of row into the new array, leaving others NULL if rowOutSize is greater than rowInSize.
+ * rowOutSize must be greater than or equal to rowInSize. */
+{
+if (rowOutSize < rowInSize)
+    errAbort("lmCloneRowExt: rowOutSize (%d) must be greater than or equal to rowInSize (%d)",
+             rowOutSize, rowInSize);
+char **rowClone = NULL;
+lmAllocArray(lm, rowClone, rowOutSize);
+int i;
+for (i = 0;  i < rowInSize;  i++)
+    rowClone[i] = lmCloneString(lm, row[i]);
+return rowClone;
+}
+
+char **lmCloneRow(struct lm *lm, char **row, int rowSize)
+/* Allocate an array of strings and its contents cloned from row. */
+{
+return lmCloneRowExt(lm, row, rowSize, rowSize);
+}

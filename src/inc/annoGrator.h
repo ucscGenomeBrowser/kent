@@ -65,6 +65,9 @@ void annoGratorInit(struct annoGrator *self, struct annoStreamer *mySource);
  * rows passed to integrate().
  * mySource becomes property of the annoGrator. */
 
+void annoGratorSetAutoSqlObject(struct annoStreamer *sSelf, struct asObject *asObj);
+/* Use new asObj and update internal state derived from asObj. */
+
 struct annoGrator *annoGratorNew(struct annoStreamer *mySource);
 /* Make a new integrator of columns from mySource with (positions of) rows passed to integrate().
  * mySource becomes property of the new annoGrator. */
