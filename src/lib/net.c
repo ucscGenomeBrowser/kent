@@ -449,7 +449,7 @@ void netParseUrl(char *url, struct netParsedUrl *parsed)
  */
 {
 char *s, *t, *u, *v, *w;
-char buf[2048];
+char buf[4096];
 
 /* Make local copy of URL. */
 if (strlen(url) >= sizeof(buf))
