@@ -5764,6 +5764,7 @@ tablesIgnored $hg
     tgpPhase1
     tgpPhase1AccessibilityPilotCriteria
     tgpPhase1AccessibilityStrictCriteria
+    tgpPhase3
     ucsfChipSeqH3K4me3BrainCoverage
     ucsfMedipSeqBrainCoverage
     ucsfMedipSeqBrainCpG
