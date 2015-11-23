@@ -762,3 +762,63 @@ group regulation
 #searchType bed
 
 include cloneEnd.trackDb.ra
+
+track snp142Common
+shortLabel Common SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp142Seq
+snpExceptionDesc snp142ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+priority 1
+html snp142Common
+
+track snp142Mult
+shortLabel Mult. SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp142Seq
+snpExceptionDesc snp142ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+html snp142Mult
+
+track snp142
+shortLabel All SNPs(142)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 142)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp142CodingDbSnp,
+html snp142
