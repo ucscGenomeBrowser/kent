@@ -449,7 +449,7 @@ void netParseUrl(char *url, struct netParsedUrl *parsed)
  */
 {
 char *s, *t, *u, *v, *w;
-char buf[4096];
+char buf[MAXURLSIZE];
 
 /* Make local copy of URL. */
 if (strlen(url) >= sizeof(buf))
@@ -1246,7 +1246,7 @@ long long netUrlSizeByRangeResponse(char *url)
  * Return negative number if can't get. */
 {
 long long retVal = -1;
-char rangeUrl[2048];
+char rangeUrl[MAXURLSIZE];
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
 struct hash *hash = newHash(0);
 int status = netUrlHeadExt(rangeUrl, "GET", hash);
