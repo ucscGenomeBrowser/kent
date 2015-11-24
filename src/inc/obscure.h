@@ -185,4 +185,9 @@ void printVmPeak();
 
 boolean nameInCommaList(char *name, char *commaList);
 /* Return TRUE if name is in comma separated list. */
+
+boolean endsWithWordComma(char *string, char *word);
+/* Return TRUE if string ends with word possibly followed by a comma, and the beginning
+ * of word within string is the beginning of string or follows a comma. */
+
 #endif /* OBSCURE_H */

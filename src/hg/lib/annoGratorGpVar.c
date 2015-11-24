@@ -453,7 +453,7 @@ struct annoGrator *gSelf = &(self->grator);
 annoGratorInit(gSelf, mySource);
 struct annoStreamer *sSelf = &(gSelf->streamer);
 // We add columns beyond what comes from mySource, so update our public-facing asObject:
-sSelf->setAutoSqlObject(sSelf, annoGpVarAsObj(mySource->asObj));
+annoGratorSetAutoSqlObject(sSelf, annoGpVarAsObj(mySource->asObj));
 gSelf->setOverlapRule = aggvSetOverlapRule;
 sSelf->close = aggvClose;
 // integrate by adding gpFx fields

@@ -11499,3 +11499,76 @@ EOF
      -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
      snp142CodingDbSnp.bed
 #Read 1951211 elements of size 11 from snp142CodingDbSnp.bed
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP142 (DONE 2015-11-21 braney)
+    mkdir /hive/data/genomes/mm10/snp142Mask
+    cd /hive/data/genomes/mm10/snp142Mask
+    # Identify rsIds with various problems -- we will exclude those.
+    zcat /hive/data/outside/dbSNP/142/mouse_mm10/snp142.bed.gz \
+    | awk '$18 ~ /MultipleAlignments|ObservedTooLong|ObservedWrongFormat|ObservedMismatch|MixedObserved/ {print $4;}' \
+      | sort -u \
+      > snp142ExcludeRsIds.txt
+    zcat /hive/data/outside/dbSNP/142/mouse_mm10/snp142.bed.gz \
+    | grep -vFwf snp142ExcludeRsIds.txt \
+      > snp142Cleaned.bed
+    wc -l snp142Cleaned.bed
+#76837455 snp142Cleaned.bed
+
+    # Substitutions:
+    mkdir substitutions
+    snpMaskSingle snp142Cleaned.bed /hive/data/genomes/mm10/mm10.2bit stdout diffObserved.txt \
+    | faSplit byname stdin substitutions/
+#Masked 66976283 snps in 66976283 out of 2729124706 genomic bases
+# /hive/data/genomes/mm10/mm10.2bit has 2730871774 total bases, 
+#but the total number of bases in sequences for which we masked snps is 2729124706 (difference is 1747068)
+
+    # Check that 1747068 is the total #bases in sequences with nothing in snp142Cleaned:
+    grep -Fw single snp142Cleaned.bed | cut -f 1 | uniq > /data/tmp/1
+    grep -vwf /data/tmp/1 ../chrom.sizes \
+    | awk 'BEGIN {TOTAL = 0;}  {TOTAL += $2;}  END {printf "%d\n", TOTAL;}'
+#1726860
+    calc 1747068-1726860
+#20208
+
+    # warnings about differing observed strings at same base position:
+    wc -l diffObserved.txt
+#2 diffObserved.txt
+    # peanuts!  good.
+    # Make sure that sizes are identical, first diffs are normal -> IUPAC,
+    # and first diffs' case is preserved:
+    foreach f (substitutions/chr*.fa)
+      faCmp $f ../ucsc/$f:t.gz |& grep -v "that differ"
+    end
+#chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10107 (y != c)
+#chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 60493 (R != A)
+#...
+#(output OK -- ambiguous bases replacing [agct] at SNP positions)
+    foreach f (substitutions/chr*.fa)
+      echo $f:t:r
+      mv $f $f:r.subst.fa
+    end
+    # Fire off a bunch of gzip jobs in parallel:
+    ls -1 substitutions/*.fa | split -l 5
+    foreach f (x??)
+      gzip `cat $f` &
+    end
+    # Wait for backgrounded gzip jobs to complete
+    rm x??
+
+    # Insertions & deletions not done.  To date we have only offered substs for download.
+    # If there is user demand, use template from snp131 above.
+
+    # Clean up and prepare for download:
+    gzip snp142Cleaned.bed &
+    foreach d (substitutions)
+      pushd $d
+        md5sum *.gz > md5sum.txt
+        cp /hive/data/genomes/hg38/snp142Mask/$d/README.txt .
+      popd
+    end
+    # Edit the README.txt.
+
+    # Create download links on hgwdev.
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask
+    ln -s /hive/data/genomes/mm10/snp142Mask/substitutions/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask/

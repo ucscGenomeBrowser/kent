@@ -1564,26 +1564,6 @@ dyStringAppend(dy, "    )\n");
 return asParseText(dy->string);
 }
 
-struct asObject *getAutoSqlForTable(char *db, char *dataDb, char *dbTable, struct trackDb *tdb)
-/* Get autoSql for dataDb.dbTable from tdb and/or db.tableDescriptions;
- * if it doesn't match columns, make one up from dataDb.table sql fields. */
-{
-struct sqlConnection *connDataDb = hAllocConn(dataDb);
-struct sqlFieldInfo *fieldList = sqlFieldInfoGet(connDataDb, dbTable);
-hFreeConn(&connDataDb);
-struct asObject *asObj = NULL;
-if (tdb != NULL)
-    {
-    struct sqlConnection *connDb = hAllocConn(db);
-    asObj = asForTdb(connDb, tdb);
-    hFreeConn(&connDb);
-    }
-if (columnsMatch(asObj, fieldList))
-    return asObj;
-else
-    return asObjectFromFields(dbTable, fieldList);
-}
-
 struct annoAssembly *getAnnoAssembly(char *db)
 /* Make annoAssembly for db. */
 {
@@ -1639,8 +1619,7 @@ else
 	safecpy(maybeSplitTable, sizeof(maybeSplitTable), dbTable);
     else
 	safef(maybeSplitTable, sizeof(maybeSplitTable), "%s_%s", chrom, dbTable);
-    struct asObject *asObj = getAutoSqlForTable(db, dataDb, maybeSplitTable, tdb);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
+    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, maxOutRows, NULL);
     }
 return streamer;
 }
