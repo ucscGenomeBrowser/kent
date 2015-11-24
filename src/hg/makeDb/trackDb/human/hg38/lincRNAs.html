@@ -1,0 +1,61 @@
+<h2>Description</h2>
+
+<p>This track displays the Human Body Map lincRNAs (large intergenic non
+coding RNAs) and TUCPs (transcripts of uncertain coding potential), as well as their
+expression levels across 22 human tissues and cell lines. The Human Body Map catalog was generated
+by integrating previously existing annotation sources with transcripts that were de-novo assembled
+from RNA-Seq data. These transcripts were collected from ~4 billion RNA-Seq reads across 24 tissues 
+and cell types.</p>
+
+<p>Expression abundance was estimated by Cufflinks (Trapnell et al., 2010) based on RNA-Seq. 
+Expression abundances were estimated on the gene locus level, rather than for each transcript 
+separately and are given as raw FPKM.  The prefixes tcons_ and tcons_l2_ are used to describe 
+lincRNAs and TUCP transcripts, respectively. Specific details about the catalog generation and data 
+sets used for this study can be found in Cabili et al (2011). Extended 
+characterization of each transcript in the human body map catalog can be found at the <a
+href="http://www.broadinstitute.org/genome_bio/human_lincrnas/" target="_blank">Human lincRNA
+Catalog</a> website.</p>
+
+<p>Expression abundance scores range from 0 to 1000, and are displayed from light blue to dark blue
+respectively:</p>
+
+<!-- The below creates the gradient bar. A little wacky looking b/c none of the browsers support the
+w3c standard correctly. But this does work in all supported browsers, incl down to IE7 -->
+<p style="color:#fff;padding:10px; width: 400px;border: 1px solid black;
+background: -webkit-gradient(linear, left bottom, right top, from(#c8dcff), to(#003c78));
+background: -moz-linear-gradient(left,  #c8dcff,  #003c78);
+background: -o-linear-gradient(left,  #c8dcff,  #003c78);
+background: -ms-linear-gradient(left,  #c8dcff,  #003c78);
+filter:progid:DXImageTransform.Microsoft.gradient(GradientType=1, startColorstr='#c8dcff', endColorstr='#003c78');
+-ms-filter: progid:DXImageTransform.Microsoft.gradient(GradientType=1,startColorstr='#c8dcff', endColorstr='#003c78');
+background: linear-gradient(top left,#c8dcff, #003c78);
+overflow:auto;"><span
+style="float:left;">0</span><span style="float:right;">1000</span></p>
+
+<h2>Credits</h2> 
+
+<p>The body map RNA-Seq data was kindly provided by the Gene Expression
+Applications research group at <a href="http://www.illumina.com" target=_blank>Illumina</a>.</p>
+
+<h2>References</h2>
+
+<p>
+Cabili MN, Trapnell C, Goff L, Koziol M, Tazon-Vega B, Regev A, Rinn JL.
+<a href="http://genesdev.cshlp.org/content/25/18/1915" target="_blank">
+Integrative annotation of human large intergenic noncoding RNAs reveals global properties and
+specific subclasses</a>.
+<em>Genes Dev</em>. 2011 Sep 15;25(18):1915-27.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21890647" target="_blank">21890647</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3185964/" target="_blank">PMC3185964</a>
+</p>
+
+<p>
+Trapnell C, Williams BA, Pertea G, Mortazavi A, Kwan G, van Baren MJ, Salzberg SL, Wold BJ, Pachter
+L.
+<a href="http://www.nature.com/nbt/journal/v28/n5/abs/nbt.1621.html" target="_blank">
+Transcript assembly and quantification by RNA-Seq reveals unannotated transcripts and isoform
+switching during cell differentiation</a>.
+<em>Nat Biotechnol</em>. 2010 May;28(5):511-5.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20436464" target="_blank">20436464</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3146043/" target="_blank">PMC3146043</a>
+</p>
