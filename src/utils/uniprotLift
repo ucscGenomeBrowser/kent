@@ -137,7 +137,7 @@ def makeBedLine(mut, bed, isMut):
         bed[3] += " in %s" % disName
 
     if mut.featType=="sequence variant":
-        varType = "Naturally occuring sequence variant"
+        varType = "Naturally occurring sequence variant"
         bed[8] = "100,0,0"
     elif mut.featType=="mutagenesis site":
         varType = "Experimental mutation of amino acids"

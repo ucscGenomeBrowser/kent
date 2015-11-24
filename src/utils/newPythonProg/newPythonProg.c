@@ -25,26 +25,8 @@ static struct optionSpec options[] = {
 void makeMakefile(char *progName, char *makeName)
 /* Make makefile. */
 {
-char *upLevel;
-//char *L;
-//char *myLibs;
 FILE *f = mustOpen(makeName, "w");
 
-if (fileExists("../inc/common.mk"))
-	upLevel = cloneString("..");
-else if (fileExists("../../inc/common.mk"))
-	upLevel = cloneString("../..");
-else if (fileExists("../../../inc/common.mk"))
-	upLevel = cloneString("../../..");
-else if (fileExists("../../../../inc/common.mk"))
-	upLevel = cloneString("../../../..");
-else if (fileExists("../../../../../inc/common.mk"))
-	upLevel = cloneString("../../../../..");
-else
-    {
-    warn("WARNING: can not find inc/common.mk 1 to 4 directories up, fix the makefile");
-    upLevel = cloneString("../../../../..");
-    }
 fprintf(f, 
 "all::\n\t cp -p %s ${HOME}/bin\n\t cp -p %s ${HOME}/kent/src/pyLib/scripts\n"
 "test::\n\t@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \\ " 

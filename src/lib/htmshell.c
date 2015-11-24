@@ -24,6 +24,15 @@ boolean htmlWarnBoxSetUpAlready=FALSE;
 
 static bool NoEscape = FALSE;
 
+static bool errorsNoHeader = FALSE;
+
+void htmlSuppressErrors()
+/* Do not output a http header for error messages. Makes sure that very early
+ * errors are not shown back to the user but trigger a 500 error, */
+{
+errorsNoHeader = TRUE;
+}
+
 void htmlNoEscape()
 {
 NoEscape = TRUE;
@@ -317,7 +326,7 @@ static void earlyWarningHandler(char *format, va_list args)
 /* Write an error message so user can see it before page is really started. */
 {
 static boolean initted = FALSE;
-if (!initted)
+if (!initted && !errorsNoHeader)
     {
     htmlStart("Very Early Error");
     initted = TRUE;
