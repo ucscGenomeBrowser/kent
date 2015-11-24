@@ -1402,7 +1402,6 @@ unsigned char *vTypes = ag->vTypes;
 int altSpliceSitesOrig = *altSpliceSites;
 int i,j,k;
 int altCount = 0;
-boolean gotOne = FALSE;
 occassionalDot();
 totalLoci++;
 for(i=0; i<vCount; i++)
@@ -1422,7 +1421,6 @@ for(i=0; i<vCount; i++)
 		    if(aSplice == NULL)
 			{
 			splicedLoci++;
-			gotOne = TRUE;
 			aSplice = initASplice(ag, em, i, j, k);
 
 			(*altSpliceSites)++;
