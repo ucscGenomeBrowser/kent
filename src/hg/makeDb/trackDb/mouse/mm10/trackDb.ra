@@ -95,8 +95,7 @@ longLabel Retroposed Genes V2, Including Pseudogenes
 group genes
 type psl
 color 20,0,250
-visibility pack
-priority 5
+visibility hide
 ucscRetroInfo ucscRetroInfo2
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds2
@@ -199,9 +198,8 @@ shortLabel Retroposed Genes 5.0
 longLabel Retroposed Genes V5, Including Pseudogens
 group genes
 type psl
-priority 6
 color 20,0,250
-visibility pack
+visibility hide
 ucscRetroInfo ucscRetroInfo5
 baseColorDefault diffCodons
 baseColorUseCds table ucscRetroCds5
@@ -316,10 +314,11 @@ group varRep
 
 # GENCODE
 track wgEncodeGencodeSuper
-superTrack on
+superTrack on show
 group genes
 shortLabel GENCODE (Ensembl)
 longLabel GENCODE Gene Annotations (Ensembl)
+priority 2
 # doen't set wgEncode attribute here, since newer GENCODEs are not ENCODE
 
 include wgEncodeGencodeVM2.ra

@@ -16,7 +16,7 @@ errAbort(
   "usage:\n"
   "   linesInAllFiles in1.txt in2.txt ... inN.txt\n"
   "The order of output will follow the order in the last file.\n"
-  "This only puts out the first occurence of the line if it occurs multiple times\n"
+  "This only puts out the first occurrence of the line if it occurs multiple times\n"
   "options:\n"
   "   -col=N - if set, file is tab-delimited and just the given column (starting with 1)\n"
   "            In this case only that column will be output\n"

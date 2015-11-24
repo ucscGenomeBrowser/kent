@@ -11,7 +11,7 @@ shortLabel GENCODE VM7 (Ensembl 82)
 longLabel Gene Annotations from ENCODE/GENCODE Version M7 (Ensembl 82)
 group genes
 dragAndDrop subTracks
-priority 34.995
+priority 2.995
 visibility hide
 subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
@@ -92,7 +92,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodePseudoGeneVM7
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM7ViewGenes on
+        subTrack wgEncodeGencodeVM7ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M7 (Ensembl 82)

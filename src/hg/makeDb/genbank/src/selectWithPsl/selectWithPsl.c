@@ -26,7 +26,7 @@ void usage()
 {
 errAbort("selectWithPsl -fmt=fmt selectPsl in out\n\n"
          "Select and sort a file based on the same query and target\n"
-         "ranges occuring in a PSL file.  This can sort orientInfo\n"
+         "ranges occurring in a PSL file.  This can sort orientInfo\n"
          "files produced by polyInfo or other psl files.  This is used\n"
          "to produce a matching set of rows when the select PSL\n"
          "file have been filtered.  A byte subrange of the PSL file maybe\n"

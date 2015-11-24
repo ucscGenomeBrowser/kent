@@ -4,24 +4,13 @@ track knownGene override
 priority 1
 
 track ensGene override
-visibility pack
-priority 2
+visibility hide
 
 track xenoRefGene override
 priority 3
 
 track refGene override
 priority 4
-
-# track ucscRetroAli2
-# priority 5
-# This priority is defined in mouse/mm10/trackDb.ra
-# If this priority changes, please change it here and there as well
-
-# track ucscRetroAli5
-# priority 6
-# This priority is defined in mouse/mm10/trackDb.ra
-# If this priority changes, please change it here and there as well
 
 # mRNA and EST
 
