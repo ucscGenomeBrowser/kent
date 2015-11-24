@@ -28,6 +28,9 @@ struct gtexGeneExtras
                                    False if displayed as two graphs, one oriented downward */
     char *graphType;            /* Additional info about graph (e.g. type of comparison graph */
     struct rgbColor *colors;    /* Color palette for tissues */
+    boolean doLogTransform;     /* Log10(x+1) */
+    struct gtexTissue *tissues; /* Cache tissue names, descriptions */
+    struct hash *tissueFilter;  /* For filter. NULL out excluded tissues */
     };
 
 struct gtexGeneInfo
@@ -249,6 +252,44 @@ else
 
 static int gtexGeneItemHeight(struct track *tg, void *item);
 
+static void filterTissues(struct track *tg)
+/* Check cart for tissue selection.  NULL out unselected tissues in tissue list */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+struct gtexTissue *tis = NULL;
+extras->tissues = getTissues();
+extras->tissueFilter = hashNew(0);
+if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, GTEX_TISSUE_SELECT))
+    {
+    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tg->tdb, 
+                                                        FALSE, GTEX_TISSUE_SELECT);
+    if (selectedValues != NULL)
+        {
+        struct slName *name;
+        for (name = selectedValues; name != NULL; name = name->next)
+            hashAdd(extras->tissueFilter, name->name, name->name);
+        return;
+        }
+    }
+/* no filter */
+for (tis = extras->tissues; tis != NULL; tis = tis->next)
+    hashAdd(extras->tissueFilter, tis->name, tis->name);
+}
+
+static int filteredTissueCount(struct track *tg)
+/* Count of tissues to display */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+return hashNumEntries(extras->tissueFilter);
+}
+
+static boolean filterTissue(struct track *tg, char *name)
+/* Does tissue pass filter */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+return (hashLookup(extras->tissueFilter, name) != NULL);
+}
+
 static void gtexGeneLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -290,6 +331,8 @@ else
     int expCount = geneBed->expCount;
     extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
     }
+filterTissues(tg);
+
 while (geneBed != NULL)
     {
     AllocVar(geneInfo);
@@ -373,13 +416,12 @@ else
     return MIN_GRAPH_HEIGHT;
 }
 
-static int gtexGraphWidth(struct gtexGeneInfo *geneInfo)
+static int gtexGraphWidth(struct track *tg, struct gtexGeneInfo *geneInfo)
 /* Width of GTEx graph in pixels */
 {
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
-struct gtexGeneBed *geneBed = geneInfo->geneBed;
-int count = geneBed->expCount;
+int count = filteredTissueCount(tg);
 int labelWidth = geneInfo->medians2 ? tl.mWidth : 0;
 return (barWidth * count) + (padding * (count-1)) + labelWidth + 2;
 }
@@ -433,11 +475,11 @@ if (!doLogTransform)
 return valToHeight(useVal, useMax, gtexMaxGraphHeight(), doLogTransform);
 }
 
-static void drawGraphBase(struct hvGfx *hvg, int x, int y, struct gtexGeneInfo *geneInfo)
+static void drawGraphBase(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
 /* Draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression) */
 {
 Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
-int graphWidth = gtexGraphWidth(geneInfo);
+int graphWidth = gtexGraphWidth(tg, geneInfo);
 hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 }
 
@@ -494,7 +536,7 @@ int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 #ifndef MULTI_REGION
 int x1 = xOff + graphX;         // x1 is at left of graph
 int keepX = x1;                 // FIXME:  Too many X's!
-drawGraphBase(hvg, keepX, yZero+1, geneInfo);
+drawGraphBase(tg, geneInfo, hvg, keepX, yZero+1);
 
 int startX = x1;
 struct rgbColor lineColor = {.r=0};
@@ -524,8 +566,11 @@ double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 int i;
 int expCount = geneBed->expCount;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-for (i=0; i<expCount; i++)
+struct gtexTissue *tis;
+for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
@@ -562,10 +607,12 @@ if (!geneInfo->medians2)
 // draw comparison bar graph (upside down)
 x1 = startX;
 yZero = yGene + gtexGeneModelHeight() + 1; // yZero is at top of graph
-drawGraphBase(hvg, keepX, yZero-1, geneInfo);
+drawGraphBase(tg, geneInfo, hvg, keepX, yZero-1);
 
-for (i=0; i<expCount; i++)
+for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
@@ -833,6 +880,8 @@ double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
                                 GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
+    if (!filterTissue(tg, tissue->name))
+        continue;
     double expScore =  (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
                                         gtexMaxGraphHeight(), doLogTransform);
@@ -918,7 +967,8 @@ static int gtexGeneItemEnd(struct track *tg, void *item)
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
-int graphWidth = gtexGraphWidth(geneInfo);
+int graphWidth = gtexGraphWidth(tg, geneInfo);
+int x;
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
 }
 

@@ -43,4 +43,7 @@
 #define GTEX_GRAPH_NORMAL       "normalized"
 #define GTEX_GRAPH_DEFAULT      GTEX_GRAPH_RAW
 
+/* Tissue filter */
+#define GTEX_TISSUE_SELECT      "tissues"
+
 #endif /* GTEXUI_H */
