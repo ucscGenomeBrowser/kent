@@ -79,7 +79,7 @@
 "title  Brief description of purpose of experimental data set\n",
 "u4m_unique_ratio  u4mUniqPos/u4mReadCount - measures library diversity\n",
 "ucsc_db  UCSC assembly database identifier for reference genome used in mapping.  Either hg19, hg38, mm9, or mm10\n",
-"vcf_common_snp_ratio   Proportion of data in file that overlaps common snps occuring in 1% or more of population\n",
+"vcf_common_snp_ratio   Proportion of data in file that overlaps common snps occurring in 1% or more of population\n",
 "vcf_dp  The depth of sequencing in the bam or other alignment file used to produce this VCF.  Should be 30 or more\n",
 "vcf_genotype_count   How many genotypes, that is different individuals, in a VCF file\n",
 "vcf_pass_ratio   Proportion of VCF records that pass quality filter\n",

@@ -15,7 +15,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "methylateGenome - Creates a methylated version of a genome, in which any occurance of CG becomes TG\n"
+  "methylateGenome - Creates a methylated version of a genome, in which any occurrence of CG becomes TG\n"
   "usage:\n"
   "   methylateGenome input.[fa|2bit] outputPrefix\n"
   "options:\n"
