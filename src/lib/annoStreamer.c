@@ -77,20 +77,21 @@ self->filters = slCat(newFilters, self->filters);
 
 void annoStreamerInit(struct annoStreamer *self, struct annoAssembly *assembly,
 		      struct asObject *asObj, char *name)
-/* Initialize a newly allocated annoStreamer with default annoStreamer methods and
- * default filters and columns based on asObj.
+/* Initialize a newly allocated annoStreamer with default annoStreamer methods.
+ * If asObj is NULL, then the caller must call annoStreamerSetAutoSqlObject before
+ * configuring filters.
  * In general, subclasses' constructors will call this first; override nextRow, close,
  * and probably setRegion; and then initialize their private data. */
 {
 self->assembly = assembly;
 self->getAutoSqlObject = annoStreamerGetAutoSqlObject;
-self->setAutoSqlObject = annoStreamerSetAutoSqlObject;
 self->setRegion = annoStreamerSetRegion;
 self->getHeader = annoStreamerGetHeader;
 self->setFilters = annoStreamerSetFilters;
 self->addFilters = annoStreamerAddFilters;
 self->positionIsGenome = TRUE;
-self->setAutoSqlObject(self, asObj);
+if (asObj != NULL)
+    annoStreamerSetAutoSqlObject(self, asObj);
 if (name == NULL)
     errAbort("annoStreamerInit: need non-NULL name");
 self->name = cloneString(name);

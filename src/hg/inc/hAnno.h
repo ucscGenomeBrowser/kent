@@ -5,6 +5,7 @@
 
 #include "annoGrator.h"
 #include "jksql.h"
+#include "jsonParse.h"
 #include "trackDb.h"
 
 // Represent "unlimited" as limit==0.
@@ -15,7 +16,8 @@ struct annoAssembly *hAnnoGetAssembly(char *db);
 /* Make annoAssembly for db. */
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
-                                              struct trackDb *tdb, char *chrom, int maxOutRows);
+                                              struct trackDb *tdb, char *chrom, int maxOutRows,
+                                              struct jsonElement *config);
 /* Figure out the source and type of data and make an annoStreamer. */
 
 struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembly *assembly,
@@ -25,11 +27,20 @@ struct annoGrator *hAnnoGratorFromBigFileUrl(char *fileOrUrl, struct annoAssembl
 struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                           struct trackDb *tdb, char *chrom, int maxOutRows,
                                           struct asObject *primaryAsObj,
-                                          enum annoGratorOverlap overlapRule);
+                                          enum annoGratorOverlap overlapRule,
+                                          struct jsonElement *config);
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 
 struct asObject *hAnnoGetAutoSqlForTdb(char *db, char *chrom, struct trackDb *tdb);
 /* If possible, return the asObj that a streamer for this track would use, otherwise NULL. */
+
+struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
+                                           boolean skipBin);
+/* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
+ * if it doesn't match columns, make one up from db.table sql fields.
+ * Some subtleties are lost in translation from .as to .sql, that's why
+ * we try tdb & db.tableDescriptions first.  But ultimately we need to return
+ * an asObj whose columns match all fields of the table. */
 
 #endif // HANNO_H

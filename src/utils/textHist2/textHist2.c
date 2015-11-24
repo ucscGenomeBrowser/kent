@@ -87,7 +87,7 @@ struct psGfx *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
 double val, maxVal = findMaxVal(hist);
 int x, y, both;
 double grayScale;
-double xPos, yPos, xMid;
+double xPos, yPos;
 double xBinPts = psInnerSize/xBins;
 double yBinPts = psInnerSize/yBins;
 
@@ -116,7 +116,6 @@ for (x=labelStep; x<xBins; x += labelStep)
     char buf[16];
     sprintf(buf, "%d", x*xBinSize+xMin);
     xPos = x * xBinPts + labelSize;
-    xMid = xPos;
     psDrawBox(ps, xPos, yPos, 1, tickSize);
     psTextDown(ps, xPos, yPos+tickSize+2, buf);
     }

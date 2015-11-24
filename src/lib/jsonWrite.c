@@ -65,22 +65,17 @@ else
 }
 
 void jsonWriteTag(struct jsonWrite *jw, char *var)
-/* Print out quoted tag followed by colon. Print out preceding comma if need be.  */
+/* Print out preceding comma if necessary, and if var is non-NULL, quoted tag followed by colon. */
 {
+jsonWriteMaybeComma(jw);
 if (var != NULL)
-    {
-    jsonWriteMaybeComma(jw);
     dyStringPrintf(jw->dy, "\"%s\": ", var);
-    }
 }
 
 void jsonWriteString(struct jsonWrite *jw, char *var, char *string)
 /* Print out "var": "val".  If var is NULL, print val only.  If string is NULL, "var": null . */
 {
-if (var)
-    jsonWriteTag(jw, var);
-else
-    jsonWriteMaybeComma(jw);
+jsonWriteTag(jw, var);
 if (string)
     dyStringPrintf(jw->dy, "\"%s\"", string);
 else
@@ -153,10 +148,7 @@ jsonWritePopObjStack(jw);
 void jsonWriteObjectStart(struct jsonWrite *jw, char *var)
 /* Print start of object, preceded by tag if var is non-NULL. */
 {
-if (var)
-    jsonWriteTag(jw, var);
-else
-    jsonWriteMaybeComma(jw);
+jsonWriteTag(jw, var);
 struct dyString *dy = jw->dy;
 dyStringAppend(dy, "{"JW_SEP);
 jsonWritePushObjStack(jw, FALSE);
@@ -226,10 +218,7 @@ void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB)
 if (jwB && jwB->stackIx)
     errAbort("jsonWriteAppend: second argument must be fully closed but its stackIx is %d not 0",
              jwB->stackIx);
-if (var)
-    jsonWriteTag(jwA, var);
-else
-    jsonWriteMaybeComma(jwA);
+jsonWriteTag(jwA, var);
 if (jwB)
     dyStringAppendN(jwA->dy, jwB->dy->string, jwB->dy->stringSize);
 else if (var)

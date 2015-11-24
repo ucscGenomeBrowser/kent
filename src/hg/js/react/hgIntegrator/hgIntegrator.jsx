@@ -198,56 +198,21 @@ var FieldSelect = React.createClass({
     // Popup with checkboxes for selecting fields of some tables.
 
     mixins: [PathUpdate, ImmutableUpdate],
-    // update(path + table + field + 'checked', newValue):
+    // update(path + 'checked' + track + table + field, newValue):
     //                                   called when user clicks a field's checkbox
-    // update(path + table, newValue):   called when user clicks 'Set all' or 'Clear all'
+    // update(path + 'setAll' + track + table, newValue):
+    //                                   called when user clicks 'Set all' or 'Clear all'
     // update(path + 'remove') called when user clicks X icon to hide this popup
-
+    // update(path + 'selectRelated' + track, newValue) : user changed related table select
+    // update(path + 'addRelated' + track) : user clicked button to add selected table
     propTypes: { // Optional:
-                 fieldInfo: pt.object,  // renders popup if truthy.
-                                        // maps table to list of fields + checked state.
+                 fieldSelect: pt.object,  // renders popup if truthy.
+                                          // maps table to list of fields + checked state.
                },
 
-    makeCheckboxGrid: function(table, fields) {
-        // Make a checkbox for each field, labeled by field name.
-        return _.map(fields, function(checkedAndDesc, field) {
-            var path = this.props.path.concat(table, field, 'checked');
-            var checked = checkedAndDesc.checked;
-            return (
-                <tr key={table+'.'+field+'.row'}>
-                  <td key={table+'.'+field+'.cb'}>
-                    <CheckboxLabel checked={checked}
-                                   path={path} update={this.props.update} />
-                  </td>
-                  <td key={table+'.'+field+'.label'}>{field}</td>
-                  <td key={table+'.'+field+'.desc'} style={{paddingLeft: '0.5em'}}>
-                    {checkedAndDesc.desc}
-                  </td>
-                </tr>
-            );
-        }, this)
-        .concat(
-            <tr>
-              <td><br /></td>
-              <td></td>
-            </tr>);
-    },
-
-    makeTableSections: function() {
-        // For each table, make a section with the table's name followed by field checkboxes.
-        var fieldInfo = this.props.fieldInfo.toJS();
-        return _.map(fieldInfo, function(info, table) {
-            return [
-                <tr key={table}>
-                  <td colSpan={3}>
-                    <span className='boldText'>{info.label}</span>
-                    <SetClearButtons path={this.props.path.concat(table)}
-                                     update={this.props.update} />
-                  </td>
-                </tr>,
-                this.makeCheckboxGrid(table, info.fields)
-            ];
-        }, this);
+    onAddRelated: function(track) {
+        // The user clicked the button for adding a related table for track.
+        this.props.update(this.props.path.concat('addRelated', track));
     },
 
     onDone: function() {
@@ -255,18 +220,148 @@ var FieldSelect = React.createClass({
         this.props.update(this.props.path.concat('remove'));
     },
 
+    renderTableInfo: function(track, table, tableInfo) {
+        // Show table's label, set & clear buttons, and then a checkbox for each field,
+        // labeled by field name.
+        var update = this.props.update;
+        var removePath = this.props.path.concat('removeRelated', track, table);
+        var setClearPath = this.props.path.concat('setAll', track, table);
+        var maybeRemoveIcon = (track !== table) ?
+                              <Icon type='x' update={update} path={removePath} /> :
+                              null;
+        var fields = tableInfo.get('fields');
+        var bodyRows;
+        if (! fields) {
+            bodyRows = <tr key={table+'.spinner'}>
+                         <td colSpan={3}> <Icon type='spinner' /> </td>
+                       </tr>;
+        } else {
+            bodyRows = fields.map(function(setting) {
+                var field = setting.get('name');
+                var checked = setting.get('checked');
+                var desc = setting.get('desc');
+                var checkedPath = this.props.path.concat('checked', track, table, field);
+                var tfPrefix = table + '.' + field + '.';
+                return (
+                        <tr key={tfPrefix+'row'}>
+                          <td key={tfPrefix+'cb'}>
+                            <CheckboxLabel checked={checked}
+                                           path={checkedPath} update={this.props.update} />
+                          </td>
+                          <td key={tfPrefix+'label'}>{field}</td>
+                          <td key={tfPrefix+'desc'} style={{paddingLeft: '0.5em'}}>
+                            {desc}
+                          </td>
+                        </tr>
+                );
+            }, this).toArray();
+        }
+        return [
+                <tr key={table+'.title'}>
+                  <td colSpan={3}>
+                    <span key='label' className='boldText'>
+                      {tableInfo.get('label')}
+                    </span>
+                    <div key='spacer' style={{display: 'inline-block', width: '10px'}} />
+                    {maybeRemoveIcon}
+                    <SetClearButtons path={setClearPath} update={update} />
+                  </td>
+                </tr> ,
+                bodyRows,
+                <tr key={table+'.spacer'}>
+                  <td colSpan={3} style={{height: '10px'}}></td>
+                </tr>
+            ];
+    },
+
+    renderRelatedTables: function(track, relatedTables, disableAddButton) {
+        // If a track has related tables, let the user choose one and click to add it.
+        if (relatedTables) {
+            var selected = relatedTables.get('selected');
+            var options = relatedTables.get('options');
+            var onAddRelated = _.bind(this.onAddRelated, this, track);
+            return [
+                  <tr key={'addRelatedSel.'+track}>
+                    <td colSpan={3}>
+                      <LabeledSelect label='Related tables'
+                                     selected={selected}
+                                     options={options}
+                                     className='sectionItem'
+                                     path={this.props.path.concat('selectRelated', track)}
+                                     update={this.props.update} />
+                    </td>
+                  </tr> ,
+                  <tr key={'addRelatedButton.'+track}>
+                    <td colSpan={3}>
+                      <input type='button' value='Add table'
+                             disabled={disableAddButton}
+                             onClick={onAddRelated} />
+                    </td>
+                  </tr>,
+                <tr key={'addRelated'+track+'Spacer'}>
+                  <td colSpan={3} style={{height: '10px'}}></td>
+                </tr>
+            ];
+        }
+    },
+
+    renderTrackSections: function() {
+        // For each track, make a section with table name and field checkboxes for the track
+        // table and any selected related tables, and (if appl.) a way to select related tables.
+        var fieldSelect = this.props.fieldSelect;
+        var i = 0;
+        return fieldSelect.map(function(info, track) {
+            // Make one track section
+            var relatedTables = info.get('relatedAvailable');
+            var tableFields = info.get('tableFields');
+            var disableAddButton = info.get('disableAddButton');
+            var separator = null;
+            if (i > 0) {
+                separator = [
+                    <tr key={'sep'+i}>
+                      <td colSpan={3} style={{background: 'black', height: '1px', padding: 0}}></td>
+                    </tr>,
+                    <tr key={'sepSpacer'+i}>
+                      <td colSpan={3} style={{height: '10px'}}></td>
+                    </tr>
+                ];
+            }
+            i++;
+            return [
+                separator,
+                tableFields.map(function (tableInfo, table) {
+                    return this.renderTableInfo(track, table, tableInfo);
+                }, this).toArray(),
+                this.renderRelatedTables(track, relatedTables, disableAddButton)
+            ];
+        }, this).toArray();
+    },
+
     render: function() {
-        if (this.props.fieldInfo) {
-            return (
-                <Modal title='Choose Fields'
-                       path={this.props.path} update={this.props.update}>
-                  <div style={{height: 5}} />
-                  <table style={{borderCollapse: 'collapse'}}>
-                  {this.makeTableSections()}
-                  </table>
-                  <input type='button' value='Done' onClick={this.onDone} />
-                </Modal>
-            );
+        if (this.props.fieldSelect) {
+            if (this.props.fieldSelect.size > 0) {
+                return (
+                    <Modal title='Choose Fields'
+                           path={this.props.path} update={this.props.update}>
+                      <div style={{height: 5}} />
+                      <table style={{borderCollapse: 'collapse', width: '100%'}}>
+                    {/* If tbody is omitted here, rows for newly selected tables are appended */}
+                    {/* after the tbody that Chrome automatically inserts, causing the new */}
+                    {/* tables to appear at the bottom of the table. */}
+                    <tbody>
+                      {this.renderTrackSections()}
+                    </tbody>
+                      </table>
+                      <input type='button' value='Done' onClick={this.onDone} />
+                    </Modal>
+                );
+            } else {
+                return (
+                    <Modal title='Choose Fields'>
+                      <Icon type='spinner' />
+                    </Modal>
+                );
+            }
         } else {
             return null;
         }
@@ -288,9 +383,9 @@ var OutFileOptions = React.createClass({
     // update(path + 'getOutput') called when user clicks the get output button
 
     propTypes: { // Optional:
-                 options: pt.object,    // Immutable.Map {doFile, fileName, doGzip}
-                 fieldInfo: pt.object,  // table/field info from server following click on
-                                        // 'Choose fields' button
+                 options: pt.object,        // should be Immutable.Map {doFile, fileName, doGzip}
+                 fieldSelect: pt.object,    // table/field info from server following click on
+                                            // 'Choose fields' button
                  showLoadingImage: pt.bool,    // If true, show loading image
                  disableGetOutput: pt.bool,         // If true, disable Get output button
                  disableGetOutputMessage: pt.node   // If disableGetOutput, show this message
@@ -342,7 +437,7 @@ var OutFileOptions = React.createClass({
               <div className='sectionRow'>
                 <input type='button' value='Choose fields...' onClick={this.onChooseFields} />
               </div>
-              <FieldSelect fieldInfo={this.props.fieldInfo}
+              <FieldSelect fieldSelect={this.props.fieldSelect}
                            update={this.props.update} path={path.concat('fieldSelect')} />
               <div className='sectionRow'>
                 <br />
@@ -363,16 +458,17 @@ var QueryBuilder = React.createClass({
     // update(path + 'dataSources' + i + 'remove'): remove the ith dataSource
 
     propTypes: { // Optional:
-                 querySpec: pt.object,      // Data sources and output options
+                 dataSources: pt.object,    // Data sources (tracks)
+                 outFileOptions: pt.object, // Output options
                  addDsInfo: pt.object,      // Options for adding a data source
-                 tableFields: pt.object,    // If present, show 'Choose fields' modal
+                 fieldSelect: pt.object,    // If present, show 'Choose fields' modal
                  showLoadingImage: pt.bool  // If true, show loading image (for query execution)
                },
 
     renderDataSource: function(dataSource, i) {
         // Render a single dataSource ({ trackPath, label, schemaUrl }).
         var dsKey = 'ds' + i;
-        var path = ['dataSources', i];
+        var path = this.props.path.concat('dataSources', i);
         var schemaLink = makeSchemaLink(dataSource.get('schemaUrl'));
 
         return (
@@ -397,10 +493,11 @@ var QueryBuilder = React.createClass({
 
     renderDataSources: function(dataSources) {
         // Wrap Sortable around rendered dataSources if we have enough data.
+        var reorderPath = this.props.path.concat('dataSources', 'reorder');
         if (dataSources && dataSources.size) {
             return (
                 <Sortable sortableConfig={{ handle: '.sortHandle', axis: 'y' }}
-                          path={['dataSources', 'reorder']} update={this.props.update}
+                          path={reorderPath} update={this.props.update}
                           className='subsectionBox' >
                   {dataSources.map(this.renderDataSource).toJS()}
                 </Sortable>
@@ -416,14 +513,13 @@ var QueryBuilder = React.createClass({
 
     render: function() {
         var addDsInfo = this.props.addDsInfo;
-        var querySpec = this.props.querySpec;
-        if (! (addDsInfo && querySpec)) {
+        var dataSources = this.props.dataSources;
+        var outputInfo = this.props.outFileOptions || Immutable.Map();
+        if (! (addDsInfo && dataSources)) {
             // Waiting for data from server
             return <Section title='Loading...' />;
         } else {
-            var dataSources = querySpec.get('dataSources');
-            var outputInfo = querySpec.get('outFileOptions') || Immutable.Map();
-            var tableFields = this.props.tableFields;
+            var fieldSelect = this.props.fieldSelect;
             var disableGetOutput = (! (dataSources && dataSources.size));
             var disableGetOutputMessage =
               <span className='disabledMessage'>
@@ -439,7 +535,7 @@ var QueryBuilder = React.createClass({
 
                 <Section title='Output Options'>
                   <OutFileOptions options={outputInfo}
-                                  fieldInfo={tableFields}
+                                  fieldSelect={fieldSelect}
                                   showLoadingImage={this.props.showLoadingImage}
                                   disableGetOutput={disableGetOutput}
                                   disableGetOutputMessage={disableGetOutputMessage}
@@ -461,9 +557,10 @@ var DbPosAndQueryBuilder = React.createClass({
     propTypes: { // Optional:
                  cladeOrgDbInfo: pt.object, // See CladeOrgDb
                  regionSelect: pt.object,   // See RegionSelect
-                 querySpec: pt.object,      // Data sources and output options
+                 dataSources: pt.object,    // Data sources (tracks)
+                 outFileOptions: pt.object, // Output options
                  addDsInfo: pt.object,      // Options for adding a data source
-                 tableFields: pt.object,    // If present, show 'Choose fields' modal
+                 fieldSelect: pt.object,    // If present, show 'Choose fields' modal
                  showLoadingImage: pt.bool  // If true, show loading image (for query execution)
     },
 
@@ -485,8 +582,9 @@ var DbPosAndQueryBuilder = React.createClass({
                 </Section>
 
                 <QueryBuilder addDsInfo={this.props.addDsInfo}
-                              querySpec={this.props.querySpec}
-                              tableFields={this.props.tableFields}
+                              dataSources={this.props.dataSources}
+                              outFileOptions={this.props.outFileOptions}
+                              fieldSelect={this.props.fieldSelect}
                               showLoadingImage={this.props.showLoadingImage}
                               path={path} update={this.props.update}
                               />
@@ -604,8 +702,9 @@ var AppComponent = React.createClass({
               <DbPosAndQueryBuilder cladeOrgDbInfo={appState.get('cladeOrgDb')}
                                     regionSelect={appState.get('regionSelect')}
                                     addDsInfo={appState.get('addDsInfo')}
-                                    querySpec={appState.get('hgi_querySpec')}
-                                    tableFields={appState.get('tableFields')}
+                                    dataSources={appState.get('dataSources')}
+                                    outFileOptions={appState.get('outFileOptions')}
+                                    fieldSelect={appState.get('fieldSelect')}
                                     showLoadingImage={appState.get('showLoadingImage')}
                                     path={path} update={this.props.update}
                                     />
