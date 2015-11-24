@@ -63,4 +63,12 @@ struct slName *lmSlName(struct lm *lm, char *name);
 /* Shortcut to allocating an array in local mem and
  * assigning pointer to it. */
 
+char **lmCloneRow(struct lm *lm, char **row, int rowSize);
+/* Allocate an array of strings and its contents cloned from row. */
+
+char **lmCloneRowExt(struct lm *lm, char **row, int rowOutSize, int rowInSize);
+/* Allocate an array of strings with rowOutSize elements.  Clone the first rowInSize elements of
+ * row into the new array; leave remaining elements NULL if rowOutSize is greater than rowInSize.
+ * rowOutSize must be greater than or equal to rowInSize. */
+
 #endif//ndef LOCALMEM_H

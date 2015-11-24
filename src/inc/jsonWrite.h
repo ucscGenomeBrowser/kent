@@ -30,7 +30,7 @@ void jsonWriteFree(struct jsonWrite **pJw);
 /* Free up a jsonWrite object. */
 
 void jsonWriteTag(struct jsonWrite *jw, char *var);
-/* Print out quoted tag followed by colon. Print out preceding comma if need be.  */
+/* Print out preceding comma if necessary, and if var is non-NULL, quoted tag followed by colon. */
 
 void jsonWriteEndLine(struct jsonWrite *jw);
 /* Write comma if in middle, and then newline regardless. */

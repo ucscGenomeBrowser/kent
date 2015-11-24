@@ -120,7 +120,6 @@ if (retCommentLine != NULL)
 /* Skip first lines until it starts with '>' */
 for (;;)
     {
-    int ret = 0;
     if(fgets(lineBuf, sizeof(lineBuf), f) == NULL)
         {
         if (ferror(f))
@@ -133,7 +132,8 @@ for (;;)
 	if (retCommentLine != NULL)
             *retCommentLine = cloneString(lineBuf);
         offset = ftello(f);
-        ret = chopByWhite(lineBuf, words, ArraySize(words));
+        // ignore return from chopByWhite() but need side-effect
+        (void) chopByWhite(lineBuf, words, ArraySize(words));
         name = words[0]+1;
         break;
         }

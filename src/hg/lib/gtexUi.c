@@ -199,9 +199,7 @@ safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_TISSUE_SELECT);
 jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
 puts("&nbsp;");
 jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
-struct gtexTissue *tis = NULL, *tissues = gtexGetTissues();
-int i;
-int count = slCount(tissues);
+struct gtexTissue *tissues = gtexGetTissues();
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);

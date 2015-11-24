@@ -339,7 +339,14 @@ if (doLogTransform)
     maxVal = log10(maxVal+1.0);
 for (tis = tissues; tis != NULL; tis = tis->next)
     {
-    tsv = hashMustFindVal(tsHash, tis->name);
+    tsv = hashFindVal(tsHash, tis->name);
+    if (tsv == NULL)
+        {
+        /* no non-zero values for this tissue/gene */
+        AllocVar(tsv);
+        val = slDoubleNew(0.0);
+        slAddHead(&tsv->valList, val);
+        }
     tsv->name = tis->name;
     tsv->description = tis->description;
     tsv->color = tis->color;
@@ -372,6 +379,14 @@ if (gtexGene == NULL)
 genericHeader(tdb, item);
 // TODO: link to UCSC gene
 printf("<b>Gene:</b> %s<br>", gtexGene->name);
+char query[256];
+sqlSafef(query, sizeof(query), 
+        "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value='%s' and knownToEnsembl.name=kgXref.kgID", gtexGene->transcriptId);
+struct sqlConnection *conn = hAllocConn(database);
+char *desc = sqlQuickString(conn, query);
+hFreeConn(&conn);
+if (desc != NULL)
+    printf("<b>Description:</b> %s<br>\n", desc);
 printf("<b>Ensembl ID:</b> %s<br>\n", gtexGene->geneId);
 printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
 puts("<p>");

@@ -5854,7 +5854,7 @@ hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();retur
 hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
-hPrintf("Mousetrap.bind('s d', gotoGetDnaPage); \n");
+hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
@@ -5882,9 +5882,9 @@ hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
-    hPrintf("<td>Send to external tool</td><td class=\"hotkey\">s then t</td>");
+    hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");
 hPrintf("               </tr>\n");
-hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>     <td>View/Send DNA</td><td class='hotkey'>s then d</td>         </tr>\n");
+hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>     <td>view DNA</td><td class='hotkey'>v then d</td>         </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");

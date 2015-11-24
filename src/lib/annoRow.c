@@ -15,12 +15,7 @@ aRow->chrom = lmCloneString(lm, chrom);
 aRow->start = start;
 aRow->end = end;
 aRow->rightJoinFail = rightJoinFail;
-char **words;
-lmAllocArray(lm, words, numCols);
-int i;
-for (i = 0;  i < numCols;  i++)
-    words[i] = lmCloneString(lm, wordsIn[i]);
-aRow->data = words;
+aRow->data = lmCloneRow(lm, wordsIn, numCols);
 return aRow;
 }
 
