@@ -2,10 +2,6 @@ The remainder of this page is identical on the following tracks:
 <UL>
   <LI>Common SNPs(142) - SNPs with &gt;= 1% minor allele frequency (MAF), mapping
      only once to reference assembly.</LI>
-  <LI>Flagged SNPs(142) - SNPs &lt; 1% minor allele frequency (MAF) (or unknown),
-     mapping only once to reference assembly, 
-     flagged in dbSnp as "clinically associated" 
-     -- <em><B>not necessarily a risk allele!</B></em></LI>
   <LI>Mult. SNPs(142) - SNPs mapping in more than one place on reference assembly.</LI>
   <LI>All SNPs(142) - all SNPs from dbSNP mapping to reference assembly.</LI>
 
@@ -390,27 +386,19 @@ bases are indicated by a "+".
 The data that comprise this track were extracted from database dump files 
 and headers of fasta files downloaded from NCBI.  
 The database dump files were downloaded from 
-<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh37p13/database/organism_data/"
-TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh37p13/database/organism_data/</A>
-for hg19 and from
-<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh38/database/organism_data/"
-TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh38/database/organism_data/</A>
-for hg38.
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/database/organism_data/mouse_10090" 
+TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/database/organism_data/mouse_10090</A>.
 The fasta files were downloaded from 
-<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh37p13/rs_fasta/"
-TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh37p13/rs_fasta/</A>
-for hg19 and from
-<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh38/rs_fasta/"
-TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606_b142_GRCh38/rs_fasta/</A>
-for hg38.
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms/mouse_10090/rs_fasta/"
+TARGET="_BLANK">ftp://ftp.ncbi.nih.gov/snp/organisms/mouse_10090/rs_fasta/</A>.
 </P>
   <UL>
   <LI>Coordinates, orientation, location type and dbSNP reference allele data
-      were obtained from b142_SNPContigLoc_<em>N</em>.bcp.gz and
-    b142_ContigInfo_<em>N</em>.bcp.gz.  (<em>N</em> = 105 for hg19, 106 for hg38)</LI>
-  <LI>b142_SNPMapInfo_<em>N</em>.bcp.gz provided the alignment weights.
+      were obtained from b142_SNPContigLoc</em>.bcp.gz and
+    b142_ContigInfo.bcp.gz.  </LI>
+  <LI>b142_SNPMapInfo.bcp.gz provided the alignment weights.
   <LI>Functional classification was obtained from 
-      b142_SNPContigLocusId_<em>N</em>.bcp.gz. The internal database representation
+      b142_SNPContigLocusId.bcp.gz. The internal database representation
       uses dbSNP's function terms, but for display in SNP details pages,
       these are translated into
       <A HREF="http://sequenceontology.org/"
@@ -429,33 +417,13 @@ for hg38.
       class and observed polymorphism.</LI>
   </UL>
 
-<H2>Orthologous Alleles (human assemblies only)</H2>
-<P>
-For the human assembly, we provide a related table that contains
-orthologous alleles in the chimpanzee, orangutan and rhesus macaque
-reference genome assemblies.  
-We use our liftOver utility to identify the orthologous alleles.  
-The candidate human SNPs are a filtered list that meet the criteria:
-<UL>
-<LI>class = 'single'</LI>
-<LI>mapped position in the human reference genome is one base long</LI>
-<LI>aligned to only one location in the human reference genome</LI>
-<LI>not aligned to a chrN_random chrom</LI>
-<LI>biallelic (not tri- or quad-allelic)</LI>
-</UL>
-
-In some cases the orthologous allele is unknown; these are set to 'N'.
-If a lift was not possible, we set the orthologous allele to '?' and the 
-orthologous start and end position to 0 (zero).
-
-<H2>Masked FASTA Files (human assemblies only)</H2>
+<H2>Masked FASTA Files </H2>
 
 FASTA files that have been modified to use 
 <A HREF="../goldenPath/help/iupac.html">IUPAC</A>
 ambiguous nucleotide characters at
 each base covered by a single-base substitution are available for download:
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg19/snp142Mask/">GRCh37/hg19</A>, 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hg38/snp142Mask/">GRCh38/hg38</A>.
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm10/snp142Mask/">GRCm38/mm10</A>.
 Note that only single-base substitutions (no insertions or deletions) were used
 to mask the sequence, and these were filtered to exclude problematic SNPs.
 
