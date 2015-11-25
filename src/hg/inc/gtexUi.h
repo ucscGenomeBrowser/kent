@@ -35,12 +35,15 @@
 #define GTEX_COMPARISON_DISPLAY         "comparison"
 #define GTEX_COMPARISON_MIRROR          "mirror"
 #define GTEX_COMPARISON_DIFF            "difference"
-#define GTEX_COMPARISON_DEFAULT         GTEX_COMPARISON_MIRROR
+#define GTEX_COMPARISON_DEFAULT         GTEX_COMPARISON_DIFF
 
 /* Graph type */
 #define GTEX_GRAPH              "graphType"
 #define GTEX_GRAPH_RAW          "raw"
 #define GTEX_GRAPH_NORMAL       "normalized"
 #define GTEX_GRAPH_DEFAULT      GTEX_GRAPH_RAW
+
+/* Tissue filter */
+#define GTEX_TISSUE_SELECT      "tissues"
 
 #endif /* GTEXUI_H */

@@ -301,7 +301,11 @@ if (core->qual < btd->minAliQual)
 return TRUE;
 }
 
+#ifdef USE_HTS
+int addBam(const bam1_t *bam, void *data, bam_hdr_t *hdr)
+#else
 int addBam(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeatures item, and add it to tg->items. */
 {
@@ -350,7 +354,11 @@ lfs->features = lf;
 return lfs;
 }
 
+#ifdef USE_HTS
+int addBamPaired(const bam1_t *bam, void *data, bam_hdr_t *header)
+#else
 int addBamPaired(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeaturesSeries item, and either store it until we find its mate
  * or add it to tg->items. */
@@ -868,7 +876,11 @@ int width;
 int preDrawZero;
 };
 
+#ifdef USE_HTS
+static int countBam(const bam1_t *bam, void *data, bam_hdr_t *header)
+#else
 static int countBam(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  */
 {
 struct bamWigTrackData *btd = (struct bamWigTrackData *)data;

@@ -28,6 +28,9 @@ struct gtexGeneExtras
                                    False if displayed as two graphs, one oriented downward */
     char *graphType;            /* Additional info about graph (e.g. type of comparison graph */
     struct rgbColor *colors;    /* Color palette for tissues */
+    boolean doLogTransform;     /* Log10(x+1) */
+    struct gtexTissue *tissues; /* Cache tissue names, descriptions */
+    struct hash *tissueFilter;  /* For filter. NULL out excluded tissues */
     };
 
 struct gtexGeneInfo
@@ -249,6 +252,44 @@ else
 
 static int gtexGeneItemHeight(struct track *tg, void *item);
 
+static void filterTissues(struct track *tg)
+/* Check cart for tissue selection.  NULL out unselected tissues in tissue list */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+struct gtexTissue *tis = NULL;
+extras->tissues = getTissues();
+extras->tissueFilter = hashNew(0);
+if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, GTEX_TISSUE_SELECT))
+    {
+    struct slName *selectedValues = cartOptionalSlNameListClosestToHome(cart, tg->tdb, 
+                                                        FALSE, GTEX_TISSUE_SELECT);
+    if (selectedValues != NULL)
+        {
+        struct slName *name;
+        for (name = selectedValues; name != NULL; name = name->next)
+            hashAdd(extras->tissueFilter, name->name, name->name);
+        return;
+        }
+    }
+/* no filter */
+for (tis = extras->tissues; tis != NULL; tis = tis->next)
+    hashAdd(extras->tissueFilter, tis->name, tis->name);
+}
+
+static int filteredTissueCount(struct track *tg)
+/* Count of tissues to display */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+return hashNumEntries(extras->tissueFilter);
+}
+
+static boolean filterTissue(struct track *tg, char *name)
+/* Does tissue pass filter */
+{
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+return (hashLookup(extras->tissueFilter, name) != NULL);
+}
+
 static void gtexGeneLoadItems(struct track *tg)
 /* Load method for track items */
 {
@@ -256,6 +297,8 @@ static void gtexGeneLoadItems(struct track *tg)
 struct gtexGeneExtras *extras;
 AllocVar(extras);
 tg->extraUiData = extras;
+extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
+                                                GTEX_LOG_TRANSFORM_DEFAULT);
 char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, 
                                                 GTEX_SAMPLES, GTEX_SAMPLES_DEFAULT);
 extras->graphType = cloneString(samples);
@@ -290,6 +333,8 @@ else
     int expCount = geneBed->expCount;
     extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
     }
+filterTissues(tg);
+
 while (geneBed != NULL)
     {
     AllocVar(geneInfo);
@@ -373,13 +418,12 @@ else
     return MIN_GRAPH_HEIGHT;
 }
 
-static int gtexGraphWidth(struct gtexGeneInfo *geneInfo)
+static int gtexGraphWidth(struct track *tg, struct gtexGeneInfo *geneInfo)
 /* Width of GTEx graph in pixels */
 {
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
-struct gtexGeneBed *geneBed = geneInfo->geneBed;
-int count = geneBed->expCount;
+int count = filteredTissueCount(tg);
 int labelWidth = geneInfo->medians2 ? tl.mWidth : 0;
 return (barWidth * count) + (padding * (count-1)) + labelWidth + 2;
 }
@@ -433,20 +477,20 @@ if (!doLogTransform)
 return valToHeight(useVal, useMax, gtexMaxGraphHeight(), doLogTransform);
 }
 
-static void drawGraphBase(struct hvGfx *hvg, int x, int y, struct gtexGeneInfo *geneInfo)
+static void drawGraphBase(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
 /* Draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression) */
 {
 Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
-int graphWidth = gtexGraphWidth(geneInfo);
+int graphWidth = gtexGraphWidth(tg, geneInfo);
 hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 }
 
-static int gtexGeneGraphHeight(struct track *tg, struct gtexGeneInfo *geneInfo, 
-                                boolean doLogTransform, boolean doTop)
+static int gtexGeneGraphHeight(struct track *tg, struct gtexGeneInfo *geneInfo, boolean doTop)
 /* Determine height in pixels of graph.  This will be the box for tissue with highest expression
    If doTop is false, compute height of bottom graph of comparison */
 {
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
+struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 int i;
 double maxExp = 0.0;
 int expCount = geneBed->expCount;
@@ -462,7 +506,7 @@ for (i=0; i<expCount; i++)
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
-return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), doLogTransform);
+return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), extras->doLogTransform);
 }
 
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
@@ -472,8 +516,6 @@ static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 {
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
-boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
-                                                GTEX_LOG_TRANSFORM_DEFAULT);
 // Color in dense mode using transcriptClass
 Color statusColor = getTranscriptStatusColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
@@ -487,14 +529,14 @@ int graphX = gtexGraphX(geneBed);
 if (graphX < 0)
     return;
 
-int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
+int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 
 #ifndef MULTI_REGION
 int x1 = xOff + graphX;         // x1 is at left of graph
 int keepX = x1;                 // FIXME:  Too many X's!
-drawGraphBase(hvg, keepX, yZero+1, geneInfo);
+drawGraphBase(tg, geneInfo, hvg, keepX, yZero+1);
 
 int startX = x1;
 struct rgbColor lineColor = {.r=0};
@@ -524,8 +566,11 @@ double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 int i;
 int expCount = geneBed->expCount;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-for (i=0; i<expCount; i++)
+struct gtexTissue *tis;
+for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
@@ -535,13 +580,13 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
-                                        gtexMaxGraphHeight(), doLogTransform);
+                                        gtexMaxGraphHeight(), extras->doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
     // mark clipped bar with magenta tip
-    if (!doLogTransform && expScore > viewMax)
+    if (!extras->doLogTransform && expScore > viewMax)
         hvGfxBox(hvg, x1, yZero-height+1, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
@@ -562,10 +607,12 @@ if (!geneInfo->medians2)
 // draw comparison bar graph (upside down)
 x1 = startX;
 yZero = yGene + gtexGeneModelHeight() + 1; // yZero is at top of graph
-drawGraphBase(hvg, keepX, yZero-1, geneInfo);
+drawGraphBase(tg, geneInfo, hvg, keepX, yZero-1);
 
-for (i=0; i<expCount; i++)
+for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     struct rgbColor fillColor = extras->colors[i];
     if (barWidth == 1 && sameString(colorScheme, GTEX_COLORS_GTEX))
         {
@@ -577,12 +624,12 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneInfo->medians2[i];
     int height = valToClippedHeight(expScore, maxMedian, viewMax, gtexMaxGraphHeight(), 
-                                        doLogTransform);
+                                        extras->doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
-    if (!doLogTransform && expScore > viewMax)
+    if (!extras->doLogTransform && expScore > viewMax)
         hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
@@ -660,7 +707,7 @@ for (i=0; i<expCount; i++)
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
 
     double expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
-    int height = valToHeight(expScore, maxMedian, gtexMaxGraphHeight(), doLogTransform);
+    int height = valToHeight(expScore, maxMedian, gtexMaxGraphHeight(), extras->doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero-height, barWidth, height, fillColorIx);
     else
@@ -696,7 +743,7 @@ for (i=0; i<expCount; i++)
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
     double expScore = geneInfo->medians2[i];
-    int height = valToHeight(expScore, maxMedian, gtexMaxGraphHeight(), doLogTransform);
+    int height = valToHeight(expScore, maxMedian, gtexMaxGraphHeight(), extras->doLogTransform);
     if (graphPadding == 0 || sameString(colorScheme, GTEX_COLORS_GTEX))
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
     else
@@ -722,15 +769,13 @@ if (item == NULL)
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 if (geneInfo->height != 0)
     return geneInfo->height;
-boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
-                                                GTEX_LOG_TRANSFORM_DEFAULT);
-int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
+int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int bottomGraphHeight = 0;
 boolean isComparison = ((struct gtexGeneExtras *)tg->extraUiData)->isComparison;
 if (isComparison)
     {
-    bottomGraphHeight = max(gtexGeneGraphHeight(tg, geneInfo, doLogTransform, FALSE),
+    bottomGraphHeight = max(gtexGeneGraphHeight(tg, geneInfo, FALSE),
                                 tl.fontHeight) + gtexGeneMargin();
     }
 int height = topGraphHeight + bottomGraphHeight + gtexGeneMargin() + gtexGeneModelHeight();
@@ -794,18 +839,40 @@ return buf;
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
-/* Create a map box for each tissue (bar in the graph) or a single map for squish/dense modes */
+/* Create a map box on gene model and label, and one for each tissue (bar in the graph) in
+ * pack or ful modes.  Just single map for squish/dense modes */
 {
 if (tg->visibility == tvDense || tg->visibility == tvSquish)
     {
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
     }
+
+// add map boxes to gene model and label
+struct gtexGeneInfo *geneInfo = item;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
+topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
+int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
+int yGene = yZero + gtexGeneMargin() - 1;
+int geneStart = max(geneInfo->geneModel->txStart, winStart);
+int geneEnd = min(geneInfo->geneModel->txEnd, winEnd);
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+int x1 = round((double)((int)geneStart-winStart)*scale) + x;
+int x2 = round((double)((int)geneEnd-winStart)*scale) + x;
+int w = x2-x1;
+char query[256];
+sqlSafef(query, sizeof(query),
+        "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value='%s' and knownToEnsembl.name=kgXref.kgID", geneBed->transcriptId);
+struct sqlConnection *conn = hAllocConn(database);
+char *desc = sqlQuickString(conn, query);
+hFreeConn(&conn);
+mapBoxHc(hvg, start, end, x, yGene, w, gtexGeneModelHeight()-1, tg->track, mapItemName, desc);
+
+// add maps to tissue bars in expresion graph
 struct gtexTissue *tissues = getTissues();
 struct gtexTissue *tissue = NULL;
-struct gtexGeneInfo *geneInfo = item;
-struct gtexGeneBed *geneBed = geneInfo->geneBed;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
@@ -813,8 +880,9 @@ double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 int graphX = gtexGraphX(geneBed);
 if (graphX < 0)
     return;
+
 // x1 is at left of graph
-int x1 = insideX + graphX;
+x1 = insideX + graphX;
 
 if (geneInfo->medians2)
     {
@@ -823,35 +891,31 @@ if (geneInfo->medians2)
     }
 int i = 0;
 
-boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
-                                                GTEX_LOG_TRANSFORM_DEFAULT);
-int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, doLogTransform, TRUE);
-topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
-int yZero = topGraphHeight + y - 1;  // yZero is bottom of (top) graph
-
 double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE, 
                                 GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     {
+    if (!filterTissue(tg, tissue->name))
+        continue;
     double expScore =  (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     int height = valToClippedHeight(expScore, maxMedian, viewMax, 
-                                        gtexMaxGraphHeight(), doLogTransform);
+                                        gtexMaxGraphHeight(), extras->doLogTransform);
     char *qualifier = NULL;
     if (extras->isComparison && extras->isDifference)
         qualifier = "F-M";
     mapBoxHc(hvg, start, end, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
-                tissueExpressionText(tissue, expScore, doLogTransform, qualifier));
+                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
     // add map box to comparison graph
     if (geneInfo->medians2)
         {
         double expScore = geneInfo->medians2[i];
         int height = valToClippedHeight(expScore, maxMedian, viewMax, 
-                                        gtexMaxGraphHeight(), doLogTransform);
+                                        gtexMaxGraphHeight(), extras->doLogTransform);
         int y = yZero + gtexGeneModelHeight() + gtexGeneMargin();  // y is top of bottom graph
         if (extras->isComparison && extras->isDifference)
             qualifier = "M-F";
         mapBoxHc(hvg, start, end, x1, y, barWidth, height, tg->track, mapItemName,
-                tissueExpressionText(tissue, expScore, doLogTransform, qualifier));
+                tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
         }
     x1 = x1 + barWidth + padding;
     }
@@ -918,7 +982,7 @@ static int gtexGeneItemEnd(struct track *tg, void *item)
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
-int graphWidth = gtexGraphWidth(geneInfo);
+int graphWidth = gtexGraphWidth(tg, geneInfo);
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
 }
 

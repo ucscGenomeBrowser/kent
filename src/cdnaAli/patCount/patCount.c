@@ -9,7 +9,7 @@
 
 void usage()
 {
-errAbort("patCount - counts up the number of occurences of each\n"
+errAbort("patCount - counts up the number of occurrences of each\n"
          "oligo of a fixed size (up to 11) in input.  Writes out\n"
          "all patterns that are overrepresented by at least factor\n"
          "to output, which is a binary .ooc file used by patSpace\n"
@@ -235,7 +235,7 @@ thresh = round(threshold);
 printf("Statistic for oligos of size %d (patSpaceSize %d)\n", oligoSize, patSpaceSize);
 printf("Total oligos %d\n", totalCount);
 printf("Distinct oligos %d\n", distinctCount);
-printf("Maximum occurences of single oligo %d\n", maxCount);
+printf("Maximum occurrences of single oligo %d\n", maxCount);
 printf("OverFactor %4.2f yeilds threshold %d\n", overFactor, thresh);
 printf("Oligos filtered out as too common %d (%2.1f%%)\n", overCount,
     100.0*overCount/distinctCount);

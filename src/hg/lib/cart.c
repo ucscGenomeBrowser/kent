@@ -696,6 +696,9 @@ cgiApoptosisSetup();
 if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
 
+if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
+    htmlSuppressErrors();
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;

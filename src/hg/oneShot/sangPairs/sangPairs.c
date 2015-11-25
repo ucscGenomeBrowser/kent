@@ -125,7 +125,7 @@ splitPath(faFileName, dir, name, ext);
 sprintf(qaFileName, "%s%s.qual", dir, name);
 qa = qaMustReadBoth(qaFileName, faFileName);
 if (hashLookup(uniqHash, qa->name))
-   warn("%s duplicated, ignoring all but first occurence", qa->name);
+   warn("%s duplicated, ignoring all but first occurrence", qa->name);
 else
     {
     hashAdd(uniqHash, qa->name, NULL);

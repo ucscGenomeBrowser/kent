@@ -180,6 +180,10 @@ void htmlNoEscape();
 /* tell htmlOut to escape special HTML chars '<', '>' */
 void htmlDoEscape();
 
+/* Do not output a http header for error messages. Makes sure that very early
+ * errors are not shown back to the user but trigger a 500 error, */
+void htmlSuppressErrors();
+
 /* Include an HTML file in a CGI.
  *   The file path is relative to the web server document root */
 void htmlIncludeWebFile(char *file);
