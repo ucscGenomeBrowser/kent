@@ -1367,8 +1367,6 @@ void loadAndValidateBed(char *row[], int bedFieldCount, int fieldCount, struct l
 int count;
 int *blockSizes = NULL;
 int *chromStarts;
-int *expIds;
-float *expScores;
 
 bed->chrom = row[0];  // note this value is not cloned for speed, callers may need to clone it.
 
@@ -1556,12 +1554,10 @@ if (bedFieldCount > 12)
 	{
 	AllocArray(bed->expIds,bed->expCount+1); // having +1 allows us to detect incorrect size
         count = lineFileAllIntsArray(lf, row, 13, bed->expIds, bed->expCount+1, TRUE, 4, "integer", TRUE);
-	expIds = bed->expIds;
 	}
     else
 	{
         count = lineFileAllIntsArray(lf, row, 13, tempExpIds, tempArraySize, TRUE, 4, "integer", TRUE);
-	expIds = tempExpIds;
 	}
     if (count != bed->expCount)
 	lineFileAbort(lf, "expecting %d elements in expIds list (bed field 14)", bed->expCount);
@@ -1570,12 +1566,10 @@ if (bedFieldCount > 12)
 	if (isCt)
 	    {
 	    sqlFloatDynamicArray(row[14], &bed->expScores, &count);
-	    expScores = bed->expScores;
 	    }
 	else
 	    {
 	    count = sqlFloatArray(row[14], tempExpScores, tempArraySize);
-	    expScores = tempExpScores;
 	    }
 	if (count != bed->expCount)
 	    lineFileAbort(lf, "expecting %d elements in expScores list (bed field 15)", bed->expCount);

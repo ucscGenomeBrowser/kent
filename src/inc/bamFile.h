@@ -12,8 +12,26 @@
 #ifndef _IOLIB
 #define _IOLIB 2
 #endif
+#ifdef USE_HTS
+#include "htslib/sam.h"
+typedef samFile samfile_t;
+typedef hts_idx_t bam_index_t;
+typedef bam_hdr_t bam_header_t;
+typedef int (*bam_fetch_f)(const bam1_t *bam, void *data, bam_hdr_t *header) ;
+#define samopen(a,b,c) sam_open(a,b)
+#define samclose(a) sam_close(a)
+#define bam1_qname bam_get_qname
+#define bam1_qual bam_get_qual
+#define bam1_aux bam_get_aux
+#define bam1_cigar bam_get_cigar
+#define bam1_seq bam_get_seq
+#define bam1_seqi bam_seqi
+#define bam_nt16_rev_table seq_nt16_str
+#define data_len l_data
+#else
 #include "bam.h"
 #include "sam.h"
+#endif
 
 #else // no USE_BAM
 typedef struct { } bam1_t;
@@ -58,7 +76,11 @@ samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader);
  * The implementation is just a wrapper around samopen from the samtools library
  * that aborts with error message if there's a problem with the open. */
 
+#ifdef USE_HTS
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_hdr_t *header,  bam_index_t *idx, char *bamFileName, 
+#else
 void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+#endif
 			 char *position, bam_fetch_f callbackFunc, void *callbackData);
 /* With the open bam file, return items the same way with the callbacks as with bamFetch() */
 /* except in this case use an already-open bam file and index (use bam_index_load and free() for */

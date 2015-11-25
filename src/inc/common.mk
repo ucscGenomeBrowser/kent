@@ -217,6 +217,22 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
+# autodetect UCSC installation of htslib:
+ifeq (${HTSDIR},"NOTNOW")
+    HTSDIR = /hive/groups/browser/htslib
+    ifneq ($(wildcard ${HTSDIR}),)
+        ifeq (${USE_HTS},)
+            USE_HTS=1
+            USE_TABIX=1
+            USE_SAMTABIX=1
+            SAMTABIXDIR = /hive/groups/browser/htslib
+            SAMTABIXLIB=/hive/groups/browser/htslib/libhts.a
+            HG_DEFS+=-DUSE_HTS
+        endif
+    endif
+endif
+
+
 # autodetect UCSC installation of samtabix:
 ifeq (${SAMTABIXDIR},)
     SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}

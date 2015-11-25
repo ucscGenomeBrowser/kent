@@ -9,7 +9,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "countChars - Count the number of occurences of a particular char\n"
+  "countChars - Count the number of occurrences of a particular char\n"
   "usage:\n"
   "   countChars char file(s)\n"
   "Char can either be a two digit hexadecimal value or\n"

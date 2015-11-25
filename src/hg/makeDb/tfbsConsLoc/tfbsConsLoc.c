@@ -157,7 +157,6 @@ void get_matches (struct MATCH **matches, int dir,
 {
     int col,
 	seq,
-	add_it = 1,
 	misses_so_far = 0,
   	*score = NULL;
     struct mafComp *comp = NULL;
@@ -166,7 +165,6 @@ void get_matches (struct MATCH **matches, int dir,
 
     for (col = 0; col < (ali->textSize - motif->len + 1); col++)
     {
-    	add_it = 1;
 	misses_so_far = 0;
     	for (comp = ali->components, seq = 0; comp; comp = comp->next, seq++)
 	{
