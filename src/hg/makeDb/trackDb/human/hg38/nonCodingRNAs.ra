@@ -1,6 +1,6 @@
 track nonCodingRNAs
 superTrack on
-group rna
+group genes
 shortLabel Non-coding RNA
 longLabel RNA sequences that do not code for a protein
 
