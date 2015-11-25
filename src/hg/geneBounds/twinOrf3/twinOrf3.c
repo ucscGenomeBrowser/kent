@@ -899,7 +899,8 @@ char *qSym = axt->qSym;
 char *tSym = axt->tSym;
 int symCount = axt->symCount;
 State **allStates;
-char *q, *t, tc, qc;
+char *q, *t, tc;
+// char qc;  unused
 int stateCount = dyno->stateCount;
 int stateByteSize = symCount * sizeof(State);
 int i;
@@ -942,7 +943,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     {
     q = qSym + symIx;
     t = tSym + symIx;
-    qc = *q;
+//    qc = *q;  unused
     tc = *t;
     // uglyf("%d %c %c\n", symIx, tc, qc);
     if (tc == '-')

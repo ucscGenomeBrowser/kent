@@ -221,9 +221,11 @@ void removeOverlap(int lfsSize , struct lfsStub *lfsList)
  * then remove all overlapping records and call recursively
  * return list of best scoring records in each cluster */
 {
-struct lfsStub *lfs, *bestMatch = NULL, *prevLfs = NULL;
+struct lfsStub *lfs, *bestMatch = NULL;
+// struct lfsStub *prevLfs = NULL;  unused
 bool first = TRUE;
-int prevStart = 0, prevEnd = 0;
+int prevEnd = 0;
+// int prevStart = 0, prevEnd = 0;  unused
 int bestScore = 0;
                                                                                 
 if (lfsList == NULL)
@@ -239,7 +241,7 @@ for (lfs = lfsList; lfs != NULL; lfs = lfs->next)
         {
         if (first)
             {
-            prevStart = start;
+//            prevStart = start;  unused
             prevEnd = end;
             first = FALSE;
             }
@@ -249,7 +251,7 @@ for (lfs = lfsList; lfs != NULL; lfs = lfs->next)
             bestScore = score;
             }
         prevEnd = max(prevEnd, end);
-        prevLfs = lfs;
+//        prevLfs = lfs;  unused
         }
     else
         break;

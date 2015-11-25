@@ -902,7 +902,6 @@ char *publication, *copyright;
 char *caption = NULL;
 int imageFile = -1;
 struct slInt *imageList;
-int imageCount=0;
 int oldId = 0;
 struct captionElement *captionElements;
 int forwardedId = vgForwardedImage(conn, id);
@@ -941,7 +940,7 @@ if (caption != NULL)
     freez(&caption);
     }
 imageList = visiGeneImagesForFile(conn, imageFile);
-imageCount = slCount(imageList);
+(void) slCount(imageList);  // ignore return count, scan list
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 

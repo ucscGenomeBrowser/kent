@@ -87,7 +87,7 @@ void gffPeek(char *fileName)
 /* gffPeek - Look at a gff file and report some basic stats. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *word, *group;
+char *line, *word;
 char *row[9];
 int commentCount = 0;
 int badCount = 0;
@@ -97,7 +97,8 @@ struct countedHash *sourceHash = countedHashNew("source", 16);
 struct countedHash *featureHash = countedHashNew("feature", 16);
 struct countedHash *strandHash = countedHashNew("strand", 8);
 struct countedHash *frameHash = countedHashNew("frame", 8);
-boolean complexGroup = FALSE;
+// boolean complexGroup = FALSE;  unused
+// char *group;  unused
 
 while (lineFileNext(lf, &line, NULL))
     {
@@ -121,6 +122,7 @@ while (lineFileNext(lf, &line, NULL))
 	continue;
 	}
     line = skipLeadingSpaces(line);
+/* unused code
     group = NULL;
     if (line != NULL && line[0] != 0)
         {
@@ -128,6 +130,7 @@ while (lineFileNext(lf, &line, NULL))
 	if (strchr(group, '=') != 0)
 	    complexGroup = TRUE;
 	}
+*/
     countedHashAdd(seqHash, row[0]);
     countedHashAdd(sourceHash, row[1]);
     countedHashAdd(featureHash, row[2]);
