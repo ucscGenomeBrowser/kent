@@ -35,7 +35,7 @@ longLabel RNA sequences that do not code for a protein
 
     track lincRNAsTranscripts
     superTrack nonCodingRNAs pack
-    shortLabel lincRNA Transcripts
+    shortLabel lincRNA TUCP
     longLabel lincRNA and TUCP transcripts
     #shadesOfBrown
     color 100,50,0
