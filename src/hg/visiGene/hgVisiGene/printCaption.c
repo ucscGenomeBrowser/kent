@@ -940,7 +940,6 @@ if (caption != NULL)
     freez(&caption);
     }
 imageList = visiGeneImagesForFile(conn, imageFile);
-(void) slCount(imageList);  // ignore return count, scan list
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
