@@ -78,7 +78,10 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     AllocVar(tsel);
     tsel->name = tis->name;
     tsel->label = makeTissueLabel(tis);
-    tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
+    if (hashNumEntries(checkHash) == 0)
+        tsel->checked = TRUE;
+    else
+        tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
     slAddHead(&allTissues, tsel);
     }
 slReverse(&allTissues);
@@ -107,7 +110,10 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     AllocVar(tsel);
     tsel->name = tis->name;
     tsel->label = makeTissueLabel(tis);
-    tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
+    if (hashNumEntries(checkHash) == 0)
+        tsel->checked = TRUE;
+    else
+        tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
     if (startsWith("brain", tis->name))
         slAddHead(&brainTissues, tsel);
     else if (sameString(tis->name, "uterus") || sameString(tis->name, "testis") ||
