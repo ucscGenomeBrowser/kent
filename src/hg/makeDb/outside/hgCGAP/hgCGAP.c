@@ -374,12 +374,11 @@ int main(argc, argv)
 	char **argv;
 	{
 	char **p;
-	char *arg0, *arg1;
+	char *arg1;
 
 if (argc==2) 
 	{
 	p=argv;
-	arg0=*argv;
 
 	p++;
 	arg1=*p;

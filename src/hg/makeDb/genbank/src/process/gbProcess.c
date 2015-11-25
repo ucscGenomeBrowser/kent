@@ -580,7 +580,7 @@ char *verChar = gbVersionField->val->string;
 char *s;
 char *org = gbOrganismField->val->string;
 char *synOrg = NULL;
-struct keyVal *seqKey, *sizeKey, *commentKey;
+struct keyVal *seqKey, *commentKey;
 boolean isEst = FALSE;
 char verNum[8];
 char *com = gbCommentField->val->string;
@@ -689,7 +689,7 @@ if (dna != NULL)
     {
     seqKey = kvtAdd(kvt, "seq", dna);
     safef(sizeString, sizeof(sizeString), "%d", dnaSize);
-    sizeKey = kvtAdd(kvt, "siz", sizeString);
+    kvtAdd(kvt, "siz", sizeString);
     
     if (isEst)
         {

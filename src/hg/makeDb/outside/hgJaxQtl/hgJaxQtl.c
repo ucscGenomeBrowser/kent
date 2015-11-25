@@ -55,8 +55,7 @@ FILE   *outF;
 
 char *database;
 
-char *mgiID, *name, *chrom, *description, *flank1, *flank2, *peak;
-char *flank1Pos, *flank2Pos, *peakPos;
+char *mgiID, *name, *description, *flank1, *flank2, *peak;
 char *peakChrom, *peakChromStart, *peakChromEnd;
 
 char *identNo;
@@ -95,13 +94,9 @@ while (row2 != NULL)
     mgiID 	= row2[0];
     name        = row2[1];
     description = row2[2];
-    chrom	= row2[3];
     flank1 	= row2[4];
     flank2  	= row2[5];
     peak        = row2[6]; 
-    flank1Pos	= row2[7];
-    flank2Pos   = row2[8]; 
-    peakPos     = row2[9]; 
     
     flanks[0] = flank1;
     flanks[1] = flank2;

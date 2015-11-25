@@ -599,15 +599,6 @@ bed->name = cloneString(buff->string);
 for(i = 0;  i < bed->blockCount; i++)
     bed->chromStarts[i] -= bed->chromStart;
 
-if(splice->type == altCassette && path->vCount == 4) 
-    {
-    int incEdge1 = -1, incEdge2 = -1, skipEdge = -1;
-    skipEdge = altGraphXGetEdgeNum(ag, verts[0],verts[3]);
-    incEdge1 = altGraphXGetEdgeNum(ag, verts[0],verts[1]);
-    incEdge2 = altGraphXGetEdgeNum(ag, verts[2],verts[3]);
-/*     bed->thickStart = altGraphConfidenceForEdge(ag, skipEdge); */
-/*     bed->thickEnd = max(altGraphConfidenceForEdge(ag, incEdge1), altGraphConfidenceForEdge(ag, incEdge2)); */
-    }
 /* If we don't have any blocks, quit now. */
 if(bed->blockCount == 0)
     bedFree(&bed);
