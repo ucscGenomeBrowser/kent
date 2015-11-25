@@ -1116,7 +1116,7 @@ while (readGbInfo(lf))
     char *verChar = versionField->val;
     char *s;
     char *org = organismField->val;
-    struct keyVal *seqKey, *sizeKey;
+    struct keyVal *seqKey;
     boolean doneSequence = FALSE;
 
     if (++gbCount % modder == 0)
@@ -1342,7 +1342,7 @@ while (readGbInfo(lf))
         doneSequence = TRUE;
         seqKey = kvtAdd(kvt, "seq", dna);
         sprintf(sizeString, "%d", dnaSize);
-        sizeKey = kvtAdd(kvt, "siz", sizeString);
+        kvtAdd(kvt, "siz", sizeString);
         
         if (nSeparateFrags)
             sepByN(dna, dnaSize, nSeparateFrags);

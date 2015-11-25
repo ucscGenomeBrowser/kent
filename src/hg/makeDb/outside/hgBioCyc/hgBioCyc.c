@@ -31,9 +31,8 @@ errAbort(
     
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn;
 FILE *o1;
-char *chp0, *chp;
+char *chp;
 char *genomeDBname;
 char refseqID[40], mapID[40];
 char *kgID, *geneSymbol;
@@ -43,7 +42,6 @@ if (argc != 3) usage();
 infileName      = argv[1];
 genomeDBname    = argv[2];
 
-conn= hAllocConn(genomeDBname);
 o1 = fopen("j.dat", "w");
 
 inf  = mustOpen(infileName, "r");
@@ -56,7 +54,6 @@ while (fgets(line_in, 1000, inf) != NULL)
 
 again:
     chp ++;
-    chp0 = chp;
     chp = strtok(chp, "\r\t\n");	
 
     if (chp == NULL) continue;
