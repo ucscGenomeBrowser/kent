@@ -812,10 +812,13 @@ else if (tg->visibility == tvPack)
         tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE); // TODO: allow oflow ?
         }
     // set variable height rows
-    if (!tg->ss->rowSizes)
-        height = spaceSaverSetRowHeights(tg->ss, gtexGeneHeight);
-    else
-        height = spaceSaverGetRowHeightsTotal(tg->ss);
+    if (tg->ss->rowCount != 0)
+        {
+        if (!tg->ss->rowSizes)
+            height = spaceSaverSetRowHeights(tg->ss, gtexGeneHeight);
+        else
+            height = spaceSaverGetRowHeightsTotal(tg->ss);
+        }
     }
 tg->height = height;
 return height;
