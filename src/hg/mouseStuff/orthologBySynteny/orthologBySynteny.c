@@ -177,14 +177,15 @@ void generateGff(struct chain *chain, FILE *f, char *ortholog, char *name, char 
 struct axt *axt= NULL ;
 struct axt *axtFound = NULL ;
 struct genePred *gpSyn = NULL;
-int cStart, cEnd, txStart, txEnd, nextEndIndex, posStrand, tPtr;
+int cStart, cEnd, txEnd, nextEndIndex, posStrand, tPtr;
+// int txStart;  unused
 int oneSize = 1;
 int tCoding = FALSE;
 int qCoding = FALSE;
 int tClass = INTERGENIC;
-int qClass = INTERGENIC;
-int prevTClass = INTERGENIC;
-int prevQClass = INTERGENIC;
+// int qClass = INTERGENIC;
+// int prevTClass = INTERGENIC;
+// int prevQClass = INTERGENIC;
 int qStopCodon = FALSE;
 int nextStart = gp->exonStarts[0];
 int nextEnd = gp->exonEnds[0];
@@ -248,7 +249,7 @@ nextStart = gp->exonStarts[nextEndIndex];
 nextEnd = gp->exonEnds[nextEndIndex];
 cStart = gp->cdsStart;
 cEnd = gp->cdsEnd-3;
-txStart = gp->txStart;
+// txStart = gp->txStart;  unused
 txEnd = gp->txEnd-3;
 tPtr = axtFound->tStart;
 if (gp->strand[0] == '+')
@@ -309,9 +310,9 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             tCoding = FALSE;
             qCoding = FALSE;
             tClass = INTERGENIC;
-            qClass = INTERGENIC;
-            prevTClass = INTERGENIC;
-            prevQClass = INTERGENIC;
+//            qClass = INTERGENIC;
+//            prevTClass = INTERGENIC;
+//            prevQClass = INTERGENIC;
             qStopCodon = FALSE;
             }
 	}
@@ -330,7 +331,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             nextEnd = (gp->exonEnds[nextEndIndex]);
             gpSyn->txStart = qPtr;	/* Transcription start position */
             tClass = INTRON;
-            qClass = INTRON;
+//            qClass = INTRON;
             }
         }
     while ((tPtr > nextStart ) && (nextEndIndex <= (gp->exonCount)-1) && tPtr < txEnd)
@@ -345,7 +346,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 tCoding = TRUE;
                 }
             tClass = INTRON;
-            qClass = INTRON;
+//             qClass = INTRON;
             }
         else
             {
@@ -395,7 +396,8 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     //assert(nextEndIndex+1 < gp->exonCount);
                     //nextStart = gp->exonStarts[nextEndIndex+1];
                     }
-                tClass = UTR5; qClass = UTR5;
+                tClass = UTR5;
+//                 qClass = UTR5;
                 }
             }
         else
@@ -417,7 +419,8 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     {
                     //gpSyn->txEnd = qPtr;	/* Transcription start position */
                     }
-                tClass = UTR5; qClass = UTR5;
+                tClass = UTR5;
+//                qClass = UTR5;
                 }
             }
             if (posStrand || !posStrand)
@@ -433,7 +436,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     if (tClass != UTR3)
                         {
                         tClass=INTRON;
-                        qClass=INTRON;
+//                         qClass=INTRON;
                         }
                     if(gpSyn->exonCount < gp->exonCount)
                         {
@@ -467,7 +470,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                     tCoding=FALSE;
                     qCoding=FALSE;
                     tClass=INTRON;
-                    qClass=INTRON;
+//                    qClass=INTRON;
                     nextEndIndex--;
                     assert(nextEndIndex < gp->exonCount);
                     assert(nextEndIndex >= 0);
@@ -484,7 +487,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 if ((tPtr >= (cStart)) && (tPtr <=(cStart+2)))
                     {
                     tClass=STARTCODON;
-                    qClass=STARTCODON;
+//                     qClass=STARTCODON;
                     tCoding=TRUE;
                     qCoding=TRUE;
                     gpSyn->cdsStart = qPtr-2;	/* coding start position */
@@ -498,7 +501,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 if ((tPtr >= cEnd) && (tPtr <= (cEnd+2)))
                     {
                     tClass=STOPCODON;
-                    qClass=STOPCODON;
+//                     qClass=STOPCODON;
                     gpSyn->cdsEnd = qPtr-1;	/* coding start position */
                     tCoding=FALSE;
                     qCoding=FALSE;
@@ -509,7 +512,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 if ((tPtr <= (cStart)) && (tPtr >=(cStart-2)))
                     {
                     tClass=STARTCODON;
-                    qClass=STARTCODON;
+//                     qClass=STARTCODON;
                     gpSyn->cdsStart = qPtr;	/* coding start position */
                     tCoding=TRUE;
                     qCoding=TRUE;
@@ -530,13 +533,13 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 if (tPtr == (cEnd +3) )
                     {
                     tClass = UTR3;
-                    qClass = UTR3;
+//                     qClass = UTR3;
                     }
                 if ((tPtr >= txEnd) && (tClass == UTR3))
                     {
                     gpSyn->txEnd = qPtr-3;	/* Transcription end position */
                     tClass = INTERGENIC;
-                    qClass = INTERGENIC;
+//                     qClass = INTERGENIC;
                     }
                 }
             else 
@@ -544,13 +547,13 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
                 if (tPtr == (cEnd -2) )
                     {
                     tClass = UTR3;
-                    qClass = UTR3;
+//                     qClass = UTR3;
                     }
                 if ((tPtr > txEnd) && (tClass == UTR3))
                     {
                     gpSyn->txStart = qPtr;	/* Transcription end position */
                     tClass = INTERGENIC;
-                    qClass = INTERGENIC;
+//                     qClass = INTERGENIC;
                     }
                 }
 
