@@ -16,7 +16,13 @@ gc.disable()
 
 # === command line interface, options and help ===
 def parseArgs():
-    parser = optparse.OptionParser("""usage: %prog [options] dirName outFname - collect expression counts from the files abundance.tsv, given a directory containing kallisto output directories.
+    parser = optparse.OptionParser("""usage: %prog [options] dirName
+    matrixOutFname statOutFname - collect expression counts from the files
+    abundance.tsv, given a directory containing kallisto output directories.
+
+    Also parses .log files with kallisto output and creates a .tab file
+    that contains two basic stats, number of reads per file and number of
+    reads mapped to transcript models. Can be used for tagStormJoinTab.
 
     Ctrl-c does not work for this program. Do ctrl-z and then 'kill %%'.
 
@@ -148,7 +154,7 @@ def addGencodeSpecial(transFile, transToGene):
 
     transToGene2 = parseDict(transFile, stripDot=True)
 
-    for transId, geneId in transToGene2:
+    for transId, geneId in transToGene2.iteritems():
         if transId not in transToGene:
             transToGene[transId] = geneId
     return transToGene
@@ -166,7 +172,7 @@ def sumTransToGene(transDictList, transFile):
     transFile2 = join(dirname(transFile), "transToGene.tab")
     if isfile(transFile2):
         transToGene2 = parseDict(transFile, stripDot=True)
-    for transId, geneId in transToGene2:
+    for transId, geneId in transToGene2.iteritems():
         if transId not in transToGene:
             transToGene[transId] = geneId
 
@@ -179,18 +185,46 @@ def sumTransToGene(transDictList, transFile):
         newRes.append(dict(geneCounts))
     return newRes
     
+def writeStats(inDir, outFname):
+    """
+    search for all .log files in inDir. Use the basename of these files
+    as the cell ID and write a .tab file that can be joined with tagStormJoinTab
+    """
+    ofh = open(outFname, "w")
+    ofh.write("meta\tkallistoProcReads\tkallistoAlnReads\tkallistoEstFragLen\n")
+
+    inFnames = glob.glob(join(inDir, "*.log"))
+    print("Parsing %d logfiles and writing to %s" % (len(inFnames), outFname))
+    for inFname in inFnames:
+        cellId = basename(inFname).split(".")[0].split("_")[0]
+        # [quant] processed 1,836,518 reads, 636,766 reads pseudoaligned
+        # [quant] estimated average fragment length: 251.99
+        for line in open(inFname):
+            if line.startswith("[quant] processed "):
+                words = line.split()
+                readCount = words[2].replace(",","")
+                alignCount = words[4].replace(",","")
+            if line.startswith("[quant] estimated average fragment length:"):
+                fragLen = line.split()[5]
+        row = [cellId, readCount, alignCount, fragLen]
+        ofh.write("\t".join(row)+"\n")
+    ofh.close()
+
 def main():
     args, options = parseArgs()
     inDir = args[0]
     outFname = args[1]
+    statOutFname = args[2]
+
+    writeStats(inDir, statOutFname)
 
     inFnames = list(iterAbundPaths(inDir))
-    logging.info("Found %d input files" % len(inFnames))
+    logging.info("Found %d kallisto input files (abundance.tsv)" % len(inFnames))
 
     threadCount = options.threads
     logging.info("Using %d threads to parse input files" % threadCount)
 
-    # multithreading in only 4 lines
+    # multithreading in 4 lines
     pool = ThreadPool(threadCount)
     results = pool.map(parseKallisto,inFnames)
     pool.close()
