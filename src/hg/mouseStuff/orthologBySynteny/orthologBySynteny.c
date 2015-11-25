@@ -178,7 +178,6 @@ struct axt *axt= NULL ;
 struct axt *axtFound = NULL ;
 struct genePred *gpSyn = NULL;
 int cStart, cEnd, txEnd, nextEndIndex, posStrand, tPtr;
-// int txStart;  unused
 int oneSize = 1;
 int tCoding = FALSE;
 int qCoding = FALSE;
@@ -249,7 +248,6 @@ nextStart = gp->exonStarts[nextEndIndex];
 nextEnd = gp->exonEnds[nextEndIndex];
 cStart = gp->cdsStart;
 cEnd = gp->cdsEnd-3;
-// txStart = gp->txStart;  unused
 txEnd = gp->txEnd-3;
 tPtr = axtFound->tStart;
 if (gp->strand[0] == '+')
