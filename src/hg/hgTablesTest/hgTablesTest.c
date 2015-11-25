@@ -144,7 +144,6 @@ verbose(2, "quickSubmit(%p, %s, %s, %s, %s, %s, %s, %s, %s)\n",
 if (basePage != NULL)
     {
     struct qaStatus *qs;
-    struct tablesTest *test;
     if (db != NULL)
 	htmlPageSetVar(basePage, NULL, "db", db);
     if (org != NULL)
@@ -161,7 +160,9 @@ if (basePage != NULL)
     if (page->forms != NULL)
         htmlFormPrint(page->forms, stdout);
     */
-    test = tablesTestNew(qs, testName, org, db, group, track, table);
+    // do not need to keep the returned structure, the answer is accumulating
+    // in global variable: tablesTestList
+    (void) tablesTestNew(qs, testName, org, db, group, track, table);
     }
 return page;
 }
@@ -302,7 +303,6 @@ struct htmlPage *outPage;
 struct htmlForm *form;
 struct htmlFormVar *var;
 int attempts = 0;
-int rowCount = 0;
 
 if (tablePage->forms == NULL) 
      errAbort("testOneField: Missing form (tablePage)");
@@ -335,7 +335,6 @@ if (outPage->forms == NULL)
 }
 
 form = outPage->forms;
-rowCount = 0;
 var = findPrefixedVar(form->vars, "hgta_fs.check.");
 if (var == NULL)
     errAbort("No hgta_fs.check. vars in form");

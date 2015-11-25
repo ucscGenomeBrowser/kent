@@ -165,7 +165,6 @@ struct htmlPage *quickSubmit(struct htmlPage *basePage,
 struct htmlPage *page = NULL;
 if (basePage != NULL)
     {
-    struct nearTest *test;
     struct qaStatus *qs;
     if (db != NULL)
 	htmlPageSetVar(basePage, NULL, "db", db);
@@ -173,7 +172,8 @@ if (basePage != NULL)
 	htmlPageSetVar(basePage, NULL, "org", org);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
-    test = nearTestNew(qs, testName, sort, org, db, col, gene);
+    // ignore return value, answer is accumulating in global: nearTestList
+    (void) nearTestNew(qs, testName, sort, org, db, col, gene);
     }
 return page;
 }
