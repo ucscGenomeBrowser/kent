@@ -906,8 +906,10 @@ int stateByteSize = symCount * sizeof(State);
 int i;
 int symIx;
 int scanSize = symCount;
-double tNotIns, tIsIns;
-boolean firstAtg = TRUE, firstKozAtg = TRUE;
+double tIsIns;
+// double tNotIns;  unused
+boolean firstAtg = TRUE;
+// boolean firstKozAtg = TRUE;  unused
 
 /* Allocate state tables. */
 allStates = needMem(stateCount * sizeof(allStates[0]));
@@ -948,12 +950,12 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     // uglyf("%d %c %c\n", symIx, tc, qc);
     if (tc == '-')
         {
-	tNotIns = never;
+//	tNotIns = never;  unused
 	tIsIns = always;
 	}
     else
         {
-	tNotIns = always;
+//	tNotIns = always;  unused
 	tIsIns = never;
 	}
 
@@ -1035,7 +1037,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 		}
 	    if (isKoz)
 	        {
-		firstKozAtg = FALSE;
+//		firstKozAtg = FALSE;  unused
 		b += firstBonus;
 		}
 	    }
