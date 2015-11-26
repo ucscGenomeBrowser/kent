@@ -127,7 +127,7 @@ priority 10
 name malacards
 shortLabel Malacards
 tables knownToMalacards
-idSql select value from knownToMalacards where name = '%s';
+idSql select knownToMalacards.value from kgXref, knownToMalacards where kgID = '%s' and kgXref.geneSymbol = knownToMalacards.value
 url http://malacards.org/search/results/%s
 priority 10
 
