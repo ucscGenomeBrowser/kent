@@ -157,7 +157,6 @@ char *line, *row[3], *parts[3];
 int partCount;
 boolean isRc = FALSE;
 struct block *blockList = NULL, *block;
-int bases;
 
 /* Read header and remember if complemented. */
 if (!lineFileNext(lf, &line, NULL))
@@ -189,7 +188,6 @@ while (lineFileRow(lf, row))
     if (!isdigit(row[2][0]))
         sim4BadLine(lf);
     block->percentId = atoi(row[2]);
-    bases = block->qStart - block->qEnd;
     slAddHead(&blockList, block);
     }
 lineFileClose(&lf);

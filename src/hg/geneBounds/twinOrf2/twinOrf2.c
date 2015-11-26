@@ -798,14 +798,17 @@ char *qSym = axt->qSym;
 char *tSym = axt->tSym;
 int symCount = axt->symCount;
 State **allStates;
-char *q, *t, tc, qc;
+char *q, *t, tc;
+// char  qc;  unused
 int stateCount = dyno->stateCount;
 int stateByteSize = symCount * sizeof(State);
 int i;
 int symIx;
 int scanSize = symCount;
-double tNotIns, tIsIns;
-boolean firstAtg = TRUE, firstKozAtg = TRUE;
+double tIsIns;
+// double tNotIns;  unused
+boolean firstAtg = TRUE;
+// boolean firstKozAtg = TRUE;
 
 /* Allocate state tables. */
 allStates = needMem(stateCount * sizeof(allStates[0]));
@@ -838,17 +841,17 @@ for (symIx=0; symIx<scanSize; symIx += 1)
     {
     q = qSym + symIx;
     t = tSym + symIx;
-    qc = *q;
+//    qc = *q;  unused
     tc = *t;
     // uglyf("%d %c %c\n", symIx, tc, qc);
     if (tc == '-')
         {
-	tNotIns = never;
+//	tNotIns = never;  unused
 	tIsIns = always;
 	}
     else
         {
-	tNotIns = always;
+//	tNotIns = always;  unused
 	tIsIns = never;
 	}
 
@@ -930,7 +933,7 @@ for (symIx=0; symIx<scanSize; symIx += 1)
 		}
 	    if (isKoz)
 	        {
-		firstKozAtg = FALSE;
+//		firstKozAtg = FALSE;  unused
 		b += firstBonus;
 		}
 	    }

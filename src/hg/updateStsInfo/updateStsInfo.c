@@ -145,7 +145,8 @@ void addElement(char *el, char ***array, unsigned *count)
 {
   char *arrayCurr, arrayNew[MAX_ID_LIST];
   int sizeOne, size;
-  char **cArray, **rArray=NULL, ***dArray;
+  char **cArray, **rArray=NULL;
+  // char ***dArray;
 
   /* Check if already present in array */
   if (!inArray(el, *array, *count))
@@ -154,7 +155,7 @@ void addElement(char *el, char ***array, unsigned *count)
       arrayCurr = sqlStringArrayToString(*array, *count);
       safef(arrayNew, ArraySize(arrayNew), "%s%s,", arrayCurr, el);
       size++;
-      dArray = array;
+      // dArray = array;
       /* if (*dArray) 
 	 freeMem(dArray); */
       sqlStringDynamicArray(arrayNew, &cArray, &sizeOne);
@@ -171,7 +172,8 @@ void removeElement(char *el, char ***array, unsigned *count)
 {
   char *arrayCurr, *arrayCurrDel, del[128];
   int sizeOne, size;
-  char **cArray, **rArray=NULL, ***dArray;
+  char **cArray, **rArray=NULL;
+  // char ***dArray;
 
   if (*count > 0)
     {
@@ -181,7 +183,7 @@ void removeElement(char *el, char ***array, unsigned *count)
       arrayCurrDel = replaceChars(arrayCurr, del, "");
       if (differentString(arrayCurr, arrayCurrDel))
 	  size--;
-      dArray = array;
+      // dArray = array;
       /* if (*dArray) 
 	 freeMem(dArray); */
       sqlStringDynamicArray(arrayCurrDel, &cArray, &sizeOne);
@@ -203,7 +205,8 @@ void addElementInt(unsigned el, unsigned **array, unsigned *count)
 {
   char *arrayCurr, arrayNew[MAX_ID_LIST];
   int sizeOne, size;
-  unsigned *uArray, **dArray;
+  unsigned *uArray;
+//  unsigned **dArray;  unused
 
   if (!inArrayInt(el, *array, *count))
     {
@@ -211,7 +214,7 @@ void addElementInt(unsigned el, unsigned **array, unsigned *count)
       arrayCurr = sqlUnsignedArrayToString(*array, *count);
       safef(arrayNew, ArraySize(arrayNew), "%s%d,", arrayCurr, el);
       size++;
-      dArray = array;
+      // dArray = array;
       /* if (*count > 0)
 	 freeMem(dArray); */
       sqlUnsignedDynamicArray(arrayNew, &uArray, &sizeOne);

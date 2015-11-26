@@ -71,12 +71,14 @@ int geneCnt  = 0;
 int pageNum  = 0;
 int topLevel = 1;
 
-char *geneSymbol, *proteinID, *spID, *desc;
+char *geneSymbol, *spID, *desc;
+// char *proteinID;  unused
 FILE *outf, *outf2;
 char fileName[255];
 database = strdup("hg17");
 boolean newPage;
-int totalKgId, totalKgCnt;
+int totalKgId;
+// int totalKgCnt;  unused
 int totalKgPage;
 int kgIdCnt = 0;
 
@@ -127,7 +129,7 @@ char *protAcc = NULL;
 sqlSafef(query2, sizeof(query2), "select count(k.name) from %s.knownGene k, %s.kgXref x where k.name=x.kgId and geneSymbol != ''", database, database);
 sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
-totalKgCnt = atoi(row2[0]);
+// totalKgCnt = atoi(row2[0]);
 sqlFreeResult(&sr2);
 
 /* figure out how many KG IDs in total */
@@ -168,7 +170,7 @@ while (kgIdCnt < totalKgId)
     	chrom     = row[0];
     	txStart   = row[1];
     	txEnd     = row[2];
-    	proteinID = row[3];
+//    	proteinID = row[3];  unused
 
 	if (newPage)
 	    {

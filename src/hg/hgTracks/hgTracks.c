@@ -2089,12 +2089,10 @@ pixWidth = tl.picWidth;
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 
-struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
-struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
+static struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
+static struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
                                  //    the side label gets seen. Therefore we need 2 images!!
-//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
-struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
+static struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
 
 // Set up imgBox dimensions
 int sliceWidth[stMaxSliceTypes]; // Just being explicit
@@ -2430,7 +2428,7 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
             {
@@ -2499,7 +2497,7 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
@@ -2571,7 +2569,7 @@ if (rulerMode != tvHide)
         curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,
                                                sliceWidth[stData],sliceHeight,
                                                sliceOffsetX[stData],sliceOffsetY);
-        curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+        (void) sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
     y = doDrawRuler(hvg,&newWinWidth,&rulerClickHeight,rulerHeight,yAfterRuler,yAfterBases,font,
                     fontHeight,rulerCds);
@@ -2598,7 +2596,7 @@ if (withCenterLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
                                                    sliceWidth[stData],sliceHeight,
                                                    sliceOffsetX[stData],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             if (isCenterLabelConditional(track))
                 imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track) ?
                                                                             clNowSeen : clNotSeen);
@@ -2638,7 +2636,7 @@ if (withCenterLabels)
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,
                                                        sliceWidth[stData],sliceHeight,
                                                        sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+                (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
         if (trackShouldUseAjaxRetrieval(track))
@@ -2677,7 +2675,7 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
         if (trackShouldUseAjaxRetrieval(track))

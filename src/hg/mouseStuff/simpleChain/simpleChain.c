@@ -245,7 +245,7 @@ return outChain;
 
 void checkInChains(struct psl **pslList, struct chain **chainList, FILE *outFound, int *addedBases)
 {
-struct chain *nextChain, *prevChain;
+struct chain *nextChain;
 struct chain *chain;
 struct psl *psl;
 struct psl *prevPsl, *nextPsl;
@@ -261,8 +261,7 @@ for(psl = *pslList; psl ;  psl = nextPsl)
 
     assert(tEnd > tStart);
     assert(qEnd > qStart);
-    prevChain = 0;
-    for(chain = *chainList; chain ; prevChain = chain , chain = nextChain)
+    for(chain = *chainList; chain ; chain = nextChain)
 	{
 	nextChain = chain->next;
 	if (((tStart < chain->tEnd) && (tEnd > chain->tStart)) &&

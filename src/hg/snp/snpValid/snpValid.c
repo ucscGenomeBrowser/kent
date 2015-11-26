@@ -404,10 +404,6 @@ fprintf(exf[i],"%s\t%d\t%d\t%s\t%d\t%s\t%s\n",
 void snpValid()
 /* Test snp for one assembly. */
 {
-
-
-char *Org;
-
 struct axtScoreScheme *simpleDnaScheme = NULL;
 
 int match = 0;         /* good match of minimal acceptable quality */
@@ -449,7 +445,7 @@ if (!hDbIsActive(db))
     return;
     }
 
-Org = hOrganism(db);
+(void) hOrganism(db);  // ignore returned organism name
 
 simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
 
