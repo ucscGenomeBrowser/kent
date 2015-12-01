@@ -86,7 +86,7 @@ echo  "NOW STARTING Git-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
 rm -f doNewGit.log
 #echo debug: disabled buildGitReports
-ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
+$WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
 #echo
@@ -161,14 +161,16 @@ if ( -e GitReports.ok ) then
     #foreach victim (braney larrym angie hiram tdreszer kate chinhli)
     set victims=( `git log v${LASTNN}_base..v${BRANCHNN}_base --name-status | grep Author | sort | uniq | awk '{ end=index($0,"@"); beg=index($0,"<"); addr=substr( $0,beg+1,end-beg-1); print addr; }'` )
     echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." ${BUILDMEISTEREMAIL} ann@soe.ucsc.edu
+    set authorsFile="/hive/groups/qa/git-reports-history/v${BRANCHNN}/branch/user/authors.html"
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
 		       rm -f /dev/shm/build.email.${victim}.txt
-                       echo "To: ${victim}@soe.ucsc.edu" > /dev/shm/build.email.${victim}.txt
-                       echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       set toAddr=`./authorEmail.pl ${victim} ${authorsFile}`
+                       echo "To: ${toAddr}" > /dev/shm/build.email.${victim}.txt
+                       echo "From: <ann@soe.ucsc.edu> Ann Zweig" >> /dev/shm/build.email.${victim}.txt
                        echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
-                       echo "Cc: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       echo "Cc: <ann@soe.ucsc.edu> Ann Zweig" >> /dev/shm/build.email.${victim}.txt
                        echo "" >> /dev/shm/build.email.${victim}.txt
 		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
 		       cat /dev/shm/build.email.${victim}.txt | /usr/sbin/sendmail -t -oi
