@@ -34,6 +34,7 @@
     <li><a class="toc" href="#UsrAcct">User Accounts and Sessions</a>
     <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
     <li><a class="toc" href="#License">Licensing Information</a>
+    <li><a class="toc" href="#Commands">Genome Browser in a Box Commands</a>
   </b></ul>
 </td>
 <p><b>Other Resources:</b>
@@ -702,6 +703,41 @@ The file /usr/local/apache/cgi-bin/hg.conf should already include a line like
 <p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
+
+<a name="Commands"></a>
+<div class="section">
+<h1>Genome Browser in a Box Commands</h1>
+<div class="sectionContent">
+<p>General commands:
+   <ol>
+      <li><code>gbibAutoUpdateOff</code>   switch off automatic weekly updates
+      <li><code>gbibAutoUpdateOn</code>    reactivate automatic weekly updates
+      <li><code>gbibOffline</code>         switch off remote access to UCSC for tables or files
+      <li><code>gbibOnline</code>          reactivte remote access to UCSC for tables or files
+      <li><code>gbibMirrorTracksOff</code> disable the "Mirror tracks" tool
+      <li><code>gbibMirrorTracksOn</code>  enable the "Mirror tracks" tool
+      <li><code>gbibAddTools</code>        download the UCSC genome command line tools into the ~bin directory
+   </ol>
+
+<p>Advanced commands:</p>
+   <ol>
+      <li><code>gbibCoreUpdate</code>      = download the most current update script from UCSC now,
+                  this is part of an automatic update
+      <li><code>gbibFixMysql1</code>       = fix all mysql databases, fast version
+      <li><code>gbibFixMysql2</code>       = fix all mysql databases, intensive version
+      <li><code>gbibResetNetwork</code>    = reinit the eth0 network interface, in case VirtualBox
+                      dropped the network connection
+      <li><code>gbibUcscLog</code>         = show a real-time log of all MYSQL queries on the console,
+      <li><code>gbibUcscTablesLog</code>   = show the tables that had to be loaded through the internet
+                      from UCSC
+      <li><code>gbibUcscTablesReset</code> = reset the table counters
+      <li><code>gbibUcscGbdbLog</code>     = show the gbdb files that had to be loaded through the
+                      internet from UCSC
+      <li><code>gbibUcscGbdbReset</code>   = reset the gbdb counters
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
 
 <a name="License"></a>
 <div class="section">
