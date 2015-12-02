@@ -258,7 +258,7 @@ taxId 9685
     # 69023548 bases of 2599716822 (2.655%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (DONE - 2014-11-25 - Hiram)
+# cytoBandIdeo - (DONE - 2015-12-02 - Hiram)
     mkdir /hive/data/genomes/felCat8/bed/cytoBand
     cd /hive/data/genomes/felCat8/bed/cytoBand
     makeCytoBandIdeo.csh felCat8
