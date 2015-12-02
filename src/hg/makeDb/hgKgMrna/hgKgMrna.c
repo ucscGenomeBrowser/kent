@@ -184,7 +184,6 @@ void parseCds(char *gbCds, int start, int end, int *retStart, int *retEnd)
 /* Parse genBank style cds string into something we can use... */
 {
 char *s = gbCds;
-boolean gotStart = FALSE;
 
 char *startP, *endP;
 
@@ -209,7 +208,6 @@ else
 		startP = s;
 		}
 	}
-gotStart = isdigit(s[0]);
 s = strchr(s, '.');
 if (s == NULL || s[1] != '.')
     {

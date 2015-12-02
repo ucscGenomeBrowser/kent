@@ -283,13 +283,15 @@ struct hash *bedHash = newHash(0);
 struct hash *chromHash = newHash(5);
 struct hash *cloneHash = newHash(0);
 struct hash *clonePosHash = newHash(0);
-struct clonePos *clonePosList = NULL;
+// struct clonePos *clonePosList = NULL;
 
 bedList = loadTable(tableFile, bedHash, chromHash, cloneHash);
 printf("Loaded %d items from %s\n", slCount(bedList), tableFile);
 addPsls(pslFile, oldDb, bedHash);
 addOther(oldDb, oldTable, bedHash);
-clonePosList = loadClonePos(newDb, clonePosHash);
+// clonePosList = loadClonePos(newDb, clonePosHash);
+//   answer is returned in clonePosHash
+(void) loadClonePos(newDb, clonePosHash);  // ignore returned has pointer
 convertList(bedList, clonePosHash);
 }
 

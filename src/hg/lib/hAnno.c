@@ -125,6 +125,10 @@ if (columnsMatch(asObj, fieldList))
     return asObj;
 else
     {
+    // Special case for pgSnp, which includes its bin column in autoSql...
+    struct asObject *pgSnpAsO = pgSnpAsObj();
+    if (columnsMatch(pgSnpAsO, fieldList))
+        return pgSnpAsO;
     return asObjectFromFields(table, fieldList, skipBin);
     }
 }

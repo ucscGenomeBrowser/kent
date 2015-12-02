@@ -17,11 +17,7 @@
 
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
-//struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
 struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-//struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
-//struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
-//struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
 /////////////////////////
 // FLAT TRACKS

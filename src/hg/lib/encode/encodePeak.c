@@ -363,7 +363,6 @@ else  /* must be gappedPeak */
 if ((pt == gappedPeak) || (pt == encodePeak))
     {
     int i, count;
-    int lastEnd, lastStart;
     int blockCountIx, blockSizesIx, blockStartsIx;
     if (pt == gappedPeak)
 	{
@@ -386,8 +385,6 @@ if ((pt == gappedPeak) || (pt == encodePeak))
 	lineFileAbort(lf, "expecting %d elements in array", peak->blockCount);
     // tell the user if they appear to be using absolute starts rather than 
     // relative... easy to forget!  Also check block order, coord ranges...
-    lastStart = -1;
-    lastEnd = 0;
     for (i=0;  i < peak->blockCount;  i++)
 	{
 	if (peak->blockStarts[i]+peak->chromStart >= peak->chromEnd)
@@ -401,8 +398,6 @@ if ((pt == gappedPeak) || (pt == encodePeak))
 		lineFileAbort(lf, 
 		    "BED blockStarts[i]+chromStart must be less than chromEnd.");
 	    }
-	lastStart = peak->blockStarts[i];
-	lastEnd = peak->chromStart + peak->blockStarts[i] + peak->blockSizes[i];
 	}
     if (peak->blockStarts[0] != 0)
 	lineFileAbort(lf, 

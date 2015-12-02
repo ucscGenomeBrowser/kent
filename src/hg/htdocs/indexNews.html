@@ -38,78 +38,62 @@
     <!-- start news -->
   <hr>
   <p>
-  <font color="#006666" size="4"><b>3 November 2015 &mdash;
-  We are pleased to announce new quick links for the Browser's top menu bar!</b></font>
+  <font color="#006666" size="4"><b>25 November 2015 &mdash;
+  New &quot;View - In External Tools&quot; Menu Sends Data to Prediction Websites!</b></font>
   <p>
-  The "Genomes" menu now features direct links to jump to browsing the human (hg38 and hg19) 
-  and mouse (mm10 and mm9) assemblies! These links also preserve location information, such 
-  as a favorite gene's location, allowing users to quickly compare available annotation 
-  tracks between two assemblies.
+  Do you often get the current sequence with &quot;View - DNA&quot; just to copy
+  and paste it into another website? With the new menu &quot;View - In External Tools&quot;
+  you can now send the current region to remote tools with two clicks.
   </p>
   <p>
-  The "Genome Browser" menu now features a "Configure" link to quickly set visibilities for 
-  all tracks on the currently browsed assembly and a "Reset All User Settings" option that will 
-  remove all external hubs and custom tracks data while resetting the entire browser to default 
-  visibilities and the hg38 assembly.
-  </p>
-  <hr>
-  
+  For example, when browsing hg38 and zoomed in on the start of a gene like ABO at
+  <a href="/cgi-bin/hgTracks?db=hg38&position=chr9%3A133255000-133255555"
+  target="_blank">chr9:133,255,000-133,255,555</a>, 
+  click the View menu and select &quot;In External Tools&quot;,
+  or simply type the keyboard shortcut &quot;s&quot; then &quot;t&quot;,
+  to send the region to a list of different prediction tools.</p>
   <p>
-  <font color="#006666" size="4"><b>23 September 2015 &mdash;
-  New keyboard shortcuts on the Genome Browser!</b></font>
-  <p>
-  We are excited to announce the addition of keyboard shortcuts to navigate 
-  the Genome Browser display! It's now possible to zoom in and out, navigate left 
-  and right, hide all tracks, configure the browser display and much more using 
-  only your keyboard. Use the "?" key to view the entire list of shortcuts. 
-  Happy browsing!
-  </p>
+  Some of the available tools (not available for all assemblies or all zoom levels)
+  are primer design and restriction enzyme predictions (Primer3Plus, Primer-BLAST,
+  NEBCutter), mRNA and protein predictions (RegRNA 2, Riboswitches, RNAfold, PFAM),
+  cis-regulatory predictions (Promoter 2, RSAT Metazoa), and CRISPR/Cas9 predictions
+  (CRISPOR, CHOPCHOP), as well as links to view the region at NCBI or Ensembl.
+  You can suggest other tools via our
+  <a href="/cgi-bin/hgUserSuggestion">Suggestion Box</a>.</p>
   <p>
   Credit goes to Max Haeussler for implementing this new feature.
   </p>
   <hr>
   
-  <p>
-  <font color="#006666" size="4"><b>14 September 2015 &mdash;
-  Human Genome Browser default changed to GRCh38/hg38 </b></font>
-  </p>
-  <p>
-  In conjunction with the release of the new 100-species Conservation track on the 
-  hg38/GRCh38 human assembly, we have now changed the default human browser on our 
-  website from hg19 to hg38. This should not affect your current browsing sessions; 
-  if you were last looking at the hg19 (or older) browser, the Genome Browser will 
-  continue to display that assembly for you when you start it up. There are circumstances, 
-  however, in which the selected assembly can switch to the newer version. For instance, 
-  the assembly will switch to hg38 if you reset your browser defaults. If you find 
-  yourself in a situation where some of your favorite browser tracks have &quot;disappeared&quot;, 
-  you may want to check that you're viewing the right assembly.
-  </p>
-  <p>
-  We will continue our efforts to expand the annotation track set on the hg38 browser 
-  to include many of the tracks present on previous human assemblies. In cases where 
-  it makes sense, data may be simply &quot;lifted&quot; from hg19 using migration tools. 
-  In many instances, however, we must rely on our data providers to generate new versions 
-  of their data on the latest assembly. We will publish these data sets as they become available.
-  </p>
-  <p>
-  For a summary of the new features in the GRCh38 assembly, see the 
-  <a href="goldenPath/newsarch.html#030614">overview</a> we published in March 2014.
-  </p>
-  <hr>
-
-
         <!-- start archives -->
-<!--
+<!--staged for future release
+        <p>
+        <font color="#006666" size="4"><b>25 November 2015 &mdash;
+        New &quot;View - In External Tools&quot; Menu Sends Data to Prediction Websites!</b></font>
+        <p>
+        Do you often get the current sequence with &quot;View - DNA&quot; just to copy
+        and paste it into another website? With the new menu &quot;View - In External Tools&quot;
+        you can now send the current region to remote tools with two clicks.
+        </p>
+        <a href="goldenPath/newsarch.html#112515">Read more</a>.
+-->
   	<p>
         <font color="#006666" size="4"><b>3 November 2015 &mdash;
-        We are pleased to announce new quick links for the Browser's top menu bar!</b></font>
-        The "Genomes" menu now features direct links to jump to browsing the human (hg38 and hg19)
-        and mouse (mm10 and mm9) assemblies! The "Genome Browser" menu now features a "Configure" 
-        link to quickly set visibilities for all tracks on the currently browsed assembly and a "Reset 
-        All User Settings" option.
+        New quick links for the Genome Browser's top menu bar </b>:</font>
+        The "Genomes" menu now features direct links to jump to browsing the human
+        (hg38 and hg19) and mouse (mm10 and mm9) assemblies!
         <a href="goldenPath/newsarch.html#110315">Read more</a>.
   	</p>
 
+        <p>
+        <font color="#006666" size="4"><b>23 September 2015 &mdash;
+        New keyboard shortcuts on the Genome Browser </b>:</font>
+        It's now possible to zoom in and out, navigate left
+        and right, hide all tracks, configure the browser display and much more using
+        only your keyboard. Use the "?" key to view the entire list of shortcuts.
+        <a href="goldenPath/newsarch.html#092315">Read more</a>. 
+        </p>
+          
   	<p>
   	<font color="#006666" size="4"><b>14 September 2015 &mdash;
   	Human Genome Browser default changed to GRCh38/hg38 </b>:</font>
@@ -118,7 +102,7 @@
   	hg19 to hg38. 
         <a href="goldenPath/newsarch.html#091415">Read more</a>.
   	</p>
--->
+
   	<p>
     	<font color="#006666" size="4"><b>10 September 2015 &mdash;
     	100 Species Conservation Track now available on GRCh38/hg38 </b>:
@@ -127,26 +111,6 @@
    	(GRCh38/hg38) assembly.
     	<a href="goldenPath/newsarch.html#091015">Read more</a>.
   	</p>
-
-	<p>
-        <font color="#006666" size="4"><b>12 August 2015 &mdash;
-       	New blog post:  How to share your UCSC screenthoughts</b>:
-        </font>
-        We talk about saving static images and dynamic Browser sessions in a new
-        <A HREF = "">blog</A> post,
-        and discuss some of the advantages and pitfalls of each.
-        <a href="goldenPath/newsarch.html#081215">Read more</a>.
-	</p>
-
-        <p>
-        <font color="#006666" size="4"><b>29 June 2015 &mdash;
-        GENCODE Genes Now Default Gene Set on the Human (GRCh38/hg38) Assembly</b>:
-        </font>
-        In a move towards standardizing on a common gene set within the bioinformatics 
-        community, UCSC has made the decision to adopt the GENCODE set of gene models 
-        as our default gene set on the human genome assembly.
-        <a href="goldenPath/newsarch.html#062915">Read more</a>.
-        </p>
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
     <BR></TD></TR></TABLE>

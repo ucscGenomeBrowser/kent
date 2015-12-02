@@ -29,10 +29,8 @@ struct sqlResult *sr, *sr2;
 char **row, **row2;
 char cond_str[200];
 
-char *genomeID, *seqID, *modelID, *eValue, *sfID, *sfDesc;
-char *name, *chrom, *strand, *txStart, *txEnd, *cdsStart, *cdsEnd,
-     *exonCount, *exonStarts, *exonEnds;
-char *region;
+char *seqID, *eValue, *sfID, *sfDesc;
+char *name, *chrom, *cdsStart, *cdsEnd;
 float E,score;
 
 char *translation_name = NULL;
@@ -63,14 +61,8 @@ while (row2 != NULL)
     {
     name 	= row2[0];
     chrom 	= row2[1];
-    strand	= row2[2];
-    txStart 	= row2[3];
-    txEnd   	= row2[4];
     cdsStart	= row2[5]; 
     cdsEnd	= row2[6];
-    exonCount 	= row2[7]; 
-    exonStarts  = row2[8]; 
-    exonEnds    = row2[9];	
 			
     strcpy(gene_name, name);
 
@@ -112,10 +104,7 @@ while (row2 != NULL)
 
     	while (row != NULL)
             {      
- 	    genomeID	= row[0];
  	    seqID 	= row[1];
- 	    modelID 	= row[2];
- 	    region	= row[3];
  	    eValue	= row[4];
  	    sfID	= row[5];
  	    sfDesc	= row[6];	/* 0302 and other supfam releases has an error here */

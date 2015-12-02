@@ -53,7 +53,7 @@ char *gsName;
 int outFileCount = 0;
 struct hash *uniqClone = newHash(16);
 struct hash *uniqFrag = newHash(19);
-boolean ignore = FALSE;
+// boolean ignore = FALSE;  unused
 struct qaSeq qa;
 
 makeDir(outDir);
@@ -68,7 +68,7 @@ while (qaFastReadNext(in, &qa.qa, &qa.size, &gsName))
     qa.name = ucscName;
     if (hashLookup(uniqFrag, ucscName))
 	{
-	ignore = TRUE;
+//	ignore = TRUE;  unused
 	warn("Duplicate %s in %s, ignoring all but first",
 	    ucscName, in->fileName);
         continue;

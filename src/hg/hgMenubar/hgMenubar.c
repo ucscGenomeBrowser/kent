@@ -21,7 +21,7 @@ void printIncludes(char* baseDir)
 printf ("<noscript><div class='noscript'><div class='noscript-inner'><p><b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser</p></div></div></noscript>\n");
 printf ("<script type='text/javascript' SRC='%sjs/jquery.js'></script>\n", baseDir);
 printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n", baseDir);
-printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css' />\n", baseDir);
+printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css'>\n", baseDir);
 }
 
 void printMenuBar(char *cgiPath, char *docRoot, char *pagePath)
