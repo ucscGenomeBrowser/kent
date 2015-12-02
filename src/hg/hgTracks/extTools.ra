@@ -20,6 +20,10 @@
 # to the URL shown in the browser (it has hgt.redirectTool=xxx in it)
 # This will show all parameters sent to the external site and lets you edit them.
 
+# Note that these configuration entries do not have to be created manually
+# We have a tool "extToolsChromeParse" that can parse the Chrome debug
+# trace to create them automatically from a traced click on a link in Chrome
+# Run the tool "extToolsChromeParse" and look at its help message for details
 tool NCBIPrev
 shortLabel NCBI Map Viewer
 longLabel NCBI Genome Browser
