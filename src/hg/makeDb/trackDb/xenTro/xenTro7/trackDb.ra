@@ -6,6 +6,8 @@ html gold
 track gap override
 html gap
 
+include trackDb.chainNet.ra
+
 searchTable gold
 shortCircuit 1
 termRegex [AN][AC][M_][C0]0[0-9]+(\.1)?
