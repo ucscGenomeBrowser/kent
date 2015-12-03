@@ -73,7 +73,7 @@
 
 <li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
-<li><a href="../FAQ/">FAQs</a></li>
+<li><a href="../FAQ/">FAQs & Search</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training/index.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>
