@@ -1735,7 +1735,7 @@ char *styleFile = cfgOption("browser.style");
 if(styleFile != NULL)
     {
     char buf[512];
-    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
     char *copy = cloneString(buf);
     htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
     webSetStyle(copy);       // for web.c, used by hgc
