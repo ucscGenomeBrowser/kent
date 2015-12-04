@@ -116,13 +116,8 @@ include chainNetGalGal4.ra alpha
         type chain latCha1
         otherDb latCha1
 
-        track chainXenTro3
-        subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=hX_Tro clade=dAmph
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro3
-        otherDb xenTro3
+include chainNetXenTro3.ra beta,public
+include chainNetXenTro7.ra alpha
 
         track chainGadMor1
         subTrack vertebrateChainNetViewchain off
@@ -290,14 +285,6 @@ include chainNetFr3.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign latCha1 chainLatCha1
         otherDb latCha1
-
-        track netXenTro3
-        subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=hX_Tro clade=dAmph
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro3 chainXenTro3
-        otherDb xenTro3
 
         track netGadMor1
         subTrack vertebrateChainNetViewnet off
