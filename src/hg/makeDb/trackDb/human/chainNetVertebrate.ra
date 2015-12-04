@@ -116,9 +116,6 @@ include chainNetGalGal4.ra alpha
         type chain latCha1
         otherDb latCha1
 
-include chainNetXenTro3.ra beta,public
-include chainNetXenTro7.ra alpha
-
         track chainGadMor1
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=kCod clade=eTele
