@@ -715,6 +715,8 @@ __attribute__((format(printf, 2, 3)))
 #endif
 ;
 
+#define NOSQLINJ "NOSQLINJ "
+
 void sqlDyStringAppend(struct dyString *ds, char *string);
 /* Append zero terminated string to end of dyString.
  * Adds the NOSQLINJ prefix if dy string is empty. */

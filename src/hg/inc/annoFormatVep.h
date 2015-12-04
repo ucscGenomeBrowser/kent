@@ -22,11 +22,12 @@ struct annoFormatter *annoFormatVepNew(char *fileName, boolean doHtml,
  * Variant Effect Predictor to fileName (can be "stdout").
  * variantSource and gpVarSource must be provided; snpSource can be NULL. */
 
-void annoFormatVepAddExtraItem(struct annoFormatter *self, struct annoStreamer *extraSource,
-			       char *tag, char *description, char *column);
+void annoFormatVepAddExtraItem(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
+			       char *tag, char *description, char *column, boolean isBoolean);
 /* Tell annoFormatVep that it should include the given column of extraSource
  * in the EXTRAS column with tag.  The VEP header will include tag's description.
- * For some special-cased sources e.g. dbNsfp files, column may be ignored. */
+ * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored.
+ * If isBoolean, the column's description won't be output, only whether a match was found. */
 
 void annoFormatVepAddRegulatory(struct annoFormatter *self, struct annoStreamer *regSource,
 				char *tag, char *description, char *column);

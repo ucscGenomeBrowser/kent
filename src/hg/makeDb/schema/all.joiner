@@ -1363,10 +1363,16 @@ identifier wgEncodeGencodeRefSeqV19
     hg19,hg38.wgEncodeGencodeRefSeqV19.transcriptId dupeOk
     hg19,hg38.wgEncodeGencodeAttrsV19.transcriptId minCheck=0.05
 
+identifier wgEncodeGencodeRefSeqToRefGeneV19
+"Link together Gencode RefSeq table with refGene track"
+    hg19.wgEncodeGencodeRefSeqV19.rnaAcc dupeOk chopAfter=.
+    hg19.refGene.name minCheck=0.75
+
 identifier wgEncodeGencodeTagV19
 "Link together Gencode Tag table with Attributes table"
     hg19,hg38.wgEncodeGencodeTagV19.transcriptId dupeOk
     hg19,hg38.wgEncodeGencodeAttrsV19.transcriptId minCheck=0.373378
+    hg19.wgEncodeGencodeRefSeqV19.transcriptId minCheck=0.9
 
 identifier wgEncodeGencodeTranscriptSourceV19
 "Link together Gencode Transcript Source table with Attributes table"
@@ -1688,10 +1694,16 @@ identifier wgEncodeGencodeRefSeqV23
     hg38.wgEncodeGencodeRefSeqV23.transcriptId dupeOk
     hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.05
 
+identifier wgEncodeGencodeRefSeqToRefGeneV23
+"Link together Gencode RefSeq table with refGene track"
+    hg38.wgEncodeGencodeRefSeqV23.rnaAcc dupeOk chopAfter=.
+    hg38.refGene.name minCheck=0.8
+
 identifier wgEncodeGencodeTagV23
 "Link together Gencode Tag table with Attributes table"
     hg38.wgEncodeGencodeTagV23.transcriptId dupeOk
     hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.373378
+    hg38.wgEncodeGencodeRefSeqV23.transcriptId minCheck=0.9
 
 identifier wgEncodeGencodeTranscriptSourceV23
 "Link together Gencode Transcript Source table with Attributes table"
@@ -1724,6 +1736,97 @@ identifier wgEncodeGencodeEntrezGeneV23
     hg38.wgEncodeGencodeEntrezGeneV23.transcriptId minCheck=0.358209
 
 # end Gencode V23
+
+# begin Gencode V24
+
+# gencode genepreds with no associations
+# wgEncodeGencodePolyaV24
+# wgEncodeGencode2wayConsPseudoV24
+
+# gencode genepreds with joining through wgEncodeGencodeAttrsV24
+identifier wgEncodeGencodeBasicAttrsV24
+"Link together Gencode Basic Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV24.transcriptId
+    hg38.wgEncodeGencodeBasicV24.name
+
+identifier wgEncodeGencodeCompAttrsV24
+"Link together Gencode Comprehensive Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV24.transcriptId
+    hg38.wgEncodeGencodeCompV24.name
+
+identifier wgEncodeGencodePseudoGeneAttrsV24
+"Link together Gencode PseudoGene Table with Attributes table"
+    hg38.wgEncodeGencodeAttrsV24.transcriptId
+    hg38.wgEncodeGencodePseudoGeneV24.name
+
+# gencode association tables (joined through wgEncodeGencodeAttrsV24)
+identifier wgEncodeGencodeExonSupportV24
+"Link together Gencode Exon Support table with Attributes table"
+    hg38.wgEncodeGencodeExonSupportV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.97
+
+identifier wgEncodeGencodeGeneSourceV24
+"Link together Gencode Gene Source table with Attributes table"
+    hg38.wgEncodeGencodeGeneSourceV24.geneId
+    hg38.wgEncodeGencodeAttrsV24.geneId
+
+identifier wgEncodeGencodePdbV24
+"Link together Gencode Pdb table with Attributes table"
+    hg38.wgEncodeGencodePdbV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.02
+
+identifier wgEncodeGencodePubMedV24
+"Link together Gencode Pubmed table with Attributes table"
+    hg38.wgEncodeGencodePubMedV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId  minCheck=0.63
+
+identifier wgEncodeGencodeRefSeqV24
+"Link together Gencode RefSeq table with Attributes table"
+    hg38.wgEncodeGencodeRefSeqV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.05
+
+identifier wgEncodeGencodeRefSeqToRefGeneV24
+"Link together Gencode RefSeq table with refGene track"
+    hg38.wgEncodeGencodeRefSeqV24.rnaAcc dupeOk chopAfter=.
+    hg38.refGene.name minCheck=0.8
+
+identifier wgEncodeGencodeTagV24
+"Link together Gencode Tag table with Attributes table"
+    hg38.wgEncodeGencodeTagV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.373378
+    hg38.wgEncodeGencodeRefSeqV24.transcriptId minCheck=0.9
+
+identifier wgEncodeGencodeTranscriptSourceV24
+"Link together Gencode Transcript Source table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptSourceV24.transcriptId
+    hg38.wgEncodeGencodeAttrsV24.transcriptId
+
+identifier wgEncodeGencodeTranscriptSupportV24
+"Link together Gencode Transcript Support table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptSupportV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.2297
+
+identifier wgEncodeGencodeTranscriptionSupportLevelV24
+"Link together Gencode Transcription Support Level table with Attributes table"
+    hg38.wgEncodeGencodeTranscriptionSupportLevelV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.30
+
+identifier wgEncodeGencodeUniProtV24
+"Link together Gencode UniProt Support table with Attributes table"
+    hg38.wgEncodeGencodeUniProtV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.358209
+
+identifier wgEncodeGencodeAnnotationRemarkV24
+"Link together Gencode Annotation Remark table with Attributes table"
+    hg38.wgEncodeGencodeAnnotationRemarkV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.10
+
+identifier wgEncodeGencodeEntrezGeneV24
+"Link together Gencode UniProt Support table with Attributes table"
+    hg38.wgEncodeGencodeEntrezGeneV24.transcriptId dupeOk
+    hg38.wgEncodeGencodeEntrezGeneV24.transcriptId minCheck=0.358209
+
+# end Gencode V24
 
 # begin Gencode VM2
 
@@ -2862,6 +2965,7 @@ identifier knownGeneId dependency
     $kgDb.knownToPfam.name
     $kgDb.knownToRefSeq.name
     $kgDb.knownToSuper.gene
+    $kgDb.knownToTag.name
     $kgDb.knownToTreefam.name
     $kgDb.knownToU133.name
     $kgDb.knownToU133Plus2.name
@@ -2876,7 +2980,7 @@ identifier knownGeneId dependency
     $ccdsDb.ccdsKgMap.geneId
     $kgDb2.knownGenePep.name full
     $kgDb3.knownGenePep.name
-    $kgDb3.knownCanonical.protein exclude=
+    $kgDb3,!hg38.knownCanonical.protein exclude=
     $kgDb3.kgProtMap2.qName
     $hg.humanHprdP2P.query
     $hg.humanHprdP2P.target
