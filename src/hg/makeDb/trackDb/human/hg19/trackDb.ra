@@ -2,6 +2,7 @@
 
 # chainNet tracks
 include trackDb.chainNet.ra
+include ../chainNetXenTro3.ra
 include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
