@@ -48,7 +48,7 @@ printf("%s</B></A>\n", itemName);
 
 /* List diseases associated with the gene */
 sqlSafef(query, sizeof(query),
-"select maladySymbol, urlSuffix, mainName, round(score) from malacards where geneSymbol='%s' order by score desc",
+"select maladySymbol, urlSuffix, mainName, round(geneScore) from malacards where isElite=1 and geneSymbol='%s' order by geneScore desc",
 itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

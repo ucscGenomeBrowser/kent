@@ -421,10 +421,10 @@ gzip run.*/all.tab
 #end didn't do
 
 # load malacards table
-hgsql hg38 -e 'create table malacards (geneSymbol varchar(255), maladySymbol varchar(255), urlSuffix varchar(255), mainName varchar(255), score float)'
-# got this table by email from Noa Rappaport, see redmine 14417
-s='"'; hgsql hg38  -e "delete from malacards; load data local infile '/hive/data/outside/malacards/UCSC_genes_export_db102_v108_12Jul15.csv' into table malacards columns terminated by ',' enclosed by '$s' escaped by '' ignore 1 lines"
+hgsql hg38 -e 'drop table malacards; create table malacards (geneSymbol varchar(255), maladySymbol varchar(255), urlSuffix varchar(255), mainName varchar(255), geneScore float, diseaseScore float, isElite bool)'
 hgsql hg38 -e 'create index malacardsGeneIdx on malacards(geneSymbol);'
+s='"'; hgsql hg38  -e "delete from malacards; load data local infile 'Disease_Gene_Centric_dump_MC_v102.csv' into table malacards columns terminated by ',' enclosed by '$s' escaped by '' ignore 1 lines"
+# got this table by email from Noa Rappaport, see redmine 14417
 
 # make knownToLynx
 mkdir -p $dir/lynx
