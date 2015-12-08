@@ -615,21 +615,18 @@ static void expMultiFilterControls(struct column *col,
 	struct sqlConnection *conn)
 /* Print out controls for advanced filter. */
 {
-char *dataTable;
 char emfPrefix[64];
 struct expMultiData *emd = col->emd;
 if (col->expShowAbs)
     {
     char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
     explainAbsolute(absoluteMax);
-    dataTable = emd->absoluteTable;
     }
 else
     {
     char *ratioMax = columnSetting(col, "ratioMax", "3.0");
     char *experimentType = columnSetting(col, "experimentType", "tissue");
     explainLogTwoRatio(ratioMax, experimentType);
-    dataTable = emd->ratioTable;
     }
 expMultiFilterPrefix(col, sizeof(emfPrefix), emfPrefix);
 expFilterControls(col, emfPrefix, emd->experimentTable, 

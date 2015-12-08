@@ -1,0 +1,254 @@
+#!/usr/bin/env python2.7
+
+# a converter for kallisto output files
+# parses ~800 cells in 1-2 minutes
+# and merges everything into a single matrix that can be read with one line in R
+# also outputs a binary hash files that can be read from python with one line
+
+import logging, sys, optparse, gzip, gc
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile, isdir, splitext
+import os, marshal, glob
+from multiprocessing.dummy import Pool as ThreadPool 
+
+# no garbage collection needed in here
+gc.disable()
+
+# === command line interface, options and help ===
+def parseArgs():
+    parser = optparse.OptionParser("""usage: %prog [options] dirName
+    matrixOutFname statOutFname - collect expression counts from the files
+    abundance.tsv, given a directory containing kallisto output directories.
+
+    Also parses .log files with kallisto output and creates a .tab file
+    that contains two basic stats, number of reads per file and number of
+    reads mapped to transcript models. Can be used for tagStormJoinTab.
+
+    Ctrl-c does not work for this program. Do ctrl-z and then 'kill %%'.
+
+    Example:
+    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1.tab -t 20
+    """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
+    parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and report the sum of all transcript TPMs")
+    parser.add_option("", "--transFile", dest="transFile", action="store", help="for the -g option, the text file with the mapping transcript-gene, one per line. default %default", default="/hive/data/outside/gencode/release_22/gencode.v22.metadata.HGNC.gz")
+    (options, args) = parser.parse_args()
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
+    return args, options
+
+# ==== functions =====
+    
+def iterAbundPaths(dirname):
+    " yield all paths of files abundance.tsv in subdirs under dirname "
+    for subDir in glob.glob(join(dirname, "*")):
+        if not isdir(subDir):
+            continue
+        abdPath = join(subDir, "abundance.tsv")
+        if not isfile(abdPath):
+            continue
+        yield abdPath
+
+def parseKallisto(fname):
+    """ parse a kallisto abundance.tsv file, return dict transcriptId -> est_tpm 
+    Does not return a value for transcripts where est_tpm is 0
+    """
+    logging.debug("parsing %s" % fname)
+    d = {}
+    ifh = open(fname)
+    ifh.readline()
+    for line in ifh:
+        fs = line.rstrip("\n").split("\t")
+        if fs[3]!="0":
+            d[fs[0]] = float(fs[3])
+    return d
+        
+def parseDict(fname, stripDot=False):
+    " open (gzip) file with key-val one per line and return as dict "
+    if fname.endswith(".gz"):
+        ifh = gzip.open(fname)
+    else:
+        ifh = open(fname)
+
+    ret = {}
+    for line in ifh:
+        fs = line.rstrip("\n").split()
+        if stripDot:
+            fs[0] = fs[0].split('.')[0]
+            fs[1] = fs[1].split('.')[0]
+        ret[fs[0]]=fs[1]
+    return ret
+        
+def outputBigMatrix(names, results, outFname):
+    """
+    given a list of names and a list of transcript -> count dictionaries,
+    write out a matrix with transcript -> counts in columns
+    """
+    logging.info("Writing data to file %s" % outFname)
+    ofh = open(outFname, "w")
+    # write header
+    ofh.write("#transcript\t%s\n" % "\t".join(names))
+    
+    # create set of all transcript names
+    allTrans = set()
+    for res in results:
+        allTrans.update(res)
+
+    # write out matrix
+    for trans in allTrans:
+        ofh.write("%s\t" % trans)
+        row = []
+        for countDict in results:
+            row.append(str(countDict.get(trans, 0)))
+        ofh.write("\t".join(row))
+        ofh.write("\n")
+    ofh.close()
+        
+# this was a try to write sparse matrices. 
+# it results in smaller data files, but they are harder to compress with gzip
+# overall the non-sparse matrices were smaller on the quake dataset
+
+#def outputBigMatrixSparse(names, results, outFname):
+    #logging.info("Writing data to file %s" % outFname)
+    #ofh = open(outFname, "w")
+    
+    # create set of all transcript names
+    #allTrans = set()
+    #for res in results:
+        #allTrans.update(res)
+
+    # create dict with transcript -> number
+    # and write out this mapping
+    #ofh.write("#")
+    #transToId = {}
+    #for i, trans in enumerate(allTrans):
+        #transToId[trans] = i
+        #ofh.write("#%s=%d\n" % (trans, i))
+
+    # write out matrix
+    #for cellId, transDict in zip(names, results):
+        #ofh.write("%s\t" % cellId)
+        #strList = ["%d=%f" % (transToId[trans], val) for trans, val in transDict.iteritems()]
+        #ofh.write(",".join(strList))
+        #ofh.write("\n")
+    #ofh.close()
+    
+def addGencodeSpecial(transFile, transToGene):
+    """ special code for gencode: their file does not include a mapping of
+    transcripts that do not have symbols. So I added a special file and
+    detect and merge it here
+    """
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if not isfile(transFile2):
+        return transToGene
+
+    transToGene2 = parseDict(transFile, stripDot=True)
+
+    for transId, geneId in transToGene2.iteritems():
+        if transId not in transToGene:
+            transToGene[transId] = geneId
+    return transToGene
+
+def sumTransToGene(transDictList, transFile):
+    """ given a list of dict transcript -> tpm, and a map transcript -> gene,
+    map all transcripts to genes and return a list of gene -> sum of tpms
+    If we have no gene name, leave the transcript names in there.
+    """
+    transToGene = parseDict(transFile, stripDot=True)
+    transToGene = addGencodeSpecial(transFile, transToGene)
+    # special code for gencode: their file does not include a mapping of
+    # transcripts that do not have symbols. So I added a special file and
+    # detect and merge it here
+    transFile2 = join(dirname(transFile), "transToGene.tab")
+    if isfile(transFile2):
+        transToGene2 = parseDict(transFile, stripDot=True)
+    for transId, geneId in transToGene2.iteritems():
+        if transId not in transToGene:
+            transToGene[transId] = geneId
+
+    newRes = []
+    for transCounts in transDictList:
+        geneCounts = defaultdict(float)
+        for transId, count in transCounts.iteritems():
+            geneId = transToGene.get(transId, transId)
+            geneCounts[geneId]+=count
+        newRes.append(dict(geneCounts))
+    return newRes
+    
+def writeStats(inDir, outFname):
+    """
+    search for all .log files in inDir. Use the basename of these files
+    as the cell ID and write a .tab file that can be joined with tagStormJoinTab
+    """
+    ofh = open(outFname, "w")
+    ofh.write("meta\tkallistoProcReads\tkallistoAlnReads\tkallistoEstFragLen\n")
+
+    inFnames = glob.glob(join(inDir, "*.log"))
+    print("Parsing %d logfiles and writing to %s" % (len(inFnames), outFname))
+    for inFname in inFnames:
+        cellId = basename(inFname).split(".")[0].split("_")[0]
+        # [quant] processed 1,836,518 reads, 636,766 reads pseudoaligned
+        # [quant] estimated average fragment length: 251.99
+        for line in open(inFname):
+            if line.startswith("[quant] processed "):
+                words = line.split()
+                readCount = words[2].replace(",","")
+                alignCount = words[4].replace(",","")
+            if line.startswith("[quant] estimated average fragment length:"):
+                fragLen = line.split()[5]
+        row = [cellId, readCount, alignCount, fragLen]
+        ofh.write("\t".join(row)+"\n")
+    ofh.close()
+
+def main():
+    args, options = parseArgs()
+    inDir = args[0]
+    outFname = args[1]
+    statOutFname = args[2]
+
+    writeStats(inDir, statOutFname)
+
+    inFnames = list(iterAbundPaths(inDir))
+    logging.info("Found %d kallisto input files (abundance.tsv)" % len(inFnames))
+
+    threadCount = options.threads
+    logging.info("Using %d threads to parse input files" % threadCount)
+
+    # multithreading in 4 lines
+    pool = ThreadPool(threadCount)
+    results = pool.map(parseKallisto,inFnames)
+    pool.close()
+    pool.join()
+
+    # reduce the filenames to only their parent directory names
+    cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
+
+    #outputBigMatrixSparse(cellNames, results, outFname)
+    if options.geneLevel:
+        results = sumTransToGene(results, options.transFile)
+
+    outputBigMatrix(cellNames, results, outFname)
+
+    # also output as a binary file for now
+    # it's a lot easier and faster to parse, at least for python scripts
+    # can be read from python with a single line:
+    # matrix = marshal.load(open("data.tab.marshal"))
+    # matrix is then a nested hash: cellName -> transcript -> count
+    binPath = outFname+".marshal"
+    logging.info("Writing %s" % binPath)
+    allData = {}
+    for name, transDict in zip(cellNames, results):
+        allData[name] = transDict
+    marshal.dump(allData, open(binPath, "wb"))
+
+main()

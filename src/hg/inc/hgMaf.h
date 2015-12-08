@@ -9,6 +9,7 @@
 
 #include "trackDb.h"
 #include "cart.h"
+#include "bbiFile.h"
 
 /* Track settings and variables */
 #define SPECIES_TREE_VAR        "speciesTree"
@@ -98,5 +99,8 @@ char **wigMafGetSpecies(struct cart *cart, struct trackDb *tdb, char *prefix, ch
 
 struct consWiggle *consWiggleFind(char *db,struct trackDb *parent,char *table);
 /* Return conservation wig if it is found in the parent. */
+
+struct mafAli *bigMafLoadInRegion( struct bbiFile *bbi, char *chrom, int start, int end);
+/* Read in MAF blocks from bigBed. */
 
 #endif//ndef HGMAF_H

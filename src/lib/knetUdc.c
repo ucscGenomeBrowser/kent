@@ -9,20 +9,29 @@
 #include "common.h"
 #include "udc.h"
 #include "knetUdc.h"
+#ifdef USE_HTS
+#include "htslib/knetfile.h"
+#else
 #include "knetfile.h"
 
 
 struct knetFile_s {
     struct udcFile *udcf;
 }; // typedef'd to knetFile in knetfile.h
+#endif
 
 static char *udcCacheDir = NULL;
 
 static knetFile *kuOpen(const char *filename, const char *mode)
 /* Open the given filename with mode which must be "r". */
 {
+#ifdef USE_HTS
+if (!(sameOk((char *)mode, "r") || sameOk((char *)mode, "rb")))
+    errAbort("mode passed to kuOpen must be 'r' or 'rb' not '%s'", mode);
+#else
 if (!sameOk((char *)mode, "r"))
     errAbort("mode passed to kuOpen must be 'r' not '%s'", mode);
+#endif
 struct udcFile *udcf = udcFileMayOpen((char *)filename, udcCacheDir);
 if (udcf == NULL)
     return NULL;

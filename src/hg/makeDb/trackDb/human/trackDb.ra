@@ -13,6 +13,15 @@ include trackDb.denisova.ra
 # Genome variants aka pgSnp aka personal genomes
 include trackDb.pgSnp.ra
 
+# Genotype Tissue Expresssion (GTEx)
+include trackDb.gtex.ra
+#track gtexGene
+#type bed 6 +
+#shortLabel GTEx
+#longLabel Gene Expression in 53 tissues from GTEX RNA-seq of 2921 samples (214 donors)
+#html gtexGeneExpr
+#group expression
+
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
 longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
@@ -935,13 +944,14 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
+##### begin SNP142 BUG FIX RE-RELEASE
 track snp142Common
 shortLabel Common SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
 group varRep
 visibility dense
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
+urlLabel dbSNP: 
 snpSeq snp142Seq
 snpExceptionDesc snp142ExceptionDesc
 defaultGeneTracks knownGene
@@ -954,6 +964,7 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 priority 1
+html snp142Common_bugFix
 
 track snp142Flagged
 shortLabel Flagged SNPs(142)
@@ -972,6 +983,7 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
+html snp142Flagged_bugFix
 
 track snp142Mult
 shortLabel Mult. SNPs(142)
@@ -979,7 +991,7 @@ longLabel Simple Nucleotide Polymorphisms (dbSNP 142) That Map to Multiple Genom
 group varRep
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
+urlLabel dbSNP: 
 snpSeq snp142Seq
 snpExceptionDesc snp142ExceptionDesc
 defaultGeneTracks knownGene
@@ -992,6 +1004,7 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
+html snp142Mult_bugFix
 
 track snp142
 shortLabel All SNPs(142)
@@ -999,7 +1012,7 @@ longLabel Simple Nucleotide Polymorphisms (dbSNP 142)
 group varRep
 visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
-urlLabel dbSNP:
+urlLabel dbSNP: 
 defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
@@ -1009,6 +1022,9 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
+html snp142_bugFix
+
+##### end SNP142 BUG FIX RE-RELEASE
 
 track snp144Common
 shortLabel Common SNPs(144)
@@ -3996,6 +4012,22 @@ type bedDetail 7
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track iscaComposite
+release alpha
+compositeTrack on
+shortLabel ClinGen CNVs
+longLabel Clinical Genome Resource (ClinGen) CNVs
+group phenDis
+visibility hide
+subGroup1 view Views atot=Total cnv=CNVs
+subGroup2 phen Phenotype ben=Benign path=Pathogenic unk=Unknown
+subGroup3 level Confidence cur=Curated det=Determined lik=Likely unc=Uncertain
+dimensions dimensionY=phen dimensionX=level
+sortOrder phen=+ level=+ view=+
+type bed 3
+
+track iscaComposite
+release beta,public
+html iscaCompositeOld
 compositeTrack on
 shortLabel ClinGen CNVs
 longLabel Clinical Genome Resource (ClinGen) CNVs
@@ -4032,6 +4064,22 @@ type bed 3
 	longLabel ClinGen CNVs: Pathogenic Loss Total
 	color 200,0,0
         subGroups view=atot phen=path level=det
+
+	track iscaBenignGainCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Gain
+	longLabel ClinGen CNVs: Benign Gain Total
+	color 0,0,200
+        subGroups view=atot phen=ben level=det
+
+	track iscaBenignLossCum
+  release alpha
+	parent iscaViewTotal
+	shortLabel Benign Loss
+	longLabel ClinGen CNVs: Benign Loss Total
+	color 200,0,0
+        subGroups view=atot phen=ben level=det
 
     track iscaViewDetail
     shortLabel CNVs

@@ -218,6 +218,7 @@ char *s = firstWordInLine(t);
 boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("bed", s) || sameString("genePred", s) ||
 		   sameString("bigBed", s) || sameString("makeItems", s) ||
+		   sameString("bigMaf", s) || sameString("bigGenePred", s) || 
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
                    sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
@@ -644,7 +645,7 @@ eCfgType cType = cfgNone;
 char *type = tdb->type;
 assert(type != NULL);
 
-if(startsWith("wigMaf", type))
+if(startsWith("wigMaf", type) || startsWith("bigMaf", type))
     cType = cfgWigMaf;
 else if(startsWith("wig", type))
     cType = cfgWig;
@@ -696,7 +697,7 @@ else if (startsWith("bed ", type) || startsWith("bigBed", type) || startsWith("b
 	    }
 	}
     }
-else if(startsWith("chain",type))
+else if(startsWith("chain",type) || startsWith("bigChain",type))
     cType = cfgChain;
 else if (startsWith("bamWig", type))
     cType = cfgWig;

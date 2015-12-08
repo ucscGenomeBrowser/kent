@@ -444,3 +444,23 @@ for (wig = wiggles;
      wig = wig->next) {}
 return wig;
 }
+
+struct mafAli *bigMafLoadInRegion( struct bbiFile *bbi,  char *chrom, int start, int end)
+/* Read in MAF blocks from bigBed. */
+{
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+struct mafAli *mafList = NULL;
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    // the MAF block in the record as \001 instead of newlines 
+    char *mafText = replaceChars(bb->rest, ";","\n");
+
+    struct mafFile mf;
+    mf.lf = lineFileOnString(NULL, TRUE, mafText);
+
+    struct mafAli *maf = mafNext(&mf);
+    slAddHead(&mafList, maf);
+    }
+return mafList;
+}

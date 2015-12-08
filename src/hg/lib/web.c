@@ -1158,7 +1158,7 @@ if (wrapInHtml) // wrapped for christmas
     if (js)
         dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
     else if (style)
-        dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
+        dyStringPrintf(wrapped,"<link rel='stylesheet' href='../%s' type='text/css'>\n", link);
     else // Will be image, since these are the only three choices allowed
         dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
     freeMem(link);

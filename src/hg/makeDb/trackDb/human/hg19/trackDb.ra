@@ -2,6 +2,7 @@
 
 # chainNet tracks
 include trackDb.chainNet.ra
+include ../chainNetXenTro3.ra
 include trackDb.wgEncode.ra
 include trackDb.denisova.ra
 
@@ -2448,3 +2449,7 @@ group phenDis
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
+
+track oregano override
+release beta,public
+html oregannoOld

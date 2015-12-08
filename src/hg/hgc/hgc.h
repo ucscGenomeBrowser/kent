@@ -465,6 +465,9 @@ void htcLrgCdna(char *item);
 void doPeptideAtlas(struct trackDb *tdb, char *item);
 /* Details for PeptideAtlas peptide mapping */
 
+void doGtexGeneExpr(struct trackDb *tdb, char *item);
+/* Details of GTEX gene expression item */
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.

@@ -209,7 +209,7 @@ struct sqlResult *sr2;
 char **row2;
 struct sqlConnection *conn2 = hAllocConn(database);
 
-char *subjId, *dnaSeqId;
+// char *subjId, *dnaSeqId;  unused variable
 char *aaSeqId= NULL;
 char *gene=NULL;
 
@@ -231,8 +231,8 @@ sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 if (row2 != NULL)
     {
-    subjId = strdup(row2[0]);
-    dnaSeqId = strdup(row2[1]);
+//    subjId = strdup(row2[0]);  unused variable
+//    dnaSeqId = strdup(row2[1]);  unused variable
     aaSeqId  = strdup(row2[2]);
     gene     = strdup(row2[3]);
     }

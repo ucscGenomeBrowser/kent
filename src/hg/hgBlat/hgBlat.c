@@ -352,7 +352,11 @@ else if (pslOut)
 else
     {
     printf("<H2>BLAT Search Results</H2>");
-    printf("<TT><PRE>");
+    char* posStr = cartOptionalString(cart, "position");
+    if (posStr != NULL)
+        printf("<P>Go back to <A HREF=\"%s\">%s</A> on the Genome Browser.</P>\n", browserUrl, posStr);
+
+    printf("<DIV STYLE=\"display:block; float:left\"><TT><PRE>");
     printf("   ACTIONS      QUERY           SCORE START  END QSIZE IDENTITY CHRO STRAND  START    END      SPAN\n");
     printf("---------------------------------------------------------------------------------------------------\n");
     for (psl = pslList; psl != NULL; psl = psl->next)
@@ -371,7 +375,9 @@ else
 	    skipChr(psl->tName), psl->strand, psl->tStart+1, psl->tEnd,
 	    psl->tEnd - psl->tStart);
 	}
-    printf("</PRE></TT>");
+    printf("</PRE></TT>\n");
+    puts("<P style=\"text-align:right\"><SMALL><A HREF=\"../FAQ/FAQblat.html#blat1b\">Missing a match?</A></SMALL></P>\n");
+    puts("</DIV>\n");
     }
 pslFreeList(&pslList);
 
@@ -697,7 +703,8 @@ void askForSeq(char *organism, char *db)
 /* Put up a little form that asks for sequence.
  * Call self.... */
 {
-struct serverTable *serve = NULL;
+/* ignore struct serverTable* return, but can error out if not found */
+findServer(db, FALSE);
 
 /* JavaScript to update form when org changes */
 char *onChangeText = "onchange=\""
@@ -705,8 +712,6 @@ char *onChangeText = "onchange=\""
     "document.mainForm.submit();\"";
 
 char *userSeq = NULL;
-
-serve = findServer(db, FALSE);
 
 printf( 
 "<FORM ACTION=\"../cgi-bin/hgBlat\" METHOD=\"POST\" ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n"

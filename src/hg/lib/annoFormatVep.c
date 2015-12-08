@@ -1276,6 +1276,8 @@ else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(),
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
 self->geneNameIx = asColumnFindIx(gpvAsColumns, "geneSymbol");
 if (self->geneNameIx < 0)
+    self->geneNameIx = asColumnFindIx(gpvAsColumns, "kgXref_geneSymbol");
+if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "name2");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");

@@ -368,18 +368,18 @@ xenTro7.mgc = yes
     screen -S xenTro7           # long running job managed in screen
     cd /cluster/data/genbank
     time ./bin/gbAlignStep -initial xenTro7 &
-#  logFile: var/build/logs/2013.06.26-13:54:24.xenTro7.initalign.log
-    # real    140m38.617s
+    # logFile: var/build/logs/2015.12.01-12:35:26.xenTro7.initalign.log
+    # real    53m58.627s
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
 
     time ./bin/gbDbLoadStep -drop -initialLoad xenTro7 &
-    #   logFile: var/dbload/hgwdev/logs/2013.06.30-19:30:11.dbload.log
-    #   real    31m43.143s
+    #   logFile: var/dbload/hgwdev/logs/2015.12.01-16:31:08.xenTro7.dbload.log
+    #   real    25m13.913s
 
-    # enable daily alignment and update of hgwdev (TBD - 2013-03-08 - Pauline)
+    # enable daily alignment and update of hgwdev (DONE - 2013-06-30 - Hiram)
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add xenTro7 to:

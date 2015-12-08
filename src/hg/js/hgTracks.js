@@ -2714,7 +2714,7 @@ function showExtToolDialog() {
         htmlLines.push("</ul>");
         content = htmlLines.join("");
             
-        var title = hgTracks.chromName + ":" + hgTracks.winStart + "-" + hgTracks.winEnd + " on another website";
+        var title = hgTracks.chromName + ":" + (hgTracks.winStart+1) + "-" + hgTracks.winEnd + " on another website";
         $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
 
         // copied from the hgTrackUi function below
@@ -2742,6 +2742,13 @@ function showExtToolDialog() {
         });
         
         $('#extToolDialog').dialog('open');
+}
+
+// a function for the keyboard shortcut:
+// Jump to the "Get DNA" page
+function gotoGetDnaPage() {
+    var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+hgTracks.chromName+"&l="+hgTracks.winStart+"&r="+hgTracks.winEnd+"&db="+getDb();
+    window.location.href = url;
 }
 
   //////////////////////////////////

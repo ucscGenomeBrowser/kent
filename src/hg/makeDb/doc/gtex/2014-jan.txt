@@ -33,6 +33,7 @@ wc -l samples.txt
 
 
 # Load tables (gtexData - median expression level across tissues, gtexTissues):
+# First, generate tissue table (suitable for manual curation)
 hgGtex gtex /hive/data/outside/GTEx/2014-01-17/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct /hive/data/outside/GTEx/2014-01-17/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt -median
 
 # Output format for Chris Eisenhart tissue clustering (hg/expData): 2 files
@@ -59,30 +60,157 @@ hgsql hgFixed -N -e 'select tissue from gtexTissue' > bioSamples.txt
 
 # Reload tables for new schemas  8/14/14
 set dataDir = /hive/data/outside/GTEx/2014-01-17
-hgGtex -tab=output gtex \
-    $dataDir/geneCounts/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
-    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
-    $dataDir/metadata/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
-    $dataDir/tissues.tab
+# run with new options, just to get info table
+hgGtex -tab=output2 gtex2 V4 \
+    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/portal/gtexColorTissue.dec.tab
 
+#edit output2/gtexInfo2.tab to add release date (YY-MM-DD)
+hgLoadSqlTab hgFixed gtexInfo ~/kent/src/hg/lib/gtexInfo.sql output2/gtexInfo.tab
+
+
+# EQTL's from Pilot data
+cd /hive/data/outside/GTEx/pilot
+mkdir eQtl; cd eQtl
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_pilot_data_2013_01_31/multi_tissue_eqtls/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets.tar
+
+
+# EQTL's from V4 (2014)
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/README.eqtls
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/GTEx_genot_imputed_variants_info4_maf05_CR95_CHR_POSb37_ID_REF_ALT.txt.zip'
+
+# Reference data
+# TODO:  Use these gene models for gene track
 # Load gene table from portal file
 
 cd /hive/data/outside/GTEx/2014-01-17
 mkdir gencode
 cd gencode
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs.txt
-cd /hive/data/outside/GTEx/2014-01-17
-awk '$1 !~ /^#/ {print "chr"$0}' gencode.v18.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \ 
+awk '$1 !~ /^#/ {print "chr"$0}' gencode.v18.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
         gtfToGenePred stdin gencodeV18.hg19.genePred
-hgLoadGenePred hg19 gtexGeneModel gencodeV18.hg19.genePred
+hgLoadGenePred hg19 gtexGeneModel  gencodeV18.hg19.genePred
+
 # make hg38 as well
 set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
 liftOver -genePred gencodeV18.hg19.genePred $chain gencodeV18.hg38.genePred unmapped
 wc -l unmapped
 # 930 unmapped
+sed 's/\.[0-9][0-9]*//' gencodeV18.hg38.genePred | hgLoadGenePred hg389 gtexGeneModel stdin
 hgLoadGenePred hg38 gtexGeneModel gencodeV18.hg38.genePred
 
 
 # Other reference files
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.genes.patched_contigs_exons.txt
 #wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/gencode.v18.transcripts.patched_contigs.gtf
+
+
+# V4 Normalized gene expression levels (June 2015)
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/GTEx_Analysis_V4_eQTLInputFiles_geneLevelNormalizedExpression.tar.gz
+
+
+# Load GTEX tissue colors 
+# These were screen-scraped from GTEX portal
+
+cd portal
+# convert hex colors to decimal (mysql LOAD DATA won't convert)
+awk -F"\t"  --non-decimal-data '{printf("%d\t%s\t%s\t%s\t%d\n", $1, $2, $3, $4, $5)}' gtexColorTissue.tab > gtexColorTissue.dec.tab
+hgLoadSqlTab  hgFixed gtexTissue ~/kent/src/hg/lib/gtexTissue.sql gtexColorTissue.dec.tab
+
+# Bulk up sample table with new schema
+set dataDir = /hive/data/outside/GTEx/2014-01-17
+~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex -noLoad -noData -tab=fullSample gtex2 V4 \
+    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/portal/gtexColorTissue.dec.tab
+
+cd fullSample
+hgLoadSqlTab hgFixed gtexSampleFull ~kate/kent/src/hg/lib/gtexSample.sql gtex2Sample.tab
+
+
+# eQTL files
+# Covariates from analysis (PCA of genotype)
+cd eQTL; mkdir covariates; cd covariates
+
+# tissue eQTL.  For first look, merge the tissue-specific files...
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/single_tissue_eqtl_data/GTEx_Analysis_V4_eQTLInputFiles_covariates.tar.gz
+gunzip *.gz
+awk '{printf("chr%s+%d+%d+%s\n", $2, $3, $3+1, $1)}' *.eqtl | sort | uniq | \
+    sed 's/+/	/g' > gtexEqtlSnp.bed
+hgLoadBed hg19 gtexEqtlSnp gtexEqtlSnp.bed
+
+
+# Variants 
+cd ..; mkdir variants; cd variants
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v4/reference/GTEx_genot_imputed_variants_info4_maf05_CR95_CHR_POSb37_ID_REF_ALT.txt.zip
+# 6820472 SNPs
+
+#header
+##CHROM POS ID REF ALT
+#1 729679 rs4951859 C G
+#1 731718 rs142557973 T C
+
+awk '{printf("chr%s\t%d\t%d\t%s\n", $1, $2, $2+1, $3)}' \
+    GTEx_genot_imputed_variants_info4_maf05_CR95_CHR_POSb37_ID_REF_ALT.txt | tail -n +2 > gtexSnp.bed
+hgLoadBed hg19 gtexSnp gtexSnp.bed
+
+# Exploratory data analysis
+
+# create R data frame for sample+donor metadata
+
+hgsql hgFixed -e 'select sampleId, tissue, gender, age, deathClass, ischemicTime, autolysisScore, rin, collectionSites, batchId, isolationDate from gtexSample, gtexDonor where gtexSample.donor=gtexDonor.name' | sed -e 's/ //' > sampleDf.txt
+
+# Reload gtexSampleData table to drop zero-scored rows (8M out of 16M total!)
+set dataDir = /hive/data/outside/GTEx/2014-01-17
+~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex -noLoad -dropZeros -tab=slimGtex gtex2 V4 \
+    $dataDir/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    $dataDir/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    $dataDir/portal/gtexColorTissue.dec.tab
+hgLoadSqlTab hgFixed gtex2SampleData ~/kent/src/hg/lib/gtexSampleData.sql slimGtex/gtex2SampleData.tab
+
+# oops, -dropZeros left in 55 zero values!  Drop these
+hgsql hgFixed -e "delete from gtex2SampleData where score=0"
+#Query OK, 55 rows affected (20.09 sec)
+
+# Create R data frame from sample data
+hgsql hgFixed -e "select geneId, gtexSampleData.tissue, score, gender, age, rin \
+       from gtexSampleData, gtexSample, gtexDonor \
+       where gtexSampleData.name=gtexSample.sampleId \
+               and gtexSample.donor=gtexDonor.name" > exprDf.txt
+
+
+# And again for all data (including zero scores)
+hgsql hgFixed -e "select geneId, gtexSampleData_old.tissue, score, gender, age, rin \
+       from gtexSampleData_old, gtexSample, gtexDonor \
+       where gtexSampleData_old.sample=gtexSample.sampleId \
+               and gtexSample.donor=gtexDonor.name" > allExprDf.txt
+
+
+# Get list of highest expressed genes for comparison with portal display
+
+# Reload medians table to fix incorrect ordering of tissues in list
+# hgGtex was fixed 7/31/15, but table wasn't reloaded
+# Looks like fixed data was created in outDirs/output6, load that for now
+cd /hive/data/outside/GTEx/2014-01-17/outDirs/
+hgLoadSqlTab hgFixed gtex2TissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql output6/gtex2TissueMedian.tab
+
+
+# Experiment with R plots of per-gene expression data, candidate for details page boxplot
+
+cd /hive/data/outside/GTEx/V4
+
+cat > makeExprDf.csh << 'EOF'
+# Make R data frame from gene expression for a single gene from data in gtexSampleData table
+#
+# Format:   sampleId, tissue, rpkm
+
+set gene = $1
+set geneId = `hgsql hg19 -Ne "select geneId from gtexGene where name='$gene' limit 1"`
+hgsql hgFixed -e "select sample, tissue, score as rpkm from gtexSampleData where geneId='$geneId'"
+'EOF'
+
+csh makeExprDf.csh BRCA1 > BRCA1.df.txt

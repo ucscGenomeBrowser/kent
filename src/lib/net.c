@@ -449,7 +449,7 @@ void netParseUrl(char *url, struct netParsedUrl *parsed)
  */
 {
 char *s, *t, *u, *v, *w;
-char buf[1024];
+char buf[MAXURLSIZE];
 
 /* Make local copy of URL. */
 if (strlen(url) >= sizeof(buf))
@@ -1246,7 +1246,7 @@ long long netUrlSizeByRangeResponse(char *url)
  * Return negative number if can't get. */
 {
 long long retVal = -1;
-char rangeUrl[2048];
+char rangeUrl[MAXURLSIZE];
 safef(rangeUrl, sizeof(rangeUrl), "%s;byterange=0-0", url);
 struct hash *hash = newHash(0);
 int status = netUrlHeadExt(rangeUrl, "GET", hash);
@@ -1391,7 +1391,11 @@ while(TRUE)
 	if (nread != 1)
 	    {
 	    if (nread == -1)
+		{
+		if (errno == EINTR)
+		    continue;
     		warn("Error (%s) reading http header on %s", strerror(errno), url);
+		}
 	    else if (nread == 0)
     		warn("Error unexpected end of input reading http header on %s", url);
 	    else

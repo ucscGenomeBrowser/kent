@@ -826,7 +826,6 @@ void createAltSplices(char *db, char *outFile,  boolean memTest)
    build altSplice graphs. */
 {
 struct genePred *gp = NULL, *gpList = NULL;
-struct altGraphX *ag=NULL;
 FILE *out = NULL;
 struct sqlConnection *conn = hAllocConn(db);
 char *gpFile = NULL;
@@ -889,7 +888,8 @@ for(gp = gpList; gp != NULL && count < 5; )
     {
     dotForUser();
     fflush(stderr);
-    ag = agFromGp(db, gp, conn, 5, out); /* memory held in binKeeper. Free
+    // ignore return from agFromGp
+    (void) agFromGp(db, gp, conn, 5, out); /* memory held in binKeeper. Free
 				      * later. */
     if (memTest != TRUE) 
 	gp = gp->next;

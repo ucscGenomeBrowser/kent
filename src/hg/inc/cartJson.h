@@ -17,13 +17,17 @@ struct cartJson
     struct jsonWrite *jw;
     };
 
+typedef void CartJsonHandler(struct cartJson *cj, struct hash *paramHash);
+/* Implementation of some command; paramHash associates parameter names with
+ * jsonElement values.  For use with cartJsonRegisterHandler. */
+
 struct cartJson *cartJsonNew(struct cart *cart);
 /* Allocate and return a cartJson object with default handlers.
  * cart must have "db" set already. */
 
-typedef void CartJsonHandler(struct cartJson *cj, struct hash *paramHash);
-/* Implementation of some command; paramHash associates parameter names with
- * jsonElement values. */
+char *cartJsonParamDefault(struct hash *paramHash, char *name, char *defaultVal);
+/* Convenience function for a CartJsonHandler function: Look up name in paramHash.
+ * Return the string contained in its jsonElement value, or defaultVal if not found. */
 
 char *cartJsonOptionalParam(struct hash *paramHash, char *name);
 /* Convenience function for a CartJsonHandler function: Look up name in paramHash.

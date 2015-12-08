@@ -1367,6 +1367,9 @@ void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemNam
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
 
+void gtexGeneMethods(struct track *tg);
+/* Gene-Tissue Expression (GTEX) gene track*/
+
 void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */
@@ -1420,6 +1423,13 @@ void checkIfWiggling(struct cart *cart, struct track *tg);
 #define measureTime uglyTime
 
 #define SUPPORT_CONTENT_TYPE 1
+
+struct bbiFile *fetchBbiForTrack(struct track *track);
+/* Fetch bbiFile from track, opening it if it is not already open. */
+
+void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                            double scale, Color color, enum trackVisibility vis);
+/* Draw next item buttons and map boxes */
 
 #endif /* HGTRACKS_H */
 

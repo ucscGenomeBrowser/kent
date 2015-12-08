@@ -66,6 +66,7 @@ UTILS_APPLIST = \
 	headRest \
 	htmlCheck \
 	newProg \
+	newPythonProg \
 	nibFrag \
 	nibSize \
 	paraFetch \

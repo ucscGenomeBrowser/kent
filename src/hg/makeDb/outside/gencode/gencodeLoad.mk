@@ -46,7 +46,7 @@ ifeq (${db},mm10)
     transSupBuild = 2015-10-02
     transSupDir = ${HOME}/compbio/ccds/branches/transSupV${ver}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1
-else (${db},hg38)
+else ifeq (${db},hg38)
     prevDb = hg38
     grcRefAssembly = GRCh38
     ver = 23
@@ -403,6 +403,7 @@ cmpRelease:
 	done
 
 joinerCheck:
+	@mkdir -p check
 	for tbl in $$(hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} | egrep -v 'wgEncodeGencode2wayConsPseudo|wgEncodeGencodePolya') ; do echo  table=$$tbl; runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >check/joiner.out 2>&1
 
 

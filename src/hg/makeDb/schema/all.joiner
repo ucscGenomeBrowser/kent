@@ -53,7 +53,7 @@ set galGal galGal2,galGal3,galGal4
 set geoFor geoFor1
 set melGal melGal1
 set gasAcu gasAcu1
-set gorGor gorGor1,gorGor3
+set gorGor gorGor1,gorGor3,gorGor4
 set haeCon haeCon1
 set hetGla hetGla1,hetGla2
 set hg hg16,hg17,hg18,hg19,hg38
@@ -727,6 +727,11 @@ identifier encodePseudogeneYale dependency
 "Link together Yale Pseudogenes and class"
     $hg.encodePseudogeneYale.name
     $hg.encodePseudogeneClass.name minCheck=0.16 unique
+
+identifier pseudoYale60
+"Link together Yale Pseudogenes 60 table with class table"
+    hg19.pseudoYale60.name
+    hg19.pseudoYale60Class.name
 
 identifier wgEncodeNhgriBip
 "Link together Gencode gene model (Known) and class for Jan 2009 Data Version"
@@ -1703,7 +1708,7 @@ identifier wgEncodeGencodeTranscriptSourceV23
 identifier wgEncodeGencodeTranscriptSupportV23
 "Link together Gencode Transcript Support table with Attributes table"
     hg38.wgEncodeGencodeTranscriptSupportV23.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.23
+    hg38.wgEncodeGencodeAttrsV23.transcriptId minCheck=0.2297
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV23
 "Link together Gencode Transcription Support Level table with Attributes table"
@@ -1993,7 +1998,7 @@ identifier wgEncodeGencodePseudoGeneAttrsVM7
 identifier wgEncodeGencodeExonSupportVM7
 "Link together Gencode Exon Support table with Attributes table"
     mm10.wgEncodeGencodeExonSupportVM7.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.97
+    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.96
 
 identifier wgEncodeGencodeGeneSourceVM7
 "Link together Gencode Gene Source table with Attributes table"
@@ -2003,7 +2008,7 @@ identifier wgEncodeGencodeGeneSourceVM7
 identifier wgEncodeGencodePdbVM7
 "Link together Gencode Pdb table with Attributes table"
     mm10.wgEncodeGencodePdbVM7.transcriptId dupeOk
-    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.02
+    mm10.wgEncodeGencodeAttrsVM7.transcriptId minCheck=0.017
 
 identifier wgEncodeGencodePubMedVM7
 "Link together Gencode Pubmed table with Attributes table"
@@ -5310,6 +5315,7 @@ tablesIgnored hg38
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
     centromeres
+    coriellDelDup
     hg38Patch3Haplotypes
     hg38Patch3Patches
     hg38Patch2Haplotypes
@@ -5758,6 +5764,7 @@ tablesIgnored $hg
     tgpPhase1
     tgpPhase1AccessibilityPilotCriteria
     tgpPhase1AccessibilityStrictCriteria
+    tgpPhase3
     ucsfChipSeqH3K4me3BrainCoverage
     ucsfMedipSeqBrainCoverage
     ucsfMedipSeqBrainCpG

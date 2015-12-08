@@ -137,6 +137,35 @@ struct spaceNode *spaceSaverAdd(struct spaceSaver *ss,
 return spaceSaverAddOverflow(ss, start, end, val, FALSE);
 }
 
+int spaceSaverSetRowHeights(struct spaceSaver *ss, int (*itemHeight)(void *item))
+/* Determine maximum height of items in a row. Return total height.
+   Used by tracks with variable height items */
+{
+assert(ss != NULL);
+AllocArray(ss->rowSizes, ss->rowCount);
+struct spaceNode *sn;
+for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+    {
+    ss->rowSizes[sn->row] = max(ss->rowSizes[sn->row], itemHeight(sn->val));
+    }
+return spaceSaverGetRowHeightsTotal(ss);
+}
+
+int spaceSaverGetRowHeightsTotal(struct spaceSaver *ss)
+/* Return height of all rows. Used by tracks with variable height items */
+{
+assert(ss != NULL);
+if (ss->rowSizes == NULL)
+    return 0;
+int height = 0;
+int i;
+for (i=0; i<ss->rowCount; i++)
+    {
+    height += ss->rowSizes[i];
+    }
+return height;
+}
+
 void spaceSaverFinish(struct spaceSaver *ss)
 /* Tell spaceSaver done adding nodes. */
 {

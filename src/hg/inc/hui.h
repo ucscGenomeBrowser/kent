@@ -1147,6 +1147,9 @@ void lrgTranscriptAliCfgUi(struct cart *cart, struct trackDb *tdb, char *name, c
 			   boolean boxed);
 /* LRG Transcripts: Locus Reference Genomic transcript sequences mapped to assembly. */
 
+void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed);
+/* GTEx (Genotype Tissue Expression) per gene data */
+
 boolean tdbSortPrioritiesFromCart(struct cart *cart, struct trackDb **tdbList);
 // Updates the tdb->priority from cart then sorts the list anew.
 // Returns TRUE if priorities obtained from cart
@@ -1365,8 +1368,12 @@ void extraFieldsFree(struct extraField **pExtras);
 #endif///def EXTRA_FIELDS_SUPPORT
 
 
+struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table);
+// If there is a tableDescriptions table and it has an entry for table, return
+// a parsed autoSql object; otherwise return NULL.
+
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb);
-// Get autoSQL description if any associated with table.
+// Get autoSQL description if any associated with table, ignoring errAborts if any.
 
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 // Return named column.

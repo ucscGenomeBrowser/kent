@@ -188,9 +188,13 @@ if(all)
         conn = hConnectCentral();
     sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb where active=1");
     while ((row = sqlNextRow(sr)) != NULL)
-        slNameAddHead(&dbs, row[0]);
+        {
+        printf("Found db %s\n", row[0]);
+        slNameAddHead(&dbs, cloneString(row[0]));
+        }
+
     sqlFreeResult(&sr);
-    sqlDisconnect(&conn);
+    hDisconnectCentral(&conn);
     }
 else
     {
@@ -199,10 +203,20 @@ else
         slNameAddHead(&dbs, argv[i]);
     }
 
-// just check that the username/password actually works
+slNameAddHead(&dbs, cloneString("hgFixed"));
+slNameAddHead(&dbs, cloneString("go"));
+slNameAddHead(&dbs, cloneString("uniProt"));
+slNameAddHead(&dbs, cloneString("visiGene"));
+
 struct sqlConnection *conn;
-conn = sqlConnectRemote(host, user, password, NULL);
-sqlDisconnect(&conn);
+
+// just check that the username/password actually works
+if (host!=NULL)
+    {
+    printf("checking mysql credentials from command line\n");
+    conn = sqlConnectRemote(host, user, password, NULL);
+    sqlDisconnect(&conn);
+    }
 
 for (; dbs != NULL; dbs = dbs->next)
     {

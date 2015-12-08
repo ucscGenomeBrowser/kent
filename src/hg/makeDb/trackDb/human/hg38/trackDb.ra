@@ -124,6 +124,8 @@ include ../chainNetPlacental.ra
 include ../chainNetVertebrate.ra
 include ../chainNetLegacy.ra alpha
 include ../newChainNet.ra alpha
+include ../chainNetXenTro3.ra beta,public
+include ../chainNetXenTro7.ra alpha
 
 track contigAlignmentSegments
 shortLabel ContigSegments
@@ -143,7 +145,7 @@ otherDb hg38
 chainNormScoreAvailable yes
 
 track multiz4way
-shortLabel 4-way Multiz
+shortLabel Cons 4-way
 longLabel 4-Way Multiz Alignment & Conservation
 group compGeno
 visibility hide

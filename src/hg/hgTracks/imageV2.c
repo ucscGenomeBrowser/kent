@@ -17,11 +17,7 @@
 
 
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
-//struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
 struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-//struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
-//struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
-//struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
 /////////////////////////
 // FLAT TRACKS
@@ -1092,7 +1088,7 @@ if (hIsPrivateHost())
         char * name = (imgTrack->name != NULL ? imgTrack->name
                                               : imgTrack->tdb != NULL ? imgTrack->tdb->track
                                                                       : imgFile);
-        warn("imgTrackAddMapItem(%s,%s) mapItem(%d:%d,%d:%d) spills over track bounds(%d:%d,%d:%d)",
+        warn("imgTrackAddMapItem(%s,%s) mapItem (%d,%d)(%d,%d) spills over track bounds(%d,%d)(%d,%d)",
              name,title,topLeftX,topLeftY,bottomRightX,bottomRightY,leftX,topY,rightX,bottomY);
         }
     }
@@ -1541,7 +1537,7 @@ void imgBoxShow(struct dyString **dy,struct imgBox *imgBox,int indent)
 if (imgBox)
     {
     struct dyString *myDy = addIndent(dy,indent);
-    dyStringPrintf(myDy,"imgBox: %s.%s:%d-%d %c width:%d basePer:%g sideLabe:%s w:%d "
+    dyStringPrintf(myDy,"imgBox: %s.%s:%d-%d %c width:%d basePer:%g sideLabel:%s w:%d "
                         "portal:%s %d-%d w:%d",(imgBox->db ? imgBox->db : ""),
                         (imgBox->chrom ? imgBox->chrom : ""),imgBox->chromStart,imgBox->chromEnd,
                         (imgBox->plusStrand    ? '+'   : '-'),imgBox->width,imgBox->basesPerPixel,

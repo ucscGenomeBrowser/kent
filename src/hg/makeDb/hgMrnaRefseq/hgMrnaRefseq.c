@@ -20,7 +20,7 @@ errAbort(
 
 int main(int argc, char *argv[])
 {
-struct sqlConnection *conn, *conn2, *conn3;
+struct sqlConnection *conn, *conn2;
 char query[256], query2[256];
 struct sqlResult *sr, *sr2;
 char **row, **row2;
@@ -28,19 +28,9 @@ char **row, **row2;
 char *chp;
 FILE *o1;
 
-char *locusID;	/* LocusLink ID */
 char *gbAC;		/* GenBank accession.version */
-char *giNCBI;	/* NCBI gi for the protein record associated with the CDS */
-char *seqType;	/* sequence type m=mRNA g=genomic u=undefined */
-char *proteinAC;	/* protein accession.version */
-char *taxID;	/* tax id */
-    
 char *locusID2;	/* LocusLink ID */
 char *refAC;	/* Refseq accession.version */
-char *giNCBI2;	/* NCBI gi for the protein record associated with the CDS */
-char *revStatus;	/* review status */
-char *proteinAC2;	/* protein accession.version */
-char *taxID2;	/* tax id */
 char *dbName; 
 
 if (argc != 2) usage();
@@ -48,7 +38,6 @@ dbName = argv[1];
 
 conn = hAllocConn(dbName);
 conn2= hAllocConn(dbName);
-conn3= hAllocConn(dbName);
 
 o1 = fopen("j.dat", "w");
     
@@ -59,22 +48,13 @@ while (row2 != NULL)
     {
     locusID2 	= row2[0];
     refAC 	= row2[1];
-    giNCBI2 	= row2[2];
-    revStatus 	= row2[3];
-    proteinAC2 	= row2[4];
-    taxID2 	= row2[5];
-		
+
     sqlSafef(query, sizeof query, "select * from %sTemp.locus2Acc0 where locusID=%s and seqType='m';", dbName, locusID2);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     while (row != NULL)
     	{
-	locusID 	= row[0];
 	gbAC 		= row[1];
-	giNCBI 		= row[2];
-	seqType 	= row[3];
-	proteinAC 	= row[4];
-	taxID 		= row[5];
 
 	chp = strstr(gbAC, ".");
 	if (chp != NULL) *chp = '\0';

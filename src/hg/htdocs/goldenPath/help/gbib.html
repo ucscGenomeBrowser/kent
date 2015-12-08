@@ -33,6 +33,7 @@
     <li><a class="toc" href="#SharingGBIB">Sharing Genome Browser in a Box with Colleagues</a>
     <li><a class="toc" href="#UsrAcct">User Accounts and Sessions</a>
     <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
+    <li><a class="toc" href="#Commands">Genome Browser in a Box Commands</a>
     <li><a class="toc" href="#License">Licensing Information</a>
   </b></ul>
 </td>
@@ -409,6 +410,7 @@ your own use, replace the URL with a pasted URL from your own machine):
     track type=bam name=BamExample bigDataUrl=http://127.0.0.1:1234/folders/test/bamExample.bam
     </pre> </p>
 
+<a name="Connectwithssh">
 <p><b>Connecting to GBiB with ssh</b></p>
 <p>
 The GBiB terminal is a normal Linux command line interface. For easier use of the command
@@ -702,6 +704,77 @@ The file /usr/local/apache/cgi-bin/hg.conf should already include a line like
 <p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
+
+<a name="Commands"></a>
+<div class="section">
+<h1>Genome Browser in a Box Commands</h1>
+<div class="sectionContent">
+<!-- Explanation here 
+-->
+<p>In addition to normal Linux commands, GBiB defines some special commands you may use
+   while inside the GBiB terminal's window. These additional commands are documented in the 
+   README.txt file on the GBiB terminal's home directory, which can also be accessed
+   via <a href="#Connectwithssh">ssh</a>.</p>
+<p><b>General commands:</b></p>
+   <table>
+      <tr><td>
+         <ul style="list-style:none;"> 
+            <li><code>gbibAutoUpdateOff</code>   
+            <li><code>gbibAutoUpdateOn</code>    
+            <li><code>gbibOffline</code>         
+            <li><code>gbibOnline</code>          
+            <li><code>gbibMirrorTracksOff</code> 
+            <li><code>gbibMirrorTracksOn</code>  
+            <li><code>gbibAddTools</code>        
+         </ul>
+      </td>
+      <td>
+         <ul style="list-style:none;">
+            <li>switch off automatic weekly updates
+            <li>reactivate automatic weekly updates
+            <li>switch off remote access to UCSC for tables or files
+            <li>reactivate remote access to UCSC for tables or files
+            <li>disable the "Mirror tracks" tool
+            <li>enable the "Mirror tracks" tool
+            <li>download the UCSC genome command line tools into the ~bin directory
+         </ul>
+      </td></tr>
+   </table>
+   
+<p><b>Advanced commands:</b></p>
+   <table>
+      <tr><td>
+         <ul style="list-style:none;">
+            <li><code>gbibCoreUpdate</code>
+            <li><code>gbibFixMysql1</code>
+            <li><code>gbibFixMysql2</code>
+            <li><code>gbibResetNetwork</code>
+            <li><code>gbibUcscLog</code>
+            <li><code>gbibUcscTablesLog</code>
+            <li><code>gbibUcscTablesReset</code>
+            <li><code>gbibUcscGbdbLog</code>
+            <li><code>gbibUcscGbdbReset</code>
+         </ul>
+      </td>
+      <td>
+         <ul style="list-style:none;">
+            <li>download the most current update script from UCSC now, this is part of an automatic 
+                update 
+            <li>fix all mysql databases, fast version
+            <li>fix all mysql databases, intensive version
+            <li>reinit the eth0 network interface, in case VirtualBox dropped the network connection
+            <li>show a real-time log of all MySQL queries on the console 
+            <li>show the tables that had to be loaded through the internet from UCSC
+            <li>reset the table counters
+            <li>show the gbdb files that had to be loaded through the internet from UCSC 
+            <li>reset the gbdb counters
+         </ul>
+      </td></tr>
+   </table>
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
 
 <a name="License"></a>
 <div class="section">

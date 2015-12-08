@@ -419,7 +419,6 @@ sqlUpdate(conn, query);
 
 /* Wrap the validations in an error catcher that will save error to file table in database */
 errCatch = errCatchNew();
-boolean success = FALSE;
 if (errCatchStart(errCatch))
     {
     /* Check MD5 sum here.  */
@@ -449,8 +448,6 @@ if (errCatchStart(errCatch))
     /* Update edwSubmit so file no longer shown as in transit */
     sqlSafef(query, sizeof(query), "update edwSubmit set fileIdInTransit=0 where id=%u", submitId);
     sqlUpdate(conn, query);
-
-    success = TRUE;
     }
 errCatchEnd(errCatch);
 if (errCatch->gotError)

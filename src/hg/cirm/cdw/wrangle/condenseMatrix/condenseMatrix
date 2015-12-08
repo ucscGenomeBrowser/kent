@@ -1,0 +1,175 @@
+#!/usr/bin/env python2.7
+# condenseMatrix
+"""
+Condense an expression matrix from transcript rows to gene rows. 
+Currently only works for human expression matrices with ensemble transcripts. 
+"""
+import os, sys, collections, argparse
+
+# import the UCSC kent python library
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+import tempfile
+import subprocess
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("inputFile",
+    help = " The input file. ",
+    type = argparse.FileType("r"))
+    parser.add_argument ("outputFile",
+    help = " The output file. ",
+    type =argparse.FileType("w"))
+    parser.add_argument ("--verbose",
+    help = " Spit out messages during runtime. ",
+    action = "store_true")
+
+    parser.set_defaults(verbose = False)
+    options = parser.parse_args()
+    return options
+
+def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
+    """
+    Input:
+        inputFile - an opened file (r).
+        intermediateFile - a namedTemporaryFile.
+        ensembleExonToGene - a dict, string keys map to string values. 
+    Takes in an input matrix and converts the transcript names into gene
+    names.  The new matrix is written to intermediateFile.  The conversion
+    is accomplished with the ensembleExonToGene table. 
+    """
+    firstLine = True
+    expCol = 0
+    count = 0 
+    for line in inputFile:
+        if firstLine: # Skip the first line
+            firstLine = False
+            intermediateFile.write(line)
+            expCol = len(line.split())
+            count +=1
+            continue 
+        splitLine = line.split()
+        if (len(splitLine)!=expCol):
+            print ("The matrix has been corrupted on line %i. Aborting"%(count))
+            exit(1)
+        count +=1
+        if (humanMap.get(splitLine[0])): 
+            count = 0 
+            for item in splitLine:
+                if (count == 0):
+                    intermediateFile.write(humanMap[splitLine[0]] + "\t")
+                    count += 1
+                    continue
+                intermediateFile.write(splitLine[count] + "\t")
+                count +=1 
+            intermediateFile.write("\n")
+        elif (mouseMap.get(splitLine[0])): 
+            count = 0 
+            for item in splitLine:
+                if (count == 0):
+                    intermediateFile.write(mouseMap[splitLine[0]] + "\t")
+                    count += 1
+                    continue
+                intermediateFile.write(splitLine[count] + "\t")
+                count +=1 
+            intermediateFile.write("\n")
+        else: 
+            print ("The transcript, %s, was not found in the hash table. Aborting."%(splitLine[0]))
+            exit(1)
+        splitLine = None
+
+def collapseRows(intermediateFile, outputFile):
+    """
+    Input:
+        intermediateFile - a namedTemporaryFile. 
+        outputFile - an opened file (w). 
+    Goes through the intermediateFile and collapses the rows. This 
+    function assumes that the intermediate file has been sorted. The collapsed
+    matrix is printed to outputFile. 
+    """
+    firstLine = True
+    newRow = []
+    rowsInBlock = 0
+    skip = True
+    count = 0
+    for line in intermediateFile:
+        splitLine = line.split()
+        if skip: # Skip the first row (header names)
+            skip = False
+            outputFile.write(line)
+            expCols = len(splitLine) # Lets verify this is actually a matrix while we make it.
+            count += 1
+            continue 
+        if (len(splitLine) != expCols): 
+            print ("The matrix has been corrupted on line %i. Aborting."%(count))
+            exit(1)
+        if firstLine: # This is the first line of the actual matrix
+            firstLine = False
+            newRow = splitLine 
+            rowsInBlock = 1
+            continue
+        if (splitLine[0]==newRow[0]): #Inside the same block, keep a summation of the items in this block. 
+            itemCount = 1
+            rowsInBlock += 1
+            for item in splitLine[1:]: 
+                newRow[itemCount] = float(newRow[itemCount]) + float(splitLine[itemCount])
+                itemCount +=1 
+        else:  # This is a flush statement, the current 'block' is complete and the collapsing occurs. 
+            # Disable the averaging for now...
+            itemCount = 1
+            for item in newRow[1:]:
+                newRow[itemCount] = str(float(newRow[itemCount]))
+            #    newRow[itemCount] = str(float(newRow[itemCount])/float(rowsInBlock))
+                itemCount += 1
+            outputFile.write("\t".join(newRow) + "\n")
+            newRow = splitLine 
+            rowsInBlock = 1
+        count +=1
+
+def main(args):
+    """
+    Initialized options and calls other functions. Read in a hash table that maps the transcripts
+    to genes. Go through the matrix and convert every transcript name to gene names. Then call the
+    unix sort (fast) to sort the new matrix.  This generates 'blocks' of transcripts where all the 
+    transcripts for a given gene are next to each other.  Go through the blocked transcript  matrix
+    and compress it one block at a time, printing the compressed gene matrix one row at a time.  
+    """
+    options = parseArgs(args)
+    if (options.verbose): print ("Start condensing the expression matrix from transcripts to genes (condenseMatrix).")
+    #result = common.sqlQuery("hg38","select transcript, gene from ensGtp") 
+    
+    #Mappings were made with this command
+    #zcat /hive/groups/cirm/software/kallisto/transcripts/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz | grep \> | cut -d' ' -f1,4 | tr -d '>' | sed -e 's/gene://'
+
+    humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
+    mouseMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
+    #ensembleExonToGene = dict()
+    #for t in result.fetchall(): 
+    #    if (ensembleExonToGene.get(t[0])):    
+    #        print("A duplicate transcript was found. Something has gone wrong, aborting.")
+    #        exit(1) 
+    #    else: ensembleExonToGene.setdefault(t[0], t[1])
+    intermediateFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    finalFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
+    
+    # Convert names
+    if (options.verbose): print ("Converting names...")
+    convertNames(options.inputFile, intermediateFile, humanMap, mouseMap)
+    
+    # Sort
+    if (options.verbose): print ("Sorting...")
+    os.system("sort -k 1 -r %s > %s"%(intermediateFile.name, finalFile.name))
+    
+    # Collapse
+    if (options.verbose): print ("Collapsing matrix...")
+    collapseRows(finalFile,options.outputFile)
+    
+    intermediateFile.close()
+    finalFile.close()
+    if (options.verbose): print ("Completed condensing the expression matrix from transcripts to genes (condenseMatrix).")
+    
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))

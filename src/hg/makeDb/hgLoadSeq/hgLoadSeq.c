@@ -94,8 +94,7 @@ if (!gotIt)
 return TRUE;
 }
 
-boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, HGID seqId, FILE *seqTab,
-                  struct sqlConnection* conn)
+boolean loadFaSeq(struct lineFile *faLf, HGID extFileId, HGID seqId, FILE *seqTab)
 /* Add next sequence in fasta file to tab file */
 {
 off_t faOffset, faEndOffset;
@@ -134,6 +133,13 @@ return TRUE;
 void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab, HGID *nextSeqId)
 /* Add sequences in a fasta file to a seq table tab file */
 {
+/* Check if the faFile is already in the extFileTbl and inform the user.*/   
+char query[1024]; 
+sqlSafef(query, sizeof(query), "(select * from %s where name='%s'",extFileTbl,faFile);
+if (!test && !sqlGetResultExt(conn, query, NULL, NULL) && !replace)
+    errAbort("The file %s already has an entry in %s. To replace the existing entry rerun with the "
+	    "-replace option.", faFile, extFileTbl); 
+
 HGID extFileId = test ? 0 : hgAddToExtFileTbl(faFile, conn, extFileTbl);
 struct lineFile *faLf = lineFileOpen(faFile, TRUE);
 unsigned count = 0;
@@ -146,7 +152,7 @@ if (!faSeekNextRecord(faLf))
 lineFileReuse(faLf);
 
 /* Loop around for each record of FA */
-while (loadFaSeq(faLf, extFileId, *nextSeqId, seqTab, conn))
+while (loadFaSeq(faLf, extFileId, *nextSeqId, seqTab))
     {
     (*nextSeqId)++;
     count++;
@@ -177,6 +183,7 @@ if (!test)
         sqlUpdate(conn, query);
         }
     sqlSafef(query, sizeof(query), seqTableCreate, seqTbl);
+    // This aught to catch the duplicate table entry 
     sqlMaybeMakeTable(conn, seqTbl, query);
     firstSeqId = nextSeqId = hgGetMaxId(conn, seqTbl) + 1;
     }

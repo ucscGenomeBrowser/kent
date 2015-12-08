@@ -217,6 +217,22 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
+# autodetect UCSC installation of htslib:
+ifeq (${HTSDIR},)
+    HTSDIR = /hive/groups/browser/htslib
+    ifneq ($(wildcard ${HTSDIR}),)
+        ifeq (${USE_HTS},)
+            USE_HTS=1
+            USE_TABIX=1
+            USE_SAMTABIX=1
+            SAMTABIXDIR = /hive/groups/browser/htslib
+            SAMTABIXLIB=/hive/groups/browser/htslib/libhts.a
+            HG_DEFS+=-DUSE_HTS
+        endif
+    endif
+endif
+
+
 # autodetect UCSC installation of samtabix:
 ifeq (${SAMTABIXDIR},)
     SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}
@@ -301,7 +317,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type

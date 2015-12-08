@@ -46,8 +46,8 @@ static boolean measureTiming = FALSE;
 #define SAVED_LINE_COUNT  50
 
 /* CGI variables */
-#define hgCt		 "hgct_"  /* prefix for all control variables */
-
+#define hgCt		 "hgct_"  /* prefix for all control variables; these are removed at end! */
+#define hgCtNoRemove	 "hgctNoRemove_"
 /* these are shared with other modules */
 #define hgCtDataText      CT_CUSTOM_TEXT_ALT_VAR
 #define hgCtDataFile      CT_CUSTOM_FILE_VAR
@@ -62,6 +62,7 @@ static boolean measureTiming = FALSE;
 #define hgCtDeletePrefix "hgct_del"
 #define hgCtRefreshPrefix "hgct_refresh"
 #define hgCtConfigLines   "hgct_configLines"
+#define hgCtNavDest 	 hgCtNoRemove "navDest"
 
 /* commands */
 #define hgCtDo		  hgCt   "do_"	  /* prefix for all commands */
@@ -584,7 +585,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
                 ct->tdb->track);
         if ((dataUrl = ctDataUrl(ct)) != NULL)
             {
-            char js[1024];
+            char js[2048];
             safef(js, sizeof(js), "class='updateCheckbox' title='refresh data from: %s'", dataUrl);
             cgiMakeCheckBoxJS(buf, setAllUpdate, js);
             }
@@ -656,7 +657,6 @@ static void makeOtherCgiForm(char *pos)
 {
 struct slPair *valsAndLabels = makeOtherCgiValsAndLabels();
 // Default to the first CGI in the menu.
-#define hgCtNavDest "hgct_navDest"
 char *defaultCgi = valsAndLabels->name;
 char *selected = cartUsualString(cart, hgCtNavDest, defaultCgi);
 printf("<FORM STYLE=\"margin-bottom:0;\" METHOD=\"GET\" NAME=\"navForm\" ID=\"navForm\""

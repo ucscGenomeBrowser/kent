@@ -338,7 +338,6 @@ struct place *createPlace(struct position *pos)
   struct place *ret;
   char *names, *words[2];
   struct name *n;
-  int wordCount;
 
   AllocVar(ret);
   ret->next = NULL;
@@ -365,7 +364,7 @@ struct place *createPlace(struct position *pos)
   if (sameString(ret->type, "BAC End Pair"))
     {
       names = cloneString(pos->name);
-      wordCount = chopString(names, ",",words,2);
+      (void) chopString(names, ",",words,2);  // ignore return count
       ret->bePair = createName(words[0]);
       n = createName(words[1]);
       slAddHead(&ret->bePair, n);
@@ -848,7 +847,6 @@ int combinePos(struct place *p, struct position *pos)
   int d2 = abs(p->end - pos->end);
   struct name *n;
   char *words[2], *names;
-  int wordCount;
   struct name *pos2;
   boolean badBE = FALSE, sameEnd = FALSE;
 
@@ -932,7 +930,7 @@ int combinePos(struct place *p, struct position *pos)
       if (sameString(pos->type, "BAC End Pair"))
 	{
 	  names = cloneString(pos->name);
-	  wordCount = chopString(names, ",",words,2);
+	  (void) chopString(names, ",",words,2);  // ignore return count
 	  n = createName(words[0]);
 	  slAddHead(&p->bePair, n);
 	  n = createName(words[1]);

@@ -63,6 +63,7 @@
 #include "botDelay.h"
 #include "chromInfo.h"
 #include "extTools.h"
+#include "customFactory.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -157,7 +158,6 @@ for (track = trackList; track != NULL; track = track->next)
     if (stringIn("FaireH1h", track->track))
 	{
 	repeatCharOut(uglyOut, '+', depth);
-        uglyf("%s pri=%g defPri=%g<BR>\n", track->track, track->priority, track->defaultPriority);
 	}
     uglySnoopTrackList(depth+1, track->subtracks);
     }
@@ -427,6 +427,8 @@ if (!IS_KNOWN(track->remoteDataSource))
 	startsWithWord("halSnake",track->tdb->type) ||
 	startsWithWord("bigPsl",track->tdb->type) ||
 	startsWithWord("bigGenePred",track->tdb->type) ||
+	startsWithWord("bigChain",track->tdb->type) ||
+	startsWithWord("bigMaf",track->tdb->type) ||
 	startsWithWord("bam",track->tdb->type) || startsWithWord("vcfTabix", track->tdb->type))
         {
         SET_TO_YES(track->remoteDataSource);
@@ -616,7 +618,6 @@ MgFont *font = tl.font;
 char *mapName = "ideoMap";
 struct hvGfx *hvg;
 boolean doIdeo = TRUE;
-boolean ideogramAvail = FALSE;
 int ideoWidth = round(.8 *tl.picWidth);
 int ideoHeight = 0;
 int textWidth = 0;
@@ -635,7 +636,6 @@ else if(trackImgOnly && !ideogramToo)
     }
 else
     {
-    ideogramAvail = TRUE;
     /* Remove the track from the group and track list. */
     removeTrackFromGroup(ideoTrack);
     slRemoveEl(pTrackList, ideoTrack);
@@ -1152,7 +1152,6 @@ char minRangeStr[32];
 char maxRangeStr[32];
 
 int ymin, ymax;
-int start;
 int newy;
 char o4[256];
 char o5[256];
@@ -1220,7 +1219,7 @@ else
    display a left label in pack mode.  To use the full mode
    labeling, temporarily set visibility to full.
    Restore savedVis later */
-if (startsWith("wigMaf", track->tdb->type) || startsWith("maf", track->tdb->type))
+if (startsWith("bigMaf", track->tdb->type) || startsWith("wigMaf", track->tdb->type) || startsWith("maf", track->tdb->type))
     vis = tvFull;
 
 switch (vis)
@@ -1234,7 +1233,6 @@ switch (vis)
     case tvFull:
         if (isCenterLabelIncluded(track))
             y += fontHeight;
-        start = 1;
 
         if( track->subType == lfSubSample && track->items == NULL )
             y += track->height;
@@ -1244,6 +1242,7 @@ switch (vis)
             char *rootName;
             char *name = track->itemName(track, item);
             int itemHeight = track->itemHeight(track, item);
+            //warn(" track %s, itemHeight %d\n", track->shortLabel, itemHeight);
             newy = y;
 
             if (track->itemLabelColor != NULL)
@@ -1291,7 +1290,6 @@ switch (vis)
                     hvGfxTextRight(hvg, leftLabelX, y, leftLabelWidth - 1,
                                 itemHeight, track->ixColor, font, rootName );
                 freeMem( rootName );
-                start = 0;
                 y = newy;
                 }
             else
@@ -1700,10 +1698,9 @@ static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart
 int boxes = 30;
 int winWidth = winEnd - winStart;
 int newWinWidth = winWidth;
-int i, ws, we = 0, ps, pe = 0;
+int i, ws, we = 0;
 int mid, ns, ne;
 double wScale = (double)winWidth/boxes;
-double pScale = (double)insideWidth/boxes;
 char message[32];
 char *zoomType = cartCgiUsualString(cart, RULER_BASE_ZOOM_VAR, ZOOM_3X);
 
@@ -1726,9 +1723,7 @@ if (newWinWidth < 1)
 
 for (i=1; i<=boxes; ++i)
     {
-    ps = pe;
     ws = we;
-    pe = round(pScale*i);
     we = round(wScale*i);
     mid = (ws + we)/2 + winStart;
     ns = mid-newWinWidth/2;
@@ -2094,12 +2089,11 @@ pixWidth = tl.picWidth;
 leftLabelX = gfxBorder;
 leftLabelWidth = insideX - gfxBorder*3;
 
-struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
-struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
+static struct image *theOneImg  = NULL; // No need to be global, only the map needs to be global
+static struct image *theSideImg = NULL; // Because dragScroll drags off end of image,
                                  //    the side label gets seen. Therefore we need 2 images!!
-//struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
-struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
+static struct imgSlice *curSlice    = NULL; // No need to be global, only the map needs to be global
+
 // Set up imgBox dimensions
 int sliceWidth[stMaxSliceTypes]; // Just being explicit
 int sliceOffsetX[stMaxSliceTypes];
@@ -2110,7 +2104,6 @@ if (theImgBox)
 // theImgBox is a global for now to avoid huge rewrite of hgTracks.  It is started
 // prior to this in doTrackForm()
     {
-    rulerTtl = "drag select or click to zoom";
     hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
     hPrintf("<input type='hidden' name='c' value='%s'>\n", chromName);
     hPrintf("<input type='hidden' name='l' value='%d'>\n", winStart);
@@ -2275,6 +2268,7 @@ else
         theOneImg = imgBoxImageAdd(theImgBox,pngTn.forHtml,NULL,pixWidth, pixHeight,FALSE);
         theSideImg = theOneImg; // Unlkess this is overwritten below, there is a single image
         }
+
     hvgSide = hvg; // Unlkess this is overwritten below, there is a single image
 
     if (theImgBox && theImgBox->showPortal && withLeftLabels)
@@ -2380,6 +2374,7 @@ if (withLeftLabels && psOutput == NULL)
                 sliceHeight      = yEnd - yStart;
                 sliceOffsetY     = yStart - 1;
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 2: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,
                                                        sliceWidth[stButton],sliceHeight,
                                                        sliceOffsetX[stButton],sliceOffsetY);
@@ -2429,10 +2424,11 @@ if (withLeftLabels)
             sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
+                //warn("GTEX 3: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
             }
         if (baseTitle)
             {
@@ -2497,10 +2493,11 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 4: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
         if (trackShouldUseAjaxRetrieval(track))
             y += REMOTE_TRACK_HEIGHT;
@@ -2568,10 +2565,11 @@ if (rulerMode != tvHide)
         sliceHeight      = basePositionHeight + (rulerCds ? rulerTranslationHeight : 0) + 1;
         sliceOffsetY     = 0;
         curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
+                //warn("GTEX 5: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
         curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,rulerTtl,
                                                sliceWidth[stData],sliceHeight,
                                                sliceOffsetX[stData],sliceOffsetY);
-        curMap      = sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
+        (void) sliceMapFindOrStart(curSlice,RULER_TRACK_NAME,NULL); // No common linkRoot
         }
     y = doDrawRuler(hvg,&newWinWidth,&rulerClickHeight,rulerHeight,yAfterRuler,yAfterBases,font,
                     fontHeight,rulerCds);
@@ -2594,10 +2592,11 @@ if (withCenterLabels)
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("GTEX 6: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
                                                    sliceWidth[stData],sliceHeight,
                                                    sliceOffsetX[stData],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             if (isCenterLabelConditional(track))
                 imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track) ?
                                                                             clNowSeen : clNotSeen);
@@ -2633,10 +2632,11 @@ if (withCenterLabels)
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             if (sliceHeight > 0)
                 {
+                //warn("GTEX 7: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,
                                                        sliceWidth[stData],sliceHeight,
                                                        sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+                (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
         if (trackShouldUseAjaxRetrieval(track))
@@ -2648,9 +2648,9 @@ if (withCenterLabels)
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track);
             // Strange mapBoxToggleLogic handles reverse complement itself so x=0,width=tl.picWidth
 
-        if (yEnd!=y)
-            warn("Slice height does not add up.  Expecting %d != %d actual",
-                 yEnd - yStart - 1,y-yStart);
+        if (yEnd != y)
+            warn("Slice height for track %s does not add up.  Expecting %d != %d actual",
+                 track->shortLabel, yEnd - yStart - 1, y - yStart);
         }
     y++;
     }
@@ -2671,10 +2671,11 @@ if (withLeftLabels)
             sliceHeight      = trackPlusLabelHeight(track, fontHeight);
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                //warn("WARN 8: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,
                                                    sliceWidth[stSide],sliceHeight,
                                                    sliceOffsetX[stSide],sliceOffsetY);
-            curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            (void) sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
         if (trackShouldUseAjaxRetrieval(track))
@@ -3274,7 +3275,7 @@ else if (sameString(type, "bigWig"))
     if (trackShouldUseAjaxRetrieval(tg))
         tg->loadItems = dontLoadItems;
     }
-else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl"))
+else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameString(type, "bigPsl") || sameString(type, "bigMaf")|| sameString(type, "bigChain"))
     {
     struct bbiFile *bbi = ct->bbiFile;
 
@@ -3283,6 +3284,10 @@ else if (sameString(type, "bigBed")|| sameString(type, "bigGenePred") || sameStr
     char typeBuf[64];
     if (sameString(type, "bigGenePred"))
 	safef(typeBuf, sizeof(typeBuf), "bigGenePred");
+    else if (sameString(type, "bigChain"))
+	safef(typeBuf, sizeof(typeBuf), "bigChain");
+    else if (sameString(type, "bigMaf"))
+	safef(typeBuf, sizeof(typeBuf), "bigMaf");
     else if (sameString(type, "bigPsl"))
 	safef(typeBuf, sizeof(typeBuf), "bigPsl");
     else
@@ -4210,10 +4215,13 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigBed"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
+     || startsWithWord("bigChain"  , track->tdb->type)
+     || startsWithWord("bigMaf"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
-     && (bdu && strstr(bdu,"://"))
+     // XX code-review: shouldn't we error abort if the URL is not valid?
+     && (bdu && isValidBigDataUrl(bdu, FALSE))
      && !(containsStringNoCase(bdu, "dl.dropboxusercontent.com"))
      && (track->subtracks == NULL);
 }
@@ -4418,7 +4426,6 @@ boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
-char *clearButtonJavascript;
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4440,7 +4447,6 @@ jsonObjectAdd(jsonForClient, "insideX", newJsonNumber(insideX));
 jsonObjectAdd(jsonForClient, "revCmplDisp", newJsonBoolean(revCmplDisp));
 
 if (hPrintStatus()) cartSaveSession(cart);
-clearButtonJavascript = "document.TrackHeaderForm.position.value=''; document.getElementById('suggest').value='';";
 
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
@@ -4734,7 +4740,6 @@ if (!hideControls)
 	    freeDyString(&trackGroupsHidden1);
 	    freeDyString(&trackGroupsHidden2);
 	if (!psOutput) cartSaveSession(cart);   /* Put up hgsid= as hidden variable. */
-	clearButtonJavascript = "document.TrackForm.position.value=''; document.getElementById('suggest').value='';";
 	hPrintf("<CENTER>");
 	}
 
@@ -5847,6 +5852,7 @@ hPrintf("Mousetrap.bind('t h', function() { document.trackHubForm.submit();retur
 hPrintf("Mousetrap.bind('r s', function() { $('input[name=\"hgt.setWidth\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r f', function() { $('input[name=\"hgt.refresh\"]').click() }); \n");
 hPrintf("Mousetrap.bind('r v', function() { $('input[name=\"hgt.toggleRevCmplDisp\"]').click() }); \n");
+hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
@@ -5874,9 +5880,9 @@ hPrintf("<tr><td> zoom in base level</td><td class=\"hotkey\">b</td><td> refresh
 hPrintf("<tr><td> zoom out 1.5x</td><td class=\"hotkey\">ctrl+k</td><td> jump to position box</td><td class=\"hotkey\">/</td>        </tr>\n"); 
 hPrintf("<tr><td> zoom out 3x</td><td class=\"hotkey\">k</td>");
 if (gotExtTools)
-    hPrintf("<td>Send to external tool</td><td class=\"hotkey\">s then t</td>");
+    hPrintf("<td>send to external tool</td><td class=\"hotkey\">s then t</td>");
 hPrintf("               </tr>\n");
-hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>              </tr>\n");
+hPrintf("<tr><td> zoom out 10x</td><td class=\"hotkey\">K</td>     <td>view DNA</td><td class='hotkey'>v then d</td>         </tr>\n");
 hPrintf("<tr><td> zoom out 100x</td><td class=\"hotkey\">0</td>             </tr>\n");
 hPrintf("</table>\n");
 hPrintf("<img style=\"margin:8px\" src=\"../images/shortcutHelp.png\">");
@@ -5922,6 +5928,14 @@ else
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)
     udcSetCacheTimeout(timeout);
+
+// tell UDC where to put its statistics file
+char *udcLogFile;
+if ((udcLogFile =  cfgOption("udcLog")) != NULL)
+    {
+    FILE *fp = mustOpen(udcLogFile, "a");
+    udcSetLog(fp);
+    }
 
 initTl();
 

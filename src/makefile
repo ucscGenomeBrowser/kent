@@ -37,7 +37,7 @@ cgi-beta: check-beta libs
 
 check-beta:
 	# this will fail if we are not in a beta checkout:
-	git branch | egrep 'v[0-9]+_branch' > /dev/null	
+	git branch | egrep '\* v[0-9]+_branch' > /dev/null	
 
 blatSuite: topLibs hgLib
 	cd blat && ${MAKE}

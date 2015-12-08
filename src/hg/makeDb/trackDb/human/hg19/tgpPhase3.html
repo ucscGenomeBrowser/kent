@@ -1,0 +1,106 @@
+<h2>Description</h2>
+<p>
+This track shows 84.7 million single nucleotide polymorphisms (SNPs),
+3.6 million short insertions/deletions (indels), and 60,000 structural variants
+discovered by the
+<a href="http://www.1000genomes.org/" target="_blank">1000 Genomes Project</a>
+through its
+Phase 3 sequencing of 2,504 genomes from 16 populations worldwide.</p>
+<p>
+The variant genotypes have been phased by the 1000 Genomes Project
+(i.e., the two alleles of each diploid genotype have been assigned to two
+<a href="http://en.wikipedia.org/wiki/Haplotype" target="_blank">haplotypes</a>,
+one inherited from each parent).
+This extra information enables a clustering of independent haplotypes
+by local similarity for display.
+</p>
+
+<h2>Display Conventions</h2>
+<p>
+<!-- An image with arrows & numbers sure would help here! and on the controls page -->
+<!-- Also, this will apply to any VCF track w/phased genotypes, so probably should -->
+<!-- be moved into an include file. -->
+In &quot;dense&quot; mode, a vertical line is drawn at the position of each
+variant.
+In &quot;pack&quot; mode, since these variants have been phased, the
+display shows a clustering of haplotypes in the viewed range, sorted
+by similarity of alleles weighted by proximity to a central variant.
+The clustering view can highlight local patterns of linkage.</p>
+<p>
+In the clustering display, each sample's phased diploid genotype is split
+into two independent haplotypes.
+Each haplotype is placed in a horizontal row of pixels; when the number of
+haplotypes exceeds the number of vertical pixels for the track, multiple
+haplotypes fall in the same pixel row and pixels are averaged across haplotypes.</p>
+<p>
+Each variant is a vertical bar with black representing the reference allele
+and white (invisible) representing the non-reference allele(s).
+Tick marks are drawn at the top and bottom of each variant's vertical bar
+to make the bar more visible when most alleles are reference alleles.
+The vertical bar for the central variant used in clustering is outlined in purple.
+In order to avoid long compute times, the range of alleles used in clustering
+may be limited; alleles used in clustering have purple tick marks at the
+top and bottom.</p>
+<p>
+The clustering tree is displayed to the left of the main image.
+It does not represent relatedness of individuals; it simply shows the arrangement
+of local haplotypes by similarity.  When a rightmost branch is purple, it means
+that all haplotypes in that branch are identical, at least within the range of
+variants used in clustering.
+</p>
+
+<h2>Methods</h2>
+<p>
+The genomes of 2,504 individuals were sequenced using both whole-genome sequencing
+(mean depth = 7.4x) and targeted exome sequencing (mean depth = 65.7x).
+
+Quoting the Phase 3 publication (1000 Genomes Project Consortium, 2015):
+
+  <blockquote cite="http://www.nature.com/nature/journal/v526/n7571/full/nature15393.html">
+  In contrast to earlier phases of the project, we expanded analysis
+beyond bi-allelic events to include multi-allelic SNPs, indels, and a
+diverse set of structural variants (SVs). An overview of the sample
+collection, data generation, data processing, and analysis is given in
+Extended Data Fig. 1. Variant discovery used an ensemble of 24
+sequence analysis tools (Supplementary Table 2), and machine-learning
+classifiers to separate high-quality variants from potential false
+positives, balancing sensitivity and specificity. Construction of
+haplotypes started with estimation of long-range phased haplotypes
+using array genotypes for project participants and, where available,
+their first degree relatives; continued with the addition of high
+confidence bi-allelic variants that were analysed jointly to improve
+these haplotypes; and concluded with the placement of multi-allelic
+and structural variants onto the haplotype scaffold one at a time.
+  </blockquote>
+
+See also:
+<ul>
+<li><a href="http://www.1000genomes.org/analysis"
+    target=_blank>1000 Genomes Project - Analysis overview</a></li>
+<li>The Phase 3 integrated release
+    <a href="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/README_phase3_callset_20150220"
+    target=_blank>README file</a></li>
+<li><a href="http://www.nature.com/nature/journal/v526/n7571/extref/nature15393-s1.pdf"
+       target=_blank>Supplemental Information</a>
+    for 1000 Genomes Project Consortium, <i>et al.</i> (2015)</li>
+<li><a href="http://www.1000genomes.org/faq"
+       target=_blank>1000 Genomes Frequently Asked Questions (FAQ)</a></li>
+</ul>
+</p>
+
+<h2>Credits</h2>
+<p>
+Thanks to the
+<a href="http://www.1000genomes.org/" target="_blank">1000 Genomes Project</a>
+for making these data freely available.
+</p>
+
+<h2>References</h2>
+<p>
+1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO,
+Marchini JL, McCarthy S, McVean GA <em>et al</em>.
+<a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15393.html" target="_blank">
+A global reference for human genetic variation</a>.
+<em>Nature</em>. 2015 Oct 1;526(7571):68-74.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26432245" target="_blank">26432245</a>
+</p>

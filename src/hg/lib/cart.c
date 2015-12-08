@@ -696,6 +696,9 @@ cgiApoptosisSetup();
 if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
 
+if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
+    htmlSuppressErrors();
+
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
 char *ex;
@@ -1732,7 +1735,7 @@ char *styleFile = cfgOption("browser.style");
 if(styleFile != NULL)
     {
     char buf[512];
-    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
     char *copy = cloneString(buf);
     htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
     webSetStyle(copy);       // for web.c, used by hgc
@@ -1765,8 +1768,8 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
 {
 struct cart *cart;
 char *db, *org, *pos;
-char titlePlus[128];
-char extra[128];
+char titlePlus[2048];
+char extra[2048];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);

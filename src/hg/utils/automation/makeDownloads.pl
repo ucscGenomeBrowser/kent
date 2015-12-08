@@ -1116,7 +1116,7 @@ mkdir -p $gp
 foreach d (bigZips $chromGz database)
   rm -rf $gp/\$d
   mkdir $gp/\$d
-  ln -s $runDir/\$d/*.{gz,txt,2bit} $gp/\$d/
+  ln -s $runDir/\$d/*.{gz,txt,2bit,sizes} $gp/\$d/
 end
 # Don't blow away all of liftOver, just the README -- there may be
 # pre-existing links that are not regenerated above.

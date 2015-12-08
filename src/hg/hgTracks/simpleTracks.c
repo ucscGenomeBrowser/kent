@@ -1701,10 +1701,10 @@ if (attr == NULL)
     }
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
-    if (!cartVarExists(cart, oregannoTypeString[cnt])
-    ||  (  cartString(cart, oregannoTypeString[cnt]) != NULL
-        && differentString(cartString(cart, oregannoTypeString[cnt]), "0")
-        && sameString(oregannoTypeDbValue[cnt], attr->attrVal)))
+    if ((!cartVarExists(cart, oregannoTypeString[cnt])
+    ||  (cartString(cart, oregannoTypeString[cnt]) != NULL
+        && differentString(cartString(cart, oregannoTypeString[cnt]), "0")))
+        && (cmpWordsWithEmbeddedNumbers(oregannoTypeDbValue[cnt], attr->attrVal))==0)
         {
         oregannoAttrFree(&attr);
         return TRUE; /* include this type */
@@ -1742,7 +1742,6 @@ hFreeConn(&conn);
 struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
 /* load bigBed for a range, as a bed list (for next item button). Just grab one item */
 {
-extern struct bbiFile *fetchBbiForTrack(struct track *track);
 struct bbiFile *bbiFile = fetchBbiForTrack(tg);
 struct lm *lm = lmInit(0);
 struct bigBedInterval *intervals = bigBedIntervalQuery(bbiFile, chr,
@@ -3346,7 +3345,22 @@ if (tg->itemNameColor != NULL)
     if (withLeftLabels && isTooLightForTextOnWhite(hvg, color))
 	labelColor = somewhatDarkerColor(hvg, color);
     }
-int y = yOff + tg->lineHeight * sn->row;
+
+// get y offset for item in pack mode
+int yRow = 0;
+if (tg->ss && tg->ss->rowSizes != NULL)
+    {
+    int i;
+    for (i=0; i < sn->row; i++)
+        yRow += tg->ss->rowSizes[i];
+    int itemHeight = tg->itemHeight(tg, item);
+    yRow += (tg->ss->rowSizes[sn->row] - itemHeight + 1);
+    tg->heightPer = itemHeight;
+    }
+else
+    yRow = tg->lineHeight * sn->row;
+int y = yOff + yRow;
+
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
 /* pgSnpDrawAt may change withIndividualLabels between items */
@@ -3605,6 +3619,28 @@ for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
 hvGfxUnclip(hvg);
 }
 
+void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                            double scale, Color color, enum trackVisibility vis)
+/* Draw next item buttons and map boxes */
+//TODO: Use this to clean up genericDrawItemsFullDense (will require wading thru ifdefs)
+{
+boolean isNextItemCompatible = nextItemCompatible(tg);
+boolean isExonNumberMapsCompatible = exonNumberMapsCompatible(tg, vis);
+if (!isNextItemCompatible && !isExonNumberMapsCompatible)
+    return;
+boolean doButtons = (isExonNumberMapsCompatible ? FALSE: TRUE);
+
+// Convert start/end coordinates to pix
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+int sClp = (s < winStart) ? winStart : s;
+int eClp = (e > winEnd)   ? winEnd   : e;
+int x1 = round((sClp - winStart)*scale) + xOff;
+int x2 = round((eClp - winStart)*scale) + xOff;
+genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, -1, y, tg->heightPer, color, 
+                            doButtons); 
+}
+
 static void genericDrawItemsFullDense(struct track *tg, int seqStart, int seqEnd,
                                       struct hvGfx *hvg, int xOff, int yOff, int width,
                                       MgFont *font, Color color, enum trackVisibility vis)
@@ -3685,7 +3721,7 @@ void genericDrawItems(struct track *tg, int seqStart, int seqEnd,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense &&  baseColorCanDraw(tg))
+if (vis != tvDense && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
@@ -7754,7 +7790,7 @@ if (vis == tvDense)
 
 for (cds = tg->items; cds != NULL; cds = cds->next)
     {
-    int wTall, wShort, end, start, blocks;
+    int end, start, blocks;
 
     for (blocks = 0; blocks < cds->ssCount; blocks++)
         {
@@ -7762,8 +7798,6 @@ for (cds = tg->items; cds != NULL; cds = cds->next)
 	tallEnd = cds->largeEnds[blocks];
 	shortStart = cds->smallStarts[blocks];
 	shortEnd = cds->smallEnds[blocks];
-	wTall = tallEnd - tallStart;
-	wShort = shortEnd - shortStart;
 
 	if (shortStart < tallStart)
 	    {
@@ -11089,6 +11123,17 @@ else if (sameString(details->attrVal, "TRANSCRIPTION FACTOR BINDING SITE"))
     itemColor = hvGfxFindColorIx(hvg, 165, 165, 65);  /* tan, darkened some */
 else if (sameString(details->attrVal, "REGULATORY REGION"))
     itemColor = hvGfxFindColorIx(hvg, 102, 102, 0);  /* dark green */
+/* New ORegAnno colors (colorblind friendly) */
+else if (sameString(details->attrVal, "Regulatory Polymorphism"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 114, 178); /* Blue */
+else if (sameString(details->attrVal, "Transcription Factor Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 230, 159, 0);  /* Orange */
+else if (sameString(details->attrVal, "Regulatory Region"))
+    itemColor = hvGfxFindColorIx(hvg, 86, 180, 233);  /* Sky Blue */
+else if (sameString(details->attrVal, "Regulatory Haplotype"))
+    itemColor = hvGfxFindColorIx(hvg, 213, 94, 0);  /* Vermillion */
+else if (sameString(details->attrVal, "miRNA Binding Site"))
+    itemColor = hvGfxFindColorIx(hvg, 0, 158, 115);  /* bluish Green */
 oregannoAttrFreeList(&details);
 hFreeConn(&conn);
 return itemColor;
@@ -11563,7 +11608,6 @@ Color omimGene2Color(struct track *tg, void *item, struct hvGfx *hvg)
 /* set the color for omimLocation track items */
 {
 struct bed *el = item;
-char *omimId;
 char *phenClass;
 char query[256];
 struct sqlResult *sr;
@@ -11623,7 +11667,6 @@ if (row == NULL)
     }
 else
     {
-    omimId    = row[0];
     phenClass = row[1];
 
     if (sameWord(phenClass, "3"))
@@ -11902,7 +11945,6 @@ Color omimLocationColor(struct track *tg, void *item, struct hvGfx *hvg)
 /* set the color for omimLocation track items */
 {
 struct bed *el = item;
-char *omimId;
 char *phenClass;
 char query[256];
 struct sqlResult *sr;
@@ -11959,7 +12001,6 @@ if (row == NULL)
     }
 else
     {
-    omimId    = row[0];
     phenClass = row[1];
 
     if (sameWord(phenClass, "3"))
@@ -12692,12 +12733,32 @@ else if (sameWord(type, "bigBed"))
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
+else if (sameWord(type, "bigMaf"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "3";
+    wigMafMethods(track, tdb, wordCount, words);
+    track->isBigBed = TRUE;
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigPsl"))
     {
     tdb->canPack = TRUE;
     wordCount++;
     words[1] = "12";
     bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "bigChain"))
+    {
+    tdb->canPack = TRUE;
+    wordCount++;
+    words[1] = "11";
+    track->isBigBed = TRUE;
+    chainMethods(track, tdb, wordCount, words);
     if (trackShouldUseAjaxRetrieval(track))
         track->loadItems = dontLoadItems;
     }
@@ -12899,6 +12960,8 @@ else if (sameWord(type, "gvf"))
 /* add handlers for wildcard */
 if (startsWith("peptideAtlas", track->track))
     peptideAtlasMethods(track);
+else if (startsWith("gtexGene", track->track))
+    gtexGeneMethods(track);
 #endif /* GBROWSE */
 }
 

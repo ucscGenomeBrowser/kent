@@ -1,0 +1,249 @@
+#!/usr/bin/env python2.7
+# rnaSeqToClustersPipeline
+"""
+Take raw RNA seq data, fastq files, and cluster them. I do this all manually normally
+and to be quite honest... Python will do it better than I could. -Chris  
+"""
+import os
+import sys
+import collections
+import argparse
+import subprocess
+import tempfile
+import time
+
+# import the UCSC kent python library
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+
+
+import common
+
+def parseArgs(args):
+    """
+    Parse the command line arguments.
+    """
+    parser= argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("manifestFastq",
+    help = " The manifest file for the fastq files. ",
+    action = 'store')
+    parser.add_argument ("dataSetId",
+    help = " The data set id, ie quakeBrainGeo1. Output files will be placed in this directory. ",
+    action = 'store')
+    parser.add_argument ("--verbose",
+    help = " Spit runtime messages to stdout. ", 
+    action = 'store_true')
+    parser.add_argument ("--isMouse",
+    help = " This is a mouse submission. ", 
+    action = 'store_true')
+    parser.add_argument ("--noKallisto",
+    help = " Do not do the kallisto step." ,
+    action = 'store_true')
+    parser.add_argument ("--single",
+    help = " Not paired end data." ,
+    action = 'store_true')
+    parser.add_argument ("--noMakeExpMatrix",
+    help = " Do not do the makeExpMatrix step.", 
+    action = 'store_true')
+    parser.add_argument ("--noCondenseMatrix",
+    help = " Do not do the CondenseMatrix step.", 
+    action = 'store_true')
+    parser.add_argument ("--noExpMatrixToJson",
+    help = " Do not do the ExpMatrixToJson step.", 
+    action = 'store_true')
+    parser.add_argument ("--noAddMetaDataToJson",
+    help = " Do not do the AddMetaDataToJson step.", 
+    action = 'store_true')
+    parser.add_argument ("--reRun",
+    help = " Pick up where the pipeline left off, overwrite names",
+    action = 'store_true')
+    parser.add_argument ("--fields", 
+    nargs="+",
+    action = "store")
+
+    parser.set_defaults(fields = ["age","tissue","donor"])
+    parser.set_defaults(noKallisto = False)
+    parser.set_defaults(noMakeExpMatrix = False)
+    parser.set_defaults(noCondenseMatrix = False)
+    parser.set_defaults(noExpMatrixToJson = False)
+    parser.set_defaults(noAddMetaDataToJson = False)
+    parser.set_defaults(reRun = False)
+    parser.set_defaults(isMouse = False)
+    parser.set_defaults(single = False)
+    parser.set_defaults(verbose = False)
+    options = parser.parse_args()
+    return options
+
+def doKallisto(manifestFileName, outDirName, isMouse, verbose, skip):
+    """
+    Input:
+        manifestFileName - A string
+        outDirName - A string
+    Takes in a directory name. The directory is assumed to have rnaSeq fastq files
+    in a .gz format.  The files are ran through the RNA quantifiaction program Kallisto
+    which generates output files into a new directory. 
+    """
+    if skip:
+        if verbose: print ("Skipping the kallisto step.")
+    else:
+        if verbose: print ("#######################################################")
+        args = ["kallistoOnFastqMani", manifestFileName, outDirName]
+        if (verbose): args.append("--verbose")
+        if (isMouse): args.append("--isMouse")
+        p = subprocess.Popen(args)
+        stdout, stderr = p.communicate()
+        if verbose: print ("#######################################################")
+
+def doMakeExpMatrix(inDir, mxFileName, verbose, skip):
+    """
+    Input:
+        inDir - A string
+        mxFileName - A string
+    Takes in a directory name. The directory is assumed to have kallisto output
+    files in it. These files are used to generate an expression matrix. The
+    expression matrix is generated in the current directory with the name mxFileName. 
+    """
+    if skip:
+        if verbose: print ("Skipping the makeExpMatrix step.")
+    else:
+        if verbose: print ("#######################################################")
+        args = ["makeExpMatrix", inDir, mxFileName]
+        if (verbose): args.append("--verbose")
+        p = subprocess.Popen(args)
+        stdout, stderr = p.communicate()
+        if verbose: print ("#######################################################")
+    
+def doExpMatrixToJson(mxFileName, clusteringName, verbose, skip):
+    """
+    Input:
+        mxFileName - A string
+    Takes in the matrix file name and performs a euclidean clustering.  Two output
+    files are generated clusteringName.html and clusteringName.json.  
+    """
+    if skip:
+        if verbose: print ("Skipping the doExpMatrixToJson step.")
+    else:
+        if verbose: print ("#######################################################")
+        args = ["expMatrixToJson", "-multiThreads",mxFileName,clusteringName]
+        if (verbose): args.append("-verbose=2")
+        p = subprocess.Popen(args)
+        stdout, stderr = p.communicate()
+        if verbose: print ("#######################################################")
+
+
+def doCondenseMatrix(mxFileName, condensedMxFileName, verbose, skip):
+    """
+    Input:
+        mxFileName - A string
+        condensedMxFileName - A string
+    Takes in a matrix file and generates a condensed matrix file. Assumes that the
+    matrix is using human transcripts.  
+    """
+    if skip:
+        if verbose: print ("Skipping the condenseMatrix step.")
+    else:
+        if verbose: print ("#######################################################")
+        args = ["condenseMatrix",mxFileName, condensedMxFileName]
+        if (verbose): args.append("--verbose")
+        p = subprocess.Popen(args)
+        stdout, stderr = p.communicate()
+        if verbose: print ("#######################################################")
+
+def doAddMetaDataToJson(jsonFileName, htmlFileName,  metaDataFileName, outputJsonFile, outputHtmlFile, fields, verbose, skip):
+    """
+    Input:
+        jsonFileName - A string
+        htmlFileName - A string
+        metaDataFileName - A string
+        outputJsonFile - A string
+        outputHtmlFile - A string 
+        keyCol - An integer
+        fields - A list of integers
+    Adds meta data to a .json file.  The metaDataFile should have a column that 
+    links the .json file entries to the rest of the meta data (keyCol). The corresponding meta data
+    values that correspond to the entries in 'fields' are added to each .json entry.
+    """
+    if skip:
+        if verbose: print ("Skipping the addMetaDataToJson step.")
+    else:
+        if verbose: print ("#######################################################")
+        args = ["addMetaDataToJson",jsonFileName, htmlFileName,  metaDataFileName, outputJsonFile, outputHtmlFile, "--fields"]
+        for field in fields:
+            args.append(field)
+        if (verbose): args.append("--verbose")
+        p = subprocess.Popen(args)
+        stdout, stderr = p.communicate()
+        if verbose: print ("#######################################################")
+
+def checkKallistoProgress(manifestFileName, kallistoLoc, single):
+    """
+    INPUT:
+        manifestFile - A string.
+        kallistoLoc - A string. 
+    Check if kallisto is still running. Return False if finished, true if still
+    running. 
+    """
+    fastqFileCount = len(open(manifestFileName,"r").readlines()) - 1  # Don't consider the header
+    kallistoFiles = tempfile.NamedTemporaryFile()
+    while(not os.path.exists(kallistoLoc)):
+        time.sleep(10)
+        
+    os.system("ls %s/*/abundance.t* > %s"%(kallistoLoc,kallistoFiles.name))
+    kallistoFileCount = len(kallistoFiles.readlines()) 
+    if single: 
+        if (fastqFileCount == (kallistoFileCount)): return False 
+    else:
+        if (fastqFileCount == (kallistoFileCount*2)): return False 
+    return True 
+
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    # Kallisto
+    try:
+        open(options.manifestFastq, "r")
+    except IOError: 
+        print ("Manifest file not found, aborting") 
+        exit(1)
+    
+    mani = open(options.manifestFastq, "r")
+    firstLine = mani.readline()
+    metaCol = firstLine.index("meta")
+    mani.close()
+
+    # Kallisto
+    doKallisto(options.manifestFastq, "kallistoOut" ,options.isMouse, options.verbose, options.noKallisto)
+    
+    dir = os.getcwd()+ "/" +options.dataSetId
+    if not os.path.exists(dir):
+        os.makedirs(dir)
+        os.chdir(dir)
+    else:
+        if (not options.reRun):
+            print ("The data set ID provided, %s, is already in use. Aborting."%(options.dataSetId))
+            exit(1)
+        else:
+            os.chdir(dir)
+    
+    # MakeExpMatrix
+    kallistoLoc = "../kallistoOut"
+    while checkKallistoProgress("../"+options.manifestFastq, kallistoLoc, options.single):
+        time.sleep(10)
+    doMakeExpMatrix(kallistoLoc, "trscrptExpMatrix.mx", options.verbose, options.noMakeExpMatrix)
+   
+    # CondenseMatrix
+    doCondenseMatrix("trscrptExpMatrix.mx", "geneExpMatrix.mx", options.verbose, options.noCondenseMatrix)
+    
+    # ExpMatrixToJson
+    doExpMatrixToJson("trscrptExpMatrix.mx", "trscrptClustering", options.verbose, options.noExpMatrixToJson)
+    doExpMatrixToJson("geneExpMatrix.mx", "geneClustering", options.verbose, options.noExpMatrixToJson)
+    
+    # AddMetaDataToJson
+    doAddMetaDataToJson("trscrptClustering.json", "trscrptClustering.html", "../"+options.manifestFastq, "trscrptClusteringwMeta.json", "trscrptClusteringWMeta.html", options.fields, options.verbose, options.noAddMetaDataToJson)
+    doAddMetaDataToJson("geneClustering.json", "geneClustering.html", "../"+options.manifestFastq,"geneClusteringwMeta.json", "geneClusteringWMeta.html", options.fields, options.verbose, options.noAddMetaDataToJson)
+
+
+if __name__ == "__main__" : 
+    sys.exit(main(sys.argv))

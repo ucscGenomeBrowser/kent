@@ -36,7 +36,7 @@ if (bbi == NULL)
 	{
 	fileName = cloneString(trackDbSetting(track->tdb, "bigDataUrl"));
 	}
-    else
+    else 
 	{
 	struct sqlConnection *conn = NULL;
 	if (!trackHubDatabase(database))

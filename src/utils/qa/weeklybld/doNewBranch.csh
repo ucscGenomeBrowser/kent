@@ -86,7 +86,7 @@ echo  "NOW STARTING Git-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
 rm -f doNewGit.log
 #echo debug: disabled buildGitReports
-ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
+$WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
 #echo
@@ -126,8 +126,7 @@ echo "Build branch sandbox on beta [${0}: `date`]"
 ./buildBeta.csh
 if ( $status ) then
      echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
-    # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER ${BUILDMEISTER} galt browser-qa
-    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER ${BUILDMEISTER}
+    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" ${BUILDMEISTEREMAIL}
     echo "Waiting for any other processes to finish"
     wait
     exit 1
@@ -136,6 +135,8 @@ endif
 ## copy binaries to beta machine:
 rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
   /usr/local/apache/cgi-bin-beta/ qateam@hgwbeta:/data/apache/cgi-bin/
+## this htdocs rsync seems redundant. buildBeta.csh does not update htdocs-beta, 
+##  but make beta in htdocs/ does, however they should be identical already.
 rsync -a -P --exclude=hg.conf --exclude=hg.conf.private \
   /usr/local/apache/htdocs-beta/ qateam@hgwbeta:/data/apache/htdocs/
 rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
@@ -144,7 +145,7 @@ rsync -a -P --exclude=hg.conf --exclude=hg.conf.private --delete \
   /usr/local/apache/htdocs-beta/style/ qateam@hgwbeta:/data/apache/htdocs/style/
 
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
-echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." $USER ${BUILDMEISTER} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
+echo "v$BRANCHNN built successfully on beta (day 16)." | mail -s "v$BRANCHNN Build complete on beta (day 16)." ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu kent@soe.ucsc.edu browser-qa@soe.ucsc.edu
 
 echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
@@ -153,21 +154,23 @@ echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." $USER ${BUILDMEISTER} kuhn@soe.ucsc.edu ann@soe.ucsc.edu kate@soe.ucsc.edu luvina@soe.ucsc.edu steve@soe.ucsc.edu
+    echo "Ready for pairings, day 16, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 16, v${BRANCHNN} review)." ${BUILDMEISTEREMAIL} kuhn@soe.ucsc.edu ann@soe.ucsc.edu kate@soe.ucsc.edu luvina@soe.ucsc.edu steve@soe.ucsc.edu
 
 	# email all who have checked in that code summaries are due
     @ LASTNN=$BRANCHNN - 1
     #foreach victim (braney larrym angie hiram tdreszer kate chinhli)
     set victims=( `git log v${LASTNN}_base..v${BRANCHNN}_base --name-status | grep Author | sort | uniq | awk '{ end=index($0,"@"); beg=index($0,"<"); addr=substr( $0,beg+1,end-beg-1); print addr; }'` )
-    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." $USER ${BUILDMEISTER} ann@soe.ucsc.edu
+    echo "Expected victims:\n${victims}" | mail -s "Code summaries for v$BRANCHNN are expected from...." ${BUILDMEISTEREMAIL} ann@soe.ucsc.edu
+    set authorsFile="/hive/groups/qa/git-reports-history/v${BRANCHNN}/branch/user/authors.html"
     foreach victim ( $victims )
 		git log --author=${victim} v${LASTNN}_base..v${BRANCHNN}_base --pretty=oneline > /dev/null
 		if ($? == 0) then
 		       rm -f /dev/shm/build.email.${victim}.txt
-                       echo "To: ${victim}@soe.ucsc.edu" > /dev/shm/build.email.${victim}.txt
-                       echo "From: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       set toAddr=`./authorEmail.pl ${victim} ${authorsFile}`
+                       echo "To: ${toAddr}" > /dev/shm/build.email.${victim}.txt
+                       echo "From: <ann@soe.ucsc.edu> Ann Zweig" >> /dev/shm/build.email.${victim}.txt
                        echo "Subject: Code summaries are due for ${victim}" >> /dev/shm/build.email.${victim}.txt
-                       echo "Cc: ann@soe.ucsc.edu" >> /dev/shm/build.email.${victim}.txt
+                       echo "Cc: <ann@soe.ucsc.edu> Ann Zweig" >> /dev/shm/build.email.${victim}.txt
                        echo "" >> /dev/shm/build.email.${victim}.txt
 		       ./summaryEmail.sh ${victim} >> /dev/shm/build.email.${victim}.txt
 		       cat /dev/shm/build.email.${victim}.txt | /usr/sbin/sendmail -t -oi

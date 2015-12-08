@@ -16,6 +16,8 @@ struct spaceSaver
     struct spaceNode *nodeList; /* List of things put in space saver. */
     struct spaceRowTracker *rowList; /* List of rows. */
     int rowCount;             /* Number of rows. */
+    int *rowSizes;            /* Height in pixels of each row. 
+                                Used by tracks with variable height items. */
     int winStart,winEnd;      /* Start and end of area we're modeling. */
     int cellsInRow;           /* Number of cells per row. */
     double scale;             /* What to scale by to get to cell coordinates. */
@@ -57,6 +59,13 @@ struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int en
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
  * that won't fit in first row (ends up being last row after
  * spaceSaverFinish()). */
+
+int spaceSaverSetRowHeights(struct spaceSaver *ss, int (*itemHeight)(void *item));
+/* Determine maximum height of items in a row. Return total height.
+   Used by tracks with variable height items */
+
+int spaceSaverGetRowHeightsTotal(struct spaceSaver *ss);
+/* Return height of all rows. Used by tracks with variable height items */
 
 void spaceSaverFinish(struct spaceSaver *ss);
 /* Tell spaceSaver done adding nodes. */

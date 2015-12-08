@@ -145,6 +145,10 @@ void customFactoryEnableExtraChecking(boolean enable);
  * E.g. extra checking is great the first time we read in a custom track,
  * but we don't need it for every hgTracks call. */
 
+boolean isValidBigDataUrl(char *url, boolean doAbort);
+/* return True if the URL is a valid bigDataUrl. 
+ * It can be a local filename if this is allowed by udc.localDir 
+ */
 #endif /* CUSTOMFACTORY_H */
 
 

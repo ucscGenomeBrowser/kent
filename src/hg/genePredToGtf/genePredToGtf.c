@@ -103,8 +103,11 @@ fprintf(f, "%c\t", strand);
 fprintf(f, "%c\t", phase);
 fprintf(f, "gene_id \"%s\"; ", (isNotEmpty(geneName)) ? geneName : name);
 fprintf(f, "transcript_id \"%s\"; ", name);
-fprintf(f, "exon_number \"%d\"; ", exonIx+1);
-fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
+if (exonIx >= 0)
+    {
+    fprintf(f, "exon_number \"%d\"; ", exonIx+1);
+    fprintf(f, "exon_id \"%s.%d\";", name, exonIx+1);
+    }
 if (isNotEmpty(geneName))
     fprintf(f, " gene_name \"%s\";", geneName);
 fprintf(f, "\n");
@@ -376,6 +379,8 @@ if (addComments)
             gp->name, gp->chrom, gp->txStart, gp->txEnd,
             gp->strand, gp->cdsStart, gp->cdsEnd);
 
+writeGtfLine(f, source, name, geneName, chrom, strand, "transcript", 
+             gp->txStart, gp->txEnd, -1, -1);
 for (i=0; i<gp->exonCount; ++i)
     {
     writeGtfLine(f, source, name, geneName, chrom, strand, "exon", 

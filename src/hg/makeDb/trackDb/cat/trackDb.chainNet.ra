@@ -36,3 +36,5 @@ priority 540.3
 chainMinScore 5000
 chainLinearGap loose
 
+track chainNetCanFam3 override
+matrix 16 95,-160,-43,-141,-160,100,-121,-43,-43,-121,100,-160,-141,-43,-160,95

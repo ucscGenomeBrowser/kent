@@ -81,21 +81,27 @@ if ((select & GB_TYPE_MASK) != (GB_MRNA|GB_EST))
     {
     /* type subset */
     len += sqlSafefFrag(query+len, sizeof(query)-len,
-                 " WHERE (type='%s')", gbTypeName(select & GB_TYPE_MASK));
+                " WHERE (type='%s')", gbTypeName(select & GB_TYPE_MASK));
     haveWhere = TRUE;
     }
 if ((select & GB_SRC_DB_MASK) != (GB_GENBANK|GB_REFSEQ))
     {
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
-                 " %s (srcDb='%s')", (haveWhere ? " AND " : " WHERE "),
-                 gbSrcDbName(select & GB_SRC_DB_MASK));
+    if (haveWhere)
+        len += sqlSafefFrag(query+len, sizeof(query)-len,
+                    " AND (srcDb='%s')", gbSrcDbName(select & GB_SRC_DB_MASK));
+    else
+        len += sqlSafefFrag(query+len, sizeof(query)-len,
+                    " WHERE (srcDb='%s')", gbSrcDbName(select & GB_SRC_DB_MASK));
     haveWhere = TRUE;
     }
 if (accPrefix != NULL)
     {
-    len += sqlSafefFrag(query+len, sizeof(query)-len,
-                 " %s (acc LIKE '%s%%')", (haveWhere ? " AND " : " WHERE "),
-                 accPrefix);
+    if (haveWhere)
+        len += sqlSafefFrag(query+len, sizeof(query)-len,
+                    " AND (acc LIKE '%s%%')", accPrefix);
+    else
+        len += sqlSafefFrag(query+len, sizeof(query)-len,
+                    " WHERE (acc LIKE '%s%%')", accPrefix);
     haveWhere = TRUE;
     }
 

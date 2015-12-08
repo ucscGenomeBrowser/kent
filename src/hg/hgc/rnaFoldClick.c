@@ -250,12 +250,12 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 fprintf(f, "<PRE><TT>");
 for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     {
-    int size;
+    // int size;  unused variable
     char buf[256];
     lineEnd = lineStart + lineSize;
     if (lineEnd >= maf->textSize)
         lineEnd = maf->textSize;
-    size = lineEnd - lineStart;
+    // size = lineEnd - lineStart;  unused variable
     fprintf(f, "%-*s %.*s\n", srcChars, positionTag, lineSize, adjPosString + lineStart);
     for (mc = maf->components, i = 0; mc != NULL; mc = mc->next, i++)
         {

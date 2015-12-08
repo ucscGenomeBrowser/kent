@@ -1,0 +1,197 @@
+#!/usr/bin/env python2.7
+# makeExpMatrix 
+# Chris Eisenhart 09/08/2015 
+# ceisenha@ucsc.edu/ceisenhart@soe.ucsc.edu
+"""
+This program does the whole deal, it makes an expression matrix from kallisto output files.
+To run simply provide the kallisto output directory and a matrix name.  
+"""
+
+from __future__ import print_function  
+import  sys, operator, fileinput, collections, string, os.path
+import  re, argparse, subprocess, time, tempfile, math 
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+
+
+startTime = time.time()
+
+def parseArgs(args): 
+    """
+    """
+    parser = argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("kallistoPath",
+    help = " The kallisto output directory.",
+    action = "store")
+    parser.add_argument ("outputFile",
+    help = " The output matrix name.",
+    action = "store")
+    parser.add_argument ("--pNan",
+    help = " The value that will overwrite 'nan' values in the matrix, default is 0",
+    action = "store")
+    parser.add_argument ("--nNan",
+    help = " The value that will overwrite '-nan' values in the matrix, default is 0",
+    action = "store")
+    parser.add_argument ("--dirtyMatrix",
+    help = " Do not clean the matrix of 'nan' and '-nan' values. ", 
+    action = "store_true") 
+    parser.add_argument ("--sigmoidTransform",
+    help = " Transform the matrix values using a sigmoid transform.  ", 
+    action = "store_true")
+    parser.add_argument ("--allowNan",
+    help = "Allow nan values, they will be transformed based on the pNan and nNan options.",
+    action = "store_true")
+    parser.add_argument ("--verbose",
+    help = " Spit out messages during runtime. ",
+    action = "store_true")
+
+    parser.set_defaults(verbose = False)
+    parser.set_defaults(allowNan = False)
+    parser.set_defaults(pNan = "0")
+    parser.set_defaults(nNan = "0")
+    parser.set_defaults(dirtyMatrix = False)
+    parser.set_defaults(sigmoidTransform = False)
+    options = parser.parse_args()
+    return options
+
+
+def matrixCleanup(matrixFile, pNan, nNan, verbose, allowNan, outputFileName, kalDirListFileName):
+    """
+    Checks the matrix for invalid values
+    """
+    dirtyMatrix = tempfile.NamedTemporaryFile()
+    os.system("cat %s | tr \"-\" \"*\" > %s "%(matrixFile, dirtyMatrix.name))
+    negProcess = subprocess.Popen(["grep", "/*nan", "-c", dirtyMatrix.name], stdout = subprocess.PIPE)
+    negOut, negErr = negProcess.communicate()
+    if int(negOut) > 0: 
+        if (allowNan):
+            if (verbose): print ("An invalid value of '-nan' was found, it was replaced with %s."%(nNan))
+            os.system("sed -i 's/*nan/%s/g' %s"  %(dirtyMatrix.name,nNan))
+        else: 
+            os.system("rm %s"%(kalDirListFileName))
+            os.system("rm %s"%(outputFileName))
+            print ("An invalid value of '-nan' was found. Aborting.")
+            sys.exit(1) 
+    posProcess = subprocess.Popen(["grep", "nan", "-c", dirtyMatrix.name], stdout = subprocess.PIPE)
+    posOut, posErr = posProcess.communicate()
+    if int(posOut) > 0: 
+        if (allowNan):
+            if (verbose): print ("An invalid value of 'nan' was found, it was replaced with %s."%(pNan))
+            os.system("sed -i 's/nan/%s/g' %s"  %(dirtyMatrix.name,pNan))
+        else: 
+            os.system("rm %s"%(kalDirListFileName))
+            os.system("rm %s"%(outputFileName))
+            print ("An invalid value of 'nan' was found. Aborting.") 
+            sys.exit(1) 
+    os.system("cat %s | tr \"*\" \"-\" > %s "%(dirtyMatrix.name,matrixFile))
+
+def getAbundanceFileList(location, kalDirListFile):
+    """
+    Gets a list of valid kal out dirs, and generates a column row for the matrix.
+    Makes use of some shiesty tactitcs to ensure that the list only contains valid 
+    kallisto file names. This is important since it will be used in the matrix, 
+    any stray names will ruin the entire program. 
+    """ 
+    if not location.endswith("/"): location += "/" 
+    abundanceFiles = tempfile.NamedTemporaryFile()
+    os.system("ls %s*/abundance.t* > %s"%(location, abundanceFiles.name))
+    abundanceFileList = []
+    kalDirListFile.write("transripts\n")
+    for line in abundanceFiles:    
+        abundanceFileList.append(line[:-1])
+        dirName = line.split("/")[-2]
+        kalDirListFile.write(dirName+ "\n")
+    kalDirListFile.close()
+    return abundanceFileList
+
+def sigmoid(columnFile, transformColumnFile):
+    """
+    Performs a sigmoid transform on the matrix values. 
+    """
+    #skip = True
+    transformColumnFile.write(columnFile[0])
+    for line in columnFile[1:]:
+        #if (skip):
+        #    skip = False
+        #    transformColumnFile.write(line)
+        #    continue
+        prefiltered = float(line[:-1])/1000.0
+        output = 1.0/(1.0 + math.exp(prefiltered))
+        transformColumnFile.write("%f\n"%(output))
+     
+def generateMatrix(startFile, abundanceFileList, sigmoidTransform, verbose):
+    """
+    Fill the matrix values in.
+    """
+    # Snag a starting column from an abundance file (these are the transcript names) 
+    os.system("cut -f 1 %s | sed '1d'  > %s"%(abundanceFileList[0], startFile.name)) 
+    # Get the values for the matrix, this is the most time consumptive step. 
+    if (verbose): print ("Generating the raw matrix...")
+    count = 0
+    p25 = True
+    p50 = True
+    p75 = True
+    for file in abundanceFileList:
+        count += 1
+        if ((count/float(len(abundanceFileList))) > .25):
+            if p25: 
+                if (verbose): print ("25% complete... ")
+            p25 = False
+        if ((count/float(len(abundanceFileList))) > .50):
+            if p50: 
+                if (verbose): print ("50% complete...")
+            p50 = False
+        if ((count/float(len(abundanceFileList))) > .75):
+            if p75: 
+                if (verbose): print ("75% complete...")
+            p75 = False  
+        columnFile = tempfile.NamedTemporaryFile()
+        os.system("cut -f 5 %s | sed '1d' > %s"%(file, columnFile.name))
+        intermediateFile = tempfile.NamedTemporaryFile()
+        os.system("cat %s > %s"%(startFile.name,intermediateFile.name))
+        if (sigmoidTransform):
+            transformColumnFile = tempfile.NamedTemporaryFile()
+            sigmoid(columnFile,transformColumnFile)
+            os.system("paste %s %s > %s" %(intermediateFile.name, transformColumnFile.name, startFile.name))
+        else: os.system("paste %s %s > %s"%(intermediateFile.name, columnFile.name, startFile.name))
+    if (verbose): print ("Raw matrix complete! Adding in the column names...")
+
+
+
+def main(args):
+    """
+    Make an expression matrix using a number of in house programs and unix commands.
+    Makes use of hidden files, which could potentially overwrite existing ones 
+    (hopefully the names are obscure enough that this wont happen).
+    """
+    options = parseArgs(args)
+    location = options.kallistoPath
+    if (options.verbose): print ("Start generating the expression matrix (makeExpMatrix).")
+
+    # Before the matrix can be make we first need to generate a list of kallisto output names.  
+    kalDirListFile = open(tempfile.NamedTemporaryFile().name, "w")
+    abundanceFileList = getAbundanceFileList(location, kalDirListFile)
+    startFile = tempfile.NamedTemporaryFile()
+    generateMatrix(startFile, abundanceFileList, options.sigmoidTransform, options.verbose)
+    # Transpose the matrix, then pase in the column names 
+    middleFile = tempfile.NamedTemporaryFile()
+    os.system("rowsToCols %s %s"%(startFile.name, middleFile.name))
+    finalFile = tempfile.NamedTemporaryFile()
+    os.system("paste %s %s > %s"%(kalDirListFile.name, middleFile.name, finalFile.name))
+    if (options.verbose): print ("Transposing matrix into its final form...")
+
+    # Transpose it back to it's original glory 
+    call = ("rowsToCols %s %s"%(finalFile.name,options.outputFile)) 
+    os.system(call)
+    # Do some matrix cleanup...
+    if not options.dirtyMatrix: 
+        if (options.verbose): print ("Verifying the matrix values...")
+        matrixCleanup(options.outputFile, options.pNan, options.nNan, options.verbose, options.allowNan, options.outputFile, kalDirListFile.name)
+    # File cleanup!
+    os.system("rm %s"%(kalDirListFile.name))
+    if (options.verbose): print ("The program took %s seconds to complete. The output was"
+            " written to %s." %(time.time()-startTime,options.outputFile))
+    if (options.verbose): print ("Completed generating the expression matrix (makeExpMatrix).")
+
+if __name__ == "__main__" :
+    sys.exit(main(sys.argv))

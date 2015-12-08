@@ -52,7 +52,7 @@ errAbort(
   "The in.bed file must be sorted by chromosome,start,\n"
   "  to sort a bed file, use the unix sort command:\n"
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
-  "Sorting must be case insensitive (LC_COLLATE=C).\n"
+  "Sorting must be set to skip Unicode mapping (LC_COLLATE=C).\n"
   "\n"
   "options:\n"
   "   -type=bedN[+[P]] : \n"
@@ -578,7 +578,7 @@ double aveSize = 0;
 bits64 bedCount = 0;
 bits32 uncompressBufSize = 0;
 struct bbiChromUsage *usageList = bbiChromUsageFromBedFile(lf, chromSizesHash, eim, 
-    &minDiff, &aveSize, &bedCount);
+    &minDiff, &aveSize, &bedCount, tabSep);
 verboseTime(1, "pass1 - making usageList (%d chroms)", slCount(usageList));
 verbose(2, "%d chroms in %s. Average span of beds %f\n", slCount(usageList), inName, aveSize);
 

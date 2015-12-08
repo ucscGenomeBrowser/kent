@@ -1548,6 +1548,7 @@ group varRep
 visibility hide
 useScore 1
 type bed 12 +
+exonNumbers off
 
 track rmskUpdate
 shortLabel RM update
@@ -2723,6 +2724,7 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel GRC Incident:
 
 track tRNAs
+release alpha
 shortLabel tRNA Genes
 longLabel Transfer RNA Genes Identified with tRNAscan-SE
 group genes

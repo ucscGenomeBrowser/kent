@@ -3,7 +3,14 @@
 <p>
 The RefSeq Genes track shows known $organism protein-coding and
 non-protein-coding genes taken from the NCBI RNA reference sequences
-collection (RefSeq). The data underlying this track are updated daily.</p>
+collection (RefSeq). The data underlying this track are updated weekly.</p>
+
+<p>
+Please visit the <a href="http://www.ncbi.nlm.nih.gov/projects/RefSeq/update.cgi" 
+target="_blank">Feedback for Gene and Reference Sequences (RefSeq)</a> page to
+make suggestions, submit additions and corrections, or ask for help concerning
+RefSeq records.
+</p>
 
 <h2>Display Conventions and Configuration</h2>
 
@@ -43,12 +50,6 @@ RefSeq RNAs over 20 base pairs were aligned against the $organism genome using B
 Those alignments with less than 16 bases aligning outside of annotated repeats were discarded.
 Next, the alignment with the highest base identity between the RNA and the genomic sequence was chosen.
 For each RNA, alignments not within 0.1% of the base identity of the best alignment were discarded.
-Additional filtering takes place based on the quality of the display which is documented on the
-<a target=_blank href='/cgi-bin/hgGateway?db=$db'>Assembly Page</a>. For <b>finished</b> assemblies,
-the minimum base identity of alignments must be 95%, and the alignment must cover 25% of the bases in the RNA.
-For <b>well-ordered</b> assemblies, the minimum base identity of alignments must be 95%, and the alignment
-must cover 15% of the bases in the RNA. For <b>low-coverage</b> assemblies, the minimum base identity of
-alignments must be 94%, and the minimum alignment size must be 80 base pairs.
 </p>
 
 <h2>Credits</h2>

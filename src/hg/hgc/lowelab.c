@@ -1001,8 +1001,8 @@ char query[512];
 char *dupe, *words[16];
 char **row;
 char tempstring[255]="";
-int flag,  z, dashes, wordCount, rowOffset;
-int start = cartInt(cart, "o"), num = 0, flag2=0;
+int z, dashes, wordCount;
+int start = cartInt(cart, "o"), num = 0;
 float sequenceLength, dashlength=60;
 
 genericHeader(tdb,trnaName);
@@ -1012,7 +1012,6 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
-rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
@@ -1036,9 +1035,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 
-flag=0;
-flag2=0;
-
 /*Print out table with Blast information*/
  printf("   </tbody>\n</table>\n<br><br>");
 
@@ -1060,7 +1056,6 @@ printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
 printf("<b>Gap openings</b>");
 printf("</td>\n    </tr>\n    <tr>");
 
-flag=0;
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {
     printf("\n      \n      <td style=\"vertical-align: top;\">");
@@ -1081,7 +1076,6 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
     printf("%i",cbs2->gap);
     printf("<br></td>\n    </tr>\n");
-    flag=0;
     }
 /* printf("  <br><br></tbody>\n</table>  \n"); */
 
@@ -1103,8 +1097,6 @@ for(z=0; z<60; z++)
 printf("</code>");
 
 printf("</td>\n    </tr>\n    <tr>");
-flag=0;
-flag2=0;
 
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {
@@ -1130,9 +1122,6 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     for(z=0; z<dashes; z++) printf("+");
     printf("</code>");
     printf("</td>\n    </tr>\n");
-    flag=0;
-
-
     }
 
 
@@ -1209,16 +1198,12 @@ struct tRNAs *trna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *dupe, *words[16];
 char **row;
-int wordCount;
 int rowOffset;
 
 char* chrom = cartString(cart, "c");
 
 genericHeader(tdb,trnaName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where chrom = '%s' and name = '%s'", tdb->table, chrom, trnaName);
@@ -1277,14 +1262,10 @@ struct snoRNAs *snorna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *dupe, *words[16];
 char **row;
-int wordCount;
 int rowOffset;
 
 genericHeader(tdb,snornaName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, snornaName);
@@ -1322,15 +1303,10 @@ struct gbRNAs *gbRna;
 char query[512];
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
-char *dupe, *words[16];
 char **row;
-int wordCount;
 int rowOffset;
 
 genericHeader(tdb,gbRnaName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
-
 
 rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, gbRnaName);
@@ -1420,8 +1396,8 @@ char query[512];
 char *dupe, *words[16];
 char **row;
 char tempstring[255]="";
-int flag, z, dashes, wordCount, rowOffset, currentGI=0;
-int start = cartInt(cart, "o"), num = 0, flag2=0;
+int flag, z, dashes, wordCount, currentGI=0;
+int start = cartInt(cart, "o"), num = 0;
 float sequenceLength, dashlength=60;
 
 genericHeader(tdb,trnaName);
@@ -1431,7 +1407,6 @@ if (wordCount > 1)
     num = atoi(words[1]);
 if (num < 3) num = 3;
 genericBedClick(conn, tdb, trnaName, start, num);
-rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
 sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, trnaName);
 sr = sqlGetResult(conn, query);
@@ -1681,7 +1656,6 @@ printf("</code>");
 
 printf("</td>\n    </tr>\n    <tr>");
 flag=0;
-flag2=0;
 
 for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
     {
@@ -1895,17 +1869,10 @@ void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
-  char *dupe, *words[16];
   char **row;
-  int wordCount;
-  int rowOffset;
-  /* int start = cartInt(cart, "o"), num = 0; */
 
   genericHeader(tdb,tigrName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
 
-  rowOffset = hOffsetPastBin(database, seqName, tdb->table);
   sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, tigrName);
   sr = sqlGetResult(conn, query);
   while ((row = sqlNextRow(sr)) != NULL)
@@ -1960,14 +1927,10 @@ void doJgiGene(struct trackDb *tdb, char *jgiName)
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
-  char *dupe, *words[16];
   char **row;
-  int wordCount;
   int rowOffset;
 
   genericHeader(tdb,jgiName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
   sqlSafef(query, sizeof query, "select * from %s where name = '%s'", tdb->table, jgiName);
@@ -2007,17 +1970,13 @@ void doPfamHit(struct trackDb *tdb, char *hitName)
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlConnection *spConn = NULL;
   struct sqlResult *sr;
-  char *dupe, *words[16];
   char **row;
-  int wordCount;
   int rowOffset;
   char *description;
   int start = cartInt(cart, "o");
   spConn = sqlConnect(UNIPROT_DB_NAME);
 
   genericHeader(tdb,hitName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 
@@ -3291,15 +3250,6 @@ void doPrimers(struct trackDb *tdb, char *primerName)
 void doWiki(char *track, struct trackDb *tdb, char *itemName)
 {
   char strand[2];
-  char wikiea[] = "wikiea";
-  char wikibme[] = "microbewiki";
-  char *wiki;
-
-  if(sameWord(track, "wiki"))
-    wiki = wikiea;
-  else
-    wiki = wikibme;
-
 
   printf("<HEAD>");
 
@@ -3418,9 +3368,7 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
-  char *dupe, *words[16];
   char **row;
-  int wordCount;
   int rowOffset;
   struct arCOGs *infoload;
   int start = cartInt(cart, "o");
@@ -3443,8 +3391,6 @@ void doarCOGs(struct trackDb *tdb, char *itemName)
 
 
   genericHeader(tdb,itemName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 
@@ -3594,9 +3540,7 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
   char query[512];
   struct sqlConnection *conn = hAllocConn(database);
   struct sqlResult *sr;
-  char *dupe, *words[16];
   char **row;
-  int wordCount;
   int rowOffset;
   struct megablastInfo *infoload;
   int start = cartInt(cart, "o");
@@ -3604,8 +3548,6 @@ void domegablastInfo(struct trackDb *tdb, char *itemName)
 
 
   genericHeader(tdb,itemName);
-  dupe = cloneString(tdb->type);
-  wordCount = chopLine(dupe, words);
 
   rowOffset = hOffsetPastBin(database,seqName, tdb->table);
 

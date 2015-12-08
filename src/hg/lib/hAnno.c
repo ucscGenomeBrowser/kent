@@ -20,7 +20,6 @@
 #include "annoStreamBigWig.h"
 #include "annoStreamDb.h"
 #include "annoStreamDbFactorSource.h"
-#include "annoStreamDbKnownGene.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
 #include "annoStreamWig.h"
@@ -106,7 +105,7 @@ dyStringAppend(dy, "    )\n");
 return asParseText(dy->string);
 }
 
-static struct asObject *getAutoSqlForTable(char *db, char *table, struct trackDb *tdb,
+struct asObject *hAnnoGetAutoSqlForDbTable(char *db, char *table, struct trackDb *tdb,
                                            boolean skipBin)
 /* Get autoSql for db.dbTable from tdb and/or db.tableDescriptions;
  * if it doesn't match columns, make one up from db.table sql fields.
@@ -119,11 +118,19 @@ struct sqlFieldInfo *fieldList = sqlFieldInfoGet(conn, table);
 struct asObject *asObj = NULL;
 if (tdb != NULL)
     asObj = asForTdb(conn, tdb);
+if (asObj == NULL)
+    asObj = asFromTableDescriptions(conn, table);
 hFreeConn(&conn);
 if (columnsMatch(asObj, fieldList))
     return asObj;
 else
+    {
+    // Special case for pgSnp, which includes its bin column in autoSql...
+    struct asObject *pgSnpAsO = pgSnpAsObj();
+    if (columnsMatch(pgSnpAsO, fieldList))
+        return pgSnpAsO;
     return asObjectFromFields(table, fieldList, skipBin);
+    }
 }
 
 static char *getBigDataFileName(char *db, struct trackDb *tdb, char *selTable, char *chrom)
@@ -158,7 +165,8 @@ return matches;
 }
 
 struct annoStreamer *hAnnoStreamerFromTrackDb(struct annoAssembly *assembly, char *selTable,
-                                              struct trackDb *tdb, char *chrom, int maxOutRows)
+                                              struct trackDb *tdb, char *chrom, int maxOutRows,
+                                              struct jsonElement *config)
 /* Figure out the source and type of data and make an annoStreamer. */
 {
 struct annoStreamer *streamer = NULL;
@@ -206,23 +214,11 @@ else if (sameString("factorSource", tdb->type) &&
     streamer = annoStreamDbFactorSourceNew(dataDb, tdb->track, sourceTable, inputsTable, assembly,
 					   maxOutRows);
     }
-else if (sameString("knownGene", tdb->track))
-    {
-    struct sqlConnection *conn = hAllocConn(dataDb);
-    if (sqlTableExists(conn, "knownGene") && sqlTableExists(conn, "kgXref"))
-        streamer = annoStreamDbKnownGeneNew(dataDb, assembly, maxOutRows);
-    hFreeConn(&conn);
-    }
 else if (trackHubDatabase(db))
     errAbort("Unrecognized type '%s' for hub track '%s'", tdb->type, tdb->track);
 if (streamer == NULL)
     {
-    char maybeSplitTable[HDB_MAX_TABLE_STRING];
-    if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
-        errAbort("hAnnoStreamerFromTrackDb: can't find table (or split table) for '%s.%s'",
-                 dataDb, dbTable);
-    struct asObject *asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
-    streamer = annoStreamDbNew(dataDb, maybeSplitTable, assembly, asObj, maxOutRows);
+    streamer = annoStreamDbNew(dataDb, dbTable, assembly, maxOutRows, config);
     }
 return streamer;
 }
@@ -253,7 +249,8 @@ return grator;
 struct annoGrator *hAnnoGratorFromTrackDb(struct annoAssembly *assembly, char *selTable,
                                           struct trackDb *tdb, char *chrom, int maxOutRows,
                                           struct asObject *primaryAsObj,
-                                          enum annoGratorOverlap overlapRule)
+                                          enum annoGratorOverlap overlapRule,
+                                          struct jsonElement *config)
 /* Figure out the source and type of data, make an annoStreamer & wrap in annoGrator.
  * If not NULL, primaryAsObj is used to determine whether we can make an annoGratorGpVar. */
 {
@@ -293,7 +290,7 @@ else if (startsWithWord("bigWig", tdb->type))
 else
     {
     struct annoStreamer *streamer = hAnnoStreamerFromTrackDb(assembly, selTable, tdb, chrom,
-                                                             maxOutRows);
+                                                             maxOutRows, config);
     if (primaryIsVariants &&
         (asColumnNamesMatchFirstN(streamer->asObj, genePredAsObj(), 10) ||
          asObjectsMatch(streamer->asObj, bigGenePredAsObj())))
@@ -334,11 +331,6 @@ else if (startsWithWord("bed", tdb->type) && !strchr(tdb->type, '+'))
         bedFieldCount = atoi(words[1]);
     asObj = asParseText(bedAsDef(bedFieldCount, bedFieldCount));
     }
-else if (sameString(tdb->track, "knownGene"))
-    {
-    if (hTableExists(db, "knownGene") && hTableExists(db, "kgXref"))
-        asObj = annoStreamDbKnownGeneAsObj();
-    }
 else if (sameString("factorSource", tdb->type) &&
          dbTableMatchesAutoSql(db, tdb->table, factorSourceAsObj()))
     {
@@ -368,7 +360,7 @@ if (!asObj && !isHubTrack(tdb->track))
     if (!hFindSplitTable(dataDb, chrom, dbTable, maybeSplitTable, NULL))
         errAbort("hAnnoGetAutoSqlForTdb: can't find table (or split table) for '%s.%s'",
                  dataDb, dbTable);
-    asObj = getAutoSqlForTable(dataDb, maybeSplitTable, tdb, TRUE);
+    asObj = hAnnoGetAutoSqlForDbTable(dataDb, maybeSplitTable, tdb, TRUE);
     }
 return asObj;
 }

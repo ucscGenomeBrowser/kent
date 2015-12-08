@@ -1,19 +1,19 @@
 track nonCodingRNAs
 superTrack on
-group rna
+group genes
 shortLabel Non-coding RNA
 longLabel RNA sequences that do not code for a protein
 
-    #track tRNAs
-    #superTrack nonCodingRNAs pack
-    #shortLabel tRNA Genes
-    #longLabel Transfer RNA Genes Identified with tRNAscan-SE
-    #group genes
-    #visibility hide
-    #color 0,20,150
-    #type bed 6 +
-    #nextItemButton on
-    #noScoreFilter .
+    track tRNAs
+    superTrack nonCodingRNAs pack
+    shortLabel tRNA Genes
+    longLabel Transfer RNA Genes Identified with tRNAscan-SE
+    group genes
+    visibility hide
+    color 0,20,150
+    type bed 6 +
+    nextItemButton on
+    noScoreFilter .
 
     track wgRna
     superTrack nonCodingRNAs pack

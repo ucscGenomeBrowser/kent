@@ -217,7 +217,7 @@ if (rgdGeneId != NULL)
 	if (row[0][0] != 0 && !sameString(row[0], "n/a"))
 	    {
 	    geneSym = cloneString(row[0]);
-	    hPrintf("<B>Symbol:</B> %s ", addCommaSpace(row[0]));
+	    hPrintf("<B>Symbol:</B> %s ", addCommaSpace(geneSym));
 	    hPrintf("<BR>\n");
 	    }
 	if (row[1][0] != 0 && !sameString(row[0], "n/a"))

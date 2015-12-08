@@ -377,7 +377,7 @@ struct bbExIndexMaker
     };
 
 struct bbiChromUsage *bbiChromUsageFromBedFile(struct lineFile *lf, struct hash *chromSizesHash, 
-	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount);
+	struct bbExIndexMaker *eim, int *retMinDiff, double *retAveSize, bits64 *retBedCount, boolean tabSep);
 /* Go through bed file and collect chromosomes and statistics.  If eim parameter is non-NULL
  * collect max field sizes there too. */
 
