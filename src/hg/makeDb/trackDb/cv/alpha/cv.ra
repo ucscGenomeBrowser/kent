@@ -2780,7 +2780,7 @@ type Cell Line
 description brain vascular pericytes
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=1200
+orderUrl http://www.sciencellonline.com/human-brain-vascular-pericytes.html
 organism human
 protocol Stam:HBVP_Stam_protocol.pdf
 sex U
@@ -3228,7 +3228,7 @@ tag HHSEC
 type Cell Line
 description hepatic sinusoidal endothelial cells
 lineage endoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=5000
+orderUrl http://www.sciencellonline.com/hhsec.html
 organism human
 protocol Stam:HHSEC_Stam_protocol.pdf
 sex U
@@ -3851,7 +3851,7 @@ tag HPAE
 type Cell Line
 description pulmonary alveolar epithelial cells
 karyotype normal
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=3200
+orderUrl http://www.sciencellonline.com/hpaepic.html
 organism human
 protocol Stam:HPAEpiC_Stam_protocol.pdf
 sex U
@@ -4910,7 +4910,7 @@ type Cell Line
 description epidermal melanocytes
 karyotype normal
 lineage ectoderm
-orderUrl http://www.sciencellonline.com/site/productDetails.php?keyword=2200
+orderUrl http://www.sciencellonline.com/human-epidermal-melanocytes-light.html
 organism human
 protocol Crawford:Melano_Crawford_protocol.pdf
 sex U

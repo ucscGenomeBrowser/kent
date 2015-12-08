@@ -218,7 +218,7 @@ L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
 # autodetect UCSC installation of htslib:
-ifeq (${HTSDIR},"NOTNOW")
+ifeq (${HTSDIR},)
     HTSDIR = /hive/groups/browser/htslib
     ifneq ($(wildcard ${HTSDIR}),)
         ifeq (${USE_HTS},)
