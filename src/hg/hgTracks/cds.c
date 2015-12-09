@@ -56,7 +56,7 @@ assert(index < CDS_NUM_COLORS);
 return cdsColor[index];
 }
 
-static void drawScaledBoxSampleWithText(struct hvGfx *hvg, 
+static void drawScaledBoxWithText(struct hvGfx *hvg, 
                                         int chromStart, int chromEnd,
                                         double scale, int xOff, int y,
                                         int height, Color color, int score,
@@ -67,8 +67,8 @@ static void drawScaledBoxSampleWithText(struct hvGfx *hvg,
 {
 
 /*first draw the box itself*/
-drawScaledBoxSample(hvg, chromStart, chromEnd, scale, xOff, y, height, 
-		    color, score);
+drawScaledBox(hvg, chromStart, chromEnd, scale, xOff, y, height, 
+		    color);
 
 /*draw text in box if space, and align properly for codons or DNA*/
 if (zoomed)
@@ -168,10 +168,66 @@ return(thisQStart + (s - tStart));
 }
 
 /* Calls to hDnaFromSeq are rather expensive for 2bit, so cache genomic sequence */
+
+struct genoCacheWindow
+{
+struct genoCacheWindow *next;
+struct window *window;
+char *initedTrack;
+struct dnaSeq *cachedGenoDna;
+int cachedGenoStart;
+int cachedGenoEnd;
+};
+
+static struct genoCacheWindow *gcWindows = NULL;
+static struct genoCacheWindow *gcWindow = NULL;
+static struct genoCacheWindow *gcWindowOld = NULL;
+
+static bool setGcWindow()
+/* scan genoCache windows. create new one if not found */
+{
+if (gcWindow && gcWindow->window == currentWindow)
+    return FALSE;
+gcWindowOld = gcWindow;
+for (gcWindow = gcWindows; gcWindow; gcWindow =  gcWindow->next)
+    {
+    if (gcWindow->window == currentWindow)
+	{
+	return TRUE;
+	}
+    }
+AllocVar(gcWindow);
+gcWindow->window = currentWindow;
+slAddTail(&gcWindows, gcWindow);
+return TRUE;
+}
+
+
+
 static char *initedTrack = NULL;
 static struct dnaSeq *cachedGenoDna = NULL;
 static int cachedGenoStart = 0;
 static int cachedGenoEnd = 0;
+
+static void setGc()
+/* set up globals for the current window */
+{
+if (setGcWindow())
+    {
+    if (gcWindowOld)
+	{
+	gcWindowOld->initedTrack     = initedTrack;
+    	gcWindowOld->cachedGenoDna   = cachedGenoDna;
+	gcWindowOld->cachedGenoStart = cachedGenoStart;
+    	gcWindowOld->cachedGenoEnd   = cachedGenoEnd;
+	}
+    initedTrack     = gcWindow->initedTrack;
+    cachedGenoDna   = gcWindow->cachedGenoDna;
+    cachedGenoStart = gcWindow->cachedGenoStart;
+    cachedGenoEnd   = gcWindow->cachedGenoEnd;
+    }
+
+}
 
 static void getLinkedFeaturesSpan(struct linkedFeatures *lfList, int *retStart, int *retEnd,
 				  boolean isSeries)
@@ -212,7 +268,8 @@ static char *getCachedDna(int chromStart, int chromEnd)
 /* Return a pointer into our cached genomic dna.  chromEnd is just for
  * bounds-checking (honor system).  Do not change or free the return value! */
 {
-if (!initedTrack || ! cachedGenoDna)
+setGc();
+if (!initedTrack || !cachedGenoDna)
     errAbort("getCachedDnaAt called before baseColorInitTrack?!");
 if (chromStart < cachedGenoStart || chromEnd > cachedGenoEnd)
     errAbort("getCachedDnaAt: coords %d,%d are out of cached range %d,%d",
@@ -1385,7 +1442,7 @@ if(mrnaS >= 0)
 	{
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(dyMrnaSeq->string, dyMrnaSeq->stringSize);
-	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, dyMrnaSeq->string,
 				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	}
@@ -1404,7 +1461,7 @@ if(mrnaS >= 0)
 					    ixColor);
 	    if (startColor && sameString(mrnaCodon,"M"))
                 color = cdsColor[CDS_START];
-	    drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	    drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
 					color, lf->score, font, mrnaCodon,
 					zoomedToCodonLevel, winStart,
 					maxPixels, isCoding, TRUE);
@@ -1420,7 +1477,7 @@ if(mrnaS >= 0)
 	maskDiffString(diffStr, dyMrnaSeq->string, genoDna, ' ');
 	if (cartUsualBooleanDb(cart, database, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(diffStr, strlen(diffStr));
-	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, diffStr, 
 				    zoomedToBaseLevel, winStart, maxPixels, isCoding, TRUE);
 	freeMem(diffStr);
@@ -1441,7 +1498,7 @@ if(mrnaS >= 0)
 	    safef(mrnaCodon, sizeof(mrnaCodon), "%c", baseColorLookupCodon(mrnaBases));
 	    if (mrnaCodon[0] != genomicCodon[0])
 		{
-		drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, 
+		drawScaledBoxWithText(hvg, s, e, scale, xOff, y, 
 					    heightPer, color, lf->score, font,
 					    mrnaCodon, zoomedToCodonLevel,
 					    winStart, maxPixels, isCoding, TRUE);
@@ -1491,15 +1548,15 @@ if (drawOpt == baseColorDrawGenomicCodons && (e-s <= 3))
     {
     if (lf->highlightColor)
 	{
-	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			    lf->highlightColor, lf->score );
-	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y+1, heightPer-2, 
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor);
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y+1, heightPer-2, 
 				    color, lf->score, font, codon, 
 				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
 	}
     else
 	{
-	drawScaledBoxSampleWithText(hvg, s, e, scale, xOff, y, heightPer, 
+	drawScaledBoxWithText(hvg, s, e, scale, xOff, y, heightPer, 
 				    color, lf->score, font, codon, 
 				    zoomedToCodonLevel, winStart, maxPixels, TRUE, !sf->codonIndex);
 	}
@@ -1509,8 +1566,8 @@ else if (mrnaSeq != NULL && (psl != NULL || sf != NULL) && !zoomedOutToPostProce
     {
     if (lf->highlightColor)
 	{
-	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			    lf->highlightColor, lf->score );
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor);
 	drawDiffTextBox(hvg, xOff+1, y+1, scale, heightPer-2, font, 
 			color, chromName, s, e, sf, psl, mrnaSeq, lf,
 			grayIx, drawOpt, maxPixels,
@@ -1529,15 +1586,15 @@ else
     /* revert to normal coloring */
     if (lf->highlightColor)
 	{
-	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			    lf->highlightColor, lf->score );
-	drawScaledBoxSample(hvg, s, e, scale, xOff+1, y+1, heightPer -2, 
-			    color, lf->score );
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
+			    lf->highlightColor);
+	drawScaledBox(hvg, s, e, scale, xOff+1, y+1, heightPer -2, 
+			    color);
 	}
     else
 	{
-	drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer, 
-			    color, lf->score );
+	drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, 
+			    color);
 	}
     }
 }
@@ -1769,6 +1826,7 @@ void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
  * tg is linkedFeatures or linkedFeaturesSeries (currently the only
  * two supported track types -- bed, psl etc. are subclasses of these). */
 {
+setGc();
 if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
     int overallStart, overallEnd;
@@ -1806,6 +1864,7 @@ if (!cdsColorsMade)
 static void checkTrackInited(struct track *tg, char *what)
 /* Die if baseColorInitTrack has not been called (most recently) for this track. */
 {
+setGc();
 if (initedTrack == NULL || differentString(tg->track, initedTrack))
     errAbort("Error: Track %s should have been baseColorInitTrack'd before %s.  "
 	     "(tg->drawItems may be unrecognized by baseColorCanDraw)",
@@ -1888,7 +1947,7 @@ for (sf = sfList; sf != NULL; sf = sf->next)
     char codon[4];
     Color color = colorAndCodonFromGrayIx(hvg, codon, sf->grayIx, MG_GRAY);
     if (zoomedToText)
-        drawScaledBoxSampleWithText(hvg, sf->start, sf->end, scale, insideX, y,
+        drawScaledBoxWithText(hvg, sf->start, sf->end, scale, insideX, y,
 				    height, color, 1.0, font, codon, TRUE,
 				    winStart, maxPixels, TRUE, TRUE);
     else

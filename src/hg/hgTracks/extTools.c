@@ -177,6 +177,11 @@ char *chromName;
 int winStart, winEnd;
 char *db = cartString(cart, "db");
 char *pos = cartString(cart, "position");
+
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    pos = cartString(cart, "nonVirtPosition");
+
 findGenomePos(db, pos, &chromName, &winStart, &winEnd, cart);
 int len = winEnd-winStart;
 

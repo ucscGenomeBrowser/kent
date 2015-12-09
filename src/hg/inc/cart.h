@@ -53,6 +53,12 @@ boolean cartTablesOk(struct sqlConnection *conn);
 /* Return TRUE if cart tables are accessible (otherwise, the connection
  * doesn't do us any good). */
 
+void cartParseOverHash(struct cart *cart, char *contents);
+/* Parse cgi-style contents into a hash table.  This will *not*
+ * replace existing members of hash that have same name, so we can
+ * support multi-select form inputs (same var name can have multiple
+ * values which will be in separate hashEl's). */
+
 struct cart *cartNew(char *userId, char *sessionId,
 	char **exclude, struct hash *oldVars);
 /* Load up cart from user & session id's.  Exclude is a null-terminated list of
@@ -590,14 +596,16 @@ extern void cartHideDefaultTracks(struct cart *cart);
  * that are something other than hide.  Do this only if the
  * variable CART_HAS_DEFAULT_VISIBILITY is set in the cart.  */
 
-char *cartGetPosition(struct cart *cart, char *database);
+char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPosCart);
 /* get the current position in cart as a string chr:start-end.
  * This can handle the special CGI params 'default' and 'lastDbPos'
  * Returned value has to be freed. Returns default position of assembly 
  * if no position set in cart nor as CGI var.
+ * For virtual modes, returns the type and extraState. 
 */
 
-void cartSetDbPosition(struct cart *cart, char *database, char *position);
-/* set the 'position.db' variable in the cart */
+void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart);
+/* Set the 'position.db' variable in the cart.*/
+
 #endif /* CART_H */
 

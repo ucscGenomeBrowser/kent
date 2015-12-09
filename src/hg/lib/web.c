@@ -852,6 +852,13 @@ if (oldVars)
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
 	    cartSetString(cart, "position", hDefaultPos(*retDb));
+	// remove virtual chrom cart vars related to position
+	cartRemove(cart, "virtMode");
+	cartRemove(cart, "virtModeType");
+	cartRemove(cart, "lastVirtModeExtraState");
+	cartRemove(cart, "lastVirtModeType");
+	cartRemove(cart, "nonVirtPosition");
+	cartRemove(cart, "oldPosition");
 	/* hgNear search term -- unless it was passed in via CGI: */
 	if (cgiOptionalString("near_search") == NULL)
 	    cartRemove(cart, "near_search");

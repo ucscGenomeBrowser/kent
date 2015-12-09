@@ -170,12 +170,24 @@ for(cb = cbList; cb != NULL; cb = cb->next)
 	}
     }
 
-/* Draw a red box around position in current browser window.  double
- thick so two lines each. */
-hvGfxBox(hvg, x1, yOff+1, x2-x1, 2, MG_RED);
-hvGfxBox(hvg, x1, yOff + yBorder - 1, x2-x1, 2, MG_RED);
-hvGfxBox(hvg, x1, yOff+1, 2, yBorder, MG_RED);
-hvGfxBox(hvg, x2, yOff+1, 2, yBorder, MG_RED);
+/* Draw a red box around all positions in windows for this chromName.  
+ * Double thick so two pixels thick each. */
+struct window *window;
+for (window=windows; window; window=window->next)
+    {
+    if (!sameString(chromName, window->chromName))
+	continue;
+
+    x1 = round((window->winStart)*scale) + xOff + xBorder -1;
+    x2 = round((window->winEnd)*scale) + xOff + xBorder -1;
+
+    hvGfxBox(hvg, x1, yOff+1,             x2-x1, 2,       MG_RED);
+    hvGfxBox(hvg, x1, yOff + yBorder - 1, x2-x1, 2,       MG_RED);
+    hvGfxBox(hvg, x1, yOff+1,             2,     yBorder, MG_RED);
+    hvGfxBox(hvg, x2, yOff+1,             2,     yBorder, MG_RED);
+
+    }
+
 hvGfxUnclip(hvg);
 
 /* Put back the lineHeight for the track

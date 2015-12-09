@@ -32325,6 +32325,8 @@ hgLoadBed -type=bed4 hg18 haplotypeLocationsEnsembl haplotypeLocationsEnsembl.be
 vi README
 # I wrote some notes about the source and reasons for the data
 
-I have not made any trackDb entry for this table at this time.
+# I have not made any trackDb entry for this table at this time.
+
+# I renamed the table to altLocations to match use in other assemblies.
 
 #############################################################################

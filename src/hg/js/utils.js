@@ -793,12 +793,21 @@ function getAllVars(obj,subtrackName)
     return urlData;
 }
 
+function debugDumpFormCollection(collectionName,vars)
+{ // dumps form vars collection in an alert
+    var debugStr = ""; 
+    for (var thisVar in vars) {
+	debugStr += thisVar + "==" + vars[thisVar]+"\n";
+    }
+    alert("DEBUG "+ collectionName + ":\n"+debugStr);  
+}
+
 function varHashChanges(newVars,oldVars)
 {   // Returns a hash of all vars that are changed between old and new hash.
     // New vars not found in old are changed.
     var changedVars = {};
     for (var newVar in newVars) {
-        if (!oldVars[newVar] || oldVars[newVar] !== newVars[newVar])
+        if (oldVars[newVar] === null || oldVars[newVar] !== newVars[newVar])
             changedVars[newVar] = newVars[newVar];
     }
     return changedVars;
@@ -1336,7 +1345,7 @@ var bindings = {
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
             if (jQuery.type(begToken) === "regexp")
-                bounds.start += someString.match(begToken).length;
+                bounds.start += someString.match(begToken)[0].length;
             else
                 bounds.start += begToken.length;
         }
@@ -1349,8 +1358,8 @@ var bindings = {
     // Pattern match can be used instead of literal token if a regexp is passed in for the tokens
         var bounds = bindings._raw(begToken,endToken,someString,ixBeg,ixEnd);
         if (bounds.start > -1) {
-            if (jQuery.type(endToken) === "regexp")
-                bounds.stop  += someString.match(endToken).length;
+            if (jQuery.type(endToken) === "regexp") 
+                bounds.stop  += someString.match(endToken)[0].length;
             else
                 bounds.stop  += endToken.length;
         }
@@ -1433,6 +1442,37 @@ function stripJsEmbedded(returnedHtml, debug, whatWeDid)
         if (-1 === jsEmbeded.indexOf("showWarnBox")) {
             if (debug)
                 alert("jsEmbedded:'"+jsEmbeded+"'\n---------------\n"+cleanHtml);
+        } else {
+            var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
+            if (warnMsg.length > 0) {
+                warn(warnMsg);
+                if (whatWeDid)
+                    whatWeDid.warnMsg = warnMsg;
+            }
+        }
+        cleanHtml = cleanHtml.slice(0,bounds.start) + cleanHtml.slice(bounds.stop);
+    }
+    return stripHgErrors(cleanHtml, whatWeDid); // Certain early errors are not called via warnBox
+}
+
+function stripMainMenu(returnedHtml, debug, whatWeDid)
+{ // strips main menu div from html returned by ajax
+  // NOTE: any warnBox style errors will be put into the warnBox
+  // If whatWeDid !== null, we use it to return info about
+  // what we stripped out and processed (current just warnMsg).
+    var cleanHtml = returnedHtml;
+    // embedded javascript?
+    while (cleanHtml.length > 0) {
+	
+        var begPattern = '<div id="main-menu-whole">';
+        var endPattern = '</div><!-- end main-menu-whole -->';
+        var bounds = bindings.outside(begPattern,endPattern,cleanHtml);
+        if (bounds.start === -1)
+            break;
+        var mainMenu = cleanHtml.slice(bounds.start,bounds.stop);
+        if (-1 === mainMenu.indexOf("showWarnBox")) {
+            if (debug)
+                alert("mainMenu:'"+mainMenu+"'\n---------------\n"+cleanHtml);
         } else {
             var warnMsg = bindings.insideOut('<li>','</li>',cleanHtml,bounds.start,bounds.stop);
             if (warnMsg.length > 0) {

@@ -74,6 +74,7 @@ return FALSE;
 
 int packCountRowsUCSFDemo(struct track *tg, int maxCount,
                           boolean withLabels, boolean allowOverflow)
+// Stale, broken, hg17-only
 /* Return packed height. */
 /* Cloned from packCountRowsOverflow() in hgTracks.c. */
 {
@@ -115,10 +116,12 @@ for (item = tg->items; item != NULL; item = item->next)
 	}
     }
 spaceSaverFinish(ss);
+
 return ss->rowCount;
 }
 
 int ucsfdemoTotalHeight(struct track *tg, enum trackVisibility vis)
+// Stale, broken, hg17-only
 {
 int rows = 0;
 double maxHeight = maximumTrackHeight(tg);
@@ -1777,7 +1780,7 @@ expRatioMethods(tg);
 tg->drawItems = expRatioDrawItems;
 tg->drawLeftLabels = expRatioDrawLeftLabels;
 tg->trackFilter = lfsFromExpRatio;
-if (sameString(tg->table, "CGHBreastCancerUCSF"))
+if (sameString(tg->table, "CGHBreastCancerUCSF")) // Stale, broken, hg17-only
     tg->totalHeight = ucsfdemoTotalHeight;
 }
 

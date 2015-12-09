@@ -1734,6 +1734,10 @@ oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
+
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
