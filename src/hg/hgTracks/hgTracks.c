@@ -8,6 +8,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include <pthread.h>
+#include <limits.h>
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
