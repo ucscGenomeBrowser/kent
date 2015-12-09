@@ -33,11 +33,7 @@
 //#define USE_NAVIGATION_LINKS
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
-//extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
 extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
-//extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
-//extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
-//extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
 /////////////////////////
 // FLAT TRACKS
