@@ -1008,7 +1008,26 @@ var HgIntegratorModel = ImModel.extend({
         // User wants to add the selected related table for track
         var track = path[3];
         var relTable = mutState.getIn(['fieldSelect', track, 'relatedAvailable', 'selected']);
-        var relSel, newRelSel, tableGroupStr, label;
+        var relSel = this.getUiChoice(mutState, ['relatedSelected', track]) || Immutable.List();
+        var alreadyAddedTable = relSel.some(function (t) { return t === relTable; });
+        var currentTables = mutState.getIn(['fieldSelect', track, 'tableFields']);
+        var relTableCount = currentTables.size - 1;
+        var newRelSel, tableGroupStr, label;
+        // Watch out for duplicate adds or trying to add more than the max.
+        if (alreadyAddedTable) {
+            // Prepend db to related tables that start with ".".
+            label = relTable;
+            if (relTable.charAt(0) === ".") {
+                label = this.getDb(mutState) + relTable;
+            }
+            alert("Table " + label + " has already been added.");
+            return;
+        }
+        if (relTableCount >= this.maxRelatedTables) {
+            alert("Sorry, you can choose a maximum of " + this.maxRelatedTables +
+                  " related tables.");
+            return;
+        }
         if (relTable) {
             // Add a stub relTable section (with spinner until server response gives fields)
             label = mutState.getIn(['fieldSelect', track, 'relatedAvailable', 'options'])
@@ -1020,7 +1039,6 @@ var HgIntegratorModel = ImModel.extend({
             mutState.setIn(['fieldSelect', track, 'tableFields', relTable, 'label'],
                            label);
             // Add relTable to the list of selected related tables for this dataSource
-            relSel = this.getUiChoice(mutState, ['relatedSelected', track]) || Immutable.List();
             newRelSel = relSel.push(relTable);
             this.setUiChoice(mutState, ['relatedSelected', track], newRelSel);
             // Update menus of related tables to gray out the newly selected one.

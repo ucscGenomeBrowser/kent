@@ -2325,6 +2325,10 @@ if (startQuery)
 else
     cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
 
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
+
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);

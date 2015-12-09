@@ -37,6 +37,7 @@
 #include "bigBed.h"
 #include "htmshell.h"
 #include "kxTok.h"
+#include "hash.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -142,7 +143,6 @@
 
 #define CHROM_COLORS 26
 
-int colorBin[MAXPIXELS][256]; /* count of colors for each pixel for each color */
 /* Declare our color gradients and the the number of colors in them */
 Color shadesOfGreen[EXPR_DATA_SHADES];
 Color shadesOfRed[EXPR_DATA_SHADES];
@@ -169,17 +169,60 @@ Color chromColor[CHROM_COLORS+1];
 /* Have the 3 shades of 8 chromosome colors been allocated? */
 boolean chromosomeColorsMade = FALSE;
 
-int z;
-int maxCount;
-int bestColor;
 int maxItemsInFullTrack = 1000;  /* Maximum number of items displayed in full */
 int maxItemsToUseOverflowDefault = 10000; /* # of items to allow overflow mode*/
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
-char *chromName;		/* Name of chromosome sequence . */
-char *database;			/* Name of database we're using. */
+
+// multi-window variables global to hgTracks
+struct window *windows = NULL;  // list of windows in image
+struct window *currentWindow = NULL; 
+bool trackLoadingInProgress;  // flag to delay ss layout until all windows are ready.
+int fullInsideX;      // full-image insideX 
+int fullInsideWidth;  // full-image insideWidth 
+
+struct virtRegion *virtRegionList = NULL;     // list of regions in virtual chrom
+struct virtChromRegionPos *virtChrom = NULL;  // virtual chrom array of positions and regions
+int virtRegionCount = 0;  // number of regions in virtual chromosome
+long virtSeqBaseCount = 0;       // number of bases in virtual chromosome
+long virtWinBaseCount = 0;       // number of bases in virtual chrom (end - start)
+long virtWinStart = 0;  // start of virtual window in bases
+long virtWinEnd = 0;    //   end of virtual window in bases
+long defaultVirtWinStart = 0;  // default start of virtual window in bases
+long defaultVirtWinEnd = 0;    // default end   of virtual window in bases
+//char *virtPosition = NULL;          /* Name of virtual position. TODO REMOVE? */
+char *virtChromName = NULL;         /* Name of virtual chrom */
+boolean virtMode = FALSE;           /* Are we in virtual chrom mode? */
+boolean virtChromChanged = FALSE;    /* Has the virtChrom changed? */
+boolean emAltHighlight = FALSE;     /* Highlight alternativing regions in virt view? */
+int emPadding = 6;                  /* # bases padding for exon-mostly regions */
+char *emGeneTable = NULL;           /* Gene table to use for exon mostly */
+struct track *emGeneTrack = NULL;   /* Track for gene table for exon mostly */
+struct rgbColor vertWindowSeparatorColor = { 255, 220, 220};  // light red
+char *multiRegionsBedUrl = "";     /* URL to Multi-window bed regions file */
+
+// demo2
+int demo2NumWindows = 70;
+int demo2WindowSize = 200;
+int demo2StepSize = 200;
+
+// singleTrans (single transcript)
+char *singleTransId = "uc001uub.1"; 
+
+// singleAltHaplos (single haplotype)
+char *singleAltHaploId = "chr6_cox_hap2"; 
+
+char *virtModeType = "default";  /* virtual chrom mode type */
+char *lastVirtModeType = "default";
+char *virtModeShortDescr = "";   /* short description of virt mode */
+char *virtModeExtraState = "";   /* Other settings that affect the virtMode state such as padding or some parameter */
+char *lastVirtModeExtraState = "";
+struct cart *lastDbPosCart = NULL;   /* store settings for use in lastDbPos and hgTracks.js setupHistory */
+
 char *organism;                 /* Name of organism we're working on. */
+char *database;			/* Name of database we're using. */
+char *chromName;		/* Name of chromosome sequence . */
 int winStart;                   /* Start of window in sequence. */
 int winEnd;                     /* End of window in sequence. */
 char *position = NULL;          /* Name of position. */
@@ -324,54 +367,309 @@ if (doWiggle)
     }
 }
 
+struct sameItemNode 
+/* sameItem node */
+    {
+    struct sameItemNode *next; /* next node */
+    struct window *window;     /* in which window - can use to detect duplicate keys */
+    void *item;
+    struct spaceSaver *ss;
+    bool done;                 /* have we (reversed the list and) processed it yet? */
+    };
+
+
+static struct spaceSaver *findSpaceSaverAndFreeOldOnes(struct track *tg, enum trackVisibility vis)
+/* Find SpaceSaver in list, freeing older ones. Return spaceSaver found or NULL. */
+{
+boolean found = FALSE;
+struct spaceSaver *result = NULL;
+struct spaceSaver *ss = NULL;
+struct spaceSaver *newSs = NULL; // tg->ss is actually a list of spaceSavers with different viz. with newest on top
+while ((ss = slPopHead(&tg->ss)))  // we needed to keep the old ss around to trigger proper viz changes.
+    {
+    slAddHead(&newSs, ss);
+    if ((int)(ss->vis) == vis)
+	{
+	found = TRUE;
+	result = ss;
+	break;
+	}
+    }
+if (found)
+    {
+    while ((ss = slPopHead(&tg->ss)))
+	{
+	spaceSaverFree(&ss); // free older ones
+	}
+    }
+slReverse(&newSs);
+tg->ss = newSs;
+return result;
+}
+
+
 int packCountRowsOverflow(struct track *tg, int maxCount,
-                          boolean withLabels, boolean allowOverflow)
+                          boolean withLabels, boolean allowOverflow, enum trackVisibility vis)
 /* Return packed height. */
 {
-struct spaceSaver *ss;
+
+//warn("packCountRowsOverflow tg->track %s (%sfirst window) tg->visibility=%d tg->limitedVis=%d tg->limitedVisSet=%d vis=%d insideWidth=%d", 
+//tg->track, currentWindow == windows ? "" : "non-", tg->visibility, tg->limitedVis, tg->limitedVisSet, vis, insideWidth); // DEBUG REMOVE
+
+// do not calculate if still loading all windows
+if (trackLoadingInProgress) // we pack after all windows are loaded.
+    {
+    // do not set ss yet
+    //warn("trackLoadingInProgress, exiting currentWindow=%lu windows=%lu", (unsigned long) currentWindow, (unsigned long) windows); // DEBUG REMOVE
+    return 1;
+    }
+
+
+// do not re-calculate if not needed
+if (tg->ss)
+    {
+    if (tg->ss->window != currentWindow)
+	errAbort("unexpected current window %lu, expected %lu", (unsigned long) currentWindow, (unsigned long) tg->ss->window);
+    struct spaceSaver *ss = findSpaceSaverAndFreeOldOnes(tg, vis);
+    if (ss)
+	return ss->rowCount;
+    // Falls thru here if a new visibility is needed, such as full changing to pack after limitVisibility.
+    // This will usually be when it is the first window and it is requesting a new vis.
+    }
+
+if (currentWindow != windows)  // if not first window
+    {
+    errAbort("unexpected current window %lu, expected first window %lu", (unsigned long) currentWindow, (unsigned long) windows);
+    }
+
+// If we get here, currentWindow should be first window i.e. windows var.
+
 struct slList *item;
 MgFont *font = tl.font;
 int extraWidth = tl.mWidth * 2;
-long long start, end;
-double scale = (double)insideWidth/(winEnd - winStart);
-spaceSaverFree(&tg->ss);
-ss = tg->ss = spaceSaverNew(0, insideWidth, maxCount);
-for (item = tg->items; item != NULL; item = item->next)
+long long start, end;  // TODO usually screen pixels, so plain long should work.
+struct window *w;
+struct track *tgSave = tg;
+
+// find out which items are the same,
+// and belong on the same line with (probably one) label:
+struct hash *sameItem = newHash(10);  
+// TODO estimate this as log base 2 # items in all windows
+//struct hash *itemDone = newHash(10);  // TODO I do not need this yet in this version if no dupes.
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
     {
-    int baseStart = tg->itemStart(tg, item);
-    int baseEnd = tg->itemEnd(tg, item);
-    if (baseStart < winEnd && baseEnd > winStart)
-        {
-	if (baseStart <= winStart)
-	    start = 0;
-	else
-	    start = round((double)(baseStart - winStart)*scale);
-	if (!tg->drawLabelInBox && !tg->drawName && withLabels)
-	    start -= mgFontStringWidth(font,
-				       tg->itemName(tg, item)) + extraWidth;
-	if (baseEnd >= winEnd)
-	    end = insideWidth;
-	else
-	    end = round((baseEnd - winStart)*scale);
-	if (tg->itemRightPixels && withLabels)
-	    {
-	    end += tg->itemRightPixels(tg, item);
-	    if (end > insideWidth)
-	        end = insideWidth;
+    // Have to init these here
+    // save old spaceSaver until callback on another window later
+    struct spaceSaver *ssOld = tg->ss; 
+    tg->ss = spaceSaverNew(0, fullInsideWidth, maxCount);  // actual params do not matter, just using ss->nodeList.
+    tg->ss->next = ssOld;
+    char *chrom = w->chromName;
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	int baseStart = tg->itemStart(tg, item);
+	int baseEnd = tg->itemEnd(tg, item);
+	if (baseStart < w->winEnd && baseEnd > w->winStart) 
+	    { // it intersects the window
+	    char *mapItemName = tg->mapItemName(tg, item);
+	    char key[1024];
+	    // TODO I am making the key based on chrom, so no items will be aligned on the same line
+	    // that are in different chromosomes.  If the itemName is unique per chromosome or in other ways
+	    // then itemName alone could be the key.
+	    // TODO we know that for some tracks there is great duplication, names are not unique,
+	    // even this key of position+name will not be unique enough.
+	    // But fixing that may require creating a new function that converts the item into a string
+	    // and then use that to prove uniqueness, or as near as can be had.
+	    //
+	    // For now, this should be good enough to illustrate the basic behavior we want to see.
+	    if (isTypeUseItemNameAsKey(tg))
+		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
+	    else
+		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
+	    struct hashEl *hel = hashLookup(sameItem, key);
+	    struct sameItemNode *sin;
+	    if (hel)
+		{
+		sin = (struct sameItemNode *)hel->val;
+		if (sin->window == w)
+		    {
+		    // dupe found for key, all windows should have the same number of dupes
+		    //char *itemName = tg->itemName(tg, item);
+		    //char *itemDataName = getItemDataName(tg, itemName);
+		    //char *mapItemName = tg->mapItemName(tg, item);
+		    //warn("duplicate keys in same window.\n key=[%s] itemDataName=%s mapItemName=%s w=%lu sin->window=%lu",  // DEBUG REMOVE
+			//key, itemDataName, mapItemName, (unsigned long) w, (unsigned long) sin->window);
+		    }
+		}
+	    else
+		{
+		hashAdd(sameItem, key, NULL);
+		hel = hashLookup(sameItem, key);
+		}
+	    AllocVar(sin);
+	    sin->window = w;
+	    sin->item = item;
+	    sin->ss = tg->ss;
+	    slAddHead(&hel->val, sin);
 	    }
-	if (start < 0) start = 0;
-	if (spaceSaverAddOverflow(ss, start, end, item, allowOverflow) == NULL)
-	    break;
 	}
     }
-spaceSaverFinish(ss);
+
+// do spaceSaver layout
+struct spaceSaver *ss; 
+ss = spaceSaverNew(0, fullInsideWidth, maxCount);
+ss->vis = vis;
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
+    {
+    // save these values so we can detect vis and window changes
+    tg->ss->vis = vis;
+    tg->ss->window = w;
+    char *chrom = w->chromName;
+    // int winOffset = w->insideX - fullInsideX;  // no longer needed
+    double scale = (double)w->insideWidth/(w->winEnd - w->winStart);
+    for (item = tg->items; item != NULL; item = item->next)
+	{
+	// TODO match items from different windows by using item start end and name in hash?
+	int baseStart = tg->itemStart(tg, item);
+	int baseEnd = tg->itemEnd(tg, item);
+	if (baseStart < w->winEnd && baseEnd > w->winStart) 
+	    { // it intersects the window
+
+	    char *mapItemName = tg->mapItemName(tg, item);
+	    char key[1024];
+	    // TODO see key caveats above
+	    // For now, this should be good enough to illustrate the basic behavior we want to see.
+	    if (isTypeUseItemNameAsKey(tg))
+		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
+	    else
+		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
+	    //warn("spaceSaver key=[%s] window=%lu", key, (unsigned long)w); // DEBUG REMOVE
+	    struct hashEl *hel = hashLookup(sameItem, key);
+	    if (!hel)
+		errAbort("unexpected error: lookup of key [%s] in sameItem hash failed.", key);
+	    struct sameItemNode *sin = (struct sameItemNode *)hel->val;
+	    if (!sin)
+		errAbort("sin empty (hel->val)!");
+	    if (!sin->done)
+		{ // still needs to be done
+		//warn("Reversed list."); // DEBUG REMOVE
+		slReverse(&hel->val);
+		sin = (struct sameItemNode *)hel->val;
+		}
+
+	    bool noLabel = FALSE;
+	    struct window *firstWin = sin->window;  // first window
+	    struct window *lastWin = NULL;
+	    bool foundWork = FALSE;
+
+	    struct spaceRange *rangeList=NULL, *range;
+	    struct spaceNode *nodeList=NULL, *node;
+            int rangeWidth = 0; // width in pixels of all ranges
+	    for(; sin; sin=sin->next)
+		{
+
+                if (sin->window != firstWin && !foundWork)
+		    break;  // If we have not found work within the first window, we never will.
+
+		if (sin->done)  // If the node has already been done by a previous pass then skip
+		    continue;
+
+		if (lastWin == sin->window)  // If we already did one in this window, skip to the next window
+		    continue;
+		
+		sin->done = TRUE;
+		foundWork = TRUE;
+		lastWin = sin->window;
+
+		int winOffset = sin->window->insideX - fullInsideX;
+		struct slList *item = sin->item;
+		int baseStart = tg->itemStart(tg, item);
+		int baseEnd = tg->itemEnd(tg, item);
+		struct window *w = sin->window;
+
+		// convert bases to pixels
+		if (baseStart <= w->winStart)
+		    start = 0;
+		else
+		    start = round((double)(baseStart - w->winStart)*scale);
+		if (!tg->drawLabelInBox && !tg->drawName && withLabels && (!noLabel))
+		    start -= mgFontStringWidth(font,
+					       tg->itemName(tg, item)) + extraWidth;
+		if (baseEnd >= w->winEnd)
+		    end = w->insideWidth;
+		else
+		    end = round((baseEnd - w->winStart)*scale);
+		if (tg->itemRightPixels && withLabels)
+		    {
+		    end += tg->itemRightPixels(tg, item);
+		    if (end > w->insideWidth)
+			end = w->insideWidth;
+		    }
+    
+		if (start + winOffset < 0) 
+		    start = -winOffset;
+
+
+		AllocVar(range);
+		range->start = start + winOffset;
+		range->end = end + winOffset;
+		slAddHead(&rangeList, range);
+                rangeWidth += (range->end - range->start);
+
+		AllocVar(node);
+		node->val = item;
+		node->parentSs = sin->ss;
+		node->noLabel = noLabel;
+		slAddHead(&nodeList, node);
+
+		noLabel = TRUE; // turns off labels for all following windows - for now.
+		}
+    
+	    if (!foundWork)
+		continue;
+
+
+	    slReverse(&rangeList);
+	    slReverse(&nodeList);
+
+            // non-proportional fixed-width handling (e.g. GTEX)
+            if (tg->nonPropPixelWidth)
+                {
+                int npWidth = tg->nonPropPixelWidth(tg, item);
+                if (npWidth > rangeWidth)
+                    { // keep the first range but extend it
+                    range = rangeList;
+                    range->end = range->start + npWidth;
+                    range->next = NULL;  // do not need the rest of the ranges
+                    }
+                }
+
+	    if (spaceSaverAddOverflowMulti(ss, rangeList, nodeList, allowOverflow) == NULL)
+		break;
+
+	    }
+	}
+    spaceSaverFinish(tg->ss);
+    }
+// must assign at end to get final row count
+for(tg=tgSave; tg; tg=tg->nextWindow)
+    {
+    tg->ss->rowCount   = ss->rowCount;
+    }
+tg = tgSave;
+spaceSaverFree(&ss);
+
+ss = findSpaceSaverAndFreeOldOnes(tg, vis);
+if (!ss)
+    errAbort("unexpected error findSpaceSaverAndFreeOldOnes returned NULL at end of pack function");
+
+//warn("packCountRowsOverflow returning rowCount=%d vis=%d tg->track=%s tg->ss->window=%lu", tg->ss->rowCount, tg->ss->vis, tg->track, (unsigned long) tg->ss->window);
 return ss->rowCount;
 }
 
-int packCountRows(struct track *tg, int maxCount, boolean withLabels)
+int packCountRows(struct track *tg, int maxCount, boolean withLabels, enum trackVisibility vis)
 /* Return packed height. */
 {
-return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
+return packCountRowsOverflow(tg, maxCount, withLabels, FALSE, vis);
 }
 
 char *getItemDataName(struct track *tg, char *itemName)
@@ -425,6 +723,10 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
+
+//warn("calling tgFixedTotalHeightOptionalOverflow tg->track=%s. Passed in vis=%d lineHeight=%d, heightPer=%d, allowOverflow=%d", 
+	//tg->track, vis, lineHeight, heightPer, allowOverflow); // DEBUG REMOVE
+
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
     {
@@ -457,14 +759,24 @@ tg->lineHeight = lineHeight;
 switch (vis)
     {
     case tvFull:
-	rows = slCount(tg->items);
+	if (isTypeBedLike(tg))
+	    {
+	    if(allowOverflow && itemCount < maxItemsToUseOverflow)
+		rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow, vis);
+	    else
+		rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, FALSE, FALSE, vis);
+	    }
+	else
+	    {
+	    rows = slCount(tg->items);
+	    }
 	break;
     case tvPack:
 	{
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
-	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow);
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), TRUE, allowOverflow, vis);
 	else
-	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE);
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, TRUE, FALSE, vis);
 	break;
 	}
     case tvSquish:
@@ -474,9 +786,9 @@ switch (vis)
 	    tg->heightPer -= 1;
 	tg->lineHeight = tg->heightPer + 1;
 	if(allowOverflow && itemCount < maxItemsToUseOverflow)
-	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow);
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight), FALSE, allowOverflow, vis);
 	else
-	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, FALSE, FALSE);
+	    rows = packCountRowsOverflow(tg, floor(maxHeight/tg->lineHeight)+1, FALSE, FALSE, vis);
 	break;
 	}
     case tvDense:
@@ -484,6 +796,8 @@ switch (vis)
         rows = 1;
 	break;
     }
+//warn("called tgFixedTotalHeightOptionalOverflow tg->track=%s. tg->lineHeight=%d, tg->heightPer=%d, itemCount=%d, rows=%d", 
+	//tg->track, tg->lineHeight, tg->heightPer, itemCount, rows); // DEBUG REMOVE
 tg->height = rows * tg->lineHeight;
 return tg->height;
 }
@@ -598,15 +912,20 @@ boolean isWithCenterLabels(struct track *track)
 // * If composite child then no center labels in dense mode. */
 {
 if (!withCenterLabels)
+    {
+    //warn("isWithCenterLabels returns FALSE because withCenterLabels is FALSE track %s", track->track); // DEBUG REMOVE
     return FALSE;
+    }
 if (track != NULL)
     {
     char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
     if (centerLabelsDense)
         {
+	//warn("isWithCenterLabels returns sameWord(centerLabelsDense, \"on\")=%d track %s", sameWord(centerLabelsDense, "on"), track->track); // DEBUG REMOVE
         return sameWord(centerLabelsDense, "on");
         }
     }
+//warn("isWithCenterLabels returns withCenterLabels=%d track %s", withCenterLabels, track->track); // DEBUG REMOVE
 return withCenterLabels;
 }
 
@@ -637,7 +956,7 @@ va_end(args);
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
                     struct track *track, boolean toggle, char *chrom,
-                    int start, int end, char *message, char *extra)
+                    long start, long end, char *message, char *extra)
 /* Print out image map rectangle that would invoke this program again.
  * If track is non-NULL then put that track's id in the map item.
  * if toggle is true, then toggle track between full and dense.
@@ -657,28 +976,38 @@ if (extra != NULL)
     }
 if (chrom == NULL)
     {
-    chrom = chromName;
-    start = winStart;
-    end = winEnd;
+    chrom = virtChromName;
+    start = virtWinStart;
+    end = virtWinEnd;
     }
+char pos[512];
+safef(pos,sizeof(pos),"%s:%ld-%ld", chrom, start+1, end);
+if (virtualSingleChrom())
+    {
+    char *newPos = disguisePositionVirtSingleChrom(pos); // DISGUISE POS
+    //warn("mapBoxReinvoke: pos=%s newPos=%s", pos, newPos);  // DEBUG REMOVE
+    safef(pos,sizeof(pos),"%s", newPos);
+    freeMem(newPos);
+    }
+
 if (theImgBox && curImgTrack)
     {
     char link[512];
-    safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",       // NOTE: position may need removing
-          hgTracksName(), chrom, start+1, end, ui->string);  //       due to portal
-    if (!revCmplDisp && x < insideX)  // Do not toggle on side label!
+    safef(link,sizeof(link),"%s?position=%s&%s",       // NOTE: position may need removing
+          hgTracksName(), pos, ui->string);    //       due to portal
+    if (!revCmplDisp && x < fullInsideX)  // Do not toggle on side label!
         {
-        width -= (insideX+1 - x);
+        width -= (fullInsideX+1 - x);
         if (width <= 1)
             {
             freeDyString(&ui);
             return;
             }
-        x = insideX+1;
+        x = fullInsideX+1;
         }
-    else if (revCmplDisp && (x+width) >= insideWidth)
+    else if (revCmplDisp && (x+width) >= fullInsideWidth)
         {
-        width -= (x+width) - insideWidth + 1;
+        width -= (x+width) - fullInsideWidth + 1;
         if (width <= 1)
             {
             freeDyString(&ui);
@@ -696,8 +1025,8 @@ if (theImgBox && curImgTrack)
 else
     {
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, x+width, y+height);
-    hPrintf("HREF=\"%s?position=%s:%d-%d",
-            hgTracksName(), chrom, start+1, end);
+    hPrintf("HREF=\"%s?position=%s",
+            hgTracksName(), pos);
     hPrintf("&%s\"", ui->string);
     if (message != NULL)
         mapStatusMessage("%s", message);
@@ -726,7 +1055,7 @@ mapBoxReinvoke(hvg, x, y, width, height, curGroup, TRUE, NULL, 0, 0, buf, NULL);
 }
 
 void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *track,
-	char *newChrom, int newStart, int newEnd, char *message)
+	char *newChrom, long newStart, long newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
@@ -1143,92 +1472,53 @@ spreadAlignString(hvg, x, y, width, height, color, font, s,
                         NULL, count, FALSE, isCodon);
 }
 
+boolean scaledBoxToPixelCoords(int chromStart, int chromEnd, double scale, int xOff, int *pX1, int *pX2)
+/* Convert chrom coordinates to pixels. Clip to window to prevent integer overflow.
+ * For special case of a SNP insert location with width==0, set width=1.
+ * Returns FALSE if it does not intersect the window, or if it would have a negative width. */
+{
+if (chromEnd < chromStart) // Invalid coordinates
+    return FALSE;  // Ignore. 
+if (chromStart == chromEnd) // SNP insert position
+    ++chromEnd; // set width to 1
+if (chromStart >= winEnd || winStart >= chromEnd)  // overlaps window?
+    return FALSE; // nothing to do
+if (chromStart < winStart) // clip to part overlapping window
+    chromStart = winStart;
+if (chromEnd > winEnd)     // which prevents x1,x2 from overflowing when zooming-in makes scale large.
+    chromEnd = winEnd;
+*pX1 = round((double)(chromStart-winStart)*scale) + xOff;
+*pX2 = round((double)(chromEnd-winStart)*scale) + xOff;
+return TRUE;
+}
+
+
 void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
                    double scale, int xOff, int y, int height, Color color)
 /* Draw a box scaled from chromosome to window coordinates.
  * Get scale first with scaleForPixels. */
 {
-int x1 = round((double)(chromStart-winStart)*scale) + xOff;
-int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-int w = x2-x1;
-if (w < 1)
-    w = 1;
-hvGfxBox(hvg, x1, y, w, height, color);
-}
-
-void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd,
-                        double scale, int xOff, int y, int height, Color color)
-/* Draw a box scaled from chromosome to window coordinates.
- * Get scale first with scaleForPixels.
- * use colorBin to collect multiple colors for the same pixel, choose
- * majority color, break ties by blending the colors.
- * Yellow and red are blended as brown, other colors not implemented.*/
-{
-int x1 = round((double)(chromStart-winStart)*scale) + xOff;
-int x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-int w = x2-x1;
-int maxColor = color;
-int maxCount = 0;
-int col;
-int blendCount = 0;
-Color blendColor = color;
-assert(x1<MAXPIXELS);
-colorBin[x1][color]++ ;
-if ((x1 >= 0) && (x1 < MAXPIXELS) && (chromEnd >= winStart) && (chromStart <= winEnd))
+int x1, x2;
+if (scaledBoxToPixelCoords(chromStart, chromEnd, scale, xOff, &x1, &x2))
     {
-    /* loop through binned colors and pick color with highest count for this pixel*/
-    /* if there are multiple colors with the same count, then blend them (only working for red and yellow) */
-    for (col = 0 ; col < 256 ; col++)
-        {
-        int binCount = colorBin[x1][col];
-        if (binCount >= maxCount && binCount > 0)
-            {
-            /* blend colors with equal counts (only red and yellow currently)*/
-            if (binCount == maxCount && col != maxColor)
-                {
-                if ((col      == getCdsColor(CDS_SYN_PROT) && maxColor == getCdsColor(CDS_STOP)) ||
-                    (maxColor == getCdsColor(CDS_SYN_PROT) && col      == getCdsColor(CDS_STOP))  )
-                    {
-                    blendColor = getCdsColor(CDS_SYN_BLEND);
-                    blendCount = maxCount;
-                    }
-                }
-            maxCount = binCount;
-            maxColor = col;
-            }
-        }
-    if (blendCount >= maxCount)
-        maxColor = blendColor;
+    int w = x2-x1;
+    if (w == 0) // when zoomed out, avoid shinking to nothing
+	w = 1;
+    hvGfxBox(hvg, x1, y, w, height, color);
     }
-if (w < 1)
-    w = 1;
-hvGfxBox(hvg, x1, y, w, height, maxColor);
 }
 
-void drawScaledBoxSampleLabel(struct hvGfx *hvg,
+void drawScaledBoxLabel(struct hvGfx *hvg,
      int chromStart, int chromEnd, double scale,
      int xOff, int y, int height, Color color, MgFont *font,  char *label)
 /* Draw a box scaled from chromosome to window coordinates and draw a label onto it. 
- * Lots of code copied from drawScaledBoxSample */
+ * Lots of code copied from drawScaledBox */
 {
-//int i;
 int x1, x2, w;
-x1 = round((double)(chromStart-winStart)*scale) + xOff;
-x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-
-if (x2 >= MAXPIXELS)
-    x2 = MAXPIXELS - 1;
-
-if (x2 < xOff)
-    x2 = xOff;
-if (x2 > xOff+insideWidth)
-    x2 = xOff+insideWidth;
-if (x1 < xOff)
-    x1 = xOff;
-if (x1 > xOff+insideWidth)
-    x1 = xOff+insideWidth;
+if (!scaledBoxToPixelCoords(chromStart, chromEnd, scale, xOff, &x1, &x2))
+    return;
 w = x2-x1;
-if (w < 1)
+if (w == 0) // when zoomed out, avoid shinking to nothing
     w = 1;
 hvGfxBox(hvg, x1, y, w, height, color);
 
@@ -1243,31 +1533,6 @@ if (charsInBox > 4)
     hvGfxTextCentered(hvg, x1, y, w, height, labelColor, font, shortLabel);
     }
 }
-
-void drawScaledBoxSample(struct hvGfx *hvg,
-                         int chromStart, int chromEnd, double scale,
-                         int xOff, int y, int height, Color color, int score)
-/* Draw a box scaled from chromosome to window coordinates. */
-{
-//int i;
-int x1, x2, w;
-int ourStart = chromStart;
-if (ourStart < winStart) 
-    ourStart = winStart;
-int ourEnd = chromEnd;
-if (ourEnd > winEnd) 
-    ourEnd = winEnd;
-x1 = round((double)(ourStart-winStart)*scale) + xOff;
-x2 = round((double)(ourEnd-winStart)*scale) + xOff;
-
-if (x2 >= MAXPIXELS)
-    x2 = MAXPIXELS - 1;
-w = x2-x1;
-if (w < 1)
-    w = 1;
-hvGfxBox(hvg, x1, y, w, height, color);
-}
-
 
 void filterItems(struct track *tg, boolean (*filter)(struct track *tg, void *item), 
                 char *filterType)
@@ -1809,36 +2074,270 @@ int exonSlRefReverseCmp(const void *va, const void *vb)
 return -1 * exonSlRefCmp(va, vb);
 }
 
-void linkedFeaturesMoveWinStart(int exonStart, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+
+void linkedFeaturesNextPrevExonFind(struct track *tg, boolean next, struct convertRange *crList)
+//char *newChrom, int newWinStart, int newWinEnd, long *retVirtWinStart, long *retVirtWinEnd
+/* Find next-exon function for linkedFeatures.  Finds corresponding position on virtual chrom for new winStart/winEnd of exon non-virt position,
+ * and returns it. This function was cloned from linkedFeaturesLabelNextPrevItem and modified. */
+{
+//warn("got here linkedFeaturesNextPrevExon next=%d", next); // DEBUG REMOVE
+
+// TODO we could exit this routine faster for the case where it would not be found
+//  if we know that the virt chrom is made out of ascending non-overlapping chrom regions.
+
+struct convertRange *cr;
+
+// Special case speed optimization. (It still works without this).
+if (!virtMode)
+    { 
+    for (cr=crList; cr; cr=cr->next)
+	{
+	if (cr->skipIt)
+	    {
+	    cr->vStart = -1;
+	    cr->vEnd   = -1;
+	    }
+	else
+	    {
+	    cr->vStart = cr->start;
+	    cr->vEnd   = cr->end;
+	    }
+	}
+    return;
+    }
+
+// set found for skipIts
+for (cr=crList; cr; cr=cr->next)
+    {
+    if (cr->skipIt)
+	{
+	cr->found = TRUE;
+	}
+    }
+
+long start = virtWinStart;
+long end = virtWinEnd;
+long size = virtWinBaseCount;
+long sizeWanted = size;
+long totalFetched = 0;
+boolean firstTime = TRUE;
+// result found
+//long vStart = 0;
+//long vEnd = 0;
+
+/* If there's stuff on the screen, skip past it. */
+/* If not, skip to the edge of the window. */
+if (next)
+    {
+    start = end;
+    end = start + size;
+    if (end > virtSeqBaseCount)
+	end = virtSeqBaseCount;
+    }
+else
+    {
+    end = start;
+    start = end - size;
+    if (start < 0)
+	start = 0;
+    }
+size = end - start;
+
+/* Now it's time to do the search. */
+if (end > start)
+    // GALT TODO BIGNUM == 0x3fffffff which is about 1 billion?
+    while (sizeWanted > 0 && sizeWanted < BIGNUM)  
+	{
+
+	// include the original window so we can detect overlap with it.
+	long xStart = start, xEnd = end;
+	if (firstTime)
+	    {
+	    firstTime = FALSE;
+	    if (next)
+		{
+		xStart = virtWinStart;
+		}
+	    else
+		{
+		xEnd = virtWinEnd;
+		}
+	    }
+
+	//warn("Expanding search window to start=%ld end=%ld size=%ld sizeWanted=%ld", xStart, xEnd, size, sizeWanted); // DEBUG REMOVE
+
+	struct window *windows = makeWindowListFromVirtChrom(xStart, xEnd);
+
+	totalFetched += (xEnd - xStart);
+
+	//warn("#WINDOWS READ=%d grand totalFetched=%ld", slCount(windows), totalFetched); // DEBUG REMOVE
+
+	struct window *w;
+	for(w=windows; w; w=w->next)
+	    {
+	    for (cr=crList; cr; cr=cr->next)
+		{
+
+		if (cr->skipIt)
+		    continue;
+
+		// exon and region overlap?
+		if (sameString(w->chromName, cr->chrom) && (cr->end > w->winStart) && (w->winEnd > cr->start)) // overlap
+		    { // clip exon to region
+
+		    //warn("region overlap: w->chromName=%s, w->winStart=%d w->winEnd=%d",w->chromName,w->winStart,w->winEnd); // DEBUG REMOVE
+
+		    int s = max(w->winStart, cr->start); 
+		    int e = min(w->winEnd, cr->end);
+		    long vs = w->virtStart + (s - w->winStart);
+		    long ve = w->virtEnd - (w->winEnd - e);
+
+		    //warn("exon and region overlap: s=%d e=%d vs=%ld ve=%ld overlap=e-s=%d", s, e, vs, ve, e-s); // DEBUG REMOVE
+
+		    if (cr->found)
+			{ // if existing, extend its range
+			cr->vStart = min(vs, cr->vStart);
+			cr->vEnd = max(ve, cr->vEnd);
+			//warn("updating vr, new values vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
+			}
+		    else
+			{ // first find
+			//warn("creating new vr vs=%ld ve=%ld", vs, ve); // DEBUG REMOVE
+			cr->found = TRUE;
+			cr->vStart = vs;
+			cr->vEnd = ve;
+			}
+		    
+		    }
+		}
+	    }
+
+	slFreeList(&windows);
+
+	boolean vrFound = TRUE;
+	for (cr=crList; cr; cr=cr->next)
+	    {
+	    if (!cr->found)
+		vrFound = FALSE;
+	    }	    
+	if (vrFound)
+	    break;
+
+	// give up if we read this amount without finding anything
+	if (totalFetched > (virtWinBaseCount+1000000)) //  max gene size supported 1MB supports most genes.
+	    {
+	    //warn("totalFetched=%ld > 1000000, breaking out of loop.", totalFetched); // DEBUG REMOVE
+	    break;
+	    }
+	
+
+try_again:    
+	sizeWanted *= 2;
+	if (next)
+	    {
+	    start = end;
+	    end += sizeWanted;
+	    if (end > virtSeqBaseCount)
+		end = virtSeqBaseCount;
+	    }
+	else
+	    {
+	    end = start;
+	    start -= sizeWanted;
+	    if (start < 0)
+		start = 0;
+	    }
+	size = end - start;
+	if (end == 0)
+	    {
+	    break;
+	    }
+	if (start == virtSeqBaseCount)
+	    {
+	    break;
+	    }
+
+	}
+
+/* Finally, we got something. */
+int saveSizeWanted = sizeWanted;
+sizeWanted = virtWinEnd - virtWinStart;  // resetting sizeWanted back to the original windows span size
+
+for (cr=crList; cr; cr=cr->next)
+    {
+    if (cr->found && !cr->skipIt)
+	{
+	if (next)
+	    {
+	    //warn("nearest found vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
+	    // are we dangling off the end, need to expand search to find full span
+	    if ((cr->vEnd == end) && (end < virtSeqBaseCount))
+		{
+		sizeWanted = saveSizeWanted; 
+		goto try_again;
+		}
+	    }
+	else
+	    {
+	    //warn("nearest found vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
+	    // are we dangling off the start, need to expand search to find full span
+	    if ((cr->vStart == start) && (start > 0)) 
+		{
+		sizeWanted = saveSizeWanted; 
+		goto try_again;
+		}
+	    }
+	if (cr->vStart < 0)
+	    cr->vStart = 0;
+	if (cr->vEnd > virtSeqBaseCount)
+	    cr->vEnd = virtSeqBaseCount;
+	}
+    else
+	{ 
+	// if none found, do we just return -1
+	cr->vStart = -1;
+	cr->vEnd = -1;
+	}
+    }
+}
+
+
+void linkedFeaturesMoveWinStart(long exonStart, long bufferToEdge, long newWinSize, long *pNewWinStart, long *pNewWinEnd)
 /* A function used by linkedFeaturesNextPrevItem to make that function */
 /* easy to read. Move the window so that the start of the exon in question */
 /* is near the start of the window. */
 {
 *pNewWinStart = exonStart - bufferToEdge;
+if (*pNewWinStart < 0)
+    *pNewWinStart = 0;
 *pNewWinEnd = *pNewWinStart + newWinSize;
 }
 
-void linkedFeaturesMoveWinEnd(int exonEnd, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+void linkedFeaturesMoveWinEnd(long exonEnd, long bufferToEdge, long newWinSize, long *pNewWinStart, long *pNewWinEnd)
 /* A function used by linkedFeaturesNextPrevItem to make that function */
 /* easy to read. Move the window so that the end of the exon in question */
 /* is near the end of the browser window. */
 {
 *pNewWinEnd = exonEnd + bufferToEdge;
+if (*pNewWinEnd > virtSeqBaseCount)
+    *pNewWinEnd = virtSeqBaseCount;
 *pNewWinStart = *pNewWinEnd - newWinSize;
 }
 
-void linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
+boolean linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next)
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
 {
+//warn("virtMode=%d next=%d winStart=%d winEnd=%d", virtMode, next, winStart, winEnd); // DEBUG REMOVE
+boolean result = FALSE;
 struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
 struct simpleFeature *exon = exons;
 char *nextExonText;
 char *prevExonText;
-int newWinSize = winEnd - winStart;
-int bufferToEdge = 0.05 * newWinSize;
-int newWinStart, newWinEnd;
+long newWinSize = virtWinEnd - virtWinStart;
+long bufferToEdge = 0.05 * newWinSize;
+long newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
@@ -1865,60 +2364,120 @@ if (next)
 else
     slSort(&exonList, exonSlRefReverseCmp);
 numExons = slCount(exonList);
+
+// translate tall and exons
+// lift params into struct for parallel processing.
+struct convertRange *cr=NULL, *crList=NULL;
+AllocVar(cr);
+if (( next && lf->tallEnd   > winStart)
+ || (!next && lf->tallStart < winEnd  ))
+    {
+    cr->chrom = chromName;
+    cr->start = lf->tallStart;
+    cr->end = lf->tallEnd;
+    }
+else
+    {
+    cr->skipIt = TRUE;
+    }
+slAddHead(&crList, cr);
 for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
+    {
+    exon = ref->val;
+    AllocVar(cr);
+    if (( next && exon->end   > winStart)
+     || (!next && exon->start < winEnd  ))
+	{
+	cr->chrom = chromName;
+	cr->start = exon->start;
+	cr->end = exon->end;
+	}
+    else
+	{
+	cr->skipIt = TRUE;
+	}
+    slAddHead(&crList, cr);
+    }
+slReverse(&crList);
+
+// convert entire list of ranges to virt coords in parallel.
+//warn("translate gene in parallel");  // DEBUG REMOVE
+linkedFeaturesNextPrevExonFind(tg, next, crList);
+
+if ((numExons + 1) != slCount(crList))
+    errAbort("Unexpected error in linkedFeaturesNextPrevItem: numExons=%d + 1 != slCount(crList)=%d", numExons, slCount(crList));
+
+// translate tall
+cr = crList;
+long xTallStart = cr->vStart, xTallEnd = cr->vEnd;
+//warn("tall next=%d lf->tallStart=%d lf->tallEnd=%d xTallStart=%ld xTallEnd=%ld skipIt=%d", 
+    //next, lf->tallStart, lf->tallEnd, xTallStart, xTallEnd, cr->skipIt);  // DEBUG REMOVE
+
+
+for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, cr=cr->next, exonIx++)
     {
     char mouseOverText[256];
     boolean bigExon = FALSE;
     boolean revStrand = (lf->orientation == -1);
     exon = ref->val;
-    if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
+
+    // translate exon
+    long xExonStart = cr->vStart, xExonEnd = cr->vEnd;
+    //warn("exon exonIx=%d next=%d exon->start=%d exon->end=%d xExonStart=%ld xExonEnd=%ld skipIt=%d", 
+	//exonIx, next, exon->start, exon->end, xExonStart, xExonEnd, cr->skipIt);  // DEBUG REMOVE
+
+    if ((xExonEnd != -1) && ((xExonEnd - xExonStart) > (newWinSize - (2 * bufferToEdge))))
 	bigExon = TRUE;
-    if (next && (exon->end > winEnd))
+    if (next && (xExonEnd != -1) && (xExonEnd > virtWinEnd))
 	/* right overhang (but left side of screen in reverse-strand-display) */
 	{
-	if (exon->start < winEnd)
+	if (xExonStart < virtWinEnd)
 	    {
 	    /* not an intron hanging over edge. */
-	    if ((lf->tallEnd > winEnd) && (lf->tallEnd < exon->end) && (lf->tallEnd > exon->start))
-		linkedFeaturesMoveWinEnd(lf->tallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((xTallEnd != -1) && (xTallEnd > virtWinEnd) && (xTallEnd < xExonEnd) && (xTallEnd > xExonStart))
+		linkedFeaturesMoveWinEnd(xTallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
-		linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    }
 	else if (bigExon)
-	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
-	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
 	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
 	else
 	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
-	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, tg, virtChromName, newWinStart, newWinEnd, mouseOverText);
+	result = TRUE;
 	break;
 	}
-    else if (!next && (exon->start < winStart))
+    else if (!next && (xExonStart != -1) && (xExonStart < virtWinStart))
 	/* left overhang */
 	{
-	if (exon->end > winStart)
+	if (xExonEnd > virtWinStart)
 	    {
 	    /* not an intron hanging over the edge. */
-	    if ((lf->tallStart < winStart) && (lf->tallStart > exon->start) && (lf->tallStart < exon->end))
-		linkedFeaturesMoveWinStart(lf->tallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    if ((xTallStart != -1) && (xTallStart < virtWinStart) && (xTallStart > xExonStart) && (xTallStart < xExonEnd))
+		linkedFeaturesMoveWinStart(xTallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
-		linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    }
 	else if (bigExon)
-	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
-	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	if (!revStrand)
 	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", prevExonText, numExons-exonIx, numExons);
 	else
 	    safef(mouseOverText, sizeof(mouseOverText), "%s (%d/%d)", nextExonText, exonIx+1, numExons);
-	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, tg, virtChromName, newWinStart, newWinEnd, mouseOverText);
+	result = TRUE;
 	break;
 	}
     }
 slFreeList(&exonList);
+slFreeList(&crList);
+return result;
 }
 
 void linkedFeaturesItemExonMaps(struct track *tg, struct hvGfx *hvg, void *item, double scale,
@@ -2048,16 +2607,98 @@ for (ref = exonList; TRUE; )
 slFreeList(&exonList);
 }
 
+static struct window *makeMergedWindowList(struct window *windows)
+/* Make a copy of the windows list, merging nearby regions on the same chrom
+and which are within some limit (1MB?) of each other. */
+{
+int mergeLimit = 1024*1024;
+struct window *w = windows;
+struct window *resultList = NULL;
+struct window *mergedW;
+if (!windows)
+    errAbort("Unexpected error: windows list NULL in makeMergedWindowList()");
+boolean doNew = TRUE;
+while(TRUE)
+    {
+    if (doNew)
+	{
+	doNew = FALSE;
+	AllocVar(mergedW);
+	mergedW->chromName = w->chromName;
+	mergedW->winStart = w->winStart;
+	mergedW->winEnd = w->winEnd;
+	w = w->next;
+	}
+    boolean nearby = FALSE;
+    if (w  
+	&& sameString(w->chromName, mergedW->chromName)
+       	&& (w->winStart >= mergedW->winEnd)
+   	&& ((w->winStart - mergedW->winEnd) <= mergeLimit)
+       ) // nearby and ascending
+	nearby = TRUE;
+    if (!w || !nearby)
+	{
+	slAddHead(&resultList, mergedW);
+	}
+    if (!w)
+	break;
+    if (nearby)
+	{
+    	mergedW->winEnd = w->winEnd;
+	w = w->next;
+	}
+    else // done with old, starting new
+	{
+	doNew = TRUE;
+	}
+    }
+
+return resultList;
+}
+
+struct virtRange 
+    {
+    struct virtRange *next;
+    long vStart;
+    long vEnd;
+    char *item;  // DEBUG REMOVE
+    };
+
+int vrCmp(const void *va, const void *vb)
+/* Compare to sort based on chromStart. */
+{
+const struct virtRange *a = *((struct virtRange **)va);
+const struct virtRange *b = *((struct virtRange **)vb);
+long dif = a->vStart - b->vStart;
+if (dif > 0) return 1;
+if (dif < 0) return -1;
+return 0;
+}
+
+int vrCmpEnd(const void *va, const void *vb)
+/* Compare to sort based on chromEnd. */
+{
+const struct virtRange *a = *((struct virtRange **)va);
+const struct virtRange *b = *((struct virtRange **)vb);
+long dif = a->vEnd - b->vEnd;
+if (dif > 0) return 1;
+if (dif < 0) return -1;
+return 0;
+}
+
+
 void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next)
 /* Default next-gene function for linkedFeatures.  Changes winStart/winEnd
  * and updates position in cart. */
 {
-int start = winStart;
-int end = winEnd;
-int size = winBaseCount;
-int sizeWanted = size;
-int bufferToEdge;
-struct bed *items = NULL;
+//warn("got here linkedFeaturesLabelNextPrevItem virtWinStart=%ld virtWinEnd=%ld", virtWinStart, virtWinEnd); // DEBUG REMOVE
+
+long start = virtWinStart;
+long end = virtWinEnd;
+long size = virtWinBaseCount;
+long sizeWanted = size;
+long bufferToEdge;
+struct virtRange *vrList = NULL;
 
 /* If there's stuff on the screen, skip past it. */
 /* If not, skip to the edge of the window. */
@@ -2065,8 +2706,8 @@ if (next)
     {
     start = end;
     end = start + size;
-    if (end > seqBaseCount)
-	end = seqBaseCount;
+    if (end > virtSeqBaseCount)
+	end = virtSeqBaseCount;
     }
 else
     {
@@ -2076,64 +2717,198 @@ else
 	start = 0;
     }
 size = end - start;
+
+struct hash *hash = newHash(8);
+boolean firstTime = TRUE;
+
 /* Now it's time to do the search. */
 if (end > start)
-    for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )
+    // GALT TODO BIGNUM == 0x3fffffff which is about 1 billion?
+    for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )  
 	{
-#ifndef GBROWSE
-	if (sameWord(tg->table, WIKI_TRACK_TABLE))
-	    items = wikiTrackGetBedRange(tg->table, chromName, start, end);
-	else if (sameWord(tg->table, "gvPos"))
-	    items = loadGvAsBed(tg, chromName, start, end);
-	else if (sameWord(tg->table, "oreganno"))
-	    items = loadOregannoAsBed(tg, chromName, start, end);
-	else if (tg->isBigBed)
-	    items = loadBigBedAsBed(tg, chromName, start, end);
-	else
-#endif /* GBROWSE */
+
+	//warn("Expanding search window to start=%ld end=%ld size=%ld sizeWanted=%ld", start, end, size, sizeWanted); // DEBUG REMOVE
+
+	// include the original window so we can detect overlap with it.
+	long xStart = start, xEnd = end;
+	if (firstTime)
 	    {
-	    if (isCustomTrack(tg->table))
+	    firstTime = FALSE;
+	    if (next)
 		{
-		struct customTrack *ct = tg->customPt;
-		items = hGetCtBedRange(CUSTOM_TRASH, database, ct->dbTableName, chromName, start, end, NULL);
+		xStart = virtWinStart;
 		}
 	    else
-		items = hGetBedRange(database, tg->table, chromName, start, end, NULL);
+		{
+		xEnd = virtWinEnd;
+		}
 	    }
-	/* If we got something, or weren't able to search as big as we wanted to */
-	/* (in case we're at the end of the chrom).  */
-	if ((items != NULL) || (size < sizeWanted))
-	    {
-	    /* If none of these were on the original screen, we're done. */
-	    /* Remove the ones that were on the original screen. */
+
+	struct window *windows = makeWindowListFromVirtChrom(xStart, xEnd);
+
+	// To optimize when using tiny exon-like regions, merge nearby regions.
+	struct window *mergedWindows = makeMergedWindowList(windows);
+
+
+	//warn("#WINDOWS READ=%d mergedWindows=%d", slCount(windows), slCount(mergedWindows)); // DEBUG REMOVE
+
+	struct window *mw;
+	for(mw=mergedWindows; mw; mw=mw->next)
+	    {  // DEBUG TEST
+
+	    //warn("WINDOW %ld-%ld %s:%d-%d", w->virtStart, w->virtEnd, w->chromName, w->winStart, w->winEnd); // DEBUG REMOVE
+	    struct bed *items = NULL;
+
+#ifndef GBROWSE
+	    if (sameWord(tg->table, WIKI_TRACK_TABLE))
+		items = wikiTrackGetBedRange(tg->table, mw->chromName, mw->winStart, mw->winEnd);
+	    else if (sameWord(tg->table, "gvPos"))
+		items = loadGvAsBed(tg, mw->chromName, mw->winStart, mw->winEnd);
+	    else if (sameWord(tg->table, "oreganno"))
+		items = loadOregannoAsBed(tg, mw->chromName, mw->winStart, mw->winEnd);
+	    else if (tg->isBigBed)
+		items = loadBigBedAsBed(tg, mw->chromName, mw->winStart, mw->winEnd);
+	    else
+#endif /* GBROWSE */
+		{
+		if (isCustomTrack(tg->table))
+		    {
+		    struct customTrack *ct = tg->customPt;
+		    items = hGetCtBedRange(CUSTOM_TRASH, database, ct->dbTableName, mw->chromName, mw->winStart, mw->winEnd, NULL);
+		    }
+		else
+		    items = hGetBedRange(database, tg->table, mw->chromName, mw->winStart, mw->winEnd, NULL);
+		}
+
 	    struct bed *item;
-	    struct bed *goodList = NULL;
 	    while ((item = slPopHead(&items)) != NULL)
 		{
 		item->next = NULL;
-		if (((item->chromStart >= winStart) && (item->chromStart < winEnd)) ||
-		    ((item->chromEnd > winStart) && (item->chromEnd <= winEnd)) ||
-		    ((item->chromStart <= winStart) && (item->chromEnd >= winEnd)))
-		    bedFree(&item);
+
+
+		struct window *w;
+		for(w=windows; w; w=w->next)
+		    {
+
+		    // item and region overlap?
+		    if ((item->chromEnd > w->winStart) && (w->winEnd > item->chromStart)) // overlap
+			{ // clip item to region
+			int s = max(w->winStart, item->chromStart); 
+			int e = min(w->winEnd, item->chromEnd);
+			long vs = w->virtStart + (s - w->winStart);
+			long ve = w->virtEnd - (w->winEnd - e);
+
+			//warn("item->name=%s item->chrom=%s item->chromStart=%d item->chromEnd=%d vs=%ld ve=%ld", 
+			    //item->name, item->chrom, item->chromStart, item->chromEnd, vs, ve);  // DEBUG REMOVE
+
+			// NOTE TODO should this key string code should be copied from the pack routine?
+			//  When I tried the pack code, mapItemName method was crashing, not sure why.
+			char key[1024];
+			safef(key, sizeof key, "%s:%d-%d %s", item->chrom, item->chromStart, item->chromEnd, item->name);
+
+			//warn("hash key=%s", key); // DEBUG REMOVE
+
+			struct hashEl *hel = hashLookup(hash, key);
+			struct virtRange *vr;
+			if (hel)
+			    { // if existing, extend its range
+			    vr = hel->val;
+			    vr->vStart = min(vs, vr->vStart);
+			    vr->vEnd = max(ve, vr->vEnd);
+			    //warn("updating vr, new values vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd); // DEBUG REMOVE
+			    }
+			else
+			    { // create new vr
+			    //warn("creating new vr vs=%ld ve=%ld", vs, ve); // DEBUG REMOVE
+			    AllocVar(vr);
+			    vr->vStart = vs;
+			    vr->vEnd = ve;
+			    vr->item = cloneString(item->name); // DEBUG REMOVE
+			    vr->next = NULL;
+			    hashAdd(hash, key, vr);
+			    }
+			
+			}
+		    }
+		bedFree(&item);
+		}
+	    
+
+	    }
+
+	slFreeList(&mergedWindows);
+	slFreeList(&windows);
+
+	vrList = NULL;
+	//warn("create a list of vrs from hash");  // DEBUG REMOVE
+	// create a list of vrs from hash
+	struct hashCookie cookie = hashFirst(hash);
+	struct hashEl *hel;
+	while ((hel = hashNext(&cookie)) != NULL)
+	    {
+	    slAddHead(&vrList, hel->val);
+	    //hel->val = NULL; // keep for reuse
+	    }
+	//warn("about to slReverse vrList from hash");  // DEBUG REMOVE
+	slReverse(&vrList);  // probably not needed.
+
+
+	/*
+	{  // DEBUG REMOVE
+	warn("VR List");
+	struct virtRange *vr;
+	for(vr=vrList; vr; vr=vr->next)
+	    warn("vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd);
+	
+	}
+	*/
+
+    
+	/* If we got something, or weren't able to search as big as we wanted to */
+	/* (in case we're at the end of the chrom).  */
+	if (vrList != NULL || (size < sizeWanted))
+	    {
+	    /* Remove the ones that were on the original screen. */
+	    struct virtRange *vr;
+	    struct virtRange *goodList = NULL;
+	    while ((vr = slPopHead(&vrList)) != NULL)
+		{
+		vr->next = NULL;
+		if ((vr->vEnd > virtWinStart) && (virtWinEnd > vr->vStart))
+		    {
+		    }
 		else
-		    slAddHead(&goodList, item);
+		    slAddHead(&goodList, vr);
 		}
 	    if (goodList)
 		{
 		slReverse(&goodList);
-		items = goodList;
+		vrList = goodList;
+		//warn("vrList=goodList"); // DEBUG REMOVE
 		break;
 		}
 	    }
+
+	/*
+	{  // DEBUG REMOVE
+	warn("VR List after filtering out ones on the original screen.");
+	struct virtRange *vr;
+	for(vr=vrList; vr; vr=vr->next)
+	    warn("vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd);
+	
+	}
+	*/
+
+try_again:    
 	sizeWanted *= 2;
 	if (next)
 	    {
 	    start = end;
 	    end += sizeWanted;
-	    if (end > seqBaseCount)
-		end = seqBaseCount;
+	    if (end > virtSeqBaseCount)
+		end = virtSeqBaseCount;
 	    }
-        else
+	else
 	    {
 	    end = start;
 	    start -= sizeWanted;
@@ -2143,63 +2918,142 @@ if (end > start)
 	size = end - start;
 	if (end == 0)
 	    {
-	    items = NULL;
+	    vrList = NULL;
 	    break;
 	    }
+	if (start == virtSeqBaseCount)
+	    {
+	    vrList = NULL;
+	    break;
+	    }
+
 	}
+
+
 /* Finally, we got something. */
-sizeWanted = winEnd - winStart;
-bufferToEdge = (int)(0.05 * (float)sizeWanted);
-if (items)
+int saveSizeWanted = sizeWanted;
+sizeWanted = virtWinEnd - virtWinStart;  // resetting sizeWanted back to the original windows span size
+bufferToEdge = (long)(0.05 * (float)sizeWanted);
+if (vrList)
     {
-    char pos[256];
+    struct virtRange *vr = NULL;
     if (next)
 	{
-	slSort(&items, bedCmp);
-	if (items->chromEnd + bufferToEdge - sizeWanted < winEnd)
+	slSort(&vrList, vrCmp);
+	/* //final list
+	{  // DEBUG REMOVE
+	warn("Final good VR List");
+	struct virtRange *vr;
+	for(vr=vrList; vr; vr=vr->next)
+	    warn("vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item);
+	
+	}
+	*/
+	vr = vrList;  // first one is nearest
+	//warn("nearest found vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item); // DEBUG REMOVE
+
+	// are we dangling off the end, need to expand search to find full span
+        if ((vr->vEnd == end) && (end < virtSeqBaseCount))
 	    {
-	    winEnd = items->chromEnd + bufferToEdge;
-	    winStart = winEnd - sizeWanted;
+	    sizeWanted = saveSizeWanted; 
+	    goto try_again;
 	    }
-	else if (items->chromStart + bufferToEdge - sizeWanted < winEnd)
+	//warn("sizeWanted=%ld, bufferToEdge=%ld", sizeWanted, bufferToEdge);  // DEBUG REMOVE
+	if (vr->vEnd + bufferToEdge - sizeWanted < virtWinEnd)
 	    {
-	    winEnd = items->chromStart + bufferToEdge;
-	    winStart = winEnd - sizeWanted;
+	    //warn("case 1, item end plus 5%% buffer within one screen width ahead"); // DEBUG REMOVE
+	    virtWinEnd = vr->vEnd + bufferToEdge;
+	    virtWinStart = virtWinEnd - sizeWanted;
+	    }
+	else if (vr->vStart + bufferToEdge - sizeWanted < virtWinEnd)
+	    {
+	    //warn("case 2, (puzzling) item start plus 5%% buffer within one screen width ahead"); // DEBUG REMOVE
+	    virtWinEnd = vr->vStart + bufferToEdge;
+	    virtWinStart = virtWinEnd - sizeWanted;
 	    }
 	else
 	    {
-	    winStart = items->chromStart - bufferToEdge;
-	    winEnd = winStart + sizeWanted;
+	    //warn("case 3, default. shift window to item start minus 5%% buffer"); // DEBUG REMOVE
+	    virtWinStart = vr->vStart - bufferToEdge;
+	    virtWinEnd = virtWinStart + sizeWanted;
 	    }
 	}
     else
 	{
-	slSort(&items, bedCmpEnd);
-	slReverse(&items);
-	if (items->chromStart - bufferToEdge + sizeWanted > winStart)
+	slSort(&vrList, vrCmpEnd);
+	slReverse(&vrList);
+	/*
+	//final list
+	{  // DEBUG REMOVE
+	warn("Final good VR List");
+	struct virtRange *vr;
+	for(vr=vrList; vr; vr=vr->next)
+	    warn("vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item);
+	
+	}
+	*/
+	vr = vrList;  // first one is nearest
+	//warn("nearest found vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item); // DEBUG REMOVE
+
+	// are we dangling off the start, need to expand search to find full span
+        if ((vr->vStart == start) && (start > 0)) 
 	    {
-	    winStart = items->chromStart - bufferToEdge;
-	    winEnd = winStart + sizeWanted;
+	    sizeWanted = saveSizeWanted; 
+	    goto try_again;
 	    }
-        else if (items->chromEnd - bufferToEdge + sizeWanted > winStart)
+	//warn("sizeWanted=%ld, bufferToEdge=%ld", sizeWanted, bufferToEdge);  // DEBUG REMOVE
+	if (vr->vStart - bufferToEdge + sizeWanted > virtWinStart)
 	    {
-	    winStart = items->chromEnd - bufferToEdge;
-	    winEnd = winStart + sizeWanted;
+	    //warn("case 1, item start minus 5%% buffer within one screen width behind"); // DEBUG REMOVE
+	    virtWinStart = vr->vStart - bufferToEdge;
+	    virtWinEnd = virtWinStart + sizeWanted;
+	    }
+        else if (vr->vEnd - bufferToEdge + sizeWanted > virtWinStart)
+	    {
+	    //warn("case 2, (puzzling) item end minus 5%% buffer within one screen width behind"); // DEBUG REMOVE
+	    virtWinStart = vr->vEnd - bufferToEdge;
+	    virtWinEnd = virtWinStart + sizeWanted;
 	    }
         else
 	    {
-	    winEnd = items->chromEnd + bufferToEdge;
-	    winStart = winEnd - sizeWanted;
+	    //warn("case 3, default. shift window to item end minus 5%% buffer"); // DEBUG REMOVE
+	    virtWinEnd = vr->vEnd + bufferToEdge;
+	    virtWinStart = virtWinEnd - sizeWanted;
 	    }
 	}
-    if (winEnd > seqBaseCount)
-	winEnd = seqBaseCount;
-    if (winStart < 0)
-	winStart = 0;
-    bedFreeList(&items);
-    safef(pos, sizeof(pos), "%s:%d-%d", chromName, winStart+1, winEnd);
-    cartSetString(cart, "position", cloneString(pos));
+    if (virtWinEnd > virtSeqBaseCount)
+	virtWinEnd = virtSeqBaseCount;
+    if (virtWinStart < 0)
+	virtWinStart = 0;
+
+    virtWinBaseCount = virtWinEnd - virtWinStart;
+
+    //warn("RESULT: virtWinStart=%ld virtWinEnd=%ld virtWinBaseCount=%ld",virtWinStart,virtWinEnd,virtWinBaseCount); // DEBUG REMOVE
+
     }
+
+// Because nextItem now gets called earlier (in tracksDisplay), 
+// before trackList gets duplicated in trackForm,
+// we do not want this track to have open handles and resources
+// be duplicated later for each window. Close resources as needed.
+tg->items = NULL;
+#ifndef GBROWSE
+if (tg->isBigBed)
+    bbiFileClose(&tg->bbiFile);
+#endif /* GBROWSE */
+
+// free the hash and its values?
+struct hashCookie cookie = hashFirst(hash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct virtRange *vr = hel->val;
+    freeMem(vr->item);
+    freeMem(vr);
+    }
+
+freeHash(&hash);
+
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
@@ -2904,15 +3758,13 @@ for (sf = components; sf != NULL; sf = sf->next)
 	if (e2 > tallStart) e2 = tallStart;
 	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    {
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff , shortHeight ,
-		lf->highlightColor, lf->score);
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff + 1, y+shortOff + 1, shortHeight - 2,
-		color, lf->score);
+	    drawScaledBox(hvg, s, e2, scale, xOff, y+shortOff , shortHeight , lf->highlightColor);
+	    drawScaledBox(hvg, s, e2, scale, xOff + 1, y+shortOff + 1, shortHeight - 2, color);
 	    }
 	else
 	    {
-	    drawScaledBoxSample(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
-		color, lf->score);
+	    drawScaledBox(hvg, s, e2, scale, xOff, y+shortOff, shortHeight,
+		color);
 	    }
 	s = e2;
 	}
@@ -2922,15 +3774,13 @@ for (sf = components; sf != NULL; sf = sf->next)
         if (s2 < tallEnd) s2 = tallEnd;
 	if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 	    {
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
-		lf->highlightColor, lf->score);
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff+1, y+shortOff+1, shortHeight-2,
-		color, lf->score);
+	    drawScaledBox(hvg, s2, e, scale, xOff, y+shortOff, shortHeight, lf->highlightColor);
+	    drawScaledBox(hvg, s2, e, scale, xOff+1, y+shortOff+1, shortHeight-2, color);
 	    }
 	else
 	    {
-	    drawScaledBoxSample(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
-		color, lf->score);
+	    drawScaledBox(hvg, s2, e, scale, xOff, y+shortOff, shortHeight,
+		color);
 	    }
 	e = s2;
 	}
@@ -2948,16 +3798,14 @@ for (sf = components; sf != NULL; sf = sf->next)
             {
 	    if (lf->highlightColor && (lf->highlightMode == highlightOutline))
 		{
-		drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-				    lf->highlightColor, lf->score );
-		drawScaledBoxSample(hvg, s, e, scale, xOff+1, y+1, heightPer-2,
-				    color, lf->score );
+		drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, lf->highlightColor);
+		drawScaledBox(hvg, s, e, scale, xOff+1, y+1, heightPer-2, color);
 		}
 	    else
 		{
 		if (tg->drawLabelInBox)
                     {
-		    drawScaledBoxSampleLabel(hvg, s, e, scale, xOff, y, heightPer,
+		    drawScaledBoxLabel(hvg, s, e, scale, xOff, y, heightPer,
                                 color, font, lf->name );
                     // exon arrows would overlap the text
                     exonArrowsAlways = FALSE;
@@ -2965,8 +3813,7 @@ for (sf = components; sf != NULL; sf = sf->next)
                     }
 
 		else
-		    drawScaledBoxSample(hvg, s, e, scale, xOff, y, heightPer,
-					color, lf->score);
+		    drawScaledBox(hvg, s, e, scale, xOff, y, heightPer, color);
                 }
 
             /* Display barbs only if no intron is visible on the item.
@@ -2988,6 +3835,7 @@ for (sf = components; sf != NULL; sf = sf->next)
             }
 	}
     }
+
 if ((intronGap > 0) || chainLines)
     lfDrawSpecialGaps(lf, intronGap, chainLines, gapFactor,
 		      tg, hvg, xOff, y, scale, color, bColor, vis);
@@ -3069,13 +3917,6 @@ lfSeriesDrawConnecter(lfs, hvg, prevEnd, lfs->end, scale, xOff, midY,
 	color, bColor, vis);
 }
 
-static void clearColorBin()
-/* Clear structure which keeps track of color of highest scoring
- * structure at each pixel. */
-{
-memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
-}
-
 boolean highlightItem(struct track *tg, void *item)
 /* Should this item be highlighted? */
 {
@@ -3154,31 +3995,43 @@ int s = tg->itemStart(tg, item);
 int e = tg->itemEnd(tg, item);
 boolean rButton = FALSE;
 boolean lButton = FALSE;
+struct window *lastWindow = windows;
+while (lastWindow->next)
+    lastWindow = lastWindow->next;
+// only process for first and last windows
 /* Draw the actual triangles.  These are always at the edge of the window. */
-if (doButtons && (s < winStart))
+if (doButtons && (s < winStart) && (currentWindow == windows)) // first window
     {
     lButton = TRUE;
-    hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y,
-                        heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
     }
-if (doButtons && (e > winEnd))
+if (doButtons && (e > winEnd) && (currentWindow == lastWindow))
     {
     rButton = TRUE;
-    hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer,
-                        y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
 
 if ((vis == tvFull) || (vis == tvPack))
     {
     /* Make the button mapboxes. */
     if (lButton)
-        tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
+        lButton = tg->nextPrevExon(tg, hvg, item, insideX, y, buttonW, heightPer, FALSE);
     if (rButton)
-        tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+        rButton = tg->nextPrevExon(tg, hvg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+    }
+
+/* Draw the actual triangles.  These are always at the edge of the window. */
+if (lButton)
+    {
+    hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y,
+                        heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
+    }
+if (rButton)
+    {
+    hvGfxNextItemButton(hvg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer,
+                        y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
     }
 
 boolean compat = exonNumberMapsCompatible(tg, vis);
-if (vis == tvPack)
+if (vis == tvPack || (vis == tvFull && isTypeBedLike(tg)))
     {
     int w = x2-textX;
     if (lButton)
@@ -3201,7 +4054,7 @@ if (vis == tvPack)
 	}
     // if not already mapped, pick up the label
     if (!(lButton && compat))
-	{
+	{ 
         tg->mapItem(tg, hvg, item, tg->itemName(tg, item), tg->mapItemName(tg, item),
 		s, e, textX, y, w, heightPer);
 	}
@@ -3273,6 +4126,25 @@ else if (vis == tvFull)
 }
 
 
+static void handleNonPropDrawItemAt(struct track *tg, struct spaceNode *sn, void *item, struct hvGfx *hvg,
+        int xOff, int yOff, double scale,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Handle non-Proportional draw-at including clipping */
+{
+
+if (tg->nonPropDrawItemAt && tg->nonPropPixelWidth && !sn->noLabel)
+    {
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, fullInsideX, yOff, fullInsideWidth, tg->height);
+
+    tg->nonPropDrawItemAt(tg, item, hvg, xOff, yOff, scale, font, color, vis);
+
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
+
+    }
+}
+
 
 static void genericDrawOverflowItem(struct track *tg, struct spaceNode *sn,
                                     struct hvGfx *hvg, int xOff, int yOff, int width,
@@ -3294,20 +4166,33 @@ if (tg->itemNameColor != NULL)
     color = tg->itemNameColor(tg, item, hvg);
 int y = yOff + origLineHeight * overflowRow;
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, tvDense);
+// non-proportional track like gtexGene
+// NOTE: Since this is being drawn in dense, perhaps it should not be called?
+//  well, gtex probably does not need it, but maybe the others might
+handleNonPropDrawItemAt(tg, sn, item, hvg, xOff, y, scale, font, color, tvDense);
+
 sn->row = origRow;
 
 /* Draw label for overflow row. */
-if (withLeftLabels && firstOverflow)
+if (withLeftLabels && firstOverflow && currentWindow == windows) // first window
     {
     int overflowCount = 0;
-    for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
-	if (sn->row >= overflowRow)
-	    overflowCount++;
+    // Do for all windows
+    struct track *tgSave = tg; 
+    for(tg=tgSave; tg; tg=tg->nextWindow)
+	{		    
+	for (sn = tg->ss->nodeList; sn != NULL; sn = sn->next)
+	    // do not count items with label turned off as they are dupes anyways.
+	    if (sn->row >= overflowRow && !sn->noLabel) 
+		overflowCount++;
+	}
+    tg = tgSave;
     assert(hvgSide != NULL);
     hvGfxUnclip(hvgSide);
     hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
     char nameBuff[SMALLBUF];
     safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
+    //warn("[%s] overflowRow %d window %lu", nameBuff, overflowRow, (unsigned long) currentWindow);  // DEBUG REMOVE
     mgFontStringWidth(font, nameBuff);
     hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
                    color, font, nameBuff);
@@ -3334,6 +4219,8 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
+
+//warn("genericDrawItem top x1=%d x2=%d xOff=%d insideX=%d insideWidth=%d", x1, x2, xOff, insideX, insideWidth); // DEBUG REMOVE
 
 if (tg->drawLabelInBox)
     withLeftLabels = FALSE;
@@ -3363,8 +4250,11 @@ int y = yOff + yRow;
 
 tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
 
+// GALT non-proportional track like gtexGene
+handleNonPropDrawItemAt(tg, sn, item, hvg, xOff, y, scale, font, color, vis);
+
 /* pgSnpDrawAt may change withIndividualLabels between items */
-boolean withLabels = (withLeftLabels && withIndividualLabels && (vis == tvPack) && !tg->drawName);
+boolean withLabels = (withLeftLabels && withIndividualLabels && ((vis == tvPack) || (vis == tvFull && isTypeBedLike(tg))) && (!sn->noLabel) && !tg->drawName);
 if (withLabels)
     {
     char *name = tg->itemName(tg, item);
@@ -3373,10 +4263,14 @@ if (withLabels)
     boolean snapLeft = FALSE;
     boolean drawNameInverted = highlightItem(tg, item);
     textX -= nameWidth + dotWidth;
-    snapLeft = (textX < insideX);
+
+    snapLeft = (textX < fullInsideX);
+    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
+
 #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
     if (theImgBox == NULL && snapLeft)
 #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
@@ -3386,7 +4280,7 @@ if (withLabels)
         textX = leftLabelX;
         assert(hvgSide != NULL);
         hvGfxUnclip(hvgSide);
-        hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+        hvGfxSetClip(hvgSide, leftLabelX, yOff, fullInsideX - leftLabelX, tg->height);
         if(drawNameInverted)
             {
             int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
@@ -3402,13 +4296,24 @@ if (withLabels)
         }
     else
         {
+
+	//warn("textX=%d y=%d nameWidth=%d name=%s insideX=%d insideWidth=%d", textX, y, nameWidth, name, insideX, insideWidth);  // DEBUG REMOVE
+	//warn("DEBUG hgfxSetClip fullInsideX=%d yOff=%d fullInsideWidth=%d tg->height=%d", fullInsideX, yOff, fullInsideWidth, tg->height);  // DEBUG REMOVE
+	
+	// shift clipping to allow drawing label to left of currentWindow
+	int pdfSlop=nameWidth/5;
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, tg->heightPer);
         if(drawNameInverted)
             {
+	    //warn("drawNameInverted"); // DEBUG REMOVE
             hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
             }
         else
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
         }
     }
 if (!tg->mapsSelf)
@@ -3683,7 +4588,7 @@ for (item = tg->items; item != NULL; item = item->next)
                     }
                 }
         #endif ///def IMAGEv2_NO_LEFTLABEL_ON_FULL
-            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, x1, y, tg->heightPer, color);
+            genericDrawNextItemStuff(tg, hvg, vis, item, scale, x2, x1, x1, y, tg->heightPer, color, TRUE);
             }
 #else//ifndef IMAGEv2_SHORT_MAPITEMS
             {
@@ -3729,7 +4634,7 @@ if (doWiggle)
     genericDrawItemsWiggle(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 				   font, color, vis);
     }
-else if (vis == tvPack || vis == tvSquish)
+else if (vis == tvPack || vis == tvSquish || (vis == tvFull && isTypeBedLike(tg)))
     {
     genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                                font, color, vis);
@@ -3744,7 +4649,6 @@ void linkedFeaturesSeriesDraw(struct track *tg, int seqStart, int seqEnd,
                               MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-clearColorBin();
 if (vis == tvDense && tg->colorShades)
     slSort(&tg->items, cmpLfsWhiteToBlack);
 genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
@@ -3756,8 +4660,6 @@ void linkedFeaturesDraw(struct track *tg, int seqStart, int seqEnd,
                         MgFont *font, Color color, enum trackVisibility vis)
 /* Draw linked features items. */
 {
-clearColorBin();
-
 if (tg->items == NULL && vis == tvDense && canDrawBigBedDense(tg))
     {
     bigBedDrawDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color);
@@ -5098,7 +6000,7 @@ if (hTableExists(database, "kgXref"))
     if (knownGeneLabels == NULL)
         {
         useGeneSymbol = TRUE; /* default to gene name */
-        /* set cart to match what doing */
+	/* set cart to match the default set */
         cartSetBoolean(cart, "knownGene.label.gene", TRUE);
         }
 
@@ -5840,7 +6742,7 @@ struct hashEl *label;
 if (rgdGene2Labels == NULL)
     {
     useGeneName = TRUE; /* default to gene name */
-    /* set cart to match what doing */
+    /* set cart to match the default set */
     cartSetBoolean(cart, "rgdGene2.label.gene", TRUE);
     }
 for (label = rgdGene2Labels; label != NULL; label = label->next)
@@ -5971,6 +6873,13 @@ for (label = refGeneLabels; label != NULL; label = label->next)
         {
         useGeneName = TRUE;
         }
+    }
+if (useGeneName)
+    {
+    /* set cart to match the default set */
+    char setting[64];
+    safef(setting, sizeof(setting), "%s.label.gene", labelString);
+    cartSetBoolean(cart, setting, TRUE);
     }
 
 for (lf = tg->items; lf != NULL; lf = lf->next)
@@ -7781,8 +8690,6 @@ int tallStart, tallEnd, shortStart, shortEnd;
 boolean isFull = (vis == tvFull);
 double scale = scaleForPixels(width);
 
-memset(colorBin, 0, MAXPIXELS * sizeof(colorBin[0]));
-
 if (vis == tvDense)
     {
     slSort(&tg->items, cmpLfsWhiteToBlack);
@@ -7802,16 +8709,16 @@ for (cds = tg->items; cds != NULL; cds = cds->next)
 	if (shortStart < tallStart)
 	    {
 	    end = tallStart;
-	    drawScaledBoxSample(hvg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBox(hvg, shortStart, end, scale, xOff, y+shortOff, shortHeight, color);
 	    }
 	if (shortEnd > tallEnd)
 	    {
 	    start = tallEnd;
-	    drawScaledBoxSample(hvg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color , cds->score);
+	    drawScaledBox(hvg, start, shortEnd, scale, xOff, y+shortOff, shortHeight, color);
 	    }
 	if (tallEnd > tallStart)
 	    {
-	    drawScaledBoxSample(hvg, tallStart, tallEnd, scale, xOff, y, heightPer, color, cds->score);
+	    drawScaledBox(hvg, tallStart, tallEnd, scale, xOff, y, heightPer, color);
 	    }
 	}
     if (isFull) y += lineHeight;
@@ -9860,7 +10767,6 @@ if (vis == tvFull || vis == tvPack)
                  lf->orientation, color, FALSE);
     }
     */
-//for(count=1; count < 4; count++)
 for (sf = lf->components; sf != NULL; sf = sf->next)
     {
     int yOff;
@@ -9887,7 +10793,6 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	default:
 	    continue;
 	}
-    //if (sf->grayIx == count)
     drawScaledBox(hvg, s, e, scale, xOff, yOff, heightPer,
 			color );
     }
@@ -9968,7 +10873,7 @@ void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, 
 /* put text anchored on right upper corner, doing separate colors if needed */
 {
 int textX = x1 - width - 2;
-boolean snapLeft = (textX < insideX);
+boolean snapLeft = (textX < fullInsideX);
 int clipYBak = 0, clipHeightBak = 0;
 struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 if (snapLeft)        /* Snap label to the left. */
@@ -9977,7 +10882,7 @@ if (snapLeft)        /* Snap label to the left. */
         hvgWhich = hvgSide;
     hvGfxGetClip(hvgWhich, NULL, &clipYBak, NULL, &clipHeightBak);
     hvGfxUnclip(hvgWhich);
-    hvGfxSetClip(hvgWhich, leftLabelX, itemY, insideWidth, lineHeight);
+    hvGfxSetClip(hvgWhich, leftLabelX, itemY, fullInsideX - leftLabelX, lineHeight); // width was insideWidth
     textX = leftLabelX;
     width = leftLabelWidth-1;
     }
@@ -10001,7 +10906,7 @@ else
     }
 if (snapLeft)
     {
-    hvGfxUnclip(hvgWhich);
+    hvGfxUnclip(hvgWhich);  // TODO GALT shoulld this be fullInsideX and fullInsideWidth:?
     hvGfxSetClip(hvgWhich, insideX, clipYBak, insideWidth, clipHeightBak);
     }
 }
@@ -11234,6 +12139,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 tg->items = list;
 }
 
@@ -11267,6 +12173,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&list);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 tg->items = list;
 }
 
@@ -13230,7 +14137,7 @@ fillInFromType(track, tdb);
 return track;
 }
 
-struct hash *handlerHash;
+struct hash *handlerHash = NULL;
 
 void registerTrackHandler(char *name, TrackHandler handler)
 /* Register a track handling function. */
@@ -13291,6 +14198,8 @@ void registerTrackHandlers()
 /* Register tracks that include some non-standard methods. */
 {
 #ifndef GBROWSE
+if (handlerHash) // these have already been registered.
+    return;
 registerTrackHandler("rgdGene", rgdGeneMethods);
 registerTrackHandler("cgapSage", cgapSageMethods);
 registerTrackHandler("cytoBand", cytoBandMethods);

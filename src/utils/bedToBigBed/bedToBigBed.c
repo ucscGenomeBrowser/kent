@@ -52,7 +52,7 @@ errAbort(
   "The in.bed file must be sorted by chromosome,start,\n"
   "  to sort a bed file, use the unix sort command:\n"
   "     sort -k1,1 -k2,2n unsorted.bed > sorted.bed\n"
-  "Sorting must be case insensitive (LC_COLLATE=C).\n"
+  "Sorting must be set to skip Unicode mapping (LC_COLLATE=C).\n"
   "\n"
   "options:\n"
   "   -type=bedN[+[P]] : \n"

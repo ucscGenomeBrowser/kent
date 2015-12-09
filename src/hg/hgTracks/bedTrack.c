@@ -529,7 +529,7 @@ if (color)
     if (tg->drawLabelInBox)
         {
 	char *label = tg->itemName(tg, bed);
-        drawScaledBoxSampleLabel(hvg, s, e, scale, xOff, y, heightPer, color, font, label);
+        drawScaledBoxLabel(hvg, s, e, scale, xOff, y, heightPer, color, font, label);
         }
     else if (tg->drawName && vis != tvSquish)
 	{
@@ -623,12 +623,13 @@ void freeSimpleBed(struct track *tg)
 bedFreeList(((struct bed **)(&tg->items)));
 }
 
-void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
+boolean simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
 			   int h, boolean next)
 /* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
  * this simply zaps us to the right/left edge of the feature.  Arrows have already been
  * drawn; here we figure out coords and draw a mapBox. */
 {
+boolean result = FALSE;
 struct bed4 *bed = item;
 char *mouseOverText = NULL;
 if (next)
@@ -650,7 +651,27 @@ else
     newWinStart = bed->chromStart - bufferToEdge;
     newWinEnd = newWinStart + winSize;
     }
-mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
+struct convertRange *cr=NULL;
+AllocVar(cr);
+if (( next && newWinEnd   > winStart)
+ || (!next && newWinStart < winEnd  ))
+    {
+    cr->start = newWinStart;
+    cr->end = newWinEnd;
+    }
+else
+    {
+    cr->skipIt = TRUE;
+    }
+linkedFeaturesNextPrevExonFind(tg, next, cr);
+long newVirtWinStart = cr->vStart;
+long newVirtWinEnd = cr->vEnd;
+if (newVirtWinStart != -1) // found it
+    {
+    mapBoxJumpTo(hvg, x, y, w, h, tg, virtChromName, newVirtWinStart, newVirtWinEnd, mouseOverText);
+    result = TRUE;
+    }
+return result;
 }
 
 void bedMethods(struct track *tg)

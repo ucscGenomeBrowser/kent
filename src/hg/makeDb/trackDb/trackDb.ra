@@ -240,6 +240,16 @@ group map
 visibility dense
 type bed 6 .
 
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url /cgi-bin/hgTracks?position=$$
+urlLabel Corresponding position:
+
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
@@ -1548,6 +1558,7 @@ group varRep
 visibility hide
 useScore 1
 type bed 12 +
+exonNumbers off
 
 track rmskUpdate
 shortLabel RM update

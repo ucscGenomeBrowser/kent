@@ -1574,6 +1574,10 @@ synBlastp.csh $ratDb $db rgdGene2 knownGene
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/knownGene.exonNuc.fa.gz
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/multiz46way/alignments/md5sum.txt
 
+# copy over malacards table from hg38
+# Done on Tue Dec  8 00:20:47 CET 2015 max
+# mysqldump hg38 malacards | mysql hg19
+
 echo
 echo "see the bottom of the script for details about knownToWikipedia"
 echo

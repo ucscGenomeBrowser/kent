@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Vertebrate Chain/Net
 longLabel Non-placental Vertebrate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aWallaby=Wallaby baTasmanian_Devil=Tasmanian_Devil bbOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=American_Alligator gLizard=Lizard haCoelacanth=Coelacanth hX_Tro=X._tropicalis iTetraodon=Tetraodon jaTilapia=Nile_Tilapia jFugu=Fugu kCod=Atlantic_Cod kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nArcticLamprey=Arctic_lamprey nLamprey=Lamprey
-subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria daCoela=Coelacanthimorpha dAmph=Amphibia eTele=Teleostei fHyper=Hyperoartia
+subGroup2 species Species aWallaby=Wallaby baTasmanian_Devil=Tasmanian_Devil bbOpossum=Opossum cPlatypus=Platypus dTurkey=Turkey eChicken=Chicken faMedium_Ground_Finch=Medium_Ground_Finch fbBudgerigar=Budgerigar fbZebra_Finch=Zebra_Finch fcAlligator=American_Alligator gLizard=Lizard haX_Tro=X._tropicalis hbCoelacanth=Coelacanth iTetraodon=Tetraodon jaTilapia=Nile_Tilapia jFugu=Fugu kCod=Atlantic_Cod kStickleback=Stickleback lMedaka=Medaka mZebrafish=Zebrafish nArcticLamprey=Arctic_lamprey nLamprey=Lamprey
+subGroup3 clade Clade aMammal=Mammalia bDino=Dinosauria cLepi=Lepidosauria dAmph=Amphibia dbCoela=Coelacanthimorpha eTele=Teleostei fHyper=Hyperoartia
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -110,19 +110,11 @@ include chainNetGalGal4.ra alpha
 
         track chainLatCha1
         subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=haCoelacanth clade=daCoela
+        subGroups view=chain species=hbCoelacanth clade=dbCoela
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain latCha1
         otherDb latCha1
-
-        track chainXenTro3
-        subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=hX_Tro clade=dAmph
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro3
-        otherDb xenTro3
 
         track chainGadMor1
         subTrack vertebrateChainNetViewchain off
@@ -285,19 +277,11 @@ include chainNetFr3.ra alpha
 
         track netLatCha1
         subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=haCoelacanth clade=daCoela
+        subGroups view=net species=hbCoelacanth clade=dbCoela
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign latCha1 chainLatCha1
         otherDb latCha1
-
-        track netXenTro3
-        subTrack vertebrateChainNetViewnet on 
-        subGroups view=net species=hX_Tro clade=dAmph
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro3 chainXenTro3
-        otherDb xenTro3
 
         track netGadMor1
         subTrack vertebrateChainNetViewnet off

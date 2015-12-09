@@ -1,9 +1,9 @@
 <!-- News Section ============================================- -->  
-<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TABLE style="background-color:#888888; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
     <TR><TD>        
-    <TABLE BGCOLOR="#fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+    <TABLE style="background-color:#fffee8; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
         <TR><TD>        
-        <TABLE BGCOLOR="#D9E4F8" BACKGROUND="images/hr.gif" WIDTH="100%" BORDER=0>
+        <TABLE style="background-color:#D9E4F8; background-image: url('images/hr.gif'); width: 100%; border: 0px">
             <TR><TD>
             <!--cheap trick to get background on row to be continuous-->
             <TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
@@ -21,7 +21,7 @@
                 SRC="images/news.jpg" ALT="" ALIGN="right" BORDER=0></A>
             </TD></TR></TABLE>
         </TD></TR></TABLE>
-        <TABLE BGCOLOR="#fffee8" WIDTH="100%" CELLPADDING=0>
+        <TABLE style="background-color:#fffee8; width: 100%; padding: 0px">
           <TR><TH HEIGHT=3></TH></TR>
           <TR><TD WIDTH=10></TD>
           <TD>
@@ -38,6 +38,37 @@
     <!-- start news -->
   <hr>
   <p>
+  <font color="#006666" size="4"><b>9 December 2015 &mdash;
+  Data from 1000 Genomes Project Phase 3 Now Available</b></font>
+  <p>
+  We have made data from Phase 3 of the
+  <a href="http://www.1000genomes.org/" target="_blank">1000 Genomes Project</a>
+  available for the hg19 version of the human assembly.
+  The data includes almost 90 million variants in the form of single nucleotide variants (SNVs),
+  insertions/deletions (InDels), and structural variants (SVs). Each variant includes a
+  detail page that incorporates links to the variant in the dbSNP database, quality scores,
+  and allele frequency information for various populations. More information is available
+  on the <a href="../cgi-bin/hgTrackUi?db=hg19&g=tgpPhase3">track description page</a>.
+  </p>
+
+  <p>
+  In addition to variant calls, the data includes two tracks that highlight regions of the
+  genome that are accessible to next generation sequencing technologies that utilize
+  paired-end reads. One track contains regions that meet the  1000 Genomes Project
+  &quot;pilot&quot; criteria while the other contains regions that meet a more
+  &quot;strict&quot; set of guidelines. More information about how these accessible regions
+  were identified can be found on the
+  <a href="../cgi-bin/hgTrackUi?db=hg19&g=tgpPhase3Accessibility">track description page</a>.
+  </p>
+
+  <p>
+  Thank you to the 1000 Genomes Project and Tom Blackwell and Mary Kate Wing at the
+  University of Michigan for making these data available. Thank you to Angie Hinrichs
+  and Matthew Speir at UCSC for their work on these tracks.
+  </p>
+
+  <hr>
+  <p>
   <font color="#006666" size="4"><b>25 November 2015 &mdash;
   New &quot;View - In External Tools&quot; Menu Sends Data to Prediction Websites!</b></font>
   <p>
@@ -47,7 +78,7 @@
   </p>
   <p>
   For example, when browsing hg38 and zoomed in on the start of a gene like ABO at
-  <a href="/cgi-bin/hgTracks?db=hg38&position=chr9%3A133255000-133255555"
+  <a href="/cgi-bin/hgTracks?db=hg38%26position=chr9%3A133255000-133255555"
   target="_blank">chr9:133,255,000-133,255,555</a>, 
   click the View menu and select &quot;In External Tools&quot;,
   or simply type the keyboard shortcut &quot;s&quot; then &quot;t&quot;,
@@ -67,15 +98,23 @@
   
         <!-- start archives -->
 <!--staged for future release
+	<p>
+	<font color="#006666" size="4"><b>9 December 2015 &mdash;
+	Data from 1000 Genomes Project Phase 3 Now Available</b>: </font>
+	We have made data from Phase 3 of the
+	<a href="http://www.1000genomes.org/" target="_blank">1000 Genomes Project</a>
+	available for the hg19 version of the human assembly.
+        <a href="goldenPath/newsarch.html#120815">Read more</a>.
+	</p>
+
         <p>
         <font color="#006666" size="4"><b>25 November 2015 &mdash;
         New &quot;View - In External Tools&quot; Menu Sends Data to Prediction Websites!</b></font>
-        <p>
         Do you often get the current sequence with &quot;View - DNA&quot; just to copy
         and paste it into another website? With the new menu &quot;View - In External Tools&quot;
         you can now send the current region to remote tools with two clicks.
-        </p>
         <a href="goldenPath/newsarch.html#112515">Read more</a>.
+        </p>
 -->
   	<p>
         <font color="#006666" size="4"><b>3 November 2015 &mdash;
@@ -92,24 +131,6 @@
         and right, hide all tracks, configure the browser display and much more using
         only your keyboard. Use the "?" key to view the entire list of shortcuts.
         <a href="goldenPath/newsarch.html#092315">Read more</a>. 
-        </p>
-          
-  	<p>
-  	<font color="#006666" size="4"><b>14 September 2015 &mdash;
-  	Human Genome Browser default changed to GRCh38/hg38 </b>:</font>
-  	In conjunction with the release of the new 100-species Conservation track on the 
-  	hg38/GRCh38 human assembly, we have changed the default human browser on our website from
-  	hg19 to hg38. 
-        <a href="goldenPath/newsarch.html#091415">Read more</a>.
-  	</p>
-
-  	<p>
-    	<font color="#006666" size="4"><b>10 September 2015 &mdash;
-    	100 Species Conservation Track now available on GRCh38/hg38 </b>:
-    	</font>
-    	We are pleased to announce the release of a new Conservation track based on the human
-   	(GRCh38/hg38) assembly.
-    	<a href="goldenPath/newsarch.html#091015">Read more</a>.
   	</p>
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>

@@ -1222,7 +1222,7 @@ double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int w, y;
-boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+boolean withLabels = (withLeftLabels && (vis == tvPack || (vis == tvFull && isTypeBedLike(tg))) && !tg->drawName);
 #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
 if (theImgBox != NULL)
     withLabels = (withLeftLabels && (vis == tvPack || vis == tvFull) && !tg->drawName);
@@ -1231,7 +1231,7 @@ if (theImgBox != NULL)
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
 
-if (vis == tvPack || vis == tvSquish)
+if (vis == tvPack || vis == tvSquish || (vis == tvFull && isTypeBedLike(tg)))
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn = NULL;
@@ -1254,17 +1254,21 @@ if (vis == tvPack || vis == tvSquish)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    boolean snapLeft = FALSE;
             textX -= nameWidth + dotWidth;
         #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (theImgBox == NULL && textX < insideX)
+            if (theImgBox == NULL && textX < fullInsideX)
         #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (textX < insideX)        /* Snap label to the left. */
+            if (textX < fullInsideX)        /* Snap label to the left. */
         #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+		snapLeft = TRUE;
+	    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+	    if (snapLeft)
                 {
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
                 hvGfxUnclip(hvgSide);
-                hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+		hvGfxSetClip(hvgSide, leftLabelX, yOff, fullInsideX - leftLabelX, tg->height);
                 hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, heightPer,
 			    itemNameColor, font, name);
                 hvGfxUnclip(hvgSide);
@@ -1318,7 +1322,7 @@ double scale = scaleForPixels(width);
 int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y, w;
-boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
+boolean withLabels = (withLeftLabels && (vis == tvPack || (vis == tvFull && isTypeBedLike(tg))) && !tg->drawName);
 #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
 if (theImgBox != NULL)
     withLabels = (withLeftLabels && (vis == tvPack || tvFull) && !tg->drawName);
@@ -1327,7 +1331,7 @@ snp125ColorSource = snp125ColorSourceFromCart(cart, tg->tdb);
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->track);
-if (vis == tvPack || vis == tvSquish)
+if (vis == tvPack || vis == tvSquish || (vis == tvFull && isTypeBedLike(tg)))
     {
     struct spaceSaver *ss = tg->ss;
     struct spaceNode *sn = NULL;
@@ -1354,17 +1358,20 @@ if (vis == tvPack || vis == tvSquish)
 	    boolean snapLeft = FALSE;
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
-            snapLeft = (textX < insideX);
+
         #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (theImgBox == NULL && snapLeft)
+            if (theImgBox == NULL && textX < fullInsideX)
         #else///ifndef IMAGEv2_NO_LEFTLABEL_ON_FULL
-            if (snapLeft)
+            if (textX < fullInsideX)        /* Snap label to the left. */
         #endif ///ndef IMAGEv2_NO_LEFTLABEL_ON_FULL
+		snapLeft = TRUE;
+	    snapLeft |= (vis == tvFull && isTypeBedLike(tg));
+	    if (snapLeft)
                 {
 		textX = leftLabelX;
                 assert(hvgSide != NULL);
                 hvGfxUnclip(hvgSide);
-                hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+                hvGfxSetClip(hvgSide, leftLabelX, yOff, fullInsideX - leftLabelX, tg->height);
 		if (drawNameInverted)
 		    {
 		    int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
@@ -1380,6 +1387,9 @@ if (vis == tvPack || vis == tvSquish)
 		}
             else
 	        {
+		int pdfSlop=nameWidth/5;
+		hvGfxUnclip(hvg);
+		hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, heightPer);
 		if (drawNameInverted)
 		    {
 		    hvGfxBox(hvg, textX - 1, y, nameWidth+1, heightPer-1, color);
@@ -1388,6 +1398,8 @@ if (vis == tvPack || vis == tvSquish)
 		else
                     hvGfxTextRight(hvg, textX, y, nameWidth, heightPer,
 			    itemNameColor, font, name);
+                hvGfxUnclip(hvg);
+                hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 		}
             }
         if (!tg->mapsSelf && ( ( w = x2-textX ) > 0 ) )

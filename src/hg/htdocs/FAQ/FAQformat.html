@@ -1524,7 +1524,7 @@ The refGene table is an example of the genePredExt format.
     uint exonCount;     	"Number of exons"
     uint[exonCount] exonStarts; "Exon start positions"
     uint[exonCount] exonEnds;   "Exon end positions"
-    uint id;            	"Unique identifier"
+    int score;            	"Score"
     string name2;       	"Alternate name (e.g. gene_id from GTF)"
     string cdsStartStat; 	"enum('none','unk','incmpl','cmpl')"
     string cdsEndStat;   	"enum('none','unk','incmpl','cmpl')"

@@ -50,9 +50,12 @@ var suggestBox = {
         else $('#positionInput').parents('form').append("<input type='hidden' id='hgFindMatches' name='hgFind.matches' " + "value='" + val + "'>");
     },
 
+    initialized: false,
+
     init: function(db, assemblySupportsGeneSuggest, selectCallback, clickCallback) {
         // selectCallback(item): called when the user selects a new genomic position from the list
         // clickCallback(position): called when the user clicks on positionDisplay
+	this.initialized = true;
         var lastSelected = null; // this is the last value entered by the user via a suggestion (used to distinguish manual entry in the same field)
         var waterMark;
         if (assemblySupportsGeneSuggest) {
@@ -103,9 +106,9 @@ var suggestBox = {
                 // This handles case where user typed or edited something rather than choosing from a suggest list;
                 // in this case, we only change the position hidden; we do NOT update the displayed coordinates.
                 var val = $('#positionInput').val();
-                if (!val || val.length === 0 || val === waterMark)
                 // handles case where users zeroes out positionInput; in that case we revert to currently displayed position
-                val = $('#positionDisplay').text();
+                if (!val || val.length === 0 || val === waterMark)
+		    val = $('#positionDisplay').text();
                 $('#position').val(val);
                 suggestBox.clearFindMatches();
             }
@@ -115,6 +118,10 @@ var suggestBox = {
             clickCallback($(this).text());
             $('#positionInput').val($(this).text());
             suggestBox.clearFindMatches();
+	    if (hgTracks.windows)
+		{
+		genomePos.positionDisplayDialog();
+		}
         });
     }
 };
