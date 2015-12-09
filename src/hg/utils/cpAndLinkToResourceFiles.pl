@@ -46,7 +46,10 @@ if($exclude) {
     %exclude = map { $_ => 1} split(/\s*,\s*/, $exclude);
 }
 
-usage("Missing/invalid destDir '$destDir'") if(!$destDir || !(-d $destDir));
+if(!$destDir || !(-d $destDir)) {
+    usage "Missing/invalid destDir";
+    die;
+}
 
 my $host = $ENV{HOST};
 if(!defined($host)) {

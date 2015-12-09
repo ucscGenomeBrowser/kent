@@ -1,11 +1,14 @@
 $(document).ready(function() {
-    suggestBox.init(document.orgForm.db.value, $('#suggestTrack').length > 0, function(item) {
-        $('#positionDisplay').text(item.id);
-        $('#position').val(item.id);
-    }, function(position) {
-        $('#positionDisplay').text(position);
-        $('#position').val(position);
-    });
+    suggestBox.init(document.orgForm.db.value, 
+        $('#suggestTrack').length > 0, 
+	function(item) {
+	    $('#positionDisplay').text(item.id);
+	    $('#position').val(item.id);
+	}, 
+	function(position) {
+	    $('#positionDisplay').text(position);
+	    $('#position').val(position);
+	});
 
     // Default the image width to current browser window width (#2633).
     var ele = $('input[name=pix]');

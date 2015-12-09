@@ -30920,7 +30920,30 @@ viewLimits 0:2000
 autoScale off
 html gwipsvizRiboseq
 
-_EOF_
+
+#########################################################################
+# altLocations (DONE - 2015-07-10 - Galt)
+#
+# I used hapRegions instead of altSeqHaplotype because it has fewer records
+# and also the corrected chromStart (-1).
+# I am trying to have a standard name for the table, used in all assemblies with alternate haplotypes (not in patches).
+# hgTracks and hgc expect the table to have this name.
+
+hgsql hg19
+create table altLocations as (select bin,chrom,chromStart,chromEnd,name from hapRegions);
+
+#I also created this in top-level trackDb.ra:
+
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url /cgi-bin/hgTracks?position=$$
+urlLabel Corresponding position:
+
+
 ##############################################################################
 # DBSNP B144 / SNP144 (DONE 9/9/15)
     # Originally done 7/16/15

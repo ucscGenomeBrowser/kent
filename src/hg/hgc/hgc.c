@@ -4067,6 +4067,12 @@ if (imagePath)
     printf("<A HREF=\"%s/%s.%s\">Download Original Image</A><BR>\n", bothWords[0], item, bothWords[1]);
     }
 
+if (sameString(tdb->table,"altLocations") && (!strchr(item,':')))
+    {
+    char *hgsid = cartSessionId(cart);
+    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleHaplo&singleHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
+    }
+
 printTrackHtml(tdb);
 freez(&dupe);
 hFreeConn(&conn);
@@ -24575,6 +24581,31 @@ scientificName = hScientificName(database);
 
 
 dbIsFound = trackHubDatabase(database) || sqlDatabaseExists(database);
+
+// Try to deal with virt chrom position used by hgTracks.
+// Hack the cart vars to set to a non virtual chrom mode position
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    {
+    char *nvPos = cartUsualString(cart, "nonVirtPosition", "");
+    /* parse non-virtual position */
+    char *pos = cloneString(nvPos);
+    char *colon = strchr(pos, ':');
+    if (!colon)
+    errAbort("position has no colon");
+    char *dash = strchr(pos, '-');
+    if (!dash)
+    errAbort("position has no dash");
+    *colon = 0;
+    *dash = 0;
+    char *chromName = cloneString(pos);
+    int winStart = atol(colon+1) - 1;
+    int winEnd = atol(dash+1);
+    cartSetString(cart, "position", nvPos);
+    cartSetString(cart, "c", chromName);
+    cartSetInt(cart, "l", winStart);
+    cartSetInt(cart, "r", winEnd);
+    }
+
 
 if (dbIsFound)
     seqName = hgOfficialChromName(database, cartString(cart, "c"));

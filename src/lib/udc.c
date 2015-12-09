@@ -1162,6 +1162,7 @@ udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
 struct slName *list = NULL;
 slAddHead(&list, slNameNew(file->bitmapFileName));
 slAddHead(&list, slNameNew(file->sparseFileName));
+slAddHead(&list, slNameNew(file->redirFileName));
 slReverse(&list);
 freeMem(file->cacheDir);
 freeMem(file->bitmapFileName);
@@ -1274,6 +1275,27 @@ for (sl = slList;  sl != NULL;  sl = sl->next)
 	}
 slNameFreeList(&slList);
 return ret;
+}
+
+time_t udcTimeFromCache(char *url, char *cacheDir)
+/* Look up the file datetime from the local cache bitmap file, or 0 if there
+ * is no cache for url. */
+{
+time_t t = 0;
+long long int ret = -1;
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
+struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
+for (sl = slList;  sl != NULL;  sl = sl->next)
+    if (endsWith(sl->name, bitmapName))
+	{
+	ret = udcSizeAndModTimeFromBitmap(sl->name, &t);
+	if (ret == -1)
+	    t = 0;
+	break;
+	}
+slNameFreeList(&slList);
+return t;
 }
 
 unsigned long udcCacheAge(char *url, char *cacheDir)

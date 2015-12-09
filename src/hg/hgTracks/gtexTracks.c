@@ -319,8 +319,11 @@ if (sameString(colorScheme, GTEX_COLORS_GTEX))
     }
 else
     {
-    int expCount = geneBed->expCount;
-    extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
+    if (geneBed)
+	{
+	int expCount = geneBed->expCount;
+	extras->colors = getRainbow(&saturatedRainbowAtPos, expCount);
+	}
     }
 filterTissues(tg);
 
@@ -328,7 +331,7 @@ while (geneBed != NULL)
     {
     AllocVar(geneInfo);
     geneInfo->geneBed = geneBed;
-    geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId);
+    geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
     slAddHead(&list, geneInfo);
     geneBed = geneBed->next;
     geneInfo->geneBed->next = NULL;
@@ -363,7 +366,7 @@ tg->items = list;
 
 static int gtexBarWidth()
 {
-int winSize = winEnd - winStart;
+long winSize = virtWinBaseCount;
 if (winSize < WIN_MAX_GRAPH)
     return MAX_BAR_WIDTH;
 else if (winSize < WIN_MED_GRAPH)
@@ -374,7 +377,8 @@ else
 
 static int gtexGraphPadding()
 {
-int winSize = winEnd - winStart;
+long winSize = virtWinBaseCount;
+
 if (winSize < WIN_MAX_GRAPH)
     return MAX_GRAPH_PADDING;
 else if (winSize < WIN_MED_GRAPH)
@@ -385,7 +389,7 @@ else
 
 static int gtexMaxGraphHeight()
 {
-int winSize = winEnd - winStart;
+long winSize = virtWinBaseCount;
 if (winSize < WIN_MAX_GRAPH)
     return MAX_GRAPH_HEIGHT;
 else if (winSize < WIN_MED_GRAPH)
@@ -405,7 +409,7 @@ return (barWidth * count) + (padding * (count-1)) + labelWidth + 2;
 }
 
 static int gtexGraphX(struct gtexGeneBed *gtex)
-/* Locate graph on X, relative to viewport. Return -1 if it won't fit */
+/* Locate graph on X, relative to viewport. */
 {
 int start = max(gtex->chromStart, winStart);
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
@@ -505,10 +509,40 @@ int graphX = gtexGraphX(geneBed);
 if (graphX < 0)
     return;
 
+// draw gene model
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
+int yGene = yZero + gtexGeneMargin() - 1;
+tg->heightPer = gtexGeneModelHeight() + 1;
+if (geneInfo->geneModel) // some BEDs do not have a corresponding geneModel record
+    {
+    struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneInfo->geneModel, FALSE);
+    lf->filterColor = statusColor;
+    linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
+    }
+tg->heightPer = heightPer;
+}
 
+static int gtexGeneNonPropPixelWidth(struct track *tg, void *item)
+/* Return end chromosome coordinate of item, including graph */
+{
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+int graphWidth = gtexGraphWidth(tg, geneInfo);
+return graphWidth;
+}
+
+static void gtexGeneNonPropDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                double scale, MgFont *font, Color color, enum trackVisibility vis)
+{
+struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+struct gtexGeneBed *geneBed = geneInfo->geneBed;
+int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
+topGraphHeight = max(topGraphHeight, tl.fontHeight);
+int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
+int yGene = yZero + gtexGeneMargin()-1;
+
+int graphX = gtexGraphX(geneBed);
 int x1 = xOff + graphX;         // x1 is at left of graph
 int keepX = x1;
 drawGraphBase(tg, geneInfo, hvg, keepX, yZero+1);
@@ -564,14 +598,6 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
     x1 = x1 + barWidth + graphPadding;
     }
 
-// draw gene model
-int yGene = yZero + gtexGeneMargin() - 1;
-tg->heightPer = gtexGeneModelHeight() + 1;
-struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneInfo->geneModel, FALSE);
-lf->filterColor = statusColor;
-linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, tvSquish);
-tg->heightPer = heightPer;
-
 if (!geneInfo->medians2)
     return;
 
@@ -620,6 +646,7 @@ if (isMax)
 if (item == NULL)
     return 0;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
+
 if (geneInfo->height != 0)
     return geneInfo->height;
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
@@ -646,37 +673,6 @@ static int gtexGeneItemHeight(struct track *tg, void *item)
 return gtexGeneItemHeightOptionalMax(tg, item, FALSE);
 }
 
-static void gtexGeneDrawItemsFull(struct track *tg, int seqStart, int seqEnd,
-                                      struct hvGfx *hvg, int xOff, int yOff, int width,
-                                      MgFont *font, Color color, enum trackVisibility vis)
-/* Draw GTEx gene graphs in full mode.  Special handling as they are variable height */
-{
-double scale = scaleForWindow(width, seqStart, seqEnd);
-struct slList *item;
-int y = yOff + 1;
-for (item = tg->items; item != NULL; item = item->next)
-    {
-    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
-    genericDrawNextItem(tg, item, hvg, xOff, y, scale, color, vis);
-    int height = gtexGeneItemHeight(tg, item);
-    y += height;
-    }
-}
-
-void gtexGeneDrawItems(struct track *tg, int seqStart, int seqEnd, 
-                        struct hvGfx *hvg, int xOff, int yOff, int width, 
-                        MgFont *font, Color color, enum trackVisibility vis)
-/* Draw GTEx gene graphs, which are of variable height so require custom layout in full
- * and pack modes */
-{
-if (vis == tvDense || vis == tvSquish)
-    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
-else if (vis == tvFull)
-    gtexGeneDrawItemsFull(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
-else if (vis == tvPack)
-    genericDrawItems(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
-}
-
 static char *tissueExpressionText(struct gtexTissue *tissue, double expScore, 
                                         boolean doLogTransform, char *qualifier)
 /* Construct mouseover text for tissue graph */
@@ -700,7 +696,6 @@ if (tg->visibility == tvDense || tg->visibility == tvSquish)
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
     }
-
 // add map boxes to gene model and label
 struct gtexGeneInfo *geneInfo = item;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
@@ -709,6 +704,8 @@ int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 int yGene = yZero + gtexGeneMargin() - 1;
+if (!geneInfo->geneModel)
+    return;
 int geneStart = max(geneInfo->geneModel->txStart, winStart);
 int geneEnd = min(geneInfo->geneModel->txEnd, winEnd);
 double scale = scaleForWindow(insideWidth, winStart, winEnd);
@@ -793,17 +790,12 @@ static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Figure out total height of track. Set in track and also return it */
 {
 int height = 0;
-struct gtexGeneInfo *item;
+
 if (tg->visibility == tvSquish || tg->visibility == tvDense)
     {
     height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, FALSE);
     }
-else if (tg->visibility == tvFull)
-    {
-    for (item = tg->items; item != NULL; item = item->next)
-        height += gtexGeneItemHeight(tg, item);
-    }
-else if (tg->visibility == tvPack)
+else if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
     {
     if (!tg->ss)
         {
@@ -815,12 +807,30 @@ else if (tg->visibility == tvPack)
     if (tg->ss->rowCount != 0)
         {
         if (!tg->ss->rowSizes)
-            height = spaceSaverSetRowHeights(tg->ss, gtexGeneHeight);
-        else
-            height = spaceSaverGetRowHeightsTotal(tg->ss);
+	    {
+	    // collect the rowSizes data across all windows
+	    assert(currentWindow==windows); // first window
+	    assert(tg->ss->vis == vis); // viz matches, we have the right one
+	    struct spaceSaver *ssHold; 
+	    AllocVar(ssHold);
+	    struct track *tgSave = tg;
+	    for(tg=tgSave; tg; tg=tg->nextWindow)
+		{
+		assert(tgSave->ss->vis == tg->ss->vis); // viz matches, we have the right one
+		spaceSaverSetRowHeights(tg->ss, ssHold, gtexGeneHeight);
+		}
+	    // share the rowSizes data across all windows
+	    for(tg=tgSave; tg; tg=tg->nextWindow)
+		{
+		tg->ss->rowSizes = ssHold->rowSizes;
+		}
+	    tg = tgSave;
+	    }
+	height = spaceSaverGetRowHeightsTotal(tg->ss);
         }
     }
 tg->height = height;
+
 return height;
 }
 
@@ -844,7 +854,6 @@ return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/sc
 
 void gtexGeneMethods(struct track *tg)
 {
-tg->drawItems = gtexGeneDrawItems;
 tg->drawItemAt = gtexGeneDrawAt;
 tg->loadItems = gtexGeneLoadItems;
 tg->mapItem = gtexGeneMapItem;
@@ -854,6 +863,8 @@ tg->itemHeight = gtexGeneItemHeight;
 tg->itemStart = gtexGeneItemStart;
 tg->itemEnd = gtexGeneItemEnd;
 tg->totalHeight = gtexGeneTotalHeight;
+tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
+tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
 }
 
 

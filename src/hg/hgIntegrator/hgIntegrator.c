@@ -849,6 +849,11 @@ void doMiddle(struct cart *theCart)
  * serve up JSON for the UI, or display the main page. */
 {
 cart = theCart;
+
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
+
 if (cgiOptionalString(CARTJSON_COMMAND))
     doCartJson();
 else if (cgiOptionalString(DO_QUERY))
