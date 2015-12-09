@@ -62,14 +62,9 @@ if [ ${RUNNING} -gt 3 ] ; then
     exit 2
 fi
 	
-# check if we're on VBox and if yes, if auto-updates were deactivated from the Vbox host via a property
-if which VBoxControl > /dev/null; then
-   if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
-   # exit only if no argument specified on command line = run from cronjob
-       if [ "$#" -eq 0 ] ; then
-           exit 6
-       fi
-   fi
+# check if auto-updates were deactivated from the Vbox host via a property
+if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
+    exit 6
 fi
 
 # check if we have internet
@@ -201,7 +196,7 @@ cp /usr/local/apache/htdocs/inc/globalNavBar.inc /tmp/navbar.inc
 # remove mirrors and downloads menu
 sed -i '/<li class="menuparent" id="mirrors">/,/^<\/li>$/d' /tmp/navbar.inc 
 sed -i '/<li class="menuparent" id="downloads">/,/^<\/li>$/d' /tmp/navbar.inc 
-cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | sed -e '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc 
+cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | sed -e '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' | sed '/genomewiki/a <li><a href="../goldenPath/help/gbib.html">Help on GBiB</a></li>' | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc 
 rm /tmp/navbar.inc
 
 # patch left side menu:
