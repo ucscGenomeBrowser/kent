@@ -12,6 +12,8 @@ include uMassBrainHistone.ra
 track stsMap override
 visibility hide
 
+track tRNAs override
+
 track gap override
 visibility hide
 

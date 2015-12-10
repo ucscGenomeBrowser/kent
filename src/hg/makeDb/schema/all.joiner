@@ -383,13 +383,6 @@ identifier ncbiTaxon
      visiGene.lifeStageScheme.taxon
      visiGene.strain.taxon
 
-# tRNAs track Stuff
-
-identifier tRNAsId
-"ID of tRNAs"
-    hg19.tRNAs.name 
-    hg19.kgXref.tRnaName exclude= minCheck=0.50
-
 # CGAP SAGE track Stuff
 
 identifier cgapSageLibId external=CGAP
@@ -2976,10 +2969,6 @@ identifier knownXref
     proteome.spXref2.accession
     proteome.hgncXref.uniProt
 
-identifier tRNAName
-"tRNA track name"
-    hg19.kgXref.tRnaName exclude=
-    hg19.tRNAs.name minCheck=0.50
 
 identifier ccdsGeneId
 "CCDS Gene ID"
@@ -5320,6 +5309,29 @@ tablesIgnored hg38
     hg38Patch3Patches
     hg38Patch2Haplotypes
     hg38Patch2Patches
+    lincRNAsCTAdipose
+    lincRNAsCTAdrenal
+    lincRNAsCTBrain
+    lincRNAsCTBrain_R
+    lincRNAsCTBreast
+    lincRNAsCTColon
+    lincRNAsCTForeskin_R
+    lincRNAsCTHeart
+    lincRNAsCTKidney
+    lincRNAsCTLiver
+    lincRNAsCTLung
+    lincRNAsCTLymphNode
+    lincRNAsCTOvary
+    lincRNAsCTPlacenta_R
+    lincRNAsCTProstate
+    lincRNAsCTSkeletalMuscle
+    lincRNAsCTTestes
+    lincRNAsCTTestes_R
+    lincRNAsCTThyroid
+    lincRNAsCTWhiteBloodCell
+    lincRNAsCThLF_r1
+    lincRNAsCThLF_r2
+    lincRNAsTranscripts
     wgEncodeGencode2wayConsPseudo%
     wgEncodeGencodePolya%
 
@@ -5959,3 +5971,5 @@ tablesIgnored hg18
     phastBiasChimpTracts3
     phastBiasChimpPosteriors3
 
+tablesIgnored $tRNAsDbs
+    tRNAs
