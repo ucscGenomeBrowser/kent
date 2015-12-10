@@ -4672,7 +4672,6 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
     }
 
 //warn("got done with flatTrack->maxHeight");
-//fflush(stdout); // DEBUG REMOVE
 
 
 // fill out track->prevTrack, and check for maxSafeHeight
@@ -4776,12 +4775,10 @@ if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does
     highlightRegion(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
-    {  // TODO GALT do I need to set globals here?
-    //setGlobalsFromWindow(window); // TEMP HACK DOES THIS HELP?
+    {
     /* Find colors to draw in. */
     findTrackColors(hvg, window->trackList);
     }
-//setGlobalsFromWindow(windows); // first window // TEMP HACK DOES THIS HELP? // REMOVE?
 
 
 // Good to go ahead and add all imgTracks regardless of buttons, left label, centerLabel, etc.
@@ -4801,18 +4798,15 @@ if (theImgBox)
 	    //warn("hvGfxFindRgb !isLimitedVisHiddenForAllWindows(%s)", track->track);  // DEBUG REMOVE
 	    struct track *winTrack;
 	    for (winTrack=track; winTrack; winTrack=winTrack->nextWindow)
-	    //for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)  // TEMP HACK DOES THIS HELP?
-		{ // TODO GALT do I need to set globals here?
+		{
 		//warn("hvGfxFindRgb (%s) winTrack labelColor=%d ixColor=%d color=%s", track->track, winTrack->labelColor, winTrack->ixColor, rgbColorToString(winTrack->color));  // DEBUG REMOVE
 		if (winTrack->labelColor == winTrack->ixColor && winTrack->ixColor == 0)
 		    {
 		    //warn("hvGfxFindRgb got here window : %s %s %s:%d-%d offset %d width %d", // DEBUG REMOVE
 			  //window->organism, window->database, window->chromName, window->winStart+1, window->winEnd, window->insideX, window->insideWidth);
-		    //setGlobalsFromWindow(window); // TEMP HACK DOES THIS HELP?
 
 		    winTrack->ixColor = hvGfxFindRgb(hvg, &winTrack->color);
 
-		    //setGlobalsFromWindow(windows); // first window // TEMP HACK DOES THIS HELP? // REMOVE?
 		    }
 		}
             int order = flatTrack->order;
@@ -5040,27 +5034,6 @@ else
     }
 
 
-//goto drawNow;
-
-
-//setGlobalsFromWindow(windows); // first window  //  TEMP HACK DEBUG REMOVE THIS should not be needed
-
-
-// DEBUG
-/* Draw Windows Dividers/Diffrentiators
-if (TRUE) // TODO make conditional
-    {
-
-    hvGfxSetClip(hvg, fullInsideX, 0, fullInsideWidth, pixHeight);
-
-    Color lightRed = hvGfxFindRgb(hvg, &vertWindowSeparatorColor);
-    for (window=windows->next; window; window=window->next) // skips first window because we already have a big vertical red where graphic begins.
-	hvGfxBox(hvg, window->insideX, 0, 1, pixHeight, lightRed);
-
-    hvGfxUnclip(hvg);
-    }	
-*/
-
 /* Draw guidelines. */
 if (galtDebug)
 warn("Draw guidelines");  // OR window separators in virtMode multi-window mode
@@ -5195,7 +5168,6 @@ if (rulerMode != tvHide)
 	}
 
     setGlobalsFromWindow(windows); // first window
-    //TODO REMOVE winBaseCount = saveWinBaseCount; // TODO REMOVE later
 
     }
 
@@ -5222,7 +5194,6 @@ if (withCenterLabels)
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                //warn("GTEX 6: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
                                                    sliceWidth[stData],sliceHeight,
                                                    sliceOffsetX[stData],sliceOffsetY);
@@ -5259,7 +5230,6 @@ if (withCenterLabels)
 //warn("Start window draw: %s:%d-%d offset %d width %d", 
   //  chromName, winStart+1, winEnd, insideX, insideWidth);
 
-//drawNow: // DEBUG REMOVE
 
 /* Draw tracks. */
 
