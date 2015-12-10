@@ -612,7 +612,7 @@ for(cb = cbList; cb != NULL; cb = cb->next)
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
-/* Make an ideogram image of the chromsome and our position in it.  If the
+/* Make an ideogram image of the chromosome and our position in it.  If the
  * ideoTn parameter is not NULL, it is filled in if the ideogram is created. */
 {
 struct track *ideoTrack = NULL;
@@ -2654,7 +2654,7 @@ void padVirtRegions(int windowPadding)
 
  * NOTE this assumes that the regions are in order, but tolerates hiccups in order.
 
- * DONE make it handle multiple chromsomes
+ * DONE make it handle multiple chromosomes
  *
  * TODO what about just modifying the original list directly? 
 
@@ -7865,7 +7865,7 @@ for(window=windows;window;window=window->next)
    
     if (window == windows) // first window
 	{	
-	/* Make chromsome ideogram gif and map. */
+	/* Make chromosome ideogram gif and map. */
 	nukeIdeoFromList = makeChromIdeoImage(&trackList, psOutput, ideoTn);  
 	window->trackList = trackList;  // the variable may have been updated.
 	// TODO make this not just be centered over the entire image,
