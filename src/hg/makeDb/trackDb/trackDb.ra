@@ -2743,18 +2743,6 @@ type bed 6 +
 nextItemButton on
 noScoreFilter .
 
-track tRNAs
-release beta, public
-html tRNAs.beta.html
-shortLabel tRNA Genes
-longLabel Transfer RNA Genes Identified with tRNAscan-SE
-group genes
-visibility hide
-color 0,20,150
-type bed 6 +
-nextItemButton on
-noScoreFilter .
-
 searchName tRNA-name
 searchTable tRNAs
 searchType bed
