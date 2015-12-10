@@ -5037,6 +5037,10 @@ else
 /* Draw guidelines. */
 if (galtDebug)
 warn("Draw guidelines");  // OR window separators in virtMode multi-window mode
+
+if (virtMode && emAltHighlight)
+    withGuidelines = TRUE;  // we cannot draw the alternating backgrounds without guidelines layer
+
 if (withGuidelines)
     {
     struct hvGfx *bgImg = hvg; // Default to the one image
@@ -5081,13 +5085,10 @@ if (withGuidelines)
 		{
 		// light blue alternating backgrounds
 		Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
-		//boolean blueBack = FALSE;
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
-		    //if (blueBack)
 		    if (window->regionOdd)
 			hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
-		    //blueBack = !blueBack;
 		    }
 		}
 	    else
