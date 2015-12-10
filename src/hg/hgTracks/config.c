@@ -583,7 +583,7 @@ virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Show single-chromsome view (default)");
+hPrintf("Show single-chromosome view (default)");
 hPrintf("</TD></TR>\n");
 
 struct sqlConnection *conn = NULL;

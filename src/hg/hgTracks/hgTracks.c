@@ -612,7 +612,7 @@ for(cb = cbList; cb != NULL; cb = cb->next)
 
 boolean makeChromIdeoImage(struct track **pTrackList, char *psOutput,
                         struct tempName *ideoTn)
-/* Make an ideogram image of the chromsome and our position in it.  If the
+/* Make an ideogram image of the chromosome and our position in it.  If the
  * ideoTn parameter is not NULL, it is filled in if the ideogram is created. */
 {
 struct track *ideoTrack = NULL;
@@ -2654,7 +2654,7 @@ void padVirtRegions(int windowPadding)
 
  * NOTE this assumes that the regions are in order, but tolerates hiccups in order.
 
- * DONE make it handle multiple chromsomes
+ * DONE make it handle multiple chromosomes
  *
  * TODO what about just modifying the original list directly? 
 
@@ -4672,7 +4672,6 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
     }
 
 //warn("got done with flatTrack->maxHeight");
-//fflush(stdout); // DEBUG REMOVE
 
 
 // fill out track->prevTrack, and check for maxSafeHeight
@@ -4776,12 +4775,10 @@ if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does
     highlightRegion(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
-    {  // TODO GALT do I need to set globals here?
-    //setGlobalsFromWindow(window); // TEMP HACK DOES THIS HELP?
+    {
     /* Find colors to draw in. */
     findTrackColors(hvg, window->trackList);
     }
-//setGlobalsFromWindow(windows); // first window // TEMP HACK DOES THIS HELP? // REMOVE?
 
 
 // Good to go ahead and add all imgTracks regardless of buttons, left label, centerLabel, etc.
@@ -4801,18 +4798,15 @@ if (theImgBox)
 	    //warn("hvGfxFindRgb !isLimitedVisHiddenForAllWindows(%s)", track->track);  // DEBUG REMOVE
 	    struct track *winTrack;
 	    for (winTrack=track; winTrack; winTrack=winTrack->nextWindow)
-	    //for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)  // TEMP HACK DOES THIS HELP?
-		{ // TODO GALT do I need to set globals here?
+		{
 		//warn("hvGfxFindRgb (%s) winTrack labelColor=%d ixColor=%d color=%s", track->track, winTrack->labelColor, winTrack->ixColor, rgbColorToString(winTrack->color));  // DEBUG REMOVE
 		if (winTrack->labelColor == winTrack->ixColor && winTrack->ixColor == 0)
 		    {
 		    //warn("hvGfxFindRgb got here window : %s %s %s:%d-%d offset %d width %d", // DEBUG REMOVE
 			  //window->organism, window->database, window->chromName, window->winStart+1, window->winEnd, window->insideX, window->insideWidth);
-		    //setGlobalsFromWindow(window); // TEMP HACK DOES THIS HELP?
 
 		    winTrack->ixColor = hvGfxFindRgb(hvg, &winTrack->color);
 
-		    //setGlobalsFromWindow(windows); // first window // TEMP HACK DOES THIS HELP? // REMOVE?
 		    }
 		}
             int order = flatTrack->order;
@@ -5040,30 +5034,13 @@ else
     }
 
 
-//goto drawNow;
-
-
-//setGlobalsFromWindow(windows); // first window  //  TEMP HACK DEBUG REMOVE THIS should not be needed
-
-
-// DEBUG
-/* Draw Windows Dividers/Diffrentiators
-if (TRUE) // TODO make conditional
-    {
-
-    hvGfxSetClip(hvg, fullInsideX, 0, fullInsideWidth, pixHeight);
-
-    Color lightRed = hvGfxFindRgb(hvg, &vertWindowSeparatorColor);
-    for (window=windows->next; window; window=window->next) // skips first window because we already have a big vertical red where graphic begins.
-	hvGfxBox(hvg, window->insideX, 0, 1, pixHeight, lightRed);
-
-    hvGfxUnclip(hvg);
-    }	
-*/
-
 /* Draw guidelines. */
 if (galtDebug)
 warn("Draw guidelines");  // OR window separators in virtMode multi-window mode
+
+if (virtMode && emAltHighlight)
+    withGuidelines = TRUE;  // we cannot draw the alternating backgrounds without guidelines layer
+
 if (withGuidelines)
     {
     struct hvGfx *bgImg = hvg; // Default to the one image
@@ -5108,13 +5085,10 @@ if (withGuidelines)
 		{
 		// light blue alternating backgrounds
 		Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
-		//boolean blueBack = FALSE;
 		for (window=windows; window; window=window->next) // background under every other window
 		    {
-		    //if (blueBack)
 		    if (window->regionOdd)
 			hvGfxBox(bgImg, window->insideX, 0, window->insideWidth, pixHeight, lightBlue);
-		    //blueBack = !blueBack;
 		    }
 		}
 	    else
@@ -5195,7 +5169,6 @@ if (rulerMode != tvHide)
 	}
 
     setGlobalsFromWindow(windows); // first window
-    //TODO REMOVE winBaseCount = saveWinBaseCount; // TODO REMOVE later
 
     }
 
@@ -5222,7 +5195,6 @@ if (withCenterLabels)
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                //warn("GTEX 6: track %s, sliceHeight=%d\n", track->shortLabel, sliceHeight);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,
                                                    sliceWidth[stData],sliceHeight,
                                                    sliceOffsetX[stData],sliceOffsetY);
@@ -5259,7 +5231,6 @@ if (withCenterLabels)
 //warn("Start window draw: %s:%d-%d offset %d width %d", 
   //  chromName, winStart+1, winEnd, insideX, insideWidth);
 
-//drawNow: // DEBUG REMOVE
 
 /* Draw tracks. */
 
@@ -7865,7 +7836,7 @@ for(window=windows;window;window=window->next)
    
     if (window == windows) // first window
 	{	
-	/* Make chromsome ideogram gif and map. */
+	/* Make chromosome ideogram gif and map. */
 	nukeIdeoFromList = makeChromIdeoImage(&trackList, psOutput, ideoTn);  
 	window->trackList = trackList;  // the variable may have been updated.
 	// TODO make this not just be centered over the entire image,

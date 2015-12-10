@@ -5912,7 +5912,7 @@ term SkMC
 tag SKMC
 type Cell Line
 label SkMC
-description Skeletal Striated Muscle Cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales
+description Skeletal muscle myosatellite cells from two individuals, SkMC_9011302 SkMC_8121902.17 from M. pectoralis / Mm. intercostales
 karyotype normal
 lab Gingeras
 lineage missing
@@ -5931,7 +5931,7 @@ term SkMC_9011302
 tag SKMC9011302
 type Cell Line
 childOf SkMC
-description Skeletal Muscle Cells from M. pectoralis
+description Skeletal muscle myosatellite cells from M. pectoralis
 karyotype normal
 lab Gingeras
 lineage missing
@@ -5950,7 +5950,7 @@ term SkMC_8121902.17
 tag SKMC812190217
 type Cell Line
 childOf SkMC
-description Skeletal Muscle Cells from Mm. intercostales
+description Skeletal muscle myosatellite cells from Mm. intercostales
 karyotype normal
 lab Gingeras
 lineage missing
