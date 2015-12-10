@@ -128,6 +128,7 @@ DBS = \
 	oryLat1 oryLat2 \
 	otoGar1 otoGar3 tupBel1\
 	oviAri1 oviAri3 \
+	oxyTri2 \
 	panPan1 \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 \
