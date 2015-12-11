@@ -243,7 +243,7 @@ void printAssemblySection()
     }
 
 /* Hidden form for jumping to custom tracks CGI. */
-printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+printf("<FORM ACTION='%s' NAME='customTrackForm' ID='customTrackForm'>", hgCustomName());
 cartSaveSession(cart);
 printf("</FORM>\n");
 
@@ -456,8 +456,8 @@ if (varTrackList == NULL)
     {
     printf("Your session doesn't have any custom tracks or hub tracks in " PGSNP_OR_VCF
            " format.\n");
-    hOnClickButton("document.customTrackForm.submit(); return false;",
-                   "add pgSNP or VCF custom track");
+    hOnClickButton("return hgva.goToAddCustomTrack();",
+                   "add pgSnp or VCF custom track");
     puts("<BR>");
     }
 else if (slCount(varTrackList) > 1)
