@@ -12,3 +12,6 @@ track gc5BaseBw override
 visibility full
 maxHeightPixels 128:36:36
 viewLimits 0:100
+
+track rmsk override
+visibility full
