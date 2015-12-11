@@ -1,8 +1,14 @@
 # Local declaration so that local gold.html is picked up.
 track gold override
+visibility dense
 html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility dense
 html gap
 
+track gc5BaseBw override
+visibility full
+maxHeightPixels 128:36:36
+viewLimits 0:100
