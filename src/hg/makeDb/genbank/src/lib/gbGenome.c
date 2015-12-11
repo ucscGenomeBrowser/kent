@@ -72,6 +72,7 @@ static char *canFamNames[] = {"Canis familiaris", "Canis sp.",
                               "Canis lupus familiaris",
 			      "Canis lupus", NULL};
 static char *felCatNames[] = {"Felis catus", NULL};
+static char *oxyTriNames[] = {"Oxytricha trifallax", "Oxytricha fallax", "Oxytricha sp.   1", "Oxytricha sp. LPJ-2005", NULL};
 static char *droYakNames[] = {"Drosophila yakuba", NULL};
 static char *droAnaNames[] = {"Drosophila ananassae", NULL};
 static char *droMojNames[] = {"Drosophila mojavensis", NULL};
@@ -196,6 +197,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"cerSim", cerSimNames},
     {"oviAri", oviAriNames},
     {"susScr", susScrNames},
+    {"oxyTri", oxyTriNames},
     {"droYak", droYakNames},
     {"droAna", droAnaNames},
     {"droMoj", droMojNames},
