@@ -192,8 +192,8 @@ if (hubConnectTableExists())
     hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
 nbSpaces(3);
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
-	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	cgiScriptName());
+       "<A HREF=\"cartReset?destination=%s\">click here</A>.\n",
+       cgiScriptName());
 puts("</div>");
 }
 
@@ -458,6 +458,11 @@ if (varTrackList == NULL)
            " format.\n");
     hOnClickButton("return hgva.goToAddCustomTrack();",
                    "add pgSnp or VCF custom track");
+    if (hubConnectTableExists())
+        {
+        nbSpaces(2);
+        hOnClickButton("document.trackHubForm.submit(); return false;", "add track hub");
+        }
     puts("<BR>");
     }
 else if (slCount(varTrackList) > 1)
@@ -652,19 +657,29 @@ if (dbNsfpTables == NULL)
 startCollapsibleSection("dbNsfp", "Database of Non-synonymous Functional Predictions (dbNSFP)",
 			TRUE);
 //#*** hardcoded version info... we need metadata (#11462)
-char *dbNsfpVersion = sameString(database, "hg19") ? "2.0" : "3.1a";
-char *txVersion = sameString(dbNsfpVersion, "2.0") ? "Gencode release 9 (Ensembl 64, Dec. 2011)" :
-                                                     "Gencode release 22 (Ensembl 79, Mar. 2015)";
+char *dbNsfpVersion = "3.1a";
+char *txVersion = "Gencode release 22 (Ensembl 79, Mar. 2015)";
+char *refYear = "2015";
+char *refUrl = "http://onlinelibrary.wiley.com/doi/10.1002/humu.22932/abstract";
+// For the time being hg19 is still on version 2.0:
+if (sameString(database, "hg19"))
+    {
+    dbNsfpVersion = "2.0";
+    txVersion = "Gencode release 9 (Ensembl 64, Dec. 2011)";
+    refYear = "2013";
+    refUrl = "http://onlinelibrary.wiley.com/doi/10.1002/humu.22376/abstract";
+    }
+
 printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbNSFP</A> "
-       "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.22376/abstract' "
-       "TARGET=_BLANK>Liu <em>et al.</em> 2013</A>) "
+       "(<A HREF='%s' "
+       "TARGET=_BLANK>Liu <em>et al.</em> %s</A>) "
        "release %s "
        "provides pre-computed scores and predictions of functional significance "
        "from a variety of tools.  Every possible coding change to transcripts in "
        "%s gene predictions "
        "has been evaluated.  "
        "<em>Note: This may not encompass all transcripts in your "
-       "selected gene set.</em><BR>\n", dbNsfpVersion, txVersion);
+       "selected gene set.</em><BR>\n", refUrl, refYear, dbNsfpVersion, txVersion);
 //#*** Another cheap hack: reverse alph order happens to be what we want (until VEST??),
 //#*** but priorities would be cleaner:
 slReverse(&dbNsfpTables);
