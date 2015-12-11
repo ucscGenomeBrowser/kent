@@ -39,7 +39,9 @@
 #include "libifyMe.h"
 
 #define GENCODE_TAG_DOC_URL "\"http://www.gencodegenes.org/gencode_tags.html\""
+#define GENCODE_BASIC_DOC_URL "\"http://www.gencodegenes.org/faq.html\""
 #define REFSEQ_STATUS_DOC_URL "\"http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
+#define APPRIS_DOC_URL "\"http://appris.bioinfo.cnio.es/#/help/database\""
 
 /* Global Variables */
 struct cart *cart;		/* CGI and other variables */
@@ -439,14 +441,30 @@ return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
 char *findLatestSnpTable(char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
 
-void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
+void selectVariants()
 /* Offer selection of user's variant custom tracks, example variants, pasted input etc. */
 {
+#define PGSNP_OR_VCF "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or " \
+       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A>"
+
 printf("<div class='sectionLiteHeader'>Select Variants</div>\n");
-printf("If you have more than one custom track or hub track in "
-       "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or "
-       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
-       "please select the one you wish to annotate:<BR>\n");
+/* Check for variant custom tracks.  If there are none, tell the user that they should add one. */
+struct slRef *varTrackList = NULL, *varGroupList = NULL;
+tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
+		    &varGroupList, &varTrackList);
+if (varTrackList == NULL)
+    {
+    printf("Your session doesn't have any custom tracks or hub tracks in " PGSNP_OR_VCF
+           " format.\n");
+    hOnClickButton("document.customTrackForm.submit(); return false;",
+                   "add pgSNP or VCF custom track");
+    puts("<BR>");
+    }
+else if (slCount(varTrackList) > 1)
+    {
+    printf("If you have more than one custom track or hub track in "
+           PGSNP_OR_VCF " format, please select the one you wish to annotate:<BR>\n");
+    }
 printf("<B>variants: </B>");
 printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack' "
        "onchange=\"hgva.changeVariantSource();\">\n");
@@ -882,8 +900,8 @@ if (hasGencodeTags())
            maybeKnownGene, maybeRefGene, maybeEnsGene, versions,
            isVisible ? "block" : "none");
     cartMakeCheckBox(cart, "hgva_txStatus_gencode", FALSE);
-    puts("Include the <A HREF=" GENCODE_TAG_DOC_URL " "
-         "TARGET=_BLANK>GENCODE tags</A> for each transcript (if available).<BR>");
+    puts("Include the <A HREF=" GENCODE_TAG_DOC_URL " TARGET=_BLANK>GENCODE tags</A> (if any) "
+         "associated with each transcript.<BR>");
     puts("</div>");
     }
 if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonical"))
@@ -893,8 +911,13 @@ if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonica
     printf("<div class=\"txStatus knownGene\" style=\"display: %s;\">",
            isVisible ? "block" : "none");
     cartMakeCheckBox(cart, "hgva_txStatus_knownCanonical", FALSE);
-    puts("Indicate whether each UCSC Genes transcript is 'canonical' (generally the longest "
-         "isoform of a gene).<BR>");
+    char *desc = hTableExists(database, "knownToTag") ?
+        "based on <A HREF=" APPRIS_DOC_URL " TARGET=_BLANK>"
+        "APPRIS</A> status or inclusion in "
+        "<A HREF=" GENCODE_BASIC_DOC_URL " TARGET=_BLANK>GENCODE Basic</A> subset: "
+        "principal &gt; alternative &gt; basic &gt; longest isoform" :
+        "generally the longest isoform of a gene";
+    printf("Indicate whether each transcript is 'canonical' (%s).<BR>\n", desc);
     puts("</div>");
     }
 if (hTableExists(database, "refGene") && hTableExists(database, "refSeqStatus"))
@@ -1260,14 +1283,9 @@ printf("<script>\n"
 addSomeCss();
 printAssemblySection();
 
-/* Check for variant custom tracks.  If there are none, tell user they need to
- * upload at least one. */
-struct slRef *varTrackList = NULL, *varGroupList = NULL;
-tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
-		    &varGroupList, &varTrackList);
 puts("<BR>");
 // Make wrapper table for collapsible sections:
-selectVariants(varGroupList, varTrackList);
+selectVariants();
 char *geneTrack = selectGenes();
 if (geneTrack != NULL)
     {
@@ -2438,7 +2456,7 @@ if (sameString(track, "knownGene") &&
     !trackDbSetting(tdb, "bigDataUrl") &&
     hTableExists(db, "kgXref"))
     {
-    configAddTableField(dyConfig, ".kgXref", "geneSymbol", &isFirst);
+    configAddTableField(dyConfig, "kgXref", "geneSymbol", &isFirst);
     }
 struct joinerDtf *txStatDtf;
 for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->next)
