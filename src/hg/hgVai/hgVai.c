@@ -2404,7 +2404,7 @@ else if (sameString(track, "refGene") && refGeneHasGencodeTags(versionList))
     if (hTableExists(db, gencodeTableName("RefSeq", version, table, sizeof(table))))
         return cloneString(gencodeTableName("Tag", version, table, sizeof(table)));
     }
-else if (sameString(track, "knownGene") && knownGeneHasGencodeTags(versionList))
+else if (sameString(track, "knownGene") && knownGeneHasGencodeTags())
     {
     if (hTableExists(db, "knownToTag"))
         return cloneString("knownToTag");
