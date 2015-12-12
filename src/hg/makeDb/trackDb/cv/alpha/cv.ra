@@ -2814,7 +2814,7 @@ type Cell Line
 description cardiac fibroblasts- adult atrial
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.htm
+orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.html
 organism human
 protocol Stam:HCFaa_Stam_protocol.pdf
 sex F
