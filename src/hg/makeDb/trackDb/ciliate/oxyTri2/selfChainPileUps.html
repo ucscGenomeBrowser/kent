@@ -1,0 +1,16 @@
+<h2>Description</h2>
+<p>
+This track counts the overlaps of the chain links from the <em> Self Chain</em>
+alignments.  It is a rough measure of how often a sequence can be found
+in the complete genome.
+</p>
+<h2>Procedure</h2>
+<p>
+The counting is performed:
+<pre>
+hgsql -N -e 'select tName,tStart,tEnd from chainSelfLink;' oxyTri2 \
+   &gt; oxyTri2.chainSelfLink.bed
+sort -S1G --parallel=30  -k1,1 -k2,2n oxyTri2.chainSelfLink.bed &gt; sorted.bed
+bedItemOverlapCount  oxyTri2 sorted.bed &gt; pileUps.bedGraph
+bedGraphToBigWig pileUps.bedGraph oxyTri2.chrom.sizes selfChainPileUps.bw
+</pre>

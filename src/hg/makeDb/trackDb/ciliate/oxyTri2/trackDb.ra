@@ -26,3 +26,31 @@ altColor 255,240,200
 spectrum on
 type chain oxyTri2
 otherDb oxyTri2
+
+track selfChainPileUps
+shortLabel Self Pile Ups
+longLabel Self chain pile ups, overlap count of chain links
+group varRep
+visibility full
+maxHeightPixels 128:64:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 0:100
+type bigWig 1 2075
+autoScale on
+alwaysZero on
+html selfChainPileUps
+
+track ncbiGene
+shortLabel NCBI Genes
+longLabel NCBI Genes from Genbank Record
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
