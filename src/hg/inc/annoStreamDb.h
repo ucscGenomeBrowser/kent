@@ -7,6 +7,7 @@
 #define ANNOSTREAMDB_H
 
 #include "annoStreamer.h"
+#include "joiner.h"
 #include "jsonParse.h"
 
 struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly *aa,
@@ -25,5 +26,9 @@ struct annoStreamer *annoStreamDbNew(char *db, char *table, struct annoAssembly 
  * descriptions to the columns of table.
  * Caller may free db, table, and dbTableFieldList when done with them, but must keep the
  * annoAssembly aa alive for the lifetime of the returned annoStreamer. */
+
+char *annoStreamDbColumnNameFromDtf(char *db, char *mainTable, struct joinerDtf *dtf);
+/* Return a string with the autoSql column name that would be assigned according to dtf's
+ * db, table and field. */
 
 #endif//ndef ANNOSTREAMDB_H

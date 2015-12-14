@@ -34,8 +34,14 @@
 #include "annoGratorGpVar.h"
 #include "annoFormatVep.h"
 #include "annoStreamBigBed.h"
+#include "annoStreamDb.h"
 
 #include "libifyMe.h"
+
+#define GENCODE_TAG_DOC_URL "\"http://www.gencodegenes.org/gencode_tags.html\""
+#define GENCODE_BASIC_DOC_URL "\"http://www.gencodegenes.org/faq.html\""
+#define REFSEQ_STATUS_DOC_URL "\"http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes\""
+#define APPRIS_DOC_URL "\"http://appris.bioinfo.cnio.es/#/help/database\""
 
 /* Global Variables */
 struct cart *cart;		/* CGI and other variables */
@@ -186,8 +192,8 @@ if (hubConnectTableExists())
     hOnClickButton("document.trackHubForm.submit(); return false;", "track hubs");
 nbSpaces(3);
 printf("To reset <B>all</B> user cart settings (including custom tracks), \n"
-	"<A HREF=\"/cgi-bin/cartReset?destination=%s\">click here</A>.\n",
-	cgiScriptName());
+       "<A HREF=\"cartReset?destination=%s\">click here</A>.\n",
+       cgiScriptName());
 puts("</div>");
 }
 
@@ -237,7 +243,7 @@ void printAssemblySection()
     }
 
 /* Hidden form for jumping to custom tracks CGI. */
-printf("<FORM ACTION='%s' NAME='customTrackForm'>", hgCustomName());
+printf("<FORM ACTION='%s' NAME='customTrackForm' ID='customTrackForm'>", hgCustomName());
 cartSaveSession(cart);
 printf("</FORM>\n");
 
@@ -435,14 +441,35 @@ return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
 char *findLatestSnpTable(char *suffix);
 /* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
 
-void selectVariants(struct slRef *varGroupList, struct slRef *varTrackList)
+void selectVariants()
 /* Offer selection of user's variant custom tracks, example variants, pasted input etc. */
 {
+#define PGSNP_OR_VCF "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or " \
+       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A>"
+
 printf("<div class='sectionLiteHeader'>Select Variants</div>\n");
-printf("If you have more than one custom track or hub track in "
-       "<A HREF='../FAQ/FAQformat.html#format10' TARGET=_BLANK>pgSnp</A> or "
-       "<A HREF='../goldenPath/help/vcf.html' TARGET=_BLANK>VCF</A> format, "
-       "please select the one you wish to annotate:<BR>\n");
+/* Check for variant custom tracks.  If there are none, tell the user that they should add one. */
+struct slRef *varTrackList = NULL, *varGroupList = NULL;
+tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
+		    &varGroupList, &varTrackList);
+if (varTrackList == NULL)
+    {
+    printf("Your session doesn't have any custom tracks or hub tracks in " PGSNP_OR_VCF
+           " format.\n");
+    hOnClickButton("return hgva.goToAddCustomTrack();",
+                   "add pgSnp or VCF custom track");
+    if (hubConnectTableExists())
+        {
+        nbSpaces(2);
+        hOnClickButton("document.trackHubForm.submit(); return false;", "add track hub");
+        }
+    puts("<BR>");
+    }
+else if (slCount(varTrackList) > 1)
+    {
+    printf("If you have more than one custom track or hub track in "
+           PGSNP_OR_VCF " format, please select the one you wish to annotate:<BR>\n");
+    }
 printf("<B>variants: </B>");
 printf("<SELECT ID='hgva_variantTrack' NAME='hgva_variantTrack' "
        "onchange=\"hgva.changeVariantSource();\">\n");
@@ -485,8 +512,8 @@ boolean isGeneTrack(struct trackDb *tdb, void *filterData)
 return (startsWith("genePred", tdb->type) || sameString("bigGenePred", tdb->type));
 }
 
-boolean selectGenes()
-/* Let user select a gene predictions track; return FALSE if there are no genePred tracks. */
+char *selectGenes()
+/* Let user select a gene predictions track; return NULL if there are no genePred tracks. */
 {
 struct slRef *trackRefList = NULL;
 tdbFilterGroupTrack(fullTrackList, fullGroupList, isGeneTrack, NULL, NULL, &trackRefList);
@@ -506,12 +533,16 @@ if (!gotGP)
 	   "the VAI can't provide functional annotations. "
 	   "Please select a different genome.<BR>");
 printf("<BR>\n");
-char *selected = cartUsualString(cart, "hgva_geneTrack", ""); //#*** per-db cart vars??
+if (! gotGP)
+    return NULL;
+char *firstTrack = ((struct trackDb *)(trackRefList->val))->track;
+char *selected = cartUsualString(cart, "hgva_geneTrack", firstTrack);
 //#*** should show more info about each track... button to pop up track desc?
 
 if (gotGP)
     {
-    printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack'>\n");
+    printf("<SELECT ID='hgva_geneTrack' NAME='hgva_geneTrack' "
+           "onchange=\"hgva.changeGeneSource();\">\n");
     struct slRef *ref;
     for (ref = trackRefList;  ref != NULL;  ref = ref->next)
 	{
@@ -521,7 +552,7 @@ if (gotGP)
 	}
     puts("</SELECT><BR>");
     }
-return gotGP;
+return selected;
 }
 
 //#*** We really need a dbNsfp.[ch]:
@@ -572,6 +603,10 @@ else if (sameString(tableName, "dbNsfpLrt"))
 	return formatDesc("http://www.genetics.wustl.edu/jflab/lrt_query.html",
 			  "Likelihood ratio test (LRT)",
 			  "(D = deleterious, N = Neutral, U = unknown)", doHtml);
+else if (sameString(tableName, "dbNsfpVest"))
+    return formatDesc("http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3665549/",
+                      "Variant Effect Scoring Tool (VEST)",
+                      "(scores [0-1] predict confidence that a change is deleterious", doHtml);
 else if (sameString(tableName, "dbNsfpGerpNr"))
 	return formatDesc("http://mendel.stanford.edu/SidowLab/downloads/gerp/index.html",
 			  "GERP++", "Neutral Rate (NR)", doHtml);
@@ -621,18 +656,31 @@ if (dbNsfpTables == NULL)
     return;
 startCollapsibleSection("dbNsfp", "Database of Non-synonymous Functional Predictions (dbNSFP)",
 			TRUE);
+//#*** hardcoded version info... we need metadata (#11462)
+char *dbNsfpVersion = "3.1a";
+char *txVersion = "Gencode release 22 (Ensembl 79, Mar. 2015)";
+char *refYear = "2015";
+char *refUrl = "http://onlinelibrary.wiley.com/doi/10.1002/humu.22932/abstract";
+// For the time being hg19 is still on version 2.0:
+if (sameString(database, "hg19"))
+    {
+    dbNsfpVersion = "2.0";
+    txVersion = "Gencode release 9 (Ensembl 64, Dec. 2011)";
+    refYear = "2013";
+    refUrl = "http://onlinelibrary.wiley.com/doi/10.1002/humu.22376/abstract";
+    }
+
 printf("<A HREF='https://sites.google.com/site/jpopgen/dbNSFP' TARGET=_BLANK>dbNSFP</A> "
-       "(<A HREF='http://onlinelibrary.wiley.com/doi/10.1002/humu.22376/abstract' "
-       "TARGET=_BLANK>Liu <em>et al.</em> 2013</A>) "
-       "release 2.0 "
+       "(<A HREF='%s' "
+       "TARGET=_BLANK>Liu <em>et al.</em> %s</A>) "
+       "release %s "
        "provides pre-computed scores and predictions of functional significance "
        "from a variety of tools.  Every possible coding change to transcripts in "
- //#*** hardcoded version info... sigh, we need trackDb... or metaDb??
-       "Gencode release 9 (Ensembl 64, Dec. 2011) gene predictions "
+       "%s gene predictions "
        "has been evaluated.  "
        "<em>Note: This may not encompass all transcripts in your "
-       "selected gene set.</em><BR>\n");
-//#*** Another cheap hack: reverse alph order happens to be what we want,
+       "selected gene set.</em><BR>\n", refUrl, refYear, dbNsfpVersion, txVersion);
+//#*** Another cheap hack: reverse alph order happens to be what we want (until VEST??),
 //#*** but priorities would be cleaner:
 slReverse(&dbNsfpTables);
 jsMakeSetClearContainer();
@@ -730,6 +778,179 @@ startCollapsibleSection("dbSnp", "Known variation", TRUE);
 cartMakeCheckBox(cart, "hgva_rsId", TRUE);
 printf("Include <A HREF='http://www.ncbi.nlm.nih.gov/projects/SNP/' TARGET=_BLANK>dbSNP</A> "
        "rs# ID if one exists<BR>\n");
+puts("<BR>");
+endCollapsibleSection();
+}
+
+#define GENCODE_PREFIX "wgEncodeGencode"
+
+struct slName *getGencodeTagVersions()
+/* Return a list of version strings from the ends of wgEncodeGencodeTag% tables. */
+{
+static struct slName *tagVersions = NULL;
+if (tagVersions == NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    struct slName *tagTables = sqlQuickList(conn,
+                                            NOSQLINJ "show tables like '"GENCODE_PREFIX"Tag%'");
+    int offset = strlen(GENCODE_PREFIX"Tag");
+    struct slName *tt;
+    for (tt = tagTables;  tt != NULL;  tt = tt->next)
+        slAddHead(&tagVersions, slNameNew(tt->name + offset));
+    hFreeConn(&conn);
+    }
+return slNameCloneList(tagVersions);
+}
+
+boolean knownGeneHasGencodeTags()
+/* Return TRUE if this database has knownToTag for knownGene. */
+{
+return hTableExists(database, "knownGene") && hTableExists(database, "knownToTag");
+}
+
+boolean hasGencodeTags()
+/* Return TRUE if GENCODE tags can be associated with some gene track in database. */
+{
+return knownGeneHasGencodeTags() || (getGencodeTagVersions() != NULL);
+}
+
+boolean hasTxStatus()
+/* Return TRUE if any gene track in database has some kind of transcript status info
+ * like knownCanonical, GENCODE tags and/or RefSeq status. */
+{
+if (hasGencodeTags())
+    return TRUE;
+if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonical"))
+    return TRUE;
+if (hTableExists(database, "refGene") && hTableExists(database, "refSeqStatus"))
+    return TRUE;
+return FALSE;
+}
+
+char *getLatestGencodeVersion(struct slName *versionList)
+/* Return the numerically largest version found in versionList. */
+{
+int maxVersionNum = -1;
+char *maxVersion = NULL;
+struct slName *version;
+for (version = versionList;  version != NULL;  version = version->next)
+    {
+    int versionNum = atoi(skipToNumeric(version->name));
+    if (versionNum > maxVersionNum)
+        {
+        maxVersionNum = versionNum;
+        maxVersion = version->name;
+        }
+    }
+return cloneString(maxVersion);
+}
+
+INLINE char *gencodeTableName(char *suffix, char *version, char *buf, size_t bufSize)
+/* Write wgEncodeGencode<suffix><version> into buf.  Return buf for convenience. */
+{
+safef(buf, bufSize, GENCODE_PREFIX"%s%s", suffix, version);
+return buf;
+}
+
+boolean refGeneHasGencodeTags(struct slName *gencodeVersionList)
+/* Return TRUE if this database has a wgEncodeGencodeRefSeq table as well as a ...Tag table. */
+{
+char *version = getLatestGencodeVersion(gencodeVersionList);
+char table[PATH_LEN];
+return hTableExists(database, gencodeTableName("RefSeq", version, table, sizeof(table)));
+}
+
+boolean startsWithGencodeGene(char *geneTrack)
+/* Return TRUE if geneTrack starts with wgEncodeGencode{Basic,Comp,PseudoGene}.
+ * (There are other GENCODE genepred tracks that don't have tags associated with them.) */
+{
+return (startsWith(GENCODE_PREFIX"Basic", geneTrack) ||
+        startsWith(GENCODE_PREFIX"Comp", geneTrack) ||
+        startsWith(GENCODE_PREFIX"PseudoGene", geneTrack));
+}
+
+boolean isGencodeWithVersion(char *geneTrack, struct slName *versionList)
+/* Return TRUE if geneTrack looks like a Gencode gene track for a supported version. */
+{
+if (! startsWithGencodeGene(geneTrack))
+    return FALSE;
+struct slName *v;
+for (v = versionList;  v != NULL;  v = v->next)
+    {
+    if (endsWith(geneTrack, v->name))
+        return TRUE;
+    }
+return FALSE;
+}
+
+void selectTxStatus(boolean hasTxStatus, char *geneTrack)
+/* Offer to include transcript status, e.g. whether it is in knownCanonical or has GENCODE tags.
+ * This makes one div per category of txStatus info; each div is visible only if its info is
+ * applicable to the selected gene track.  If no divs are visible, display a message that
+ * there's nothing for the currently selected gene track. */
+{
+if (! hasTxStatus)
+    return;
+startCollapsibleSection("txStatus", "Transcript status", FALSE);
+boolean somethingIsVisible = FALSE;
+if (hasGencodeTags())
+    {
+    struct slName *versionList = getGencodeTagVersions();
+    char *maybeKnownGene = knownGeneHasGencodeTags() ? "knownGene" : "";
+    char *maybeRefGene = refGeneHasGencodeTags(versionList) ? "refGene" : "";
+    char *maybeEnsGene = "";
+    char *versions = "";
+    if (versionList != NULL)
+        {
+        if (hTableExists(database, "ensGene"))
+            maybeEnsGene = "ensGene";
+        versions = slNameListToString(versionList, ' ');
+        }
+    boolean isVisible = (sameString(geneTrack, maybeKnownGene) ||
+                         sameString(geneTrack, maybeEnsGene) ||
+                         sameString(geneTrack, maybeRefGene) ||
+                         isGencodeWithVersion(geneTrack, versionList));
+    somethingIsVisible |= isVisible;
+    printf("<div class=\"txStatus %s %s %s %s\" style=\"display: %s;\">",
+           maybeKnownGene, maybeRefGene, maybeEnsGene, versions,
+           isVisible ? "block" : "none");
+    cartMakeCheckBox(cart, "hgva_txStatus_gencode", FALSE);
+    puts("Include the <A HREF=" GENCODE_TAG_DOC_URL " TARGET=_BLANK>GENCODE tags</A> (if any) "
+         "associated with each transcript.<BR>");
+    puts("</div>");
+    }
+if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonical"))
+    {
+    boolean isVisible = sameString(geneTrack, "knownGene");
+    somethingIsVisible |= isVisible;
+    printf("<div class=\"txStatus knownGene\" style=\"display: %s;\">",
+           isVisible ? "block" : "none");
+    cartMakeCheckBox(cart, "hgva_txStatus_knownCanonical", FALSE);
+    char *desc = hTableExists(database, "knownToTag") ?
+        "based on <A HREF=" APPRIS_DOC_URL " TARGET=_BLANK>"
+        "APPRIS</A> status or inclusion in "
+        "<A HREF=" GENCODE_BASIC_DOC_URL " TARGET=_BLANK>GENCODE Basic</A> subset: "
+        "principal &gt; alternative &gt; basic &gt; longest isoform" :
+        "generally the longest isoform of a gene";
+    printf("Indicate whether each transcript is 'canonical' (%s).<BR>\n", desc);
+    puts("</div>");
+    }
+if (hTableExists(database, "refGene") && hTableExists(database, "refSeqStatus"))
+    {
+    boolean isVisible = sameString(geneTrack, "refGene");
+    somethingIsVisible |= isVisible;
+    printf("<div class=\"txStatus refGene\" style=\"display: %s;\">",
+           isVisible ? "block" : "none");
+    cartMakeCheckBox(cart, "hgva_txStatus_refSeqStatus", FALSE);
+    puts("Include the "
+         "<A HREF=" REFSEQ_STATUS_DOC_URL " "
+         "TARGET=_BLANK>RefSeq status</A> of each transcript.<BR>");
+    puts("</div>");
+    }
+printf("<div class=\"noTxStatus\" style=\"display: %s;\">",
+       somethingIsVisible ? "none" : "block");
+puts("No transcript status data are available for the selected gene track.");
+puts("</div>");
 puts("<BR>");
 endCollapsibleSection();
 }
@@ -865,7 +1086,7 @@ if (trackRefList != NULL)
     }
 }
 
-void selectAnnotations()
+void selectAnnotations(char *geneTrack)
 /* Beyond predictions of protein-coding effect, what other basic data can we integrate? */
 {
 struct slName *dbNsfpTables = findDbNsfpTables();
@@ -873,14 +1094,16 @@ boolean gotSnp = findSnpBed4("", NULL, NULL);
 struct slRef *elTrackRefList = NULL, *scoreTrackRefList = NULL;
 findCons(&elTrackRefList, &scoreTrackRefList);
 struct slRef *cosmicTrackRefList = findTrackRefByName("cosmic");
+boolean hasTxStat = hasTxStatus();
 if (dbNsfpTables == NULL && !gotSnp && elTrackRefList == NULL && scoreTrackRefList == NULL &&
-    cosmicTrackRefList == NULL)
+    cosmicTrackRefList == NULL && !hasTxStat)
     return;
 puts("<BR>");
 printf("<div class='sectionLiteHeader'>Select More Annotations (optional)</div>\n");
 // Make wrapper table for collapsible sections:
 puts("<TABLE border=0 cellspacing=5 cellpadding=0 style='padding-left: 10px;'>");
 selectDbNsfp(dbNsfpTables);
+selectTxStatus(hasTxStat, geneTrack);
 selectDbSnp(gotSnp);
 trackCheckBoxSection("Cosmic", "COSMIC", cosmicTrackRefList);
 trackCheckBoxSection("ConsEl", "Conserved elements", elTrackRefList);
@@ -1075,19 +1298,14 @@ printf("<script>\n"
 addSomeCss();
 printAssemblySection();
 
-/* Check for variant custom tracks.  If there are none, tell user they need to
- * upload at least one. */
-struct slRef *varTrackList = NULL, *varGroupList = NULL;
-tdbFilterGroupTrack(fullTrackList, fullGroupList, isVariantCustomTrack, NULL,
-		    &varGroupList, &varTrackList);
 puts("<BR>");
 // Make wrapper table for collapsible sections:
-selectVariants(varGroupList, varTrackList);
-boolean gotGP = selectGenes();
-if (gotGP)
+selectVariants();
+char *geneTrack = selectGenes();
+if (geneTrack != NULL)
     {
     selectRegulatory();
-    selectAnnotations();
+    selectAnnotations(geneTrack);
     selectFilters();
     selectOutput();
     submitAndDisclaimer();
@@ -1290,7 +1508,8 @@ if (vepOut != NULL)
     if (isReg)
 	annoFormatVepAddRegulatory(vepOut, (struct annoStreamer *)grator, tag, description, column);
     else
-	annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)grator, tag, description, column);
+	annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)grator, tag, description, column,
+                                  FALSE);
     }
 }
 
@@ -2152,27 +2371,119 @@ else
 return varTdb;
 }
 
-static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb)
+static char *gencodeVersionFromTrack(char *track)
+/* If track is a GENCODE table, find and return a pointer to the version at the end;
+ * otherwise return NULL. */
+{
+if (startsWithGencodeGene(track))
+    {
+    char *v = strrchr(track, 'V');
+    return v;
+    }
+return NULL;
+}
+
+static char *gencodeTagTableForTrack(char *db, char *track)
+/* If there is a wgEncodeGencodeTag<version> table that can be associated with track,
+ * return it; otherwise return NULL. */
+{
+struct slName *versionList = getGencodeTagVersions();
+if (startsWithGencodeGene(track))
+    {
+    char *version = gencodeVersionFromTrack(track);
+    if (version != NULL)
+        {
+        char table[PATH_LEN];
+        return cloneString(gencodeTableName("Tag", version, table, sizeof(table)));
+        }
+    }
+else if (sameString(track, "refGene") && refGeneHasGencodeTags(versionList))
+    {
+    char *version = getLatestGencodeVersion(versionList);
+    char table[PATH_LEN];
+    if (hTableExists(db, gencodeTableName("RefSeq", version, table, sizeof(table))))
+        return cloneString(gencodeTableName("Tag", version, table, sizeof(table)));
+    }
+else if (sameString(track, "knownGene") && knownGeneHasGencodeTags(versionList))
+    {
+    if (hTableExists(db, "knownToTag"))
+        return cloneString("knownToTag");
+    }
+return NULL;
+}
+
+static struct joinerDtf *getTxStatusExtras(char *db, char *track)
+// Several kinds of transcript status may be enabled in the cart; if any are enabled,
+// and if they apply to track, return the tables & fields to be joined with the track.
+{
+struct joinerDtf *txStatusExtras = NULL;
+if (cartUsualBoolean(cart, "hgva_txStatus_gencode", FALSE))
+    {
+    char *gencodeTagTable = gencodeTagTableForTrack(db, track);
+    if (gencodeTagTable != NULL)
+        {
+        char *field = "tag";
+        if (sameString("knownToTag", gencodeTagTable))
+            field = "value";
+        slAddHead(&txStatusExtras, joinerDtfNew(db, gencodeTagTable, field));
+        }
+    }
+if (cartUsualBoolean(cart, "hgva_txStatus_knownCanonical", FALSE) &&
+    sameString(track, "knownGene") &&
+    hTableExists(db, "knownCanonical"))
+    {
+    slAddHead(&txStatusExtras, joinerDtfNew(db, "knownCanonical", "transcript"));
+    }
+if (cartUsualBoolean(cart, "hgva_txStatus_refSeqStatus", FALSE) &&
+    sameString(track, "refGene") &&
+    hTableExists(db, "refSeqStatus"))
+    {
+    slAddHead(&txStatusExtras, joinerDtfNew(db, "refSeqStatus", "status"));
+    }
+return txStatusExtras;
+}
+
+static void configAddTableField(struct dyString *dy, char *table, char *field, boolean *pIsFirst)
+/* Add a JSON object with table and (list of one) field. */
+// (with "." prepended to table name
+// because that's the convention for related tables in same db as track):
+{
+if (! *pIsFirst)
+    dyStringAppend(dy, ", ");
+dyStringPrintf(dy, "{ \"table\": \".%s\", \"fields\": [\"%s\"] }", table, field);
+*pIsFirst = FALSE;
+}
+
+
+static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb,
+                                             struct joinerDtf *txStatusExtras)
 /* Add VAI-specific config options, if applicable. */
 {
 struct jsonElement *config = NULL;
 char *track = tdb->track;
+struct dyString *dyConfig = dyStringCreate("{ \"naForMissing\": false,"
+                                           "  \"relatedTables\": [ ");
+boolean isFirst = TRUE;
 // If track is sql-based knownGene and we have kgXref, then add kgXref.geneSymbol after
 // the columns of knownGene.
-if (sameString(track, "knownGene") && !isCustomTrack(track) && !isHubTrack(track) &&
-    !trackDbSetting(tdb, "bigDataUrl"))
+if (sameString(track, "knownGene") &&
+    !isCustomTrack(track) && !isHubTrack(track) &&
+    !trackDbSetting(tdb, "bigDataUrl") &&
+    hTableExists(db, "kgXref"))
     {
-    struct sqlConnection *conn = hAllocConn(db);
-    if (sqlTableExists(conn, "kgXref"))
-        {
-        char jsonStr[PATH_LEN];
-        safef(jsonStr, sizeof(jsonStr),
-              "{ \"relatedTables\":"
-              "    [ { \"table\": \"%s.kgXref\", \"fields\": [\"geneSymbol\"] } ] }",
-              db);
-        config = jsonParse(jsonStr);
-        }
-    hFreeConn(&conn);
+    configAddTableField(dyConfig, "kgXref", "geneSymbol", &isFirst);
+    }
+struct joinerDtf *txStatDtf;
+for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->next)
+    configAddTableField(dyConfig, txStatDtf->table, txStatDtf->field, &isFirst);
+
+// If any of the above apply, close the relatedTables list and config object
+// and parse into jsonElements.
+if (! isFirst)
+    {
+    dyStringAppend(dyConfig, " ] }");
+    config = jsonParse(dyConfig->string);
+    dyStringFree(&dyConfig);
     }
 return config;
 }
@@ -2183,6 +2494,55 @@ static void adjustGpVarOverlapRule(struct annoGrator *gpVarGrator, boolean haveR
 {
 if (haveRegulatory && cartUsualBoolean(cart, "hgva_include_regulatory", TRUE))
     gpVarGrator->setOverlapRule(gpVarGrator, agoNoConstraint);
+}
+
+static void addTxStatusExtras(struct annoFormatter *vepOut, char *geneTrack,
+                              struct annoGrator *gpVarGrator,
+                              struct joinerDtf *txStatusExtras)
+/* Given a list of tables and fields that will be joined with geneTrack to provide transcript
+ * status info, configure vepOut to put them in the EXTRAs column. */
+{
+struct joinerDtf *txStatDtf;
+for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->next)
+    {
+    char *tag = NULL, *description = NULL;
+    boolean isBoolean = FALSE;
+    if (differentString(txStatDtf->database, database))
+        errAbort("addTxStatusExtras: Expected db=%s in txStatDtf but got %s",
+                 database, txStatDtf->database);
+    if ((startsWith(GENCODE_PREFIX"Tag", txStatDtf->table) &&
+         sameString(txStatDtf->field, "tag")) ||
+        (sameString(txStatDtf->table, "knownToTag") &&
+         sameString(txStatDtf->field, "value")))
+        {
+        tag = "GENCODE_TAG";
+        description = "<A HREF=" GENCODE_TAG_DOC_URL " "
+            "TARGET=_BLANK>GENCODE tags</A> for the transcript";
+        }
+    else if (sameString(txStatDtf->table, "knownCanonical") &&
+             sameString(txStatDtf->field, "transcript"))
+        {
+        tag = "CANONICAL";
+        description = "If present, the transcript is the 'canonical' transcript of the gene "
+            "(generally the longest isoform of the gene)";
+        isBoolean = TRUE;
+        }
+    else if (sameString(txStatDtf->table, "refSeqStatus") &&
+             sameString(txStatDtf->field, "status"))
+        {
+        tag = "REFSEQ_STATUS";
+        description = "<A HREF=" REFSEQ_STATUS_DOC_URL " "
+         "TARGET=_BLANK>RefSeq status</A> of the transcript";
+        }
+    else
+        {
+        errAbort("addTxStatusExtras: Unrecognized {table,field}: {%s,%s}",
+                 txStatDtf->table, txStatDtf->field);
+        }
+    char *column = annoStreamDbColumnNameFromDtf(database, geneTrack, txStatDtf);
+    annoFormatVepAddExtraItem(vepOut, (struct annoStreamer *)gpVarGrator,
+                              tag, description, column, isBoolean);
+    }
 }
 
 void doQuery()
@@ -2238,7 +2598,8 @@ else
     }
 
 enum annoGratorOverlap geneOverlapRule = agoMustOverlap;
-struct jsonElement *gpConfig = configForStreamer(database, geneTdb);
+struct joinerDtf *txStatusExtras = getTxStatusExtras(database, geneTrack);
+struct jsonElement *gpConfig = configForStreamer(database, geneTdb, txStatusExtras);
 struct annoGrator *gpVarGrator = hAnnoGratorFromTrackDb(assembly, geneTdb->table, geneTdb, chrom,
                                                         ANNO_NO_LIMIT, primary->asObj,
                                                         geneOverlapRule, gpConfig);
@@ -2271,6 +2632,7 @@ struct annoFormatter *vepOut = annoFormatVepNew("stdout", doHtml,
 						geneTdb->longLabel,
 						(struct annoStreamer *)snpGrator,
 						snpDesc, assembly);
+addTxStatusExtras(vepOut, geneTrack, gpVarGrator, txStatusExtras);
 boolean haveRegulatory = FALSE;
 addOutputTracks(&gratorList, gratorsByName, vepOut, assembly, chrom, doHtml, &haveRegulatory);
 adjustGpVarOverlapRule(gpVarGrator, haveRegulatory);
@@ -2324,6 +2686,10 @@ if (startQuery)
     cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 else
     cart = cartAndCookie(hUserCookie(), excludeVars, oldVars);
+
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);

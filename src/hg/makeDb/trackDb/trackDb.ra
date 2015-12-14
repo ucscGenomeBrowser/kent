@@ -240,6 +240,16 @@ group map
 visibility dense
 type bed 6 .
 
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url /cgi-bin/hgTracks?position=$$
+urlLabel Corresponding position:
+
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
@@ -2724,7 +2734,6 @@ url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/issue_detail.cgi?id
 urlLabel GRC Incident:
 
 track tRNAs
-release alpha
 shortLabel tRNA Genes
 longLabel Transfer RNA Genes Identified with tRNAscan-SE
 group genes

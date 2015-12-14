@@ -396,6 +396,7 @@ addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 /* disable ortherOrg section for CGB servers for the time being */
 if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(malacardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 /*if (isRgdGene(conn))
     {
