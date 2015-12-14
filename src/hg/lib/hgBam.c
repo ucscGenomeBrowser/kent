@@ -10,6 +10,20 @@
 #ifdef USE_BAM
 #include "htmshell.h"
 #include "samAlignment.h"
+#include "hgConfig.h"
+
+void cramInit(struct trackDb *tdb)
+/* Initialize variables needed for CRAM parsing. */
+{
+char *cramRef;
+if ((cramRef =  cfgOption("cramRef")) != NULL)
+    {
+    setenv("REF_CACHE", cramRef, TRUE);
+    }
+char *refPath = trackDbSetting(tdb, "refPath");
+if (refPath != NULL)
+    setenv("REF_PATH", refPath, TRUE);
+}
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 

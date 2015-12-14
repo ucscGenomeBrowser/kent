@@ -165,6 +165,8 @@ if (anyFilter())
 /* Loop through outputting each region */
 struct region *region, *regionList = getRegions();
 
+struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
+cramInit(tdb);
 int maxOut = bigFileMaxOutput();
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {

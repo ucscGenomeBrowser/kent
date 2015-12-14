@@ -19,6 +19,8 @@
 #include "jksql.h"
 #endif
 
+#include "trackDb.h"
+
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName);
 /* Return file name from table.  If table has a seqName column, then grab the 
  * row associated with bamSeqName (which can be e.g. '1' not 'chr1' if that is the
@@ -41,5 +43,8 @@ struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOff
 			 boolean useStrand, char **retQSeq);
 /* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
  * query sequence into which ffAli needle pointers point. */
+
+void cramInit(struct trackDb *tdb);
+/* Initialize variables needed for CRAM parsing. */
 
 #endif//ndef HGBAM_H
