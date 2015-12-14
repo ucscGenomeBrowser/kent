@@ -27,9 +27,9 @@
 <td>
   <ul><b>
     <li><a class="toc" href="#Intro">Introduction</a>
-    <li><a class="toc" href="#GetStarted">Getting Started: Performing a Simple Query</a>
-    <li><a class="toc" href="#DataSources">Selecting Data Sources</a>
-    <li><a class="toc" href="#Overlap">Computing Item Overlap</a>
+    <li><a class="toc" href="#GetStarted">Getting Started: Gene or Exon Only View</a>
+    <li><a class="toc" href="#CustomRegions">Display a Custom Region with a BED File</a>
+    <li><a class="toc" href="#Haplotype">Viewing an Alternate Haplotype Against the Reference Region</a>
     <li><a class="toc" href="#OutputConfig">Configuring Output</a>
   </b></ul>
 </td>
@@ -75,23 +75,18 @@
 
 <a name="GetStarted"></a>
 <div class="section">
-	<h1>Getting Started: Performing a Simple Query</h1>
+	<h1>Getting Started: Gene or Exon Only View</h1>
 	<div class="sectionContent">
-	<p>Follow these instructions to perform a basic query that intersects two
-	or more tracks:
+	<p>Follow these instructions to display regions only containing genes
+           or exons:
 
 	<p>
 	<b>Step 1. Pick a genome assembly</b><br>
-	Specify the genome assembly from which you'd like to retrieve the
-	data by choosing the appropriate organism using the <b>group</b> and <b>genome</b>
-	menus, then selecting the assembly version from the
-	<b>assembly</b> menu.
-        Note that changing the <b>group</b> menu causes the <b>genome</b> menu to refresh,
-        and changing the <b>genome</b> menu causes the <b>assembly</b> menu to refresh.
-        Assemblies that are
-	uploaded as part of an <a href="hgTrackHubHelp.html#Assembly">assembly hub</a>
-	will be available under the hub's name in the <b>group</b> menu.
-
+           Select the genome assembly you would like to view just as when normally
+           viewing an assembly, by using the top menu's Genomes link. If you would like
+           view exon or gene only mode for your assembly hub, navigate to it's browser
+           display as normal.
+        
 	<p>
 	<b>Step 2. Pick a genomic region</b><br>
 	The Data Integrator allows you to choose the genomic regions for which you want output.
@@ -180,9 +175,9 @@
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
 
-<a name="DataSources"></a>	
+<a name="CustomRegions"></a>	
 <div class="section">
-<h1>Selecting Data Sources</h1>
+<h1>Display a Custom Region with a BED File</h1>
 	<div class="sectionContent">
 	<p>The Data Integrator allows you to select up to five data sources to intersect. These
 	data sources can be tracks provided by UCSC or your own data uploaded using 
@@ -214,9 +209,9 @@
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
-<a name="Overlap"></a>
+<a name="Haplotype"></a>
 <div class="section">
-<h1>Computing Item Overlap</h1>
+<h1>Viewing an Alternate Haplotype Against the Reference Region</h1>
 	<div class="sectionContent">
 	<p>The current intersection mechanism the Data Integrator uses is fairly simple. For gene
 	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
