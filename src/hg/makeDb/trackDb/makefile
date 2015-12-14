@@ -7,6 +7,10 @@
 # Make for ENCODE reporting (includes release alpha and release beta)
 #	make encodeReport
 
+# DO NOT RUN MULTIPLE INSTANCES OF THIS SCRIPT 
+# Because it creates temporary files in the current directory 
+# before loading them into the database.
+
 # Browser supports multiple trackDb's so that individual developers
 # can change things rapidly without stepping on other people's toes. 
 # Usually when updating it is best to update your own trackDb and
@@ -34,6 +38,7 @@ DBS = \
 	apiMel1 \
 	apiMel2	\
 	aplCal1 \
+	aptMan1 \
 	aquChr2 \
 	ascSuu1 \
 	balAcu1 \
@@ -124,6 +129,7 @@ DBS = \
 	oryLat1 oryLat2 \
 	otoGar1 otoGar3 tupBel1\
 	oviAri1 oviAri3 \
+	oxyTri2 \
 	panPan1 \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 \
@@ -206,14 +212,14 @@ onbeta:	/cluster/home/${USER}/.hg.conf.beta
 
 beta: onbeta clean 
 	${GIT} pull
-	# first make files for hgwdev-beta (we share the tables with hgwbeta)
-#	rsync -a cv/beta/cv.ra ${CGI_BIN}-beta/encode/cv.ra
-	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 	# now do loads on hgwbeta
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta ./checkMetaDb beta metaDb ${DBS}
 #	rsync -a cv/beta/cv.ra ${BETA_MACHINE}:${CGI_BIN}/encode/cv.ra
 	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${BETA_MACHINE} ${DATA_TRIX} ${DBS}
+	# now make files for hgwdev-beta (we share the tables with hgwbeta)
+#	rsync -a cv/beta/cv.ra ${CGI_BIN}-beta/encode/cv.ra
+	HGDB_CONF=/cluster/home/${USER}/.hg.conf.beta HGDB_TRACKDB=trackDb ${BUILD_TRIX} trackDb metaDb cv/beta/cv.ra ${ALPHA_MACHINE} ${HIVE_TRIX} ${DBS}
 
 public: onbeta clean
 	${GIT} pull

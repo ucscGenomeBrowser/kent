@@ -9704,7 +9704,7 @@ mouseOrthoFreeList((struct mouseOrtho**)&tg->items);
 }
 
 Color mouseOrthoItemColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of psl track item based on chromsome. */
+/* Return color of psl track item based on chromosome. */
 {
 char chromStr[20];
 struct mouseOrtho *ms = item;
@@ -9751,7 +9751,7 @@ humanParalogFreeList((struct humanParalog**)&tg->items);
 }
 
 Color humanParalogItemColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of psl track item based on chromsome. */
+/* Return color of psl track item based on chromosome. */
 {
 char chromStr[20];
 struct humanParalog *ms = item;
@@ -9787,7 +9787,7 @@ tg->drawName = TRUE;
 }
 
 Color syntenyItemColor(struct track *tg, void *item, struct hvGfx *hvg)
-/* Return color of psl track item based on chromsome. */
+/* Return color of psl track item based on chromosome. */
 {
 char chromStr[20];
 struct bed *ms = item;

@@ -23,7 +23,6 @@ static void raInfoAdd(struct raInfoTbl *rit, struct hash *raRec,
                       unsigned extFileId)
 /* add a ra mrna or pep */
 {
-struct hashEl *hel;
 struct raInfo *ri;
 char accVer[GB_ACC_BUFSZ];
 if (extFileId == 0)
@@ -31,7 +30,8 @@ if (extFileId == 0)
 gbVerbPr(10, "raAdd %s.%d ext %d", acc, ver, extFileId);
 lmAllocVar(rit->accMap->lm, ri);
 safef(accVer, sizeof(accVer), "%s.%d", acc, ver);
-hel = hashAdd(rit->accMap, accVer, ri);
+// ignore result from hashAdd
+hashAdd(rit->accMap, accVer, ri);
 ri->acc = lmCloneString(rit->accMap->lm, acc);
 ri->version = ver;
 ri->size = sqlUnsigned((char*)hashMustFindVal(raRec, seqSzFld));

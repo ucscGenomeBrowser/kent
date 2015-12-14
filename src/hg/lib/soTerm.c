@@ -35,7 +35,7 @@ switch (termNumber)
     case upstream_gene_variant : return "upstream_gene_variant"; break;
     case downstream_gene_variant : return "downstream_gene_variant"; break;
     case TF_binding_site_variant : return "TF_binding_site_variant"; break;
-    case non_coding_exon_variant : return "non_coding_exon_variant"; break;
+    case non_coding_exon_variant : return "non_coding_transcript_exon_variant"; break;
     case protein_altering_variant : return "protein_altering_variant"; break;
     case synonymous_variant : return "synonymous_variant"; break;
     case inframe_deletion : return "inframe_deletion"; break;

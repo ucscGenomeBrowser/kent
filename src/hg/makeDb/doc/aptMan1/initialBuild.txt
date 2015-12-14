@@ -1,0 +1,477 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the aptMan1
+# Apteryx australis mantelli - Brown Kiwi
+
+# http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=JYOU01
+
+# the description page is missing from the genbank directory
+
+# there is no chrMt sequence in this release or in NCBI nucleotide
+
+#############################################################################
+# fetch sequence from new style download directory (Done - 2015-12-10 Chris )
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/aptMan1/refseq
+    cd /hive/data/genomes/aptMan1/refseq
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_other/Apteryx_australis/all_assembly_versions/GCF_001039765.1_AptMant0/ ./
+    # real	1m12.690s
+
+    # measure what we have here:
+    faSize GCF_001039765.1_AptMant0_genomic.fna.gz
+    
+    #1523972539 bases (212971491 N's 1311001048 real 1093095933 upper 217905115 lower) in 24720 sequences in 1 files
+    #Total size: mean 61649.4 sd 839460.1 min 1000 (NW_014006041.1) max 63182071 (NW_013995860.1) median 1776
+    #N count: mean 8615.4 sd 64628.4
+    #U count: mean 44219.1 sd 637623.2
+    #L count: mean 8814.9 sd 140154.0
+    #%14.30 masked total, %16.62 masked real
+
+
+#############################################################################
+# fixup to UCSC naming scheme (Done - 2015-09-15 - Chris)
+    mkdir /hive/data/genomes/aptMan1/ucsc
+    cd /hive/data/genomes/aptMan1/ucsc
+
+    # since this is a scaffold-only assembly, merely use the accession names
+    # and since there are all .1 versions, this sed statement will make them
+    # all v1 version names:
+    zcat ../refseq/*assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+       | grep -v "^#" | sed -e 's/\.1/v1/;' > chrUn.aptMan1.agp
+
+    time zcat ../refseq/*assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+       | sed -e 's/.1 Apteryx .*/v1/;' > chrUn.aptMan1.fa
+
+    # verify these two files are compatible:
+    faToTwoBit chrUn.aptMan1.fa test.2bit
+    time checkAgpAndFa chrUn.aptMan1.agp test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+    rm test.2bit
+
+    # fetch photo:
+    mkdir /hive/data/genomes/aptMan1/photo
+    cd /hive/data/genomes/aptMan1/photo
+    wget --timestamping \
+http://www.md.ucl.ac.be/peca/test/Brown%20Kiwi.jpg
+    # The file was cropped using mac default cropping (cmd+shift+4)
+    convert -quality 80 -geometry "400x300" brownKiwi.jpg \
+       bk.jpg
+
+    # check that into the source tree hg/htdocs/images/
+    cp bk.jpg /cluster/home/ceisenhart/kent/src/hg/htdocs/images/Apteryx_australis.jpg
+    cd /cluster/home/ceisenhart/kent/src/hg/htdocs/images/
+    git add Apteryx_australis.jpg
+    # add in the link next time! 
+    git commit -m "photo courtesy of S. Moniotte, refs #16029"
+
+    # and copy over to /usr/local/apache/htdocs/images/Nanorana_parkeri.jpg
+    # permission obtained:
+
+#############################################################################
+#  Initial database build (Done - 2015-12-10 Chris)
+
+    cd /hive/data/genomes/aptMan1
+    printf "%s" '# Config parameters for makeGenomeDb.pl:
+db aptMan1
+clade vertebrate
+genomeCladePriority 50 # Seems to serve no purpose...
+scientificName Apteryx australis mantelli
+commonName Brown kiwi 
+assemblyDate Jun. 2015
+assemblyLabel Max-Plank Institute for Evolutionary Anthropology AptMant0
+assemblyShortLabel MPI-EVA AptMant0
+orderKey 2715
+mitoAcc LK054805.1
+fastaFiles /hive/data/genomes/aptMan1/ucsc/*.fa
+agpFiles /hive/data/genomes/aptMan1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://www.md.ucl.ac.be/peca/test/copyright.html
+photoCreditName S. Moniotte
+ncbiGenomeId 10907
+ncbiAssemblyId 356101
+ncbiAssemblyName AptMant0
+ncbiBioProject 287231
+genBankAccessionID GCA_001039765.1
+taxId 202946
+' > aptMan1.config.ra
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp aptMan1.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # real    1m35.746s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db aptMan1.config.ra) > db.log 2>&1
+    
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=trackDb aptMan1.config.ra) > trackDb.log 2>&1
+    # real    15m49.649s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-12-10 - Chris)
+    mkdir /hive/data/genomes/aptMan1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/aptMan1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/aptMan1/aptMan1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku aptMan1) > do.log 2>&1
+
+    cat fb.aptMan1.cpgIslandExtUnmasked.txt
+    #36538307 bases of 1311306859 (2.786%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-12-10 - Chris)
+    mkdir /hive/data/genomes/aptMan1/bed/cytoBand
+    cd /hive/data/genomes/aptMan1/bed/cytoBand
+    makeCytoBandIdeo.csh aptMan1
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/aptMan1/bed/ucscToINSDC
+    cd /hive/data/genomes/aptMan1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab aptMan1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords aptMan1
+    # should cover %100 entirely:
+    featureBits -countGaps aptMan1 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2015-03-20 - Hiram)
+    hgsql -N -e "select frag from gold;" aptMan1 | sort | head -1
+JYOU01000001.1
+
+    hgsql -N -e "select frag from gold;" aptMan1 | sort | tail -2
+JYOU01147511.1
+JYOU01147512.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" aptMan1 | wc -l
+    # 147512
+
+    hgsql -N -e "select frag from gold;" aptMan1 \
+       | egrep -e 'JYOU01[0-9]+(\.1)?' | wc -l
+    # 147512
+
+    hgsql -N -e "select frag from gold;" aptMan1 \
+       | egrep -v -e 'JYOU01[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/aptMan1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex JYOU01[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker ( DONE - 2015-12-10 - Chris)
+    mkdir /hive/data/genomes/aptMan1/bed/repeatMasker
+    cd /hive/data/genomes/aptMan1/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku aptMan1) > do.log 2>&1
+    # real    232m59.124s
+
+    cat faSize.rmsk.txt
+    #1523986457 bases (212971113 N's 1311015344 real 1252680878 upper 58334466
+    #lower) in 24719 sequences in 1 files
+    #Total size: mean 61652.4 sd 839476.9 min 1000 (NW_014006041v1) max
+    #63182071 (NW_013995860v1) median 1777
+    #N count: mean 8615.7 sd 64629.7
+    #U count: mean 50676.8 sd 739119.8
+    #L count: mean 2359.9 sd 39090.5
+    #%3.83 masked total, %4.45 masked real
+
+    egrep -i "versi|relea" do.log
+    #RepeatMasker version open-4.0.5
+    #grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
+    ##    January 31 2015 (open-4-0-5) version of RepeatMasker
+    #grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+    #CC   RELEASE 20140131;  
+
+    time featureBits -countGaps aptMan1 rmsk
+    #58406940 bases of 1523986457 (3.833%) in intersection
+    #
+    #real	0m12.775s
+    #user	0m3.215s
+    #sys	0m0.318s
+
+##########################################################################
+# running simple repeat (DONE - 2015-12-10 - Chris)
+
+    mkdir /hive/data/genomes/aptMan1/bed/simpleRepeat
+    cd /hive/data/genomes/aptMan1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        aptMan1) > do.log 2>&1
+    # real    20m20.609s
+
+    cat fb.simpleRepeat
+    # 112091725 bases of 1311306859 (8.548%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/aptMan1
+    twoBitMask bed/windowMasker/aptMan1.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  aptMan1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa aptMan1.2bit stdout | faSize stdin > faSize.aptMan1.2bit.txt
+    cat faSize.aptMan1.2bit.txt
+    #1523986457 bases (212971113 N's 1311015344 real 1087217052 upper
+    #223798292 lower) in 24719 sequences in 1 files
+    #Total size: mean 61652.4 sd 839476.9 min 1000 (NW_014006041v1) max
+    #63182071 (NW_013995860v1) median 1777
+    #N count: mean 8615.7 sd 64629.7
+    #U count: mean 43983.1 sd 634950.8
+    #L count: mean 9053.7 sd 142837.6
+    #%14.69 masked total, %17.07 masked real
+
+    rm /gbdb/aptMan1/aptMan1.2bit
+    ln -s `pwd`/aptMan1.2bit /gbdb/aptMan1/aptMan1.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/aptMan1/bed/microsat
+     cd /cluster/data/aptMan1/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed aptMan1 microsat microsat.bed
+    #	Read 8213 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (TBD - 2015-03-20 - Hiram)
+
+    mkdir /hive/data/genomes/aptMan1/bed/windowMasker
+    cd /hive/data/genomes/aptMan1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev aptMan1) > do.log 2>&1
+    # real    153m54.144s
+
+    # Masking statistics
+    cat faSize.aptMan1.cleanWMSdust.txt
+    # 2053849526 bases (76078142 N's 1977771384 real 1208849805 upper
+    #     768921579 lower) in 25187 sequences in 1 files
+    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
+    #    max 8606022 (KN905849v1) median 453
+    # %37.44 masked total, %38.88 masked real
+
+    cat fb.aptMan1.rmsk.windowmaskerSdust.txt
+    # 23839116 bases of 2053849526 (1.161%) in intersection
+
+##########################################################################
+# cpgIslands - (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/aptMan1/bed/cpgIslands
+    cd /hive/data/genomes/aptMan1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku aptMan1) > do.log 2>&1 &
+    # real    117m34.561s
+    # failed during kluster hardMask operation, continuing:
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -continue=cpg -workhorse=hgwdev -smallClusterHub=ku aptMan1) \
+         > cpg.log 2>&1 &
+    # real    10m28.915s
+
+    cat fb.aptMan1.cpgIslandExt.txt
+    # 13717904 bases of 1977771384 (0.694%) in intersection
+
+#########################################################################
+# genscan - (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/aptMan1/bed/genscan
+    cd /hive/data/genomes/aptMan1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku aptMan1) > do.log 2>&1
+    # real    57m21.101s
+
+    cat fb.aptMan1.genscan.txt
+    #   55630505 bases of 1977771384 (2.813%) in intersection
+
+    cat fb.aptMan1.genscanSubopt.txt
+    #   58340692 bases of 1977771384 (2.950%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-03-24 - Hiram)
+
+    cd /hive/data/genomes/aptMan1
+    # numerator is aptMan1 gapless bases "real" as reported by:
+    head -1 faSize.aptMan1.2bit.txt
+# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
+#    76942601 lower) in 25187 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1977771384 / 2861349177 \) \* 1024
+    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
+
+    # ==> use -repMatch=700 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/aptMan1
+    time blat aptMan1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/aptMan1.11.ooc \
+        -repMatch=700
+    # Wrote 23756 overused 11-mers to jkStuff/aptMan1.11.ooc
+    #  real    0m32.961s
+
+    # there are no non-bridged gaps, do not need to do this
+    #   check non-bridged gaps to see what the typical size is:
+#     hgsql -N -e 'select * from gap where bridge="no" order by size;' aptMan1 
+#       | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50,076
+
+#  gapToLift -verbose=2 -minGap=50000 aptMan1 jkStuff/aptMan1.nonBridged.lft \
+#         -bedFile=jkStuff/aptMan1.nonBridged.bed
+
+#    hgsql -N \
+#        -e 'select * from gap where bridge="no" order by size;' aptMan1 \
+#        | ave -col=7 stdin
+
+    # not needed:
+#    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
+#        -bedFile=jkStuff/nonBridged.bed
+
+    # survey sizes:
+    n50.pl chrom.sizes
+#       reading: chrom.sizes
+#       contig count: 25187, total size: 2053849526, one half size: 1026924763
+# cumulative    N50 count       contig  contig size
+# 1026149130      545     KN906416v1      1073586
+# 1026924763 one half size
+# 1027218231      546     KN906384v1      1069101
+
+#############################################################################
+# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    #  Nanorana parkeri	3	0	0
+    #  Nanorana pleskei	3	0	0
+    #  Nanorana yunnanensis	1	0	0
+
+    # edit etc/genbank.conf to add aptMan1 just before xenTro7
+
+# aptMan1 (tibetan frog)
+aptMan1.serverGenome = /hive/data/genomes/aptMan1/aptMan1.2bit
+aptMan1.clusterGenome = /hive/data/genomes/aptMan1/aptMan1.2bit
+aptMan1.ooc = /hive/data/genomes/aptMan1/jkStuff/aptMan1.11.ooc
+aptMan1.lift = no
+aptMan1.perChromTables = no
+aptMan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+aptMan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+aptMan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+aptMan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+aptMan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+aptMan1.downloadDir = aptMan1
+aptMan1.refseq.mrna.native.load  = no
+aptMan1.refseq.mrna.xeno.load = yes
+aptMan1.refseq.mrna.xeno.loadDesc  = yes
+aptMan1.genbank.mrna.native.load = no
+aptMan1.genbank.mrna.native.loadDesc = no
+aptMan1.genbank.mrna.xeno.load = yes
+aptMan1.genbank.mrna.xeno.loadDesc = yes
+aptMan1.genbank.est.native.load = no
+aptMan1.genbank.est.native.loadDesc = no
+# aptMan1.upstreamGeneTbl = ensGene
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
+         etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial aptMan1
+    # logFile: var/build/logs/2015.05.27-15:45:35.aptMan1.initalign.log
+    # real    1651m57.350s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.aptMan1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad aptMan1
+    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.aptMan1.dbload.log
+    # real    128m32.009s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add aptMan1 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added aptMan1 - Tibetan frog refs #15056" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=aptMan1 -tableCoverage all.joiner
+    joinerCheck -database=aptMan1 -times all.joiner
+    joinerCheck -database=aptMan1 -keys all.joiner
+
+    cd /hive/data/genomes/aptMan1
+    time makeDownloads.pl aptMan1 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/aptMan1/pushQ
+    cd /hive/data/genomes/aptMan1/pushQ
+    makePushQSql.pl aptMan1 > aptMan1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/aptMan1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/aptMan1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/aptMan1/bbi/qualityBw/quality.bw
+    # WARNING: aptMan1 does not have seq
+    # WARNING: aptMan1 does not have extFile
+    # WARNING: aptMan1 does not have estOrientInfo
+    # WARNING: aptMan1 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p aptMan1.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/aptMan1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
