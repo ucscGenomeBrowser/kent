@@ -7211,18 +7211,18 @@ void setEMGeneTrack()
 if (emGeneTable) // we already have it!
     return;
 emGeneTable = cloneString(cartOptionalString(cart, "emGeneTable"));
-if (!emGeneTable)
+if (emGeneTable)
     {
-    cartRemove(cart, "emGeneTable");
-    return;
+    struct track *myTrackList = getTrackListForOneTrack(emGeneTable);
+    emGeneTrack = rFindTrackWithTable(emGeneTable, myTrackList);
     }
-struct track *myTrackList = getTrackListForOneTrack(emGeneTable);
-emGeneTrack = rFindTrackWithTable(emGeneTable, myTrackList);
-// note that we cannot easily call findBestEMGeneTable because we do not have a complete track list early on.
-if (!emGeneTrack) 
+if (!emGeneTable || !emGeneTrack) 
     {
     cartRemove(cart, "emGeneTable");
-    return;
+    // It is preferable not to create a complete track list early on,
+    //  but now we need one to find the best default emGeneTable and track.
+    initTrackList(); 
+    findBestEMGeneTable(trackList);
     }
 }
 
@@ -8638,6 +8638,7 @@ if (NULL == chromName)
 gotVirtPos:
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
+//warn("virtMode=%d\n", virtMode); // DEBUG REMOVE
 
 /* Figure out basic dimensions of display.  This
  * needs to be done early for the sake of the
@@ -8665,6 +8666,7 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
     setEMGeneTrack();
     if (!emGeneTable) // there is no available gene table, undo exonMostly or geneMostly
 	{
+	//warn("setEMGeneTrack unable to find default gene track");
 	virtModeType = "default";
 	cartSetString(cart, "virtModeType", virtModeType); 
 	}
@@ -9484,9 +9486,9 @@ if (gotExtTools)
     hPrintf("Mousetrap.bind('s t', showExtToolDialog); \n");
 
 // multi-region views
-hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; return false; });  \n",
+hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtModeType=exonMostly'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
-hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; return false; });  \n",
+hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 

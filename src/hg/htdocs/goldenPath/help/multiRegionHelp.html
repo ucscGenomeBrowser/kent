@@ -81,97 +81,52 @@
            or exons:
 
 	<p>
-	<b>Step 1. Pick a genome assembly</b><br>
+	<b>Step 1. Pick a genome assembly and region</b><br>
            Select the genome assembly you would like to view just as when normally
            viewing an assembly, by using the top menu's Genomes link. If you would like
            view exon or gene only mode for your assembly hub, navigate to it's browser
            display as normal.
+
+        <p>Once an assembly has been selected, either search for a gene of interest 
+           or select a region to view using the Genome Browser search bar.
+        	
+        <p>
+	<b>Step 2. Configure the multi-region view</b><br>
+	   <ul>
+              <li>Click <button type="button">multi-region</button> while on the track display
+                  page to bring up the multi-region configuration window. <br># image needed here
+                  for both where to click and the window
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>By default the <b>Show single-chromosome view</b> will be selected. If you
+                  would like to return to the plain Genome Browser display you can choose this
+                  option.
+              <li>Now select either <b>Show exons</b> or <b>genes using Ensembl/RefSeq/Gencode etc</b>
+                  depending on whether you would like to view intronic regions (genes view)
+                  or non intronic (exons view). Note that both views remove all intergenic regions, 
+                  except for the number of bases noted in the <b>padding</b> field, pads each exon 
+                  or gene with the specified number of bases on either side of the item. Thus if 
+                  the exon only view is selected the padding bases will be intron or intergenic 
+                  while if gene only view is selected the padding bases will be all intergenic.
+              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
+                  you would like every other exon or gene to be highlighted in blue. <br># image of
+                  highlighted browser here.
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>Click submit to be taken back to the Genome Browser display.
+           </ul>
+        <p>Exon and gene slicing is computed relative to the "most annotated" gene track for
+           that assembly, and includes all exons and genes in every subtrack if the 
+           gene track used is a super-track or composite track.
         
-	<p>
-	<b>Step 2. Pick a genomic region</b><br>
-	The Data Integrator allows you to choose the genomic regions for which you want output.
-		<ul>
-		<li> To display all of the data records for the selected track(s), select
-		<select><option>genome</option></select> from the
-                <b>region to annotate</b> menu.
-		<li>
-		To restrict the data to a specific position
-		range, select
-                <select><option>position or search term</option></select> from the
-		<b>region to annotate</b> menu
-		and type or paste the position into the box. Some
-		examples of specific positions include a chromosome name
-		(<em>chrX</em>), a coordinate range within a chromosome
-		(<em>chrX:100000-400000</em>), or a scaffold name.
-		<li>
-		To look up the position range of a genomic element -- such
-		as a gene name, an accession ID, an STS marker, etc. -- or
-		keywords from the GenBank description of an mRNA,
-                select <select><option>position or search term</option></select> from the
-		<b>region to annotate</b> menu and then type
-		your search term into the box.
-                For assemblies that have gene annotations, autocompletions of gene symbols
-                are offered.
-                If your search term matches more than one track or item,
-                then a pop-up will appear with matching items and positions;
-                click an item to select its position.
-		<li>
-		To query multiple genomic regions, select
-                <select><option>define regions</option></select> from the
-		<b>region to annotate</b> menu and then
-		enter up to 1,000 regions in a 3- or 4-field
-		<a href="../../FAQ/FAQformat.html#format1">BED</a>
-		file format or as <em>chrom:start-end</em> position ranges.
-		</ul>
-	<p>
-	<b>Step 3. Configure your data sources</b><br>
-	The <b>track group</b> menu shows all the annotation track groups
-	available in the selected genome assembly. The names correspond
-	to the groupings displayed at the bottom of the Genome Browser
-	annotation tracks page. When a group is selected from the menu,
-	the <b>track</b> menu automatically updates to show all the
-	annotation tracks available within that group.
-		<ul>
-		<li>
-		To examine all the tracks available within a certain group (e.g.,
-		all gene prediction tracks), select the group name from the
-		<b>track group</b> menu, then browse the entries in the
-		<b>track</b> menu.
-		<li>
-		Custom annotation tracks created during the current session
-		are listed under the <b>Custom Tracks</b> group.
-		<li>
-		Each connected track hub will be listed as its own group under the
-		<b>track group</b> menu.
-                <li>Clicking the "View table schema" link opens a new web browser tab with
-                the Table Browser's schema page which describes the data fields.
-		</ul>
-	<p><img style="border: 1px solid black; display: block;"
-		src="../../images/hgIntegratorAddTrack.png">
-	
-	<p>After selecting your track from the drop-down menus, click
-	<button type="button">Add</button>. You may add up to five tracks.
-	See the <a href="#DataSources">Selecting Data Sources</a> section for more details.
-	<p>
-	<b>Step 4. Rearrange your data sources (Optional)</b><br>
-	You can rearrange your data sources by clicking on a track name
-	and dragging it into the desired order. Items are output based on their overlap
-	with the first listed track. The order of the tracks will also determine
-	the order of the fields in the output. Fields from tracks higher in the list
-	will appear first in the output.
-	<p>
-	<b>Step 5. Choose output fields (Optional)</b><br>
-	Click <button type="button">Choose fields...</button> to bring up a checklist of all
-	fields from all selected data sources. By default, every field is selected.
-	You can choose the columns you want in your output by checking the box next to that
-	field. See the <a href="#OutputConfig">Configuring Output</a> section for more details.
-	<p>
-	<b>Step 6. Get output</b><br>
-	Click <button type="button">Get output</button> to display the
-	results of the query in the web browser window. The results will be displayed
-	as tab-delimited text. Download results as a file by checking the box next to
-	<b>Send output to file</b> and entering a file name into the box.
-	The output file can also be compressed by gzip.
+        <p># This would be a good session example once this feature comes out<br>
+           One can see this on the human hg38 assembly by searching for a gene, say SOD1,
+           and then turning on multi-region with exons and highlighting alternate
+           regions. One will still see many intron regions in the GENCODE V22 track,
+           even though multi-region slices exons based on the Gencode track.
+ 
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
 
