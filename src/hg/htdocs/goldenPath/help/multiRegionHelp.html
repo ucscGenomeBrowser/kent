@@ -77,7 +77,8 @@
 <div class="section">
 	<h1>Getting Started: Gene or Exon Only View</h1>
 	<div class="sectionContent">
-	<p>Follow these instructions to display regions only containing genes
+	<p>
+        Follow these instructions to display regions only containing genes
            or exons:
 
 	<p>
@@ -100,9 +101,9 @@
                        src="">
                   <img style="border: 1px solid black; display: block;"
                        src="">
-              <li>By default the <b>Show single-chromosome view</b> will be selected. If you
-                  would like to return to the plain Genome Browser display you can choose this
-                  option.
+              <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
+                  standard Genome Browser display, and can be used to return to a standard 
+                  display.
               <li>Now select either <b>Show exons</b> or <b>genes using Ensembl/RefSeq/Gencode etc</b>
                   depending on whether you would like to view intronic regions (genes view)
                   or non intronic (exons view). Note that both views remove all intergenic regions, 
@@ -117,15 +118,23 @@
                        src="">
               <li>Click submit to be taken back to the Genome Browser display.
            </ul>
-        <p>Exon and gene slicing is computed relative to the "most annotated" gene track for
-           that assembly, and includes all exons and genes in every subtrack if the 
-           gene track used is a super-track or composite track.
-        
-        <p># This would be a good session example once this feature comes out<br>
-           One can see this on the human hg38 assembly by searching for a gene, say SOD1,
-           and then turning on multi-region with exons and highlighting alternate
-           regions. One will still see many intron regions in the GENCODE V22 track,
-           even though multi-region slices exons based on the Gencode track.
+        <p>
+        <b>Important Notes about the exon and gene only view</b>
+           <ul>
+              <li>Exon and gene slicing is computed relative to the "most annotated" gene track for
+                  that assembly, and includes all exons and genes in every subtrack if the 
+                  gene track used is a super-track or composite track.
+              <br># Session or screenshot example<br>
+              <li>For the gene only option, the longest transcript in a given region is used as the 
+                  reference for where to slice. This may be confusing when genes are nested inside
+                  other genes:
+                  # Screenshot example of nested gene
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+                  
+              <li>Exon and gene only views are unavailable with assembly hubs. This is because
+                  assembly hubs do not come with a default gene track, however viewing custom
+                  regions should still work.
  
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
@@ -134,33 +143,14 @@
 <div class="section">
 <h1>Display a Custom Region with a BED File</h1>
 	<div class="sectionContent">
-	<p>The Data Integrator allows you to select up to five data sources to intersect. These
-	data sources can be tracks provided by UCSC or your own data uploaded using 
-	<a href="../../../cgi-bin/hgCustom" target="_blank">custom tracks</a> or
-	<a href="../../../cgi-bin/hgHubConnect" target="_blank">track hubs</a>. Only positional
-	tables, such as BED, Wiggle, and genePred, are currently allowed in the output.
-	Other formats such as MAF or BAM are currently unavailable in the Data
-	Integrator.
-
-	<p>Items in your selected tracks are output based on their overlap with items in your
-	primary track. The primary track is the one that shows up first in the list of
-	your chosen data sources. In the following example, UCSC Genes would be the primary
-	track and items would be output based on their overlap with items in UCSC Genes:
 	<p>
+        One can now display multiple regions specified via BED file in the Genome Browser display
+        with the multi-region tool. These regions may be on one chromosome or across
+        multiple chromosomes. 
+
 	<img style="border: 1px solid black; display: block;"
 	src="../../images/hgIntegratorDataSourceConfig.png">
-	</p>
-	<p>The order of your selected tracks also affects the order of fields in your output.
-	Fields from tracks that are higher up in the <b>Configure Data Sources</b> box will show
-	up before tracks that are lower in that box. Using the same order of tracks seen in the
-	previous example, this means that fields from the UCSC Genes track will appear first in
-	the output, then fields from DNase Clusters and lastly fields from Conservation -
-	100 Vert. El. However, your tracks aren't limited to the order in which you selected them,
-	and you can rearrange the order of your tracks at any time. To do so, just click and drag
-	a track to a new position in the list. A track can be removed by clicking the
-	"<b>X</b>" next to it.  
 
-	
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
