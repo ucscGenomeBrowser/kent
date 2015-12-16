@@ -172,6 +172,8 @@ return 0;
 void doBamDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a BAM file. */
 {
+cramInit(tdb);
+
 if (item == NULL)
     errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");

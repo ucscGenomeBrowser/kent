@@ -452,6 +452,14 @@ var hgva = // result of invoking:
 	    ajax({'action': 'reorderSources'});
 	},
 
+        goToAddCustomTrack: function()
+        {
+            var $ctForm = $('#customTrackForm');
+            $ctForm.append('<INPUT TYPE=HIDDEN NAME="hgct_do_add" VALUE=""/>');
+            $ctForm.submit();
+            return false;
+        },
+
 	lookupPosition: lookupPosition,
 
 	buildQuerySpec: buildQuerySpec,

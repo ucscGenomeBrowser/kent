@@ -38,6 +38,7 @@ DBS = \
 	apiMel1 \
 	apiMel2	\
 	aplCal1 \
+	aptMan1 \
 	aquChr2 \
 	ascSuu1 \
 	balAcu1 \

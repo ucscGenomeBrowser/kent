@@ -30,7 +30,7 @@ static void loadGbCdnaInfoRow(struct metaDataTbls* metaDataTbls,
 /* load one row from the gbCdnaInfo table */
 {
 struct metaData* md;
-int len, numNonZero, iRow = 0;
+int numNonZero, iRow = 0;
 char *acc, *dir;
 boolean gotError, isOk;
 
@@ -45,7 +45,6 @@ if (md->inGbCdnaInfo)
     }
 md->inGbCdnaInfo = TRUE;
 md->gbCdnaInfoId = strToUnsigned(row[iRow++], acc, "gbCdnaInfo.id", NULL);
-len = strlen(acc);
 md->gbCdnaInfoVersion = strToUnsigned(row[iRow++], "gbCdnaInfo.version", acc, &gotError);
 if (!gotError && (md->gbCdnaInfoVersion <= 0))
      gbError("%s: gbCdnaInfo.version invalid: \"%d\"", acc, md->gbCdnaInfoVersion);
@@ -157,7 +156,6 @@ static void loadRefLinkRow(struct metaDataTbls* metaDataTbls,
 struct metaData* md;
 int iRow = 0;
 char *acc = row[iRow++];
-char *product;
 
 if (!(startsWith("NM_", acc) || startsWith("NR_", acc)))
     {
@@ -170,7 +168,7 @@ if (md->inRefLink)
     gbError("%s: occurs multiple times in the refLink table", md->acc);
 md->inRefLink = TRUE;
 safef(md->rlName, sizeof(md->rlName), "%s", row[iRow++]);
-product = row[iRow++];
+iRow++;    // unused result product = row[iRow++];
 safef(md->rlProtAcc, sizeof(md->rlProtAcc), "%s", row[iRow++]);
 
 /* check if ids are valid (zero is allowed, so just parse) */

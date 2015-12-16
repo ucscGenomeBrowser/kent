@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<title>Multi-Region Display Help Guide - UCSC Genome Browser</title>
+        <meta name="description" content="Multi-Region Display">
+        <meta name="keywords" content="genome, genome data, data integrator, table browser, genome browser, genome assembly, UCSC, bioinformatics, gene prediction, SNP, EST, mRNA, multi region">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="/style/HGStyle.css">
+</head>
+<body class="oldStaticPage">
+
+<div class="header">
+	<img src="../../images/title.jpg" alt="UCSC Genome Bioinformatics">
+</div><!-- .header -->
+
+<div class="nav">
+<!--#include virtual="../../cgi-bin/hgMenubar"-->
+</div><!-- .nav -->
+
+<div class="content">
+
+<div class="section">
+<h1>Multi Region Display Help</h1>
+<div class="sectionContent">
+<p><b>Table of Contents:</b>
+<td>
+  <ul><b>
+    <li><a class="toc" href="#Intro">Introduction</a>
+    <li><a class="toc" href="#GetStarted">Getting Started: Gene or Exon Only View</a>
+    <li><a class="toc" href="#CustomRegions">Display a Custom Region with a BED File</a>
+    <li><a class="toc" href="#Haplotype">Viewing an Alternate Haplotype Against the Reference Region</a>
+    <li><a class="toc" href="#OutputConfig">Configuring Output</a>
+  </b></ul>
+</td>
+                <P>
+                <FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/goldenPath/help';">          
+                Search the Genome Browser help pages: &nbsp;
+                <input type="hidden" name="q" value="">
+                <input type="hidden" name="num" value="10">
+                <input type="hidden" name="filter" value="0">
+                <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+                <input TYPE="submit" VALUE="Submit">
+                </FORM>
+                </p><p>
+                <A HREF="../../contacts.html">Questions and feedback are welcome</A>.
+
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
+
+<a name="Intro"></a>	
+<div class="section">
+	<h1>Introduction</h1>
+	<div class="sectionContent">
+	   <p>The multi-region display allows users the ability to &quot;slice&quot; up
+              their normal track viewing experience into a variety of different modes:
+              exon, gene, or user defined BED coordinates, and visualize 
+              the track annotations only in those regions, effectively removing
+              the intergenic and intron regions from the viewing window.
+        
+           <p>In addition, for the human assemblies hg19 and hg38, the multi-region view
+              also supports embedding a haplotype chromosome on top of it's
+              reference sequence in order to visualize the differences between the haplotype
+              sequence and the reference sequence.
+        
+           <p># List some limits on the multi regions
+              <ul>
+                 <li>Can only filter on predefined exon or gene type, not just whatever
+                     track you are looking at
+                 <li>Only one haplotype can currently be viewed
+
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="GetStarted"></a>
+<div class="section">
+	<h1>Getting Started: Gene or Exon Only View</h1>
+	<div class="sectionContent">
+	<p>
+        Follow these instructions to display regions only containing genes
+           or exons:
+
+	<p>
+	<b>Step 1. Pick a genome assembly and region</b><br>
+           Select the genome assembly you would like to view just as when normally
+           viewing an assembly, by using the top menu's Genomes link. If you would like
+           view exon or gene only mode for your assembly hub, navigate to it's browser
+           display as normal.
+
+        <p>Once an assembly has been selected, either search for a gene of interest 
+           or select a region to view using the Genome Browser search bar.
+        	
+        <p>
+	<b>Step 2. Configure the multi-region view</b><br>
+	   <ul>
+              <li>Click <button type="button">multi-region</button> while on the track display
+                  page to bring up the multi-region configuration window. <br># image needed here
+                  for both where to click and the window
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
+                  standard Genome Browser display, and can be used to return to a standard 
+                  display.
+              <li>Now select either <b>Show exons</b> or <b>genes using Ensembl/RefSeq/Gencode etc</b>
+                  depending on whether you would like to view intronic regions (genes view)
+                  or non intronic (exons view). Note that both views remove all intergenic regions, 
+                  except for the number of bases noted in the <b>padding</b> field, pads each exon 
+                  or gene with the specified number of bases on either side of the item. Thus if 
+                  the exon only view is selected the padding bases will be intron or intergenic 
+                  while if gene only view is selected the padding bases will be all intergenic.
+              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
+                  you would like every other exon or gene to be highlighted in blue. <br># image of
+                  highlighted browser here.
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>Click submit to be taken back to the Genome Browser display.
+           </ul>
+        <p>
+        <b>Important Notes about the exon and gene only view</b>
+           <ul>
+              <li>Exon and gene slicing is computed relative to the "most annotated" gene track for
+                  that assembly, and includes all exons and genes in every subtrack if the 
+                  gene track used is a super-track or composite track.
+              <br># Session or screenshot example<br>
+              <li>For the gene only option, the longest transcript in a given region is used as the 
+                  reference for where to slice. This may be confusing when genes are nested inside
+                  other genes:
+                  # Screenshot example of nested gene
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+                  
+              <li>Exon and gene only views are unavailable with assembly hubs. This is because
+                  assembly hubs do not come with a default gene track, however viewing custom
+                  regions should still work.
+ 
+    </div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="CustomRegions"></a>	
+<div class="section">
+<h1>Display a Custom Region with a BED File</h1>
+	<div class="sectionContent">
+	<p>
+        One can now display multiple regions specified via BED file in the Genome Browser display
+        with the multi-region tool. These regions may be on one chromosome or across
+        multiple chromosomes. 
+
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorDataSourceConfig.png">
+
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="Haplotype"></a>
+<div class="section">
+<h1>Viewing an Alternate Haplotype Against the Reference Region</h1>
+	<div class="sectionContent">
+	<p>The current intersection mechanism the Data Integrator uses is fairly simple. For gene
+	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
+	for the entire range of the item is computed. This means that introns and gaps in the item
+	are also considered when computing overlap. This is an improvement upon the Table Browser
+	which only computed overlap with exons. For example, let's consider the following situation
+	using the UCSC Genes and DNase Clusters tracks:
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorHgTracksExample.png">
+	<p>
+	If we were using the Data Integrator to find the DNase peaks that overlapped with the
+	gene in the UCSC Genes track, we would get all of the visible peaks in our output.
+
+	<p>Additionally, items are output regardless of the amount of overlap. This means that if
+	there is even a single base of overlap between two items, they are included in the output.
+	
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+<a name="OutputConfig"></a>
+<div class="section">
+<h1>Configuring Output</h1>
+	<div class="sectionContent">
+        <p>By default, the Data Integrator outputs all fields of all data sources
+        except for the <tt>bin</tt> column of database tables (a numerical index added by UCSC
+        to speed up database queries).
+	If you are only interested in the data from a limited number of fields, you can customize
+	the set of fields to include in the output. After
+	selecting and configuring your data sources as described in the <a href="#DataSources">
+	Selecting Data Sources</a> section, click <button type="button">Choose fields...</button>
+	to begin configuring your output. After clicking the button, a pop-up with all the fields
+	from your selected tables will appear:
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorFieldsConfig.png">
+	<p>Uncheck the box next to the field name to exclude it from the output;
+        check the box if you change your mind and want to include it.
+        You can quickly select or deselect all of the fields by clicking
+        <button type="button">Set all</button> or
+        <button type="button">Clear all</button> below the track name.
+        After you have finished selecting your
+	output fields, click <button type="button">Done</button> at the bottom of the dialog
+	box to finish configuring your output.
+	
+	<p>If you want to view your results in the web browser window, simply click
+	<button type="button">Get output</button>. Or, if you want to send your output to a file, 
+	check the box next to <b>Send output to file</b>. You can compress your output file using
+	gzip by checking the box next to <b>Compress with gzip (.gz)</b>.  Then click
+        <button type="button">Get output</button> to begin downloading your file.
+	</p>
+	
+	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
+	In the future, we intend to add an option to output all of the data values in that region
+	of overlap.
+
+	<p>
+        If a single item in the primary track has multiple matches in a secondary track,
+        then the Data Integrator outputs multiple rows.  Each row repeats the fields of
+        the primary track item, and then adds fields of the <em>nth</em> matching item
+        from each secondary track.
+        If there are multiple secondary tracks, then their items will appear together in
+        a row of output whether or not they overlap each other.  For example, note how items
+        overlap (or not) in the three tracks A, B and C in the image below:
+	<p><img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorHgTracksExample2.png">
+        <p>
+        Two items from track B (B1, B2) overlap the primary item (A).
+        Three items from track C (C1, C2, C3) overlap the primary item (A).
+        The Data Integrator prints 3 rows of output.  B1 and C1, although they
+        do not overlap, appear together in the first row of output.
+        B2 and C2 appear together in the second row of output.
+        The third row of output has empty fields for track B followed
+        by C3's fields.  This is the output (when A, B and C are 4-field
+	<a href="../../FAQ/FAQformat.html#format1">BED</a>
+        custom tracks; colors added for emphasis):
+        <p>
+          <pre class="code">
+#A.chrom	A.chromStart	A.chromEnd	A.name	<span style="color: #960000;">B.chrom	B.chromStart	B.chromEnd	B.name</span>	<span style="color: #000096;">C.chrom	C.chromStart	C.chromEnd	C.name</span>
+chr1	1200	1800	A	<span style="color: #960000;">chr1	1250	1350	B1</span>	<span style="color: #000096;">chr1	1425	1525	C1</span>
+chr1	1200	1800	A	<span style="color: #960000;">chr1	1550	1650	B2</span>	<span style="color: #000096;">chr1	1675	1775	C2</span>
+chr1	1200	1800	A					<span style="color: #000096;">chr1	1700	1800	C3</span>
+          </pre>
+
+	</div><!-- .sectionContent --> 
+</div><!-- .section -->
+
+</div><!-- .content -->
+</body>
+</html>

@@ -1606,7 +1606,7 @@ label Endometrium OC
 description Endometrium isolated from uterine lining
 karyotype normal
 lab Crawford
-orderUrl http://findadoc.unchealthcare.org/directory/profile.asp?dbase=main&setsize=10&last=young&pict_id=0002115
+orderUrl http://findadoc.unchealthcare.org/details/1864
 organism human
 protocol Crawford:EndometriumOC_Crawford_protocol.pdf
 sex F
@@ -2814,7 +2814,7 @@ type Cell Line
 description cardiac fibroblasts- adult atrial
 karyotype normal
 lineage mesoderm
-orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.htm
+orderUrl http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.html
 organism human
 protocol Stam:HCFaa_Stam_protocol.pdf
 sex F
@@ -3297,7 +3297,7 @@ description Mammary Epithelial Cells (placeholder, waiting on second lot/donor f
 karyotype normal
 lab Gingeras
 lineage ectoderm
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
+orderUrl http://www.promocell.com/products/human-primary-cells/
 organism human
 protocol Gingeras:HMEpC_Gingeras_protocol.pdf
 sex F
@@ -3316,7 +3316,7 @@ description Mammary Epithelial Cells
 karyotype normal
 lab Gingeras
 lineage ectoderm
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/epithelial-cells/human-mammary-epithelial-cells-hmepc/?sword_list%5B%5D=HMEpC
+orderUrl http://www.promocell.com/products/human-primary-cells/
 organism human
 protocol Gingeras:HMEpC6022801.3_Gingeras_protocol.pdf
 sex F
@@ -4256,7 +4256,7 @@ tag HSMMFSHD
 type Cell Line
 description primary myoblast from Facioscapulohumeral Muscular Dystrophy (FSHD) patients, muscle needle biopsies
 lab Crawford
-orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
+orderUrl http://www.genome.duke.edu/crawford-lab/crawford-lab
 organism human
 protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 sex U
@@ -4308,7 +4308,7 @@ type Cell Line
 childOf HSMM_FSHD
 description myotube from Facioscapulohumeral Muscular Dystrophy (FSHD) patient, muscle needle biopsies
 lab Crawford
-orderUrl http://www.genome.duke.edu/directory/faculty/crawford/
+orderUrl http://www.genome.duke.edu/crawford-lab/crawford-lab 
 organism human
 protocol Crawford:HSMM_HSMMtube_Crawford_protocol.pdf
 sex U
@@ -4412,7 +4412,7 @@ description Villous Mesenchymal Fibroblasts from villous tissue
 karyotype normal
 lab Gingeras
 lineage missing
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+orderUrl http://www.promocell.com/products/human-primary-cells/
 organism human
 protocol Gingeras:HVMF6100401.3_Gingeras_protocol.pdf
 sex F
@@ -4431,7 +4431,7 @@ description Villous Mesenchymal Fibroblasts from villous tissue
 karyotype normal
 lab Gingeras
 lineage missing
-orderUrl http://www.promocell.com/nc/products/human-primary-cells/fibroblasts/human-villous-mesenchymal-fibroblasts-hvmf/?sword_list%5B%5D=HVMF
+orderUrl http://www.promocell.com/products/human-primary-cells/
 organism human
 protocol Gingeras:HVMF6091203.3_Gingeras_protocol.pdf
 sex M

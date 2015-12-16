@@ -24,4 +24,4 @@ chr19_45417440_A/G	chr19:45417440	G	-	uc002paf.1	Transcript	upstream_gene_varian
 chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pac.1	Transcript	missense_variant	340	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=4/5
 chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pad.1	Transcript	missense_variant	278	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=3/4
 chr19_45419476_G/A	chr19:45419476	A	P02654	uc002pae.1	Transcript	missense_variant	178	88	30	V/I	Gtc/Atc	rs72654455	SIFT=T(0.840000);EXON=3/4
-chr19_45419476_G/A	chr19:45419476	A	-	uc002paf.1	Transcript	non_coding_exon_variant	43	-	-	-	-	rs72654455	EXON=1/2
+chr19_45419476_G/A	chr19:45419476	A	-	uc002paf.1	Transcript	non_coding_transcript_exon_variant	43	-	-	-	-	rs72654455	EXON=1/2

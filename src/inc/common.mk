@@ -219,14 +219,14 @@ HG_INC+=${PNGINCL}
 
 # autodetect UCSC installation of htslib:
 ifeq (${HTSDIR},)
-    HTSDIR = /hive/groups/browser/htslib
+    HTSDIR = /hive/data/outside/htslib/${MACHTYPE}
     ifneq ($(wildcard ${HTSDIR}),)
         ifeq (${USE_HTS},)
             USE_HTS=1
             USE_TABIX=1
             USE_SAMTABIX=1
-            SAMTABIXDIR = /hive/groups/browser/htslib
-            SAMTABIXLIB=/hive/groups/browser/htslib/libhts.a
+            SAMTABIXDIR = ${HTSDIR}
+            SAMTABIXLIB=${HTSDIR}/libhts.a
             HG_DEFS+=-DUSE_HTS
         endif
     endif
