@@ -341,7 +341,7 @@ struct annoStreamer *dbNsfpSource = snpSource->next->next;
 struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "some more variants",
                                                 gpVarSource, "UCSC Genes of course",
                                                 snpSource, "now snp137.", assembly);
-annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
+annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "", FALSE);
 struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
 annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);
 annoGratorQueryExecute(query);

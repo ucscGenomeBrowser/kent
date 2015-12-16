@@ -752,6 +752,8 @@ var HgIntegratorModel = ImModel.extend({
                 }
                 _.set(querySpec, ['dataSources', dsIx, 'config', 'relatedTables'],
                       relatedTables);
+                // n/a for missing values, to match hgTables
+                _.set(querySpec, ['dataSources', dsIx, 'config', 'naForMissing'], true);
             }
             if (tfChoicesMain) {
                 _.set(querySpec, ['outFileOptions', 'tableFields', track],

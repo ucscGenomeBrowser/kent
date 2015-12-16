@@ -6,75 +6,169 @@
 # The database of non-synonymous functional predictions (dbNSFP)
 # contains precomputed scores from a wide variety of tools on all
 # non-synon variants of all genomic positions in the CDS of Gencode
-# transcripts.  Pick out some interesting subsets of its 52 columns
+# transcripts.  Pick out some interesting subsets of its many columns
 # and translate into bigBed and bigWig files that can be joined with
 # users' variants by the Variant Annotation Integrator (#6152).
 
 use warnings;
 use strict;
 
-# As of dbNSFP 2.0 (Feb. 2013), the files have 52 tab-separated columns
+# As of dbNSFP 3.1a (Nov. 2015), the files had 143 tab-separated columns
 # described by a #header line with a label for each column.
+# (Back in dbNSFP 2.0 (Feb. 2013), the files had a mere 52 columns.)
 # Expect to find these input header column labels, in this order;
 # also define corresponding symbolic names for internal use:
 my @columnNames = ( [ "chr",			"chrom" ],
-		    [ "pos(1-coor)",		"hg19Start" ],
+		    [ "pos(1-based)",		"hg38Pos" ],
 		    [ "ref",			"refAl" ],
 		    [ "alt",			"altAl" ],
 		    [ "aaref",			"refAa" ],
 		    [ "aaalt",			"altAa" ],
-		    [ "hg18_pos(1-coor)",	"hg18Start" ],
+		    [ "rs_dbSNP144",		"" ],
+		    [ "hg19_chr",		"hg19Chrom" ],
+		    [ "hg19_pos(1-based)",	"hg19Pos" ],
+		    [ "hg18_chr",		"hg18Chrom" ],
+		    [ "hg18_pos(1-based)",	"hg18Pos" ],
 		    [ "genename",		"geneName" ],
-		    [ "Uniprot_acc",		"uniProtAcc" ],
-		    [ "Uniprot_id",		"uniProtId" ],
-		    [ "Uniprot_aapos",		"uniProtAaPos" ],
-		    [ "Interpro_domain",	"interProDomain" ],
 		    [ "cds_strand",		"cdsStrand" ],
 		    [ "refcodon",		"refCodon" ],
-		    [ "SLR_test_statistic ",	"slrTestStat" ],
 		    [ "codonpos",		"codonPos" ],
-		    [ "fold-degenerate",	"foldDegen" ],
-		    [ "Ancestral_allele",	"ancestralAl" ],
+		    [ "codon_degeneracy",	"" ],
+		    [ "Ancestral_allele",	"" ],
+		    [ "AltaiNeandertal",	"" ],
+		    [ "Denisova",		"" ],
 		    [ "Ensembl_geneid",		"ensGeneId" ],
 		    [ "Ensembl_transcriptid",	"ensTxId" ],
+		    [ "Ensembl_proteinid",	"" ],
 		    [ "aapos",			"aaPos" ],
-		    [ "SIFT_score",		"siftScore" ],
-		    [ "Polyphen2_HDIV_score",	"pp2HDivScore" ],
-		    [ "Polyphen2_HDIV_pred",	"pp2HDivPred" ],
-		    [ "Polyphen2_HVAR_score",	"pp2HVarScore" ],
-		    [ "Polyphen2_HVAR_pred",	"pp2HVarPred" ],
-		    [ "LRT_score",		"lrtScore" ],
-		    [ "LRT_pred",		"lrtPred" ],
-		    [ "MutationTaster_score",	"mtScore" ],
-		    [ "MutationTaster_pred",	"mtPred" ],
-		    [ "MutationAssessor_score",	"maScore" ],
-		    [ "MutationAssessor_pred",	"maPred" ],
-		    [ "FATHMM_score",		"fathmmScore" ],
-		    [ "GERP++_NR",		"gerpNr" ],
-		    [ "GERP++_RS",		"gerpRs" ],
-		    [ "phyloP",			"phyloP" ],
-		    [ "29way_pi",		"siPhy29wayPi" ],
-		    [ "29way_logOdds",		"siPhy29wayLogOdds" ],
-		    [ "LRT_Omega",		"lrtOmega" ],
-		    [ "UniSNP_ids",		"uniSnpIds" ],
-		    [ "1000Gp1_AC",		"tgpAc" ],
-		    [ "1000Gp1_AF",		"tgpAf" ],
-		    [ "1000Gp1_AFR_AC",		"tgpAfrAc" ],
-		    [ "1000Gp1_AFR_AF",		"tgpAfrAf" ],
-		    [ "1000Gp1_EUR_AC",		"tgpEurAc" ],
-		    [ "1000Gp1_EUR_AF",		"tgpEurAf" ],
-		    [ "1000Gp1_AMR_AC",		"tgpAmrAc" ],
-		    [ "1000Gp1_AMR_AF",		"tgpAmrAf" ],
-		    [ "1000Gp1_ASN_AC",		"tgpAsnAc" ],
-		    [ "1000Gp1_ASN_AF",		"tgpAsnAf" ],
-		    [ "ESP6500_AA_AF",		"esp6500AaAf" ],
-		    [ "ESP6500_EA_AF",		"esp6500EaAf" ],
+		    [ "SIFT_score",			"siftScore" ],
+		    [ "SIFT_converted_rankscore",	"" ],
+		    [ "SIFT_pred",			"" ],
+		    [ "Uniprot_acc_Polyphen2",		"uniProtAcc" ],
+		    [ "Uniprot_id_Polyphen2",		"uniProtId" ],
+		    [ "Uniprot_aapos_Polyphen2",	"uniProtAaPos" ],
+		    [ "Polyphen2_HDIV_score",		"pp2HDivScore" ],
+		    [ "Polyphen2_HDIV_rankscore",	"" ],
+		    [ "Polyphen2_HDIV_pred",		"pp2HDivPred" ],
+		    [ "Polyphen2_HVAR_score",		"pp2HVarScore" ],
+		    [ "Polyphen2_HVAR_rankscore",	"" ],
+		    [ "Polyphen2_HVAR_pred",		"pp2HVarPred" ],
+		    [ "LRT_score",			"lrtScore" ],
+		    [ "LRT_converted_rankscore",	"" ],
+		    [ "LRT_pred",			"lrtPred" ],
+		    [ "LRT_Omega",			"lrtOmega" ],
+		    [ "MutationTaster_score",			"mtScore" ],
+		    [ "MutationTaster_converted_rankscore",	"" ],
+		    [ "MutationTaster_pred",			"mtPred" ],
+		    [ "MutationTaster_model",			"" ],
+		    [ "MutationTaster_AAE",			"" ],
+		    [ "Uniprot_id_MutationAssessor",		"" ],
+		    [ "Uniprot_variant_MutationAssessor",	"" ],
+		    [ "MutationAssessor_score",		"maScore" ],
+		    [ "MutationAssessor_rankscore",	"" ],
+		    [ "MutationAssessor_pred",		"maPred" ],
+		    [ "FATHMM_score",			"" ],
+		    [ "FATHMM_converted_rankscore",	"" ],
+		    [ "FATHMM_pred",			"" ],
+		    [ "PROVEAN_score",			"" ],
+		    [ "PROVEAN_converted_rankscore",	"" ],
+		    [ "PROVEAN_pred",			"" ],
+		    [ "Transcript_id_VEST3",		"vestNm" ],
+		    [ "Transcript_var_VEST3",		"vestVar" ],
+		    [ "VEST3_score",			"vestScore" ],
+		    [ "VEST3_rankscore",		"" ],
+		    [ "CADD_raw",			"" ],
+		    [ "CADD_raw_rankscore",		"" ],
+		    [ "CADD_phred",			"" ],
+		    [ "DANN_score",			"" ],
+		    [ "DANN_rankscore",			"" ],
+		    [ "fathmm-MKL_coding_score",	"" ],
+		    [ "fathmm-MKL_coding_rankscore",	"" ],
+		    [ "fathmm-MKL_coding_pred",		"" ],
+		    [ "fathmm-MKL_coding_group",	"" ],
+		    [ "MetaSVM_score",			"" ],
+		    [ "MetaSVM_rankscore",		"" ],
+		    [ "MetaSVM_pred",			"" ],
+		    [ "MetaLR_score",			"" ],
+		    [ "MetaLR_rankscore",		"" ],
+		    [ "MetaLR_pred",			"" ],
+		    [ "Reliability_index",		"" ],
+		    [ "integrated_fitCons_score",	"" ],
+		    [ "integrated_fitCons_rankscore",	"" ],
+		    [ "integrated_confidence_value",	"" ],
+		    [ "GM12878_fitCons_score",		"" ],
+		    [ "GM12878_fitCons_rankscore",	"" ],
+		    [ "GM12878_confidence_value",	"" ],
+		    [ "H1-hESC_fitCons_score",		"" ],
+		    [ "H1-hESC_fitCons_rankscore",	"" ],
+		    [ "H1-hESC_confidence_value",	"" ],
+		    [ "HUVEC_fitCons_score",		"" ],
+		    [ "HUVEC_fitCons_rankscore",	"" ],
+		    [ "HUVEC_confidence_value",		"" ],
+		    [ "GERP++_NR",			"gerpNr" ],
+		    [ "GERP++_RS",			"gerpRs" ],
+		    [ "GERP++_RS_rankscore",		"" ],
+		    [ "phyloP7way_vertebrate",			"" ],
+		    [ "phyloP7way_vertebrate_rankscore",	"" ],
+		    [ "phyloP20way_mammalian",			"" ],
+		    [ "phyloP20way_mammalian_rankscore",	"" ],
+		    [ "phastCons7way_vertebrate",		"" ],
+		    [ "phastCons7way_vertebrate_rankscore",	"" ],
+		    [ "phastCons20way_mammalian",		"" ],
+		    [ "phastCons20way_mammalian_rankscore",	"" ],
+		    [ "SiPhy_29way_pi",			"" ],
+		    [ "SiPhy_29way_logOdds",		"" ],
+		    [ "SiPhy_29way_logOdds_rankscore",	"" ],
+		    [ "1000Gp3_AC",			"" ],
+		    [ "1000Gp3_AF",			"" ],
+		    [ "1000Gp3_AFR_AC",			"" ],
+		    [ "1000Gp3_AFR_AF",			"" ],
+		    [ "1000Gp3_EUR_AC",			"" ],
+		    [ "1000Gp3_EUR_AF",			"" ],
+		    [ "1000Gp3_AMR_AC",			"" ],
+		    [ "1000Gp3_AMR_AF",			"" ],
+		    [ "1000Gp3_EAS_AC",			"" ],
+		    [ "1000Gp3_EAS_AF",			"" ],
+		    [ "1000Gp3_SAS_AC",			"" ],
+		    [ "1000Gp3_SAS_AF",			"" ],
+		    [ "TWINSUK_AC",			"" ],
+		    [ "TWINSUK_AF",			"" ],
+		    [ "ALSPAC_AC",			"" ],
+		    [ "ALSPAC_AF",			"" ],
+		    [ "ESP6500_AA_AC",			"" ],
+		    [ "ESP6500_AA_AF",			"" ],
+		    [ "ESP6500_EA_AC",			"" ],
+		    [ "ESP6500_EA_AF",			"" ],
+		    [ "ExAC_AC",			"" ],
+		    [ "ExAC_AF",			"" ],
+		    [ "ExAC_Adj_AC",			"" ],
+		    [ "ExAC_Adj_AF",			"" ],
+		    [ "ExAC_AFR_AC",			"" ],
+		    [ "ExAC_AFR_AF",			"" ],
+		    [ "ExAC_AMR_AC",			"" ],
+		    [ "ExAC_AMR_AF",			"" ],
+		    [ "ExAC_EAS_AC",			"" ],
+		    [ "ExAC_EAS_AF",			"" ],
+		    [ "ExAC_FIN_AC",			"" ],
+		    [ "ExAC_FIN_AF",			"" ],
+		    [ "ExAC_NFE_AC",			"" ],
+		    [ "ExAC_NFE_AF",			"" ],
+		    [ "ExAC_SAS_AC",			"" ],
+		    [ "ExAC_SAS_AF",			"" ],
+		    [ "clinvar_rs",			"" ],
+		    [ "clinvar_clnsig",			"" ],
+		    [ "clinvar_trait",			"" ],
+		    [ "Interpro_domain",		"interProDomain" ],
+		    [ "GTEx_V6_gene",			"" ],
+		    [ "GTEx_V6_tissue",			"" ],
 		  );
 
 # Define subs to use in lieu of string constants for symbolic names:
 # ('use constant' doesn't work with 'use strict';
 #  see http://stackoverflow.com/questions/3057027/using-constants-in-perl)
-map { my $symbol = $_->[1]; eval "sub $symbol () { $symbol; }" } @columnNames;
+eval join(" ",
+          map { my $symbol = $_->[1]; $symbol ? "sub $symbol () { $symbol; } " : "" }
+              @columnNames);
 
 # Finally, the interesting part!  Which columns will we tease out into independent BED files?
 my %subsetColumns = ( Sift             => [ refAl(), ensTxId(), altAl(), siftScore() ],
@@ -99,6 +193,10 @@ my %subsetColumns = ( Sift             => [ refAl(), ensTxId(), altAl(), siftSco
 
 		      MutationAssessor => [ refAl(), ensTxId(), altAl(), maScore(), maPred() ],
 
+                      # New in v3: VEST, from Rachel Karchin's lab at JHU
+                      Vest             => [ refAl(), ensTxId(), vestNm(), altAl(),
+                                            vestVar(), vestScore() ],
+
 		      # These subsets are related to position or transcript, not alleles:
 		      GerpNr           => [ gerpNr() ],
 
@@ -109,10 +207,6 @@ my %subsetColumns = ( Sift             => [ refAl(), ensTxId(), altAl(), siftSco
 		      # Note: these were taken from PolyPhen2! Not directly related to ensTxIds.
 		      UniProt          => [ uniProtAcc(), uniProtId() ],
 
-		      # These two sound great but are extremely sparse as of v2.0...
-		      # UniSnp           => [ uniSnpIds() ],
-		      #
-		      # Tgp              => [ tgpAf(), tgpAfrAf(), tgpEurAf(), tgpAmrAf(), tgpAsnAf() ],
 		    );
 
 
@@ -174,7 +268,7 @@ sub skipToAlt($) {
 # When a subset list starts with refAl and altAl, which are never placeholders,
 # we want to look for non-placeholder values *after* those.
   my ($ixList) = @_;
-  if ($ixList->[0] != $refAlIx) {
+ if ($ixList->[0] != $refAlIx) {
     return $ixList;
   } else {
     my $i = 1;
@@ -243,11 +337,21 @@ sub collateEnsTx($$$) {
 	    $rowsForTx[$i+1]->[$aaPosIx] !~ /^-1(;-1)*$/) {
 	  next;
 	}
-	push @newRows, $rowsForTx[$i];
+        if ($rowsForTx[$i]->[$altAlIx] eq $rowsForTx[$i]->[$refAlIx]) {
+          # Sometimes there's a row with altAl the same as refAl and mostly empty columns;
+          # drop those rows.
+          print STDERR "refAl == altAl:\n" . join("\t", @{$rowsForTx[$i]}) . "\n";
+        } else {
+          push @newRows, $rowsForTx[$i];
+        }
       }
       $rowCount = @newRows;
       if ($rowCount > 3) {
-	die "Failed to resolve rows to 3 {$chr, $start, altAl, $ensTxId}.";
+	print STDERR "Failed to resolve rows to 3 {$chr, $start, altAl, $ensTxId}.\n";
+        foreach my $r (@newRows) {
+          print STDERR join("\t", @{$r}) . "\n";
+        }
+        die;
       }
       $ensTxRows{$ensTxId} = \@newRows;
     }
@@ -273,14 +377,8 @@ sub printIfNonEmpty($$$) {
   my ($chr, $start, $rows) = @_;
   my @bed3Vals = ($chr, $start, $start+1);
   my %ensTxRows = collateEnsTx($chr, $start, $rows);
-  my $ensTxIdCount = scalar(keys %ensTxRows);
   foreach my $ensTxId (sort keys %ensTxRows) {
     my @rowsForTx = @{$ensTxRows{$ensTxId}};
-    # Most locations have only one Ensembl transcript set; to cut file size,
-    # abbreviate ensTxId to '.' when there's only one.
-    if ($ensTxIdCount == 1) {
-      $rowsForTx[0]->[$ensTxIdIx] = '.';
-    }
     # Select columns and print output for each subset:
     for (my $subset = 0;  $subset < $subsetCount;  $subset++) {
       my $fOut = $handles[$subset];
@@ -343,7 +441,7 @@ sub printIfNonEmpty($$$) {
 
 my $expectedCols = @columnNames;
 
-my ($chromIx, $hg19StartIx) = ($symbolIx{chrom()}, $symbolIx{hg19Start()});
+my ($chromIx, $hg38PosIx) = ($symbolIx{chrom()}, $symbolIx{hg38Pos()});
 my ($prevChr, $prevStart);
 my @prevRows = ();
 
@@ -358,8 +456,8 @@ while (<>) {
     die "Wrong number of columns (expected $expectedCols, got " . scalar(@w);
   }
 
-  # Positions are all given as {chr, start}; end is always start+1.
-  my ($chr, $start) = getVals(\@w, [ $chromIx, $hg19StartIx ]);
+  # Positions are all given as {chr, start}; size is always 1 base.
+  my ($chr, $start) = getVals(\@w, [ $chromIx, $hg38PosIx ]);
   $chr = "chr" . $chr unless ($chr =~ /^chr/);
   $start--;
 
