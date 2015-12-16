@@ -78,3 +78,30 @@ visibility pack
 
 track intronEst override
 visibility hide
+
+track ncRNAs
+shortLabel ncRNAs
+longLabel ncRNAs
+group genes
+visibility pack
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMACsb310
+
+track microGenes
+shortLabel MIC genes
+longLabel MIC-only genes from Landweber Lab 2014aug28 Cell paper
+group genes
+visibility pack
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMICjrb310
+
+track mergeJunctions
+shortLabel TopHat Junctions
+longLabel merge _all samples mapalgo4_pe7777_ncRNAfilt_oxytri2Ref_tophat tophat junctions
+group genes
+visibility pack
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMACsb310
