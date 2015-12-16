@@ -100,8 +100,15 @@ chromosomes chrMICjrb310
 track mergeJunctions
 shortLabel TopHat Junctions
 longLabel merge _all samples mapalgo4_pe7777_ncRNAfilt_oxytri2Ref_tophat tophat junctions
-group genes
+group regulation
 visibility pack
 type bed 12
 colorByStrand 0,0,128 0,128,0
 chromosomes chrMACsb310
+
+track pileUps200
+shortLabel Over 200
+longLabel locations of self chains with more than 200 pileUps
+group varRep
+visibility dense
+type bed 3
