@@ -1,0 +1,604 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the oxyTri2
+# Oxytricha trifallax - ciliate
+
+#############################################################################
+# fetch sequence from refseq (DONE - 2015-12-08 - Hiram)
+    mkdir -p /hive/data/genomes/oxyTri2/genbank
+    cd /hive/data/genomes/oxyTri2/genbank
+
+for D in GCA_000711775.1_Oxytricha_MIC_v2.0 GCA_001297925.1_ASM129792v1 \
+   GCA_000295675.1_oxytricha_asm_v1.1
+do
+  rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/protozoa/Oxytricha_trifallax/all_assembly_versions/${D}/ ./${D}/
+done
+
+    mkdir chrM
+for mitoAcc in JN383842 JN383843
+do
+  wget -O chrM/${mitoAcc}.fa \
+ "http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=$mitoAcc"
+done
+
+    # measure the sequences:
+for F in */*genomic.fna.gz
+do
+ echo "==== $F ===="
+ faSize $F
+ echo "============="
+done
+
+==== GCA_000295675.1_oxytricha_asm_v1.1/GCA_000295675.1_oxytricha_asm_v1.1_genomic.fna.gz ====
+67158112 bases (1383 N's 67156729 real 67156729 upper 0 lower) in 22363 sequences in 1 files
+Total size: mean 3003.1 sd 2386.5 min 200 (AMCR01020018.1) max 66022 (AMCR01009294.1) median 2420
+%0.00 masked total, %0.00 masked real
+=============
+==== GCA_000711775.1_Oxytricha_MIC_v2.0/GCA_000711775.1_Oxytricha_MIC_v2.0_genomic.fna.gz ====
+496291018 bases (0 N's 496291018 real 253388527 upper 242902491 lower) in 25720 sequences in 1 files
+Total size: mean 19295.9 sd 23164.0 min 1505 (ARYC01024697.1) max 380827 (ARYC01000045.1) median 12381
+%48.94 masked total, %48.94 masked real
+=============
+==== GCA_001297925.1_ASM129792v1/GCA_001297925.1_ASM129792v1_genomic.fna.gz ====
+57457034 bases (0 N's 57457034 real 48353099 upper 9103935 lower) in 22458 sequences in 1 files
+Total size: mean 2558.4 sd 2034.5 min 201 (LAEC01022424.1) max 28998 (LAEC01020391.1) median 2072
+%15.84 masked total, %15.84 masked real
+=============
+
+    faCount chrM/*.fa
+#seq    len     A       C       G       T       N       cpg
+gi|359817564|gb|JN383842.1|     5280    1883    613     1092    1692    0      112
+gi|359817572|gb|JN383843.1|     69800   27602   7995    8639    25291   273    1626
+
+
+    faSize chrM/*.fa */*genomic.fna.gz
+620981244 bases (1656 N's 620979588 real 368973162 upper 252006426 lower) in 70543 sequences in 5 files
+Total size: mean 8802.9 sd 16187.3 min 200 (AMCR01020018.1) max 380827 (ARYC01000045.1) median 3577
+N count: mean 0.0 sd 1.1
+U count: mean 5230.5 sd 9150.9
+L count: mean 3572.4 sd 7821.9
+%40.58 masked total, %40.58 masked real
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-12-10 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/ucsc
+    cd /hive/data/genomes/oxyTri2/ucsc
+    # going to construct artificial AGP files from the faCount measurements
+    # of the sequences
+
+    printf "%s\n" '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+  printf STDERR "usage: faCountToAgp.pl chrName file.faCount.txt > chrName.file.agp\n";
+  exit 255;
+}
+
+my $chrName = shift;
+my $faCountFile = shift;
+my $ix = 1;
+my $chrStart = 1;
+my $chrEnd = 1;
+my $gapSize = 50;
+open (FH, "<$faCountFile") or die "can not read $faCountFile";
+while (my $line = <FH>) {
+  next if ($line =~ m/^#/);
+  next if ($line =~ m/^total/);
+  chomp $line;
+  my ($contigName, $size, $rest) = split('\s+', $line, 3);
+#  printf STDERR "# %s\t%d\n", $contigName, $size;
+  if ($ix > 1) {
+    $chrEnd = $chrStart + $gapSize - 1;
+    printf "%s\t%d\t%d\t%d\tN\t%d\tcontig\tno\tna\n",
+       $chrName, $chrStart, $chrEnd, $ix++, $gapSize;
+    $chrStart = $chrEnd + 1;
+  }
+  $chrEnd = $chrStart + $size - 1;
+  printf "%s\t%d\t%d\t%d\tF\t%s\t1\t%d\t+\n",
+    $chrName, $chrStart, $chrEnd, $ix++, $contigName, $size;
+  $chrStart = $chrEnd + 1;
+}
+close (FH);
+' > faCountToAgp.pl
+    chmod +x faCountToAgp.pl
+
+    # Al Zahler's existing chr1 MAC sequence, constructed in the same order
+    # strain SB310
+    zcat ../genbank/GCA_000295675.1_oxytricha_asm_v1.1/GCA_000295675.1_oxytricha_asm_v1.1_genomic.fna.gz \
+      | sed -e 's/^>.*strain SB310 />/; s/ macronuclear.*//;' \
+         | gzip -c > chrMACsb310.contigs.fa.gz
+    faCount chrMACsb310.contigs.fa.gz > chrMACsb310.contigs.faCount.txt
+    ./faCountToAgp.pl chrMACsb310 chrMACsb310.contigs.faCount.txt \
+        > chrMACsb310.contigs.agp
+
+    # MAC sequence strain JRB510
+    zcat ../genbank/GCA_001297925.1_ASM129792v1/GCA_001297925.1_ASM129792v1_genomic.fna.gz \
+       | sed -e 's/.1 Oxytricha trifallax.*/v1/;' | gzip -c \
+           > chrMACjrb510.contigs.fa.gz
+    faCount chrMACjrb510.contigs.fa.gz | sort -k2nr \
+       > length.sorted.ASM129792v1.faCount.txt
+    ./faCountToAgp.pl chrMACjrb510 length.sorted.ASM129792v1.faCount.txt \
+       > chrMACjrb510.contigs.agp
+
+    # the MIC sequence strain JRB310, equivalent to Al Zahler's chr2:
+    zcat ../genbank/GCA_000711775.1_Oxytricha_MIC_v2.0/*.fna.gz \
+       | sed -e 's/.1 Oxytricha trifa.*//' | gzip -c \
+         > chrMICjrb310.contigs.fa.gz
+    faCount chrMICjrb310.contigs.fa.gz > chrMICjrb310.contigs.faCount.txt
+    ./faCountToAgp.pl chrMICjrb310 chrMICjrb310.contigs.faCount.txt \
+       > chrMICjrb310.contigs.agp
+
+    # need to construct an artifical AGP file for the chrM sequence to
+    #  annotate the gaps
+    echo ">JN383843.1" > JN383843.1.fa
+    grep -v "^>" ../genbank/chrM/JN383843.fa >> JN383843.1.fa
+    sed -e 's/JN383843.1/chrM/;' JN383843.1.fa > chrM.fa
+    hgFakeAgp -minContigGap=1 JN383843.1.fa stdout \
+       | sed -e 's/^JN383843.1/chrM/;' > JN383843.1.agp
+
+    # and then an equivalent fa.gz file with the contig sequences
+    faToTwoBit chrM.fa chrM.2bit
+    grep -v contig JN383843.1.agp | while read L
+do
+  start=`echo $L | awk '{printf "%d", $2-1}'`
+  end=`echo $L | awk '{printf "%d", $3}'`
+  name=`echo $L | awk '{printf "%s", $6}'`
+  echo chrM:$start-$end $name 1>&2
+  twoBitToFa chrM.2bit:chrM:$start-$end stdout | sed -e "s/^>.*/>$name/;"
+done | faToTwoBit stdin JN383843.1.2bit
+    twoBitToFa JN383843.1.2bit stdout | gzip -c > JN383843.1.fa.gz
+
+    echo ">chrmO" > chrmO.fa
+    grep -v "^>" ../genbank/chrM/JN383842.fa >> chrmO.fa
+    export mSize=`faCount chrmO.fa | grep total | awk '{print $2}'`
+    printf "chrmO\t1\t%d\t1\tF\t%s\t1\t%d\t+\n" $mSize "JN383842.1" $mSize \
+       > JN383842.1.agp
+
+    # verify the fa.gz and agp files are compatible
+    # this is different than usual since all of the fa.gz files are the
+    # 'contig' sequences that are going to make up the 'chrom' sequences
+    # as defined by the agp files
+    cat chrMACjrb510.contigs.agp chrMACsb310.contigs.agp \
+      chrMICjrb310.contigs.agp JN383843.1.agp JN383842.1.agp > agp.test
+
+    zcat JN383842.1.fa.gz JN383843.1.contigs.fa.gz chrMACjrb510.contigs.fa.gz \
+        chrMACsb310.contigs.fa.gz chrMICjrb310.contigs.fa.gz \
+          | agpToFa -simpleMultiMixed agp.test all stdout stdin \
+             | faToTwoBit stdin test.2bit
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # fetch photo:
+    mkdir /hive/data/genomes/oxyTri2/photo
+    cd /hive/data/genomes/oxyTri2/photo
+    # manually download the photo from the WEB page:
+    https://www.genome.gov/dmd/img.cfm?node=Photos/Microorganisms&id=79122
+    identify NHGRI-79122.jpg 
+    # NHGRI-79122.jpg JPEG 4267x3200 4267x3200+0+0 8-bit DirectClass 5.909mb 
+
+    convert -quality 80 -geometry "400x300" NHGRI-79122.jpg \
+       Oxytricha_trifallax.jpg
+
+    # check that into the source tree hg/htdocs/images/
+    cp Oxytricha_trifallax.jpg \
+      /cluster/home/ceisenhart/kent/src/hg/htdocs/images/
+    cd /cluster/home/ceisenhart/kent/src/hg/htdocs/images/
+    git add Oxytricha_trifallax.jpg
+    git commit -m "photo from NHGRI 79122 public rights refs no redmine"
+
+    # and copy over to /usr/local/apache/htdocs/images/Oxytricha_trifallax.jpg
+
+#############################################################################
+#  Initial database build (DONE - 2015-12-10 - Hiram)
+
+    cd /hive/data/genomes/oxyTri2
+    printf "%s" '# Config parameters for makeGenomeDb.pl:
+db oxyTri2
+clade ciliate
+genomeCladePriority 1200
+scientificName Oxytricha trifallax
+commonName Oxytricha trifallax
+assemblyDate Sep. 2015
+assemblyLabel Washington University Genome Sequencing Center
+assemblyShortLabel WashU ASM129792v1
+orderKey 40100
+# mito sequence included in the UCSC files
+mitoAcc none
+fastaFiles /hive/data/genomes/oxyTri2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/oxyTri2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ciliate
+photoCreditURL https://www.genome.gov/dmd/img.cfm?node=Photos/Microorganisms&id=79122
+photoCreditName NHGRI 79122
+ncbiGenomeId 13412
+ncbiAssemblyId 2342058
+ncbiAssemblyName ASM129792v1
+ncbiBioProject 74629
+genBankAccessionID GCA_001297925.1
+taxId 1172189
+' > oxyTri2.config.ra
+
+    # verify sequence and AGP are OK:  (forgot to include the -stop=agp)
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         oxyTri2.config.ra) > agp.log 2>&1
+    # *** All done!  (through the 'agp' step)
+    # about 6 minutes
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+    # need to add a new clade category:
+    hgsql hgcentraltest \
+-e 'INSERT INTO clade (name, label, priority) VALUES ("ciliate", "Ciliates", 1200);'
+
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (TBD - 2015-12-10 - Chris)
+    mkdir /hive/data/genomes/oxyTri2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/oxyTri2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/oxyTri2/oxyTri2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku oxyTri2) > do.log 2>&1
+
+    cat fb.oxyTri2.cpgIslandExtUnmasked.txt
+    #36538307 bases of 1311306859 (2.786%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (TBD - 2015-12-10 - Chris)
+    mkdir /hive/data/genomes/oxyTri2/bed/cytoBand
+    cd /hive/data/genomes/oxyTri2/bed/cytoBand
+    makeCytoBandIdeo.csh oxyTri2
+
+#########################################################################
+# ucscToINSDC table/track (TBD - 2015-03-20 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/bed/ucscToINSDC
+    cd /hive/data/genomes/oxyTri2/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+       ../../genbank/GCA_*assembly_structure/Primary_Assembly
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # verify all names are coming through, should be same line count:
+    wc -l *
+    # 25187 name.coordinate.tab
+    # 25187 ucscToINSDC.bed
+    # 25187 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab oxyTri2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords oxyTri2
+    # should cover %100 entirely:
+    featureBits -countGaps oxyTri2 ucscToINSDC
+    # 2053849526 bases of 2053849526 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2015-03-20 - Hiram)
+    hgsql -N -e "select frag from gold;" oxyTri2 | sort | head -1
+JYOU01000001.1
+
+    hgsql -N -e "select frag from gold;" oxyTri2 | sort | tail -2
+JYOU01147511.1
+JYOU01147512.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" oxyTri2 | wc -l
+    # 147512
+
+    hgsql -N -e "select frag from gold;" oxyTri2 \
+       | egrep -e 'JYOU01[0-9]+(\.1)?' | wc -l
+    # 147512
+
+    hgsql -N -e "select frag from gold;" oxyTri2 \
+       | egrep -v -e 'JYOU01[0-9]+(\.1)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/tarsier/oxyTri2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex JYOU01[0-9]+(\.1)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
+# running repeat masker (DONE - 2015-12-10 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/bed/repeatMasker
+    cd /hive/data/genomes/oxyTri2/bed/repeatMasker
+    time (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku oxyTri2) > do.log 2>&1
+    # real    26m32.442s
+
+    cat faSize.rmsk.txt
+#    624508144 bases (3528556 N's 620979588 real 604835905 upper 16143683 lower)
+#      in 5 sequences in 1 files
+#    Total size: mean 124901628.8 sd 210756971.1 min 5280 (chrmO)
+#      max 497576968 (chrMICjrb310) median 58579884
+#    %2.59 masked total, %2.60 masked real
+
+    egrep -i "versi|relea" do.log
+#    RepeatMasker version open-4.0.5
+#    grep version of RepeatMasker$ /scratch/data/RepeatMasker/RepeatMasker
+#    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+#    grep RELEASE /scratch/data/RepeatMasker/Libraries/RepeatMaskerLib.embl
+#    CC   RELEASE 20140131;  
+
+    time featureBits -countGaps oxyTri2 rmsk
+#    16143693 bases of 624508144 (2.585%) in intersection
+#    real    0m1.832s
+
+##########################################################################
+# running simple repeat (DONE - 2015-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/oxyTri2/bed/simpleRepeat
+    cd /hive/data/genomes/oxyTri2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        oxyTri2) > do.log 2>&1
+    # real    47m51.931s
+
+    cat fb.simpleRepeat
+    # 46901593 bases of 620980971 (7.553%) in intersection
+
+    # using the Window Masker result:
+    cd /hive/data/genomes/oxyTri2
+    twoBitMask bed/windowMasker/oxyTri2.cleanWMSdust.2bit \
+       -add bed/simpleRepeat/trfMask.bed  oxyTri2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa oxyTri2.2bit stdout | faSize stdin > faSize.oxyTri2.2bit.txt
+    cat faSize.oxyTri2.2bit.txt
+#   624508144 bases (3528556 N's 620979588 real 339311116 upper 281668472 lower)
+#      in 5 sequences in 1 files
+#   Total size: mean 124901628.8 sd 210756971.1 min 5280 (chrmO)
+#     max 497576968 (chrMICjrb310) median 58579884
+#   %45.10 masked total, %45.36 masked real
+
+
+    rm /gbdb/oxyTri2/oxyTri2.2bit
+    ln -s `pwd`/oxyTri2.2bit /gbdb/oxyTri2/oxyTri2.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-12-10 - Hiram)
+     ssh hgwdev
+     mkdir /cluster/data/oxyTri2/bed/microsat
+     cd /cluster/data/oxyTri2/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed oxyTri2 microsat microsat.bed
+    #	Read 755 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-12-10 - Hiram)
+
+    mkdir /hive/data/genomes/oxyTri2/bed/windowMasker
+    cd /hive/data/genomes/oxyTri2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev oxyTri2) > do.log 2>&1
+    # real    23m33.281s
+
+    # Masking statistics
+    cat faSize.oxyTri2.cleanWMSdust.txt
+#    624508144 bases (3528556 N's 620979588 real 339382064 upper
+#      281597524 lower) in 5 sequences in 1 files
+#    Total size: mean 124901628.8 sd 210756971.1 min 5280 (chrmO)
+#      max 497576968 (chrMICjrb310) median 58579884
+#    %45.09 masked total, %45.35 masked real
+
+    cat fb.oxyTri2.rmsk.windowmaskerSdust.txt
+    #   14493217 bases of 624508144 (2.321%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-12-10 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/bed/cpgIslands
+    cd /hive/data/genomes/oxyTri2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku oxyTri2) > do.log 2>&1 &
+    # real    2m2.556s
+
+    cat fb.oxyTri2.cpgIslandExt.txt
+    # 310453 bases of 620980971 (0.050%) in intersection
+
+#########################################################################
+# genscan - (DONE - 2015-12-10 - Hiram)
+    mkdir /hive/data/genomes/oxyTri2/bed/genscan
+    cd /hive/data/genomes/oxyTri2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku oxyTri2) > do.log 2>&1
+    # real    57m21.101s
+
+    cat fb.oxyTri2.genscan.txt
+    #   55630505 bases of 1977771384 (2.813%) in intersection
+
+    cat fb.oxyTri2.genscanSubopt.txt
+    #   58340692 bases of 1977771384 (2.950%) in intersection
+
+#############################################################################
+# augustus genes (DONE - 2015-12-11 - Hiram)
+
+    mkdir /hive/data/genomes/oxyTri2/bed/augustus
+    cd /hive/data/genomes/oxyTri2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=saccharomyces -dbHost=hgwdev \
+           -workhorse=hgwdev oxyTri2) > do.log 2>&1
+
+    cat fb.oxyTri2.augustusGene.txt
+    # 25248650 bases of 100286401 (25.177%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2015-03-24 - Hiram)
+
+    cd /hive/data/genomes/oxyTri2
+    # numerator is oxyTri2 gapless bases "real" as reported by:
+    head -1 faSize.oxyTri2.2bit.txt
+# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
+#    76942601 lower) in 25187 sequences in 1 files
+
+    # numerator is 'real' base count
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 620979588 / 2861349177 \) \* 1024
+    # ( 620979588 / 2861349177 ) * 1024 = 222.231912
+
+    # ==> use -repMatch=200 according to size scaled down from 1024 for human.
+    # repMatch=200 produces 88.795, which is quite a bit, using repMatch=400
+    cd /hive/data/genomes/oxyTri2
+    time blat oxyTri2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/oxyTri2.11.ooc \
+        -repMatch=400
+    # Wrote 28353 overused 11-mers to jkStuff/oxyTri2.11.ooc
+    #  real    0m11.314s
+
+    # there are many non-bridged gaps since these are artifical chromosomes
+    #   definately need to tell genbank
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' oxyTri2 \
+      | ave -tableOut -col=7 stdin
+# # min Q1 median Q3 max mean N sum stddev
+# 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
+
+    # note the minimum non-bridged gap size is 50
+
+    gapToLift -verbose=2 -minGap=50 oxyTri2 jkStuff/oxyTri2.nonBridged.lft \
+        -bedFile=jkStuff/oxyTri2.nonBridged.bed
+
+
+    # survey sizes of the individual sequences:
+    n50.pl chrom.sizes.contigs
+#       reading: chrom.sizes.contigs
+#       contig count: 70543, total size: 620981244, one half size: 310490622
+# cumulative    N50 count       contig  contig size
+# 310471381       7008    ARYC01007568    19742
+# 310490622 one half size
+# 310491123       7009    ARYC01013959    19742
+
+#############################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-12-11 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Oxytricha fallax        4       0       0
+    # Oxytricha sp.   1       0       0
+    # Oxytricha sp. LPJ-2005  2       0       0
+    # Oxytricha trifallax     1       0       0
+
+    # edit etc/genbank.conf to add oxyTri2 just before droAna1
+
+# oxyTri2 (tibetan frog)
+oxyTri2.serverGenome = /hive/data/genomes/oxyTri2/oxyTri2.2bit
+oxyTri2.clusterGenome = /hive/data/genomes/oxyTri2/oxyTri2.2bit
+oxyTri2.ooc = /hive/data/genomes/oxyTri2/jkStuff/oxyTri2.11.ooc
+oxyTri2.lift = /hive/data/genomes/oxyTri2/jkStuff/oxyTri2.nonBridged.lft
+oxyTri2.perChromTables = no
+oxyTri2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+oxyTri2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+oxyTri2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+oxyTri2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+oxyTri2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+oxyTri2.downloadDir = oxyTri2
+# defaults are OK: genbank and refseq mrna.native.load yes
+#                  genbank est.native.load yes refseq.mrna.xeno.load yes
+#                  genbank mrna and est xeno.load no
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added oxyTri2 Oxytricha trifallax refs no redmine" \
+         etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/etc/:
+    make etc-update
+    # update /cluster/data/genbank/bin/:
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial oxyTri2
+    # logFile: var/build/logs/2015.12.10-23:33:17.oxyTri2.initalign.log
+    #    real    1049m54.083s
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.oxyTri2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad oxyTri2
+    # logFile: var/dbload/hgwdev/logs/2015.12.11-17:56:41.oxyTri2.dbload.log
+    # real    18m14.340s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add oxyTri2 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added oxyTri2 - Oxytricha trifallax refs no redmine" \
+      etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+## blat server turned on (DONE - 2015-12-11 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oxyTri2", "blat1a", "17852", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("oxyTri2", "blat1a", "17853", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to ABO gene (DONE - 2014-01-13 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr9:133252000-133280861"
+	where name="hg38";' hgcentraltest
+
+#########################################################################
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=oxyTri2 -tableCoverage all.joiner
+    joinerCheck -database=oxyTri2 -times all.joiner
+    joinerCheck -database=oxyTri2 -keys all.joiner
+
+    cd /hive/data/genomes/oxyTri2
+    time makeDownloads.pl oxyTri2 > downloads.log 2>&1
+    # real    13m42.027s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/oxyTri2/pushQ
+    cd /hive/data/genomes/oxyTri2/pushQ
+    makePushQSql.pl oxyTri2 > oxyTri2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/oxyTri2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/oxyTri2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/oxyTri2/bbi/qualityBw/quality.bw
+    # WARNING: oxyTri2 does not have seq
+    # WARNING: oxyTri2 does not have extFile
+    # WARNING: oxyTri2 does not have estOrientInfo
+    # WARNING: oxyTri2 does not have mrnaOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p oxyTri2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/oxyTri2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

@@ -499,6 +499,8 @@ if (errCatchStart(errCatch))
     parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
     struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
 			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
+    cramInit(tg->tdb);
+
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
 	{
