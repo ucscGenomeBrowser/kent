@@ -114,3 +114,4 @@ visibility dense
 type bed 3
 
 include rnaSeq.ra
+include coverage.ra
