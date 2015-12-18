@@ -43,12 +43,12 @@ sqlSafef(query, sizeof(query), "select k.geneSymbol from kgXref k, malacards m"
 itemName = sqlQuickString(conn, query);
 
 printf("<B>Malacards Gene Search: ");
-printf("<A HREF='http://www.malacards.org/search/eliteGene/%s' target=_blank>", itemName);
+printf("<A HREF='http://www.malacards.org/search/results/%s' target=_blank>", itemName);
 printf("%s</B></A>\n", itemName);
 
 /* List diseases associated with the gene */
 sqlSafef(query, sizeof(query),
-"select maladySymbol, urlSuffix, mainName, round(geneScore) from malacards where isElite=1 and geneSymbol='%s' order by geneScore desc",
+"select maladySymbol, urlSuffix, mainName, round(geneScore), isElite from malacards where geneSymbol='%s' order by geneScore desc",
 itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -56,16 +56,29 @@ row = sqlNextRow(sr);
 if (row != NULL) 
     printf("<BR><B>Diseases sorted by score:  </B>");
 
+int eliteCount = 0;
+
 while (row != NULL)
     {
     char *maladySym = row[0];
     char *mainName = row[2];
     char *score = row[3];
-    printf("<A HREF='http://www.malacards.org/card/%s' target=_blank>%s</a> (%s)", maladySym, mainName, score);
+    char *isElite = row[4];
+    char *isEliteChar = "";
+    if (sameWord(isElite, "1"))
+        {
+        isEliteChar = "*";
+        eliteCount += 1;
+        }
+
+    printf("<A HREF='http://www.malacards.org/card/%s' target=_blank>%s</a>%s (%s)",
+        maladySym, mainName, isEliteChar, score);
     row = sqlNextRow(sr);
     if (row!=NULL)
         printf(", ");
     }
+if (eliteCount!=0)
+    printf("<br><small>* = Manually curated disease association</small>");
 sqlFreeResult(&sr);
 }
 
