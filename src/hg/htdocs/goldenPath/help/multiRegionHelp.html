@@ -75,7 +75,7 @@
 
 <a name="GetStarted"></a>
 <div class="section">
-	<h1>Getting Started: Gene or Exon Only View</h1>
+	<h1>Getting Started: Exon or Gene Only View</h1>
 	<div class="sectionContent">
 	<p>
         Follow these instructions to display regions only containing genes
@@ -135,6 +135,7 @@
               <li>Exon and gene only views are unavailable with assembly hubs. This is because
                   assembly hubs do not come with a default gene track, however viewing custom
                   regions should still work.
+
  
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
@@ -144,12 +145,68 @@
 <h1>Display a Custom Region with a BED File</h1>
 	<div class="sectionContent">
 	<p>
-        One can now display multiple regions specified via BED file in the Genome Browser display
-        with the multi-region tool. These regions may be on one chromosome or across
-        multiple chromosomes. 
+        One can now display multiple regions specified via BED file(linktobedformatdesc) in 
+        the Genome Browser display with the multi-region tool. These regions may be on one 
+        chromosome or across multiple chromosomes.
 
-	<img style="border: 1px solid black; display: block;"
-	src="../../images/hgIntegratorDataSourceConfig.png">
+        <p>
+        To display multiple custom regions in the browser, click 
+        <button type="button">multi-region</button> while on the track display
+        page to bring up the multi-region configuration window. Select 
+        <b>Custom regions from BED URL:</b> and paste in the URL to your BED
+        file, then click <button type="button">submit</button>. 
+
+        <p>
+        The browser will now display the region(s) you have specified as &quot;slices&quot;,
+        <em>with the regions displayed in the order of the BED file</em>.
+        The following BED12 example specifies a 3 block region on chromsome 22 between bases
+        1000 and 5000, and a second 3 block region between bases 2000 and 6000:<br>
+        <pre>
+        chr22 1000 5000 cloneA 960 + 1000 5000 0 3 567,488,900, 0,2512,3100
+        chr22 2000 6000 cloneB 900 + 2000 6000 0 3 433,399,800, 0,2601,3200
+        </pre>
+        <p>
+        Although line 2 specifies positions that overlap with those in line 1, the multi-reigon
+        viewer will display the regions:
+
+            <table cellpadding=5>
+               <tr>
+                  <td><ul style="list-style:none;">
+                     <li>chr22:1001-1567<br>
+                         chr22:3513-4000<br>
+                         chr22:4101-5000<br>
+                         chr22:2001-2433<br>
+                         chr22:4602-5000<br>
+                         chr22:5201-6000<br>
+                     <li>In that order, even though chr22:2001-2433 should display before
+                         chr22:3513-4000, since that position technically comes before
+                         the former.
+                  </td>
+                  <td>
+                     <img style="border: 1px solid black; display: block;"
+                          src="../../images/hgIntegratorHgTracksExample.png">
+                  </td>
+               </tr>
+            </table>
+        </ul>
+        For an example BED12 file to try out the above example, click 
+           <a href="../../~chmalee/bed12formultregion.txt">here</a>.
+        <pre>
+        # notes for later:
+        #    bed12 files may display unexpectedly if positions
+        #       from multiple lines overlap
+        #       Ex file (http://hgwdev.cse.ucsc.edu/~chmalee/bed12formultregion.txt):
+        #       chr22 1000 5000 cloneA 960 + 1000 5000 0 3 567,488,900, 0,2512,3100
+        #       chr22 2000 6000 cloneB 900 + 2000 6000 0 3 433,399,800, 0,2601,3200
+        #    bed3 files  
+        #       Ex file (http://hgwdev.cse.ucsc.edu/~chmalee/multRegion2.txt):
+        #       chr9 133252000 133280861
+        #       chr21 31659622 31668931
+        #       chr13 69700594 70108459
+        </pre>
+
+       <ul><img style="border: 1px solid black; display: block;"
+             src="">
 
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->

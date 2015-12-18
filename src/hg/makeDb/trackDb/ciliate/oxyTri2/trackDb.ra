@@ -44,15 +44,27 @@ autoScale on
 alwaysZero on
 html selfChainPileUps
 
-track ncbiGene
+# track xNcbiGene
+# shortLabel NCBI Genes
+# longLabel NCBI Genes from Genbank Record
+# group genes
+# visibility pack
+# type bed 12
+# colorByStrand 0,0,128 0,128,0
+# chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
+
+track xNcbiGene
 shortLabel NCBI Genes
 longLabel NCBI Genes from Genbank Record
-group genes
 visibility pack
-color 12,12,120
-type genePred
-baseColorUseCds given
-baseColorDefault genomicCodons
+color 0,80,150
+altColor 150,80,0
+colorByStrand 0,80,150 150,80,0
+type bigBed 12
+searchIndex name
+searchTrix /gbdb/oxyTri2/bbi/ncbiGene/xNcbiGene.ix
+group genes
+chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
 
 searchTable gold
 shortCircuit 1
