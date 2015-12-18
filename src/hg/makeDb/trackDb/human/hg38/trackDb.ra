@@ -126,6 +126,7 @@ include ../chainNetLegacy.ra alpha
 include ../newChainNet.ra alpha
 include ../chainNetXenTro3.ra beta,public
 include ../chainNetXenTro7.ra alpha
+include ../chainNetFelCat8.ra
 
 track contigAlignmentSegments
 shortLabel ContigSegments

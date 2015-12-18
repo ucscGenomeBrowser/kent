@@ -112,3 +112,6 @@ longLabel locations of self chains with more than 200 pileUps
 group varRep
 visibility dense
 type bed 3
+
+include rnaSeq.ra
+include coverage.ra
