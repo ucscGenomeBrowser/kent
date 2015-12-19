@@ -9,7 +9,7 @@ visibility show
 type bam
 html bamTracks
 pairEndsByName on
-showNames on
+showNames off
 noColorTag .
 bamColorMode strand
 bamGrayMode aliQual
