@@ -242,7 +242,7 @@ printf("<td>");
 prEnsIdAnchor(id, urlTemplate);
 }
 
-static void prApprisTdAnchor(char *id, char *urlTemplate)
+static void prApprisTdAnchor(char *id, char *label, char *urlTemplate)
 /* print a gene or transcript link to APPRIS */
 {
 // under bar separated, lower case species name.
@@ -253,7 +253,7 @@ subChar(speciesArg, ' ', '_');
 char accBuf[64];
 printf("<td><a href=\"");
 printf(urlTemplate, getBaseAcc(id, accBuf, sizeof(accBuf)), speciesArg);
-printf("\" target=_blank>%s</a>", id);
+printf("\" target=_blank>%s</a>", label);
 
 freeMem(speciesArg);
 }
@@ -266,10 +266,71 @@ printf("<a href=\"%s&db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>",
        chrom, chromStart, chromEnd, chrom, chromStart+1, chromEnd);
 }
 
-static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno, struct wgEncodeGencodeAttrs *transAttrs,
+static bool geneHasApprisTranscripts(struct trackDb *tdb, struct sqlConnection *conn, struct wgEncodeGencodeAttrs *transAttrs)
+/* check if any transcript in a gene has an APPRIS tags */
+{
+char query[1024];
+safef(query, sizeof(query),
+      "%s tag where tag.tag like \"appris%%\" and transcriptId in "
+      "(select transcriptId from %s where geneId=\"%s\"",
+      getGencodeTable(tdb, "wgEncodeGencodeTag"),
+      getGencodeTable(tdb, "wgEncodeGencodeAttrs"),
+      transAttrs->geneId);
+return sqlRowCount(conn, query) > 0;
+}
+
+static char* findApprisTag(struct wgEncodeGencodeTag *tags)
+/* search list for APPRIS tag or NULL */
+{
+struct wgEncodeGencodeTag *tag;
+for (tag = tags; tag != NULL; tag = tag->next)
+    {
+    if (startsWith("appris_", tag->tag))
+        return tag->tag;
+    }
+return NULL;
+}
+
+static char* apprisTagToSymbol(char* tag)
+/* convert APPRIS tag to the symbol use by APPRIS. WARNING static return. */
+{
+// appris_principal_1 -> PRINCIPAL:1
+static char buf[64];
+safecpy(buf, sizeof(buf), tag+7);
+touppers(buf);
+subChar(buf, '_', ':');
+return buf;
+}
+
+static void writeAprrisRow(struct sqlConnection *conn, struct trackDb *tdb,
+                           struct wgEncodeGencodeAttrs *transAttrs,
+                           struct wgEncodeGencodeTag *tags)
+/* write row for APPRIS */
+{
+// Get labels to use. if transcript has an appris tag, then we link to the transcript.
+// if it doesn;t have a appris tag, we can still link to the gene if any of the transcripts
+// have appris tags
+char* apprisTag = findApprisTag(tags);
+char* transLabel = (apprisTag != NULL) ? apprisTagToSymbol(apprisTag) : NULL;
+char *geneLabel = ((apprisTag != NULL) || geneHasApprisTranscripts(tdb, conn, transAttrs)) ? transAttrs->geneName : NULL;
+
+printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
+if (transLabel != NULL)
+    prApprisTdAnchor(transAttrs->transcriptId, transLabel, apprisTranscriptUrl);
+else
+    printf("<td>&nbsp;");
+if (geneLabel != NULL)
+    prApprisTdAnchor(transAttrs->geneId, geneLabel, apprisGeneUrl);
+else
+    printf("<td>&nbsp;");
+printf("</tr>\n");
+}
+
+static void writeBasicInfoHtml(struct sqlConnection *conn, struct trackDb *tdb, char *gencodeId, struct genePred *transAnno,
+                               struct wgEncodeGencodeAttrs *transAttrs,
                                int geneChromStart, int geneChromEnd,
                                struct wgEncodeGencodeGeneSource *geneSource, struct wgEncodeGencodeTranscriptSource *transcriptSource,
-                               bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
+                               struct wgEncodeGencodeTag *tags, bool haveTsl, struct wgEncodeGencodeTranscriptionSupportLevel *tsl)
 /* write basic HTML info for all genes */
 {
 /*
@@ -333,12 +394,7 @@ prExtIdAnchor(transAttrs->geneName, geneCardsUrl);
 printf("</tr>\n");
 
 if (isProteinCodingTrans(transAttrs))
-    {
-    printf("<tr><th><a href=\"%s\" target=_blank>APPRIS</a>\n", apprisHomeUrl);
-    prApprisTdAnchor(transAttrs->transcriptId, apprisTranscriptUrl);
-    prApprisTdAnchor(transAttrs->geneId, apprisGeneUrl);
-    printf("</tr>\n");
-    }
+    writeAprrisRow(conn, tdb, transAttrs, tags);
 
 // FIXME: add sequence here??
 printf("</tbody></table>\n");
@@ -751,7 +807,7 @@ else
 cartWebStart(cart, database, "%s", header);
 printf("<H2>%s</H2>\n", header);
 
-writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, haveTsl, tsl);
+writeBasicInfoHtml(conn, tdb, gencodeId, transAnno, transAttrs, geneChromStart, geneChromEnd, geneSource, transcriptSource, tags, haveTsl, tsl);
 writeTagLinkHtml(tags);
 writeSequenceHtml(tdb, gencodeId, transAnno);
 if (haveRemarks)
