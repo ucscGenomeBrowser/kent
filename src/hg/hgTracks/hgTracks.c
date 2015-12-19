@@ -4193,6 +4193,11 @@ else if (sameString(virtModeType, "exonMostly")
 
     initVirtRegionsFromEMGeneTableExons(showNoncoding, knownCanonical, knownToTag, geneMostly);
     //warn("slCount(virtRegionList)=%d", slCount(virtRegionList));  // DEBUG REMOVE
+    if (!virtRegionList)
+	{
+	warn("No genes found on chrom %s for track %s, returning to default view", chromName, emGeneTrack->shortLabel);
+	return FALSE;   // regionList is empty, nothing found.
+	}
     if (geneMostly)
 	virtModeShortDescr = "genes";
     else
@@ -4307,6 +4312,9 @@ else
     }
 
 virtModeExtraState = dyStringCannibalize(&dy);
+
+if (!virtRegionList)
+    return FALSE;   // regionList is empty, nothing found.
 
 return TRUE;
 
