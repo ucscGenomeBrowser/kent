@@ -54,7 +54,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
 if (row != NULL) 
-    printf("<BR><B>Diseases sorted by score:  </B>");
+    printf("<BR><B>Diseases sorted by gene-association score:  </B>");
 
 int eliteCount = 0;
 
