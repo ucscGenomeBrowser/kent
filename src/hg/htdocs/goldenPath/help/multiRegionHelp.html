@@ -158,8 +158,11 @@
 
         <p>
         The browser will now display the region(s) you have specified as &quot;slices&quot;,
-        <em>with the regions displayed in the order of the BED file</em>.
-        
+        <em>with the regions displayed in the order of the BED file</em>. Note that you may 
+        specify the same region multiple times in the BED file and it will be displayed
+        as a separate region each time, making the modeling and comparison of the same region
+        against many regions possible in one browser display.
+ 
         <p><b>Displaying regions from the same chromsome</b></br>
         The following BED12 <a href="../../~chmalee/bed12formultregion.txt">example</a> specifies
         a 3 block region on chromsome 22 between bases 1000 and 5000, and a second 3 block 
@@ -181,8 +184,9 @@
 
         <p>
         The positions display in the order specified by the BED file, not by genomic position.
-        Notice how the # need to update later # block is in the fourth region, not the second
+        Notice how the <em># need to update later #</em> block is in the fourth region, not the second
         region, as in the custom track example.  
+        <p>
         For an example BED12 URL, click <a href="../../~chmalee/bed12formultregion.txt">here</a>.
         
         <p><b>Displaying regions from multiple chromsomes</b></br>
@@ -196,6 +200,8 @@
         chr21 31659622 31668931
         chr13 69700594 70108459
         </pre>
+        
+        
 
        <ul><img style="border: 1px solid black; display: block;"
              src="">
