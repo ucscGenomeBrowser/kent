@@ -223,11 +223,6 @@ ifeq (${HTSDIR},)
     ifneq ($(wildcard ${HTSDIR}),)
         ifeq (${USE_HTS},)
             USE_HTS=1
-            USE_TABIX=1
-            USE_SAMTABIX=1
-            SAMTABIXDIR = ${HTSDIR}
-            SAMTABIXLIB=${HTSDIR}/libhts.a
-            HG_DEFS+=-DUSE_HTS
         endif
     endif
 endif
@@ -253,6 +248,13 @@ GBIBDIR = /hive/groups/browser/gbib/
 ifneq ($(wildcard ${GBIBDIR}/*.c),)
   HG_DEFS+=-DUSE_GBIB_PWD
   HG_INC += -I${GBIBDIR}
+endif
+
+ifeq (${USE_HTS},1)
+    HG_DEFS+=-DUSE_HTS
+    USE_SAMTABIX=1
+    SAMTABIXDIR = ${HTSDIR}
+    SAMTABIXLIB=${HTSDIR}/libhts.a
 endif
 
 # libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
