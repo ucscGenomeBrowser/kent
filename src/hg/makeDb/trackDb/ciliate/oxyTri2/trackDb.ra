@@ -31,7 +31,7 @@ track selfChainPileUps
 shortLabel Self Pile Ups
 longLabel Self chain pile ups, overlap count of chain links
 group varRep
-visibility full
+visibility hide
 maxHeightPixels 128:64:16
 graphTypeDefault Bar
 gridDefault OFF
@@ -85,7 +85,7 @@ searchMethod prefix
 termRegex [ACJcd][MNeot][Cgn3][Rt0-9][i0-9][g0-9][0-9]([a-z0-9_.]*)?
 searchPriority 100
 
-track nscanGene override
+track xenoRefGene override
 visibility pack
 
 track intronEst override
@@ -113,7 +113,7 @@ track mergeJunctions
 shortLabel TopHat Junctions
 longLabel merge _all samples mapalgo4_pe7777_ncRNAfilt_oxytri2Ref_tophat tophat junctions
 group regulation
-visibility pack
+visibility hide
 type bed 12
 colorByStrand 0,0,128 0,128,0
 chromosomes chrMACsb310
@@ -122,7 +122,7 @@ track pileUps200
 shortLabel Over 200
 longLabel locations of self chains with more than 200 pileUps
 group varRep
-visibility dense
+visibility hide
 type bed 3
 
 include rnaSeq.ra

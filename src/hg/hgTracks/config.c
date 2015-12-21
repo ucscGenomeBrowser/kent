@@ -739,7 +739,13 @@ hPrintf("</TD></TR>\n");
 hPrintf("</TABLE>\n");
 
 hPrintf("<BR>\n");
+hPrintf("<TABLE style=\"border:0px;width:650px \">\n");
+hPrintf("<TR><TD>");
 cgiMakeButton("topSubmit", "submit");
+hPrintf("</TD><TD align=right>");
+hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>Help</A>\n");
+hPrintf("</TD></TR>\n");
+hPrintf("</TABLE>\n");
 
 hFreeConn(&conn);
 

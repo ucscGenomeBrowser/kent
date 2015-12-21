@@ -219,6 +219,38 @@ are allowed to differ.</p>
   </li>
 </ul>
 
+<p><b><a name="appris" href="http://appris.bioinfo.cnio.es/">APPRIS</a></b> is a system to annotate alternatively spliced transcripts based on a range of computational methods. It provides value to the annotations of the human, mouse, zebrafish, rat, and pig genomes.
+APPRIS has selected a single CDS variant for each gene as the 'PRINCIPAL' isoform. Principal isoforms are tagged with the numbers 1 to 5, with 1 being the most reliable.</p>
+<ul>
+  <li>PRINCIPAL:1 - Transcript(s) expected to code for the main functional
+    isoform based solely on the core modules in the APPRIS. 
+  <li>PRINCIPAL:2 - Where the APPRIS core modules are unable to choose a clear
+    principal variant (approximately 25% of human protein coding genes), the
+    database chooses two or more of the CDS variants as "candidates" to be the
+    principal variant.
+  <li>PRINCIPAL:3 - Where the APPRIS core modules are unable to choose a clear
+    principal variant and there more than one of the variants have distinct
+    CCDS identifiers, APPRIS selects the variant with lowest CCDS identifier
+    as the principal variant. The lower the CCDS identifier, the earlier it
+    was annotated.
+  <li>PRINCIPAL:4 - Where the APPRIS core modules are unable to choose a clear
+    principal CDS and there is more than one variant with a distinct (but
+    consecutive) CCDS identifiers, APPRIS selects the longest CCDS isoform as
+    the principal variant.
+  <li>PRINCIPAL:5 - Where the APPRIS core modules are unable to choose a clear
+    principal variant and none of the candidate variants are annotated by CCDS,
+    APPRIS selects the longest of the candidate isoforms as the principal variant.
+    For genes in which the APPRIS core modules are unable to choose a clear
+    principal variant (approximately 25% of human protein coding genes), the
+    "candidate" variants not chosen as principal are labeled in the following way:
+  <li>ALTERNATIVE:1 - Candidate transcript(s) models that are conserved in at
+    least three tested species.
+  <li>ALTERNATIVE:2 - Candidate transcript(s) models that appear to be
+    conserved in fewer than three tested species.  Non-candidate transcripts are
+    not tagged and are considered as "Minor" transcripts. Further information and
+    additional web services can be found at the APPRIS website.
+</ul>
+
 <h2>Downloads</h2>
 GENCODE GFF3 and GTF files are available from the
 <a href="http://www.gencodegenes.org/releases/23.html" target="_blank">GENCODE release 23</a> site.
