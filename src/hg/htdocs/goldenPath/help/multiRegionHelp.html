@@ -59,17 +59,11 @@
               the track annotations only in those regions, effectively removing
               the intergenic and intron regions from the viewing window.
         
-           <p>In addition, for the human assemblies hg19 and hg38, the multi-region view
+           <p>In addition, for the human assemblies hg17,hg18,hg19 and hg38, the multi-region view
               also supports embedding a haplotype chromosome on top of it's
               reference sequence in order to visualize the differences between the haplotype
               sequence and the reference sequence.
         
-           <p># List some limits on the multi regions
-              <ul>
-                 <li>Can only filter on predefined exon or gene type, not just whatever
-                     track you are looking at
-                 <li>Only one haplotype can currently be viewed
-
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
@@ -145,7 +139,8 @@
 <h1>Display a Custom Region with a BED File</h1>
 	<div class="sectionContent">
 	<p>
-        One can now display multiple regions specified via BED file (linktobedformatdesc) in 
+        One can now display multiple regions specified via 
+        <a href="http://genome.ucsc.edu/FAQ/FAQformat.html#format1">BED file</a> in 
         the Genome Browser display with the multi-region tool. These regions may be on one 
         chromosome or across multiple chromosomes.
 
@@ -191,19 +186,20 @@
         
         <p><b>Displaying regions from multiple chromsomes</b></br>
         Multi-region view also supports BED files specifying regions from across multiple
-        chromosomes, allowing  display of annotations from different genomic regions. The 
-        following <a href="../../~chmalee/multRegion2.txt">file</a> specifies regions from
-        across three different chromosomes:
+        chromosomes, allowing  display of annotations from different genomic regions in the same
+        browser window. The following <a href="../../~chmalee/multRegion2.txt">file</a> 
+        specifies regions from across three different chromosomes:
         
         <pre>
-        chr9 133252000 133280861
+        chr9 133255000 133276861
         chr21 31659622 31668931
-        chr13 69700594 70108459
+        chr13 69700594 69708459
         </pre>
         
-        
+        Again the multi-region view will display the &quot;slices&quot; according to the order
+        specified in the BED file, and allows the same region to be displayed twice.
 
-       <ul><img style="border: 1px solid black; display: block;"
+        <ul><img style="border: 1px solid black; display: block;"
              src="">
 
 	</div><!-- .sectionContent --> 
@@ -213,21 +209,11 @@
 <div class="section">
 <h1>Viewing an Alternate Haplotype Against the Reference Region</h1>
 	<div class="sectionContent">
-	<p>The current intersection mechanism the Data Integrator uses is fairly simple. For gene
-	transcripts, mRNAs, and any other tracks where the items have blocks or gaps, the overlap
-	for the entire range of the item is computed. This means that introns and gaps in the item
-	are also considered when computing overlap. This is an improvement upon the Table Browser
-	which only computed overlap with exons. For example, let's consider the following situation
-	using the UCSC Genes and DNase Clusters tracks:
 	<p>
+        
+        
 	<img style="border: 1px solid black; display: block;"
-	src="../../images/hgIntegratorHgTracksExample.png">
-	<p>
-	If we were using the Data Integrator to find the DNase peaks that overlapped with the
-	gene in the UCSC Genes track, we would get all of the visible peaks in our output.
-
-	<p>Additionally, items are output regardless of the amount of overlap. This means that if
-	there is even a single base of overlap between two items, they are included in the output.
+	src="">
 	
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
