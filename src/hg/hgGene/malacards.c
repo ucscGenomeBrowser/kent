@@ -43,7 +43,7 @@ sqlSafef(query, sizeof(query), "select k.geneSymbol from kgXref k, malacards m"
 itemName = sqlQuickString(conn, query);
 
 printf("<B>Malacards Gene Search: ");
-printf("<A HREF='http://www.malacards.org/search/results/%s' target=_blank>", itemName);
+printf("<A HREF='http://www.malacards.org/search/bySymbol/%s' target=_blank>", itemName);
 printf("%s</B></A>\n", itemName);
 
 /* List diseases associated with the gene */
