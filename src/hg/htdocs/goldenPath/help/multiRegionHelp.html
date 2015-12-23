@@ -30,7 +30,7 @@
     <li><a class="toc" href="#GetStarted">Getting Started: Gene or Exon Only View</a>
     <li><a class="toc" href="#CustomRegions">Display a Custom Region with a BED File</a>
     <li><a class="toc" href="#Haplotype">Viewing an Alternate Haplotype Against the Reference Region</a>
-    <li><a class="toc" href="#OutputConfig">Configuring Output</a>
+    <li><a class="toc" href="#OutputConfig">Configuring the Multi-Region Display</a>
   </b></ul>
 </td>
                 <P>
@@ -163,8 +163,8 @@
         a 3 block region on chromsome 22 between bases 1000 and 5000, and a second 3 block 
         region between bases 2000 and 6000:<br>
         <pre>
-        chr22 1000 5000 cloneA 960 + 1000 5000 0 3 567,488,900, 0,2512,3100
-        chr22 2000 6000 cloneB 900 + 2000 6000 0 3 433,399,800, 0,2601,3200
+     chr22 1000 5000 cloneA 960 + 1000 5000 0 3 567,488,900, 0,2512,3100
+     chr22 2000 6000 cloneB 900 + 2000 6000 0 3 433,399,800, 0,2601,3200
         </pre>
         <p>
         When loaded as a custom track, we can see that there are overlapping regions, as well
@@ -190,11 +190,11 @@
         browser window. The following <a href="../../~chmalee/multRegion2.txt">file</a> 
         specifies regions from across three different chromosomes:
         
-        <pre>
-        chr9 133255000 133276861
-        chr21 31659622 31668931
-        chr13 69700594 69708459
-        </pre>
+           <pre>
+     chr9 133255000 133276861
+     chr21 31659622 31668931
+     chr13 69700594 69708459
+           </pre>
         
         Again the multi-region view will display the &quot;slices&quot; according to the order
         specified in the BED file, and allows the same region to be displayed twice.
@@ -210,77 +210,66 @@
 <h1>Viewing an Alternate Haplotype Against the Reference Region</h1>
 	<div class="sectionContent">
 	<p>
-        
-        
+        The human hg38, hg19, hg18 and hg17 assemblies all possess an extra feature while
+        using the multi-region view: showing an alternate haplotype on it's chromosome.
+        For a list of possible haplotypes, click on the <b>sequences</b> link while
+        on the human gateway page:
+        <br># Picture of link here #
 	<img style="border: 1px solid black; display: block;"
 	src="">
+        Any haplotype of the form <em>chr_name_alt</em> can be placed on it's chromosome,
+        unlike the random and unplaced sequences, which are currently not supported by
+        the multi-region view.
+        
+        <p><b>Displaying an alternate haplotype</b><br>
+        To place an alternate haplotype on it's chromosome open up the multi-region
+        configuration window from the browser display and select
+        <b>Show one alternate haplotype, placed on its chromosome, using ID:</b>
+        and paste or type the name of an alternate haplotype. The browser display
+        will now feature the alternate haplotype in the center of the display along with
+        the flanking regions from the reference sequence.
+        <br># Example of haplotype view #
+	<img style="border: 1px solid black; display: block;"
+	src="">
+
+        <p><b>Notes about haplotype display</b>
+        <ul>
+           <li>Only one haplotype can be displayed at a time. Thus you cannot display
+               multiple haplotypes on the same chromsome to see how they compare. 
+        </ul>
 	
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
 <a name="OutputConfig"></a>
 <div class="section">
-<h1>Configuring Output</h1>
+<h1>Configuring the Multi-Region Display</h1>
 	<div class="sectionContent">
-        <p>By default, the Data Integrator outputs all fields of all data sources
-        except for the <tt>bin</tt> column of database tables (a numerical index added by UCSC
-        to speed up database queries).
-	If you are only interested in the data from a limited number of fields, you can customize
-	the set of fields to include in the output. After
-	selecting and configuring your data sources as described in the <a href="#DataSources">
-	Selecting Data Sources</a> section, click <button type="button">Choose fields...</button>
-	to begin configuring your output. After clicking the button, a pop-up with all the fields
-	from your selected tables will appear:
-	<p>
-	<img style="border: 1px solid black; display: block;"
-	src="../../images/hgIntegratorFieldsConfig.png">
-	<p>Uncheck the box next to the field name to exclude it from the output;
-        check the box if you change your mind and want to include it.
-        You can quickly select or deselect all of the fields by clicking
-        <button type="button">Set all</button> or
-        <button type="button">Clear all</button> below the track name.
-        After you have finished selecting your
-	output fields, click <button type="button">Done</button> at the bottom of the dialog
-	box to finish configuring your output.
-	
-	<p>If you want to view your results in the web browser window, simply click
-	<button type="button">Get output</button>. Or, if you want to send your output to a file, 
-	check the box next to <b>Send output to file</b>. You can compress your output file using
-	gzip by checking the box next to <b>Compress with gzip (.gz)</b>.  Then click
-        <button type="button">Get output</button> to begin downloading your file.
-	</p>
-	
-	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
-	In the future, we intend to add an option to output all of the data values in that region
-	of overlap.
+        <p>
+        After entering multi-region mode, whether through exon only, gene only, BED or alternate
+        haplotype view, the usual browser display configurations will still work, such as zooming
+        in and out, reversing and resizing the view, highlighting and zooming to highlighted 
+        selection, and track search.
 
-	<p>
-        If a single item in the primary track has multiple matches in a secondary track,
-        then the Data Integrator outputs multiple rows.  Each row repeats the fields of
-        the primary track item, and then adds fields of the <em>nth</em> matching item
-        from each secondary track.
-        If there are multiple secondary tracks, then their items will appear together in
-        a row of output whether or not they overlap each other.  For example, note how items
-        overlap (or not) in the three tracks A, B and C in the image below:
-	<p><img style="border: 1px solid black; display: block;"
-	src="../../images/hgIntegratorHgTracksExample2.png">
+        <p>  
+        While in exon or gene only mode, the number of bases used for padding comes from the
+        intergenic sequence(gene only) or intron and intergenic sequence (exon only). This may
+        lead to confusion when there are fewer intergenic or intronic bases between each exon
+        or gene than the padding dictates. For example, on tightly packed chromosomes like 
+        the mitochondiral chromosome, there may actually be zero bases in between elements,
+        and thus the multi-region display may behave oddly in these types of situtations.
+
         <p>
-        Two items from track B (B1, B2) overlap the primary item (A).
-        Three items from track C (C1, C2, C3) overlap the primary item (A).
-        The Data Integrator prints 3 rows of output.  B1 and C1, although they
-        do not overlap, appear together in the first row of output.
-        B2 and C2 appear together in the second row of output.
-        The third row of output has empty fields for track B followed
-        by C3's fields.  This is the output (when A, B and C are 4-field
-	<a href="../../FAQ/FAQformat.html#format1">BED</a>
-        custom tracks; colors added for emphasis):
+        Searching and zooming while using BED URLs are a little different than exon and gene
+        only mode. When a term or position is entered into the search box from the tracks
+        display page, the browser first searches for the term within the multi-region view,
+        and if found, the browser will zoom to that feature. If the term is not found, 
+        then the browser will search the default search set and redirect if found.
+
         <p>
-          <pre class="code">
-#A.chrom	A.chromStart	A.chromEnd	A.name	<span style="color: #960000;">B.chrom	B.chromStart	B.chromEnd	B.name</span>	<span style="color: #000096;">C.chrom	C.chromStart	C.chromEnd	C.name</span>
-chr1	1200	1800	A	<span style="color: #960000;">chr1	1250	1350	B1</span>	<span style="color: #000096;">chr1	1425	1525	C1</span>
-chr1	1200	1800	A	<span style="color: #960000;">chr1	1550	1650	B2</span>	<span style="color: #000096;">chr1	1675	1775	C2</span>
-chr1	1200	1800	A					<span style="color: #000096;">chr1	1700	1800	C3</span>
-          </pre>
+        Be careful zooming out too far while using the haplotype view. You may zoom out off the
+        end of a chromsome and onto the next one. Theoretically you could display all 25
+        chromosomes this way, although it will be slow.
 
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
