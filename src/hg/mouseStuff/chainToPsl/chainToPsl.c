@@ -9,6 +9,7 @@
 #include "verbose.h"
 #include "dnaLoad.h"
 #include "dnaseq.h"
+#include "options.h"
 
 
 void usage()
@@ -215,10 +216,9 @@ carefulClose(&outFile);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+optionHash(&argc, argv);
 if (argc != 7)
-    {
     usage();
-    }
 chainToPsl(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
