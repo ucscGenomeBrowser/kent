@@ -184,24 +184,42 @@ if (tree->left == NULL && tree->right == NULL)
     // Print the leaf nodes
     {
     if (bio->desc)
-	fprintf(f, "{\"name\":\"%s\",\"kids\":\"%i\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, 0, bio->desc, colors.r, colors.g, colors.b); 
+	fprintf(f, "{\"name\":\"%s\",\"length\":%f,\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, (tree->parent->childDistance*tree->parent->childDistance)  /1000, bio->desc, colors.r, colors.g, colors.b); 
     else
-	fprintf(f, "{\"name\":\"%s\",\"kids\":\"%i\",\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, 0, " ", colors.r, colors.g, colors.b); 
+	fprintf(f, "{\"name\":\"%s\",\"length\":%f,\"distance\":\"%s\",\"colorGroup\":\"rgb(%i,%i,%i)\"}", tissue, tree->parent->childDistance, " ", colors.r, colors.g, colors.b); 
     return;
     }
 else if (tree->left == NULL || tree->right == NULL)
     errAbort("\nHow did we get a node with one NULL kid??");
 
 // Prints out the node object and opens a new children block.
-fprintf(f, "{\"name\": \" \", \"longestDistance\":\"%f\", \"tpmDistance\": \"%f\", \"kids\": \"%f\",  \"colorGroup\": \"rgb(%i,"
-	    "%i,%i)\",",clLongest,tree->childDistance,sqrt(bio->children), colors.r,colors.g,colors.b);
-distance = tree->childDistance/clLongest; 
+for (i = 0;  i < level + 1;  i++)
+    fputc(' ', f);
+distance = tree->childDistance/clLongest;
+double temp = 0; 
+if (tree->parent != NULL)
+    {
+    temp = tree->parent->childDistance;
+    }
+fprintf(f, "{\"name\": \" \", \"longestDistance\":\"%f\", \"tpmDistance\": \"%f\", \"length\": %f,  \"colorGroup\": \"rgb(%i,"
+	    "%i,%i)\",",clLongest,tree->childDistance, temp*temp/1000, colors.r,colors.g,colors.b);
 if (distance != distance) distance = 0;
 //fprintf(f, "\"%s\"%s \"%f\"%s\n", "distance", ":", 100*distance, ",");
 struct rgbColor wTB; 
-if (distance == 0) {wTB = whiteToBlackRainbowAtPos(.95);}
-else  {wTB = whiteToBlackRainbowAtPos(.95-(sqrt(distance)*.95));}
-fprintf(f, "\"distance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\",\n", 100*distance, wTB.r, wTB.g, wTB.b);
+struct rgbColor wTBsqrt; 
+struct rgbColor wTBquad; 
+if (distance == 0) {
+    wTB = whiteToBlackRainbowAtPos(0);
+    wTBsqrt = whiteToBlackRainbowAtPos(0);
+    wTBquad = whiteToBlackRainbowAtPos(0);
+    }
+else  {
+    wTB = whiteToBlackRainbowAtPos(distance*.95);
+    wTBsqrt = whiteToBlackRainbowAtPos(sqrt(distance*.95));
+    wTBquad = whiteToBlackRainbowAtPos(sqrt(sqrt(distance*.95)));
+    }
+fprintf(f, "\"distance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\", \"whiteTo", distance, wTB.r, wTB.g, wTB.b); 
+fprintf(f, "BlackSqrt\":\"rgb(%i,%i,%i)\", \"whiteToBlackQuad\":\"rgb(%i,%i,%i)\",\n", wTBsqrt.r, wTBsqrt.g, wTBsqrt.b, wTBquad.r, wTBquad.g, wTBquad.b);
 for (i = 0;  i < level + 1;  i++)
     fputc(' ', f);
 fprintf(f, "\"children\":[\n");
@@ -281,7 +299,7 @@ void colorLeaves(struct slRef *leafList)
 /* Assign colors of rainbow to leaves. */
 {
 float total = 0.0;
-double purplePos = 0.80;
+//double purplePos = 0.80;
 struct slRef *el, *nextEl;
 
 /* Loop through list once to figure out total, since we need to normalize */
@@ -298,9 +316,9 @@ for (el = leafList; el != NULL; el = nextEl)
     }
 
 if (total == 0) errAbort("There doesn't seem to be any difference between these matrix columns. Aborting."); 
-
 double soFar = 0;
 /* Loop through list a second time to generate actual colors. */
+bool firstLine = TRUE; 
 for (el = leafList; el != NULL; el = nextEl)
     {
     nextEl = el->next;
@@ -309,15 +327,25 @@ for (el = leafList; el != NULL; el = nextEl)
     struct bioExpVector *bio1 = el->val;
     struct bioExpVector *bio2 = nextEl->val;
     double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
-    if (distance != distance ) distance = 0 ;
-    soFar += distance;
-    double normalized = soFar/total;
-    bio2->color = saturatedRainbowAtPos(normalized*purplePos);
+    if (firstLine) 
+	{
+	double normalized = distance/total; 
+	bio1->color = whiteToBlackRainbowAtPos(normalized); 
+	firstLine = FALSE;
+	}
+    //if (distance != distance ) distance = 0 ;
+    //soFar += distance;
+    //double normalized = soFar/total;
+    double normalized = distance/total; 
+    if (normalized * 100 >= .95) bio2->color = whiteToBlackRainbowAtPos(.95);
+    else bio2->color = whiteToBlackRainbowAtPos(normalized*100); 
+    //bio2->color = saturatedRainbowAtPos(distance);
+    soFar += normalized;     
     }
-
 /* Set first color to correspond to 0, since not set in above loop */
-struct bioExpVector *bio = leafList->val;
-bio->color = saturatedRainbowAtPos(0);
+//struct bioExpVector *bio = leafList->val;
+//bio->color = saturatedRainbowAtPos(0);
+//bio->color = whiteToBlackRainbowAtPos(0.0);
 }
 
 void convertInput(char *expMatrix, char *descFile, bool csv)
@@ -372,39 +400,215 @@ int labelLength = 10+nameSize*(15-textSize);
 if (labelLength > 100) labelLength = 100;
 
 
-fprintf(outputFile,"<!DOCTYPE html><meta charset=\"utf-8\"><title>%s</title><style>.node circle{fill: #ff f; stroke: steelblue; stroke-width: .25px;}.node{font: %ipx sans-serif;}.link{fill: none; stroke: #ccc; st roke-width: 1.5px;}.selected", pageName, textSize);
- fprintf(outputFile,"Link{fill: none; stroke: #ccc; stroke-width: 3.0px;}.selected{fill: red;}.legend{font-size: 12px;}rect{stroke-width: 2;}</style><body> <script src=\"http://d3js.org/d3.v3.min.js\"></script> ");
- fprintf(outputFile,"<button onclick=\"metaData(-1)\">Back to rainbow</button> <! Identifier  ><div id=\"graph\"></div><script>var radius= %i / 2; var cluster=d3.layout.cluster().size([360, radius - %i]);var colors=d3.scale.category20b(); var diagona", radius, labelLength);
- fprintf(outputFile,"l=d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];});var svg=d3.select(\"#graph\") .append(\"svg\") .attr(\"width\", 150 + (radius * 2) ) .attr(\"height\", radius * 2) .append(\"g\") .attr(\"transform\", \"translat");
- fprintf(outputFile,"e(\" + (radius + 150) + \",\" + radius + \")\"); var legendRectSize=20; var legendSpacing=4; var currentLegend=-1; d3.json(\"%s\", function(error, root){var nodes=cluster.nodes(root); var link=svg.selectAll(\"path.link\") .dat", jsonFile);
- fprintf(outputFile,"a(cluster.links(nodes)).enter().append(\"path\").attr(\"class\", \"link\").on(\"click\", function(){d3.select(\".selectedLink\").classed(\"selectedLink\", false); d3.select(this).classed(\"selectedLink\", true);}).attr(\"d\", diagonal); var node=sv");
- fprintf(outputFile,"g.selectAll(\"g.node\") .data(nodes).enter().append(\"g\").attr(\"class\", \"node\").attr(\"transform\", function(d){return \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";});node.append(\"circle\").attr(\"r\", function(d){if (d.name==\" \"");
- fprintf(outputFile,"){return d.kids;}else{return 5;}}).style(\"fill\", function(d){if (d.name==\" \"){return d.whiteToBlack;}else{return d3.rgb(d.colorGroup);}}); node.append(\"text\").attr(\"dy\", \".55em\").attr(\"text-anchor\", function(d){return d.x < 180 ? \"start\"");
- fprintf(outputFile,": \"end\";}).attr(\"transform\", function(d){return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\";}).text(function(d){return d.name;}); var legend=svg.selectAll('.legend') .data(colors.domain()) .enter() .append('g') .attr('class', 'l");
- fprintf(outputFile,"egend') .attr('transform', function (d, i){var height=legendRectSize + legendSpacing; var offset=height * colors.domain().length / 2; var horz=-2 * legendRectSize; var vert=i * height - offset; return 'translate(' + horz + ',' + vert + ')';});legen");
- fprintf(outputFile,"d.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize) .style('fill', colors) .style('stroke', colors);legend.append('text') .attr('x', legendRectSize + legendSpacing) .attr('y', legendRectSize - legendSpacing) .text(functi");
- fprintf(outputFile,"on (d){return d;});}); function updateLegend(val){var legend=svg.selectAll('g.legend').data(val); legend.enter() .append('g') .attr('class', 'legend') .attr('transform', function (d, i){var height=legendRectSize + legendSpacing; var offset=height *");
- fprintf(outputFile,"colors.domain().length / 2; var horz=(-2 * legendRectSize) - radius - 75; var vert=-(i * height - offset); return 'translate(' + horz + ',' + vert + ')';});legend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize) .style(");
- fprintf(outputFile,"'fill', colors) .style('stroke', colors);legend.append('text') .attr('x', legendRectSize + legendSpacing) .attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});}function metaData(val){var node=svg.selectAll(\"g.node\");    node.");
- fprintf(outputFile,"append(\"circle\").attr(\"r\",  function(d){if (d.name==\" \"){return d.kids;}else return 5;}).style(\"fill\",    function(d){if (d.name==\" \"){return d.whiteToBlack;}else{if (val==-1) return d3.rgb(d.colorGroup); /* Identifier */");
- fprintf(outputFile,"}}); var legend=svg.selectAll('g.legend').remove(); if (val >=0 ) updateLegend(colors.domain());colors=d3.scale.category20b();}</script></body>"); 
+fprintf(outputFile,"<!DOCTYPE html>\n");
+fprintf(outputFile,"<meta charset=\"utf-8\">\n");
+fprintf(outputFile,"<title>%s</title>\n", pageName); 
+// CSS styles
+fprintf(outputFile,"<style>\n");
+fprintf(outputFile,"\t.node circle{fill: #ff f; stroke: steelblue; stroke-width: .25px;}\n");
+fprintf(outputFile,"\t.node{font: %ipx sans-serif;}\n", textSize);
+fprintf(outputFile,"\t.link{fill: none; stroke: #ccc; st roke-width: 1.5px;}\n");
+fprintf(outputFile,"\t.selectedLink{fill: none; stroke: #ccc; stroke-width: 3.0px;}\n");
+fprintf(outputFile,"\t.selected{fill: red;}\n");
+fprintf(outputFile,"\t.legend{font-size: 12px;}\n");
+fprintf(outputFile,"\trect{stroke-width: 2;}\n");
+fprintf(outputFile,"</style>\n");
+// Start body
+fprintf(outputFile,"<body>\n"); 
+// Scripts
+fprintf(outputFile,"<link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\">\n");
+fprintf(outputFile,"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n");
+fprintf(outputFile,"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n");
+fprintf(outputFile,"<script src=\"http://d3js.org/d3.v3.min.js\"></script>\n");
+// Adding dropdowns...
+fprintf(outputFile,"<div class = \"dropdown\">\n\t<ul style=\"list-style-type:none;display:inline-flex\">\n"); 
+// Inner nodes
+fprintf(outputFile,"\t\t<li class=\"dropdown\">\n"); 
+fprintf(outputFile,"\t\t\t<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> Inner nodes\n"); 
+fprintf(outputFile,"\t\t\t<span class=\"caret\"</span></button>\n"); 
+fprintf(outputFile,"\t\t\t<ul class=\"dropdown-menu\">\n"); 
+fprintf(outputFile,"\t\t\t\t<li><button onclick=\"nodeColors(0)\">tpm distance</button></li>\n"); 
+fprintf(outputFile,"\t\t\t\t<li><button onclick=\"nodeColors(1)\">sqrt tpm distance</button></li>\n"); 
+fprintf(outputFile,"\t\t\t\t<li><button onclick=\"nodeColors(2)\">quad rt tpm distance</button></li>\n"); 
+fprintf(outputFile,"\t\t\t</ul>\n\t\t</li>\n");
+// Inner leaves
+fprintf(outputFile,"\t\t<li class=\"dropdown\">\n"); 
+fprintf(outputFile,"\t\t\t<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> Inner leaves\n"); 
+fprintf(outputFile,"\t\t\t<span class=\"caret\"</span></button>\n"); 
+fprintf(outputFile,"\t\t\t<ul class=\"dropdown-menu\">\n"); 
+fprintf(outputFile,"<! Identifier  >\n"); 
+fprintf(outputFile,"\t\t\t</ul>\n\t\t</li>\n");
+// Middle leaves
+fprintf(outputFile,"\t\t<li class=\"dropdown\">\n"); 
+fprintf(outputFile,"\t\t\t<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> Middle leaves\n"); 
+fprintf(outputFile,"\t\t\t<span class=\"caret\"</span></button>\n"); 
+fprintf(outputFile,"\t\t\t<ul class=\"dropdown-menu\">\n"); 
+fprintf(outputFile,"<! Identifier  >\n"); 
+fprintf(outputFile,"\t\t\t</ul>\n\t\t</li>\n");
+// Outer leaves
+fprintf(outputFile,"\t\t<li class=\"dropdown\">\n"); 
+fprintf(outputFile,"\t\t\t<button class=\"btn btn-default dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> Outer leaves\n"); 
+fprintf(outputFile,"\t\t\t<span class=\"caret\"</span></button>\n"); 
+fprintf(outputFile,"\t\t\t<ul class=\"dropdown-menu\">\n"); 
+fprintf(outputFile,"<! Identifier  >\n"); 
+fprintf(outputFile,"\t\t\t</ul>\n\t\t</li>\n");
 
- /*
-fprintf(outputFile,"<!DOCTYPE html> <meta charset=\"utf-8\"><title>%s</title><style>.node circle{fill: #fff; stroke: steelblue; stroke-width: .25px; }.node{font: %ipx sans-serif; }.link{fill: none; stroke: #ccc; stroke-width: 1.5px;}.selectedL", pageName, textSize);
-fprintf(outputFile,"ink{ fill: none; stroke: #ccc; stroke-width: 3.0px;}.selected{ fill: red;}"); 
-fprintf(outputFile,".legend{fond-size:12px;}rect(stroke-width:2;}</style><bod> <script src=\"http://d3js.org/d3.v3.min.js\"    ></script><button onclick=\"metaData(-1)\">back to rainbow</button> <! Identifier  ><div id=\"graph\"></div> <script>var colors=d3.scale.category20();var radius=%i / 2; var     cluster=d3.layout.cluster().size([360, radiu",radius);
-fprintf(outputFile,"s - %i]); var diagonal=d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];})    ; var svg=d3.select(\"body\") .append(\"svg\") .attr(\"width\", radius * 2) .attr(    \"height\", radius * 2) .append(\"g\") .attr(\"transform\", \"translate(\"", labelLength);
-fprintf(outputFile," + radius     + \",\" + radius + \")\"); var legendRectSize=20; var legendSpacing=4; var currentLegend=-1; d3.json(\"%s\", function(error,root){ var nodes=cluster.nodes(root); var link=svg.selectAll(\"path.link\")  .data(cluster.links(nodes)).enter().append(\"path\").attr(\"class\", \"link\").on(\"click\", func", jsonFile);
-fprintf(outputFile,"tion(){d3.select(\".selectedLink\").classed(\"selectedLink\", false)    ; d3.select(this).classed(\"selectedLink\", true);}).attr(\"d\", diagonal); var     node=svg.selectAll(\"g.node\") .data(nodes).enter().append(\"g\").attr(\"class\",     \"node\").attr(\"transform\", function(d){return \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";}).on(\"click\", function(){ d3.select(\".selected\").classed(\"selected\", false); d3.select(this).classed(\"selected\", true);}).on(\"mouseover\", function(d){ var g=d3.select(this); var info=g.ap");
-fprintf(outputFile,"pend('text') .classed('info', true) .attr('x', 20) .attr('y', 10) .attr(\"transform\", function(d)    {return \"rotate(\" + (90 - d.x) + \")\";}) .text(d.distance) .style(\"font-size\"    ,\"15px\")  .style(\"font-weight\", \"bold\");}).on(\"mouseout\", function(){ d3.select(this).select('text.info').remove();}); node.append(\"circle\")  .attr(\"r\",     function(d){ if (d.name==\" \"){ return d.kids;}else return 5; }).style(\"fill\", function(d){if (d.name==\" \"){return d.whiteToBlack;}else return d3.rgb(d.    colorGroup);}); node.ap");
-fprintf(outputFile,"pend(\"text\").attr(\"dy\", \".55em\").attr(\"text-anchor\",     function(d){return d.x < 180 ? \"start\" : \"end\";}).attr(\"transform\", function    (d){return d.x < 180 ? \"translate(8)\" : \"rotate(180)translate(-8)\";}).text(function(d){return d.name;});});"); 
-fprintf(outputFile," var legend=svg.selectAll('.legend') .data(colors.domain()) .enter() .append('g') .attr('class', 'legend') .attr('transform', function (d, i){var height=legendRectSize + legendSpacing; var offset=height * colors.domain().length / 2; var horz=-2 * legendRectSize - radius -75; var vert=i * height - offset; return 'translate(' + horz + ',' + vert + ')';});legend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize) .style('fill', colors) .style('stroke',");
-fprintf(outputFile,"colors);legend.append('text') .attr('x', legendRectSize + legendSpacing) .attr('y', legendRectSize - legendSpacing) .text(function (d){return d;}); function updateLegend(val){var legend=svg.selectAll('g.legend').data(val);    legend.enter() .append('g') .attr('class', 'legend') .attr('transform', function (d, i){var height=legendRectSize + legendSpacing;var offset=height * colors.domain().length / 2;var horz=(-2 * legendRectSize) -radius - 50;var vert=(i * height - offset);return 'translate('"); 
-fprintf(outputFile,"+ horz + ',' + vert + ')';});legend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize) .style('fill', colors) .style('stroke', colors);legend.append('text') .attr('x', legendRectSize + legendSpacing) .attr('y', legendRectSize - legendSpacing) .text(function (d){return d;})}function metaData(val){var node=svg.selectAll(\"g.node\");  node.append(\"circle\").attr(\"r\", function(d){if (d.name==\" \"){return d.kids;}else return 5;}).style(\"fill\", function(d)");
-*/
- 
-//fprintf(outputFile,"{if (d.name==\" \"){return d.whiteToBlack;}else{if (val==-1) return d3.rgb(d.colorGroup);/* Identifier */}});var legend=svg.selectAll('g.legend').remove(); if (val >=0 ) updateLegend(colors.domain());colors=d3.scale.category20b();}"); 
-//fprintf(outputFile, " </script>");
+
+fprintf(outputFile,"\t</ul>\n</div>\n"); 
+fprintf(outputFile,"<div id=\"graph\"></div>\n");
+// Div the graph
+fprintf(outputFile,"<script>\n");
+// Global variables and stuffs
+fprintf(outputFile,"\tvar radius= %i / 2;\n", radius); 
+fprintf(outputFile,"\tvar cluster=d3.layout.cluster().size([360, radius - %i]);\n", labelLength); 
+fprintf(outputFile,"\tvar colors=d3.scale.category20();\n"); 
+fprintf(outputFile,"\tvar diagonal=d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];});\n"); 
+fprintf(outputFile,"\tvar svg=d3.select(\"#graph\") .append(\"svg\") .attr(\"width\", 150 + (radius * 2) )\n");  
+fprintf(outputFile,"\t\t.attr(\"height\", radius * 2) .append(\"g\") .attr(\"transform\",\n"); 
+fprintf(outputFile,"\t\t\"translate(\" + (radius + 150) + \",\" + radius + \")\");\n"); 
+fprintf(outputFile,"\tvar legendRectSize=20;\n");
+fprintf(outputFile,"\tvar legendSpacing=4;\n");
+fprintf(outputFile,"\tvar currentLegend=-1;\n");
+// Start D3 processing
+fprintf(outputFile,"\td3.json(\"%s\", function(error, root){\n", jsonFile); 
+// Variable nodes
+fprintf(outputFile,"\t\tvar nodes=cluster.nodes(root);\n\n"); 
+// Variable link
+fprintf(outputFile,"\t\tvar link=svg.selectAll(\"path.link\")\n"); 
+fprintf(outputFile,"\t\t\t.data(cluster.links(nodes)).enter().append(\"path\")\n"); 
+fprintf(outputFile,"\t\t\t.attr(\"class\", \"link\").on(\"click\", function(){\n");
+fprintf(outputFile,"\t\t\td3.select(\".selectedLink\").classed(\"selectedLink\", false);\n");
+fprintf(outputFile,"\t\t\td3.select(this).classed(\"selectedLink\", true);}).attr(\"d\", diagonal);\n\n");
+// Graph variables!!! These are parsed by D3 and used to generate the actual dendrogram
+// Variable internalNodes
+fprintf(outputFile,"\t\tvar internalNodes = svg.selectAll(\"g.internalNode\")\n");
+fprintf(outputFile,"\t\t\t.data(nodes).enter().append(\"g\")\n"); 
+fprintf(outputFile,"\t\t\t.attr(\"class\", \"internalNode\").attr(\"transform\",\n");
+fprintf(outputFile,"\t\t\tfunction(d){\n"); 
+fprintf(outputFile,"\t\t\t\treturn \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";});\n"); 
+fprintf(outputFile,"\t\t\t\tinternalNodes.append(\"circle\").attr(\"r\", function(d){\n"); 
+fprintf(outputFile,"\t\t\t\tif (d.name==\" \")\n");
+fprintf(outputFile,"\t\t\t\t{return 5;}\n"); //d.kids;}\n"); 
+fprintf(outputFile,"\t\t\t\telse{return 0;}})\n"); 
+fprintf(outputFile,"\t\t\t\t.style(\"fill\", function(d){\n");
+fprintf(outputFile,"\t\t\t\tif (d.name==\" \")\n"); 
+fprintf(outputFile,"\t\t\t\t{return d.whiteToBlack;}\n"); 
+fprintf(outputFile,"\t\t\t\telse{return \"none\";}})\n");
+fprintf(outputFile,"\t\t\t\t.style(\"stroke\", \"steelblue\")\n"); 
+fprintf(outputFile,"\t\t\t\t.style(\"stroke-width\", \"1.25px\");\n\n"); 
+// Variable innerLeaves
+fprintf(outputFile,"\t\tvar innerLeaves = svg.selectAll(\"g.innerLeaf\")\n");
+fprintf(outputFile,"\t\t\t.data(nodes).enter().append(\"g\")\n"); 
+fprintf(outputFile,"\t\t\t.attr(\"class\", \"innerLeaf\").attr(\"transform\",\n");
+fprintf(outputFile,"\t\t\tfunction(d){\n"); 
+fprintf(outputFile,"\t\t\t\treturn \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";});\n"); 
+fprintf(outputFile,"\t\t\t\tinnerLeaves.append(\"circle\").attr(\"r\", function(d){\n"); 
+fprintf(outputFile,"\t\t\t\tif (d.name !==\" \")\n");
+fprintf(outputFile,"\t\t\t\t{return 5;}})\n"); 
+fprintf(outputFile,"\t\t\t\t.style(\"fill\", function(d){\n");
+fprintf(outputFile,"\t\t\t\tif (d.name !==\" \")\n"); 
+fprintf(outputFile,"\t\t\t\t{return \"d.whiteToBlack\";}\n"); 
+fprintf(outputFile,"\t\t\t\t})\n\n");
+// Variable middleLeaves
+fprintf(outputFile,"\t\tvar middleLeaves = svg.selectAll(\"g.middleLeaf\")\n");
+fprintf(outputFile,"\t\t\t.data(nodes).enter().append(\"g\")\n"); 
+fprintf(outputFile,"\t\t\t.attr(\"class\", \"middleLeaf\").attr(\"transform\",\n");
+fprintf(outputFile,"\t\t\tfunction(d){\n"); 
+fprintf(outputFile,"\t\t\t\treturn \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";});\n"); 
+fprintf(outputFile,"\t\t\t\tmiddleLeaves.append(\"circle\").attr(\"r\", 5).style(\"fill\",\"none\");\n\n"); 
+// Variable outerLeaves
+fprintf(outputFile,"\t\tvar outerLeaves = svg.selectAll(\"g.outerLeaf\")\n");
+fprintf(outputFile,"\t\t\t.data(nodes).enter().append(\"g\")\n"); 
+fprintf(outputFile,"\t\t\t.attr(\"class\", \"outerLeaf\").attr(\"transform\",\n");
+fprintf(outputFile,"\t\t\tfunction(d){\n"); 
+fprintf(outputFile,"\t\t\t\treturn \"rotate(\" + (d.x - 90) + \")translate(\" + d.y + \")\";});\n"); 
+fprintf(outputFile,"\t\t\t\touterLeaves.append(\"circle\").attr(\"r\", 5).style(\"fill\",\"none\");\n\n"); 
+// Legend variables!!! These are parsed by D3 and used to generate the legends
+// Variable innerLegend
+fprintf(outputFile,"\t\t\tvar innerLegend=svg.selectAll('.innerLegend') .data(colors.domain()) .enter()\n"); 
+fprintf(outputFile,"\t\t\t.append('g') .attr('class', 'innerLegend')\n"); 
+fprintf(outputFile,"\t\t\t.attr('transform', \n"); 
+fprintf(outputFile,"\t\t\tfunction (d, i){\n"); 
+fprintf(outputFile,"\t\t\t\tvar height=legendRectSize + legendSpacing;\n"); 
+fprintf(outputFile,"\t\t\t\tvar offset=height * colors.domain().length / 2;\n"); 
+fprintf(outputFile,"\t\t\t\tvar horz=-2 * legendRectSize;\n"); 
+fprintf(outputFile,"\t\t\t\tvar vert=i * height - offset;\n"); 
+fprintf(outputFile,"\t\t\t\treturn 'translate(' + horz + ',' + vert + ')';}\n"); 
+fprintf(outputFile,"\t\t\t);\n");
+fprintf(outputFile,"\t\t\tinnerLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)\n"); 
+fprintf(outputFile,"\t\t\t.style('fill', colors) .style('stroke', colors);\n"); 
+fprintf(outputFile,"\t\t\tinnerLegend.append('text') .attr('x', legendRectSize + legendSpacing)\n");
+fprintf(outputFile,"\t\t\t.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});\n\n"); 
+// Variable middleLegend
+fprintf(outputFile,"\t\t\tvar middleLegend=svg.selectAll('.middleLegend') .data(colors.domain()) .enter()\n"); 
+fprintf(outputFile,"\t\t\t.append('g') .attr('class', 'middlerLegend')\n"); 
+fprintf(outputFile,"\t\t\t.attr('transform', \n"); 
+fprintf(outputFile,"\t\t\tfunction (d, i){\n"); 
+fprintf(outputFile,"\t\t\t\tvar height=legendRectSize + legendSpacing;\n"); 
+fprintf(outputFile,"\t\t\t\tvar offset=height * colors.domain().length / 2;\n"); 
+fprintf(outputFile,"\t\t\t\tvar horz=-2 * legendRectSize;\n"); 
+fprintf(outputFile,"\t\t\t\tvar vert=i * height - offset;\n"); 
+fprintf(outputFile,"\t\t\t\treturn 'translate(' + horz + ',' + vert + ')';}\n"); 
+fprintf(outputFile,"\t\t\t);\n");
+fprintf(outputFile,"\t\t\tmiddleLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)\n"); 
+fprintf(outputFile,"\t\t\t.style('fill', colors) .style('stroke', colors);\n"); 
+fprintf(outputFile,"\t\t\tmiddleLegend.append('text') .attr('x', legendRectSize + legendSpacing)\n");
+fprintf(outputFile,"\t\t\t.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});\n\n"); 
+// Variable outerLegend
+fprintf(outputFile,"\t\t\tvar outerLegend=svg.selectAll('.outerLegend') .data(colors.domain()) .enter()\n"); 
+fprintf(outputFile,"\t\t\t.append('g') .attr('class', 'outerLegend')\n"); 
+fprintf(outputFile,"\t\t\t.attr('transform', \n"); 
+fprintf(outputFile,"\t\t\tfunction (d, i){\n"); 
+fprintf(outputFile,"\t\t\t\tvar height=legendRectSize + legendSpacing;\n"); 
+fprintf(outputFile,"\t\t\t\tvar offset=height * colors.domain().length / 2;\n"); 
+fprintf(outputFile,"\t\t\t\tvar horz=-2 * legendRectSize;\n"); 
+fprintf(outputFile,"\t\t\t\tvar vert=i * height - offset;\n"); 
+fprintf(outputFile,"\t\t\t\treturn 'translate(' + horz + ',' + vert + ')';}\n"); 
+fprintf(outputFile,"\t\t\t);\n");
+fprintf(outputFile,"\t\t\touterLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)\n"); 
+fprintf(outputFile,"\t\t\t.style('fill', colors) .style('stroke', colors);\n"); 
+fprintf(outputFile,"\t\t\touterLegend.append('text') .attr('x', legendRectSize + legendSpacing)\n");
+fprintf(outputFile,"\t\t\t.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});\n\n"); 
+fprintf(outputFile,"\t\t\t});\n");
+// Function updateLegend
+fprintf(outputFile,"\tfunction updateLegend(val, layer, shift){\n"); 
+fprintf(outputFile,"\t\tvar legend=svg.selectAll('g.'+layer+'legend').data(val);\n"); 
+fprintf(outputFile,"\t\tlegend.enter() .append('g') .attr('class', 'legend') .attr('transform', function (d, i){\n");
+fprintf(outputFile,"\t\t\tvar height=legendRectSize + legendSpacing;\n"); 
+fprintf(outputFile,"\t\t\tvar offset=height *colors.domain().length / 2;\n"); 
+fprintf(outputFile,"\t\t\tvar horz=(-2 * legendRectSize) - radius - 75;\n");
+fprintf(outputFile,"\t\t\tvar vert=-(i * height - offset);\n"); 
+fprintf(outputFile,"\t\t\treturn 'translate(' + horz + ',' + vert + ')';});\n"); 
+fprintf(outputFile,"\t\tlegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)\n");
+fprintf(outputFile,"\t\t.style('fill', colors) .style('stroke', colors);\n"); 
+fprintf(outputFile,"\t\tlegend.append('text') .attr('x', legendRectSize + legendSpacing)\n"); 
+fprintf(outputFile,"\t\t.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});}\n\n");
+// Function leafColors
+fprintf(outputFile,"\tfunction leafColors(val, layer, shift){\n"); 
+fprintf(outputFile,"\t\tvar node = svg.selectAll(\"g.\" + layer + \"Leaf\")\n"); 
+fprintf(outputFile,"\t\t.selectAll(\"circle\").style(\"fill\", function(d){\n"); 
+fprintf(outputFile,"\t\t\tif (d.name !== \" \"){\n"); 
+fprintf(outputFile,"\t\t\t\tif (val ===0) {return d3.rgb(d.colorGroup);}\n"); 
+fprintf(outputFile,"\t\t /* Identifier */\n"); 
+fprintf(outputFile,"\t\t\t}\n"); 
+fprintf(outputFile,"\t\t\t\telse{return 'none'}});\n"); 
+fprintf(outputFile,"\t\tvar legend=svg.selectAll('g.' + layer + 'Legend').remove();\n"); 
+fprintf(outputFile,"\t\tif (val >= 0) updateLegend(colors.domain(), layer);\n"); 
+fprintf(outputFile,"\t\tcolors=d3.scale.category20();}\n\n"); 
+// Function nodeColors
+fprintf(outputFile,"\tfunction nodeColors(val){\n"); 
+fprintf(outputFile,"\t\tvar node=svg.selectAll(\"g.internalNode\").selectAll(\"circle\")\n"); 
+fprintf(outputFile,"\t\t.style(\"fill\",function(d){\n"); 
+fprintf(outputFile,"\t\t\tif (d.name === \" \"){\n"); 
+fprintf(outputFile,"\t\t\t\tif (val==-1) return d3.rgb(d.colorGroup);\n"); 
+fprintf(outputFile,"\t\t\t\tif (val==0) return d3.rgb(d.whiteToBlack);\n"); 
+fprintf(outputFile,"\t\t\t\tif (val==1) return d3.rgb(d.whiteToBlackSqrt);\n"); 
+fprintf(outputFile,"\t\t\t\tif (val==2) return d3.rgb(d.whiteToBlackQuad);\n"); 
+fprintf(outputFile,"}});\n"); 
+fprintf(outputFile,"\t\t}\n"); 
+fprintf(outputFile,"</script>\n"); 
+fprintf(outputFile,"</body>"); 
+
 carefulClose(&outputFile); 
 }
 
