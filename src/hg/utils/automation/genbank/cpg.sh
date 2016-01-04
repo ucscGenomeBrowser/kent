@@ -20,26 +20,28 @@ export asmName=`basename "${asmDirectory}"`
 cd "${asmDirectory}"
 # could be a zero length file, which means there are no results to be had
 if [ ! -f "bbi/${asmName}.cpgIslandExtUnmasked.ncbi.bb" ]; then
-  rm -fr cpg
+  rm -fr cpgU
   sleep 1
-  mkdir cpg
-  touch `pwd`/cpg
+  mkdir cpgU
+  touch `pwd`/cpgU
   printf "# %s cpgIslandExtUnmasked from %s.ncbi.2bit\n" "${dateStamp}" "${asmName}" 1>&2
   twoBitToFa -noMask "${asmDirectory}/${asmName}.ncbi.2bit" stdout \
-    | faToTwoBit stdin "${asmDirectory}/cpg/ncbi.noMask.2bit"
+    | faToTwoBit stdin "${asmDirectory}/cpgU/ncbi.noMask.2bit"
   /cluster/bin/scripts/doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
-     -buildDir=`pwd`/cpg \
+     -buildDir=`pwd`/cpgU \
        -stop=makeBed -tableName=cpgIslandExtUnmasked.ncbi \
          -chromSizes="${asmDirectory}/${asmName}.ncbi.chrom.sizes" \
-          -maskedSeq="${asmDirectory}/cpg/ncbi.noMask.2bit" -workhorse=hgwdev \
-              -smallClusterHub=ku "${asmName}" > cpg/do.log 2>&1
-  mv "cpg/${asmName}.cpgIslandExtUnmasked.ncbi.bb" bbi
-  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
+          -maskedSeq="${asmDirectory}/cpgU/ncbi.noMask.2bit" -workhorse=hgwdev \
+              -smallClusterHub=ku "${asmName}" > cpgU/do.log 2>&1
+  mv "cpgU/${asmName}.cpgIslandExtUnmasked.ncbi.bb" bbi
+#  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
-  rm -f ncbi.noMask.2bit
-  rm -fr cpg
+#  rm -f ncbi.noMask.2bit
+#  rm -fr cpg
   sleep 1
   touch -r "${asmName}.ncbi.2bit" "bbi/${asmName}.cpgIslandExtUnmasked.ncbi.bb"
+else
+  printf "# done: %s.cpgIslandExtUnmasked.ncbi.bb\n" "${asmName}" 1>&2
 fi
 # could be a zero length file, which means there are no results to be had
 if [ ! -f "bbi/${asmName}.cpgIslandExt.ncbi.bb" ]; then
@@ -55,9 +57,11 @@ if [ ! -f "bbi/${asmName}.cpgIslandExt.ncbi.bb" ]; then
           -maskedSeq="${asmDirectory}/${asmName}.ncbi.2bit" -workhorse=hgwdev \
               -smallClusterHub=ku "${asmName}" > cpg/do.log 2>&1
   mv "cpg/${asmName}.cpgIslandExt.ncbi.bb" bbi
-  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
+#  ssh ku "cd ${asmDirectory}/cpg; para clearSickNodes; para flushResults; para resetCounts; para freeBatch"
   sleep 1
-  rm -fr cpg
+#  rm -fr cpg
   sleep 1
   touch -r "${asmName}.ncbi.2bit" "bbi/${asmName}.cpgIslandExt.ncbi.bb"
+else
+  printf "# done: %s.cpgIslandExt.ncbi.bb\n" "${asmName}" 1>&2
 fi

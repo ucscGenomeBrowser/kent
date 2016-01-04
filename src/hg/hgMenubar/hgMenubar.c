@@ -1,3 +1,9 @@
+/*
+ * This CGI is used by static html pages to show a menu bar.
+ * On an Apache with activated SSI, a html statement like
+ * <!--#include virtual="../cgi-bin/hgMenubar"-->
+ * will include the menu bar into a static page.
+ */
 #include "common.h"
 #include "dystring.h"
 #include "filePath.h"
