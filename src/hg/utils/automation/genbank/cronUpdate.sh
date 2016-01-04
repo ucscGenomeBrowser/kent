@@ -4,11 +4,15 @@
 set -beEu -o pipefail
 
 function usage() {
-  printf "usage: cronUpdate.sh <genbank|refseq>\n" 1>&2
+  printf "usage: cronUpdate.sh <genbank|refseq> </path/to/local/copy/from/ncbi>\n" 1>&2
   printf "select genbank or refseq assemblies update\n" 1>&2
+  printf "the '/path/to/local/copy/from/ncbi' is a local filesystem where\n" 1>&2
+  printf "the copy from NCBI will accumulate.  To that path the asmType\n" 1>&2
+  printf "will be added, for UCSC this is:\n" 1>&2
+  printf "/hive/data/outside/ncbi/genomes/<genbank|refseq>/\n" 1>&2
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 2 ]; then
   usage
   exit 255
 fi
@@ -21,10 +25,20 @@ if [ "${asmType}" != "genbank" -a "${asmType}" != "refseq" ]; then
   exit 255
 fi
 
-printf "running asmType: %s\n" "${asmType}" 1>&2
+export outside="$2/${asmType}"
+if [ ! -d "${outside}" ]; then
+  printf "ERROR: expecting the local directory path to exist:\n" 1>&2
+  printf "    %s\n" "${outside}"
+  usage
+  exit 255
+fi
 
-# should pick up this variable from a configuration file
-export outside="/hive/data/outside/ncbi/genomes/${asmType}"
+printf "# running asmType: %s\n" "${asmType}" 1>&2
+printf "# into directory: %s\n" "${outside}" 1>&2
+export dirList="vertebrate_mammalian vertebrate_other archaea bacteria fungi invertebrate other plant protozoa"
+if [ "${asmType}" = "refseq" ]; then
+  dirList="archaea bacteria fungi invertebrate mitochondrion plant plasmid plastid protozoa vertebrate_mammalian vertebrate_other viral"
+fi
 
 ##########################################################################
 ##  the '|| /bin/true' prevents this script from exit on rsync errors
@@ -34,11 +48,10 @@ rsync -avPL \
 rsync -avPL \
   rsync://ftp.ncbi.nlm.nih.gov/genomes/${asmType}/README.txt ./
 
-for D in archaea bacteria fungi invertebrate mitochondrion plant plasmid \
-  plastid protozoa vertebrate_mammalian vertebrate_other viral
+for D in ${dirList}
 do
   mkdir -p ${D}
-  echo "##########  working: ${D}  #########################" 1>&2
+  printf "##########  working: %s  #########################\n" "${D}" 1>&2
   rsync -avPL --include "*/" --include="chr2acc" --include="*chr2scaf" \
      --include "*placement.txt" --include "*definitions.txt" \
      --include "*_rm.out.gz" --include "*agp.gz" --include "*regions.txt" \
@@ -75,20 +88,29 @@ cd "${outside}"
 YYYY=`date "+%Y"`
 MM=`date "+%m"`
 DS=`date "+%FT%T"`
-rsyncLogFile="logs/${YYYY}/${MM}/${DS}.rsync.log"
-fileList="fileListings/${YYYY}/${MM}/${DS}.genomicFna.list"
-asmRptSum="fileListings/${YYYY}/${MM}/${DS}.assembly_report.sum"
+export rsyncLogFile="logs/${YYYY}/${MM}/${DS}.rsync.log"
+export currentFnaList="${YYYY}/${MM}/${DS}.genomicFna.list"
 mkdir -p "logs/${YYYY}/${MM}"
 mkdir -p "fileListings/${YYYY}/${MM}"
-echo "# rsync log: ${rsyncLogFile}" 1>&2
-echo "# file list: ${fileList}" 1>&2
+printf "# rsync log: %s\n" "${rsyncLogFile}" 1>&2
+printf "# file list: %s\n" "fileListings/${currentFnaList}" 1>&2
 time (ncbiRsync) > "${rsyncLogFile}" 2>&1
 ## construct list of *_genomic.fna.gz files, to be used in processing everything
 find . -type f | grep "_genomic.fna.gz" \
-   | sed -e 's#^./##;' | sort > "${fileList}" 2>&1
-rm -f "fileListings/latest.genomicFna.list"
-ln -s "${YYYY}/${MM}/${DS}.genomicFna.list" "fileListings/latest.genomicFna.list"
-cat "${fileList}" | sed -e 's/_genomic.fna.gz/_assembly_report.txt/' \
-    | xargs sum > "${asmRptSum}"
-rm -f "fileListings/latest.assembly_report.sum"
-ln -s "${YYYY}/${MM}/${DS}.assembly_report.sum" "fileListings/latest.assembly_report.sum"
+   | sed -e 's#^./##;' | sort > "fileListings/${currentFnaList}" 2>&1
+export sumCurrent=`cat "fileListings/${currentFnaList}" | sum`
+if [ -s "fileListings/latest.genomicFna.list" ]; then
+  sumPrevious=`cat "fileListings/latest.genomicFna.list" | sum`
+  if [ "${sumCurrent}" = "${sumPrevious}" ]; then
+    printf "# genomic.fna.gz list current == previous - '%s' == '%s'\n" "${sumCurrent}" "${sumPrevious}" 1>&2
+    rm -f "fileListings/${currentFnaList}"
+  else
+    printf "# genomic.fna.gz list current != previous - '%s' != '%s'\n" "${sumCurrent}" "${sumPrevious}" 1>&2
+    # diff exits non-zero, use the '|| true' to move on despite that 'fail' code
+    (diff "fileListings/${currentFnaList}" \
+       "fileListings/latest.genomicFna.list" | grep "^< " \
+         | sed -e 's/^< //; s#/.*##;' | sort | uniq -c 1>&2) || true
+    rm -f "fileListings/latest.genomicFna.list"
+    ln -s "${currentFnaList}" "fileListings/latest.genomicFna.list"
+  fi
+fi

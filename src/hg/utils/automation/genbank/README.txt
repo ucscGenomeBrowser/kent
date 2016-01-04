@@ -1,3 +1,4 @@
+############################################################################
 
 UCSC procedure to mirror genbank/refseq assemblies and generate assembly hubs
 
@@ -48,5 +49,23 @@ The cron script also maintains file listings and logs in:
    ${outside}/fileListings/yyyy/mm/
    ${outside}/logs/yyyy/mm/
 to track changes over time and provide a record of activity
+
+############################################################################
+# processing NCBI files into assembly hub files
+
+Processing takes place in the two hierarchies:
+   /hive/data/inside/ncbi/genomes/refseq/
+   /hive/data/inside/ncbi/genomes/genbank/
+
+The scripts from this source directory:
+     kent/src/hg/utils/automation/genbank/
+are used to process the NCBI files into assembly hub files.
+This processing is done with a cluster computer set up since there
+are a large number of steps to perform.
+
+The primary driving script is: ncbiToUcsc.sh
+It takes two arguments:
+    1. genbank|refseq - to specify which hierarchy to work on
+    2. <pathTo>/*_genomic.fna.gz - fasta sequence file in the 'outside' path
 
 ############################################################################
