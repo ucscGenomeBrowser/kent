@@ -202,7 +202,12 @@ for (bed = bedList; bed != NULL; bed = bed->next)
 	 mean = sum/coverage;
     fprintf(f, "%s\t%d\t%d\t%g\t%g\t%g", bed->name, size, coverage, sum, sum/size, mean);
     if (outputMinMax)
-        fprintf(f, "\t%g\t%g", minVal, maxVal);
+        {
+        if (coverage > 0)
+            fprintf(f, "\t%g\t%g", minVal, maxVal);
+        else
+            fprintf(f, "\t0\t0");       // put out zeros for min/max if no coverage
+        }
     fputc('\n', f);
     optionallyPrintBedPlus(bedF, bed, fieldCount, mean, outputMinMax, minVal, maxVal);
     updateSums(sum, coverage, size);
