@@ -9,7 +9,7 @@ fi
 
 export asmRpt=$1
 
-grep -v "^#" "${asmRpt}" | awk '{
+(grep -v "^#" "${asmRpt}" || true) | awk '{
 if (match($2,".*patch")) {
  suffix="_fix"
  if (match($2,"novel.*")) { suffix="_alt" }

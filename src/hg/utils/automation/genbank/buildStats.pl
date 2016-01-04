@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use File::Basename;
 
 # from Perl Cookbook Recipe 2.17, print out large numbers with comma
 # delimiters:
@@ -28,7 +29,6 @@ while (my $sizeFile = shift) {
     my %sizes;	# key is contigName, value is size
 
     if ($sizeFile eq "stdin") {
-#	printf STDERR "#\treading: stdin\n";
 	while (my $line = <>) {
 	    next if ($line =~ m/^\s*#/);
 	    ++$contigCount;
@@ -38,7 +38,6 @@ while (my $sizeFile = shift) {
 	    $sizes{$key} = $size;
 	}
     } else {
-#	printf STDERR "#\treading: $sizeFile\n";
 	open (FH, "<$sizeFile") or die "can not read $sizeFile";
 	while (my $line = <FH>) {
 	    next if ($line =~ m/^\s*#/);
@@ -58,8 +57,6 @@ while (my $sizeFile = shift) {
     my $n50Size = $totalSize / 2;
 
     my $genomeSize = $totalSize;
-    printf "<b>contig count:</b> %s<br>
-<b>total size:</b> %s bases<br>\n", commify($contigCount), commify($totalSize);
 
     my $prevContig = "";
     my $prevSize = 0;
@@ -73,7 +70,6 @@ while (my $sizeFile = shift) {
 	    $prevName =~ s/_X_[0-9]+//;
 	    my $origName = $key;
 	    $origName =~ s/_X_[0-9]+//;
-	    printf "<b>N50 size:</b> %s<br>\n<hr>\n", commify($sizes{$key});
             # the third number here is N50 size
             printf STDERR "%d\t%d\t%d\n", $contigCount, $genomeSize, $sizes{$key};
 	    last;
