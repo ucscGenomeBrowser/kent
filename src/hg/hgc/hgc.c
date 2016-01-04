@@ -12280,7 +12280,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("<BR><A HREF=\"%s\" TARGET=_blank>View summary of all genomic tRNA predictions</A><BR>\n"
 	       , trna->genomeUrl);
-        printf("<BR><A HREF=\"%s\" TARGET=_blank>View tRNA alignments</A><BR>\n", trna->trnaUrl);
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View complete details for this tRNA</A><BR>\n", trna->trnaUrl);
 	}
 
     if (trna->next != NULL)
