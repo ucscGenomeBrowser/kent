@@ -1140,9 +1140,6 @@ if (configEl != NULL)
 return asObj;
 }
 
-// Why isn't this in jksql.h?
-#define NOSQLINJ "NOSQLINJ "
-
 static char *sqlExplain(struct sqlConnection *conn, char *query)
 /* For now, just turn the values back into a multi-line "#"-comment string. */
 {
