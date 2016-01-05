@@ -28,13 +28,13 @@
   <ul><b>
     <li><a class="toc" href="#Intro">Introduction</a>
     <li><a class="toc" href="#About">About the multi-region view</a>
+    <li><a class="toc" href="#GetStarted">Getting started with the multi-region view</a>
     <ul>
-       <li><a class="toc" href="#ExonOnly">Exon Only</a>
-       <li><a class="toc" href="#GeneOnly">Gene Only</a>
+       <li><a class="toc" href="#ExonOnly">Exon only</a>
+       <li><a class="toc" href="#GeneOnly">Gene only</a>
        <li><a class="toc" href="#CustomRegions">Custom Regions</a>
-       <li><a class="toc" href="#Haplotype">Haplotype View</a>    
+       <li><a class="toc" href="#Haplotype">Haplotype view</a>    
     </ul>
-    <li><a class="toc" href="#GetStarted">Getting Started</a>
     <li><a class="toc" href="#Examples">Examples</a>
   </b></ul>
 </td>
@@ -85,14 +85,71 @@
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
+<a name="GetStarted"></a>
+<div class="section">
+	<h1>Getting Started with the multi-region view</h1>
+	<div class="sectionContent">
+	<p>
+        Use the following instructions to display mutliple regions in the genome browser.
+        
+	<p>
+	<b>Step 1. Pick a genome assembly and region</b><br>
+           <ul>
+              <li>Select the genome assembly you would like to view just as when normally
+                  viewing an assembly, by using the top menu's Genomes link. If you would like
+                  view custom regions for your assembly hub, navigate to it's browser
+                  display as normal.
+
+              <li>Once an assembly has been selected, you may search for a gene of interest 
+                  or select a region to view using the Genome Browser search bar if desired,
+                  just as normal.
+           </ul>	
+        <p>
+	<b>Step 2. Select the multi-region view</b><br>
+	   <ul>
+              <li>Click <button type="button">multi-region</button> while on the track display
+                  page to bring up the multi-region configuration window. <br># image needed here
+                  for  where to click 
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
+                  standard Genome Browser display, and can be used to return to a standard 
+                  display.
+           </ul>
+        <p>
+	<b>Step 3. Configure the multi-region view</b><br>
+	   <ul>
+              # Perhaps show the configuration window to the side of this text?
+              <li>Now we can select which multi-region view we would like to display:<br>
+                 <ul>
+                    <li>For exon only select  <b>Show exons</b> 
+                    <li>For gene only select <b>genes using ...</b>
+                    <li>For custom regions select <b>Custom regions from BED URL</b>
+                    <li>For haplotype select <b>Show one alternate haplotype...</b>
+                 </ul>
+              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
+                  you would like every other exon or gene to be highlighted in blue. <br># image of
+                  highlighted browser here.
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+              <li>Click submit to be taken back to the Genome Browser display.
+           </ul>
+        <p>
+        After entering multi-region mode, the usual browser display configurations will still 
+        work, such as zooming in and out, reversing and resizing the view, highlighting and 
+        zooming to highlighted selection, and track search.
+ 
+    </div><!-- .sectionContent --> 
+</div><!-- .section -->
+
 <a name="About"></a>
 <div class="section">
         <h1>About the multi-region view</h1>
         <div class="sectionContent">
 
-        <a name="Exon Only"></a>
+        <a name="ExonOnly"></a>
         <p>
-        <b>Exon Only View</b><br>
+        <h4>Exon Only View</h4><br>
            The exon only view removes the intronic bases, and thus only displays annotations
            that fall within an exon.
 
@@ -103,7 +160,7 @@
            the exon only view is selected the padding bases will be intron or intergenic 
            while if gene only view is selected the padding bases will be all intergenic.
         
-        <a name="Exon Only"></a>
+        <a name="GeneOnly"></a>
         <p>
         <b>Gene Only View</b><br>
            The gene only view allows one to remove all intergenic bases in a given range, thus
@@ -150,22 +207,16 @@
 	<p>
         The human hg38, hg19, hg18 and hg17 assemblies all possess an extra feature while
         using the multi-region view: showing an alternate haplotype on it's chromosome.
+        <p>
         For a list of possible haplotypes, click on the <b>sequences</b> link while
         on the human gateway page:
         <br># Picture of link here #
 	<img style="border: 1px solid black; display: block;"
-	src="">
+	   src="">
         Any haplotype of the form <em>chr_name_alt</em> can be placed on it's chromosome,
         unlike the random and unplaced sequences, which are currently not supported by
         the multi-region view.
         
-        <p><b>Displaying an alternate haplotype</b><br>
-        To place an alternate haplotype on it's chromosome open up the multi-region
-        configuration window from the browser display and select
-        <b>Show one alternate haplotype, placed on its chromosome, using ID:</b>
-        and paste or type the name of an alternate haplotype. The browser display
-        will now feature the alternate haplotype in the center of the display along with
-        the flanking regions from the reference sequence.
         <br># Example of haplotype view #
 	<img style="border: 1px solid black; display: block;"
 	src="">
@@ -183,62 +234,6 @@
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
-<a name="GetStarted"></a>
-<div class="section">
-	<h1>Getting Started: Exon or Gene Only View</h1>
-	<div class="sectionContent">
-	<p>
-        Use the following instructions to display mutliple regions in the genome browser.
-        
-	<p>
-	<b>Step 1. Pick a genome assembly and region</b><br>
-           <ul>
-              <li>Select the genome assembly you would like to view just as when normally
-                  viewing an assembly, by using the top menu's Genomes link. If you would like
-                  view custom regions for your assembly hub, navigate to it's browser
-                  display as normal.
-
-              <li>Once an assembly has been selected, you may search for a gene of interest 
-                  or select a region to view using the Genome Browser search bar if desired,
-                  just as normal.
-           </ul>	
-        <p>
-	<b>Step 2.Select the multi-region view</b><br>
-	   <ul>
-              <li>Click <button type="button">multi-region</button> while on the track display
-                  page to bring up the multi-region configuration window. <br># image needed here
-                  for  where to click 
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
-              <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
-                  standard Genome Browser display, and can be used to return to a standard 
-                  display.
-           </ul>
-        <p>
-	<b>Step 3. Configure the multi-region view</b><br>
-	   <ul>
-              # Perhaps show the configuration window to the side of this text?
-              <li>Now we can select which multi-region view we would like to display:<br>
-                 <ul>
-                    <li>For exon only select  <b>Show exons</b> 
-                    <li>For gene only select <b>genes using ...</b>
-                    <li>For custom regions select <b>Custom regions from BED URL</b>
-                    <li>For haplotype select <b>Show one alternate haplotype...</b>
-                 </ul>
-              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
-                  you would like every other exon or gene to be highlighted in blue. <br># image of
-                  highlighted browser here.
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
-              <li>Click submit to be taken back to the Genome Browser display.
-           </ul>
-        <p>
-        After entering multi-region mode, the usual browser display configurations will still 
-        work, such as zooming in and out, reversing and resizing the view, highlighting and 
-        zooming to highlighted selection, and track search.
- 
-    </div><!-- .sectionContent --> 
-</div><!-- .section -->
 
 <a name="Examples"></a>
 <div class="section">
