@@ -18,13 +18,19 @@ track refGene override
 visibility pack
 priority 2
 
+#Phenotype and Literature
+
+track omimAvSnp override
+visibility pack
+priority 1
+
 # mRNA and EST
 
 track mrna override
 priority 1
 
 track intronEst override
-priority 2
+visibility hide
 
 # Comparative Genomics
 
