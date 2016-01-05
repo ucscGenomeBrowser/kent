@@ -14,6 +14,7 @@
 #include "jksql.h"
 #include "hgRelate.h"
 #include "basicBed.h"
+#include "genePred.h"
 #include "linefile.h"
 // TODO: Consider using Appris to pick 'functional' transcript
 #include "encode/wgEncodeGencodeAttrs.h"
@@ -24,7 +25,7 @@
 
 // Versions are used to suffix tablenames
 char *gtexVersion = "";
-char *gencodeVersion = "V20";
+char *gencodeVersion = "V19";
 
 boolean doLoad = FALSE;
 char *database, *table;
@@ -152,6 +153,20 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+// Get GTEx gene models
+struct hash *modelHash = newHash(0);
+struct genePred *gp;
+verbose(2, "Reading gtexGeneModel table\n");
+sqlSafef(query, sizeof(query), "SELECT * from gtexGeneModel%s", gtexVersion);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredLoad(row);
+    verbose(3, "...Adding gene model %s to modelHash\n", gp->name);
+    hashAdd(modelHash, gp->name, gp);
+    }
+sqlFreeResult(&sr);
+
 // Get data (experiment count and scores), and create BEDs
 verbose(2, "Reading gtexTissueMedian table\n");
 struct gtexGeneBed *geneBed, *geneBeds = NULL;
@@ -169,11 +184,24 @@ while ((row = sqlNextRow(sr)) != NULL)
     geneBed->expCount = gtexData->tissueCount;
     geneBed->expScores = CloneArray(gtexData->scores, gtexData->tissueCount);
 
-    // Get canonical transcript
+    // Get position info from gene models
+    struct hashEl *el = hashLookup(modelHash, geneId);
+    if (el == NULL)
+        {
+        warn("Can't find gene %s in modelHash", geneId);
+        continue;
+        }
+    gp = el->val;
+    geneBed->chrom = gp->chrom;
+    geneBed->chromStart = gp->txEnd;
+    geneBed->chromEnd = gp->txEnd;
+    safecpy(geneBed->strand, sizeof(geneBed->strand), gp->strand);
+
+    // Get a canonical transcript
     verbose(3, "...Looking up geneId %s in geneHash \n", geneId);
     chopSuffix(geneId);
-    struct hashEl *el = hashLookup(geneHash, geneId);
-    // TODO:  Handle genes not in canonical table (there are 3 of them)
+    el = hashLookup(geneHash, geneId);
+    // TODO:  Handle genes not in canonical table
     if (el == NULL)
         {
         warn("Can't find gene %s in geneHash", geneId);
@@ -182,12 +210,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     geneInfo = el->val;
     char *transcriptId = geneInfo->transcriptId;
     geneBed->transcriptId = transcriptId;
-
-    // Get other info
-    geneBed->chrom = geneInfo->chrom;
-    geneBed->chromStart = geneInfo->chromStart;
-    geneBed->chromEnd = geneInfo->chromEnd;
-    safecpy(geneBed->strand, sizeof(geneBed->strand), geneInfo->strand);
 
     struct wgEncodeGencodeAttrs *ga = hashFindVal(gaHash, transcriptId);
     if (ga == NULL)

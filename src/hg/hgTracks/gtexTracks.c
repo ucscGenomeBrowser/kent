@@ -17,6 +17,7 @@
 struct gtexGeneExtras 
 /* Track info */
     {
+    char *version;              /* Trailing track name, e.g. 'V6' */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -286,6 +287,11 @@ static void gtexGeneLoadItems(struct track *tg)
 struct gtexGeneExtras *extras;
 AllocVar(extras);
 tg->extraUiData = extras;
+
+/* Get version info from track table name */
+// TODO: get valid versions from gtexInfo table
+if (endsWith(tg->table, "V6"))
+    extras->version = "V6";
 extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, 
@@ -296,12 +302,14 @@ if (sameString(samples, GTEX_SAMPLES_COMPARE_SEX))
 char *comparison = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COMPARISON_DISPLAY,
                         GTEX_COMPARISON_DEFAULT);
 extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FALSE;
-extras->maxMedian = gtexMaxMedianScore(NULL);
+extras->maxMedian = gtexMaxMedianScore(extras->version);
 
 /* Get geneModels in range */
 //TODO: version the table name, move to lib
+char buf[256];
 char *modelTable = "gtexGeneModel";
-struct hash *modelHash = loadGeneModels(modelTable);
+safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "");
+struct hash *modelHash = loadGeneModels(buf);
 
 /* Get geneBeds (names and all-sample tissue median scores) in range */
 bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);

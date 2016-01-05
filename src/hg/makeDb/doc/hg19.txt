@@ -30770,11 +30770,24 @@ cd ..
 
 hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
 
+#############################################################################
+# GTEx V6 (October 2015) Kate
+# Create BED from hgFixed tables (see doc/gtex)
 
+cd /hive/data/outside/gtex/V6
 
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -noLoad -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
+# table looks OK
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
 
+# Load gene models (Gencode V19 transcript union from GTEx)
+gunzip gencode.v19.genes.patched_contigs.gtf.gz
+awk '$1 !~ /^#/ {print "chr"$0}' gencode.v19.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
+        gtfToGenePred stdin gencodeV19.hg19.genePred
+hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred
 
-EOF
 #############################################################################
 # 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie)
     # It was kind of a pain to get the Aspera command line client ascp this time around --
