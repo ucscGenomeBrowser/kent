@@ -201,7 +201,39 @@
         <p>
         <b>Custom Regions</b></br>
         <p>
-        As mentioned in the <a class="toc" href="#GetStarted">Getting Started</a> section,
+        The custom regions from BED URL mode allows the browser to display only those coordinates
+        specified in a BED file, and thus allows for user-specific modeling of various regions. 
+ 
+        <p>
+        For instance, one may create a BED file containg different regions from across mutliple
+        chromosomes, like <a class="toc" href=#Examples">Example 3</a> below, and you can now
+        explore 3 different chromosomes at one time.
+
+        <p>
+        Or, if a repeat region was clogging up your normal browser display, you could
+        specify a BED file containing the upstream portion you are interested in, one unit
+        of the repeating element, and then downstream region, to gain a better understanding
+        of what is around the repeat. This is only possible if the BED file has the correct
+        coordinates in the right order, as the display only depends on the order of regions
+        specified in the file, not the coordinates relative genomic position to each other.
+
+        <p>
+        It is important to note that the BED files supported can be of any type, although
+        only information from BED 3 or BED 12 files are relevant to the display. Be careful
+        about the order of the regions specified, as the &quot;slices&quot; displayed are in
+        order of the BED file, and not in order of their genomic position. Check out 
+        <a class="toc" href="#Examples">Example 4</a> for an illustrative example of how 
+        important this ordering is.
+
+        <p>
+        As mentioned in the <a class="toc" href="#GetStarted">Getting Started</a> section, 
+        searching, scrolling and zooming while viewing regions from a custom BED URL may be
+        a little counterintuitive. While viewing multiple custom regions, your view is 
+        limited to only the regions you have specified, so although you can still zoom in
+        down to single base resolution you can only zoom out as far as the intial view, and 
+        the up and downstream scrolling is also limited to the range specified by the BED file.
+        
+
         <a name="Haplotype"></a>
         <p>
         <b>Haplotype</b><br>
