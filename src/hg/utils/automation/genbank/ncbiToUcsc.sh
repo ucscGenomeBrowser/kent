@@ -2,8 +2,6 @@
 
 set -beEu -o pipefail
 
-set -x
-
 function usage() {
   printf "usage: ucscToNcbi.sh <genbank|refseq> <pathTo>/*_genomic.fna.gz
   select genbank or refseq assembly hierarchy,
@@ -36,7 +34,9 @@ fi
 
 outside="/hive/data/outside/ncbi/genomes/$asmType"
 inside="/hive/data/inside/ncbi/genomes/$asmType"
-export scripts="/hive/data/inside/ncbi/genomes/refseq/scripts"
+# expecting to find all the scripts used by this in the
+# users 'kent' source tree copy
+export scripts="$HOME/kent/src/hg/utils/automation/genbank"
 
 export fnaFile=$2
 

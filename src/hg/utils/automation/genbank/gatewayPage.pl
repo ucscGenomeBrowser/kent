@@ -233,10 +233,10 @@ printf "</p>\n<hr>
 <p>
 <b>Download files for this assembly hub:</b><br>
 To use the data from this assembly for a local hub instance at your
-institution, download this data as indicated by these instructions.<br>
+institution, download these data as indicated by these instructions.<br>
 See also: <a href=\"/goldenPath/help/hgTrackHubHelp.html\" target=_blank>track hub help</a> documentation.<br>
 <br>
-To download this data, issue this <em>wget</em> command:
+To download these data, issue this <em>wget</em> command:
 <pre>
 wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
    --reject \"index.html*\" -P \"$urlDirectory\" \\
@@ -304,7 +304,7 @@ to find Genome Browser tracks that match specific selection criteria.
 </p>
 <hr>\n";
 
-printf "<script type='text/javascript' src='/js/gatewayPage.js?ver=8'></script>\n";
+printf "<script type='text/javascript' src='/js/gatewayPage.js'></script>\n";
 
 __END__
 
