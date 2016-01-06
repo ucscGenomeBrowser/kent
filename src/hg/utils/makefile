@@ -22,6 +22,7 @@ UTILS_APPLIST = \
 	bedExtendRanges \
 	bedToPsl \
 	bedWeedOverlapping \
+	bigPslToPsl \
 	chromGraphFromBin \
 	chromGraphToBin \
 	crTreeIndexBed \
@@ -38,6 +39,7 @@ UTILS_APPLIST = \
 	oligoMatch \
 	overlapSelect \
 	positionalTblCheck \
+	pslToBigPsl \
 	pslMap \
 	tdbQuery \
 	twoBitMask
