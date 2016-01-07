@@ -8578,19 +8578,15 @@ boolean positionIsVirt = FALSE;
 position = getPositionFromCustomTracks();
 if (NULL == position)
     {
+    //warn("cartGetPosition: database=%s position=%s", database, position); // DEBUG REMOVE
+    position = cartGetPosition(cart, database, &lastDbPosCart);
     if (sameOk(cgiOptionalString("position"), "lastDbPos"))
 	{
-	position = cartGetPosition(cart, database, &lastDbPosCart);
-	//warn("cartGetPosition: database=%s position=%s", database, position); // DEBUG REMOVE
 	// DEBUG REMOVE
 	//struct dyString *encoded = newDyString(4096);
 	//cartEncodeState(lastDbPosCart, encoded);
 	//warn("restored lastDbPosCart encoded state = [%s]", encoded->string); // DEBUG REMOVE
         restoreSavedVirtPosition();
-	}
-    else
-	{
-	position = cloneString(cartUsualString(cart, "position", NULL));
 	}
     //warn("position = %s\n", position); // DEBUG REMOVE
     if (startsWith("virt:", position))
@@ -8598,7 +8594,6 @@ if (NULL == position)
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	//warn("positionIsVirt=TRUE position = %s\n", position); // DEBUG REMOVE
 	positionIsVirt = TRUE;
-	goto gotVirtPos;
 	}
     }
 
@@ -8608,42 +8603,42 @@ if (sameString(position, ""))
     hUserAbort("Please go back and enter a coordinate range or a search term in the \"search term\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
-chromName = NULL;
-winStart = 0;
-if (isGenome(position) || NULL ==
-    (hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
+if (!positionIsVirt)
     {
-    //warn("doing weird stuff with isGenome() and findGenomePos(), add more debugging");
-    if (winStart == 0)  /* number of positions found */
-        {
-        freeMem(position);
-        position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
-        hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-        if (hgp != NULL && differentString(position, defaultPosition))
-            cartSetString(cart, "position", position);
-        }
+    chromName = NULL;
+    winStart = 0;
+    if (isGenome(position) || NULL ==
+	(hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
+	{
+	//warn("doing weird stuff with isGenome() and findGenomePos(), add more debugging");
+	if (winStart == 0)  /* number of positions found */
+	    {
+	    freeMem(position);
+	    position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
+	    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
+	    if (hgp != NULL && differentString(position, defaultPosition))
+		cartSetString(cart, "position", position);
+	    }
+	}
+
+    /* After position is found set up hash of matches that should
+       be drawn with names highlighted for easy identification. */
+    createHgFindMatchHash();
+
+    /* This means that no single result was found
+    I.e., multiple results may have been found and are printed out prior to this code*/
+    if (NULL == chromName)
+	{
+	// In case user manually edits the browser location as described in #13009,
+	// revert the position.  If they instead choose from the list as we expect,
+	// that will set the position to their choice.
+	// lastPosition gets set in cart.c
+	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+	cartSetString(cart, "position", lastPosition);
+	return;
+	}
+
     }
-
-/* After position is found set up hash of matches that should
-   be drawn with names highlighted for easy identification. */
-createHgFindMatchHash();
-
-/* This means that no single result was found
-I.e., multiple results may have been found and are printed out prior to this code*/
-if (NULL == chromName)
-    {
-    // In case user manually edits the browser location as described in #13009,
-    // revert the position.  If they instead choose from the list as we expect,
-    // that will set the position to their choice.
-    char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-    cartSetString(cart, "position", lastPosition);
-    return;
-    }
-
-// TODO NOTE lastPosition gets set in cart.c
-
-
-gotVirtPos:
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
 //warn("virtMode=%d\n", virtMode); // DEBUG REMOVE
@@ -8682,35 +8677,39 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType); 
 
-again:
-//warn("virtModeType=%s lastVirtModeType=%s\n", virtModeType, lastVirtModeType); // DEBUG REMOVE
-if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
-    { // RETURNING TO DEFAULT virtModeType
-    virtModeType = "default";
-    cartSetString(cart, "virtModeType", virtModeType); 
-    findNearest = TRUE;
-    if (positionIsVirt)
-	position = cartUsualString(cart, "nonVirtPosition", "");
-    char *nvh = cartUsualString(cart, "nonVirtHighlight", NULL);
-    if (nvh)
-	cartSetString(cart, "highlight", nvh); 
-    //warn("leaving virtMode, going to position %s", position);  // DEBUG REMOVE
-    if (!sameString(position,""))
-	parseNonVirtPosition(position);
-    }
+while(TRUE)
+    {
+    //warn("virtModeType=%s lastVirtModeType=%s\n", virtModeType, lastVirtModeType); // DEBUG REMOVE
+    if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
+	{ // RETURNING TO DEFAULT virtModeType
+	virtModeType = "default";
+	cartSetString(cart, "virtModeType", virtModeType); 
+	findNearest = TRUE;
+	if (positionIsVirt)
+	    position = cartUsualString(cart, "nonVirtPosition", "");
+	char *nvh = cartUsualString(cart, "nonVirtHighlight", NULL);
+	if (nvh)
+	    cartSetString(cart, "highlight", nvh); 
+	//warn("leaving virtMode, going to position %s", position);  // DEBUG REMOVE
+	if (!sameString(position,""))
+	    parseNonVirtPosition(position);
+	}
 
-
-//warn("\nGALT before initRegionList chromName=%s winStart=%d winEnd=%d\n", chromName, winStart,winEnd); // DEBUG REMOVE
-if (!initRegionList())   // initialize the region list, sets virtModeExtraState
-    { // virt mode failed, forced to return to default
-    virtModeType = "default";
-    cartSetString(cart, "virtModeType", virtModeType);
-    position = cloneString(hDefaultPos(database));
-    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
-    cartSetString(cart, "position", position);
-    positionIsVirt=FALSE;
-    virtMode=FALSE;
-    goto again;
+    //warn("\nGALT before initRegionList chromName=%s winStart=%d winEnd=%d\n", chromName, winStart,winEnd); // DEBUG REMOVE
+    if (initRegionList())   // initialize the region list, sets virtModeExtraState
+	{
+	break;  
+	}
+    else
+	{ // virt mode failed, forced to return to default
+	virtModeType = "default";
+	cartSetString(cart, "virtModeType", virtModeType);
+	position = cloneString(hDefaultPos(database));
+	hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
+	cartSetString(cart, "position", position);
+	positionIsVirt=FALSE;
+	virtMode=FALSE;
+	}
     }
 
 // PAD padding of exon regions is now being done inside the fetch/merge.
