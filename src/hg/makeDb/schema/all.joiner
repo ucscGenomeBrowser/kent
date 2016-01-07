@@ -4902,6 +4902,7 @@ identifier pubsArticleId external=pubTools
     $gbd.pubsBlat.name dupeOk
     $gbd.pubsBlatPsl.articleId
     hgFixed.pubsSequenceAnnot.articleId
+    hgFixed.pubsMarkerAnnot.articleId
     hgFixed.pubsArticle.articleId
 
 identifier pubsSequenceId external=pubTools
