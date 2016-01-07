@@ -27,8 +27,8 @@
 <td>
   <ul><b>
     <li><a class="toc" href="#Intro">Introduction</a>
-    <li><a class="toc" href="#About">About the multi-region view</a>
     <li><a class="toc" href="#GetStarted">Getting started with the multi-region view</a>
+    <li><a class="toc" href="#About">About the multi-region view</a>
     <ul>
        <li><a class="toc" href="#ExonOnly">Exon only</a>
        <li><a class="toc" href="#GeneOnly">Gene only</a>
@@ -74,7 +74,8 @@
            <p>
              Using the multi-region display, one can:<br>
              <ul>
-                <li>Show all the SNP's that are within exons using the exon only view.
+                <li>Show all the SNP's that are within exons using the exon only view. 
+                    ### make examples section same as these examples? or different? 
                 <li>Show only the genes on a chromosome with the gene only view.
                 <li>Display the same chromosomal position on either side of a gene in order 
                     to model a repeat region using a BED file with custom regions.
@@ -97,7 +98,7 @@
            <ul>
               <li>Select the genome assembly you would like to view just as when normally
                   viewing an assembly, by using the top menu's Genomes link. If you would like
-                  view custom regions for your assembly hub, navigate to it's browser
+                  to view custom regions for your assembly hub, navigate to it's browser
                   display as normal.
 
               <li>Once an assembly has been selected, you may search for a gene of interest 
@@ -107,7 +108,7 @@
         <p>
 	<b>Step 2. Select the multi-region view</b><br>
 	   <ul>
-              <li>Click <button type="button">multi-region</button> while on the track display
+              <li>Click <button type="button">multi-region</button> while on the default display
                   page to bring up the multi-region configuration window. <br># image needed here
                   for  where to click 
                   <img style="border: 1px solid black; display: block;"
@@ -160,43 +161,62 @@
         <a name="ExonOnly"></a>
         <p>
         <b>Exon Only View</b><br>
-        The exon only view removes any bases that fall within an intron from the display, and 
-        thus only annotations that fall within an exon will be displayed. .
+        The exon only view removes any bases that fall within an intron from the display, thus
+        removing those annotations as well. The intergenic sequence is also removed, thus the 
+        browser display will only consist of annotations and bases that fall within an exon or 
+        padding region.
 
         <p>
         The padding field defines the number of intronic or intergenic bases to buffer
-        each &quot;slice&quot; of the exon only view. 
+        each &quot;slice&quot; of the view.
+        <br>### Screen here of end of an exon, padding bases and next exon ### 
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+
+        <p>
+        The exon only view uses various gene tracks to compute where to &quot;slice&quot; the
+        display, but only uses the highest <em>priority</em> track per organism. Thus if your
+        organism has multiple gene tracks available, only one gene track will be used to
+        pull exon positions from. If you are noticing intron regions in your display while you
+        are in exon only mode, be sure that you have the correct gene track turned on. The 
+        track used will be listed next to <b>genes</b> option in the multi-region configuration
+        window, as both the exon and gene only view use the same track. 
+        
+        <p>
+        The heirarchy of gene tracks for exon slicing is as follows:
+           <ul>
+              <li>GENCODE ....
+              <li>....
+           </ul>
+        <br>#### Also need to mention jumping of position if no annotations in view ####
+
+        <p>
+        If the gene track used to compute the slicing is a 
+        <a href="">super track link help page here</a> 
+        or contains other transcripts, then only the longest exons will be used to determine
+        slices, regardless of whether or not they are in the same transcript. The below screenshot
+        shows the exon only view for the SOD1 gene in human. The 3rd &quot;exon&quot; from the 
+        left falls within the intron of the actual SOD1 gene, but is shown as an exon because it 
+        is part of the GENCODE v22 super-track.
+        <br>### Screenshot of SOD1 hg38 in exon only mode ###
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
+        
         <a name="GeneOnly"></a>
         <p>
         <b>Gene Only View</b><br>
-           The gene only view allows one to remove all intergenic bases in a given range, thus
-           only displaying annotations that fall within the range of a gene. 
+        The gene only view is similiar to the exon only view, however it removes all 
+        intergenic bases in a given range, thus only displaying annotations that fall within the 
+        coordinates of a gene. 
+ 
+        <p>
+        As with exon only mode, gene only mode uses the padding field to set the number
+        of intergenic bases to buffer each gene. 
 
-        <b>Important Notes about the exon and gene only view</b>
-           <ul>
-              <li>Exon and gene slicing is computed relative to the "most annotated" gene track for
-                  that assembly, and includes all exons and genes in every subtrack if the 
-                  gene track used is a super-track or composite track.
-              <br># Session or screenshot example<br>
-              <li>For the gene only option, the longest transcript in a given region is used as the 
-                  reference for where to slice. This may be confusing when genes are nested inside
-                  other genes:
-                  # Screenshot example of nested gene
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
-                  
-              <li>Exon and gene only views are unavailable with assembly hubs. This is because
-                  assembly hubs do not come with a default gene track, however viewing custom
-                  regions should still work.
-           </ul>
-        <p>  
-        While in exon or gene only mode, the number of bases used for padding comes from the
-        intergenic sequence(gene only) or intron and intergenic sequence (exon only). This may
-        lead to confusion when there are fewer intergenic or intronic bases between each exon
-        or gene than the padding dictates. For example, on tightly packed chromosomes like 
-        the mitochondiral chromosome, there may actually be zero bases in between elements,
-        and thus the multi-region display may behave oddly in these types of situtations.
-        
+        <p>
+        Again similiar to exon only mode, gene only mode also uses the longest transcript from 
+        its reference gene track as the region to display?
+
         <a name="CustomRegions"></a>
         <p>
         <b>Custom Regions</b></br>
@@ -206,8 +226,10 @@
  
         <p>
         For instance, one may create a BED file containg different regions from across mutliple
-        chromosomes, like <a class="toc" href=#Examples">Example 3</a> below, and you can now
+        chromosomes, like <a class="toc" href="#Example3">Example 3</a> below, and you can now
         explore 3 different chromosomes at one time.
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
 
         <p>
         Or, if a repeat region was clogging up your normal browser display, you could
@@ -222,8 +244,10 @@
         only information from BED 3 or BED 12 files are relevant to the display. Be careful
         about the order of the regions specified, as the &quot;slices&quot; displayed are in
         order of the BED file, and not in order of their genomic position. Check out 
-        <a class="toc" href="#Examples">Example 4</a> for an illustrative example of how 
+        <a class="toc" href="#Example4">Example 4</a> for an illustrative example of how 
         important this ordering is.
+                  <img style="border: 1px solid black; display: block;"
+                       src="">
 
         <p>
         As mentioned in the <a class="toc" href="#GetStarted">Getting Started</a> section, 
@@ -273,12 +297,15 @@
 <h1>Examples</h1>       
         <div class="sectionContent">
         <p>
+        <a name="Example1"></a>
         <b>Gene only example</b><br>
 
         <p>
+        <a name="Example2"></a>
         <b>Exon only example</b><br>
         
         <p>
+        <a name="Example3"></a>
         <b>BED3 example</b><br>
            # show multiple chromosomes
         <p><b>Displaying regions from multiple chromsomes</b></br>
@@ -300,6 +327,7 @@
              src="">
  
         <p>
+        <a name="Example4"></a>
         <b>BED12 example</b><br>
            # be sure to emphasize how regions show in order specified
              not genomic order <br>
@@ -332,6 +360,7 @@
         For an example BED12 URL, click <a href="../../~chmalee/bed12formultregion.txt">here</a>.
 
         <p>
+        <a name="Example5"></a>
         <b>Haplotyple example</b><br>
 
 	</div><!-- .sectionContent --> 
