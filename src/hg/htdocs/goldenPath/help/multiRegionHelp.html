@@ -109,32 +109,40 @@
 	<b>Step 2. Select the multi-region view</b><br>
 	   <ul>
               <li>Click <button type="button">multi-region</button> while on the default display
-                  page to bring up the multi-region configuration window. <br># image needed here
-                  for  where to click 
+                  page to bring up the multi-region configuration window.
+                  <p>
                   <img style="border: 1px solid black; display: block;"
-                       src="">
+                       src="../../images/MultiRegionButton.png">
               <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
                   standard Genome Browser display, and can be used to return to a standard 
                   display.
            </ul>
         <p>
-	<b>Step 3. Configure the multi-region view</b><br>
-	   <ul>
-              ### Perhaps show the configuration window to the side of this text? ###
-              <li>Now we can select which multi-region view we would like to display:<br>
-                 <ul>
-                    <li>For exons only select  <b>Show exons</b> 
-                    <li>For genes only select <b>genes using ...</b>
-                    <li>For custom regions select <b>Custom regions from BED URL</b>
-                    <li>For a haplotype chromosome select <b>Show one alternate haplotype...</b>
+	<b>Step 3. Configure the multi-region view</b>
+           <table cellpadding=1>
+              <tr><td>
+	         <ul>
+                    <li>Now we can select which multi-region view we would like to display:<br>
+                    <ul>
+                       <li>For exons only select  <b>Show exons</b> 
+                       <li>For genes only select <b>genes using ...</b>
+                       <li>For custom regions select <b>Custom regions from BED URL</b>
+                       <li>For a haplotype chromosome select <b>Show one alternate haplotype...</b>
+                    </ul>
+                    <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
+                        you would like every other &quot;slice&quot;to be highlighted in blue. 
+                    <li>Click submit to be taken back to the Genome Browser display.
                  </ul>
-              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
-                  you would like every other &quot;slice&quot;to be highlighted in blue. <br>
-                  ### image of highlighted browser here. ###
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
-              <li>Click submit to be taken back to the Genome Browser display.
-           </ul>
+              </td>
+              <td>
+                 <img style="border: 1px solid black; display: block;"
+                       src="../../images/MultiRegionConfigurationWindow.png">
+              </td></tr>
+           </table> 
+        <p style="text-align: center">The result of selecting <b>Show exons</b> and <b>Highlight
+                                      alternating regions</b>
+        <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionHighlighted.png">
         <p>
         After entering multi-region mode, the usual browser display configurations will still 
         work, such as zooming in and out, reversing and resizing the view, highlighting and 
@@ -171,7 +179,7 @@
         each &quot;slice&quot; of the view.
         <br>### Screen here of end of an exon, padding bases and next exon ### 
                   <img style="border: 1px solid black; display: block;"
-                       src="">
+                       src="../../images/MultiRegionExonPadding.png">
 
         <p>
         The exon only view uses various gene tracks to compute where to &quot;slice&quot; the
@@ -182,14 +190,9 @@
         track used will be listed next to <b>genes</b> option in the multi-region configuration
         window, as both the exon and gene only view use the same track. 
         
-        <p>
-        The heirarchy of gene tracks for exon slicing is as follows:
-           <ul>
-              <li>GENCODE ....
-              <li>....
-           </ul>
         <br>#### Also need to mention jumping of position if no annotations in view ####
-
+        <p>
+        
         <p>
         If the gene track used to compute the slicing is a 
         <a href="">super track link help page here</a> 
@@ -200,7 +203,7 @@
         is part of the GENCODE v22 super-track.
         <br>### Screenshot of SOD1 hg38 in exon only mode ###
                   <img style="border: 1px solid black; display: block;"
-                       src="">
+                       src="../../images/MultiRegionSOD1.png">
         
         <a name="GeneOnly"></a>
         <p>
@@ -223,7 +226,11 @@
         <p>
         The custom regions from BED URL mode allows the browser to display only those coordinates
         specified in a BED file, and thus allows for user-specific modeling of various regions. 
- 
+
+        <p>
+        ### Write about comments here ###<br>
+        options are #database #shortDesc and #padding<br>
+        only grabs positions from BED3 or BED12, all other bed options ignored 
         <p>
         For instance, one may create a BED file containg different regions from across mutliple
         chromosomes, like <a class="toc" href="#Example3">Example 3</a> below, and you can now
@@ -265,8 +272,7 @@
         The human hg38, hg19, hg18 and hg17 assemblies all possess an extra feature while
         using the multi-region view: showing an alternate haplotype on it's chromosome.
         <p>
-        For a list of possible haplotypes, click on the <b>sequences</b> link while
-        on the human gateway page:
+        For a list of possible haplotypes, check the goldenPath/hg$/bigZips/hg$.chrom.sizes file 
         <br># Picture of link here #
 	<img style="border: 1px solid black; display: block;"
 	   src="">
@@ -362,6 +368,8 @@
         <p>
         <a name="Example5"></a>
         <b>Haplotyple example</b><br>
+        <img style="border: 1px solid black; display: block;"
+             src="../../images/MultiRegionHaplotypeView.png">
 
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
