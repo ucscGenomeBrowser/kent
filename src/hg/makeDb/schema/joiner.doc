@@ -1,5 +1,8 @@
 INTRODUCTION
 
+To copy the all.joiner to the right place in the your cgi-bin directory,
+run a "make" in the src/hg/hgTables directory.
+
 The .joiner file describes relationships between tables.
 In particular it groups together fields in different tables
 that refer to the same identifier.  The first field in the group

@@ -949,7 +949,7 @@ track snp142Common
 shortLabel Common SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
 snpSeq snp142Seq
