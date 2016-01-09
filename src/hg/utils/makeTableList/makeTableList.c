@@ -193,6 +193,11 @@ if(all)
         slNameAddHead(&dbs, cloneString(row[0]));
         }
 
+    slNameAddHead(&dbs, cloneString("hgFixed"));
+    slNameAddHead(&dbs, cloneString("go"));
+    slNameAddHead(&dbs, cloneString("uniProt"));
+    slNameAddHead(&dbs, cloneString("visiGene"));
+
     sqlFreeResult(&sr);
     hDisconnectCentral(&conn);
     }
@@ -203,10 +208,6 @@ else
         slNameAddHead(&dbs, argv[i]);
     }
 
-slNameAddHead(&dbs, cloneString("hgFixed"));
-slNameAddHead(&dbs, cloneString("go"));
-slNameAddHead(&dbs, cloneString("uniProt"));
-slNameAddHead(&dbs, cloneString("visiGene"));
 
 struct sqlConnection *conn;
 
