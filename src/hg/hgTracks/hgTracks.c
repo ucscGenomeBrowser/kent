@@ -7362,6 +7362,15 @@ if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
 
 //warn("copy track structures for multiple  windows"); // DEBUG REMOVE
 // COPY TRACK STRUCTURES for other windows.
+
+// TODO: due to an issue where some loading code is modifying the visibility
+// of subtracks from hide to visible, I am forced to remove the optimization
+// of cloning ONLY non-hidden tracks and subtracks.  If the offending code
+// can be identified and moved into a step proceding the track cloning,
+// then we can return to that optimization. 
+//	if (track->visibility != tvHide)
+//		if (subtrack->visibility != tvHide)
+
 windows->trackList = trackList;  // save current track list in window
 struct window *window;
 for (window=windows; window->next; window=window->next)
@@ -7370,7 +7379,7 @@ for (window=windows; window->next; window=window->next)
     for (track = trackList; track != NULL; track = track->next)
 	{
 	track->nextWindow = NULL;
-	if (track->visibility != tvHide)
+	//if (track->visibility != tvHide)  // Unable to use this optimization at present
 	    {
 	    struct track *copy;
 	    AllocVar(copy);
@@ -7386,7 +7395,7 @@ for (window=windows; window->next; window=window->next)
 	    struct track *subtrack;
 	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		{
-		if (subtrack->visibility != tvHide)
+		//if (subtrack->visibility != tvHide)  // Unable to use this optimization at present
 		    {
 		    struct track *subcopy;
 		    AllocVar(subcopy);

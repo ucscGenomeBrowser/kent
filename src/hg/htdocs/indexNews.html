@@ -38,12 +38,44 @@
     <!-- start news -->
   <hr>
   <p>
-  <font color="#006666" size="4"><b>
-  Happy Holidays from the UCSC Genome Browser! &mdash;</b></font>
-  Here's a <A
-  HREF="../cgi-bin/hgTracks?db=hg38&hgct_customText=http://hgwdev.cse.ucsc.edu/~brianlee/customTracks/testBigGenePred/testFun/customTrackLines">card</A> 
-  for you!
+  <font color="#006666" size="4"><b> 08 January 2016 -
+  dbSNP 144 Available for hg19 and hg38</b></font>
+  <p>
+  We are pleased to announce the release of four tracks derived 
+  from NCBI <a href="http://www.ncbi.nlm.nih.gov/SNP/">
+  dbSNP</a> Build 144 data, available on the two most 
+  recent human assemblies GRCh37/hg19 and GRCh38/hg38. 
+  </p>
+  <p>
+  There are four SNP tracks available as part of this release. 
+  One is a track containing all mappings of reference SNPs 
+  to the human assembly, labeled "All SNPs (144)". 
+  The other three tracks are subsets of this track 
+  and show interesting and easily defined subsets of dbSNP:
+  </p>
+
+  <ul>
+  <li>Common SNPs (144): uniquely mapped variants that appear 
+  in at least 1% of the population or are 100% non-reference</li>
+  <li>Flagged SNPs (144): uniquely mapped variants, excluding 
+  Common SNPs, that have been flagged by dbSNP as 
+  "clinically associated"</li>
+  <li>Mult. SNPs (144): variants that have been mapped to more 
+  than one genomic location</li> 
+  </ul>
+  <p>
+  By default, only the Common SNPs (144) are visible; 
+  other tracks must be made visible using the track controls. 
+  You will find the other SNPs (144) tracks on both 
+  of GRCh37/hg19 and GRCh38/hg38 browsers in the "Variation" group.
+  </p>
+  <p>
+  The tracks were produced at UCSC by Angie Hinrichs and 
+  Luvina Guruvadoo. We'd like to thank the dbSNP group at 
+  NCBI for providing access to these data. 
+  </p>
   <hr>
+  
   <p>
   <font color="#006666" size="4"><b> 21 December 2015 -
   Two New Assemblies Now Available in the Genome Browser</b></font>
@@ -91,38 +123,15 @@
   </p>
   
   <hr>
-  <p>
-  <font color="#006666" size="4"><b>16 December 2015 &mdash;
-  Output from Related Tables Now Available in the Data Integrator</b></font>
-  <p>
-  In the UCSC Genome Browser database, detailed information on the annotations for many tracks
-  is stored in extra tables. This information can include things such as identifiers
-  in other databases, transcript status, or other descriptive information. You can now obtain
-  data from these related tables in your output from the
-  <a href="cgi-bin/hgIntegrator">Data Integrator</a>.
-  </p>
-
-  <p>
-  To add related tables to your Data Integrator output, first, select and add at least one
-  track to your data sources. Then, scroll down to the "Output Options" section and click the
-  <button type="button">Choose fields</button> button.
-  Lastly, at the bottom of the section for each selected track, you will see a drop-down menu
-  labeled "Related tables" which allows you to select and add various tables to your output.
-  <p><img style="border: 1px solid black; display: block;"
-                src="images/hgIntegratorRelatedTablesAnnouncement.png">
-  <p>
-  For more information about using the Data Integrator, please see the
-  <a href="goldenPath/help/hgIntegratorHelp.html">User Guide</a>.
-  </p>
-
-  <p>
-  Thank you to Angie Hinrichs and Matthew Speir for their work on this feature.
-  </p>
-
-
-  <hr>
         <!-- start archives -->
 <!--staged for future release
+
+        <p>
+        <font color="#006666" size="4"><b>08 January 2016 &mdash; 
+        dbSNP 144 Available for hg19 and hg38
+        <a href="goldenPath/newsarch.html#010816">Read more</a>.
+        </p>
+
         <p>
         <font color="#006666" size="4"><b> 21 December 2015 -
         Two New Assemblies Now Available in the Genome Browser</b></font>
@@ -131,6 +140,7 @@
         and cat (<i>Felis catus</i>) assemblies.
 	<a href="goldenPath/newsarch.html#122115">Read more</a>. 
         </p>
+-->
 
         <p>
 	<font color="#006666" size="4"><b>16 December 2015 &mdash;
@@ -139,24 +149,7 @@
 	<a href="cgi-bin/hgIntegaror">Data Integrator</a>.
 	<a href="goldenPath/newsarch.html#121615">Read more</a>.
         </p>
--->
-	<p>
-	<font color="#006666" size="4"><b>9 December 2015 &mdash;
-	Data from 1000 Genomes Project Phase 3 Now Available</b>: </font>
-	We have made data from Phase 3 of the
-	<a href="http://www.1000genomes.org/" target="_blank">1000 Genomes Project</a>
-	available for the hg19 version of the human assembly.
-        <a href="goldenPath/newsarch.html#120915">Read more</a>.
-	</p>
-
-        <p>
-        <font color="#006666" size="4"><b>25 November 2015 &mdash;
-        New &quot;View - In External Tools&quot; Menu Sends Data to Prediction Websites!</b></font>
-        Do you often get the current sequence with &quot;View - DNA&quot; just to copy
-        and paste it into another website? With the new menu &quot;View - In External Tools&quot;
-        you can now send the current region to remote tools with two clicks.
-        <a href="goldenPath/newsarch.html#112515">Read more</a>.
-        </p>
+	
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
     <BR></TD></TR></TABLE>

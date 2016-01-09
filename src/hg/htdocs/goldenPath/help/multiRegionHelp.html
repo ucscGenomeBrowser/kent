@@ -28,7 +28,7 @@
   <ul><b>
     <li><a class="toc" href="#Intro">Introduction</a>
     <li><a class="toc" href="#GetStarted">Getting started with the multi-region view</a>
-    <li><a class="toc" href="#About">About the multi-region view</a>
+    <li><a class="toc" href="#About">About the multi-region modes</a>
     <ul>
        <li><a class="toc" href="#ExonOnly">Exon only</a>
        <li><a class="toc" href="#GeneOnly">Gene only</a>
@@ -109,53 +109,63 @@
 	<b>Step 2. Select the multi-region view</b><br>
 	   <ul>
               <li>Click <button type="button">multi-region</button> while on the default display
-                  page to bring up the multi-region configuration window. <br># image needed here
-                  for  where to click 
+                  page to bring up the multi-region configuration window:
+                  <p>
                   <img style="border: 1px solid black; display: block;"
-                       src="">
-              <li>By default the <b>Show single-chromosome view</b> will be selected. This is the
-                  standard Genome Browser display, and can be used to return to a standard 
-                  display.
+                       src="../../images/MultiRegionButton.png">
+              
            </ul>
         <p>
-	<b>Step 3. Configure the multi-region view</b><br>
-	   <ul>
-              ### Perhaps show the configuration window to the side of this text? ###
-              <li>Now we can select which multi-region view we would like to display:<br>
-                 <ul>
-                    <li>For exons only select  <b>Show exons</b> 
-                    <li>For genes only select <b>genes using ...</b>
-                    <li>For custom regions select <b>Custom regions from BED URL</b>
-                    <li>For a haplotype chromosome select <b>Show one alternate haplotype...</b>
-                 </ul>
-              <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
-                  you would like every other &quot;slice&quot;to be highlighted in blue. <br>
-                  ### image of highlighted browser here. ###
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
-              <li>Click submit to be taken back to the Genome Browser display.
+	<b>Step 3. Configure the multi-region view</b>
+           <ul>
+              <li>By default the <b>Show single-chromosome view</b> will be selected. This 
+                  is the standard Genome Browser display, and can be used to return to a 
+                  standard display.<br>
+              <table cellpadding=15>
+              <tr><td>
+                 <li>Now we can select which multi-region view we would like to display:<br>
+                    <ul>
+                       <li>For exons only select  <b>Show exons</b> 
+                       <li>For genes only select <b>genes using ...</b>
+                       <li>For custom regions select <b>Custom regions from BED URL</b>
+                       <li>For a haplotype chromosome select <b>Show one alternate haplotype...</b>
+                    </ul>
+                 <li>Select the <b>Highlight alternating regions in multi-region view</b> box if
+                     you would like every other &quot;slice&quot;to be highlighted in blue. 
+              </td>
+              <td>
+                 <img style="border: 1px solid black; display: block;"
+                       src="../../images/MultiRegionConfigurationWindow.png">
+              </td></tr>
+              </table> 
+              <li>Click submit to be taken back to the Genome Browser display:
            </ul>
+        <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionMouseHighlighted.png">
+        <p style="text-align: center">An example <b>exon only</b> view.
         <p>
         After entering multi-region mode, the usual browser display configurations will still 
         work, such as zooming in and out, reversing and resizing the view, highlighting and 
-        zooming to highlighted selection, and track search.
+        zooming to the highlighted selection, and track search.
         
         <p>
-        ###### NEED TO REWORD ######<br>
+        <b>Searching and zooming</b><br>
         Searching and zooming while using custom BED regions are a little different than while in
         exon or gene only and haplotype mode. Searching should work normally when in gene only, 
-        exon only, and haplotype mode, however in custom regions mode, when a term or position 
-        is entered into the search box from the tracks display page, the browser first searches 
-        for the term within the multi-region view, and if found, the browser will zoom to that 
-        feature. If the term is not found, then the browser will search the default search set 
-        and redirect if found. 
+        exon only, and haplotype mode, however in custom regions mode, the process is slightly
+        different, see the <a href="#CustomRegions">About Custom Regions</a> section for more
+        information. 
+        <p>
+        Additionally, while viewing custom regions, the browser can only zoom out as far as the
+        BED defined coordinates, although single base resolution is still available. Again, for
+        more information see the <a href="#CustomRegions">About Custom Regions</a> section. 
          
     </div><!-- .sectionContent --> 
 </div><!-- .section -->
 
 <a name="About"></a>
 <div class="section">
-        <h1>About the multi-region view</h1>
+        <h1>About the multi-region modes</h1>
         <div class="sectionContent">
 
         <a name="ExonOnly"></a>
@@ -169,11 +179,11 @@
         <p>
         The padding field defines the number of intronic or intergenic bases to buffer
         each &quot;slice&quot; of the view.
-        <br>### Screen here of end of an exon, padding bases and next exon ### 
-                  <img style="border: 1px solid black; display: block;"
-                       src="">
+        <img style="border: 1px solid black; display: block;"
+             src="../../images/MultiRegionExonPadding.png">
 
         <p>
+        ##### NEEDS REWORDING #####
         The exon only view uses various gene tracks to compute where to &quot;slice&quot; the
         display, but only uses the highest <em>priority</em> track per organism. Thus if your
         organism has multiple gene tracks available, only one gene track will be used to
@@ -183,13 +193,8 @@
         window, as both the exon and gene only view use the same track. 
         
         <p>
-        The heirarchy of gene tracks for exon slicing is as follows:
-           <ul>
-              <li>GENCODE ....
-              <li>....
-           </ul>
-        <br>#### Also need to mention jumping of position if no annotations in view ####
-
+        #### Also need to mention jumping of position if no annotations in view ####
+        <br>placeholder text
         <p>
         If the gene track used to compute the slicing is a 
         <a href="">super track link help page here</a> 
@@ -200,22 +205,21 @@
         is part of the GENCODE v22 super-track.
         <br>### Screenshot of SOD1 hg38 in exon only mode ###
                   <img style="border: 1px solid black; display: block;"
-                       src="">
+                       src="../../images/MultiRegionSOD1.png">
         
         <a name="GeneOnly"></a>
         <p>
         <b>Gene Only View</b><br>
         The gene only view is similiar to the exon only view, however it removes all 
         intergenic bases in a given range, thus only displaying annotations that fall within the 
-        coordinates of a gene. 
+        coordinates of a gene.  
  
         <p>
         As with exon only mode, gene only mode uses the padding field to set the number
-        of intergenic bases to buffer each gene. 
-
-        <p>
-        Again similiar to exon only mode, gene only mode also uses the longest transcript from 
-        its reference gene track as the region to display?
+        of intergenic bases to buffer each gene. On tightly packed chromosomes or regions
+        where there is little intergenic space, be careful the padding is not set too high,
+        or multiple genes may display as a single gene, since overlapping transcripts are 
+        considered as one gene. 
 
         <a name="CustomRegions"></a>
         <p>
@@ -223,9 +227,45 @@
         <p>
         The custom regions from BED URL mode allows the browser to display only those coordinates
         specified in a BED file, and thus allows for user-specific modeling of various regions. 
- 
+
         <p>
-        For instance, one may create a BED file containg different regions from across mutliple
+        Like BED custom tracks, some comments are supported in the BED files used by multi-region
+        mode. The supported comments are: 
+        <table>
+        <tr><td>
+           <ul style="list-style:none;">
+              <li>database
+              <li>shortDesc
+              <li>padding
+           </ul>
+        </td>
+        <td>
+           <ul style="list-style:none;">
+              <li>The database comment ensures that if this BED file is loaded on a database other
+                  than the one specified, the custom regions mode will not work.
+              <li>shortDesc specifies the content in the parentheses here:
+                  <!--<img style="border: 1px solid black; display: block;"
+                       src="">-->
+                  "customUrl" becomes your comment.
+              <li>The padding field changes the padding similiar to exon and gene only mode's
+                  padding field.
+           </ul>
+        </td></tr>
+        </table>
+        <br>
+        To use one of these comments, just include the comment at the top of your BED file, like
+        so:<br>
+        <pre>
+   #database hg38
+   #shortDesc Example of a short description
+   chr1 pos1 pos2
+   chr2 pos1 pos2
+   .
+   .
+   .
+        </pre>
+        <p>
+        For instance, one may create a BED file containing different regions from across mutliple
         chromosomes, like <a class="toc" href="#Example3">Example 3</a> below, and you can now
         explore 3 different chromosomes at one time.
                   <img style="border: 1px solid black; display: block;"
@@ -248,14 +288,34 @@
         important this ordering is.
                   <img style="border: 1px solid black; display: block;"
                        src="">
-
+        <p>
+         Searching and zooming while using custom BED regions are a little different than while in
+        exon or gene only and haplotype mode. Searching should work normally when in gene only, 
+        exon only, and haplotype mode, however in custom regions mode, when a term or position 
+        is entered into the search box from the tracks display page, the browser first searches 
+        for the term within the multi-region view, and if found, the browser will zoom to that 
+        feature. 
+        <table>
+        <tr><td>
+              If the term is not found in the BED defined regions but is found elsewhere,
+              this message will ask if you would like to return to a default view at that location.
+              Click ok to return to your custom region.
+        </td>
+        <td> 
+           <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionBEDSearchRedirectMessage.png">
+        </td></tr>
+        </table>
+        <p>
+        If the term is not found at all in our databases, then the normal search error message will 
+        trigger.
         <p>
         As mentioned in the <a class="toc" href="#GetStarted">Getting Started</a> section, 
         searching, scrolling and zooming while viewing regions from a custom BED URL may be
         a little counterintuitive. While viewing multiple custom regions, your view is 
         limited to only the regions you have specified, so although you can still zoom in
-        down to single base resolution you can only zoom out as far as the intial view, and 
-        the up and downstream scrolling is also limited to the range specified by the BED file.
+        down to single base resolution you can only zoom out as far as the BED defined regions, and 
+        the up and downstream scrolling is also limited to the range specified in the BED file.
         
 
         <a name="Haplotype"></a>
@@ -265,8 +325,7 @@
         The human hg38, hg19, hg18 and hg17 assemblies all possess an extra feature while
         using the multi-region view: showing an alternate haplotype on it's chromosome.
         <p>
-        For a list of possible haplotypes, click on the <b>sequences</b> link while
-        on the human gateway page:
+        For a list of possible haplotypes, check the goldenPath/hg$/bigZips/hg$.chrom.sizes file 
         <br># Picture of link here #
 	<img style="border: 1px solid black; display: block;"
 	   src="">
@@ -306,25 +365,20 @@
         
         <p>
         <a name="Example3"></a>
-        <b>BED3 example</b><br>
+        <b>Custom Regions example</b><br>
            # show multiple chromosomes
-        <p><b>Displaying regions from multiple chromsomes</b></br>
-        Multi-region view also supports BED files specifying regions from across multiple
-        chromosomes, allowing  display of annotations from different genomic regions in the same
-        browser window. The following <a href="../../~chmalee/multRegion2.txt">file</a> 
-        specifies regions from across three different chromosomes:
-        
-           <pre>
-     chr9 133255000 133276861
-     chr21 31659622 31668931
-     chr13 69700594 69708459
-           </pre>
-        
-        Again the multi-region view will display the &quot;slices&quot; according to the order
-        specified in the BED file, and allows the same region to be displayed twice.
-
-        <ul><img style="border: 1px solid black; display: block;"
-             src="">
+        Here is an example <a href="../../~chmalee/mm10multiRegionexample.txt">file</a> for mm10
+        that contains a list of exon positions. If you load this file as a custom track without
+        turning on multi-region, you will notice that the blocks display in order of genomic
+        position, not in the order they are specified in the file:
+        <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionBEDFileInOrder.png">
+        However, if after loading the custom track you turn on multi-region mode and use the file
+        as a list of custom regions, you will see that now all of a sudden the blocks are out of
+        order, and the corresponding exons of the Pax9 gene have been split up and are out of 
+        order as well.
+        <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionBEDFileOutOrder.png">
  
         <p>
         <a name="Example4"></a>
@@ -362,6 +416,8 @@
         <p>
         <a name="Example5"></a>
         <b>Haplotyple example</b><br>
+        <img style="border: 1px solid black; display: block;"
+             src="../../images/MultiRegionHaplotypeView.png">
 
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
