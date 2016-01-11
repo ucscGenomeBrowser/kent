@@ -298,9 +298,9 @@
 	
         <p>
         The human hg38, hg19, hg18 and hg17 assemblies all possess an extra feature while
-        using the multi-region view: showing one alternate haplotype on it's chromosome.
+        using the multi-region view: showing one alternative haplotype on it's chromosome.
         <p>
-        #### How to structure the bigZips link to make this text work? ####<br>
+        <b>#### How to structure the bigZips link to make this text work? ####</b><br>
         For a list of possible haplotypes, check the goldenPath/hg$/bigZips/hg$.chrom.sizes file,
         where hg$ is one of either hg38, hg19, hg18 or hg17. Any haplotype of the form 
         <em>chr_name_alt</em> can be placed on it's chromosome, unlike the random and unplaced 
@@ -373,7 +373,9 @@
         However, if after loading the custom track you turn on multi-region mode and use the file
         as a list of custom regions, you will see that now all of a sudden the blocks are out of
         order, and the corresponding exons of the Pax9 gene have been split up and are out of 
-        order as well.
+        order as well. This is a feature of the custom regions view, as it allows for display
+        of previously difficult to model regions, such as centromeres or display or the same gene
+        twice to compare annotations.
         
         <p>
         <img style="margin: auto; border: 1px solid black; display: block;"
@@ -384,15 +386,32 @@
         <b>BED12 example</b><br>
         The following example <a href="../../~chmalee/bed12formultregion.txt">BED file</a> 
         utilizes a BED12 file to show two regions from two different chromosomes, chromosome
-        22 and chromosom 21.
-
-        #### Picture coming soon ####
-
+        22 and chromosome 21, highlighting the human genes POTEH, CECR2, USP25 and CHODL. 
+        <pre>
+     chr22 15690026 17558149 chr22 960 + 15690026 17558149 0 2 31497,81057, 0,1787066
+     chr21 15730025 18267373 chr21 960 + 15730025 18267373 0 2 148887,22540, 0,2514808
+        </pre>
+        
+        <img style="margin: auto; border: 1px solid black; display: block;"
+             src="../../images/MultiRegionBED12Example.png">
+        <p>
+        The multi-region display utilizes the data in the blockStarts and blockSizes fields of 
+        the BED file in order to draw it's regions, allowing for even more customization of 
+        the genome browser display. 
+        
         <p>
         <a name="Example5"></a>
         <b>Haplotyple example</b><br>
-        <img style="border: 1px solid black; display: block;"
+        
+        <p>
+        This example shows how the human hg38 haplotype chr1_KI270762v1_alt fits onto chromosome 1.
+        <p>
+        <img style="margin:auto; border: 1px solid black; display: block;"
              src="../../images/MultiRegionHaplotypeView.png">
+        
+        <p>
+        Not how annotations do not extend into or out of the haplotype region, since haplotypes 
+        are annotated separately from regular chromosomes. 
 
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
