@@ -25,8 +25,10 @@ while (my $line = <FH>) {
     my $email = $b[$sizeB-1];
     $email =~ s/<//;
     $email =~ s/@.*//;
-    push @victims, $email;
-    $victimEmail{$email} = $line;
+    if (!exists($victimEmail{$email})) {
+      push @victims, $email;
+      $victimEmail{$email} = $line;
+    }
   }
 }
 close (FH);
