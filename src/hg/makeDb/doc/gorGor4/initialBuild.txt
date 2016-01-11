@@ -1,0 +1,890 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the gorGor4
+# gorilla/Gorilla gorilla gorilla -- Wellcome Trust Sanger Institute
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2015-10-16 - Jonathan)
+    # NCBI has redesigned their FTP download site, new type of address
+    #      and naming scheme
+    mkdir -p /hive/data/genomes/gorGor4/genbank
+    cd /hive/data/genomes/gorGor4/genbank
+
+    rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Gorilla_gorilla/latest_assembly_versions/GCA_000151905.3_gorGor4/ ./
+
+    # measure what we have here:
+    faSize \
+*_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/*.fna.gz \
+*_assembly_structure/Primary_Assembly/unlocalized_scaffolds/FASTA/chr*.unlocalized.scaf.fna.gz \
+*_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz
+    # 3063346382 bases (146001290 N's 2917345092 real 2917345092 upper 0
+    #     lower) in 40710 sequences in 49 files
+    # Total size: mean 75248.0 sd 3218522.4 min 100 (CABD030167151.1) max
+    #     228908639 (FR853080.2) median 2005
+    # N count: mean 3586.4 sd 159236.0
+    # U count: mean 71661.6 sd 3065255.5
+    # L count: mean 0.0 sd 0.0
+    # %0.00 masked total, %0.00 masked real
+
+    # note that these totals do not include chrM since the GenBank ftp directory
+    # did not include a non-nuclear directory
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2015-10-16 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/ucsc
+    cd /hive/data/genomes/gorGor4/ucsc
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+../genbank/*_assembly_structure/Primary_Assembly
+
+# FR853101.2 8
+# FR853102.2 9
+# FR853080.2 1
+# FR853091.2 20
+# FR853089.2 18
+# FR853088.3 17
+# FR853086.2 15
+# FR853083.2 12
+# FR853096.2 3
+# FR853099.2 6
+# FR853082.2 11
+# FR853093.2 22
+# FR853098.3 5
+# FR853090.2 19
+# FR853097.2 4
+# FR853085.2 14
+# FR853103.2 X
+# FR853092.2 21
+# FR853087.2 16
+# FR853100.2 7
+# FR853081.2 10
+# FR853095.2 2B
+# FR853094.2 2A
+# FR853084.2 13
+
+# real    0m42.532s
+
+    time ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+../genbank/*_assembly_structure/Primary_Assembly
+
+# chr11
+# chr21
+# chr7
+# chr17
+# chr22
+# chr1
+# chr18
+# chr16
+# chr13
+# chr6
+# chrX
+# chr3
+# chr9
+# chr2B
+# chr12
+# chr20
+# chr14
+# chr15
+# chr8
+# chr4
+# chr2A
+# chr19
+# chr10
+# chr5
+
+    # real    0m1.427s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+../genbank/*_assembly_structure/Primary_Assembly
+    # real    0m2.393s
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa
+    # 3063346382 bases (146001290 N's 2917345092 real 2917345092 upper 0
+    #     lower) in 40710 sequences in 49 files
+    # Total size: mean 75248.0 sd 3218522.4 min 100 (chrUn_CABD030167151v1)
+    #     max 228908639 (chr1) median 2005
+    # %0.00 masked total, %0.00 masked real
+
+    # same numbers as above.
+
+    cd /hive/data/genomes/gorGor4/ucsc
+    zcat ../genbank/*_assembly_structure/non-nuclear/assembled_chromosomes/AGP/*.agp.gz | \
+      sed 's/^LN611626.1/chrM/' > chrM.agp
+    zcat ../genbank/*_assembly_structure/non-nuclear/assembled_chromosomes/FASTA/*.fna.gz | \
+      sed 's/^>LN611626.1.*/>chrM/' > chrM.fa
+
+    # Checking to make sure fa and AGP files match up
+    faToTwoBit *.fa junk.2bit
+    cat *.agp | checkAgpAndFa stdin junk.2bit 2>&1 | tail
+
+    # Should really run twoBitDup here to save time later - look
+    # for duplicate chromosome records.
+
+
+    # All AGP and FASTA entries agree - both files are valid
+    rm junk.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2015-10-19 - Jonathan)
+
+    cd /hive/data/genomes/gorGor4
+    cat << '_EOF_' > gorGor4.config.ra
+# Config parameters for makeGenomeDb.pl:
+db gorGor4
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate Dec 2014
+assemblyLabel Wellcome Trust Sanger Institute Dec 2014 (NCBI project 31265, GCA_000151905.1)
+assemblyShortLabel gorGor4.1
+orderKey 7682
+# no mito accession - already part of assembly: LN611626.1
+mitoAcc none
+fastaFiles /hive/data/genomes/gorGor4/ucsc/*fa
+agpFiles /hive/data/genomes/gorGor4/ucsc/*agp
+# qualFiles none
+dbDbSpeciesDir gorilla
+photoCreditURL https://commons.wikimedia.org/wiki/User:Arpingstone
+photoCreditName Wikimedia Commons/Adrian Pingstone
+ncbiGenomeId 2156
+ncbiAssemblyId 503571
+ncbiAssemblyName gorGor4
+ncbiBioProject 31265
+genBankAccessionID GCA_000151905.3
+taxId 9595
+'_EOF_'
+    # << happy emacs
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp gorGor4.config.ra > agp.log 2>&1
+
+    # $ twoBitDup gorGor4.unmasked.2bit 
+    # chrUn_CABD030132546v1 and chr2A_CABD030129486v1_random are identical
+    # chrUn_CABD030131115v1 and chrUn_CABD030131928v1 are identical
+    # chrUn_CABD030131001v1 and chrUn_CABD030131928v1 are identical
+    # chrUn_CABD030131720v1 and chrUn_CABD030130937v1 are identical
+    # chrUn_CABD030131327v1 and chrUn_CABD030130937v1 are identical
+    # chrUn_CABD030132118v1 and chrUn_CABD030132114v1 are identical
+    # chrUn_CABD030132319v1 and chr9_CABD030129872v1_random are identical
+    # chrUn_CABD030131156v1 and chrUn_CABD030131166v1 are identical
+    # chrUn_CABD030132550v1 and chr2A_CABD030129492v1_random are identical
+    # chrUn_CABD030132215v1 and chrUn_CABD030132180v1 are identical
+    # chrUn_CABD030167305v1 and chrUn_CABD030167306v1 are identical
+    # chrUn_CABD030132026v1 and chrUn_CABD030131028v1 are identical
+    # chrUn_CABD030131473v1 and chrUn_CABD030131472v1 are identical
+    # chrUn_CABD030130414v1 and chrUn_CABD030130361v1 are identical
+    # chrUn_CABD030131340v1 and chrUn_CABD030131033v1 are identical
+    # chrUn_CABD030131344v1 and chrUn_CABD030132223v1 are identical
+    # chrUn_CABD030132027v1 and chrUn_CABD030131029v1 are identical
+    # chrUn_CABD030132028v1 and chrUn_CABD030131030v1 are identical
+    # chrUn_CABD030131168v1 and chrUn_CABD030131158v1 are identical
+
+    # Exclude duplicates (first name in list)
+
+    faSomeRecords -exclude ucsc/chrUn.fa excludeList dupFree.fa
+    grep -v -f excludeList ucsc/chrUn.agp > dupFree.agp
+
+    mkdir ucsc/aside
+    mv ucsc/chrUn.* ucsc/aside
+    mv dupFree.* ucsc/
+
+    # re-run previous makeGenomeDb.pl command
+    #
+    # real  2m44.282s
+
+    # then finish it off:
+    time nice -n +19 makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db gorGor4.config.ra > db.log 2>&1
+    # real    real    24m37.067s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2015-10-19 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/bed/repeatMasker
+    cd /hive/data/genomes/gorGor4/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku gorGor4) > do.log 2>&1
+    # real    587m53.835s
+
+    cat faSize.rmsk.txt
+    # 3063310485 bases (146001289 N's 2917309196 real 1460079025 upper
+    # 1457230171 lower) in 40692 sequences in 1 files
+    # Total size: mean 75280.4 sd 3219233.8 min 100 (chrUn_CABD030167151v1)
+    # max 228908639 (chr1) median 2006
+    # %47.57 masked total, %49.95 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps gorGor4 rmsk
+    # 1459613759 bases of 3063310485 (47.648%) in intersection
+    # real  1m0.933s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+##########################################################################
+# running simple repeat (DONE 2015-11-11 - Jonathan)
+    # This is running into the same kind of problem that we had with
+    # hg38 - ceontromere sequence causes trf to run indefinitely.
+    # Following Hiram's method of repeatedly splitting the run down
+    # until everything finishes.
+
+    # this didn't work
+    mkdir /hive/data/genomes/gorGor4/bed/simpleRepeat
+    cd /hive/data/genomes/gorGor4/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        gorGor4) > do.log 2>&1
+
+    # moving that run aside, starting again
+    cd /hive/data/genomes/gorGor4/bed
+    mv simpleRepeat simpleRepeat.2015-10-19
+
+    mkdir -p /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/splitGap
+    cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/splitGap
+    mkdir -p noGap
+
+    twoBitToFa ../../../gorGor4.unmasked.2bit stdout \
+      | faSplit -lift=noGap.lift gap stdin 5000000 noGap/gorGor4_
+    # make sure nothing's missing:
+    faCount noGap/*.fa > faCount.txt
+    tail -1 faCount.txt
+# total 3035682197  862124294 596217273 593636862 865330767 118373001 29582190
+    # compared to full genome - should have same ACGT numbers
+    # (numeric colums 2-5 - first column is size)
+    twoBitToFa ../../../gorGor4.unmasked.2bit stdout | faCount stdin
+# total 3063310485  862124294 596217273 593636862 865330767 146001289 29582190
+    faToTwoBit noGap/*.fa gorGor4.nogap.2bit
+    twoBitInfo gorGor4.nogap.2bit stdout | sort -k2,2nr > gorGor4.nogap.sizes
+
+
+    mkdir /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M
+    cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M
+    /cluster/bin/scripts/simplePartition.pl \
+/hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/splitGap/gorGor4.nogap.2bit \
+    20000000 /hive/data/genomes/gorGor4/TrfPart20M
+    ln -s /hive/data/genomes/gorGor4/TrfPart20M \
+      /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/TrfPart20M
+    ssh ku
+    cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M
+
+    printf "%s" '#LOOP
+./TrfRun.csh /hive/data/genomes/gorGor4/TrfPart20M/$(path1).bed
+#ENDLOOP
+' > gsub
+    gensub2 /hive/data/genomes/gorGor4/TrfPart20M/partitions.lst single gsub jobList
+    para create jobList
+    para push
+    # 1 job doesn't want to finish
+# Completed: 165 of 166 jobs
+# Jobs currently running: 1
+# CPU time in finished jobs:      89775s    1496.25m    24.94h    1.04d  0.003 y
+# IO & Wait Time:                   499s       8.31m     0.14h    0.01d  0.000 y
+# Time in running jobs:           64864s    1081.07m    18.02h    0.75d  0.002 y
+# Average job time:                 547s       9.12m     0.15h    0.01d
+# Longest running job:            64864s    1081.07m    18.02h    0.75d
+# Longest finished job:           46144s     769.07m    12.82h    0.53d
+# Submission to last job:         46151s     769.18m    12.82h    0.53d
+
+    # determine which are the last jobs as individual bits:
+    para status | grep -v done | awk '{print $(NF-1),$NF}' | grep TrfRun \
+      > not.done.list
+    awk '{print $NF}' not.done.list | sed -e 's/.bed//' | while read F
+do
+    cat $F
+done > seq.specs.not.done
+
+    mkdir /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/lastJobs
+    cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/lastJobs
+    mkdir fasta
+    for seqSpec in `cat ../seq.specs.not.done`
+do
+  fName=`echo $seqSpec | sed -e 's/.*://'`
+  echo $fName
+  twoBitToFa $seqSpec fasta/$fName.fa
+done
+  ls -1S `pwd`/fasta > part.list
+  printf "%s" '#LOOP
+./runTrf {check in line+ fasta/$(path1)} {check out line bed/$(root1).bed}
+#ENDLOOP
+' > template
+
+  cat << '_EOF_' > runTrf
+#!/bin/bash
+set -beEu -o pipefail
+export path1=$1
+export inputFN=`basename $1`
+export outpath=$2
+export outputFN=`basename $2`
+mkdir -p /dev/shm/$outputFN
+cp -p $path1 /dev/shm/$outputFN
+cd /dev/shm/$outputFN
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf \
+      $inputFN /dev/null -bedAt=$outputFN -tempDir=/dev/shm
+cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/lastJobs
+rm -f $outpath
+cp -p /dev/shm/$outputFN/$outputFN $outpath
+rm -fr /dev/shm/$outputFN/*
+rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
+'_EOF_'
+  # << happy emacs
+  chmod +x runTrf
+  mkdir bed
+
+  # used parasol remove job to kill the old unfinished job
+  # now to start the new batch that replaces it
+  gensub2 part.list single template jobList
+  para create jobList
+  para push
+
+  # Once again, not everything finished:
+  # Completed: 42 of 44 jobs
+  # Jobs currently running: 2
+  # CPU time in finished jobs:      56289s     938.15m    15.64h    0.65d 0.002 y
+  # IO & Wait Time:                   191s       3.18m     0.05h    0.00d 0.000 y
+  # Time in running jobs:          253691s    4228.18m    70.47h    2.94d 0.008 y
+  # Average job time:                1345s      22.41m     0.37h    0.02d
+  # Longest running job:           126853s    2114.22m    35.24h    1.47d
+  # Longest finished job:           56355s     939.25m    15.65h    0.65d
+  # Submission to last job:         56366s     939.43m    15.66h    0.65d
+
+  # Assembling the data that did finish:
+  liftUp result.bed ../../splitGap/noGap.lift error bed/*.bed
+  # find jobs not done
+  para status | grep -v done | grep runTrf | awk '{print $(NF-2),$(NF-1),$NF}' \
+    > not.done.list
+
+  # splitting up those last jobs - note, this 1M_10K split was abandoned.
+  # Jump down to the 100K_10K split for the next step.
+  mkdir /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/splitBits
+  cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/splitBits
+  mkdir noGap
+  awk '{print $2}' ../lastJobs/not.done.list | while read F
+do
+  cp -p ../lastJobs/$F ./noGap/
+done
+
+  # split into 1,000,000 chunks with 10,000 overlap:
+  mkdir -p 1M_10K
+
+  for F in noGap/*.fa
+  do
+    B=`basename $F .fa`
+    echo "faSplit -lift=$B.lift -extra=10000 size $F 1000000 1M_10K/$B_"
+    faSplit -lift=$B.lift -extra=10000 size $F 1000000 1M_10K/${B}_
+  done
+
+  ls -1S `pwd`/1M_10K/*.fa > part.list
+
+  cat << '_EOF_' > runTrf
+#!/bin/bash
+set -beEu -o pipefail
+export path1=$1
+export inputFN=`basename $1`
+export outpath=$2
+export outputFN=`basename $2`
+mkdir -p /dev/shm/$outputFN
+cp -p $path1 /dev/shm/$outputFN
+cd /dev/shm/$outputFN
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf \
+      $inputFN /dev/null -bedAt=$outputFN -tempDir=/dev/shm
+cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/splitBits
+rm -f $outpath
+cp -p /dev/shm/$outputFN/$outputFN $outpath
+rm -fr /dev/shm/$outputFN/*
+rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
+'_EOF_'
+ # << happy emacs
+
+  chmod +x runTrf
+  mkdir -p bed
+
+  cat << '_EOF_' > template
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line bed/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+ # << happy emacs
+
+  gensub2 part.list single template jobList
+  para create jobList
+  para push
+  # Not all of those jobs finished either.  Actually, none of them did.
+  # Completed: 0 of 10 jobs
+  # Jobs currently running: 10
+  # CPU time in finished jobs:          0s       0.00m     0.00h    0.00d 0.000 y
+  # IO & Wait Time:                     0s       0.00m     0.00h    0.00d 0.000 y
+  # Time in running jobs:          743780s   12396.33m   206.61h    8.61d 0.024 y
+
+  # Remove that batch, start again with a finer split
+  para stop
+
+  mkdir /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/fineSplitBits
+  cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/fineSplitBits
+  mkdir noGap
+
+  awk '{print $2}' ../lastJobs/not.done.list | while read F
+do
+  cp -p ../lastJobs/$F ./noGap/
+done
+
+  # split into 100K chunks with 10K overlap:
+  mkdir -p 100K_10K
+
+  for F in noGap/*.fa
+  do
+    B=`basename $F .fa`
+    echo "faSplit -lift=$B.lift -extra=10000 size $F 100000 100K_10K/$B_"
+    faSplit -lift=$B.lift -extra=10000 size $F 100000 100K_10K/${B}_
+  done
+
+  ls -1S `pwd`/100K_10K/*.fa > part.list
+
+  cat << '_EOF_' > runTrf
+#!/bin/bash
+set -beEu -o pipefail
+export path1=$1
+export inputFN=`basename $1`
+export outpath=$2
+export outputFN=`basename $2`
+mkdir -p /dev/shm/$outputFN
+cp -p $path1 /dev/shm/$outputFN
+cd /dev/shm/$outputFN
+/cluster/bin/x86_64/trfBig -trf=/cluster/bin/x86_64/trf \
+      $inputFN /dev/null -bedAt=$outputFN -tempDir=/dev/shm
+cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M/fineSplitBits
+rm -f $outpath
+cp -p /dev/shm/$outputFN/$outputFN $outpath
+rm -fr /dev/shm/$outputFN/*
+rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
+'_EOF_'
+ # << happy emacs
+
+  chmod +x runTrf
+  mkdir -p bed
+
+  cat << '_EOF_' > template
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line bed/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+ # << happy emacs
+
+  gensub2 part.list single template jobList
+  para create jobList
+  para push
+  # This time, they all finished.
+  # Completed: 100 of 100 jobs
+  # CPU time in finished jobs:      95589s    1593.14m    26.55h    1.11d  0.003 y
+  # IO & Wait Time:                   263s       4.39m     0.07h    0.00d  0.000 y
+  # Average job time:                 959s      15.98m     0.27h    0.01d
+  # Longest finished job:            2523s      42.05m     0.70h    0.03d
+  # Submission to last job:          2526s      42.10m     0.70h    0.03d
+
+  cat *.lift | liftUp 100Kparts.bed stdin error bed/*.bed
+  liftUp -type=.bed stdout ../../splitGap/noGap.lift error 100Kparts.bed | sort -u \
+    | sort -k1,1 -k2,2n > gorGor4.result.bed
+
+  # Putting it all together:
+  cd /hive/data/genomes/gorGor4/bed/simpleRepeat.2015-11-5/run20M
+  cat /hive/data/genomes/gorGor4/TrfPart20M/???/*.bed lastJobs/bed/*.bed \
+    fineSplitBits/100Kparts.bed > beforeLift.simpleRepeat.bed
+  liftUp -type=.bed stdout ../splitGap/noGap.lift error \
+    beforeLift.simpleRepeat.bed | sort -u \
+    | sort -k1,1 -k2,2n > simpleRepeat.bed
+
+  awk '{if ($5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+
+  hgLoadBed gorGor4 simpleRepeat simpleRepeat.bed \
+    -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+  featureBits gorGor4 simpleRepeat > fb.simpleRepeat 2>&1
+  cat fb.simpleRepeat
+  # 166266267 bases of 2917333143 (5.699%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/gorGor4
+    twoBitMask gorGor4.rmsk.2bit \
+        -add bed/simpleRepeat.2015-11-5/run20M/trfMask.bed gorGor4.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa gorGor4.2bit stdout | faSize stdin > faSize.gorGor4.2bit.txt
+    cat faSize.gorGor4.2bit.txt
+    # 3063310485 bases (146001289 N's 2917309196 real 1458434938 upper
+    # 1458874258 lower) in 40692 sequences in 1 files
+    # Total size: mean 75280.4 sd 3219233.8 min 100 (chrUn_CABD030167151v1)
+    #    max 228908639 (chr1) median 2006
+    # %47.62 masked total, %50.01 masked real
+
+    rm /gbdb/gorGor4/gorGor4.2bit
+    ln -s `pwd`/gorGor4.2bit /gbdb/gorGor4/gorGor4.2bit
+
+##########################################################################
+# CREATE MICROSAT TRACK (DONE - 2015-11-11 - Jonathan)
+     ssh hgwdev
+     mkdir /cluster/data/gorGor4/bed/microsat
+     cd /cluster/data/gorGor4/bed/microsat
+     awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+	../simpleRepeat/simpleRepeat.bed > microsat.bed
+    hgLoadBed gorGor4 microsat microsat.bed
+    #	Read 27963 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2015-11-11 - Jonathan)
+
+    mkdir /hive/data/genomes/gorGor4/bed/windowMasker
+    cd /hive/data/genomes/gorGor4/bed/windowMasker
+    time nice -n +19 doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev gorGor4 > do.log 2>&1
+    # real    245m41.678s
+
+    # Masking statistics
+    cat faSize.gorGor4.cleanWMSdust.txt
+    # 3063310485 bases (146001289 N's 2917309196 real 1797939035 upper
+    # 1119370161 lower) in 40692 sequences in 1 files
+    # Total size: mean 75280.4 sd 3219233.8 min 100 (chrUn_CABD030167151v1)
+    # max 228908639 (chr1) median 2006
+    # %36.54 masked total, %38.37 masked real
+
+    cat fb.gorGor4.rmsk.windowmaskerSdust.txt
+    # 824968454 bases of 3063310485 (26.931%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2015-11-11 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/bed/cpgIslands
+    cd /hive/data/genomes/gorGor4/bed/cpgIslands
+    time doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku gorGor4 > do.log 2>&1
+    # real    32m36.495s
+
+    cat fb.gorGor4.cpgIslandExt.txt
+    # 19071327 bases of 2917333143 (0.654%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2015-11-11 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/gorGor4/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/gorGor4/gorGor4.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku gorGor4) > do.log 2>&1
+    # real    71m51.112s
+
+    cat fb.gorGor4.cpgIslandExtUnmasked.txt
+    # 25964207 bases of 2917333143 (0.890%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2015-10-19 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/bed/cytoBand
+    cd /hive/data/genomes/gorGor4/bed/cytoBand
+    makeCytoBandIdeo.csh gorGor4
+
+#########################################################################
+# genscan - (DONE - 2015-11-18 - Jonathan)
+    mkdir /hive/data/genomes/gorGor4/bed/genscan
+    cd /hive/data/genomes/gorGor4/bed/genscan
+    time doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku gorGor4 > do.log 2>&1
+    # real    2252m4.489s
+    # two jobs failed, running with reduced window size 2,000,000
+# ./runGsBigLastTwo.csh chr19 000 gtf/000/chr19.gtf pep/000/chr19.pep subopt/000/chr19.bed &
+# ./runGsBigLastTwo.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed
+# wait
+
+# chr22 finished, but chr19 didn't.  Dropping window size to 1.8M
+# ./runGsBigLastOne.csh chr19 000 gtf/000/chr19.gtf pep/000/chr19.pep subopt/000/chr19.bed
+# wait
+
+    # continuing
+    time doGenscan.pl -continue=makeBed  -buildDir=`pwd` -workhorse=hgwdev \
+      -dbHost=hgwdev -bigClusterHub=ku gorGor4 > makeBed.log 2>&1
+    # real    3m18.308s
+
+    cat fb.gorGor4.genscan.txt
+    # 42850913 bases of 2917333143 (1.469%) in intersection
+
+    cat fb.gorGor4.genscanSubopt.txt
+    # 42201199 bases of 2917333143 (1.447%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2015-10-19 - Hiram/Jonathan)
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2917345092 / 2861349177 \) \* 1024
+    # ( 2917345092 / 2861349177 ) * 1024 = 1044.039434
+
+    # ==> use repMatch=1000 - it's nice and round
+    cd /hive/data/genomes/gorGor4
+    time blat gorGor4.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/gorGor4.11.ooc \
+        -repMatch=1000
+    # Wrote 32028 overused 11-mers to jkStuff/gorGor4.11.ooc
+    # Done making jkStuff/gorGor4.11.ooc
+    #
+    # real  0m54.563s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N -e 'select * from gap where bridge="no" order by size;' \
+       gorGor4 | ave -col=7 stdin
+# Q1 2380000.000000
+# median 2992365.000000
+# Q3 3000000.000000
+# average 2554669.052632
+# min 99581.000000
+# max 3000000.000000
+# count 19
+# total 48538712.000000
+# standard deviation 787329.083452
+
+    # they are all 100 bases
+    gapToLift -verbose=2 -minGap=100 gorGor4 jkStuff/gorGor4.nonBridged.lft \
+        -bedFile=jkStuff/gorGor4.nonBridged.bed
+
+    cat jkStuff/gorGor4.nonBridged.bed | awk '{printf "%s\t%d\n", $4,$3-$2}' \
+        | sort -k2nr > jkStuff/nonBridged.sizes
+    n50.pl jkStuff/nonBridged.sizes
+# reading: jkStuff/nonBridged.sizes
+# contig count: 40711, total size: 3014771773, one half size: 1507385886
+# cumulative  N50 count contig  contig size
+1475129793  14  chr12 82873846
+1507385886 one half size
+1556356822  15  chr11 81227029
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2015-11-24 - Hiram/Jonathan)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Gorilla gorilla 589 1 87
+    # Gorilla gorilla gorilla 6 0 0
+
+    # edit etc/genbank.conf to add gorGor4 just before gorGor3
+gorGor4.serverGenome = /hive/data/genomes/gorGor4/gorGor4.2bit
+gorGor4.clusterGenome = /hive/data/genomes/gorGor4/gorGor4.2bit
+gorGor4.ooc = /hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc
+gorGor4.lift = /hive/data/genomes/gorGor4/jkStuff/gorGor4.nonBridged.lft
+gorGor4.perChromTables = no
+gorGor4.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+gorGor4.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+gorGor4.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+gorGor4.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+gorGor4.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+gorGor4.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+gorGor4.downloadDir = gorGor4
+# refseq.mrna native and xeno are default yes
+# # genbank.mrna and genbank.est native are default yes, the xeno is default
+# no
+# # reset upstream* if and when a multiple alignment is constructed
+# # gorGor4.upstreamGeneTbl = ensGene
+# # gorGor4.upstreamMaf = multiz11way
+# /hive/data/genomes/gorGor4/bed/multiz11way/species.list
+
+
+    git commit -m "adding gorGor4 definitions refs #16220" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial gorGor4
+    # logFile: var/build/logs/2015.11.20-11:13:18.gorGor4.initalign.log
+    #
+    # real    1414m49.353s
+    #
+    #   If necessary to restart from beginning, rm the dir first:
+    #     /cluster/data/genbank/work/initial.gorGor4
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad gorGor4
+    # logFile: var/dbload/hgwdev/logs/2015.11.24-10:08:58.gorGor4.dbload.log
+    # real    41m18.271s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add gorGor4 to:
+    #   vi etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added gorGor4 - gorilla refs #16220" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+# construct liftOver to gorGor3 (DONE - 2015-11-16 - Jonathan)
+    screen -S gorGor3	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor4/bed/blat.gorGor3.2015-11-16
+    cd /hive/data/genomes/gorGor4/bed/blat.gorGor3.2015-11-16
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor3
+    # real    0m1.373s
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor3) > do.log 2>&1
+    #	real    16m38.789s
+
+# log crashed after connection to ku failed; resumed by hand after the
+# jobs completed.
+    para time > run.time
+    time (doSameSpeciesLiftOver.pl -continue chain -buildDir=`pwd` \
+  -bigClusterHub=ku -ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+  -dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor3) >> do.log 2>&1
+
+    # verify this file exists:
+    #	/gbdb/gorGor4/liftOver/gorGor4ToGorGor3.over.chain.gz
+    # and try out the conversion on genome-test from gorGor4 to gorGor3
+
+
+############################################################################
+# construct liftOver from gorGor3 (DONE - 2015-11-20 - Jonathan)
+
+    screen -S gorGor3To4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor3/bed/blat.gorGor4.2015-11-19
+    cd /hive/data/genomes/gorGor3/bed/blat.gorGor4.2015-11-19
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor3/jkStuff/gorGor3.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor3 gorGor4
+    # real    0m1.613s
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor3/jkStuff/gorGor3.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor3 gorGor4) > do.log 2>&1
+    #	real    274m58.405s
+
+    # verify this file exists:
+    #	/gbdb/gorGor3/liftOver/gorGor3ToGorGor4.over.chain.gz
+    # and try out the conversion on genome-test from gorGor4 to gorGor3
+
+#########################################################################
+# ucscToINSDC table/track (DONE - 2015-10-19 - Jonathan)
+
+    mkdir /hive/data/genomes/gorGor4/bed/ucscToINSDC
+    cd /hive/data/genomes/gorGor4/bed/ucscToINSDC
+    # check for chrM in assembly:
+    grep chrM ../../gorGor4.agp
+# chrM    1       17009   6       F       NC_001700.1     1       17009   +
+
+    # use the accession name from there in this command (blank if none)
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../genbank/GCA_*assembly_structure/Primary_Assembly CABD030129419.1
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    # should all be the same line count:
+    wc -l *
+    # 267625 name.coordinate.tab
+    # 267625 ucscToINSDC.bed
+    # 267625 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 28
+    # use the 28 in this sed
+    sed -e "s/21/28/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab gorGor4 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords gorGor4
+    # should cover %100 entirely:
+    featureBits -countGaps gorGor4 ucscToINSDC
+    # 2641342258 bases of 2641342258 (100.000%) in intersection
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2015-11-20 - Jonathan)
+#	After getting a blat server assigned by the Blat Server Gods,
+     ssh hgwdev
+
+     # verify doesn't exist yet:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i gorgor
+     # only shows gorGor3
+
+     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor4", "blat1c", "17870", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor4", "blat1c", "17871", "0", "1");' \
+		hgcentraltest
+
+     # verify entry:
+     hgsql -e 'select * from blatServers;' hgcentraltest | grep -i gorgor
+     #    gorGor4 blat1c  17870 1 0
+     #    gorGor4 blat1c  17871 0 1
+
+     #	test it with some sequence
+
+#########################################################################
+# set default position (DONE - 2015-11-20 - Jonathan)
+
+    # Maybe something around chr5:6,996,520-7,026,281, roughly the location
+    # for EVPL - one of the most accelerated gorilla genes according to
+    # the assembly paper (PMID 22398555).
+    # gorGor3 didn't have a default - just jumped to the middle of chr1.
+    hgsql -e \
+'update dbDb set defaultPos="chr5:6996937-7026323" where name="gorGor4";' \
+	hgcentraltest
+
+#########################################################################
+# Augustus genes - (DONE 2016-01-04 - Jonathan)
+
+    mkdir /hive/data/genomes/gorGor4/bed/augustus
+    cd /hive/data/genomes/gorGor4/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev gorGor4) > do.log 2>&1
+
+    cat fb.gorGor4.augustusGene.txt
+    # 64344606 bases of 2917333143 (2.206%) in intersection
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE 2015-01-08 - Jonathan)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=gorGor4 -keys all.joiner
+    joinerCheck -database=gorGor4 -tableCoverage all.joiner
+    joinerCheck -database=gorGor4 -times all.joiner
+
+    cd /hive/data/genomes/gorGor4
+    time makeDownloads.pl gorGor4 > downloads.log 2>&1
+    #  real    19m56.404s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/gorGor4/pushQ
+    cd /hive/data/genomes/gorGor4/pushQ
+    # do not want transMap in the output:
+    makePushQSql.pl gorGor4 2> stderr.out | grep -v transMap > gorGor4.pushQ.sql
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/gorGor4/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/gorGor4/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/gorGor4/bbi/quality.bw
+    # WARNING: gorGor4 does not have seq
+    # WARNING: gorGor4 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p gorGor4.pushQ.sql qateam@hgwbeta:/tmp
+    ssh qateam@hgwbeta './bin/x86_64/hgsql qapushq < /tmp/gorGor4.pushQ.sql'
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

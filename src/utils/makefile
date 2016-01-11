@@ -146,6 +146,7 @@ UCSC_APPS = \
 SCRIPT_FILES = \
         agpToLift \
         bedCollapse.pl \
+        bedSingleCover.pl \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl \
