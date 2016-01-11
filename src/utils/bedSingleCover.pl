@@ -16,6 +16,10 @@ if ($argc < 1) {
     printf STDERR "No need to pre-sort the bed file, it will be sorted here\n";
     printf STDERR "result is four columns: chr start end size\n";
     printf STDERR "where size is the size of the element: size=end-start\n";
+    printf STDERR "\nTo obtain a quick featureBits like measurement of\n";
+    printf STDERR "this singleCover result, using awk:\n";
+    printf STDERR " bedSingleCover.pl file.bed |";
+    printf STDERR " awk '{sum+=\$3-\$2}END{printf \"%%d bases\\n\", sum}'\n";
     exit 255
 }
 
