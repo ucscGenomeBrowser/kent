@@ -47,6 +47,17 @@ RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
 UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
 LOGFILE=/var/log/gbibUpdates.log
+DEBUG=0
+if [[ "$#" -ne 0 ]]; then
+    DEBUG=1
+fi
+
+# function to echo only if run with some arguments
+function echoDebug {
+   if [[ DEBUG -eq "1" ]]; then
+     echo $*
+   fi
+} 
 
 # make sure that apt-get never opens an interactive dialog
 export DEBIAN_FRONTEND=noninteractive 
@@ -75,30 +86,31 @@ fi
 # check if running already, 3 = the main script + its update + the subshell where this command is running
 RUNNING=`ps --no-headers -CupdateBrowser.sh | wc -l`
 if [ ${RUNNING} -gt 3 ] ; then
-    #echo update already running
+    echoDebug GBiB update already running, not starting
     exit 2
 fi
 	
-# check if the VirtualBox guest addition kernel modules work and if yes, if auto-updates were 
-# deactivated from the Vbox host via a property
-if modprobe vboxguest 2> /dev/null > /dev/null; then
-   if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" 2> /dev/null ; then
-       exit 6
-   # exit only if no argument specified on command line = run from cronjob
-       if [ "$#" -eq 0 ] ; then
+# if run with no argument (=from cron): check if the VirtualBox guest addition
+# kernel modules work and if yes, if auto-updates were deactivated from the
+# Vbox host via a property
+if [ "$#" -eq 0 ] ; then
+    if modprobe vboxguest 2> /dev/null > /dev/null; then
+       if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" 2> /dev/null ; then
            exit 6
        fi
-   fi
+    fi
+# show a little note when VirtualBox kernel module is not working and we're not running under cron
 else
-   # only show this notice when run with a command line argument (=not from cron)
-   if [ "$#" -ne 0 ] ; then
-      echo - Info: GBiB not running under VirtualBox or VirtualBox Guest Utils are not working
-   fi
+    if [ ! modprobe vboxguest 2> /dev/null > /dev/null ] ; then
+      echo - Info: GBiB not running on VirtualBox or VirtualBox Guest Utils are not working
+    fi
 fi
+
 
 # check if we have internet, stop if not
 wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
 if [ $? -ne 0 ] ; then
+    echoDebug GBiB has no connection to hgdownload.soe.ucsc.edu, cannot update now
     exit 3
 fi
 
@@ -146,6 +158,14 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     exit 4
 fi
 	
+# deactivate inno-db support in mysql. Saves 400-500MB of RAM.
+if ! grep skip-innodb /etc/mysql/my.cnf > /dev/null 2> /dev/null ; then
+    echo - Switching off inno-db in /etc/mysql/my.cnf
+    sed -i '/^.mysqld.$/a skip-innodb' /etc/mysql/my.cnf
+    sed -i '/^.mysqld.$/a default-storage-engine=myisam' /etc/mysql/my.cnf
+    service mysql restart
+fi
+   
 # activate the apt repo 'main' and 'universe' so we can install external software
 if ! apt-cache policy r-base | grep "Unable to locate" > /dev/null; then
    if ! grep '^deb http://us.archive.ubuntu.com/ubuntu trusty main universe multiverse$' /etc/apt/sources.list > /dev/null; then
