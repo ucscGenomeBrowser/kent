@@ -2988,7 +2988,7 @@ type Cell Line
 description esophageal epithelial cells
 karyotype normal
 lineage endoderm
-orderUrl http://www.sciencellonline.com/heepic.html
+orderUrl http://www.sciencellonline.com/human-esophageal-epithelial-cells.html 
 organism human
 protocol Stam:HEEpiC_Stam_protocol.pdf
 sex U
