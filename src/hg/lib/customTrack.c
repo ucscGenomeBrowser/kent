@@ -748,8 +748,6 @@ if (!customText)
 char *fileName = NULL;
 struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
-if (customText)
-    customText = NULL;
 
 fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
 char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);
