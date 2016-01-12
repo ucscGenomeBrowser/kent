@@ -25,8 +25,10 @@ while (my $line = <FH>) {
     my $email = $b[$sizeB-1];
     $email =~ s/<//;
     $email =~ s/@.*//;
-    push @victims, $email;
-    $victimEmail{$email} = $line;
+    if (!exists($victimEmail{$email})) {
+      push @victims, $email;
+      $victimEmail{$email} = $line;
+    }
   }
 }
 close (FH);
@@ -44,7 +46,6 @@ foreach my $victim (sort keys %victimEmail) {
   }
   close (FH);
   if (length($logData) > 1) {
-    if ($victim =~ m/hiram/) {
        my $toAddr = $victimEmail{$victim};
        printf STDERR "# sending email to $toAddr\n";
        open (SH, "| /usr/sbin/sendmail -t -oi") or die "can not run sendmail";
@@ -54,6 +55,5 @@ foreach my $victim (sort keys %victimEmail) {
        printf SH "Cc: <ann\@soe.ucsc.edu> Ann Zweig\n";
        printf SH "\n";
        print SH `./summaryEmail.sh $victim`;
-    }
   }
 }

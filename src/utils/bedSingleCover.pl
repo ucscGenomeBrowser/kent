@@ -1,9 +1,9 @@
-#!/bin/env perl
+#!/usr/bin/env perl
 #
-# bedCollapse - combine adjacent bed elements into one element
+# bedSingleCover - combine overlapping bed elements into one element
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
-# edit ~/kent/src/utils/bedCollapse.pl instead.
+# edit ~/kent/src/utils/bedSingleCover.pl instead.
 
 use strict;
 use warnings;
@@ -11,15 +11,15 @@ use warnings;
 my $argc = scalar(@ARGV);
 
 if ($argc < 1) {
-    printf STDERR "usage: bedCollapse.pl [file.bed] > collapsed.bed\n";
-    printf STDERR "will combine adjacent bed elements into one element\n";
-    printf STDERR "This is working on only columns 2 and 3, the column 4\n";
-    printf STDERR "output is the size of the element.\n";
-    printf STDERR "NOTE: This is not like bedSingleCover.pl, this collapse\n";
-    printf STDERR "      only works on exactly adjacent elements as determined\n";
-    printf STDERR "      by column 2 from 'sort -k1,1 -k2,2n' of the input bed file\n";
-    printf STDERR "      where chromEnd of the previous element is == chromStart\n";
-    printf STDERR "      of the next element.\n";
+    printf STDERR "usage: bedSingleCover.pl [file.bed] > singleCover.bed\n";
+    printf STDERR "will combine overlapping bed elements into one element\n";
+    printf STDERR "No need to pre-sort the bed file, it will be sorted here\n";
+    printf STDERR "result is four columns: chr start end size\n";
+    printf STDERR "where size is the size of the element: size=end-start\n";
+    printf STDERR "\nTo obtain a quick featureBits like measurement of\n";
+    printf STDERR "this singleCover result, using awk:\n";
+    printf STDERR " bedSingleCover.pl file.bed |";
+    printf STDERR " awk '{sum+=\$3-\$2}END{printf \"%%d bases\\n\", sum}'\n";
     exit 255
 }
 
@@ -43,8 +43,8 @@ while (my $line = <FH>) {
 	    printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
 	    $chr = $c; $start = $s; $end = $e;
 	} else {
-	    if ($s == $end) {
-		$end = $e;
+	    if ($s <= $end) {
+		$end = $e if ($e > $end);
 	    } else {
 		printf "%s\t%d\t%d\t%d\n", $chr, $start, $end, $size;
 		$chr = $c; $start = $s; $end = $e;
