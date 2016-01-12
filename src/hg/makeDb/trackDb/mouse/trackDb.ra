@@ -822,3 +822,35 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142
+
+searchTable snp142Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9861
+padding 250
+
+searchTable snp142Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9862
+padding 250
+
+searchTable snp142Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9863
+padding 250
+
+searchTable snp142
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9864
+padding 250
