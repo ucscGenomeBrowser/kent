@@ -4070,7 +4070,7 @@ if (imagePath)
 if (sameString(tdb->table,"altLocations") && (!strchr(item,':')))
     {
     char *hgsid = cartSessionId(cart);
-    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleHaplo&singleHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
+    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
     }
 
 printTrackHtml(tdb);

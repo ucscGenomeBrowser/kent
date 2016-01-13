@@ -204,15 +204,19 @@ echo - Applying Ubuntu security updates
 unattended-upgrade -v
 rm -f /root/gbibSkipNextUpdate
 
-# The original GBiB image did not use the Ubuntu Virtualbox guest utils
-# fix this now and switch to these
+# The original GBiB image did not use the Ubuntu Virtualbox guest utils but the
+# ones from VirtualBox in /opt. Fix this now and switch to the Ubuntu guest
+# utilities, so they are updated automatically by the Ubuntu tools
 if apt-cache policy virtualbox-guest-dkms | grep "Installed: .none." > /dev/null; then
+    echo - Updating VirtualBox Guest utilities
     apt-get install -y linux-headers-generic 
     apt-get install -y virtualbox-guest-dkms
     apt-get -y autoremove
     /etc/init.d/vboxadd start
+
     # during 2015, a directory /home/browser/bin got created in the official image and filled with a copy of the user tools
     # remove this directory now to avoid confusion
+    # this is unrelated to the virtualbox tools, but doing this now will make sure it is executed only once
     shred -fzu -n1 /home/browser/bin/blat/*
     rm -rf /home/browser/bin/blat
     shred -fzu -n1 /home/browser/bin/*
@@ -223,7 +227,7 @@ fi
 if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
    echo - Installing R
    apt-get update
-   apt-get install -y r-base
+   apt-get --no-install-recommends install -y r-base-core
    apt-get -y autoremove
 fi
 
