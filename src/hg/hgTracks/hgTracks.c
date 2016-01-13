@@ -2715,7 +2715,7 @@ for(virtRegion=virtRegionList; virtRegion; virtRegion = virtRegion->next)
     lastChrom = virtRegion->chrom;
     ++regionCount;
     }
-warn("After padding, %d regions", regionCount);
+//warn("After padding, %d regions", regionCount); // DEBUG REMOVE
 slReverse(&newList);
 virtRegionList = newList; // update new list -- TODO should the old one be freed? if so, the chrom name should use cloneString
 }
@@ -3960,7 +3960,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	if (startsWith("#padding ",line))
 	    {
 	    bedPadding = sqlSigned(line+strlen("#padding "));
-	    warn("got #padding setting: %d", bedPadding); // DEBUG REMOVE
+	    //warn("got #padding setting: %d", bedPadding); // DEBUG REMOVE
 	    }
 	continue;
 	}
