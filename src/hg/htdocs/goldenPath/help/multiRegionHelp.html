@@ -211,10 +211,8 @@
         regions, by allowing less intergenic space between genes, however this overlap is a common
         feature for most of our gene sets, and should be no cause for concern.
         
- 
         <p>
-        For an example of how both overlapping transcripts and intergenic padding affects
-        the gene only view, see <a href="#Example2">Example 2</a>.
+        For an example gene only view, see <a href="#Example2">Example 2</a>.
         
         <a name="CustomRegions"></a>
         <p>
@@ -332,10 +330,9 @@
         <p>
         <a name="Example1"></a>
         <b>Exon only example</b><br>
-        The below screenshot
-        shows the exon only view for the SOD1 gene in human assembly hg38. The 3rd &quot;exon&quot; 
-        from the left falls within the intron of the actual SOD1 gene, but is shown as an exon 
-        because it is part of the GENCODE v22 super-track.
+        The below screenshot shows the exon only view for the SOD1 gene in human assembly hg38. 
+        The 3rd &quot;exon&quot; from the left falls within the intron of the actual SOD1 gene, 
+        but is shown as an exon because it is part of the GENCODE v22 super-track.
         
         <p>
         <img style="margin:auto; border: 1px solid black; display: block;"
@@ -346,28 +343,23 @@
         <b>Gene only example</b><br>
         
         <p>
-        Here is the hg38 mitochondrial chromosome, shown in gene only mode with padding set to
-        10:
+        The below screenshot illustrates how intergenic regions are removed from the default view:
         
         <p>
         <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionMitochondrialPacked.png">
+             src="../../images/MultiRegionXDefault.png">
 
         <p>
-        Even though many genes are present on this chromosome, they are almost all overlapping
-        with each other, preventing the gene only view from defining separate regions. 
+        This region of the X chromosome on the human hg19 assembly consists of a three genes 
+        (DKC1, MPP1, and F8) with varying intergenic space between them. 
         
         <p>
-        Now compare to the hg38 mitochondrial chromosome with padding set to 0: 
+        Now compare to the same region but in gene only mode with padding set to 6: 
         
         <p>
         <img style="margin:auto; border: 1px solid black; display: block;"
-             src="../../images/MultiRegionMitochondrialUnpacked.png">
+             src="../../images/MultiRegionXGeneOnly.png">
         
-        <p>
-        With more alternating regions, we can see that not all the genes overlapped with each
-        other, they simply had no intergenic space between them with which to draw slices.
-
         <p>
         <a name="Example3"></a>
         <b>Custom Regions example</b><br>
