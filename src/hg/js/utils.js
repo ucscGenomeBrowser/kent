@@ -2161,6 +2161,7 @@ var sortTable = {
     // Finally if you want the tableSort to alternate the table row colors
     // (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
     // NOTE: This class can be added by using the altColors option to this function
+    // To override, specify <TBODY class='sortable noAltColors'>
     
         if (altColors === undefined || altColors === null) // explicitly default this boolean
             altColors = false;
@@ -2196,7 +2197,8 @@ var sortTable = {
             $(tbody).addClass('sortable');
             //warn('Added sortable class to tbody');
         }
-        if (altColors && $(tbody).hasClass('altColors') === false) {
+        if (altColors && $(tbody).hasClass('altColors') === false && 
+                $(tbody).hasClass('noAltColors') === false) {
             $(tbody).addClass('altColors');
             //warn('Added altColors class to tbody.sortable');
         }
