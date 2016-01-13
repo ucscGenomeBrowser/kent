@@ -296,7 +296,7 @@ VALUES ("hg38Patch6", "Dec. 2015", "/gbdb/hg38Patch6", "GRCh38.p6",
 "GRCh38 patch 6 Genome Reference Consortium Human Reference 38", 9606);
 INSERT INTO defaultDb (genome, name) VALUES ("GRCh38.p6", "hg38Patch6");
 INSERT INTO genomeClade (genome, clade, priority)
-VALUES ("GRCh38.p6", "haplotypes", 132);'
+VALUES ("GRCh38.p6", "haplotypes", 134);'
 
     mkdir html
     # copy description.html from hg38Patch2/html/description.html
