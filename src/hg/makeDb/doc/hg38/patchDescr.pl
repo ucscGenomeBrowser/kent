@@ -58,7 +58,7 @@ printf "<p>
 Data obtained from the
    <a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
    Genome Reference Consortium:</a>&nbsp;&nbsp;
-   <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38.p$patchLevel/\" target=\"_blank\">FTP</a>.
+   <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.21_GRCh38.p$patchLevel/\" target=\"_blank\">FTP</a>.
 </p>\n";
 }
 
