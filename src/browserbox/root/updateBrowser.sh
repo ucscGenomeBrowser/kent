@@ -214,13 +214,6 @@ if apt-cache policy virtualbox-guest-dkms | grep "Installed: .none." > /dev/null
     apt-get -y autoremove
     /etc/init.d/vboxadd start
 
-    # during 2015, a directory /home/browser/bin got created in the official image and filled with a copy of the user tools
-    # remove this directory now to avoid confusion
-    # this is unrelated to the virtualbox tools, but doing this now will make sure it is executed only once
-    shred -fzu -n1 /home/browser/bin/blat/*
-    rm -rf /home/browser/bin/blat
-    shred -fzu -n1 /home/browser/bin/*
-    rm -rf /home/browser/bin
 fi
 
 # install R for the gtex tracks
