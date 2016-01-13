@@ -267,14 +267,6 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-boolean bogusMacEmptyChars(char *s)
-/* Return TRUE if it looks like this is just a buggy
- * Mac browser putting in bogus chars into empty text box. */
-{
-char c = *s;
-return (c != '_') && (c != '#') && !isalnum(c);
-}
-
 static int ct_nextDefaultTrackNum = 1;
 
 static boolean isDefaultTrack(struct customTrack *ct)
@@ -756,8 +748,6 @@ if (!customText)
 char *fileName = NULL;
 struct slName *browserLines = NULL;
 customText = skipLeadingSpaces(customText);
-if (customText && bogusMacEmptyChars(customText))
-    customText = NULL;
 
 fileName = cartOptionalString(cart, CT_CUSTOM_FILE_NAME_VAR);
 char *fileContents = cartOptionalString(cart, CT_CUSTOM_FILE_VAR);

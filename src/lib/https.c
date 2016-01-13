@@ -13,6 +13,7 @@
 #include <pthread.h>
 
 #include "common.h"
+#include "internet.h"
 #include "errAbort.h"
 #include "net.h"
 
@@ -135,12 +136,25 @@ if(!ssl)
     goto cleanup;
     }
 
+
+
 /* Don't want any retries since we are non-blocking bio now */
 //SSL_set_mode(ssl, SSL_MODE_AUTO_RETRY);
 
 
 safef(hostnameProto,sizeof(hostnameProto),"%s:%d",params->hostName,params->port);
 BIO_set_conn_hostname(sbio, hostnameProto);
+
+/* 
+Server Name Indication (SNI)
+Required to complete tls ssl negotiation for systems which house multiple domains. (SNI)
+This is common when serving HTTPS requests with a wildcard certificate (*.domain.tld).
+This line will allow the ssl connection to send the hostname at tls negotiation time.
+It tells the remote server which hostname the client is connecting to.
+The hostname must not be an IP address.
+*/ 
+if (!internetIsDottedQuad(params->hostName))
+    SSL_set_tlsext_host_name(ssl,params->hostName);
 
 BIO_set_nbio(sbio, 1);     /* non-blocking mode */
 

@@ -1273,3 +1273,67 @@ EOF
 
 
 ##############################################################################
+# DBNSFP (DONE 12/4/15 angie)
+    # The database of non-synonymous functional predictions (dbNSFP) contains
+    # precomputed scores from a wide variety of tools on all non-synon variants
+    # of all genomic positions in the CDS of Gencode transcripts.  Pick out
+    # some interesting subsets of v3.1a's 143 columns and translate into bigBed and
+    # bigWig files that can be joined with users' variants by the Variant
+    # Annotation Integrator (#6152).
+    screen -S dbNSFP -t dbNSFP
+    mkdir -p /hive/data/genomes/hg38/bed/dbNSFP/dbNSFPv3.1a
+    cd /hive/data/genomes/hg38/bed/dbNSFP
+    wget ftp://dbnsfp:dbnsfp@dbnsfp.softgenetics.com/dbNSFPv3.1a.zip
+    cd dbNSFPv3.1a
+    unzip ../dbNSFPv3.1a.zip
+
+    # Run a perl script that digests the 52-column input files into several independent
+    # bed3+ files:
+    ~/kent/src/hg/utils/dbNsfpToBed.pl dbNSFP*_variant.chr*
+
+    # There are many mild warnings like these two:
+#FYI: >3 rows (6) for {chr1, 1579933, ENST00000624594}; removing less-informative duplicates.
+#refAl == altAl:
+#1       25802093        T       T       U       X       .       1       26128584        1       26001171        SEPN1   +       TGA     1       0       T       T/T     T/T     ENSG00000162430 ENST00000361547 ENSP00000355141 ....
+    # The script has a workaround and follow-up error check, but it would be
+    # good to report the cases to dbNSFP (see script for details).
+
+    wc -l *.bed
+#    2341018 dbNsfpGerpNr.bed
+#   21514727 dbNsfpGerpRs.bed
+#     234192 dbNsfpInterPro.bed
+#   24486742 dbNsfpLrt.bed
+#   26832024 dbNsfpMutationAssessor.bed
+#   29467212 dbNsfpMutationTaster.bed
+#   27524420 dbNsfpPolyPhen2.bed
+#   29376024 dbNsfpSeqChange.bed
+#   27368993 dbNsfpSift.bed
+#     414922 dbNsfpUniProt.bed
+#   28459886 dbNsfpVest.bed
+
+    # Convert Gerp scores to bigWig
+    bedGraphToBigWig dbNsfpGerpNr.bed /hive/data/genomes/hg38/chrom.sizes dbNsfpGerpNr.bw
+    bedGraphToBigWig dbNsfpGerpRs.bed /hive/data/genomes/hg38/chrom.sizes dbNsfpGerpRs.bw
+
+    # Convert remaining files to bigBed -- all should have 24 or 25 chroms
+    # (some include chrM, some don't)
+    foreach f (dbNsfp[^G]*.bed)
+      set track = $f:r
+      echo $track
+      set autoSql = ~/kent/src/hg/lib/$track.as
+      bedToBigBed -type=bed3+ -as=$autoSql -tab \
+        $f /hive/data/genomes/hg38/chrom.sizes $track.bb
+    end
+
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/hg38/dbNsfp
+    foreach f (dbNsfp*.{bb,bw})
+      ln -s `pwd`/$f /gbdb/hg38/dbNsfp/
+      hgBbiDbLink hg38 $f:r /gbdb/hg38/dbNsfp/$f
+    end
+
+    # Clean up: remove large files that can be re-unzipped or regenerated:
+    rm -f search_db* dbNS*_variant.chr* dbNs*.bed
+
+
+##############################################################################

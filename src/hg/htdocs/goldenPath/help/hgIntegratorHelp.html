@@ -183,7 +183,8 @@
 	Click <button type="button">Choose fields...</button> to bring up a checklist of all
 	fields from all selected data sources. By default, every field is selected.
 	You can choose the columns you want in your output by checking the box next to that
-	field. See the <a href="#OutputConfig">Configuring Output</a> section for more details.
+	field. Additionally, you can add and select fields from up to four related tables.
+	See the <a href="#OutputConfig">Configuring Output</a> section for more details.
 	<p>
 	<b>Step 6. Get output</b><br>
 	Click <button type="button">Get output</button> to display the
@@ -258,7 +259,7 @@
         <p>By default, the Data Integrator outputs all fields of all data sources
         except for the <tt>bin</tt> column of database tables (a numerical index added by UCSC
         to speed up database queries).
-	If you are only interested in the data from a limited number of fields, you can customize
+	If you are interested in the data from a limited number of fields, you can customize
 	the set of fields to include in the output. After
 	selecting and configuring your data sources as described in the <a href="#DataSources">
 	Selecting Data Sources</a> section, click <button type="button">Choose fields...</button>
@@ -272,8 +273,25 @@
         You can quickly select or deselect all of the fields by clicking
         <button type="button">Set all</button> or
         <button type="button">Clear all</button> below the track name.
-        After you have finished selecting your
-	output fields, click <button type="button">Done</button> at the bottom of the dialog
+
+	<p>
+	In the UCSC Genome Browser database, detailed information on the annotations for many
+	tracks is stored in extra tables. This information can include things such as identifiers
+	in other databases, transcript status, or other descriptive information.
+	You can select fields from up to four of these related tables for each of your
+	selected tracks. After clicking <button type="button">Choose fields...</button>,
+	you should see a section labeled &quot;Related tables&quot; below each track.
+	This drop-down menu allows you to select and add related tables to your output.
+	<p>
+	<img style="border: 1px solid black; display: block;"
+	src="../../images/hgIntegratorRelatedTablesAnnouncement.png">
+
+	<p> Note that not all tracks in the Genome Browser database will have related tracks. If no
+	&quot;Related tables&quot; section appears for a particular selected track, then
+	there are no related tables for this track.
+
+	<p>After you have finished selecting your output fields and related tables,
+	click <button type="button">Done</button> at the bottom of the dialog
 	box to finish configuring your output.
 	
 	<p>If you want to view your results in the web browser window, simply click
@@ -283,7 +301,7 @@
         <button type="button">Get output</button> to begin downloading your file.
 	</p>
 	
-	<p>Note that for wiggle tracks, the "Value" field is averaged across the region of overlap.
+	<p>Note that for wiggle tracks, the &quot;Value&quot; field is averaged across the region of overlap.
 	In the future, we intend to add an option to output all of the data values in that region
 	of overlap.
 

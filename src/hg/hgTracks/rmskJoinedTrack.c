@@ -51,6 +51,42 @@
 // TODO: Document
 static float pixelsPerBase = 1.0;
 
+
+struct windowGlobals
+{
+struct windowGlobals *next;
+struct window *window;
+/* These are the static globals needed for each window: */
+struct hash *classHash;
+struct repeatItem *otherRepeatItem;
+struct hash *subTracksHash;
+};
+
+static struct windowGlobals *wgWindows = NULL;
+static struct windowGlobals *wgWindow = NULL;
+static struct windowGlobals *wgWindowOld = NULL;
+
+static bool setWgWindow()
+/* scan genoCache windows. create new one if not found */
+{
+if (wgWindow && wgWindow->window == currentWindow)
+    return FALSE;
+wgWindowOld = wgWindow;
+for (wgWindow = wgWindows; wgWindow; wgWindow =  wgWindow->next)
+    {
+    if (wgWindow->window == currentWindow)
+	{
+	return TRUE;
+	}
+    }
+AllocVar(wgWindow);
+wgWindow->window = currentWindow;
+slAddTail(&wgWindows, wgWindow);
+return TRUE;
+}
+
+// per window static vars act like local global vars, need one per window
+
 /* Hash of the repeatItems ( tg->items ) for this track.
  *   This is used to hold display names for the lines of
  *   the track, the line heights, and class colors.
@@ -64,6 +100,27 @@ static struct repeatItem *otherRepeatItem = NULL;
  *   results of one or more table queries
  */
 struct hash *subTracksHash = NULL;
+
+
+static void setWg()
+/* set up per-window globals for the current window */
+{
+if (setWgWindow())
+    {
+    if (wgWindowOld)
+	{
+	wgWindowOld->classHash       = classHash;
+	wgWindowOld->otherRepeatItem = otherRepeatItem;
+    	wgWindowOld->subTracksHash   = subTracksHash;
+	}
+    classHash       = wgWindow->classHash;
+    otherRepeatItem = wgWindow->otherRepeatItem;
+    subTracksHash   = wgWindow->subTracksHash;
+    }
+
+}
+
+
 
 struct subTrack
 {
@@ -106,14 +163,8 @@ static Color rmskJoinedClassColors[] = {
 0xff17becf,			// Unknown - aqua
 };
 
-// Basic range type
-struct Extents
-{
-int start;
-int end;
-};
 
-static struct Extents * getExtents(struct rmskJoined *rm)
+static void getExtents(struct rmskJoined *rm, int *pStart, int *pEnd)
 /* Calculate the glyph extents in genome coordinate
  * space ( ie. bp )
  *
@@ -123,16 +174,14 @@ static struct Extents * getExtents(struct rmskJoined *rm)
  *
  */
 {
-static struct Extents ex;
+int start;
+int end;
 char lenLabel[20];
-
-if (rm == NULL)
-    return NULL;
 
 // Start position is anchored by the alignment start
 // coordinates.  Then we subtract from that space for
 // the label.
-ex.start = rm->alignStart -
+start = rm->alignStart -
     (int) ((mgFontStringWidth(tl.font, rm->name) +
 	    LABEL_PADDING) / pixelsPerBase);
 
@@ -142,33 +191,34 @@ if ((rm->blockSizes[0] * pixelsPerBase) > MAX_UNALIGNED_PIXEL_LEN)
     {
     // Unaligned sequence bar needs length label -- account for that.
     safef(lenLabel, sizeof(lenLabel), "%d", rm->blockSizes[0]);
-    ex.start -= (int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
+    start -= (int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
 	(int) ((mgFontStringWidth(tl.font, lenLabel) +
 		LABEL_PADDING) / pixelsPerBase);
     }
 else
     {
-    ex.start -= rm->blockSizes[0];
+    start -= rm->blockSizes[0];
     }
 
-ex.end = rm->alignEnd;
+end = rm->alignEnd;
 
 if ((rm->blockSizes[rm->blockCount - 1] * pixelsPerBase) >
     MAX_UNALIGNED_PIXEL_LEN)
     {
     safef(lenLabel, sizeof(lenLabel), "%d",
 	   rm->blockSizes[rm->blockCount - 1]);
-    ex.end +=
+    end +=
 	(int) (MAX_UNALIGNED_PIXEL_LEN / pixelsPerBase) +
 	(int) ((mgFontStringWidth(tl.font, lenLabel) +
 		LABEL_PADDING) / pixelsPerBase);
     }
 else
     {
-    ex.end += rm->blockSizes[rm->blockCount - 1];
+    end += rm->blockSizes[rm->blockCount - 1];
     }
 
-return &ex;
+*pStart = start;
+*pEnd = end;
 }
 
 // A better way to organize the display
@@ -191,6 +241,7 @@ struct repeatItem *fullRIList = NULL;
 static struct repeatItem * makeJRepeatItems()
 /* Initialize the track */
 {
+setWg();
 int i;
 struct repeatItem *ri = NULL;
 
@@ -233,6 +284,8 @@ static void rmskJoinedLoadItems(struct track *tg)
    * all the repeat data for each displayed subtrack.
    */
 
+setWg();
+
 if (!subTracksHash)
     subTracksHash = newHash(20);
 
@@ -263,14 +316,16 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         rm = rmskJoinedLoad(row + rowOffset);
         slAddHead(&detailList, rm);
         }
+    //warn("rmskJoinedLoadItems tg->table=%s chromName=%s winStart=%d winEnd=%d, rowOffset=%d slCount(detailList)=%d", 
+	//tg->table, chromName, winStart, winEnd, rowOffset, slCount(detailList)); // DEBUG REMOVE
     slSort(&detailList, cmpRepeatDiv);
 
     sqlFreeResult(&sr);
     hFreeConn(&conn);
 
-    AllocArray( st->levels, slCount(&detailList));
+    if (detailList)
+	AllocArray( st->levels, slCount(detailList));
 
-    int crChromEnd;
     while (detailList)
         {
         st->levels[st->levelCount++] = detailList;
@@ -278,21 +333,19 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         struct rmskJoined *cr = detailList;
         detailList = detailList->next;
         cr->next = NULL;
+        int crChromStart, crChromEnd;
         int rmChromStart, rmChromEnd;
         struct rmskJoined *prev = NULL;
         rm = detailList;
 
-        struct Extents *ext = NULL;
-        ext = getExtents(cr);
-        crChromEnd = ext->end;
-
+        getExtents(cr, &crChromStart, &crChromEnd);
 
         if ( tg->visibility == tvFull )
-        {
-        AllocVar(ri);
-        ri->className = cr->name;
-        slAddHead(&fullRIList, ri);
-        }
+	    {
+	    AllocVar(ri);
+	    ri->className = cr->name;
+	    slAddHead(&fullRIList, ri);
+	    }
 
         //Disabled
         //if ( tg->visibility == tvSquish || tg->visibility == tvPack )
@@ -300,9 +353,7 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
              {
              while (rm)
                  {
-                 ext = getExtents(rm);
-                 rmChromStart = ext->start;
-                 rmChromEnd = ext->end;
+                 getExtents(rm, &rmChromStart, &rmChromEnd);
 
                  if (rmChromStart > crChromEnd)
                      {
@@ -327,12 +378,14 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
              } // else if ( tg->visibility == tvSquish ...
         } // while ( detailList )
     // Create Hash Entry
+    //warn("rmskJoinedLoadItems tg->table=%s st->levelCount=%d", tg->table, st->levelCount); // DEBUG REMOVE
     hashReplace(subTracksHash, tg->table, st);
     slReverse(&fullRIList);
     tg->items = fullRIList;
     } // if ((tg->visibility == tvFull || ...
-    else
-       tg->items = classRIList;
+else
+   tg->items = classRIList;
+//warn("rmskJoinedLoadItems track=%s vis=%d slCount(tg->items)=%d", tg->track, tg->visibility, slCount(tg->items)); // DEBUG REMOVE
 }
 
 static void rmskJoinedFreeItems(struct track *tg)
@@ -344,7 +397,6 @@ slFreeList(&tg->items);
 static char * rmskJoinedName(struct track *tg, void *item)
 /* Return name of rmskJoined item track. */
 {
-static char empty = '\0';
 struct repeatItem *ri = item;
   /*
    * In detail view mode the items represent different packing
@@ -357,9 +409,9 @@ struct repeatItem *ri = item;
 if (tg->visibility == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
     if (strcmp(ri->className, "SINE") == 0)
-	return("Repeats");
+	return "Repeats";
     else
-	return &empty;
+	return "";
     }
 return ri->className;
 }
@@ -380,10 +432,7 @@ int rmskJoinedItemHeight(struct track *tg, void *item)
 //else if ((tg->limitedVis == tvFull || tg->limitedVis == tvPack) && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
 if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     {
-    if ( tg->heightPer < MINHEIGHT )
-      return MINHEIGHT;
-    else
-      return tg->heightPer;
+    return max(tg->heightPer, MINHEIGHT);
     }
 else
     {
@@ -393,6 +442,8 @@ else
 
 int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
+setWg();
+//warn("rmskJoinedTotalHeight track=%s vis=%d winBaseCount=%d", tg->track, vis, winBaseCount); // DEBUG REMOVE
   // Are we in full view mode and at the scale needed to display
   // the detail view?
 //Disabled
@@ -404,13 +455,15 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     struct subTrack *st = hashFindVal(subTracksHash, tg->table);
     if (st)
         {
-        tg->height = ((st->levelCount ) * rmskJoinedItemHeight(tg, NULL) );
-        return ((st->levelCount ) * rmskJoinedItemHeight(tg, NULL));
+        tg->height = (st->levelCount * rmskJoinedItemHeight(tg, NULL));
+	//warn("rmskJoinedTotalHeight track=%s st->levelCount=%d tg->height=%d", tg->track, st->levelCount, tg->height); // DEBUG REMOVE
+        return tg->height;
         }
     else
         {
         tg->height = rmskJoinedItemHeight(tg, NULL);
-        return (rmskJoinedItemHeight(tg, NULL));	// Just display one line
+	//warn("rmskJoinedTotalHeight track=%s st is NULL tg->height=%d", tg->track, tg->height); // DEBUG REMOVE
+        return tg->height;	// Just display one line
         }
     }
 else
@@ -629,6 +682,7 @@ static void drawRMGlyph(struct hvGfx *hvg, int y, int heightPer,
  *
  */
 {
+setWg();
 int idx;
 int lx1, lx2;
 int cx1, cx2;
@@ -1022,6 +1076,7 @@ static void origRepeatDraw(struct track *tg, int seqStart, int seqEnd,
  * to handle the new rmskJoined table structure.
  */
 {
+setWg();
 int baseWidth = seqEnd - seqStart;
 struct repeatItem *ri;
 int y = yOff;
@@ -1180,6 +1235,7 @@ static void rmskJoinedDrawItems(struct track *tg, int seqStart, int seqEnd,
 	     struct hvGfx *hvg, int xOff, int yOff, int width,
 	     MgFont * font, Color color, enum trackVisibility vis)
 {
+setWg();
 int baseWidth = seqEnd - seqStart;
 
 // TODO: Document
@@ -1194,7 +1250,6 @@ pixelsPerBase = (float) width / (float) baseWidth;
 int heightPer = rmskJoinedItemHeight(tg, NULL);
 //boolean isFull = (vis == tvFull);
 struct rmskJoined *rm;
-// DEBUG REMOVE
 
   // If we are in full view mode and the scale is sufficient,
   // display the new visualization.

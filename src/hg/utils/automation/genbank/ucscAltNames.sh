@@ -9,7 +9,7 @@ fi
 
 export asmRpt=$1
 
-grep -v "^#" "${asmRpt}" | awk '{
+(grep -v "^#" "${asmRpt}" || true) | awk '{
 if (match($2,"alt-scaffold")) {
  ucscName=$5
  sub("\\.","v",ucscName)

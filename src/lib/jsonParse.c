@@ -80,7 +80,10 @@ void jsonListAdd(struct jsonElement *list, struct jsonElement *ele)
 {
 if(list->type != jsonList)
     errAbort("jsonListAdd called on element with incorrect type (%d)", list->type);
-slAddHead(&list->val.jeList, ele);
+struct slRef *el;
+AllocVar(el);
+el->val = ele;
+slAddHead(&list->val.jeList, el);
 }
 
 static void skipLeadingSpacesWithPos(char *s, int *posPtr)

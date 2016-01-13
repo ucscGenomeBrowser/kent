@@ -11,4 +11,5 @@ include wgEncodeGencodeV20.ra
 include wgEncodeGencodeV21.ra alpha
 include wgEncodeGencodeV22.ra
 include wgEncodeGencodeV23.ra
+include wgEncodeGencodeV24.ra
 include wgEncodeReg.ra

@@ -1,0 +1,7 @@
+Your looking for these differences, 
+
+83.66 should be the largest, 
+next is 39.25, 
+then 10.5
+then you are looking at the raw node distances, 
+should be 1, 2, 5, and 10 

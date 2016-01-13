@@ -64,6 +64,8 @@ struct annoStreamDb
     uint sqlRowSize;			// Number of columns from sql query (may include related)
     uint bigRowSize;			// Number of columns from sql + joinMixer->hashJoins
     boolean hasLeftJoin;		// If we have to use 'left join' we'll have to 'order by'.
+    boolean naForMissing;		// If true, insert "n/a" for missing related table values
+					// to match hgTables.
 
     struct rowBuf
     // Temporary storage for rows from chunked query
@@ -81,8 +83,6 @@ struct annoStreamDb
     void (*doQuery)(struct annoStreamDb *self, char *minChrom, uint minEnd);
     // Depending on query style, perform either a single query or (series of) chunked query
     };
-
-static boolean naForMissing = TRUE;	// This should be made into a UI option.
 
 //#*** TODO: make a way to pass the filter with dtf into annoStreamDb.
 
@@ -258,7 +258,7 @@ if (self->relatedDtfList)
         self->joiner = joinerRead(JOINER_FILE);
     int expectedRows = sqlRowCount(self->conn, self->table);
     self->joinMixer = joinMixerNew(self->joiner, self->db, self->table, outputFieldList,
-                                   expectedRows, naForMissing);
+                                   expectedRows, self->naForMissing);
     self->sqlRowSize = slCount(self->joinMixer->sqlFieldList);
     self->bigRowSize = self->joinMixer->bigRowSize;
     joinerDtfFreeList(&outputFieldList);
@@ -711,7 +711,7 @@ if (self->joinMixer)
         {
         uint outIx = self->joinMixer->outIxs[i+self->omitBin];
         if (row[outIx] == NULL)
-            swizzleRow[i] = naForMissing ? "n/a" : "";
+            swizzleRow[i] = self->naForMissing ? "n/a" : "";
         else
             swizzleRow[i] = row[outIx];
         }
@@ -910,6 +910,23 @@ static void makeDottedTriple(char *dtfString, size_t dtfStringSize,
 safef(dtfString, dtfStringSize, "%s.%s.%s", db, table, field);
 }
 
+char *annoStreamDbColumnNameFromDtf(char *db, char *mainTable, struct joinerDtf *dtf)
+/* Return a string with the autoSql column name that would be assigned according to dtf's
+ * db, table and field. */
+{
+char colName[PATH_LEN*2];
+if (differentString(dtf->table, mainTable) || differentString(dtf->database, db))
+    {
+    joinerDtfToSqlFieldString(dtf, db, colName, sizeof(colName));
+    // asParse rejects names that have '.' in them, which makes sense because it's for SQL,
+    // so replace the '.'s with '_'s.
+    subChar(colName, '.', '_');
+    }
+else
+    safecpy(colName, sizeof(colName), dtf->field);
+return cloneString(colName);
+}
+
 static void addOneColumn(struct dyString *dy, struct joinerDtf *dtf, char *db, char *mainTable,
                          struct asColumn *col, struct hash *dtfNames)
 /* Append an autoSql text line describing col to dy.
@@ -931,7 +948,7 @@ if (col->isArray && sizeColIsMissing)
     {
     // The size column is missing, so this can't be a valid array in autoSql --
     // ignore col->lowType and call it a (comma-separated) string.
-    dyStringAppend(dy, "    string");
+    dyStringAppend(dy, "    lstring");
     }
 else
     {
@@ -946,16 +963,7 @@ else
         dyStringAppendC(dy, ']');
         }
     }
-char colName[PATH_LEN];
-if (differentString(dtf->table, mainTable) || differentString(dtf->database, db))
-    {
-    joinerDtfToSqlFieldString(dtf, db, colName, sizeof(colName));
-    // asParse rejects names that have '.' in them, which makes sense because it's for SQL,
-    // so replace the '.'s with '_'s.
-    subChar(colName, '.', '_');
-    }
-else
-    safecpy(colName, sizeof(colName), col->name);
+char *colName = annoStreamDbColumnNameFromDtf(db, mainTable, dtf);
 dyStringPrintf(dy, "  %s; \"%s\"\n", colName, col->comment);
 // Store plain old dotted triple in dtfNames in case we need to look it up later.
 char dtfString[PATH_LEN];
@@ -1078,7 +1086,8 @@ static struct asObject *asdParseConfig(struct annoStreamDb *self, struct jsonEle
  *                                 "fields": ["clusterId"] }
  *                             ] }
  * If so, unpack the [db.]tables and fields into self->relatedDtfList and append autoSql
- * column descriptions for each field to the autoSql object that describes our output. */
+ * column descriptions for each field to the autoSql object that describes our output.
+ * It might also have "naForMissing": true/false; if so, set self->naForMissing. */
 {
 //#*** TODO: hAnnoGetAutoSqlForDbTable should do its own split-table checking
 char maybeSplitTable[HDB_MAX_TABLE_STRING];
@@ -1124,12 +1133,12 @@ if (configEl != NULL)
         slReverse(&self->relatedDtfList);
         asObj = asdAutoSqlFromTableFields(self, asObj);
         }
+    struct jsonElement *naForMissingEl = hashFindVal(config, "naForMissing");
+    if (naForMissingEl != NULL)
+        self->naForMissing = jsonBooleanVal(naForMissingEl, "naForMissing");
     }
 return asObj;
 }
-
-// Why isn't this in jksql.h?
-#define NOSQLINJ "NOSQLINJ "
 
 static char *sqlExplain(struct sqlConnection *conn, char *query)
 /* For now, just turn the values back into a multi-line "#"-comment string. */

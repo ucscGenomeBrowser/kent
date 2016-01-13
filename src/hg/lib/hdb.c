@@ -4027,15 +4027,15 @@ if (sTdb != NULL)
 return cTdb;
 }
 
-boolean hgParseChromRange(char *db, char *spec, char **retChromName,
-	int *retWinStart, int *retWinEnd)
+boolean hgParseChromRangeLong(char *db, char *spec, char **retChromName,
+	long *retWinStart, long *retWinEnd)
 /* Parse something of form chrom:start-end into pieces.
  * if db != NULL then check with chromInfo for names */
 {
 boolean haveDb = (db != NULL);
 char *chrom, *start, *end;
 char buf[256];
-int iStart, iEnd;
+long iStart, iEnd;
 
 safecpy(buf, sizeof(buf), spec);
 stripChar(buf, ',');
@@ -4070,8 +4070,8 @@ else
 	return FALSE;
     if (haveDb && ((chrom = hgOfficialChromName(db, chrom)) == NULL))
 	return FALSE;
-    iStart = atoi(start)-1;
-    iEnd = atoi(end);
+    iStart = atol(start)-1;
+    iEnd = atol(end);
     }
 if (retChromName != NULL)
     *retChromName = (haveDb)? chrom : cloneString(chrom);
@@ -4080,6 +4080,23 @@ if (retWinStart != NULL)
 if (retWinEnd != NULL)
     *retWinEnd = iEnd;
 return TRUE;
+}
+
+boolean hgParseChromRange(char *db, char *spec, char **retChromName,
+	int *retWinStart, int *retWinEnd)
+/* Parse something of form chrom:start-end into pieces.
+ * if db != NULL then check with chromInfo for names */
+{
+long winStart, winEnd;
+boolean result = hgParseChromRangeLong(db, spec, retChromName, &winStart, &winEnd);
+if (result)
+    {
+    if (retWinStart != NULL)
+	*retWinStart = winStart;
+    if (retWinEnd != NULL)
+	*retWinEnd = winEnd;
+    }
+return result;
 }
 
 boolean hgIsChromRange(char *db, char *spec)
@@ -4790,23 +4807,21 @@ char *addCommasToPos(char *db, char *position)
  * returns pointer to static */
 {
 static char buffer[256];
-int winStart, winEnd;
+long winStart, winEnd; // long to support virtual chrom
 char *chromName;
 char num1Buf[64], num2Buf[64]; /* big enough for 2^64 (and then some) */
 
 if (position == NULL)
     return NULL;
 
-buffer[sizeof(buffer) - 1] = 0;
-if (!hgParseChromRange(NULL, position, &chromName, &winStart, &winEnd))
-    strncpy(buffer, position, sizeof(buffer) - 1);
-else
+if (hgParseChromRangeLong(NULL, position, &chromName, &winStart, &winEnd))
     {
     sprintLongWithCommas(num1Buf, winStart + 1);
     sprintLongWithCommas(num2Buf, winEnd);
-    safef(buffer, sizeof(buffer) - 1, "%s:%s-%s",chromName, num1Buf,  num2Buf);
+    safef(buffer, sizeof(buffer), "%s:%s-%s",chromName, num1Buf,  num2Buf);
     }
-
+else
+    safecpy(buffer, sizeof(buffer), position);
 return buffer;
 }
 

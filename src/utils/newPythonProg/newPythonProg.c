@@ -45,7 +45,7 @@ fprintf(programFile,
     "import os\nimport sys\nimport collections\nimport argparse\n"
     "\n"
     "# import the UCSC kent python library\n"
-    "sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))\n"
+    "sys.path.append(os.path.dirname(__file__))\n"
     "import common\n\n");
 fprintf(programFile, "def parseArgs(args):\n    \"\"\"\n    Parse the command line arguments.\n    \"\"\"\n    parser" 
 		    "= argparse.ArgumentParser(description = __doc__)\n    parser.add_argument (\"inpu"

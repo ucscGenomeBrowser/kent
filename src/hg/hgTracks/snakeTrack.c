@@ -805,7 +805,7 @@ if (withLabels)
     boolean snapLeft = FALSE;
     boolean drawNameInverted = FALSE;
     textX -= nameWidth + dotWidth;
-    snapLeft = (textX < insideX);
+    snapLeft = (textX < fullInsideX);
     /* Special tweak for expRatio in pack mode: force all labels
      * left to prevent only a subset from being placed right: */
     snapLeft |= (startsWith("expRatio", tg->tdb->type));
@@ -818,7 +818,7 @@ if (withLabels)
         textX = leftLabelX;
         assert(hvgSide != NULL);
         hvGfxUnclip(hvgSide);
-        hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
+        hvGfxSetClip(hvgSide, leftLabelX, yOff, fullInsideX - leftLabelX, tg->height);
         if(drawNameInverted)
             {
             int boxStart = leftLabelX + leftLabelWidth - 2 - nameWidth;
@@ -834,6 +834,9 @@ if (withLabels)
         }
     else
         {
+        int pdfSlop=nameWidth/5;
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, tg->heightPer);
         if(drawNameInverted)
             {
             hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
@@ -841,6 +844,8 @@ if (withLabels)
             }
         else
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
+        hvGfxUnclip(hvg);
+        hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
         }
     }
 

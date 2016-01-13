@@ -1,0 +1,132 @@
+# Local declaration so that local gold.html is picked up.
+track gold override
+visibility dense
+html gold
+
+# Local declaration so that local gap.html is picked up.
+track gap override
+visibility dense
+html gap
+
+track gc5BaseBw override
+visibility full
+maxHeightPixels 128:36:36
+viewLimits 0:100
+
+track rmsk override
+visibility full
+
+track chainSelf
+shortLabel Self Chain
+longLabel Chained Self-Alignments
+group varRep
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain oxyTri2
+otherDb oxyTri2
+
+track selfChainPileUps
+shortLabel Self Pile Ups
+longLabel Self chain pile ups, overlap count of chain links
+group varRep
+visibility hide
+maxHeightPixels 128:64:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,0,0
+altColor 128,128,128
+viewLimits 0:100
+type bigWig 1 2075
+autoScale on
+alwaysZero on
+html selfChainPileUps
+
+# track xNcbiGene
+# shortLabel NCBI Genes
+# longLabel NCBI Genes from Genbank Record
+# group genes
+# visibility pack
+# type bed 12
+# colorByStrand 0,0,128 0,128,0
+# chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
+
+track genbankGenes
+shortLabel NCBI Genes
+longLabel NCBI Genes from Genbank Record
+visibility pack
+color 0,80,150
+altColor 150,80,0
+colorByStrand 0,80,150 150,80,0
+type bigBed 12
+searchIndex name
+searchTrix /gbdb/oxyTri2/bbi/genbankGenes/genbankGenes.ix
+group genes
+chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
+
+searchTable genbankGenes
+searchType bigBed
+
+searchTable gold
+shortCircuit 1
+termRegex [ACJL][ANRo][EYn3][Ct8][i03][g18][0-9]([v0-9_.]*)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+track sequences
+shortLabel Sequences
+longLabel Sequence names comprising the artificial chromosomes
+group map
+visibility pack
+type bed 4
+
+searchTable sequences
+searchType bed
+searchMethod prefix
+termRegex [ACJcd][MNeot][Cgn3][Rt0-9][i0-9][g0-9][0-9]([a-z0-9_.]*)?
+searchPriority 100
+
+track xenoRefGene override
+visibility pack
+
+track intronEst override
+visibility hide
+
+track ncRNAs
+shortLabel ncRNAs
+longLabel ncRNAs
+group genes
+visibility pack
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMACsb310
+
+track microGenes
+shortLabel MIC genes
+longLabel MIC-only genes from Landweber Lab 2014aug28 Cell paper
+group genes
+visibility pack
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMICjrb310
+
+track mergeJunctions
+shortLabel TopHat Junctions
+longLabel merge _all samples mapalgo4_pe7777_ncRNAfilt_oxytri2Ref_tophat tophat junctions
+group regulation
+visibility hide
+type bed 12
+colorByStrand 0,0,128 0,128,0
+chromosomes chrMACsb310
+
+track pileUps200
+shortLabel Over 200
+longLabel locations of self chains with more than 200 pileUps
+group varRep
+visibility hide
+type bed 3
+
+include rnaSeq.ra
+include coverage.ra

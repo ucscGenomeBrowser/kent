@@ -125,7 +125,8 @@ include ../chainNetVertebrate.ra
 include ../chainNetLegacy.ra alpha
 include ../newChainNet.ra alpha
 include ../chainNetXenTro3.ra beta,public
-include ../chainNetXenTro7.ra alpha
+include ../chainNetXenTro7.ra
+include ../chainNetFelCat8.ra
 
 track contigAlignmentSegments
 shortLabel ContigSegments
@@ -438,7 +439,9 @@ searchPriority 3.53
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch3.ra
+include hg38Patch3.ra beta,public
+include hg38Patch6.ra alpha
+
 include knownGene.ra
 
 include trackDb.100way.ra

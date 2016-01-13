@@ -336,12 +336,15 @@ if (count > 0)
 return count;
 }
 
-void configPageSetTrackVis(int vis)
-/* Do config page after setting track visibility. If vis is -2, then visibility
- * is unchanged.  If -1 then set visibility to default, otherwise it should
- * be tvHide, tvDense, etc. */
+
+void configInitTrackList(
+    int vis, 
+    char **pGroupTarget,
+    struct track **pTrackList,
+    struct track **pIdeoTrack,
+    struct group **pGroupList
+)
 {
-struct dyString *title = dyStringNew(0);
 char *groupTarget = NULL;
 struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
@@ -373,6 +376,27 @@ groupTarget = cloneString(cartUsualString(cart, configGroupTarget, ""));
 cartRemove(cart, configGroupTarget);
 if (sameString(groupTarget, "none"))
     freez(&groupTarget);
+
+*pGroupTarget = groupTarget;
+*pTrackList = trackList;
+*pIdeoTrack = ideoTrack;
+*pGroupList = groupList;
+
+}
+
+void configPageSetTrackVis(int vis)
+/* Do config page after setting track visibility. If vis is -2, then visibility
+ * is unchanged.  If -1 then set visibility to default, otherwise it should
+ * be tvHide, tvDense, etc. */
+{
+char *groupTarget;
+struct track *trackList;
+struct track *ideoTrack;
+struct group *groupList;
+
+configInitTrackList(vis, &groupTarget, &trackList, &ideoTrack, &groupList);
+
+struct dyString *title = dyStringNew(0);
 
 dyStringPrintf(title, "Configure Image");
 
@@ -430,7 +454,7 @@ if (ideoTrack != NULL)
 hPrintf("<TR><TD>");
 hCheckBox("guidelines", cartUsualBoolean(cart, "guidelines", TRUE));
 hPrintf("</TD><TD>");
-hPrintf("Show light blue vertical guidelines");
+hPrintf("Show light blue vertical guidelines, or light red vertical  window separators in multi-region view");
 hPrintf("</TD></TR>\n");
 
 hPrintf("<TR><TD>");
@@ -475,12 +499,13 @@ hPrintf("</TD><TD>");
 hPrintf("Enable highlight with drag-and-select "
         "(if unchecked, drag-and-select always zooms to selection)");
 hPrintf("</TD></TR>\n");
-
 hTableEnd();
+
+
 cgiDown(0.9);
 
-char *freeze = hFreezeFromDb(database);
 char buf[256];
+char *freeze = hFreezeFromDb(database);
 if (freeze == NULL)
     safef(buf, sizeof buf, "Configure Tracks on %s %s: %s",
 	  organization, browserName, trackHubSkipHubName(organism));
@@ -522,5 +547,212 @@ void configPage()
 /* Put up configuration page. */
 {
 configPageSetTrackVis(-2);
+}
+
+// TODO GALT there is duplication still between config and configMultiRegionPageSetTrackVis
+//  that could maybe be addressed by pulling the code that initializes the tracklist,
+//  and the code that draws the multi-region options, into 2 functions to be called by each.
+
+void configMultiRegionPage()
+/* Do multi-region config page after setting track visibility. If vis is -2, then visibility
+ * is unchanged.  If -1 then set visibility to default, otherwise it should
+ * be tvHide, tvDense, etc. */
+{
+char *groupTarget;
+struct track *trackList;
+struct track *ideoTrack;
+struct group *groupList;
+int vis = -2;
+
+configInitTrackList(vis, &groupTarget, &trackList, &ideoTrack, &groupList);
+
+hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n", hgTracksName(),
+	cartUsualString(cart, "formMethod", "POST"));
+
+webStartWrapperDetailedNoArgs(cart, database, "", "", FALSE, FALSE, FALSE, FALSE);
+
+cartSaveSession(cart);
+
+
+hPrintf("<BR>\n");
+
+hTableStart();
+
+virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
+
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("Show single-chromosome view (default)");
+hPrintf("</TD></TR>\n");
+
+struct sqlConnection *conn = NULL;
+if (!trackHubDatabase(database))  // no db conn for assembly hubs 
+    conn = hAllocConn(database);
+
+// Do we have a gene table for exonMostly?
+findBestEMGeneTable(trackList);
+if (emGeneTable)
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "exonMostly", sameWord("exonMostly", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show exons or ");
+    cgiMakeRadioButton("virtModeType", "geneMostly", sameWord("geneMostly", virtModeType));
+    hPrintf("genes using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
+    hIntVar("emPadding", cartUsualInt(cart, "emPadding", emPadding), 3);
+    hPrintf(" bases.");
+    hPrintf("</TD></TR>\n");
+    }
+
+/* obsolete    
+if (conn && sqlTableExists(conn,"knownCanonical"))
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "kcGenes", sameWord("kcGenes", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show gene regions genome-wide.");
+    hPrintf("</TD></TR>\n");
+    }
+*/
+
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "customUrl", sameWord("customUrl", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("Custom regions from BED URL: ");
+hTextVar("multiRegionsBedUrl", cartUsualString(cart, "multiRegionsBedUrl", multiRegionsBedUrl), 60);
+hPrintf("</TD></TR>\n");
+
+
+/* The AllChroms option will be released in future
+if (emGeneTable && sqlTableExists(conn, emGeneTable))
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "singleTrans", sameWord("singleTrans", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show only one transcript using an ID from %s : ", emGeneTrack->shortLabel);
+    char *trans = cartUsualString(cart, "singleTransId", singleTransId);
+    char sql[1024];
+    sqlSafef(sql, sizeof sql, "select name from %s where name='%s'", emGeneTable, trans);
+    char *result = sqlQuickString(conn, sql);
+    if (!result)
+	{
+	sqlSafef(sql, sizeof sql, "select name from %s limit 1", emGeneTable);
+	trans = sqlQuickString(conn, sql);
+	}
+    hTextVar("singleTransId", trans, 20);
+    hPrintf("</TD></TR>\n");
+    }
+*/
+
+if (conn && sqlTableExists(conn, "altLocations"))
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "singleAltHaplo", sameWord("singleAltHaplo", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show one alternate haplotype, placed on its chromosome, using ID: ");
+    char *haplo = cartUsualString(cart, "singleAltHaploId", singleAltHaploId);
+    char sql[1024];
+    sqlSafef(sql, sizeof sql, "select name from altLocations where name='%s'", haplo);
+    char *result = sqlQuickString(conn, sql);
+    if (!result)
+	{
+	sqlSafef(sql, sizeof sql, "select name from altLocations limit 1");
+	haplo = sqlQuickString(conn, sql);
+	}
+    hTextVar("singleAltHaploId", haplo, 20);
+    hPrintf("</TD></TR>\n");
+    }
+
+/* disable demo for now
+if (sameString(database,"hg19") || sameString(database, "hg38"))
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "demo1", sameWord("demo1", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("demo1 two windows on two chroms (default pos on chr21, and same loc on chr22)");
+    hPrintf("</TD></TR>\n");
+    }
+*/
+
+
+/* Disabled for now 
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "demo2", sameWord("demo2", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("demo2 multiple "); 
+hIntVar("demo2NumWindows", cartUsualInt(cart, "demo2NumWindows", demo2NumWindows), 3);
+hPrintf(" windows on one chrom chr21 def posn, window size ");
+hIntVar("demo2WindowSize", cartUsualInt(cart, "demo2WindowSize", demo2WindowSize), 3);
+hPrintf(" and step size ");
+hIntVar("demo2StepSize", cartUsualInt(cart, "demo2StepSize", demo2StepSize), 3);
+hPrintf(" exon-like");
+hPrintf("</TD></TR>\n");
+*/
+
+/* The AllChroms option will be released in future
+if (conn)  // requires chromInfo from database. 
+    { // TODO allow it to use assembly hubs via trackHubAllChromInfo() ?
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "allChroms", sameWord("allChroms", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("<br>Show all chromosomes.<br><span style='color:red'>Warning:</span> Turn off all tracks except bigBed, bigWig, and very sparse tracks.<br>Press Hide All to hide all tracks.");
+    hPrintf("</TD></TR>\n");
+    }
+*/
+
+
+/* Disabled for now 
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "demo4", sameWord("demo4", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("demo4 multiple (311) windows showing exons from TITIN gene uc031rqd.1.");
+hPrintf("</TD></TR>\n");
+*/
+
+/* Disabled for now 
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "demo5", sameWord("demo5", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("demo5 alt locus on hg38. Shows alt chrom surrounded by regions of same size from reference genome.");
+hPrintf("</TD></TR>\n");
+*/
+
+/* Disabled for now 
+hPrintf("<TR><TD>");
+cgiMakeRadioButton("virtModeType", "demo6", sameWord("demo6", virtModeType));
+hPrintf("</TD><TD>");
+hPrintf("demo6 shows zoomed in exon-exon junction from SOD1 gene, between exon1 and exon2.");
+hPrintf("</TD></TR>\n");
+*/
+
+
+hTableEnd();
+
+hPrintf("<BR>\n");
+hPrintf("<TABLE style=\"border:0px; \">\n");
+hPrintf("<TR><TD>");
+hCheckBox("emAltHighlight", cartUsualBoolean(cart, "emAltHighlight", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Highlight alternating regions in multi-region view");
+hPrintf("</TD></TR>\n");
+hPrintf("</TABLE>\n");
+
+hPrintf("<BR>\n");
+hPrintf("<TABLE style=\"border:0px;width:650px \">\n");
+hPrintf("<TR><TD>");
+cgiMakeButton("topSubmit", "submit");
+hPrintf("</TD><TD align=right>");
+hPrintf("<A HREF=\"../goldenPath/help/multiRegionHelp.html\" target=_blank>Help</A>\n");
+hPrintf("</TD></TR>\n");
+hPrintf("</TABLE>\n");
+
+hFreeConn(&conn);
+
+cgiDown(0.9);
+
+freez(&groupTarget);
+webEndSectionTables();
+hPrintf("</FORM>");
 }
 

@@ -51,8 +51,8 @@ for an explanation of the configuration options.
 <h2>Downloads</h2>
 <p>
 The data for this track can be found in the files
-in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/" target=_blank>build directory</a>, specifically:<br>
-<b>bigWig file format: </b><a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/bbi/$accAsm.gc5Base.ncbi.bw" target=_blank>$accAsm.gc5Base.ncbi.bw</a><br>
+in this <a href="/gbdb/hubs/$asmType/$selfUrl/" target=_blank>build directory</a>, specifically:<br>
+<b>bigWig file format: </b><a href="/gbdb/hubs/$asmType/$selfUrl/bbi/$accAsm.gc5Base.ncbi.bw" target=_blank>$accAsm.gc5Base.ncbi.bw</a><br>
 </p>
 <h2>Credits</h2>
 <p> The data and presentation of this graph were prepared by
@@ -60,8 +60,8 @@ in this <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$selfUrl/"
 .&#117;&#99;&#115;&#99;.&#101;&#100;u">Hiram Clawson</a>.
 </p>
 <p>
-Return to UCSC naming <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.html">$groupName</a> assembly hub index.<br>
-Return to NCBI naming <a href="http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
+Return to UCSC naming <a href="/gbdb/hubs/$asmType/$groupName/${groupName}.html">$groupName</a> assembly hub index.<br>
+Return to NCBI naming <a href="/gbdb/hubs/$asmType/$groupName/${groupName}.ncbi.html">$groupName</a> assembly hub index.
 </p>
 _EOF_
    ;

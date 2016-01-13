@@ -1,0 +1,9 @@
+meta	donor	tissue	age	lab
+Cell1	1	brain	16	snyder
+Cell2	1	lung	12	snyder
+Cell3	1	liver	10	snyder
+Cell4	1	lung	5	snyder
+Cell5	2	liver	8	snyder
+Cell6	2	brain	3	snyder
+Cell7	2	liver	1	snyder
+Cell8	2	brain	.5	snyder

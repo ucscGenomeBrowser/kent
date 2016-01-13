@@ -88,7 +88,7 @@ include chainNetVicPac2.ra
         type chain loxAfr3
         otherDb loxAfr3
 
-include chainNetFelCat5.ra
+# felCat3 and felCat5 are separately included in hg19/hg38
 
         track chainCanFam3
         subTrack placentalChainNetViewchain off

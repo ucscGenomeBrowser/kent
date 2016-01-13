@@ -23,7 +23,7 @@ ifeq (${HG_WARN},)
       HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     else
-      HG_WARN = -Wall -Werror -Wformat -Wimplicit -Wreturn-type
+      HG_WARN = -Wall -Wunused-but-set-variable -Wformat -Wimplicit -Wreturn-type
       HG_WARN_UNINIT=-Wuninitialized
     endif
   endif

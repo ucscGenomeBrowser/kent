@@ -14,15 +14,18 @@ sub commify($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 2) {
-  printf STDERR "usage: hubHtml.pl <hubLink> <pathTo>/<base> >> file.html\n";
+if ($argc != 3) {
+  printf STDERR "usage: hubHtml.pl <ncbi|ucsc> <hubLink> <pathTo>/<base> >> file.html\n";
   printf STDERR "will look for files <pathTo>/<base>.names.tab and\n";
   printf STDERR "<pathTo>/<base>.build.stats.txt\n";
   exit 255;
 }
 
+my $ucscNcbi = shift;
 my $hubLink = shift;
 my $baseName = shift;
+my $fileSuffix = "";
+$fileSuffix = ".ncbi" if ( $ucscNcbi =~ m/ncbi/ );
 my $ftpName = dirname($baseName);
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 my $namesFile = "$baseName.names.tab";
@@ -54,12 +57,18 @@ close (FH);
 # #seq    len     A       C       G       T       N       cpg
 # total   16569   5124    5181    2169    4094    1       435
 
-my $geneStats = `cat $geneStatsFile | awk '{printf "%d\\n", \$2}' | xargs echo`;
-chomp $geneStats;
-my ($geneCount, $geneBasesCovered) = split('\s+', $geneStats);
+my $geneCount = 0;
 my $genePercentCoverage = 0;
-if ($genomeSize > 0) {
- $genePercentCoverage = sprintf("%.3f", 100.0 * $geneBasesCovered/$genomeSize);
+my $geneBasesCovered = 0;
+
+if ( -s $geneStatsFile ) {
+  my $geneStats=`cat $geneStatsFile | awk '{printf "%d\\n", \$2}' | xargs echo`;
+  chomp $geneStats;
+  ($geneCount, $geneBasesCovered) = split('\s+', $geneStats);
+  $genePercentCoverage = 0;
+  if ($genomeSize > 0) {
+  $genePercentCoverage = sprintf("%.3f", 100.0 * $geneBasesCovered/$genomeSize);
+  }
 }
 
 open (FH, "grep '^total' $faCountFile|tail -1|") or die "can not read $faCountFile";
@@ -72,8 +81,7 @@ while (my $line = <FH>) {
 close (FH);
 
 
-my $hubText = "hub.txt";
-$hubText = "hub.ncbi.txt" if ($hubLink =~ m#refseq/#);
+my $hubText = "hub$fileSuffix.txt";
 # first line is a comment, second line is the set of names data
 open (FH, "grep -v '^#' $namesFile|") or die "can not read $namesFile";
 while (my $line = <FH>) {
@@ -82,7 +90,7 @@ while (my $line = <FH>) {
   $asmDate =~ s/ /&nbsp;/g;
   printf "<tr align=\"right\"><td><a href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%d\" target=_\"_blank\"> %d</a>", $taxId, $taxId;
   printf "<td>%s</td>", $asmDate;
-  printf "<td><a href=\"/cgi-bin/hgTracks?hubUrl=http://genome-test.cse.ucsc.edu/~hiram/hubs/%s/%s&genome=%s_%s&position=lastDbPos\" target=_blank>%s</a></td>", $hubLink, $hubText, $asmAccession, $asmName, $commonName;
+  printf "<td><a href='' class='hgGateway' hubTxt='%s/%s'  asmId='%s_%s' target='_blank'>%s</a></td>", $hubLink, $hubText, $asmAccession, $asmName, $commonName;
   printf "<td>%s</td>", $sciName;
   if ($bioSample ne "(n/a)") {
     printf "<td><a href=\"http://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a></td>", $bioSample, $bioSample;
