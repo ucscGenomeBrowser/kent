@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<head>
+<title>New dendrogram tests</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="d3.dendrograms1.js" type="text/javascript"></script>
+<div class = "dropdown">
+	<div id = dropdown>
+</div>
+<script>
+	function load() {
+	var data;
+
+	d3.json("testClustersWMeta.json", function(error,json){
+		if (error) return console.warn(error);
+		data = json;
+			d3.dendrogram.makeCartesianDendrogram('#phylogram', data, {
+			width: 90,
+			height: 90,
+			});
+
+			d3.dendrogram.makeRadialDendrogram('#dendrogram', data,{
+			radius: 797,
+			});
+		});
+  	}
+</script>
+<style type="text/css" media="screen">
+  body { font-family: "Helvetica Neue", Helvetica, sans-serif; }
+  td { vertical-align: top; }
+</style>
+</head>
+<body onload="load()">
+<table>
+  <tr>
+	<td>
+	  <h1>Phylogram</h2>
+	  <div id='phylogram'></div>
+	</td>
+	<td>
+	  <h1>Dendrogram</h1>
+	  <div id='dendrogram'></div>
+	</td>
+  </tr>
+</table>
+</body>
+</html>
