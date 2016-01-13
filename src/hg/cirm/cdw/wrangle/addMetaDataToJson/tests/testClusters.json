@@ -1,35 +1,35 @@
- {"name": " ", "longestDistance":"83.666664", "tpmDistance": "83.666666", "length": 0.000000,  "colorGroup": "rgb(0,0,0)","distance": "1.000000", "whiteToBlack":"rgb(7,7,7)", "whiteToBlackSqrt":"rgb(61,61,61)", "whiteToBlackQuad":"rgb(157,157,157)",
+ {"name":" ", "number":"1", "kids":"8", "tpmDistance": "83.666666", "length": "0.000000",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "1.000000", "whiteToBlack":"rgb(7,7,7)", "whiteToBlackSqrt":"rgb(61,61,61)", "whiteToBlackQuad":"rgb(157,157,157)",
  "children":[
-   {"name": " ", "longestDistance":"83.666664", "tpmDistance": "39.250000", "length": 7.000111,  "colorGroup": "rgb(0,0,0)","distance": "0.469124", "whiteToBlack":"rgb(141,141,141)", "whiteToBlackSqrt":"rgb(84,84,84)", "whiteToBlackQuad":"rgb(45,45,45)",
+   {"name":" ", "number":"2", "kids":"6", "tpmDistance": "39.250000", "length": "83.666666",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.469124", "whiteToBlack":"rgb(141,141,141)", "whiteToBlackSqrt":"rgb(84,84,84)", "whiteToBlackQuad":"rgb(45,45,45)",
   "children":[
-     {"name": " ", "longestDistance":"83.666664", "tpmDistance": "10.500000", "length": 1.540563,  "colorGroup": "rgb(0,0,0)","distance": "0.125498", "whiteToBlack":"rgb(224,224,224)", "whiteToBlackSqrt":"rgb(167,167,167)", "whiteToBlackQuad":"rgb(105,105,105)",
+     {"name":" ", "number":"3", "kids":"4", "tpmDistance": "10.500000", "length": "39.250000",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.125498", "whiteToBlack":"rgb(224,224,224)", "whiteToBlackSqrt":"rgb(167,167,167)", "whiteToBlackQuad":"rgb(105,105,105)",
    "children":[
-       {"name": " ", "longestDistance":"83.666664", "tpmDistance": "1.000000", "length": 0.110250,  "colorGroup": "rgb(0,0,0)","distance": "0.011952", "whiteToBlack":"rgb(252,252,252)", "whiteToBlackSqrt":"rgb(228,228,228)", "whiteToBlackQuad":"rgb(171,171,171)",
+       {"name":" ", "number":"4", "kids":"2", "tpmDistance": "1.000000", "length": "10.500000",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.011952", "whiteToBlack":"rgb(252,252,252)", "whiteToBlackSqrt":"rgb(228,228,228)", "whiteToBlackQuad":"rgb(171,171,171)",
     "children":[
-    {"name":"Cell1","length":0.001000,"distance":"0","colorGroup":"rgb(252,252,252)"},
-    {"name":"Cell2","length":0.001000,"distance":"0","colorGroup":"rgb(8,8,8)"}
+    {"name":"Cell1","kids":"0","length":"1.000000","colorGroup":"rgb(8,8,8)"},
+    {"name":"Cell2","kids":"0","length":"1.000000","colorGroup":"rgb(8,8,8)"}
     ]
    },
-       {"name": " ", "longestDistance":"83.666664", "tpmDistance": "2.000000", "length": 0.110250,  "colorGroup": "rgb(0,0,0)","distance": "0.023904", "whiteToBlack":"rgb(249,249,249)", "whiteToBlackSqrt":"rgb(216,216,216)", "whiteToBlackQuad":"rgb(156,156,156)",
+       {"name":" ", "number":"5", "kids":"2", "tpmDistance": "2.000000", "length": "10.500000",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.023904", "whiteToBlack":"rgb(249,249,249)", "whiteToBlackSqrt":"rgb(216,216,216)", "whiteToBlackQuad":"rgb(156,156,156)",
     "children":[
-    {"name":"Cell3","length":0.004000,"distance":"0","colorGroup":"rgb(8,8,8)"},
-    {"name":"Cell4","length":0.004000,"distance":"0","colorGroup":"rgb(8,8,8)"}
+    {"name":"Cell3","kids":"0","length":"2.000000","colorGroup":"rgb(8,8,8)"},
+    {"name":"Cell4","kids":"0","length":"2.000000","colorGroup":"rgb(8,8,8)"}
     ]
    }
    ]
   },
-     {"name": " ", "longestDistance":"83.666664", "tpmDistance": "10.000000", "length": 1.540563,  "colorGroup": "rgb(0,0,0)","distance": "0.119522", "whiteToBlack":"rgb(226,226,226)", "whiteToBlackSqrt":"rgb(169,169,169)", "whiteToBlackQuad":"rgb(107,107,107)",
+     {"name":" ", "number":"6", "kids":"2", "tpmDistance": "10.000000", "length": "39.250000",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.119522", "whiteToBlack":"rgb(226,226,226)", "whiteToBlackSqrt":"rgb(169,169,169)", "whiteToBlackQuad":"rgb(107,107,107)",
    "children":[
-   {"name":"Cell5","length":0.100000,"distance":"0","colorGroup":"rgb(8,8,8)"},
-   {"name":"Cell6","length":0.100000,"distance":"0","colorGroup":"rgb(8,8,8)"}
+   {"name":"Cell5","kids":"0","length":"10.000000","colorGroup":"rgb(8,8,8)"},
+   {"name":"Cell6","kids":"0","length":"10.000000","colorGroup":"rgb(8,8,8)"}
    ]
   }
   ]
  },
-   {"name": " ", "longestDistance":"83.666664", "tpmDistance": "5.000000", "length": 7.000111,  "colorGroup": "rgb(0,0,0)","distance": "0.059761", "whiteToBlack":"rgb(240,240,240)", "whiteToBlackSqrt":"rgb(194,194,194)", "whiteToBlackQuad":"rgb(130,130,130)",
+   {"name":" ", "number":"7", "kids":"2", "tpmDistance": "5.000000", "length": "83.666666",  "colorGroup": "rgb(0,0,0)","normalizedDistance": "0.059761", "whiteToBlack":"rgb(240,240,240)", "whiteToBlackSqrt":"rgb(194,194,194)", "whiteToBlackQuad":"rgb(130,130,130)",
   "children":[
-  {"name":"Cell7","length":0.025000,"distance":"0","colorGroup":"rgb(8,8,8)"},
-  {"name":"Cell8","length":0.025000,"distance":"0","colorGroup":"rgb(8,8,8)"}
+  {"name":"Cell7","kids":"0","length":"5.000000","colorGroup":"rgb(8,8,8)"},
+  {"name":"Cell8","kids":"0","length":"5.000000","colorGroup":"rgb(8,8,8)"}
   ]
  }
  ]

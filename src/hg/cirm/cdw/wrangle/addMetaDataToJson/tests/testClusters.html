@@ -1,209 +1,49 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<title>testClusters</title>
-<style>
-	.node circle{fill: #ff f; stroke: steelblue; stroke-width: .25px;}
-	.node{font: 9px sans-serif;}
-	.link{fill: none; stroke: #ccc; st roke-width: 1.5px;}
-	.selectedLink{fill: none; stroke: #ccc; stroke-width: 3.0px;}
-	.selected{fill: red;}
-	.legend{font-size: 12px;}
-	rect{stroke-width: 2;}
-</style>
-<body>
+<head>
+<title>New dendrogram tests</title>
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="d3.dendrograms1.js" type="text/javascript"></script>
 <div class = "dropdown">
-	<ul style="list-style-type:none;display:inline-flex">
-		<li class="dropdown">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Inner nodes
-			<span class="caret"</span></button>
-			<ul class="dropdown-menu">
-				<li><button onclick="nodeColors(0)">tpm distance</button></li>
-				<li><button onclick="nodeColors(1)">sqrt tpm distance</button></li>
-				<li><button onclick="nodeColors(2)">quad rt tpm distance</button></li>
-			</ul>
-		</li>
-		<li class="dropdown">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Inner leaves
-			<span class="caret"</span></button>
-			<ul class="dropdown-menu">
-<! Identifier  >
-			</ul>
-		</li>
-		<li class="dropdown">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Middle leaves
-			<span class="caret"</span></button>
-			<ul class="dropdown-menu">
-<! Identifier  >
-			</ul>
-		</li>
-		<li class="dropdown">
-			<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> Outer leaves
-			<span class="caret"</span></button>
-			<ul class="dropdown-menu">
-<! Identifier  >
-			</ul>
-		</li>
-	</ul>
+	<div id = dropdown>
 </div>
-<div id="graph"></div>
 <script>
-	var radius= 797 / 2;
-	var cluster=d3.layout.cluster().size([360, radius - 40]);
-	var colors=d3.scale.category20();
-	var diagonal=d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];});
-	var svg=d3.select("#graph") .append("svg") .attr("width", 400 + (radius * 2) )
-		.attr("height", radius * 2) .append("g") .attr("transform",
-		"translate(" + (radius + 150) + "," + radius + ")");
-	var legendRectSize=20;
-	var legendSpacing=4;
-	var currentLegend=-1;
-	d3.json("testClusters.json", function(error, root){
-		var nodes=cluster.nodes(root);
+	function load() {
+	var data;
 
-		var link=svg.selectAll("path.link")
-			.data(cluster.links(nodes)).enter().append("path")
-			.attr("class", "link").on("click", function(){
-			d3.select(".selectedLink").classed("selectedLink", false);
-			d3.select(this).classed("selectedLink", true);}).attr("d", diagonal);
-
-		var internalNodes = svg.selectAll("g.internalNode")
-			.data(nodes).enter().append("g")
-			.attr("class", "internalNode").attr("transform",
-			function(d){
-				return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
-				internalNodes.append("circle").attr("r", function(d){
-				if (d.name==" ")
-				{return 5;}
-				else{return 0;}})
-				.style("fill", function(d){
-				if (d.name==" ")
-				{return d.whiteToBlack;}
-				else{return "none";}})
-				.style("stroke", "steelblue")
-				.style("stroke-width", "1.25px");
-
-		var innerLeaves = svg.selectAll("g.innerLeaf")
-			.data(nodes).enter().append("g")
-			.attr("class", "innerLeaf").attr("transform",
-			function(d){
-				return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
-				innerLeaves.append("circle").attr("r", function(d){
-				if (d.name !==" ")
-				{return 5;}})
-				.style("fill", function(d){
-				if (d.name !==" ")
-				{return "d.whiteToBlack";}
-				})
-
-		var middleLeaves = svg.selectAll("g.middleLeaf")
-			.data(nodes).enter().append("g")
-			.attr("class", "middleLeaf").attr("transform",
-			function(d){
-				return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
-				middleLeaves.append("circle").attr("r", 5).style("fill","none");
-
-		var outerLeaves = svg.selectAll("g.outerLeaf")
-			.data(nodes).enter().append("g")
-			.attr("class", "outerLeaf").attr("transform",
-			function(d){
-				return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
-				outerLeaves.append("circle").attr("r", 5).style("fill","none");
-
-		var innerLegend=svg.selectAll('.innerLegend') .data(colors.domain()) .enter()
-			.append('g') .attr('class', 'innerLegend')
-			.attr('transform', 
-			function (d, i){
-				var height=legendRectSize + legendSpacing;
-				var offset=height * colors.domain().length / 2;
-				var horz=-2 * legendRectSize;
-				var vert=i * height - offset;
-				return 'translate(' + horz + ',' + vert + ')';}
-			);
-			innerLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)
-			.style('fill', colors) .style('stroke', colors);
-			innerLegend.append('text') .attr('x', legendRectSize + legendSpacing)
-			.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});
-
-		var middleLegend=svg.selectAll('.middleLegend') .data(colors.domain()) .enter()
-			.append('g') .attr('class', 'middlerLegend')
-			.attr('transform', 
-			function (d, i){
-				var height=legendRectSize + legendSpacing;
-				var offset=height * colors.domain().length / 2;
-				var horz=-2 * legendRectSize;
-				var vert=i * height - offset;
-				return 'translate(' + horz + ',' + vert + ')';}
-			);
-			middleLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)
-			.style('fill', colors) .style('stroke', colors);
-			middleLegend.append('text') .attr('x', legendRectSize + legendSpacing)
-			.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});
-
-		var outerLegend=svg.selectAll('.outerLegend') .data(colors.domain()) .enter()
-			.append('g') .attr('class', 'outerLegend')
-			.attr('transform', 
-			function (d, i){
-				var height=legendRectSize + legendSpacing;
-				var offset=height * colors.domain().length / 2;
-				var horz=-2 * legendRectSize;
-				var vert=i * height - offset;
-				return 'translate(' + horz + ',' + vert + ')';}
-			);
-			outerLegend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)
-			.style('fill', colors) .style('stroke', colors);
-			outerLegend.append('text') .attr('x', legendRectSize + legendSpacing)
-			.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});
-
+	d3.json("testClustersWMeta.json", function(error,json){
+		if (error) return console.warn(error);
+		data = json;
+			d3.dendrogram.makeCartesianDendrogram('#phylogram', data, {
+			width: 90,
+			height: 90,
 			});
-	function updateLegend(val, layer){
-		var legend=svg.selectAll('g.'+layer+'Legend').data(val);
-		legend.enter() .append('g') .attr('class',layer+ 'Legend') .attr('transform', function (d, i){
-			var height=legendRectSize + legendSpacing;
-			var offset=height *colors.domain().length / 2;
-			var horz, vert;
-			if (layer=="inner"){
-				horz=(-2 * legendRectSize) - radius - 75;
-				vert=-(i * height - offset) - (radius*.4);
-			}
-			if (layer=="middle"){
-				horz=(-2 * legendRectSize) + radius + 75;
-				vert=-(i * height - offset) - (radius*.4);
-			}
-			if (layer=="outer"){
-				horz=(-2 * legendRectSize) + radius + 75;
-				vert=-(i * height - offset)+ (radius*.4);
-			}
-			return 'translate(' + horz + ',' + vert + ')';});
-		legend.append('rect') .attr('width', legendRectSize) .attr('height', legendRectSize)
-		.style('fill', colors) .style('stroke', colors);
-		legend.append('text') .attr('x', legendRectSize + legendSpacing)
-		.attr('y', legendRectSize - legendSpacing) .text(function (d){return d;});}
 
-	function leafColors(val, layer, shift){
-		var node = svg.selectAll("g." + layer + "Leaf")
-		.selectAll("circle").style("fill", function(d){
-			if (d.name !== " "){
-		 /* Identifier */
-			}
-				else{return 'none'}})
-			.attr("transform","translate(" + shift + "," + 0 + ")");
-		var legend=svg.selectAll('g.' + layer + 'Legend').remove();
-		updateLegend(colors.domain(), layer);
-		colors=d3.scale.category20();}
-
-	function nodeColors(val){
-		var node=svg.selectAll("g.internalNode").selectAll("circle")
-		.style("fill",function(d){
-			if (d.name === " "){
-				if (val==-1) return d3.rgb(d.colorGroup);
-				if (val==0) return d3.rgb(d.whiteToBlack);
-				if (val==1) return d3.rgb(d.whiteToBlackSqrt);
-				if (val==2) return d3.rgb(d.whiteToBlackQuad);
-}});
-		}
+			d3.dendrogram.makeRadialDendrogram('#dendrogram', data,{
+			radius: 797,
+			});
+		});
+  	}
 </script>
+<style type="text/css" media="screen">
+  body { font-family: "Helvetica Neue", Helvetica, sans-serif; }
+  td { vertical-align: top; }
+</style>
+</head>
+<body onload="load()">
+<table>
+  <tr>
+	<td>
+	  <h1>Phylogram</h2>
+	  <div id='phylogram'></div>
+	</td>
+	<td>
+	  <h1>Dendrogram</h1>
+	  <div id='dendrogram'></div>
+	</td>
+  </tr>
+</table>
 </body>
+</html>
