@@ -158,13 +158,15 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     exit 4
 fi
 	
+# not done, as old customTrash tables will be in innoDb format
+# and can't be read if we deactivate it now
 # deactivate inno-db support in mysql. Saves 400-500MB of RAM.
-if ! grep skip-innodb /etc/mysql/my.cnf > /dev/null 2> /dev/null ; then
-    echo - Switching off inno-db in /etc/mysql/my.cnf
-    sed -i '/^.mysqld.$/a skip-innodb' /etc/mysql/my.cnf
-    sed -i '/^.mysqld.$/a default-storage-engine=myisam' /etc/mysql/my.cnf
-    service mysql restart
-fi
+#if ! grep skip-innodb /etc/mysql/my.cnf > /dev/null 2> /dev/null ; then
+    #echo - Switching off inno-db in /etc/mysql/my.cnf
+    #sed -i '/^.mysqld.$/a skip-innodb' /etc/mysql/my.cnf
+    #sed -i '/^.mysqld.$/a default-storage-engine=myisam' /etc/mysql/my.cnf
+    #service mysql restart
+#fi
    
 # activate the apt repo 'main' and 'universe' so we can install external software
 if ! apt-cache policy r-base | grep "Unable to locate" > /dev/null; then
