@@ -3,8 +3,10 @@
 use strict;
 use warnings;
 
-my $patchLevel = 3;
-my $patchOrdinal = "third";
+my $patchLevel = 6;
+my $patchOrdinal = "sixth";
+# also need to update file paths below from GCA_000001405.21 to the current
+# version (e.g., GCA_000001405.22).
 
 my $haploCount = `cat hg38Patch${patchLevel}Haplotypes.bed | wc -l`;
 chomp $haploCount;
@@ -62,7 +64,7 @@ Data obtained from the
 
 my %seqName;
 my %seqRole;
-open (FH, "<genbank/GCA_000001405.18_GRCh38.p${patchLevel}_assembly_report.txt") or die "can not read genbank/GCA_000001405.18_GRCh38.p${patchLevel}_assembly_report.txt";
+open (FH, "<genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_report.txt") or die "can not read genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_report.txt";
 while (my $line = <FH>) {
    next if ($line =~ m/^#/);
    chomp $line;
@@ -74,7 +76,7 @@ close (FH);
 
 my %region;
 
-open (FH, "<genbank/GCA_000001405.18_GRCh38.p${patchLevel}_assembly_regions.txt") or die "can not read genbank/GCA_000001405.18_GRCh38.p${patchLevel}_assembly_regions.txt";
+open (FH, "<genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_regions.txt") or die "can not read genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_regions.txt";
 while (my $line = <FH>) {
    next if ($line =~ m/^#/);
   chomp $line;
