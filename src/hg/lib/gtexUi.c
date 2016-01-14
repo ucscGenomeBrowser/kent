@@ -11,14 +11,52 @@
 #include "gtexTissue.h"
 #include "gtexUi.h"
 
+#define SYSTEM_BRAIN            "Brain"
+#define SYSTEM_REPRODUCTIVE     "Reproductive"
+#define SYSTEM_GASTRO           "Digestive"
+
+#define SYSTEM_ENDOCRINE        "Endocrine"
+#define SYSTEM_CARDIO           "Cardiovascular"
+#define SYSTEM_OTHER            "Other"
+
+
+static char *makeTissueColorPatch(struct gtexTissue *tis)
+{
+char buf[256];
+safef(buf, sizeof(buf), "<td style='width:10px; font-size:75%%;' bgcolor=%X></td>", tis->color);
+return(cloneString(buf));
+}
 
 static char *makeTissueLabel(struct gtexTissue *tis)
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td style='width:20px; font-size:75%%;' bgcolor=%X></td>"
+safef(buf, sizeof(buf), "<td style='width:10px; font-size:75%%;' bgcolor=%X></td>"
                         "<td style='font-size:75%%'>&nbsp;%s</td>", 
-                                    tis->color, tis->description);
+                                tis->color, tis->description);
 return(cloneString(buf));
+}
+
+static char *getSystem(struct gtexTissue *tis)
+{
+if (startsWith("brain", tis->name))
+    return(SYSTEM_BRAIN);
+else if (sameString(tis->name, "uterus") || sameString(tis->name, "testis") ||
+        sameString(tis->name, "vagina") || sameString(tis->name, "prostate") ||
+        sameString(tis->name, "ovary") ||
+        sameString(tis->name, "breastMamTissue") || sameString(tis->name, "ectocervix") ||
+        sameString(tis->name, "endocervix") || sameString(tis->name, "fallopianTube"))
+    return(SYSTEM_REPRODUCTIVE);
+else if (startsWith("esophagus", tis->name) || startsWith("colon", tis->name) ||
+        sameString(tis->name, "stomach") || sameString("smallIntestine", tis->name) ||
+        sameString("pancreas", tis->name) || sameString("liver", tis->name))
+    return(SYSTEM_GASTRO);
+else if (sameString("adrenalGland", tis->name) || sameString("pituitary", tis->name) ||
+        sameString("thyroid", tis->name))
+    return(SYSTEM_ENDOCRINE);
+else if (startsWith("heart", tis->name) || startsWith("artery", tis->name))
+    return(SYSTEM_CARDIO);
+else
+    return(SYSTEM_OTHER);
 }
 
 struct tissueSelect
@@ -92,6 +130,80 @@ safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
 }
 
+static void makeTableTissueCheckboxes(char *name, struct gtexTissue *tissues, 
+                                        struct slName *checked, boolean isPopup)
+{
+char *onClick = "";
+// Sortable table can't be activated when in activated from right-click (popup mode)
+if (!isPopup)
+    {
+    jsIncludeFile("hui.js", NULL);
+    onClick = "'tableSortAtButtonPress(this);";
+    }
+struct hash *checkHash = hashNew(0);
+struct slName *sel;
+for (sel = checked; sel != NULL; sel = sel->next)
+    hashAdd(checkHash, sel->name, sel->name);
+//puts("<TABLE BORDERWIDTH=0><TR>");
+puts("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0' class='sortable'>");
+
+/* table header */
+puts("\n<THEAD class='sortable'>");
+puts("\n<TR ID='tissueTableHeader' class='sortable'>");
+printf("\n<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n",
+        "gtexGene.sortOrder", "tissue=+ samples=+ organ=+ system=+");
+puts("<TH>&nbsp;&nbsp;&nbsp;&nbsp;</TH>");
+
+printf("<TH id='tissue' class='sortable sort1' style='font-size:75%%' %s "
+        "align='left' title='Sort on tissue'>&nbsp;Tissue</TH>", onClick);
+
+printf("<TH id='samples' abbr='use' class='sortable sort2' style='font-size:75%%' %s "
+        "title='Sort on sample count'>&nbsp;Samples</TH>", onClick);
+
+printf("<TH id='organ' class='sortable sort3' style='font-size:75%%' %s "
+        "align='left' title='Sort on organ'>&nbsp;Organ</TH>", onClick);
+
+printf("<TH id='system' class='sortable sort4' style='font-size:75%%' %s "
+        "align='left' title='Sort on system'>&nbsp;System</TH>", onClick);
+puts("\n</TR>");
+puts("</THEAD>");
+
+/* table body */
+puts("<TBODY class='sortable noAltColors' style='display: table-row-group;' id='tbodySort'>");
+struct hash *tscHash = gtexGetTissueSampleCount();
+struct gtexTissue *tis;
+boolean isChecked = FALSE;
+for (tis = tissues; tis != NULL; tis = tis->next)
+    {
+    puts("\n<TR valign='top'>");
+
+    // checkbox
+    if (hashNumEntries(checkHash) == 0)
+        isChecked = TRUE;
+    else
+        isChecked = (hashLookup(checkHash, tis->name) != NULL);
+    printf("<td><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s></td>",
+               name, tis->name, isChecked ? "CHECKED" : "");
+    // color patch
+    printf("\n%s", makeTissueColorPatch(tis));
+    // tissue name
+    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", tis->description);
+    // sample count
+    int samples = hashIntValDefault(tscHash, tis->name, 0);
+    printf("\n<TD abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d</TD>", samples, samples);
+    // organ
+    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", tis->organ);
+    // system
+    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", getSystem(tis));
+    puts("\n</TR>");
+    }
+puts("</TBODY>");
+puts("</TABLE>");
+char buf[512];
+safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "0");
+}
+
 static void makeGroupedTissueCheckboxes(char *name, struct gtexTissue *tissues, struct slName *checked)
 {
 struct hash *checkHash = hashNew(0);
@@ -114,20 +226,16 @@ for (tis = tissues; tis != NULL; tis = tis->next)
         tsel->checked = TRUE;
     else
         tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
-    if (startsWith("brain", tis->name))
+    char *system = getSystem(tis);
+    if (sameString(SYSTEM_BRAIN, system))
         slAddHead(&brainTissues, tsel);
-    else if (sameString(tis->name, "uterus") || sameString(tis->name, "testis") ||
-            sameString(tis->name, "vagina") || sameString(tis->name, "prostate") ||
-            sameString(tis->name, "ovary") ||
-            sameString(tis->name, "breastMamTissue") || sameString(tis->name, "ectocervix") ||
-            sameString(tis->name, "endocervix") || sameString(tis->name, "fallopianTube"))
-                slAddHead(&reproductiveTissues, tsel);
-    else if (startsWith("esophagus", tis->name) || startsWith("colon", tis->name) ||
-            sameString(tis->name, "stomach") || sameString("smallIntestine", tis->name))
-                slAddHead(&digestiveTissues, tsel);
+    else if (sameString(SYSTEM_REPRODUCTIVE, system))
+        slAddHead(&reproductiveTissues, tsel);
+    else if (sameString(SYSTEM_GASTRO, system))
+        slAddHead(&digestiveTissues, tsel);
     else
         slAddHead(&otherTissues, tsel);
-}
+    }
 slReverse(&brainTissues);
 slReverse(&digestiveTissues);
 slReverse(&reproductiveTissues);
@@ -141,9 +249,13 @@ char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
 }
+
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
+boolean isPopup = FALSE;
+if (cartVarExists(cart, "ajax"))
+    isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<table%s><tr><td>",boxed?" width='100%'":"");
 
@@ -209,8 +321,11 @@ struct gtexTissue *tissues = gtexGetTissues();
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
-if (sameString(cgiUsualString("tis", "group"), "group"))
+char *selectType = cgiUsualString("tis", "table");
+if (sameString(selectType, "group"))
     makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
+else if (sameString(selectType, "table"))
+    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, isPopup);
 else
     makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
 
