@@ -91,8 +91,8 @@ for (i=0; i<count; i++)
         col = 0;
         }
     j = row + col*(count/tableColumns+1);
-    printf("<td><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s></td>" "<td>%s</td>\n",
-               name, tisArray[j]->name, tisArray[j]->checked ? "CHECKED" : "", tisArray[j]->label);
+    printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>" "<td>%s</td>\n",
+               name, tisArray[j]->name, tisArray[j]->checked ? "checked" : "", tisArray[j]->label);
     col++;
     }
 if ((i % tableColumns) != 0)
@@ -107,7 +107,7 @@ struct hash *checkHash = hashNew(0);
 struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
-puts("<TABLE BORDERWIDTH=0><TR>");
+puts("<table borderwidth=0><tr>");
 struct tissueSelect *tsel;
 struct gtexTissue *tis;
 struct tissueSelect *allTissues = NULL;
@@ -124,7 +124,7 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     }
 slReverse(&allTissues);
 makeGroupCheckboxes(name, NULL, allTissues);
-puts("</TR></TABLE>");
+puts("</tr></table>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
@@ -144,61 +144,61 @@ struct hash *checkHash = hashNew(0);
 struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
-//puts("<TABLE BORDERWIDTH=0><TR>");
-puts("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0' class='sortable'>");
+//puts("<table borderwidth=0><tr>");
+puts("\n<table cellspacing='2' cellpadding='0' border='0' class='sortable'>");
 
 /* table header */
-puts("\n<THEAD class='sortable'>");
-puts("\n<TR ID='tissueTableHeader' class='sortable'>");
-printf("\n<TH>&nbsp;<INPUT TYPE=HIDDEN NAME='%s' class='sortOrder' VALUE='%s'></TH>\n",
+puts("\n<thead class='sortable'>");
+puts("\n<tr ID='tissueTableHeader' class='sortable'>");
+printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
         "gtexGene.sortOrder", "tissue=+ samples=+ organ=+ system=+");
-puts("<TH>&nbsp;&nbsp;&nbsp;&nbsp;</TH>");
+puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
 
-printf("<TH id='tissue' class='sortable sort1' style='font-size:75%%' %s "
-        "align='left' title='Sort on tissue'>&nbsp;Tissue</TH>", onClick);
+printf("<th id='tissue' class='sortable sort1' style='font-size:75%%' %s "
+        "align='left' title='Sort on tissue'>&nbsp;Tissue</th>", onClick);
 
-printf("<TH id='samples' abbr='use' class='sortable sort2' style='font-size:75%%' %s "
-        "title='Sort on sample count'>&nbsp;Samples</TH>", onClick);
+printf("<th id='samples' abbr='use' class='sortable sort2' style='font-size:75%%' %s "
+        "title='Sort on sample count'>&nbsp;Samples</th>", onClick);
 
-printf("<TH id='organ' class='sortable sort3' style='font-size:75%%' %s "
-        "align='left' title='Sort on organ'>&nbsp;Organ</TH>", onClick);
+printf("<th id='organ' class='sortable sort3' style='font-size:75%%' %s "
+        "align='left' title='Sort on organ'>&nbsp;Organ</th>", onClick);
 
-printf("<TH id='system' class='sortable sort4' style='font-size:75%%' %s "
-        "align='left' title='Sort on system'>&nbsp;System</TH>", onClick);
-puts("\n</TR>");
-puts("</THEAD>");
+printf("<th id='system' class='sortable sort4' style='font-size:75%%' %s "
+        "align='left' title='Sort on system'>&nbsp;System</th>", onClick);
+puts("\n</tr>");
+puts("</thead>");
 
 /* table body */
-puts("<TBODY class='sortable noAltColors' style='display: table-row-group;' id='tbodySort'>");
+puts("<tbody class='sortable noAltColors' style='display: table-row-group;' id='tbodySort'>");
 struct hash *tscHash = gtexGetTissueSampleCount();
 struct gtexTissue *tis;
 boolean isChecked = FALSE;
 for (tis = tissues; tis != NULL; tis = tis->next)
     {
-    puts("\n<TR valign='top'>");
+    puts("\n<tr valign='top'>");
 
     // checkbox
     if (hashNumEntries(checkHash) == 0)
         isChecked = TRUE;
     else
         isChecked = (hashLookup(checkHash, tis->name) != NULL);
-    printf("<td><INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=\"%s\" %s></td>",
-               name, tis->name, isChecked ? "CHECKED" : "");
+    printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>",
+               name, tis->name, isChecked ? "checked" : "");
     // color patch
     printf("\n%s", makeTissueColorPatch(tis));
     // tissue name
-    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", tis->description);
+    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", tis->description);
     // sample count
     int samples = hashIntValDefault(tscHash, tis->name, 0);
-    printf("\n<TD abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d</TD>", samples, samples);
+    printf("\n<td abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d/td>", samples, samples);
     // organ
-    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", tis->organ);
+    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", tis->organ);
     // system
-    printf("\n<TD style='font-size:75%%'>&nbsp;%s</TD>", getSystem(tis));
-    puts("\n</TR>");
+    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", getSystem(tis));
+    puts("\n</tr>");
     }
-puts("</TBODY>");
-puts("</TABLE>");
+puts("</tbody>");
+puts("</table>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
@@ -210,7 +210,7 @@ struct hash *checkHash = hashNew(0);
 struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
-puts("<TABLE BORDERWIDTH=0><TR>");
+puts("<table borderwidth=0><tr>");
 struct tissueSelect *brainTissues = NULL;
 struct tissueSelect *digestiveTissues = NULL;
 struct tissueSelect *reproductiveTissues = NULL;
@@ -244,7 +244,7 @@ makeGroupCheckboxes(name, "Brain", brainTissues);
 makeGroupCheckboxes(name, "Gastrointestinal", digestiveTissues);
 makeGroupCheckboxes(name, "Reproductive", reproductiveTissues);
 makeGroupCheckboxes(name, "Other", otherTissues);
-puts("</TR></TABLE>");
+puts("</tr></table>");
 char buf[512];
 safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
