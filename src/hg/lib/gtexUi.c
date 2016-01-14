@@ -187,14 +187,14 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     // color patch
     printf("\n%s", makeTissueColorPatch(tis));
     // tissue name
-    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", tis->description);
+    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", tis->description);
     // sample count
     int samples = hashIntValDefault(tscHash, tis->name, 0);
-    printf("\n<td abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d/td>", samples, samples);
+    printf("\n<td abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d</td>", samples, samples);
     // organ
-    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", tis->organ);
+    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", tis->organ);
     // system
-    printf("\n<td style='font-size:75%%'>&nbsp;%s/td>", getSystem(tis));
+    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", getSystem(tis));
     puts("\n</tr>");
     }
 puts("</tbody>");
