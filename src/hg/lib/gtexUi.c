@@ -158,7 +158,7 @@ printf("<th id='tissue' class='sortable sort1' style='font-size:75%%' %s "
         "align='left' title='Sort on tissue'>&nbsp;Tissue</th>", onClick);
 
 printf("<th id='samples' abbr='use' class='sortable sort2' style='font-size:75%%' %s "
-        "title='Sort on sample count'>&nbsp;Samples</th>", onClick);
+        "align='left' title='Sort on sample count'>&nbsp;Samples</th>", onClick);
 
 printf("<th id='organ' class='sortable sort3' style='font-size:75%%' %s "
         "align='left' title='Sort on organ'>&nbsp;Organ</th>", onClick);
@@ -190,9 +190,9 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", tis->description);
     // sample count
     int samples = hashIntValDefault(tscHash, tis->name, 0);
-    printf("\n<td abbr='%05d' style='font-size:75%%; align='right';>&nbsp;%d</td>", samples, samples);
+    printf("\n<td abbr='%05d' style='font-size:75%%; text-align: right; padding-right: 10px''>&nbsp;%d</td>", samples, samples);
     // organ
-    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", tis->organ);
+    printf("\n<td style='font-size:75%%; padding-right: 10px'>&nbsp;%s</td>", tis->organ);
     // system
     printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", getSystem(tis));
     puts("\n</tr>");
