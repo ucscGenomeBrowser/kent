@@ -13,6 +13,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hgConfig.h"
+#include "hVarSubst.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
@@ -894,14 +895,38 @@ getDbGenomeClade(cart, retDb, retGenome, &garbage, oldVars);
 freeMem(garbage);
 }
 
+static void webIncludeFileSubst(char *file, struct cart *cart)
+/* Include an HTML file in a CGI.  If cart is non-null, invoke hVarSubstWithCart.
+ *   The file path may begin with hDocumentRoot(); if it doesn't, it is
+ *   assumed to be relative and hDocumentRoot() will be prepended. */
+{
+char *str = hFileContentsOrWarning(file);
+if (cart != NULL)
+    {
+    char *db = cartString(cart, "db");
+    hVarSubstWithCart("webIncludeFileSubst", cart, NULL, db, &str);
+    }
+puts(str);
+freeMem(str);
+}
+
 void webIncludeFile(char *file)
 /* Include an HTML file in a CGI.
  *   The file path may begin with hDocumentRoot(); if it doesn't, it is
  *   assumed to be relative and hDocumentRoot() will be prepended. */
 {
-char *str = hFileContentsOrWarning(file);
-puts(str);
-freeMem(str);
+return webIncludeFileSubst(file, NULL);
+}
+
+void webIncludeHelpFileSubst(char *fileRoot, struct cart *cart, boolean addHorizLine)
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * print out the contents of the file.  If cart is non-NULL, invoke hVarSubstWithCart
+ * before printing.  If addHorizLine, print out an <HR> first. */
+{
+if (addHorizLine)
+    htmlHorizontalLine();
+char *file = hHelpFile(fileRoot);
+webIncludeFileSubst(file, cart);
 }
 
 void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
@@ -909,9 +934,7 @@ void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
  * print out the contents of the file.  If addHorizLine, print out an
  * <HR> first. */
 {
-if (addHorizLine)
-    htmlHorizontalLine();
-webIncludeFile(hHelpFile(fileRoot));
+return webIncludeHelpFileSubst(fileRoot, NULL, addHorizLine);
 }
 
 void webPrintLinkTableStart()
