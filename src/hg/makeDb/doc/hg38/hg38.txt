@@ -3076,6 +3076,51 @@ cat  << '_EOF_' > template
     # 7408226 total
 
 #########################################################################
+## RE-load alternate sequence for PSL display (DONE - 2016-01-15 - Hiram)
+## The procedure below
+##    "load alternate sequence for PSL display (DONE - #2014-02-24 - Hiram)
+## produced an illegal psl Table altSeqLiftOverPsl:
+    pslCheck -db=hg38 altSeqLiftOverPsl
+    checked: 266 failed: 264 errors: 1046
+
+## Since then, the gff3ToPsl command has been updated to be a bit more
+##  robust, so, the following sequence produces the new alignment file:
+    mkdir -p /hive/data/genomes/hg38/bed/altAlignments/redo2016
+    cd /hive/data/genomes/hg38/bed/altAlignments/redo2016
+
+mkdir -p ucscPsl
+
+awk -F'/' '{printf "s/^%s\t/%s\t/g;\n", $3,$2}' ../accessionToUcsc.sed.txt \
+    > ucscToNcbi.sed.txt
+
+sed -f ucscToNcbi.sed.txt ../../../chrom.sizes > ncbi.chrom.sizes
+
+paste ncbi.chrom.sizes ../../../chrom.sizes \
+  | awk -F'\t' '{printf "0\t%s\t%d\t%s\t%d\n", $1,$2,$3,$4}' \
+    > ncbiToUcsc.lift
+
+find ../../../genbank -type f | grep alt_scaffolds | grep "\.gff$" \
+  | while read gff
+do
+  name=`basename $gff | sed -e 's/_.*//;'`
+  fasta=`dirname $gff | sed -e 's#alignments#FASTA/alt.scaf.fa.gz#;'`
+  size=`faCount $fasta | grep -w total | cut -f2`
+  printf "%s\t%d\n" "$name" "$size" > target.sizes
+  gff3ToPsl ncbi.chrom.sizes target.sizes $gff $name.psl
+  pslCheck ${name}.psl
+  liftUp -type=.psl stdout ncbiToUcsc.lift error ${name}.psl \
+    | liftUp -type=.psl -pslQ ucscPsl/${name}.psl ncbiToUcsc.lift error stdin
+  pslCheck ucscPsl/${name}.psl
+done
+
+  pslSort dirs altSeqLiftOverPsl.psl ./tmp ucscPsl
+  pslCheck -db=hg38 altSeqLiftOverPsl.psl
+
+  hgLoadPsl hg38 altSeqLiftOverPsl.psl
+  pslCheck -db=hg38 altSeqLiftOverPsl
+  #  checked: 266 failed: 0 errors: 0
+
+#########################################################################
 ## load alternate sequence for PSL display (DONE - 2014-02-24 - Hiram)
     mkdir /hive/data/genomes/hg38/bed/altAlignments/sequence
     cd /hive/data/genomes/hg38/bed/altAlignments/sequence
@@ -3251,15 +3296,15 @@ cp  /hive/users/pchan/tRNAs/Eukaryota/hg38/hg38-tRNAs.bed .
 
 hgLoadBed -tab hg38 tRNAs hg38-tRNAs.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
 
-## tRNAs track (2015-10-04, Chris FINISHING BUILD FOR RELEASE) 
+## tRNAs track (2015-10-04, Chris FINISHING BUILD FOR RELEASE)
     cd /hive/data/genomes/hg38/bed/tRNAs
     cp /hive/users/pchan/gtrnadb2/Eukaryota/hg38/hg38-tRNAs.bed hg38-tRNAs2.bed
-    hgsql hg38 -e 'drop table if exists tRNAs' 
+    hgsql hg38 -e 'drop table if exists tRNAs'
     hgLoadBed -tab hg38 tRNAs hg38-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
     mkdir gif
     cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg38/images/* gif
     cd /hive/data/gbdb/hg38
-    ln -s /hive/data/genomes/hg38/bed/tRNAs/gif RNA-img 
+    ln -s /hive/data/genomes/hg38/bed/tRNAs/gif RNA-img
     cd /usr/local/apache/htdocs-ceisenhart/RNA-img
     ln -s /gbdb/hg38/RNA-img hg38
 
@@ -6133,8 +6178,8 @@ RMSK=rmsk
 NET1=netMm10
 NET2=netCanFam3
 NET3=netRheMac3
-# these two nets determine which retros are classified as ancient, 
-# use two farthest nets 
+# these two nets determine which retros are classified as ancient,
+# use two farthest nets
 ANCIENT1=netMm10
 ANCIENT2=netCanFam3
 GENE1=knownGene
@@ -6162,12 +6207,12 @@ SPLITBYAGE=$SCRIPT/splitRetrosByAge
 PDB=proteins140122
 #ARRAY=gnfAtlas2
 #AFFYPROBE="affyU133A,affyGnf1h"
-#ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median 
+#ARRAYMEDIAN=hgFixed.gnfHumanAtlas2Median
 #ARRAYRATIO=hgFixed.gnfHumanAtlas2AllRatio
-#ARRAYABS=hgFixed.gnfHumanAtlas2All   
-#ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps 
+#ARRAYABS=hgFixed.gnfHumanAtlas2All
+#ARRAYEXP=hgFixed.gnfHumanAtlas2MedianExps
 #ARRAYEXPALL=hgFixed.gnfHumanAtlas2AllExps
-#ARRAYLOOKUP=knownToGnfAtlas2 
+#ARRAYLOOKUP=knownToGnfAtlas2
 #ARRAYPSLS="/hive/data/genomes/hg19/bed/geneAtlas2/affyU133A.psl /hive/data/genomes/hg19/bed/geneAtlas2/affyGnf1h.psl"
 '_EOF_'
     # << happy emacs
@@ -6181,7 +6226,7 @@ cp ../DEF .
 
 # Create S1.len file
 rom.sizes without random chroms or chrM, there are many alt loci also
-# in hg38 that were not in hg19 so 285 chroms total. 
+# in hg38 that were not in hg19 so 285 chroms total.
 cat /hive/data/genomes/hg38/chrom.sizes | grep -v random \
    | grep -v chrUn | grep -v chrM > S1.len
 cp S1.len /hive/data/genomes/hg38/bed/mrnaBlastz.9
@@ -6206,8 +6251,8 @@ retroFinder/branches/version2/src/pipeline/analyseExpress.sh
 #added ucscRetroAli9 to kent/src/hg/makeDb/human/hg38/trackDb.ra
 # copied
 # /hive/groups/gencode/pseudogenes/retroFinder/hg38.20150112/retro/version9/hg38/trackDb.retro
-# entry to kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra and edited it to 
-# remove the full date and add: 
+# entry to kent/src/hg/makeDb/trackDb/human/hg38/trackDb.ra and edited it to
+# remove the full date and add:
 # dataVersion Jan. 2015
 # Scripts copied ucscRetroAli9.psl, ucscRetroInfo9.bed and ucscRetroCds9.tab
 # to /hive/data/genomes/hg38/bed/retro/
@@ -6227,7 +6272,7 @@ rm tmpChrom
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV22
     cd /hive/data/genomes/hg38/bed/gencodeV22
 
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
     # release and transcript support versions
 
 
@@ -6312,7 +6357,7 @@ rm tmpChrom
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV23
     cd /hive/data/genomes/hg38/bed/gencodeV23
 
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
     # release and transcript support versions
 
 
@@ -6357,7 +6402,7 @@ rm tmpChrom
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV24
     cd /hive/data/genomes/hg38/bed/gencodeV24
 
-    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set 
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
     # release and transcript support versions
 
 
