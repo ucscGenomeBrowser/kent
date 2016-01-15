@@ -236,9 +236,10 @@ if (samfile->format.format == cram)
         char *cacheDir = cram_get_cache_dir(samfile);
 
         sprintf(server, refPath, md5String);
-        sprintf(pendingFile, "%s/pending/%s",cacheDir,md5String);
+        sprintf(pendingFile, "%s/pending/",cacheDir);
         sprintf(errorFile, "%s/error/%s",cacheDir,md5String);
         makeDirsOnPath(pendingFile);
+        sprintf(pendingFile, "%s/pending/%s",cacheDir,md5String);
         FILE *downFile;
         if ((downFile = fopen(errorFile, "r")) != NULL)
             {
