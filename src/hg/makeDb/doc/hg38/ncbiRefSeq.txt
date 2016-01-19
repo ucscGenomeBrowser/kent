@@ -8,7 +8,7 @@ cd /hive/data/genomes/hg38/bed/ncbiRefSeq
 
 export asmName="GCF_000001405.31_GRCh38.p5"
 
-# mose of these files could be linked in from the refseq download, for example:
+# most of these files could be linked in from the refseq download, for example:
 ln -s /hive/data/genomes/hg38/refseq/${asmName}_rna.gbff.gz ./
 
 # or, fetched freshly from  NCBI refseq assemblies:
@@ -88,7 +88,7 @@ pslCheck -db=hg38 ${asmName}.hg38.psl.gz
 
 # separate categories of genes:
 
-egrep "^N(M|R)|^YP" ${asmName}.hg38.gp.gz > curated.gp
+zegrep "^N(M|R)|^YP" ${asmName}.hg38.gp.gz > curated.gp
 zegrep "^X(M|R)" ${asmName}.hg38.gp.gz > predicted.gp
 zegrep -v "^N(M|R)|^YP|X(M|R)" ${asmName}.hg38.gp.gz > other.gp
 
