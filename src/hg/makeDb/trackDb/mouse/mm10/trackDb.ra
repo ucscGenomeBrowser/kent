@@ -74,8 +74,7 @@ urlLabel Click here for primer details:
 
 track snp138Common override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
-visibility dense
-priority 1
+visibility hide
 
 track snp138Mult override
 snpSeqFile /gbdb/mm10/snp/snp138.fa
