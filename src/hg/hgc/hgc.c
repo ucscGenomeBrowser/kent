@@ -8602,7 +8602,7 @@ char *ensemblIdUrl = trackDbSettingOrDefault(tdb, "ensemblIdUrl", "http://www.en
 /* shortItemName is the name without the "." + version */
 shortItemName = cloneString(itemName);
 /* ensembl gene names are different from their usual naming scheme on ce6 */
-if (! startsWith("ce6", database))
+if (! (startsWith("ce6", database) || startsWith("ce11", database)))
     {
     chp = strstr(shortItemName, ".");
     if (chp != NULL)
