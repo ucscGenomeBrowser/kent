@@ -413,6 +413,10 @@ int packCountRowsOverflow(struct track *tg, int maxCount,
 /* Return packed height. */
 {
 
+// allowOverflow is currently ONLY used by xenoMrna and est tracks.
+//  When true,  the extra rows are kept, printed at the bottom in dense and Last Row: overlow count appears at bottom of leftLabel area.
+//  When false, the extra rows are tossed, the count seems to equal overflow limit + 2, and limitVisibility lowers vis and retries.
+
 //warn("packCountRowsOverflow tg->track %s (%sfirst window) tg->visibility=%d tg->limitedVis=%d tg->limitedVisSet=%d vis=%d insideWidth=%d", 
 //tg->track, currentWindow == windows ? "" : "non-", tg->visibility, tg->limitedVis, tg->limitedVisSet, vis, insideWidth); // DEBUG REMOVE
 
@@ -421,7 +425,7 @@ if (trackLoadingInProgress) // we pack after all windows are loaded.
     {
     // do not set ss yet
     //warn("trackLoadingInProgress, exiting currentWindow=%lu windows=%lu", (unsigned long) currentWindow, (unsigned long) windows); // DEBUG REMOVE
-    return 1;
+    return 0;  // height of 0 triggers unsetting limitedVis since our data is not all loaded yet and it will get set later.
     }
 
 
