@@ -9,31 +9,38 @@ import logging, sys, optparse, gzip, gc
 from collections import defaultdict
 from os.path import join, basename, dirname, isfile, isdir, splitext
 import os, marshal, glob
-from multiprocessing.dummy import Pool as ThreadPool 
+from multiprocessing.dummy import Pool as ThreadPool
 
 # no garbage collection needed in here
 gc.disable()
 
+# the column of the kallisto output file with the TPM value
+tpmColumnIndex = 4
+
 # === command line interface, options and help ===
 def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] dirName
-    matrixOutFname statOutFname - collect expression counts from the files
-    abundance.tsv, given a directory containing kallisto output directories.
+    outBase - collect expression counts from all abundance.tsv files,
+    given a directory containing kallisto output sub-directories.
+
+    TPM transcript counts are written to <outBase>.tpm.tab
+    TPM gene counts are written to <outBase>.geneTpm.tab
 
     Also parses .log files with kallisto output and creates a .tab file
     that contains two basic stats, number of reads per file and number of
-    reads mapped to transcript models. Can be used for tagStormJoinTab.
+    reads mapped to transcript models, written to <outBase>.stat.tab
+    Can be used for tagStormJoinTab.
 
     Ctrl-c does not work for this program. Do ctrl-z and then 'kill %%'.
 
     Example:
-    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1.tab -t 20
+    kallistoToMatrix /hive/groups/cirm/submit/quake/quakeBrainGeo1/kallistoOut quakeBrainGeo1 -t 20
     """)
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
-    parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and report the sum of all transcript TPMs")
-    parser.add_option("", "--transFile", dest="transFile", action="store", help="for the -g option, the text file with the mapping transcript-gene, one per line. default %default", default="/hive/data/outside/gencode/release_22/gencode.v22.metadata.HGNC.gz")
+    #parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and write the sum of all transcript TPMs into a file <outBase>.geneTpm.tab")
+    parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene, one per line. default %default", default="/hive/data/outside/gencode/release_22/gencode.v22.metadata.HGNC.gz")
     (options, args) = parser.parse_args()
     if args==[]:
         parser.print_help()
@@ -63,14 +70,16 @@ def parseKallisto(fname):
     """ parse a kallisto abundance.tsv file, return dict transcriptId -> est_tpm 
     Does not return a value for transcripts where est_tpm is 0
     """
+
     logging.debug("parsing %s" % fname)
-    d = {}
     ifh = open(fname)
     ifh.readline()
+
+    d = {}
     for line in ifh:
         fs = line.rstrip("\n").split("\t")
-        if fs[3]!="0":
-            d[fs[0]] = float(fs[3])
+        if fs[tpmColumnIndex]!="0":
+            d[fs[0]] = float(fs[tpmColumnIndex])
     return d
         
 def parseDict(fname, stripDot=False):
@@ -89,20 +98,22 @@ def parseDict(fname, stripDot=False):
         ret[fs[0]]=fs[1]
     return ret
         
-def outputBigMatrix(names, results, outFname):
+def outputBigMatrix(cellNames, results, outFname):
     """
-    given a list of names and a list of transcript -> count dictionaries,
+    given a list of cellNames and a list of transcript -> count dictionaries,
     write out a matrix with transcript -> counts in columns
     """
     logging.info("Writing data to file %s" % outFname)
     ofh = open(outFname, "w")
     # write header
-    ofh.write("#transcript\t%s\n" % "\t".join(names))
+    ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
     
-    # create set of all transcript names
+    # create a sorted list of all transcript names
     allTrans = set()
     for res in results:
         allTrans.update(res)
+    allTrans = list(allTrans)
+    allTrans.sort()
 
     # write out matrix
     for trans in allTrans:
@@ -113,6 +124,18 @@ def outputBigMatrix(names, results, outFname):
         ofh.write("\t".join(row))
         ofh.write("\n")
     ofh.close()
+
+    # also output as a binary file for now
+    # it's a lot easier and faster to parse, at least for python scripts
+    # can be read from python with a single line:
+    # matrix = marshal.load(open("data.tab.marshal"))
+    # matrix is then a nested hash: cellName -> transcript -> count
+    binPath = outFname+".marshal"
+    logging.info("Writing %s" % binPath)
+    allData = {}
+    for name, transDict in zip(cellNames, results):
+        allData[name] = transDict
+    marshal.dump(allData, open(binPath, "wb"))
         
 # this was a try to write sparse matrices. 
 # it results in smaller data files, but they are harder to compress with gzip
@@ -166,15 +189,18 @@ def sumTransToGene(transDictList, transFile):
     """
     transToGene = parseDict(transFile, stripDot=True)
     transToGene = addGencodeSpecial(transFile, transToGene)
-    # special code for gencode: their file does not include a mapping of
-    # transcripts that do not have symbols. So I added a special file and
+    # special code for gencode: their FTP files do not include a mapping of
+    # transcripts->genes that do not have symbols. So I added a special file and
     # detect and merge it here
     transFile2 = join(dirname(transFile), "transToGene.tab")
     if isfile(transFile2):
-        transToGene2 = parseDict(transFile, stripDot=True)
-    for transId, geneId in transToGene2.iteritems():
-        if transId not in transToGene:
-            transToGene[transId] = geneId
+        logging.info("Reading %s" % transFile2)
+        transToGene2 = parseDict(transFile2, stripDot=True)
+        for transId, geneId in transToGene2.iteritems():
+            if transId not in transToGene:
+                transToGene[transId] = geneId
+
+    logging.info("Mapping %d transcript IDs to gene IDs (symbol or ENSG ID)" % len(transToGene))
 
     newRes = []
     for transCounts in transDictList:
@@ -183,6 +209,7 @@ def sumTransToGene(transDictList, transFile):
             geneId = transToGene.get(transId, transId)
             geneCounts[geneId]+=count
         newRes.append(dict(geneCounts))
+
     return newRes
     
 def writeStats(inDir, outFname):
@@ -193,7 +220,7 @@ def writeStats(inDir, outFname):
     ofh = open(outFname, "w")
     ofh.write("meta\tkallistoProcReads\tkallistoAlnReads\tkallistoEstFragLen\n")
 
-    inFnames = glob.glob(join(inDir, "*.log"))
+    inFnames = glob.glob(join(inDir, "log", "*.log"))
     print("Parsing %d logfiles and writing to %s" % (len(inFnames), outFname))
     for inFname in inFnames:
         cellId = basename(inFname).split(".")[0].split("_")[0]
@@ -213,12 +240,17 @@ def writeStats(inDir, outFname):
 def main():
     args, options = parseArgs()
     inDir = args[0]
-    outFname = args[1]
-    statOutFname = args[2]
+    outBase = args[1]
+
+    transOutFname = outBase+".tpm.tab"
+    statOutFname = outBase+".stat.tab"
 
     writeStats(inDir, statOutFname)
 
     inFnames = list(iterAbundPaths(inDir))
+    if len(inFnames)==0:
+        logging.info("No input files found")
+        sys.exit(1)
     logging.info("Found %d kallisto input files (abundance.tsv)" % len(inFnames))
 
     threadCount = options.threads
@@ -234,21 +266,10 @@ def main():
     cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
 
     #outputBigMatrixSparse(cellNames, results, outFname)
-    if options.geneLevel:
-        results = sumTransToGene(results, options.transFile)
+    outputBigMatrix(cellNames, results, transOutFname)
 
-    outputBigMatrix(cellNames, results, outFname)
-
-    # also output as a binary file for now
-    # it's a lot easier and faster to parse, at least for python scripts
-    # can be read from python with a single line:
-    # matrix = marshal.load(open("data.tab.marshal"))
-    # matrix is then a nested hash: cellName -> transcript -> count
-    binPath = outFname+".marshal"
-    logging.info("Writing %s" % binPath)
-    allData = {}
-    for name, transDict in zip(cellNames, results):
-        allData[name] = transDict
-    marshal.dump(allData, open(binPath, "wb"))
+    geneOutFname = outBase+".geneTpm.tab"
+    results = sumTransToGene(results, options.transFile)
+    outputBigMatrix(cellNames, results, geneOutFname)
 
 main()
