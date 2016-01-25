@@ -1756,7 +1756,12 @@ var sortTable = {
             $(tbody).attr('id',"tbodySort"); // Must have some id!
             id = $(tbody).attr('id');
         }
-        sortTable.loadingId = showLoadingImage(id);
+        if ($(tbody).css('display') === 'none') {
+            // suppress loading image if element is hidden (and consequently has no position)
+            sortTable.loadingId = null;
+        } else {
+            sortTable.loadingId = showLoadingImage(id);
+        }
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
         // This allows hiding the rows while sorting!
@@ -2162,6 +2167,8 @@ var sortTable = {
     // (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
     // NOTE: This class can be added by using the altColors option to this function
     // To override, specify <TBODY class='sortable noAltColors'>
+    // NOTE: Add class 'initBySortOrder' to have an sort by column performed at document initialization time, using
+    // the saved sortOrder cart variable 
     
         if (altColors === undefined || altColors === null) // explicitly default this boolean
             altColors = false;
@@ -2254,10 +2261,14 @@ var sortTable = {
         });
         // Now update all of those cells
         sortTable.orderUpdate(table,sortColumns,addSuperscript);
+        if ($(tbody).hasClass('initBySortOrder')) {
+            sortTable.sortByColumns(tbody,sortColumns);
+        }
 
         // Alternate colors if requested
-        if (altColors)
+        if (altColors) {
             sortTable.alternateColors(tbody);
+        }
 
         // Highlight rows?  But on subtrack list, this will mess up "metadata dropdown" coloring.
         // So just exclude tables with drag and drop

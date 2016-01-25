@@ -131,11 +131,11 @@ cgiMakeHiddenVar(buf, "0");
 }
 
 static void makeTableTissueCheckboxes(char *name, struct gtexTissue *tissues, 
-                                        struct slName *checked, boolean isPopup)
+                                        struct slName *checked, struct cart *cart)
 {
 char *onClick = "";
-// Sortable table can't be activated when in activated from right-click (popup mode)
-if (!isPopup)
+// Sortable table can't be displayed when UI is activated from right-click (popup mode)
+if (!cartVarExists(cart, "ajax"))
     {
     jsIncludeFile("hui.js", NULL);
     onClick = "'tableSortAtButtonPress(this);";
@@ -145,13 +145,16 @@ struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
 //puts("<table borderwidth=0><tr>");
-puts("\n<table cellspacing='2' cellpadding='0' border='0' class='sortable'>");
+puts("\n<table id='tissueTable' cellspacing='2' cellpadding='0' border='0' class='sortable'>");
 
 /* table header */
+char orderVar[256];
+safef(orderVar, sizeof(orderVar), "%s.sortOrder", name);
+char *sortOrder = cartCgiUsualString(cart, orderVar, "tissue=+ samples=+ organ=+ system=+");
 puts("\n<thead class='sortable'>");
-puts("\n<tr ID='tissueTableHeader' class='sortable'>");
+puts("\n<tr class='sortable'>");
 printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
-        "gtexGene.sortOrder", "tissue=+ samples=+ organ=+ system=+");
+        orderVar, sortOrder);
 puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
 
 printf("<th id='tissue' class='sortable sort1' style='font-size:75%%' %s "
@@ -169,7 +172,7 @@ puts("\n</tr>");
 puts("</thead>");
 
 /* table body */
-puts("<tbody class='sortable noAltColors' style='display: table-row-group;' id='tbodySort'>");
+printf("<tbody class='sortable noAltColors initBySortOrder'>");
 struct hash *tscHash = gtexGetTissueSampleCount();
 struct gtexTissue *tis;
 boolean isChecked = FALSE;
@@ -195,6 +198,7 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     printf("\n<td style='font-size:75%%; padding-right: 10px'>&nbsp;%s</td>", tis->organ);
     // system
     printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", getSystem(tis));
+
     puts("\n</tr>");
     }
 puts("</tbody>");
@@ -250,12 +254,9 @@ safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
 }
 
-void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
+void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, boolean boxed)
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
-boolean isPopup = FALSE;
-if (cartVarExists(cart, "ajax"))
-    isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("<table%s><tr><td>",boxed?" width='100%'":"");
 
@@ -264,7 +265,7 @@ char *selected = NULL;
 
 /* Sample selection */
 printf("<b>Samples:</b>&nbsp;");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_SAMPLES);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
 selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
 cgiMakeRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples);
@@ -275,7 +276,7 @@ printf("</p>");
 
 /* Comparison type */
 printf("<p><b>Comparison display:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_COMPARISON_DISPLAY);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COMPARISON_DISPLAY);
 selected = cartCgiUsualString(cart, cartVar, GTEX_COMPARISON_DEFAULT); 
 boolean isMirror = sameString(selected, GTEX_COMPARISON_MIRROR);
 cgiMakeRadioButton(cartVar, GTEX_COMPARISON_DIFF, !isMirror);
@@ -286,13 +287,13 @@ printf("</p>");
 
 /* Data transform */
 printf("<p><b>Log10 transform:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_LOG_TRANSFORM);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
 cgiMakeCheckBox(cartVar, isLogTransform);
 
 /* Viewing limits max */
 printf("&nbsp;&nbsp;<b>View limits maximum:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_MAX_LIMIT);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
 // TODO: set max and initial limits from gtexInfo table
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
 cgiMakeIntVar(cartVar, viewMax, 4);
@@ -302,7 +303,7 @@ printf("</p>");
 /* Color scheme */
 // Not sure if we still want this option
 printf("<p><b>Tissue colors:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_COLORS);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COLORS);
 selected = cartCgiUsualString(cart, cartVar, GTEX_COLORS_DEFAULT); 
 boolean isGtexColors = sameString(selected, GTEX_COLORS_GTEX);
 cgiMakeRadioButton(cartVar, GTEX_COLORS_GTEX, isGtexColors);
@@ -313,7 +314,7 @@ printf("</p>");
 
 /* Tissue filter */
 printf("<p><b>Tissue selection:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", name, GTEX_TISSUE_SELECT);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
 puts("&nbsp;");
 jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
@@ -325,7 +326,7 @@ char *selectType = cgiUsualString("tis", "table");
 if (sameString(selectType, "group"))
     makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
 else if (sameString(selectType, "table"))
-    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, isPopup);
+    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart);
 else
     makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
 
