@@ -3566,7 +3566,7 @@ if (virtualSingleChrom())
     sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
-if (sameString(emGeneTable,"refGene"))
+if (!sameString(emGeneTable,"knownGene"))
     sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");  
 //warn("query = [%s]", query); // DEBUG REMOVE
 sr = sqlGetResult(conn, query);
