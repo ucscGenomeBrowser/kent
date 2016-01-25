@@ -248,6 +248,11 @@ void webIncludeHelpFile(char *fileRoot, boolean addHorizLine);
  * print out the contents of the file.  If addHorizLine, print out an
  * <HR> first. */
 
+void webIncludeHelpFileSubst(char *fileRoot, struct cart *cart, boolean addHorizLine);
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * print out the contents of the file.  If cart is non-NULL, invoke hVarSubstWithCart
+ * before printing.  If addHorizLine, print out an <HR> first. */
+
 /*** Inside the "web" pages doing a table that looks good is
  *** hard.  These routines help. ***/
 

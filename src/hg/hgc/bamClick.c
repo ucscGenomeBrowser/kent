@@ -15,6 +15,7 @@
 
 
 #include "hgBam.h"
+#include "hgConfig.h"
 
 struct bamTrackData
     {
@@ -172,8 +173,6 @@ return 0;
 void doBamDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a BAM file. */
 {
-cramInit(tdb);
-
 if (item == NULL)
     errAbort("doBamDetails: NULL item name");
 int start = cartInt(cart, "o");
@@ -213,7 +212,9 @@ if (fileName == NULL)
 	}
     }
 
-bamFetch(fileName, position, oneBam, &btd, NULL);
+char *cacheDir =  cfgOption("cramRef");
+char *refUrl = trackDbSetting(tdb, "refUrl");
+bamFetchPlus(fileName, position, oneBam, &btd, NULL, refUrl, cacheDir);
 if (isPaired)
     {
     char *setting = trackDbSettingOrDefault(tdb, "pairSearchRange", "20000");

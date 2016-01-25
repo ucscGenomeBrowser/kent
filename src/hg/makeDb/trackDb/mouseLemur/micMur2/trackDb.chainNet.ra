@@ -1,0 +1,9 @@
+track chainNetTarSyr2 override
+matrix 16 100,-170,-29,-137,-170,97,-194,-29,-29,-194,97,-170,-137,-29,-170,100
+chainMinScore 3000
+chainLinearGap medium
+
+track chainNetHg38 override
+matrix 16 100,-164,-34,-127,-164,93,-186,-34,-34,-186,93,-164,-127,-34,-164,100
+chainMinScore 3000
+chainLinearGap medium

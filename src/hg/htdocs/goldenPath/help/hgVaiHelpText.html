@@ -276,6 +276,37 @@ TARGET=_BLANK>GERP++</A>
 TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
 </P>
 
+<a name="txStatus"></a>
+<h3>Transcript status</h3>
+<P>
+  Some of the gene prediction tracks have additional annotations
+  to indicate the amount or quality of supporting evidence for each transcript.
+  When the track selected in the "Select Genes" section has such annotations,
+  these can be enabled under "Transcript Status".  The options depend on which
+  gene prediction track is selected.
+  <ul>
+    <li><b>GENCODE tags:</b>
+      when GENCODE Genes are selected in the "Select Genes" section,
+      any
+      <A HREF="http://www.gencodegenes.org/gencode_tags.html"
+         TARGET=_BLANK>GENCODE tags</A> associated with a transcript can be added to output.
+    </li>
+    <li><b>RefSeq status:</b>
+      when RefSeq Genes are selected in the "Select Genes" section,
+      the transcript's
+      <A HREF="http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes"
+         TARGET=_BLANK>status</A> can be included in output.
+    </li>
+    <li><b>Canonical UCSC transcripts:</b>
+      when UCSC Genes (labeled GENCODE V22 in hg38/GRCh38)
+      are selected in the "Select Genes" section,
+      the flag "CANONICAL=YES" is added when the transcript
+      has been chosen as "canonical" (see the "Related Data" section of the
+      <A HREF="hgTrackUi?g=knownGene&hgsid=$hgsid">UCSC Genes track description</A>).
+    </li>
+  </ul>
+</P>
+
 <a name="knownVar"></a>
 <h3>Known variation</h3>
 <P>

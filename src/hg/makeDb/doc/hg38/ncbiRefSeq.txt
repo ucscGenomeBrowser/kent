@@ -1,0 +1,135 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes the construction of NCBI RefSeq track
+
+#############################################################################
+mkdir /hive/data/genomes/hg38/bed/ncbiRefSeq
+cd /hive/data/genomes/hg38/bed/ncbiRefSeq
+
+export asmName="GCF_000001405.31_GRCh38.p5"
+
+# most of these files could be linked in from the refseq download, for example:
+ln -s /hive/data/genomes/hg38/refseq/${asmName}_rna.gbff.gz ./
+
+# or, fetched freshly from  NCBI refseq assemblies:
+for F in ${asmName}_genomic.fna.gz ${asmName}_genomic.gff.gz \
+   ${asmName}_rna.fna.gz ${asmName}_assembly_report.txt
+do
+ time rsync -L -a -P rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Homo_sapiens/latest_assembly_versions/${asmName}/${F} ./
+done
+
+# measure these items:
+
+faCount ${asmName}_rna.fna.gz > rna.faCount.txt
+faCount ${asmName}_genomic.fna.gz > genomic.faCount.txt
+
+egrep -v "^#seq|^total" rna.faCount.txt | cut -f1,2 \
+   | sort -k2nr > rna.chrom.sizes
+egrep -v "^#seq|^total" genomic.faCount.txt | cut -f1,2 \
+   | sort -k2nr > genomic.chrom.sizes
+
+# this constructes the unlifted genePred file with NCBI chrom names
+gff3ToGenePred -useName -attrsOut=${asmName}.attrs.useName.txt \
+    ${asmName}_genomic.gff.gz \
+       ${asmName}.useName.gp
+
+# extract additional names from column nine to use as an index for
+#  the variety of names that identify each item
+~/kent/src/hg/makeDb/doc/hg38/gffToIx.pl ${asmName}_genomic.gff.gz \
+   > ${asmName}_genomic.ix.txt
+
+# for psl alignments, only need to work on the items with Gap specifications
+# The NG_ named items do not function correctly
+zgrep -v "NG_" ${asmName}_genomic.gff.gz | grep "Gap=" >> only.gap.gff
+
+# construct the PSL alignments from the Gap records
+sed -e 's/cDNA_match/match/;' only.gap.gff \
+  | gff3ToPsl genomic.chrom.sizes rna.chrom.sizes stdin ${asmName}.psl
+
+# this doesn't work, too many UCSC names missing from the NCBI file:
+grep -v "^#" ${asmName}_assembly_report.txt | sed -e 's/^M//g;' \
+    | cut -f7,9,10 \
+       |awk -F'\t' '{printf "0\t%s\t%d\t%s\t%d\n", $1, $2, $3, $2}' \
+           > insdcToHg38.lift
+
+# the automated hubs process does construct a good NCBI to UCSC lift file:
+
+export liftFile="/hive/data/inside/ncbi/genomes/refseq/vertebrate_mammalian/Homo_sapiens/latest_assembly_versions/${asmName}/${asmName}.ncbiToUcsc.lift"
+
+# liftUp the genePred from NCBI chrom names to UCSC chrom names
+liftUp -extGenePred -type=.gp stdout \
+     ${liftFile} warn ${asmName}.useName.gp | gzip -c \
+        > ${asmName}.ucsc.gp.gz
+touch -r ${asmName}.useName.gp ${asmName}.ucsc.gp.gz
+# some items will fail because they are on patches or alternative sequence
+# from Patch 5 that does not exist in hg38
+genePredCheck -db=hg38 ${asmName}.ucsc.gp.gz
+# checked: 150709 failed: 1455
+
+# filter out the patches and alternative sequences that are not in hg38
+genePredFilter -db=hg38 ${asmName}.ucsc.gp.gz stdout \
+    | gzip -c > ${asmName}.hg38.gp.gz
+# this should be perfectly good
+genePredCheck -db=hg38 ${asmName}.hg38.gp.gz
+# checked: 149254 failed: 0
+
+
+# liftUp the psl file from NCBI chrom names to UCSC chrom names
+pslSwap ${asmName}.psl stdout \
+   | liftUp -type=.psl stdout ${liftFile} drop stdin \
+      | gzip -c > ${asmName}.ucsc.psl.gz
+touch -r ${asmName}.psl ${asmName}.ucsc.psl.gz
+# same problem here as above, not everything is in hg38,
+#   filter patch 5 items out:
+pslCheck -pass=stdout -db=hg38 ${asmName}.ucsc.psl.gz 2> /dev/null \
+  | gzip -c > ${asmName}.hg38.psl.gz
+pslCheck -db=hg38 ${asmName}.hg38.psl.gz
+# checked: 1062 failed: 0 errors: 0
+
+# separate categories of genes:
+
+zegrep "^N(M|R)|^YP" ${asmName}.hg38.gp.gz > curated.gp
+zegrep "^X(M|R)" ${asmName}.hg38.gp.gz > predicted.gp
+zegrep -v "^N(M|R)|^YP|X(M|R)" ${asmName}.hg38.gp.gz > other.gp
+
+# verify none lost
+wc -l curated.gp predicted.gp other.gp
+   54869 curated.gp
+   88703 predicted.gp
+    5682 other.gp
+  149254 total
+
+zcat ${asmName}.hg38.gp.gz | wc -l
+149254
+
+# extract CDS records from the rna.gbff.gz for bigPsl construction:
+~/kent/src/hg/makeDb/doc/hg38/gbffToCds.pl ${asmName}_rna.gbff.gz > rna.cds
+
+# ensure simple names are in the rna.fa file
+zcat ${asmName}_rna.fna.gz | sed -e 's/ .*//;' > rna.fa
+pslToBigPsl -fa=rna.fa -cds=rna.cds ${asmName}.hg38.psl.gz test.bigPsl
+sort -k1,1 -k2,2n test.bigPsl > ${asmName}.hg38.bigPsl
+bedToBigBed -type=bed12+12 -tab -as=$HOME/kent/src/hg/lib/bigPsl.as \
+  ${asmName}.hg38.bigPsl ../../chrom.sizes ${asmName}.hg38.bigPsl.bb
+
+# loading genePred tracks:
+
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqCurated curated.gp
+genePredCheck -db=hg38 ncbiRefSeqCurated
+# checked: 54869 failed: 0
+
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqPredicted predicted.gp
+genePredCheck -db=hg38 ncbiRefSeqPredicted
+# checked: 88703 failed: 0
+
+hgLoadGenePred -genePredExt hg38 ncbiRefSeqOther other.gp
+genePredCheck -db=hg38 ncbiRefSeqOther
+# checked: 5682 failed: 0
+
+# and the bigPsl file:
+mkdir -p /gbdb/hg38/bbi/ncbiRefSeq
+ln -s `pwd`/${asmName}.hg38.bigPsl.bb /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
+hgBbiDbLink hg38 ncbiRefSeqBigPsl /gbdb/hg38/bbi/ncbiRefSeqBigPsl.bb
+
+#############################################################################
+

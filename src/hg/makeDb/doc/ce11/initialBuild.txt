@@ -309,7 +309,7 @@ taxId 6239
 # 56136951   3   chrIV    17493829
 
 #############################################################################
-# GENBANK AUTO UPDATE (DONE - 2015-06-10 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-06-10 - rerun 2016-01-22 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -359,14 +359,13 @@ ce11.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFi
 ce11.maxIntron = 100000
 ce11.lift = no
 ce11.refseq.mrna.native.load = yes
-ce11.refseq.mrna.xeno.load = no
-ce11.genbank.mrna.xeno.load = no
-ce11.genbank.mrna.native.load = no
-ce11.genbank.est.native.load = no
+ce11.refseq.mrna.xeno.load = yes
+ce11.genbank.mrna.xeno.load = yes
+ce11.genbank.mrna.native.load = yes
+ce11.genbank.est.native.load = yes
 ce11.downloadDir = ce11
 # ce11.upstreamGeneTbl = ensGene
-# ce11.upstreamMaf = multiz7way
-# /hive/data/genomes/ce11/bed/multiz7way/species.list
+# ce11.upstreamMaf = multiz7way /hive/data/genomes/ce11/bed/multiz7way/species.list
 
     git commit -m "Added ce11; refs #15209" etc/genbank.conf
     git push
@@ -376,9 +375,10 @@ ce11.downloadDir = ce11
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
+    # rerun all this with more tracks turned on 2016-01-21
     time ./bin/gbAlignStep -initial ce11
-    # logFile: var/build/logs/2015.06.10-15:57:13.ce11.initalign.log
-    # real    10m11.990s
+    # logFile: var/build/logs/2016.01.21-11:26:42.ce11.initalign.log
+    # real    587m41.017s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.ce11
@@ -387,8 +387,8 @@ ce11.downloadDir = ce11
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ce11 &
-    # logFile: var/dbload/hgwdev/logs/2015.06.19-09:37:47.ce11.dbload.log
-    # real    1m38.436s
+    # logFile: var/dbload/hgwdev/logs/2016.01.22-11:23:48.ce11.dbload.log
+    # real    166m44.273s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -554,4 +554,16 @@ searchPriority 8
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="chrII:14646376-14667875"
 	where name="ce11";' hgcentraltest
+############################################################################
+## blat server turned on (DONE - 2016-01-22 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce11", "blat1a", "17854", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce11", "blat1a", "17855", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
 ############################################################################

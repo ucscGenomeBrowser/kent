@@ -699,7 +699,7 @@ pslCheck -db=hg38 hg38.hg38Patch6.over.psl
 
 # load this PSL track
 #     this table name prefix altSeqLiftOverPsl is recognized in hgc clicks
-hgLoadPsl hg38 -table=altSeqLiftOverPslP5 hg38.hg38Patch6.over.psl
+hgLoadPsl hg38 -table=altSeqLiftOverPslP6 hg38.hg38Patch6.over.psl
 
 mkdir /hive/data/genomes/hg38/bed/hg38Patch6/seqExt
 cd /hive/data/genomes/hg38/bed/hg38Patch6/seqExt

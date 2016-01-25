@@ -21,6 +21,7 @@
 #include "udc.h"
 #include "bigWarn.h"
 #include "errCatch.h"
+#include "hgConfig.h"
 
 
 struct bamTrackData
@@ -499,7 +500,6 @@ if (errCatchStart(errCatch))
     parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
     struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
 			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
-    cramInit(tg->tdb);
 
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
@@ -520,8 +520,10 @@ if (errCatchStart(errCatch))
 
     char posForBam[512];
     safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
+    char *cacheDir =  cfgOption("cramRef");
+    char *refUrl = trackDbSetting(tg->tdb, "refUrl");
     if (!isPaired)
-	bamFetch(fileName2, posForBam, addBam, &btd, NULL);
+	bamFetchPlus(fileName2, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
     else
 	{
 	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -529,7 +531,7 @@ if (errCatchStart(errCatch))
 	if (pairSearchRange > 0)
 	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName2, posForBam, addBamPaired, &btd, NULL);
+	bamFetchPlus(fileName2, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
 	struct hashEl *hel;
 	struct hashCookie cookie = hashFirst(btd.pairHash);
 	while ((hel = hashNext(&cookie)) != NULL)
