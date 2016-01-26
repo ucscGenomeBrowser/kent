@@ -3187,16 +3187,16 @@ if ((canonicalSpec =
 	}
     else
 	relEnd   = atoi(stripCommas(term+substrs[3].rm_so));
-    if (canonicalSpec || gbrowserSpec || lengthSpec)
-	relStart--;
-    if (lengthSpec)
-        relEnd += relStart;
     if (relStart > relEnd)
 	{
 	int tmp  = relStart;
 	relStart = relEnd;
 	relEnd   = tmp;
 	}
+    if (canonicalSpec || gbrowserSpec || lengthSpec)
+	relStart--;
+    if (lengthSpec)
+        relEnd += relStart;
     relativeFlag = TRUE;
     }
 term = cloneString(term); // because hgOfficialChromName mangles it
