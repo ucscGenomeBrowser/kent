@@ -20,18 +20,27 @@
 #define SYSTEM_OTHER            "Other"
 
 
+static void initTissueTableStyle()
+{
+puts("<style>\n"
+        "#tissueTable th, #tissueTable td {\n"
+            "font-size: 75%;\n"
+        "}\n"
+    "</style>\n");
+}
+
 static char *makeTissueColorPatch(struct gtexTissue *tis)
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td style='width:10px; font-size:75%%;' bgcolor=%X></td>", tis->color);
+safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>", tis->color);
 return(cloneString(buf));
 }
 
 static char *makeTissueLabel(struct gtexTissue *tis)
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td style='width:10px; font-size:75%%;' bgcolor=%X></td>"
-                        "<td style='font-size:75%%'>&nbsp;%s</td>", 
+safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>"
+                        "<td>&nbsp;%s</td>", 
                                 tis->color, tis->description);
 return(cloneString(buf));
 }
@@ -70,7 +79,7 @@ struct tissueSelect
 static void makeGroupCheckboxes(char *name, char *title, struct tissueSelect *tisSelects)
 {
 if (title != NULL)
-    printf("<tr><td colspan=10 style='font-size:75%%'><i><b>%s</b></i></td></tr><tr>\n", title);
+    printf("<tr><td colspan=10><i><b>%s</b></i></td></tr><tr>\n", title);
 int count = slCount(tisSelects);
 struct tissueSelect **tisArray;
 AllocArray(tisArray, count);
@@ -133,6 +142,7 @@ cgiMakeHiddenVar(buf, "0");
 static void makeTableTissueCheckboxes(char *name, struct gtexTissue *tissues, 
                                         struct slName *checked, struct cart *cart)
 {
+initTissueTableStyle();
 char *onClick = "";
 // Sortable table can't be displayed when UI is activated from right-click (popup mode)
 if (!cartVarExists(cart, "ajax"))
@@ -157,16 +167,16 @@ printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></
         orderVar, sortOrder);
 puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
 
-printf("<th id='tissue' class='sortable sort1' style='font-size:75%%' %s "
+printf("<th id='tissue' class='sortable sort1' %s "
         "align='left' title='Sort on tissue'>&nbsp;Tissue</th>", onClick);
 
-printf("<th id='samples' abbr='use' class='sortable sort2' style='font-size:75%%' %s "
+printf("<th id='samples' abbr='use' class='sortable sort2' %s "
         "align='left' title='Sort on sample count'>&nbsp;Samples</th>", onClick);
 
-printf("<th id='organ' class='sortable sort3' style='font-size:75%%' %s "
+printf("<th id='organ' class='sortable sort3' %s "
         "align='left' title='Sort on organ'>&nbsp;Organ</th>", onClick);
 
-printf("<th id='system' class='sortable sort4' style='font-size:75%%' %s "
+printf("<th id='system' class='sortable sort4' %s "
         "align='left' title='Sort on system'>&nbsp;System</th>", onClick);
 puts("\n</tr>");
 puts("</thead>");
@@ -190,14 +200,14 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     // color patch
     printf("\n%s", makeTissueColorPatch(tis));
     // tissue name
-    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", tis->description);
+    printf("\n<td>&nbsp;%s</td>", tis->description);
     // sample count
     int samples = hashIntValDefault(tscHash, tis->name, 0);
-    printf("\n<td abbr='%05d' style='font-size:75%%; text-align: right; padding-right: 10px''>&nbsp;%d</td>", samples, samples);
+    printf("\n<td abbr='%05d' style='text-align: right; padding-right: 10px'>&nbsp;%d</td>", samples, samples);
     // organ
-    printf("\n<td style='font-size:75%%; padding-right: 10px'>&nbsp;%s</td>", tis->organ);
+    printf("\n<td style='padding-right: 10px'>&nbsp;%s</td>", tis->organ);
     // system
-    printf("\n<td style='font-size:75%%'>&nbsp;%s</td>", getSystem(tis));
+    printf("\n<td>&nbsp;%s</td>", getSystem(tis));
 
     puts("\n</tr>");
     }
