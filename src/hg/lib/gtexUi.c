@@ -20,16 +20,13 @@
 #define SYSTEM_OTHER            "Other"
 
 
-static void initTissueTableStyle()
-{
-puts("<style>\n"
-        "#tissueTable th, #tissueTable td {\n"
-            "font-size: 75%;\n"
-        "}\n"
-    "</style>\n");
-}
+/* Restrict features on right-click (popup) version */
+static boolean isPopup = FALSE;
+
+/* Convenience functions for tissue filter controls */
 
 static char *makeTissueColorPatch(struct gtexTissue *tis)
+/* Display a box colored by defined tissue color */
 {
 char buf[256];
 safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>", tis->color);
@@ -38,6 +35,7 @@ return(cloneString(buf));
 
 static char *makeTissueLabel(struct gtexTissue *tis)
 {
+/* Display tissue color and label */
 char buf[256];
 safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>"
                         "<td>&nbsp;%s</td>", 
@@ -46,6 +44,7 @@ return(cloneString(buf));
 }
 
 static char *getSystem(struct gtexTissue *tis)
+/* Rough categorization of tissues for filter presentation */
 {
 if (startsWith("brain", tis->name))
     return(SYSTEM_BRAIN);
@@ -100,8 +99,11 @@ for (i=0; i<count; i++)
         col = 0;
         }
     j = row + col*(count/tableColumns+1);
-    printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>" "<td>%s</td>\n",
+    if (!isPopup)
+        {
+        printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>" "<td>%s</td>\n",
                name, tisArray[j]->name, tisArray[j]->checked ? "checked" : "", tisArray[j]->label);
+        }
     col++;
     }
 if ((i % tableColumns) != 0)
@@ -110,42 +112,23 @@ if ((i % tableColumns) != 0)
 printf("</tr><tr><td></td></tr>\n");
 }
 
-static void makeAllTissueCheckboxes(char *name, struct gtexTissue *tissues, struct slName *checked)
+static void initTissueTableStyle()
+/* Reduce font in tissue table so more rows are visible.
+ * Specify some colors.*/
 {
-struct hash *checkHash = hashNew(0);
-struct slName *sel;
-for (sel = checked; sel != NULL; sel = sel->next)
-    hashAdd(checkHash, sel->name, sel->name);
-puts("<table borderwidth=0><tr>");
-struct tissueSelect *tsel;
-struct gtexTissue *tis;
-struct tissueSelect *allTissues = NULL;
-for (tis = tissues; tis != NULL; tis = tis->next)
-    {
-    AllocVar(tsel);
-    tsel->name = tis->name;
-    tsel->label = makeTissueLabel(tis);
-    if (hashNumEntries(checkHash) == 0)
-        tsel->checked = TRUE;
-    else
-        tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
-    slAddHead(&allTissues, tsel);
-    }
-slReverse(&allTissues);
-makeGroupCheckboxes(name, NULL, allTissues);
-puts("</tr></table>");
-char buf[512];
-safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
-cgiMakeHiddenVar(buf, "0");
+puts("<style>\n"
+        "#tissueTable th, #tissueTable td {font-size: 75%;}\n"
+        ".notSortable {font-color: black;}\n"
+    "</style>\n");
 }
 
 static void makeTableTissueCheckboxes(char *name, struct gtexTissue *tissues, 
-                                        struct slName *checked, struct cart *cart)
+                                        struct slName *checked, struct cart *cart, char *track)
 {
 initTissueTableStyle();
 char *onClick = "";
 // Sortable table can't be displayed when UI is activated from right-click (popup mode)
-if (!cartVarExists(cart, "ajax"))
+if (!isPopup)
     {
     jsIncludeFile("hui.js", NULL);
     onClick = "'tableSortAtButtonPress(this);";
@@ -163,21 +146,28 @@ safef(orderVar, sizeof(orderVar), "%s.sortOrder", name);
 char *sortOrder = cartCgiUsualString(cart, orderVar, "tissue=+ samples=+ organ=+ system=+");
 puts("\n<thead class='sortable'>");
 puts("\n<tr class='sortable'>");
-printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
+char *sortableClass = isPopup ? "notSortable" : "sortable";
+if (isPopup)
+    {
+    printf("<th>&nbsp;&nbsp;<a style='color: blue; cursor: pointer; text-decoration: none' href='%s?g=%s' "
+         "title='Sorry you cannot select tissues from the list below. To do so, click the ?.'>?</a>",
+                "../cgi-bin/hgTrackUi", track); // Better to use hgTrackUiName(), but there's an issue
+                                                        //with header includes, so punting for now
+    }
+else
+    {
+    printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
         orderVar, sortOrder);
+    }
 puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
-
-printf("<th id='tissue' class='sortable sort1' %s "
-        "align='left' title='Sort on tissue'>&nbsp;Tissue</th>", onClick);
-
-printf("<th id='samples' abbr='use' class='sortable sort2' %s "
-        "align='left' title='Sort on sample count'>&nbsp;Samples</th>", onClick);
-
-printf("<th id='organ' class='sortable sort3' %s "
-        "align='left' title='Sort on organ'>&nbsp;Organ</th>", onClick);
-
-printf("<th id='system' class='sortable sort4' %s "
-        "align='left' title='Sort on system'>&nbsp;System</th>", onClick);
+printf("<th id='tissue' class='%s sort1' %s align='left'>&nbsp;Tissue</th>", 
+               sortableClass, onClick);
+printf("<th id='samples' abbr='use' class='%s sort2' %s align='left'>&nbsp;Samples</th>", 
+               sortableClass, onClick);
+printf("<th id='organ' class='%s sort3' %s align='left'>&nbsp;Organ</th>", 
+               sortableClass, onClick);
+printf("<th id='system' class='%s sort4' %s align='left'>&nbsp;System</th>", 
+               sortableClass, onClick);
 puts("\n</tr>");
 puts("</thead>");
 
@@ -195,8 +185,8 @@ for (tis = tissues; tis != NULL; tis = tis->next)
         isChecked = TRUE;
     else
         isChecked = (hashLookup(checkHash, tis->name) != NULL);
-    printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s></td>",
-               name, tis->name, isChecked ? "checked" : "");
+    printf("<td><input type=checkbox name=\"%s\" value=\"%s\" %s %s></td>",
+           name, tis->name, isChecked ? "checked" : "", isPopup ? "disabled" : "");
     // color patch
     printf("\n%s", makeTissueColorPatch(tis));
     // tissue name
@@ -264,11 +254,43 @@ safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "0");
 }
 
+static void makeAllTissueCheckboxes(char *name, struct gtexTissue *tissues, 
+                                        struct slName *checked)
+{
+struct hash *checkHash = hashNew(0);
+struct slName *sel;
+for (sel = checked; sel != NULL; sel = sel->next)
+    hashAdd(checkHash, sel->name, sel->name);
+puts("<table borderwidth=0><tr>");
+struct tissueSelect *tsel;
+struct gtexTissue *tis;
+struct tissueSelect *allTissues = NULL;
+for (tis = tissues; tis != NULL; tis = tis->next)
+    {
+    AllocVar(tsel);
+    tsel->name = tis->name;
+    tsel->label = makeTissueLabel(tis);
+    if (hashNumEntries(checkHash) == 0)
+        tsel->checked = TRUE;
+    else
+        tsel->checked = (hashLookup(checkHash, tis->name) != NULL);
+    slAddHead(&allTissues, tsel);
+    }
+slReverse(&allTissues);
+makeGroupCheckboxes(name, NULL, allTissues);
+puts("</tr></table>");
+char buf[512];
+safef(buf, sizeof(buf), "%s%s", cgiMultListShadowPrefix(), name);
+cgiMakeHiddenVar(buf, "0");
+}
+
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, boolean boxed)
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
+if (cartVarExists(cart, "ajax"))
+    isPopup = TRUE;
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-printf("<table%s><tr><td>",boxed?" width='100%'":"");
+printf("<table%s><tr><td>", boxed ?" width='100%'":"");
 
 char cartVar[1024];
 char *selected = NULL;
@@ -311,7 +333,8 @@ printf(" RPKM (range 10-180000)<br>\n");
 printf("</p>");
 
 /* Color scheme */
-// Not sure if we still want this option
+// We don't need the rainbow color scheme, but may want another (e.g. different
+// colors for brain tissues), so leaving code in for now.
 #ifdef COLOR_SCHEME
 printf("<p><b>Tissue colors:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COLORS);
@@ -325,11 +348,14 @@ printf("</p>");
 #endif
 
 /* Tissue filter */
-printf("<p><b>Tissue selection:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
-jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
-puts("&nbsp;");
-jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+if (!isPopup)
+    {
+    printf("<p><b>Tissue filter:</b>\n");
+    safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
+    jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
+    puts("&nbsp;");
+    jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+    }
 struct gtexTissue *tissues = gtexGetTissues();
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
@@ -338,7 +364,7 @@ char *selectType = cgiUsualString("tis", "table");
 if (sameString(selectType, "group"))
     makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
 else if (sameString(selectType, "table"))
-    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart);
+    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track);
 else
     makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
 
