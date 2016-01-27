@@ -449,6 +449,7 @@ extern boolean virtMode;            /* Are we in virtual chrom mode? */
 extern boolean virtChromChanged;     /* Has the virtChrom changed? */
 extern boolean emAltHighlight;      /* Highlight alternativing regions in virt view? */
 extern int emPadding;               /* # bases padding for exon-mostly regions */
+extern int gmPadding;               /* # bases padding for gene-mostly regions */
 extern char *emGeneTable;           /* Gene table to use for exon mostly */
 extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
 extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
