@@ -240,6 +240,16 @@ group map
 visibility dense
 type bed 6 .
 
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url /cgi-bin/hgTracks?position=$$
+urlLabel Corresponding position:
+
+
 track knownGene
 shortLabel UCSC Genes
 longLabel UCSC Genes (RefSeq, GenBank, tRNAs & Comparative Genomics)
@@ -1548,6 +1558,7 @@ group varRep
 visibility hide
 useScore 1
 type bed 12 +
+exonNumbers off
 
 track rmskUpdate
 shortLabel RM update
@@ -2746,7 +2757,7 @@ longLabel Pfam Domains in UCSC Genes
 group genes
 type bed 12
 color 20,0,250
-url http://pfam.sanger.ac.uk/family/$$
+url http://pfam.xfam.org/family/$$
 
 track numtSeq2012
 compositeTrack on
@@ -3007,4 +3018,108 @@ searchType genePred
 shortCircuit 1
 searchMethod fuzzy
 termRegex g[0-9]+(\.t[0-9]+)?
+searchPriority 50
+
+track xNcbiRefSeq
+compositeTrack on
+shortLabel xNCBI RefSeq
+longLabel RefSeq gene predictions from NCBI
+group genes
+visibility hide
+color 16,93,235
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons
+noInherit on
+subGroup1 view Views genes=Genes alignments=Alignments bigPsl=BigPsl curated=Curated predicted=Predicted other=Other
+
+    track ncbiRefGenesView
+    shortLabel NCBI RefSeq genes
+    view genes
+    visibility pack
+    color 16,93,235
+    parent xNcbiRefSeq
+
+	track ncbiRefSeq
+	shortLabel NCBI RefSeq genes
+        subGroups view=genes
+        longLabel RefSeq gene predictions from NCBI
+	visibility pack
+	parent ncbiRefGenesView
+
+    track ncbiRefAlignView
+    shortLabel Alignments
+    view alignments
+    visibility hide
+    parent xNcbiRefSeq
+    color 48,168,219
+
+	track ncbiRefSeqAlignments
+	shortLabel NCBI RefSeq alignments
+        subGroups view=alignments
+	longLabel Alignments of RefSeq gene predictions from NCBI
+	parent ncbiRefAlignView
+        type psl
+
+    track ncbiRefBigAlignView
+    shortLabel BigPsl Alignments
+    view bigPsl
+    visibility hide
+    parent xNcbiRefSeq
+    color 48,168,219
+
+	track ncbiRefSeqBigPsl
+	shortLabel Big PSL NCBI RefSeq alignments
+        subGroups view=bigPsl
+	longLabel Big PSL Alignments of RefSeq gene predictions from NCBI
+	parent ncbiRefBigAlignView
+        type bigPsl
+
+    track ncbiRefXCuratedView
+    shortLabel Curated
+    view curated
+    visibility pack
+    color 16,93,235
+    parent xNcbiRefSeq
+
+	track ncbiRefSeqCurated
+	shortLabel RefSeq Curated
+        subGroups view=curated
+	longLabel RefSeq Curated (NM_* and NR_*)
+	visibility pack
+	parent ncbiRefXCuratedView
+
+    track ncbiRefXPredictedView
+    shortLabel Predicted
+    view predicted
+    visibility hide
+    parent xNcbiRefSeq
+    color 48,168,219
+    spectrum on
+
+	track ncbiRefSeqPredicted
+	shortLabel RefSeq Predicted
+        subGroups view=predicted
+	longLabel RefSeq Predicted (XM_* and XR_*)
+	parent ncbiRefXPredictedView
+
+    track ncbiRefXOtherView
+    shortLabel Other
+    view other
+    visibility hide
+    parent xNcbiRefSeq
+    color 48,168,219
+    spectrum on
+
+	track ncbiRefSeqOther
+	shortLabel RefSeq Other
+        subGroups view=other
+	longLabel RefSeq other genes, not (NM_* or NR_* or XM_* or XR_*)
+	parent ncbiRefXOtherView
+
+searchTable ncbiRefSeq
+searchType genePred
+shortCircuit 1
+searchMethod fuzzy
+termRegex ^[NXYcir][MPRdn][12567_as][0-9]+(\.[0-9]+)?
 searchPriority 50

@@ -7,60 +7,320 @@ var HgIntegratorModel = ImModel.extend({
               PositionSearchMixin(['regionSelect', 'positionInfo']),
               UserRegionsMixin(['regionSelect', 'userRegions'])],
 
+    // Hardcoded params / constants
     maxDataSources: 5,
+    maxRelatedTables: 4,
     tdbFields: 'track,table,shortLabel,parent,subtracks',
     excludeTypes: 'bam,wigMaf,maf',
 
-    handleCartVar: function(mutState, cartVar, newValue) {
-        // Some cart variables require special action (not simply being merged into top-level state)
-        if (cartVar === 'hgi_querySpec') {
-            if (newValue === '') {
-                // No querySpec in cart yet -- make an empty one for rendering:
-                mutState.set(cartVar,
-                                  Immutable.fromJS({ dataSources: [], outFileOptions: {} }));
-            } else {
-                newValue = decodeURIComponent(newValue);
-                newValue = JSON.parse(newValue);
-                mutState.set(cartVar, Immutable.fromJS(newValue));
+    // Cart variables
+    querySpecVar: 'hgi_querySpec',
+    uiChoicesVar: 'hgi_uiChoices',
+    rangeSelectVar: 'hgi_range', //#*** TODO: fold into uiChoices!
+    addDsSelectVar: 'hgi_addDsTrackPath', //#*** TODO: fold into uiChoices!
+
+    handleUserRegionsUpdate: function(mutState, cartVar, newValue) {
+        var range;
+        // User-defined regions updated -- if nonempty, change range to userRegions
+        if (cartVar === 'userRegionsUpdate') {
+            if (newValue && newValue !== "") {
+                mutState.setIn(['regionSelect', this.rangeSelectVar], 'userRegions');
             }
-        } else if (cartVar === 'hgi_range') {
-            // perhaps regionSelect stuff should move to a plugin
+        } else if (cartVar === 'userRegions') {
+            // If we just changed db and there are no defined regions for this db,
+            // hgi_range can't be 'userRegions'.
+            range = mutState.getIn(['regionSelect', 'hgi_range']);
+            if ((! newValue || newValue === '') && range === 'userRegions') {
+                this.clearUserRegions(mutState);
+            }
+        } else {
+            this.error('handleUserRegionsUpdate: unexpectedly given', cartVar, newValue);
+        }
+    },
+
+    querySpecUpdateUiChoices: function(mutState) {
+        // Incoming dataSources[*].relatedTables overrides uiChoices relatedSelected and.
+        // uiChoices tableFields[track][table][fields] for related tables.
+        // Incoming outFileOptions.tableFields overrides uiChoices tableFields[track][track].
+        // For each dataSource, override uiChoices or remove if not provided.
+        var tableFields;
+        mutState.get('dataSources').forEach(function(ds, dsIx) {
+            // Extract this dataSource's related table info.
+            var track = ds.get('trackPath').last();
+            var relatedTables = ds.getIn(['config', 'relatedTables']);
+            var relSel;
+            if (relatedTables && relatedTables.size > 0) {
+                // The query does include related tables & fields -- update uiChoices.
+                relSel = relatedTables.map(function(info) { return info.get('table'); });
+                this.setUiChoice(mutState, ['relatedSelected', track], relSel);
+                relatedTables.forEach(
+                    function (info) {
+                        var table = info.get('table');
+                        var fields = info.get('fields') || Immutable.List();
+                        this.setUiChoice(mutState, ['relatedTableFields', track, table], fields);
+                    },
+                this);
+            }
+            // Remove from ds to avoid confusion; uiChoices owns the info now.
+            mutState.removeIn(['dataSources', dsIx, 'config', 'relatedTables']);
+        }, this);
+        // outFileOptions.tableFields may contain deselected fields from (main tables of) sources.
+        tableFields = mutState.getIn(['outFileOptions', 'tableFields']);
+        if (tableFields) {
+            tableFields.forEach(
+                function(fields, track) {
+                    this.setUiChoice(mutState, ['tableFields', track], fields);
+                },
+                this);
+        }
+        this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+    },
+
+    handleQueryState: function(mutState, cartVar, queryState) {
+        // The querySpec from cart, received only when the page is initially displaying,
+        // requires special handling because portions of it become top-level UI state,
+        // and parts of querySpec can override parts of uiChoices.
+        var querySpec, uiChoices;
+        if (cartVar === 'queryState') {
+            querySpec = this.parseCartJsonString(queryState[this.querySpecVar]);
+            uiChoices = this.parseCartJsonString(queryState[this.uiChoicesVar]);
+            if (querySpec) {
+                // Overwriting dataSources blows away some UI state like labels;
+                // Those will be added back in this.validateCart.
+                mutState.set('dataSources', Immutable.fromJS(querySpec.dataSources));
+                mutState.set('outFileOptions', Immutable.fromJS(querySpec.outFileOptions));
+            } else {
+                // No querySpec in cart yet -- make an empty one for rendering:
+                mutState.set('dataSources', Immutable.List());
+                mutState.set('outFileOptions', Immutable.Map());
+            }
+            if (uiChoices) {
+                this.setUiChoice(mutState, [], Immutable.fromJS(uiChoices));
+            }
+            this.querySpecUpdateUiChoices(mutState);
+        } else {
+            this.error('handleQueryState: unexpectedly given', cartVar, queryState);
+        }
+    },
+
+    handleRangeSelect: function(mutState, cartVar, newValue) {
+        // Bundle this with positionInfo for fast immutable-prop checking
+        if (cartVar === this.rangeSelectVar) {
             mutState.setIn(['regionSelect', cartVar], newValue);
             mutState.setIn(['regionSelect', 'loading'], false);
-        } else if (cartVar === 'userRegionsUpdate') {
-            if (newValue && newValue !== "") {
-                // User-defined regions updated -- change range to userRegions
-                mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
-            }
-        } else if (cartVar === 'tableFields') {
-            // The server has sent an object mapping table names to lists of fields.
-            // Construct an immutable map of table names to ordered maps of fields to
-            // booleans for checkboxes; if hgi_querySpec contains saved settings,
-            // use those; otherwise true unless field is bin.
-            var tfDefaults = {};
-            var current = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'tableFields']);
-            if (current) {
-                current = current.toJS();
-            } else {
-                current = {};
-            }
-            tfDefaults = _.mapValues(newValue, function(info, table) {
-                var currentFieldSettings = current[table] || {};
-                var newFieldSettings = Immutable.OrderedMap();
-                info.fields.forEach(function(fieldAndDesc) {
-                    var field = fieldAndDesc.name;
-                    var checked = currentFieldSettings[field];
-                    if (checked === undefined) {
-                        checked = (field !== 'bin');
-                    }
-                    var newSetting = Immutable.Map({checked: checked, desc: fieldAndDesc.desc});
-                    newFieldSettings = newFieldSettings.set(field, newSetting);
-                }, this);
-                return Immutable.Map({ fields: newFieldSettings, label: info.label});
-            }, this);
-            mutState.set('tableFields', Immutable.OrderedMap(tfDefaults));
         } else {
-            this.error('handleCartVar: unexpectedly given', cartVar, newValue);
+            this.error('handleRangeSelect: unexpectedly given', cartVar, newValue);
+        }
+    },
+
+    fieldCheckedByDefault: function(table, field) {
+        // Return true if checkbox for including table field in output would be checked by default.
+        // If table contains a '.' (db.table), it's a related SQL table; no fields checked by
+        // default.  Otherwise, it's the main data source; every field except bin is checked.
+        return (!_.includes(table, '.') && field !== 'bin');
+    },
+
+    getRelatedAvailableSelected: function (mutState, track, optionList) {
+        // Determine which related table in optionList is selected, based on past choices,
+        // availability and defaults for popular tracks.
+        var relatedTables = optionList.map(function (option) { return option.get('value'); })
+                                      .toArray();
+        var selected = this.getUiChoice(mutState,
+                                        ['relatedAvailable', track, 'selected']);
+        if (!_.includes(relatedTables, selected)) {
+            selected = undefined;
+        }
+        if (_.isUndefined(selected)) {
+            // Pick useful defaults for tracks with tons of related tables.
+            if (track === 'knownGene') {
+                selected = _.find(relatedTables,
+                                  function (relTable) { return _.endsWith(relTable, '.kgXref'); });
+            } else if (track === 'refGene') {
+                selected = _.find(relatedTables,
+                                  function (relTable) { return _.endsWith(relTable, '.refLink'); });
+            }
+        }
+        if (_.isUndefined(selected)) {
+            selected = relatedTables[0];
+        }
+        return selected;
+    },
+
+    getTablesIncluded: function (mutState) {
+        // Return an object whose keys are tables that have been selected in uiChoices
+        // (so we can exclude them from menus of related tables that could be added)
+        // First make list of all tracks' tables:
+        var tablesIncluded = _.flatten(mutState.get('fieldSelect').map(
+            function(trackInfo) {
+                return trackInfo.get('tableFields')
+                                .map(function(x, table) { return table; }).toArray();
+            }).toArray());
+        // Transform list into an into an object with table names as keys for easy testing:
+        return _.countBy(tablesIncluded);
+    },
+
+    updateRelatedTablesMenus: function (mutState) {
+        // Each track's menu of not-yet-selected related tables, if any.
+        // They are interrelated because selecting a related table for one track
+        // means we need to disable that related table in all tracks that link to it.
+        // Disable the 'Add' button if they have already selected our max number
+        // of related tables or if the selected table has already been added.
+        var tablesIncluded = this.getTablesIncluded(mutState);
+        mutState.get('fieldSelect').forEach(
+            function (trackState, track) {
+                var optionList = trackState.getIn(['relatedAvailable', 'options']);
+                var selectedTable, tableFields, disableAddButton;
+                if (optionList) {
+                    selectedTable = this.getRelatedAvailableSelected(mutState, track, optionList);
+                    tableFields = trackState.get('tableFields');
+                    disableAddButton = (tableFields.size - 1 >= this.maxRelatedTables);
+                    optionList.forEach(
+                        function (option, opIx) {
+                            var relTable = option.get('value');
+                            var disableIt = !!tablesIncluded[relTable];
+                            mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'options',
+                                            opIx, 'disabled'],
+                                           disableIt);
+                            if (disableIt && relTable === selectedTable) {
+                                disableAddButton = true;
+                            }
+                        }
+                    );
+                    // Set selected relTable
+                    mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'selected'],
+                                   selectedTable);
+                    mutState.setIn(['fieldSelect', track, 'disableAddButton'],
+                                   disableAddButton);
+                }
+            },
+            this);
+    },
+
+    fieldIsCheckedInUiChoices: function(mutState, track, table, field) {
+        // Figure out the right path in uiChoices for track/table/field, look for a value
+        // there, and return it if found.  Otherwise return the default for table/field.
+        // For backwards compatibility, the main table's fields are stored as a
+        // Map: field -> boolean isChecked, and in practice only the fields with
+        // non-default values are stored.  Fields of related tables are stored
+        // as lists of non-default (i.e. checked) fields.
+        var checkedByDefault = this.fieldCheckedByDefault(table, field);
+        var checked, nonDefaultFields;
+        if (table === track) {
+            // Value in map or default
+            checked = this.getUiChoice(mutState,
+                                       ['tableFields', track, field]);
+            if (_.isUndefined(checked)) {
+                checked = checkedByDefault;
+            }
+        } else {
+            // Presence in list means that field has the non-default value:
+            nonDefaultFields = this.getUiChoice(mutState, ['relatedTableFields', track, table]);
+            if (nonDefaultFields &&
+                nonDefaultFields.some(function (f) { return f === field; })) {
+                checked = !checkedByDefault;
+            } else {
+                checked = checkedByDefault;
+            }
+        }
+        return checked;
+    },
+
+    mergeFieldSettings: function(mutState, tableFieldsFromServer) {
+        // Merge data from a fieldSelect or relatedFields server response into the
+        // fieldSelect UI obj.
+        // tableFieldsFromServer settings are plain JS:
+        // { <track>: { <table>: { label: ___,
+        //                         fields: [ { name: ___, desc: ___ }, ... ],
+        //                       },
+        //                       ... },
+        //            }, ... }
+        _.forEach(tableFieldsFromServer,
+            function(trackTables, track) {
+                // Each track has info for one or more tables, and possibly also related tables
+                _.forEach(trackTables,
+                    function(tableInfo, table) {
+                        // Each table has a label, a list of objects w/field name and description,
+                        // and a (usually empty) list of related db.table names
+                        var fsPathToTable = ['fieldSelect', track, 'tableFields', table];
+                        mutState.setIn(fsPathToTable.concat('label'), tableInfo.label);
+                        // Add each field's checkbox state for UI
+                        mutState.setIn(fsPathToTable.concat('fields'), Immutable.List());
+                        _.forEach(tableInfo.fields,
+                            function(fieldAndDesc, ix) {
+                                var field = fieldAndDesc.name;
+                                var checked = this.fieldIsCheckedInUiChoices(mutState,
+                                                                             track, table, field);
+                                var newSetting = Immutable.Map({ name: field,
+                                                                 checked: checked,
+                                                                 desc: fieldAndDesc.desc });
+                                mutState.setIn(fsPathToTable.concat(['fields', ix]), newSetting);
+                            },
+                        this);
+                    },
+                this);
+            },
+        this);
+    },
+
+    handleFieldSelect: function(mutState, cartVar, tableFields) {
+        // The server has sent an object mapping data source names to table names to
+        // lists of fields.
+        // Construct an immutable map of data source names to maps of table names to
+        // ordered maps of fields to booleans & descriptions for checkboxes.
+        // If uiChoices contains saved settings, use those; otherwise true unless field is bin.
+        if (cartVar === 'fieldSelect') {
+            // New list of track tables; build popup contents from scratch.
+            mutState.set('fieldSelect', Immutable.OrderedMap());
+            this.mergeFieldSettings(mutState, tableFields);
+        } else {
+            this.error('handleTableFields: unexpectedly given', cartVar, tableFields);
+        }
+    },
+
+    handleRelatedFields: function(mutState, cartVar, tableFields) {
+        // The server has sent an object mapping data source names to related SQL table names
+        // to lists of fields.
+        // Construct an immutable map of table names to ordered maps of fields to
+        // booleans for checkboxes; if uiChoices contains saved settings,
+        // use those; otherwise true unless field is bin.
+        if (cartVar === 'relatedFields') {
+            // Related tables to add; merge them into the existing Modal state.
+            if (! mutState.get('fieldSelect')) {
+                // The user must have closed the Modal before these arrived.
+                return;
+            }
+            this.mergeFieldSettings(mutState, tableFields);
+        } else {
+            this.error('handleRelatedFields: unexpectedly given', cartVar, tableFields);
+        }
+    },
+
+    handleRelatedTables: function(mutState, cartVar, relatedTables) {
+        // The server has sent an object mapping data source names to lists of
+        // available related tables (which can change every time another related
+        // table is selected).  Update state and refresh all tracks' menus
+        // of related tables.
+        if (cartVar === 'relatedTablesUpdate' && ! mutState.get('fieldSelect')) {
+            // The user must have closed the Modal before these arrived.
+            return;
+        } else if (cartVar === 'relatedTablesAll' || cartVar === 'relatedTablesUpdate') {
+            _.forEach(relatedTables,
+                // Merge new lists into state: rebuild each track's related tables menu option list.
+                function(tables, track) {
+                    var options = _.map(tables,
+                        function(tblDescTuple) {
+                            var relTable = tblDescTuple[0];
+                            var label = tblDescTuple[1];
+                            // Don't set disabled until we know all tables included in the query.
+                            return { value: relTable, label: label };
+                        });
+                    mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'options'],
+                                   Immutable.fromJS(options));
+                }
+            );
+        this.updateRelatedTablesMenus(mutState);
+        } else {
+            this.error('handleRelatedTables: unexpectedly given', cartVar, relatedTables);
         }
     },
 
@@ -240,7 +500,7 @@ var HgIntegratorModel = ImModel.extend({
     updateAddDsDisable: function(mutState) {
         // If user has added the max # of data sources, or has already added the currently
         // selected track, disable the Add button.
-        var dataSources = mutState.getIn(['hgi_querySpec', 'dataSources']);
+        var dataSources = mutState.get('dataSources');
         if (! dataSources) {
             return;
         }
@@ -259,7 +519,7 @@ var HgIntegratorModel = ImModel.extend({
 
     disableDataSourcesInAddDsMenus: function (mutState) {
         // Disable the leaf (rightmost) menu's options only for already-added data sources.
-        var dataSources = mutState.getIn(['hgi_querySpec', 'dataSources']);
+        var dataSources = mutState.get('dataSources');
         if (! dataSources) {
             return;
         }
@@ -329,7 +589,7 @@ var HgIntegratorModel = ImModel.extend({
         this.updateAddDsSchemaUrl(mutState, db);
     },
 
-    handleGroupedTrackDb: function(mutState, cartVar, newValue) {
+   handleGroupedTrackDb: function(mutState, cartVar, newValue) {
         // Server just sent new groupedTrackDb; if it is for the current db,
         // build group/track/etc menus for <AddDataSource>.
         var currentDb, addDsTrackPath;
@@ -344,7 +604,7 @@ var HgIntegratorModel = ImModel.extend({
                 });
                 mutState.set('groupedTrackDb', Immutable.fromJS(newValue.groupedTrackDb));
                 // If the cart includes a saved trackPath consistent with groupedTrackDb, use that:
-                addDsTrackPath = mutState.get('hgi_addDsTrackPath');
+                addDsTrackPath = mutState.get(this.addDsSelectVar);
                 if (! addDsTrackPath ||
                     ! this.isInGroupedTrackDb(mutState, addDsTrackPath)) {
                     addDsTrackPath = Immutable.List();
@@ -388,13 +648,16 @@ var HgIntegratorModel = ImModel.extend({
     },
 
     validateCart: function(mutState) {
-        // When both groupedTrackDb and hgi_query have been incorporated into mutState,
-        // trim any data sources from hgi_query that aren't found in groupedTrackDb
+        // When both groupedTrackDb and hgi_querySpec have been incorporated into mutState,
+        // trim any data sources from hgi_querySpec that aren't found in groupedTrackDb
         // (e.g. after a db change).
         // Also make sure that labels and schema links are consistent w/latest db & trackDb.
-        var dataSources = mutState.getIn(['hgi_querySpec', 'dataSources']) || Immutable.List();
+        var dataSources = mutState.get('dataSources') || Immutable.List();
         var addDsInfo = mutState.get('addDsInfo');
         if (dataSources && addDsInfo) {
+            //#*** Seems awfully inefficient to do this every time something comes in from
+            //#*** the server.  It would be better to have a coherent way to manage multiple
+            //#*** arriving pieces of data together.
             var db = this.getDb(mutState);
             var newDataSources = dataSources.filter(function(ds) {
                 var trackPath = ds.get('trackPath');
@@ -407,7 +670,7 @@ var HgIntegratorModel = ImModel.extend({
                 return ds;
             }, this);
             if (! newDataSources.equals(dataSources)) {
-                mutState.setIn(['hgi_querySpec', 'dataSources'], newDataSources);
+                mutState.set('dataSources', newDataSources);
             }
             this.disableDataSourcesInAddDsMenus(mutState);
             this.updateAddDsDisable(mutState);
@@ -417,6 +680,7 @@ var HgIntegratorModel = ImModel.extend({
     changeRange: function(mutState, uiPath, newValue) {
         // User changed 'region to annotate' select; if they changed it to 'define regions'
         // but have not yet defined any regions, open the UserRegions popup.
+        //#*** Reaching into a mixin's state here is not good.
         var existingRegions = mutState.getIn(['regionSelect', 'userRegions', 'regions']);
         if (newValue === 'userRegions' && (!existingRegions || existingRegions === "")) {
             this.openUserRegions(mutState);
@@ -426,8 +690,8 @@ var HgIntegratorModel = ImModel.extend({
     },
 
     clearUserRegions: function(mutState) {
-        // Clear user region state and reset hgi_range.
-        this.changeCartString(mutState, ['regionSelect', 'hgi_range'], 'position');
+        // Clear user region state and reset rangeSelectVar.
+        this.changeCartString(mutState, ['regionSelect', this.rangeSelectVar], 'position');
         this.clearUserRegionState(mutState);
     },
 
@@ -437,19 +701,73 @@ var HgIntegratorModel = ImModel.extend({
     },
 
     pastedUserRegions: function(mutState) {
-        // Update hgi_range to select user regions
-        mutState.setIn(['regionSelect', 'hgi_range'], 'userRegions');
+        // Update rangeSelectVar to select user regions
+        mutState.setIn(['regionSelect', this.rangeSelectVar], 'userRegions');
+    },
+
+    toQuerySpecJS: function(mutState) {
+        // Transform internal state into the JS object version of the query specification
+        // that the CGI will receive as this.querySpecVar.
+        var querySpec = {};
+        var dataSources = mutState.get('dataSources').toJS();
+        // Include only the parts of dataSources that are relevant to the query, not UI decorations:
+        querySpec.dataSources = _.map(dataSources, function(ds) {
+            return _.pick(ds, ['trackPath']);
+        });
+        querySpec.outFileOptions = mutState.get('outFileOptions').toJS();
+        // tableFields for current dataSources will be added in below so delete the current+old:
+        delete querySpec.outFileOptions.tableFields;
+        // Add in uiChoices that apply to dataSources and outFileOptions.
+        _.forEach(dataSources, function(ds, dsIx) {
+            var track = _.last(ds.trackPath);
+            // Build a relatedTables data structure for this track: an ordered list of objects
+            // containing table & ordered list of enabled fields.
+            // First get list of selected related tables, if any:
+            var relSel = this.getUiChoice(mutState, ['relatedSelected', track]);
+            var tfChoicesMain = this.getUiChoice(mutState, ['tableFields', track]) ||
+                               Immutable.Map();
+            var tfChoicesRel = this.getUiChoice(mutState, ['relatedTableFields', track]) ||
+                               Immutable.List();
+            var relatedTables, tfChoices;
+            if (relSel && relSel.size > 0) {
+                // Make the relatedTables data structure with empty field lists:
+                relatedTables = relSel.map(
+                    function(table) {
+                        return { table: table, fields: [] };
+                    },
+                    this).toArray();
+                // Now add the selected fields -- from only the selected related tables:
+                tfChoices = tfChoicesRel.filter(function (fields, table) {
+                    return relSel.find(function(t) { return t === table; });
+                });
+                if (tfChoices && tfChoices.size > 0) {
+                    _.forEach(relatedTables,
+                        function (info) {
+                            var fields = tfChoices.get(info.table);
+                            if (fields) {
+                                info.fields = fields.toArray();
+                            }
+                        }
+                    );
+                }
+                _.set(querySpec, ['dataSources', dsIx, 'config', 'relatedTables'],
+                      relatedTables);
+                // n/a for missing values, to match hgTables
+                _.set(querySpec, ['dataSources', dsIx, 'config', 'naForMissing'], true);
+            }
+            if (tfChoicesMain) {
+                _.set(querySpec, ['outFileOptions', 'tableFields', track],
+                      tfChoicesMain.toJS());
+            }
+        }, this);
+        console.log('new querySpec:', querySpec);
+        return querySpec;
     },
 
     cartSendQuerySpec: function(mutState) {
         // When some part of querySpec changes, update the cart variable.
-        var state = mutState || this.state;
-        var querySpec = state.get('hgi_querySpec').toJS();
-        // Remove UI-only fields from dataSources:
-        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
-            return _.omit(ds, ['schemaUrl', 'label']);
-        });
-        this.cartSet('hgi_querySpec', JSON.stringify(querySpec));
+        var querySpec = this.toQuerySpecJS(mutState);
+        this.cartSet(this.querySpecVar, querySpec);
     },
 
     changeAddDsMenu: function(mutState, uiPath, newValue) {
@@ -475,22 +793,22 @@ var HgIntegratorModel = ImModel.extend({
         this.groupedTrackDbToMenus(mutState, db, trackPath, ix);
         // Store updated trackPath in state and cart
         trackPath = this.getAddDsTrackPath(mutState);
-        mutState.set('hgi_addDsTrackPath', trackPath);
-        this.cartSet('hgi_addDsTrackPath', JSON.stringify(trackPath.toJS()));
+        mutState.set(this.addDsSelectVar, trackPath);
+        this.cartSet(this.addDsSelectVar, trackPath);
     },
 
     addDataSource: function(mutState) {
         // User clicked button to add a new data source (track/table); tell server and render,
         // unless they have reached the max number of allowed data sources, or are trying to
         // add a data source that has already been added.
-        if (mutState.getIn(['hgi_querySpec', 'dataSources']).size >= this.maxDataSources) {
+        if (mutState.get('dataSources').size >= this.maxDataSources) {
             alert("Sorry, you can choose a maximum of " + this.maxDataSources + " data sources.");
             return;
         }
         var addDsTrackPath = this.getAddDsTrackPath(mutState);
         var label = this.labelFromTrackPath(mutState, addDsTrackPath);
         var alreadyAdded = false;
-        mutState.getIn(['hgi_querySpec', 'dataSources']).forEach(function (ds) {
+        mutState.get('dataSources').forEach(function (ds) {
             var dsTrackPath = ds.get('trackPath');
             if (dsTrackPath.equals(addDsTrackPath)) {
                 alreadyAdded = true;
@@ -506,7 +824,7 @@ var HgIntegratorModel = ImModel.extend({
         var dataSource = Immutable.fromJS({ trackPath: addDsTrackPath,
                                             label: label,
                                             schemaUrl: schemaUrl});
-        mutState.updateIn(['hgi_querySpec', 'dataSources'], function(list) {
+        mutState.update('dataSources', function(list) {
             return list.push(dataSource);
         });
         this.disableDataSourcesInAddDsMenus(mutState);
@@ -532,7 +850,7 @@ var HgIntegratorModel = ImModel.extend({
     reorderDataSources: function(mutState, path, reordering) {
         // User dragged and dropped a Data Source section to a new position; update accordingly.
         // reordering is an array whose indices are new positions and values are old positions.
-        mutState.updateIn(['hgi_querySpec', 'dataSources'], function(dataSources) {
+        mutState.update('dataSources', function(dataSources) {
             if (reordering.length !== dataSources.size) {
                 console.warn(dataSources, reordering);
                 this.error('reorderDataSources: there are', dataSources.size, 'data sources but',
@@ -557,68 +875,214 @@ var HgIntegratorModel = ImModel.extend({
         } else {
             var ix = path[1], action = path[2];
             if (action && action === 'remove') {
-                mutState.updateIn(['hgi_querySpec', 'dataSources'], function(oldList) {
+                mutState.update('dataSources', function(oldList) {
                     return oldList.remove(ix);
                 });
                 this.disableDataSourcesInAddDsMenus(mutState);
                 this.updateAddDsDisable(mutState);
                 this.cartSendQuerySpec(mutState);
-            } else if (action && action === 'moreOptions') {
-                var track = mutState.getIn(['hgi_querySpec', 'dataSources', ix, 'track']);
-                alert('more options ' + track);
             } else {
                 this.error('dataSourceClick: unrecognized path', path);
             }
         }
     },
 
-    doChooseFields: function(mutState) {
-        // User clicked the 'Choose fields' button -- get field info from server.
-        var dataSources = mutState.getIn(['hgi_querySpec', 'dataSources']);
-        var tables = dataSources.map(function(dataSource) {
-            return dataSource.get('trackPath').last();
-        });
-        this.cartDo({ getFields: { tables: tables.join(',') } });
+    getTableStringForTrack: function(mutState, track) {
+        var tableStr = track;
+        // Add in related tables, if any
+        var relSel = this.getUiChoice(mutState, ['relatedSelected', track]);
+        if (relSel) {
+            relSel.forEach(function(relTable) {
+                tableStr += ',' + relTable;
+            });
+        }
+        return tableStr;
     },
 
-    doFieldSelect: function(mutState, path, newValue) {
-        // User clicked something on the field selection popup
-        if (path[2] === 'remove') {
-            mutState.set('tableFields', null);
+    doChooseFields: function(mutState) {
+        // User clicked the 'Choose fields' button -- get field info from server.
+        var dataSources = mutState.get('dataSources');
+        var tableGroupStr = dataSources.map(function(dataSource) {
+            var track = dataSource.get('trackPath').last();
+            return this.getTableStringForTrack(mutState, track);
+        }, this).toJS().join(';');
+        // Create empty fieldSelect state so the dialog will pop up and show a spinner.
+        // Sometimes these requests can take a while.
+        mutState.set('fieldSelect', Immutable.Map());
+        this.cartDo({ getFields: { tableGroups: tableGroupStr, jsonName: 'fieldSelect' },
+                      getRelatedTables: { tableGroups: tableGroupStr,
+                                          jsonName: 'relatedTablesAll' } });
+    },
+
+    fieldSelectRemove: function(mutState) {
+        // Make the 'Choose Fields' popup go away
+        mutState.set('fieldSelect', null);
+    },
+
+    fieldSelectToUiChoices: function(mutState, track, table, fsPathToFields) {
+        // Regenerate the uiChoices for track/table/fields (after a field has been changed).
+        // fieldList (fieldSelect.track.tableFields.table.fields) is an OrderedMap, and it
+        // is ordered as the columns in the table, not in the order that the checkboxes are
+        // checked by the user.  Preserve the order by generating a new ordered map for
+        // main table fields, or a new list for related table fields.
+        var fieldList = mutState.getIn(fsPathToFields);
+        var nonDefaultFields = fieldList.filter(
+                                   function(fieldInfo) {
+                                       var field = fieldInfo.get('name');
+                                       return (fieldInfo.get('checked') !==
+                                               this.fieldCheckedByDefault(table, field));
+                                   }, this);
+        var newOMap, newList;
+        if (table === track) {
+            newOMap = Immutable.OrderedMap(
+                nonDefaultFields.map(
+                    function(fieldInfo) {
+                        return [fieldInfo.get('name'), fieldInfo.get('checked')];
+                    })
+            );
+            this.setUiChoice(mutState, ['tableFields', track], newOMap);
         } else {
-            var table = path[2], field = path[3];
-            if (field) {
-                // Update field's status in UI state and hgi_querySpec
-                mutState.setIn(['tableFields', table, 'fields', field, 'checked'], newValue);
-                mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
-                                     table, field], newValue);
-            } else {
-                // 'Set all' or 'Clear all' according to newValue
-                mutState.updateIn(['tableFields', table, 'fields'], function(fieldVals) {
-                    return fieldVals.map(function(checkedAndDesc) {
-                        return checkedAndDesc.set('checked', newValue);
-                    });
-                });
-                // hgi_querySpec might not yet contain any explicit choices for table's fields,
-                // so iterate over the complete set of fields in top-level tableFields:
-                mutState.getIn(['tableFields', table, 'fields']
-                               ).forEach(function(checkedAndDesc, field) {
-                    mutState.setIn(['hgi_querySpec', 'outFileOptions', 'tableFields',
-                                         table, field], checkedAndDesc.get('checked'));
-                });
-            }
-            this.cartSendQuerySpec(mutState);
+            newList = nonDefaultFields.map(function(fieldInfo) { return fieldInfo.get('name'); });
+            this.setUiChoice(mutState, ['relatedTableFields', track, table], newList);
         }
+    },
+
+    fieldSelectSetOne: function(mutState, path, newValue) {
+        // Set (or clear) the checkbox for a particular field
+        var track = path[3];
+        var table = path[4];
+        var field = path[5];
+        var fsPathToFields = ['fieldSelect', track, 'tableFields', table, 'fields'];
+        var fieldList = mutState.getIn(fsPathToFields);
+        var fieldIx = fieldList.findIndex(
+            function (fieldInfo) {
+                return fieldInfo.get('name') === field;
+            });
+        if (fieldIx < 0) {
+            this.error('fieldSelectSetOne: unrecognized field "' + field + '" for track ' +
+                       track + ', table ' + table);
+            return;
+        }
+        // Update field's status in popup, uiChoices and cart
+        //#*** TODO: figure out a way to avoid duplication of state in popup and uiChoices.
+        //#*** Reconstructing popup all the time is more functional but loses Immutable benefits.
+        //#*** Perhaps, when popup is open, it owns the tableFields state, and feeds that
+        //#*** back into uiChoices when the user clicks Done.  That also
+        //#*** would work better if we want to make popup actions cancellable.
+        //#*** Or, if we can do something like make the popup state a bunch of cursors into
+        //#*** uiChoices, that might solve the bogus duplication problem.
+        mutState.setIn(fsPathToFields.concat([fieldIx, 'checked']), newValue);
+        this.fieldSelectToUiChoices(mutState, track, table, fsPathToFields);
+        this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+        this.cartSendQuerySpec(mutState);
+    },
+
+    fieldSelectSetAll: function(mutState, path, newValue) {
+        // 'Set all' or 'Clear all' according to newValue
+        var track = path[3];
+        var table = path[4];
+        var fsPathToFields = ['fieldSelect', track, 'tableFields', table, 'fields'];
+        // Update all of table's fields in popup, uiChoices and cart.
+        //#*** as above, reduce state duplication
+        mutState.updateIn(fsPathToFields,
+                          function(fieldVals) {
+                              return fieldVals.map(
+                                  function(fieldInfo) {
+                                      return fieldInfo.set('checked', newValue);
+                                  });
+                          });
+        this.fieldSelectToUiChoices(mutState, track, table, fsPathToFields);
+        this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+        this.cartSendQuerySpec(mutState);
+    },
+
+    fieldSelectSelectRelated: function(mutState, path, newValue) {
+        // User changed the select input for choosing a related table
+        var track = path[3];
+        mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'selected'], newValue);
+        this.setUiChoice(mutState, ['relatedAvailable', track, 'selected'], newValue);
+        // Update menus of related tables and the flag to disable the add button.
+        this.updateRelatedTablesMenus(mutState);
+        this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+    },
+
+    fieldSelectAddRelated: function(mutState, path) {
+        // User wants to add the selected related table for track
+        var track = path[3];
+        var relTable = mutState.getIn(['fieldSelect', track, 'relatedAvailable', 'selected']);
+        var relSel = this.getUiChoice(mutState, ['relatedSelected', track]) || Immutable.List();
+        var alreadyAddedTable = relSel.some(function (t) { return t === relTable; });
+        var currentTables = mutState.getIn(['fieldSelect', track, 'tableFields']);
+        var relTableCount = currentTables.size - 1;
+        var newRelSel, tableGroupStr, label;
+        // Watch out for duplicate adds or trying to add more than the max.
+        if (alreadyAddedTable) {
+            // Prepend db to related tables that start with ".".
+            label = relTable;
+            if (relTable.charAt(0) === ".") {
+                label = this.getDb(mutState) + relTable;
+            }
+            alert("Table " + label + " has already been added.");
+            return;
+        }
+        if (relTableCount >= this.maxRelatedTables) {
+            alert("Sorry, you can choose a maximum of " + this.maxRelatedTables +
+                  " related tables.");
+            return;
+        }
+        if (relTable) {
+            // Add a stub relTable section (with spinner until server response gives fields)
+            label = mutState.getIn(['fieldSelect', track, 'relatedAvailable', 'options'])
+                            .find(
+                function (option) {
+                    return option.get('value') === relTable;
+                }
+            ).get('label');
+            mutState.setIn(['fieldSelect', track, 'tableFields', relTable, 'label'],
+                           label);
+            // Add relTable to the list of selected related tables for this dataSource
+            newRelSel = relSel.push(relTable);
+            this.setUiChoice(mutState, ['relatedSelected', track], newRelSel);
+            // Update menus of related tables to gray out the newly selected one.
+            this.updateRelatedTablesMenus(mutState);
+            this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+            this.cartSendQuerySpec(mutState);
+            tableGroupStr = this.getTableStringForTrack(mutState, track);
+            this.cartDo({ getFields: { tableGroups: tableGroupStr,
+                                       jsonName: 'relatedFields' },
+                          getRelatedTables: { tableGroups: tableGroupStr,
+                                              jsonName: 'relatedTablesUpdate' }
+                        });
+        } else {
+            this.error('Got "addRelated" event but can\'t find selected related table');
+        }
+    },
+
+    fieldSelectRemoveRelated: function(mutState, path) {
+        // User doesn't want to choose fields from this related table after all.
+        var track = path[3];
+        var relTable = path[4];
+        var tableGroupStr;
+        // Remove relTable from the list of selected related tables for this dataSource
+        var relSel = this.getUiChoice(mutState, ['relatedSelected', track]) || Immutable.List();
+        var newRelSel = relSel.filter(function(table) { return table !== relTable; });
+        this.setUiChoice(mutState, ['relatedSelected', track], newRelSel);
+        // Remove relTable's section from fieldSelect Modal
+        mutState.removeIn(['fieldSelect', track, 'tableFields', relTable]);
+        // Update menus of related tables to show that relTable is now available for selection.
+        this.updateRelatedTablesMenus(mutState);
+        this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
+        this.cartSendQuerySpec(mutState);
+        // Get the possibly expanded list of related tables from the server.
+        tableGroupStr = this.getTableStringForTrack(mutState, track);
+        this.cartDo({ getRelatedTables: { tableGroups: tableGroupStr,
+                                          jsonName: 'relatedTablesUpdate' } });
     },
 
     doGetOutput: function(mutState) {
         // User clicked 'Get output' button; make a form and submit it.
-        var querySpec = mutState.get('hgi_querySpec').toJS();
-        // Remove UI-only fields from dataSources:
-        querySpec.dataSources = _.map(querySpec.dataSources, function(ds) {
-            return _.omit(ds, ['schemaUrl', 'label']);
-        });
-        var doFile = mutState.getIn(['hgi_querySpec', 'outFileOptions', 'doFile']);
+        var querySpec = this.toQuerySpecJS(mutState), querySpecStr;
+        var doFile = mutState.getIn(['outFileOptions', 'doFile']);
         if (querySpec.dataSources.length < 1) {
             alert('Please add at least one data source.');
         } else {
@@ -626,8 +1090,8 @@ var HgIntegratorModel = ImModel.extend({
                 // Show loading image and message that the query might take a while.
                 mutState.set('showLoadingImage', true);
             }
-            querySpec = encodeURIComponent(JSON.stringify(querySpec));
-            $('input[name="hgi_querySpec"]').val(querySpec);
+            querySpecStr = encodeURIComponent(JSON.stringify(querySpec));
+            $('input[name="' + this.querySpecVar + '"]').val(querySpecStr);
             $('#queryForm')[0].submit();
         }
     },
@@ -635,14 +1099,8 @@ var HgIntegratorModel = ImModel.extend({
     outFileOptionsClick: function(mutState, path, newValue) {
         // User clicked on something in OutFileOptions; path[1] is either an action or
         // the piece of state that needs to be updated on server
-        if (path[1] === 'chooseFields') {
-            this.doChooseFields(mutState);
-        } else if (path[1] === 'fieldSelect') {
-            this.doFieldSelect(mutState, path, newValue);
-        } else if (path[1] === 'getOutput') {
-            this.doGetOutput(mutState);
-        } else {
-            mutState.setIn(['hgi_querySpec'].concat(path), newValue);
+        if (! _.includes(['chooseFields', 'fieldSelect', 'getOutput'], path[1])) {
+            mutState.setIn(path, newValue);
             this.cartSendQuerySpec(mutState);
         }
     },
@@ -659,7 +1117,8 @@ var HgIntegratorModel = ImModel.extend({
         var newPos = this.getDefaultPos(mutState);
         this.setPosition(mutState, newPos);
         // Parallel requests for little stuff that we need ASAP and potentially huge trackDb:
-        this.cartDo({ get: { 'var': 'position,hgi_querySpec' },
+        this.cartDo({ get: { 'var': 'position' },
+                      getQueryState: {},
                       getGeneSuggestTrack: {},
                       getUserRegions: {}
                       });
@@ -669,14 +1128,19 @@ var HgIntegratorModel = ImModel.extend({
 
     initialize: function() {
         // Register handlers for cart variables that need special treatment:
-        this.registerCartVarHandler(['hgi_querySpec', 'hgi_range', 'tableFields',
-                                     'userRegionsUpdate'],
-                                    this.handleCartVar);
-        this.registerCartVarHandler('hgi_addDsTrackPath', this.handleJsonBlob);
+        this.registerCartVarHandler(['userRegionsUpdate', 'userRegions'],
+                                    this.handleUserRegionsUpdate);
+        this.registerCartVarHandler('queryState', this.handleQueryState);
+        this.registerCartVarHandler(this.rangeSelectVar, this.handleRangeSelect);
+        this.registerCartVarHandler('fieldSelect', this.handleFieldSelect);
+        this.registerCartVarHandler('relatedFields', this.handleRelatedFields);
+        this.registerCartVarHandler(['relatedTablesAll', 'relatedTablesUpdate'],
+                                    this.handleRelatedTables);
+        this.registerCartVarHandler(this.addDsSelectVar, this.handleJsonBlob);
         this.registerCartVarHandler('groupedTrackDb', this.handleGroupedTrackDb);
         this.registerCartValidateHandler(this.validateCart);
         // Register handlers for UI events:
-        this.registerUiHandler(['regionSelect', 'hgi_range'], this.changeRange);
+        this.registerUiHandler(['regionSelect', this.rangeSelectVar], this.changeRange);
         this.registerUiHandler(['regionSelect', 'changeRegions'], this.openUserRegions);
         this.registerUiHandler(['regionSelect', 'clearRegions'], this.clearUserRegions);
         this.registerUiHandler(['regionSelect', 'userRegions', 'uploaded'],
@@ -688,6 +1152,20 @@ var HgIntegratorModel = ImModel.extend({
         this.registerUiHandler(['customTracks'], this.goToCustomTracks);
         this.registerUiHandler(['dataSources'], this.dataSourceClick);
         this.registerUiHandler(['outFileOptions'], this.outFileOptionsClick);
+        this.registerUiHandler(['outFileOptions', 'chooseFields'], this.doChooseFields);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'remove'],
+                               this.fieldSelectRemove);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'checked'],
+                               this.fieldSelectSetOne);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'setAll'],
+                               this.fieldSelectSetAll);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'selectRelated'],
+                               this.fieldSelectSelectRelated);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'addRelated'],
+                               this.fieldSelectAddRelated);
+        this.registerUiHandler(['outFileOptions', 'fieldSelect', 'removeRelated'],
+                               this.fieldSelectRemoveRelated);
+        this.registerUiHandler(['outFileOptions', 'getOutput'], this.doGetOutput);
 
         // Tell cart what CGI to send requests to
         this.cart.setCgi('hgIntegrator');
@@ -700,7 +1178,8 @@ var HgIntegratorModel = ImModel.extend({
             // Fire off some requests in parallel -- some are much slower than others.
             // Get clade/org/db and important small cart variables.
             this.cartDo({ getCladeOrgDbPos: {},
-                          get: {'var': 'hgi_range,hgi_querySpec,hgi_addDsTrackPath'},
+                          getQueryState: {},
+                          get: {'var': this.rangeSelectVar + ',' + this.addDsSelectVar},
                           getUserRegions: {}
                         });
             // The groupedTrackDb structure is so large for hg19 and other well-annotated

@@ -1,0 +1,5 @@
+#file	format	output	meta	enriched_in	ucsc_db	paired_end	file_part	lab_quake_fluidics_chip	lab_quake_fluidics_cell	age	tissue	donor
+fastqFiles/fq1-R1-001.fastq.gz	fastq	reads	A2DC7_1_1l_C08_IL3230-702-502	exon	mm10	1	1	1772990001	C08	1	brain	1
+fastqFiles/fq1-R2-001.fastq.gz	fastq	reads	A2DC7_1_1l_C08_IL3230-702-502	exon	mm10	2	1	1772990001	C08	1	brain	2
+fastqFiles/fq2-R1-001.fastq.gz	fastq	reads	A2DC7_1_1l_C09_IL3230-701-502	exon	mm10	1	1	1772990001	C09	2	brain	3
+fastqFiles/fq2-R2-001.fastq.gz	fastq	reads	A2DC7_1_1l_C09_IL3230-701-502	exon	mm10	2	1	1772990001	C09	2	brain	4

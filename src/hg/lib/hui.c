@@ -42,6 +42,7 @@
 #include "pgSnp.h"
 #include "memgfx.h"
 #include "trackHub.h"
+#include "gtexUi.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -6696,7 +6697,6 @@ indelShowOptionsWithNameExt(cart, tdb, name, "LRG transcript sequence", FALSE, F
 cfgEndBox(boxed);
 }
 
-
 struct trackDb *rFindView(struct trackDb *forest, char *view)
 // Return the trackDb on the list that matches the view tag. Prefers ancestors before decendents
 {
@@ -8322,6 +8322,49 @@ if (pExtras != NULL)
 }
 #endif///def EXTRA_FIELDS_SUPPORT
 
+static boolean tableDescriptionsExists(struct sqlConnection *conn)
+/* Cache flag for whether tableDescriptions exists in conn, in case we will need to
+ * fetch a lot of descriptions from tableDescriptions. */
+{
+static struct hash *hash = NULL;
+if (hash == NULL)
+    hash = hashNew(0);
+char *db = sqlGetDatabase(conn);
+int exists =  hashIntValDefault(hash, db, -1);
+if (exists < 0)
+    {
+    exists = sqlTableExists(conn, "tableDescriptions");
+    hashAddInt(hash, db, exists);
+    }
+return (boolean)exists;
+}
+
+struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table)
+// If there is a tableDescriptions table and it has an entry for table, return
+// a parsed autoSql object; otherwise return NULL.
+{
+struct asObject *asObj = NULL;
+if (tableDescriptionsExists(conn))
+    {
+    char query[PATH_LEN*2];
+    // Try unsplit table first.
+    sqlSafef(query, sizeof(query),
+             "select autoSqlDef from tableDescriptions where tableName='%s'", table);
+    char *asText = sqlQuickString(conn, query);
+    // If no result try split table.
+    if (asText == NULL)
+        {
+        sqlSafef(query, sizeof(query),
+                 "select autoSqlDef from tableDescriptions where tableName='chrN_%s'", table);
+        asText = sqlQuickString(conn, query);
+        }
+    if (isNotEmpty(asText))
+        asObj = asParseText(asText);
+    freez(&asText);
+    }
+return asObj;
+}
+
 static struct asObject *asForTdbOrDie(struct sqlConnection *conn, struct trackDb *tdb)
 // Get autoSQL description if any associated with tdb.
 // Abort if there's a problem
@@ -8347,35 +8390,12 @@ else if (sameWord("bedDetail", tdb->type))
 else if (sameWord("pgSnp", tdb->type))
     asObj = pgSnpAsObj();
 else
-    {
-    if (sqlTableExists(conn, "tableDescriptions"))
-        {
-        char query[256];
-        char *asText = NULL;
-
-        // Try unsplit table first.
-        sqlSafef(query, sizeof(query),
-              "select autoSqlDef from tableDescriptions where tableName='%s'",tdb->table);
-        asText = sqlQuickString(conn, query);
-
-        // If no result try split table.
-        if (asText == NULL)
-            {
-            sqlSafef(query, sizeof(query),
-                  "select autoSqlDef from tableDescriptions where tableName='chrN_%s'",tdb->table);
-            asText = sqlQuickString(conn, query);
-            }
-
-        if (asText != NULL && asText[0] != 0)
-            asObj = asParseText(asText);
-        freez(&asText);
-        }
-    }
+    asObj = asFromTableDescriptions(conn, tdb->table);
 return asObj;
 }
 
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb)
-// Get autoSQL description if any associated with table.
+// Get autoSQL description if any associated with table, ignoring errAborts if any.
 {
 struct errCatch *errCatch = errCatchNew();
 struct asObject *asObj = NULL;

@@ -1,0 +1,104 @@
+<h2>Description</h2>
+<p>
+This track shows which genome regions are more or less accessible to next
+generation sequencing methods that use short, paired-end reads.  It summarizes whole
+genome sequencing data from Phase 3 of the
+<a href="http://www.1000genomes.org/"
+target="_blank">1000 Genomes Project</a> and shows two
+levels of stringency:  &quot;pilot&quot; stringency regions (see below) cover 94.5%
+of non-N bases in the genome (excluding alternate haplotype sequences and unplaced contigs;
+95.9% on autosomes)
+and &quot;strict&quot; regions cover 75.5% (76.9% on autosomes).  Each site which meets
+&quot;strict&quot; criteria also passes the &quot;pilot&quot; criteria.
+</p>
+
+<p>
+This track does <b><i>not</i></b> show a mask of regions in which variant calls can
+or cannot be made.
+Some 1000 Genomes Phase 3 variant calls are in regions that do not meet the
+&quot;strict&quot; criteria.
+Phase 3 variant calls are filtered using various tools such as the
+<a href="https://www.broadinstitute.org/gatk/guide/article?id=39"
+target="_blank">Variant Quality Score Recalibrator</a> (VQSR)
+method (implemented in the
+<a href="https://www.broadinstitute.org/gatk/"
+target="_blank">Genome Analysis Toolkit</a> (GATK))
+without regard to the thresholds applied here.
+VQSR and similar tools assess the evidence for variation at sites where a variant is called,
+but say nothing about the remaining sites.
+The 1000 Genomes Project Phase 3 variant calls combine information from low coverage sequencing,
+exome sequencing and array genotyping for improved sensitivity and specificity.
+The coverage masks are based on low coverage sequencing only.
+</p>
+
+<p>
+These regions will be useful for (a) comparing accessibility using current technologies
+to accessibility in the 1000 Genomes Pilot Project, and (b) population genetic
+analyses (such as estimates of mutation rate) that must focus on genomic regions
+with very low false positive and false negative rates.
+</p>
+
+<h2>Methods</h2>
+<p>
+The total depth of mapped sequence reads, the average mapping quality score
+and the fraction of reads with mapping quality zero (meaning that this read maps
+equally well to more than one location in the genome) are tabulated from
+1000 Genomes Project Phase 3 .bam files.
+This combines whole genome sequence data from 2,504 individuals,
+giving a genome wide average depth of coverage of 17,920 reads.
+Both &quot;pilot&quot; and &quot;strict&quot; tracks are .bed file conversions of the
+&quot;pass&quot; regions from
+<a href="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/supporting/accessible_genome_masks/"
+target="_blank">.fasta mask files</a>.
+See the
+<a href="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/release/20130502/supporting/accessible_genome_masks/README.accessible_genome_mask.20140520"
+target="_blank">README file</a> in that directory and
+<a href="http://www.nature.com/nature/journal/v526/n7571/extref/nature15393-s1.pdf"
+target="_blank">Supplementary Information</a> (section 9.2)
+of 1000 Genomes Project Consortium, <i>et al.</i> (2015) for more details.
+</p>
+
+<p>
+The &quot;pilot&quot; criteria require a depth of coverage between 8,960 and 35,840 inclusive
+(between one-half and twice the average depth) and that no more than 20% of
+covering reads have mapping quality zero.  These are equivalent to the criteria
+used for analyses in the 1000 Genomes Pilot paper (2010).  The &quot;strict&quot; criteria
+require a depth of coverage between 8,960 and 26,880 inclusive, no more than 0.1%
+of reads with mapping quality zero, and an average mapping quality of 56 or greater.
+This definition is quite stringent and focuses on the most unique regions of the
+genome.
+Since approximately
+one-half of 1000 Genomes Project individuals are males, the depth of coverage
+is generally lower on the X chromosome.  Coverage thresholds on the X chromosome were
+adjusted by a factor of 3/4 and on the Y chromosome by a factor of 1/2.
+</p>
+
+<h2>Credits</h2>
+<p>
+Thank you to
+Mary Kate Wing at the
+<a href="http://csg.sph.umich.edu/"
+target="_blank">University of Michigan Center for Statistical Genetics</a>
+for providing the track data files.
+Thank you to Tom Blackwell and Mary Kate Wing at UM for editing the description and methods.
+</p>
+
+<h2>References</h2>
+<p>
+1000 Genomes Project Consortium, Abecasis GR, Altshuler D, Auton A, Brooks LD, Durbin RM, Gibbs RA,
+Hurles ME, McVean GA.
+<a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15393.html" target="_blank">
+A map of human genome variation from population-scale sequencing</a>.
+<em>Nature</em>. 2010 Oct 28;467(7319):1061-73.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/20981092" target="_blank">20981092</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3042601/" target="_blank">PMC3042601</a>
+</p>
+
+<p>
+1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO,
+Marchini JL, McCarthy S, McVean GA <em>et al</em>.
+<a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15393.html" target="_blank">
+A global reference for human genetic variation</a>.
+<em>Nature</em>. 2015 Oct 1;526(7571):68-74.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26432245" target="_blank">26432245</a>
+</p>

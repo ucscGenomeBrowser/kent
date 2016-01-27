@@ -519,7 +519,7 @@ else
     {
     int q1Ix = count/4;
     int q3Ix = count - 1 - q1Ix;
-    uglyf("count %d, q1Ix %d, q3Ix %d\n", count, q1Ix, q3Ix);
+    verbose(4, "count %d, q1Ix %d, q3Ix %d\n", count, q1Ix, q3Ix);
     q1 = array[q1Ix];
     q3 = array[q3Ix];
     }

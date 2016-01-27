@@ -28,6 +28,8 @@ struct annoFormatVepExtraItem
     int rowIx;					// Offset of column in row from data source
 						// (N/A for wig sources)
     boolean isRegulatory;			// TRUE if overlap implies regulatory_region
+    boolean isBoolean;				// TRUE if we don't need to print out the value,
+						// only whether it is found
     };
 
 struct annoFormatVep;
@@ -39,8 +41,9 @@ struct annoFormatVepExtraSource
     struct annoStreamer *source;		// streamer or grator: same pointers as below
     struct annoFormatVepExtraItem *items;	// one or more columns of source and their tags
 
-    void (*printExtra)(struct annoFormatVep *afVep, struct annoFormatVepExtraItem *extraItem,
-		       struct annoRow *extraRows, boolean *pGotExtra);
+    void (*printExtra)(struct annoFormatVepExtraSource *self,
+                       struct annoFormatVep *afVep, struct annoFormatVepExtraItem *extraItem,
+		       struct annoRow *extraRows, struct annoRow *gpvRow, boolean *pGotExtra);
     /* Method for printing items from this source; pGotExtra is in/out to keep track of
      * whether any call has actually printed something yet. */
     };
@@ -839,6 +842,51 @@ for (row = extraRows;  row != NULL;  row = row->next)
     }
 }
 
+static void afVepPrintDbNsfpVest(struct annoFormatVep *self,
+                                 struct annoFormatVepExtraSource *extraSrc,
+                                 struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
+                                 boolean *pGotExtra)
+/* Match the allele from gpFx to the per-allele scores in row from dbNsfpVest */
+{
+// TODO: also compare var[123] protein change columns to gpFx to make sure we have the right one
+// Look up column indices only once:
+static int ensTxIdIx=-1, altAl1Ix, score1Ix, altAl2Ix, score2Ix, altAl3Ix, score3Ix;
+if (ensTxIdIx == -1)
+    {
+    struct asColumn *columns = extraSrc->source->asObj->columnList;
+    ensTxIdIx = asColumnFindIx(columns, "ensTxId");
+    altAl1Ix = asColumnFindIx(columns, "altAl1");
+    score1Ix = asColumnFindIx(columns, "score1");
+    altAl2Ix = asColumnFindIx(columns, "altAl2");
+    score2Ix = asColumnFindIx(columns, "score2");
+    altAl3Ix = asColumnFindIx(columns, "altAl3");
+    score3Ix = asColumnFindIx(columns, "score3");
+    }
+
+struct annoRow *row;
+for (row = extraRows;  row != NULL;  row = row->next)
+    {
+    // Skip this row unless it contains the ensTxId found by getDbNsfpEnsTx
+    char **words = row->data;
+    if (differentString(ensTxId, ".") && differentString(words[ensTxIdIx], ".") &&
+	commaSepFindIx(ensTxId, words[ensTxIdIx]) < 0)
+	continue;
+    struct annoFormatVepExtraItem *extraItem = extraSrc->items;
+    char *score = NULL;
+    if (sameString(gpFx->allele, words[altAl1Ix]))
+	score = words[score1Ix];
+    else if (sameString(gpFx->allele, words[altAl2Ix]))
+	score = words[score2Ix];
+    else if (sameString(gpFx->allele, words[altAl3Ix]))
+	score = words[score3Ix];
+    if (isNotEmpty(score) && differentString(score, "."))
+	{
+	afVepNewExtra(self, pGotExtra);
+	fprintf(self->f, "%s=%s", extraItem->tag, score);
+	}
+    }
+}
+
 static void afVepPrintDbNsfpInterPro(struct annoFormatVep *self,
 				     struct annoFormatVepExtraSource *extraSrc,
 				     struct annoRow *extraRows, struct gpFx *gpFx, char *ensTxId,
@@ -966,6 +1014,8 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	    afVepPrintDbNsfpMutationTA(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
 	else if (sameString(asObjName, "dbNsfpLrt"))
 	    afVepPrintDbNsfpLrt(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
+        else if (sameString(asObjName, "dbNsfpVest"))
+	    afVepPrintDbNsfpVest(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
 	else if (sameString(asObjName, "dbNsfpInterPro"))
 	    afVepPrintDbNsfpInterPro(self, extraSrc, extraRows, gpFx, ensTxId, pGotExtra);
 	else if (!sameString(asObjName, "dbNsfpSeqChange"))
@@ -975,9 +1025,11 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
     }
 }
 
-static void afVepPrintExtraWigVec(struct annoFormatVep *self,
+static void afVepPrintExtraWigVec(struct annoFormatVepExtraSource *extraSrc,
+                                  struct annoFormatVep *self,
                                   struct annoFormatVepExtraItem *extraItem,
-                                  struct annoRow *extraRows, boolean *pGotExtra)
+                                  struct annoRow *extraRows, struct annoRow *gpvRow,
+                                  boolean *pGotExtra)
 /* Print values from a wig source with type arWigVec (per-base floats) */
 {
 int i;
@@ -1001,9 +1053,11 @@ for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
     }
 }
 
-static void afVepPrintExtraWigSingle(struct annoFormatVep *self,
+static void afVepPrintExtraWigSingle(struct annoFormatVepExtraSource *extraSrc,
+                                     struct annoFormatVep *self,
                                      struct annoFormatVepExtraItem *extraItem,
-                                     struct annoRow *extraRows, boolean *pGotExtra)
+                                     struct annoRow *extraRows, struct annoRow *gpvRow,
+                                     boolean *pGotExtra)
 /* Print values from a wig source with type arWigSingle (one double per row, e.g. an average) */
 {
 struct annoRow *row;
@@ -1021,31 +1075,57 @@ for (row = extraRows;  row != NULL;  row = row->next)
     }
 }
 
-static void afVepPrintExtraWords(struct annoFormatVep *self,
+static void afVepPrintExtraWords(struct annoFormatVepExtraSource *extraSrc,
+                                 struct annoFormatVep *self,
 				 struct annoFormatVepExtraItem *extraItem,
-				 struct annoRow *extraRows, boolean *pGotExtra)
+				 struct annoRow *extraRows, struct annoRow *gpvRow,
+                                 boolean *pGotExtra)
 /* Print comma-separated values in the specified column from the usual array-of-words. */
 {
 if (extraItem->rowIx < 0)
     errAbort("annoFormatVep: invalid rowIx for tag %s", extraItem->tag);
+char **gpvWords = gpvRow ? gpvRow->data : NULL;
+char *gpvTranscript = gpvWords ? gpvWords[0] : NULL;
+boolean gotGpvTx = FALSE;
 int i;
 struct annoRow *row;
-for (i = 0, row = extraRows;  row != NULL;  i++, row = row->next)
+for (i = 0, row = extraRows;  row != NULL;  row = row->next)
     {
+    char **words = row->data;
+    char *extraTranscript = words[0];
+    // If extraSrc happens to be gpVarSource, use only the row that matches the current
+    // transcript, and use it only once.
+    if (extraSrc->source == self->config->gpVarSource)
+        {
+        if (gpvTranscript == NULL || differentString(extraTranscript, gpvTranscript) || gotGpvTx)
+            continue;
+        gotGpvTx = TRUE;
+        }
+    char *val = words[extraItem->rowIx];
+    if (isEmpty(val))
+        continue;
+    // Strip trailing comma if found
+    int valLen = strlen(val);
+    if (val[valLen-1] == ',')
+        val[valLen-1] = '\0';
     if (i == 0)
 	{
 	afVepNewExtra(self, pGotExtra);
 	fprintf(self->f, "%s=", extraItem->tag);
+        if (extraItem->isBoolean)
+            fputs("YES", self->f);
 	}
-    else
+    else if (! extraItem->isBoolean)
 	fputc(',', self->f);
-    char **words = row->data;
-    char *val = words[extraItem->rowIx];
-    // Watch out for characters that will mess up parsing of EXTRAS column:
-    // #*** When producing HTML output, it would definitely be better to HTML-encode:
-    subChar(val, '=', '_');
-    subChar(val, ';', '_');
-    fputs(val, self->f);
+    if (! extraItem->isBoolean)
+        {
+        // Watch out for characters that will mess up parsing of EXTRAS column:
+        // #*** When producing HTML output, it would definitely be better to HTML-encode:
+        subChar(val, '=', '_');
+        subChar(val, ';', '_');
+        fputs(val, self->f);
+        }
+    i++;
     }
 }
 
@@ -1067,7 +1147,7 @@ for (extraSrc = extras;  extraSrc != NULL;  extraSrc = extraSrc->next)
 	struct annoFormatVepExtraItem *extraItem;
 	for (extraItem = extraSrc->items;  extraItem != NULL;  extraItem = extraItem->next)
 	    if (includeRegulatory || ! extraItem->isRegulatory)
-		extraSrc->printExtra(self, extraItem, extraRows, pGotExtra);
+		extraSrc->printExtra(extraSrc, self, extraItem, extraRows, gpvRow, pGotExtra);
 	}
     }
 // VEP automatically adds DISTANCE for upstream/downstream variants
@@ -1276,6 +1356,8 @@ else if (! asColumnNamesMatchFirstN(config->gpVarSource->asObj, genePredAsObj(),
 struct asColumn *gpvAsColumns = config->gpVarSource->asObj->columnList;
 self->geneNameIx = asColumnFindIx(gpvAsColumns, "geneSymbol");
 if (self->geneNameIx < 0)
+    self->geneNameIx = asColumnFindIx(gpvAsColumns, "kgXref_geneSymbol");
+if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "name2");
 if (self->geneNameIx < 0)
     self->geneNameIx = asColumnFindIx(gpvAsColumns, "proteinID");
@@ -1350,7 +1432,8 @@ return (struct annoFormatter *)self;
 }
 
 static void afvAddExtraItemMaybeReg(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
-				    char *tag, char *description, char *column, boolean isReg)
+				    char *tag, char *description, char *column, boolean isBoolean,
+                                    boolean isReg)
 /* Tell annoFormatVep that it should include the given column of extraSource
  * in the EXTRAS column with tag.  The VEP header will include tag's description.
  * If isReg, overlap implies that the variant has consequence regulatory_region_variant.
@@ -1381,16 +1464,18 @@ item->rowIx = -1;
 if (isNotEmpty(column))
     item->rowIx = asColumnFindIx(extraSource->asObj->columnList, column);
 item->isRegulatory = isReg;
+item->isBoolean = isBoolean;
 slAddTail(&(src->items), item);
 }
 
 void annoFormatVepAddExtraItem(struct annoFormatter *fSelf, struct annoStreamer *extraSource,
-			       char *tag, char *description, char *column)
+			       char *tag, char *description, char *column, boolean isBoolean)
 /* Tell annoFormatVep that it should include the given column of extraSource
  * in the EXTRAS column with tag.  The VEP header will include tag's description.
- * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored. */
+ * For some special-cased sources e.g. dbNsfp files, column may be NULL/ignored.
+ * If isBoolean, the column's description won't be output, only whether a match was found. */
 {
-afvAddExtraItemMaybeReg(fSelf, extraSource, tag, description, column, FALSE);
+afvAddExtraItemMaybeReg(fSelf, extraSource, tag, description, column, isBoolean, FALSE);
 }
 
 void annoFormatVepAddRegulatory(struct annoFormatter *fSelf, struct annoStreamer *regSource,
@@ -1399,5 +1484,5 @@ void annoFormatVepAddRegulatory(struct annoFormatter *fSelf, struct annoStreamer
  * with regSource, and to include the given column of regSource in the EXTRAS column.
  * The VEP header will include tag's description. */
 {
-afvAddExtraItemMaybeReg(fSelf, regSource, tag, description, column, TRUE);
+afvAddExtraItemMaybeReg(fSelf, regSource, tag, description, column, FALSE, TRUE);
 }

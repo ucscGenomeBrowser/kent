@@ -276,10 +276,11 @@ track->drawItemAt = factorSourceDrawMotifForItemAt;
 
 // suppress re-draw of item labels in motif color
 extern boolean withLeftLabels;
+boolean saveWithLeftLabels = withLeftLabels;
 withLeftLabels = FALSE;
 genericDrawItems(track, seqStart, seqEnd, hvg, xOff, yOff, width,
 	font, color, vis);
-withLeftLabels = TRUE;
+withLeftLabels = saveWithLeftLabels;
 }
 
 void factorSourceMethods(struct track *track)

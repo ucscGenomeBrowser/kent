@@ -38,6 +38,44 @@
 #include <dirent.h>
 #include <openssl/sha.h>
 
+/* The stdio stream we'll use to output statistics on file i/o.  Off by default. */
+FILE *udcLogStream = NULL;
+
+void udcSetLog(FILE *fp)
+/* Turn on logging of file i/o. 
+ * For each UDC file two lines are written.  One line for the open, and one line for the close. 
+ * The Open line just has the URL being opened.
+ * The Close line has the the URL plus a bunch of counts of the number of seeks, reads, and writes
+ *   for the following four files: the udc bitmap, the udc sparse data, the incoming calls
+ *   to the UDC layer, and the network connection to the (possibly) remote file.
+ *   There are two additional counts: the number of socket connects, and the 
+ *   number of times a socket is reused instead of closed and reopened.
+ */
+{
+udcLogStream = fp;
+fprintf(fp, "Begin\n");
+}
+
+struct ioStats
+/* Statistics concerning reads and seeks. */
+    {
+    bits64 numSeeks;            /* The number of seeks on this file */
+    bits64 numReads;            /* The number of reads from this file */
+    bits64 bytesRead;           /* The number of bytes read from this file */
+    bits64 numWrites;           /* The number of writes to this file */
+    bits64 bytesWritten;        /* The number of bytes written to this file */
+    };
+
+struct ios
+/* Statistics concerning reads and seeks for sparse, bitmap, url, and to us. */
+    {
+    struct ioStats bit;         /* Statistics on file i/o to the bitmap file. */
+    struct ioStats sparse;      /* Statistics on file i/o to the sparse data file. */
+    struct ioStats udc;         /* Statistics on file i/o from the application to us. */
+    struct ioStats net;         /* Statistics on file i/o over the network. */
+    bits64 numConnects;         /* The number of socket connections made. */
+    bits64 numReuse;            /* The number of socket reuses. */
+    };
 
 #define udcBlockSize (8*1024)
 /* All fetch requests are rounded up to block size. */
@@ -55,7 +93,7 @@ struct connInfo
     };
 
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
-			       struct connInfo *ci);
+			       struct udcFile *file);
 /* Type for callback function that fetches file data. */
 
 struct udcRemoteFileInfo
@@ -75,6 +113,7 @@ struct udcProtocol
     struct udcProtocol *next;	/* Next in list */
     UdcDataCallback fetchData;	/* Data fetcher */
     UdcInfoCallback fetchInfo;	/* Timestamp & size fetcher */
+    char *type;
     };
 
 struct udcFile
@@ -100,6 +139,7 @@ struct udcFile
     bits64 endData;		/* End of area in file we know to have data. */
     bits32 bitmapVersion;	/* Version of associated bitmap we were opened with. */
     struct connInfo connInfo;   /* Connection info for open net connection. */
+    struct ios ios;             /* Statistics on file access. */
     };
 
 struct udcBitmap
@@ -123,7 +163,45 @@ static int cacheTimeout = 0;
 
 #define MAX_SKIP_TO_SAVE_RECONNECT (udcMaxBytesPerRemoteFetch / 2)
 
-static void readAndIgnore(int sd, bits64 size)
+static off_t ourMustLseek(struct ioStats *ioStats, int fd, off_t offset, int whence)
+{
+ioStats->numSeeks++;
+return mustLseek(fd, offset, whence);
+}
+
+
+static void ourMustWrite(struct ioStats *ioStats, int fd, void *buf, size_t size)
+{
+ioStats->numWrites++;
+ioStats->bytesWritten += size;
+mustWriteFd(fd, buf, size);
+}
+
+static size_t ourRead(struct ioStats *ioStats, int fd, void *buf, size_t size)
+{
+ioStats->numReads++;
+size_t bytesRead = read(fd, buf, size);
+ioStats->bytesRead += bytesRead;
+
+return bytesRead;
+}
+
+static void ourMustRead(struct ioStats *ioStats, int fd, void *buf, size_t size)
+{
+ioStats->numReads++;
+ioStats->bytesRead += size;
+mustReadFd(fd, buf, size);
+}
+
+static size_t ourFread(struct ioStats *ioStats, void *buf, size_t size, size_t nmemb, FILE *stream)
+{
+ioStats->numReads++;
+ioStats->bytesRead += size * nmemb;
+return fread(buf, size, nmemb, stream);
+}
+
+
+static void readAndIgnore(struct ioStats *ioStats, int sd, bits64 size)
 /* Read size bytes from sd and return. */
 {
 static char *buf = NULL;
@@ -133,7 +211,7 @@ bits64 remaining = size, total = 0;
 while (remaining > 0)
     {
     bits64 chunkSize = min(remaining, udcBlockSize);
-    ssize_t rd = read(sd, buf, chunkSize);
+    ssize_t rd = ourRead(ioStats, sd, buf, chunkSize);
     if (rd < 0)
 	errnoAbort("readAndIgnore: error reading socket after %lld bytes", total);
     remaining -= rd;
@@ -143,19 +221,21 @@ if (total < size)
     errAbort("readAndIgnore: got EOF at %lld bytes (wanted %lld)", total, size);
 }
 
-static int connInfoGetSocket(struct connInfo *ci, char *url, bits64 offset, int size)
+static int connInfoGetSocket(struct udcFile *file, char *url, bits64 offset, int size)
 /* If ci has an open socket and the given offset matches ci's current offset,
  * reuse ci->socket.  Otherwise close the socket, open a new one, and update ci,
  * or return -1 if there is an error opening a new one. */
 {
+struct connInfo *ci = &file->connInfo;
 if (ci != NULL && ci->socket > 0 && ci->offset != offset)
     {
     bits64 skipSize = (offset - ci->offset);
     if (skipSize > 0 && skipSize <= MAX_SKIP_TO_SAVE_RECONNECT)
 	{
 	verbose(4, "!! skipping %lld bytes @%lld to avoid reconnect\n", skipSize, ci->offset);
-	readAndIgnore(ci->socket, skipSize);
+	readAndIgnore(&file->ios.net, ci->socket, skipSize);
 	ci->offset = offset;
+        file->ios.numReuse++;
 	}
     else
 	{
@@ -169,6 +249,7 @@ if (ci != NULL && ci->socket > 0 && ci->offset != offset)
 int sd;
 if (ci == NULL || ci->socket <= 0)
     {
+    file->ios.numConnects++;
     if (ci->redirUrl)
 	{
 	url = transferParamsToRedirectedUrl(url, ci->redirUrl);
@@ -225,7 +306,7 @@ if (stringIn("..", url) || stringIn("~", url) || stringIn("//", url) ||
 return url;
 }
 
-static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
+static int udcDataViaLocal(char *url, bits64 offset, int size, void *buffer, struct udcFile *file)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -235,7 +316,7 @@ verbose(4, "reading remote data - %d bytes at %lld - on %s\n", size, offset, url
 url = assertLocalUrl(url);
 FILE *f = mustOpen(url, "rb");
 fseek(f, offset, SEEK_SET);
-int sizeRead = fread(buffer, 1, size, f);
+int sizeRead = ourFread(&file->ios.net, buffer, 1, size, f);
 if (ferror(f))
     {
     warn("udcDataViaLocal failed to fetch %d bytes at %lld", size, offset);
@@ -263,7 +344,7 @@ return TRUE;
 /********* Section for transparent file protocol **********/
 
 static int udcDataViaTransparent(char *url, bits64 offset, int size, void *buffer,
-				 struct connInfo *ci)
+				 struct udcFile *file)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -282,7 +363,7 @@ return FALSE;
 
 /********* Section for slow local file protocol - simulates network... **********/
 
-static int udcDataViaSlow(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
+static int udcDataViaSlow(char *url, bits64 offset, int size, void *buffer, struct udcFile *file)
 /* Fetch a block of data of given size into buffer using the http: protocol.
 * Returns number of bytes actually read.  Does an errAbort on
 * error.  Typically will be called with size in the 8k - 64k range. */
@@ -301,7 +382,7 @@ for (i=0; i<size; i += step)
     int readChunk = size - i;
     if (readChunk > step)
         readChunk = step;
-    int oneReadSize = fread(pt, 1, readChunk, f);
+    int oneReadSize = ourFread(&file->ios.net, pt, 1, readChunk, f);
     verbose(4, "slowly read %d bytes\n", oneReadSize);
     if (ferror(f))
 	{
@@ -359,7 +440,7 @@ static bool udcCacheEnabled()
 return (defaultDir != NULL);
 }
 
-int udcDataViaHttpOrFtp(char *url, bits64 offset, int size, void *buffer, struct connInfo *ci)
+int udcDataViaHttpOrFtp( char *url, bits64 offset, int size, void *buffer, struct udcFile *file)
 /* Fetch a block of data of given size into buffer using url's protocol,
  * which must be http, https or ftp.  Returns number of bytes actually read.
  * Does an errAbort on error.
@@ -370,12 +451,12 @@ if (startsWith("http://",url) || startsWith("https://",url) || startsWith("ftp:/
 else
     errAbort("Invalid protocol in url [%s] in udcDataViaFtp, only http, https, or ftp supported",
 	     url); 
-int sd = connInfoGetSocket(ci, url, offset, size);
+int sd = connInfoGetSocket(file, url, offset, size);
 if (sd < 0)
     errAbort("Can't get data socket for %s", url);
 int rd = 0, total = 0, remaining = size;
 char *buf = (char *)buffer;
-while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
+while ((remaining > 0) && ((rd = ourRead(&file->ios.net, sd, buf, remaining)) > 0))
     {
     total += rd;
     buf += rd;
@@ -383,6 +464,7 @@ while ((remaining > 0) && ((rd = read(sd, buf, remaining)) > 0))
     }
 if (rd == -1)
     errnoAbort("udcDataViaHttpOrFtp: error reading socket");
+struct connInfo *ci = &file->connInfo;
 if (ci == NULL)
     mustCloseFd(&sd);
 else
@@ -552,15 +634,15 @@ writeOneFd(fd, reserved64);
 writeOneFd(fd, reserved64);
 writeOneFd(fd, reserved64);
 writeOneFd(fd, reserved64);
-long long offset = mustLseek(fd, 0, SEEK_CUR);
+long long offset = ourMustLseek(&file->ios.bit, fd, 0, SEEK_CUR);
 if (offset != udcBitmapHeaderSize)
     errAbort("offset in fd=%d, f=%s is %lld, not expected udcBitmapHeaderSize %d",
 	     fd, file->bitmapFileName, offset, udcBitmapHeaderSize);
 
 /* Write out initial all-zero bitmap, using sparse-file method: write 0 to final address. */
 unsigned char zero = 0;
-mustLseek(fd, bitmapSize-1, SEEK_CUR);
-mustWriteFd(fd, &zero, 1);
+ourMustLseek(&file->ios.bit, fd, bitmapSize-1, SEEK_CUR);
+ourMustWrite(&file->ios.bit, fd, &zero, 1);
 
 /* Clean up bitmap file and name. */
 mustCloseFd(&fd);
@@ -647,26 +729,31 @@ if (sameString(upToColon, "local"))
     {
     prot->fetchData = udcDataViaLocal;
     prot->fetchInfo = udcInfoViaLocal;
+    prot->type = "local";
     }
 else if (sameString(upToColon, "slow"))
     {
     prot->fetchData = udcDataViaSlow;
     prot->fetchInfo = udcInfoViaSlow;
+    prot->type = "slow";
     }
 else if (sameString(upToColon, "http") || sameString(upToColon, "https"))
     {
     prot->fetchData = udcDataViaHttpOrFtp;
     prot->fetchInfo = udcInfoViaHttp;
+    prot->type = "http";
     }
 else if (sameString(upToColon, "ftp"))
     {
     prot->fetchData = udcDataViaHttpOrFtp;
     prot->fetchInfo = udcInfoViaFtp;
+    prot->type = "ftp";
     }
 else if (sameString(upToColon, "transparent"))
     {
     prot->fetchData = udcDataViaTransparent;
     prot->fetchInfo = udcInfoViaTransparent;
+    prot->type = "transparent";
     }
 else
     {
@@ -739,7 +826,7 @@ if (file->size > 0)
         endBlock = 8;
     int initialCachedBlocks = bitFindClear(&b, 0, endBlock);
     file->endData = initialCachedBlocks * udcBlockSize;
-    mustLseek(bits->fd, wasAt, SEEK_SET);
+    ourMustLseek(&file->ios.bit, bits->fd, wasAt, SEEK_SET);
     } 
 
 file->bits = bits;
@@ -961,6 +1048,8 @@ struct udcFile *udcFileMayOpen(char *url, char *cacheDir)
 if (cacheDir == NULL)
     cacheDir = udcDefaultDir();
 verbose(4, "udcfileOpen(%s, %s)\n", url, cacheDir);
+if (udcLogStream)
+    fprintf(udcLogStream, "Open %s\n", url);
 /* Parse out protocol.  Make it "transparent" if none specified. */
 char *protocol = NULL, *afterProtocol = NULL, *colon;
 boolean isTransparent = FALSE;
@@ -1073,6 +1162,7 @@ udcPathAndFileNames(file, cacheDir, protocol, afterProtocol);
 struct slName *list = NULL;
 slAddHead(&list, slNameNew(file->bitmapFileName));
 slAddHead(&list, slNameNew(file->sparseFileName));
+slAddHead(&list, slNameNew(file->redirFileName));
 slReverse(&list);
 freeMem(file->cacheDir);
 freeMem(file->bitmapFileName);
@@ -1089,6 +1179,15 @@ void udcFileClose(struct udcFile **pFile)
 struct udcFile *file = *pFile;
 if (file != NULL)
     {
+    if (udcLogStream)
+        {
+        fprintf(udcLogStream, "Close %s %s %lld %lld bit %lld %lld %lld %lld %lld sparse %lld %lld %lld %lld %lld udc  %lld %lld %lld %lld %lld net %lld %lld %lld %lld %lld \n",
+           file->url, file->prot->type, file->ios.numConnects, file->ios.numReuse,
+           file->ios.bit.numSeeks, file->ios.bit.numReads, file->ios.bit.bytesRead, file->ios.bit.numWrites,  file->ios.bit.bytesWritten, 
+           file->ios.sparse.numSeeks, file->ios.sparse.numReads, file->ios.sparse.bytesRead, file->ios.sparse.numWrites,  file->ios.sparse.bytesWritten, 
+           file->ios.udc.numSeeks, file->ios.udc.numReads, file->ios.udc.bytesRead, file->ios.udc.numWrites,  file->ios.udc.bytesWritten, 
+           file->ios.net.numSeeks, file->ios.net.numReads, file->ios.net.bytesRead, file->ios.net.numWrites,  file->ios.net.bytesWritten);
+        }
     if (file->connInfo.socket != 0)
 	mustCloseFd(&(file->connInfo.socket));
     if (file->connInfo.ctrlSocket != 0)
@@ -1178,6 +1277,27 @@ slNameFreeList(&slList);
 return ret;
 }
 
+time_t udcTimeFromCache(char *url, char *cacheDir)
+/* Look up the file datetime from the local cache bitmap file, or 0 if there
+ * is no cache for url. */
+{
+time_t t = 0;
+long long int ret = -1;
+if (cacheDir == NULL)
+    cacheDir = udcDefaultDir();
+struct slName *sl, *slList = udcFileCacheFiles(url, cacheDir);
+for (sl = slList;  sl != NULL;  sl = sl->next)
+    if (endsWith(sl->name, bitmapName))
+	{
+	ret = udcSizeAndModTimeFromBitmap(sl->name, &t);
+	if (ret == -1)
+	    t = 0;
+	break;
+	}
+slNameFreeList(&slList);
+return t;
+}
+
 unsigned long udcCacheAge(char *url, char *cacheDir)
 /* Return the age in seconds of the oldest cache file.  If a cache file is
  * missing, return the current time (seconds since the epoch). */
@@ -1199,7 +1319,7 @@ for (sl = slList;  sl != NULL;  sl = sl->next)
 return (now - oldestTime);
 }
 
-static void readBitsIntoBuf(int fd, int headerSize, int bitStart, int bitEnd,
+static void readBitsIntoBuf(struct udcFile *file, int fd, int headerSize, int bitStart, int bitEnd,
 	Bits **retBits, int *retPartOffset)
 /* Do some bit-to-byte offset conversions and read in all the bytes that
  * have information in the bits we're interested in. */
@@ -1208,8 +1328,8 @@ int byteStart = bitStart/8;
 int byteEnd = bitToByteSize(bitEnd);
 int byteSize = byteEnd - byteStart;
 Bits *bits = needLargeMem(byteSize);
-mustLseek(fd, headerSize + byteStart, SEEK_SET);
-mustReadFd(fd, bits, byteSize);
+ourMustLseek(&file->ios.bit,fd, headerSize + byteStart, SEEK_SET);
+ourMustRead(&file->ios.bit, fd, bits, byteSize);
 *retBits = bits;
 *retPartOffset = byteStart*8;
 }
@@ -1232,7 +1352,7 @@ boolean gotUnset = FALSE;
 struct udcBitmap *bitmap = udcBitmapOpen(file->bitmapFileName);
 int partOffset;
 Bits *bits;
-readBitsIntoBuf(bitmap->fd, udcBitmapHeaderSize, startBlock, endBlock, &bits, &partOffset);
+readBitsIntoBuf(file, bitmap->fd, udcBitmapHeaderSize, startBlock, endBlock, &bits, &partOffset);
 
 int partBitStart = startBlock - partOffset;
 int partBitEnd = endBlock - partOffset;
@@ -1263,12 +1383,12 @@ if (endPos > startPos)
     bits64 readSize = endPos - startPos;
     void *buf = needLargeMem(readSize);
     
-    int actualSize = file->prot->fetchData(file->url, startPos, readSize, buf, &(file->connInfo));
+    int actualSize = file->prot->fetchData(file->url, startPos, readSize, buf, file);
     if (actualSize != readSize)
 	errAbort("unable to fetch %lld bytes from %s @%lld (got %d bytes)",
 		 readSize, file->url, startPos, actualSize);
-    mustLseek(file->fdSparse, startPos, SEEK_SET);
-    mustWriteFd(file->fdSparse, buf, readSize);
+    ourMustLseek(&file->ios.sparse, file->fdSparse, startPos, SEEK_SET);
+    ourMustWrite(&file->ios.sparse, file->fdSparse, buf, readSize);
     freez(&buf);
     }
 }
@@ -1282,7 +1402,7 @@ int partOffset;
 Bits *b;
 int startBlock = start / bits->blockSize;
 int endBlock = (end + bits->blockSize - 1) / bits->blockSize;
-readBitsIntoBuf(bits->fd, udcBitmapHeaderSize, startBlock, endBlock, &b, &partOffset);
+readBitsIntoBuf(file, bits->fd, udcBitmapHeaderSize, startBlock, endBlock, &b, &partOffset);
 if (allBitsSetInFile(startBlock, endBlock, partOffset, b))
     {  // it is already in the cache
     freeMem(b);
@@ -1316,8 +1436,8 @@ if (dirty)
     int byteStart = startBlock/8;
     int byteEnd = bitToByteSize(endBlock);
     int byteSize = byteEnd - byteStart;
-    mustLseek(bits->fd, byteStart + udcBitmapHeaderSize, SEEK_SET);
-    mustWriteFd(bits->fd, b, byteSize);
+    ourMustLseek(&file->ios.bit, bits->fd, byteStart + udcBitmapHeaderSize, SEEK_SET);
+    ourMustWrite(&file->ios.bit, bits->fd, b, byteSize);
     }
 
 freeMem(b);
@@ -1395,13 +1515,16 @@ return ok;
 bits64 udcRead(struct udcFile *file, void *buf, bits64 size)
 /* Read a block from file.  Return amount actually read. */
 {
+file->ios.udc.numReads++;
 // if not caching, just fetch the data
 if (!udcCacheEnabled() && !sameString(file->protocol, "transparent"))
     {
-    int actualSize = file->prot->fetchData(file->url, file->offset, size, buf, &(file->connInfo));
+    int actualSize = file->prot->fetchData(file->url, file->offset, size, buf, file);
     file->offset += actualSize;
+    file->ios.udc.bytesRead += actualSize;
     return actualSize;
     }
+file->ios.udc.bytesRead += size;
 
 /* Figure out region of file we're going to read, and clip it against file size. */
 bits64 start = file->offset;
@@ -1439,7 +1562,7 @@ while(TRUE)
 		break;
 	    }
 	file->sparseReadAhead = FALSE;
-	mustLseek(file->fdSparse, start, SEEK_SET);
+	ourMustLseek(&file->ios.sparse,file->fdSparse, start, SEEK_SET);
 	}
 
     bits64 saveEnd = end;
@@ -1475,18 +1598,18 @@ while(TRUE)
 	 * slower to move fseek so it is always executed in front of read, in
 	 * case other code is moving around file pointer. */
 
-	mustLseek(file->fdSparse, start, SEEK_SET);
+	ourMustLseek(&file->ios.sparse,file->fdSparse, start, SEEK_SET);
 	}
 
     if (file->sparseReadAhead)
 	{
-	mustReadFd(file->fdSparse, file->sparseReadAheadBuf, size);
+	ourMustRead(&file->ios.sparse,file->fdSparse, file->sparseReadAheadBuf, size);
 	end = saveEnd;
 	size = end - start;
 	}
     else
 	{
-	mustReadFd(file->fdSparse, cbuf, size);
+	ourMustRead(&file->ios.sparse,file->fdSparse, cbuf, size);
 	file->offset += size;
 	bytesRead += size;
 	break;
@@ -1660,17 +1783,19 @@ return lineFileOnString(url, TRUE, buf);
 void udcSeekCur(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
+file->ios.udc.numSeeks++;
 file->offset += offset;
 if (udcCacheEnabled())
-    mustLseek(file->fdSparse, offset, SEEK_CUR);
+    ourMustLseek(&file->ios.sparse,file->fdSparse, offset, SEEK_CUR);
 }
 
 void udcSeek(struct udcFile *file, bits64 offset)
 /* Seek to a particular position in file. */
 {
+file->ios.udc.numSeeks++;
 file->offset = offset;
 if (udcCacheEnabled())
-    mustLseek(file->fdSparse, offset, SEEK_SET);
+    ourMustLseek(&file->ios.sparse,file->fdSparse, offset, SEEK_SET);
 }
 
 bits64 udcTell(struct udcFile *file)
@@ -1690,7 +1815,7 @@ if (blockCount > 0)
     {
     int bitmapSize = bitToByteSize(blockCount);
     Bits *b = needLargeMem(bitmapSize);
-    mustReadFd(bits->fd, b, bitmapSize);
+    mustReadFd( bits->fd, b, bitmapSize);
     int bitsSet = bitCountRange(b, 0, blockCount);
     byteSize = (long)bitsSet*blockSize;
     freez(&b);

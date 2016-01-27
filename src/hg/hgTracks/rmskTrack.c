@@ -25,22 +25,27 @@ static char *repeatClasses[] = {
     "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "RNA", "Other", "Unknown", 
 };
 
+static struct repeatItem *riList = NULL;  // can be re-used by all windows
+
 static struct repeatItem *makeRepeatItems()
 /* Make the stereotypical repeat masker tracks. */
 {
-struct repeatItem *ri, *riList = NULL;
-int i;
-int numClasses = ArraySize(repeatClasses);
-for (i=0; i<numClasses; ++i)
+if (!riList)
     {
-    AllocVar(ri);
-    ri->class = repeatClasses[i];
-    ri->className = repeatClassNames[i];
-    slAddHead(&riList, ri);
-    if (sameString(repeatClassNames[i], "Other"))
-        otherRepeatItem = ri;               
+    struct repeatItem *ri;
+    int i;
+    int numClasses = ArraySize(repeatClasses);
+    for (i=0; i<numClasses; ++i)
+	{
+	AllocVar(ri);
+	ri->class = repeatClasses[i];
+	ri->className = repeatClassNames[i];
+	slAddHead(&riList, ri);
+	if (sameString(repeatClassNames[i], "Other"))
+	    otherRepeatItem = ri;               
+	}
+    slReverse(&riList);
     }
-slReverse(&riList);
 return riList;
 }
 

@@ -143,6 +143,39 @@ taxId 9685
     # check in the trackDb files created and add to trackDb/makefile
 
 ##########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2015-03-20 - Hiram)
+    hgsql -N -e "select frag from gold;" felCat8 | sort | head -1
+AANG03000001.1
+
+    # there are other naming patterns:
+    hgsql -N -e "select frag from gold;" felCat8 | sort | grep -v AANG | head -2
+AC145332.48
+AC233257.1
+
+    hgsql -N -e "select frag from gold;" felCat8 | sort | tail -2
+AY152836.1
+NC_001700.1
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" felCat8 | wc -l
+    # 367856
+
+    hgsql -N -e "select frag from gold;" felCat8 \
+       | egrep -e '[AN][ACY][N0-9_][G0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 367856
+
+    hgsql -N -e "select frag from gold;" felCat8 \
+       | egrep -v -e '[AN][ACY][N0-9_][G0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/cat/felCat8/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [AN][ACY][N0-9_][G0-9][0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+##########################################################################
 # running repeat masker (DONE - 2014-11-21 - Hiram)
     mkdir /hive/data/genomes/felCat8/bed/repeatMasker
     cd /hive/data/genomes/felCat8/bed/repeatMasker
@@ -258,7 +291,7 @@ taxId 9685
     # 69023548 bases of 2599716822 (2.655%) in intersection
 
 #############################################################################
-# cytoBandIdeo - (DONE - 2014-11-25 - Hiram)
+# cytoBandIdeo - (DONE - 2015-12-02 - Hiram)
     mkdir /hive/data/genomes/felCat8/bed/cytoBand
     cd /hive/data/genomes/felCat8/bed/cytoBand
     makeCytoBandIdeo.csh felCat8

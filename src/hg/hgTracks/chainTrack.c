@@ -17,6 +17,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 #include "hgColors.h"
+#include "hubConnect.h"
 
 
 
@@ -26,7 +27,56 @@ struct cartOptions
     int scoreFilter ; /* filter chains by score if > 0 */
     };
 
-static void doQuery(struct sqlConnection *conn, char *fullName, 
+struct sqlClosure
+{
+struct sqlConnection *conn;
+};
+
+struct bbClosure
+{
+struct bbiFile *bbi;
+};
+
+typedef void  (*linkRetrieveFunc)(void *closure,  char *fullName, 
+			struct lm *lm, struct hash *hash, 
+			int start, int end, char * chainId, boolean isSplit);
+
+static void doBbQuery(void *closure, char *fullName, 
+			struct lm *lm, struct hash *hash, 
+			int start, int end, char * chainId, boolean isSplit)
+/* doBbQuery- check a bigBed for chain elements between
+ * 	start and end.  Use the passed hash to resolve chain
+ * 	id's and place the elements into the right
+ * 	linkedFeatures structure
+ */
+{
+struct bbClosure *bbClosure = (struct bbClosure *)closure;
+struct bbiFile *bbi = bbClosure->bbi;
+struct linkedFeatures *lf;
+struct simpleFeature *sf;
+
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, start, end, 0, lm);
+char *bedRow[5];
+char startBuf[16], endBuf[16];
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    lf = hashFindVal(hash, bedRow[3]);
+
+    if (lf != NULL)
+	{
+	lmAllocVar(lm, sf);
+	sf->start = sqlUnsigned(bedRow[1]);
+	sf->end = sqlUnsigned(bedRow[2]);
+	sf->qStart = sqlUnsigned(bedRow[4]); 
+	sf->qEnd = sf->qStart + (sf->end - sf->start);
+	slAddHead(&lf->components, sf);
+	}
+    }
+}
+
+static void doQuery(void *closure, char *fullName, 
 			struct lm *lm, struct hash *hash, 
 			int start, int end, char * chainId, boolean isSplit)
 /* doQuery- check the database for chain elements between
@@ -35,6 +85,8 @@ static void doQuery(struct sqlConnection *conn, char *fullName,
  * 	linkedFeatures structure
  */
 {
+struct sqlClosure *sqlClosure = (struct sqlClosure *)closure;
+struct sqlConnection *conn = sqlClosure->conn;
 struct sqlResult *sr = NULL;
 char **row;
 struct linkedFeatures *lf;
@@ -89,7 +141,6 @@ struct linkedFeatures *lf;
 struct simpleFeature *sf;
 struct lm *lm;
 struct hash *hash;	/* Hash of chain ids. */
-struct sqlConnection *conn;
 double scale = ((double)(winEnd - winStart))/width;
 char fullName[64];
 int start, end, extra;
@@ -100,9 +151,27 @@ int overLeft, overRight;
 if (tg->items == NULL)		/*Exit Early if nothing to do */
     return;
 
+void *closure;
+struct sqlClosure sqlClosure;
+struct bbClosure bbClosure;
+linkRetrieveFunc queryFunc;
+if (tg->isBigBed)
+    {
+    closure = &bbClosure;
+    queryFunc = doBbQuery;
+    char *fileName = trackDbSetting(tg->tdb, "linkDataUrl");
+    struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    bbClosure.bbi =  bbi;
+    }
+else
+    {
+    closure = &sqlClosure;
+    queryFunc = doQuery;
+    sqlClosure.conn = hAllocConn(database);
+    }
+
 lm = lmInit(1024*4);
 hash = newHash(0);
-conn = hAllocConn(database);
 
 /* Make up a hash of all linked features keyed by
  * id, which is held in the extras field.  To
@@ -139,7 +208,7 @@ if (hash->size)
     boolean isSplit = TRUE;
     /* Make up range query. */
     safef(fullName, sizeof fullName, "%s_%s", chromName, tg->table);
-    if (!hTableExists(database, fullName))
+    if (isHubTrack(tg->table) || !hTableExists(database, fullName))
 	{
 	strcpy(fullName, tg->table);
 	isSplit = FALSE;
@@ -149,7 +218,7 @@ if (hash->size)
      * so we don't need items off the screen 
      */
     if (vis == tvDense)
-	doQuery(conn, fullName, lm,  hash, seqStart, seqEnd, NULL, isSplit);
+	queryFunc(closure, fullName, lm,  hash, seqStart, seqEnd, NULL, isSplit);
     else
 	{
 	/* if chains extend beyond edge of window we need to get 
@@ -164,7 +233,7 @@ if (hash->size)
 	start = seqStart - extra;
 	extra = (STARTSLOP < maxOverRight) ? STARTSLOP : maxOverRight;
 	end = seqEnd + extra;
-	doQuery(conn, fullName, lm,  hash, start, end, NULL, isSplit);
+	queryFunc(closure, fullName, lm,  hash, start, end, NULL, isSplit);
 
 	for (lf = tg->items; lf != NULL; lf = lf->next)
 	    {
@@ -183,7 +252,7 @@ if (hash->size)
 		extra *= MULTIPLIER;
 		start = end;
 		end = start + extra;
-                doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
+                queryFunc(closure, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		if (lf->components != NULL)
 		    slSort(&lf->components, linkedFeaturesCmpStart);
 		for (sf=lastSf;  sf != NULL;  lastSf=sf, sf=sf->next)
@@ -217,7 +286,7 @@ if (hash->size)
 		start = end - extra;
                 if (start < 0)
                     start = 0;
-		doQuery(conn, fullName, lm,  hash, start, end, lf->extra, isSplit);
+		queryFunc(closure, fullName, lm,  hash, start, end, lf->extra, isSplit);
 		slSort(&lf->components, linkedFeaturesCmpStart);
 		}
 	    if ((lf->components != NULL) && (lf->components->start > seqStart) && (lf->start < lf->components->start))
@@ -241,9 +310,85 @@ linkedFeaturesDraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
 for (lf = tg->items; lf != NULL; lf = lf->next)
     lf->components = NULL;
 
+if (tg->isBigBed)
+    bbiFileClose(&bbClosure.bbi);
+else
+    hFreeConn(&sqlClosure.conn);
+
 lmCleanup(&lm);
 freeHash(&hash);
-hFreeConn(&conn);
+}
+
+void bigChainLoadItems(struct track *tg)
+/* Load up all of the chains from correct table into tg->items 
+ * item list.  At this stage to conserve memory for other tracks
+ * we don't load the links into the components list until draw time. */
+{
+struct linkedFeatures *list = NULL, *lf;
+int qs;
+char *optionChrStr;
+struct cartOptions *chainCart;
+
+chainCart = (struct cartOptions *) tg->extraUiData;
+
+optionChrStr = cartOptionalStringClosestToHome(cart, tg->tdb, FALSE,
+	"chromFilter");
+
+struct bbiFile *bbi =  fetchBbiForTrack(tg);
+struct lm *lm = lmInit(0);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, winStart, winEnd, 0, lm);
+int fieldCount = 11;
+char *bedRow[fieldCount];
+char startBuf[16], endBuf[16];
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    if ((optionChrStr != NULL) && !startsWith(optionChrStr, bedRow[7]))
+        continue;
+
+    if (chainCart->scoreFilter >0) 
+        {
+        unsigned score = sqlUnsigned(bedRow[4]);
+        if  (score < chainCart->scoreFilter)
+            continue;
+        }
+
+    struct bed *bed = bedLoadN(bedRow, 6);
+    lf = bedMungToLinkedFeatures(&bed, tg->tdb, fieldCount,
+        0, 1000, FALSE);
+
+    if (*bedRow[5] == '-')
+	{
+	lf->orientation = -1;
+        qs = sqlUnsigned(bedRow[8]) - sqlUnsigned(bedRow[10]);
+	}
+    else
+        {
+	lf->orientation = 1;
+	qs = sqlUnsigned(bedRow[9]);
+	}
+
+    int len = strlen(bedRow[7]) + 32;
+    lf->name = needMem(len);
+    safef(lf->name, len, "%s %c %dk", bedRow[7], *bedRow[5], qs/1000);
+    lf->extra = cloneString(bedRow[3]);
+    lf->components = NULL;
+    slAddHead(&list, lf);
+    }
+
+/* Make sure this is sorted if in full mode. Sort by score when
+ * coloring by score and in dense */
+if (tg->visibility != tvDense)
+    slSort(&list, linkedFeaturesCmpStart);
+else if ((tg->visibility == tvDense) &&
+	(chainCart->chainColor == chainColorScoreColors))
+    slSort(&list, chainCmpScore);
+else
+    slReverse(&list);
+tg->items = list;
+
+bbiFileClose(&bbi);
 }
 
 void chainLoadItems(struct track *tg)
@@ -421,7 +566,11 @@ else
 	chainCart->chainColor = chainColorChromColors;
     }
 
-tg->loadItems = chainLoadItems;
+
+if (tg->isBigBed)
+    tg->loadItems = bigChainLoadItems;
+else
+    tg->loadItems = chainLoadItems;
 tg->drawItems = chainDraw;
 tg->mapItemName = lfMapNameFromExtra;
 tg->subType = lfSubChain;

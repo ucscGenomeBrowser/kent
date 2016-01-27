@@ -115,7 +115,7 @@ struct track
     void (*drawItemAt)(struct track *tg, void *item, struct hvGfx *hvg,
         int xOff, int yOff, double scale,
 	MgFont *font, Color color, enum trackVisibility vis);
-    /* Draw a single option.  This is optional, but if it's here
+    /* Draw a single item.  This is optional, but if it's here
      * then you can plug in genericDrawItems into the drawItems,
      * which takes care of all sorts of things including packing. */
 
@@ -217,7 +217,7 @@ struct track
     struct track *prevTrack;    // if not NULL, points to track immediately above in the image.
                                 //    Needed by ConditionalCenterLabel logic
 
-    void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
+    boolean (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
     /* box to it as well, so that a click will move the browser window */
     /* to the next (or previous if next==FALSE) item. This is meant to */
@@ -230,7 +230,7 @@ struct track
     /* the track was pressed (as opposed to the next-item buttons on the */
     /* track items themselves... see nextPrevExon() ). This is meant for */
     /* going to the next/previous item currently unseen in the browser, */
-    /* e.g. the next gene. SO FAR THIS IS UNIMPLEMENTED. */
+    /* e.g. the next gene. */
 
     char *(*itemDataName)(struct track *tg, char *itemName);
     /* If not NULL, function to translated an itemName into a data name.
@@ -250,8 +250,45 @@ struct track
     char *networkErrMsg;        /* Network layer error message */
     boolean parallelLoading;    /* If loading in parallel, usually network resources. */
     struct bbiSummaryElement *summary;  /* for bigBed */
-    struct bbiSummaryElement *sumAll;   /* for bigBid */
+    struct bbiSummaryElement *sumAll;   /* for bigBed */
     boolean drawLabelInBox;     /* draw labels into the features instead of next to them */
+    
+    struct track *nextWindow;   /* Same track in next window's track list. */
+    struct track *prevWindow;   /* Same track in prev window's track list. */
+
+    // Fixed-width non-proportional tracks
+    void (*nonPropDrawItemAt)(struct track *tg, void *item, struct hvGfx *hvg,
+        int xOff, int yOff, double scale,
+	MgFont *font, Color color, enum trackVisibility vis);
+    /* Draw a single Non-proportional fixed-width item.  Such as gtexGene.
+     * This is method is optional, but if it's here
+     * then you can plug in genericDrawItems into the drawItems,
+     * which takes care of all sorts of things including packing. */
+
+    int (*nonPropPixelWidth)(struct track *tg, void *item);
+    /* Return the width in pixels of the non-proportional part of track, e.g. gtexGene graphic */
+
+    };
+
+struct window  // window in multiwindow image
+    {
+    struct window *next;   // Next on list.
+
+    // These two were experimental and will be removed soon:
+    char *organism;        /* Name of organism */
+    char *database;        /* Name of database */
+
+    char *chromName;
+    int winStart;           // in bases
+    int winEnd;
+    int insideX;            // in pixels
+    int insideWidth;
+    long virtStart;         // in bases on virt chrom
+    long virtEnd;
+
+    boolean regionOdd;      // window comes from odd region? or even? for window separator coloring
+
+    struct track *trackList;   // track list for window
     };
 
 
@@ -355,24 +392,97 @@ struct knownGenesExtra
     char *name;                 /* name to be used on label */
     };
 
-/* global GSID subject list */
 struct gsidSubj
+/* global GSID subject list */
     {
     struct gsidSubj  *next;
     char *subjId;
     };
 
-/* global GSID sequence list */
 struct gsidSeq
+/* global GSID sequence list */
     {
     struct gsidSeq  *next;
     char *seqId;
     char *subjId;
     };
 
+
+struct virtRegion
+/* virtual chromosome structure */
+    {
+    struct virtRegion *next;
+    char *chrom;
+    int start;
+    int end;
+    char strand[2];	/* + or - for strand */
+    };
+
+struct virtChromRegionPos
+/* virtual chromosome region position*/
+    {
+    long virtPos;
+    struct virtRegion *virtRegion;
+    };
+
+struct positionMatch
+/* virtual chroom position that matches or overlaps search query chrom,start,end */
+ {
+ struct positionMatch *next;
+ long virtStart;
+ long virtEnd;
+ };
+
+
+extern struct virtRegion *virtRegionList;
+extern struct virtChromRegionPos *virtChrom; // Array
+extern int virtRegionCount;
+extern long virtWinStart;  // start of virtual window in bases
+extern long virtWinEnd;    //   end of virtual window in bases
+extern long defaultVirtWinStart;  // default start of virtual window in bases
+extern long defaultVirtWinEnd;    // default end   of virtual window in bases
+extern long virtWinBaseCount;  /* Number of bases in windows, also virtWinEnd - virtWinStart. */
+extern long virtSeqBaseCount; // all bases in virt chrom
+//extern char *virtPosition;          /* Name of virtual position. TODO Remove? */
+extern char *virtChromName;         /* Name of virtual chrom */
+extern boolean virtMode;            /* Are we in virtual chrom mode? */
+extern boolean virtChromChanged;     /* Has the virtChrom changed? */
+extern boolean emAltHighlight;      /* Highlight alternativing regions in virt view? */
+extern int emPadding;               /* # bases padding for exon-mostly regions */
+extern int gmPadding;               /* # bases padding for gene-mostly regions */
+extern char *emGeneTable;           /* Gene table to use for exon mostly */
+extern struct track *emGeneTrack;   /* Track for gene table for exon mostly */
+extern struct rgbColor vertWindowSeparatorColor; /* color for vertical windows separator */
+extern char *multiRegionsBedUrl;       /* URL to bed regions list */
+
+// demo2
+extern int demo2NumWindows;
+extern int demo2WindowSize;
+extern int demo2StepSize;
+
+// singleTrans (single transcript)
+extern char *singleTransId; 
+
+// singleAltHaplos (one alternate haplotype)
+extern char *singleAltHaploId; 
+
+extern char *virtModeType;         /* virtual chrom mode type */
+extern char *lastVirtModeType;
+extern char *virtModeShortDescr;   /* short description of virt mode */
+extern char *virtModeExtraState;   /* Other settings that affect the virtMode state such as padding or some parameter */
+extern char *lastVirtModeExtraState;
+extern struct cart *lastDbPosCart;     /* store settings for use in lastDbPos and hgTracks.js setupHistory */
+
 extern char *excludeVars[];
 extern struct trackLayout tl;
 extern struct jsonElement *jsonForClient;
+
+/* multiple windows */
+extern struct window *windows;        // list of windows in image
+extern struct window *currentWindow;  // current window
+extern bool trackLoadingInProgress;  // flag to delay ss layout until all windows are ready.
+extern int fullInsideX;      // full-image insideX 
+extern int fullInsideWidth;  // full-image insideWidth 
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
@@ -497,7 +607,7 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
 		    struct track *track, boolean toggle, char *chrom,
-		    int start, int end, char *message, char *extra);
+		    long start, long end, char *message, char *extra);
 /* Print out image map rectangle that would invoke this program again.
  * If track is non-NULL then put that track's id in the map item.
  * if toggle is true, then toggle track between full and dense.
@@ -510,7 +620,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
  * program with the current track expanded. */
 
 void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *toggleGroup,
-		  char *newChrom, int newStart, int newEnd, char *message);
+		  char *newChrom, long newStart, long newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 
@@ -546,13 +656,10 @@ void drawScaledBox(struct hvGfx *hvg, int chromStart, int chromEnd,
 /* Draw a box scaled from chromosome to window coordinates.
  * Get scale first with scaleForPixels. */
 
-void drawScaledBoxBlend(struct hvGfx *hvg, int chromStart, int chromEnd,
-	double scale, int xOff, int y, int height, Color color);
-/* Draw a box scaled from chromosome to window coordinates.
- * Get scale first with scaleForPixels.
- * use colorBin to collect multiple colors for the same pixel, choose
- * majority color, break ties by blending the colors.
- * Yellow and red are blended as brown, other colors not implemented.*/
+void drawScaledBoxLabel(struct hvGfx *hvg,
+     int chromStart, int chromEnd, double scale,
+     int xOff, int y, int height, Color color, MgFont *font,  char *label);
+/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
 
 Color whiteIndex();
 /* Return index of white. */
@@ -663,7 +770,7 @@ void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader l
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
 
-void simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
+boolean simpleBedNextPrevEdge(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w,
 			   int h, boolean next);
 /* Like linkedFeaturesNextPrevItem, but for simple bed which has no block structure so
  * this simply zaps us to the right/left edge of the feature.  Arrows have already been
@@ -1106,17 +1213,6 @@ void lfsMapItemName(struct track *tg, struct hvGfx *hvg, void *item, char *itemN
                     char *mapItemName, int start, int end,
 		    int x, int y, int width, int height);
 
-void drawScaledBoxSample(struct hvGfx *hvg,
-        int chromStart, int chromEnd, double scale,
-        int xOff, int y, int height, Color color,
-        int score);
-/* Draw a box scaled from chromosome to window coordinates. */
-
-void drawScaledBoxSampleLabel(struct hvGfx *hvg,
-     int chromStart, int chromEnd, double scale,
-     int xOff, int y, int height, Color color, MgFont *font,  char *label);
-/* Draw a box scaled from chromosome to window coordinates and draw a label onto it. */
-
 struct track *trackFromTrackDb(struct trackDb *tdb);
 /* Create a track based on the tdb */
 
@@ -1178,6 +1274,9 @@ void configPageSetTrackVis(int vis);
 /* Do config page after setting track visibility. If vis is -2, then visibility
  * is unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc. */
+
+void configMultiRegionPage();
+/* Put up multi-region configuration page. */
 
 struct track *trackNew();
 /* Allocate track . */
@@ -1367,6 +1466,9 @@ void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemNam
 void gvfMethods(struct track *tg);
 /* Load GVF variant data. */
 
+void gtexGeneMethods(struct track *tg);
+/* Gene-Tissue Expression (GTEX) gene track*/
+
 void messageLineMethods(struct track *track);
 /* Methods for drawing a single-height message line instead of track items,
  * e.g. if source was compiled without a necessary library. */
@@ -1417,12 +1519,65 @@ void printMenuBar();
 void checkIfWiggling(struct cart *cart, struct track *tg);
 /* Check to see if a linkedFeatures track should be drawing as a wiggle. */
 
+boolean isTypeBedLike(struct track *track);
+/* Check if track type is BED-like packable thing (but not rmsk or joinedRmsk) */
+
+boolean isTypeUseItemNameAsKey(struct track *track);
+/* Check if track type is like expRatio and key is just item name. */
+
+void setEMGeneTrack();
+/* Find the track for the gene table to use for exonMostly and geneMostly. */
+
+void findBestEMGeneTable(struct track *trackList);
+/* Find the best gene table to use for exonMostly */
+
+struct window *makeWindowListFromVirtChrom(long virtWinStart, long virtWinEnd);
+/* make list of windows from virtual position on virtualChrom */
+
+struct convertRange
+    {
+    struct convertRange *next;
+    char *chrom;
+    int start;
+    int end;
+    long vStart;
+    long vEnd;
+    boolean found;
+    boolean skipIt;
+    };
+
+
+void linkedFeaturesNextPrevExonFind(struct track *tg, boolean next, struct convertRange *crList);
+/* Find next-exon function for linkedFeatures.  Finds corresponding position on virtual chrom for new winStart/winEnd of exon non-virt position,
+ * and returns it. This function was cloned from linkedFeaturesLabelNextPrevItem and modified. */
+
+boolean virtualSingleChrom();
+/* Return TRUE if using virtual single chromosome mode */
+
+void parseVPosition(char *position, char **pChrom, long *pStart, long *pEnd);
+/* parse Virt position */
+
+char *undisguisePosition(char *position); // UN-DISGUISE VMODE
+/* Find the virt position
+ * position should be real chrom span. 
+ * Limitation: can only convert things in the current windows set. */
+
+
+char *disguisePositionVirtSingleChrom(char *position); // DISGUISE VMODE
+/* Hide the virt position, convert to real single chrom span.
+ * position should be virt chrom span. 
+ * Can handle anything in the virt single chrom. */
+
 #define measureTime uglyTime
 
 #define SUPPORT_CONTENT_TYPE 1
 
 struct bbiFile *fetchBbiForTrack(struct track *track);
 /* Fetch bbiFile from track, opening it if it is not already open. */
+
+void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
+                            double scale, Color color, enum trackVisibility vis);
+/* Draw next item buttons and map boxes */
 
 #endif /* HGTRACKS_H */
 

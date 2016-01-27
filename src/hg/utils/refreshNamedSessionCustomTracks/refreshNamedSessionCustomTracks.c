@@ -74,8 +74,8 @@ pid_t pid = getpid();
 char temp[256];
 printf("# pid=%d: ",pid); fflush(stdout);
 safef(temp, sizeof(temp), "grep VmPeak /proc/%d/status", (int) pid);
-int ignoredRet = system(temp);
-ignoredRet = 0;  // avoid warning from attribute warn_unused_result -- casting to void not enough
+if (system(temp) != 0)
+    errAbort("system(\"%s\") failed", temp);
 fflush(stdout);
 }
 

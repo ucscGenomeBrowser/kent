@@ -68,7 +68,7 @@ endif
 echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
 
 #echo debug: disabled sending email
-echo "Ready for pairings, day 2, Git reports completed for v${NEXTNN} preview http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER ${BUILDMEISTER} kuhn ann kate luvina braney steve
+echo "Ready for pairings, day 2, Git reports completed for v${NEXTNN} preview http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 2, v${NEXTNN} preview)." $USER@soe.ucsc.edu ${BUILDMEISTEREMAIL} kuhn@soe.ucsc.edu ann@soe.ucsc.edu kate@soe.ucsc.edu luvina@soe.ucsc.edu braney@soe.ucsc.edu steve@soe.ucsc.edu
 
 
 #---------------------

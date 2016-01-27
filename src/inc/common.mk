@@ -217,6 +217,17 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
+# autodetect UCSC installation of htslib:
+ifeq (${HTSDIR},)
+    HTSDIR = /hive/data/outside/htslib/${MACHTYPE}
+    ifneq ($(wildcard ${HTSDIR}),)
+        ifeq (${USE_HTS},)
+            USE_HTS=1
+        endif
+    endif
+endif
+
+
 # autodetect UCSC installation of samtabix:
 ifeq (${SAMTABIXDIR},)
     SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}
@@ -237,6 +248,13 @@ GBIBDIR = /hive/groups/browser/gbib/
 ifneq ($(wildcard ${GBIBDIR}/*.c),)
   HG_DEFS+=-DUSE_GBIB_PWD
   HG_INC += -I${GBIBDIR}
+endif
+
+ifeq (${USE_HTS},1)
+    HG_DEFS+=-DUSE_HTS
+    USE_SAMTABIX=1
+    SAMTABIXDIR = ${HTSDIR}
+    SAMTABIXLIB=${HTSDIR}/libhts.a
 endif
 
 # libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
@@ -301,7 +319,7 @@ ifeq (${HG_WARN},)
       HG_WARN_UNINIT=-Wuninitialized
     else
       ifeq (${FULLWARN},hgwdev)
-        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body
+        HG_WARN = -Wall -Werror -Wformat -Wformat-security -Wimplicit -Wreturn-type -Wempty-body -Wunused-but-set-variable
         HG_WARN_UNINIT=-Wuninitialized
       else
         HG_WARN = -Wall -Wformat -Wimplicit -Wreturn-type

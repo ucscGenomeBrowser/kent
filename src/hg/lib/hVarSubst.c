@@ -171,7 +171,8 @@ static boolean isDatabaseVar(char *varBase)
 return (strcasecmp(varBase, "organism") == 0)
     || (strcasecmp(varBase, "date") == 0)
     || (strcasecmp(varBase, "linkToGatewayPage") == 0)
-    || (strcasecmp(varBase, "db") == 0);
+    || (strcasecmp(varBase, "db") == 0)
+    || (strcasecmp(varBase, "hgsid") == 0);
 }
 
 static char *valOrDb(char *val, char *database)
@@ -182,7 +183,7 @@ if (val == NULL)
 return val;
 }
 
-static void substDatabaseVar(char *database, char *varBase,
+static void substDatabaseVar(char *database, struct cart *cart, char *varBase,
                              struct dyString *dest)
 /* substitute a variable resolved from the database name.
  * Specify the base name, excluding the o_ prefix. If database
@@ -222,6 +223,8 @@ else if (sameString(varBase, "date"))
     }
 else if (sameString(varBase, "db"))
     dyStringAppend(dest, database);
+else if (sameString(varBase, "hgsid") && cart != NULL)
+    dyStringAppend(dest, cartSessionId(cart));
 }
 
 static void substTrackDbVar(char *desc, struct trackDb *tdb, char *database,
@@ -238,28 +241,29 @@ else
     dyStringAppend(dest, lookupTrackDbSubVar(desc, tdb, varName, varName));
 }
 
-static void substVar(char *desc, struct trackDb *tdb, char *database,
+static void substVar(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
                      char *varName, struct dyString *dest)
 /* look up varName and insert value in output string.  Error if variable
  * can't be found */
 {
 if (isDatabaseVar(varName))
-    substDatabaseVar(database, varName, dest);
+    substDatabaseVar(database, cart, varName, dest);
 else if (tdb == NULL)
     errAbort("invalid variable \"%s\" to substitute in %s",
              varName, desc);
 else if (startsWith("o_", varName) && isDatabaseVar(varName+2))
-    substDatabaseVar(lookupOtherDb(desc, tdb, varName), varName+2, dest);
+    substDatabaseVar(lookupOtherDb(desc, tdb, varName), cart, varName+2, dest);
 else
     substTrackDbVar(desc, tdb, database, varName, dest);
 }
 
-char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src)
+static char *hVarSubstExt(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
+                          char *src)
 /* Parse a string and substitute variable references.  Return NULL if
  * no variable references were found.  Error on missing variables (except
  * $matrix).  desc is a brief description to print on an error to help with
  * debugging. tdb maybe NULL to only do substitutions based on database
- * and organism. See trackDb/README for more information.*/
+ * and organism.  cart may be NULL. See trackDb/README for more information.*/
 {
 struct dyString *dest = NULL;
 char *start = src;  // start of current static string in src
@@ -281,7 +285,7 @@ while ((next = strchr(next, '$')) != NULL)
         {
         // variable reference
         start = next = parseVarName(desc, next, varName, sizeof(varName));
-        substVar(desc, tdb, database, varName, dest);
+        substVar(desc, cart, tdb, database, varName, dest);
         }
     }
 if (dest != NULL)
@@ -293,12 +297,22 @@ else
     return NULL; // no substitutions
 }
 
+char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src)
+/* Parse a string and substitute variable references.  Return NULL if
+ * no variable references were found.  Error on missing variables (except
+ * $matrix).  desc is a brief description to print on error to help with
+ * debugging. tdb maybe NULL to only do substitutions based on database
+ * and organism. See trackDb/README for more information.*/
+{
+return hVarSubstExt(desc, NULL, tdb, database, src);
+}
+
 void hVarSubstInVar(char *desc, struct trackDb *tdb, char *database, char **varPtr)
 /* hVarSubst on a dynamically allocated string, replacing string in substitutions
  * occur, freeing the old memory if necessary.  See hVarSubst for details.
  */
 {
-char *dest = hVarSubst(desc, tdb, database, *varPtr);
+char *dest = hVarSubstExt(desc, NULL, tdb, database, *varPtr);
 if (dest != NULL)
     {
     freez(varPtr);
@@ -312,4 +326,16 @@ void hVarSubstTrackDb(struct trackDb *tdb, char *database)
 hVarSubstInVar(tdb->track, tdb, database, &tdb->shortLabel);
 hVarSubstInVar(tdb->track, tdb, database, &tdb->longLabel);
 hVarSubstInVar(tdb->track, tdb, database, &tdb->html);
+}
+
+void hVarSubstWithCart(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
+                       char **varPtr)
+/* Like hVarSubstInVar, but if cart is non-NULL, $hgsid will be substituted. */
+{
+char *dest = hVarSubstExt(desc, cart, tdb, database, *varPtr);
+if (dest != NULL)
+    {
+    freez(varPtr);
+    *varPtr = dest;
+    }
 }

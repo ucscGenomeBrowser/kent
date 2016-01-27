@@ -139,8 +139,7 @@
 	            <P>
 			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
 			"I cannot find a sequence with Blat although I'm sure
-                        it is in the genome. Am I doing something wrong?
-			"
+                        it is in the genome. Am I doing something wrong?"
 			<P>
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			<P>
@@ -151,22 +150,32 @@
                         published articles do not specify the version so trying
                         a few may be necessary.<P>
 
-                        If you are sure that the genome is the right one and
+                        <P>
+                        Very short sequences that go over a splice site in a
+                        cDNA sequence can not be found, as they are not
+                        in the genome, QPCR primers are a typical example.
+                        You can use In-Silico PCR and select a gene set as the
+                        target for these cases. In general, In-Silico PCR
+                        is more sensitive and should be preferred for primers.
+                        </P>
+                        If you are sure that the genome is the
+                        right one and
                         that the sequence is indeed there, for example by using
                         the "Short match" track, the problem
-                        may be a result of Blat's query masking. The online version of
-                        Blat masks 11mers from the query that occur more than
-                        1024 times in the genome. The goal is to improve speed
-                        but this may result in missing hits when you
-                        are searching for sequences in repeats.<P>
+                        may be a result of Blat's query masking. The online
+                        version of Blat masks 11mers from the query that occur
+                        more than 1024 times in the genome. The goal is to
+                        improve speed but this may result in missing hits when
+                        you are searching for sequences in repeats.<P>
 
-                        To find these matches with the online version of Blat, you can
-                        add more flanking sequence to your query. If this is
-                        not possible, the only alternative is to download 
-                        the executables of Blat and the .2bit file of a genome
-                        to your own machine and use the command line. See <A
-                        HREF="#blat3">Downloading Blat source and
+                        To find these matches with the online version of Blat,
+                        you can add more flanking sequence to your query. If
+                        this is not possible, the only alternative is to
+                        download the executables of Blat and the .2bit file of
+                        a genome to your own machine and use the command line.
+                        See <A HREF="#blat3">Downloading Blat source and
                         documentation</A>.
+
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>

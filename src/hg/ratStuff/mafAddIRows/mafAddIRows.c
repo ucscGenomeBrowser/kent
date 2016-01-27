@@ -268,9 +268,9 @@ void bridgeSpecies(struct mafAli *mafList, struct subSpecies *subSpecies)
 {
 struct mafAli *maf;
 int pushState, leftLen;
-struct mafComp *masterMc, *mc, *prevMc;
+struct mafComp *mc = NULL;
+// struct mafComp *masterMc = NULL, *prevMc = NULL: unused
 
-prevMc = mc = NULL;
 for(; subSpecies; subSpecies = subSpecies->next)
     {
     //printf("bridging %s\n",subSpecies->name);
@@ -278,8 +278,8 @@ for(; subSpecies; subSpecies = subSpecies->next)
     leftLen = 0;
     for(maf = mafList; maf ;  maf = maf->next)
 	{
-	masterMc = maf->components;
-	prevMc = mc;
+	// masterMc = maf->components;
+	// prevMc = mc;  unused
 	if ((mc = mafMayFindCompPrefix(maf, subSpecies->name,NULL)) == NULL)
 	    {
 	    continue;

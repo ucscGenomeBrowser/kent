@@ -11,17 +11,17 @@
 
 <li class="first even" id="home"><a href="../index.html" ><span id="home-link">Home</span></a></li> 
 
-<li class="menuparent" id="tools"><a href="../cgi-bin/hgGateway">Genomes</a>
+<li class="menuparent" id="tools1"><a href="../cgi-bin/hgGateway">Genomes</a>
 	<ul style="display: none; visibility: hidden;">
-	<li class="first"><a href="../cgi-bin/hgTracks?db=hg19&position=lastDbPos">Human GRCh37/hg19</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=hg38&position=lastDbPos">Human GRCh38/hg38</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm10&position=lastDbPos">Mouse NCBI37/mm10</a></li>
-	<li><a href="../cgi-bin/hgTracks?db=mm9&position=lastDbPos">Mouse GRCh38/mm9</a></li>
+	<li class="first"><a href="../cgi-bin/hgTracks?db=hg38&amp;position=lastDbPos">Human GRCh38/hg38</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=hg19&amp;position=lastDbPos">Human GRCh37/hg19</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm10&amp;position=lastDbPos">Mouse GRCm38/mm10</a></li>
+	<li><a href="../cgi-bin/hgTracks?db=mm9&amp;position=lastDbPos">Mouse NCBI37/mm9</a></li>
 	<li class="last"><a href="../cgi-bin/hgGateway">Other</a></li>
         </ul>
 </li>
 
-<li class="menuparent" id="tools"><a href="../cgi-bin/hgTracks">Genome Browser</a>
+<li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks">Genome Browser</a>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
 	<li><a href="../cgi-bin/cartReset">Reset All User Settings</a></li>
@@ -29,7 +29,7 @@
 </li>
 
 
-<li class="menuparent" id="tools"><span>Tools</span>
+<li class="menuparent" id="tools3"><span>Tools</span>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="../cgi-bin/hgBlat?command=start">Blat</a></li>
 	<li><a href="../cgi-bin/hgTables">Table Browser</a></li>
@@ -73,7 +73,7 @@
 
 <li class="menuparent" id="help"><span>Help</span><ul style="display: none; visibility: hidden;">
 <!-- CONTEXT_SPECIFIC_HELP -->
-<li><a href="../FAQ/">FAQs</a></li>
+<li><a href="../FAQ/">FAQs & Search</a></li>
 <li><a href="../goldenPath/help/hgTracksHelp.html">Browser Documentation</a></li>
 <li><a href="../training/index.html">Training</a></li>
 <li><a href="../contacts.html">Mailing Lists</a></li>

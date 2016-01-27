@@ -50,5 +50,6 @@ fi
 
 # bedDetail4.sql was generated like this:
 # egrep -v 'score|strand|thick|reserved|block|chromStarts' /cluster/home/max/kent/src/hg/lib/bedDetail.sql > bedDetail4.sql 
-$KENTBIN/hgLoadBed hg19 lovd lovd.hg19.bed -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
-$KENTBIN/hgLoadBed hg18 lovd lovd.hg18.bed -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
+# need to use bedClip as current files include invalid coords which LOVD won't fix.
+bedClip lovd.hg19.bed /cluster/data/hg19/chrom.sizes stdout | $KENTBIN/hgLoadBed hg19 lovd stdin -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin
+bedClip lovd.hg18.bed /cluster/data/hg18/chrom.sizes stdout | $KENTBIN/hgLoadBed hg18 lovd stdin  -tab -sqlTable=../bedDetail4.sql -renameSqlTable -noBin

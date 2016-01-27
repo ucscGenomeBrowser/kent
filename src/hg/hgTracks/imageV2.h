@@ -9,7 +9,9 @@
 // DRAG_SCROLL means dragging the image left-right to reposition the viewing window on the chrom.
 // NOTE: 1x works fine and is released. Set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x)
 //       to see hidden image while dragging.
+#ifndef IMAGEv2_DRAG_SCROLL_SZ
 #define IMAGEv2_DRAG_SCROLL_SZ 1
+#endif
 
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     #define IMAGEv2_SHORT_MAPITEMS
@@ -31,16 +33,12 @@
 //#define USE_NAVIGATION_LINKS
 
 extern struct imgBox   *theImgBox;   // Make this global for now to avoid huge rewrite
-//extern struct image    *theOneImg;   // Make this global for now to avoid huge rewrite
 extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge rewrite
-//extern struct imgSlice *curSlice;    // Make this global for now to avoid huge rewrite
-//extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
-//extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
 /////////////////////////
 // FLAT TRACKS
 // A simplistic way of flattening the track list before building the image
-// NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independednt of imageV2
+// NOTE: Strategy is NOT to use imgBox->imgTracks, since this should be independent of imageV2
 //       These should probably be moved to hgTracks.h
 /////////////////////////
 struct flatTracks // List of tracks in image, flattened to promote subtracks
@@ -48,6 +46,7 @@ struct flatTracks // List of tracks in image, flattened to promote subtracks
     struct flatTracks *next;   // Next on list.
     struct track *track;       // Track (the track list is still heirarchical
     int order;                 // Image order: This keeps track of dragReorder
+    int maxHeight;             // largest height among all windows in image.
     };
 
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart);
@@ -286,7 +285,7 @@ enum centerLabelSeen
     clNotSeen=3               // Conditionally and currently unseen
     };
 
-struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
+struct imgTrack // IMAGEv2: imageBox contains list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
     struct trackDb *tdb;      // trackDb entry (should this be struct track* entry?)
@@ -294,8 +293,8 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
                               //    but then it must have a name
     char *db;                 // Image for db (species) (assert imgTrack matches imgBox)
     char *chrom;              // Image for chrom (assert imgTrack matches imgBox)
-    int  chromStart;          // Image start (absolute, not portal position)
-    int  chromEnd;            // Image end (absolute, not portal position)
+    long  chromStart;          // Image start (absolute, not portal position)
+    long  chromEnd;            // Image end (absolute, not portal position)
     boolean plusStrand;       // Image covers plus strand, not minus strand
     boolean hasCenterLabel;   // A track may have a center label but not show it
     enum centerLabelSeen centerLabelSeen;  // Conditionally displayed center labels are always
@@ -315,14 +314,14 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
 #define IMG_ORDER_VAR "imgOrd"
 
 struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,
-                               char *chrom,int chromStart,int chromEnd,boolean plusStrand,
-                               boolean hasCenterLabel,enum trackVisibility vis,int order);
+                               char *chrom, long chromStart, long chromEnd, boolean plusStrand,
+                               boolean hasCenterLabel, enum trackVisibility vis, int order);
 // Starts an image track which will contain all image slices needed to render one track
 // Must completed by adding slices with imgTrackAddSlice()
 
 struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,
-                                char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,
-                                boolean hasCenterLabel,enum trackVisibility vis,int order);
+                                char *db,char *chrom, long chromStart, long chromEnd, boolean plusStrand,
+                                boolean hasCenterLabel, enum trackVisibility vis, int order);
 // Updates an already existing image track
 
 void imgTrackMarkForAjaxRetrieval(struct imgTrack *imgTrack,boolean ajaxRetrieval);
@@ -386,8 +385,8 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
     {
     char *db;                 // database (species)
     char *chrom;              // chrom
-    int  chromStart;          // Image start (absolute, not portal position)
-    int  chromEnd;            // Image end (absolute, not portal position)
+    long  chromStart;          // Image start (absolute, not portal position)
+    long  chromEnd;            // Image end (absolute, not portal position)
     boolean plusStrand;       // imgBox currently shows plus strand, not minus strand
     struct image *images;     // Contains all images for the imgBox. TEMPORARY: hgTracks creates
                               //    it's current one image and I'll store it here
@@ -401,33 +400,33 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
     boolean showPortal;       // Rather than showing the entire data range, only show a portion,
                               //    and allow dragScrolling
     double basesPerPixel;     // number of bases covered by a single pixel
-    int  portalStart;         // initial visible portal within html image table (db coodinates)
+    long  portalStart;         // initial visible portal within html image table (db coodinates)
                               //    [May be obsoleted by js client]
-    int  portalEnd;           // initial visible portal within html image table (db coodinates)
+    long  portalEnd;           // initial visible portal within html image table (db coodinates)
                               //    [May be obsoleted by js client]
     int  portalWidth;         // in pixels (should be equal to the visible position of data slice)
     struct imgTrack *imgTracks; // slList of all images to display
     };
 
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,
-                           boolean plusStrand,int sideLabelWidth,int width);
+struct imgBox *imgBoxStart(char *db, char *chrom, long chromStart, long chromEnd,
+                           boolean plusStrand, int sideLabelWidth, int width);
 // Starts an imgBox which should contain all info needed to draw the hgTracks image with
 // multiple tracks. The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd()
 
-boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,
+boolean imgBoxPortalDefine(struct imgBox *imgBox, long *chromStart, long *chromEnd,
                            int *imgWidth,double imageMultiple);
 // Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll
 // is being used.  The new chromStart,chromEnd and imgWidth are returned as OUTs, while the
 // portal becomes the initial defined size
 // Returns TRUE if successfully defined as having a portal.
 
-boolean imgBoxPortalRemove(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth);
+boolean imgBoxPortalRemove(struct imgBox *imgBox, long *chromStart, long *chromEnd, int *imgWidth);
 // Will redefine the imgBox as the portal dimensions and return the dimensions as OUTs.
 // Returns TRUE if a portal was defined in the first place
 
-boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromEnd,
-                               int *imgWidth,int *sideLabelWidth,
-                               int *portalStart,int *portalEnd,int *portalWidth,
+boolean imgBoxPortalDimensions(struct imgBox *imgBox, long *chromStart, long *chromEnd,
+                               int *imgWidth, int *sideLabelWidth,
+                               long *portalStart, long *portalEnd, int *portalWidth,
                                double *basesPerPixel);
 // returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined
 

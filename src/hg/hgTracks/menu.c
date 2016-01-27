@@ -227,7 +227,7 @@ appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 // add the sendTo menu
 if (fileExists("extTools.ra"))
     {
-    appendLinkWithOnclick(&links, "#", "In External tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", FALSE, FALSE);
+    appendLinkWithOnclick(&links, "#", "In External Tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", FALSE, FALSE);
     }
 
 
@@ -412,6 +412,10 @@ else if (sameString(database, "ce2"))
 appendLink(&links, "", "", "", FALSE); // separator line
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", uiVars);
 appendLink(&links, buf, "Configure Browser", "configureMenuLink", FALSE);
+
+// multi-region
+appendLinkWithOnclick(&links, "#", "Multi-Region", "multiRegionLink", "Show multi-region options", "popUpHgt.hgTracks('multi-region config'); return false;", FALSE, FALSE);
+
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
 appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);

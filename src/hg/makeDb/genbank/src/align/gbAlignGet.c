@@ -337,7 +337,7 @@ errAbort("   gbAlignGet [options] relname update typeAccPrefix db aligningList\n
 
 int main(int argc, char* argv[])
 {
-char *relName, *updateName, *typeAccPrefix, *database, *sep, *partitionList;
+char *relName, *updateName, *typeAccPrefix, *database, *sep;
 struct gbIndex* index;
 struct gbSelect select;
 struct gbSelect* prevSelect = NULL;
@@ -357,7 +357,9 @@ relName = argv[1];
 updateName = argv[2];
 typeAccPrefix = argv[3];
 database = argv[4];
+#if UNUSED
 partitionList = argv[5];
+#endif
 
 /* parse typeAccPrefix */
 sep = strchr(typeAccPrefix, '.');

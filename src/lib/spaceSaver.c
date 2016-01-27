@@ -59,13 +59,15 @@ for (i=0; i<count; ++i)
 return TRUE;
 }
 
-struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int end, 
-					void *val, boolean allowOverflow)
-/* Add a new node to space saver. Returns NULL if can't fit item in
+struct spaceNode *spaceSaverAddOverflowMulti(struct spaceSaver *ss, 
+	struct spaceRange *rangeList, struct spaceNode *nodeList, 
+					boolean allowOverflow)
+/* Add new nodes for multiple windows to space saver. Returns NULL if can't fit item in
  * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
- * that won't fit in last row. */
+ * that won't fit in first row (ends up being last row after
+ * spaceSaverFinish()). */
 {
-int cellStart, cellEnd, cellWidth;
+//int cellStart, cellEnd, cellWidth;
 struct spaceRowTracker *srt, *freeSrt = NULL;
 int rowIx = 0;
 struct spaceNode *sn;
@@ -73,25 +75,53 @@ struct spaceNode *sn;
 if (ss->isFull)
     return NULL;
 
-if ((start -= ss->winStart) < 0)
-    start = 0;
-end -= ss->winStart;	/* We'll clip this in cell coordinates. */
+struct spaceRange *range;
+struct spaceRange *cellRanges = NULL, *cellRange;
 
-cellStart = round(start * ss->scale);
-cellEnd = round(end * ss->scale)+1;
-if (cellEnd > ss->cellsInRow)
-    cellEnd = ss->cellsInRow;
-cellWidth = cellEnd - cellStart;
-
-/* Find free row. */
-for (srt = ss->rowList; srt != NULL; srt = srt->next)
+for (range = rangeList; range; range = range->next)
     {
-    if (allClear(srt->used + cellStart, cellWidth))
+    AllocVar(cellRange);
+    int start = range->start;
+    int end   = range->end;
+    if ((start -= ss->winStart) < 0)
+    	start = 0;
+    end -= ss->winStart;	/* We'll clip this in cell coordinates. */
+
+    cellRange->start = round(start * ss->scale);
+    cellRange->end = round(end * ss->scale)+1;
+    if (cellRange->end > ss->cellsInRow)
+	cellRange->end = ss->cellsInRow;
+    cellRange->width = cellRange->end - cellRange->start;
+    slAddHead(&cellRanges, cellRange);
+    }
+slReverse(&cellRanges);
+
+
+if (ss->vis == 2) // tvFull for BEDLIKE tracks does not pack, so force a new line
+    {
+    rowIx = ss->rowCount;
+    }
+else
+    {
+    /* Find free row. */
+    for (srt = ss->rowList; srt != NULL; srt = srt->next)
 	{
-	freeSrt = srt;
-	break;
+	bool freeFound = TRUE;
+	for (cellRange = cellRanges; cellRange; cellRange = cellRange->next)
+	    { // TODO possibly can just calculate cellRange->width instead of storing it?
+	    if (!allClear(srt->used + cellRange->start, cellRange->width))
+		{
+		freeFound = FALSE;
+		break;
+		}
+	    }
+	if (freeFound)
+	    {
+	    freeSrt = srt;
+	    break;
+	    }
+	++rowIx;
 	}
-    ++rowIx;
     }
 
 /* If no free row make new row. */
@@ -118,16 +148,58 @@ if (freeSrt == NULL)
 
 /* Mark that part of row used (except in overflow case). */
 if(freeSrt != NULL)
-    memset(freeSrt->used + cellStart, 1, cellWidth);
+    {
+    for (cellRange = cellRanges; cellRange; cellRange = cellRange->next)
+	{
+	memset(freeSrt->used + cellRange->start, 1, cellRange->width);
+	}
+    }
 
-/* Make a space node. If allowing overflow it will
- all end up in the last row. */
-AllocVar(sn);
-sn->row = rowIx;
-sn->val = val;
-slAddHead(&ss->nodeList, sn);
-return sn;
+// Instead of allocating nodes, just shift them
+// from the input to parent window's list while setting the row
+//
+struct spaceNode *snNext;
+for (sn=nodeList; sn; sn=snNext)
+    {
+    /* Make a space node. If allowing overflow it will
+     all end up in the last row. */
+    //AllocVar(sn);
+    sn->row = rowIx;
+    //sn->val = val;
+    snNext = sn->next;
+    slAddHead(&sn->parentSs->nodeList, sn);
+    }
+return nodeList;
 }
+
+
+struct spaceNode *spaceSaverAddOverflowExtended(struct spaceSaver *ss, int start, int end, 
+					void *val, boolean allowOverflow, struct spaceSaver *parentSs, bool noLabel)
+/* Add a new node to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in last row. parentSs allows specification of destination for node from alternate window.*/
+{
+struct spaceRange *range;
+AllocVar(range);
+range->start = start;
+range->end = end;
+struct spaceNode *node;
+AllocVar(node);
+node->val = val;
+node->parentSs = parentSs;
+node->noLabel = noLabel;
+return spaceSaverAddOverflowMulti(ss, range, node, allowOverflow);
+}
+
+struct spaceNode *spaceSaverAddOverflow(struct spaceSaver *ss, int start, int end, 
+					void *val, boolean allowOverflow)
+/* Add a new node to space saver. Returns NULL if can't fit item in
+ * and allowOverflow == FALSE. If allowOverflow == TRUE then put items
+ * that won't fit in last row. */
+{
+return spaceSaverAddOverflowExtended(ss, start, end, val, allowOverflow, ss, FALSE);
+}
+
 
 struct spaceNode *spaceSaverAdd(struct spaceSaver *ss, 
 	int start, int end, void *val)
@@ -135,6 +207,43 @@ struct spaceNode *spaceSaverAdd(struct spaceSaver *ss,
  * item in. */
 {
 return spaceSaverAddOverflow(ss, start, end, val, FALSE);
+}
+
+struct spaceNode *spaceSaverAddMulti(struct spaceSaver *ss, 
+	struct spaceRange *rangeList, struct spaceNode *nodeList)
+/* Add new nodes for multiple windows to space saver. */
+{
+return spaceSaverAddOverflowMulti(ss, rangeList, nodeList, FALSE);
+}
+
+int spaceSaverGetRowHeightsTotal(struct spaceSaver *ss)
+/* Return height of all rows. Used by tracks with variable height items */
+{
+assert(ss != NULL);
+if (ss->rowSizes == NULL)
+    return 0;
+int height = 0;
+int i;
+for (i=0; i<ss->rowCount; i++)
+    {
+    height += ss->rowSizes[i];
+    }
+return height;
+}
+
+void spaceSaverSetRowHeights(struct spaceSaver *ss, struct spaceSaver *holdSs, int (*itemHeight)(void *item))
+/* Determine maximum height of items in a row. Return total height.
+   Used by tracks with variable height items */
+{
+assert(ss != NULL);
+assert(holdSs != NULL);
+if (!holdSs->rowSizes)
+    AllocArray(holdSs->rowSizes, ss->rowCount);
+struct spaceNode *sn;
+for (sn = ss->nodeList; sn != NULL; sn = sn->next)
+    {
+    holdSs->rowSizes[sn->row] = max(holdSs->rowSizes[sn->row], itemHeight(sn->val));
+    }
 }
 
 void spaceSaverFinish(struct spaceSaver *ss)

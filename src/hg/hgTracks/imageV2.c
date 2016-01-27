@@ -15,13 +15,9 @@
 #include "hgConfig.h"
 #include "regexHelper.h"
 
-
+// Note: when right-click View image (or pdf output) then theImgBox==NULL, so it will be rendered as a single simple image
 struct imgBox   *theImgBox   = NULL; // Make this global for now to avoid huge rewrite
-//struct image    *theOneImg   = NULL; // Make this global for now to avoid huge rewrite
 struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge rewrite
-//struct imgSlice *curSlice    = NULL; // Make this global for now to avoid huge rewrite
-//struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
-//struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
 /////////////////////////
 // FLAT TRACKS
@@ -895,9 +891,9 @@ if (pSlice != NULL && *pSlice != NULL)
 
 /////////////////////// imgTracks
 
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,
-                               char *chrom,int chromStart,int chromEnd,boolean plusStrand,
-                               boolean hasCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackStart(struct trackDb *tdb, char *name, char *db,
+                               char *chrom, long chromStart, long chromEnd, boolean plusStrand,
+                               boolean hasCenterLabel, enum trackVisibility vis, int order)
 // Starts an image track which will contain all image slices needed to render one track
 // Must completed by adding slices with imgTrackAddSlice()
 {
@@ -908,9 +904,9 @@ return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,
                       hasCenterLabel,vis,order);
 }
 
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,
-                                char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,
-                                boolean hasCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack, struct trackDb *tdb, char *name,
+                                char *db, char *chrom, long chromStart, long chromEnd, boolean plusStrand,
+                                boolean hasCenterLabel, enum trackVisibility vis, int order)
 // Updates an already existing image track
 {
 if (tdb != NULL && tdb != imgTrack->tdb)
@@ -1087,12 +1083,14 @@ if (hIsPrivateHost())
     {
     int leftX, topY, rightX, bottomY;
     imgTrackCoordinates(imgTrack, &leftX, &topY, &rightX, &bottomY);
-    if (topLeftY < topY || bottomRightY > bottomY)
+    //if (topLeftY < topY || bottomRightY > bottomY) 
+    // TODO for sideLabels=0, many track item maps are extending down 1 pixel too far. EXISTING BUG.
+    if (topLeftY < topY || bottomRightY > (bottomY + 1))  // DEBUG RESTORE GALT Ignoring problem for now.
         {
         char * name = (imgTrack->name != NULL ? imgTrack->name
                                               : imgTrack->tdb != NULL ? imgTrack->tdb->track
                                                                       : imgFile);
-        warn("imgTrackAddMapItem(%s,%s) mapItem(%d:%d,%d:%d) spills over track bounds(%d:%d,%d:%d)",
+        warn("imgTrackAddMapItem(%s,%s) mapItem (%d,%d)(%d,%d) spills over track bounds(%d,%d)(%d,%d)",
              name,title,topLeftX,topLeftY,bottomRightX,bottomRightY,leftX,topY,rightX,bottomY);
         }
     }
@@ -1220,7 +1218,7 @@ if (imgTrack->chromStart  >= imgTrack->chromEnd)
     {
     if (verbose)
         {
-        warn("imgTrack(%s) for %s.%s:%d-%d has bad genome range.",name,
+        warn("imgTrack(%s) for %s.%s:%ld-%ld has bad genome range.",name,
              imgTrack->db,imgTrack->chrom,imgTrack->chromStart,imgTrack->chromEnd);
         imgTrackShow(NULL,imgTrack,0);
         }
@@ -1289,8 +1287,8 @@ if (pImgTrack != NULL && *pImgTrack != NULL)
 
 /////////////////////// Image Box
 
-struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,
-                           int sideLabelWidth,int width)
+struct imgBox *imgBoxStart(char *db, char *chrom, long chromStart, long chromEnd, boolean plusStrand,
+                           int sideLabelWidth, int width)
 // Starts an imgBox which should contain all info needed to draw the hgTracks image with
 // multiple tracks. The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd()
 {
@@ -1318,7 +1316,7 @@ imgBox->basesPerPixel  =
 return imgBox;
 }
 
-boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,
+boolean imgBoxPortalDefine(struct imgBox *imgBox, long *chromStart, long *chromEnd,
                            int *imgWidth,double imageMultiple)
 // Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll
 // is being used. The new chromStart,chromEnd and imgWidth are returned as OUTs, while the portal
@@ -1333,29 +1331,39 @@ imgBox->portalEnd   = imgBox->chromEnd;
 imgBox->portalWidth = imgBox->width - imgBox->sideLabelWidth;
 imgBox->showPortal  = FALSE; // Guilty until proven innocent
 
-int positionWidth = (int)((imgBox->portalEnd - imgBox->portalStart) * imageMultiple);
-*chromStart = imgBox->portalStart - (int)(  ((imageMultiple - 1)/2)
+long positionWidth = (long)((imgBox->portalEnd - imgBox->portalStart) * imageMultiple);
+*chromStart = imgBox->portalStart - (long)(  ((imageMultiple - 1)/2)
                                           * (imgBox->portalEnd - imgBox->portalStart));
 if (*chromStart < 0)
     *chromStart = 0;
 *chromEnd = *chromStart + positionWidth;
-struct chromInfo *chrInfo = hGetChromInfo(imgBox->db,imgBox->chrom);
-if (chrInfo == NULL)
+// get chrom size
+long virtChromSize = 0;
+if (sameString(imgBox->chrom, "virt"))
     {
-    *chromStart = imgBox->chromStart;
-    *chromEnd   = imgBox->chromEnd;
-    return FALSE;
+    virtChromSize = virtSeqBaseCount;
     }
-if (*chromEnd > (int)(chrInfo->size))  // Bound by chrom length
+else
     {
-    *chromEnd = (int)(chrInfo->size);
+    struct chromInfo *chrInfo = hGetChromInfo(imgBox->db,imgBox->chrom);
+    if (chrInfo == NULL)
+	{
+	*chromStart = imgBox->chromStart;
+	*chromEnd   = imgBox->chromEnd;
+	return FALSE;
+	}
+    virtChromSize = chrInfo->size;
+    }
+if (*chromEnd > virtChromSize)  // Bound by chrom length
+    {
+    *chromEnd = virtChromSize;
     *chromStart = *chromEnd - positionWidth;
     if (*chromStart < 0)
         *chromStart = 0;
     }
 // TODO: Normalize to power of 10 boundary
 // Normalize portal ends
-int diff = *chromStart - imgBox->portalStart;
+long diff = *chromStart - imgBox->portalStart;
 if (diff < 10 && diff > -10)
     *chromStart = imgBox->portalStart;
 diff = *chromEnd - imgBox->portalEnd;
@@ -1383,7 +1391,7 @@ imgBox->showPortal    = TRUE;
 return imgBox->showPortal;
 }
 
-boolean imgBoxPortalRemove(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth)
+boolean imgBoxPortalRemove(struct imgBox *imgBox, long *chromStart, long *chromEnd, int *imgWidth)
 // Will redefine the imgBox as the portal dimensions and return the dimensions as OUTs.
 // Returns TRUE if a portal was defined in the first place
 {
@@ -1401,9 +1409,9 @@ imgBox->showPortal = FALSE;
 return TRUE;
 }
 
-boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromEnd,
-                               int *imgWidth,int *sideLabelWidth,
-                               int *portalStart,int *portalEnd,int *portalWidth,
+boolean imgBoxPortalDimensions(struct imgBox *imgBox, long *chromStart, long *chromEnd,
+                               int *imgWidth, int *sideLabelWidth,
+                               long *portalStart, long *portalEnd, int *portalWidth,
                                double *basesPerPixel)
 // returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined
 {
@@ -1541,8 +1549,8 @@ void imgBoxShow(struct dyString **dy,struct imgBox *imgBox,int indent)
 if (imgBox)
     {
     struct dyString *myDy = addIndent(dy,indent);
-    dyStringPrintf(myDy,"imgBox: %s.%s:%d-%d %c width:%d basePer:%g sideLabe:%s w:%d "
-                        "portal:%s %d-%d w:%d",(imgBox->db ? imgBox->db : ""),
+    dyStringPrintf(myDy,"imgBox: %s.%s:%ld-%ld %c width:%d basePer:%g sideLabel:%s w:%d "
+                        "portal:%s %ld-%ld w:%d",(imgBox->db ? imgBox->db : ""),
                         (imgBox->chrom ? imgBox->chrom : ""),imgBox->chromStart,imgBox->chromEnd,
                         (imgBox->plusStrand    ? '+'   : '-'),imgBox->width,imgBox->basesPerPixel,
                         (imgBox->showSideLabel ? "Yes" : "No"),imgBox->sideLabelWidth,
@@ -1611,7 +1619,7 @@ if (imgBox->db == NULL)
 if (imgBox->chromStart  >= imgBox->chromEnd)
     {
     if (verbose)
-        warn("imgBox(%s.%s:%d-%d) has bad genome range.",
+        warn("imgBox(%s.%s:%ld-%ld) has bad genome range.",
              imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
     return FALSE;
     }
@@ -1620,7 +1628,7 @@ if (imgBox->portalStart >= imgBox->portalEnd
 ||  imgBox->portalEnd   >  imgBox->chromEnd  )
     {
     if (verbose)
-        warn("imgBox(%s.%s:%d-%d) has bad portal range: %d-%d",
+        warn("imgBox(%s.%s:%ld-%ld) has bad portal range: %ld-%ld",
              imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,
              imgBox->portalStart,imgBox->portalEnd);
     return FALSE;
@@ -1630,7 +1638,7 @@ if (imgBox->portalStart >= imgBox->portalEnd
 if (imgBox->images == NULL)
     {
     if (verbose)
-        warn("imgBox(%s.%s:%d-%d) has no images",
+        warn("imgBox(%s.%s:%ld-%ld) has no images",
              imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
     return FALSE;
     }
@@ -1638,7 +1646,7 @@ if (imgBox->images == NULL)
 if (imgBox->imgTracks == NULL)
     {
     if (verbose)
-        warn("imgBox(%s.%s:%d-%d) has no imgTracks",
+        warn("imgBox(%s.%s:%ld-%ld) has no imgTracks",
              imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
     return FALSE;
     }
@@ -1648,7 +1656,7 @@ while (imgTrack != NULL)
     if (!imgTrackIsComplete(imgTrack,verbose))
         {
         if (verbose)
-            warn("imgBox(%s.%s:%d-%d) has bad track - being skipped.",
+            warn("imgBox(%s.%s:%ld-%ld) has bad track - being skipped.",
                  imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd);
         slRemoveEl(&(imgBox->imgTracks),imgTrack);
         imgTrackFree(&imgTrack);
@@ -1663,7 +1671,7 @@ while (imgTrack != NULL)
     ||               imgTrack->plusStrand != imgBox->plusStrand)
         {
         if (verbose)
-            warn("imgBox(%s.%s:%d-%d) has inconsistent imgTrack for %s.%s:%d-%d",
+            warn("imgBox(%s.%s:%ld-%ld) has inconsistent imgTrack for %s.%s:%ld-%ld",
                  imgBox->db,  imgBox->chrom,  imgBox->chromStart,  imgBox->chromEnd,
                  imgTrack->db,imgTrack->chrom,imgTrack->chromStart,imgTrack->chromEnd);
         return FALSE;
@@ -1675,7 +1683,7 @@ while (imgTrack != NULL)
         if (slice->parentImg && (slIxFromElement(imgBox->images,slice->parentImg) == -1))
             {
             if (verbose)
-                warn("imgBox(%s.%s:%d-%d) has slice(%s) for unknown image (%s)",
+                warn("imgBox(%s.%s:%ld-%ld) has slice(%s) for unknown image (%s)",
                      imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,
                      sliceTypeToString(slice->type),slice->parentImg->file);
             return FALSE;
@@ -1776,7 +1784,7 @@ if (slice->parentImg && slice->parentImg->file != NULL)
     if (useMap)
         hPrintf(" usemap='#map_%s'",name);
     hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
-    if (slice->type==stData && imgBox->showPortal)
+    if (slice->type==stData && imgBox->showPortal) //  || slice->type==stCenter will make centerLabels scroll too
         hPrintf(" panImg'");
     else
         hPrintf("'");
@@ -1799,6 +1807,7 @@ else
         if (centerSlice != NULL)
             height -= centerSlice->height;
         }
+
     hPrintf("  <p id='p_%s' style='height:%dpx;",name,height);
     if (slice->type==stButton)
         {
@@ -1852,6 +1861,11 @@ if (slice->parentImg)
             offsetY += centerSlice->height;
             }
         }
+
+    // this makes it look like view image theImgBox==NULL
+    if ((slice->type==stData) && !sameString(name,"side_ruler"))   // data not high enough by 1 pixel GALT
+	height += 1; 
+
     // Adjustment for portal
     if (imgBox->showPortal && imgBox->basesPerPixel > 0
     && (sliceType==stData || sliceType==stCenter))
@@ -1950,8 +1964,9 @@ if (imgBox->bgImg)
 if (imgBox->showPortal)
     {
     // Let js code know what's up
-    int chromSize = hChromSize(database, chromName);
-    jsonObjectAdd(jsonForClient,"chromStart", newJsonNumber(  1));
+    // TODO REMOVE OLD WAY int chromSize = hChromSize(database, chromName);
+    long chromSize = virtSeqBaseCount;
+    jsonObjectAdd(jsonForClient,"chromStart", newJsonNumber(  1)); // yep, the js code expects 1-based closed coord here.
     jsonObjectAdd(jsonForClient,"chromEnd", newJsonNumber(chromSize));
     jsonObjectAdd(jsonForClient,"imgBoxPortal", newJsonBoolean(TRUE));
     jsonObjectAdd(jsonForClient,"imgBoxWidth", newJsonNumber(imgBox->width-imgBox->sideLabelWidth));

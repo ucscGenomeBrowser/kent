@@ -52,7 +52,7 @@ droYak2
 echTel2
 equCab2
 eriEur2
-felCat5
+felCat8
 fr3
 gadMor1
 galGal4
@@ -103,7 +103,7 @@ triMan1
 tupBel1
 turTru2
 vicPac2
-xenTro3
+xenTro7
 #
 # this is the beginning of the list of secondary assemblies
 #
@@ -139,6 +139,7 @@ droYak1
 echTel1
 equCab1
 eriEur1
+felCat5
 felCat4
 felCat3
 fr2
@@ -173,5 +174,6 @@ taeGut1
 tarSyr1
 tetNig1
 vicPac1
+xenTro3
 xenTro2
 xenTro1

@@ -496,14 +496,6 @@ html newChainNet
         type chain xenTro1
         otherDb xenTro1
 
-        track chainXenTro7
-        subTrack vertebrateNewChainNetViewchain on
-        subGroups view=chain species=ceX_tropicalis clade=advertebrate
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain xenTro7
-        otherDb xenTro7
-
         track chainXipMac1
         subTrack vertebrateNewChainNetViewchain on
         subGroups view=chain species=cfSouthern_platyfish clade=advertebrate
@@ -991,14 +983,6 @@ html newChainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign xenTro1 chainXenTro1
         otherDb xenTro1
-
-        track netXenTro7
-        subTrack vertebrateNewChainNetViewnet on
-        subGroups view=net species=ceX_tropicalis clade=advertebrate
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign xenTro7 chainXenTro7
-        otherDb xenTro7
 
         track netXipMac1
         subTrack vertebrateNewChainNetViewnet on

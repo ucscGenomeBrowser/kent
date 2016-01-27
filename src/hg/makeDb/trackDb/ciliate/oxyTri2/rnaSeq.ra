@@ -1,0 +1,84 @@
+track bamTracks
+compositeTrack on
+shortLabel bowtie/tophat
+longLabel BAM files from bowtie/tophat analysis
+group varRep
+visibility hide
+type bam
+html bamTracks
+pairEndsByName on
+showNames off
+noColorTag .
+bamColorMode strand
+bamGrayMode aliQual
+aliQualRange 0:255
+baseColorDefault diffBases
+baseColorUseSequence lfExtra
+indelDoubleInsert on
+indelQueryInsert on
+showDiffBasesAllScales .
+showDiffBasesMaxZoom 100
+maxWindowToDraw 1000000
+
+    track bammat06Zn01Oxytri2Ih1Rd1XpeYcTophat
+    parent bamTracks
+    shortLabel Mat06Zn01
+    longLabel mat06_zn01 mapalgo4_pe7777_ncRNAfilt_oxytri2Ref_tophat rnaseq pairedEnd Only mappings (including one hit for each multihit read) (duplicates removed down to 1) bam
+    visibility pack
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bammat06Zn30Oxytri2Ih1Rd1YcBowtie
+    parent bamTracks
+    shortLabel Mat06Zn30
+    longLabel mat06_zn30 mapalgo2_se50_ncRNAfilt_oxytri2Ref_bowtie2 rnaseq singleEnd mappings (including one hit for each multihit read) (duplicates removed down to 1) bam
+    visibility hide
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bammat12Zn31Oxytri2Ih1Rd1YcBowtie
+    parent bamTracks
+    shortLabel Mat12Zn31
+    longLabel mat12_zn31 mapalgo2_se50_ncRNAfilt_oxytri2Ref_bowtie2 rnaseq singleEnd mappings (including one hit for each multihit read) (duplicates removed down to 1) bam
+    visibility pack
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bammat24Zn32Oxytri2Ih1Rd1YcBowtie
+    parent bamTracks
+    shortLabel Mat24Zn32
+    longLabel mat24_zn32 mapalgo2_se50_ncRNAfilt_oxytri2Ref_bowtie2 rnaseq singleEnd mappings (including one hit for each multihit read) (duplicates removed down to 1) bam
+    visibility hide
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bammat24x05Oxytri2IhnYcGe26le28Bowtie
+    parent bamTracks
+    shortLabel Mat24x05
+    longLabel mat24_05 mapalgoT22_se1_ncRNAfilt_oxytri2Ref_bowtie_trimalgo2 rnaseq length ge26bp,le28bp singleEnd mappings (including all hits for each multihit read) bam
+    visibility hide
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bammat24x06Oxytri2IhnYcGe26le28Bowtie
+    parent bamTracks
+    shortLabel Mat24x06
+    longLabel mat24_06 mapalgoT22_se1_ncRNAfilt_oxytri2Ref_bowtie_trimalgo2 rnaseq length ge26bp,le28bp singleEnd mappings (including all hits for each multihit read) bam
+    visibility hide
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310
+
+    track bamveg09Zn29Oxytri2Ih1Rd1YcBowtie
+    parent bamTracks
+    shortLabel Veg09Zn29
+    longLabel veg09_zn29 mapalgo2_se50_ncRNAfilt_oxytri2Ref_bowtie2 rnaseq singleEnd mappings (including one hit for each multihit read) (duplicates removed down to 1) bam
+    visibility pack
+    configurable on
+    bamSkipPrintQualScore .
+    chromosomes chrM,chrMACsb310

@@ -24907,4 +24907,6 @@ vi README
 
 # I have not made any trackDb entry for this table at this time.
 
+# I renamed the table to altLocations to match use in other assemblies.
+
 #############################################################################

@@ -9141,6 +9141,15 @@ http://genome.crg.es/~tderrien/UCSC_Tracks/H.sapiens.genome.hg19.main.mappabilit
     mkdir /hive/data/gbdb/hg19/RNA-img
     cp -p * /hive/data/gbdb/hg19/RNA-img
 
+# tRNAs track (2015-10-04, Chris RE-BUILD WITH UPDATED DATA FROM TODD LOWE) 
+    cd /hive/data/genomes/hg19/bed/tRNAs
+    cp /hive/users/pchan/gtrnadb2/Eukaryota/hg19/hg19-tRNAs.bed hg19-tRNAs2.bed
+    hgsql hg19 -e 'drop table if exists tRNAs'
+    hgLoadBed -tab hg19 tRNAs hg19-tRNAs2.bed -sqlTable=$HOME/kent/src/hg/lib/tRNAs.sql
+    mv gif gif.old 
+    mkdir gif
+    cp -p /hive/users/pchan/gtrnadb2/Eukaryota/hg19/images/* gif
+
 #####################################################################
 # calJac3 Marmoset BLASTZ/CHAIN/NET (DONE - 2010-01-21 - Hiram)
     screen # use a screen to manage this multi-day job
@@ -17540,6 +17549,35 @@ TMPDIR=/scratch/tmp
       color 200,0,0 (Loss)
   #  new html page using override in trackDb/human/hg19/trackDb.ra
 
+
+##############################################################################
+# ISCA AGGREGATE BENIGN TRACKS (DONE 2015-11-18 jcasper)
+
+    cd /hive/data/outside/otto/isca/2015-09-16/
+    for db in hg19 hg38; do
+
+    # make bedGraphs
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_gain%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignGain.bedGraph
+
+  hgsql -N -e "SELECT chrom, chromStart, chromEnd FROM iscaBenign \
+      WHERE attrVals LIKE '%number_loss%'" $db | sort \
+  | bedItemOverlapCount $db stdin > $db/iscaBenignLoss.bedGraph
+
+  # load tables
+  hgLoadBed -bedGraph=4 $db iscaBenignGainCum $db/iscaBenignGain.bedGraph
+  hgLoadBed -bedGraph=4 $db iscaBenignLossCum $db/iscaBenignLoss.bedGraph
+    done
+    # hg19
+    # Read 1889 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1252 elements of size 4 from iscaBenignLoss.bedGraph
+    # hg38
+    # Read 1861 elements of size 4 from iscaBenignGain.bedGraph
+    # Read 1265 elements of size 4 from iscaBenignLoss.bedGraph
+
+  # Plus changes made to the scripts in kent/src/hg/utils/otto/isca/
+  # to ensure that these tables are re-built and tested with the rest
 
 ############################################################################
 # LINCRNAS FROM BROAD (DONE 2011-10-10 Chin)
@@ -30648,9 +30686,97 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
 
+##############################################################################
+# GTEX Genotype-Tissue Expression(2015-03-09 Kate)
+#
+# Data and sample info (metadata) loaded rom http://www.gtexportal.org to
+# tables in hgFixed.  Methods here:
+# kent/src/hg/makeDb/doc/gtex/2014.jan.txt
 
+# Load BED15ish table with tissue medians for each gene.  Coordinates are the
+# UCSC known genes canonical transcript for the ENSembl gene reported by GTEX.
+
+cd /hive/data/genomes/hg19/bed
+mkdir gtex; cd gtex
+
+# Map GENCODE to known genes for cannonical transcript selection
+hgMapToGene hg19 wgEncodeGencodeCompV19 knownGene knownToGencodeV19
+
+hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
+# 75623
+# compared to 80184 for hg38 V20 GENCODE
+
+
+hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
+# reload 9/23/15 to repair tissue ordering problem
+
+# GTEX gene models are based on GENCODE V18.  Need a knownToGencodeV18 table to make this work
+#hgGtexGeneBed hg19 -gencodeVersion=V18 gtexGene >&! log.v18.txt
+
+wc -l log.txt 
+# 31823 errs - Can't find gene
+# Needs investigating. 
+
+hgsql hg19 -Ne 'select count(*) from gtexGene'
+# 24170
+# Compared to 23911 for hg38 GENCODE V20 (which also had errs IFIRC)
+
+# Load exon data
+cd /hive/data/outside/GTEx/2014-01-17
+cd exonReads
+alias hgGtex ~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex
+hgGtex -exon -noLoad -tab=output gtex V4 \
+    GTEx_Analysis_V4_RNA-seq_RNA-SeQCv1.1.8_exon_reads.txt \
+    ../GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt \
+    ../GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt \
+    ../portal/gtexColorTissue.dec.tab
+
+cd output
+hgLoadSqlTab hgFixed gtexExonTissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql \
+        gtexExonTissueMedian.tab
+
+alias hgGtexExonBed ~kate/kent/src/hg/makeDb/outside/hgGtexExonBed/hgGtexExonBed
+hgGtexExonBed hg19 gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
+
+# rename  and split out whole genes (exon _0).  NOTE: these include a few on chrM (called chrMT)
+foreach f (*.tab)
+    set r = $f:r
+    set t = `echo $r | sed 's/gtexTissueExonMedian//'`
+    grep -v '_0' $f | sed 's/chrMT/chrM/' > gtexTissueExonMedian$t.bed
+    grep '_0' $f | sed 's/chrMT/chrM/' > gtexTissueExon0Median$t.bed
+end
+
+# add scores (100-1000)
+cd scored
+bedScore -method=reg -uniform -col=7 -minScore=100 gtexTissueExonMedian*.bed scored/
+bedScore -method=reg -uniform -col=7 -minScore=100 gtexTissueExon0Median*.bed scored/
+
+# load
+cat > load.csh << 'EOF'
+foreach f (gtexTissueExon0Median*.bed)
+    set r = $f:r
+    hgLoadBed hg19 $r $f -sqlTable=/cluster/home/kate/kent/src/hg/lib/bed6FloatVal.sql -renameSqlTable -tab
+end
+foreach f (gtexTissueExonMedian*.bed)
+    set r = $f:r
+    hgLoadBed hg19 $r $f -sqlTable=/cluster/home/kate/kent/src/hg/lib/bed6FloatVal.sql -renameSqlTable -tab
+end
+'EOF'
+
+csh load.csh >&! load.log &
+cd ..
+
+# redo trackDb
+
+hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
+
+
+
+
+
+EOF
 #############################################################################
-# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 4/8/15 angie)
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie)
     # It was kind of a pain to get the Aspera command line client ascp this time around --
     # turns out it's included in their web browser plugin package, which I didn't think to
     # obtain because I need a command-line tool not a web browser plugin.  Anyway,
@@ -30672,7 +30798,7 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
       echo $f
       tabix -p vcf $f
     end
-
+    # Install the files
     mkdir /gbdb/hg19/1000Genomes/phase3
     ln -s `pwd`/*.vcf.gz* /gbdb/hg19/1000Genomes/phase3/
     cp /dev/null tgpPhase3.txt
@@ -30683,7 +30809,7 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
     # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
     hgLoadSqlTab hg19 tgpPhase3 ~/kent/src/hg/lib/bbiChroms.sql tgpPhase3.txt
     # Make a chromosomes line for trackDb:
-    use hg19 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
+    hgsql hg19 -NBe 'select seqName from tgpPhase3' | xargs echo | sed -e 's/ /,/g'
 #chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 
@@ -30706,6 +30832,10 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
     rm tmp.bed
     ln -s `pwd`/2014*.bb /gbdb/hg19/1000Genomes/phase3/
     # Use trackDb's bigDataUrl setting instead of hgBbiDbLink tiny table
+    # Make a chromosomes line for trackDb:
+    bigBedInfo -chroms /gbdb/hg19/1000Genomes/phase3/20141020.strict_mask.whole_genome.bb \
+    | egrep '^[[:space:]]+chr' | awk '{print $1;}' | xargs echo | sed -e 's/ /,/g'
+#chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr2,chr20,chr21,chr22,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chrX,chrY
 
 
 ############################################################################
@@ -30790,7 +30920,30 @@ viewLimits 0:2000
 autoScale off
 html gwipsvizRiboseq
 
-_EOF_
+
+#########################################################################
+# altLocations (DONE - 2015-07-10 - Galt)
+#
+# I used hapRegions instead of altSeqHaplotype because it has fewer records
+# and also the corrected chromStart (-1).
+# I am trying to have a standard name for the table, used in all assemblies with alternate haplotypes (not in patches).
+# hgTracks and hgc expect the table to have this name.
+
+hgsql hg19
+create table altLocations as (select bin,chrom,chromStart,chromEnd,name from hapRegions);
+
+#I also created this in top-level trackDb.ra:
+
+track altLocations
+type bed 4
+group map
+color 32,32,190
+shortLabel Alt Haplotypes
+longLabel Alternate Haplotypes to Reference Sequence Correspondence
+url /cgi-bin/hgTracks?position=$$
+urlLabel Corresponding position:
+
+
 ##############################################################################
 # DBSNP B144 / SNP144 (DONE 9/9/15)
     # Originally done 7/16/15

@@ -1,0 +1,15 @@
+        track chainXenTro3
+        subTrack vertebrateChainNetViewchain off
+        subGroups view=chain species=haX_Tro clade=dAmph
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain xenTro3
+        otherDb xenTro3
+
+        track netXenTro3
+        subTrack vertebrateChainNetViewnet on 
+        subGroups view=net species=haX_Tro clade=dAmph
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign xenTro3 chainXenTro3
+        otherDb xenTro3

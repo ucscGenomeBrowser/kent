@@ -21,6 +21,7 @@
 #include "udc.h"
 #include "bigWarn.h"
 #include "errCatch.h"
+#include "hgConfig.h"
 
 
 struct bamTrackData
@@ -38,7 +39,7 @@ struct bamTrackData
     };
 
 
-struct psl *pslFromBam(const bam1_t *bam)
+static struct psl *pslFromBam(const bam1_t *bam)
 /* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
  * no scoring info) */
 {
@@ -93,6 +94,13 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    errAbort("pslFromBam: unrecognized CIGAR op %c -- update me", op);
 	}
     }
+
+if (blockCount == 0)
+    {
+    // sometimes BAM's have alignments with no alignment
+    return NULL;  // leaks allocated PSL.
+    }
+
 psl->tSize = hChromSize(database, chromName);
 psl->tStart = tStarts[0];
 psl->tEnd = tStarts[blockCount-1] + blockSizes[blockCount-1];
@@ -219,6 +227,10 @@ struct linkedFeatures *bamToLf(const bam1_t *bam, void *data)
 struct bamTrackData *btd = (struct bamTrackData *)data;
 const bam1_core_t *core = &bam->core;
 struct linkedFeatures *lf;
+struct psl *original = pslFromBam(bam);
+if (original == NULL)
+    return NULL;
+
 AllocVar(lf);
 lf->score = core->qual;
 lf->name = cloneString(bam1_qname(bam));
@@ -228,7 +240,7 @@ lf->components = sfFromNumericCigar(bam, &length);
 lf->start = lf->tallStart = core->pos;
 lf->end = lf->tallEnd = core->pos + length;
 lf->extra = bamGetQuerySequence(bam, FALSE); // cds.c reverses if psl != NULL
-lf->original = pslFromBam(bam);
+lf->original = original;
 int clippedQLen;
 bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
@@ -290,7 +302,11 @@ if (core->qual < btd->minAliQual)
 return TRUE;
 }
 
+#ifdef USE_HTS
+int addBam(const bam1_t *bam, void *data, bam_hdr_t *hdr)
+#else
 int addBam(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeatures item, and add it to tg->items. */
 {
@@ -298,8 +314,11 @@ struct bamTrackData *btd = (struct bamTrackData *)data;
 if (!passesFilters(bam, btd))
     return 0;
 struct linkedFeatures *lf = bamToLf(bam, data);
-struct track *tg = btd->tg;
-slAddHead(&(tg->items), lf);
+if (lf)
+    {
+    struct track *tg = btd->tg;
+    slAddHead(&(tg->items), lf);
+    }
 return 0;
 }
 
@@ -336,7 +355,11 @@ lfs->features = lf;
 return lfs;
 }
 
+#ifdef USE_HTS
+int addBamPaired(const bam1_t *bam, void *data, bam_hdr_t *header)
+#else
 int addBamPaired(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeaturesSeries item, and either store it until we find its mate
  * or add it to tg->items. */
@@ -477,6 +500,7 @@ if (errCatchStart(errCatch))
     parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
     struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
 			       aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
+
     char *fileName = trackDbSetting(tg->tdb, "bigDataUrl");
     if (fileName == NULL)
 	{
@@ -496,8 +520,10 @@ if (errCatchStart(errCatch))
 
     char posForBam[512];
     safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName, winStart, winEnd);
+    char *cacheDir =  cfgOption("cramRef");
+    char *refUrl = trackDbSetting(tg->tdb, "refUrl");
     if (!isPaired)
-	bamFetch(fileName2, posForBam, addBam, &btd, NULL);
+	bamFetchPlus(fileName2, posForBam, addBam, &btd, NULL, refUrl, cacheDir);
     else
 	{
 	char *setting = trackDbSettingClosestToHomeOrDefault(tg->tdb, "pairSearchRange", "20000");
@@ -505,7 +531,7 @@ if (errCatchStart(errCatch))
 	if (pairSearchRange > 0)
 	    safef(posForBam, sizeof(posForBam), "%s:%d-%d", chromName,
 		  max(0, winStart-pairSearchRange), winEnd+pairSearchRange);
-	bamFetch(fileName2, posForBam, addBamPaired, &btd, NULL);
+	bamFetchPlus(fileName2, posForBam, addBamPaired, &btd, NULL, refUrl, cacheDir);
 	struct hashEl *hel;
 	struct hashCookie cookie = hashFirst(btd.pairHash);
 	while ((hel = hashNext(&cookie)) != NULL)
@@ -854,7 +880,11 @@ int width;
 int preDrawZero;
 };
 
+#ifdef USE_HTS
+static int countBam(const bam1_t *bam, void *data, bam_hdr_t *header)
+#else
 static int countBam(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  */
 {
 struct bamWigTrackData *btd = (struct bamWigTrackData *)data;

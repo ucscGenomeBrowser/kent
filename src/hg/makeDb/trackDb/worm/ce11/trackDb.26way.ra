@@ -50,8 +50,8 @@ group compGeno
         track phyloP26way
         subTrack cons26wayViewphyloP on
         subGroups view=phyloP
-        shortLabel 26 mammals Cons
-        longLabel 26 mammals (17 primates) Basewise Conservation by PhyloP
+        shortLabel 26 nematodes Cons
+        longLabel 26 nematodes Basewise Conservation by PhyloP
         noInherit on
         configurable on
         type wig -3.992 9.159
@@ -75,7 +75,7 @@ group compGeno
         subTrack cons26wayViewphastcons off
         subGroups view=phastcons
         shortLabel 26-way Cons
-        longLabel 26 mammals (17 primates) conservation by PhastCons
+        longLabel 26 nematodes conservation by PhastCons
         noInherit on
         configurable on
         type wig 0 1
@@ -98,7 +98,7 @@ group compGeno
         subTrack cons26wayViewelements off
         subGroups view=elements
         shortLabel 26-way El
-        longLabel 26 mammals (17 primates) Conserved Elements
+        longLabel 26 nematodes Conserved Elements
         noInherit on
         color 110,10,40
         type bed 5 .

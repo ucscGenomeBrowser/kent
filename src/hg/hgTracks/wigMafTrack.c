@@ -101,7 +101,7 @@ AllocVar(mi);
 if ((val = hGenome(s)) != NULL)
     {
     /* it's a database name */
-    mi->db = cloneString(s);
+    mi->db = cloneString(hubConnectSkipHubPrefix(s));
     mi->name = val;
     }
 else
@@ -304,7 +304,10 @@ if (begin < 0)
 
 if (track->isBigBed)
     {
-    mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, begin, winEnd+2);
+    struct bbiFile *bbi = fetchBbiForTrack(track);
+    mp->list = bigMafLoadInRegion(bbi, chromName, begin, winEnd+2);
+    bbiFileClose(&bbi);
+    track->bbiFile = NULL;
     }
 else if (mp->ct)
     {
@@ -517,7 +520,10 @@ if (!doSnpTable && !inSummaryMode(cart, track->tdb, winBaseCount))
 
     if (track->isBigBed)
         {
+        struct bbiFile *bbi = fetchBbiForTrack(track);
         mp->list = bigMafLoadInRegion(fetchBbiForTrack(track), chromName, winStart, winEnd);
+        bbiFileClose(&bbi);
+        track->bbiFile = NULL;
         }
     else if (mp->ct)
 	{
@@ -1180,6 +1186,7 @@ if (track->isBigBed)
         else
             slAddHead(&(hel->val), ms);
         }
+    bbiFileClose(&bbi);
     }
 else 
     {
@@ -1579,11 +1586,42 @@ if ((retValue = lookupCodon(codon)) == 0)
 return retValue;
 }
 
-static void translateCodons(struct sqlConnection *conn,
-                            struct sqlConnection *conn2, char *tableName, char *compName,
+struct sqlClosure
+{
+char *mafFile;
+struct sqlConnection *conn2;
+struct sqlConnection *conn3;
+char *tableName;
+};
+
+struct bbClosure
+{
+struct bbiFile *bbi;
+};
+
+typedef struct mafAli * (*mafRetrieveFunc)(void *closure,  char *chrom, int start, int end);
+
+static struct mafAli *mafLoadFromBb(void *closure, char *chrom, int start, int end)
+/* Retrieve maf blocks from a bigBed file. */
+{
+struct bbClosure *bbClosure = closure;
+
+return bigMafLoadInRegion( bbClosure->bbi, chrom, start, end);
+}
+
+static struct mafAli *mafLoadFromSql(void *closure, char *chrom, int start, int end)
+/* Retrieve maf blocks from an SQL table. */
+{
+struct sqlClosure *sqlClosure = closure;
+
+return mafLoadInRegion2(sqlClosure->conn2, sqlClosure->conn3, sqlClosure->tableName, chrom, start, end, sqlClosure->mafFile  );
+}
+
+static void translateCodons(mafRetrieveFunc func, void *closure,
+                            char *compName,
                             DNA *dna, int start, int length, int frame, char strand,
                             int prevEnd, int nextStart, bool alreadyComplemented,
-                            int x, int y, int width, int height, struct hvGfx *hvg, char *mafFile)
+                            int x, int y, int width, int height, struct hvGfx *hvg)
 {
 int size = length;
 DNA *ptr;
@@ -1597,7 +1635,7 @@ int mult = 1;
 char codon[4];
 int fillBox = FALSE;
 
-safef(masterChrom, sizeof(masterChrom), "%s.%s", database, chromName);
+safef(masterChrom, sizeof(masterChrom), "%s.%s", hubConnectSkipHubPrefix(database), chromName);
 
 dna += start;
 
@@ -1649,7 +1687,7 @@ else if (frame && (prevEnd != -1))
     switch(frame)
 	{
 	case 1:
-	    ali = mafLoadInRegion2(conn, conn2, tableName, chromName, prevEnd , prevEnd + 1, mafFile  );
+	    ali = func(closure,  chromName, prevEnd , prevEnd + 1);
 	    if (ali != NULL)
 		{
 		sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
@@ -1674,15 +1712,13 @@ else if (frame && (prevEnd != -1))
 	case 2:
 	    if (strand == '-')
 		{
-		ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
-			    prevEnd, prevEnd + 2, mafFile);
+                ali = func(closure,  chromName, prevEnd , prevEnd + 2);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd, prevEnd + 2  );
 		}
 	    else
 		{
-		ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
-			    prevEnd - 1, prevEnd + 1, mafFile);
+                ali = func(closure,  chromName, prevEnd - 1 , prevEnd + 1);
 		if (ali != NULL)
 		    sub = mafSubset(ali, masterChrom, prevEnd - 1, prevEnd + 1);
 		}
@@ -1754,16 +1790,14 @@ if (length && (nextStart != -1))
 
     if (strand == '-')
 	{
-	ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
-		    nextStart - 2 + length, nextStart + 1, mafFile );
+        ali = func(closure,  chromName, nextStart - 2 + length, nextStart + 1);
 	if (ali != NULL)
 	    sub = mafSubset(ali, masterChrom,
 		nextStart - 2 + length, nextStart + 1);
 	}
     else
 	{
-	ali = mafLoadInRegion2(conn, conn2, tableName, chromName,
-				nextStart , nextStart + 2, mafFile );
+        ali = func(closure,  chromName, nextStart , nextStart + 2);
 	if (ali != NULL)
 	    sub = mafSubset(ali, masterChrom, nextStart , nextStart + 2);
 	}
@@ -1835,6 +1869,51 @@ else if (length)	 /* broken frame, just show nucs */
 
 if (strand == '-')
     reverseBytes(dna, size);
+}
+
+static struct mafFrames *getFramesFromSql(  char *framesTable,
+    char *chromName, int seqStart, int seqEnd, char *extra, boolean newTableType)
+{
+struct mafFrames *mfList = NULL;
+int rowOffset;
+struct sqlResult *sr;
+struct mafFrames *mf;
+char **row;
+
+struct sqlConnection *conn = hAllocConn(database);
+sr = hRangeQuery(conn, framesTable, chromName, seqStart, seqEnd, extra, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (newTableType)
+        mf = mafFramesLoad(row + rowOffset);
+    else
+        mf = mafFramesLoadOld(row + rowOffset);
+    slAddHead(&mfList, mf);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return mfList;
+}
+
+static struct mafFrames *getFramesFromBb(  char *framesTable, char *chromName, int seqStart, int seqEnd)
+{
+struct lm *lm = lmInit(0);
+struct bbiFile *bbi =  bigBedFileOpen(framesTable);
+struct bigBedInterval *bb, *bbList =  bigBedIntervalQuery(bbi, chromName, seqStart, seqEnd, 0, lm);
+char *bedRow[11];
+char startBuf[16], endBuf[16];
+struct mafFrames *mfList = NULL, *mf;
+
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, chromName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    mf = mafFramesLoad( bedRow );
+    slAddHead(&mfList, mf);
+    }
+
+bbiFileClose(&bbi);
+slReverse(&mfList);
+return mfList;
 }
 
 static int wigMafDrawBases(struct track *track, int seqStart, int seqEnd,
@@ -1930,7 +2009,12 @@ if (framesTable)
 boolean newTableType = FALSE;
 
 if (framesTable != NULL)
-    newTableType = hHasField(database, framesTable, "isExonStart");
+    {
+    if (track->isBigBed)
+        newTableType = TRUE;
+    else
+        newTableType = hHasField(database, framesTable, "isExonStart");
+    }
 
 /* initialize "no alignment" string to o's */
 for (i = 0; i < sizeof noAlignment - 1; i++)
@@ -2271,10 +2355,7 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 
     if (framesTable != NULL)
 	{
-	int rowOffset;
-	char **row;
-	struct sqlConnection *conn = hAllocConn(database);
-	struct sqlResult *sr;
+        struct mafFrames *mfList = NULL, *mf;
 	char extra[512];
 	boolean found = FALSE;
 
@@ -2299,43 +2380,61 @@ for (mi = miList->next, i=1; mi != NULL && mi->db != NULL; mi = mi->next, i++)
 	else
 	    errAbort("unknown codon translation mode %s",codonTransMode);
 tryagain:
-	sr = hRangeQuery(conn, framesTable, chromName, seqStart, seqEnd, extra, &rowOffset);
-	while ((row = sqlNextRow(sr)) != NULL)
-	    {
-	    struct mafFrames mf;
-	    int start, end, w;
-	    int frame;
+        if (track->isBigBed)
+            mfList = getFramesFromBb(  framesTable, chromName, seqStart, seqEnd);
+        else
+            mfList = getFramesFromSql(  framesTable, chromName, seqStart, seqEnd, extra, newTableType);
 
-	    found = TRUE;
-	    if (newTableType)
-		mafFramesStaticLoad(row + rowOffset, &mf);
-	    else
-		mafFramesStaticLoadOld(row + rowOffset, &mf);
+        if (mfList != NULL)
+            found = TRUE;
 
-	    if (mf.chromStart < seqStart)
-		start = 0;
-	    else
-		start = mf.chromStart-seqStart;
-	    frame = mf.frame;
-	    if (mf.strand[0] == '-')
-		{
-		if (mf.chromEnd > seqEnd)
-		    frame = (frame + mf.chromEnd-seqEnd  ) % 3;
-		}
-	    else
-		{
-		if (mf.chromStart < seqStart)
-		    frame = (frame + seqStart-mf.chromStart  ) % 3;
-		}
+        for(mf = mfList; mf; mf = mf->next)
+            {
+            int start, end, w;
+            int frame;
+            if (mf->chromStart < seqStart)
+                start = 0;
+            else
+                start = mf->chromStart-seqStart;
+            frame = mf->frame;
+            if (mf->strand[0] == '-')
+                {
+                if (mf->chromEnd > seqEnd)
+                    frame = (frame + mf->chromEnd-seqEnd  ) % 3;
+                }
+            else
+                {
+                if (mf->chromStart < seqStart)
+                    frame = (frame + seqStart-mf->chromStart  ) % 3;
+                }
 
-	    end = mf.chromEnd > seqEnd ? seqEnd - seqStart  : mf.chromEnd - seqStart;
-	    w= end - start;
+            end = mf->chromEnd > seqEnd ? seqEnd - seqStart  : mf->chromEnd - seqStart;
+            w= end - start;
 
-	    translateCodons(conn2, conn3, tableName, mi->db, line, start,
-                            w, frame, mf.strand[0],mf.prevFramePos,mf.nextFramePos,
-                            complementBases, x, y, width, mi->height,  hvg, mafFile);
-	    }
-	sqlFreeResult(&sr);
+            void *closure;
+            mafRetrieveFunc func;
+            struct sqlClosure sqlClosure;
+            struct bbClosure bbClosure;
+
+            if (track->isBigBed)
+                {
+                func =  mafLoadFromBb;
+                closure = &bbClosure;
+                bbClosure.bbi = fetchBbiForTrack(track);
+                }
+            else
+                {
+                func =  mafLoadFromSql;
+                closure = &sqlClosure;
+                sqlClosure.conn2 = conn2;
+                sqlClosure.conn3 = conn3;
+                sqlClosure.mafFile = mafFile;
+                sqlClosure.tableName = tableName;
+                }
+            translateCodons(func, closure, mi->db, line, start,
+                            w, frame, mf->strand[0],mf->prevFramePos,mf->nextFramePos,
+                            complementBases, x, y, width, mi->height,  hvg);
+            }
 
 	if (!found)
 	    {
@@ -2345,8 +2444,6 @@ tryagain:
 	    found = TRUE; /* don't try again */
 	    goto tryagain;
 	    }
-
-	hFreeConn(&conn);
 	}
 
     if (startSub2)

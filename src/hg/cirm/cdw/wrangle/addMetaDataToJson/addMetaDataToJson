@@ -24,18 +24,26 @@ def parseArgs(args):
     type = argparse.FileType("r"))
     parser.add_argument ("metaDataFile",
     help = " The input meta data file ",
-    type = argparse.FileType("r"))
-    parser.add_argument ("outputFile",
+    action = "store")
+    parser.add_argument ("outputJson",
     help = " The output file. ",
     type =argparse.FileType("w"))
     parser.add_argument ("--keyCol",
-    help = " The meta data key column. ",
+    help = " The meta data key column. Defaults to 'meta' column. ",
     type = int)
     parser.add_argument ("--fields", 
     nargs="+",
-    type = int)
-    parser.set_defaults(keyCol = 5)
-    parser.set_defaults(fields = [1]) 
+    action = "store")
+    parser.add_argument ("--verbose",
+    help = " Spit out messages during runtime. ",
+    action = "store_true")
+    
+    parser.set_defaults(verbose = False)
+    parser.set_defaults(keyCol = None)
+    parser.set_defaults(fields = ["age","donor","tissue","lab"]) 
+    if (len(sys.argv) == 1): 
+        parser.print_help()
+        exit(1)
     options = parser.parse_args()
     return options
 
@@ -71,13 +79,11 @@ def addJsonNameValPair(string, name, val):
     result += nameVal + string[findLastQuotation(string):]
     return result
 
-def main(args):
+def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
     """
-    Initialized options and calls other functions.
     """
-    options = parseArgs(args)
-    metaData = common.readInTable(options.metaDataFile, options.keyCol, "\t") 
-    for line in options.jsonFile: # Lets abuse python's string manipulation a bit...
+    doOnce = True
+    for line in jsonFile: # Lets abuse python's string manipulation a bit...
         if "name" in line: 
             elements = line.split(",")
             name = elements[0].split(":")[1].replace("\"","").replace(" ","")
@@ -85,13 +91,34 @@ def main(args):
                 if metaData.get(name): # We're here! This is the json entries that correspond to the leaf nodes...
                     newLine = line[:-1]
                     count = 0
-                    for item in options.fields: # Add in the new meta data fields to the json entry
-                        swap = addJsonNameValPair(newLine, "metaField" + str(count), metaData[name][item])
+                    for item in fields: # Add in the new meta data fields to the json entry
+                        swap = addJsonNameValPair(newLine, item, metaData[name][metaFieldToCol[item]])
                         newLine = swap 
                         count +=1
-                    options.outputFile.write(newLine+"\n") # Print the json entry
+                    doOnce = False
+                    outputJson.write(newLine+"\n") # Print the json entry
                     continue 
-        options.outputFile.write(line) # Print everything else
+        outputJson.write(line) # Print everything else
+
+
+def main(args):
+    """
+    Initialized options and calls other functions.
+    """
+    options = parseArgs(args)
+    if (options.verbose): print ("Start adding meta data to the clustered .json and .html files.")
+    
+    with open(options.metaDataFile, "r") as f:
+        firstLine = f.readline()[:-1].split("\t")
+
+    metaData = common.readInTable(open(options.metaDataFile, "r"), firstLine.index("meta"), "\t")
+    metaFieldToCol = dict()
+    for item in options.fields: 
+        metaFieldToCol.setdefault(item,firstLine.index(item))
+        
+    updateJson(options.jsonFile, metaData, metaFieldToCol, options.fields, options.outputJson)
+
+    if (options.verbose): print ("Completed adding meta data to the clustered .json and .html files.")
 
 if __name__ == "__main__" : 
     sys.exit(main(sys.argv))

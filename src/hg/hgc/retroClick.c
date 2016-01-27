@@ -508,14 +508,16 @@ static void displayMappingInfo(struct sqlConnection *conn, struct mappingInfo *m
 /* display information from a transMap table */
 {
 struct ucscRetroInfo *pg = mi->pg;
-double  wt[12];     /* weights on score function*/
 char query[512];
 char *name;
 char alignTbl[128];
 char scoreSql[128];
+#ifdef score
+double  wt[12];     /* weights on score function*/
 struct psl *psl;
 float coverFactor = 0;
 float maxOverlap = 0;
+#endif
 if (mi->suffix == NULL)
     {
     safef(alignTbl, sizeof(alignTbl), "%s%sAli", mi->tblPre, mi->geneSet);
@@ -543,18 +545,16 @@ printf("<TR><TH>Introns Processed Out <TD>%d out of %d (%d exons covered)\n", pg
 printf("<TR><TH>Possible Introns or Gaps in Retrogene<TD>%d,%d\n", pg->intronCount, pg->alignGapCount);
 printf("<TR><TH>Conserved Splice Sites<TD>%d</TR>\n",  pg->conservedSpliceSites);
 printf("<TR><TH>Parent Splice Sites<TD>%d</TR>\n",  pg->parentSpliceCount);
+#ifdef score
 psl = getAlignments(conn, alignTbl, mi->pg->name);
 if (psl != NULL)
     {
     maxOverlap = (float)pg->maxOverlap/(float)(psl->match+psl->misMatch+psl->repMatch)  ;
     coverFactor = ((float)(psl->qSize-psl->qEnd)/(float)psl->qSize);
     }
-else 
-    {
-    maxOverlap = 0;
-    }
 wt[0] = 0; wt[1] = 0.85; wt[2] = 0.2; wt[3] = 0.3; wt[4] = 0.8; 
 wt[5] = 1; wt[6] = 1  ; wt[7] = 0.5; wt[8] = 0.5; wt[9] = 1; wt[10] = 1;
+#endif
 #ifdef debug
 char table[512];
 struct psl *pslList = getParentAligns(conn, mi, &table);

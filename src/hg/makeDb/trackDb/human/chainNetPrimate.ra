@@ -43,6 +43,15 @@ html primateChainNet
         type chain panPan1
         otherDb panPan1
 
+        track chainGorGor4
+        release alpha
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=acGorilla clade=aaHominidae
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor4
+        otherDb gorGor4
+
         track chainGorGor3
         subTrack primateChainNetViewchain off
         subGroups view=chain species=acGorilla clade=aaHominidae
@@ -176,6 +185,15 @@ include chainNetRBestOtoGar3.ra alpha
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panPan1 chainPanPan1
         otherDb panPan1
+
+        track netGorGor4
+        release alpha
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=acGorilla clade=aaHominidae
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor4 chainGorGor4
+        otherDb gorGor4
 
         track netGorGor3
         subTrack primateChainNetViewnet off

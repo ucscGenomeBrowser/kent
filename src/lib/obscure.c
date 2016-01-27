@@ -829,3 +829,18 @@ for (;;)
     }
 }
 
+boolean endsWithWordComma(char *string, char *word)
+/* Return TRUE if string ends with word possibly followed by a comma, and the beginning
+ * of word within string is the beginning of string or follows a comma. */
+{
+int stringLen = strlen(string);
+int wordLen = strlen(word);
+int commaSize = (stringLen > wordLen && string[stringLen-1] == ',') ? 1 : 0;
+if (stringLen < wordLen + commaSize)
+    return FALSE;
+int wordOffset = stringLen - commaSize - wordLen;
+if (sameStringN(string + wordOffset, word, wordLen) &&
+    (wordOffset == 0 || string[wordOffset-1] == ','))
+    return TRUE;
+return FALSE;
+}

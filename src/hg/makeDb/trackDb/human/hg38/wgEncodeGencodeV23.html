@@ -129,7 +129,7 @@ gene locus.
        locus:
     <ul>
       <li> All full-length coding transcripts (except problem transcripts or transcripts that are
-           nonsense-mediated decay) was included in the basic set.</li>
+           nonsense-mediated decay) were included in the basic set.</li>
       <li> If there were no transcripts meeting the above criteria, then the partial coding
            transcript with the largest CDS was included in the basic set (excluding problem transcripts).</li>
     </ul>
@@ -219,9 +219,41 @@ are allowed to differ.</p>
   </li>
 </ul>
 
+<p><b><a name="appris" href="http://appris.bioinfo.cnio.es/">APPRIS</a></b> is a system to annotate alternatively spliced transcripts based on a range of computational methods. It provides value to the annotations of the human, mouse, zebrafish, rat, and pig genomes.
+APPRIS has selected a single CDS variant for each gene as the 'PRINCIPAL' isoform. Principal isoforms are tagged with the numbers 1 to 5, with 1 being the most reliable.</p>
+<ul>
+  <li>PRINCIPAL:1 - Transcript(s) expected to code for the main functional
+    isoform based solely on the core modules in the APPRIS. 
+  <li>PRINCIPAL:2 - Where the APPRIS core modules are unable to choose a clear
+    principal variant (approximately 25% of human protein coding genes), the
+    database chooses two or more of the CDS variants as "candidates" to be the
+    principal variant.
+  <li>PRINCIPAL:3 - Where the APPRIS core modules are unable to choose a clear
+    principal variant and there more than one of the variants have distinct
+    CCDS identifiers, APPRIS selects the variant with lowest CCDS identifier
+    as the principal variant. The lower the CCDS identifier, the earlier it
+    was annotated.
+  <li>PRINCIPAL:4 - Where the APPRIS core modules are unable to choose a clear
+    principal CDS and there is more than one variant with a distinct (but
+    consecutive) CCDS identifiers, APPRIS selects the longest CCDS isoform as
+    the principal variant.
+  <li>PRINCIPAL:5 - Where the APPRIS core modules are unable to choose a clear
+    principal variant and none of the candidate variants are annotated by CCDS,
+    APPRIS selects the longest of the candidate isoforms as the principal variant.
+    For genes in which the APPRIS core modules are unable to choose a clear
+    principal variant (approximately 25% of human protein coding genes), the
+    "candidate" variants not chosen as principal are labeled in the following way:
+  <li>ALTERNATIVE:1 - Candidate transcript(s) models that are conserved in at
+    least three tested species.
+  <li>ALTERNATIVE:2 - Candidate transcript(s) models that appear to be
+    conserved in fewer than three tested species.  Non-candidate transcripts are
+    not tagged and are considered as "Minor" transcripts. Further information and
+    additional web services can be found at the APPRIS website.
+</ul>
+
 <h2>Downloads</h2>
 GENCODE GFF3 and GTF files are available from the
-<a href="http://www.gencodegenes.org/releases/23.html" target="_blank">GENCODE release 32</a> site.
+<a href="http://www.gencodegenes.org/releases/23.html" target="_blank">GENCODE release 23</a> site.
 
 <h2>Verification</h2>
 
@@ -264,12 +296,16 @@ GENCODE at the Sanger Institute</A>)
       <td style="vertical-align: top; text-align: left;"><b>Contributors</b></td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/research/faculty/thubbard/" target="_blank">GENCODE Principal Investigator</a></td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/people/directory/harrow-jennifer" target="_blank">GENCODE Principal Investigator</a></td>
+      <td style="vertical-align: top;">Jennifer Harrow</td>
+    </tr>
+    <tr>
+      <td style="vertical-align: top; text-align: left;"><a href="https://kclpure.kcl.ac.uk/portal/tim.hubbard.html" target="_blank">GENCODE Co-Principal Investigator</a></td>
       <td style="vertical-align: top;">Tim Hubbard</td>
     </tr>
     <tr>
-      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/research/projects/vertebrategenome/havana/" target="_blank">HAVANA manual annotation group</a>, Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
-      <td style="vertical-align: top;">Jennifer Harrow, Timothy Cutts, Bronwen Aken, James Gilbert, Jyoti Choudhary, Ed Griffiths, Jose Manuel Gonzalez, Electra Tapanari, Daniel Barrell, Adam Frankish, Andrew Berry, Alexandra Bignell, Veronika Boychenko, Claire Davidson, Gloria Despacio-Reyes, Mike Kay, Deepa Manthravadi, Gaurab Mukherjee, Catherine Snow, Gemma Barson, Matt Hardy, Joanne Howes</td>
+      <td style="vertical-align: top; text-align: left;"><a href="http://www.sanger.ac.uk/science/groups/vertebrate-annotation" target="_blank">HAVANA manual annotation group</a>, Wellcome Trust Sanger Insitute (WTSI), Hinxton, UK</td>
+      <td style="vertical-align: top;">Timothy Cutts, Bronwen Aken, James Gilbert, Jyoti Choudhary, Ed Griffiths, Jose Manuel Gonzalez, Electra Tapanari, Daniel Barrell, Adam Frankish, Andrew Berry, Alexandra Bignell, Veronika Boychenko, Claire Davidson, Gloria Despacio-Reyes, Mike Kay, Deepa Manthravadi, Gaurab Mukherjee, Catherine Snow, Gemma Barson, Matt Hardy, Joanne Howes</td>
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;"><a href="http://big.crg.cat/computational_biology_of_rna_processing" target="_blank">Centre de Regulaci&oacute; Gen&ograve;mica (CRG)</a>, Barcelona, Spain</td>
@@ -277,7 +313,7 @@ GENCODE at the Sanger Institute</A>)
     </tr>
     <tr>
       <td><a href="http://genome.ucsc.edu/" target="_blank">Genome Bioinformatics, University of California Santa Cruz</a> (UCSC), USA</td>
-      <td style="vertical-align: top;">David Haussler, Rachel Harte, Mark Diekhans, Benedict Paten, Joel Armstrong</td>
+      <td style="vertical-align: top;">David Haussler, Mark Diekhans, Benedict Paten, Joel Armstrong</td>
     </tr>
     <tr>
       <td><a href="http://www.csail.mit.edu/" target="_blank">Computer Science and Artificial Intelligence Lab</a>,<a href="http://www.broadinstitute.org/" target="_blank">Broad Institute of MIT and Harvard</a>, USA</td>
@@ -297,7 +333,7 @@ GENCODE at the Sanger Institute</A>)
     </tr>
     <tr>
       <td style="vertical-align: top; text-align: left;">Former members of the GENCODE project</td>
-      <td style="vertical-align: top;">Felix Kokocinski, Toby Hunt, Gary Saunders, Sarah Grubb, Thomas Derrien, Andrea Tanzer, Gang Fang, Mihali Felipe, Michael Brent, Randall Brown, Jeltje van Baren, Stephen Searle</td>
+      <td style="vertical-align: top;">Felix Kokocinski, Toby Hunt, Gary Saunders, Sarah Grubb, Thomas Derrien, Andrea Tanzer, Gang Fang, Mihali Felipe, Michael Brent, Randall Brown, Jeltje van Baren, Stephen Searle, Rachel Harte</td>
     </tr>
   </tbody>
 </table>

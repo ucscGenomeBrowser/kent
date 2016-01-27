@@ -249,13 +249,13 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
     int start = lineFileNeedNum(lf, row, 3) - 1;
     int end = lineFileNeedNum(lf, row, 4);
     char *s = row[8];
-    char *probe, *orf, *note; 
+    char *orf, *note; 
     char *boundAt = "Bound at ";
     struct tfBinding *tfbList = NULL, *tfb;
     if (!startsWith("Probe ", s))
         errAbort("Expecting 9th column to start with 'Probe ' line %d of %s",
 		lf->lineIx, lf->fileName);
-    probe = nextWord(&s);
+    nextWord(&s); // skip Probe
     orf = nextWord(&s);
     chopOff(orf, ';');
     note = nextWord(&s);

@@ -13,6 +13,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "hgConfig.h"
+#include "hVarSubst.h"
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
@@ -197,7 +198,6 @@ if (withHtmlHeader)
     *ptr1 = 0;
     htmlTextOut(newString);
     printf("	</TITLE>\n    ");
-    printf ("<base href=\".\">\n");
     webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
@@ -853,6 +853,13 @@ if (oldVars)
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
 	    cartSetString(cart, "position", hDefaultPos(*retDb));
+	// remove virtual chrom cart vars related to position
+	cartRemove(cart, "virtMode");
+	cartRemove(cart, "virtModeType");
+	cartRemove(cart, "lastVirtModeExtraState");
+	cartRemove(cart, "lastVirtModeType");
+	cartRemove(cart, "nonVirtPosition");
+	cartRemove(cart, "oldPosition");
 	/* hgNear search term -- unless it was passed in via CGI: */
 	if (cgiOptionalString("near_search") == NULL)
 	    cartRemove(cart, "near_search");
@@ -888,14 +895,38 @@ getDbGenomeClade(cart, retDb, retGenome, &garbage, oldVars);
 freeMem(garbage);
 }
 
+static void webIncludeFileSubst(char *file, struct cart *cart)
+/* Include an HTML file in a CGI.  If cart is non-null, invoke hVarSubstWithCart.
+ *   The file path may begin with hDocumentRoot(); if it doesn't, it is
+ *   assumed to be relative and hDocumentRoot() will be prepended. */
+{
+char *str = hFileContentsOrWarning(file);
+if (cart != NULL)
+    {
+    char *db = cartString(cart, "db");
+    hVarSubstWithCart("webIncludeFileSubst", cart, NULL, db, &str);
+    }
+puts(str);
+freeMem(str);
+}
+
 void webIncludeFile(char *file)
 /* Include an HTML file in a CGI.
  *   The file path may begin with hDocumentRoot(); if it doesn't, it is
  *   assumed to be relative and hDocumentRoot() will be prepended. */
 {
-char *str = hFileContentsOrWarning(file);
-puts(str);
-freeMem(str);
+return webIncludeFileSubst(file, NULL);
+}
+
+void webIncludeHelpFileSubst(char *fileRoot, struct cart *cart, boolean addHorizLine)
+/* Given a help file root name (e.g. "hgPcrResult" or "cutters"),
+ * print out the contents of the file.  If cart is non-NULL, invoke hVarSubstWithCart
+ * before printing.  If addHorizLine, print out an <HR> first. */
+{
+if (addHorizLine)
+    htmlHorizontalLine();
+char *file = hHelpFile(fileRoot);
+webIncludeFileSubst(file, cart);
 }
 
 void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
@@ -903,9 +934,7 @@ void webIncludeHelpFile(char *fileRoot, boolean addHorizLine)
  * print out the contents of the file.  If addHorizLine, print out an
  * <HR> first. */
 {
-if (addHorizLine)
-    htmlHorizontalLine();
-webIncludeFile(hHelpFile(fileRoot));
+return webIncludeHelpFileSubst(fileRoot, NULL, addHorizLine);
 }
 
 void webPrintLinkTableStart()
@@ -1159,7 +1188,7 @@ if (wrapInHtml) // wrapped for christmas
     if (js)
         dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
     else if (style)
-        dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
+        dyStringPrintf(wrapped,"<link rel='stylesheet' href='../%s' type='text/css'>\n", link);
     else // Will be image, since these are the only three choices allowed
         dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
     freeMem(link);

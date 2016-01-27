@@ -50,7 +50,7 @@ struct streamerInfo
     char *sqlDb;		// If non-NULL, then we are using this SQL database
     char *tableFileUrl;		// If db is non-NULL, table name; else file or URL
     enum annoRowType type;	// Data type (wig or words?)
-    struct asObject *asObj;	// not used if type is arWig*
+    struct asObject *asObj;	// not used if we're using a sqlDb table
     };
 
 struct annoStreamer *streamerFromInfo(struct streamerInfo *info)
@@ -60,8 +60,7 @@ struct annoStreamer *streamer = NULL;
 if (info->type == arWigVec)
     streamer = annoStreamWigDbNew(info->sqlDb, info->tableFileUrl, info->assembly, BIGNUM);
 else if (info->sqlDb != NULL)
-    streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, info->asObj,
-			       BIGNUM);
+    streamer = annoStreamDbNew(info->sqlDb, info->tableFileUrl, info->assembly, BIGNUM, NULL);
 else if (info->asObj && asObjectsMatch(info->asObj, vcfAsObj()))
     {
     //#*** this is kludgey, should test for .tbi file:
@@ -342,7 +341,7 @@ struct annoStreamer *dbNsfpSource = snpSource->next->next;
 struct annoFormatter *vepOut = annoFormatVepNew("stdout", FALSE, primary, "some more variants",
                                                 gpVarSource, "UCSC Genes of course",
                                                 snpSource, "now snp137.", assembly);
-annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "");
+annoFormatVepAddExtraItem(vepOut, dbNsfpSource, "SIFT", "SIFT score from dbNSFP", "", FALSE);
 struct annoGratorQuery *query = annoGratorQueryNew(assembly, primary, gratorList, vepOut);
 annoGratorQuerySetRegion(query, "chr19", 45405960, 45419476);
 annoGratorQueryExecute(query);

@@ -516,16 +516,82 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
     hgsql hg38 -e "drop table wgEncodeCell_old"
     checkUrlsInTable hg38 wgEncodeCell > errs.txt
 
+# Nov 2015 -- sciencell links are reported as permanently moved (HTTP status code 301)
+# Time to fix them!  21 total
+# navigate to links and grab correct URL
+# These must be fixed in the wgEncodeCell table (for hg38) and also in cv.ra (for hg19 tracks)
+#  (2015-11 kate)
+
+cd /hive/data/genomes/hg38/bed/wgEncodeRegDnase/cells
+checkUrlsInTable hg38 wgEncodeCell > wgEncodeCell.errs
+
+# hand edited below
+http://sciencellonline.com/catalogsearch/result/?q=1830 301
+        http://www.sciencellonline.com/human-astrocytes-hippocampal.html HA-h
+http://sciencellonline.com/catalogsearch/result/?q=1820 301
+        http://www.sciencellonline.com/human-astrocytes-spinal-cord.html HA-sp
+http://sciencellonline.com/catalogsearch/result/?q=7110 301
+        http://www.sciencellonline.com/haepic.html HAEpiC
+http://sciencellonline.com/catalogsearch/result/?q=1810 301
+        http://www.sciencellonline.com/human-astrocytes-cerebellar.html HA-c
+http://sciencellonline.com/catalogsearch/result/?q=1000 301
+        http://www.sciencellonline.com/human-brain-microvascular-endothelial-cells.html HBMEC
+http://sciencellonline.com/catalogsearch/result/?q=1100 301
+        http://www.sciencellonline.com/human-brain-vascular-smooth-muscle-cells.html HBVSMC
+http://sciencellonline.com/catalogsearch/result/?q=6300 301
+        http://www.sciencellonline.com/human-cardiac-fibroblasts.html HCF
+http://sciencellonline.com/catalogsearch/result/?q=6320 301
+        http://www.sciencellonline.com/human-cardiac-fibroblasts-adult-atrial.html HCF-aa
+http://sciencellonline.com/catalogsearch/result/?q=200  301
+        http://www.sciencellonline.com/human-cardiac-myocytes.html HCM
+http://sciencellonline.com/catalogsearch/result/?q=1310 301
+        http://www.sciencellonline.com/human-choroid-plexus-epithelial-cells.html HCPEpiC
+http://sciencellonline.com/catalogsearch/result/?q=6570 301
+        http://www.sciencellonline.com/hconf.html HConF
+http://sciencellonline.com/catalogsearch/result/?q=2720 301
+        http://www.sciencellonline.com/heepic.html HEEpiC
+http://sciencellonline.com/catalogsearch/result/?q=2620 301
+        http://www.sciencellonline.com/human-gingival-fibroblasts.html HGnF
+http://sciencellonline.com/catalogsearch/result/?q=6560 301
+        http://www.sciencellonline.com/hipepic.html HIPEpiC
+http://sciencellonline.com/catalogsearch/result/?q=7630 301
+        http://www.sciencellonline.com/hmf.html HMF
+http://sciencellonline.com/catalogsearch/result/?q=6580 301
+        http://www.sciencellonline.com/hnpcepic.html HNPCEpiC
+http://sciencellonline.com/catalogsearch/result/?q=3120 301
+        http://www.sciencellonline.com/hpaaf.html HPAAF
+http://sciencellonline.com/catalogsearch/result/?q=3300 301
+        http://www.sciencellonline.com/hpf.html HPF
+http://sciencellonline.com/catalogsearch/result/?q=4000 301
+        http://www.sciencellonline.com/human-renal-glomerular-endothelial-cells.html HRGEC
+http://sciencellonline.com/catalogsearch/result/?q=6540 301
+        http://www.sciencellonline.com/hrpepic.html HRPEpiC
+http://sciencellonline.com/catalogsearch/result/?q=7130 301
+        http://www.sciencellonline.com/hvmf.html HVMF
+###
+# hand-munge above into a shell script to edit .tab file
+# sed -e 's^bad-url^good-url^'
+hgsql hg38 -Ne 'select * from wgEncodeCell' > wgEncodeCell.2015-11-11.tab
+csh fixCells.csh wgEncodeCell.2015-11-11.tab > wgEncodeCell.2015-11-11.fixed.tab
+hgsql hg38 -e "alter table wgEncodeCell rename to wgEncodeCell_old"
+hgLoadSqlTab hg38 wgEncodeCell ~/kent/src/hg/lib/encode/wgEncodeCell.sql wgEncodeCell.2015-11-11.fixed.tab
+# check, then remove old table
+checkUrlsInTable hg38 wgEncodeCell > errs.txt
+hgsql hg38 -e "drop table wgEncodeCell_old"
+
+
+
+
 
 # Treatment table
 # TBD
 
-    # create term/description tab sep file (currently just treatments in UW DNase)
-    #cd /hive/data/genomes/hg38/bed/uwDnase1
-    #cd cells
-    #tail -n +2 treatments.tab | \
-        #nl -v 0 | \
-        #hgLoadSqlTab hg38 wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
+# create term/description tab sep file (currently just treatments in UW DNase)
+#cd /hive/data/genomes/hg38/bed/uwDnase1
+#cd cells
+#tail -n +2 treatments.tab | \
+    #nl -v 0 | \
+    #hgLoadSqlTab hg38 wgEncodeTreatment ~/kent/src/hg/lib/encode/wgEncodeTreatment.sql stdin
 
 
 # Comparison to lifted track (Chris Eisenhart)
@@ -534,18 +600,18 @@ http://www.sciencellonline.com/site/productInformation.php?keyword=7130 302
 
 # Coverage is similar:
 
- featureBits hg38 wgEncodeRegDnaseClustered
- # 451551920 bases of 3049335806 (14.808%) in intersection
+featureBits hg38 wgEncodeRegDnaseClustered
+# 451551920 bases of 3049335806 (14.808%) in intersection
 
- featureBits hg38 wgEncodeRegDnaseClusteredLifted
- # 477271764 bases of 3049335806 (15.652%) in intersection
+featureBits hg38 wgEncodeRegDnaseClusteredLifted
+# 477271764 bases of 3049335806 (15.652%) in intersection
 
 # Comparing chr1:
 
- featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClustered
- #41505780 bases of 230486321 (18.008%) in intersection
- featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClusteredLifted
- #46543116 bases of 230486321 (20.193%) in intersection
+featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClustered
+#41505780 bases of 230486321 (18.008%) in intersection
+featureBits hg38 -chrom=chr1 wgEncodeRegDnaseClusteredLifted
+#46543116 bases of 230486321 (20.193%) in intersection
 
 # Greater number of elements must be due to mappings on new alt chroms
 # (96 chroms in new track, 38 in old)

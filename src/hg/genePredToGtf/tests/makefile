@@ -25,24 +25,28 @@ test: \
 basicSimpleTest: mkout
 	${genePredToGtf} -source=test file input/simple.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
+	gtfToGenePred output/$@.gtf  output/$@.gp
 
 utrSimpleTest: mkout
 	${genePredToGtf} -utr -source=test file input/simple.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
-
+	gtfToGenePred output/$@.gtf  output/$@.gp
 
 # tests using extended genePred
 basicTest: mkout
 	${genePredToGtf} -source=test file input/extended.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
+	gtfToGenePred output/$@.gtf  output/$@.gp
 
 utrTest: mkout
 	${genePredToGtf} -utr -source=test file input/extended.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
+	gtfToGenePred output/$@.gtf  output/$@.gp
 
 honorTest: mkout
 	${genePredToGtf} -honorCdsStat -utr -source=test file input/extended.gp output/$@.gtf
 	${DIFF} expected/$@.gtf output/$@.gtf
+	gtfToGenePred output/$@.gtf  output/$@.gp
 
 mkout:
 	@${MKDIR} output

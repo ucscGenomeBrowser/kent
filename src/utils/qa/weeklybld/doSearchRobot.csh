@@ -1,8 +1,8 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 if ( "$HOST" != "hgwbeta" ) then
- echo "error: doSearchRobot.csh must be executed from hgwbeta!"
- exit 1
+    echo "error: doSearchRobot.csh must be executed from hgwbeta!"
+    exit 1
 endif
 
 cd $BUILDDIR/v${BRANCHNN}_branch/kent/src/hg/qa
@@ -17,13 +17,13 @@ set res = `cat ./logs/search-v${BRANCHNN}.log | egrep "Error" `
 
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "errs found:"
- echo "$res"
- echo "$res" | mail -s "Errors in searchRobot on $HOST" $USER ${BUILDMEISTER} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
- exit 1
+    echo "errs found:"
+    echo "$res"
+    echo "$res" | mail -s "Errors in searchRobot on $HOST" ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
+    exit 1
 endif
 #
 echo Done.
-echo "$res" | mail -s "v${BRANCHNN} search robot done successfully on $HOST." $USER ${BUILDMEISTER} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
+echo "$res" | mail -s "v${BRANCHNN} search robot done successfully on $HOST." ${BUILDMEISTEREMAIL} galt@soe.ucsc.edu browser-qa@soe.ucsc.edu
 exit 0
 

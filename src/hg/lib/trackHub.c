@@ -683,33 +683,26 @@ if (trackDbSetting(tdb, setting))
         hub->url, genome->name, tdb->track);
 }
 
+static void expandOneUrl(struct hash *settingsHash, char *hubUrl, char *variable)
+{
+struct hashEl *hel = hashLookup(settingsHash, variable);
+if (hel != NULL)
+    {
+    char *oldVal = hel->val;
+    hel->val = trackHubRelativeUrl(hubUrl, oldVal);
+    freeMem(oldVal);
+    }
+}
+
 static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
 	struct trackDb *tdb)
 /* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
 {
-struct hashEl *hel = hashLookup(tdb->settingsHash, "bigDataUrl");
-if (hel != NULL)
-    {
-    char *oldVal = hel->val;
-    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
-    freeMem(oldVal);
-    }
-
-hel = hashLookup(tdb->settingsHash, "summary");
-if (hel != NULL)
-    {
-    char *oldVal = hel->val;
-    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
-    freeMem(oldVal);
-    }
-
-hel = hashLookup(tdb->settingsHash, "searchTrix");
-if (hel != NULL)
-    {
-    char *oldVal = hel->val;
-    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
-    freeMem(oldVal);
-    }
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "bigDataUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "frames");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "summary");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "linkDataUrl");
+expandOneUrl(tdb->settingsHash, genome->trackDbFile, "searchTrix");
 }
 
 struct trackHubGenome *trackHubFindGenome(struct trackHub *hub, char *genomeName)
@@ -763,6 +756,7 @@ else
           startsWithWord("bigPsl", type) ||
           startsWithWord("bigMaf", type) ||
           startsWithWord("bigGenePred", type) ||
+          startsWithWord("bigChain", type) ||
           startsWithWord("bam", type)))
 	{
 	errAbort("Unsupported type '%s' in hub %s genome %s track %s", type,

@@ -1,19 +1,19 @@
 track nonCodingRNAs
 superTrack on
-group rna
+group genes
 shortLabel Non-coding RNA
 longLabel RNA sequences that do not code for a protein
 
-    #track tRNAs
-    #superTrack nonCodingRNAs pack
-    #shortLabel tRNA Genes
-    #longLabel Transfer RNA Genes Identified with tRNAscan-SE
-    #group genes
-    #visibility hide
-    #color 0,20,150
-    #type bed 6 +
-    #nextItemButton on
-    #noScoreFilter .
+    track tRNAs
+    superTrack nonCodingRNAs pack
+    shortLabel tRNA Genes
+    longLabel Transfer RNA Genes Identified with tRNAscan-SE
+    group genes
+    visibility hide
+    color 0,20,150
+    type bed 6 +
+    nextItemButton on
+    noScoreFilter .
 
     track wgRna
     superTrack nonCodingRNAs pack
@@ -35,7 +35,7 @@ longLabel RNA sequences that do not code for a protein
 
     track lincRNAsTranscripts
     superTrack nonCodingRNAs pack
-    shortLabel lincRNA Transcripts
+    shortLabel lincRNA TUCP
     longLabel lincRNA and TUCP transcripts
     #shadesOfBrown
     color 100,50,0
@@ -50,7 +50,7 @@ longLabel RNA sequences that do not code for a protein
     superTrack nonCodingRNAs dense
     compositeTrack on
     onlyVisibility dense
-    shortLabel lincRNA RNA-Seq Reads
+    shortLabel lincRNA RNA-Seq
     longLabel lincRNA RNA-Seq reads expression abundances
     subGroup1 view Views lincRNAsRefseqExp=RefSeq_Expression_Ratio
     subGroup2 tissueType Tissue_Type adipose=Adipose adrenal=Adrenal brain=Brain brain_r=Brain_R breast=Breast colon=Colon foreskin_r=Foreskin_R heart=Heart hlf_r1=hLF_r1 hlf_r2=hLF_r2 kidney=Kidney liver=Liver lung=Lung lymphnode=LymphNode ovary=Ovary placenta_r=Placenta_R prostate=Prostate skeletalmuscle=SkeletalMuscle testes=Testes testes_r=Testes_R thyroid=Thyroid whitebloodcell=WhiteBloodCell
@@ -66,7 +66,7 @@ longLabel RNA sequences that do not code for a protein
     origAssembly hg19
 
     track lincRNAsAllCellType
-    shortLabel lincRNAsAllCellType
+    shortLabel lincRNAsCellType
     longLabel lincRNA RNA-Seq reads expression abundances
     view lincRNAsRefseqExp
     visibility dense

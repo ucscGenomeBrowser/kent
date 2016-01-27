@@ -420,18 +420,11 @@ cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
 #end didn't do
 
-# make knownToMalacards
-mkdir -p $dir/malacards
-cd $dir/malacards
-# grab files that b0b came up with somehow
-# please check before running this is there isn't a newer version of the malacards dump in the genecards directory.
-# we drop them into this directory when we receive them by mail and tag them by date
-#cp /hive/users/kuhn/tracks/malacards/malacardsUcscGenesExport.csv .
-cp /hive/data/outside/genecards/2015-july-12/UCSC_genes_export_db102_v108_12Jul15.csv ./malacardExists.txt
-awk 'BEGIN {FS=","} {print $1}' malacardsUcscGenesExport.csv | sort -u > malacardExists.txt
-hgsql -e "select geneSymbol,kgId from kgXref" --skip-column-names hg38 | awk '{if (NF == 2) print}' | sort > geneSymbolToKgId.txt
-join malacardExists.txt geneSymbolToKgId.txt | awk 'BEGIN {OFS="\t"} {print $2,$1}' | sort > knownToMalacards.tab
-hgLoadSqlTab -notOnServer $tempDb  knownToMalacards $kent/src/hg/lib/knownTo.sql  knownToMalacards.tab
+# load malacards table
+hgsql hg38 -e 'drop table malacards; create table malacards (geneSymbol varchar(255), maladySymbol varchar(255), urlSuffix varchar(255), mainName varchar(255), geneScore float, diseaseScore float, isElite bool)'
+hgsql hg38 -e 'create index malacardsGeneIdx on malacards(geneSymbol);'
+s='"'; hgsql hg38  -e "delete from malacards; load data local infile 'Disease_Gene_Centric_dump_MC_v102.csv' into table malacards columns terminated by ',' enclosed by '$s' escaped by '' ignore 1 lines"
+# got this table by email from Noa Rappaport, see redmine 14417
 
 # make knownToLynx
 mkdir -p $dir/lynx

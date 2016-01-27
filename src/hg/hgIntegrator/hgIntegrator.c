@@ -23,6 +23,7 @@
 #include "hdb.h"
 #include "hgColors.h"
 #include "hui.h"
+#include "joiner.h"
 #include "jsHelper.h"
 #include "jsonParse.h"
 #include "textOut.h"
@@ -36,68 +37,368 @@
 struct cart *cart = NULL;             /* CGI and other variables */
 
 #define QUERY_SPEC "hgi_querySpec"
+#define UI_CHOICES "hgi_uiChoices"
 #define DO_QUERY "hgi_doQuery"
 
 #define hgiRegionType "hgi_range"
 #define hgiRegionTypeDefault "position"
 
-static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
-/* Write tdb->shortLabel into label if table is the same as tdb->track; otherwise, write shortLabel
- * followed by table name in parens. */
+static void writeCartVar(struct cartJson *cj, char *varName)
 {
-if (sameString(table, tdb->track))
-    safecpy(label, labelSize, tdb->shortLabel);
+//#*** TODO: move jsonStringEscape inside jsonWriteString
+char *val = cartOptionalString(cj->cart, varName);
+char *encoded = jsonStringEscape(val);
+jsonWriteString(cj->jw, varName, encoded);
+freeMem(encoded);
+}
+
+static void getQueryState(struct cartJson *cj, struct hash *paramHash)
+/* Bundle hgi_querySpec and hgi_uiChoices because they need to be processed together. */
+{
+jsonWriteObjectStart(cj->jw, "queryState");
+writeCartVar(cj, QUERY_SPEC);
+writeCartVar(cj, UI_CHOICES);
+jsonWriteObjectEnd(cj->jw);
+}
+
+static struct trackDb *getFullTrackList(struct cart *cart)
+/* It can take a long time to load trackDb, hubs etc, so cache it in case multiple
+ * handlers need it.
+ * Callers must not modify (e.g. sort) the returned list! */
+//#*** Seems like hdb should have something like this if it doesn't already.
+{
+static struct trackDb *fullTrackList = NULL;
+static struct grp *fullGroupList = NULL;
+if (fullTrackList == NULL)
+    cartTrackDbInit(cart, &fullTrackList, &fullGroupList, /* useAccessControl= */TRUE);
+return fullTrackList;
+}
+
+static void makeTrackLabel(struct trackDb *tdb, char *table, char *label, size_t labelSize)
+/* Write tdb->shortLabel followed by table name in parens. */
+{
+safef(label, labelSize, "%s (%s)", tdb->shortLabel, table);
+}
+
+static struct slPair *fieldsFromAsObj(struct asObject *asObj)
+/* Extract name and description from each column in autoSql. */
+{
+struct slPair *fieldList = NULL;
+struct asColumn *col;
+for (col = asObj->columnList;  col != NULL;  col = col->next)
+    {
+    slAddHead(&fieldList, slPairNew(col->name, cloneString(col->comment)));
+    }
+slReverse(&fieldList);
+return fieldList;
+}
+
+static struct slPair *fieldsFromSqlFields(struct sqlConnection *conn, char *table)
+/* List field names and empty descriptions. */
+{
+struct slPair *fieldList = NULL;
+struct slName *field, *sqlFieldList = sqlListFields(conn, table);
+for (field = sqlFieldList;  field != NULL;  field = field->next)
+    {
+    slAddHead(&fieldList, slPairNew(field->name, cloneString("")));
+    }
+slReverse(&fieldList);
+return fieldList;
+}
+
+static void writeTableFields(struct jsonWrite *jw, char *label, char *table, struct slPair *fields)
+/* Add a json object for a table containing its label and field descriptions. */
+{
+jsonWriteObjectStart(jw, table);
+jsonWriteString(jw, "label", label);
+jsonWriteListStart(jw, "fields");
+struct slPair *field;
+for (field = fields;  field != NULL;  field = field->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "name", field->name);
+    jsonWriteString(jw, "desc", (char *)field->val);
+    jsonWriteObjectEnd(jw);
+    }
+jsonWriteListEnd(jw);
+jsonWriteObjectEnd(jw);
+}
+
+static void writeTableFieldsFromAsObj(struct jsonWrite *jw, char *label, char *table,
+                                      struct asObject *asObj)
+/* Add a json object for a table containing its label and field descriptions from autoSql. */
+{
+struct slPair *fieldList = fieldsFromAsObj(asObj);
+writeTableFields(jw, label, table, fieldList);
+slPairFreeList(&fieldList);
+}
+
+static void writeTableFieldsFromDbTable(struct jsonWrite *jw, char *label,
+                                        struct sqlConnection *conn, char *table)
+/* Add a json object for a table containing its label and field descriptions from autoSql. */
+{
+struct slPair *fieldList = fieldsFromSqlFields(conn, table);
+writeTableFields(jw, label, table, fieldList);
+slPairFreeList(&fieldList);
+}
+
+static char *getRelatedTableLabel(char *db, char *table, struct trackDb *tdb)
+/* Label db.table using tdb->longLabel (if available) or autoSql comment (if available),
+ * Caller can free result. */
+{
+struct dyString *dy = dyStringCreate("%s.%s", db, table);
+if (tdb != NULL)
+    {
+    dyStringPrintf(dy, " (%s)", tdb->longLabel);
+    }
 else
-    safef(label, labelSize, "%s (%s)", tdb->shortLabel, table);
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    struct asObject *asObj = asFromTableDescriptions(conn, table);
+    if (asObj != NULL)
+        {
+        dyStringPrintf(dy, " (%s)", asObj->comment);
+        asObjectFree(&asObj);
+        }
+    hFreeConn(&conn);
+    }
+return dyStringCannibalize(&dy);
 }
 
 static void getFields(struct cartJson *cj, struct hash *paramHash)
-/* Print out the fields of the tables in comma-sep tables param. */
+/* Print out the fields of the tables in tableGroups param.  In order to support related SQL
+ * tables, the tableGroups param is ;-separated and may include ,-separated lists containing
+ * the main table for a track followed by db.table's for related sql tables. */
 {
-char *tableStr = cartJsonRequiredParam(paramHash, "tables", cj->jw, "getFields");
-if (! tableStr)
+char *tableGroupStr = cartJsonRequiredParam(paramHash, "tableGroups", cj->jw, "getFields");
+if (! tableGroupStr)
     return;
-
-char *db = cartString(cart, "db");
-struct slName *table, *tables = slNameListFromComma(tableStr);
-jsonWriteObjectStart(cj->jw, "tableFields");
-struct trackDb *fullTrackList = NULL;
-struct grp *fullGroupList = NULL;
-cartTrackDbInit(cj->cart, &fullTrackList, &fullGroupList, /* useAccessControl= */TRUE);
-for (table = tables;  table != NULL;  table = table->next)
+char *jsonName = cartJsonParamDefault(paramHash, "jsonName", "tableFields");
+char *cartDb = cartString(cart, "db");
+struct trackDb *fullTrackList = getFullTrackList(cj->cart);
+jsonWriteObjectStart(cj->jw, jsonName);
+struct slName *tableGroup, *tableGroups = slNameListFromString(tableGroupStr, ';');
+for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->next)
     {
-    char *tableName = table->name;
-    if (startsWith("all_", tableName))
-        tableName += strlen("all_");
-    struct trackDb *tdb = tdbForTrack(NULL, tableName, &fullTrackList);
-    if (tdb)
+    struct slName *table, *tables = slNameListFromComma(tableGroup->name);
+    // When there are multiple tables, the first table in list is the main table for track.
+    char *mainTable = tables->name;
+//#*** TODO:
+//#*** The trackDb setting defaultLinkedTables should be checked too, when determining which tables
+//#*** have already been selected.
+    struct trackDb *mainTdb = tdbForTrack(NULL, mainTable, &fullTrackList);
+    jsonWriteObjectStart(cj->jw, mainTable);
+    for (table = tables;  table != NULL;  table = table->next)
         {
-        struct asObject *asObj = hAnnoGetAutoSqlForTdb(db, hDefaultChrom(db), tdb);
-        if (asObj)
+        // Note that the given table name can be db.table (for related sql tables); parse out.
+        char db[PATH_LEN], tableName[PATH_LEN];
+        hParseDbDotTable(cartDb, table->name, db, sizeof(db), tableName, sizeof(tableName));
+        if (isEmpty(db))
+            safecpy(db, sizeof(db), cartDb);
+        struct trackDb *tdb = NULL;
+        if (sameString(db, cartDb) && sameString(tableName, mainTable))
+            tdb = mainTdb;
+        if (tdb)
             {
-            jsonWriteObjectStart(cj->jw, table->name);
-            char label[strlen(tdb->shortLabel) + strlen(table->name) + PATH_LEN];
-            makeTrackLabel(tdb, table->name, label, sizeof(label));
-            jsonWriteString(cj->jw, "label", label);
-            jsonWriteListStart(cj->jw, "fields");
-            struct asColumn *col;
-            for (col = asObj->columnList;  col != NULL;  col = col->next)
+            struct asObject *asObj = hAnnoGetAutoSqlForTdb(db, hDefaultChrom(db), tdb);
+            if (asObj)
                 {
-                jsonWriteObjectStart(cj->jw, NULL);
-                jsonWriteString(cj->jw, "name", col->name);
-                jsonWriteString(cj->jw, "desc", col->comment);
-                jsonWriteObjectEnd(cj->jw);
+                char label[PATH_LEN*2];
+                makeTrackLabel(tdb, tableName, label, sizeof(label));
+                writeTableFieldsFromAsObj(cj->jw, label, table->name, asObj);
                 }
-            jsonWriteListEnd(cj->jw);
-            jsonWriteObjectEnd(cj->jw);
+            else
+                warn("No autoSql for track %s", table->name);
+            }
+        else if (trackHubDatabase(db))
+            {
+            warn("No tdb for track hub table %s", table->name);
+            }
+        else
+            {
+            // No tdb and not a hub track so it's a sql table, presumably related to mainTable.
+            struct sqlConnection *conn = hAllocConn(db);
+            char *realTable = NULL;
+            struct slName *realTables = NULL;
+            if (sqlTableExists(conn, tableName))
+                realTable = tableName;
+            else
+                {
+                char likeExpr[PATH_LEN];
+                safef(likeExpr, sizeof(likeExpr), "like 'chr%%\\_%s'", tableName);
+                realTables = sqlListTablesLike(conn, likeExpr);
+                if (realTables != NULL)
+                    realTable = realTables->name;
+                }
+            if (realTable != NULL)
+                {
+                struct asObject *asObj = hAnnoGetAutoSqlForDbTable(db, realTable, tdb, TRUE);
+                char *label = getRelatedTableLabel(db, tableName, tdb);
+                if (asObj)
+                    writeTableFieldsFromAsObj(cj->jw, label, table->name, asObj);
+                else
+                    {
+                    warn("No autoSql for table %s", tableName);
+                    // Show sql field names, no descriptions available.
+                    writeTableFieldsFromDbTable(cj->jw, label, conn, realTable);
+                    }
+                }
+            else
+                warn("No tdb or table for %s", tableName);
+            slFreeList(&realTables);
+            hFreeConn(&conn);
             }
         }
-    else
-        warn("No tdb for %s", table->name);
+    slNameFreeList(&tables);
+    jsonWriteObjectEnd(cj->jw); // mainTable ("track")
     }
 jsonWriteObjectEnd(cj->jw);
-slFreeList(&tables);
+slNameFreeList(&tableGroups);
 }
+
+static void addAll_PrefixForJoiner(char *table, size_t sizeofTable)
+// Ugly: although we need to trim 'all_' from some table names in order to find their
+// trackDb entries, all.joiner uses the all_ table names, so add it back here.
+// The names to prefix are from this command:
+/*
+    grep all_ ~/kent/src/hg/makeDb/schema/all.joiner \
+    | perl -wpe 's/^.*all_/all_/; s/\..*$//;' \
+    | sort -u
+*/
+// and cross-checking whether the names are in trackDb (only mrna and est; the bacends,
+// fosends and sts tables are auxiliary tables, not track tables).  I expect it to be stable --
+// these tracks are ancient and we won't make that mistake again. :)
+{
+if (sameString(table, "mrna") || sameString(table, "est"))
+    {
+    int tableLen = strlen(table);
+    int prefixLen = strlen("all_");
+    if (sizeofTable > tableLen + prefixLen + 1)
+        {
+        memmove(table+prefixLen, table, tableLen+1);
+        strncpy(table, "all_", prefixLen);
+        }
+    }
+}
+
+static int joinerDtfCmp(const void *a, const void *b)
+/* Compare joinerDtf's alphabetically by database, table and (possiby NULL) field. */
+{
+struct joinerDtf *dtfA = *((struct joinerDtf **)a);
+struct joinerDtf *dtfB = *((struct joinerDtf **)b);
+int dif = strcmp(dtfA->database, dtfB->database);
+if (dif == 0)
+    dif = strcmp(dtfA->table, dtfB->table);
+if (dif == 0)
+    {
+    if (dtfA->field == NULL && dtfB->field != NULL)
+        dif = -1;
+    else if (dtfA->field != NULL && dtfB->field == NULL)
+        dif = 1;
+    else
+        dif = strcmp(dtfA->field, dtfB->field);
+    }
+return dif;
+}
+
+static struct joinerDtf *findRelatedTables(struct joiner *joiner, char *cartDb,
+                                           struct slName *dbTableList)
+/* Return a (usually NULL) list of tables that can be joined to something in dbTableList.
+ * First item in dbTableList is the main track table. */
+{
+struct joinerDtf *outList = NULL;
+struct hash *uniqHash = newHash(0);
+char *mainTable = dbTableList->name;
+struct slName *dbTable;
+for (dbTable = dbTableList;  dbTable != NULL;  dbTable = dbTable->next)
+    {
+    char db[PATH_LEN], table[PATH_LEN];
+    hParseDbDotTable(cartDb, dbTable->name, db, sizeof(db), table, sizeof(table));
+    if (isEmpty(db))
+        safecpy(db, sizeof(db), cartDb);
+    addAll_PrefixForJoiner(table, sizeof(table));
+    struct joinerPair *jp, *jpList = joinerRelate(joiner, db, table);
+    for (jp = jpList; jp != NULL; jp = jp->next)
+        {
+        // omit the main table from the list if some related table links back to the main table:
+        boolean isMainTable = (sameString(jp->b->database, cartDb) &&
+                               sameString(jp->b->table, mainTable));
+        char dbDotTable[PATH_LEN];
+        safef(dbDotTable, sizeof(dbDotTable), "%s.%s", jp->b->database, jp->b->table);
+        if (! isMainTable && !hashLookup(uniqHash, dbDotTable) &&
+            !cartTrackDbIsAccessDenied(jp->b->database, jp->b->table))
+            {
+            hashAdd(uniqHash, dbDotTable, NULL);
+            slAddHead(&outList, joinerDtfClone(jp->b));
+            }
+        }
+    joinerPairFreeList(&jpList);
+    }
+slSort(&outList, joinerDtfCmp);
+hashFree(&uniqHash);
+return outList;
+}
+
+static void getRelatedTables(struct cartJson *cj, struct hash *paramHash)
+/* Print out related tables (if any) for each track in the tableGroups param.
+ * The tableGroups param is ;-separated and may include ,-separated lists containing
+ * the main table for a track followed by db.table's for related sql tables. */
+{
+char *tableGroupStr = cartJsonRequiredParam(paramHash, "tableGroups", cj->jw, "getRelatedTables");
+if (! tableGroupStr)
+    return;
+char *jsonName = cartJsonParamDefault(paramHash, "jsonName", "relatedTables");
+char *cartDb = cartString(cart, "db");
+struct joiner *joiner = joinerRead("all.joiner");
+// Even if we didn't require the track list, it would still be necessary to call cartTrackDbInit
+// so that cartTrackDbIsAccessDenied can use the local static forbiddenTrackList, ugh...
+// need to make that more explicit.
+struct trackDb *fullTrackList = getFullTrackList(cj->cart);
+jsonWriteObjectStart(cj->jw, jsonName);
+struct slName *tableGroup, *tableGroups = slNameListFromString(tableGroupStr, ';');
+for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->next)
+    {
+    struct slName *dbTableList = slNameListFromComma(tableGroup->name);
+    // When there are multiple tables, the first table in list is the main table for track.
+    char *mainTable = dbTableList->name;
+    struct joinerDtf *relatedTables = findRelatedTables(joiner, cartDb, dbTableList);
+    if (relatedTables != NULL)
+        {
+        // Write a list of [table, description] tuples
+        jsonWriteListStart(cj->jw, mainTable);
+        struct joinerDtf *dtf;
+        for (dtf = relatedTables;  dtf != NULL;  dtf = dtf->next)
+            {
+            // Write one [table, description] tuple
+            jsonWriteListStart(cj->jw, NULL);
+            // If related table is in same database as main table, make its name begin with
+            // just "." so saved settings don't pull in related tables from the old database
+            // when we switch to a new database.
+            char relTableName[PATH_LEN];
+            if (sameString(dtf->database, cartDb))
+                safef(relTableName, sizeof(relTableName), ".%s", dtf->table);
+            else
+                safef(relTableName, sizeof(relTableName), "%s.%s", dtf->database, dtf->table);
+            jsonWriteString(cj->jw, NULL, relTableName);
+            struct trackDb *tdb = NULL;
+            if (sameString(dtf->database, cartDb))
+                tdb = tdbForTrack(cartDb, dtf->table, &fullTrackList);
+            char *description = getRelatedTableLabel(dtf->database, dtf->table, tdb);
+            //#*** TODO: move jsonStringEscape inside jsonWriteString
+            char *encoded = jsonStringEscape(description);
+            jsonWriteString(cj->jw, NULL, encoded);
+            jsonWriteListEnd(cj->jw);
+            }
+        jsonWriteListEnd(cj->jw);
+        }
+    slNameFreeList(&dbTableList);
+    slNameFreeList(&relatedTables);
+    }
+jsonWriteObjectEnd(cj->jw);
+slNameFreeList(&tableGroups);
+joinerFree(&joiner);
+}
+
 
 // For now at least, use hgTables' CGI var names so regions are shared between hgI & hgTables
 //#*** TODO: get own CGI var names or libify these (dup'd from hgTables.h)
@@ -282,7 +583,9 @@ void doCartJson()
 if (! cartOptionalString(cart, "db"))
     cartSetString(cart, "db", hDefaultDb());
 struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, "getQueryState", getQueryState);
 cartJsonRegisterHandler(cj, "getFields", getFields);
+cartJsonRegisterHandler(cj, "getRelatedTables", getRelatedTables);
 cartJsonRegisterHandler(cj, "setUserRegions", setUserRegions);
 cartJsonRegisterHandler(cj, "getUserRegions", getUserRegions);
 cartJsonExecute(cj);
@@ -321,9 +624,7 @@ if (outFileOptions)
     if (tableFieldsObj)
         {
         struct hash *tableFields = jsonObjectVal(tableFieldsObj, "tableFields");
-        // Iterate over names which are tables which had better end up being annoStreamer names...
-        //#*** Hmmm, annoStreamer uses complete file path for big and we don't have that info
-        //#*** here.  Better find a way to pass in names to streamers for consistency!
+        // Iterate over hash keys (= tables); the same names must be passed into annoStreamers.
         struct hashEl *hel;
         struct hashCookie cookie = hashFirst(tableFields);
         while ((hel = hashNext(&cookie)) != NULL)
@@ -339,7 +640,7 @@ if (outFileOptions)
                 char *colName = innerHel->name;
                 struct jsonElement *enabledEl = innerHel->val;
                 boolean enabled = jsonBooleanVal(enabledEl, colName);
-                if (! enabled)
+                if (!enabled)
                     annoFormatTabSetColumnVis(tabOut, sourceName, colName, enabled);
                 }
             }
@@ -366,6 +667,7 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     struct jsonElement *dsObj = dsRef->val;
     struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
                                           "trackPath");
+    struct jsonElement *configEl = jsonFindNamedField(dsObj, "dataSource", "config");
     // The first item in trackPath is group.  The second is track (or composite):
     struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
     // and the last item in trackPath is track or leaf subtrack.
@@ -381,13 +683,15 @@ for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     char *table = tdb->table;
     if (i == 0)
         {
-        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT);
+        primary = hAnnoStreamerFromTrackDb(assembly, table, tdb, region->chrom, ANNO_NO_LIMIT,
+                                           configEl);
         annoStreamerSetName(primary, tdb->track);
         }
     else
         {
         struct annoGrator *grator = hAnnoGratorFromTrackDb(assembly, table, tdb, region->chrom,
-                                                           ANNO_NO_LIMIT, NULL, agoNoConstraint);
+                                                           ANNO_NO_LIMIT, NULL, agoNoConstraint,
+                                                           configEl);
         if (grator)
             {
             annoStreamerSetName((struct annoStreamer *)grator, tdb->track);
@@ -424,7 +728,7 @@ void doQuery()
 {
 // Make sure we have either genome-wide search or a valid position
 
-//#*** TODO: user-defined regions
+//#*** TODO: improve user-defined regions:
 //#*** For starters, just loop the whole damn thing on regions just like the TB.
 //#*** It would be better for performance to push the details of per-chrom files
 //#*** or split tables down into streamers, which could then open a different
@@ -434,6 +738,7 @@ void doQuery()
 char *db = cartString(cart, "db");
 char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
 struct bed4 *regionList = NULL;
+char regionDesc[PATH_LEN];
 if (sameString(regionType, "position"))
     {
     char *chrom = NULL;
@@ -445,16 +750,19 @@ if (sameString(regionType, "position"))
     regionList->chrom = cloneString(chrom);
     regionList->chromStart = start;
     regionList->chromEnd = end;
+    safef(regionDesc, sizeof(regionDesc), "%s:%d-%d", chrom, start+1, end);
     }
 else if (sameString(regionType, hgtaRegionTypeUserRegions))
     {
     regionList = userRegionsGetBedList();
     slSort(&regionList, bedCmp);
+    safecpy(regionDesc, sizeof(regionDesc), "defined-regions");
     }
 else
     {
     // genome-wide query: chrom=NULL, start=end=0
     AllocVar(regionList);
+    safecpy(regionDesc, sizeof(regionDesc), "genome");
     }
 struct annoAssembly *assembly = hAnnoGetAssembly(db);
 // Decode and parse CGI-encoded querySpec.
@@ -467,6 +775,9 @@ struct jsonElement *queryObj = jsonParse(querySpecDecoded);
 int savedStdout = -1;
 struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
 webStartText();
+// Print a simple output header
+time_t now = time(NULL);
+printf("# hgIntegrator: database=%s region=%s %s", db, regionDesc, ctime(&now));
 // Make an annoFormatter to print output.
 // For now, tab-separated output is it.
 struct annoFormatter *formatter = makeTabFormatter(queryObj);
@@ -475,9 +786,7 @@ struct annoFormatter *formatter = makeTabFormatter(queryObj);
 struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
                                         "dataSources");
 // Get trackDb.
-struct grp *fullGroupList = NULL;
-struct trackDb *fullTrackList = NULL;
-cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
+struct trackDb *fullTrackList = getFullTrackList(cart);
 
 // For now, do a complete annoGrator query for each region, rebuilding each data source
 // since annoStreamers don't yet handle split tables/files internally.  For decent
@@ -487,6 +796,9 @@ cartTrackDbInit(cart, &fullTrackList, &fullGroupList, TRUE);
 struct bed4 *region;
 for (region = regionList;  region != NULL;  region = region->next)
     {
+    if (sameString(regionType, hgtaRegionTypeUserRegions))
+        printf("# region=%s:%d-%d\n",
+               region->chrom, region->chromStart+1, region->chromEnd);
     regionQuery(assembly, region, dataSources, fullTrackList, formatter);
     }
 
@@ -537,6 +849,11 @@ void doMiddle(struct cart *theCart)
  * serve up JSON for the UI, or display the main page. */
 {
 cart = theCart;
+
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
+
 if (cgiOptionalString(CARTJSON_COMMAND))
     doCartJson();
 else if (cgiOptionalString(DO_QUERY))

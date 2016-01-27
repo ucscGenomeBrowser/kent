@@ -1,0 +1,99 @@
+track coverage
+compositeTrack on
+shortLabel read coverage
+longLabel density of read coverage
+group varRep
+visibility show
+autoScale On
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+windowingFunction Mean
+gridDefault Off
+color 0,128,255
+altColor 255,128,0
+type bigWig 0 21265
+html coverage
+
+    track coveragemat06Zn01Ih1Rd1
+    parent coverage on
+    shortLabel mat06Zn01Ih1Rd1
+    longLabel mat06Zn01Ih1Rd1
+    type bigWig 0 16213
+
+    track coveragemat06Zn06Ih1Rd1
+    parent coverage off
+    shortLabel mat06Zn06Ih1Rd1
+    longLabel mat06Zn06Ih1Rd1
+    type bigWig 0 17835
+
+    track coveragemat12Zn02Ih1Rd1
+    parent coverage off
+    shortLabel mat12Zn02Ih1Rd1
+    longLabel mat12Zn02Ih1Rd1
+    type bigWig 0 13731
+
+    track coveragemat12Zn07Ih1Rd1
+    parent coverage off
+    shortLabel mat12Zn07Ih1Rd1
+    longLabel mat12Zn07Ih1Rd1
+    type bigWig 0 13264
+
+    track coveragemat24Zn03Ih1Rd1
+    parent coverage off
+    shortLabel mat24Zn03Ih1Rd1
+    longLabel mat24Zn03Ih1Rd1
+    type bigWig 0 15208
+
+    track coveragemat24Zn08Ih1Rd1
+    parent coverage off
+    shortLabel mat24Zn08Ih1Rd1
+    longLabel mat24Zn08Ih1Rd1
+    type bigWig 0 17400
+
+    track coveragemat48Zn04Ih1Rd1
+    parent coverage off
+    shortLabel mat48Zn04Ih1Rd1
+    longLabel mat48Zn04Ih1Rd1
+    type bigWig 0 18706
+
+    track coveragemat48Zn09Ih1Rd1
+    parent coverage off
+    shortLabel mat48Zn09Ih1Rd1
+    longLabel mat48Zn09Ih1Rd1
+    type bigWig 0 14410
+
+    track coveragemat72Zn05Ih1Rd1
+    parent coverage off
+    shortLabel mat72Zn05Ih1Rd1
+    longLabel mat72Zn05Ih1Rd1
+    type bigWig 0 6339
+
+    track coveragemat72Zn10Ih1Rd1
+    parent coverage off
+    shortLabel mat72Zn10Ih1Rd1
+    longLabel mat72Zn10Ih1Rd1
+    type bigWig 0 21265
+
+    track coverageveg09Zn11Ih1Rd1
+    parent coverage on
+    shortLabel veg09Zn11Ih1Rd1
+    longLabel veg09Zn11Ih1Rd1
+    type bigWig 0 7680
+
+    track coverageveg09Zn12Ih1Rd1
+    parent coverage off
+    shortLabel veg09Zn12Ih1Rd1
+    longLabel veg09Zn12Ih1Rd1
+    type bigWig 0 11997
+
+    track coveragevsc09Zn13Ih1Rd1
+    parent coverage off
+    shortLabel vsc09Zn13Ih1Rd1
+    longLabel vsc09Zn13Ih1Rd1
+    type bigWig 0 9695
+
+    track coveragevsc09Zn14Ih1Rd1
+    parent coverage off
+    shortLabel vsc09Zn14Ih1Rd1
+    longLabel vsc09Zn14Ih1Rd1
+    type bigWig 0 11457

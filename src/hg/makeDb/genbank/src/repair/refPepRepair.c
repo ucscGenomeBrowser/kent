@@ -272,12 +272,12 @@ static void saveProtFastaPath(struct brokenRefPepTbl* brpTbl,
                               char *mrnaAcc, char *mrnaFa)
 /* save protein fasta file path; mangles mrnaFa string */
 {
-struct hashEl *hel;
 char protFa[PATH_LEN];
 safef(brp->mrnaAcc, sizeof(brp->mrnaAcc), "%s", mrnaAcc);
 chopSuffixAt(mrnaFa, '/');
 safef(protFa, sizeof(protFa), "%s/pep.fa", mrnaFa);
-hel = hashStore(brpTbl->protFaHash, protFa);
+// ignore result from hashStore()
+(void) hashStore(brpTbl->protFaHash, protFa);
 safef(brp->newFaPath, sizeof(brp->newFaPath), "%s", protFa);
 brpTbl->numToRepair++;
 }

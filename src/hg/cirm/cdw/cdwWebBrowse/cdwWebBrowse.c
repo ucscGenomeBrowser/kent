@@ -29,6 +29,7 @@
 #include "tablesTables.h"
 #include "jsHelper.h"
 #include "wikiLink.h"
+#include "cdwDataset.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -713,29 +714,60 @@ accessibleFilesTable(cart, conn, searchString,
 printf("</FORM>\n");
 }
 
+struct hash* loadDatasetDescs(struct sqlConnection *conn)
+/* Load cdwDataset table and return hash with name -> cdwDataset */
+{
+char* query = "NOSQLINJ SELECT * FROM cdwDataset;";
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct hash *descs = hashNew(7);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct cdwDataset *dataset = cdwDatasetLoad(row);
+    hashAdd(descs, dataset->name, dataset);
+    }
+sqlFreeResult(&sr);
+return descs;
+}
 
 void doBrowsePopularTags(struct sqlConnection *conn, char *tag)
 /* Print list of most popular tags of type */
 {
 struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct hash *hash = tagStormCountTagVals(tags, tag);
-printf("%s tag values ordered by usage\n", tag);
 struct hashEl *hel, *helList = hashElListHash(hash);
 slSort(&helList, hashElCmpIntValDesc);
-webPrintLinkTableStart();
-webPrintLabelCell("#");
-webPrintLabelCell(tag);
-webPrintLabelCell("matching files");
 int valIx = 0, maxValIx = 100;
+printf("<UL>\n");
+
+struct hash *descs = loadDatasetDescs(conn);
+
 for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
     {
-    printf("<TR>\n");
-    webPrintIntCell(valIx);
-    webPrintLinkCell(hel->name);
-    webPrintIntCell(ptToInt(hel->val));
-    printf("</TR>\n");
+    printf("<LI>\n");
+    struct cdwDataset *dataset = hashFindVal(descs, hel->name);
+
+    char *label;
+    char *desc;
+    if (dataset != NULL)
+        {
+        label = dataset->label;
+        desc = dataset->description;
+        }
+    else
+        {
+        label = hel->name;
+        desc = "Missing description in table cdw.cdwDataset";
+        }
+
+    char *datasetId = hel->name;
+    printf("<B><A href=\"../cdwDatasets/%s/\">%s</A></B><BR>", datasetId, label);
+    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
+    printf("</LI>\n");
+    cdwDatasetFree(&dataset);
     }
-webPrintLinkTableEnd();
+printf("</UL>\n");
+hashFree(&descs);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
@@ -1340,7 +1372,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.48");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.49");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
@@ -1361,3 +1393,4 @@ oldVars = hashNew(0);
 cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
+

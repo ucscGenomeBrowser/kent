@@ -146,7 +146,7 @@ if (!sqlTableExists(conn, sessionDbTable()))
 return TRUE;
 }
 
-static void cartParseOverHash(struct cart *cart, char *contents)
+void cartParseOverHash(struct cart *cart, char *contents)
 /* Parse cgi-style contents into a hash table.  This will *not*
  * replace existing members of hash that have same name, so we can
  * support multi-select form inputs (same var name can have multiple
@@ -695,6 +695,9 @@ struct cart *cartNew(char *userId, char *sessionId,
 cgiApoptosisSetup();
 if (cfgOptionBooleanDefault("showEarlyErrors", FALSE))
     errAbortSetDoContentType(TRUE);
+
+if (cfgOptionBooleanDefault("suppressVeryEarlyErrors", FALSE))
+    htmlSuppressErrors();
 
 struct cart *cart;
 struct sqlConnection *conn = cartDefaultConnector();
@@ -1732,7 +1735,7 @@ char *styleFile = cfgOption("browser.style");
 if(styleFile != NULL)
     {
     char buf[512];
-    safef(buf, sizeof(buf), "<LINK rel='STYLESHEET' href='%s' TYPE='text/css' />", styleFile);
+    safef(buf, sizeof(buf), "<link rel='stylesheet' href='%s' type='text/css'>", styleFile);
     char *copy = cloneString(buf);
     htmlSetStyleTheme(copy); // for htmshell.c, used by hgTracks
     webSetStyle(copy);       // for web.c, used by hgc
@@ -1765,12 +1768,12 @@ void cartHtmlShellWithHead(char *head, char *title, void (*doMiddle)(struct cart
 {
 struct cart *cart;
 char *db, *org, *pos;
-char titlePlus[128];
-char extra[128];
+char titlePlus[2048];
+char extra[2048];
 pushWarnHandler(cartEarlyWarningHandler);
 cart = cartAndCookie(cookieName, exclude, oldVars);
 getDbAndGenome(cart, &db, &org, oldVars);
-pos = cartGetPosition(cart, db);
+pos = cartGetPosition(cart, db, NULL);
 pos = addCommasToPos(db, stripCommas(pos));
 if(pos != NULL && oldVars != NULL)
     {
@@ -2810,23 +2813,50 @@ if (isNotEmpty(ss))
     }
 }
 
-char *cartGetPosition(struct cart *cart, char *database)
+char *cartGetPosition(struct cart *cart, char *database, struct cart **pLastDbPosCart)
 /* get the current position in cart as a string chr:start-end.
  * This can handle the special CGI params 'default' and 'lastDbPos'
  * Returned value has to be freed. Returns 
  * default position of assembly is no position set in cart nor as CGI var.
  * Returns NULL if no position set anywhere and no default position.
+ * For virtual modes, returns the type and extraState. 
 */
 {
 // position=lastDbPos in URL? -> go back to the last browsed position for this db
 char *position = NULL;
-char dbPosKey[256];
 char *defaultPosition = hDefaultPos(database);
+struct cart *lastDbPosCart = cartOfNothing();
+boolean gotCart = FALSE;
+char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
 if (sameOk(cgiOptionalString("position"), "lastDbPos"))
     {
-    position = cartUsualString(cart, dbPosKey, defaultPosition);
-    cartSetString(cart, "position", position);
+    char *dbLocalPosContent = cartUsualString(cart, dbPosKey, NULL);
+    if (dbLocalPosContent)
+	{
+	//warn("dbLocalPosContent=%s",dbLocalPosContent); // DEBUG REMOVE
+	if (strchr(dbLocalPosContent, '='))
+	    {
+	    gotCart = TRUE;
+	    cartParseOverHash(lastDbPosCart, cloneString(dbLocalPosContent)); // this function chews up input
+	    position = cloneString(cartUsualString(lastDbPosCart, "position", NULL));
+	    //warn("gotCart position=%s",position); // DEBUG REMOVE
+
+	    // DEBUG REMOVE:
+	    //struct dyString *dbPosValue = newDyString(4096);
+	    //cartEncodeState(lastDbPosCart, dbPosValue);
+	    //warn("gotCart dbPosValue->string=[%s]",dbPosValue->string);
+
+	    }
+	else
+	    {
+	    position = dbLocalPosContent;  // old style value
+	    }
+	}
+    else
+	{
+	position = defaultPosition; // no value was set
+	}
     }
     
 if (position == NULL)
@@ -2841,13 +2871,28 @@ if (((position == NULL) || sameString(position, "default"))
     && (defaultPosition != NULL))
     position = cloneString(defaultPosition);
 
+if (!gotCart)
+    {
+    cartSetBoolean(lastDbPosCart, "virtMode", FALSE);
+    cartSetString(lastDbPosCart, "virtModeType", "default");
+    cartSetString(lastDbPosCart, "lastVirtModeType", "default");
+    cartSetString(lastDbPosCart, "position", position);
+    cartSetString(lastDbPosCart, "nonVirtPosition", position);
+    cartSetString(lastDbPosCart, "lastVirtModeExtra", "");
+    }
+
+if (pLastDbPosCart)
+    *pLastDbPosCart = lastDbPosCart;
+
 return position;
 }
 
-void cartSetDbPosition(struct cart *cart, char *database, char *position)
-/* set the 'position.db' variable in the cart */
+void cartSetDbPosition(struct cart *cart, char *database, struct cart *lastDbPosCart)
+/* Set the 'position.db' variable in the cart.*/
 {
 char dbPosKey[256];
-safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
-cartSetString(cart, dbPosKey, cloneString(position)); // XX need to clone here?
+safef(dbPosKey, sizeof dbPosKey, "position.%s", database);
+struct dyString *dbPosValue = newDyString(4096);
+cartEncodeState(lastDbPosCart, dbPosValue);
+cartSetString(cart, dbPosKey, dbPosValue->string);
 }

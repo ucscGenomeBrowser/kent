@@ -940,16 +940,6 @@ else if (track != NULL && !tdbIsComposite(track))
  * use the first field. */
 if (idField == NULL && !isCustomTrack(table) && (hti == NULL || !hti->isPos))
     {
-    char *dotPos = strstr(table, ".");
-    if (isHubTrack(table) && dotPos != NULL)
-        // if the database is part of the table name in mysql notation
-        // (= databaseName.tableName), split the table string and override db.
-        // The jksql table name/field cache cannot handle it otherwise
-        {
-            *dotPos = 0;
-            db = table;
-            table = dotPos+1;
-        }
     struct sqlConnection *conn = track ? hAllocConnTrack(db, track) : hAllocConn(db);
     struct slName *fieldList = sqlListFields(conn, table);
     if (fieldList == NULL)
@@ -1743,6 +1733,10 @@ oldVars = hashNew(10);
 /* Sometimes we output HTML and sometimes plain text; let each outputter
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
+
+// Try to deal with virt chrom position used by hgTracks.
+if (startsWith("virt:", cartUsualString(cart, "position", "")))
+    cartSetString(cart, "position", cartUsualString(cart, "nonVirtPosition", ""));
 
 /* Set up global variables. */
 allJoiner = joinerRead("all.joiner");

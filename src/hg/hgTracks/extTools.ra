@@ -3,6 +3,7 @@
 # $s - chrom name, stripping "chr"
 # $S - full chrom name, leaving "chr"
 # $[ - start position of window
+# $start1 - start position of window + 1
 # $] - end position of window
 # $n - current organism name, spaces replaced with underscores
 # $D - current database, like hg19
@@ -19,6 +20,10 @@
 # to the URL shown in the browser (it has hgt.redirectTool=xxx in it)
 # This will show all parameters sent to the external site and lets you edit them.
 
+# Note that these configuration entries do not have to be created manually
+# We have a tool "extToolsChromeParse" that can parse the Chrome debug
+# trace to create them automatically from a traced click on a link in Chrome
+# Run the tool "extToolsChromeParse" and look at its help message for details
 tool NCBIPrev
 shortLabel NCBI Map Viewer
 longLabel NCBI Genome Browser
@@ -28,7 +33,7 @@ onlyDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 param build previous
 
@@ -41,7 +46,7 @@ notDbs hg19
 isHttpGet true
 param taxId $taxId
 param CHR $s
-param BEG $[
+param BEG $start1
 param END $]
 
 tool ensemblArch
@@ -52,7 +57,7 @@ onlyDbs hg38
 email helpdesk@ensembl.org
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool ensembl
@@ -63,7 +68,7 @@ email helpdesk@ensembl.org
 notDbs hg38
 isHttpGet true
 param chr $s
-param start $[
+param start $start1
 param end $]
 
 tool primer3Plus
@@ -177,6 +182,9 @@ param PRIMER_MAX_DIFF_TM 3
 param MAX_CANDIDATE_PRIMER 500
 param CUSTOM_DB 
 param PRIMER_PAIR_MAX_TEMPLATE_MISPRIMING 24.00
+param chrom $s
+param start $[
+param db $db
 
 tool nebcutter
 shortLabel NEBCutter
@@ -200,6 +208,9 @@ param cut_from 0
 param circular 0
 param add_homing 0
 param enz_suppl 1
+param chrom $s
+param start $[
+param db $db
 
 tool regrna2
 shortLabel RegRNA 2
@@ -246,6 +257,9 @@ param accessibility_window_size 100
 param LongStem_len 40
 param RiboSW ON
 param Size 950
+param chrom $s
+param start $[
+param db $db
 
 tool RnaFold
 shortLabel RNAfold
@@ -279,6 +293,21 @@ param noLP on
 param shape_conv_cutoff 0.25
 param shape_intercept -0.7
 param PAGE 2
+param chrom $s
+param start $[
+param db $db
+
+tool pfam
+shortLabel PFAM Search
+longLabel Annotation of protein domains by the EBI Pfam database
+email pfam-help@ebi.ac.uk
+url http://pfam.xfam.org/search/sequence
+param submit Submit
+param seq $seq
+maxSize 80000
+param chrom $s
+param start $[
+param db $db
 
 tool promoter2
 shortLabel Promoter 2
@@ -289,10 +318,14 @@ maxSize 50000
 param configfile /usr/opt/www/pub/CBS/services/Promoter-2.0/Promoter.cf
 param SEQPASTE $seq
 param SEQSUB 
+# these trigger error messages
+#param chrom $s
+#param start $[
+#param db $db
 
 tool rsatMeta
 shortLabel RSAT Metazoa
-longLabel Regulatory Sequence Analysis Tools for Metazoa. Can search for Transcription Factor binding sites and over-represented words.
+longLabel Regulatory Sequence Analysis Tools for Metazoa. Can search for Transcription Factor binding sites and over-represented oligo-nucleotides.
 url http://rsat.sb-roscoff.fr/convert-seq.cgi 
 email Jacques.van-Helden@univ-amu.fr
 maxSize 50000
@@ -327,22 +360,23 @@ param user_email
 #param dnaFile 
 #param dnaFormat textarea
 
-#tool crispor
-#url http://tefor.net/crisporMax/crispor.cgi
-#email services@tefor.net
-#shortLabel CRISPOR
-#longLabel CRISPR/Cas9 target selector: off-target and activity predictions, primer design 
-#param org $db
-#param pos $position
-#param pam NGG
-#maxSize 1000
+tool crispor
+url http://tefor.net/crispor/crispor.cgi
+email services@tefor.net
+shortLabel CRISPOR
+longLabel CRISPR/Cas9 target selector: off-target, activity predictions and primer design 
+param org $db
+param pos $position
+param pam NGG
+maxSize 1000
+onlyDbs hg19,hg38,ce10,dm3,mm10,oryLat2,rn5,sacCer3,xenTro3,galGal4,danRer7,danRer10
 
 tool chopchop
 url https://chopchop.rc.fas.harvard.edu/search.php
 email tessa.montague@gmail.com
 shortLabel CHOPCHOP
 longLabel CRISPR/Cas9 off-target predictions
-maxSize 2000
+maxSize 1000
 onlyDbs anoGam1,ce10,dm3,hg19,hg38,danRer7,galGal4,gasAcu1,mm10,musFur1,rn6,oryLat2,sacCer3,xenTro3
 param organism $db
 param pasteSeq $seq
@@ -369,3 +403,6 @@ param PRIMER_MIN_TM 57
 param PRIMER_MAX_TM 63
 param PRIMER_OPT_TM 60
 param sitePadding 20
+param chrom $s
+param start $[
+param db $db

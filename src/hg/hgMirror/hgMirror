@@ -1164,6 +1164,11 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     cmdFh.write("ps -o pgid= -p $$ > %slastJob.pid\n" % TMPDIR)
 
+    # make sure that mysql is restarted if the job is cancelled
+    # by the system for some reason
+    cmd = 'trap "trap - EXIT; sudo service mysql start; exit 1;" TERM EXIT\n'
+    cmdFh.write(cmd)
+
     cmd = "sudo service mysql stop\n"
     cmdFh.write(cmd)
 
@@ -1192,7 +1197,9 @@ def runRsyncJobs(jobId, db, listFname, gbdbListFname, fixedFname):
 
     cmdFh.close()
     # "at" suggested by http://stackoverflow.com/questions/6024472/start-background-process-daemon-from-cgi-script/6091159#6091159
-    cmd = "at now -M -f %s" % jobFname
+    # must run job as a script in a subshell, not with -f option as
+    # otherwise the trap command in the script won't work
+    cmd = "echo bash %s | at now -M" % jobFname
 
     # write commands to log file
     logFh = open(TMPDIR+"%d.log" % jobId, "w")
@@ -1547,6 +1554,10 @@ def stopAllJobs():
     if isfile(TMPDIR+"lastJob.pid"):
         lastPid = open(TMPDIR+"lastJob.pid").read().strip()
         cmd = "sudo kill -- -%s" % lastPid
+        runCmd(cmd)
+
+        # make sure mysql is started again
+        cmd = 'sudo service mysql start'
         runCmd(cmd)
     
 def assertEmptyQueue():

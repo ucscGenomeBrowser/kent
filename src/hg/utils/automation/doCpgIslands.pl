@@ -119,81 +119,60 @@ sub checkOptions {
 }
 
 #########################################################################
-# * step: hard mask [bigClusterHub]
+# * step: hard mask [workhorse]
 sub doHardMask {
   # Set up and perform the cluster run to run the hardMask sequence.
-  my $paraHub = $bigClusterHub;
-  my $runDir = "$buildDir/run.hardMask";
-  my $outRoot = '../hardMaskedFa';
+  my $runDir = "$buildDir";
+  my $outRoot = 'hardMaskedFa';
 
   # First, make sure we're starting clean.
-  if (-e "$runDir/run.time") {
+  if ( ! $opt_debug && ( -d "$runDir/$outRoot" || -s "$runDir/hardMask.done" ) ) {
     die "doHardMask: looks like this was run successfully already " .
-      "(run.time exists).  Either run with -continue cpg or some later " .
-	"stage, or move aside/remove $runDir/ and run again.\n";
-  } elsif ((-e "$runDir/gsub" || -e "$runDir/jobList") && ! $opt_debug) {
-    die "doHardMask: looks like we are not starting with a clean " .
-      "slate.\n\tPlease move aside or remove\n  $runDir/\n\tand run again.\n";
+      "(directory hardMaskedFa exists).  Either run with -continue cpg or some later " .
+	"stage, or move aside/remove $runDir/$outRoot and run again.\n";
   }
-  &HgAutomate::mustMkdir($runDir);
-  my $templateCmd = ("./runOne.csh " . '$(root1) '
-                . "{check out exists+ $outRoot/" . '$(lastDir1)/$(file1)}');
-  &HgAutomate::makeGsub($runDir, $templateCmd);
- `touch "$runDir/para_hub_$paraHub"`;
 
-  my $fh = &HgAutomate::mustOpen(">$runDir/runOne.csh");
-  print $fh <<_EOF_
-#!/bin/csh -ef
-set chrom = \$1
-set result = \$2
-twoBitToFa $maskedSeq:\$chrom stdout \\
-  | maskOutFa stdin hard \$result
-_EOF_
-  ;
-  close($fh);
-
-  my $whatItDoes = "Make hard-masked fastas for each chrom.";
-  my $bossScript = new HgRemoteScript("$runDir/doHardMask.csh", $paraHub,
+  my $whatItDoes = "Constructs $outRoot/*.2bit files for processing with cphlh.";
+  my $bossScript = newBash HgRemoteScript("$runDir/doHardMask.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-mkdir -p $outRoot
-chmod a+x runOne.csh
-set perDirLimit = 4000
-set ctgCount = `twoBitInfo $maskedSeq stdout | wc -l`
-set subDirCount = `echo \$ctgCount | awk '{printf "%d", 1+\$1/4000}'`
-@ dirCount = 0
-set dirName = `echo \$dirCount | awk '{printf "%03d", \$1}'`
-@ perDirCount = 0
-mkdir $outRoot/\$dirName
-/bin/rm -f chr.list
-/bin/touch chr.list
-foreach chrom ( `twoBitInfo $maskedSeq stdout | cut -f1` )
-  if (\$perDirCount < \$perDirLimit) then
-    @ perDirCount += 1
-  else
-    @ dirCount += 1
-    set dirName = `echo \$dirCount | awk '{printf "%03d", \$1}'`
-    set perDirCount = 1
-    mkdir $outRoot/\$dirName
-  endif
-  echo \$dirName/\$chrom.fa >> chr.list
-end
-$HgAutomate::gensub2 chr.list single gsub jobList
-$HgAutomate::paraRun
+rm -fr parts $outRoot
+mkdir $outRoot
+export twoBit=\"$maskedSeq\"
+export maxSize=`sort -k2nr $chromSizes | head -1 | awk '{print \$2}'`
+/cluster/bin/scripts/partitionSequence.pl -lstDir parts \$maxSize 0 \$twoBit $chromSizes 30 > /dev/null
+for L in parts/part*.lst
+do
+  B=`basename \$L | sed -e 's/.lst//;'`
+  sed -e 's/.*.2bit://; s/:0-.*//;' \${L} > \${B}.list
+  twoBitToFa -seqList=\$B.list \${twoBit} stdout | maskOutFa stdin hard stdout \\
+     | faToTwoBit stdin $outRoot/\$B.t.2bit
+  rm -f \${B}.list
+  twoBitToFa $outRoot/\$B.t.2bit stdout | faCount stdin | egrep -v \"^total|^#seq\" | awk '\$2-\$7 > 200 { printf \"%s\\n\", \$1}' > \$B.list
+  if [ -s \$B.list ]; then
+    twoBitToFa -seqList=\$B.list $outRoot/\$B.t.2bit stdout | faToTwoBit stdin $outRoot/\$B.2bit
+  fi
+  rm -f $outRoot/\$B.t.2bit \$B.list
+done
+date > hardMask.done
 _EOF_
   );
   $bossScript->execute();
 } # doHardMask
 
 #########################################################################
-# * step: cpg [workhorse] (will change to a cluster at some point)
+# * step: cpg [bigClusterHub]
 sub doCpg {
   # Set up and perform the cluster run to run the CpG function on the
   #     hard masked sequence.
   my $paraHub = $bigClusterHub;
   my $runDir = $buildDir;
-  # First, make sure we're starting clean.
+  # First, make sure previous step is completed
+  if (! $opt_debug && ! -s "$runDir/hardMask.done") {
+    die "doCpg: previous step hardMask has not completed\n";
+  }
+  # Second, make sure we're starting clean.
   if (-e "$runDir/run.time") {
     die "doCpg: looks like this was run successfully already " .
       "(run.time exists).  Either run with -continue makeBed or some later " .
@@ -204,26 +183,18 @@ sub doCpg {
   }
   &HgAutomate::mustMkdir($runDir);
 
-  my $templateCmd = ("./runCpg.csh " . '$(root1) $(lastDir1) '
-                . '{check out exists results/$(lastDir1)/$(root1).cpg}');
+  my $templateCmd = ("./runCpg.csh " . '$(root1) '
+                . '{check out exists results/$(root1).cpg}');
   &HgAutomate::makeGsub($runDir, $templateCmd);
  `touch "$runDir/para_hub_$paraHub"`;
 
   my $fh = &HgAutomate::mustOpen(">$runDir/runCpg.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
-set chrom = \$1
-set dir = \$2
-set result = \$3
-set resultDir = \$result:h
-mkdir -p \$resultDir
-set seqFile = hardMaskedFa/\$dir/\$chrom.fa
-set C = `faCount \$seqFile | egrep -v "^#seq|^total" | awk '{print \$2 - \$7}'`
-if ( \$C > 200 ) then
-    /scratch/data/cpgIslandExt/cpglh \$seqFile > \$result
-else
-    touch \$result
-endif
+set partName = \$1
+set part2bit = hardMaskedFa/\$partName.2bit
+set result = \$2
+twoBitToFa \$part2bit stdout | /scratch/data/cpgIslandExt/cpglh /dev/stdin > \$result
 _EOF_
   ;
   close($fh);

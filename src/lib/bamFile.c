@@ -14,6 +14,15 @@
 // If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
 // without worrying about the samtools lib creating local cache files in cgi-bin:
 
+#ifdef USE_HTS
+static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
+/* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
+ * otherwise return NULL. */
+{
+bam_index_t *idx = sam_index_load(sam, fileOrUrl);
+return idx;
+}
+#else
 static bam_index_t *bamOpenIdx(char *fileOrUrl)
 /* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
  * otherwise return NULL. */
@@ -21,6 +30,7 @@ static bam_index_t *bamOpenIdx(char *fileOrUrl)
 bam_index_t *idx = bam_index_load(fileOrUrl);
 return idx;
 }
+#endif
 
 #else// no KNETFILE_HOOKS
 // Oh well.  The unmodified samtools lib downloads .bai files into the current
@@ -80,10 +90,16 @@ boolean bamFileExists(char *fileOrUrl)
 {
 char *bamFileName = fileOrUrl;
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
+#ifdef USE_HTS
+if (fh != NULL)
+    {
+    bam_index_t *idx = bamOpenIdx(fh, bamFileName);
+#else
 // Check both fh and fh->header; non-NULL fh can have NULL header if header doesn't parse!
 if (fh != NULL && fh->header != NULL)
     {
     bam_index_t *idx = bamOpenIdx(bamFileName);
+#endif
     samclose(fh);
     if (idx == NULL)
 	{
@@ -114,7 +130,11 @@ bam_verbose = 1;
 
 samfile_t *fh = samopen(bamFileName, "rb", NULL);
 // Check both fh and fh->header; non-NULL fh can have NULL header if header doesn't parse!
+#ifdef USE_HTS
+if (fh == NULL)
+#else
 if (fh == NULL || fh->header == NULL)
+#endif
     {
     boolean usingUrl = (strstr(fileOrUrl, "tp://") || strstr(fileOrUrl, "https://"));
     struct dyString *urlWarning = dyStringNew(0);
@@ -124,8 +144,10 @@ if (fh == NULL || fh->header == NULL)
 		       ". If you are able to access the URL with your web browser, "
 		       "please try reloading this page.");
 	}
+#ifndef USE_HTS
     else if (fh != NULL && fh->header == NULL)
 	dyStringAppend(urlWarning, ": parser error while reading the file header.");
+#endif
     errAbort("Failed to open %s%s", fileOrUrl, urlWarning->string);
     }
 return fh;
@@ -163,20 +185,79 @@ void bamFileAndIndexMustExist(char *fileOrUrl)
  * takes for diagnostic info to propagate up through errCatches in calling code. */
 {
 samfile_t *bamF = bamOpen(fileOrUrl, NULL);
+#ifdef USE_HTS
+bam_index_t *idx = bamOpenIdx(bamF, fileOrUrl);
+#else
 bam_index_t *idx = bamOpenIdx(fileOrUrl);
+#endif
 if (idx == NULL)
     errAbort("failed to read index file (.bai) corresponding to %s", fileOrUrl);
 bamCloseIdx(&idx);
 bamClose(&bamF);
 }
 
+#ifdef USE_HTS
+void bamFetchAlreadyOpen(samfile_t *samfile, bam_hdr_t *header,  bam_index_t *idx, char *bamFileName, 
+#else
 void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
+#endif
 			 char *position, bam_fetch_f callbackFunc, void *callbackData)
 /* With the open bam file, return items the same way with the callbacks as with bamFetch() */
 /* except in this case use an already-open bam file and index (use bam_index_load and free() for */
 /* the index). It seems a little strange to pass the filename in with the open bam, but */
 /* it's just used to report errors. */
 {
+#ifdef USE_HTS
+bam1_t *b;
+AllocVar(b);
+hts_itr_t *iter = sam_itr_querys(idx, header, position);
+if (iter == NULL && startsWith("chr", position))
+    iter = sam_itr_querys(idx, header, position + strlen("chr"));
+
+if (iter == NULL)
+    return;
+int result;
+while ((result = sam_itr_next(samfile, iter, b)) >= 0) 
+    callbackFunc(b, callbackData, header);
+
+// if we're reading a CRAM file and the MD5 string has been set
+// we know there was an error finding the reference and we need
+// to request that it be loaded.
+if (samfile->format.format == cram) 
+    {
+    char *md5String =  cram_get_Md5(samfile);
+    if (!isEmpty(md5String))
+        {
+        char server[4096];
+        char pendingFile[4096];
+        char errorFile[4096];
+
+        char *refPath = cram_get_ref_url(samfile);
+        char *cacheDir = cram_get_cache_dir(samfile);
+
+        sprintf(server, refPath, md5String);
+        sprintf(pendingFile, "%s/pending/",cacheDir);
+        sprintf(errorFile, "%s/error/%s",cacheDir,md5String);
+        makeDirsOnPath(pendingFile);
+        sprintf(pendingFile, "%s/pending/%s",cacheDir,md5String);
+        FILE *downFile;
+        if ((downFile = fopen(errorFile, "r")) != NULL)
+            {
+            char errorBuf[4096];
+            mustGetLine(downFile, errorBuf, sizeof errorBuf);
+            errAbort("cannot find reference %s.  Error: %s\n", md5String,errorBuf);
+            }
+        else
+            {
+            if ((downFile = fopen(pendingFile, "w")) == NULL)
+                errAbort("cannot find reference %s.  Cannot create file %s.",md5String, pendingFile);  
+            fprintf(downFile,  "%s\n", server);
+            fclose(downFile);
+            errAbort("cannot find reference %s.  Downloading from %s. Pending in %s",md5String, server, pendingFile);
+            }
+        }
+    }
+#else
 int chromId, start, end;
 int ret = bam_parse_region(samfile->header, position, &chromId, &start, &end);
 if (ret != 0 && startsWith("chr", position))
@@ -187,10 +268,11 @@ if (ret != 0)
 ret = bam_fetch(samfile->x.bam, idx, chromId, start, end, callbackData, callbackFunc);
 if (ret != 0)
     warn("bam_fetch(%s, %s (chromId=%d) failed (%d)", bamFileName, position, chromId, ret);
+#endif
 }
 
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-		 samfile_t **pSamFile)
+void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile, char *refUrl, char *cacheDir)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
@@ -199,17 +281,41 @@ void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *c
 {
 char *bamFileName = NULL;
 samfile_t *fh = bamOpen(fileOrUrl, &bamFileName);
+#ifdef USE_HTS
+if (fh->format.format == cram) 
+    {
+    if (cacheDir == NULL)
+        errAbort("CRAM cache dir hg.conf variable (cramRef) must exist for CRAM support");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
+bam_hdr_t *header = sam_hdr_read(fh);
+if (pSamFile != NULL)
+    *pSamFile = fh;
+bam_index_t *idx = bamOpenIdx(fh, bamFileName);
+#else
 if (pSamFile != NULL)
     *pSamFile = fh;
 bam_index_t *idx = bamOpenIdx(bamFileName);
+#endif
 if (idx == NULL)
     warn("bam_index_load(%s) failed.", bamFileName);
 else
     {
+#ifdef USE_HTS
+    bamFetchAlreadyOpen(fh, header, idx, bamFileName, position, callbackFunc, callbackData);
+#else
     bamFetchAlreadyOpen(fh, idx, bamFileName, position, callbackFunc, callbackData);
+#endif
     bamCloseIdx(&idx);
     }
 bamClose(&fh);
+}
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile)
+{
+bamFetchPlus(fileOrUrl, position, callbackFunc, callbackData, pSamFile,
+    NULL, NULL);
 }
 
 boolean bamIsRc(const bam1_t *bam)
@@ -552,6 +658,7 @@ while (s < bam->data + bam->data_len)
     }
 }
 
+#ifndef USE_HTS
 struct bamChromInfo *bamChromList(samfile_t *fh)
 {
 /* Return list of chromosomes from bam header. We make no attempty to normalize chromosome names to UCSC format,
@@ -612,6 +719,7 @@ FILE *f = mustOpen(bedOut, "w");
 samToOpenBed(samIn, f);
 carefulClose(&f);
 }
+#endif
 
 #else
 // If we're not compiling with samtools, make stub routines so compile won't fail:

@@ -6,7 +6,10 @@
  * See README in this or parent directory for licensing information. */
 #ifndef hVarSubst_h
 #define hVarSubst_h
-struct trackDb;
+
+#include "trackDb.h"
+#include "cart.h"
+
 
 char *hVarSubst(char *desc, struct trackDb *tdb, char *database, char *src);
 /* Parse a string and substitute variable references.  Return NULL if
@@ -19,6 +22,10 @@ void hVarSubstInVar(char *desc, struct trackDb *tdb, char *database, char **varP
 /* hVarSubst on a dynamically allocated string, replacing string in substitutions
  * occur, freeing the old memory if necessary.  See hVarSubst for details.
  */
+
+void hVarSubstWithCart(char *desc, struct cart *cart, struct trackDb *tdb, char *database,
+                       char **varPtr);
+/* Like hVarSubstInVar, but if cart is non-NULL, $hgsid will be substituted. */
 
 void hVarSubstTrackDb(struct trackDb *tdb, char *database);
 /* Substitute variables in trackDb shortLabel, longLabel, and html fields. */

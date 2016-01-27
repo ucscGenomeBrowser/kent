@@ -136,7 +136,7 @@ void loadFa(char *faFile, struct sqlConnection *conn, FILE *seqTab, HGID *nextSe
 /* Check if the faFile is already in the extFileTbl and inform the user.*/   
 char query[1024]; 
 sqlSafef(query, sizeof(query), "(select * from %s where name='%s'",extFileTbl,faFile);
-if (!sqlGetResultExt(conn, query, NULL, NULL) && !replace)
+if ((!test) && (!replace) && (sqlGetResultExt(conn, query, NULL, NULL) != NULL))
     errAbort("The file %s already has an entry in %s. To replace the existing entry rerun with the "
 	    "-replace option.", faFile, extFileTbl); 
 

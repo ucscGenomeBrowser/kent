@@ -134,7 +134,11 @@ for (i=0; i<size; ++i)
 return TRUE;
 }
 
+#ifdef USE_HTS
+int bamAddOneSamAlignment(const bam1_t *bam, void *data, bam_hdr_t *header)
+#else
 int bamAddOneSamAlignment(const bam1_t *bam, void *data)
+#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a samAlignment. */
 {
@@ -149,7 +153,11 @@ sam->flag = core->flag;
 if (helper->chrom != NULL)
     sam->rName = helper->chrom;
 else
+#ifdef USE_HTS
+    sam->rName = lmCloneString(lm, header->target_name[core->tid]);
+#else
     sam->rName = lmCloneString(lm, helper->samFile->header->target_name[core->tid]);
+#endif
 sam->pos = core->pos + 1;
 sam->mapQ = core->qual;
 dyStringClear(dy);
@@ -160,7 +168,11 @@ if (core->mtid >= 0)
     if (core->tid == core->mtid)
 	sam->rNext = "=";
     else
+#ifdef USE_HTS
+	sam->rNext = lmCloneString(lm, header->target_name[core->mtid]);
+#else
 	sam->rNext = lmCloneString(lm, helper->samFile->header->target_name[core->mtid]);
+#endif
     }
 else
     sam->rNext = "*";
@@ -183,8 +195,8 @@ slAddHead(&helper->samList, sam);
 return 0;
 }
 
-struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
-	struct lm *lm)
+struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm,  char *refUrl, char *cacheDir)
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 {
@@ -195,13 +207,26 @@ helper.dy = dyStringNew(0);
 helper.samList = NULL;
 char posForBam[256];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start+1, end);
-bamFetch(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile);
+bamFetchPlus(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile,
+    refUrl, cacheDir);
 dyStringFree(&helper.dy);
 slReverse(&helper.samList);
 return helper.samList;
 }
 
+struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm)
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+{
+return bamFetchSamAlignmentPlus(fileOrUrl, chrom, start, end, lm, NULL, NULL);
+}
+
+#ifdef USE_HTS
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm)
+#else
 struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
+#endif
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */
 {
@@ -218,9 +243,15 @@ int i;
 bam1_t *b = bam_init1();
 for (i=0; i<count; ++i)
     {
+#ifdef USE_HTS
+    if (sam_read1(fh,   header,  b) < 0)
+       break;
+    bamAddOneSamAlignment(b, &helper, header);
+#else
     if (samread(fh, b) < 0)
        break;
     bamAddOneSamAlignment(b, &helper);
+#endif
     }
 bam_destroy1(b);
 

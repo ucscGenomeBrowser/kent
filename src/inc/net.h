@@ -12,6 +12,7 @@
 
 #define DEFAULTCONNECTTIMEOUTMSEC 10000  /* default connect timeout for tcp in milliseconds */
 #define DEFAULTREADWRITETTIMEOUTSEC 120  /* default read/write timeout for tcp in seconds */
+#define MAXURLSIZE 4096 /* maximum size in characters for a URL, but also see the struct netParsedUrl definition */
 
 int setReadWriteTimeouts(int sd, int seconds);
 /* Set read and write timeouts on socket sd 

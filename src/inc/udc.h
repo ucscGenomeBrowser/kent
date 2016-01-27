@@ -137,6 +137,10 @@ long long int udcSizeFromCache(char *url, char *cacheDir);
 /* Look up the file size from the local cache bitmap file, or -1 if there
  * is no cache for url. */
 
+time_t udcTimeFromCache(char *url, char *cacheDir);
+/* Look up the file datetime from the local cache bitmap file, or 0 if there
+ * is no cache for url. */
+
 unsigned long udcCacheAge(char *url, char *cacheDir);
 /* Return the age in seconds of the oldest cache file.  If a cache file is
  * missing, return the current time (seconds since the epoch). */
@@ -157,7 +161,7 @@ boolean udcFastReadString(struct udcFile *f, char buf[256]);
  * to hold it.  String is in 'writeString' format. */
 
 off_t udcFileSize(char *url);
-/* fetch remote or loca file size from given URL or path */
+/* fetch remote or local file size from given URL or path */
 
 boolean udcExists(char *url);
 /* return true if a remote or local file exists */
@@ -165,4 +169,6 @@ boolean udcExists(char *url);
 boolean udcIsLocal(char *url);
 /* return true if url is not a http or ftp file, just a normal local file path */
 
+void udcSetLog(FILE *fp);
+/* Tell UDC where to log its statistics. */
 #endif /* UDC_H */
