@@ -3468,20 +3468,18 @@ for(e=list; e; prev=e, e=e->next)
 return best;
 }
 
-static void padExons(struct genePred *gene, int chromSize)
+static void padExons(struct genePred *gene, int chromSize, int padding)
 /* pad all of the exons */
 {
 int i;
 for(i=0; i < gene->exonCount; ++i)
     {
-    // padding
-    gene->exonStarts[i] -= emPadding;
+    gene->exonStarts[i] -= padding;
     if (gene->exonStarts[i] < 0)
 	gene->exonStarts[i] = 0;
-    gene->exonEnds[i] += emPadding;
+    gene->exonEnds[i] += padding;
     if (gene->exonEnds[i] > chromSize)
 	gene->exonEnds[i] = chromSize;
-
     }
 }
 
@@ -3523,6 +3521,9 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
 char query[256];
+int padding = emPadding;
+if (sameString(virtModeType, "geneMostly"))
+    padding = gmPadding;
 // knownCanonical Hash
 struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
@@ -3608,8 +3609,8 @@ while (1)
 		    chromSize = hChromSize(database, gene->chrom);
 		    safecpy(lastChromSizeChrom, sizeof lastChromSizeChrom, gene->chrom);
 		    }
-		if (emPadding > 0)
-		    padExons(gene, chromSize); // handle padding
+		if (padding > 0)
+		    padExons(gene, chromSize, padding); // handle padding
 		}
 	    else
 		{
@@ -8449,6 +8450,7 @@ if (!hIsGsidServer())
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
     }
 emPadding = cartUsualInt(cart, "emPadding", emPadding);
+gmPadding = cartUsualInt(cart, "gmPadding", gmPadding);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
