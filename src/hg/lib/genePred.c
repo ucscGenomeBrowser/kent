@@ -864,12 +864,12 @@ if (options & genePredGxfGeneNameAsName2)
     }
 else if (group->lineList->geneId != NULL)
     {
-    if (genePredGxfIncludeVersion && (group->lineList->geneVersion != NULL))
+    if ((options & genePredGxfIncludeVersion) && (group->lineList->geneVersion != NULL))
         safef(geneIdToUse, sizeof(geneIdToUse), "%s.%s", group->lineList->geneId, group->lineList->geneVersion);
     else
         safecpy(geneIdToUse, sizeof(geneIdToUse), group->lineList->geneId);
     }
-if (genePredGxfIncludeVersion && (group->lineList->transcriptVersion != NULL))
+if ((options & genePredGxfIncludeVersion) && (group->lineList->transcriptVersion != NULL))
     safef(transcriptIdToUse, sizeof(transcriptIdToUse), "%s.%s", name, group->lineList->transcriptVersion);
 else
     safecpy(transcriptIdToUse, sizeof(transcriptIdToUse), name);

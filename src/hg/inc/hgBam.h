@@ -31,6 +31,11 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 
+struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm, char *refUrl, char *cacheDir );
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+
 #ifdef USE_HTS
 struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm);
 #else
@@ -43,8 +48,5 @@ struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOff
 			 boolean useStrand, char **retQSeq);
 /* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the 
  * query sequence into which ffAli needle pointers point. */
-
-void cramInit(struct trackDb *tdb);
-/* Initialize variables needed for CRAM parsing. */
 
 #endif//ndef HGBAM_H
