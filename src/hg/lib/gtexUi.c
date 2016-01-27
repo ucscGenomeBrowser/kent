@@ -312,6 +312,7 @@ printf("</p>");
 
 /* Color scheme */
 // Not sure if we still want this option
+#ifdef COLOR_SCHEME
 printf("<p><b>Tissue colors:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COLORS);
 selected = cartCgiUsualString(cart, cartVar, GTEX_COLORS_DEFAULT); 
@@ -321,6 +322,7 @@ printf("GTEx\n");
 cgiMakeRadioButton(cartVar, GTEX_COLORS_RAINBOW, !isGtexColors);
 printf("Rainbow\n");
 printf("</p>");
+#endif
 
 /* Tissue filter */
 printf("<p><b>Tissue selection:</b>\n");

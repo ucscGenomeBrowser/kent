@@ -311,8 +311,12 @@ struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
 struct gtexGeneBed *geneBed = (struct gtexGeneBed *)tg->items;
 
 /* Load tissue colors: GTEx or rainbow */
+#ifdef COLOR_SCHEME
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
                         GTEX_COLORS_DEFAULT);
+#else
+char *colorScheme = GTEX_COLORS_DEFAULT;
+#endif
 if (sameString(colorScheme, GTEX_COLORS_GTEX))
     {
     extras->colors = getGtexTissueColors();
