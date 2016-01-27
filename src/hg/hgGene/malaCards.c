@@ -1,4 +1,4 @@
-/* malacards - do malacards section. parts copied from gad.c */
+/* malaCards - do malaCards section. parts copied from gad.c */
 
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -13,9 +13,9 @@
 #include "hdb.h"
 #include "net.h"
 
-static boolean malacardsExists(struct section *section, 
+static boolean malaCardsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
-/* Return TRUE if malacards table exists and it has an entry with the gene symbol */
+/* Return TRUE if malaCards table exists and it has an entry with the gene symbol */
 {
 char query[1024];
 char *geneSymbol;
@@ -29,9 +29,9 @@ if (sqlTableExists(conn, "malacards") == TRUE)
     }
 return(FALSE);
 }
-static void malacardsPrint(struct section *section, 
+static void malaCardsPrint(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
-/* Print out malacards section. */
+/* Print out malaCards section. */
 {
 char query[1024];
 struct sqlResult *sr;
@@ -82,16 +82,12 @@ if (eliteCount!=0)
 sqlFreeResult(&sr);
 }
 
-struct section *malacardsSection(struct sqlConnection *conn, 
+struct section *malaCardsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa)
-/* Create malacards section. */
+/* Create malaCards section. */
 {
 struct section *section = sectionNew(sectionRa, "malacards");
-section->exists = malacardsExists;
-section->print = malacardsPrint;
+section->exists = malaCardsExists;
+section->print = malaCardsPrint;
 return section;
 }
-
-
-
-
