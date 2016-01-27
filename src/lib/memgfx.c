@@ -654,10 +654,29 @@ if ((over = *h + *dy - dest->clipMaxY) > 0)
 return (*h > 0 && *w > 0);
 }
 
+#ifdef SOON /* Simple but as yet untested blit function. */
+void mgBlit(int width, int height, 
+    struct memGfx *source, int sourceX, int sourceY,
+    struct memGfx *dest, int destX, int destY)
+/* Copy pixels in a rectangle from source to destination */
+{
+if (!mgClipForBlit(&width, &height, &sourceX, &sourceY, dest, &destX, &destY))
+    return;
+while (--height >= 0)
+    {
+    Color *dLine = _mgPixAdr(dest,destX,destY++);
+    Color *sLine = _mgPixAdr(source,sourceX,sourceY++);
+    memcpy(dLine, sLine, width * sizeof(Color));
+    }
+}
+#endif /* SOON */
+
 void mgTextBlit(int width, int height, int bitX, int bitY,
 	unsigned char *bitData, int bitDataRowBytes, 
 	struct memGfx *dest, int destX, int destY, 
 	Color color, Color backgroundColor)
+/* Copy pixels from a bit-a-pixel source to a fully colored destination
+ * within rectangle */
 {
 UBYTE *inLine;
 Color *outLine;

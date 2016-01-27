@@ -826,7 +826,14 @@ void checkMetaTags(struct tagStorm *tagStorm)
 rCheckTagValid(tagStorm, tagStorm->forest);
 }
 
-void checkManifestAndMetadata( struct fieldedTable *table, int fileIx, int formatIx, int metaIx,
+boolean isEnrichedInFormat(char *format)
+/* Return TRUE if it is a genomic format */
+{
+char *formats[] = {"bed", "bigBed", "bigWig", "fastq", "gtf",};
+return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
+}
+
+void checkManifestAndMetadata( struct fieldedTable *table, int fileIx, int formatIx, int metaIx, int enrichedInIx,
     struct tagStorm *tagStorm, struct hash *metaHash)
 /* Make sure that all file names are unique, all metadata tags are unique, and that
  * meta tags in table exist in tagStorm.  Some of the replace a file logic is here. */
@@ -850,8 +857,16 @@ for (row = table->rowList; row != NULL; row = row->next)
     if (!isSupportedFormat(format))
 	errAbort("Format %s is not supported", format);
 
-    if (!hashLookup(metaHash, meta))
+    struct tagStanza *stanza = hashFindVal(metaHash, meta);
+    if (stanza == NULL)
         errAbort("Meta ID %s is in %s but not %s", meta, table->name, tagStorm->fileName);
+
+    if (isEnrichedInFormat(format) && enrichedInIx < 0)
+        {
+	char *enrichedIn = tagFindVal(stanza, "enriched_in");
+	if (enrichedIn == NULL)
+	    errAbort("Genomics file %s missing enriched_in tag", file);
+	}
     }
 
 /* Check manifest.txt tags */
@@ -1016,7 +1031,6 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 return hash;
 }
 
-
 void cdwSubmit(char *email, char *manifestFile, char *metaFile)
 /* cdwSubmit - Submit URL with validated.txt to warehouse. */
 {
@@ -1030,6 +1044,7 @@ struct fieldedTable *table = fieldedTableFromTabFile(manifestFile, manifestFile,
 int fileIx = stringArrayIx("file", table->fields, table->fieldCount);
 int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
 int metaIx = stringArrayIx("meta", table->fields, table->fieldCount);
+int enrichedInIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
 
 verbose(1, "Got %d fields and %d rows in %s\n", 
     table->fieldCount, slCount(table->rowList), manifestFile);
@@ -1038,7 +1053,7 @@ struct hash *metaHash = tagStormUniqueIndex(tagStorm, "meta");
 verbose(1, "Got %d items in metaHash\n", metaHash->elCount);
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
-checkManifestAndMetadata(table, fileIx, formatIx, metaIx, 
+checkManifestAndMetadata(table, fileIx, formatIx, metaIx, enrichedInIx,
     tagStorm, metaHash);
 
 /* Convert to data structure that has more fields.  If submission contains

@@ -12,6 +12,7 @@
 boolean withParent = FALSE;
 boolean flatten = FALSE;
 boolean tab = FALSE;
+boolean leaves = FALSE;
 char *idTag = NULL;
 int maxDepth = BIGNUM;
 
@@ -28,6 +29,7 @@ errAbort(
   "   -maxDepth=n Maximum depth of storm to write\n"
   "   -tab   If set will be output in tab-separated format\n"
   "   -flatten If set output all fields in each record\n"
+  "   -leaves If set will only output nodes with no children\n"
   );
 }
 
@@ -38,6 +40,7 @@ static struct optionSpec options[] = {
    {"maxDepth", OPTION_INT},
    {"flatten", OPTION_BOOLEAN},
    {"tab", OPTION_BOOLEAN},
+   {"leaves", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -47,9 +50,9 @@ void tagStormReformat(char *input, char *output)
 {
 struct tagStorm *tagStorm = tagStormFromFile(input);
 if (flatten)
-    tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth);
+    tagStormWriteAsFlatRa(tagStorm, output, idTag, withParent, maxDepth, leaves);
 else if (tab)
-    tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth);
+    tagStormWriteAsFlatTab(tagStorm, output, idTag, withParent, maxDepth, leaves);
 else
     tagStormWrite(tagStorm, output, maxDepth);
 tagStormFree(&tagStorm);
@@ -65,6 +68,7 @@ idTag = optionVal("idTag", idTag);
 withParent = optionExists("withParent");
 flatten = optionExists("flatten");
 tab = optionExists("tab");
+leaves = optionExists("leaves");
 if (withParent && !idTag)
     errAbort("Please specify idTag option if using withParent option");
 maxDepth = optionInt("maxDepth", maxDepth);
