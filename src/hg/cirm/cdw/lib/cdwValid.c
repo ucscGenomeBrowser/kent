@@ -189,69 +189,78 @@ return bedType;
 }
 
 char *cdwAllowedTags[] = {
-    "title",
-    "lab",
-    "submitter",
-    "pmid",
-    "file",
-    "file_part",
-    "format",
     "access",
-    "md5",
+    "age",
+    "age_unit",
     "antibody",
     "assay",
+    "assay_seq",
+    "biomaterial_provider",
+    "biosample_date",
+    "body_part",
+    "cell_count",
+    "cell_culture_type",
+    "cell_enrichment",
+    "cell_line",
+    "cell_pair",
+    "cell_type",
+    "chrom",
+    "consent",
     "control",
     "data_set_id",
+    "differentiation",
+    "disease",
+    "disease_stage",
+    "donor",
     "enriched_in",
+    "file",
+    "file_part",
+    "fluidics_chip",
+    "format",
+    "geo_sample",
+    "geo_series",
+    "inputs",
+    "ips",
+    "karyotype",
     "keywords",
+    "lab",
+    "life_stage",
+    "md5",
+    "meta",
+    "multiplex_barcode",
+    "ncbi_bio_project",
+    "ncbi_bio_sample",
+    "organ",
+    "output",
+    "paired_end",
+    "passage_number",
+    "pipeline",
+    "pmid",
     "ratio_260_280",
     "replicate",
-    "sequencer",
+    "rna_spike_in",
     "seq_library",
+    "seq_library_prep",
+    "seq_library_prep",
     "seq_sample",
-    "assay_seq",
+    "sequencer",
+    "sex",
+    "sorting",
+    "species",
+    "sra_run",
+    "sra_sample",
+    "sra_study",
+    "strain",
+    "submission_date",
+    "submitter",
     "t",
     "t_unit",
     "target_epitope",
     "target_gene",
+    "title",
     "treatment",
-    "paired_end",
-    "life_stage",
-    "age",
-    "age_unit",
-    "cell_line",
-    "cell_pair",
-    "cell_count",
-    "cell_type",
-    "differentiation",
-    "donor",
-    "consent",
-    "species",
-    "strain",
-    "body_part",
-    "organ",
-    "sorting",
-    "ips",
-    "sex",
-    "biosample_date",
-    "submission_date",
-    "update_date",
-    "disease",
-    "disease_stage",
-    "inputs",
     "ucsc_db",
-    "pipeline",
-    "output",
-    "meta",
-    "chrom",
-    "ncbi_bio_project",
-    "ncbi_bio_sample",
-    "biomaterial_provider",
-    "sra_study",
-    "sra_sample",
-    "sra_run",
-    "geo_series",
-    "geo_sample",
+    "update_date",
     };
 
 struct hash *cdwAllowedTagsHash()
@@ -271,14 +280,24 @@ return allowedHash;
 boolean cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
-if (startsWith("lab_", tag) || startsWith("user_", tag) || startsWith("GEO_", tag) || startsWith("SRA_", tag))
+// First see if it is in hash of allowed tags.
+if (hashLookup(cdwAllowedTagsHash(), tag) != NULL)
+    return TRUE;
+// Otherwise see if it's one of the prefixes that allows anything afterwords 
+else if (startsWith("lab_", tag) || startsWith("user_", tag) 
+    || startsWith("GEO_", tag) || startsWith("SRA_", tag))
     {
     return TRUE;
     }
-else
+// Otherwise see if it's one of our reserved but unimplemented things
+else if (sameString("mixin", tag) || sameString("deprecated", tag) 
+    || sameString("deprecated_acc", tag) || sameString("children", tag)
+    || sameString("replaces_reason", tag) || sameString("replaces_file", tag))
     {
-    return hashLookup(cdwAllowedTagsHash(), tag) != NULL;
+    errAbort("%s not implemented", tag);
     }
+// Otherwise, nope, doesn't validate.
+return FALSE;
 }
 
 boolean cdwValidateTagVal(char *tag, char *val)

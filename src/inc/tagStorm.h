@@ -75,11 +75,11 @@ void tagStormWrite(struct tagStorm *tagStorm, char *fileName, int maxDepth);
 /* Write all of tag storm to file */
 
 void tagStormWriteAsFlatRa(struct tagStorm *tagStorm, char *fileName, char *idTag, 
-    boolean withParent, int maxDepth);
+    boolean withParent, int maxDepth, boolean leavesOnly);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in .ra format */
 
 void tagStormWriteAsFlatTab(struct tagStorm *tagStorm, char *fileName, char *idTag,
-    boolean withParent, int maxDepth);
+    boolean withParent, int maxDepth, boolean leavesOnly);
 /* Write tag storm flattening out hierarchy so kids have all of parents tags in tab-sep format */
 
 #ifdef OLD
