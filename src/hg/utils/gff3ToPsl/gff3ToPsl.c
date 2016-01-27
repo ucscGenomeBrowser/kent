@@ -158,7 +158,7 @@ recProcessed(processed, node);
 
 if (sameString(node->type, "source"))
     processSourceLine(pslF, node);
-else if (sameString(node->type, "match"))
+else if (sameString(node->type, "match") || sameString(node->type, "cDNA_match"))
     processMatchLine(pslF, node, queryChromSizes, targetChromSizes);
 else
     cnvError("no support for type %s\n", node->type);
