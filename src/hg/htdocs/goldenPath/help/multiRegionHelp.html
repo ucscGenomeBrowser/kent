@@ -221,26 +221,32 @@
         Like BED custom tracks, comments are supported in the BED files used by multi-region
         mode. Comments are included at the top of the BED file, preceded by &quot;#&quot;. The 
 	supported comments are: 
-        <table>
-        <tr><td>
-           <ul style="list-style:none;">
-              <li>database
-              <li>shortDesc
-              <li>padding
-           </ul>
-        </td>
-        <td>
-           <ul style="list-style:none;">
-              <li>The genome assembly database for which the BED file is intended. If the 
-		  file is loaded onto a different assembly, the custom regions mode will not work.
-              <li>(Optional) A short description of the custom region, displayed next to 
-		  the chromosome ideogram.
-              <li>Sets the size of the padding on either side of a BED entry in the browser
-                  tracks window. 
-           </ul>
-        </td></tr>
-        </table>
         <br>
+        <table style="margin-left:40px">
+          <tr>
+	    <td style="vertical-align:top">
+	      database:
+            </td><td style="vertical-align:top">
+	      The genome assembly database for which the BED file is intended. If the file is 
+	      loaded onto a different assembly, the custom regions mode will not work.
+	    </td>
+	  </tr><tr>
+            <td style="vertical-align:top">shortDesc:
+	    </td><td style="vertical-align:top">
+	      (Optional) A short description of the custom region, displayed next to the chromosome 
+	      ideogram.
+	    </td>
+	  </tr>
+	  <tr>
+            <td style="vertical-align:top">
+	      padding:
+	    </td><td style="vertical-align:top">
+	      Sets the size of the padding on either side of a BED entry in the browser tracks 
+	      window. 
+	    </td>
+          </tr>
+        </table>
+	<br>
         Here is an example of a BED3 file with comments:<br>
         <pre>
       #database hg38
