@@ -140,7 +140,7 @@ if (!checkTarget(node, nsT))
     return; // invalid Target
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
-                                   node->targetStrand, cigar);
+                                   node->strand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
 // validate PSL, which can find a bad CIGAR
 int pslErrCnt = pslCheck("converted GFF3 CIGAR alignment", stderr, psl);
