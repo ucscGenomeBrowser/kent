@@ -125,6 +125,14 @@ if ((node->targetStart < 0) || (node->targetEnd > nsT->size))
 return TRUE;
 }
 
+static char checkStrand(char strand, char *strandType)
+{
+if ((strand == '+') || (strand == '-'))
+    return strand;
+cnvError("illegal %s strand %c\n", strandType, strand);
+return '+';
+}
+
 static void processMatchLine(FILE *pslF, struct gff3Ann *node,
                              struct hash *queryChromSizes, struct hash *targetChromSizes)
 {
@@ -138,9 +146,13 @@ struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
 struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid);
 if (!checkTarget(node, nsT))
     return; // invalid Target
+char strand[3];
+strand[0] = checkStrand(*node->targetStrand, "target");
+strand[1] = checkStrand(*node->strand, "query");
+strand[2] = 0;
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 
-                                   node->strand, cigar);
+                                   strand, cigar);
 pslOutput(psl, pslF, '\t' , '\n');
 // validate PSL, which can find a bad CIGAR
 int pslErrCnt = pslCheck("converted GFF3 CIGAR alignment", stderr, psl);
