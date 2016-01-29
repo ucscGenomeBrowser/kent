@@ -3031,10 +3031,10 @@ type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 noInherit on
-subGroup1 view Views genes=Genes alignments=Alignments bigPsl=BigPsl curated=Curated predicted=Predicted other=Other
+subGroup1 view Views genes=Genes alignments=Alignments curated=Curated predicted=Predicted other=Other
 
     track ncbiRefGenesView
-    shortLabel NCBI RefSeq genes
+    shortLabel NCBI RefSeq genes, all genes, curated, predicted and other
     view genes
     visibility pack
     color 16,93,235
@@ -3047,30 +3047,16 @@ subGroup1 view Views genes=Genes alignments=Alignments bigPsl=BigPsl curated=Cur
 	visibility pack
 	parent ncbiRefGenesView
 
-    track ncbiRefAlignView
+    track ncbiRefBigAlignView
     shortLabel Alignments
     view alignments
     visibility hide
     parent xNcbiRefSeq
     color 48,168,219
 
-	track ncbiRefSeqAlignments
-	shortLabel NCBI RefSeq alignments
-        subGroups view=alignments
-	longLabel Alignments of RefSeq gene predictions from NCBI
-	parent ncbiRefAlignView
-        type psl
-
-    track ncbiRefBigAlignView
-    shortLabel BigPsl Alignments
-    view bigPsl
-    visibility hide
-    parent xNcbiRefSeq
-    color 48,168,219
-
 	track ncbiRefSeqBigPsl
 	shortLabel Big PSL NCBI RefSeq alignments
-        subGroups view=bigPsl
+        subGroups view=alignments
 	longLabel Big PSL Alignments of RefSeq gene predictions from NCBI
 	parent ncbiRefBigAlignView
         type bigPsl
