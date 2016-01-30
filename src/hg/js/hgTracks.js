@@ -565,7 +565,7 @@ var genomePos = {
                 resizable: false,
                 autoOpen: false,
                 minWidth: 400,
-                minHeight: 40, // DEBUG GALT
+                minHeight: 40,
                 buttons: {  
                     "OK": function() {
                         $(this).dialog("close");
@@ -3734,13 +3734,24 @@ var imageV2 = {
     updateChromImg: function (response)
     {   // Parse out new chrom 'ideoGram' (if available)
         // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif"
-        //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+        //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom' style='display: inline;'>
+	// If the ideo is hidden or missing, we supply a place-holder for dynamic update later.
+        // e.g.: <IMG SRC = ""
+        //                BORDER=1 WIDTH=1039 HEIGHT=0 USEMAP=#ideoMap id='chrom' style='display: none'>
         // Larry's regex voodoo:
         var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
         if (a && a[1]) {
-            var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            if (b && b[1]) {
+            var b = /SRC\s*=\s*"([^")]*)"/.exec(a[1]);
+            if (b) { // tolerate empty SRC= string when no ideo
                 $('#chrom').attr('src', b[1]);
+		var c = /style\s*=\s*'([^')]+)'/.exec(a[1]);
+    		if (c && c[1]) {
+		    $('#chrom').attr('style', c[1]);
+		}
+		var d = /HEIGHT\s*=\s*(\d*)/.exec(a[1]);
+    		if (d && d[1]) {
+		    $('#chrom').attr('HEIGHT', d[1]);
+		}
                 // Even if we're on the same chrom, ideoMap may change because the label
                 // on the left changes width depending on band name, and that changes px scaling.
                 var ideoMapMatch = /<MAP Name=ideoMap>[\s\S]+?<\/MAP>/.exec(response);
@@ -3765,10 +3776,11 @@ var imageV2 = {
 	// Added by galt to update window separators
         // Parse out background image url
         // background-image:url("../trash/hgt/blueLines1563-118-12_hgwdev_galt_9df9_e33b30.png")
+        // background-image:url("../trash/hgt/winSeparators_hgwdev_galt_5bcb_baff60.png")
+	// This will only need to update when multi-region is on and is using winSeparators.
 
         var a = /background-image:url\("(..\/trash\/hgt\/winSeparators[^"]+[.]png)"\)/.exec(response);
         if (a && a[1]) {
-	    //warn("updateBackground called! winSepartors"+a[1]);
 	    $('td.tdData').css("background-image", "url("+a[1]+")");
 	}
 

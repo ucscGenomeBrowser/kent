@@ -634,7 +634,9 @@ ideoTrack = chromIdeoTrack(*pTrackList);
 
 /* If no ideogram don't draw. */
 if(ideoTrack == NULL)
+    {
     doIdeo = FALSE;
+    }
 else if(trackImgOnly && !ideogramToo)
     {
     doIdeo = FALSE;
@@ -659,6 +661,11 @@ else
     if(ideoTrack->limitedVis == tvHide || !withIdeogram)
         doIdeo = FALSE;
     }
+// TODO use DIV in future (can update entire div at once in hgTracks.js)
+//hPrintf("<DIV id='chromIdeoDiv'>\n"); 
+// FYI from testing, I see that there is code that inserts warning error messages
+//  right before ideoMap, so any changes to that name or adding the DIV would require
+//  updating the warning-insertion target name.
 if(doIdeo)
     {
     //warn("makeChromIdeoImage doIdeo = TRUE"); // DEBUG REMOVE
@@ -720,17 +727,34 @@ if(doIdeo)
     if (!psOutput)
         hPrintf("</MAP>\n");
     }
-hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
-if (doIdeo && !psOutput)
+
+// create an empty hidden-map place holder which can change dynamically with ajax callbacks.
+if (!doIdeo && !psOutput) 
     {
+    hPrintf("<MAP Name=%s>\n", mapName);
+    hPrintf("</MAP>\n");
+    }
+
+hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
+if (!psOutput)
+    {
+    // by default, create an empty hidden ideo place holder for future dynamic ajax update
+    char *srcPath = "";
+    char *style = "display: none;";
+    if (doIdeo)
+	{
+	srcPath = ideoTn->forHtml;
+	style = "display: inline;";
+	}
     hPrintf("<TR><TD HEIGHT=5></TD></TR>");
-    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom'>",
-            ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
+    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom' style='%s'>",
+            srcPath, ideoWidth, ideoHeight, mapName, style);
     hPrintf("</TD></TR>");
     hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>\n");
     }
 else
     hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>\n");
+//hPrintf("</DIV>\n");  // TODO use DIV in future
 if(ideoTrack != NULL)
     {
     ideoTrack->limitedVisSet = TRUE;
@@ -7235,6 +7259,17 @@ if (!emGeneTable || !emGeneTrack)
     }
 }
 
+boolean windowsHaveMultipleChroms()
+/* Are there multiple different chromosomes in the windows list? */
+{
+struct window *window;
+for (window=windows->next; window; window=window->next)
+    {
+    if (!sameString(window->chromName,windows->chromName))
+	return TRUE;
+    }
+return FALSE;
+}
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -7685,9 +7720,10 @@ char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
 jsonObjectAdd(jsonForClient, "lastDbPos", newJsonString(cartString(cart, dbPosKey)));
 
-
-
-if(trackImgOnly && !ideogramToo)
+// hide chromIdeo
+if ((trackImgOnly && !ideogramToo) 
+|| (sameString(virtModeType, "customUrl") && windowsHaveMultipleChroms()) // Special case hide by request
+)
     {
     for(window=windows;window;window=window->next)
 	{
@@ -7698,6 +7734,10 @@ if(trackImgOnly && !ideogramToo)
 	    ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
 	    }
 	}
+    }
+
+if (trackImgOnly && !ideogramToo) 
+    {
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
