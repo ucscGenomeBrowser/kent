@@ -963,7 +963,6 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
-priority 1
 html snp142Common_bugFix
 
 track snp142Flagged
