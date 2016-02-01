@@ -54,6 +54,13 @@ static struct optionSpec options[] = {
     {NULL, 0},
     };
 
+struct slDoubleInt
+    {
+    struct slDoubleInt *next; 
+    double val; 
+    int index; 
+    };
+
 struct bioExpVector
 /* Contains expression information for a biosample on many genes. */
     {
@@ -64,7 +71,34 @@ struct bioExpVector
     double *vector;   //  An array allocated dynamically.
     struct rgbColor color;  // Color for this one
     int children;   // Number of bioExpVectors used to build the current 
+    struct slDoubleInt *topGeneIndeces; // The indeces for the top 10 genes that drove the clustering up to this point 
+    int contGenes; //The number of contributing genes
     };
+
+
+struct slDoubleInt *slDoubleIntNew(double x, int y)
+/* Return a new double. */
+{
+struct slDoubleInt *a;
+AllocVar(a);
+a->val = x;
+a->index = y; 
+return a;
+}
+
+int slDoubleIntCmp(const void *va, const void *vb)
+/* Compare two slDoubles. */
+{
+const struct slDoubleInt *a = *((struct slDoubleInt **)va);
+const struct slDoubleInt *b = *((struct slDoubleInt **)vb);
+double diff = a->val - b->val;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else
+    return 0;
+}
 
 double stringToDouble(char *s)
 /* Convert string to a double.  Assumes all of string is number
@@ -104,6 +138,7 @@ struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
 	for (i = 0; i < el->count; ++i)
 	    el->vector[i] = stringToDouble(row[i]);
 	el->children = 1;
+	el->contGenes = 0;
 	slAddHead(&list, el);
 	}
     lineFileClose(&lf);
@@ -167,7 +202,7 @@ struct slRef *getOrderedLeafList(struct hacTree *tree)
     return leafList;
     }
 
-static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance)
+static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance, struct slName *geneNames)
 /* Recursively prints out the elements of the hierarchical .json file. */
     {
     struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
@@ -191,6 +226,7 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     else if (tree->left == NULL || tree->right == NULL)
 	errAbort("\nHow did we get a node with one NULL kid??");
     
+    // NOTE: There are no leaves past this point
     for (i = 0;  i < level + 1;  i++)
 	fputc(' ', f);
     distance = tree->childDistance/clLongest;
@@ -202,7 +238,17 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     // *****NODES*****
     ++internalNodes; 
     fprintf(f, "{\"name\":\" \", \"number\":\"%i\", \"kids\":\"%i\", \"tpmDistance\": \"%f\", \"length\": \"%f\",  \"colorGroup\": \"rgb(%i,"
-			"%i,%i)\",",internalNodes,  bio->children , tree->childDistance, length, colors.r,colors.g,colors.b);
+			"%i,%i)\",\"contGenes\":\"%i\",\"geneList\": {",internalNodes,  bio->children , tree->childDistance, length, colors.r,colors.g,colors.b, bio->contGenes);
+    
+    struct slDoubleInt *j;
+    for (j = bio->topGeneIndeces; j != NULL; j = j->next)
+	{
+	struct slName *geneName = slElementFromIx(geneNames, j->index); 
+	fprintf(f,"\"%s\":\"%f\"", geneName->name, j->val);  
+	if (j->next != NULL) fprintf(f, ", "); 
+	
+	}
+    fprintf(f , "},"); 
     if (distance != distance) distance = 0;
     struct rgbColor wTB; 
     struct rgbColor wTBsqrt; 
@@ -224,9 +270,9 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     for (i = 0;  i < level + 1;  i++)
 	fputc(' ', f);
     fprintf(f, "\"children\":[\n");
-    rPrintHierarchicalJson(f, tree->left, level+1, distance);
+    rPrintHierarchicalJson(f, tree->left, level+1, distance, geneNames);
     fputs(",\n", f);
-    rPrintHierarchicalJson(f, tree->right, level+1, distance);
+    rPrintHierarchicalJson(f, tree->right, level+1, distance, geneNames);
     fputc('\n', f);
     // Closes the children block for node objects
     for (i=0;  i < level + 1;  i++)
@@ -237,7 +283,7 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     fputs("}", f);
     }
 
-void printHierarchicalJson(FILE *f, struct hacTree *tree)
+void printHierarchicalJson(FILE *f, struct hacTree *tree, char *geneNamesFile)
 /* Prints out the binary tree into .json format intended for d3
  * hierarchical layouts */
     {
@@ -247,7 +293,19 @@ void printHierarchicalJson(FILE *f, struct hacTree *tree)
 	return;
 	}
     double distance = 0;
-    rPrintHierarchicalJson(f, tree, 0, distance);
+    
+    
+    struct lineFile *lf = lineFileOpen(geneNamesFile, TRUE);
+    char *line;
+    struct slName *geneNames;
+    AllocVar(geneNames);
+    while (lineFileNextReal(lf, &line))
+	{
+	struct slName *geneName = newSlName(cloneString(line));
+	slAddTail(&geneNames, geneName);
+	}
+    lineFileClose(&lf);
+    rPrintHierarchicalJson(f, tree, 0, distance, geneNames);
     fputc('\n', f);
     }
 
@@ -288,9 +346,30 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     el->count = kid1->count; 
     el->name = catTwoStrings(kid1->name, kid2->name);
     int i;
+    int gCount = 0;
     for (i = 0; i < el->count; ++i)
 	{
 	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);
+	double diff = abs((kid1Weight*kid1->vector[i] - kid2Weight*kid2->vector[i]));
+			
+	if (diff > 0.0){
+	    ++el->contGenes; 
+	    ++gCount;
+	    int index = i + 1; 
+	    if (gCount <= 10){
+		struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
+		slAddHead(&el->topGeneIndeces, newGene); 
+		slSort(&el->topGeneIndeces, slDoubleIntCmp); 
+		}
+	    else{
+		if (el->vector[i] > el->topGeneIndeces->val){
+		    slPopHead(el->topGeneIndeces); 
+		    struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
+		    slAddHead(&el->topGeneIndeces, newGene); 
+		    slSort(&el->topGeneIndeces, slDoubleIntCmp); 
+		    }
+		}
+	    }
 	}
     el->children = kid1->children + kid2->children;
     return (struct slList *)(el);
@@ -354,7 +433,7 @@ void convertInput(char *expMatrix, char *descFile, bool csv)
  * Namely a transposed table with the first column removed.  Makes use of system calls
  * to use cut, sed, kent utility rowsToCols, and paste (for descFile option). */
     {
-    char cmd1[1024], cmd2[1024];
+    char cmd[1024],cmd1[1024], cmd2[1024];
     if (csv)
 	/* A sed one liner will convert comma separated values into a tab separated values*/ 
 	{
@@ -363,7 +442,8 @@ void convertInput(char *expMatrix, char *descFile, bool csv)
 	verbose(2,"%s\n", cmd3);
 	mustSystem(cmd3); 
 	}
-
+    safef(cmd, 1024, "cut -f 1 %s | sed \'1d\' > %s.genes", expMatrix, expMatrix); 
+    mustSystem(cmd); 
     safef(cmd1, 1024, "cat %s | sed '1d' | rowsToCols stdin %s.transposedMatrix", expMatrix, expMatrix); 
     /* Exp matrices are X axis of cell lines and Y axis of transcripts. This causes long Y axis and short
      * X axis, which are not handled well in C.  The matrix is transposed to get around this issue. */ 
@@ -396,7 +476,7 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     char *pageName = cloneString(jsonFile);
     chopSuffix(pageName);
     int textSize = 12 - log(nodeCount);  
-    int radius = 540 + 270*log10(nodeCount);  
+    //int radius = 540 + 270*log10(nodeCount);  
     int width = 10 * nodeCount; 
     int height = 10 * nodeCount; 
     int labelLength = 10+nameSize*(15-textSize);
@@ -409,23 +489,22 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     fprintf(outputFile,"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://d3js.org/d3.v3.min.js\" type=\"text/javascript\"></script>\n"); 
-    fprintf(outputFile,"<script src=\"d3.dendrograms1.js\" type=\"text/javascript\"></script>\n"); 
+    fprintf(outputFile,"<script src=\"d3.dendrograms.js\" type=\"text/javascript\"></script>\n"); 
     fprintf(outputFile,"<div class = \"dropdown\">\n"); 
     fprintf(outputFile,"	<div id = dropdown>\n");  
     fprintf(outputFile,"</div>\n");
     fprintf(outputFile,"<script>\n"); 
     fprintf(outputFile,"	function load() {\n"); 
     fprintf(outputFile,"	var data;\n\n"); 
-    fprintf(outputFile,"	d3.json(\"testClustersWMeta.json\", function(error,json){\n"); 
+    fprintf(outputFile,"	d3.json(\"%s\", function(error,json){\n", jsonFile); 
     fprintf(outputFile,"		if (error) return console.warn(error);\n"); 
     fprintf(outputFile,"		data = json;\n"); 
+    fprintf(outputFile,"			d3.dendrogram.makeRadialDendrogram('#dendrogram', data,{\n"); 
+    fprintf(outputFile,"			});\n"); 
     fprintf(outputFile,"			d3.dendrogram.makeCartesianDendrogram('#phylogram', data, {\n"); 
     fprintf(outputFile,"			width: %i,\n", width); 
     fprintf(outputFile,"			height: %i,\n", height); 
     fprintf(outputFile,"			});\n\n"); 
-    fprintf(outputFile,"			d3.dendrogram.makeRadialDendrogram('#dendrogram', data,{\n"); 
-    fprintf(outputFile,"			radius: %i,\n", radius); 
-    fprintf(outputFile,"			});\n"); 
     fprintf(outputFile,"		});\n"); 
     fprintf(outputFile,"  	}\n"); 
     fprintf(outputFile,"</script>\n"); 
@@ -438,12 +517,12 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     fprintf(outputFile,"<table>\n"); 
     fprintf(outputFile,"  <tr>\n"); 
     fprintf(outputFile,"	<td>\n"); 
-    fprintf(outputFile,"	  <h1>Phylogram</h2>\n"); 
-    fprintf(outputFile,"	  <div id='phylogram'></div>\n"); 
-    fprintf(outputFile,"	</td>\n"); 
-    fprintf(outputFile,"	<td>\n"); 
     fprintf(outputFile,"	  <h1>Dendrogram</h1>\n"); 
     fprintf(outputFile,"	  <div id='dendrogram'></div>\n"); 
+    fprintf(outputFile,"	</td>\n"); 
+    fprintf(outputFile,"	<td>\n"); 
+    fprintf(outputFile,"	  <h1>Phylogram</h2>\n"); 
+    fprintf(outputFile,"	  <div id='phylogram'></div>\n"); 
     fprintf(outputFile,"	</td>\n"); 
     fprintf(outputFile,"  </tr>\n"); 
     fprintf(outputFile,"</table>\n"); 
@@ -487,16 +566,18 @@ void expData(char *matrixFile, char *outDir, char *descFile)
 
     struct slRef *orderedList = getOrderedLeafList(clusters);
     colorLeaves(orderedList);
-    printHierarchicalJson(f, clusters);
+    printHierarchicalJson(f, clusters, catTwoStrings(matrixFile, ".genes"));
     FILE *htmlF = mustOpen(catTwoStrings(outDir,".html"),"w");
     generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
 
     // Remove temporary files
-    char cleanup[1024], cleanup2[1024];
+    char cleanup[1024], cleanup2[1024], cleanup3[1024];
     safef(cleanup, 1024, "rm %s.cellNames", matrixFile); 
     safef(cleanup2, 1024, "rm %s.transposedMatrix", matrixFile); 
+    safef(cleanup3, 1024, "rm %s.genes", matrixFile); 
     mustSystem(cleanup);
     mustSystem(cleanup2);
+    mustSystem(cleanup3);
     end = clock(); 
     verbose(2,"%lld allocated at end. The program took %f seconds to complete.\n", (long long)carefulTotalAllocated(), (double)(end-begin)/CLOCKS_PER_SEC);
     verbose(2,"Completed binary clustering of the expression matrix by euclidean distance (expMatrixToJson).\n");
