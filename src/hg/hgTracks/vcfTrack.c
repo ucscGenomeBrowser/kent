@@ -1191,8 +1191,6 @@ if (errCatchStart(errCatch))
 	    tg->customInt = slCount(tg->items);
 	    }
 	// Don't vcfFileFree here -- we are using its string pointers!
-        // but we need to close the files!
-        lineFileClose(&(vcff->lf));
 	}
     }
 errCatchEnd(errCatch);

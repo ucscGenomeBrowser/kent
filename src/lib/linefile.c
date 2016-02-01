@@ -751,7 +751,8 @@ if ((lf = *pLf) != NULL)
 	ti_close(lf->tabix);
 #ifdef USE_HTS
         hts_close(lf->htsFile);
-        free(lf->kline);
+        kstring_t *kline = lf->kline;
+        free(kline->s);
 #endif
 	}
 #endif // USE_TABIX
