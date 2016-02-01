@@ -3047,6 +3047,14 @@ subGroup1 view Views genes=Genes alignments=Alignments curated=Curated predicted
 	visibility pack
 	parent ncbiRefGenesView
 
+        track ncbiRefSeqBed
+	shortLabel bed file representation of the GFF3 file
+        subGroups view=genes
+        longLabel bed file representation of the GFF3 file
+	visibility pack
+        type bed 6 .
+	parent ncbiRefGenesView
+
     track ncbiRefBigAlignView
     shortLabel Alignments
     view alignments
