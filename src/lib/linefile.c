@@ -250,7 +250,8 @@ if ((tabix->idx = ti_index_load(tbiName)) == NULL)
 #endif
     {
     warn("Unable to load tabix index from \"%s\"", tbiName);
-    ti_close(tabix);
+    if (tabix)
+        ti_close(tabix);
     tabix = NULL;
     return NULL;
     }
@@ -748,6 +749,10 @@ if ((lf = *pLf) != NULL)
 	if (lf->tabixIter != NULL)
 	    ti_iter_destroy(lf->tabixIter);
 	ti_close(lf->tabix);
+#ifdef USE_HTS
+        hts_close(lf->htsFile);
+        free(lf->kline);
+#endif
 	}
 #endif // USE_TABIX
     else if (lf->udcFile != NULL)
