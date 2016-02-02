@@ -3450,7 +3450,7 @@ var popUp = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 640;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3463,7 +3463,7 @@ var popUp = {
             height: (popUp.trackDescriptionOnly ? popMaxHeight : 'auto'),
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,

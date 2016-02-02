@@ -29,7 +29,7 @@ static char *makeTissueColorPatch(struct gtexTissue *tis)
 /* Display a box colored by defined tissue color */
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>", tis->color);
+safef(buf, sizeof(buf), "<td bgcolor=%X></td>", tis->color);
 return(cloneString(buf));
 }
 
@@ -37,7 +37,7 @@ static char *makeTissueLabel(struct gtexTissue *tis)
 {
 /* Display tissue color and label */
 char buf[256];
-safef(buf, sizeof(buf), "<td style='width:10px;' bgcolor=%X></td>"
+safef(buf, sizeof(buf), "<td bgcolor=%X></td>"
                         "<td>&nbsp;%s</td>", 
                                 tis->color, tis->description);
 return(cloneString(buf));
@@ -117,7 +117,9 @@ static void initTissueTableStyle()
  * Specify some colors.*/
 {
 puts("<style>\n"
-        "#tissueTable th, #tissueTable td {font-size: 75%;}\n"
+        "#tissueTable th, #tissueTable td {font-size: 75%; margin: 0px; border: 0px; padding: 0px}\n"
+        "#tissueTable input {margin: 0px .5ex; width: 8px; height: 8px}\n"
+        "#gtexGeneControls div {margin-bottom: .3em;}\n"
         ".notSortable {font-color: black;}\n"
     "</style>\n");
 }
@@ -138,7 +140,7 @@ struct slName *sel;
 for (sel = checked; sel != NULL; sel = sel->next)
     hashAdd(checkHash, sel->name, sel->name);
 //puts("<table borderwidth=0><tr>");
-puts("\n<table id='tissueTable' cellspacing='2' cellpadding='0' border='0' class='sortable'>");
+puts("\n<table id='tissueTable' cellspacing='1' cellpadding='0' border='0' class='sortable'>");
 
 /* table header */
 char orderVar[256];
@@ -150,7 +152,7 @@ char *sortableClass = isPopup ? "notSortable" : "sortable";
 if (isPopup)
     {
     printf("<th>&nbsp;&nbsp;<a style='color: blue; cursor: pointer; text-decoration: none' href='%s?g=%s' "
-         "title='Sorry you cannot select tissues from the list below. To do so, click the ?.'>?</a>",
+         "title='To change the tissue selection, click the ?.'>?</a>",
                 "../cgi-bin/hgTrackUi", track); // Better to use hgTrackUiName(), but there's an issue
                                                         //with header includes, so punting for now
     }
@@ -193,9 +195,9 @@ for (tis = tissues; tis != NULL; tis = tis->next)
     printf("\n<td>&nbsp;%s</td>", tis->description);
     // sample count
     int samples = hashIntValDefault(tscHash, tis->name, 0);
-    printf("\n<td abbr='%05d' style='text-align: right; padding-right: 10px'>&nbsp;%d</td>", samples, samples);
+    printf("\n<td abbr='%05d' style='text-align: right; padding-right: 8px'>&nbsp;%d</td>", samples, samples);
     // organ
-    printf("\n<td style='padding-right: 10px'>&nbsp;%s</td>", tis->organ);
+    printf("\n<td style='padding-right: 8px'>&nbsp;%s</td>", tis->organ);
     // system
     printf("\n<td>&nbsp;%s</td>", getSystem(tis));
 
@@ -288,15 +290,22 @@ void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
 if (cartVarExists(cart, "ajax"))
+    {
     isPopup = TRUE;
+    // force box to visually separate as some styling (e.g. font size) 
+    // may differ from generic UI
+    boxed = TRUE;
+    }
+
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-printf("<table%s><tr><td>", boxed ?" width='100%'":"");
+printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>", 
+        isPopup ? 50 : 100, boxed ?" width='100%'":"");
 
 char cartVar[1024];
 char *selected = NULL;
 
 /* Sample selection */
-printf("<b>Samples:</b>&nbsp;");
+printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
 selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
@@ -304,10 +313,10 @@ cgiMakeRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples);
 printf("All\n");
 cgiMakeRadioButton(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples);
 printf("Compare by gender\n");
-printf("</p>");
+printf("</div>");
 
 /* Comparison type */
-printf("<p><b>Comparison display:</b>\n");
+printf("<div><b>Comparison display:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COMPARISON_DISPLAY);
 selected = cartCgiUsualString(cart, cartVar, GTEX_COMPARISON_DEFAULT); 
 boolean isMirror = sameString(selected, GTEX_COMPARISON_MIRROR);
@@ -315,10 +324,10 @@ cgiMakeRadioButton(cartVar, GTEX_COMPARISON_DIFF, !isMirror);
 printf("Difference graph\n");
 cgiMakeRadioButton(cartVar, GTEX_COMPARISON_MIRROR, isMirror);
 printf("Two graphs\n");
-printf("</p>");
+printf("</div>");
 
 /* Data transform */
-printf("<p><b>Log10 transform:</b>\n");
+printf("<div><b>Log10 transform:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
 boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
 cgiMakeCheckBox(cartVar, isLogTransform);
@@ -329,8 +338,8 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
 // TODO: set max and initial limits from gtexInfo table
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
 cgiMakeIntVar(cartVar, viewMax, 4);
-printf(" RPKM (range 10-180000)<br>\n");
-printf("</p>");
+printf(" RPKM (range 10-180000)\n");
+printf("</div>");
 
 /* Color scheme */
 // We don't need the rainbow color scheme, but may want another (e.g. different
@@ -348,13 +357,15 @@ printf("</p>");
 #endif
 
 /* Tissue filter */
+printf("<br>");
 if (!isPopup)
     {
-    printf("<p><b>Tissue filter:</b>\n");
+    printf("<div><b>Tissue filter:</b>\n");
     safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     puts("&nbsp;");
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
+    printf("</div>");
     }
 struct gtexTissue *tissues = gtexGetTissues();
 struct slName *selectedValues = NULL;
@@ -368,5 +379,6 @@ else if (sameString(selectType, "table"))
 else
     makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
 
+puts("\n</table>\n");
 cfgEndBox(boxed);
 }
