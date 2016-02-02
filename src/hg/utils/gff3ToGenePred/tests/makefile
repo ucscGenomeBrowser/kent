@@ -9,7 +9,7 @@ all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
-	genesWithExonsTest
+	minimalGenesTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -61,10 +61,11 @@ transcriptCdsParentTest: mkout
 	${gff3ToGenePred} input/transcriptCdsParent.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
-# pseudogene annotations tie exons directly to genes
-genesWithExonsTest: mkout
-	${gff3ToGenePred} -allowGenesWithExons input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
+# pseudogene annotations tie exons directly to genes and have standalong gnenes
+minimalGenesTest: mkout
+	${gff3ToGenePred} -allowMinimalGenes -unprocessedRootsOut=output/$@.unprocessed input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+	diff expected/$@.unprocessed output/$@.unprocessed
 
 mkout:
 	@mkdir -p output

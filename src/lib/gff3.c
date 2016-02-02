@@ -632,8 +632,9 @@ else
     fprintf(fh, "%d", g3a->phase);
 }
 
-static void writeAnn(struct gff3Ann *g3a, FILE *fh)
-/* write an annotation record to the specified file */
+void gff3AnnWrite(struct gff3Ann *g3a, FILE *fh)
+/* Write an annotation record to the specified file.
+ * This only writes a single record, it is not recursive.*/
 {
 writeFields(g3a, fh);
 fputc('\t', fh);
@@ -1085,7 +1086,7 @@ FILE *fh = mustOpen(fileName, "w");
 writeMeta(g3f, fh);
 struct gff3AnnRef *g3aRef;
 for (g3aRef = g3f->anns; g3aRef != NULL; g3aRef = g3aRef->next)
-    writeAnn(g3aRef->ann, fh);
+    gff3AnnWrite(g3aRef->ann, fh);
 writeFastas(g3f, fh);
 carefulClose(&fh);
 }
