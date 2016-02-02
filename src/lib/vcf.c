@@ -989,9 +989,9 @@ if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
         vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
+    lineFileClose(&(vcff->lf)); // file is all read in so we close it
     }
 
-lineFileClose(&(vcff->lf)); // file is all read in so we close it
 return vcff;
 }
 
