@@ -8,7 +8,8 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
-	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest
+	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
+	genesWithExonsTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -58,6 +59,11 @@ geneTranscriptTest: mkout
 # it also appears that gene->transcript->exon->cds is valid
 transcriptCdsParentTest: mkout
 	${gff3ToGenePred} input/transcriptCdsParent.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+# pseudogene annotations tie exons directly to genes
+genesWithExonsTest: mkout
+	${gff3ToGenePred} -allowGenesWithExons input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 mkout:

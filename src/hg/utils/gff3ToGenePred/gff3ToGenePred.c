@@ -29,6 +29,10 @@ errAbort(
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"
+  "  -allowGenesWithExons - normally this programs assumes that genes contains\n"
+  "   transcripts which contain exons.  If this option is specified, it will exons\n"
+  "   as direct children of genes and create genePred records for them.\n"
+  "\n"
   "This converts:\n"
   "   - top-level gene records with RNA records\n"
   "   - top-level RNA records\n"
@@ -57,6 +61,7 @@ static struct optionSpec options[] = {
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
+    {"allowGenesWithExons", OPTION_BOOLEAN},
     {"attrsOut", OPTION_STRING},
     {"bad", OPTION_STRING},
     {NULL, 0},
@@ -64,6 +69,7 @@ static struct optionSpec options[] = {
 static boolean useName = FALSE;
 static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
+static boolean allowGenesWithExons = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
@@ -316,7 +322,8 @@ return cdsUtrBlks;
 }
 
 static struct genePred *mrnaToGenePred(struct gff3Ann *gene, struct gff3Ann *mrna)
-/* construct a genePred from an mRNA or transript record, return NULL if there is an error */
+/* construct a genePred from an mRNA or transript record, return NULL if there is an error.
+ * The gene argument maybe null if there isn't a gene parent */
 {
 // allow for only having UTR/CDS children
 struct gff3AnnRef *exons = getChildFeatures(mrna, gff3FeatExon);
@@ -346,8 +353,9 @@ slFreeList(&cdsUtrBlks);
 return gp;  // NULL if error above
 }
 
-static int shouldProcess( struct gff3Ann *node)
-/* decide if we should process this feature */
+static boolean shouldProcessAsTranscript(struct gff3Ann *node)
+/* Decide if we should process this feature as a transcript and turn it into a
+ * genePred. */
 {
 return sameString(node->type, gff3FeatMRna) 
     || sameString(node->type, gff3FeatNCRna)
@@ -359,8 +367,16 @@ return sameString(node->type, gff3FeatMRna)
     || sameString(node->type, gff3FeatPrimaryTranscript);
 }
 
+static boolean shouldProcessGeneAsTranscript(struct gff3Ann *gene)
+/* should this gene be processed as a transcripts? */
+{
+return allowGenesWithExons && (gene->children != NULL)
+    && sameString(gene->children->ann->type, gff3FeatExon);
+}
+
 static void processMRna(FILE *gpFh, struct gff3Ann *gene, struct gff3Ann *mrna, struct hash *processed)
-/* process a mRNA/transcript node in the tree; gene can be NULL. Error count increment on error and genePred discarded */
+/* process a mRNA/transcript node in the tree; gene can be NULL. Error count
+   increment on error and genePred discarded */
 {
 recProcessed(processed, mrna);
 
@@ -369,20 +385,29 @@ if (gp != NULL)
     outputGenePredAndFree(mrna, gpFh, gp);
 }
 
-static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
-/* process a gene node in the tree.  Stop process if maximum errors reached */
+static void processGeneTranscripts(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
+/* process transcript records of a gene */
 {
-recProcessed(processed, gene);
-
 struct gff3AnnRef *child;
 for (child = gene->children; child != NULL; child = child->next)
     {
-    if (shouldProcess(child->ann) 
+    if (shouldProcessAsTranscript(child->ann) 
         && !isProcessed(processed, child->ann))
         processMRna(gpFh, gene, child->ann, processed);
     if (convertErrCnt >= maxConvertErrors)
         break;
     }
+}
+
+static void processGene(FILE *gpFh, struct gff3Ann *gene, struct hash *processed)
+/* process a gene node in the tree.  Stop process if maximum errors reached */
+{
+recProcessed(processed, gene);
+
+if (shouldProcessGeneAsTranscript(gene))
+    processMRna(gpFh, NULL, gene, processed);
+else
+    processGeneTranscripts(gpFh, gene, processed);
 }
 
 static void processRoot(FILE *gpFh, struct gff3Ann *node, struct hash *processed)
@@ -392,7 +417,7 @@ recProcessed(processed, node);
 
 if (sameString(node->type, gff3FeatGene))
     processGene(gpFh, node, processed);
-else if (shouldProcess(node))
+else if (shouldProcessAsTranscript(node))
     processMRna(gpFh, NULL, node, processed);
 }
 
@@ -439,6 +464,7 @@ maxConvertErrors = optionInt("maxConvertErrors", maxConvertErrors);
 if (maxConvertErrors < 0)
     maxConvertErrors = INT_MAX;
 honorStartStopCodons = optionExists("honorStartStopCodons");
+allowGenesWithExons = optionExists("allowGenesWithExons");
 char *bad = optionVal("bad", NULL);
 if (bad != NULL)
     outBadFp = mustOpen(bad, "w");
