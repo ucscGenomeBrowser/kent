@@ -1184,6 +1184,9 @@ var dragSelect = {
                 else {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                     if (imageV2.inPlaceUpdate) {
+			if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+			    newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+			}
                         imageV2.navigateInPlace("position=" + newPosition, null, true);
                     } else {
                         jQuery('body').css('cursor', 'wait');
