@@ -3477,11 +3477,19 @@ var popUp = {
             modal: true,
             closeOnEscape: true,
             autoOpen: false,
-            buttons: { "OK": function() {
-                    if ( ! popUp.trackDescriptionOnly )
-                        popUp.uiDialogOk($('#pop'), popUp.trackName);
-                    $(this).dialog("close");
-            }},
+
+            buttons: { 
+                    'Apply': function () {
+                         popUp.uiDialogOk($('#pop'), popUp.trackName);
+                         // thanks to JAT for this cleverness to keep button functioning
+                         //popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                    },
+                    'OK': function() {
+                        if ( ! popUp.trackDescriptionOnly )
+                            popUp.uiDialogOk($('#pop'), popUp.trackName);
+                        $(this).dialog("close");
+                    }
+            },
             // popup.ready() doesn't seem to work in open.
             
             open: function () {
