@@ -1,95 +1,66 @@
-PROCESS DESCRIPTION  (8/13/14 JK) added below
-TROUBLE-SHOOTING TIPS (8/17/14 JK) added below
-
---------------------------------------------
-
 Here lies code to implement the CIRM Data Warehouse (CDW).  The CDW is designed to track 
 a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
 1) A Linux file system with a fairly large block size.
-2) A MySQL database with a relatively small number of tables tracking
-    a) Users (by their email name - we rely on Persona for authentication)
-    b) Hubs (by their URLs)
-    c) Hosts (by their IP and connectivity)
-    d) Submits (by date/submitter/hub)
-    e) Files (by hub file name and CDW license plate).
-    f) Subscribers (jobs that get started when a file of a particular type arrives).
-    g) Results of automatic quality assurance results on files.
-3) A system to notify subscribers when a file has been received.
-Note the pipeline code is relatively separate.  The pipeline subscribes to the data warehouse.
+2) A MySQL database with tables tracking
+    a) Users (by their email name)
+    b) Submits (by date/submitter/hub)
+    c) Files (by hub file name and CDW license plate).
+    d) Groups and file permissions
+    e) Results of automatic quality assurance results on files.
 
-The schema for the database is in lib/encodeDataWarehouse.as. There is also a script lib/resetCdw
-that will delete the existing database and create a new one on the test site (hgwdev).  The programs
-that interact with the database directly are in C, and all start with the "cdw" prefix.  Ones that
-work over the web start with the "cdwWeb" prefix.  Arguably the most important program is cdwSubmit.
-This program reads a manifest file that has been validated with validateManifest on the data 
-producer's machine.  This "validated.txt" file is on the data producer's web site,  as are all of
-the files it refers to.   The cdwSubmit program transfers the files, updating the cdwSubmit table
-with its progress,  and queues up jobs for the validation/quality assurance phase.  CdwSubmit can
-be run through the command line,  but more often is run indirectly from the web either interactively
-with the cdwWebSubmit program,  or under script control with cdwScriptSubmit.  These other two 
-programs add an item to the cdwSubmitJob table,  and send a message to a Unix FIFO to wake up a
-cdwRunDaemon.  The cdwRunDaemon manages up to ~5 (the exact number is configurable) cdwSubmit 
-processes running in parallel.  A separate cdwRunDaemon manages up to ~10 validation/QA processes.
+The schema for the database is in lib/*.as, with most of the information in cdw.as. 
+There is also a script lib/resetCdw that will delete the existing database and create 
+a new one on the test site (hgwdev).  This should be viewed as documentation rather than
+as a program to run at this point, since the test database has useful stuff. The programs
+that interact with the database directly are in C, and all start with the "cdw" prefix.  
+Arguably the most important program is cdwSubmit.  This program takes a tab separated manifest
+file that contains a line for each file in the submission, and a tag-storm format metadata
+file that describes the experiments the files came from, copies the files into the warehouse
+directory, and puts the file into the cdwFile table.  It also adds jobs to a table
+for the validation/QA script.
 
-Here is a brief description of the programs involved in this system, starting with the command
-line tools.
+The validation is done asynchronously.  It is driven by the cdwRunDaemon program, which looks
+for new rows in the cdwJob table,  and runs them, keeping a configurable number of jobs (currently
+14) running in parallel.  The validation is done by a simple linear shell script, cdwQaAgent, 
+which calls a number of C programs one after the other.  The first and perhaps most important
+of these is cdwMakeValidFile,  which insures that a file is of the format it claims to be in
+the manifest, gathers some preliminary statistics on the file, and adds the file to the cdwValidFile
+table.  At this point the file will have a name that looks like a license plate, something like
+CDW123ABC.
 
-cdwAddAssembly - Add a new genome assembly to the database.
-cdwAddQaEnrichTarget - Add a new enrichment target (like a set of exons or regulatory regions).
-cdwAddSubscriber - Add a new subscriber who gets notified of new files.
-cdwCreateUser - Add a new user who has database access.
-cdwMakeEnrichments - Calculate coverage of enrichment targets vs. coverage of genome.
-cdwMakeReplicateQa - Calculate overlap and correlation within overlap of replicates.
-cdwMakeValidFile - Check format. Count up items and bases in data set, subsample fastqs and BAMS.
-cdwMetaManiToTdb - From a manifest file and a little metadata create a trackDb.txt file.
-cdwQaAgent - Little script that runs cdwMakeValidFile, cdwMakeEnrichments, cdwMakeReplicateQa.
-cdwReallyRemoveFiles - Remove files that were put in database by mistake.
-cdwRunDaemon - Run jobs specified in a database table - either cdwJob or cdwSubmitJob.
-cdwSubmit - Manages transfer of files into database and local file system.
-
-Here is a description of the web based tools. 
-cdwScriptSubmit - Scripts can start cdwSubmit with this tool using a https based web service.
-cdwWebAuthLogin - Part of Persona authentication system.  See also cdwPersona.js.
-cdwWebAuthLogout - Part of Persona authentication system. Does not directly interact with user.
-cdwWebBrowse - A user can log in and view status of all of his submissions with this.
-cdwWebCreateUser - A user can grant access to a new user with this.
-cdwWebRegisterScript - Scripts for submitting data need to be registered with this form.
-cdwWebSubmit - Main interactive submit-a-dataset form.  Also monitors progress of one submission.
-
-Supporting these tools are the lib and inc dirs.  These just contain two modules - 
-encodeDataWarehouse which is autoSql generated from lib/encodeDataWarehouse.as,  and cdwLib
-containing the hand-coded parts.
+Once the asynchronous validation is complete, a wrangle will check for errors, deal with them
+if necessary, and then run a few commands to index and otherwise prepare the data for web display.
+The web display program is cdwWebBrowse.
 
 
 PROCESS DESCRIPTION  (8/13 JK)
 -------------------------------
-1) User runs validateManifest to create a validated.txt file on their web site.
-2) User navigates to http://encodedcc.sdsc.edu/cgi-bin/cdwWebSubmit and logs in.
-3) Log in causes exchange with Persona server that invokes cdwWebAuthLogin on our side.
-4) User puts URL for their validated manifest in cdwWebSubmit form and submits.
-5) cdwWebSubmit writes a row to the cdwSubmitJob table and sends a wake up signal to cdwDaemon.
-6) cdwDaemon starts up cdwSubmit, keeping track of how long cdwSubmit takes to run, and storing any stderr output in the stderr output of cdwSubmitJob.
-7) cdwSubmit downloads validated.txt.  It creates a cdwSubmit table entry. Then it processes each file in the validated.txt sequentially.  It checks the MD5 sum on each file.   If the MD5 sum matches a file with the same name from the same directory,  that is in the warehouse it skips it, figuring it was already submitted.   Otherwise it makes an entry in the cdwFIle table, and downloads the file using parallel connections.  It checks the MD5 sum. If there is a problem it will set an errorMessage in the cdwFile table, and also in the cdwSubmit table.When file is downloaded and the MD5 sum matches cdwSubmit puts a row for 'cdwQaAgent' in the cdwJob table.  
-8) cdwDaemon (another instance) notices cdwQaAgent job, and starts it, capturing start/end times and stderr output.  This means the server side validation/automatic QA process typically starts as cdwSubmit is working on downloading the next file.
-9) cdwQaAgent is just a very small shell script that invokes the next four steps sequentially.
-10) cdwMakeValidFile checks the file format really is what it is supposed to be, and for many file formats will gather statistics such as how many items covering how many bases are in the file.  This information goes into the cdwValidFile table, along with the CIRM license plate.  For fastq files additional information gets stored in the cdwFastqFile table,  and a sample fastq containing just 250,000 reads is made.   These reads get aligned against the target genome to compute the mapRatio.  For fastq files, and files such as BAM and bigBed, that include genomic coordinates,  a sample of 250,000 items is turned into a simple (non-blocked) bed file for later use.  If there is an error during the cdwMakeValidFile phase the cdwValidFile table entry will not be made, and there will be a message posted on the cdwFile errorMessage column.
-11) cdwMakeEnrichment will take the sample bed files produced in step 10, and see where it lands relative to all the regions specified (as .bigBed files) in the cdwQaEnrichTarget table for the relevant assembly. It puts the results in the cdwQaEnrich table,  which will have one row for each file/target combination.
-12) cdwMakeReplicateQa looks for any files that are in the database already with the same experiment and output type, but a different replicate.  For these it  uses the sample bed files from step 10 to make an entry in the cdwQaPairSampleOverlap table (aka cross-splatter or cross-enrichment analysis).  For bigWig files instead of the cross-enrichment, it does correlations, putting the results in the cdwQaPairCorrelation table.  These correlations are done genome wide, and also restricted to the regions specified as the target in the manifest.
-13) cdwMakeContaminationQa runs only on fastq files.  It subsamples the 250,000 read sample down to 100,000 reads,  and aligns these against all organisms specified in the cdwQaContamTarget table.  The mapRatio is that results is stored in the cdwQaContam table, with one entry for each fastq file/target pair.
-14) cdwMakeRepeatQa also runs only on fastq files.  (Potentially this could be extended to other files though.)  It aligns the 250,000 read sample against a RepeatMasker library for the organism,  and stores the results in the cdwQaRepeat table.  This will have one entry for each major repeat class (LINE, SINE, tRNA, rRNA, etc) that gets hit by the sample, and includes what proportion of reads align to that major repeat class.
-
+1) cdwSubmit parses manifest.txt and meta.txt inputs and makes sure that the meta tags in the 
+manifest exist in the meta.txt. It also checks meta.txt to make sure there are only legal tags
+present. It then md5-sums each file. It creates a cdwSubmit table entry. Then it processes each 
+file in the manifest sequentially, copying it to the warehouse,  and puts a row for 'cdwQaAgent' 
+in the cdwJob table.  
+2) cdwDaemon (another instance) notices cdwQaAgent job, and starts it, capturing start/end times and stderr output.  This means the server side validation/automatic QA process typically starts as cdwSubmit is working on copying the next file.
+3) cdwQaAgent is just a very small shell script that invokes the next QA steps sequentially.
+4) cdwMakeValidFile checks the file format really is what it is supposed to be, and for many file formats will gather statistics such as how many items covering how many bases are in the file.  This information goes into the cdwValidFile table, along with the CIRM license plate.  For fastq files additional information gets stored in the cdwFastqFile table,  and a sample fastq containing just 250,000 reads is made.   These reads get aligned against the target genome to compute the mapRatio.  For fastq files, and files such as BAM and bigBed, that include genomic coordinates,  a sample of 250,000 items is turned into a simple (non-blocked) bed file for later use.  If there is an error during the cdwMakeValidFile phase the cdwValidFile table entry will not be made, and there will be a message posted on the cdwFile errorMessage column.
+5) cdwMakePairedEndQa checks for read concordance for faired end fastq files
+6) cdwMakeEnrichments will take the sample bed files produced in step 10, and see where it lands relative to all the regions specified (as .bigBed files) in the cdwQaEnrichTarget table for the relevant assembly. It puts the results in the cdwQaEnrich table,  which will have one row for each file/target combination.
+7) cdwMakeReplicateQa looks for any files that are in the database already with the same experiment and output type, but a different replicate.  For these it  uses the sample bed files from step 10 to make an entry in the cdwQaPairSampleOverlap table (aka cross-splatter or cross-enrichment analysis).  For bigWig files instead of the cross-enrichment, it does correlations, putting the results in the cdwQaPairCorrelation table.  These correlations are done genome wide, and also restricted to the regions specified as the target in the manifest.
+8) cdwMakeContaminationQa runs only on fastq files.  It subsamples the 250,000 read sample down to 100,000 reads,  and aligns these against all organisms specified in the cdwQaContamTarget table.  The mapRatio is that results is stored in the cdwQaContam table, with one entry for each fastq file/target pair.
+9) cdwMakeRepeatQa also runs only on fastq files.  (Potentially this could be extended to other files though.)  It aligns the 250,000 read sample against a RepeatMasker library for the organism,  and stores the results in the cdwQaRepeat table.  This will have one entry for each major repeat class (LINE, SINE, tRNA, rRNA, etc) that gets hit by the sample, and includes what proportion of reads align to that major repeat class.
+10)cdwMakeTrackViz will prepare some file types for visualization in the genome browser, adding
+them to the appropriate table, and if necessary creating indexes.
 
 TROUBLE_SHOOTING TIPS (8/17 JK)
 --------------------------------
-when troubleshooting the CDW,  the first thing to do is use 'ps' to determine if cdwDaemons are running.  There should be at least 2:
+when troubleshooting the CDW,  the first thing to do is use 'ps' to determine if cdwDaemons are running.  There should be at least 1:
 
-        kent      5727     1  0 Aug14 ?        00:00:00 cdwRunDaemon encodeDataWarehouse cdwSubmitJob 6 /data/www/userdata/cdwSubmit.fifo -log=cdwSubm
-        kent      5729     1  0 Aug14 ?        00:00:00 cdwRunDaemon encodeDataWarehouse cdwJob 12 /data/www/userdata/cdwQaAgent.fifo -log=cdwQaAgent.
+        kent      5729     1  0 Aug14 ?        00:00:00 cdwRunDaemon cdw cdwJob 12 /data/www/userdata/cdwQaAgent.fifo -log=cdwQaAgent.
 
 If not, go to:
 
-        production: /data/encode3/encodeDataWarehouse/etc
-        test: kent/src/hg/encode3/encodeDataWarehouse/lib
+        production: /data/cirm/cdw/startup
+        test: /cluster/home/kent/kent/src/hg/cirm/cdw/lib
 
 and run
         ./restartDaemons
@@ -104,3 +75,6 @@ daemon and cdwSubmit.
 o - Run cdwMakeFileTags now to create cdwFileTags table
 o - Run cdwTextForIndex to create full text for free index search
 o - Run ixIxx to make the full text index in /gbdb
+o - You *might* need to run cdwChangeAccess to update the accessibility to make things
+    group readable, (or if the access all tag is intended but left off, world readable)
+
