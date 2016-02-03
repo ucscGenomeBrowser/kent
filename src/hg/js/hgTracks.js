@@ -2885,6 +2885,14 @@ var rightClick = {
                                 displayItemFunctions = true;
                             }
                         }
+                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
+                            // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
+                            // item (gene) name
+                            a = /i=([^&]+)/.exec(href);
+                            if (a && a[1]) {
+                                title = a[1];
+                            }
+                        }
                         if (displayItemFunctions) {
                             o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
                                 onclick: function(menuItemClicked, menuObject) {
