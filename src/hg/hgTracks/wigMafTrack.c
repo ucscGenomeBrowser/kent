@@ -13,7 +13,6 @@
 #include "hgTracks.h"
 #include "maf.h"
 #include "scoredRef.h"
-#include "wiggle.h"
 #include "hCommon.h"
 #include "hgMaf.h"
 #include "mafTrack.h"
