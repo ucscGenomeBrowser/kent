@@ -1173,6 +1173,8 @@ if (isEmpty(fileOrUrl))
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tg->tdb, VCF_HAP_ENABLED_VAR, TRUE);
+if (slCount(windows)>1)
+    hapClustEnabled = FALSE;  // haplotype sorting display not currently available with multiple windows.
 /* protect against temporary network error */
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
@@ -1252,6 +1254,8 @@ static void vcfLoadItems(struct track *tg)
 int vcfMaxErr = -1;
 struct vcfFile *vcff = NULL;
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tg->tdb, VCF_HAP_ENABLED_VAR, TRUE);
+if (slCount(windows)>1)
+    hapClustEnabled = FALSE;  // haplotype sorting display not currently available with multiple windows.
 char *table = tg->table;
 struct customTrack *ct = tg->customPt;
 struct sqlConnection *conn;
