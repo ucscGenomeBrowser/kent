@@ -238,7 +238,7 @@ if (htsFile == NULL)
     return NULL;
     }
 tbx_t *tabix;
-if ((tabix = ti_index_load(tbiName)) == NULL)
+if ((tabix = tbx_index_load2(fileOrUrl, tbiName)) == NULL)
 #else
 tabix_t *tabix = ti_open(fileOrUrl, tbiName);
 if (tabix == NULL)
