@@ -149,18 +149,8 @@ char *sortOrder = cartCgiUsualString(cart, orderVar, "tissue=+ samples=+ organ=+
 puts("\n<thead class='sortable'>");
 puts("\n<tr class='sortable'>");
 char *sortableClass = isPopup ? "notSortable" : "sortable";
-if (isPopup)
-    {
-    printf("<th>&nbsp;&nbsp;<a style='color: blue; cursor: pointer; text-decoration: none' href='%s?g=%s' "
-         "title='To change the tissue selection, click the ?.'>?</a>",
-                "../cgi-bin/hgTrackUi", track); // Better to use hgTrackUiName(), but there's an issue
-                                                        //with header includes, so punting for now
-    }
-else
-    {
-    printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
+printf("\n<th>&nbsp;<input type=hidden name='%s' class='sortOrder' value='%s'></th>\n",
         orderVar, sortOrder);
-    }
 puts("<th>&nbsp;&nbsp;&nbsp;&nbsp;</th>");
 printf("<th id='tissue' class='%s sort1' %s align='left'>&nbsp;Tissue</th>", 
                sortableClass, onClick);
@@ -290,16 +280,11 @@ void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
 if (cartVarExists(cart, "ajax"))
-    {
     isPopup = TRUE;
-    // force box to visually separate as some styling (e.g. font size) 
-    // may differ from generic UI
-    boxed = TRUE;
-    }
 
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>", 
-        isPopup ? 50 : 100, boxed ?" width='100%'":"");
+        isPopup ? 75 : 100, boxed ?" width='100%'":"");
 
 char cartVar[1024];
 char *selected = NULL;
@@ -338,6 +323,7 @@ safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
 // TODO: set max and initial limits from gtexInfo table
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
 cgiMakeIntVar(cartVar, viewMax, 4);
+//FIXME
 printf(" RPKM (range 10-180000)\n");
 printf("</div>");
 
@@ -358,15 +344,19 @@ printf("</p>");
 
 /* Tissue filter */
 printf("<br>");
-if (!isPopup)
+printf("<div><b>Tissues:</b>\n");
+if (isPopup)
     {
-    printf("<div><b>Tissue filter:</b>\n");
+    printf("<a href='../cgi-bin/hgTrackUi?g=%s'><button type='button'>Change</button><a>", track);
+    }
+else
+    {
     safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     puts("&nbsp;");
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
-    printf("</div>");
     }
+printf("</div>");
 struct gtexTissue *tissues = gtexGetTissues();
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))

@@ -45,11 +45,14 @@ function initVars()
             // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately,
             // logs for 7/2011 show vast majority of safari users are pre-5.1 (5.0.5 is by far
             // the most common).
+            // KRR/JAT:
+            // As of 9.0.9, possibly earlier, the 3rd part of the version is included in the
+            // user agent string, so must be parsed out (and discarded)
             //
             // Early versions of Chrome had this problem too, but this problem went away
             // as of Chrome 5.0.335.1 (or possibly earlier).
             imageV2.mapIsUpdateable = false;
-            var reg = new RegExp("Version\/([0-9]+.[0-9]+) Safari");
+            var reg = new RegExp("Version\/([0-9]+.[0-9]+)(.[0-9]+)? Safari");
             var a = reg.exec(navigator.userAgent);
             if (a && a[1]) {
                 var version = Number(a[1]);
@@ -3482,7 +3485,7 @@ var popUp = {
                     'Apply': function () {
                          popUp.uiDialogOk($('#pop'), popUp.trackName);
                          // thanks to JAT for this cleverness to keep button functioning
-                         //popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                         popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
                     },
                     'OK': function() {
                         if ( ! popUp.trackDescriptionOnly )
