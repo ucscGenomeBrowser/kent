@@ -3055,6 +3055,14 @@ subGroup1 view Views genes=Genes alignments=Alignments curated=Curated predicted
         type bed 6 .
 	parent ncbiRefGenesView
 
+        track missingRefSeqBed
+	shortLabel missing items
+        subGroups view=genes
+        longLabel missing items
+	visibility pack
+        type bed 4 .
+	parent ncbiRefGenesView
+
     track ncbiRefBigAlignView
     shortLabel Alignments
     view alignments
@@ -3063,9 +3071,9 @@ subGroup1 view Views genes=Genes alignments=Alignments curated=Curated predicted
     color 48,168,219
 
 	track ncbiRefSeqBigPsl
-	shortLabel Big PSL NCBI RefSeq alignments
+	shortLabel NCBI RefSeq alignments
         subGroups view=alignments
-	longLabel Big PSL Alignments of RefSeq gene predictions from NCBI
+	longLabel Alignments of RefSeq gene predictions from NCBI
 	parent ncbiRefBigAlignView
         type bigPsl
 
