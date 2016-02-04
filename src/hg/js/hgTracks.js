@@ -3140,7 +3140,7 @@ function showExtToolDialog() {
         // copied from the hgTrackUi function below
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 600;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3245,7 +3245,7 @@ var popUpHgt = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 700;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3258,7 +3258,7 @@ var popUpHgt = {
             height: 'auto',
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,
