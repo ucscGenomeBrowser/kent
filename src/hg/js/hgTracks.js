@@ -51,6 +51,14 @@ function initVars()
             //
             // Early versions of Chrome had this problem too, but this problem went away
             // as of Chrome 5.0.335.1 (or possibly earlier).
+            //
+            // KRR/JAT 2/2016:
+            // This Safari issue is likely resolved in all current versions.  However the test
+            // for version had been failing, likely for some time now.
+            // (As of 9.0.9, possibly earlier, the 3rd part of the version is included in the
+            // user agent string, so must be accounted for in string match)
+            // Consequences were that page refresh was used instead of img update (e.g. 
+            // for drag-zoom).  And UI dialog was unable to update (e.g. via Apply button).
             imageV2.mapIsUpdateable = false;
             var reg = new RegExp("Version\/([0-9]+.[0-9]+)(.[0-9]+)? Safari");
             var a = reg.exec(navigator.userAgent);

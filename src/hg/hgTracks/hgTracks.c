@@ -4018,6 +4018,19 @@ while (lineFileNext(lf, &line, &lineSize))
     // note: this function does not validate chrom name or end beyond chrom size
     loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE);
     bed->chrom=cloneString(bed->chrom);  // loadAndValidateBed does not do it for speed. but bedFree needs it.
+
+    struct chromInfo *ci = hGetChromInfo(database, bed->chrom);
+    if (ci == NULL)
+	{
+        warn("Couldn't find chromosome/scaffold %s in database", bed->chrom);
+	return FALSE;
+	}
+    if (bed->chromEnd > ci->size)
+	{
+        warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
+	return FALSE;
+	}
+
     slAddHead(&bedList, bed);
 
     //warn("got after load and validate bed"); // DEBUG REMOVE
