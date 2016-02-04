@@ -99,6 +99,7 @@
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
 #include "ncbiRefLink.h"
+#include "ncbiRefSeqLink.h"
 #include "refLink.h"
 #include "hgConfig.h"
 #include "estPair.h"
@@ -11407,6 +11408,70 @@ if (summary != NULL)
 htmlHorizontalLine();
 
 return rl;
+}
+
+void doNcbiRefSeq(struct trackDb *tdb, char *rnaName)
+/* Process click on a NCBI RefSeq gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *sqlRnaName = rnaName;
+struct ncbiRefSeqLink *nrl;
+char noDot[1024];
+
+struct dyString *dy = newDyString(1024);
+dyStringPrintf(dy, "%s", tdb->longLabel);
+
+struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
+if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
+
+cartWebStart(cart, database, "%s", dy->string);
+safecpy(noDot, sizeof noDot,  rnaName);
+char *ptr = strchr(noDot, '.');
+if (ptr)
+    *ptr++ = 0;
+
+/* get refLink entry */
+sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", sqlRnaName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) == NULL)
+    errAbort("Couldn't find %s in ncbiRefSeqLink table.", rnaName);
+nrl = ncbiRefSeqLinkLoad(row);
+sqlFreeResult(&sr);
+
+/* print the first section with info  */
+printf("<ul>\n");
+printf("<li>%s: %s</li>\n", "status", nrl->status);
+printf("<li>%s: %s</li>\n", "name", nrl->name);
+printf("<li>%s: %s</li>\n", "product", nrl->product);
+printf("<li>%s: %s</li>\n", "mrnaAcc", nrl->mrnaAcc);
+printf("<li>%s: %s</li>\n", "protAcc", nrl->protAcc);
+printf("<li>%s: %s</li>\n", "locusLinkId", nrl->locusLinkId);
+printf("<li>%s: %s</li>\n", "omimId", nrl->omimId);
+printf("<li>%s: %s</li>\n", "hgnc", nrl->hgnc);
+printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
+printf("<li>%s: %s</li>\n", "pseudo", nrl->pseudo);
+printf("<li>%s: %s</li>\n", "gbkey", nrl->gbkey);
+printf("<li>%s: %s</li>\n", "source", nrl->source);
+printf("<li>%s: %s</li>\n", "gene_biotype", nrl->gene_biotype);
+printf("<li>%s: %s</li>\n", "gene_synonym", nrl->gene_synonym);
+printf("<li>%s: %s</li>\n", "ncrna_class", nrl->ncrna_class);
+printf("<li>%s: %s</li>\n", "note", nrl->note);
+printf("<li>%s: %s</li>\n", "description", nrl->description);
+
+if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    {
+    printf("<B>Annotation Release:</B> <A HREF=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
+    htmlHorizontalLine();
+    }
+
+printf("</tr>\n</table>\n");
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void doNcbiRefGene(struct trackDb *tdb, char *rnaName)
@@ -24937,9 +25002,17 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefPredicted") || sameWord(table, "ncbiRefCurated") )
+else if (sameWord(table, "ncbiRefPredicted") ||
+         sameWord(table, "ncbiRefCurated") )
     {
     doNcbiRefGene(tdb, item);
+    }
+else if (sameWord(table, "ncbiRefSeq") ||
+         sameWord(table, "ncbiRefSeqCurated") ||
+         sameWord(table, "ncbiRefSeqPredicted") ||
+         sameWord(table, "ncbiRefSeqOther") )
+    {
+    doNcbiRefSeq(tdb, item);
     }
 else if (sameWord(table, "refGene") )
     {
