@@ -87,6 +87,16 @@ void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName
 /* the index). It seems a little strange to pass the filename in with the open bam, but */
 /* it's just used to report errors. */
 
+void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile, char *refUrl, char *cacheDir);
+/* Open the .bam file, fetch items in the seq:start-end position range,
+ * and call callbackFunc on each bam item retrieved from the file plus callbackData.
+ * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
+ * The pSamFile parameter is optional.  If non-NULL it will be filled in, just for
+ * the benefit of the callback function, with the open samFile.  
+ * refUrl points to the place to grab CRAM reference sequences (if any)
+ * cacheDir points to the directory in which CRAM reference sequences are cached */
+
 void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
 	samfile_t **pSamFile);
 /* Open the .bam file, fetch items in the seq:start-end position range,

@@ -152,14 +152,18 @@ annotations that can be included in the output for each variant.
 
 <a name="dbNSFP"></a>
 <h3>Database of Non-synonymous Functional Predictions (dbNSFP)</h3>
-(available for hg19/GRCh37 only)
+dbNSFP annotations are available only for hg19/GRCh37 (dbNSFP release 2.0) and
+hg38/GRCh38 (release 3.1a).
 <A HREF="https://sites.google.com/site/jpopgen/dbNSFP" TARGET=_BLANK>dbNSFP</A>
 (<A HREF="http://onlinelibrary.wiley.com/doi/10.1002/humu.21517/abstract"
 TARGET=_BLANK>Liu <em>et al.</em> 2011</A>)
-release 2.0 provides pre-computed scores and predictions of functional
+provides pre-computed scores and predictions of functional
 significance from a variety of tools.  Every possible coding change to
-transcripts in Gencode release 9 (Ensembl 64, Dec. 2011) gene
-predictions has been evaluated.
+transcripts in
+<A HREF="http://www.gencodegenes.org/" TARGET=_BLANK>GENCODE</A>
+(for hg19: release 9, Ensembl 64, Dec. 2011;
+ for hg38, release 22, Ensembl 79, Mar. 2015)
+gene predictions has been evaluated.
 dbNSFP includes only single-nucleotide missense changes;
 its data do not apply to indels, multi-nucleotide variants,
 non-coding or synonymous changes.
@@ -248,6 +252,15 @@ missense variant would damage a protein's structure and function:
     (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/19602639"
     TARGET=_BLANK>Chun and Fay, 2009</A>)
     </LI>
+<LI><B><A HREF="http://karchinlab.org/apps/appVest.html"
+    TARGET=_BLANK>VEST (Variant Effect Scoring Tool)</A></B>
+    (available only for hg38/GRCh38)
+    uses a classifier that was trained with ~45,000 disease mutations from HGMD
+    and ~45,000 high frequency missense variants (putatively neutral) from the
+    Exome Sequencing Project.
+    (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/23819870"
+    TARGET=_BLANK>Carter <em>et al.</em>, 2013</A>)
+</LI>
 </UL>
 </P>
 <P>
@@ -261,6 +274,37 @@ of conservation computed by
 TARGET=_BLANK>GERP++</A>
 (<A HREF="http://www.ncbi.nlm.nih.gov/pubmed/21152010"
 TARGET=_BLANK>Davydov <em>et al.</em>, 2010</A>).
+</P>
+
+<a name="txStatus"></a>
+<h3>Transcript status</h3>
+<P>
+  Some of the gene prediction tracks have additional annotations
+  to indicate the amount or quality of supporting evidence for each transcript.
+  When the track selected in the "Select Genes" section has such annotations,
+  these can be enabled under "Transcript Status".  The options depend on which
+  gene prediction track is selected.
+  <ul>
+    <li><b>GENCODE tags:</b>
+      when GENCODE Genes are selected in the "Select Genes" section,
+      any
+      <A HREF="http://www.gencodegenes.org/gencode_tags.html"
+         TARGET=_BLANK>GENCODE tags</A> associated with a transcript can be added to output.
+    </li>
+    <li><b>RefSeq status:</b>
+      when RefSeq Genes are selected in the "Select Genes" section,
+      the transcript's
+      <A HREF="http://www.ncbi.nlm.nih.gov/books/NBK21091/table/ch18.T.refseq_status_codes"
+         TARGET=_BLANK>status</A> can be included in output.
+    </li>
+    <li><b>Canonical UCSC transcripts:</b>
+      when UCSC Genes (labeled GENCODE V22 in hg38/GRCh38)
+      are selected in the "Select Genes" section,
+      the flag "CANONICAL=YES" is added when the transcript
+      has been chosen as "canonical" (see the "Related Data" section of the
+      <A HREF="hgTrackUi?g=knownGene&hgsid=$hgsid">UCSC Genes track description</A>).
+    </li>
+  </ul>
 </P>
 
 <a name="knownVar"></a>

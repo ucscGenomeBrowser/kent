@@ -239,6 +239,10 @@ struct gff3Ann *gff3FileFindAnn(struct gff3File *g3f, char *id);
 struct gff3Attr *gff3AnnFindAttr(struct gff3Ann *g3a, char *tag);
 /* find a user attribute, or NULL */
 
+void gff3AnnWrite(struct gff3Ann *g3a, FILE *fh);
+/* Write an annotation record to the specified file.
+ * This only writes a single record, it is not recursive.*/
+
 void gff3FileWrite(struct gff3File *g3f, char *fileName);
 /* write contents of an GFF3File object to a file */
 

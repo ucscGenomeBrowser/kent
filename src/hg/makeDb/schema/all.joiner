@@ -169,7 +169,7 @@ databasesChecked $gbd,$otherDb
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch10,hg19Patch9,hg19Patch5,hg19Patch2,hg19Patch2i,hg38Patch2,hg38Patch3,hg19snp131,hg19snp132,hg19snp134,hg19snp135,hg19snp137,hg19snp138,hg19snp141,hg38snp141,hg19snp142,hg38snp142,hg19snp144,hg38snp144,mm10snp138,canFam3snp139,bosTau7snp138,susScr3snp138,galGal4snp138,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mm10snp137,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
-set chainDest AilMel1,AncCey1,AnoCar1,AnoCar2,AnoGam1,ApiMel1,ApiMel2,ApiMel3,ApiMel4,AplCal1,AscSuu1,BosTau1,BosTau2,BosTau3,BosTau4,BosTau6,BosTau7,BosTau8,BraFlo1,BraFlo2,BruMal1,BruMal2,BurXyl1,CaeAng1,CaeAng2,CaeJap1,CaeJap3,CaeJap4,CaePb1,CaePb2,CaePb3,CaeRem2,CaeRem3,CaeRem4,CaeSp111,CaeSp51,CalJac1,CalJac3,CanFam1,CanFam2,CanFam3,CanFamPoodle1,CavPor3,Cb1,Cb3,Cb4,Ce2,Ce4,Ce6,Ce9,Ce10,Ce11,ChlSab1,ChlSab2,ChoHof1,Ci1,Ci2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,DanRer10,DasNov2,DasNov3,DipOrd1,DirImm1,Dm1,Dm2,Dm3,Dm6,Dp1,Dp2,Dp3,Dp4,DroAlb1,DroAna1,DroAna2,DroAna3,DroBia2,DroBip2,DroEle2,DroEre1,DroEre2,DroEug2,DroFic2,DroGri1,DroGri2,DroKik2,DroMir2,DroMoj1,DroMoj2,DroMoj3,DroPer1,DroPse3,DroRho2,DroSec1,DroSim1,DroSuz1,DroTak2,DroVir1,DroVir2,DroVir3,DroWil1,DroWil2,DroYak1,DroYak2,DroYak3,EchTel1,EquCab1,EquCab2,EriEur1,EriEur2,FelCat3,FelCat4,FelCat5,FelCat8,Fr1,Fr2,Fr3,GadMor1,GalGal2,GalGal3,GalGal4,GasAcu1,GeoFor1,GorGor1,GorGor2,GorGor3,HaeCon1,HaeCon2,HetBac1,HetGla1,HetGla2,Hg16,Hg17,Hg18,Hg19,Hg19Patch2,Hg19Patch5,Hg19Patch9,Hg19Patch10,Hg38Patch2,Hg38Patch3,Hg38,LatCha1,LoaLoa1,LoxAfr2,LoxAfr3,MacEug1,MacEug2,MacFas5,MarVir1,MelGal1,MelHap1,MelInc1,MelInc2,MelUnd1,MicMur1,Mm5,Mm6,Mm7,Mm8,Mm9,Mm10,Mm10Patch1,MonDom1,MonDom2,MonDom4,MonDom5,MusDom2,MyoLuc1,MyoLuc2,NasLar1,NecAme1,NomLeu1,NomLeu2,NomLeu3,OchPri2,OncVol1,OreNil1,OreNil2,OrnAna1,OryCun1,OryCun2,OryLat1,OryLat2,OtoGar1,OtoGar3,OviAri1,PanPan1,PanRed1,PanTro1,PanTro2,PanTro3,PanTro4,PapAnu2,PapHam1,PetMar1,PonAbe2,PriExs1,PriPac1,PriPac2,PriPac3,ProCap1,PteVam1,RheMac1,RheMac2,RheMac3,RhiRox1,Rn3,Rn4,Rn5,SaiBol1,SorAra1,SpeTri1,SpeTri2,StrRat1,StrRat2,StrPur1,StrPur2,SusScr1,SusScr2,SusScr3,TaeGut1,TarSyr1,TarSyr2,TetNig1,TetNig2,TriCas2,TriMan1,TriSpi1,TriSui1,TupBel1,TurTle1,TurTru1,TurTru2,VicPac1,VicPac2,XenTro1,XenTro2,XenTro3,XenTro7
+set chainDest AilMel1,AncCey1,AnoCar1,AnoCar2,AnoGam1,ApiMel1,ApiMel2,ApiMel3,ApiMel4,AplCal1,AscSuu1,BosTau1,BosTau2,BosTau3,BosTau4,BosTau6,BosTau7,BosTau8,BraFlo1,BraFlo2,BruMal1,BruMal2,BurXyl1,CaeAng1,CaeAng2,CaeJap1,CaeJap3,CaeJap4,CaePb1,CaePb2,CaePb3,CaeRem2,CaeRem3,CaeRem4,CaeSp111,CaeSp51,CalJac1,CalJac3,CanFam1,CanFam2,CanFam3,CanFamPoodle1,CavPor3,Cb1,Cb3,Cb4,Ce2,Ce4,Ce6,Ce9,Ce10,Ce11,ChlSab1,ChlSab2,ChoHof1,Ci1,Ci2,DanRer1,DanRer2,DanRer3,DanRer4,DanRer5,DanRer6,DanRer7,DanRer10,DasNov2,DasNov3,DipOrd1,DirImm1,Dm1,Dm2,Dm3,Dm6,Dp1,Dp2,Dp3,Dp4,DroAlb1,DroAna1,DroAna2,DroAna3,DroBia2,DroBip2,DroEle2,DroEre1,DroEre2,DroEug2,DroFic2,DroGri1,DroGri2,DroKik2,DroMir2,DroMoj1,DroMoj2,DroMoj3,DroPer1,DroPse3,DroRho2,DroSec1,DroSim1,DroSuz1,DroTak2,DroVir1,DroVir2,DroVir3,DroWil1,DroWil2,DroYak1,DroYak2,DroYak3,EchTel1,EquCab1,EquCab2,EriEur1,EriEur2,FelCat3,FelCat4,FelCat5,FelCat8,Fr1,Fr2,Fr3,GadMor1,GalGal2,GalGal3,GalGal4,GasAcu1,GeoFor1,GorGor1,GorGor2,GorGor3,GorGor4,HaeCon1,HaeCon2,HetBac1,HetGla1,HetGla2,Hg16,Hg17,Hg18,Hg19,Hg19Patch2,Hg19Patch5,Hg19Patch9,Hg19Patch10,Hg38Patch2,Hg38Patch3,Hg38,LatCha1,LoaLoa1,LoxAfr2,LoxAfr3,MacEug1,MacEug2,MacFas5,MarVir1,MelGal1,MelHap1,MelInc1,MelInc2,MelUnd1,MicMur1,MicMur2,Mm5,Mm6,Mm7,Mm8,Mm9,Mm10,Mm10Patch1,MonDom1,MonDom2,MonDom4,MonDom5,MusDom2,MyoLuc1,MyoLuc2,NasLar1,NecAme1,NomLeu1,NomLeu2,NomLeu3,OchPri2,OncVol1,OreNil1,OreNil2,OrnAna1,OryCun1,OryCun2,OryLat1,OryLat2,OtoGar1,OtoGar3,OviAri1,PanPan1,PanRed1,PanTro1,PanTro2,PanTro3,PanTro4,PapAnu2,PapHam1,PetMar1,PonAbe2,PriExs1,PriPac1,PriPac2,PriPac3,ProCap1,PteVam1,RheMac1,RheMac2,RheMac3,RhiRox1,Rn3,Rn4,Rn5,SaiBol1,SorAra1,SpeTri1,SpeTri2,StrRat1,StrRat2,StrPur1,StrPur2,SusScr1,SusScr2,SusScr3,TaeGut1,TarSyr1,TarSyr2,TetNig1,TetNig2,TriCas2,TriMan1,TriSpi1,TriSui1,TupBel1,TurTle1,TurTru1,TurTru2,VicPac1,VicPac2,XenTro1,XenTro2,XenTro3,XenTro7
 
 # Define databases that support known genes
 set kgDb $hg,$mm,rn3,braNey38
@@ -4902,6 +4902,7 @@ identifier pubsArticleId external=pubTools
     $gbd.pubsBlat.name dupeOk
     $gbd.pubsBlatPsl.articleId
     hgFixed.pubsSequenceAnnot.articleId
+    hgFixed.pubsMarkerAnnot.articleId
     hgFixed.pubsArticle.articleId
 
 identifier pubsSequenceId external=pubTools
@@ -5406,7 +5407,6 @@ tablesIgnored $kgDb
     pep%Dist
 
 tablesIgnored hg38
-    altLocations
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
     centromeres
@@ -5754,6 +5754,7 @@ tablesIgnored $hg
     affyTxnPhase3HeLaTopStrand
     affyTxnPhase3HepG2BottomStrand
     affyTxnPhase3HepG2TopStrand
+    altLocations
     burgeRnaSeqGemMapper%
     chimpDels
     chimpParalogy
@@ -5928,6 +5929,9 @@ tablesIgnored $mm
     polyASeqSitesMuscleRev
     polyASeqSitesTestisFwd
     polyASeqSitesTestisRev
+
+tablesIgnored $ci
+    tableList
 
 tablesIgnored $macFas
     tableList

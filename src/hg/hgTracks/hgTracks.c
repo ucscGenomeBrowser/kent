@@ -634,7 +634,9 @@ ideoTrack = chromIdeoTrack(*pTrackList);
 
 /* If no ideogram don't draw. */
 if(ideoTrack == NULL)
+    {
     doIdeo = FALSE;
+    }
 else if(trackImgOnly && !ideogramToo)
     {
     doIdeo = FALSE;
@@ -659,6 +661,11 @@ else
     if(ideoTrack->limitedVis == tvHide || !withIdeogram)
         doIdeo = FALSE;
     }
+// TODO use DIV in future (can update entire div at once in hgTracks.js)
+//hPrintf("<DIV id='chromIdeoDiv'>\n"); 
+// FYI from testing, I see that there is code that inserts warning error messages
+//  right before ideoMap, so any changes to that name or adding the DIV would require
+//  updating the warning-insertion target name.
 if(doIdeo)
     {
     //warn("makeChromIdeoImage doIdeo = TRUE"); // DEBUG REMOVE
@@ -720,17 +727,34 @@ if(doIdeo)
     if (!psOutput)
         hPrintf("</MAP>\n");
     }
-hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
-if (doIdeo && !psOutput)
+
+// create an empty hidden-map place holder which can change dynamically with ajax callbacks.
+if (!doIdeo && !psOutput) 
     {
+    hPrintf("<MAP Name=%s>\n", mapName);
+    hPrintf("</MAP>\n");
+    }
+
+hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
+if (!psOutput)
+    {
+    // by default, create an empty hidden ideo place holder for future dynamic ajax update
+    char *srcPath = "";
+    char *style = "display: none;";
+    if (doIdeo)
+	{
+	srcPath = ideoTn->forHtml;
+	style = "display: inline;";
+	}
     hPrintf("<TR><TD HEIGHT=5></TD></TR>");
-    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom'>",
-            ideoTn->forHtml, ideoWidth, ideoHeight, mapName);
+    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s id='chrom' style='%s'>",
+            srcPath, ideoWidth, ideoHeight, mapName, style);
     hPrintf("</TD></TR>");
     hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>\n");
     }
 else
     hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>\n");
+//hPrintf("</DIV>\n");  // TODO use DIV in future
 if(ideoTrack != NULL)
     {
     ideoTrack->limitedVisSet = TRUE;
@@ -2715,7 +2739,7 @@ for(virtRegion=virtRegionList; virtRegion; virtRegion = virtRegion->next)
     lastChrom = virtRegion->chrom;
     ++regionCount;
     }
-warn("After padding, %d regions", regionCount);
+//warn("After padding, %d regions", regionCount); // DEBUG REMOVE
 slReverse(&newList);
 virtRegionList = newList; // update new list -- TODO should the old one be freed? if so, the chrom name should use cloneString
 }
@@ -3468,20 +3492,18 @@ for(e=list; e; prev=e, e=e->next)
 return best;
 }
 
-static void padExons(struct genePred *gene, int chromSize)
+static void padExons(struct genePred *gene, int chromSize, int padding)
 /* pad all of the exons */
 {
 int i;
 for(i=0; i < gene->exonCount; ++i)
     {
-    // padding
-    gene->exonStarts[i] -= emPadding;
+    gene->exonStarts[i] -= padding;
     if (gene->exonStarts[i] < 0)
 	gene->exonStarts[i] = 0;
-    gene->exonEnds[i] += emPadding;
+    gene->exonEnds[i] += padding;
     if (gene->exonEnds[i] > chromSize)
 	gene->exonEnds[i] = chromSize;
-
     }
 }
 
@@ -3523,6 +3545,9 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
 char query[256];
+int padding = emPadding;
+if (sameString(virtModeType, "geneMostly"))
+    padding = gmPadding;
 // knownCanonical Hash
 struct hash *kcHash = NULL;
 if (knownCanonical) // filter out alt splicing variants
@@ -3566,7 +3591,7 @@ if (virtualSingleChrom())
     sqlSafefAppend(query, sizeof(query), " where chrom='%s'", chromName);
 // TODO GALT may have to change this to in-memory sorting?
 // refGene is out of order because of genbank continuous loading
-if (sameString(emGeneTable,"refGene"))
+if (!sameString(emGeneTable,"knownGene"))
     sqlSafefAppend(query, sizeof(query), " order by chrom, txStart");  
 //warn("query = [%s]", query); // DEBUG REMOVE
 sr = sqlGetResult(conn, query);
@@ -3608,8 +3633,8 @@ while (1)
 		    chromSize = hChromSize(database, gene->chrom);
 		    safecpy(lastChromSizeChrom, sizeof lastChromSizeChrom, gene->chrom);
 		    }
-		if (emPadding > 0)
-		    padExons(gene, chromSize); // handle padding
+		if (padding > 0)
+		    padExons(gene, chromSize, padding); // handle padding
 		}
 	    else
 		{
@@ -3960,7 +3985,7 @@ while (lineFileNext(lf, &line, &lineSize))
 	if (startsWith("#padding ",line))
 	    {
 	    bedPadding = sqlSigned(line+strlen("#padding "));
-	    warn("got #padding setting: %d", bedPadding); // DEBUG REMOVE
+	    //warn("got #padding setting: %d", bedPadding); // DEBUG REMOVE
 	    }
 	continue;
 	}
@@ -3993,6 +4018,19 @@ while (lineFileNext(lf, &line, &lineSize))
     // note: this function does not validate chrom name or end beyond chrom size
     loadAndValidateBed(row, numFields, numFields+0, lf, bed, NULL, TRUE);
     bed->chrom=cloneString(bed->chrom);  // loadAndValidateBed does not do it for speed. but bedFree needs it.
+
+    struct chromInfo *ci = hGetChromInfo(database, bed->chrom);
+    if (ci == NULL)
+	{
+        warn("Couldn't find chromosome/scaffold %s in database", bed->chrom);
+	return FALSE;
+	}
+    if (bed->chromEnd > ci->size)
+	{
+        warn("BED chromEnd %u > size %u for chromosome/scaffold %s", bed->chromEnd, ci->size, bed->chrom);
+	return FALSE;
+	}
+
     slAddHead(&bedList, bed);
 
     //warn("got after load and validate bed"); // DEBUG REMOVE
@@ -7234,6 +7272,17 @@ if (!emGeneTable || !emGeneTrack)
     }
 }
 
+boolean windowsHaveMultipleChroms()
+/* Are there multiple different chromosomes in the windows list? */
+{
+struct window *window;
+for (window=windows->next; window; window=window->next)
+    {
+    if (!sameString(window->chromName,windows->chromName))
+	return TRUE;
+    }
+return FALSE;
+}
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -7362,6 +7411,15 @@ if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
 
 //warn("copy track structures for multiple  windows"); // DEBUG REMOVE
 // COPY TRACK STRUCTURES for other windows.
+
+// TODO: due to an issue where some loading code is modifying the visibility
+// of subtracks from hide to visible, I am forced to remove the optimization
+// of cloning ONLY non-hidden tracks and subtracks.  If the offending code
+// can be identified and moved into a step proceding the track cloning,
+// then we can return to that optimization. 
+//	if (track->visibility != tvHide)
+//		if (subtrack->visibility != tvHide)
+
 windows->trackList = trackList;  // save current track list in window
 struct window *window;
 for (window=windows; window->next; window=window->next)
@@ -7370,7 +7428,7 @@ for (window=windows; window->next; window=window->next)
     for (track = trackList; track != NULL; track = track->next)
 	{
 	track->nextWindow = NULL;
-	if (track->visibility != tvHide)
+	//if (track->visibility != tvHide)  // Unable to use this optimization at present
 	    {
 	    struct track *copy;
 	    AllocVar(copy);
@@ -7386,7 +7444,7 @@ for (window=windows; window->next; window=window->next)
 	    struct track *subtrack;
 	    for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
 		{
-		if (subtrack->visibility != tvHide)
+		//if (subtrack->visibility != tvHide)  // Unable to use this optimization at present
 		    {
 		    struct track *subcopy;
 		    AllocVar(subcopy);
@@ -7675,9 +7733,10 @@ char dbPosKey[256];
 safef(dbPosKey, sizeof(dbPosKey), "position.%s", database);
 jsonObjectAdd(jsonForClient, "lastDbPos", newJsonString(cartString(cart, dbPosKey)));
 
-
-
-if(trackImgOnly && !ideogramToo)
+// hide chromIdeo
+if ((trackImgOnly && !ideogramToo) 
+|| (sameString(virtModeType, "customUrl") && windowsHaveMultipleChroms()) // Special case hide by request
+)
     {
     for(window=windows;window;window=window->next)
 	{
@@ -7688,6 +7747,10 @@ if(trackImgOnly && !ideogramToo)
 	    ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
 	    }
 	}
+    }
+
+if (trackImgOnly && !ideogramToo) 
+    {
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
@@ -8440,6 +8503,7 @@ if (!hIsGsidServer())
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
     }
 emPadding = cartUsualInt(cart, "emPadding", emPadding);
+gmPadding = cartUsualInt(cart, "gmPadding", gmPadding);
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
 fullInsideX = trackOffsetX();
 fullInsideWidth = tl.picWidth-gfxBorder-fullInsideX;
@@ -8578,19 +8642,15 @@ boolean positionIsVirt = FALSE;
 position = getPositionFromCustomTracks();
 if (NULL == position)
     {
+    //warn("cartGetPosition: database=%s position=%s", database, position); // DEBUG REMOVE
+    position = cartGetPosition(cart, database, &lastDbPosCart);
     if (sameOk(cgiOptionalString("position"), "lastDbPos"))
 	{
-	position = cartGetPosition(cart, database, &lastDbPosCart);
-	//warn("cartGetPosition: database=%s position=%s", database, position); // DEBUG REMOVE
 	// DEBUG REMOVE
 	//struct dyString *encoded = newDyString(4096);
 	//cartEncodeState(lastDbPosCart, encoded);
 	//warn("restored lastDbPosCart encoded state = [%s]", encoded->string); // DEBUG REMOVE
         restoreSavedVirtPosition();
-	}
-    else
-	{
-	position = cloneString(cartUsualString(cart, "position", NULL));
 	}
     //warn("position = %s\n", position); // DEBUG REMOVE
     if (startsWith("virt:", position))
@@ -8598,7 +8658,6 @@ if (NULL == position)
 	position = stripCommas(position); // sometimes the position string arrives with commas in it.
 	//warn("positionIsVirt=TRUE position = %s\n", position); // DEBUG REMOVE
 	positionIsVirt = TRUE;
-	goto gotVirtPos;
 	}
     }
 
@@ -8608,42 +8667,42 @@ if (sameString(position, ""))
     hUserAbort("Please go back and enter a coordinate range or a search term in the \"search term\" field.<br>For example: chr22:20100000-20200000.\n");
     }
 
-chromName = NULL;
-winStart = 0;
-if (isGenome(position) || NULL ==
-    (hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
+if (!positionIsVirt)
     {
-    //warn("doing weird stuff with isGenome() and findGenomePos(), add more debugging");
-    if (winStart == 0)  /* number of positions found */
-        {
-        freeMem(position);
-        position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
-        hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
-        if (hgp != NULL && differentString(position, defaultPosition))
-            cartSetString(cart, "position", position);
-        }
+    chromName = NULL;
+    winStart = 0;
+    if (isGenome(position) || NULL ==
+	(hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart)))
+	{
+	//warn("doing weird stuff with isGenome() and findGenomePos(), add more debugging");
+	if (winStart == 0)  /* number of positions found */
+	    {
+	    freeMem(position);
+	    position = cloneString(cartUsualString(cart, "lastPosition", defaultPosition));
+	    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd,cart);
+	    if (hgp != NULL && differentString(position, defaultPosition))
+		cartSetString(cart, "position", position);
+	    }
+	}
+
+    /* After position is found set up hash of matches that should
+       be drawn with names highlighted for easy identification. */
+    createHgFindMatchHash();
+
+    /* This means that no single result was found
+    I.e., multiple results may have been found and are printed out prior to this code*/
+    if (NULL == chromName)
+	{
+	// In case user manually edits the browser location as described in #13009,
+	// revert the position.  If they instead choose from the list as we expect,
+	// that will set the position to their choice.
+	// lastPosition gets set in cart.c
+	char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
+	cartSetString(cart, "position", lastPosition);
+	return;
+	}
+
     }
-
-/* After position is found set up hash of matches that should
-   be drawn with names highlighted for easy identification. */
-createHgFindMatchHash();
-
-/* This means that no single result was found
-I.e., multiple results may have been found and are printed out prior to this code*/
-if (NULL == chromName)
-    {
-    // In case user manually edits the browser location as described in #13009,
-    // revert the position.  If they instead choose from the list as we expect,
-    // that will set the position to their choice.
-    char *lastPosition = cartUsualString(cart, "lastPosition", hDefaultPos(database));
-    cartSetString(cart, "position", lastPosition);
-    return;
-    }
-
-// TODO NOTE lastPosition gets set in cart.c
-
-
-gotVirtPos:
 
 virtMode = cartUsualBoolean(cart, "virtMode", FALSE);
 //warn("virtMode=%d\n", virtMode); // DEBUG REMOVE
@@ -8682,35 +8741,39 @@ if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMost
 
 lastVirtModeType = cartUsualString(cart, "lastVirtModeType", lastVirtModeType); 
 
-again:
-//warn("virtModeType=%s lastVirtModeType=%s\n", virtModeType, lastVirtModeType); // DEBUG REMOVE
-if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
-    { // RETURNING TO DEFAULT virtModeType
-    virtModeType = "default";
-    cartSetString(cart, "virtModeType", virtModeType); 
-    findNearest = TRUE;
-    if (positionIsVirt)
-	position = cartUsualString(cart, "nonVirtPosition", "");
-    char *nvh = cartUsualString(cart, "nonVirtHighlight", NULL);
-    if (nvh)
-	cartSetString(cart, "highlight", nvh); 
-    //warn("leaving virtMode, going to position %s", position);  // DEBUG REMOVE
-    if (!sameString(position,""))
-	parseNonVirtPosition(position);
-    }
+while(TRUE)
+    {
+    //warn("virtModeType=%s lastVirtModeType=%s\n", virtModeType, lastVirtModeType); // DEBUG REMOVE
+    if (sameString(virtModeType, "default") && !(sameString(lastVirtModeType, "default")))
+	{ // RETURNING TO DEFAULT virtModeType
+	virtModeType = "default";
+	cartSetString(cart, "virtModeType", virtModeType); 
+	findNearest = TRUE;
+	if (positionIsVirt)
+	    position = cartUsualString(cart, "nonVirtPosition", "");
+	char *nvh = cartUsualString(cart, "nonVirtHighlight", NULL);
+	if (nvh)
+	    cartSetString(cart, "highlight", nvh); 
+	//warn("leaving virtMode, going to position %s", position);  // DEBUG REMOVE
+	if (!sameString(position,""))
+	    parseNonVirtPosition(position);
+	}
 
-
-//warn("\nGALT before initRegionList chromName=%s winStart=%d winEnd=%d\n", chromName, winStart,winEnd); // DEBUG REMOVE
-if (!initRegionList())   // initialize the region list, sets virtModeExtraState
-    { // virt mode failed, forced to return to default
-    virtModeType = "default";
-    cartSetString(cart, "virtModeType", virtModeType);
-    position = cloneString(hDefaultPos(database));
-    hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
-    cartSetString(cart, "position", position);
-    positionIsVirt=FALSE;
-    virtMode=FALSE;
-    goto again;
+    //warn("\nGALT before initRegionList chromName=%s winStart=%d winEnd=%d\n", chromName, winStart,winEnd); // DEBUG REMOVE
+    if (initRegionList())   // initialize the region list, sets virtModeExtraState
+	{
+	break;  
+	}
+    else
+	{ // virt mode failed, forced to return to default
+	virtModeType = "default";
+	cartSetString(cart, "virtModeType", virtModeType);
+	position = cloneString(hDefaultPos(database));
+	hgp = findGenomePos(database, position, &chromName, &winStart, &winEnd, cart);
+	cartSetString(cart, "position", position);
+	positionIsVirt=FALSE;
+	virtMode=FALSE;
+	}
     }
 
 // PAD padding of exon regions is now being done inside the fetch/merge.

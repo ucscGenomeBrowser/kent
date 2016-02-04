@@ -16,7 +16,7 @@
 #  +-------------+---------------------------------+
 
 
-# DOWNLOAD SEQUENCE 
+# DOWNLOAD SEQUENCE
 
     ssh kkstore02
     mkdir /cluster/store11/ci2
@@ -28,7 +28,7 @@
     mkdir chunks500k jkStuff scaffolds nib
 
     cd scaffolds
-    faSplit byname ../fromJGI/*fasta .     
+    faSplit byname ../fromJGI/*fasta .
     for i in *.fa
     do
 	faToNib $i ../nib/`basename $i .fa`.nib
@@ -36,7 +36,7 @@
 
     cd ..
 
-    faSplit gap fromJGI/*fasta 500000 chunks500k/x  -lift=jkStuff/chunks500k.lft -minGapSize=100     
+    faSplit gap fromJGI/*fasta 500000 chunks500k/x  -lift=jkStuff/chunks500k.lft -minGapSize=100
 
 # REPEAT MASKING
     #- Make the run directory and job list:
@@ -87,7 +87,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
     featureBits ci2 rmsk
 # 22881665 bases of 141233565 (16.201%) in intersection
 
-# SIMPLE REPEATS (TRF) 
+# SIMPLE REPEATS (TRF)
     ssh kkstore02
     mkdir -p /cluster/data/ci2/bed/simpleRepeat
     cd /cluster/data/ci2/bed/simpleRepeat
@@ -102,7 +102,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
       end
     end
     screen
-    csh -ef jobs.csh 
+    csh -ef jobs.csh
 
     # check on this with
     tail -f jobs.log
@@ -122,7 +122,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
 # Create the database.
     ssh hgwdev
     echo 'create database ci2' | hgsql ''
-# CREATING GRP TABLE FOR TRACK GROUPING 
+# CREATING GRP TABLE FOR TRACK GROUPING
     echo "create table grp (PRIMARY KEY(NAME)) select * from hg17.grp" | hgsql ci2
 
     echo 'insert into blatServers values("ci2", "blat10", "17780", "1"); \
@@ -140,7 +140,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
     ssh hgwdev
     mkdir /gbdb/ci2
     ln -s /cluster/data/ci2/nib /gbdb/ci2/nib
-    # Load /gbdb/ci2/nib paths into database 
+    # Load /gbdb/ci2/nib paths into database
     cd /cluster/data/ci2
     hgsql ci2  < ~kent/src/hg/lib/chromInfo.sql
     hgNibSeq -preMadeNib ci2 /gbdb/ci2/nib scaffolds/*.fa
@@ -158,7 +158,7 @@ if (-e /tmp/ci2/$2/$2.cat) /bin/cp /tmp/ci2/$2/$2.cat ./
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
     cvs update etc
-    
+
     # Edit etc/genbank.conf and add these lines:
     # NOTE: braney created a ooc and this was added after the initial alignment
 # ci2 (ciona intestinalis)
@@ -195,7 +195,7 @@ ci2.perChromTables = no
     cd /cluster/data/ci2/bed/gapRmsk
     simpleGap /cluster/data/ci2/nib gap.bed repeats.bed
     echo "drop table gap;" | hgsql ci2
-    hgsql ci2 < ~/kent/src/hg/lib/gap.sql   
+    hgsql ci2 < ~/kent/src/hg/lib/gap.sql
     hgLoadBed -oldTable ci2 gap gap.bed
     echo "create index chrom on gap (chrom(13), bin) ;" | hgsql ci2
     echo "create index chrom_2 on gap  (chrom(13), chromStart);" | hgsql ci2
@@ -214,14 +214,14 @@ ci2.perChromTables = no
     cd /cluster/data/ci2/bed/simpleRepeat
     mkdir trf
     for i in ../../scaffolds/*.fa
-    do 
+    do
     	trfBig $i /dev/null -bedAt=trf/`basename $i .fa`.bed > /dev/null 2>&1 ; echo $i;
     done
     cat trf/* > simpleRepeat.bed
 
     ssh hgwdev
     hgLoadBed ci2 simpleRepeat /cluster/data/ci2/bed/simpleRepeat/simpleRepeat.bed \
-    	-sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql 
+    	-sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
 
     ssh kkstore02
     cd /cluster/data/ci2/bed/simpleRepeat
@@ -241,20 +241,20 @@ ci2.perChromTables = no
     cat scaffolds/*.fa |  maskOutFa -soft stdin all.out all.tmp.fa
     maskOutFa -softAdd all.tmp.fa all.trfMask.bed all.masked.fa
 
-    # Rebuild the nib files, using the soft masking in the fa:                                           
+    # Rebuild the nib files, using the soft masking in the fa:
     mkdir -p /cluster/data/ci2/nib
     cd /cluster/data/ci2/maskedScaffolds
-    
+
     for i in *.fa
     do
       faToNib -softMask $i ../nib/`basename $i .fa`.nib
     done
 
     # Make one big 2bit file as well, and make a link to it in
-    faToTwoBit *.fa ../ci2.2bit                                                                     
+    faToTwoBit *.fa ../ci2.2bit
     ln -s /cluster/data/ci2/ci2.2bit /gbdb/ci2/
 
-### SNAP GENE PREDICTIONS FROM COLIN DEWEY 
+### SNAP GENE PREDICTIONS FROM COLIN DEWEY
     ssh hgwdev
     mkdir /cluster/data/ci2/bed/snap
     cd /cluster/data/ci2/bed/snap
@@ -285,7 +285,7 @@ zip -j ../../zip/ScaffoldTrf.zip simpleRepeat.bed
     chmod +x ./jkStuff/zipAll.csh
     ./jkStuff/zipAll.csh  |& tee zipAll.log
     cd zip
-    #- Look at zipAll.log to make sure all file lists look reasonable.  
+    #- Look at zipAll.log to make sure all file lists look reasonable.
     #- Check zip file integrity:
     foreach f (*.zip)
       unzip -t $f > $f.test
@@ -311,7 +311,7 @@ zip -j ../../zip/ScaffoldTrf.zip simpleRepeat.bed
     # md5sum *.zip > md5sum.txt
     # Take a look at bigZips/* and chromosomes/*, update their README.txt's
 
-# MAKE 11.OOC FILE FOR BLAT 
+# MAKE 11.OOC FILE FOR BLAT
     mkdir /cluster/bluearc/ci2
     blat /cluster/data/ci2/ci2.2bit /dev/null /dev/null -tileSize=11 \
       -makeOoc=/cluster/bluearc/ci2/11.ooc -repMatch=100
@@ -342,7 +342,7 @@ zip -j ../../zip/ScaffoldTrf.zip simpleRepeat.bed
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
     cvs update etc
-    
+
     # Edit etc/genbank.conf and add these lines:
 # ci2 (ciona intestinalis)
 ci2.serverGenome = /cluster/data/ci2/ci2.2bit
@@ -410,7 +410,7 @@ export PATH=/cluster/home/max/bin/x86_64:/cluster/bin/x86_64:/cluster/home/max/s
 # pmc
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat init /hive/data/inside/literature/blat/pmc/ /hive/data/inside/literature/text/pmc
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/pmcBlat/
 pubBlat steps:annot-tables
 exit
@@ -419,10 +419,42 @@ pubBlat load
 # elsevier
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat init /hive/data/inside/literature/blat/elsevier/ /hive/data/inside/literature/text/elsevier
-ssh swarm 
+ssh swarm
 cd /hive/data/inside/literature/pubtools/runs/elsBlat/
 pubBlat steps:annot-tables
 exit
 pubBlat load
 #--pubEnd
 
+#############################################################################
+# LIFTOVER TO ci3 (DONE - 2015-08-26 - Hiram )
+    cd /hive/data/genomes/ci2
+    twoBitToFa ci2.2bit stdout | faSize stdin > faSize.ci2.2bit.txt
+    head -1 faSize.ci2.2bit.txt
+# 173499994 bases (32266429 N's 141233565 real 118279813 upper 22953752 lower) in 4390 sequences in 1 files
+
+    #       vvvvvvvvv  use 'real' number from the faSize measurement:
+    calc \( 141233565 / 2861349177 \) \* 1024
+    # ( 141233565 / 2861349177 ) * 1024 = 50.543699
+
+    # ==> use -repMatch=100 since the smaller '50' number would count too many
+    blat ci2.2bit /dev/null /dev/null -tileSize=11 \
+       -makeOoc=jkStuff/ci2.11.ooc -repMatch=100
+    # Wrote 10830 overused 11-mers to jkStuff/ci2.11.ooc
+
+    #  ci3 had: Wrote 6681 overused 11-mers to jkStuff/ci3.11.ooc
+
+    mkdir /hive/data/genomes/ci2/bed/blat.ci3.2015-08-26
+    cd /hive/data/genomes/ci2/bed/blat.ci3.2015-08-26
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ci2/jkStuff/ci2.11.ooc -debug ci2 ci3
+    # Real run:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+       -ooc=/hive/data/genomes/ci2/jkStuff/ci2.11.ooc ci2 ci3) > do.log 2>&1
+    #  real    18m32.003s
+    # verify it works on genome-test
+
+#############################################################################

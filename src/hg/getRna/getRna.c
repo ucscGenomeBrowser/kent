@@ -21,12 +21,19 @@ static struct optionSpec optionSpecs[] = {
 };
 
 /* command line options */
-boolean cdsUpper = FALSE;
-boolean cdsUpperAll = FALSE;
-boolean inclVer = FALSE;
-boolean peptides = FALSE;
+static boolean cdsUpper = FALSE;
+static boolean cdsUpperAll = FALSE;
+static boolean inclVer = FALSE;
+static boolean peptides = FALSE;
 
-void usage()
+/* derived from command line, it clearer as -cdsUpperAll and -peptides defines
+ * multiple behaviors */
+boolean warnOnNoCds = FALSE;
+boolean skipNoCds = FALSE;
+
+static int errCnt = 0;
+
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -34,7 +41,8 @@ errAbort(
   "usage:\n"
   "   getRna [options] database accFile outfa\n"
   "\n"
-  "Get mrna for all accessions in accFile, writing to a fasta file. \n"
+  "Get mrna for all accessions in accFile, writing to a fasta file. If accession\n"
+  " has a version, that version is returned or an error generated\n"
   "\n"
   "Options:\n"
   "  -cdsUpper - lookup CDS and output it as upper case. If CDS annotation\n"
@@ -45,7 +53,39 @@ errAbort(
   "\n");
 }
 
-char *getCdsString(struct sqlConnection *conn, char *acc)
+static void parseAccVersion(char* requestedAcc,
+                            char acc[GENBANK_ACC_BUFSZ],
+                            char ver[GENBANK_ACC_BUFSZ])
+/* parse accession and optional version */
+{
+char* verDot = strchr(requestedAcc, '.');
+if (verDot != NULL)
+    {
+    genbankDropVer(acc, requestedAcc);
+    safecpy(ver, GENBANK_ACC_BUFSZ, verDot+1);
+    }
+else
+    {
+    safecpy(acc, GENBANK_ACC_BUFSZ, requestedAcc);
+    ver[0] = '\0';
+    }
+}
+
+static struct dnaSeq* getSeq(struct sqlConnection *conn, char* acc)
+/* get sequence from fasta file */
+{
+HGID seqId;
+char *faSeq = hGetSeqAndId(conn, acc, &seqId);
+if (faSeq == NULL)
+    {
+    fprintf(stderr, "%s\tsequence not in database\n", acc);
+    errCnt++;
+    return NULL;
+    }
+return faFromMemText(faSeq);
+}
+
+static char *getCdsString(struct sqlConnection *conn, char *acc)
 /* get the CDS string for an accession, or null if not found */
 {
 char query[256];
@@ -56,8 +96,8 @@ sqlSafef(query, sizeof(query),
 return sqlQuickString(conn, query);
 }
 
-boolean getCds(struct sqlConnection *conn, char *acc, int mrnaLen,
-               boolean warnOnNoCds, struct genbankCds *cds)
+static boolean getCds(struct sqlConnection *conn, char *acc, int mrnaLen,
+                      struct genbankCds *cds)
 /* get the CDS range for an mRNA, warning and return FALSE if can't obtain
  * CDS or it is longer than mRNA. */
 {
@@ -87,7 +127,7 @@ free(cdsStr);
 return TRUE;
 }
 
-void upperCaseCds(struct dnaSeq *dna, struct genbankCds *cds)
+static void upperCaseCds(struct dnaSeq *dna, struct genbankCds *cds)
 /* uppercase the CDNS */
 {
 tolowers(dna->dna);
@@ -102,10 +142,32 @@ char query[256];
 sqlSafef(query, sizeof(query),
       "SELECT version FROM gbCdnaInfo WHERE (gbCdnaInfo.acc = '%s')",
       acc);
-return  sqlQuickNum(conn, query);
+return sqlQuickNum(conn, query);
 }
 
-void writePeptide(FILE *outFa, char *acc, struct dnaSeq *dna, struct genbankCds *cds)
+static void processVersion(struct sqlConnection *conn, char acc[GENBANK_ACC_BUFSZ],
+                           char ver[GENBANK_ACC_BUFSZ])
+/* If the acc has a version, check that the correct version was included.  If
+ * a version is requested in the fasta, update acc argument. */
+{
+int dbVerNum = getVersion(conn, acc);
+char dbVerStr[32];
+safef(dbVerStr, sizeof(dbVerStr), "%d", dbVerNum);
+if ((strlen(ver) > 0) && !sameString(dbVerStr, ver))
+    {
+    fprintf(stderr, "%s.%s requested, database has version %s\n", acc, ver, dbVerStr);
+    errCnt++;
+    }
+if (inclVer)
+    {
+    char accTmp[GENBANK_ACC_BUFSZ];
+    safef(accTmp, sizeof(accTmp), "%s.%d", acc, dbVerNum);
+    safecpy(acc, GENBANK_ACC_BUFSZ, accTmp);
+    }
+}
+
+
+static void writePeptide(FILE *outFa, char *acc, struct dnaSeq *dna, struct genbankCds *cds)
 /* translate the sequence to a peptide and output */
 {
 char *pep = needMem(dna->size); /* more than needed */
@@ -117,48 +179,44 @@ faWriteNext(outFa, acc, pep, strlen(pep));
 freeMem(pep);
 }
 
-void getAccMrna(char *acc, struct sqlConnection *conn, FILE *outFa)
+static void getAccMrna(char *requestedAcc, struct sqlConnection *conn, FILE *outFa)
 /* get mrna for an accession */
 {
-HGID seqId;
-char *faSeq;
-struct dnaSeq *dna;
+char acc[GENBANK_ACC_BUFSZ];
+char ver[GENBANK_ACC_BUFSZ];
 boolean cdsOk = TRUE;
-char accBuf[512];
 struct genbankCds cds;
 
-faSeq = hGetSeqAndId(conn, acc, &seqId);
-if (faSeq == NULL)
-    {
-    fprintf(stderr, "%s\tsequence not in database\n", acc);
-    return;
-    }
-dna = faFromMemText(faSeq);
+parseAccVersion(requestedAcc, acc, ver);
+
+struct dnaSeq *dna = getSeq(conn, acc);
+if (dna == NULL)
+    return;  
 
 if (cdsUpper || peptides)
-    cdsOk = getCds(conn, acc, dna->size, !cdsUpperAll, &cds);
+    {
+    cdsOk = getCds(conn, acc, dna->size, &cds);
+    if ((!cdsOk) && skipNoCds)
+        {
+        dnaSeqFree(&dna);
+        return;
+        }
+    }
 
 if (cdsOk && cdsUpper)
     upperCaseCds(dna, &cds);
-if ((cdsOk || cdsUpperAll) && inclVer)
-    {
-    int ver = getVersion(conn, acc);
-    safef(accBuf, sizeof(accBuf), "%s.%d", acc, ver);
-    acc = accBuf;
-    }
+if (inclVer || (strlen(ver) > 0))
+    processVersion(conn, acc, ver);
 
-if ((cdsOk || cdsUpperAll))
-    {
-    if (peptides)
-        writePeptide(outFa, acc, dna, &cds);
-    else
-        faWriteNext(outFa, acc, dna->dna, dna->size);
-    }
+if (peptides)
+    writePeptide(outFa, acc, dna, &cds);
+else
+    faWriteNext(outFa, acc, dna->dna, dna->size);
 
 dnaSeqFree(&dna);
 }
 
-void getRna(char *database, char *accFile, char *outFaFile)
+static void getRna(char *database, char *accFile, char *outFaFile)
 /* obtain mrna for a list of accessions */
 {
 struct sqlConnection *conn = sqlConnect(database);
@@ -193,13 +251,17 @@ accFile = argv[2];
 outFaFile = argv[3];
 cdsUpper = optionExists("cdsUpper");
 cdsUpperAll = optionExists("cdsUpperAll");
+warnOnNoCds = !cdsUpperAll;
+skipNoCds = cdsUpper;
 if (cdsUpperAll)
     cdsUpper = TRUE;
 inclVer = optionExists("inclVer");
 peptides = optionExists("peptides");
+if (peptides)
+    skipNoCds = TRUE;
 if (peptides && (cdsUpper || cdsUpperAll))
     errAbort("can't specify -peptides with -cdsUpper or -cdsUpperAll");
 getRna(database, accFile, outFaFile);
-return 0;
+return (errCnt == 0) ? 0 : 1;
 }
 

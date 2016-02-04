@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# update script on the box
+# update script on the GBiB virtual machine
 # - updates itself and then run itself
 # - updates cgis, html and gbdb via rsync 
-# - updates hg.conf via wget
 # - patches the menu
-# - hides conservation+retro 
-# - removes some searches if latency to UCSC is > 90msecs
+# - calls hgMirror to hide some slow default tracks, e.g. conservation+retro 
 
 # will not run if:
 # - not run as root
@@ -14,10 +12,25 @@
 # - any hgMirror jobs are running
 # - hgdownload is offline
 # - if a flagFile on hgDownload is not more recent than a local flag file
+# - if the VirtualBox Guest property "gbibAutoUpdateOff" is set. To set it, run this on the host 
+#   "VBoxManage guestproperty set browserbox gbibAutoUpdateOff"
+
+# To find out why the script did not run, use the command echo $? to show the
+# exit code of the script:
+# 1 - not root
+# 2 - already running
+# 3 - no internet connection
+# 4 - hgMirror job is running
+# 5 - not enough arguments
+# 6 - virtualbox guest property is set
 
 # parameters:
 # - parameter "hgwdev": does not update itself, copies only the beta/alpha CGIs/htdocs from hgwdev
 # - parameter "notSelf": does not update itself and does not check flagfile
+
+# this script is not using the bash options pipefail or errabort.
+# In case something goes wrong it continues, this is intentional to 
+# avoid a virtual machine that can not update itself anymore
 
 # rsync options:
 # l = preserve symlinks
@@ -33,6 +46,21 @@ RSYNCSRC="rsync://hgdownload.cse.ucsc.edu"
 RSYNCCGIBIN=cgi-bin
 RSYNCHTDOCS=htdocs
 UPDATEFLAG=http://hgdownload.cse.ucsc.edu/gbib/lastUpdate
+LOGFILE=/var/log/gbibUpdates.log
+DEBUG=0
+if [[ "$#" -ne 0 ]]; then
+    DEBUG=1
+fi
+
+# function to echo only if run with some arguments
+function echoDebug {
+   if [[ DEBUG -eq "1" ]]; then
+     echo $*
+   fi
+} 
+
+# make sure that apt-get never opens an interactive dialog
+export DEBIAN_FRONTEND=noninteractive 
 
 # help
 if [ "$1" == "-h" ] ; then
@@ -58,22 +86,35 @@ fi
 # check if running already, 3 = the main script + its update + the subshell where this command is running
 RUNNING=`ps --no-headers -CupdateBrowser.sh | wc -l`
 if [ ${RUNNING} -gt 3 ] ; then
-    #echo update already running
+    echoDebug GBiB update already running, not starting
     exit 2
 fi
 	
-# check if auto-updates were deactivated from the Vbox host via a property
-if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" ; then
-    exit 6
+# if run with no argument (=from cron): check if the VirtualBox guest addition
+# kernel modules work and if yes, if auto-updates were deactivated from the
+# Vbox host via a property
+if [ "$#" -eq 0 ] ; then
+    if modprobe vboxguest 2> /dev/null > /dev/null; then
+       if VBoxControl guestproperty get gbibAutoUpdateOff | grep -xq "Value: yes" 2> /dev/null ; then
+           exit 6
+       fi
+    fi
+# show a little note when VirtualBox kernel module is not working and we're not running under cron
+else
+    if [ ! modprobe vboxguest 2> /dev/null > /dev/null ] ; then
+      echo - Info: GBiB not running on VirtualBox or VirtualBox Guest Utils are not working
+    fi
 fi
 
-# check if we have internet
+
+# check if we have internet, stop if not
 wget -q --tries=1 --timeout=10 --spider http://hgdownload.soe.ucsc.edu -O /dev/null
 if [ $? -ne 0 ] ; then
+    echoDebug GBiB has no connection to hgdownload.soe.ucsc.edu, cannot update now
     exit 3
 fi
 
-# check flag if run with no parameter (=from cron)
+# check flag file if run with no parameter (=from cron)
 if [ "$#" -eq 0 ] ; then
    # check a flag file to see if anything on hgdownload actually changed
    if /root/urlIsNotNewerThanFile $UPDATEFLAG /root/lastUpdateTime.flag
@@ -82,8 +123,23 @@ if [ "$#" -eq 0 ] ; then
    fi
 fi
 
+# keep a log of all output of this script and the date
+echo --------------------------------- >> $LOGFILE
+date  >> $LOGFILE
+echo --------------------------------- >> $LOGFILE
+exec >> >(tee -a $LOGFILE) 2>&1
+
 # unless already calling self, update self and call self unless doing only cgis
-if [ "$BASH_ARGV" != "notSelf" -a "$1" != "hgwdev" ] ; then
+# self-updates are not done when suppressed with notSelf and also not in hgwdev-mode to allow testing of local updateBrowser.sh changes
+# Internal sidenote: if you want hgwdev CGIs and also the current hgwdev update
+# script, do a gbibCoreUpdateBeta+updateBrowser hgwdev
+
+# gbibCoreUpdateBeta ends with -Beta because it is used during beta time, to
+# test the current dev update script The update script itself has only a
+# two-stage release process, beta and final, as the alpha version of the script
+# is on the GBiB of the developer itself.
+# the file /root/gbibSkipUpdate allows to skip one single auto-update
+if [[ ( "$BASH_ARGV" != "notSelf" && "$1" != "hgwdev" ) && ( ! -e /root/gbibSkipNextUpdate ) ]] ; then
     echo getting new update script
     # we got three VMs where updateBrowser.sh was 0 bytes, so doing download/move now
     wget http://hgdownload.soe.ucsc.edu/gbib/updateBrowser.sh -O /root/updateBrowser.sh.new -q && mv /root/updateBrowser.sh.new /root/updateBrowser.sh
@@ -91,6 +147,8 @@ if [ "$BASH_ARGV" != "notSelf" -a "$1" != "hgwdev" ] ; then
     /root/updateBrowser.sh $1 notSelf
     exit 0
 fi
+
+rm -f /root/gbibSkipNextUpdate
 
 # check if any hgMirror jobs are running right now
 # check if the group id file exists and also if any processes exist with this group id
@@ -100,8 +158,74 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     exit 4
 fi
 	
+# not done, as old customTrash tables will be in innoDb format
+# and can't be read if we deactivate it now
+# deactivate inno-db support in mysql. Saves 400-500MB of RAM.
+#if ! grep skip-innodb /etc/mysql/my.cnf > /dev/null 2> /dev/null ; then
+    #echo - Switching off inno-db in /etc/mysql/my.cnf
+    #sed -i '/^.mysqld.$/a skip-innodb' /etc/mysql/my.cnf
+    #sed -i '/^.mysqld.$/a default-storage-engine=myisam' /etc/mysql/my.cnf
+    #service mysql restart
+#fi
+   
+# activate the apt repo 'main' and 'universe' so we can install external software
+if ! apt-cache policy r-base | grep "Unable to locate" > /dev/null; then
+   if ! grep '^deb http://us.archive.ubuntu.com/ubuntu trusty main universe multiverse$' /etc/apt/sources.list > /dev/null; then
+       echo - Activating the main Ubuntu package repository
+       echo 'deb http://us.archive.ubuntu.com/ubuntu trusty main universe multiverse' >> /etc/apt/sources.list
+   fi
+fi
+
+# activate daily automated security updates with automated reboots
+# automated reboots are strange but probably better than to risk exploits
+# see https://help.ubuntu.com/community/AutomaticSecurityUpdates
+if apt-cache policy unattended-upgrades | grep "Installed: .none." > /dev/null; then
+   echo - Activating automated daily Ubuntu security updates
+   # from http://askubuntu.com/questions/203337/enabling-unattended-upgrades-from-a-shell-script
+   apt-get update
+   apt-get install -y unattended-upgrades update-notifier-common
+   # update package lists every day
+   echo 'APT::Periodic::Update-Package-Lists "1";' > /etc/apt/apt.conf.d/20auto-upgrades
+   # do the upgrade every day
+   echo 'APT::Periodic::Unattended-Upgrade "1";' >> /etc/apt/apt.conf.d/20auto-upgrades
+   # reboot if needed
+   echo 'Unattended-Upgrade::Automatic-Reboot "true";' >> /etc/apt/apt.conf.d/20auto-upgrades
+   # remove packages not used anymore
+   echo 'Unattended-Upgrade::Remove-Unused-Dependencies "true";' >> /etc/apt/apt.conf.d/20auto-upgrades
+   # and remove the downloaded tarballs at the end
+   echo 'APT::Periodic::AutocleanInterval "1";' >> /etc/apt/apt.conf.d/20auto-upgrades
+   /etc/init.d/unattended-upgrades restart
+fi
+   
+# unattended security upgrades take a while to start, better to force one right now and show the progress
+# this may lead to an auto-reboot, so let's skip the auto-update of this script for this reboot
+touch /root/gbibSkipNextUpdate
+echo - Applying Ubuntu security updates
+unattended-upgrade -v
+rm -f /root/gbibSkipNextUpdate
+
+# The original GBiB image did not use the Ubuntu Virtualbox guest utils but the
+# ones from VirtualBox in /opt. Fix this now and switch to the Ubuntu guest
+# utilities, so they are updated automatically by the Ubuntu tools
+if apt-cache policy virtualbox-guest-dkms | grep "Installed: .none." > /dev/null; then
+    echo - Updating VirtualBox Guest utilities
+    apt-get install -y linux-headers-generic 
+    apt-get install -y virtualbox-guest-dkms
+    apt-get -y autoremove
+    /etc/init.d/vboxadd start
+
+fi
+
+# install R for the gtex tracks
+if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
+   echo - Installing R
+   apt-get update
+   apt-get --no-install-recommends install -y r-base-core
+   apt-get -y autoremove
+fi
+
 echo
-echo Updating the genome browser software via rsync:
+echo - Updating the genome browser software via rsync:
 
 # CGI-BIN and HTDOCS:
 # the parameter "hgwdev" copies over only the beta/alpha CGIs from hgwdev
@@ -152,11 +276,11 @@ if [ "$1" == "hgwdev" ] ; then
 # normal public updates from hgdownload are easier, not many excludes necessary
 else
     # update CGIs
-    echo updating CGIs...
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
+    echo - Updating CGIs...
+    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCCGIBIN /usr/local/apache/cgi-bin/ --exclude=hg.conf --exclude=hg.conf.local --exclude edw* --exclude *private --exclude hgNearData --exclude visiGeneData --exclude Neandertal 
 
-    echo updating HTML files...
-    rsync --delete $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
+    echo - Updating HTML files...
+    rsync --delete -u $RSYNCOPTS $RSYNCSRC/$RSYNCHTDOCS/ /usr/local/apache/htdocs/ --include **/customTracks/*.html --exclude ENCODE/ --exclude *.bam --exclude *.bb --exclude */*.bw --exclude */*.gz --exclude favicon.ico --exclude folders --exclude ancestors --exclude admin --exclude goldenPath/customTracks --exclude images/mammalPsg --exclude style/gbib.css --exclude images/title.jpg --exclude images/homeIconSprite.png --exclude goldenPath/**.pdf --exclude training
 
     PUSHLOC=hgdownload.cse.ucsc.edu::gbib/push/
 fi
@@ -166,12 +290,12 @@ chown -R www-data.www-data /usr/local/apache/htdocs/
 chmod -R a+r /usr/local/apache/htdocs
 
 if [ "$1" != "hgwdev" ] ; then
-  echo updating GBDB files...
+  echo - Updating GBDB files...
   rsync $RSYNCOPTS --existing rsync://hgdownload.cse.ucsc.edu/gbdb/ /data/gbdb/
   chown -R www-data.www-data /data/gbdb/
 fi
 
-echo pulling other files
+echo - Pulling other files
 # make sure we never overwrite the hg.conf.local file
 rsync $RSYNCOPTS $PUSHLOC / --exclude=hg.conf.local
 
@@ -191,12 +315,18 @@ if [ "$1" != "hgwdev" ] ; then
   mysql hgcentral -e 'delete from hubPublic where hubUrl like "%nknguyen%"'
 fi
 
-echo patching menu 
+echo - Adapting the menu 
 cp /usr/local/apache/htdocs/inc/globalNavBar.inc /tmp/navbar.inc
 # remove mirrors and downloads menu
 sed -i '/<li class="menuparent" id="mirrors">/,/^<\/li>$/d' /tmp/navbar.inc 
 sed -i '/<li class="menuparent" id="downloads">/,/^<\/li>$/d' /tmp/navbar.inc 
-cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | sed -e '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' | sed '/genomewiki/a <li><a href="../goldenPath/help/gbib.html">Help on GBiB</a></li>' | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc 
+# adding the link to the mirror tracks tool
+sed -i '/hgLiftOver/a <li><a href="../cgi-bin/hgMirror">Mirror tracks</a></li>' /tmp/navbar.inc
+# add a link to the gbib shared data folder
+sed -i '/Track Hubs/a <li><a target="_blank" href="http:\/\/127.0.0.1:1234\/folders\/">GBiB Shared Data Folder<\/a><\/li>' /tmp/navbar.inc
+# adding a link to the GBIB help pages
+sed -i '/genomewiki/a <li><a href="../goldenPath/help/gbib.html">Help on GBiB</a></li>' /tmp/navbar.inc
+cat /tmp/navbar.inc | grep -v hgNear | grep -v hgVisiGene | uniq > /usr/local/apache/htdocs/inc/globalNavBar.inc
 rm /tmp/navbar.inc
 
 # patch left side menu:
@@ -250,5 +380,5 @@ if [ ! -f /usr/local/apache/cgi-bin/hg.conf.local ] ; then
 fi
 
 touch /root/lastUpdateTime.flag
-echo update done.
+echo - GBiB update done
 cat /etc/issue | tr -s '\n'

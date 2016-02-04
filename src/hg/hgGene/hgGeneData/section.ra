@@ -25,8 +25,8 @@ longLabel Genetic Association Studies of Complex Diseases and Disorders
 priority 35
 
 name malacards
-shortLabel Malacards
-longLabel Malacards Disease Associations
+shortLabel MalaCards
+longLabel MalaCards Disease Associations
 priority 35.1
 
 name microarray

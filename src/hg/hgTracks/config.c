@@ -583,7 +583,7 @@ virtModeType = cartUsualString(cart, "virtModeType", virtModeType);
 hPrintf("<TR><TD>");
 cgiMakeRadioButton("virtModeType", "default", sameWord("default", virtModeType));
 hPrintf("</TD><TD>");
-hPrintf("Show single-chromosome view (default)");
+hPrintf("Exit multi-region mode");
 hPrintf("</TD></TR>\n");
 
 struct sqlConnection *conn = NULL;
@@ -597,10 +597,19 @@ if (emGeneTable)
     hPrintf("<TR><TD>");
     cgiMakeRadioButton("virtModeType", "exonMostly", sameWord("exonMostly", virtModeType));
     hPrintf("</TD><TD>");
-    hPrintf("Show exons or ");
-    cgiMakeRadioButton("virtModeType", "geneMostly", sameWord("geneMostly", virtModeType));
-    hPrintf("genes using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
+    hPrintf("Show exons using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
     hIntVar("emPadding", cartUsualInt(cart, "emPadding", emPadding), 3);
+    hPrintf(" bases.");
+    hPrintf("</TD></TR>\n");
+    }
+
+if (emGeneTable)
+    {
+    hPrintf("<TR><TD>");
+    cgiMakeRadioButton("virtModeType", "geneMostly", sameWord("geneMostly", virtModeType));
+    hPrintf("</TD><TD>");
+    hPrintf("Show genes using %s. &nbsp;&nbsp; Use padding of: ", emGeneTrack->shortLabel);
+    hIntVar("gmPadding", cartUsualInt(cart, "gmPadding", gmPadding), 3);
     hPrintf(" bases.");
     hPrintf("</TD></TR>\n");
     }

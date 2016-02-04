@@ -27,6 +27,7 @@
 #include "asFilter.h"
 #include "xmlEscape.h"
 #include "hgBam.h"
+#include "hgConfig.h"
 
 boolean isBamTable(char *table)
 /* Return TRUE if table corresponds to a BAM file. */
@@ -166,14 +167,15 @@ if (anyFilter())
 struct region *region, *regionList = getRegions();
 
 struct trackDb *tdb = findTdbForTable(db, curTrack, table, ctLookupName);
-cramInit(tdb);
 int maxOut = bigFileMaxOutput();
+char *cacheDir =  cfgOption("cramRef");
+char *refUrl = trackDbSetting(tdb, "refUrl");
 for (region = regionList; region != NULL && (maxOut > 0); region = region->next)
     {
     struct lm *lm = lmInit(0);
     char *fileName = bamFileName(table, conn, region->chrom);
-    struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
-    	region->start, region->end, lm);
+    struct samAlignment *sam, *samList = bamFetchSamAlignmentPlus(fileName, region->chrom,
+    	region->start, region->end, lm, refUrl, cacheDir );
     char *row[SAMALIGNMENT_NUM_COLS];
     char numBuf[BAM_NUM_BUF_SIZE];
     for (sam = samList; sam != NULL && (maxOut > 0); sam = sam->next)

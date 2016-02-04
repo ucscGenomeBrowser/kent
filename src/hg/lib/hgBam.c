@@ -10,20 +10,6 @@
 #ifdef USE_BAM
 #include "htmshell.h"
 #include "samAlignment.h"
-#include "hgConfig.h"
-
-void cramInit(struct trackDb *tdb)
-/* Initialize variables needed for CRAM parsing. */
-{
-char *cramRef;
-if ((cramRef =  cfgOption("cramRef")) != NULL)
-    {
-    setenv("REF_CACHE", cramRef, TRUE);
-    }
-char *refPath = trackDbSetting(tdb, "refPath");
-if (refPath != NULL)
-    setenv("REF_PATH", refPath, TRUE);
-}
 
 char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
 /* Return file name from table.  If table has a seqName column, then grab the 
@@ -209,8 +195,8 @@ slAddHead(&helper->samList, sam);
 return 0;
 }
 
-struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
-	struct lm *lm)
+struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm,  char *refUrl, char *cacheDir)
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
  * bam record.  Results is allocated out of lm, since it tends to be large... */
 {
@@ -221,10 +207,19 @@ helper.dy = dyStringNew(0);
 helper.samList = NULL;
 char posForBam[256];
 safef(posForBam, sizeof(posForBam), "%s:%d-%d", chrom, start+1, end);
-bamFetch(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile);
+bamFetchPlus(fileOrUrl, posForBam, bamAddOneSamAlignment, &helper, &helper.samFile,
+    refUrl, cacheDir);
 dyStringFree(&helper.dy);
 slReverse(&helper.samList);
 return helper.samList;
+}
+
+struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm)
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+{
+return bamFetchSamAlignmentPlus(fileOrUrl, chrom, start, end, lm, NULL, NULL);
 }
 
 #ifdef USE_HTS

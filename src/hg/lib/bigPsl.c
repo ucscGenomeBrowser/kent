@@ -333,5 +333,6 @@ for(ii=0; ii < psl->blockCount; ii++)
 //    psl->qStarts[ii] += psl->qStart;
     }
 
+pslComputeInsertCounts(psl);
 return psl;
 }

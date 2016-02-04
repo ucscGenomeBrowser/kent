@@ -207,6 +207,27 @@ hFreeConn(&conn);
 return gtexTissues;
 }
 
+struct hash *gtexGetTissueSampleCount()
+/* Return hash of sample counts keyed by tissue name */
+{
+char query[1024];
+struct sqlResult *sr;
+char **row;
+struct sqlConnection *conn = hAllocConn("hgFixed");
+sqlSafef(query, sizeof(query), "select tissue, count(tissue) from gtexSample group by tissue");
+struct hash *tscHash = hashNew(0);
+sr = sqlGetResult(conn,query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *tissue = cloneString(row[0]);
+    int samples = sqlUnsigned(row[1]);
+    hashAddInt(tscHash, tissue, samples);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return tscHash;
+}
+
 struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb)
 /* Increase brightness for better visibility of small items */
 {
@@ -214,4 +235,5 @@ struct hslColor hsl = mgRgbToHsl(rgb);
 hsl.s = min(1000, hsl.s + 300);
 return mgHslToRgb(hsl);
 }
+
 

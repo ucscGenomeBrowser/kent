@@ -4070,7 +4070,7 @@ if (imagePath)
 if (sameString(tdb->table,"altLocations") && (!strchr(item,':')))
     {
     char *hgsid = cartSessionId(cart);
-    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleHaplo&singleHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
+    printf("<A HREF=\"/cgi-bin/hgTracks?hgsid=%s&virtModeType=singleAltHaplo&singleAltHaploId=%s\">Show this alternate haplotype placed on its chromosome</A><BR>\n", hgsid, item);
     }
 
 printTrackHtml(tdb);
@@ -8601,8 +8601,8 @@ char *ensemblIdUrl = trackDbSettingOrDefault(tdb, "ensemblIdUrl", "http://www.en
 
 /* shortItemName is the name without the "." + version */
 shortItemName = cloneString(itemName);
-/* ensembl gene names are different from their usual naming scheme on ce6 */
-if (! startsWith("ce6", database))
+/* ensembl gene names are different from their usual naming scheme on ce6/ce11*/
+if (! (startsWith("ce6", database) || startsWith("ce11", database)))
     {
     chp = strstr(shortItemName, ".");
     if (chp != NULL)
@@ -8817,8 +8817,8 @@ else if (startsWith("vega", tdb->table))
    }
 /* shortItemName is the name without the "." + version */
 shortItemName = cloneString(itemName);
-/* ensembl gene names are different from their usual naming scheme on ce6 */
-if (!startsWith("ce6", database))
+/* ensembl gene names are different from their usual naming scheme on ce6/ce11*/
+if (! (startsWith("ce6", database) || startsWith("ce11", database)) )
     {
     chp = strstr(shortItemName, ".");
     if (chp != NULL)
@@ -12280,7 +12280,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("<BR><A HREF=\"%s\" TARGET=_blank>View summary of all genomic tRNA predictions</A><BR>\n"
 	       , trna->genomeUrl);
-        printf("<BR><A HREF=\"%s\" TARGET=_blank>View tRNA alignments</A><BR>\n", trna->trnaUrl);
+        printf("<BR><A HREF=\"%s\" TARGET=_blank>View complete details for this tRNA</A><BR>\n", trna->trnaUrl);
 	}
 
     if (trna->next != NULL)

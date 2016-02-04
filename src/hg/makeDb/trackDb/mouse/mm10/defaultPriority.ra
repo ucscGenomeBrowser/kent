@@ -22,9 +22,9 @@ priority 2
 
 # Variation and Repeats
 
-# track snp138Common override
+# track snp142Common override
 # priority 1
-# This priority is defined in mouse/mm10/trackDb.ra
+# This priority is defined in mouse/trackDb.ra
 # If this priority changes, please change it here and there as well
 
 track rmsk override

@@ -389,6 +389,7 @@ else
     psl.tStart = psl.tStarts[0];
     psl.tEnd = psl.tStarts[blockNum - 1] + sizeMul*psl.blockSizes[blockNum - 1];
     }
+pslComputeInsertCounts(&psl);
 pslTabOut(&psl, outFile);
 }
 

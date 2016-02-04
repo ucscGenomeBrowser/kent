@@ -220,6 +220,43 @@ int result;
 while ((result = sam_itr_next(samfile, iter, b)) >= 0) 
     callbackFunc(b, callbackData, header);
 
+// if we're reading a CRAM file and the MD5 string has been set
+// we know there was an error finding the reference and we need
+// to request that it be loaded.
+if (samfile->format.format == cram) 
+    {
+    char *md5String =  cram_get_Md5(samfile);
+    if (!isEmpty(md5String))
+        {
+        char server[4096];
+        char pendingFile[4096];
+        char errorFile[4096];
+
+        char *refPath = cram_get_ref_url(samfile);
+        char *cacheDir = cram_get_cache_dir(samfile);
+
+        sprintf(server, refPath, md5String);
+        sprintf(pendingFile, "%s/pending/",cacheDir);
+        sprintf(errorFile, "%s/error/%s",cacheDir,md5String);
+        makeDirsOnPath(pendingFile);
+        sprintf(pendingFile, "%s/pending/%s",cacheDir,md5String);
+        FILE *downFile;
+        if ((downFile = fopen(errorFile, "r")) != NULL)
+            {
+            char errorBuf[4096];
+            mustGetLine(downFile, errorBuf, sizeof errorBuf);
+            errAbort("cannot find reference %s.  Error: %s\n", md5String,errorBuf);
+            }
+        else
+            {
+            if ((downFile = fopen(pendingFile, "w")) == NULL)
+                errAbort("cannot find reference %s.  Cannot create file %s.",md5String, pendingFile);  
+            fprintf(downFile,  "%s\n", server);
+            fclose(downFile);
+            errAbort("cannot find reference %s.  Downloading from %s. Pending in %s",md5String, server, pendingFile);
+            }
+        }
+    }
 #else
 int chromId, start, end;
 int ret = bam_parse_region(samfile->header, position, &chromId, &start, &end);
@@ -234,8 +271,8 @@ if (ret != 0)
 #endif
 }
 
-void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
-		 samfile_t **pSamFile)
+void bamFetchPlus(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile, char *refUrl, char *cacheDir)
 /* Open the .bam file, fetch items in the seq:start-end position range,
  * and call callbackFunc on each bam item retrieved from the file plus callbackData.
  * This handles BAM files with "chr"-less sequence names, e.g. from Ensembl. 
@@ -245,6 +282,12 @@ void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *c
 char *bamFileName = NULL;
 samfile_t *fh = bamOpen(fileOrUrl, &bamFileName);
 #ifdef USE_HTS
+if (fh->format.format == cram) 
+    {
+    if (cacheDir == NULL)
+        errAbort("CRAM cache dir hg.conf variable (cramRef) must exist for CRAM support");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
 bam_hdr_t *header = sam_hdr_read(fh);
 if (pSamFile != NULL)
     *pSamFile = fh;
@@ -266,6 +309,13 @@ else
     bamCloseIdx(&idx);
     }
 bamClose(&fh);
+}
+
+void bamFetch(char *fileOrUrl, char *position, bam_fetch_f callbackFunc, void *callbackData,
+		 samfile_t **pSamFile)
+{
+bamFetchPlus(fileOrUrl, position, callbackFunc, callbackData, pSamFile,
+    NULL, NULL);
 }
 
 boolean bamIsRc(const bam1_t *bam)

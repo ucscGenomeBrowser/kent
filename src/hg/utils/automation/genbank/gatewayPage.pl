@@ -12,6 +12,79 @@ sub usage() {
   exit 255;
 }
 
+# from Perl Cookbook Recipe 2.17, print out large numbers with comma
+# delimiters:
+sub commify($) {
+    my $text = reverse $_[0];
+    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
+    return scalar reverse $text
+}
+
+sub chromSizes($) {
+  my ($sizeFile) = @_;
+  if ( -s $sizeFile ) {
+    printf STDERR "# reading chrom.sizes file:\n#\t'%s\'\n", $sizeFile;
+    my $ix = 0;
+    my $contigCount = 0;
+
+    my %sizes;	# key is contigName, value is size
+
+    if ($sizeFile eq "stdin") {
+	while (my $line = <>) {
+	    next if ($line =~ m/^\s*#/);
+	    ++$contigCount;
+	    chomp ($line);
+	    my ($name, $size, $rest) = split('\s+', $line, 3);
+	    my $key = sprintf("%s_X_%d", $name, $ix++);
+	    $sizes{$key} = $size;
+	}
+    } else {
+	open (FH, "<$sizeFile") or die "can not read $sizeFile";
+	while (my $line = <FH>) {
+	    next if ($line =~ m/^\s*#/);
+	    ++$contigCount;
+	    chomp ($line);
+	    my ($name, $size, $rest) = split('\s+', $line, 3);
+	    my $key = sprintf("%s_X_%d", $name, $ix++);
+	    $sizes{$key} = $size;
+	}
+	close (FH);
+    }
+
+    my $totalSize = 0;
+    foreach my $key (keys %sizes) {
+	$totalSize += $sizes{$key}
+    }
+    my $n50Size = $totalSize / 2;
+
+    my $genomeSize = $totalSize;
+    printf "<b>Total assembly nucleotides:</b> %s<br>\n", commify($totalSize);
+    printf "<b>Assembly contig count:</b> %s<br>\n", commify($contigCount);
+
+    my $prevContig = "";
+    my $prevSize = 0;
+
+    $totalSize = 0;
+    # work through the sizes until reaching the N50 size
+    foreach my $key (sort { $sizes{$b} <=> $sizes{$a} } keys %sizes) {
+	$totalSize += $sizes{$key};
+	if ($totalSize > $n50Size) {
+	    my $prevName = $prevContig;
+	    $prevName =~ s/_X_[0-9]+//;
+	    my $origName = $key;
+	    $origName =~ s/_X_[0-9]+//;
+            printf "<b>N50 size:</b> %s<br>\n", commify($sizes{$key});
+	    last;
+	}
+	$prevContig = $key;
+	$prevSize = $sizes{$key};
+    }
+  } else {
+    printf STDERR "# error: can not find chrom.sizes file:\n#\t'%s\'\n",
+      $sizeFile;
+  }
+}
+
 # typical reference:
 #   ${inside}/scripts/gatewayPage.pl ${outside}/${asmReport} \
 #       > "${inside}/${D}/${B}.description.html" \
@@ -29,17 +102,22 @@ if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
 }
+# transform this path name into a chrom.sizes reference
+my $chromSizes = $asmReport;
+$chromSizes =~ s/_assembly_report.txt/.ncbi.chrom.sizes/;
+$chromSizes =~ s#/outside/#/inside/#;
 
 my $ftpName = dirname($asmReport);
 $ftpName =~ s#/hive/data/outside/ncbi/##;
 $ftpName =~ s#/hive/data/inside/ncbi/##;
 my $urlDirectory = `basename $ftpName`;
 chomp $urlDirectory;
-my $urlPath = $ftpName;
+my $asmId = $urlDirectory;
+my $speciesSubgroup = $ftpName;
 my $asmType = "genbank";
-$asmType = "refseq" if ( $urlPath =~ m#/refseq/#);
-$urlPath =~ s#genomes/$asmType/##;;
-$urlPath =~ s#/.*##;;
+$asmType = "refseq" if ( $speciesSubgroup =~ m#/refseq/#);
+$speciesSubgroup =~ s#genomes/$asmType/##;;
+$speciesSubgroup =~ s#/.*##;;
 
 my %taxIdCommonName;  # key is taxId, value is common name
                       # from NCBI taxonomy database dump
@@ -134,9 +212,11 @@ printf STDERR "%s\t", $asmLevel;
 printf STDERR "%s\t", $asmDate;
 printf STDERR "%s\n", $asmAccession;
 
+printf "<script type='text/javascript'>var asmId='%s';</script>\n", $asmId;
+
 printf "<p>
-<b>Common name: %s<br>
-<b>Taxonomic name: %s, taxonomy ID: <a href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
+<b>Common name: %s</b><br>
+<b>Taxonomic name: %s, taxonomy ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=%s\" target=_\"_blank\"> %s</a><br>
 <b>Sequencing/Assembly provider ID:</b> %s<br>
 <b>Assembly date:</b> %s<br>
 <b>Assembly type:</b> %s<br>
@@ -144,9 +224,62 @@ printf "<p>
 <b>Biosample:</b> <a href=\"http://www.ncbi.nlm.nih.gov/biosample/?term=%s\" target=\"_blank\"> %s</a><br>
 <b>Assembly accession ID:</b> <a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a><br>
 <b>Assembly FTP location:</b> <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/all/%s\" target=\"_blank\">%s</a><br>
-<b>UCSC downloads directory:</b> <a href=\"http://genome-test.cse.ucsc.edu/~hiram/hubs/$asmType/%s/%s/\" target=\"_blank\">%s_%s</a><br>
-</p>\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
-  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $asmName, $urlPath, $urlDirectory, $asmAccession, $asmName;
+\n", $commonName, $orgName, $taxId, $taxId, $submitter, $asmDate, $descrAsmType,
+  $asmLevel, $bioSample, $bioSample, $asmAccession, $asmAccession, $urlDirectory, $urlDirectory;
+
+chromSizes($chromSizes);
+
+printf "</p>\n<hr>
+<p>
+<b>Download files for this assembly hub:</b><br>
+To use the data from this assembly for a local hub instance at your
+institution, download these data as indicated by these instructions.<br>
+See also: <a href=\"/goldenPath/help/hgTrackHubHelp.html\" target=_blank>track hub help</a> documentation.<br>
+<br>
+To download these data, issue this <em>wget</em> command:
+<pre>
+wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
+   --reject \"index.html*\" -P \"$urlDirectory\" \\
+       http:<span id='wgetSrc'>//genome-test.cse.ucsc.edu</span>/gbdb/hubs/$asmType/$speciesSubgroup/$urlDirectory/
+</pre>
+to download the files for this assembly,<br>
+creating the local directory: \"$urlDirectory\"<br>
+<br>
+There is an included $urlDirectory.genomes.txt file in that download
+data to use for your local track hub instance.<br>
+You will need to add a hub.txt file to point to this genomes.txt file.<br>
+Something like:
+<pre>
+hub myLocalHub
+shortLabel myLocalHub
+longLabel genomes from RefSeq assemblies
+genomesFile $urlDirectory.genomes.txt
+email yourEmail\@yourdomain.edu
+descriptionUrl description.html
+</pre>
+The <em>description.html</em> page is information for your users to
+describe this assembly.  This WEB page with these instructions
+is a description.html file.
+</p>\n";
+
+printf "<hr>
+<p>
+To operate a blat server on this assembly, in the directory where you have
+the $urlDirectory.2bit file:
+<pre>
+gfServer -log=%s.gfServer.trans.log -ipLog -canStop start \\
+    yourserver.domain.edu 76543 -trans -mask %s.2bit &
+gfServer -log=%s.gfServer.log -ipLog -canStop start \\
+    yourserver.domain.edu 76542 -stepSize=5 %s.2bit &
+</pre>
+Adjust the port numbers <em>76543</em> <em>76542</em> and the
+<em>yourserver.domain.edu</em> for your local circumstances.<br>
+Enter the following specifications in your genomes.txt file:
+<pre>
+transBlat yourserver.domain.edu 76543
+blat yourserver.domain.edu 76542
+</pre>
+</p>\n", $urlDirectory, $urlDirectory, $urlDirectory, $urlDirectory;
 
 printf "<hr>
 <p>
@@ -170,6 +303,8 @@ to find Genome Browser tracks that match specific selection criteria.
 </ul>
 </p>
 <hr>\n";
+
+printf "<script type='text/javascript' src='/js/gatewayPage.js'></script>\n";
 
 __END__
 

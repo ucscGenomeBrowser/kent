@@ -68,9 +68,9 @@ if [ -s ${Db}.grcIncidentDb.bb ]; then
 fi
 
 if [ "${oldSum}" = "${newSum}" ]; then
-   echo "${db} GRC update no change from previous ${DS}" \
-        | mail -s "ALERT: GRC Incident update $Db" ${failMail} \
-            > /dev/null 2> /dev/null
+#    echo "${db} GRC update no change from previous ${DS}" \
+#         | mail -s "ALERT: GRC Incident update $Db" ${failMail} \
+#             > /dev/null 2> /dev/null
    rm -f ${YM}/${DS}.${Db}.grcIncidentDb.bb
    rm -f ${YM}/${db}.${DS}.bed5.gz
    rm -f ${YM}/${GRC_issue}.${DS}.gff.gz
@@ -86,6 +86,8 @@ else
         | mail -s "ALERT: GRC Incident update $Db" ${failMail} \
             > /dev/null 2> /dev/null
    rm -fr ./udcCache
+   zcat ${YM}/${db}.${DS}.bed5.gz | cut -f4 | sort -u | awk '{printf "%s\t%s\n", $1, $1}' > ${Db}.nameIndex.txt
+   /cluster/bin/x86_64/ixIxx ${Db}.nameIndex.txt ${Db}.grcIncidentDb.ix ${Db}.grcIncidentDb.ixx
 fi
 rm -f updateRunning.pid
 ${ECHO} SUCCESS

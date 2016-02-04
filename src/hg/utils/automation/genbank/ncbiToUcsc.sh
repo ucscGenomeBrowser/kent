@@ -34,7 +34,9 @@ fi
 
 outside="/hive/data/outside/ncbi/genomes/$asmType"
 inside="/hive/data/inside/ncbi/genomes/$asmType"
-export scripts="${inside}/scripts"
+# expecting to find all the scripts used by this in the
+# users 'kent' source tree copy
+export scripts="$HOME/kent/src/hg/utils/automation/genbank"
 
 export fnaFile=$2
 
@@ -73,7 +75,8 @@ if [ ! -s "${inside}/${D}/${B}.checkAgpStatusOK.txt" ]; then
 # there will always be a 2bit file constructed from the fnaFile
 mkdir -p "${inside}/${D}"
 if [ "${outside}/${fnaFile}" -nt "${inside}/${D}/${B}.ncbi.2bit" ]; then
-  printf "# %s NCBI 2bit $s\n" "${dateStamp}" "${B}" 1>&2
+  printf "# %s NCBI 2bit %s\n" "${dateStamp}" "${B}" 1>&2
+  printf "# %s outside fna %s\n" "${dateStamp}" "${outside}/${fnaFile}" 1>&2
   faToTwoBit "${outside}/${fnaFile}" "${inside}/${D}/${B}.ncbi.2bit"
   twoBitInfo "${inside}/${D}/${B}.ncbi.2bit" stdout \
     | sort -k2nr > "${inside}/${D}/${B}.ncbi.chrom.sizes"
@@ -160,28 +163,30 @@ fi
 
 altCount=`(find "${asmStructure}" -type f | grep alt.scaf.agp.gz || true) | wc -l`
 
-if [ "${altCount}" -gt 0 -a ! -s "${B}_alternates.agp.ncbi.gz" ]; then
-  printf "# %s alternates %s" "${dateStamp}" "${B}" 1>&2
-  ${scripts}/alternatesAgp.pl ncbi "" "${asmStructure}" \
-     | gzip -c > "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
-  partCount=`echo $partCount | awk '{printf "%d", $1+1}'`
-  touch -r "${inside}/${D}/${B}.ncbi.2bit" "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
+if [ "${altCount}" -gt 0 ]; then
+  if [ ! -s "${B}_alternates.agp.ncbi.gz" ]; then
+    printf "# %s alternates %s" "${dateStamp}" "${B}" 1>&2
+    ${scripts}/alternatesAgp.pl ncbi "" "${asmStructure}" \
+       | gzip -c > "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
+    partCount=`echo $partCount | awk '{printf "%d", $1+1}'`
+    touch -r "${inside}/${D}/${B}.ncbi.2bit" "${inside}/${D}/${B}.alternates.agp.ncbi.gz"
+  fi
 fi
 
 ${scripts}/ucscPatchNames.sh "${outside}/${asmReport}" \
   > "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names"
-if [ ! -s "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names" ]; then
- rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names"
-else
+if [ -s "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names" ]; then
  printf "# %s patches built %s\n" "${dateStamp}" "${B}"
+else
+ rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.patch.names"
 fi
 
 ${scripts}/ucscAltNames.sh "${outside}/${asmReport}" \
   > "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names"
-if [ ! -s "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names" ]; then
- rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names"
-else
+if [ -s "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names" ]; then
  printf "# %s alternates built %s\n" "${dateStamp}" "${B}"
+else
+ rm -f "${inside}/${D}/${B}.ucsc.to.ncbi.alt.names"
 fi
 
 ###########################################################################
@@ -558,13 +563,28 @@ if [ -s "${inside}/${D}/${B}.checkAgpStatusOK.txt" ]; then
   printf "# %s ncbiGene.sh %s\n" "${dateStamp}" "${B}" 1>&2
   ${scripts}/ncbiGene.sh "${gffFile}" "${inside}/${D}/"
 
+  # cpg.sh is run separately from kluster jobs on hgwdev which spawns
+  # cluster jobs on ku
+
   # cpg.sh will do its own checking to see if it needs to run
-#   printf "# %s cpg.sh %s\n" "${dateStamp}" "${B}" 1>&2
-#   ${scripts}/cpg.sh "${inside}/${D}"
+  # printf "# %s cpg.sh %s\n" "${dateStamp}" "${B}" 1>&2
+  # ${scripts}/cpg.sh "${inside}/${D}"
 
   # construct a signature from faCount totals to compare with UCSC existing
   #  genome browsers
 
+  if [ ! -s ${inside}/${D}/${B}.faCount.ucsc.txt ]; then
+     if [ -s ${inside}/${D}/${B}.ucsc.2bit ]; then
+       twoBitToFa ${inside}/${D}/${B}.ucsc.2bit stdout | faCount stdin \
+          > ${inside}/${D}/${B}.faCount.ucsc.txt
+     fi
+  fi
+  if [ ! -s ${inside}/${D}/${B}.faCount.ncbi.txt ]; then
+     if [ -s ${inside}/${D}/${B}.ncbi.2bit ]; then
+       twoBitToFa ${inside}/${D}/${B}.ncbi.2bit stdout | faCount stdin \
+          > ${inside}/${D}/${B}.faCount.ncbi.txt
+     fi
+  fi
   if [ ! -s ${inside}/${D}/${B}.faCount.signature.txt ]; then
      twoBitToFa ${inside}/${D}/${B}.ncbi.2bit stdout | faCount stdin \
        |  grep -P "^total\t" > ${inside}/${D}/${B}.faCount.signature.txt

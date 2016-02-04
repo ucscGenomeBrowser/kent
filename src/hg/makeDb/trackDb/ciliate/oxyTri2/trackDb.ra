@@ -53,7 +53,7 @@ html selfChainPileUps
 # colorByStrand 0,0,128 0,128,0
 # chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
 
-track xNcbiGene
+track genbankGenes
 shortLabel NCBI Genes
 longLabel NCBI Genes from Genbank Record
 visibility pack
@@ -62,9 +62,12 @@ altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
 type bigBed 12
 searchIndex name
-searchTrix /gbdb/oxyTri2/bbi/ncbiGene/xNcbiGene.ix
+searchTrix /gbdb/oxyTri2/bbi/genbankGenes/genbankGenes.ix
 group genes
 chromosomes chrMACsb310,chrMICjrb310,chrM,chrmO
+
+searchTable genbankGenes
+searchType bigBed
 
 searchTable gold
 shortCircuit 1

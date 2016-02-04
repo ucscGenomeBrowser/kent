@@ -238,7 +238,7 @@ if (htsFile == NULL)
     return NULL;
     }
 tbx_t *tabix;
-if ((tabix = ti_index_load(tbiName)) == NULL)
+if ((tabix = tbx_index_load2(fileOrUrl, tbiName)) == NULL)
 #else
 tabix_t *tabix = ti_open(fileOrUrl, tbiName);
 if (tabix == NULL)
@@ -250,7 +250,8 @@ if ((tabix->idx = ti_index_load(tbiName)) == NULL)
 #endif
     {
     warn("Unable to load tabix index from \"%s\"", tbiName);
-    ti_close(tabix);
+    if (tabix)
+        ti_close(tabix);
     tabix = NULL;
     return NULL;
     }
@@ -748,6 +749,11 @@ if ((lf = *pLf) != NULL)
 	if (lf->tabixIter != NULL)
 	    ti_iter_destroy(lf->tabixIter);
 	ti_close(lf->tabix);
+#ifdef USE_HTS
+        hts_close(lf->htsFile);
+        kstring_t *kline = lf->kline;
+        free(kline->s);
+#endif
 	}
 #endif // USE_TABIX
     else if (lf->udcFile != NULL)

@@ -1,0 +1,27 @@
+##gff-version 3
+#!gff-spec-version 1.21
+#!processor NCBI annotwriter
+#!genome-build GRCh38.p6
+#!genome-build-accession NCBI_Assembly:GCF_000001405.32
+##sequence-region NC_000001.11 1 248956422
+##species http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606
+NC_000001.11	Curated Genomic	gene	8831007	8831378	.	+	.	ID=gene250;Dbxref=GeneID:100131143,HGNC:HGNC:36708;Name=RPL23AP19;description=ribosomal protein L23a pseudogene 19;gbkey=Gene;gene=RPL23AP19;gene_biotype=pseudogene;gene_synonym=RPL23A_2_8;pseudo=true
+NC_000001.11	RefSeq	match	8830907	8831478	572	+	.	ID=f331a28e-bbe4-4f18-8174-3fcac124d0d1;Target=NG_009753.1 1 572 +;assembly_bases_aln=572;assembly_bases_seq=572;bit_score=1065.56;blast_aligner=1;blast_score=572;common_component=1;e_value=0;filter_score=0;for_remapping=2;gap_count=0;hsp_percent_coverage=100;matchable_bases=572;matched_bases=572;num_ident=572;num_mismatch=0;pct_coverage=100;pct_coverage_hiqual=100;pct_identity_gap=100;pct_identity_gapopen_only=100;pct_identity_ungap=100;rank=1;score=572;weighted_identity=1
+NC_000001.11	Curated Genomic	gene	8057181	8058487	.	-	.	ID=gene240;Dbxref=GeneID:390993,HGNC:HGNC:35613;Name=RPL7AP18;description=ribosomal protein L7a pseudogene 18;gbkey=Gene;gene=RPL7AP18;gene_biotype=pseudogene;gene_synonym=RPL7A_1_5;pseudo=true
+NC_000001.11	Curated Genomic	exon	8057181	8057946	.	-	.	ID=id10086;Parent=gene240;Dbxref=GeneID:390993,HGNC:HGNC:35613;gbkey=exon;gene=RPL7AP18
+NC_000001.11	Curated Genomic	exon	8058363	8058487	.	-	.	ID=id10087;Parent=gene240;Dbxref=GeneID:390993,HGNC:HGNC:35613;gbkey=exon;gene=RPL7AP18
+NC_000001.11	Curated Genomic	gene	8189826	8192773	.	+	.	ID=gene241;Dbxref=GeneID:100129776;Name=LOC100129776;description=eukaryotic translation initiation factor 2%2C subunit 3 gamma%2C 52kDa pseudogene;gbkey=Gene;gene=LOC100129776;gene_biotype=pseudogene;pseudo=true
+NC_000001.11	RefSeq	match	8189726	8192873	3148	+	.	ID=478306d3-8c05-4470-ad7e-dff3522d5168;Target=NG_022768.1 1 3148 +;assembly_bases_aln=3148;assembly_bases_seq=3148;bit_score=5859.7;blast_aligner=1;blast_score=3148;common_component=1;e_value=0;filter_score=0;for_remapping=2;gap_count=0;hsp_percent_coverage=100;matchable_bases=3148;matched_bases=3148;num_ident=3148;num_mismatch=0;pct_coverage=100;pct_coverage_hiqual=100;pct_identity_gap=100;pct_identity_gapopen_only=100;pct_identity_ungap=100;rank=1;score=3148;weighted_identity=1
+NC_000001.11	RefSeq	match	8893311	8894703	1393	+	.	ID=3b73cb34-74d3-4fa2-94e6-1e122fd2bba5;Target=NG_006598.1 1 1393 +;assembly_bases_aln=1393;assembly_bases_seq=1393;bit_score=2593.51;blast_aligner=1;blast_score=1393;common_component=1;e_value=0;filter_score=0;for_remapping=2;gap_count=0;hsp_percent_coverage=100;matchable_bases=1393;matched_bases=1393;num_ident=1393;num_mismatch=0;pct_coverage=100;pct_coverage_hiqual=100;pct_identity_gap=100;pct_identity_gapopen_only=100;pct_identity_ungap=100;rank=1;score=1393;weighted_identity=1
+
+NC_000003.12	Curated Genomic	gene	122317609	122318603	.	+	.	ID=gene10002;Dbxref=GeneID:100130002,HGNC:HGNC:39541;Name=HNRNPA1P23;description=heterogeneous nuclear ribonucleoprotein A1 pseudogene 23;gbkey=Gene;gene=HNRNPA1P23;gene_biotype=pseudogene;pseudo=true
+NC_000003.12	Curated Genomic	gene	122594770	122603627	.	+	.	ID=gene10013;Dbxref=GeneID:100421636;Name=LOC100421636;description=poly (ADP-ribose) polymerase family%2C member 14 pseudogene;gbkey=Gene;gene=LOC100421636;gene_biotype=pseudogene;pseudo=true
+NC_000003.12	Curated Genomic	gene	124621710	124622532	.	+	.	ID=gene10043;Dbxref=GeneID:100420144;Name=LOC100420144;description=mediator of cell motility 1 pseudogene;gbkey=Gene;gene=LOC100420144;gene_biotype=pseudogene;pseudo=true
+
+NC_000003.12	Curated Genomic	gene	101357293	101358633	.	+	.	ID=gene9734;Dbxref=GeneID:7661,HGNC:HGNC:12888;Name=ZNF90P1;description=zinc finger protein 90 pseudogene 1;gbkey=Gene;gene=ZNF90P1;gene_biotype=pseudogene;gene_synonym=ZNF108,ZNF108P;pseudo=true
+NC_000003.12	Curated Genomic	gene	101599239	101599644	.	-	.	ID=gene9741;Dbxref=GeneID:391560,HGNC:HGNC:35804;Name=RPL32P7;description=ribosomal protein L32 pseudogene 7;gbkey=Gene;gene=RPL32P7;gene_biotype=pseudogene;gene_synonym=RPL32_1_390;pseudo=true
+NC_000003.12	Curated Genomic	gene	103240989	103241234	.	+	.	ID=gene9760;Dbxref=GeneID:100287880,HGNC:HGNC:31362;Name=NDUFA4P2;description=NADH dehydrogenase (ubiquinone) 1 alpha subcomplex%2C 4%2C 9kDa%2C pseudogene 2;gbkey=Gene;gene=NDUFA4P2;gene_biotype=pseudogene;gene_synonym=bcm1723,NDUFA4L;pseudo=true
+
+# these are discarded
+NC_012920.1	RefSeq	D_loop	16024	17145	.	-	.	ID=id1589545;gbkey=D-loop
+NC_000011.10	Curated Genomic	long_terminal_repeat	5293260	5294954	.	-	.	ID=id840823;Note=ERV-9;gbkey=LTR
