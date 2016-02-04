@@ -45,9 +45,6 @@ function initVars()
             // As of 5.1 (7534.50) this problem appears to have been fixed - unfortunately,
             // logs for 7/2011 show vast majority of safari users are pre-5.1 (5.0.5 is by far
             // the most common).
-            // KRR/JAT:
-            // As of 9.0.9, possibly earlier, the 3rd part of the version is included in the
-            // user agent string, so must be parsed out (and discarded)
             //
             // Early versions of Chrome had this problem too, but this problem went away
             // as of Chrome 5.0.335.1 (or possibly earlier).
@@ -3143,7 +3140,7 @@ function showExtToolDialog() {
         // copied from the hgTrackUi function below
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 600;
+        var popWidth     = 740;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3490,11 +3487,12 @@ var popUp = {
             autoOpen: false,
 
             buttons: { 
-                    'Apply': function () {
-                         popUp.uiDialogOk($('#pop'), popUp.trackName);
+                    // TODO: Enable when ready to deploy this feature
+                    //'Apply': function () {
+                         //popUp.uiDialogOk($('#pop'), popUp.trackName);
                          // thanks to JAT for this cleverness to keep button functioning
-                         popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
-                    },
+                         //popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                    //},
                     'OK': function() {
                         if ( ! popUp.trackDescriptionOnly )
                             popUp.uiDialogOk($('#pop'), popUp.trackName);
