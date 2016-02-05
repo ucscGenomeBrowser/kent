@@ -11438,11 +11438,38 @@ if (differentWord(nrl->note, "n/a"))
     {
     printf("<b>Other notes:</b> %s<br>\n", nrl->note);
     }
-printf("<b>OMIM:</b> <a href=\"");
-printEntrezOMIMUrl(stdout, sqlSigned(nrl->omimId));
-printf("\" target=_blank>%s</a><br>\n", nrl->omimId);
+if (differentWord(nrl->omimId, "n/a"))
+    {
+    printf("<b>OMIM:</b> <a href=\"");
+    printEntrezOMIMUrl(stdout, sqlSigned(nrl->omimId));
+    printf("\" target=_blank>%s</a><br>\n", nrl->omimId);
+    }
+if (differentWord(nrl->mrnaAcc, "n/a") && differentWord(nrl->mrnaAcc,nrl->id))
+    {
+    printf("<b>mRNA:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->mrnaAcc);
+    printf("%s</a><br>\n", nrl->mrnaAcc);
+    }
+if (differentWord(nrl->genbank, "n/a") && differentWord(nrl->genbank,nrl->id))
+    {
+    printf("<b>Genbank:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->genbank);
+    printf("%s</a><br>\n", nrl->genbank);
+    }
+if (differentWord(nrl->protAcc, "n/a"))
+    {
+    printf("<b>Protein:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/protein/%s\" target=_blank>", nrl->protAcc);
+    printf("%s</a><br>\n", nrl->protAcc);
+    }
+if (differentWord(nrl->hgnc, "n/a"))
+    {
+    printf("<b>HGNC:</b> ");
+    printf("<a href=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s\" target=_blank>", nrl->hgnc);
+    printf("%s</a><br>\n", nrl->hgnc);
+    }
 
-if (nrl->locusLinkId != 0)
+if (differentWord(nrl->locusLinkId, "n/a"))
     {
     printf("<b>Entrez Gene:</b> ");
     printf("<a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s\" TARGET=_blank>",
@@ -11461,21 +11488,26 @@ if (differentWord(nrl->name,"n/a"))
         printf("%s</a><br>\n", nrl->name);
         }
     }
-printf("<hr>\n");
-printf("Summary of <b>%s</b><br>\n%s<br><hr>\n", nrl->name, nrl->description);
+if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
+    {
+    printf("<B>Annotation Release:</B> <A href=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
+    }
 
-/* print the first section with info  */
-printf("<ul>\n");
+htmlHorizontalLine();
+printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
+htmlHorizontalLine();
+
+// printf("<ul>\n");
 // printf("<li>%s: %s</li>\n", "status", nrl->status);
 // printf("<li>%s: %s</li>\n", "name", nrl->name);
 // printf("<li>%s: %s</li>\n", "product", nrl->product);
-printf("<li>%s: %s</li>\n", "mrnaAcc", nrl->mrnaAcc);
-printf("<li>%s: %s</li>\n", "protAcc", nrl->protAcc);
+// printf("<li>%s: %s</li>\n", "mrnaAcc", nrl->mrnaAcc);
+// printf("<li>%s: %s</li>\n", "protAcc", nrl->protAcc);
 // printf("<li>%s: %s</li>\n", "locusLinkId", nrl->locusLinkId);
 // printf("<li>%s: %s</li>\n", "omimId", nrl->omimId);
-printf("<li>%s: %s</li>\n", "hgnc", nrl->hgnc);
-printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
-//printf("<li>%s: %s</li>\n", "pseudo", nrl->pseudo);
+// printf("<li>%s: %s</li>\n", "hgnc", nrl->hgnc);
+// printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
+// printf("<li>%s: %s</li>\n", "pseudo", nrl->pseudo);
 // printf("<li>%s: %s</li>\n", "gbkey", nrl->gbkey);
 // printf("<li>%s: %s</li>\n", "source", nrl->source);
 // printf("<li>%s: %s</li>\n", "gene_biotype", nrl->gene_biotype);
@@ -11483,14 +11515,7 @@ printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
 // printf("<li>%s: %s</li>\n", "ncrna_class", nrl->ncrna_class);
 // printf("<li>%s: %s</li>\n", "note", nrl->note);
 // printf("<li>%s: %s</li>\n", "description", nrl->description);
-
-if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
-    {
-    printf("<B>Annotation Release:</B> <A href=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
-    htmlHorizontalLine();
-    }
-
-printf("</tr>\n</table>\n");
+// printf ("</ul>\n");
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
