@@ -11377,18 +11377,18 @@ htmlHorizontalLine();
 return rl;
 }
 
-void doNcbiRefSeq(struct trackDb *tdb, char *rnaName)
+void doNcbiRefSeq(struct trackDb *tdb, char *itemName)
 /* Process click on a NCBI RefSeq gene. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *sqlRnaName = rnaName;
+char *sqlRnaName = itemName;
 struct ncbiRefSeqLink *nrl;
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, "%s - %s ", tdb->longLabel, rnaName);
+dyStringPrintf(dy, "%s - %s ", tdb->longLabel, itemName);
 
 struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
 if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
@@ -11400,7 +11400,7 @@ cartWebStart(cart, database, "%s", dy->string);
 sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in ncbiRefSeqLink table.", rnaName);
+    errAbort("Couldn't find %s in ncbiRefSeqLink table.", itemName);
 nrl = ncbiRefSeqLinkLoad(row);
 sqlFreeResult(&sr);
 
@@ -11516,6 +11516,20 @@ htmlHorizontalLine();
 // printf("<li>%s: %s</li>\n", "note", nrl->note);
 // printf("<li>%s: %s</li>\n", "description", nrl->description);
 // printf ("</ul>\n");
+
+// could also look for nrl->mrnaAcc here too if the itemName isn't found
+struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
+if (pslList)
+    {
+    printf ("<h4>there is alignment for %s</h4><br>\n", itemName);
+    printf("<H3>mRNA/Genomic Alignments</H3>");
+    int start = cartInt(cart, "o");
+    printAlignments(pslList, start, "ncbiRefSeqPsl", "ncbiRefSeqPsl", itemName);
+    }
+else
+    {
+    printf ("<h4>there is NO alignment for %s</h4><br>\n", itemName);
+    }
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
