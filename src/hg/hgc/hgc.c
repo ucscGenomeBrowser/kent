@@ -10994,39 +10994,6 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
-void prNcbiRefGeneInfo(struct sqlConnection *conn, char *rnaName,
-                   char *sqlRnaName, struct ncbiRefLink *rl, boolean isPredicted)
-/* print basic details information and links for a NCBI RefGene */
-{
-
-printf("<td valign=top nowrap>\n");
-printf("<H2>NCBI RefSeq Gene %s</H2>\n", rl->id);
-printf("<B>RefSeq:</B> <A HREF=\"");
-printEntrezNucleotideUrl(stdout, rl->id);
-printf("\" TARGET=_blank>%s</A><BR>", rl->id);
-
-if (!isEmpty(rl->gene))
-    {
-    printf("<B>Gene name:</B> %s<BR>\n", rl->gene);
-    }
-if (!isEmpty(rl->gbKey))
-    {
-    printf("<B>Molecule type:</B> %s<BR>\n", rl->gbKey);
-    }
-if (!isEmpty(rl->dbXref) && startsWith("GeneID:", rl->dbXref))
-    {
-    char *geneId = strchr(rl->dbXref, ':');
-    geneId++;
-    printf("<B>NCBI Gene:</B> <A HREF=\"");
-    printNcbiGeneUrl(stdout, geneId);
-    printf("\" TARGET=_blank>%s</A><BR>", geneId);
-    }
-if (!isEmpty(rl->product))
-    {
-    printf("<B>Product:</B> %s<BR>\n", rl->product);
-    }
-}
-
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
