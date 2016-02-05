@@ -1,7 +1,7 @@
-# Create samples.txt and matrix.txt for expData from GTEx latest release
+# Create samples.txt and matrix.txt for expData from GTEx V4 release (January 2014)
 # from www.gtexportal.org/home/datasets
 
-# Gene expression levels  in multiple tissues & donors
+# Gene expression levels in multiple tissues & donors
 
 # Samples
 

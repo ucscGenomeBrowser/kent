@@ -17,7 +17,7 @@
 struct gtexGeneExtras 
 /* Track info */
     {
-    char *version;              /* Trailing track name, e.g. 'V6' */
+    char *version;              /* Suffix to table name, e.g. 'V6' */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -305,7 +305,6 @@ extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FAL
 extras->maxMedian = gtexMaxMedianScore(extras->version);
 
 /* Get geneModels in range */
-//TODO: version the table name, move to lib
 char buf[256];
 char *modelTable = "gtexGeneModel";
 safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "");

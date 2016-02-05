@@ -20,8 +20,11 @@
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "gtexTissueMedian.h"
 #include "gtexGeneBed.h"
+#include "gtexTranscript.h"
 
 #define GTEX_TISSUE_MEDIAN_TABLE  "gtexTissueMedian"
+#define GTEX_TRANSCRIPT_TABLE  "gtexTranscript"
+#define GTEX_GENE_MODEL_TABLE  "gtexGeneModel"
 
 // Versions are used to suffix tablenames
 char *gtexVersion = "";
@@ -86,59 +89,21 @@ struct sqlResult *sr;
 char query[128];
 
 struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *connFixed = sqlConnect("hgFixed");
 
-// Get canonical transcripts from known genes
-verbose(2, "Reading knownCanonical table\n");
-struct hash *kcHash = hashNew(0);
-sqlSafef(query, sizeof(query),"SELECT transcript FROM knownCanonical");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+// Get transcript for each gene
+verbose(2, "Reading gtexTranscript table\n");
+struct hash *transcriptHash = newHash(0);
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TRANSCRIPT_TABLE, gtexVersion);
+struct gtexTranscript *tx = NULL, *transcripts = gtexTranscriptLoadByQuery(connFixed, query);
+for (tx = transcripts; tx != NULL; tx = tx->next)
     {
-    char *ucscId = cloneString(row[0]);
-    chopSuffix(ucscId);
-    verbose(3, "...Adding ucscId %s to kcHash\n", ucscId);
-    hashAdd(kcHash, ucscId, NULL);
+    hashAdd(transcriptHash, tx->geneId, tx->transcriptName);
+    verbose(3, "...Adding geneId %s transcript %s to transcriptHash\n", 
+                tx->geneId, tx->transcriptName);
     }
 
-// Map to Ensembl transcript IDs
-verbose(2, "Reading knownToGencode table\n");
-struct hash *tcHash = hashNew(0);
-sqlSafef(query, sizeof(query),"SELECT name, value FROM knownToGencode%s", gencodeVersion);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *ucscId = cloneString(row[0]);
-    chopSuffix(ucscId);
-    verbose(3, "...Looking up ucscId %s in kcHash \n", ucscId);
-    if (!hashLookup(kcHash, ucscId))
-        // not canonical
-        continue;
-    char *ensTranscriptId = cloneString(row[1]);
-    chopSuffix(ensTranscriptId);
-    verbose(3, "...Adding transcriptId %s to tcHash\n", ensTranscriptId);
-    hashAdd(tcHash, ensTranscriptId, NULL);
-    }
-sqlFreeResult(&sr);
-
-// Get Ensembl gene IDs for canonical transcripts
-verbose(2, "Reading ensGene table\n");
-struct hash *geneHash = newHash(0);
-struct geneInfo *geneInfo;
-sqlSafef(query, sizeof(query),"SELECT chrom, txStart, txEnd, strand, name, name2 FROM ensGene");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    geneInfo = geneInfoLoad(row);
-    verbose(3, "...Looking up transcriptId %s in tcHash\n", geneInfo->transcriptId);
-    if (!hashLookup(tcHash, geneInfo->transcriptId))
-        // not canonical
-        continue;
-    hashAdd(geneHash, geneInfo->geneId, geneInfo);
-    verbose(3, "...Adding geneId %s to geneHash\n", geneInfo->geneId);
-    }
-sqlFreeResult(&sr);
-
-// Get gene name and transcript status
+// Get gene name, transcript ID and transcript status from GENCODE attributes table
 struct hash *gaHash = newHash(0);
 struct wgEncodeGencodeAttrs *ga;
 verbose(2, "Reading wgEncodeGencodeAttrs table\n");
@@ -147,21 +112,29 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ga = wgEncodeGencodeAttrsLoad(row);
+#ifdef HAS_TRANSCRIPT_ID
+    // need to notify GTEx DCC that model file lacks transcriptID's
     chopSuffix(ga->transcriptId);
     verbose(3, "...Adding transcriptId %s to gaHash\n", ga->transcriptId);
     hashAdd(gaHash, ga->transcriptId, ga);
+#else
+    verbose(3, "...Adding transcriptName %s for gene %s to gaHash\n", 
+                ga->transcriptName, ga->geneName);
+    hashAdd(gaHash, ga->transcriptName, ga);
+#endif
     }
 sqlFreeResult(&sr);
 
 // Get GTEx gene models
 struct hash *modelHash = newHash(0);
 struct genePred *gp;
-verbose(2, "Reading gtexGeneModel table\n");
-sqlSafef(query, sizeof(query), "SELECT * from gtexGeneModel%s", gtexVersion);
+sqlSafef(query, sizeof(query), "SELECT * from %s%s", GTEX_GENE_MODEL_TABLE, gtexVersion);
+verbose(2, "Reading %s%s table\n", GTEX_GENE_MODEL_TABLE, gtexVersion);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    gp = genePredLoad(row);
+    /* skip bin */
+    gp = genePredLoad(row+1);
     verbose(3, "...Adding gene model %s to modelHash\n", gp->name);
     hashAdd(modelHash, gp->name, gp);
     }
@@ -171,10 +144,10 @@ sqlFreeResult(&sr);
 verbose(2, "Reading gtexTissueMedian table\n");
 struct gtexGeneBed *geneBed, *geneBeds = NULL;
 struct gtexTissueMedian *gtexData;
-struct sqlConnection *connFixed = sqlConnect("hgFixed");
 sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, gtexVersion);
 sr = sqlGetResult(connFixed, query);
 float maxVal = 0;
+verbose(3, "transcriptHashSize = %d\n", hashNumEntries(transcriptHash));
 while ((row = sqlNextRow(sr)) != NULL)
     {
     gtexData = gtexTissueMedianLoad(row);
@@ -192,29 +165,24 @@ while ((row = sqlNextRow(sr)) != NULL)
         continue;
         }
     gp = el->val;
-    geneBed->chrom = gp->chrom;
+    geneBed->chrom = cloneString(gp->chrom);
     geneBed->chromStart = gp->txEnd;
     geneBed->chromEnd = gp->txEnd;
     safecpy(geneBed->strand, sizeof(geneBed->strand), gp->strand);
 
-    // Get a canonical transcript
-    verbose(3, "...Looking up geneId %s in geneHash \n", geneId);
-    chopSuffix(geneId);
-    el = hashLookup(geneHash, geneId);
-    // TODO:  Handle genes not in canonical table
+    // Get transcript for gene
+    verbose(3, "...Looking up gene %s in transcriptHash\n", geneId);
+    el = hashLookup(transcriptHash, geneId);
     if (el == NULL)
         {
-        warn("Can't find gene %s in geneHash", geneId);
+        warn("Can't find gene %s in transcriptHash", geneId);
         continue;
         }
-    geneInfo = el->val;
-    char *transcriptId = geneInfo->transcriptId;
-    geneBed->transcriptId = transcriptId;
-
-    struct wgEncodeGencodeAttrs *ga = hashFindVal(gaHash, transcriptId);
+    char *transcriptName = (char *)(el->val);
+    struct wgEncodeGencodeAttrs *ga = hashFindVal(gaHash, transcriptName);
     if (ga == NULL)
         {
-        warn("Can't find transcript %s in wgEncodeGencodeAttrs%s", transcriptId, gtexVersion);
+        warn("Can't find transcript %s in wgEncodeGencodeAttrs%s", transcriptName, gtexVersion);
         continue;
         }
      int i;
@@ -223,8 +191,9 @@ while ((row = sqlNextRow(sr)) != NULL)
         for (i=0; i<geneBed->expCount; i++)
             maxVal = (geneBed->expScores[i] > maxVal ? geneBed->expScores[i] : maxVal);
         }
-    geneBed->transcriptClass = ga->transcriptClass;
     geneBed->name = ga->geneName;
+    geneBed->transcriptId = ga->transcriptId;
+    geneBed->transcriptClass = ga->transcriptClass;
     slAddHead(&geneBeds, geneBed);
     }
 sqlFreeResult(&sr);
