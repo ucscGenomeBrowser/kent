@@ -148,8 +148,8 @@ html primateChainNet
         type chain calJac3
         otherDb calJac3
 
-include chainNetMicMur1.ra beta,public
-include chainNetMicMur2.ra alpha
+include chainNetMicMur1.ra alpha,beta
+include chainNetMicMur2.ra alpha,beta,public
 
         track chainTarSyr2
         subTrack primateChainNetViewchain off
