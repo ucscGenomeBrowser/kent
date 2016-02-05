@@ -17,13 +17,13 @@
 //     cart.flush();
 //
 // In model's UI handler for when user changes some input or clicks on a button:
-//     cart.send({ cgiVars: { someCartVar: newVal },
+//     cart.send({ cgiVar: { someCartVar: newVal },
 //                 doSomething: { what: 'etc' }
 //               },
 //               handleServerResponse, handleServerFailure);
 //
 // In model's UI handler for when user uploads a file:
-//     cart.uploadFile({ cgiVars: { someCartVar: newVal },
+//     cart.uploadFile({ cgiVar: { someCartVar: newVal },
 //                       doSomething: { what: 'etc' }
 //                     },
 //                     jqueryFileInput,
