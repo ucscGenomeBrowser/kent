@@ -5455,7 +5455,6 @@ tablesIgnored hg19
     bacEndPairsBad
     bamAllNumtSSorted
     coriellDelDup
-    gwipsvizRiboseq
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain
@@ -5816,6 +5815,7 @@ tablesIgnored $hg
     fox2ClipSeqDensityReverseStrand
     geneTests
     grcIncidentDb
+    gwipsvizRiboseq
     haplotype
     hapMapRelease24CEURecombMap
     hapMapRelease24CombinedRecombMap
