@@ -26,6 +26,9 @@
 #define GTEX_TRANSCRIPT_TABLE  "gtexTranscript"
 #define GTEX_GENE_MODEL_TABLE  "gtexGeneModel"
 
+#define GENCODE_COMP_TABLE      "wgEncodeGencodeComp"
+#define GENCODE_PSEUDO_TABLE    "wgEncodeGencodePseudoGene"
+
 // Versions are used to suffix tablenames
 char *gtexVersion = "";
 char *gencodeVersion = "V19";
@@ -45,6 +48,8 @@ errAbort(
   "    -gtexVersion=VN (default \'%s\')\n"
   "    -gencodeVersion=VNN (default \'%s\')\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
+  " NOTE: if gtexGeneModel<version> table doesn't exist, this program will create a .tab file suitable\n"
+  "       for loading, and then quit.  Inspect the model file, load it, then re-run."
   , gtexVersion, gencodeVersion);
 }
 
@@ -55,30 +60,85 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 
-struct geneInfo 
-    {
-    struct geneInfo *next;
-    char *chrom;
-    uint chromStart;
-    uint chromEnd;
-    char strand[2];
-    char *transcriptId;
-    char *geneId;
-    };
-
-struct geneInfo *geneInfoLoad(char **row)
+void loadGeneModelTable(struct sqlConnection *conn, struct hash *transcriptHash, struct hash *gaHash)
+/* Load gtexGeneModel table */
 {
-struct geneInfo *geneInfo;
-AllocVar(geneInfo);
-geneInfo->chrom = cloneString(row[0]);
-geneInfo->chromStart = sqlUnsigned(row[1]);
-geneInfo->chromEnd = sqlUnsigned(row[2]);
-strcpy(geneInfo->strand, row[3]);
-geneInfo->transcriptId = cloneString(row[4]);
-chopSuffix(geneInfo->transcriptId);
-geneInfo->geneId = cloneString(row[5]);
-chopSuffix(geneInfo->geneId);
-return geneInfo;
+// Load up gene preds from GENCODE
+verbose(2, "Reading GENCODE tables\n");
+struct hash *gencodeHash = newHash(0);
+struct genePred *gp = NULL;
+char query[256];
+
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GENCODE_COMP_TABLE, gencodeVersion);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredExtLoad(row+1, 12);
+    verbose(3, "...Adding genePred %s to gencodeHash\n", gp->name);
+    hashAdd(gencodeHash, gp->name, gp);
+    }
+
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GENCODE_PSEUDO_TABLE, gencodeVersion);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    gp = genePredExtLoad(row+1, 10);
+    verbose(3, "...Adding genePred %s to gencodeHash\n", gp->name);
+    hashAdd(gencodeHash, gp->name, gp);
+    }
+// Get transcript ID's of all GTEx genes, and use to retrieve genePred
+struct hashCookie cookie = hashFirst(transcriptHash);
+struct hashEl *el;
+struct genePred *gps = NULL;
+while ((el = hashNext(&cookie)) != NULL)
+    {
+    AllocVar(gp);
+    gp->name = el->name;
+    char *transcriptName = (char *)el->val;
+    verbose(3, "...Looking up transcriptId for name %s in gaHash\n", transcriptName);
+    struct wgEncodeGencodeAttrs *ga = hashFindVal(gaHash, transcriptName);
+    if (ga == NULL)
+        {
+        warn("Can't find transcript %s in wgEncodeGencodeAttrs%s", transcriptName, gtexVersion);
+        continue;
+        }
+    verbose(3, "...Looking up transcriptId %s for name %s in gencodeHash\n", ga->transcriptId, transcriptName);
+    struct genePred *gpGencode = hashFindVal(gencodeHash, ga->transcriptId);
+    if (gpGencode == NULL)
+        {
+        warn("Can't find transcript %s in gencodeHash", ga->transcriptId);
+        continue;
+        }
+    gp->chrom = cloneString(gpGencode->chrom);
+    strcpy(gp->strand, gpGencode->strand);
+    gp->txStart = gpGencode->txStart;
+    gp->txEnd = gpGencode->txEnd;
+    gp->cdsStart = gpGencode->cdsStart;
+    gp->cdsEnd = gpGencode->cdsEnd;
+    gp->exonCount = gpGencode->exonCount;
+    AllocArray(gp->exonStarts, gp->exonCount);
+    AllocArray(gp->exonEnds, gp->exonCount);
+    int i;
+    for (i=0; i<gp->exonCount; i++)
+        {
+        gp->exonStarts[i] = gpGencode->exonStarts[i];
+        gp->exonEnds[i] = gpGencode->exonEnds[i];
+        }
+    slAddHead(&gps, gp);
+    }
+slSort(&gps, genePredCmp);
+char buf[256];
+safef(buf, sizeof buf, "%s%s.%s.genePred", GTEX_GENE_MODEL_TABLE, gtexVersion, database);
+if (fopen(buf, "r") != NULL)
+    errAbort("File %s exists\n", buf);
+FILE *f = fopen(buf, "w");
+verbose(2, "Writing model file\n");
+if (f == NULL)
+    errAbort("Can't create file %s\n", buf);
+for (gp = gps; gp != NULL; gp = gp->next)
+    genePredOutput(gp, f, '\t', '\n');
+fclose(f);
 }
 
 void hgGtexGeneBed(char *database, char *table)
@@ -87,6 +147,7 @@ void hgGtexGeneBed(char *database, char *table)
 char **row;
 struct sqlResult *sr;
 char query[128];
+char buf[256];
 
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *connFixed = sqlConnect("hgFixed");
@@ -126,10 +187,18 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 
 // Get GTEx gene models
+// If table doesn't exist, create it, using transcriptHash, gaHash
+// and GENCODE gene tables
+safef(buf, sizeof buf, "%s%s", GTEX_GENE_MODEL_TABLE, gtexVersion);
+if (!sqlTableExists(conn, buf))
+    {
+    loadGeneModelTable(conn, transcriptHash, gaHash);
+    exit(0);
+    }
 struct hash *modelHash = newHash(0);
 struct genePred *gp;
-sqlSafef(query, sizeof(query), "SELECT * from %s%s", GTEX_GENE_MODEL_TABLE, gtexVersion);
-verbose(2, "Reading %s%s table\n", GTEX_GENE_MODEL_TABLE, gtexVersion);
+sqlSafef(query, sizeof(query), "SELECT * from %s", buf);
+verbose(2, "Reading %s table\n", buf);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -166,7 +235,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         }
     gp = el->val;
     geneBed->chrom = cloneString(gp->chrom);
-    geneBed->chromStart = gp->txEnd;
+    geneBed->chromStart = gp->txStart;
     geneBed->chromEnd = gp->txEnd;
     safecpy(geneBed->strand, sizeof(geneBed->strand), gp->strand);
 
