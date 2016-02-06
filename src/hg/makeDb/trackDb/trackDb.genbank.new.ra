@@ -24,16 +24,16 @@ type genePred
 baseColorUseCds given
 #html refGene.new
 
-track refGene
-shortLabel RefSeq Genes
-longLabel RefSeq Genes
-group genes
-visibility dense
-color 12,12,120
-type genePred refPep refMrna
-idXref refLink mrnaAcc name
-baseColorUseCds given
-html refGene.new
+# track refGene
+# shortLabel UCSC RefSeq
+# longLabel Existing UCSC RefSeq Genes track
+# group genes
+# visibility dense
+# color 12,12,120
+# type genePred refPep refMrna
+# idXref refLink mrnaAcc name
+# baseColorUseCds given
+# html refGene.new
 
 track mrna
 table all_mrna
