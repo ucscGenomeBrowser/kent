@@ -11494,42 +11494,31 @@ if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
     }
 
 htmlHorizontalLine();
-printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
-htmlHorizontalLine();
+if (differentWord("n/a", nrl->description))
+    {
+    printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
+    htmlHorizontalLine();
+    }
 
-// printf("<ul>\n");
-// printf("<li>%s: %s</li>\n", "status", nrl->status);
-// printf("<li>%s: %s</li>\n", "name", nrl->name);
-// printf("<li>%s: %s</li>\n", "product", nrl->product);
-// printf("<li>%s: %s</li>\n", "mrnaAcc", nrl->mrnaAcc);
-// printf("<li>%s: %s</li>\n", "protAcc", nrl->protAcc);
-// printf("<li>%s: %s</li>\n", "locusLinkId", nrl->locusLinkId);
-// printf("<li>%s: %s</li>\n", "omimId", nrl->omimId);
-// printf("<li>%s: %s</li>\n", "hgnc", nrl->hgnc);
-// printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
-// printf("<li>%s: %s</li>\n", "pseudo", nrl->pseudo);
-// printf("<li>%s: %s</li>\n", "gbkey", nrl->gbkey);
-// printf("<li>%s: %s</li>\n", "source", nrl->source);
-// printf("<li>%s: %s</li>\n", "gene_biotype", nrl->gene_biotype);
-// printf("<li>%s: %s</li>\n", "gene_synonym", nrl->gene_synonym);
-// printf("<li>%s: %s</li>\n", "ncrna_class", nrl->ncrna_class);
-// printf("<li>%s: %s</li>\n", "note", nrl->note);
-// printf("<li>%s: %s</li>\n", "description", nrl->description);
-// printf ("</ul>\n");
 
-// could also look for nrl->mrnaAcc here too if the itemName isn't found
 struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
+// if the itemName isn't found, it might be found as the nrl->mrnaAcc
+if (! pslList)
+    pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
 if (pslList)
     {
-    printf ("<h4>there is alignment for %s</h4><br>\n", itemName);
-    printf("<H3>mRNA/Genomic Alignments</H3>");
     int start = cartInt(cart, "o");
+    printf("<H3>mRNA/Genomic Alignments</H3>");
     printAlignments(pslList, start, "ncbiRefSeqPsl", "ncbiRefSeqPsl", itemName);
     }
 else
     {
     printf ("<h4>there is NO alignment for %s</h4><br>\n", itemName);
     }
+
+htmlHorizontalLine();
+
+showGenePos(itemName, tdb);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
