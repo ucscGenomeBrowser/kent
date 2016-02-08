@@ -99,6 +99,7 @@
 #include "borkPseudoHom.h"
 #include "sanger22extra.h"
 #include "ncbiRefLink.h"
+#include "ncbiRefSeqLink.h"
 #include "refLink.h"
 #include "hgConfig.h"
 #include "estPair.h"
@@ -10993,39 +10994,6 @@ if ((xenoDb != NULL) && hDbIsActive(xenoDb) && hTableExists(xenoDb, "refSeqAli")
 freeMem(org);
 }
 
-void prNcbiRefGeneInfo(struct sqlConnection *conn, char *rnaName,
-                   char *sqlRnaName, struct ncbiRefLink *rl, boolean isPredicted)
-/* print basic details information and links for a NCBI RefGene */
-{
-
-printf("<td valign=top nowrap>\n");
-printf("<H2>NCBI RefSeq Gene %s</H2>\n", rl->id);
-printf("<B>RefSeq:</B> <A HREF=\"");
-printEntrezNucleotideUrl(stdout, rl->id);
-printf("\" TARGET=_blank>%s</A><BR>", rl->id);
-
-if (!isEmpty(rl->gene))
-    {
-    printf("<B>Gene name:</B> %s<BR>\n", rl->gene);
-    }
-if (!isEmpty(rl->gbKey))
-    {
-    printf("<B>Molecule type:</B> %s<BR>\n", rl->gbKey);
-    }
-if (!isEmpty(rl->dbXref) && startsWith("GeneID:", rl->dbXref))
-    {
-    char *geneId = strchr(rl->dbXref, ':');
-    geneId++;
-    printf("<B>NCBI Gene:</B> <A HREF=\"");
-    printNcbiGeneUrl(stdout, geneId);
-    printf("\" TARGET=_blank>%s</A><BR>", geneId);
-    }
-if (!isEmpty(rl->product))
-    {
-    printf("<B>Product:</B> %s<BR>\n", rl->product);
-    }
-}
-
 void prRefGeneInfo(struct sqlConnection *conn, char *rnaName,
                    char *sqlRnaName, struct refLink *rl, boolean isXeno)
 /* print basic details information and links for a RefGene */
@@ -11409,83 +11377,159 @@ htmlHorizontalLine();
 return rl;
 }
 
-void doNcbiRefGene(struct trackDb *tdb, char *rnaName)
+void doNcbiRefSeq(struct trackDb *tdb, char *itemName)
 /* Process click on a NCBI RefSeq gene. */
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *sqlRnaName = rnaName;
-struct ncbiRefLink *nrl;
-boolean isPredicted = sameString(tdb->table, "ncbiRefPredicted");
-int left = cartInt(cart, "l");
-int right = cartInt(cart, "r");
-char *chrom = cartString(cart, "c");
-char noDot[1024];
+char *sqlRnaName = itemName;
+struct ncbiRefSeqLink *nrl;
 
 struct dyString *dy = newDyString(1024);
-if (isPredicted)
-    dyStringPrintf(dy, "NCBI Predicted RefSeq Gene");
-else
-    dyStringPrintf(dy, "NCBI Curated RefSeq Gene");
+dyStringPrintf(dy, "%s - %s ", tdb->longLabel, itemName);
 
 struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
 if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
     dyStringPrintf(dy, "- Release %s\n", trackVersion->version);
 
 cartWebStart(cart, database, "%s", dy->string);
-safecpy(noDot, sizeof noDot,  rnaName);
-char *ptr = strchr(noDot, '.');
-if (ptr)
-    *ptr++ = 0;
-
-// get info from Genbank (if any)
-struct refLink *rl = printRefSeqInfo( conn, tdb, noDot, ptr);
-
-/* Make sure to escape single quotes for DB parseability */
-if (strchr(rnaName, '\''))
-    {
-    sqlRnaName = replaceChars(rnaName, "'", "''");
-    }
 
 /* get refLink entry */
-sqlSafef(query, sizeof(query), "select * from ncbiRefLink where id = '%s'", sqlRnaName);
+sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", sqlRnaName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
-    errAbort("Couldn't find %s in ncbiRefLink table.", rnaName);
-nrl = ncbiRefLinkLoad(row);
+    errAbort("Couldn't find %s in ncbiRefSeqLink table.", itemName);
+nrl = ncbiRefSeqLinkLoad(row);
 sqlFreeResult(&sr);
 
-/* print the first section with info  */
-printf("<table border=0>\n<tr>\n");
-if (rl == NULL)
+printf("<h2>RefSeq Gene %s</h2><br>\n", nrl->name);
+printf("<b>RefSeq:</b> <a href=\"");
+printEntrezNucleotideUrl(stdout, nrl->id);
+printf("\" target=_blank>%s</a>", nrl->id);
+printf("&nbsp;&nbsp;<b>Status: </b>%s<br>\n", nrl->status);
+printf("<b>Description:</b> %s<br>\n", nrl->product);
+if (differentWord(nrl->gbkey, "n/a"))
     {
-    prNcbiRefGeneInfo(conn, rnaName, sqlRnaName, nrl, isPredicted);
-    htmlHorizontalLine();
+    printf("<b>Molecule type:</b> %s<br>\n", nrl->gbkey);
+    }
+if (differentWord(nrl->pseudo, "n/a"))
+    {
+    printf("<b>Pseudogene:</b> %s<br>\n", nrl->pseudo);
+    }
+if (differentWord(nrl->source, "n/a"))
+    {
+    printf("<b>Source:</b> %s<br>\n", nrl->source);
+    }
+if (differentWord(nrl->gene_biotype, "n/a"))
+    {
+    printf("<b>Biotype:</b> %s<br>\n", nrl->gene_biotype);
+    }
+if (differentWord(nrl->gene_synonym, "n/a"))
+    {
+    printf("<b>Synonyms:</b> %s<br>\n", nrl->gene_synonym);
+    }
+if (differentWord(nrl->ncrna_class, "n/a"))
+    {
+    printf("<b>ncRNA class:</b> %s<br>\n", nrl->ncrna_class);
+    }
+if (differentWord(nrl->note, "n/a"))
+    {
+    printf("<b>Other notes:</b> %s<br>\n", nrl->note);
+    }
+if (differentWord(nrl->omimId, "n/a"))
+    {
+    printf("<b>OMIM:</b> <a href=\"");
+    printEntrezOMIMUrl(stdout, sqlSigned(nrl->omimId));
+    printf("\" target=_blank>%s</a><br>\n", nrl->omimId);
+    }
+if (differentWord(nrl->mrnaAcc, "n/a") && differentWord(nrl->mrnaAcc,nrl->id))
+    {
+    printf("<b>mRNA:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->mrnaAcc);
+    printf("%s</a><br>\n", nrl->mrnaAcc);
+    }
+if (differentWord(nrl->genbank, "n/a") && differentWord(nrl->genbank,nrl->id))
+    {
+    printf("<b>Genbank:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->genbank);
+    printf("%s</a><br>\n", nrl->genbank);
+    }
+if (differentWord(nrl->protAcc, "n/a"))
+    {
+    printf("<b>Protein:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/protein/%s\" target=_blank>", nrl->protAcc);
+    printf("%s</a><br>\n", nrl->protAcc);
+    }
+if (differentWord(nrl->hgnc, "n/a"))
+    {
+    printf("<b>HGNC:</b> ");
+    printf("<a href=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s\" target=_blank>", nrl->hgnc);
+    printf("%s</a><br>\n", nrl->hgnc);
     }
 
+if (differentWord(nrl->locusLinkId, "n/a"))
+    {
+    printf("<b>Entrez Gene:</b> ");
+    printf("<a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s\" TARGET=_blank>",
+           nrl->locusLinkId);
+    printf("%s</a><br>\n", nrl->locusLinkId);
+    }
+
+if (differentWord(nrl->name,"n/a"))
+    {
+    printGeneCards(nrl->name);
+    if (startsWith("hg", database))
+        {
+        printf("<b>AceView:</b> ");
+        printf("<a href = \"http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" target=_blank>",
+	   nrl->name);
+        printf("%s</a><br>\n", nrl->name);
+        }
+    }
 if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
     {
-    printf("<B>Annotation Release:</B> <A HREF=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
-    htmlHorizontalLine();
+    printf("<B>Annotation Release:</B> <A href=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
     }
 
-printf("</tr>\n</table>\n");
+htmlHorizontalLine();
+printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
+htmlHorizontalLine();
 
-struct palInfo *palInfo = NULL;
+// printf("<ul>\n");
+// printf("<li>%s: %s</li>\n", "status", nrl->status);
+// printf("<li>%s: %s</li>\n", "name", nrl->name);
+// printf("<li>%s: %s</li>\n", "product", nrl->product);
+// printf("<li>%s: %s</li>\n", "mrnaAcc", nrl->mrnaAcc);
+// printf("<li>%s: %s</li>\n", "protAcc", nrl->protAcc);
+// printf("<li>%s: %s</li>\n", "locusLinkId", nrl->locusLinkId);
+// printf("<li>%s: %s</li>\n", "omimId", nrl->omimId);
+// printf("<li>%s: %s</li>\n", "hgnc", nrl->hgnc);
+// printf("<li>%s: %s</li>\n", "genbank", nrl->genbank);
+// printf("<li>%s: %s</li>\n", "pseudo", nrl->pseudo);
+// printf("<li>%s: %s</li>\n", "gbkey", nrl->gbkey);
+// printf("<li>%s: %s</li>\n", "source", nrl->source);
+// printf("<li>%s: %s</li>\n", "gene_biotype", nrl->gene_biotype);
+// printf("<li>%s: %s</li>\n", "gene_synonym", nrl->gene_synonym);
+// printf("<li>%s: %s</li>\n", "ncrna_class", nrl->ncrna_class);
+// printf("<li>%s: %s</li>\n", "note", nrl->note);
+// printf("<li>%s: %s</li>\n", "description", nrl->description);
+// printf ("</ul>\n");
 
-if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+// could also look for nrl->mrnaAcc here too if the itemName isn't found
+struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
+if (pslList)
     {
-    AllocVar(palInfo);
-    palInfo->chrom = chrom;
-    palInfo->left = left;
-    palInfo->right = right;
-    palInfo->rnaName = rnaName;
+    printf ("<h4>there is alignment for %s</h4><br>\n", itemName);
+    printf("<H3>mRNA/Genomic Alignments</H3>");
+    int start = cartInt(cart, "o");
+    printAlignments(pslList, start, "ncbiRefSeqPsl", "ncbiRefSeqPsl", itemName);
     }
-
-geneShowPosAndLinksPal(nrl->id, NULL, tdb, NULL, "htcTranslatedProtein",
-		    "htcGeneMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
+else
+    {
+    printf ("<h4>there is NO alignment for %s</h4><br>\n", itemName);
+    }
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -24937,9 +24981,12 @@ else if (sameWord(table, "knownGene"))
     {
     doKnownGene(tdb, item);
     }
-else if (sameWord(table, "ncbiRefPredicted") || sameWord(table, "ncbiRefCurated") )
+else if (sameWord(table, "ncbiRefSeq") ||
+         sameWord(table, "ncbiRefSeqCurated") ||
+         sameWord(table, "ncbiRefSeqPredicted") ||
+         sameWord(table, "ncbiRefSeqOther") )
     {
-    doNcbiRefGene(tdb, item);
+    doNcbiRefSeq(tdb, item);
     }
 else if (sameWord(table, "refGene") )
     {

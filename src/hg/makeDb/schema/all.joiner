@@ -5000,6 +5000,16 @@ identifier ncbiGene
     $eboVir.ncbiGene.chrom dupeOk
     $eboVir.chromInfo.chrom
 
+identifier ncbiRefSeq
+"NCBI RefSeq gene track"
+    hg38.ncbiRefSeq.name dupeOk
+    hg38.ncbiRefSeqLink.id
+    hg38.ncbiRefSeqCurated.name
+    hg38.ncbiRefSeqPredicted.name
+    hg38.ncbiRefSeqOther.name
+    hg38.ncbiRefSeqPsl.qName
+    hg38.seqNcbiRefSeq.acc
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -5455,7 +5465,6 @@ tablesIgnored hg19
     bacEndPairsBad
     bamAllNumtSSorted
     coriellDelDup
-    gwipsvizRiboseq
     lincRNAsCTAdipose
     lincRNAsCTAdrenal
     lincRNAsCTBrain
@@ -5816,6 +5825,7 @@ tablesIgnored $hg
     fox2ClipSeqDensityReverseStrand
     geneTests
     grcIncidentDb
+    gwipsvizRiboseq
     haplotype
     hapMapRelease24CEURecombMap
     hapMapRelease24CombinedRecombMap

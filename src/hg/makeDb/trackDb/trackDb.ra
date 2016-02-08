@@ -2905,66 +2905,12 @@ track ncbiRefOverlap
 shortLabel NCBI Overlaps
 longLabel NCBI Gene Annotations with Exon Overlaps
 group genes
-visibility pack
+visibility hide
 priority 1
 color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
-
-track ncbiGene
-shortLabel NCBI RefSeq
-longLabel NCBI RefSeq Genes
-compositeTrack on
-group genes
-visibility hide
-type genePred 
-baseColorUseCds given
-noInherit on
-baseColorDefault genomicCodons
-subGroup1 view Views curated=Curated predicted=Predicted
-
-    track ncbiRefCuratedView
-    shortLabel Curated
-    view curated
-    visibility pack
-    color 16,93,235
-    parent ncbiGene
-
-	track ncbiRefCurated
-	shortLabel RefSeq Curated
-        subGroups view=curated
-	longLabel  RefSeq Curated (NM_* and NR_*)
-	visibility pack
-	parent ncbiRefCuratedView
-
-    track ncbiRefPredictedView
-    shortLabel Predicted
-    view predicted
-    visibility hide
-    parent ncbiGene
-    color 48,168,219
-    spectrum on
-
-	track ncbiRefPredicted
-	shortLabel RefSeq Predicted
-        subGroups view=predicted
-	longLabel  RefSeq Predicted (XM_* and XR_*)
-	parent ncbiRefPredictedView
-
-#itemDetailsHtmlTable geneDesc
-#url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20%[
-#urlLabel muPIT protein structures
-
-#        track ucscGenePfam
-#        shortLabel Pfam in UCSC Gene
-#        longLabel Pfam Domains in UCSC Genes
-#        parent spUniprot
-#        group genes
-#        type bed 12
-#        color 20,0,250
-#        url http://pfam.sanger.ac.uk/family/$$
-#        release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1
@@ -3020,96 +2966,136 @@ searchMethod fuzzy
 termRegex g[0-9]+(\.t[0-9]+)?
 searchPriority 50
 
-track xNcbiRefSeq
+track refSeqComposite
+release alpha
 compositeTrack on
-shortLabel xNCBI RefSeq
+shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility hide
+visibility pack
 color 16,93,235
 type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 noInherit on
-subGroup1 view Views genes=Genes alignments=Alignments curated=Curated predicted=Predicted other=Other
+subGroup1 view Views aGenes=Genes curated=Curated predicted=Predicted xOther=Other zAlignments=Alignments
+html refGene.new
 
     track ncbiRefGenesView
     shortLabel NCBI RefSeq genes, all genes, curated, predicted and other
-    view genes
+    view aGenes
     visibility pack
     color 16,93,235
-    parent xNcbiRefSeq
+    parent refSeqComposite
 
 	track ncbiRefSeq
-	shortLabel NCBI RefSeq genes
-        subGroups view=genes
-        longLabel RefSeq gene predictions from NCBI
+        parent ncbiRefGenesView on
+        shortLabel All RefSeq
+        subGroups view=aGenes
+        longLabel All RefSeq annotations from NCBI
 	visibility pack
-	parent ncbiRefGenesView
+        html refGene.new
+        priority 1
 
-        track ncbiRefSeqBed
-	shortLabel bed file representation of the GFF3 file
-        subGroups view=genes
-        longLabel bed file representation of the GFF3 file
-	visibility pack
-        type bed 6 .
-	parent ncbiRefGenesView
+#        track ncbiRefSeqBed
+#	parent ncbiRefGenesView
+#	shortLabel bed file representation of the GFF3 file
+#        subGroups view=aGenes
+#        longLabel bed file representation of the GFF3 file
+#	visibility pack
+#        type bed 6 .
+
+#        track missingRefSeqBed
+#        shortLabel missing items
+#        subGroups view=aGenes
+#        longLabel missing items
+#        visibility pack
+#        type bed 4 .
+#        parent ncbiRefGenesView
+
+        track refGene
+	parent ncbiRefGenesView off
+        shortLabel UCSC RefSeq
+        longLabel Existing UCSC RefSeq Genes track
+        subGroups view=aGenes
+        visibility hide
+        color 12,12,120
+        type genePred refPep refMrna
+        idXref refLink mrnaAcc name
+        baseColorUseCds given
+        html refGene.new
+        priority 2
 
     track ncbiRefBigAlignView
+    parent refSeqComposite
     shortLabel Alignments
-    view alignments
+    view zAlignments
     visibility hide
-    parent xNcbiRefSeq
     color 48,168,219
 
-	track ncbiRefSeqBigPsl
-	shortLabel Big PSL NCBI RefSeq alignments
-        subGroups view=alignments
-	longLabel Big PSL Alignments of RefSeq gene predictions from NCBI
+	track ncbiRefSeqPsl
 	parent ncbiRefBigAlignView
-        type bigPsl
+	shortLabel RefSeq alignments
+        subGroups view=zAlignments
+	longLabel Alignments of RefSeq gene predictions from NCBI
+        type psl
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault itemBases
+        pslSequence no
+        baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
+
+#	track ncbiRefSeqBigPsl
+#	parent ncbiRefBigAlignView
+#	shortLabel NCBI RefSeq alignments
+#        subGroups view=zAlignments
+#	longLabel (BigPSL) Alignments of RefSeq gene predictions from NCBI
+#        type bigPsl
 
     track ncbiRefXCuratedView
+    parent refSeqComposite
     shortLabel Curated
     view curated
-    visibility pack
+    visibility hide
     color 16,93,235
-    parent xNcbiRefSeq
 
 	track ncbiRefSeqCurated
+	parent ncbiRefXCuratedView
 	shortLabel RefSeq Curated
         subGroups view=curated
 	longLabel RefSeq Curated (NM_* and NR_*)
-	visibility pack
-	parent ncbiRefXCuratedView
 
     track ncbiRefXPredictedView
+    parent refSeqComposite
     shortLabel Predicted
     view predicted
     visibility hide
-    parent xNcbiRefSeq
     color 48,168,219
     spectrum on
 
 	track ncbiRefSeqPredicted
+	parent ncbiRefXPredictedView
 	shortLabel RefSeq Predicted
         subGroups view=predicted
 	longLabel RefSeq Predicted (XM_* and XR_*)
-	parent ncbiRefXPredictedView
 
     track ncbiRefXOtherView
+    parent refSeqComposite
     shortLabel Other
-    view other
+    view xOther
     visibility hide
-    parent xNcbiRefSeq
     color 48,168,219
     spectrum on
 
 	track ncbiRefSeqOther
-	shortLabel RefSeq Other
-        subGroups view=other
-	longLabel RefSeq other genes, not (NM_* or NR_* or XM_* or XR_*)
 	parent ncbiRefXOtherView
+	shortLabel RefSeq Other
+        subGroups view=xOther
+	longLabel RefSeq other genes, not (NM_* or NR_* or XM_* or XR_*)
 
 searchTable ncbiRefSeq
 searchType genePred

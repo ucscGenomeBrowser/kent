@@ -48,8 +48,16 @@ function initVars()
             //
             // Early versions of Chrome had this problem too, but this problem went away
             // as of Chrome 5.0.335.1 (or possibly earlier).
+            //
+            // KRR/JAT 2/2016:
+            // This Safari issue is likely resolved in all current versions.  However the test
+            // for version had been failing, likely for some time now.
+            // (As of 9.0.9, possibly earlier, the 3rd part of the version is included in the
+            // user agent string, so must be accounted for in string match)
+            // Consequences were that page refresh was used instead of img update (e.g. 
+            // for drag-zoom).  And UI dialog was unable to update (e.g. via Apply button).
             imageV2.mapIsUpdateable = false;
-            var reg = new RegExp("Version\/([0-9]+.[0-9]+) Safari");
+            var reg = new RegExp("Version\/([0-9]+.[0-9]+)(.[0-9]+)? Safari");
             var a = reg.exec(navigator.userAgent);
             if (a && a[1]) {
                 var version = Number(a[1]);
@@ -2885,6 +2893,14 @@ var rightClick = {
                                 displayItemFunctions = true;
                             }
                         }
+                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
+                            // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
+                            // item (gene) name
+                            a = /i=([^&]+)/.exec(href);
+                            if (a && a[1]) {
+                                title = a[1];
+                            }
+                        }
                         if (displayItemFunctions) {
                             o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
                                 onclick: function(menuItemClicked, menuObject) {
@@ -3229,7 +3245,7 @@ var popUpHgt = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 700;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3242,7 +3258,7 @@ var popUpHgt = {
             height: 'auto',
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,
@@ -3450,7 +3466,7 @@ var popUp = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 640;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3463,17 +3479,26 @@ var popUp = {
             height: (popUp.trackDescriptionOnly ? popMaxHeight : 'auto'),
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,
             closeOnEscape: true,
             autoOpen: false,
-            buttons: { "OK": function() {
-                    if ( ! popUp.trackDescriptionOnly )
-                        popUp.uiDialogOk($('#pop'), popUp.trackName);
-                    $(this).dialog("close");
-            }},
+
+            buttons: { 
+                    // TODO: Enable when ready to deploy this feature
+                    //'Apply': function () {
+                         //popUp.uiDialogOk($('#pop'), popUp.trackName);
+                         // thanks to JAT for this cleverness to keep button functioning
+                         //popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                    //},
+                    'OK': function() {
+                        if ( ! popUp.trackDescriptionOnly )
+                            popUp.uiDialogOk($('#pop'), popUp.trackName);
+                        $(this).dialog("close");
+                    }
+            },
             // popup.ready() doesn't seem to work in open.
             
             open: function () {
