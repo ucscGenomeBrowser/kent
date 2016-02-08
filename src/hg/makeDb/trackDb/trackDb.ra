@@ -3014,6 +3014,7 @@ html refGene.new
 #        parent ncbiRefGenesView
 
         track refGene
+        release alpha
 	parent ncbiRefGenesView off
         shortLabel UCSC RefSeq
         longLabel Existing UCSC RefSeq Genes track
