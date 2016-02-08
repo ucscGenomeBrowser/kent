@@ -595,6 +595,7 @@ if (errCatchStart(errCatch))
 	&hostId, &submitDirId);
 
     prefetchChecks(format, ef->submitFileName);
+    verbose(1, "copying %s\n", ef->submitFileName);
     int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user);
     close(fd);
     cdwAddQaJob(conn, fileId);
