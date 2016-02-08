@@ -11500,9 +11500,6 @@ if (differentWord("n/a", nrl->description))
     htmlHorizontalLine();
     }
 
-char *chrom = cartString(cart, "c");
-int start = cartInt(cart, "o");
-int end = cartInt(cart, "t");
 
 struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
 // if the itemName isn't found, it might be found as the nrl->mrnaAcc
@@ -11510,6 +11507,7 @@ if (! pslList)
     pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
 if (pslList)
     {
+    int start = cartInt(cart, "o");
     printf("<H3>mRNA/Genomic Alignments</H3>");
     printAlignments(pslList, start, "ncbiRefSeqPsl", "ncbiRefSeqPsl", itemName);
     }
