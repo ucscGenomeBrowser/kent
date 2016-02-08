@@ -11520,24 +11520,7 @@ else
 
 htmlHorizontalLine();
 
-if (hTableExists(database, "ncbiRefSeq"))
-    {
-    char query[1024];
-    sqlSafef(query, sizeof query,
-            "select txStart,txEnd,strand from ncbiRefSeq "
-            "where chrom = '%s' and name='%s' and txEnd > %d and "
-            "txStart <= %d;", chrom, itemName, start, end);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        start = sqlUnsigned(row[0]);
-        end = sqlUnsigned(row[1]);
-        printf("<b>Name:</b> %s<br>", nrl->id);
-        printPosOnChrom(chrom, start, end, row[2], TRUE, itemName);
-        }
-    sqlFreeResult(&sr);
-    htmlHorizontalLine();
-    }
+showGenePos(itemName, tdb);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
