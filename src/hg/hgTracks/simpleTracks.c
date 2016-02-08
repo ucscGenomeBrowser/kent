@@ -14067,7 +14067,7 @@ if (sameWord(tdb->track, "ensGene"))
     else
 	track->longLabel = cloneString(tdb->longLabel);
     }
-else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+else if (startsWith("ncbiRef", tdb->track))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
@@ -14075,6 +14075,7 @@ else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRef
 	char longLabel[1024];
 	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
+	tdb->longLabel = cloneString(longLabel);
 	}
     else
 	track->longLabel = cloneString(tdb->longLabel);
