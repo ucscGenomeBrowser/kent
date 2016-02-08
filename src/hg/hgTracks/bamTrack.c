@@ -984,13 +984,25 @@ for (i=0; i<insideWidth; ++i)
 
 }
 
+
+static void bamWigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+/* Call pre graphing routine. */
+wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+
+}
+
+
 static void bamWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 /* Call actual graphing routine. */
 wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
-	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, tg->graphUpperLimit, tg->graphLowerLimit);
 
 }
 
@@ -1000,6 +1012,8 @@ void bamWigMethods(struct track *track, struct trackDb *tdb,
 {
 bedGraphMethods(track, tdb, wordCount, words);
 track->loadItems = bamWigLoadItems;
+track->preDrawItems = bamWigPreDrawItems;
+track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = bamWigDrawItems;
 }
 #else /* no USE_BAM */
