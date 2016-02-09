@@ -29,7 +29,7 @@ static char *makeTissueColorPatch(struct gtexTissue *tis)
 /* Display a box colored by defined tissue color */
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td bgcolor=%X></td>", tis->color);
+safef(buf, sizeof(buf), "<td bgcolor=#%06X></td>", tis->color);
 return(cloneString(buf));
 }
 
