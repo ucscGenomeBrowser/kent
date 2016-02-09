@@ -9,7 +9,9 @@ import subprocess
 
 # import the UCSC kent python library
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
-import common
+import common        
+        
+kallisto = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/kallisto"
 
 def parseArgs(args):
     """
@@ -31,47 +33,56 @@ def parseArgs(args):
     parser.add_argument ("--single",
     help = " This is single data (not paired end data).",
     action = "store_true")
+    parser.add_argument ("--bootstrap",
+    help = " Enable bootstrapping, please provide an integer.", 
+    action = "store",
+    type = int)
+    parser.add_argument ("--server",
+    help = " Choose your server, defaults to ku cluster.",
+    action = "store_true")
     parser.add_argument ("--verbose",
     help = " Spit out messages during runtime. ",
     action = "store_true")
 
     parser.set_defaults(single = False)
+    parser.set_defaults(sever = "ku")
     parser.set_defaults(dry = False)
     parser.set_defaults(verbose = False)
     parser.set_defaults(isMouse = False)
+    parser.set_defaults(bootstrap = None)
     options = parser.parse_args()
     return options
 
 
-def makeJobListSingle(manifestFile, outputFile, isMouse): 
+def findIndex(isMouse): 
     """
+    Input:  isMouse - a boolean
+    Output: result - a string
+    Finds the Kallisto index on the current machine. Returns the path as a string. 
     """
-    
-    firstLine = True
-    pair = 1
-    binFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/runKallisto.sh"
     if isMouse: 
-        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
+        result = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
     else: 
-        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
-    
-    ofh = open(outputFile, "w", 1)
-    for line in open("../"+manifestFile,"r"): 
-        if firstLine:
-            firstLine = False 
-            print (line)
-            splitLine = line.split("\t")
-            metaCol = splitLine.index("meta") 
-            fileCol = splitLine.index("file")
-            continue 
-        splitLine = line.split("\t")
-        meta = splitLine[metaCol]
-        file = "../"+splitLine[fileCol]
-        cmd = "%(binFname)s %(transFname)s %(meta)s %(file)s\n" % locals()
-        ofh.write(cmd)
-    ofh.close() 
+        result = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
+    return result
 
-def makeJobList(manifestFile, outputFile, isMouse):
+def makeJob(kallisto, index, meta, bootstraps, files, single):
+    """
+    kallisto - A string
+    index - A string
+    meta - A string
+    bootstraps - An int
+    files - A list of strings 
+    """ 
+    cmd = "%(kallisto)s quant -i %(index)s -o %(meta)s " % locals()
+    if bootstraps > 0: cmd += "-b %(bootstraps)i " % locals()
+    for file in files: 
+        cmd += " ../%s" % file 
+    if single: 
+        cmd += " -single"
+    return cmd 
+
+def makeJobList(manifestFile, outputFile, isMouse, bootstraps, verbose):
     """
     Input:
         manifestFile - A string
@@ -79,57 +90,52 @@ def makeJobList(manifestFile, outputFile, isMouse):
     Make a job list for a parasol submission from a manifest file.
     The job list is written to outputFile. 
     """
-    # This started as Max's code but I have since butchered it to make it more
-    # universal. 
+    firstLine = True
+    headerLine = True
+    index = findIndex(isMouse) 
+    single = True 
+    for line in open(manifestFile, "r"):   
+        if headerLine: # Determine the index of the columns
+            splitLine = line.strip("#").strip("\n").split("\t") 
+            if "meta" in splitLine: 
+                metaCol = splitLine.index("meta")
+            else: 
+                print ("The manifest file doesn't have a meta column. Please provide one then rerun the srcipt")
+                exit(1)
+            if "file" in splitLine:
+                fileCol = splitLine.index("file")
+            else: 
+                print ("The manifest file doesn't have a file column. Please provide one then rerun the srcipt")
+                exit(1)
+            if "paired_end" in splitLine: 
+                pairedEndCol = splitLine.index("paired_end")
+                single = False
+                if verbose: print ("The script has classified these fastq files as paired, due to the 'paired_end' column in the manifest file")
+            headerLine = False
+            continue
+        splitLine = line.split("\t") 
+        if firstLine: # Store the first row of actual data, all we need to keep track off are the files for each meta value
+            meta = splitLine[metaCol] 
+            files = [splitLine[fileCol]]
+            firstLine = False 
+            continue 
+        if meta == splitLine[metaCol]: # The same meta so append the new file
+            files.append(splitLine[fileCol])
+        else: # A new meta, flush the old data and reset 
+            job = makeJob(kallisto, index, meta, bootstraps, files, single)
+            outputFile.write(job + "\n")        
+            meta = splitLine[metaCol] 
+            files = [splitLine[fileCol]]
+    job = makeJob(kallisto, index, meta, bootstraps, files, single)
+    outputFile.write(job + "\n")        
+    outputFile.close()
 
-    # create the jobList file for parasol
-    dataDir = "../"
-
-    # create a dict with meta -> (list of forw read fnames, list of rev read fnames)
-    files = dict()
-    firstLine = True 
-    maniFile =  open("../"+manifestFile).read().splitlines()
-    maniIndex = maniFile[0].strip("#").split("\t")
-    for line in maniFile[1:]:
-        fs = line.split()
-        fname = fs[maniIndex.index("file")]
-        meta = fs[maniIndex.index("meta")]
-        if meta not in files:
-            files[meta] = ([], [])
-        pairedEnd = fs[maniIndex.index("paired_end")]
-        filePart = fs[7]
-        if not fname.startswith("/"):
-            if pairedEnd=="1":
-                files[meta][0].append(dataDir+fname)
-            else:
-                files[meta][1].append(dataDir+fname)
-        else:
-            if pairedEnd=="1":
-                files[meta][0].append(fname)
-            else:
-                files[meta][1].append(fname)
-    ofh = open(outputFile, "w", 1)
-    # iterate over dict and write joblist
-    binFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/runKallisto.sh"
-    if isMouse: 
-        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Mus_musculus.GRCm38.rel79.cdna.all.fa.index"
-    else: 
-        transFname = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
-
-    for meta, pairFnames in files.items():
-        pairs1, pairs2 = pairFnames
-        pair1Str = ",".join(pairs1)
-        pair2Str = ",".join(pairs2)
-        cmd = "%(binFname)s %(transFname)s %(meta)s %(pair1Str)s  %(pair2Str)s" % locals()
-        ofh.write(cmd+"\n")
-    ofh.close()
-
-
-def paraRunKallisto(verbose):
+def paraRunKallisto(verbose, server):
     """
     Log onto ku and use the parasol cluster management system to run kallisto.
     """
     curDir = os.getcwd()
+    #if server == "ku": 
     args = ["ssh ku \"cd %s; para make jobList\""%(curDir)]
     if verbose: print (" ".join(args))
     p = subprocess.check_call(args,shell=True)
@@ -152,17 +158,17 @@ def main(args):
 
     if options.verbose: print ("Start run kallisto on a batch of fastq files (kallistoOnFastqMani).")
     if options.verbose: print ("Making the job list...")
-    if options.single: makeJobListSingle(options.manifestFile, "jobList", options.isMouse)
-    else: makeJobList(options.manifestFile,"jobList", options.isMouse)
-    
+    makeJobList("../"+options.manifestFile, open("jobList","w", 1),options.isMouse, options.bootstrap, options.verbose)
+   
+    if options.verbose:
+        print ("The first ten commands in the joblist are...")
+        os.system("head jobList")
     if options.dry:
-        print ("The first command generated is...")
-        os.system("head -1 jobList")
         print ("You have selected a dry run, the program is stopping now.")
         exit(1)
+    paraRunKallisto(options.verbose, options.server) # Go onto the server and run the joblist. Currently only works for Ku
     if options.verbose: print ("Starting the parasol run...")
-    paraRunKallisto(options.verbose)
     if options.verbose: print ("Completed run kallisto on a batch of fastq files (kallistoOnFastqMani).")
 
-if __name__ == "__main__" : 
+if __name__ == "__main__": 
     sys.exit(main(sys.argv))

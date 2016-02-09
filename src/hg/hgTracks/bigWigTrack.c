@@ -75,6 +75,20 @@ tg->preDrawContainer = preDrawList;
 return preDrawList;
 }
 
+static void bigWigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+if (tg->networkErrMsg == NULL)
+    {
+    /* Call pre graphing routine. */
+    wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+		   tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, 
+		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+}
+
+
 static void bigWigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -84,7 +98,7 @@ if (tg->networkErrMsg == NULL)
     /* Call actual graphing routine. */
     wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 		   tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, 
-		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+		   tg->graphUpperLimit, tg->graphLowerLimit);
     }
 else
     bigDrawWarning(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis);
@@ -148,6 +162,8 @@ void bigWigMethods(struct track *track, struct trackDb *tdb,
 {
 bedGraphMethods(track, tdb, wordCount, words);
 track->loadItems = bigWigLoadItems;
+track->preDrawItems = bigWigPreDrawItems;
+track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = bigWigDrawItems;
 track->loadPreDraw = bigWigLoadPreDraw;
 }

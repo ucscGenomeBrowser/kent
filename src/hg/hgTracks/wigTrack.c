@@ -1209,20 +1209,18 @@ if (tg->wigGraphOutput == NULL)
     tg->wigGraphOutput = wigGraphOutputSolid(xOff, yOff, hvg);
 }
 
-void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
+void wigPreDrawPredraw(struct track *tg, int seqStart, int seqEnd,
                     struct hvGfx *hvg, int xOff, int yOff, int width,
                     MgFont *font, Color color, enum trackVisibility vis,
                     struct preDrawContainer *preContainer, int preDrawZero,
                     int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
-/* Draw once we've figured out predraw (numerical values to graph) we draw it here.
+/* Figure out graph limits after running windowingFunction and smoothing if needed.
  * This code is shared by wig, bigWig, and bedGraph drawers. */
 {
-wigTrackSetGraphOutputDefault(tg, xOff, yOff, hvg);
 
 /*	determined from data	*/
 double graphUpperLimit=0;	/*	scaling choice will set these	*/
 double graphLowerLimit=0;	/*	scaling choice will set these	*/
-double graphRange=0;		/*	scaling choice will set these	*/
 double epsilon;			/*	range of data in one pixel	*/
 struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 
@@ -1233,34 +1231,48 @@ struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
 
 struct preDrawElement *preDraw = preContainer->preDraw;
 
-if (preContainer->smoothingDone == FALSE)
+preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
+	wigCart->transformFunc, wigCart->doNegative);
+preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
+if (!preContainer->skipAutoscale) // multiWig does own autoscaling
     {
-    preDrawWindowFunction(preDraw, preDrawSize, wigCart->windowingFunction,
-	    wigCart->transformFunc, wigCart->doNegative);
-    preDrawSmoothing(preDraw, preDrawSize, wigCart->smoothingWindow);
-    graphRange = preDrawAutoScale(preDraw, preDrawZero, width,
+    preDrawAutoScale(preDraw, preDrawZero, width,
 	wigCart->autoScale, wigCart->windowingFunction,
 	&preContainer->graphUpperLimit, &preContainer->graphLowerLimit,
 	&epsilon, tg->lineHeight,
 	wigCart->maxY, wigCart->minY, wigCart->alwaysZero);
-	}
+    }
 
 graphUpperLimit = preContainer->graphUpperLimit;
 graphLowerLimit = preContainer->graphLowerLimit;
 
+if (retGraphUpperLimit != NULL)
+    *retGraphUpperLimit = graphUpperLimit;
+if (retGraphLowerLimit != NULL)
+    *retGraphLowerLimit = graphLowerLimit;
+}
+
+void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
+                    struct hvGfx *hvg, int xOff, int yOff, int width,
+                    MgFont *font, Color color, enum trackVisibility vis,
+                    struct preDrawContainer *preContainer, int preDrawZero,
+                    int preDrawSize, double graphUpperLimit, double graphLowerLimit)
+/* Draw once we've figured out predraw (numerical values to graph) we draw it here.
+ * This code is shared by wig, bigWig, and bedGraph drawers. */
+{
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->wigCartData;
+double graphRange;   /*	scaling choice will set this */
 /* if we're autoscaling and the range is 0 this implies that all values 
  * in the given range are the same.  We create a bottom of the scale  
  * by subtracting one from the only value.
  * This results in drawing a box that fills the range. */
 if (graphUpperLimit == graphLowerLimit)
     {
-    graphRange = 1.0;
     graphLowerLimit = graphUpperLimit - 1;
     }
-else
-    {
-    graphRange = graphUpperLimit - graphLowerLimit;
-    }
+graphRange = graphUpperLimit - graphLowerLimit;
+
+wigTrackSetGraphOutputDefault(tg, xOff, yOff, hvg); 
 
 graphPreDrawContainer(preContainer, preDrawZero, width, tg, hvg, xOff, yOff, 
     graphUpperLimit, graphLowerLimit, graphRange, vis, wigCart);
@@ -1276,10 +1288,6 @@ drawArbitraryYLine(vis, (enum wiggleGridOptEnum)wigCart->yLineOnOff,
 
 wigMapSelf(tg, hvg, seqStart, seqEnd, xOff, yOff, width);
 
-if (retGraphUpperLimit != NULL)
-    *retGraphUpperLimit = graphUpperLimit;
-if (retGraphLowerLimit != NULL)
-    *retGraphLowerLimit = graphLowerLimit;
 }
 
 struct preDrawContainer *wigLoadPreDraw(struct track *tg, int seqStart, int seqEnd, int width)
@@ -1456,7 +1464,7 @@ if (wibFH > 0)
 return pre;
 }
 
-static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
+static void wigPreDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 /* Draw wiggle items that resolve to doing a box for each pixel. */
@@ -1464,9 +1472,46 @@ static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 struct preDrawContainer *pre = wigLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {
-    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+    wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
                    pre, pre->preDrawZero, pre->preDrawSize,
                    &tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+}
+
+void wigMultiRegionGraphLimits(struct track *tg)
+/* Set common graphLimits across all windows */
+{
+double graphUpperLimit = -BIGDOUBLE;
+double graphLowerLimit = BIGDOUBLE;
+struct track *tgSave = tg;
+struct window *w;
+// find graphLimits across all windows.
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
+    {
+    if (tg->graphUpperLimit > graphUpperLimit)
+	graphUpperLimit = tg->graphUpperLimit;
+    if (tg->graphLowerLimit < graphLowerLimit)
+	graphLowerLimit = tg->graphLowerLimit;
+    }
+// set same common graphLimits in all windows.
+for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
+    {
+    tg->graphUpperLimit = graphUpperLimit;
+    tg->graphLowerLimit = graphLowerLimit;
+    }
+}
+
+static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle items that resolve to doing a box for each pixel. */
+{
+struct preDrawContainer *pre = tg->preDrawContainer;
+if (pre != NULL)
+    {
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+                   pre, pre->preDrawZero, pre->preDrawSize,
+                   tg->graphUpperLimit, tg->graphLowerLimit);
     }
 }
 
@@ -1686,6 +1731,8 @@ wigCart->bedGraph = FALSE;	/*	signal to left labels	*/
 
 track->loadItems = wigLoadItems;
 track->freeItems = wigFreeItems;
+track->preDrawItems = wigPreDrawItems;
+track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = wigDrawItems;
 track->itemName = wigNameCallback;
 track->mapItemName = wigNameCallback;

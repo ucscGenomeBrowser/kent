@@ -35,6 +35,7 @@
                   $w[$i] =~ s/\357/i/g;
                   $w[$i] =~ s/\277/?/g;
                   $w[$i] =~ s/\266/P/g;
+                  $w[$i] =~ s/\247/c/g;
                   $w[$i] = decode_utf8($w[$i], Encode::FB_CROAK); 
                   @chars = split(//, $w[$i]); 
                   $w[$i] = ""; 

@@ -4491,8 +4491,10 @@ freez(&counts);
 
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, tg->graphUpperLimit, tg->graphLowerLimit);
 tg->mapsSelf = TRUE;
 hvGfxUnclip(hvg);
 }
@@ -14065,7 +14067,7 @@ if (sameWord(tdb->track, "ensGene"))
     else
 	track->longLabel = cloneString(tdb->longLabel);
     }
-else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+else if (startsWith("ncbiRef", tdb->track))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
@@ -14073,6 +14075,7 @@ else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRef
 	char longLabel[1024];
 	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
+	tdb->longLabel = cloneString(longLabel);
 	}
     else
 	track->longLabel = cloneString(tdb->longLabel);

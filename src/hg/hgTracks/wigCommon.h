@@ -48,7 +48,7 @@ struct preDrawContainer
                                  * get more because of smoothing */
     int width;			/* Passed in width, number of pixels to display without smooth */
     double graphUpperLimit, graphLowerLimit; /* limits to the smoothed value */
-    boolean smoothingDone;      /* did we already do the smoothing? */
+    boolean skipAutoscale;      /* multiWig does its own autoscale */
     };
 
 struct preDrawElement
@@ -149,10 +149,20 @@ void wigFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit);
 /*	find upper and lower limits of graphed items (wigItem)	*/
 
+void wigMultiRegionGraphLimits(struct track *tg);
+/* Set common graphLimits across all windows */
+
+void wigPreDrawPredraw(struct track *tg, int seqStart, int seqEnd,
+                    struct hvGfx *hvg, int xOff, int yOff, int width,
+                    MgFont *font, Color color, enum trackVisibility vis,
+                    struct preDrawContainer *preContainer, int preDrawZero,
+                    int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
+/* Figure out graph limits after running windowingFunction and smoothing if needed. */
+
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis, struct preDrawContainer *preDrawContainer,
-	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit);
+	int preDrawZero, int preDrawSize, double graphUpperLimit, double graphLowerLimit);
 /* Draw once we've figured out predraw. */
 
 void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
