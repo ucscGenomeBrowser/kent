@@ -8,6 +8,7 @@
 #include "hdb.h"
 #include "cheapcgi.h"
 #include "dystring.h"
+#include "jsonParse.h"
 #include "suggest.h"
 
 static void fail(char *msg)
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 
+cgiSpoof(&argc, argv);
 char *prefix = cgiOptionalString("prefix");
 char *database = cgiOptionalString("db");
 
@@ -84,7 +86,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         count++;
         dyStringPrintf(str, "%s{\"value\": \"%s (%s)\", \"id\": \"%s:%d-%s\", \"internalId\": \"%s\"}", count == 1 ? "" : ",\n",
-                       row[0], javaScriptLiteralEncode(row[5]), row[1], atoi(row[2])+1, row[3], javaScriptLiteralEncode(row[4]));
+                       row[0], jsonStringEscape(row[5]), row[1], atoi(row[2])+1, row[3], jsonStringEscape(row[4]));
         }
     }
 

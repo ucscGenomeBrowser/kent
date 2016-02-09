@@ -65,10 +65,22 @@ if (hub == NULL)
     return 1;
 
 FILE *searchFp =stdout;
-struct trackHubGenome *genomeList = hub->genomeList;
-
-for(; genomeList ; genomeList = genomeList->next)
-    fprintf(searchFp, "%s\t%s\n",hub->url,  trackHubSkipHubName(genomeList->name));
+struct trackHubGenome *genome;
+for (genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    fprintf(searchFp, "%s\t%s\n", hub->url, trackHubSkipHubName(genome->name));
+    if (isNotEmpty(genome->organism) && differentString(genome->organism, genome->name))
+        fprintf(searchFp, "%s\t%s\n", hub->url, trackHubSkipHubName(genome->organism));
+    if (isNotEmpty(genome->description))
+        fprintf(searchFp, "%s\t%s\n", hub->url, genome->description);
+    struct hashEl *hel = NULL;
+    if (genome->settingsHash && (hel = hashLookup(genome->settingsHash, "scientificName")) != NULL)
+        {
+        char *sciName = (char *)(hel->val);
+        if (differentString(sciName, genome->name))
+            fprintf(searchFp, "%s\t%s\n", hub->url, sciName);
+        }
+    }
 fprintf(searchFp, "%s\t%s\t%s\n",hub->url, hub->shortLabel, hub->longLabel);
 
 if (hub->descriptionUrl != NULL)
