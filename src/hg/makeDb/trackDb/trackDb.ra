@@ -3056,9 +3056,25 @@ allButtonPair on
         pslSequence no
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
 
+searchName refSeqComposite
 searchTable ncbiRefSeq
 searchType genePred
 shortCircuit 1
 searchMethod fuzzy
 termRegex ^[NXYcir][MPRdn][12567_as][0-9]+(\.[0-9]+)?
 searchPriority 50
+
+searchName refSeqName2
+searchTable ncbiRefSeq
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 50.1
+
+searchName ncbiRefSeqProtein
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+shortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NZY]P_a[0-9]+(\.[0-9]+)?
