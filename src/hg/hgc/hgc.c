@@ -11520,6 +11520,25 @@ htmlHorizontalLine();
 
 showGenePos(itemName, tdb);
 
+printf("<h3>Links xyz to sequence:</h3>\n");
+printf("<ul>\n");
+printf("<li>need to figure out how to make these links, these don't work.\n");
+
+// might need something like this: seq = hPepSeq(database, buffer);
+
+puts("<li>\n");
+hgcAnchorSomewhere("htcTranslatedProtein", itemName, "seqNcbiRefSeq",
+		       nrl->mrnaAcc);
+printf("Predicted Protein</a> \n");
+puts("</li>\n");
+puts("<li>\n");
+hgcAnchorSomewhere("htcGeneMrna", itemName, tdb->track, nrl->mrnaAcc);
+printf("%s</a> may be different from the genomic sequence.\n",
+	   "Predicted mRNA");
+puts("</li>\n");
+
+printf("</ul>\n");
+
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
