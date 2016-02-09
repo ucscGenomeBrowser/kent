@@ -4491,8 +4491,10 @@ freez(&counts);
 
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, tg->graphUpperLimit, tg->graphLowerLimit);
 tg->mapsSelf = TRUE;
 hvGfxUnclip(hvg);
 }
@@ -6848,9 +6850,11 @@ boolean useMim =  FALSE;
 char trackLabel[1024];
 char *labelString = tg->table;
 boolean isRefGene = TRUE;
-if (sameString(labelString, "ncbiRefCurated") || sameString(labelString, "ncbiRefPredicted"))
+
+
+if (startsWith("ncbiRefSeq", labelString))
     {
-    labelString="ncbiGene";
+    labelString="refSeqComposite";
     isRefGene = FALSE;
     }
 safef(trackLabel, sizeof trackLabel, "%s.label", labelString);
@@ -6920,7 +6924,14 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         {
         char *mimId;
         char query[256];
-        sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+        if  (isRefGene)
+            {
+            sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+            }
+        else
+            {
+            sqlSafef(query, sizeof(query), "select omimId from ncbiRefSeqLink where id = '%s'", lf->name);
+            }
         mimId = sqlQuickString(conn, query);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
@@ -7041,7 +7052,7 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-void loadNcbiGene(struct track *tg)
+void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
 enum trackVisibility vis = tg->visibility;
@@ -7158,7 +7169,13 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
+
+if (startsWith("ncbiRefSeq", tg->table))
+    {
+    sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
+    }
+else
+    sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
         name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
@@ -7201,16 +7218,16 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest
  * If no refSeqStatus, color it normally.
  */
-if (hTableExists(database,  "refSeqStatus"))
+if (hTableExists(database,  "refSeqStatus") || hTableExists(database,  "ncbiRefSeqLink"))
     return refGeneColorByStatus(tg, lf->name, hvg);
 else
     return(tg->ixColor);
 }
 
-void ncbiGeneMethods(struct track *tg)
+void ncbiRefSeqMethods(struct track *tg)
 /* Make NCBI Genes track */
 {
-tg->loadItems = loadNcbiGene;
+tg->loadItems = loadNcbiRefSeq;
 tg->itemName = refGeneName;
 tg->mapItemName = ncbiRefGeneMapName;
 tg->itemColor = refGeneColor;
@@ -14065,7 +14082,7 @@ if (sameWord(tdb->track, "ensGene"))
     else
 	track->longLabel = cloneString(tdb->longLabel);
     }
-else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+else if (startsWith("ncbiRef", tdb->track))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
@@ -14073,6 +14090,7 @@ else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRef
 	char longLabel[1024];
 	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
+	tdb->longLabel = cloneString(longLabel);
 	}
     else
 	track->longLabel = cloneString(tdb->longLabel);
@@ -14351,7 +14369,10 @@ registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
-registerTrackHandler("ncbiGene", ncbiGeneMethods);
+registerTrackHandler("ncbiRefSeq", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqCurated", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqPredicted", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqOther", ncbiRefSeqMethods);
 registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);

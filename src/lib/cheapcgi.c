@@ -1601,13 +1601,18 @@ if (isNotEmpty(extra))
 printf(">\n");
 }
 
+void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *extra)
+/* Make a text control filled with initial value and optional extra HTML.  */
+{
+if (maxDigits == 0) maxDigits = 4;
+printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d %s>", 
+                varName, maxDigits, initialVal, extra ? extra : "");
+}
+
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits)
 /* Make a text control filled with initial value.  */
 {
-if (maxDigits == 0) maxDigits = 4;
-
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d>", varName,
-        maxDigits, initialVal);
+cgiMakeIntVarWithExtra(varName, initialVal, maxDigits, NULL);
 }
 
 void cgiMakeIntVarInRange(char *varName, int initialVal, char *title, int width,

@@ -170,7 +170,7 @@ freez(&lineBuf);
 static void minMaxVals(struct slRef *refList, double *retMin, double *retMax,
      enum wiggleWindowingEnum windowingFunction,enum wiggleAlwaysZeroEnum alwaysZero, double *yOffsets)
 /* Figure out min/max of everything in list.  The refList contains pointers to
- * preDrawContainers */
+ * preDrawContainers. Calculates the yOffsets used to make the stacked-graph overlay mode. */
 {
 /* Turns out to be *much* shorter to rewrite than to reuse preDrawAutoScale */
 double max = -BIGDOUBLE, min = BIGDOUBLE;
@@ -262,6 +262,140 @@ return wgo;
 }
 
 
+static void multiWigPreDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width, 
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Pre-Draw multiWig container calls preDraw on all subtracks. */
+{
+int y = yOff;  // The y value here should not matter.
+struct track *subtrack;
+
+struct wigCartOptions *wigCart = tg->wigCartData;
+
+// we want to the order to be the same in all the modes 
+if (wigCart->aggregateFunction == wiggleAggregateStacked)
+    slReverse(&tg->subtracks);
+
+int numTracks = 0;
+// determine if any subtracks had errors and count them up
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack) )
+	{
+	numTracks++;
+	}
+    }
+
+struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
+tg->wigGraphOutput = wgo;
+
+// Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
+// all children can be on same scale.
+double minVal, maxVal;
+
+// Force load of all predraw arrays so can do calcs. Build up list, and then
+// figure out max/min.  No worries about multiple loading, the loaders protect
+// themselves. 
+struct slRef *refList = NULL;
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
+
+	if (pre != NULL)  // pre maybe null if the load fails
+	    {
+	    pre->skipAutoscale = TRUE;
+	    subtrack->preDrawItems(subtrack, seqStart, seqEnd, hvg, xOff, y, width, font, color, vis);
+	    refAdd(&refList, pre);
+	    }
+	}
+    }
+slReverse(&refList);
+
+minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
+slFreeList(&refList);
+
+if (!wigCart->autoScale)
+    {
+    minVal = wigCart->minY;
+    maxVal = wigCart->maxY;
+    }
+
+// Loop through again setting up the wigCarts of the children to have minY/maxY for
+// our limits and autoScale off.
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	struct wigCartOptions *wigCart = subtrack->wigCartData;
+	wigCart->minY = minVal;
+	wigCart->maxY = maxVal;
+	wigCart->autoScale = wiggleScaleManual;
+	struct preDrawContainer *pre = subtrack->preDrawContainer;
+	if (pre != NULL)  // pre maybe null if the load fails
+	    {
+	    pre->graphUpperLimit = maxVal;
+	    pre->graphLowerLimit = minVal;
+	    }
+	}
+    }
+}
+
+static void multiWigMultiRegionGraphLimits(struct track *tg)
+/* Set graphLimits for subtracks. */
+{
+struct track *subtrack;
+
+double graphUpperLimit = -BIGDOUBLE;
+double graphLowerLimit = BIGDOUBLE;
+struct window *w;
+struct track *tgs;
+
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	// find common graphLimits across all windows.
+	for(w=windows,tgs=subtrack; w; w=w->next,tgs=tgs->nextWindow)
+	    {
+	    struct preDrawContainer *pre = tgs->preDrawContainer;
+	    if (pre != NULL)  // pre maybe null if the load fails
+		{
+		if (pre->graphUpperLimit > graphUpperLimit)
+		    graphUpperLimit = pre->graphUpperLimit;
+		if (pre->graphLowerLimit < graphLowerLimit)
+		    graphLowerLimit = pre->graphLowerLimit;
+		}
+	    }
+	break;  // can exit since the rest of the subtracks have been set to the same limits.
+	}
+    }
+
+// set same common graphLimits across all subtracks.
+for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
+    {
+    if (isSubtrackVisible(subtrack))
+	{
+	// set same common graphLimits across all windows.
+	for(w=windows,tgs=subtrack; w; w=w->next,tgs=tgs->nextWindow)
+	    {
+	    struct wigCartOptions *wigCart = tgs->wigCartData;
+	    wigCart->minY = graphUpperLimit;
+	    wigCart->maxY = graphLowerLimit;
+	    struct preDrawContainer *pre = tgs->preDrawContainer;
+	    if (pre != NULL)  // pre maybe null if the load fails
+		{
+		pre->graphUpperLimit = graphUpperLimit;
+		pre->graphLowerLimit = graphLowerLimit;
+		}
+	    tgs->graphUpperLimit = graphUpperLimit;
+	    tgs->graphLowerLimit = graphLowerLimit;
+	    }
+	}
+    }
+}
+
 static void multiWigDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
@@ -271,13 +405,11 @@ struct track *subtrack;
 boolean errMsgShown = FALSE;
 int y = yOff;
 boolean errMsgFound = FALSE;
-int numTracks = 0;
 // determine if any subtracks had errors and count them up
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
     {
     if (isSubtrackVisible(subtrack) )
 	{
-	numTracks++;
 	if (subtrack->networkErrMsg)
 	    errMsgFound = TRUE;
 	}
@@ -290,65 +422,7 @@ if (errMsgFound)
     }
 
 struct wigCartOptions *wigCart = tg->wigCartData;
-struct wigGraphOutput *wgo = setUpWgo(xOff, yOff, width, tg->height, numTracks, wigCart, hvg);
-
-// we want to the order to be the same in all the modes 
-if (wigCart->aggregateFunction == wiggleAggregateStacked)
-    slReverse(&tg->subtracks);
-
-/* Cope with autoScale and stacked bars - we do it here rather than in the child tracks, so that
- * all children can be on same scale. */
-double minVal, maxVal;
-
-/* Force load of all predraw arrays so can do calcs. Build up list, and then
- * figure out max/min.  No worries about multiple loading, the loaders protect
- * themselves. */
-struct slRef *refList = NULL;
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (isSubtrackVisible(subtrack))
-	{
-	struct preDrawContainer *pre = subtrack->loadPreDraw(subtrack, seqStart, seqEnd, width);
-
-	if (pre != NULL)  // pre maybe null if the load fails
-	    {
-	    preDrawWindowFunction(pre->preDraw, pre->preDrawSize, wigCart->windowingFunction,
-		    wigCart->transformFunc, wigCart->doNegative);
-	    preDrawSmoothing(pre->preDraw, pre->preDrawSize, wigCart->smoothingWindow);
-	    pre->smoothingDone = TRUE;
-	    refAdd(&refList, pre);
-	    }
-	}
-    }
-slReverse(&refList);
-minMaxVals(refList, &minVal, &maxVal, wigCart->windowingFunction,  wigCart->alwaysZero, wgo->yOffsets);
-slFreeList(&refList);
-
-if (!wigCart->autoScale)
-    {
-    minVal = wigCart->minY;
-    maxVal = wigCart->maxY;
-    }
-
-/* Loop through again setting up the wigCarts of the children to have minY/maxY for
- * our limits and autoScale off. */
-for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
-    {
-    if (!isSubtrackVisible(subtrack))
-	continue;
-
-    struct wigCartOptions *wigCart = subtrack->wigCartData;
-    wigCart->minY = minVal;
-    wigCart->maxY = maxVal;
-    wigCart->autoScale = wiggleScaleManual;
-    struct preDrawContainer *pre = subtrack->preDrawContainer;
-
-    if (pre != NULL)  // pre maybe null if the load fails
-	{
-	pre->graphUpperLimit = maxVal;
-	pre->graphLowerLimit = minVal;
-	}
-    }
+struct wigGraphOutput *wgo = tg->wigGraphOutput;
 
 int numTrack = 0;
 for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
@@ -497,6 +571,8 @@ void multiWigContainerMethods(struct track *track)
 track->syncChildVisToSelf = TRUE;
 track->loadItems = multiWigLoadItems;
 track->totalHeight = multiWigTotalHeight;
+track->preDrawItems = multiWigPreDraw;
+track->preDrawMultiRegion = multiWigMultiRegionGraphLimits;
 track->drawItems = multiWigDraw;
 track->drawLeftLabels = multiWigLeftLabels;
 }

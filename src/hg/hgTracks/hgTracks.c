@@ -1527,6 +1527,24 @@ if (track->limitedVis != tvHide)
 return y;
 }
 
+static void doPreDrawItems(struct track *track, struct hvGfx *hvg, MgFont *font,
+                                    int y, long *lastTime)
+/* Do Pre-Draw track items. */
+{
+int fontHeight = mgFontLineHeight(font);
+if (isCenterLabelIncluded(track))
+    y += fontHeight;
+if (track->preDrawItems)
+    track->preDrawItems(track, winStart, winEnd, hvg, insideX, y, insideWidth,
+                 font, track->ixColor, track->limitedVis);
+if (measureTiming && lastTime)
+    {
+    long thisTime = clock1000();
+    track->drawTime = thisTime - *lastTime;
+    *lastTime = thisTime;
+    }
+}
+
 static int doDrawItems(struct track *track, struct hvGfx *hvg, MgFont *font,
                                     int y, long *lastTime)
 /* Draw track items.  Return y coord */
@@ -5328,9 +5346,35 @@ warn("Draw tracks");
             y += REMOTE_TRACK_HEIGHT;
         else
 	    { 
-	    int savey = y; // DEBUG REMOVE
+	    int savey = y;
 	    struct track *winTrack;
 
+	    // do preDraw
+	    if (track->preDrawItems)
+		{
+		for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
+		    {
+		    setGlobalsFromWindow(window);
+		    if (winTrack->limitedVis == tvHide)
+			{
+			warn("Draw tracks skipping %s because winTrack->limitedVis=hide", winTrack->track);
+			continue;
+			}
+		    if (insideWidth >= 1)  // do not try to draw if width < 1.
+			{
+			doPreDrawItems(winTrack, hvg, font, y, &lastTime);
+			}
+		    }
+		}
+
+	    setGlobalsFromWindow(windows); // first window
+	    // do preDrawMultiRegion across all windows, e.g. wig autoScale
+	    if (track->preDrawMultiRegion)
+		{
+		track->preDrawMultiRegion(track);
+		}
+
+	    // doDrawItems
 	    for (window=windows, winTrack=track; window; window=window->next, winTrack=winTrack->nextWindow)
 		{
 		setGlobalsFromWindow(window);
@@ -5349,7 +5393,7 @@ warn("Draw tracks");
 		    }
 		}
 	    setGlobalsFromWindow(windows); // first window
-	    y = savey + flatTrack->maxHeight; // DEBUG REMOVE
+	    y = savey + flatTrack->maxHeight;
 	    }
 
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))

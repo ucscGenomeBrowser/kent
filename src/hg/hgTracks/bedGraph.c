@@ -217,16 +217,29 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 return pre;
 }
 
-static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
+static void bedGraphPreDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
 {
 struct preDrawContainer *pre = bedGraphLoadPreDraw(tg, seqStart, seqEnd, width);
 if (pre != NULL)
     {
-    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+    wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 		   pre, pre->preDrawZero, pre->preDrawSize, 
 		   &tg->graphUpperLimit, &tg->graphLowerLimit);
+    }
+}
+
+static void bedGraphDrawItems(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+struct preDrawContainer *pre = tg->preDrawContainer;
+if (pre != NULL)
+    {
+    wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+		   pre, pre->preDrawZero, pre->preDrawSize, 
+		   tg->graphUpperLimit, tg->graphLowerLimit);
     }
 }
 
@@ -263,6 +276,8 @@ track->graphLowerLimit = wigEncodeStartingLowerLimit;
 
 track->loadItems = bedGraphLoadItems;
 track->freeItems = bedGraphFreeItems;
+track->preDrawItems = bedGraphPreDrawItems;
+track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = bedGraphDrawItems;
 track->itemName = bedGraphName;
 track->mapItemName = bedGraphName;

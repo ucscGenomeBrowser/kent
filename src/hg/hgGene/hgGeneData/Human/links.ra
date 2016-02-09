@@ -121,7 +121,7 @@ name lynx
 shortLabel Lynx
 tables knownToLynx
 idSql select value from knownToLynx where name = '%s';
-url http://lynx.ci.uchicago.edu/gene/?geneid=%s
+url http://lynx.cri.uchicago.edu/gene/?geneid=%s
 priority 10
 
 name malacards

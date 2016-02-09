@@ -3470,6 +3470,24 @@ var popUp = {
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
+        // Create dialog buttons for UI popup
+        var uiDialogButtons = {};
+        if (popUp.trackDescriptionOnly) {
+            uiDialogButtons.OK = function() {
+                $(this).dialog("close");
+            };
+        } else {
+            uiDialogButtons.Apply = function() {
+                 popUp.uiDialogOk($('#pop'), popUp.trackName);
+                 // thanks to JAT for this cleverness to keep button functioning
+                 popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+            };
+            uiDialogButtons.OK = function() {
+                popUp.uiDialogOk($('#pop'), popUp.trackName);
+                $(this).dialog("close");
+            };
+        }
+
         $('#hgTrackUiDialog').dialog({
             ajaxOptions: {
                 // This doesn't work
@@ -3485,24 +3503,12 @@ var popUp = {
             modal: true,
             closeOnEscape: true,
             autoOpen: false,
+            buttons: uiDialogButtons,
 
-            buttons: { 
-                    // TODO: Enable when ready to deploy this feature
-                    //'Apply': function () {
-                         //popUp.uiDialogOk($('#pop'), popUp.trackName);
-                         // thanks to JAT for this cleverness to keep button functioning
-                         //popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
-                    //},
-                    'OK': function() {
-                        if ( ! popUp.trackDescriptionOnly )
-                            popUp.uiDialogOk($('#pop'), popUp.trackName);
-                        $(this).dialog("close");
-                    }
-            },
             // popup.ready() doesn't seem to work in open.
             
             open: function () {
-                if ( ! popUp.trackDescriptionOnly ) {
+                if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(
                         function(i) {
                             if ($(this).hasClass('filterComp'))
