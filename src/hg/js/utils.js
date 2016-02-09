@@ -1305,6 +1305,7 @@ function codonColoringChanged(name)
     // of track coloring select.
     var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
     $("input[name='" + name + ".codonNumbering']").attr('disabled', val === "OFF");
+    $("#" + name + "CodonNumberingLabel").toggleClass("disabled", val === "OFF" ? true : false);
 }
 
 
