@@ -1904,6 +1904,20 @@ labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 baseColorDrawOptDropDown(cart, tdb);
 }
 
+void ncbiRefSeqUI(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+char varName[64];
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+printf("<br><b>Label:</b> ");
+labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+char sym[32];
+safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+printf("&nbsp;&nbsp;(select gene symbol(s) to display)<br>");
+}
+
 void ensGeneUI(struct trackDb *tdb)
 /* Put up Ensembl Gene track-specific controls */
 {
@@ -2898,6 +2912,8 @@ else if (startsWith("ucscRetro", track)
     retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
     ensemblNonCodingUI(tdb);
+else if (startsWith("refSeqComposite", track))
+    ncbiRefSeqUI(tdb);
 else if (sameString(track, "ensGene"))
     ensGeneUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
@@ -3142,7 +3158,7 @@ if (sameWord(tdb->track,"ensGene"))
 
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
-else if (sameWord(tdb->track, "ncbiGene"))
+else if (sameWord(tdb->track, "refSeqComposite"))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     char longLabel[1024];
