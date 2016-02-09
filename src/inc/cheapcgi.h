@@ -313,6 +313,9 @@ void cgiMakeOnKeypressTextVar(char *varName, char *initialVal, int charSize,
  * to execute every time a key is pressed.  If charSize is zero it's
  * calculated from initialVal size. */
 
+void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *extra);
+/* Make a text control filled with initial value and optional extra HTML.  */
+
 void cgiMakeIntVar(char *varName, int initialVal, int maxDigits);
 /* Make a text control filled with initial integer value.  */
 
