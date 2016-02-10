@@ -105,8 +105,8 @@ char *geneSym = NULL;
 
 for (ci = rsCcds; ci != NULL; ci = ci->next)
     {
-    sqlSafef(query, sizeof(query), "select name from refLink where mrnaAcc='%s'",
-          genbankDropVer(accBuf, ci->mrnaAcc));
+    sqlSafef(query, sizeof(query), "select name from %s where mrnaAcc='%s'",
+          refLinkTable, genbankDropVer(accBuf, ci->mrnaAcc));
     geneSym = sqlQuickString(conn, query);
     if (geneSym != NULL)
         return geneSym;

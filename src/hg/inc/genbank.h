@@ -68,4 +68,33 @@ void genbankExceptionsHash(char *fileName,
  * it filled with the accessions having the two exceptions we can handle, 
  * selenocysteines, and alternative start codons. */
 
+
+extern char *gbCdnaInfoTable;       
+extern char *descriptionTable;       
+extern char *productNameTable;       
+extern char *organismTable;       
+extern char *authorTable;       
+extern char *cdsTable;       
+extern char *tissueTable;       
+extern char *developmentTable;       
+extern char *geneNameTable;       
+extern char *refLinkTable;       
+extern char *refPepTable;       
+extern char *cellTable;       
+extern char *sourceTable;
+extern char *libraryTable;
+extern char *mrnaCloneTable;
+extern char *sexTable;
+extern char *keywordTable;
+extern char *gbSeqTable;
+extern char *gbExtFileTable;
+extern char *gbMiscDiffTable;
+extern char *imageCloneTable;
+extern char *gbWarnTable;
+extern char *refSeqStatusTable;
+extern char *refSeqSummaryTable;
+
+void initGenbankTableNames(char *database);
+/* read hg.conf to get alternate table names */
+
 #endif

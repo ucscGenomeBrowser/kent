@@ -609,21 +609,21 @@ static void getGenbankCds(char *acc, struct genbankCds* cds)
  * does nothing */
 {
 static boolean first = TRUE, haveGbCdnaInfo = FALSE;
+struct sqlConnection *conn = hAllocConn(database);
 if (first)
     {
-    haveGbCdnaInfo = hTableExists(database, "gbCdnaInfo");
+    haveGbCdnaInfo = sqlTableExists(conn, gbCdnaInfoTable);
     first = FALSE;
     }
 if (haveGbCdnaInfo)
     {
     char query[256], buf[256], *cdsStr;
-    struct sqlConnection *conn = hAllocConn(database);
-    sqlSafef(query, sizeof query, "select cds.name from gbCdnaInfo,cds where (acc = '%s') and (gbCdnaInfo.cds = cds.id)", acc);
+    sqlSafef(query, sizeof query, "select c.name from %s g,%s c where (acc = '%s') and (g.cds = c.id)", gbCdnaInfoTable, cdsTable, acc);
     cdsStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (cdsStr != NULL)
         genbankCdsParse(cdsStr, cds);
-    hFreeConn(&conn);
     }
+hFreeConn(&conn);
 }
 
 static void getCdsFromTbl(char *acc, char *baseColorSetting, struct genbankCds* cds)

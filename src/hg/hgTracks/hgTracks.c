@@ -66,6 +66,7 @@
 #include "extTools.h"
 #include "basicBed.h"
 #include "customFactory.h"
+#include "genbank.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -9663,6 +9664,8 @@ printf("State: %s\n", state->string);
 #endif
 
 getDbAndGenome(cart, &database, &organism, oldVars);
+
+initGenbankTableNames(database);
 
 protDbName = hPdbFromGdb(database);
 debugTmp = cartUsualString(cart, "hgDebug", "off");
