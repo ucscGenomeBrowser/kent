@@ -1414,6 +1414,9 @@ __attribute__((format(printf, 1, 2)))
 void makeDirs(char* path);
 /* make a directory, including parent directories */
 
+boolean isSymbolString(char *s);
+/* Return TRUE if s can be used as a symbol in the C language */
+
 boolean isNumericString(char *s);
 /* Return TRUE if string is numeric (integer or floating point) */
 
