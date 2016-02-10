@@ -9,7 +9,9 @@ gene <- args[1]
 dataFile <- args[2]
 outFile <- args[3]
 isLog <- args[4] == "log=TRUE"
+version <- args[5]
 
+# TODO: replace with V6 colors
 source("hgcData/gtexColorsV4.R")
 # sets colorsHex
 
@@ -40,7 +42,7 @@ yLabel <- if(isLog) "Log10 (RPKM+1)" else "RPKM"
 max <- max(df$rpkm)
 yLimit <- if(isLog) c(-.05, max+.1) else c(-(max*.02), max+ (max*.03))
 exprPlot <- boxplot(rpkm ~ tissueMedian, data=df, ylab=yLabel, ylim=yLimit,
-                        main=paste(gene, "Gene Expression from GTEx (Release V4, 2014)"),
+                        main=paste(gene, "Gene Expression from GTEx (Release ", version, ")"),
                         col=colorsHex, border=c(darkgray),
                         # medians
                         medcol="black", medlwd=2,

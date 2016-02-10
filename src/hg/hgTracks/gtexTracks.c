@@ -289,9 +289,7 @@ AllocVar(extras);
 tg->extraUiData = extras;
 
 /* Get version info from track table name */
-// TODO: get valid versions from gtexInfo table
-if (endsWith(tg->table, "V6"))
-    extras->version = "V6";
+extras->version = gtexVersionSuffix(tg->table);
 extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, 
