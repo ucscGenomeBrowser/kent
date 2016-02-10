@@ -184,7 +184,6 @@ genericHeader(tdb, item);
 // TODO: link to UCSC gene
 printf("<b>Gene:</b> %s<br>", gtexGene->name);
 char query[256];
-uglyf("transcriptId=%s\n", gtexGene->transcriptId);
 sqlSafef(query, sizeof(query), 
         "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value='%s' and knownToEnsembl.name=kgXref.kgID", gtexGene->transcriptId);
 struct sqlConnection *conn = hAllocConn(database);
