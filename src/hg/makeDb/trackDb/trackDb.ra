@@ -3059,7 +3059,7 @@ searchTable ncbiRefSeq
 searchType genePred
 shortCircuit 1
 searchMethod fuzzy
-termRegex ^[NXYcir][MPRdn][12567_as][0-9]+(\.[0-9]+)?
+termRegex [35A-Za-z][.0-9A-Za-z-]+
 searchPriority 50
 
 searchName refSeqName2
@@ -3072,7 +3072,18 @@ searchName ncbiRefSeqProtein
 searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
 shortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
-termRegex [NZY]P_a[0-9]+(\.[0-9]+)?
+termRegex [NZY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqMrna
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq mrnaAcc search alias
+shortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
+termRegex [NX][MR]_[0-9]+(\.[0-9]+)?
