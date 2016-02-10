@@ -14,6 +14,7 @@
 #include "gtexTissue.h"
 #include "gtexSampleData.h"
 #include "gtexUi.h"
+#include "gtexInfo.h"
 
 struct tissueSampleVals
 /* RPKM expression values for multiple samples */
@@ -33,7 +34,7 @@ struct tissueSampleVals
 /* R implementation.  Invokes R script */
 
 void drawGtexRBoxplot(struct gtexGeneBed *gtexGene, struct tissueSampleVals *tsvList,
-                        boolean doLogTransform)
+                        boolean doLogTransform, char *version)
 /* Draw a box-and-whiskers plot from GTEx sample data, using R boxplot */
 {
 /* Create R data frame.  This is a tab-sep file, one row per sample, 
@@ -61,9 +62,9 @@ trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
 char cmd[256];
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s",  
+safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s %s",  
                                 gtexGene->name, dfTn.forCgi, pngTn.forHtml, 
-                                doLogTransform ? "log=TRUE" : "log=FALSE");
+                                doLogTransform ? "log=TRUE" : "log=FALSE", version);
 int ret = system(cmd);
 if (ret == 0)
     {
@@ -98,7 +99,7 @@ return gtexGene;
 }
 
 struct tissueSampleVals *getTissueSampleVals(struct gtexGeneBed *gtexGene, boolean doLogTransform,
-                                                double *maxValRet)
+                                                char *version, double *maxValRet)
 /* Get sample data for the gene.  Optionally log10 it. Return maximum value seen */
 {
 // TODO: support version table name.  Likely move to lib.
@@ -110,11 +111,13 @@ double maxVal = 0;
 struct gtexSampleData *sd = NULL;
 char query[256];
 char **row;
+char buf[256];
 char *sampleDataTable = "gtexSampleData";
+safef(buf, sizeof(buf), "%s%s", sampleDataTable, version);
 struct sqlConnection *conn = hAllocConn("hgFixed");
-assert(sqlTableExists(conn, sampleDataTable));
+assert(sqlTableExists(conn, buf));
 sqlSafef(query, sizeof(query), "select * from %s where geneId='%s'", 
-                sampleDataTable, gtexGene->geneId);
+                buf, gtexGene->geneId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -181,6 +184,7 @@ genericHeader(tdb, item);
 // TODO: link to UCSC gene
 printf("<b>Gene:</b> %s<br>", gtexGene->name);
 char query[256];
+uglyf("transcriptId=%s\n", gtexGene->transcriptId);
 sqlSafef(query, sizeof(query), 
         "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value='%s' and knownToEnsembl.name=kgXref.kgID", gtexGene->transcriptId);
 struct sqlConnection *conn = hAllocConn(database);
@@ -195,9 +199,11 @@ puts("<p>");
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 double maxVal = 0.0;
-struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform, &maxVal);
-
-drawGtexRBoxplot(gtexGene, tsvs, doLogTransform);
+char *versionSuffix = gtexVersionSuffix(tdb->table);
+struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform, 
+                                                        versionSuffix, &maxVal);
+char *version = gtexVersion(tdb->table);
+drawGtexRBoxplot(gtexGene, tsvs, doLogTransform, version);
 
 printTrackHtml(tdb);
 }
