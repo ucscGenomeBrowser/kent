@@ -56,10 +56,10 @@ extern char *cdwAllowedTags[];
 struct hash *cdwAllowedTagsHash();
 /* Get hash of all allowed tags */
 
-boolean cdwValidateTagName(char *tag);
+void cdwValidateTagName(char *tag);
 /* Make sure that tag is one of the allowed ones. */
 
-boolean cdwValidateTagVal(char *tag, char *val);
+void cdwValidateTagVal(char *tag, char *val);
 /* Make sure that tag is one of the allowed ones and that
  * val is compatible */
 
