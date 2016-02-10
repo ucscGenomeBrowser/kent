@@ -6,13 +6,13 @@
 #Metadata for NCBI RefSeq tracks
 CREATE TABLE ncbiRefSeqLink (
     id varchar(255) not null,	# id for this gene or curated item
-    status varchar(255) not null,	# Inferrred, Model, Predicted, Provisional, Reviewed, Validated, Unknown
+    status varchar(255) not null,	# Inferred, Model, Predicted, Provisional, Reviewed, Validated, Unknown
     name varchar(255) not null,	# gene name
     product varchar(255) not null,	# product
     mrnaAcc varchar(255) not null,	# transcript_id
     protAcc varchar(255) not null,	# protein_id
     locusLinkId varchar(255) not null,	# locus link identifier, from Dbxref
-    omimId varchar(255) not null,	# omim identifier, from Dbxref
+    omimId varchar(255) not null,	# OMIM identifier, from Dbxref
     hgnc varchar(255) not null,	# HGNC identifier, from Dbxref
     genbank varchar(255) not null,	# genbank identifier from Dbxref
     pseudo varchar(255) not null,	# 'true' if pseudo gene, or n/a
