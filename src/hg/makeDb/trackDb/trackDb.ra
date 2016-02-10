@@ -2987,7 +2987,6 @@ allButtonPair on
     color 16,93,235
     parent refSeqComposite on
     configurable on
-    allButtonPair on
     baseColorUseCds given
     baseColorDefault genomicCodons
 
@@ -3003,7 +3002,7 @@ allButtonPair on
         release alpha
 	parent ncbiRefGenesView off
         shortLabel UCSC RefSeq
-        longLabel Existing UCSC RefSeq Genes track
+        longLabel RefSeq UCSC alignments
         subGroups view=aGenes
         color 12,12,120
         type genePred refPep refMrna
@@ -3038,7 +3037,6 @@ allButtonPair on
     view zAlign
     color 48,168,219
     configurable on
-    allButtonPair on
 
 	track ncbiRefSeqPsl
 	parent ncbiRefAlignView off

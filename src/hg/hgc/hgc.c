@@ -11384,7 +11384,6 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-char *sqlRnaName = itemName;
 struct ncbiRefSeqLink *nrl;
 
 struct dyString *dy = newDyString(1024);
@@ -11397,7 +11396,7 @@ if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
 cartWebStart(cart, database, "%s", dy->string);
 
 /* get refLink entry */
-sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", sqlRnaName);
+sqlSafef(query, sizeof(query), "select * from ncbiRefSeqLink where id = '%s'", itemName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
     errAbort("Couldn't find %s in ncbiRefSeqLink table.", itemName);
@@ -11405,9 +11404,9 @@ nrl = ncbiRefSeqLinkLoad(row);
 sqlFreeResult(&sr);
 
 printf("<h2>RefSeq Gene %s</h2><br>\n", nrl->name);
-printf("<b>RefSeq:</b> <a href=\"");
+printf("<b>RefSeq:</b> <a href='");
 printEntrezNucleotideUrl(stdout, nrl->id);
-printf("\" target=_blank>%s</a>", nrl->id);
+printf("' target=_blank>%s</a>", nrl->id);
 printf("&nbsp;&nbsp;<b>Status: </b>%s<br>\n", nrl->status);
 printf("<b>Description:</b> %s<br>\n", nrl->product);
 if (differentWord(nrl->gbkey, "n/a"))
@@ -11440,39 +11439,39 @@ if (differentWord(nrl->note, "n/a"))
     }
 if (differentWord(nrl->omimId, "n/a"))
     {
-    printf("<b>OMIM:</b> <a href=\"");
+    printf("<b>OMIM:</b> <a href='");
     printEntrezOMIMUrl(stdout, sqlSigned(nrl->omimId));
-    printf("\" target=_blank>%s</a><br>\n", nrl->omimId);
+    printf("' target=_blank>%s</a><br>\n", nrl->omimId);
     }
 if (differentWord(nrl->mrnaAcc, "n/a") && differentWord(nrl->mrnaAcc,nrl->id))
     {
     printf("<b>mRNA:</b> ");
-    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->mrnaAcc);
+    printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->mrnaAcc);
     printf("%s</a><br>\n", nrl->mrnaAcc);
     }
 if (differentWord(nrl->genbank, "n/a") && differentWord(nrl->genbank,nrl->id))
     {
     printf("<b>Genbank:</b> ");
-    printf("<a href=\"http://www.ncbi.nlm.nih.gov/nuccore/%s\" target=_blank>", nrl->genbank);
+    printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->genbank);
     printf("%s</a><br>\n", nrl->genbank);
     }
 if (differentWord(nrl->protAcc, "n/a"))
     {
     printf("<b>Protein:</b> ");
-    printf("<a href=\"http://www.ncbi.nlm.nih.gov/protein/%s\" target=_blank>", nrl->protAcc);
+    printf("<a href='http://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
 if (differentWord(nrl->hgnc, "n/a"))
     {
     printf("<b>HGNC:</b> ");
-    printf("<a href=\"http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s\" target=_blank>", nrl->hgnc);
+    printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
     printf("%s</a><br>\n", nrl->hgnc);
     }
 
 if (differentWord(nrl->locusLinkId, "n/a"))
     {
     printf("<b>Entrez Gene:</b> ");
-    printf("<a href=\"http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s\" TARGET=_blank>",
+    printf("<a href='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s' TARGET=_blank>",
            nrl->locusLinkId);
     printf("%s</a><br>\n", nrl->locusLinkId);
     }
@@ -11483,14 +11482,14 @@ if (differentWord(nrl->name,"n/a"))
     if (startsWith("hg", database))
         {
         printf("<b>AceView:</b> ");
-        printf("<a href = \"http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s\" target=_blank>",
+        printf("<a href = 'http://www.ncbi.nlm.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=%s' target=_blank>",
 	   nrl->name);
         printf("%s</a><br>\n", nrl->name);
         }
     }
 if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
     {
-    printf("<B>Annotation Release:</B> <A href=\"%s\" TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
+    printf("<B>Annotation Release:</B> <A href='%s' TARGET=_blank> %s <BR></A>", trackVersion->comment, trackVersion->version);
     }
 
 htmlHorizontalLine();
@@ -11499,7 +11498,6 @@ if (differentWord("n/a", nrl->description))
     printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
     htmlHorizontalLine();
     }
-
 
 struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
 // if the itemName isn't found, it might be found as the nrl->mrnaAcc
