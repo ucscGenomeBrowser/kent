@@ -31,7 +31,9 @@ colorsHex <- as.vector(dfOrderedColors$colorsHex)
 labels <- as.vector(dfOrderedColors$orderedLevels)
 
 # draw graph
-png(file=outFile, width=900, height=500)
+png(file=outFile, width=1000, height=500)
+#png(file=outFile, width=1200, height=500, res=80)
+# res=72 is default
 gray <- "#A6A6A6"
 darkgray <- "#737373"
 
