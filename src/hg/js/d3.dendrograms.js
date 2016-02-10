@@ -93,13 +93,16 @@ Internal functions:
 
 */
 
+// The color alphabet that was proposed in "A Colour Alphabet and the Limits of Colour Coding" by Paul Green-Armytage 10 August 2010 
+// The color alphabet capitalizes the number of visibly unqiue colors. 
+var colorAlphabet = ["#015eff", "#fc0a18","#0cc402", "#aea7a5", "#ff15ae", "#d99f07", "#11a5fe", "#037e43", "#ba4455", "#d10aff", "#9354a6", "#7b6d2b", "#08bbbb", "#95b42d", "#b54e04", "#ee74ff", "#2d7593", "#e19772","#fa7fbe", "#fe035b", "#aea0db", "#905e76", "#92b27a", "#03c262"];
+
 if (!d3) { throw "d3 wasn't included!";}
 (function(){
 	d3.dendrogram = {}; 
-  
-	var colors=d3.scale.category20();
-	var legendRectSize=20;
-	var legendSpacing=4;
+	var colors=d3.scale.category20().range(colorAlphabet); 
+	var legendRectSize=10;
+	var legendSpacing=3;
 	var currentLegend=-1;
 	var radius=0; 
 	
@@ -139,22 +142,23 @@ if (!d3) { throw "d3 wasn't included!";}
 		var first = 1;
 		var node = vis.selectAll("g."+ layer + "Leaf");
 	
-		colors = d3.scale.category20();
-		if (layer == "middle"){colors = d3.scale.category20b();} 
-		if (layer == "outer"){colors = d3.scale.category20c();} 
+		colors=d3.scale.category20().range(colorAlphabet); 
 
 		node.selectAll("circle")
 			.style("fill", function(d){
 				// This block links the extra leaf json fields to a specific value (count). This value
 				// is provided when the buttons are written in the main function. 
 				if (d.name != " "){	
+					if (val==1)
+					
+					return d3.rgb(d.colorGroup);
 					var count = 0;
 					for (var key in d) {
 						if (d.hasOwnProperty(key)){
 							if (key != "x" && key!="y" && key!= "name" && key!="kids" && key!="length" && key!="colorGroup" && key!="parent" && key!="depth" && key!="rootDist"){
 								if (count == val){
 									count += 1;
-									return colors(d[key]); 
+									return colors(d[key]);
 									}
 								}
 							count += 1;
@@ -175,12 +179,19 @@ if (!d3) { throw "d3 wasn't included!";}
 		var node=vis.selectAll("g.internalNode").selectAll("circle")
 		.style("fill",function(d){
 			if (d.name === " "){
-				if (val==1) return d3.rgb(d.colorGroup);
 				if (val==2) return d3.rgb(d.whiteToBlack);
+				if (val==5) return d3.rgb(d.whiteToBlack);
 				if (val==3) return d3.rgb(d.whiteToBlackSqrt);
 				if (val==4) return d3.rgb(d.whiteToBlackQuad);
 				}
-			});
+			})
+		.attr("r", function(d){
+			if (d.name === " "){
+				if (val ==5) return 2; 	
+				else return 1 + Math.sqrt(d.kids);
+				}
+			}) 
+		;
 		};
 	
 	updateLegend = function(val, layer, vis, title, shift){
@@ -196,23 +207,28 @@ if (!d3) { throw "d3 wasn't included!";}
 					var offset= height * colors.domain().length / 2;
 					if (layer=="inner"){
 						horz=(-2 * legendRectSize) + (2*radius) + 45 ;
-						vert=(i * height - offset) + (radius*(1/2)) + 100;
+						vert=(i * height - offset) + (radius*(1/2)) + 80;
 						if (first){
 							vis.selectAll("text.innerLegendTitle").remove(); 
 							vis.append("text")
 								.attr('class','innerLegendTitle')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-45)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-15)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
-								.text(title);
+								.text(function (){
+									if (title.length > 15){
+										return title.substring(0,14)+"...";
+										}
+									return title; 
+									});
 							vis.selectAll("text.outerLegendTitleInner").remove(); 
 							vis.append("text")
 								.attr('class','outerLegendTitleInner')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-65)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-35)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
 								.text("Inner");
@@ -221,23 +237,28 @@ if (!d3) { throw "d3 wasn't included!";}
 						}
 					if (layer=="middle"){
 						horz=(-2 * legendRectSize) + (2 * radius) + 232 ;
-						vert=(i * height - offset) + (radius*(1/2)) + 100;
+						vert=(i * height - offset) + (radius*(1/2)) + 80;
 						if (first){
 							vis.selectAll("text.middleLegendTitle").remove(); 
 							vis.append("text")
 								.attr('class','middleLegendTitle')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-45)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-15)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
-								.text(title);
+								.text(function (){
+									if (title.length > 15){
+										return title.substring(0,14)+"...";
+										}
+									return title; 
+									});
 							vis.selectAll("text.outerLegendTitleMiddle").remove(); 
 							vis.append("text")
 								.attr('class','outerLegendTitleMiddle')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-65)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-35)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
 								.text("Middle");
@@ -246,23 +267,28 @@ if (!d3) { throw "d3 wasn't included!";}
 					}
 					if (layer=="outer"){
 						horz=(-2 * legendRectSize) + (2 * radius) + 420;
-						vert=(i * height - offset)+ (radius*(1/2)) + 100;
+						vert=(i * height - offset)+ (radius*(1/2) +80 );
 						if (first){
 							vis.selectAll("text.outerLegendTitle").remove(); 
 							vis.append("text")
 								.attr('class','outerLegendTitle')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-45)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-15)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
-								.text(title);
+								.text(function (){
+									if (title.length > 15){
+										return title.substring(0,14)+"...";
+										}
+									return title; 
+									});
 							vis.selectAll("text.outerLegendTitleLabel").remove(); 
 							vis.append("text")
 								.attr('class','outerLegendTitleLabel')
-								.style("font-size","20px")
+								.style("font-size","16px")
 								.style("font-weight","bold")
-								.attr("transform", "translate(" + (horz-45) + "," + (vert-65)+ ")")
+								.attr("transform", "translate(" + (horz-45) + "," + (vert-35)+ ")")
 								.attr('x', legendRectSize + legendSpacing)
 								.attr('y', legendRectSize - legendSpacing)
 								.text("Outer");
@@ -279,7 +305,8 @@ if (!d3) { throw "d3 wasn't included!";}
 			.style('stroke', colors);
 		
 		legend.append('text')
-			.style("font-size","14px")
+			.style("font-size","12px")
+			.style("font-weight","bold")
 			.attr('x', legendRectSize + legendSpacing)
 			.attr('y', legendRectSize - legendSpacing)
 			.text(function (d){return d;});
@@ -346,18 +373,19 @@ if (!d3) { throw "d3 wasn't included!";}
 			outerDropdown.append("button").attr("class","btn btn-default dropdown-toggle")
 				.attr("type", "button").attr("data-toggle","dropdown").html("Outer "+treeType+" nodes").append("span").attr("class","caret"); 
 			outerDropdown.append("ul").attr("class","dropdown-menu").html("<div id=outer"+treeType+"Leaves </div>"); 
+	
+	
 		};
 
 
 	d3.dendrogram.makeCartesianDendrogram =function (selector, data, options) {
-		options = options || {};
 		function zoom() {
 			svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 			}
 
+		options = options || {};
 
 		// define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
-		var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 		var viewerWidth = $(document).width();
 	    var viewerHeight = $(document).height();
 	
@@ -372,28 +400,35 @@ if (!d3) { throw "d3 wasn't included!";}
 		    .children(options.children || function(node) {
 				return node.children;
 		  		});
+		
+		var zoomListener = d3.behavior.zoom().scaleExtent([0.01, 10])
+				.on("zoom", zoom);
 
 		var diagonal = options.diagonal || d3.dendrogram.rightAngleDiagonal();
 		
-		var vis = options.vis || d3.select(selector).append("svg")
-			//.attr("width", w + 300)
-			//.attr("height", h + 30)
-			.attr("width", viewerWidth)
-			.attr("height", viewerHeight)
-			.attr("class", "overlay")
-			.call(zoomListener); 
+		var vis = options.vis || d3.select(selector)
+			.append("svg")
+				.attr("width", viewerWidth)
+				.attr("height", viewerHeight)
+				.attr("class", "overlay")
+				.call(zoomListener); 
+		
+		d3.select(selector).select("svg").append ("rect")
+			.attr("width",w).attr("height",h)
+			.style("fill", "none")
+			.style("stroke","black")
+			.style("stroke-width","5")
+			.style("opacity","0.5");
 		  
-
-
 		var svgGroup = vis.append("g")
 				.attr("transform", "translate(20, 20)");
 		
+		d3.select(selector).select("svg").on("wheel.zoom",null); 
+		d3.select(selector).select("svg").on("mousewheel.zoom",null); 
 
 		var nodes = tree(data);
-		
-		var legendRectSize = 10; 
-		var legendSpacing = 10; 
-		
+		var legendRectSize = 6; 
+		var legendSpacing = 6; 
 		var yscale; 	
 		if (options.skipBranchLengthScaling) {
 		  	yscale = d3.scale.linear()
@@ -412,7 +447,8 @@ if (!d3) { throw "d3 wasn't included!";}
 			  		.attr('y2', h)
 			  		.attr('x1', yscale)
 			  		.attr('x2', yscale)
-			  		.attr("stroke", "#ddd");
+			  		.attr("stroke", "#ddd")
+					.attr("stroke-width","3px");
 
 		  	svgGroup.selectAll("text.rule")
 				.data(yscale.ticks(10))
@@ -434,7 +470,7 @@ if (!d3) { throw "d3 wasn't included!";}
 				.attr("d", diagonal)
 				.attr("fill", "none")
 				.attr("stroke", "#aaa")
-				.attr("stroke-width", "2px");
+				.attr("stroke-width", "1px");
 			
 		var first = 1; 
 		
@@ -553,21 +589,43 @@ if (!d3) { throw "d3 wasn't included!";}
   
 
 	d3.dendrogram.makeRadialDendrogram = function(selector, data, options) {
+		function zoom() {
+			svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+			}
 		options = options || {};
 		radius = (options.radius || 700) / 2; // Global for the legend placement. See function updateLegend.
 		var tree = options.tree || d3.layout.cluster()
 			.size([360, radius - 45]);
 		
+		var zoomListener = d3.behavior.zoom().scaleExtent([1, 3])
+			.on("zoom", zoom); 
+		
 		var diagonal=d3.svg.diagonal.radial()
 			.projection(function(d){return [d.y, d.x / 180 * Math.PI];});
 		
-		var vis=d3.select(selector)
+		var width = (radius * 2) + 570, 
+			height = (radius * 2) + 50; 
+
+		var vis = options.vis || d3.select(selector)
 			.append("svg")
-				.attr("width", (radius * 2) + 550)
-				.attr("height", radius * 2) 
-				.append("g") 
-					.attr("transform","translate(" + (radius) + "," + radius + ")");
+				.attr("width", width)
+				.attr("height", height)
+				.attr("class", "overlay")
+				.call(zoomListener);
 		
+		vis.append ("rect")
+			.attr("width",width).attr("height",height)
+			.style("fill", "none")
+			.style("stroke","black")
+			.style("stroke-width","5")
+			.style("opacity","0.5");
+		  
+		var svgGroup = vis.append("g")
+				.attr("transform","translate(" + (radius) + "," + radius + ")");
+				
+		d3.select("svg").on("wheel.zoom",null); 
+		d3.select("svg").on("mousewheel.zoom",null); 
+
 		var tooltip = d3.select(selector)
 			.append('div')
 			.attr('class', 'tooltip')
@@ -578,24 +636,29 @@ if (!d3) { throw "d3 wasn't included!";}
 		var currentLegend=-1;
 		var nodes=tree.nodes(data);
 		
-		var link=vis.selectAll("path.link")
+		var link=svgGroup.selectAll("path.link")
 			.data(tree.links(nodes)).enter()
 			.append("path")
 				.attr("class", "link")
 				.attr("fill", "none")
 				.attr("stroke", "#aaa")
-				.attr("stroke-width", "2px")
+				.attr("stroke-width", "1px")
 				.attr("d", diagonal); 	
 		
 		makeDropdownSkeleton("Dendro");//Looks for the div 'dropdown' and generates the outer list and buttons
 		// For the radial display the interior node color options are constant (calculated on the backend in the C code)
+		addLeafButton("distance", 1, 'inner', 15, '#innerDendroLeaves', '#dendrogram'); 
+		addLeafButton("distance", 1, 'middle', 25, '#middleDendroLeaves', '#dendrogram'); 
+		addLeafButton("distance", 1, 'outer', 35, '#outerDendroLeaves', '#dendrogram') ;
+		
 		addNodeButton("#interiorDendroNodes" ,2, selector, "Tpm distance"); 
 		addNodeButton("#interiorDendroNodes" ,3, selector, "Square root tpm distance"); 
 		addNodeButton("#interiorDendroNodes" ,4, selector, "Quad root tpm distance"); 
+		addNodeButton("#interiorDendroNodes" ,5, selector, "Make nodes smaller"); 
 					
 		var first = 1; 
 
-		var innerNodes = vis.selectAll("g")
+		var innerNodes = svgGroup.selectAll("g")
 			.data(nodes).enter()
 			.append("g")
 				.attr("class", function(n) {
@@ -608,9 +671,9 @@ if (!d3) { throw "d3 wasn't included!";}
 							for (var key in n) {
 								if (n.hasOwnProperty(key)) {
 									if (key != "x" && key!="y" && key!= "name" && key!="kids" && key!="length" && key!="colorGroup" && key!="parent" && key!="depth" && key!="rootDist"){
-										addLeafButton(key, count, 'inner', 5, '#innerDendroLeaves', '#dendrogram'); 
-										addLeafButton(key, count, 'middle', 17, '#middleDendroLeaves', '#dendrogram'); 
-										addLeafButton(key, count, 'outer', 29, '#outerDendroLeaves', '#dendrogram') ;
+										addLeafButton(key, count, 'inner', 15, '#innerDendroLeaves', '#dendrogram'); 
+										addLeafButton(key, count, 'middle', 25, '#middleDendroLeaves', '#dendrogram'); 
+										addLeafButton(key, count, 'outer', 35, '#outerDendroLeaves', '#dendrogram') ;
 										}
 									}
 								count += 1;
@@ -621,27 +684,10 @@ if (!d3) { throw "d3 wasn't included!";}
 						}
 					})
 				.attr("transform", function(d){return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
-			
-		var interiorNodes = vis.selectAll("g.internalNode")
+		var temp = 1; 
+		var temp2; 
+		var interiorNodes =svgGroup.selectAll("g.internalNode")
 			.append("circle")
-				.on("mouseover", function(d) {
-					tooltip.transition()
-					.duration(200)
-					.style("opacity", .9);
-					result = "Contributing genes: " + d.contGenes + "<br/>";
-					for (var n in d.geneList){
-						result = result + n + " " + d.geneList[n] + "<br/>"; 
-						}
-					tooltip.html(result)
-					.style("left", (d3.event.pageX + 5) + "px")
-					.style("top", (d3.event.pageY - 28) + "px");
-					})
-				.on("mouseout", function(d) {
-					tooltip.transition()
-					.duration(500)
-					.style("opacity", 0);
-					}
-				   )
 				.attr("r", function(d){
 					if (d.name==" "){
 					return 1 + Math.sqrt(d.kids);}
@@ -650,24 +696,130 @@ if (!d3) { throw "d3 wasn't included!";}
 				.style("fill", function(d){
 					if (d.name==" "){return d.whiteToBlack;}
 					else{return "none";}})
+				.on("click", function(d) {
+					d3.select(this).style("fill", "red"); 
+					if (temp ==2) {
+						console.log(temp2);
+						temp2.style("fill", d.whiteToBlack);
+						for (var temp3 in d){console.log(temp3);}
+						} 
+					tooltip.transition()
+					.duration(200)
+					.style("opacity", 0.9);
+					result = "<table border=\"1\">";  //"Contributing genes" + "</td><td>" +d.contGenes + "td/>";
+					count = 1;
+					result = result +"<tr><td colspan=\"4\" style=\"font-size:14px;text-align:center\">Internal node meta data</td>"; 
+					//result = result +"<td></td><td></td></tr>"; 
+					for (var key in d) {
+						if (d.hasOwnProperty(key)) {
+							if (key == "number" || key == "rootDist" || key == "kids" || key == "tpmDistance" || key == "length" || key == "contGenes" || key == "normalizedDistance" || key == "depth")
+								{
+								if (count == 1){
+									count = 2; 
+									result = result +"<tr><td style=\"font-size:10px;\">" + key + "</td><td style=\"font-size:10px;\">" + d[key] + "</td>"; 
+									}
+								else{
+									count = 1; 
+									result = result +"<td style=\"font-size:10px;\">" + key + "</td><td style=\"font-size:10px;\">" + d[key] + "</td></tr>"; 
+									}
+								}
+							}
+						}
+					count = 1;
+					result = result +"<tr><td colspan=\"2\" style=\"font-size:14px\">Top 10 contributing genes </td><td colspan=\"2\" style=\"font-size:14px\">TPM value contributed</td>"; 
+					//result = result +"<td></td><td></td></tr>"; 
+					for (var n in d.geneList){
+						//result = result + n + " " + d.geneList[n] + "<br/>"; 
+						if (count == 1){
+							count = 2; 
+							result = result +"<tr><td style=\"font-size:10px\">" + n + "</td><td style=\"font-size:10px\">" + d.geneList[n] + "</td>"; 
+							}
+						else{
+							count = 1; 
+							result = result +"<td style=\"font-size:10px\">" + n + "</td><td style=\"font-size:10px\">" + d.geneList[n] + "</td></tr>"; 
+							}
+						}
+					result = result + "</table"; 
+					tooltip.html(result)
+					.style("right", "160px")
+					.style("top", "500px"); 
+					temp = 2;
+					temp2 = d3.select(this); 
+					})
 				.style("stroke", "black")
 				.style("stroke-width", ".25px");
-
-		var innerLeaves = vis.selectAll("g.innerLeaf")
+		
+		var trueLeaves = svgGroup.selectAll("g.trueLeaf")
 			.data(nodes).enter()
 			.append("g")
-				.attr("class", "innerLeaf")
+				.attr("class", "trueLeaf")
 				.attr("transform",function(d){return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
 
-		innerLeaves.append("circle")
+		var temp4 =1; 
+		var temp5; 
+		trueLeaves.append("circle")
 			.attr("r", function(d){
-				if (d.name !==" "){return 4;}})
+				if (d.name !==" "){return 2;}})
 			.style("fill", function(d){
 				if (d.name !==" "){return "d.whiteToBlack";}
 				})
-			.attr("transform","translate(" + 5 + "," + 0 + ")");
+			.attr("transform","translate(" + 5 + "," + 0 + ")")
+			.on("click", function(d) {
+				d3.select(this).style("fill", "red"); 
+				if (temp4 ==2) {
+					console.log(temp5);
+					temp5.style("fill", d.whiteToBlack);
+					for (var temp3 in d){console.log(temp3);}
+					} 
+				tooltip.transition()
+				.duration(200)
+				.style("opacity", 0.9);
+				result = "<table border=\"1\">";  
+				count = 1;
+				result = result +"<tr><td colspan=\"4\" style=\"font-size:14px;text-align:center\">Inner leaf meta data</td>"; 
+				for (var key in d) {
+					if (d.hasOwnProperty(key)) {
+						if (key != "x" && key!="y" && key!="kids" && key!="colorGroup" && key!="parent")
+							{
+							var sub1 = key, sub2 = d[key]; 
+							if (typeof key === 'string' && key.length > 20)
+								{
+								sub1 = key.substring(0,19)+"...";
+								}
+							if (typeof d[key] === 'string' && d[key].length > 20)
+								{
+								sub2 = d[key].substring(0,19)+"...";
+								}
+							console.log(key, sub1, d[key],sub2); 
+							if (count == 1){
+								count = 2; 
+								result = result +"<tr><td style=\"font-size:10px;\">" + sub1 + "</td><td style=\"font-size:10px;\">" + sub2 + "</td>"; 
+								}
+							else{
+								count = 1; 
+								result = result +"<td style=\"font-size:10px;\">" + sub1 + "</td><td style=\"font-size:10px;\">" + sub2 + "</td></tr>"; 
+								}
+							}
+						}
+					}
+				result = result + "</table"; 
+				tooltip.html(result)
+				.style("right", "100px")
+				.style("top", "500px"); 
+				temp4 = 2;
+				temp5 = d3.select(this); 
+				});
 
-		var middleLeaves = vis.selectAll("g.middleLeaf")
+		var innerLeaves = svgGroup.selectAll("g.innerLeaf")
+			.data(nodes).enter()
+			.append("g")
+				.attr("class", "innerLeaf")
+				.attr("transform",function(d){return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";})
+				.append("circle")
+					.attr("r",4)
+					.style("fill","none");
+
+		var middleLeaves = svgGroup.selectAll("g.middleLeaf")
 			.data(nodes).enter()
 			.append("g")
 				.attr("class", "middleLeaf")
@@ -676,7 +828,7 @@ if (!d3) { throw "d3 wasn't included!";}
 					.attr("r", 4)
 					.style("fill","none");
 
-		var outerLeaves = vis.selectAll("g.outerLeaf")
+		var outerLeaves = svgGroup.selectAll("g.outerLeaf")
 			.data(nodes).enter()
 			.append("g")
 				.attr("class", "outerLeaf")
@@ -685,6 +837,6 @@ if (!d3) { throw "d3 wasn't included!";}
 					.attr("r", 4)
 					.style("fill","none");
 		
-		return {tree: tree, vis: vis};
+		return {tree: tree, vis: svgGroup};
 		};
 })();
