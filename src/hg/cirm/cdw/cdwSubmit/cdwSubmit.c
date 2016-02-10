@@ -500,44 +500,6 @@ while ((c = *s++) != 0)
         errAbort("Character '%c' (binary %d) not allowed in fileName '%s'", c, (int)c, fileName);
 }
 
-void allGoodSymbolChars(char *symbol)
-/* Return TRUE if all chars are good for a basic symbol in a controlled vocab */
-{
-if (!sameString("n/a", symbol))
-    {
-    char c, *s = symbol;
-    while ((c = *s++) != 0)
-	if (!isalnum(c) && c != '_')
-	    errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
-    }
-}
-
-boolean isExperimentId(char *experiment)
-/* Return TRUE if it looks like an CIRM experiment ID */
-{
-return TRUE;
-}
-
-boolean isAllNum(char *s)
-/* Return TRUE if all characters are numeric (no leading - even) */
-{
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c))
-        return FALSE;
-return TRUE;
-}
-
-boolean isAllHexLower(char *s)
-/* Return TRUE if all chars are valid lower case hexadecimal. */
-{
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c) && !(c >= 'a' && c <= 'f'))
-        return FALSE;
-return TRUE;
-}
-         
 boolean isSupportedFormat(char *format)
 /* Return TRUE if this is one of our supported formats */
 {
@@ -559,15 +521,6 @@ if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 
 if (startsWith("bed_", format))
     format += 4;
 return cdwIsSupportedBigBedFormat(format);
-}
-
-
-boolean isEmptyOrNa(char *s)
-/* Return TRUE if string is NULL, "", "n/a", or "N/A" */
-{
-if (isEmpty(s))
-    return TRUE;
-return sameWord(s, "n/a");
 }
 
 void prefetchChecks(char *format, char *fileName)
@@ -730,83 +683,6 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     }
 return updateCount;
 }
-
-#ifdef UNUSED
-void doValidatedEmail(struct cdwSubmit *submit, boolean isComplete)
-/* Send an email with info on all validated files */
-{
-struct sqlConnection *conn = cdwConnect();
-struct cdwUser *user = cdwUserFromId(conn, submit->userId);
-struct dyString *message = dyStringNew(0);
-/* Is this submission has no new file at all */
-if ((submit->oldFiles != 0) && (submit->newFiles == 0) &&
-    (submit->metaChangeCount == 0)  && isEmpty(submit->errorMessage)
-     && (submit->fileIdInTransit == 0))
-    {
-    dyStringPrintf(message, "Your submission from %s is completed, but validation was not performed for this submission since all files in validate.txt have been previously submitted and validated.\n", submit->url);
-    mailViaPipe(user->email, "CDW Validation Results", message->string, cdwDaemonEmail);
-    sqlDisconnect(&conn);
-    dyStringFree(&message);
-    return;
-    }
-
-if (isComplete)
-    dyStringPrintf(message, "Your submission from %s is completely validated\n", submit->url);
-else
-    dyStringPrintf(message, 
-	"Your submission hasn't validated after 24 hours, something is probably wrong\n"
-	"at %s\n", submit->url);
-dyStringPrintf(message, "\n#accession\tsubmitted_file_name\tnotes\n");
-char query[512];
-sqlSafef(query, sizeof(query),
-    "select licensePlate,submitFileName "
-    " from cdwFile left join cdwValidFile on cdwFile.id = cdwValidFile.fileId "
-    " where cdwFile.submitId = %u and cdwFile.id != %u"
-    , submit->id, submit->manifestFileId);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *licensePlate = row[0];
-    char *submitFileName = row[1];
-    dyStringPrintf(message, "%s\t%s\t", naForNull(licensePlate), submitFileName);
-    if (licensePlate == NULL)
-        {
-	dyStringPrintf(message, "Not validating");
-	}
-    dyStringPrintf(message, "\n");
-    }
-sqlFreeResult(&sr);
-
-mailViaPipe(user->email, "CDW Validation Results", message->string, cdwDaemonEmail);
-sqlDisconnect(&conn);
-dyStringFree(&message);
-}
-#endif /* UNUSED */
-
-#ifdef UNUSED
-void waitForValidationAndSendEmail(struct cdwSubmit *submit, char *email)
-/* Poll database every 5 minute or so to see if finished. */
-{
-int maxSeconds = 3600*24;
-int secondsPer = 60*5;
-int seconds;
-for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
-    {
-    struct sqlConnection *conn = cdwConnect();
-    if (cdwSubmitIsValidated(submit, conn))
-         {
-	 doValidatedEmail(submit, TRUE);
-	 return;
-	 }
-    verbose(2, "waiting for validation\n");
-    sqlDisconnect(&conn);
-    sleep(secondsPer);	// Sleep for 5 more minutes
-    }
-doValidatedEmail(submit, FALSE);
-}
-#endif /* UNUSED */
 
 static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list)
 /* Check tagStorm tags */
@@ -998,7 +874,7 @@ int metaTagsId = sqlQuickNum(conn, query->string);
 if (metaTagsId == 0)
     {
     dyStringClear(query);
-    dyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
+    sqlDyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
     dyStringAppend(query, cgi->string);
     dyStringPrintf(query, "', '%s')", md5);
     sqlUpdate(conn, query->string);
