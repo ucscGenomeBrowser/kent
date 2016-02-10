@@ -29,6 +29,7 @@
 
 boolean doUpdate = FALSE;
 boolean noRevalidate = FALSE;
+boolean justTest = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +42,8 @@ errAbort(
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
   "   -noRevalidate - if set don't run revalidator on update\n"
-  "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n");
+  "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n"
+  "   -test This will look at the manifest and meta, but not actually load the databas\n");
 }
 
 char *localPrefix = "local://localhost/";
@@ -52,6 +54,7 @@ static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
    {"noRevalidate", OPTION_BOOLEAN},
    {"md5", OPTION_STRING},
+   {"test", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -814,8 +817,9 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
-	if (!cdwValidateTagVal(pair->name, pair->val))
-	    errAbort("Unknown tag '%s' in %s", pair->name, tagStorm->fileName);
+	cdwValidateTagName(pair->name);
+	if (justTest)	// ugly - will do this outside of test soon
+	    cdwValidateTagVal(pair->name, pair->val);
 	}
     rCheckTagValid(tagStorm, stanza->children);
     }
@@ -875,8 +879,7 @@ int i;
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
-    if (!cdwValidateTagName(field))
-	errAbort("Unknown field '%s' in %s", field, table->name);
+    cdwValidateTagName(field);
     }
 
 /* Check meta.txt tags */
@@ -987,7 +990,7 @@ cgiEncodeHash(hash, cgi);
 char *md5 = hmacMd5("", cgi->string);
 
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select id from cdwMetaTags where md5='%s' and tags='%s'", 
+sqlDyStringPrintf(query, "select id from cdwMetaTags where md5='%s' and tags='%s'", 
     md5, cgi->string);
 int metaTagsId = sqlQuickNum(conn, query->string);
 
@@ -1073,6 +1076,9 @@ safef(submitUrl, sizeof(submitUrl), "%s%s/%s", localPrefix, submitDir, manifestF
 /* Figure out directory ID for submission */
 int hostId = cdwGetHost(conn, "localhost");
 int submitDirId = cdwGetSubmitDir(conn, hostId, submitDir);
+
+if (justTest)
+    return;
 
 /* Create a submission record */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
@@ -1210,6 +1216,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
 noRevalidate = optionExists("noRevalidate");
+justTest = optionExists("test");
 if (optionExists("md5"))
     {
     char *md5File = optionVal("md5", NULL);
