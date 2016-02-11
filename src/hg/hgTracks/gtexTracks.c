@@ -241,7 +241,6 @@ if (extras->isComparison)
         }
     geneInfo->medians1 = medians1;
     geneInfo->medians2 = medians2;
-
     }
 }
 
@@ -501,10 +500,9 @@ int i;
 double maxExp = 0.0;
 int expCount = geneBed->expCount;
 double expScore;
-struct gtexTissue *tis;
-for (i=0, tis = extras->tissues; i<expCount && tis != NULL; i++, tis = tis->next)
+for (i=0; i<expCount; i++)
     {
-    if (!filterTissue(tg, tis->name))
+    if (!filterTissue(tg, getTissueName(i)))
         continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
@@ -658,6 +656,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         hvGfxBox(hvg, x1, yZero, barWidth, height, fillColorIx);
     else
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
+    // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > viewMax)
         hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
     x1 = x1 + barWidth + graphPadding;
