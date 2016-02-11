@@ -14533,7 +14533,6 @@ registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
-registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
