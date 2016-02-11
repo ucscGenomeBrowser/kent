@@ -82,13 +82,8 @@ html chainNet
         type chain papHam1
         otherDb papHam1
 
-        track chainRheMac3
-        subTrack euarchontoglireChainNetViewchain off
-        subGroups view=chain species=gRhesus clade=bCerco
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain rheMac3
-        otherDb rheMac3
+include chainNetRheMac3.ra beta,public
+include chainNetRheMac8.ra alpha
 
         track chainNomLeu2
         subTrack euarchontoglireChainNetViewchain off
@@ -186,14 +181,6 @@ include hg38ChainNet.ra
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign papHam1 chainPapHam1
         otherDb papHam1
-
-        track netRheMac3
-        subTrack euarchontoglireChainNetViewnet on 
-        subGroups view=net species=gRhesus clade=bCerco
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign rheMac3 chainRheMac3
-        otherDb rheMac3
 
         track netNomLeu2
         subTrack euarchontoglireChainNetViewnet off
