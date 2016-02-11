@@ -44,16 +44,18 @@ struct gtexGeneInfo
 /***********************************************/
 /* Color gene models using GENCODE conventions */
 
-struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
-struct rgbColor noncodingColor = {0, 100, 0}; // #006400
-struct rgbColor problemColor = {254, 0, 0}; // #FE0000
-struct rgbColor unknownColor = {1, 1, 1};
+static struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
+static struct rgbColor noncodingColor = {0, 100, 0}; // #006400
+static struct rgbColor pseudoColor = {255,51,255}; // #FF33FF
+static struct rgbColor problemColor = {254, 0, 0}; // #FE0000
+static struct rgbColor unknownColor = {1, 1, 1};
 
 static struct statusColors
 /* Color values for gene models */
     {
     Color coding;
     Color noncoding;
+    Color pseudo;
     Color problem;
     Color unknown;
     } statusColors = {0,0,0,0};
@@ -65,6 +67,7 @@ if (statusColors.coding != 0)
     return;
 statusColors.coding = hvGfxFindColorIx(hvg, codingColor.r, codingColor.g, codingColor.b);
 statusColors.noncoding = hvGfxFindColorIx(hvg, noncodingColor.r, noncodingColor.g, noncodingColor.b);
+statusColors.pseudo = hvGfxFindColorIx(hvg, pseudoColor.r, pseudoColor.g, pseudoColor.b);
 statusColors.problem = hvGfxFindColorIx(hvg, problemColor.r, problemColor.g, problemColor.b);
 statusColors.unknown = hvGfxFindColorIx(hvg, unknownColor.r, unknownColor.g, unknownColor.b);
 }
@@ -79,6 +82,8 @@ if (sameString(geneBed->transcriptClass, "coding"))
     return statusColors.coding;
 if (sameString(geneBed->transcriptClass, "nonCoding"))
     return statusColors.noncoding;
+if (sameString(geneBed->transcriptClass, "pseudo"))
+    return statusColors.pseudo;
 if (sameString(geneBed->transcriptClass, "problem"))
     return statusColors.problem;
 return statusColors.unknown;
