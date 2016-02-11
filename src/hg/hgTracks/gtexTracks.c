@@ -501,8 +501,11 @@ int i;
 double maxExp = 0.0;
 int expCount = geneBed->expCount;
 double expScore;
-for (i=0; i<expCount; i++)
+struct gtexTissue *tis;
+for (i=0, tis = extras->tissues; i<expCount && tis != NULL; i++, tis = tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     else
