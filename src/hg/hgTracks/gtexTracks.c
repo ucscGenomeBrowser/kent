@@ -17,6 +17,7 @@
 struct gtexGeneExtras 
 /* Track info */
     {
+    char *version;              /* Suffix to table name, e.g. 'V6' */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -43,16 +44,18 @@ struct gtexGeneInfo
 /***********************************************/
 /* Color gene models using GENCODE conventions */
 
-struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
-struct rgbColor noncodingColor = {0, 100, 0}; // #006400
-struct rgbColor problemColor = {254, 0, 0}; // #FE0000
-struct rgbColor unknownColor = {1, 1, 1};
+static struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
+static struct rgbColor noncodingColor = {0, 100, 0}; // #006400
+static struct rgbColor pseudoColor = {255,51,255}; // #FF33FF
+static struct rgbColor problemColor = {254, 0, 0}; // #FE0000
+static struct rgbColor unknownColor = {1, 1, 1};
 
 static struct statusColors
 /* Color values for gene models */
     {
     Color coding;
     Color noncoding;
+    Color pseudo;
     Color problem;
     Color unknown;
     } statusColors = {0,0,0,0};
@@ -64,6 +67,7 @@ if (statusColors.coding != 0)
     return;
 statusColors.coding = hvGfxFindColorIx(hvg, codingColor.r, codingColor.g, codingColor.b);
 statusColors.noncoding = hvGfxFindColorIx(hvg, noncodingColor.r, noncodingColor.g, noncodingColor.b);
+statusColors.pseudo = hvGfxFindColorIx(hvg, pseudoColor.r, pseudoColor.g, pseudoColor.b);
 statusColors.problem = hvGfxFindColorIx(hvg, problemColor.r, problemColor.g, problemColor.b);
 statusColors.unknown = hvGfxFindColorIx(hvg, unknownColor.r, unknownColor.g, unknownColor.b);
 }
@@ -78,6 +82,8 @@ if (sameString(geneBed->transcriptClass, "coding"))
     return statusColors.coding;
 if (sameString(geneBed->transcriptClass, "nonCoding"))
     return statusColors.noncoding;
+if (sameString(geneBed->transcriptClass, "pseudo"))
+    return statusColors.pseudo;
 if (sameString(geneBed->transcriptClass, "problem"))
     return statusColors.problem;
 return statusColors.unknown;
@@ -286,6 +292,9 @@ static void gtexGeneLoadItems(struct track *tg)
 struct gtexGeneExtras *extras;
 AllocVar(extras);
 tg->extraUiData = extras;
+
+/* Get version info from track table name */
+extras->version = gtexVersionSuffix(tg->table);
 extras->doLogTransform = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_LOG_TRANSFORM, 
                                                 GTEX_LOG_TRANSFORM_DEFAULT);
 char *samples = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, 
@@ -296,12 +305,13 @@ if (sameString(samples, GTEX_SAMPLES_COMPARE_SEX))
 char *comparison = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COMPARISON_DISPLAY,
                         GTEX_COMPARISON_DEFAULT);
 extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FALSE;
-extras->maxMedian = gtexMaxMedianScore(NULL);
+extras->maxMedian = gtexMaxMedianScore(extras->version);
 
 /* Get geneModels in range */
-//TODO: version the table name, move to lib
+char buf[256];
 char *modelTable = "gtexGeneModel";
-struct hash *modelHash = loadGeneModels(modelTable);
+safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "");
+struct hash *modelHash = loadGeneModels(buf);
 
 /* Get geneBeds (names and all-sample tissue median scores) in range */
 bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);
@@ -311,8 +321,12 @@ struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
 struct gtexGeneBed *geneBed = (struct gtexGeneBed *)tg->items;
 
 /* Load tissue colors: GTEx or rainbow */
+#ifdef COLOR_SCHEME
 char *colorScheme = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COLORS, 
                         GTEX_COLORS_DEFAULT);
+#else
+char *colorScheme = GTEX_COLORS_DEFAULT;
+#endif
 if (sameString(colorScheme, GTEX_COLORS_GTEX))
     {
     extras->colors = getGtexTissueColors();
@@ -487,8 +501,11 @@ int i;
 double maxExp = 0.0;
 int expCount = geneBed->expCount;
 double expScore;
-for (i=0; i<expCount; i++)
+struct gtexTissue *tis;
+for (i=0, tis = extras->tissues; i<expCount && tis != NULL; i++, tis = tis->next)
     {
+    if (!filterTissue(tg, tis->name))
+        continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
     else

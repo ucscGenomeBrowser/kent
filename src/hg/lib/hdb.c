@@ -1650,7 +1650,7 @@ static boolean querySeqInfo(struct sqlConnection *conn, char *acc, char *seqTbl,
 /* lookup information in the seq or gbSeq table */
 {
 boolean gotIt = FALSE;
-if (hTableExists(sqlGetDatabase(conn), seqTbl))
+if (sqlTableExists(conn, seqTbl))
     {
     char query[256];
     sqlSafef(query, sizeof(query),
@@ -1684,8 +1684,8 @@ size_t size;
 off_t offset;
 char *extTable = NULL;
 /* try gbExtFile table first, as it tends to be  more performance sensitive */
-if (querySeqInfo(conn, acc, "gbSeq", "gbExtFile", retId, &extId, &size, &offset))
-    extTable = "gbExtFile";
+if (querySeqInfo(conn, acc, gbSeqTable, "gbExtFile", retId, &extId, &size, &offset))
+    extTable = gbExtFileTable;
 else if (querySeqInfo(conn, acc, "seq", "extFile", retId, &extId, &size, &offset))
     extTable = "extFile";
 else
@@ -1705,7 +1705,7 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 {
 char *buf= getSeqAndId(conn, acc, retId);
 if (buf == NULL)
-    errAbort("No sequence for %s in seq or gbSeq tables", acc);
+    errAbort("No sequence for %s in seq or %s tables", acc, gbSeqTable);
 return buf;
 }
 
@@ -1805,8 +1805,8 @@ if ((compatTable != NULL) && hTableExists(db, compatTable))
     }
 else
     {
-    if (hTableExists(db, "gbSeq"))
-        haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
+    if (sqlTableExists(conn, gbSeqTable))
+        haveSeq = checkIfInTable(conn, acc, "acc", gbSeqTable);
     if ((!haveSeq) && hTableExists(db, "seq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "seq");
     }
@@ -1938,15 +1938,15 @@ genbankDropVer(accId, acc);
 
 if (native && genbankIsRefSeqAcc(accId))
     {
-    sqlSafef(query, sizeof(query), "select product from refLink where mrnaAcc = \"%s\"", accId);
+    sqlSafef(query, sizeof(query), "select product from %s where mrnaAcc = \"%s\"", refLinkTable, accId);
     desc = sqlQuickString(conn, query);
     }
 
 if (desc == NULL)
     {
-    sqlSafef(query, sizeof(query), "select description.name from description,gbCdnaInfo "
-          "where gbCdnaInfo.acc = \"%s\" "
-          "and gbCdnaInfo.description = description.id", accId);
+    sqlSafef(query, sizeof(query), "select d.name from %s d, %s g "
+          "where g.acc = \"%s\" "
+          "and g.description = d.id", descriptionTable, gbCdnaInfoTable, accId);
     desc = sqlQuickString(conn, query);
     }
 hFreeConn(&conn);
@@ -5210,7 +5210,7 @@ char *hGenbankModDate(char *acc, struct sqlConnection *conn)
 {
 char query[128];
 sqlSafef(query, sizeof(query),
-      "select moddate from gbCdnaInfo where (acc = '%s')", acc);
+      "select moddate from %s where (acc = '%s')",gbCdnaInfoTable, acc);
 return sqlQuickString(conn, query);
 }
 

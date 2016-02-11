@@ -1096,9 +1096,10 @@ else if (gotCds)
     printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     safef(buf, sizeof(buf), "%s.%s", name, CODON_NUMBERING_SUFFIX);
-    puts("<br /><b>Show codon numbering</b>:\n");
     if (curOpt == baseColorDrawOff)
         disabled = "disabled";
+    printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
+                name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
     cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE), disabled);
     }
 else if (gotSeq)

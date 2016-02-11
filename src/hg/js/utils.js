@@ -1305,6 +1305,39 @@ function codonColoringChanged(name)
     // of track coloring select.
     var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
     $("input[name='" + name + ".codonNumbering']").attr('disabled', val === "OFF");
+    $("#" + name + "CodonNumberingLabel").toggleClass("disabled", val === "OFF" ? true : false);
+}
+
+function gtexTransformChanged(name)
+{ // Disable view limits settings if log transform enabled
+
+    // NOTE: selector strings are a bit complex due to dots GB vars/attributes (track.var)
+    // so can't use more concise jQuery syntax
+
+    // check log transform
+    var logCheckbox = $("input[name='" + name + ".logTransform']");
+    var isLogChecked = logCheckbox.attr('checked');
+
+    // enable/disable view limits
+    var maxTextbox = $("input[name='" + name + ".maxLimit']");
+    maxTextbox.attr('disabled', isLogChecked);
+    var maxTextLabel = $("." + name + "ViewLimitsMaxLabel");
+    maxTextLabel.toggleClass("disabled", isLogChecked ? true : false);
+}
+
+function gtexSamplesChanged(name)
+{ // Disable and comparison controls if all samples selected
+
+    // check sample select
+    var sampleSelect = $("input[name='" + name + ".samples']:checked");
+    var isAllSamples = (sampleSelect.val() === 'all');
+
+    // enable/disable comparison options
+    // limiting to radio buttons as there is a problem with tissue checkbox naming on popup
+    var comparisonButtons = $("input[type='radio' name='" + name + ".comparison']");
+    comparisonButtons.attr('disabled', isAllSamples);
+    var comparisonLabel = $("." + name + "ComparisonLabel");
+    comparisonLabel.toggleClass("disabled", isAllSamples ? true : false);
 }
 
 
@@ -1756,7 +1789,12 @@ var sortTable = {
             $(tbody).attr('id',"tbodySort"); // Must have some id!
             id = $(tbody).attr('id');
         }
-        sortTable.loadingId = showLoadingImage(id);
+        if ($(tbody).css('display') === 'none') {
+            // suppress loading image if element is hidden (and consequently has no position)
+            sortTable.loadingId = null;
+        } else {
+            sortTable.loadingId = showLoadingImage(id);
+        }
         sortTable.tbody=tbody;
         sortTable.columns=sortColumns;
         // This allows hiding the rows while sorting!
@@ -2161,6 +2199,9 @@ var sortTable = {
     // Finally if you want the tableSort to alternate the table row colors
     // (using #FFFEE8 and #FFF9D2) then TBODY.sortable should also have class 'altColors'
     // NOTE: This class can be added by using the altColors option to this function
+    // To override, specify <TBODY class='sortable noAltColors'>
+    // NOTE: Add class 'initBySortOrder' to have an sort by column performed at document initialization time, using
+    // the saved sortOrder cart variable 
     
         if (altColors === undefined || altColors === null) // explicitly default this boolean
             altColors = false;
@@ -2196,7 +2237,8 @@ var sortTable = {
             $(tbody).addClass('sortable');
             //warn('Added sortable class to tbody');
         }
-        if (altColors && $(tbody).hasClass('altColors') === false) {
+        if (altColors && $(tbody).hasClass('altColors') === false && 
+                $(tbody).hasClass('noAltColors') === false) {
             $(tbody).addClass('altColors');
             //warn('Added altColors class to tbody.sortable');
         }
@@ -2252,10 +2294,14 @@ var sortTable = {
         });
         // Now update all of those cells
         sortTable.orderUpdate(table,sortColumns,addSuperscript);
+        if ($(tbody).hasClass('initBySortOrder')) {
+            sortTable.sortByColumns(tbody,sortColumns);
+        }
 
         // Alternate colors if requested
-        if (altColors)
+        if (altColors) {
             sortTable.alternateColors(tbody);
+        }
 
         // Highlight rows?  But on subtrack list, this will mess up "metadata dropdown" coloring.
         // So just exclude tables with drag and drop

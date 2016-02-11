@@ -38,6 +38,7 @@
 #include "chromInfo.h"
 #include "knetUdc.h"
 #include "trashDir.h"
+#include "genbank.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -1742,6 +1743,8 @@ if (startsWith("virt:", cartUsualString(cart, "position", "")))
 allJoiner = joinerRead("all.joiner");
 getDbGenomeClade(cart, &database, &genome, &clade, oldVars);
 freezeName = hFreezeFromDb(database);
+
+initGenbankTableNames(database);
 
 int timeout = cartUsualInt(cart, "udcTimeout", 300);
 if (udcCacheTimeout() < timeout)

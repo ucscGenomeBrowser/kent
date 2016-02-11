@@ -59,7 +59,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     ggTypes.o glDbRep.o goa.o goaPart.o googleAnalytics.o gpFx.o \
     growthCondition.o grp.o \
     gtexInfo.o gtexDonor.o gtexGeneBed.o gtexSample.o gtexSampleData.o \
-    gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexUi.o \
+    gtexTissue.o gtexTissueData.o gtexTissueMedian.o gtexTranscript.o gtexUi.o \
     gwasCatalog.o hAnno.o haplotypes.o \
     hapmapAllelesOrtho.o hapmapAllelesSummary.o hapmapPhaseIIISummary.o \
     hapmapSnps.o hapmapSnpsCombined.o \
@@ -78,9 +78,9 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     mcnBreakpoints.o mdb.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \
     mouseOrtho.o mouseSyn.o mouseSynWhd.o mysqlTableStatus.o ncbiRefLink.o \
-    netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o orthoAlleles.o \
-    pal.o pbStamp.o pcrResult.o pepPred.o peptideAtlasPeptide.o plasEndPairs.o \
-    polyGenotype.o protFeat.o pscreen.o \
+    ncbiRefSeqLink.o netAlign.o netCart.o nonCodingUi.o omimTitle.o ooUtils.o \
+    orthoAlleles.o pal.o pbStamp.o pcrResult.o pepPred.o \
+    peptideAtlasPeptide.o plasEndPairs.o polyGenotype.o protFeat.o pscreen.o \
     pseudoGeneLink.o pslReader.o pslWScore.o putaInfo.o qaSeq.o \
     rangeTreeFile.o rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \

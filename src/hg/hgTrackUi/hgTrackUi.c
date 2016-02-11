@@ -47,6 +47,7 @@
 #include "microarray.h"
 #include "trackVersion.h"
 #include "gtexUi.h"
+#include "genbank.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -1713,7 +1714,7 @@ void knownGeneIdConfig(struct trackDb *tdb)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 char *omimAvail = NULL;
-sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
 char *isGencode = trackDbSetting(tdb, "isGencode");
@@ -1854,7 +1855,7 @@ if (sameString(tdb->track, "refGene"))
     {
     struct sqlConnection *conn = hAllocConn(database);
     char query[128];
-    sqlSafef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
+    sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
     omimAvail = sqlQuickNum(conn, query);
     hFreeConn(&conn);
     }
@@ -1902,6 +1903,34 @@ labelMakeCheckBox(tdb, "gene", "gene", FALSE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
 
 baseColorDrawOptDropDown(cart, tdb);
+}
+
+void ncbiRefSeqUI(struct trackDb *tdb)
+/* Put up gene ID track controls */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+char *omimAvail = NULL;
+if (sqlTableExists(conn, "kgXref"))
+    {
+    sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
+    omimAvail = sqlQuickString(conn, query);
+    }
+else if (sqlTableExists(conn, "ncbiRefSeqLink"))
+    omimAvail = "yes";
+
+char varName[64];
+safef(varName, sizeof(varName), "%s.label", tdb->track);
+printf("<br><b>Label:</b> ");
+labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
+labelMakeCheckBox(tdb, "acc", "accession", FALSE);
+if (omimAvail)
+    {
+    char sym[32];
+    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    }
+printf("&nbsp;&nbsp;(select gene symbol(s) to display)<br>");
 }
 
 void ensGeneUI(struct trackDb *tdb)
@@ -2898,6 +2927,8 @@ else if (startsWith("ucscRetro", track)
     retroGeneUI(tdb);
 else if (sameString(track, "ensGeneNonCoding"))
     ensemblNonCodingUI(tdb);
+else if (startsWith("refSeqComposite", track))
+    ncbiRefSeqUI(tdb);
 else if (sameString(track, "ensGene"))
     ensGeneUI(tdb);
 else if (sameString(track, "vegaGeneComposite"))
@@ -2987,8 +3018,10 @@ else if (sameString(track, "lrg"))
     lrgCfgUi(cart, tdb, tdb->track, NULL, boxed);
 else if (sameString(track, "lrgTranscriptAli"))
     lrgTranscriptAliCfgUi(cart, tdb, tdb->track, NULL, boxed);
-else if (startsWith(track, "gtexGene"))
+else if (startsWith("gtexGene", track))
+    {
     gtexGeneUi(cart, tdb, tdb->track, NULL, boxed);
+    }
 else if (tdb->type != NULL)
     {   // NOTE for developers: please avoid special cases and use cfgTypeFromTdb//cfgByCfgType()
         //  When you do, then multi-view cfg and subtrack cfg will work.
@@ -3142,7 +3175,7 @@ if (sameWord(tdb->track,"ensGene"))
 
     printf("<B style='font-size:200%%;'>%s%s</B>\n", longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
     }
-else if (sameWord(tdb->track, "ncbiGene"))
+else if (sameWord(tdb->track, "refSeqComposite"))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     char longLabel[1024];
@@ -3159,7 +3192,9 @@ else
     if (trackDbSetting(tdb, "wgEncode"))
         printf("<A HREF='/ENCODE/index.html'><IMG style='vertical-align:middle;' "
                "width=100 src='/images/ENCODE_scaleup_logo.png'><A>");
-    printf("<B style='font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+    // set large title font size, but less so for long labels to minimize wrap
+    printf("<B style='font-size:%d%%;'>%s%s</B>\n", strlen(tdb->longLabel) > 30 ? 133 : 200,
+                tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 
     }
 /* Print link for parent track */
@@ -3445,6 +3480,7 @@ char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
+initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 
 trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE);

@@ -19,7 +19,10 @@ static bam_index_t *bamOpenIdx(samfile_t *sam, char *fileOrUrl)
 /* If fileOrUrl has a valid accompanying .bai file, parse and return the index;
  * otherwise return NULL. */
 {
-bam_index_t *idx = sam_index_load(sam, fileOrUrl);
+char indexName[4096];
+// assume that index is a .bai file 
+safef(indexName, sizeof indexName, "%s.bai", fileOrUrl);
+bam_index_t *idx = sam_index_load2(sam, fileOrUrl, indexName);
 return idx;
 }
 #else

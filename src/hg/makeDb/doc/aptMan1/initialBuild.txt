@@ -256,17 +256,16 @@ searchPriority 8
     ln -s `pwd`/aptMan1.2bit /gbdb/aptMan1/aptMan1.2bit
 
 ##########################################################################
-# CREATE MICROSAT TRACK (TBD - 2015-06-22 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2016-02-4 - Chris )
      ssh hgwdev
      mkdir /cluster/data/aptMan1/bed/microsat
      cd /cluster/data/aptMan1/bed/microsat
      awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
 	../simpleRepeat/simpleRepeat.bed > microsat.bed
     hgLoadBed aptMan1 microsat microsat.bed
-    #	Read 8213 elements of size 4 from microsat.bed
-
+# Read 4041 elements of size 4 from microsat.bed
 ##########################################################################
-## WINDOWMASKER (TBD - 2015-03-20 - Hiram)
+## WINDOWMASKER (DONE - 2015-12-10 - Chris)
 
     mkdir /hive/data/genomes/aptMan1/bed/windowMasker
     cd /hive/data/genomes/aptMan1/bed/windowMasker
@@ -275,18 +274,22 @@ searchPriority 8
     # real    153m54.144s
 
     # Masking statistics
-    cat faSize.aptMan1.cleanWMSdust.txt
-    # 2053849526 bases (76078142 N's 1977771384 real 1208849805 upper
-    #     768921579 lower) in 25187 sequences in 1 files
-    # Total size: mean 81544.0 sd 330701.2 min 200 (JYOU01147511v1)
-    #    max 8606022 (KN905849v1) median 453
-    # %37.44 masked total, %38.88 masked real
+    cat faSize.aptMan1.cleanWMSdust.txti
 
+    #1523986457 bases (212971113 N's 1311015344 real 1087495173 upper
+    #223520171 lower) in 24719 sequences in 1 files
+    #Total size: mean 61652.4 sd 839476.9 min 1000 (NW_014006041v1) max
+    #63182071 (NW_013995860v1) median 1777
+    #N count: mean 8615.7 sd 64629.7
+    #U count: mean 43994.3 sd 635058.8
+    #L count: mean 9042.4 sd 142728.8
+    #%14.67 masked total, %17.05 masked real
+    
     cat fb.aptMan1.rmsk.windowmaskerSdust.txt
-    # 23839116 bases of 2053849526 (1.161%) in intersection
+    #28675883 bases of 1523986457 (1.882%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2015-03-20 - Hiram)
+# cpgIslands - (DONE - 2015-12-10 - Chris)
     mkdir /hive/data/genomes/aptMan1/bed/cpgIslands
     cd /hive/data/genomes/aptMan1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
@@ -299,10 +302,10 @@ searchPriority 8
     # real    10m28.915s
 
     cat fb.aptMan1.cpgIslandExt.txt
-    # 13717904 bases of 1977771384 (0.694%) in intersection
+    # 31431262 bases of 1311306859 (2.397%) in intersection
 
 #########################################################################
-# genscan - (TBD - 2015-03-20 - Hiram)
+# genscan - (Done - 2015-12-11 - Chris)
     mkdir /hive/data/genomes/aptMan1/bed/genscan
     cd /hive/data/genomes/aptMan1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
@@ -315,36 +318,55 @@ searchPriority 8
     cat fb.aptMan1.genscanSubopt.txt
     #   58340692 bases of 1977771384 (2.950%) in intersection
 
+#############################################################################
+# generic example procedure:
+
+    mkdir /hive/data/genomes/aptMan1/bed/augustus
+    cd /hive/data/genomes/aptMan1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=chicken -dbHost=hgwdev \
+           -workhorse=hgwdev aptMan1) > do.log 2>&1
+    # real    112m36.188s
+    # user    0m0.489s
+    # sys     0m0.729
+	
+    cat fb.aptMan1.augustusGene.txt
+    #24772963 bases of 1311306859 (1.889%) in intersection
+
 ########################################################################
-# Create kluster run files (TBD - 2015-03-24 - Hiram)
+# Create kluster run files (Done - 2015-12-22 - Chris)
 
     cd /hive/data/genomes/aptMan1
     # numerator is aptMan1 gapless bases "real" as reported by:
     head -1 faSize.aptMan1.2bit.txt
-# 2053849526 bases (76078142 N's 1977771384 real 1208345365 upper
-#    76942601 lower) in 25187 sequences in 1 files
+    #1523986457 bases (212971113 N's 1311015344 real 1087217052 upper
+    #223798292 lower) in 24719 sequences in 1 files
 
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
-    #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 1977771384 / 2861349177 \) \* 1024
-    # ( 1977771384 / 2861349177 ) * 1024 = 707.791245
+    calc \( 1311015344 / 2861349177 \) \* 1024
+    #  ( 1311015344 / 2861349177 ) * 1024 = 469.177171
 
     # ==> use -repMatch=700 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/aptMan1
     time blat aptMan1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/aptMan1.11.ooc \
-        -repMatch=700
-    # Wrote 23756 overused 11-mers to jkStuff/aptMan1.11.ooc
-    #  real    0m32.961s
+        -repMatch=400
+    # Wrote 21445 overused 11-mers to jkStuff/aptMan1.11.ooc
+    # Done making jkStuff/aptMan1.11.ooc
+    #
+    # real	0m27.556s
+    # user	0m26.401s
+    # sys	0m1.033s
 
     # there are no non-bridged gaps, do not need to do this
     #   check non-bridged gaps to see what the typical size is:
-#     hgsql -N -e 'select * from gap where bridge="no" order by size;' aptMan1 
-#       | ave -tableOut -col=7 stdin
+     hgsql -N -e 'select * from gap where bridge="no" order by size;' aptMan1 \ 
+       | ave -tableOut -col=7 stdin
+    # There are no non-bridged gaps 
 # # min Q1 median Q3 max mean N sum stddev
 # 50076 58368.8 70128 100495 1.07816e+07 178173 670 1.19376e+08 672006
 
@@ -361,66 +383,61 @@ searchPriority 8
 #    gapToLift -verbose=2 -minGap=100 bosTau7 jkStuff/nonBridged.lft \
 #        -bedFile=jkStuff/nonBridged.bed
 
-    # survey sizes:
-    n50.pl chrom.sizes
-#       reading: chrom.sizes
-#       contig count: 25187, total size: 2053849526, one half size: 1026924763
-# cumulative    N50 count       contig  contig size
-# 1026149130      545     KN906416v1      1073586
-# 1026924763 one half size
-# 1027218231      546     KN906384v1      1069101
+##	reading: chrom.sizes
+##	contig count: 24719, total size: 1523986457, one half size: 761993228
+## cumulative	N50 count	contig	contig size
+#757321977	50	NW_013989770v1	5713742
+#761993228 one half size
+#763000997	51	NW_014004284v1	5679020
+
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-12-22 - Chris)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism       mrnaCnt estCnt  refSeqCnt
-    #  Nanorana parkeri	3	0	0
-    #  Nanorana pleskei	3	0	0
-    #  Nanorana yunnanensis	1	0	0
+    # Apteryx australis australis     1       0       0
+    # Apteryx australis mantelli      1       0       1
+    # Apteryx owenii  5	0	0 
 
     # edit etc/genbank.conf to add aptMan1 just before xenTro7
 
-# aptMan1 (tibetan frog)
+# aptMan1 (brown kiwi)
 aptMan1.serverGenome = /hive/data/genomes/aptMan1/aptMan1.2bit
 aptMan1.clusterGenome = /hive/data/genomes/aptMan1/aptMan1.2bit
 aptMan1.ooc = /hive/data/genomes/aptMan1/jkStuff/aptMan1.11.ooc
 aptMan1.lift = no
 aptMan1.perChromTables = no
 aptMan1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+aptMan1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
 aptMan1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
 aptMan1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 aptMan1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 aptMan1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
 aptMan1.downloadDir = aptMan1
-aptMan1.refseq.mrna.native.load  = no
-aptMan1.refseq.mrna.xeno.load = yes
-aptMan1.refseq.mrna.xeno.loadDesc  = yes
-aptMan1.genbank.mrna.native.load = no
-aptMan1.genbank.mrna.native.loadDesc = no
-aptMan1.genbank.mrna.xeno.load = yes
-aptMan1.genbank.mrna.xeno.loadDesc = yes
-aptMan1.genbank.est.native.load = no
-aptMan1.genbank.est.native.loadDesc = no
-# aptMan1.upstreamGeneTbl = ensGene
 
     # Edit src/lib/gbGenome.c to add new species.
-    git commit -m "Added nanPar Nanorana parkeri refs #15056" \
+    git commit -m "Added aptMan brown kiwi refs #16029" \
          etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/etc/:
     make etc-update
     # update /cluster/data/genbank/bin/:
+    # Hiram manually changed the compiler settings to get this through
+    # (HG-WARN) 
     make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial aptMan1
-    # logFile: var/build/logs/2015.05.27-15:45:35.aptMan1.initalign.log
-    # real    1651m57.350s
+    #
+    #real    249m59.353s
+    #user    37m10.703s
+    #sys     192m17.108s
+    # logFile: var/build/logs/2015.12.21-10:29:28.aptMan1.initalign.log
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.aptMan1
@@ -429,21 +446,23 @@ aptMan1.genbank.est.native.loadDesc = no
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad aptMan1
-    # logFile: var/dbload/hgwdev/logs/2015.06.09-14:34:12.aptMan1.dbload.log
-    # real    128m32.009s
+    #logFile: var/dbload/hgwdev/logs/2015.12.22-10:50:30.aptMan1.dbload.log
+    #
+    #real    84m57.390s
+    #user    12m35.070s
+    #sys     68m18.331s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add aptMan1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added aptMan1 - Tibetan frog refs #15056" \
-      etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added aptMan1 - Brown Kiwi refs #16029" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD - 2015-06-22 - Hiram)
+# all.joiner update, downloads and in pushQ - (Done - 2016-01-06 - Chris)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=aptMan1 -tableCoverage all.joiner
@@ -451,8 +470,11 @@ aptMan1.genbank.est.native.loadDesc = no
     joinerCheck -database=aptMan1 -keys all.joiner
 
     cd /hive/data/genomes/aptMan1
-    time makeDownloads.pl aptMan1 > downloads.log 2>&1
-    # real    13m42.027s
+    time makeDownloads.pl aptMan1 > downloads.log 2>&1i
+    #
+    #real    10m45.282s
+    #user    0m0.690s
+    #sys     0m0.500s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/aptMan1/pushQ
@@ -460,15 +482,18 @@ aptMan1.genbank.est.native.loadDesc = no
     makePushQSql.pl aptMan1 > aptMan1.pushQ.sql 2> stderr.out
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/aptMan1/wib/gc5Base.wib
-    # WARNING: hgwdev does not have /gbdb/aptMan1/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/aptMan1/bbi/qualityBw/quality.bw
-    # WARNING: aptMan1 does not have seq
-    # WARNING: aptMan1 does not have extFile
-    # WARNING: aptMan1 does not have estOrientInfo
-    # WARNING: aptMan1 does not have mrnaOrientInfo
-
+    cd /hive/data/genomes/aptMan1/pushQ
+    makePushQSql.pl aptMan1 > aptMan1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    #WARNING: hgwdev does not have /gbdb/aptMan1/wib/gc5Base.wib
+    #WARNING: hgwdev does not have /gbdb/aptMan1/wib/quality.wib
+    #WARNING: hgwdev does not have /gbdb/aptMan1/bbi/qualityBw/quality.bw
+    #WARNING: aptMan1 does not have seq
+    #WARNING: aptMan1 does not have extFile
+    #WARNING: aptMan1 does not have estOrientInfo
+    
     #   copy it to hgwbeta
-    scp -p aptMan1.pushQ.sql qateam@hgwbeta:/tmp
+	scp -p aptMan1.pushQ.sql qateam@hgwbeta:/tmp
     ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/aptMan1.pushQ.sql"
 
     #   in that pushQ entry walk through each entry and see if the

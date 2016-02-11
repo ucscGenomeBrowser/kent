@@ -22,6 +22,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 #include "obscure.h"
+#include "genbank.h"
 
 
 /* ---- Global variables. ---- */
@@ -648,6 +649,7 @@ void cartMain(struct cart *theCart)
 hgBotDelay();
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
+initGenbankTableNames(database);
 getGenomeSettings();
 if (cartVarExists(cart, hggDoKgMethod))
     doKgMethod();

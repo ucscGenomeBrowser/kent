@@ -1,0 +1,660 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the rheMac8
+# Rhesus - Macaca mulatta
+
+# Assembly Name:  Mmul_8.0.1
+# Organism name:  Macaca mulatta
+# Taxid:          9544
+# Submitter:      Baylor College of Medicine Genome Sequencing Center
+# Date:           2015-11-30
+# BioSample:      SAMN02981228
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000772875.3 (latest)
+# RefSeq Assembly Accession: GCF_000772875.2 (species-representative latest)
+# RefSeq Assembly and GenBank Assemblies Identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000772885.3      GCF_000772885.2 Primary Assembly
+##      GCF_000005875.1 non-nuclear
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2016-01-08 - Hiram)
+    mkdir -p /hive/data/genomes/rheMac8/refseq
+    cd /hive/data/genomes/rheMac8/refseq
+
+export asmName="GCF_000772875.2_Mmul_8.0.1"
+export asmType="refseq"
+export D="vertebrate_mammalian/Macaca_mulatta/latest_assembly_versions/${asmName}"
+
+rsync -a -P -L \
+   rsync://ftp.ncbi.nlm.nih.gov/genomes/${asmType}/${D}/ ./
+
+    # measure what we have here:
+    faSize *genomic.fna.gz
+# 3236224332 bases (94132579 N's 3142091753 real 1857179349 upper
+#      1284912404 lower) in 284728 sequences in 1 files
+# Total size: mean 11366.0 sd 1223261.8 min 116 (NW_014950235.1)
+#      max 225584828 (NC_027893.1) median 941
+# %39.70 masked total, %40.89 masked real
+
+    # check for duplicate sequences:
+
+    mkdir /hive/data/genomes/rheMac8/ucsc
+    cd /hive/data/genomes/rheMac8/ucsc
+    faToTwoBit ../refseq/GCF_000772875.2_Mmul_8.0.1_genomic.fna.gz refseq.2bit
+    #  real    1m32.684s
+    twoBitDup refseq.2bit
+    # no output is a good result
+    rm refseq.2bit
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2016-01-29 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/ucsc
+    cd /hive/data/genomes/rheMac8/ucsc
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+NC_027904.1 12
+NC_027902.1 10
+NC_027913.1 X
+NC_027897.1 5
+NC_027903.1 11
+NC_027896.1 4
+NC_027901.1 9
+NC_027912.1 20
+NC_027898.1 6
+NC_027899.1 7
+NC_027905.1 13
+NC_027907.1 15
+NC_027911.1 19
+NC_027906.1 14
+NC_027914.1 Y
+NC_027910.1 18
+NC_027909.1 17
+NC_027908.1 16
+NC_027900.1 8
+NC_027895.1 3
+NC_027894.1 2
+NC_027893.1 1
+
+real    0m42.032s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    #  real    0m8.257s
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e 's/^NC_005943.1/chrM/;' > chrM.agp
+
+    zcat ../refseq/*_assembly_structure/non-nuclear/assem*/FASTA/*.fna.gz \
+      | sed -e 's/^>.*/>chrM/;' > chrM.fa
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa
+#  3236224332 bases (94132579 N's 3142091753 real 3142091753 upper
+#    0 lower) in 284728 sequences in 24 files
+#  Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
+#    max 225584828 (chr1) median 941
+#  %0.00 masked total, %0.00 masked real
+
+    # same totals as above: (except for masking)
+# 3236224332 bases (94132579 N's 3142091753 real 1857179349 upper
+#      1284912404 lower) in 284728 sequences in 1 files
+
+#############################################################################
+#  Initial database build (DONE - 2016-01-29 - Hiram)
+
+    cd /hive/data/genomes/rheMac8
+    printf "%s" \
+# Config parameters for makeGenomeDb.pl:
+db rheMac8
+clade primate
+genomeCladePriority 15
+scientificName Macaca mulatta
+commonName rhesus
+assemblyDate Nov. 2015
+assemblyLabel Baylor College of Medicine Genome Sequencing Center
+assemblyShortLabel BCM Mmul_8.0.1
+orderKey 18411
+# chrM GCF_000005875.1 included in assembly
+# mitoAcc NC_005943.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rheMac8/ucsc/*.fa
+agpFiles /hive/data/genomes/rheMac8/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rhesus
+photoCreditURL http://www.wakehealth.edu/Faculty/Kaplan-Jay-R.htm
+# photoCreditURL http://caplab.yale.edu/
+# http://www.ncbi.nlm.nih.gov/sutils/static/GP_IMAGE/rhesus.jpg
+# photoCreditName Dr. Laurie Santos
+photoCreditName J.R. Kaplan
+ncbiGenomeId 215
+ncbiAssemblyId 2715158
+ncbiAssemblyName Mmul_8.0.1
+ncbiBioProject 12537
+genBankAccessionID GCF_000772875.2
+taxId 9544' > rheMac8.config.ra
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rheMac8.config.ra > agp.log 2>&1
+    # real    4m50.591s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db rheMac8.config.ra) > db.log 2>&1
+    # real    30m6.878s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##########################################################################
+# running repeat masker (DONE - 2016-01-29 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/bed/repeatMasker
+    cd /hive/data/genomes/rheMac8/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku rheMac8) > do.log 2>&1
+    # real    481m50.689s
+
+    # broken cluster run due to sick machines, no real problem, it
+    # completed, continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=cat -smallClusterHub=ku rheMac8) > cat.log 2>&1
+    #  real    61m1.143s
+
+    cat faSize.rmsk.txt
+    # 3236224332 bases (94132579 N's 3142091753 real 1436601310 upper
+    #    1705490443 lower) in 284728 sequences in 1 files
+    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
+    #    max 225584828 (chr1) median 941
+    # %52.70 masked total, %54.28 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps rheMac8 rmsk
+    # 1705908888 bases of 3236224332 (52.713%) in intersection
+    # real    2m52.924s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' rheMac8 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1705908888.000000
+    # real    0m39.734s
+
+##########################################################################
+# running simple repeat (DONE - 2016-01-29 - Hiram)
+
+    mkdir /hive/data/genomes/rheMac8/bed/simpleRepeat
+    cd /hive/data/genomes/rheMac8/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        rheMac8) > do.log 2>&1
+    # real    140m2.826s
+
+    cat fb.simpleRepeat
+    # 298982788 bases of 3142093174 (9.515%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/rheMac8
+    twoBitMask rheMac8.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed rheMac8.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa rheMac8.2bit stdout | faSize stdin > faSize.rheMac8.2bit.txt
+    cat faSize.rheMac8.2bit.txt
+    # 3236224332 bases (94132579 N's 3142091753 real 1434869663 upper
+    #    1707222090 lower) in 284728 sequences in 1 files
+    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
+    #    max 225584828 (chr1) median 941
+    # %52.75 masked total, %54.33 masked real
+
+    rm /gbdb/rheMac8/rheMac8.2bit
+    ln -s `pwd`/rheMac8.2bit /gbdb/rheMac8/rheMac8.2bit
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-02-02 - Hiram)
+
+    mkdir /hive/data/genomes/rheMac8/bed/windowMasker
+    cd /hive/data/genomes/rheMac8/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rheMac8) > do.log 2>&1
+    # real    665m37.329s
+
+    # Masking statistics
+    cat faSize.rheMac8.cleanWMSdust.txt
+    # 3236224332 bases (94132579 N's 3142091753 real 1839176720 upper
+    #    1302915033 lower) in 284728 sequences in 1 files
+    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
+    #    max 225584828 (chr1) median 941
+    # %40.26 masked total, %41.47 masked real
+
+    cat fb.rheMac8.rmsk.windowmaskerSdust.txt
+    # 1061810183 bases of 3236224332 (32.810%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-02-04 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/bed/cpgIslands
+    cd /hive/data/genomes/rheMac8/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku rheMac8) > do.log 2>&1
+XXX - running - Thu Feb  4 10:51:56 PST 2016
+    # real    14m36.983s
+
+    cat fb.rheMac8.cpgIslandExt.txt
+    # 24127795 bases of 2649307237 (0.911%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-01-29 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rheMac8/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rheMac8/rheMac8.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rheMac8) > do.log 2>&1
+    # real    60m39.280s
+
+    cat fb.rheMac8.cpgIslandExtUnmasked.txt
+    # 41820506 bases of 3142093174 (1.331%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-01-29 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/bed/cytoBand
+    cd /hive/data/genomes/rheMac8/bed/cytoBand
+    makeCytoBandIdeo.csh rheMac8
+
+#########################################################################
+# genscan - (DONE - 2016-02-04 - Hiram)
+    mkdir /hive/data/genomes/rheMac8/bed/genscan
+    cd /hive/data/genomes/rheMac8/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku rheMac8) > do.log 2>&1
+XXX - running - Thu Feb  4 10:54:27 PST 2016
+    # real    65m53.319s
+
+    cat fb.rheMac8.genscan.txt
+    # 54695662 bases of 2649307237 (2.065%) in intersection
+
+    cat fb.rheMac8.genscanSubopt.txt
+    # 50492196 bases of 2649307237 (1.906%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2016-02-03 - Hiram)
+
+    # numerator is rheMac8 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap rheMac8 gap
+    # 72500454 bases of 2763479500 (2.624%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2763479500 / 2861349177 \) \* 1024
+    #  ( 2763479500 / 2861349177 ) * 1024 = 988.975072
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/rheMac8
+    blat rheMac8.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rheMac8.11.ooc \
+        -repMatch=900
+    #   Wrote 43065 overused 11-mers to jkStuff/rheMac8.11.ooc
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' rheMac8 \
+        | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+    gapToLift -verbose=2 -minGap=100 rheMac8 jkStuff/nonBridged.lft \
+        -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2016-02-03 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Macaca mulatta  378586  60372   5778
+
+    # edit etc/genbank.conf to add rheMac8 just before rheMac2
+# rheMac8 Macaca mulatta (rhesus)
+rheMac8.serverGenome = /hive/data/genomes/rheMac8/rheMac8.2bit
+rheMac8.clusterGenome = /hive/data/genomes/rheMac8/rheMac8.2bit
+rheMac8.ooc = /hive/data/genomes/rheMac8/jkStuff/rheMac8.11.ooc
+rheMac8.lift = /hive/data/genomes/rheMac8/jkStuff/rheMac8.nonBridged.lft
+rheMac8.perChromTables = no
+rheMac8.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+rheMac8.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+rheMac8.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+rheMac8.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+rheMac8.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+rheMac8.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+rheMac8.downloadDir = rheMac8
+rheMac8.genbank.mrna.xeno.load = yes
+rheMac8.refseq.mrna.native.load  = yes
+rheMac8.refseq.mrna.xeno.load  = yes
+rheMac8.upstreamGeneTbl = refGene
+
+    git commit -m "Added rheMac8; refs #16744" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial rheMac8
+    # logFile: var/build/logs/2016.02.04-11:24:58.rheMac8.initalign.log
+XXX - running - Thu Feb  4 11:25:12 PST 2016
+    #   real    362m8.057s
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.rheMac8
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad rheMac8
+    # logFile: var/dbload/hgwdev/logs/2014.10.14-09:00:05.rheMac8.dbload.log
+
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rheMac8 to:
+    #   etc/align.dbs
+    #   etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added rheMac8 - Cow" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#########################################################################
+#  SWAP hg38 LASTZ (TBD - 2014-10-15 - Hiram)
+    #   original alignment done at hg38.txt
+    cd /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15
+
+    cat fb.hg38.chainBosTau8Link.txt
+    # 1401921010 bases of 3049335806 (45.975%) in intersection
+    # Create link
+    cd /hive/data/genomes/hg38/bed
+    ln -s  lastzBosTau8.2014-10-15 lastz.rheMac8
+
+    #   running the swap
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.hg38.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/hg38/bed/lastzBosTau8.2014-10-15/DEF \
+        -swap  -syntenicNet \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real     116m32.121s
+    cat fb.rheMac8.chainHg38Link.txt
+    #   1336307377 bases of 2649307237 (50.440%) in intersection
+    cd /hive/data/genomes/rheMac8/bed
+    ln -s blastz.hg38.swap lastz.hg38
+
+#########################################################################
+#  SWAP mm10 LASTZ (TBD - 2014-10-15 - Hiram)
+    #   original alignment done at mm10.txt
+    cd /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15
+
+    cat fb.mm10.chainBosTau8Link.txt
+    # 698722925 bases of 2652783500 (26.339%) in intersection
+    # Create link
+    cd /hive/data/genomes/mm10/bed
+    ln -s  lastzBosTau8.2014-10-15 lastz.rheMac8
+
+    #   and the swap
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/mm10/bed/lastzBosTau8.2014-10-15/DEF \
+        -swap -syntenicNet  \
+        -noLoadChainSplit \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1
+    #   real    58m4.272s
+    cat fb.rheMac8.chainMm10Link.txt
+    # 687270584 bases of 2649307237 (25.942%) in intersection
+    # Create link
+    cd /hive/data/genomes/rheMac8/bed
+    ln -s blastz.mm10.swap lastz.mm10
+
+#########################################################################
+# LIFTOVER TO bosTau6 (TBD - 2014-10-21 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/rheMac8
+    ln -s jkStuff/rheMac8.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         rheMac8 bosTau6 > doLiftOverToBosTau6.log 2>&1
+    # real    82m56.388s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/rheMac8/liftOver/
+    md5sum rheMac8ToBosTau6.over.chain.gz >> md5sum.txt
+    popd
+
+#########################################################################
+# LIFTOVER TO bosTau7 (TBD - 2014-10-21 - Hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/rheMac8
+    ln -s jkStuff/rheMac8.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         rheMac8 bosTau7 > doLiftOverToBosTau7.log 2>&1
+    # real    105m34.448s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/rheMac8/liftOver/
+    md5sum rheMac8ToBosTau7.over.chain.gz >> md5sum.txt
+    popd
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=rheMac8 -keys all.joiner
+    joinerCheck -database=rheMac8 -tableCoverage all.joiner
+    joinerCheck -database=rheMac8 -times all.joiner
+
+    cd /hive/data/genomes/rheMac8
+    makeDownloads.pl rheMac8 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/rheMac8/pushQ
+    cd /hive/data/genomes/rheMac8/pushQ
+    makePushQSql.pl rheMac8 > rheMac8.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/rheMac8/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/rheMac8/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/rheMac8/bbi/quality.bw
+    # WARNING: rheMac8 does not have seq
+    # WARNING: rheMac8 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p rheMac8.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < rheMac8.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################
+# uscsToINSDC table/track (TBD - 2014-10-21 - Hiram)
+    # fixup the translateNames.sh file from rn6 work to use the new
+    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
+    ./translateNames.sh  NC_006853.1
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
+         > ucscToINSDC.bed
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 16
+    # use the 16 in this sed
+    sed -e "s/21/16/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab rheMac8 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords rheMac8
+    # should cover %100 entirely:
+    featureBits -countGaps rheMac8 ucscToINSDC
+    # 2670044500 bases of 2670044500 (100.000%) in intersection
+
+#########################################################################
+# lastz Horse equCab2 (TBD - 2014-10-27 - Hiram)
+    # a tuning run to determine lastz parameters, this process should move
+    # out of this directory to a rheMac8/bed/lastz... directory:
+
+    mkdir /hive/users/hiram/multiz/100way/rheMac8.equCab2
+    cd /hive/users/hiram/multiz/100way/rheMac8.equCab2
+    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.pep.gz \
+       > equCab2.genscan.pep
+    zcat /hive/data/genomes/equCab2/bed/genscan/genscan.gp.gz \
+       > equCab2.genscan.gp
+    zcat /hive/data/genomes/rheMac8/bed/genscan/genscan.pep.gz \
+       > rheMac8.genscan.pep
+    zcat /hive/data/genomes/rheMac8/bed/genscan/genscan.gp.gz \
+       > rheMac8.genscan.gp
+
+    # determine a correspondence between genes in the two sequences:
+    time (blat -prot -oneOff=1 rheMac8.genscan.pep equCab2.genscan.pep \
+       -out=maf rheMac8.equCab2.oneOff.maf) > blat.log 2>&1
+    #  real    282m40.628s
+    ../mafScoreSizeScan.pl rheMac8.equCab2.oneOff.maf  > mafScoreSizeScan.list
+    ave mafScoreSizeScan.list | grep "^Q3" | awk '{print $2}' \
+       | sed -e 's/.000000//' > mafScoreSizeScan.Q3
+
+    # with those regions identified, extract corresponding sequence to
+    # use in the lastz tuning operation.  Filter all the scores for the
+    # top quartile:
+    Q3=`cat mafScoreSizeScan.Q3`
+    awk '$1 > '$Q3' && $2 > 100 && $7 > 80 && $8 > 80' mafScoreSizeScan.list \
+            > top.all.list
+    cut -f3,4 top.all.list | sort > selected.topAll.list
+    topCount=`cat selected.topAll.list | wc -l`
+    echo "number of top scorers: $topCount"
+    #  number of top scorers: 3240
+    for N in 100 200 300 400
+do
+  cat top.all.list | randomLines -decomment stdin $N top.$N.list
+  cut -f3,4 top.$N.list | sort > selected.top$N.list
+  $TOP/selectedFasta.sh $target $query top$N
+            ./tune.top$N.sh &
+  /cluster/bin/penn/lastz-distrib-1.03.02/bin/lastz_D \
+     --inferonly=/hive/users/hiram/multiz/100way/create_scores_file.control \
+        rheMac8.top${N}.fa equCab2.top${N}.fa \
+          | /hive/users/hiram/multiz/100way/expand_scores_file.py \
+             > rheMac8.equCab2.tuning.top${N}.txt 2>&1
+done
+
+    # scan the four result files to see the range in the matrix scores
+    # hopefully not too wildly different:
+    ../matrixSummary.pl
+#  read 4 .txt files    rheMac8.equCab2
+      A     C     G     T       averages        4 files rheMac8.equCab2
+A    81  -119   -30  -133
+C  -119   100   -95   -30
+G   -30   -95   100  -119
+T  -133   -30  -119    81
+      A     C     G     T       ranges  4 files rheMac8.equCab2
+A    12    13     4    11
+C    13     0    31     4
+G     4    31     0    13
+T    11     4    13    12
+      A     C     G     T       ranges percent  4 files rheMac8.equCab2
+A  14.7  10.9  13.0   8.2
+C  10.9   0.0  32.6  13.0
+G  13.0  32.6  -0.0  10.9
+T   8.2  13.0  10.9  14.7
+
+     # looks good, using the results from the top400:
+
+     mkdir /hive/data/genomes/rheMac8/bed/lastzEquCab2.2014-10-27
+     cd /hive/data/genomes/rheMac8/bed/lastzEquCab2.2014-10-27
+
+     cp -p /hive/users/hiram/multiz/100way/rheMac8.equCab2/rheMac8.equCab2.tuning.top400.txt \
+        ./rheMac8.equCab2.tuning.Q.txt
+
+     printf "%s" \
+'# Horse pig vs Horse
+# parameters obtained from a tuning run of lastz_D
+# /hive/users/hiram/multiz/100way/rheMac8.equCab2/rheMac8.equCab2.tuning.top400.txt
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.52/bin/lastz
+
+BLASTZ_T=2
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_M=50
+BLASTZ_X=880
+BLASTZ_Y=3400
+BLASTZ_Q=/hive/data/genomes/rheMac8/bed/lastzEquCab2.2014-10-27/rheMac8.equCab2.tuning.Q.txt
+#       A     C     G     T
+# A    88  -111   -31  -128
+# C  -111   100   -75   -31
+# G   -31   -75   100  -111
+# T  -128   -31  -111    88
+
+# TARGET: Cow rheMac8
+SEQ1_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ1_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=40
+SEQ1_LAP=0
+
+# QUERY: Horse equCab2
+SEQ2_DIR=/hive/data/genomes/equCab2/equCab2.2bit
+SEQ2_LEN=/hive/data/genomes/equCab2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=500
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rheMac8/bed/lastzEquCab2.2014-10-27
+TMPDIR=/dev/shm' > DEF
+
+        time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    292m42.862s
+    cat fb.rheMac8.chainEquCab2Link.txt
+    #  1463490656 bases of 2649307237 (55.241%) in intersection
+
+    time (doRecipBest.pl rheMac8 equCab2 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    # real    60m9.228s
+
+    #	and the swap
+    mkdir /hive/data/genomes/equCab2/bed/blastz.rheMac8.swap
+    cd /hive/data/genomes/equCab2/bed/blastz.rheMac8.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/rheMac8/bed/lastzEquCab2.2014-10-27/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #   real    139m36.654s
+
+    cat fb.equCab2.chainBosTau8Link.txt
+    #	1497036779 bases of 2428790173 (61.637%) in intersection
+
+    time (doRecipBest.pl equCab2 rheMac8 -buildDir=`pwd` -workhorse=hgwdev) \
+	> best.log 2>&1
+    #   real    75m31.777s
+
+#########################################################################
