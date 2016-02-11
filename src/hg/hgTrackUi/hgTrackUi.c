@@ -1908,14 +1908,28 @@ baseColorDrawOptDropDown(cart, tdb);
 void ncbiRefSeqUI(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+char *omimAvail = NULL;
+if (sqlTableExists(conn, "kgXref"))
+    {
+    sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
+    omimAvail = sqlQuickString(conn, query);
+    }
+else if (sqlTableExists(conn, "ncbiRefSeqLink"))
+    omimAvail = "yes";
+
 char varName[64];
 safef(varName, sizeof(varName), "%s.label", tdb->track);
 printf("<br><b>Label:</b> ");
 labelMakeCheckBox(tdb, "gene", "gene symbol", TRUE);
 labelMakeCheckBox(tdb, "acc", "accession", FALSE);
-char sym[32];
-safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
-labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+if (omimAvail)
+    {
+    char sym[32];
+    safef(sym, sizeof(sym), "omim%s", cartString(cart, "db"));
+    labelMakeCheckBox(tdb, sym, "OMIM ID", FALSE);
+    }
 printf("&nbsp;&nbsp;(select gene symbol(s) to display)<br>");
 }
 
