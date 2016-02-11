@@ -9,6 +9,7 @@
 #include "hvGfx.h"
 #include "trashDir.h"
 #include "hgc.h"
+#include "hCommon.h"
 
 #include "gtexGeneBed.h"
 #include "gtexTissue.h"
@@ -173,6 +174,28 @@ if (maxValRet != NULL)
 return tsList;
 }
 
+char *getGeneDescription(struct gtexGeneBed *gtexGene)
+/* Get description for gene. Needed because knownGene table semantics have changed in hg38 */
+{
+char query[256];
+if (sameString(database, "hg38"))
+    {
+    char *geneId = cloneString(gtexGene->geneId);
+    chopSuffix(geneId);
+    sqlSafef(query, sizeof(query), 
+        "select kgXref.description from kgXref, knownCanonical where knownCanonical.protein like '%%%s%%' and knownCanonical.transcript=kgXref.kgID", geneId);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query), 
+                "select kgXref.description from kgXref where geneSymbol='%s'", gtexGene->name);
+    }
+struct sqlConnection *conn = hAllocConn(database);
+char *desc = sqlQuickString(conn, query);
+hFreeConn(&conn);
+return desc;
+}
+
 void doGtexGeneExpr(struct trackDb *tdb, char *item)
 /* Details of GTEx gene expression item */
 {
@@ -182,19 +205,17 @@ if (gtexGene == NULL)
 
 genericHeader(tdb, item);
 // TODO: link to UCSC gene
-printf("<b>Gene:</b> %s<br>", gtexGene->name);
-char query[256];
-char *transcriptId = cloneString(gtexGene->transcriptId);
-chopSuffix(transcriptId);
-sqlSafef(query, sizeof(query), 
-        "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value like '%%%s%%' and knownToEnsembl.name=kgXref.kgID", transcriptId);
-struct sqlConnection *conn = hAllocConn(database);
-char *desc = sqlQuickString(conn, query);
-hFreeConn(&conn);
+printf("<b>Gene: </b><a target='_blank' href='%s?db=%s&hgg_gene=%s'>%s</a><br>", 
+                        hgGeneName(), database, gtexGene->name, gtexGene->name);
+char *desc = getGeneDescription(gtexGene);
 if (desc != NULL)
     printf("<b>Description:</b> %s<br>\n", desc);
 printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
-printf("<b>Ensembl Transcript ID:</b> %s<br>\n", transcriptId);
+printf("<b>Ensembl Transcript ID:</b> %s<br>\n", gtexGene->transcriptId);
+printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>", 
+                        hgTracksPathAndSettings(), database, 
+                        gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
+                        gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
 printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
 puts("<p>");
 
