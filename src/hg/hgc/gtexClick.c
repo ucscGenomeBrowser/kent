@@ -31,6 +31,24 @@ struct tissueSampleVals
     struct slDouble *valList;   /* used to create val array */
     };
 
+char *gencodeTranscriptClassColorCode(char *transcriptClass)
+/* Get HTML color code used by GENCODE for transcript class
+ * WARNING: should share code with transcript color handling in hgTracks */
+{
+char *unknown = "#010101";
+if (transcriptClass == NULL)
+    return unknown;
+if (sameString(transcriptClass, "coding"))
+    return "#0C0C78";
+if (sameString(transcriptClass, "nonCoding"))
+    return "#006400";
+if (sameString(transcriptClass, "pseudo"))
+    return "#FF33FF";
+if (sameString(transcriptClass, "problem"))
+    return "#FE0000";
+return unknown;
+}
+
 /********************************************************/
 /* R implementation.  Invokes R script */
 
@@ -204,15 +222,21 @@ if (gtexGene == NULL)
     errAbort("Can't find gene %s in GTEx gene table %s\n", item, tdb->table);
 
 genericHeader(tdb, item);
-// TODO: link to UCSC gene
-printf("<b>Gene: </b><a target='_blank' href='%s?db=%s&hgg_gene=%s'>%s</a><br>", 
-                        hgGeneName(), database, gtexGene->name, gtexGene->name);
+printf("<b>Gene: </b>");
 char *desc = getGeneDescription(gtexGene);
-if (desc != NULL)
+if (desc == NULL)
+    printf("%s<br>\n", gtexGene->name);
+else
+    {
+    printf("<a target='_blank' href='%s?db=%s&hgg_gene=%s'>%s</a><br>\n", 
+                        hgGeneName(), database, gtexGene->name, gtexGene->name);
     printf("<b>Description:</b> %s<br>\n", desc);
+    }
 printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
 printf("<b>Ensembl Transcript ID:</b> %s<br>\n", gtexGene->transcriptId);
-printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>", 
+printf("<b>Ensembl Transcript Class: </b><span style='color: %s'>%s</span><br>\n", 
+            gencodeTranscriptClassColorCode(gtexGene->transcriptClass), gtexGene->transcriptClass);
+printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                         hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
