@@ -100,7 +100,7 @@ html primateChainNet
         type chain papAnu2
         otherDb papAnu2
 
-include chainNetRheMac3.ra beta,publix
+include chainNetRheMac3.ra beta,public
 include chainNetRheMac8.ra alpha
 
         track chainChlSab2
