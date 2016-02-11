@@ -7,6 +7,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "gtexInfo.h"
+#include "gtexGeneBed.h"
 
 
 
@@ -196,11 +197,21 @@ struct sqlConnection *conn = hAllocConn("hgFixed");
 if (!conn)
     return 0;
 // TODO: trackDB setting for this
-if (!version)
+if (!version || sameString(version, ""))
     version = "V4";
 sqlSafef(query, sizeof query, "select maxMedianScore from gtexInfo where version='%s'", version);
 double score = sqlQuickDouble(conn, query);
+if (score == 0.0)
+    errAbort("Internal error: GTEx version \"%s\" not found in gtexInfo table", version);
 hFreeConn(&conn);
 return score;
+}
+
+char *gtexVersion(char *table)
+/* Return version string based on table suffix */
+{
+char *suffix = gtexVersionSuffix(table);
+// Currently the V4 tables have no suffix
+return (sameString(suffix, "")) ? "V4" : suffix;
 }
 

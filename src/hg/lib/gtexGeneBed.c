@@ -210,3 +210,12 @@ sqlSafef(query, sizeof(query),
     table);
 sqlRemakeTable(conn, table, query);
 }
+
+char *gtexVersionSuffix(char *table)
+/* Return version string for a GTEx track table.  For now, just supporting V4 (no suffix) and V6 */
+{
+if (endsWith(table, "V6"))
+    return("V6");
+return("");
+}
+

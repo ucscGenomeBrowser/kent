@@ -1,7 +1,7 @@
-# Create samples.txt and matrix.txt for expData from GTEx latest release
+# Create samples.txt and matrix.txt for expData from GTEx V4 release (January 2014)
 # from www.gtexportal.org/home/datasets
 
-# Gene expression levels  in multiple tissues & donors
+# Gene expression levels in multiple tissues & donors
 
 # Samples
 
@@ -197,6 +197,8 @@ hgsql hgFixed -e "select geneId, gtexSampleData_old.tissue, score, gender, age, 
 # Looks like fixed data was created in outDirs/output6, load that for now
 cd /hive/data/outside/GTEx/2014-01-17/outDirs/
 hgLoadSqlTab hgFixed gtex2TissueMedian ~/kent/src/hg/lib/gtexTissueMedian.sql output6/gtex2TissueMedian.tab
+
+#hgLoadSqlTab hgFixed gtexTissueData ~/kent/src/hg/lib/gtexTissueData.sql output6/gtex2TissueData.tab
 
 
 # Experiment with R plots of per-gene expression data, candidate for details page boxplot

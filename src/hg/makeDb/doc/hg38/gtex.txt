@@ -1,0 +1,24 @@
+#############################################################################
+# GTEx V6 (October 2015) Kate
+# Create BED from hgFixed tables (see doc/gtex)
+
+cd /hive/data/outside/gtex/V6
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed hg38 -gtexVersion=V6 -noLoad -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
+
+# creates gtexGeneModelV6.hg38.genePred
+# NOTE: drops 192 transcripts.  One I spot-checked indeed didn't exist in our hg38 genes
+
+hgLoadGenePred hg38 gtexGeneModelV6 gtexGeneModelV6.hg38.genePred
+
+# Run again, to create bed table
+mkdir hg38; cd hg38
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -noLoad -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
+
+Max score: 219385.906250
+
+wc -l *.tab
+56126 gtexGeneBedV6.tab
+
+# looks good, so load up
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
+

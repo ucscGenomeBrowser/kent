@@ -67,5 +67,8 @@ void gtexGeneBedOutput(struct gtexGeneBed *el, FILE *f, char sep, char lastSep);
 void gtexGeneBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create expression record format table of given name. */
 
+char *gtexVersionSuffix(char *table);
+/* Return version string for a GTEx track table.  For now, just supporting V4 (no suffix) and V6 */
+
 #endif /* GTEXGENEBED_H */
 

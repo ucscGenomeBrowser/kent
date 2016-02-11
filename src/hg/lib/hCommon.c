@@ -24,6 +24,7 @@ static char *_hgSessionName = "../cgi-bin/hgSession";	/* Path to session manager
 static char *_hgPalName = "../cgi-bin/hgPal"; /* Path back to the protein aligner */
 static char *_hgVarAnnogratorName = "../cgi-bin/hgVarAnnogrator"; /* Path to variant annot intgr */
 static char *_hgIntegratorName = "../cgi-bin/hgIntegrator"; /* Path to annotation intgrator */
+static char *_hgGeneName = "../cgi-bin/hgGene"; /* Path to gene details */
 
 char *hgPalName()
 /* Relative URL to click processing program. */
@@ -101,6 +102,12 @@ char *hgIntegratorName()
 /* Relative URL to annotation integrator program. */
 {
 return _hgIntegratorName;
+}
+
+char *hgGeneName()
+/* Relative URL to gene details program (hgGene). */
+{
+return _hgGeneName;
 }
 
 static void finishCloneName(char *fragName, char *e, char cloneName[128])
