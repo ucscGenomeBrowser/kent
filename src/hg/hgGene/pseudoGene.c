@@ -13,6 +13,7 @@
 #include "genePred.h"
 #include "bed.h"
 #include "hgGene.h"
+#include "genbank.h"
 
 
 static boolean pseudoGeneExists(struct section *section, 
@@ -78,11 +79,11 @@ while ((row = sqlNextRow(sr)) != NULL)
    
     desc = emptyStr;
     sqlSafefFrag(condStr, sizeof(condStr), "acc='%s'", refseq);
-    descID= sqlGetField(database, "gbCdnaInfo", "description", condStr);
+    descID= sqlGetField(database, gbCdnaInfoTable, "description", condStr);
     if (descID != NULL)
     	{
     	sqlSafefFrag(condStr, sizeof(condStr), "id=%s", descID);
-    	desc = sqlGetField(database, "description", "name", condStr);
+    	desc = sqlGetField(database, descriptionTable, "name", condStr);
 	if (desc == NULL) desc = emptyStr;
 	}
    	

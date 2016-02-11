@@ -12,6 +12,7 @@
 #include "genePred.h"
 #include "bed.h"
 #include "hgGene.h"
+#include "genbank.h"
 
 
 static boolean mrnaDescriptionsExists(struct section *section, 
@@ -69,9 +70,9 @@ for (psl = pslList; psl != NULL; psl = psl->next)
 	char query[512];
 	char *description;
 	sqlSafef(query, sizeof(query),
-	    "select description.name from gbCdnaInfo,description"
-	    " where gbCdnaInfo.acc='%s' and gbCdnaInfo.description = description.id"
-	    , psl->qName);
+	    "select d.name from %s g,%s d"
+	    " where g.acc='%s' and g.description = d.id"
+	    , gbCdnaInfoTable, descriptionTable, psl->qName);
 	description = sqlQuickString(conn, query);
 	if (description != NULL)
 	    {

@@ -38,7 +38,7 @@
 #include "udc.h"
 #include "hubConnect.h"
 #include "bigBedFind.h"
-
+#include "genbank.h"
 
 // Exhaustive searches can lead to timeouts on CGIs (#11626).
 // However, hgGetAnn requires exhaustive searches (#11665).
@@ -434,10 +434,10 @@ char **row;
 char *result = NULL;
 
 conn = hAllocConn(db);
-if (sqlTableExists(conn, "refLink"))
+if (sqlTableExists(conn, refLinkTable))
     {
-    sqlSafef(query, sizeof(query), "SELECT mrnaAcc FROM refLink WHERE name='%s'",
-          geneName);
+    sqlSafef(query, sizeof(query), "SELECT mrnaAcc FROM %s WHERE name='%s'",
+          refLinkTable, geneName);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
         {
@@ -1236,7 +1236,7 @@ char **row;
 int ret;
 
 sqlSafef(query, sizeof(query),
-      "select type from gbCdnaInfo where acc = '%s'", acc);
+      "select type from %s where acc = '%s'", gbCdnaInfoTable, acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1393,15 +1393,21 @@ static boolean findMrnaPos(char *db, char *acc,  struct hgPositions *hgp)
 /* NOTE: this excludes RefSeq mrna's, as they are currently
  * handled in findRefGenes(), which is called later in the main function */
 {
-if (!hTableExists(db, "gbCdnaInfo"))
+struct sqlConnection *conn = hAllocConn(db);
+if (!sqlTableExists(conn, gbCdnaInfoTable))
+    {
+    hFreeConn(&conn);
     return FALSE;
+    }
 char *type = mrnaType(db, acc); 
 if (isEmpty(type))
+    {
+    hFreeConn(&conn);
     /* this excludes refseq mrna's, and accessions with
      * invalid column type in mrna table (refseq's and ests) */
     return FALSE;
+    }
 char lowerType[16];
-struct sqlConnection *conn = hAllocConn(db);
 char **tables, **labels, *tableName;
 boolean gotResults = FALSE;
 
@@ -1418,7 +1424,10 @@ else if (sameWord(lowerType, "est"))
     labels = estLabels;
     }
 else
+    {
+    hFreeConn(&conn);
     return FALSE;
+    }
 
 while ((tableName = *tables++) != NULL)
     {
@@ -1570,8 +1579,8 @@ for (i = 0;
         {
         /* don't check srcDb to exclude refseq for compat with older tables */
 	sqlSafef(query, sizeof(query),
-	      "select acc, organism from gbCdnaInfo where %s = '%s' "
-	      " and type = 'mRNA'", field, idEl->name);
+	      "select acc, organism from %s where %s = '%s' "
+	      " and type = 'mRNA'", gbCdnaInfoTable, field, idEl->name);
         // limit results to avoid CGI timeouts (#11626).
         if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
             sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
@@ -1721,23 +1730,23 @@ for (el = *pAccList; el != NULL; el = el->next)
     /* print description for item, or lacking that, the product name */
     safef(description, sizeof(description), "%s", "n/a"); 
     sqlSafef(query, sizeof(query), 
-        "select description.name from gbCdnaInfo,description"
-        " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.description = description.id", acc);
+        "select d.name from %s g,%s d"
+        " where g.acc = '%s' and g.description = d.id", gbCdnaInfoTable, descriptionTable, acc);
     sqlQuickQuery(conn, query, description, sizeof(description));
     if (sameString(description, "n/a"))
         {
         /* look for product name */
         sqlSafef(query, sizeof(query), 
-            "select productName.name from gbCdnaInfo,productName"
-            " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.productName = productName.id",
-                 acc);
+            "select p.name from %s g,%s p"
+            " where g.acc = '%s' and g.productName = p.id",
+                 gbCdnaInfoTable, productNameTable, acc);
         sqlQuickQuery(conn, query, product, sizeof(product));
         if (!sameString(product, "n/a"))
             {
             /* get organism name */
             sqlSafef(query, sizeof(query), 
-                "select organism.name from gbCdnaInfo,organism"
-                " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+                "select o.name from %s g,%s o"
+                " where g.acc = '%s' and g.organism = o.id", gbCdnaInfoTable, organismTable, acc);
             *organism = 0;
             sqlQuickQuery(conn, query, organism, sizeof(organism));
             safef(description, sizeof(description), "%s%s%s",
@@ -2083,8 +2092,8 @@ char query[256];
 
 for (accEl = accList;  accEl != NULL;  accEl = accEl->next)
     {
-    sqlSafef(query, sizeof(query), "select * from refLink where mrnaAcc = '%s'",
-	  accEl->name);
+    sqlSafef(query, sizeof(query), "select * from %s where mrnaAcc = '%s'",
+	  refLinkTable, accEl->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -2102,7 +2111,7 @@ static boolean findRefGenes(char *db, struct hgFindSpec *hfs, char *spec,
 struct sqlConnection *conn = hAllocConn(db);
 struct dyString *ds = newDyString(256);
 struct refLink *rlList = NULL, *rl;
-boolean gotRefLink = hTableExists(db, "refLink");
+boolean gotRefLink = sqlTableExists(conn, refLinkTable);
 boolean found = FALSE;
 char *specNoVersion = cloneString(spec);
 // chop off the version number, e.g. "NM_000454.4 ", 
@@ -2112,40 +2121,40 @@ if (gotRefLink && isNotEmpty(specNoVersion))
     {
     if (startsWith("NM_", specNoVersion) || startsWith("NR_", specNoVersion) || startsWith("XM_", specNoVersion))
 	{
-	sqlDyStringPrintf(ds, "select * from refLink where mrnaAcc = '%s'", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from %s where mrnaAcc = '%s'", refLinkTable, specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else if (startsWith("NP_", specNoVersion) || startsWith("XP_", specNoVersion))
         {
-	sqlDyStringPrintf(ds, "select * from refLink where protAcc = '%s'", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from %s where protAcc = '%s'", refLinkTable, specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else if (isUnsignedInt(specNoVersion))
         {
-	sqlDyStringPrintf(ds, "select * from refLink where locusLinkId = '%s'",
-		       specNoVersion);
+	sqlDyStringPrintf(ds, "select * from %s where locusLinkId = '%s'",
+		       refLinkTable, specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	dyStringClear(ds);
-	sqlDyStringPrintf(ds, "select * from refLink where omimId = '%s'", specNoVersion);
+	sqlDyStringPrintf(ds, "select * from %s where omimId = '%s'", refLinkTable,specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	}
     else 
 	{
-	char *indexFile = getGenbankGrepIndex(db, hfs, "refLink", "mrnaAccProduct");
-	sqlDyStringPrintf(ds, "select * from refLink where name like '%s%%'",
-		       specNoVersion);
+	char *indexFile = getGenbankGrepIndex(db, hfs, refLinkTable, "mrnaAccProduct");
+	sqlDyStringPrintf(ds, "select * from %s where name like '%s%%'",
+		       refLinkTable, specNoVersion);
 	addRefLinks(conn, ds, &rlList);
 	if (indexFile != NULL)
 	    {
-	    struct slName *accList = doGrepQuery(indexFile, "refLink", specNoVersion,
+	    struct slName *accList = doGrepQuery(indexFile, refLinkTable, specNoVersion,
 						 NULL);
 	    addRefLinkAccs(conn, accList, &rlList);
 	    }
 	else
 	    {
 	    dyStringClear(ds);
-	    sqlDyStringPrintf(ds, "select * from refLink where product like '%%%s%%'",
-			   specNoVersion);
+	    sqlDyStringPrintf(ds, "select * from %s where product like '%%%s%%'",
+			   refLinkTable, specNoVersion);
 	    addRefLinks(conn, ds, &rlList);
 	    }
 	}

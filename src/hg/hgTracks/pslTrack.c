@@ -12,6 +12,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "psl.h"
+#include "genbank.h"
 
 #ifndef GBROWSE
 #include "../gsid/gsidTable/gsidTable.h"
@@ -92,7 +93,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     if (fil->pattern[0] != 0)   // Filled above
 	{
 	fil->hash = newHash(10);
-	if ((fil->mrnaTableIx = sqlFieldIndex(conn, "gbCdnaInfo", fil->table)) < 0)
+	if ((fil->mrnaTableIx = sqlFieldIndex(conn, gbCdnaInfoTable, fil->table)) < 0)
 	    internalErr();
 	}
     }
@@ -112,7 +113,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
 	for (wordIx=0; wordIx <wordCount; ++wordIx)
 	    {
 	    char *pattern = cloneString(words[wordIx]);
-	    /* Special case for accessions as gbCdnaInfo is very large to
+	    /* Special case for accessions as gbCdnaInfoTable is very large to
 	       read into memory. */
 	    if(sameString(fil->table, "acc"))
 		{
@@ -159,7 +160,7 @@ for (lf = *pLfList; lf != NULL; lf = next)
     {
     boolean passed = andLogic;
     next = lf->next;
-    sqlSafef(query, sizeof query, "select * from gbCdnaInfo where acc = '%s'", lf->name);
+    sqlSafef(query, sizeof query, "select * from %s where acc = '%s'", gbCdnaInfoTable, lf->name);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{

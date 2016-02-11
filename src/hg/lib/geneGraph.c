@@ -17,7 +17,7 @@
 #include "altGraphX.h"
 #include "geneGraph.h"
 #include "dystring.h"
-
+#include "genbank.h"
 
 void ggEvidenceFree(struct ggEvidence **pEl)
 /* Free a single dynamically allocated ggEvidence */
@@ -424,7 +424,7 @@ for(i=0; i< mrnaCount; ++i)
 	char **row = NULL;
 	char query[256];
 	assert(gg->mrnaRefs[i]);
-	sqlSafef(query, sizeof(query), "select library, tissue from gbCdnaInfo where acc='%s'", gg->mrnaRefs[i]);
+	sqlSafef(query, sizeof(query), "select library, tissue from %s where acc='%s'", gbCdnaInfoTable, gg->mrnaRefs[i]);
 	sr = sqlGetResult(conn, query);
 	row = sqlNextRow(sr);
 	if(row == NULL)

@@ -47,6 +47,7 @@
 #include "microarray.h"
 #include "trackVersion.h"
 #include "gtexUi.h"
+#include "genbank.h"
     
 #ifdef USE_HAL 
 #include "halBlockViz.h"
@@ -1713,7 +1714,7 @@ void knownGeneIdConfig(struct trackDb *tdb)
 struct sqlConnection *conn = hAllocConn(database);
 char query[256];
 char *omimAvail = NULL;
-sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+sqlSafef(query, sizeof(query), "select kgXref.kgID from kgXref,%s r where kgXref.refseq = r.mrnaAcc and r.omimId != 0 limit 1", refLinkTable);
 omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
 char *isGencode = trackDbSetting(tdb, "isGencode");
@@ -1854,7 +1855,7 @@ if (sameString(tdb->track, "refGene"))
     {
     struct sqlConnection *conn = hAllocConn(database);
     char query[128];
-    sqlSafef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
+    sqlSafef(query, sizeof(query), "select r.omimId from %s r, refGene where r.mrnaAcc = refGene.name and r.omimId != 0 limit 1", refLinkTable);
     omimAvail = sqlQuickNum(conn, query);
     hFreeConn(&conn);
     }
@@ -3463,6 +3464,7 @@ char *ignored;
 cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
+initGenbankTableNames(database);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 
 trackHash = trackHashMakeWithComposites(database,chromosome,&tdbList,FALSE);

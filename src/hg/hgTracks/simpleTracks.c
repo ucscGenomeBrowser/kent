@@ -140,6 +140,7 @@
 #endif /* LOWELAB_WIKI */
 
 #include "trackVersion.h"
+#include "genbank.h"
 
 #define CHROM_COLORS 26
 
@@ -5905,9 +5906,9 @@ if (hTableExists(database, "kgXref"))
             protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
-        if (useMimId && hTableExists(database, "refLink"))
+        if (useMimId && sqlTableExists(conn, refLinkTable))
             {
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(r.omimId as char) from kgXref,%s r where kgID = '%s' and kgXref.refseq = r.mrnaAcc and r.omimId != 0",refLinkTable, lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -6079,11 +6080,11 @@ if (hTableExists(database, "kgXref"))
                 dyStringAppend(name, protDisplayId);
                 }
 	    }
-        if (useMimId && hTableExists(database, "refLink"))
+        if (useMimId && sqlTableExists(conn, refLinkTable))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(r.omimId as char) from kgXref,%s r where kgID = '%s' and kgXref.refseq = r.mrnaAcc and r.omimId != 0",refLinkTable, lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -6214,9 +6215,9 @@ sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' ", lf->name);
 refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
-    if (hTableExists(database, "refSeqStatus"))
+    if (sqlTableExists(conn, refSeqStatusTable))
         {
-        sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+        sqlSafef(query, sizeof query, "select status from %s where mrnaAcc = '%s'", refSeqStatusTable, refAcc);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -6663,7 +6664,7 @@ if (cacheEl == NULL)
     {
     char query[256];
     sqlSafef(query, sizeof query, 
-	"select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+	"select o.name from %s g,%s o where g.acc = '%s' and g.organism = o.id", gbCdnaInfoTable, organismTable, acc);
     char *org = sqlQuickString(conn, query);
     if ((org != NULL) && (org[0] == '\0'))
         org = NULL;
@@ -6686,14 +6687,14 @@ char *getGeneName(struct sqlConnection *conn, char *acc)
 {
 static char nameBuf[256];
 char query[256], *name = NULL;
-if (hTableExists(database,  "refLink"))
+if (sqlTableExists(conn,  refLinkTable))
     {
     /* remove the version number if any */
     static char accBuf[1024];
     safecpy(accBuf, sizeof accBuf, acc);
     chopSuffix(accBuf);
 
-    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", accBuf);
+    sqlSafef(query, sizeof query, "select name from %s where mrnaAcc = '%s'", refLinkTable, accBuf);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
@@ -7175,8 +7176,8 @@ if (startsWith("ncbiRefSeq", tg->table))
     sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
     }
 else
-    sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
-        name);
+    sqlSafef(query, sizeof query, "select status from %s where mrnaAcc = '%s'",
+        refSeqStatusTable, name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7218,10 +7219,12 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest
  * If no refSeqStatus, color it normally.
  */
-if (hTableExists(database,  "refSeqStatus") || hTableExists(database,  "ncbiRefSeqLink"))
-    return refGeneColorByStatus(tg, lf->name, hvg);
-else
-    return(tg->ixColor);
+struct sqlConnection *conn = hAllocConn(database);
+Color color = tg->ixColor;
+if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(database,  "ncbiRefSeqLink"))
+    color = refGeneColorByStatus(tg, lf->name, hvg);
+hFreeConn(&conn);
+return color;
 }
 
 void ncbiRefSeqMethods(struct track *tg)
@@ -7343,7 +7346,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 int direction = -1;
 char query[512];
 char buf[SMALLBUF], *s = NULL;
-sqlSafef(query, sizeof query, "select direction from gbCdnaInfo where acc='%s'", acc);
+sqlSafef(query, sizeof query, "select direction from %s where acc='%s'", gbCdnaInfoTable, acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
     direction = atoi(s);
@@ -14530,7 +14533,6 @@ registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
-registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);
