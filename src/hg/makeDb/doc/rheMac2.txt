@@ -1890,3 +1890,20 @@ TMPDIR=/dev/shm
     # real    40m57.725s
 
 #########################################################################
+# LIFTOVER TO rheMac8 (DONE - 2016-02-05 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rheMac2/bed/blat.rheMac8.2016-02-05
+    cd /hive/data/genomes/rheMac2/bed/blat.rheMac8.2016-02-05
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac2/jkStuff/rheMac2.11.ooc \
+         rheMac2 rheMac8
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac2/jkStuff/rheMac2.11.ooc \
+         rheMac2 rheMac8) > doLiftOverToRheMac2.log 2>&1
+    # real    1320m23.090s
+
+    # see if the liftOver menus function in the browser from rheMac2 to Mac8
+
+#########################################################################
