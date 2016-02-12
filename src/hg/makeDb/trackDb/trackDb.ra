@@ -2982,6 +2982,7 @@ html refGene.new
 allButtonPair on
 
     track ncbiRefGenesView
+    release alpha
     shortLabel NCBI RefSeq genes, all genes, curated, predicted and other
     view aGenes
     color 16,93,235
@@ -2989,8 +2990,10 @@ allButtonPair on
     configurable on
     baseColorUseCds given
     baseColorDefault genomicCodons
+    pepTable ncbiRefSeqPepTable
 
 	track ncbiRefSeq
+        release alpha
         parent ncbiRefGenesView on
         shortLabel All RefSeq
         subGroups view=aGenes
@@ -3011,6 +3014,7 @@ allButtonPair on
         priority 2
 
 	track ncbiRefSeqCurated
+        release alpha
 	parent ncbiRefGenesView off
 	shortLabel RefSeq Curated
         subGroups view=aGenes
@@ -3018,6 +3022,7 @@ allButtonPair on
         priority 3
 
 	track ncbiRefSeqPredicted
+        release alpha
 	parent ncbiRefGenesView off
 	shortLabel RefSeq Predicted
         subGroups view=aGenes
@@ -3025,6 +3030,7 @@ allButtonPair on
         priority 4
 
 	track ncbiRefSeqOther
+        release alpha
 	parent ncbiRefGenesView off
 	shortLabel RefSeq Other
         subGroups view=aGenes
@@ -3032,6 +3038,7 @@ allButtonPair on
         priority 5
 
     track ncbiRefAlignView
+    release alpha
     parent refSeqComposite off
     shortLabel Alignments
     view zAlign
@@ -3039,6 +3046,7 @@ allButtonPair on
     configurable on
 
 	track ncbiRefSeqPsl
+        release alpha
 	parent ncbiRefAlignView off
 	shortLabel mRNA Alignments
         subGroups view=zAlign
