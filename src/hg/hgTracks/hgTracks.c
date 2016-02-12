@@ -7479,6 +7479,7 @@ for (window=windows; window->next; window=window->next)
 	    AllocVar(copy);
 	    memmove(copy,track,sizeof(struct track));
 	    copy->next = NULL;
+	    copy->bbiFile = NULL;  // bigDataUrl custom tracks have already been opened, will re-open for other windows.
 	    copy->nextWindow = NULL;
 	    copy->prevWindow = track;
 	    slAddHead(&newTrackList, copy);
@@ -7495,6 +7496,7 @@ for (window=windows; window->next; window=window->next)
 		    AllocVar(subcopy);
 		    memmove(subcopy,subtrack,sizeof(struct track));
 		    subcopy->next = NULL;
+		    subcopy->bbiFile = NULL;  // bigDataUrl custom tracks have already been opened, will re-open for other windows.
 		    subcopy->nextWindow = NULL;
 		    subcopy->prevWindow = subtrack;
 		    slAddHead(&copy->subtracks, subcopy);

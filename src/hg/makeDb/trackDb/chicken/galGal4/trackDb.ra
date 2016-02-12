@@ -9,7 +9,20 @@ track gap override
 html gap
 
 track refGene override
+release beta,public
 visibility pack
+
+track refSeqComposite override
+release alpha
+visibility pack
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 track xenoRefGene override
 visibility pack
@@ -23,3 +36,13 @@ searchPriority 8
 track animalQtl override
 url http://www.animalgenome.org/cgi-bin/QTLdb/GG/qdetails?QTL_ID=$p
 urlLabel Animal Genome QTL db:
+
+track testAugustus
+shortLabel augustus3.1
+longLabel augustus3.1
+group map
+visibility hide
+color 12,120,12
+type genePred
+baseColorUseCds given
+baseColorDefault genomicCodons

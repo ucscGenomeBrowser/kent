@@ -80,6 +80,8 @@ void gtexInfoOutput(struct gtexInfo *el, FILE *f, char sep, char lastSep);
 
 #endif /* GTEXINFO_H */
 
+#define GTEX_DEFAULT_VERSION    "V6"
+
 void gtexInfoCreateTable(struct sqlConnection *conn, char *table);
 /* Create GTEx info table */
 
@@ -88,3 +90,5 @@ double gtexMaxMedianScore(char *version);
 
 char *gtexVersion(char *table);
 /* Return version string based on table suffix */
+
+

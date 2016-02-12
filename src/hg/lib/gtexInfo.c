@@ -189,6 +189,14 @@ sqlSafef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+char *gtexVersion(char *table)
+/* Return version string based on table suffix */
+{
+char *suffix = gtexVersionSuffix(table);
+// Currently the V4 tables have no suffix
+return (sameString(suffix, "")) ? GTEX_DEFAULT_VERSION : suffix;
+}
+
 double gtexMaxMedianScore(char *version)
 /* Retrieve max median score for latest (or named) version */
 {
@@ -198,7 +206,7 @@ if (!conn)
     return 0;
 // TODO: trackDB setting for this
 if (!version || sameString(version, ""))
-    version = "V4";
+    version = GTEX_DEFAULT_VERSION;
 sqlSafef(query, sizeof query, "select maxMedianScore from gtexInfo where version='%s'", version);
 double score = sqlQuickDouble(conn, query);
 if (score == 0.0)
@@ -206,12 +214,3 @@ if (score == 0.0)
 hFreeConn(&conn);
 return score;
 }
-
-char *gtexVersion(char *table)
-/* Return version string based on table suffix */
-{
-char *suffix = gtexVersionSuffix(table);
-// Currently the V4 tables have no suffix
-return (sameString(suffix, "")) ? "V4" : suffix;
-}
-

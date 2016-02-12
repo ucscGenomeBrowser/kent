@@ -29,8 +29,22 @@ refSeqAnnoVersion 1.2
 priority 5
 
 track refGene override
+release beta,public
 visibility pack
 priority 6
+
+track refSeqComposite override
+release alpha
+visibility pack
+priority 6
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 # mRNA and EST
 

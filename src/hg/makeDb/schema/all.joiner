@@ -5010,6 +5010,28 @@ identifier ncbiRefSeq
     hg38.ncbiRefSeqPsl.qName
     hg38.seqNcbiRefSeq.acc
 
+# GTEx (Genotype-Tissue Expression)   
+
+identifier gtexDonor
+"GTEx donor ID"
+    hgFixed.gtexSample.donor
+
+identifier gtexSample
+"GTEx sample ID"
+    hgFixed.gtexSample.sampleId
+    hgFixed.gtexSampleData.sample
+
+identifier gtexGeneId
+"GTEx gene ID (ENS gene)"
+    hgFixed.gtexSampleData.geneId
+    hg19,hg38.gtexGene.geneId
+    hg19,hg38.gtexGeneModel.name
+
+identifier gtexTissue
+"Short name for GTEx tissue (UCSC)"
+    hgFixed.gtexSampleData.tissue
+    hgFixed.gtexTissue.name
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio

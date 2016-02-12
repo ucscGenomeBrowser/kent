@@ -15,8 +15,22 @@ priority 1
 #priority 1
 
 track refGene override
+release beta,public
 visibility pack
 priority 2
+
+track refSeqComposite override
+release alpha
+visibility pack
+priority 2
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 #Phenotype and Literature
 
