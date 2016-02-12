@@ -17,7 +17,7 @@ track gtexGene
 type bed 6 +
 shortLabel GTEx Gene V4
 longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 2921 samples, 209 donors (V4, Aug 2014)
-html gtexGeneExpr
+html gtexGeneExprV4
 group expression
 priority 10.1
 
@@ -25,6 +25,7 @@ track gtexGeneV6
 type bed 6 +
 shortLabel GTEx Gene V6
 longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples, 570 donors (V6, Oct 2015)
+html gtexGeneExpr
 group expression
 priority 10.15
 
