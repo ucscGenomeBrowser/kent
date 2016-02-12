@@ -430,7 +430,6 @@ if (trackLoadingInProgress) // we pack after all windows are loaded.
     return 0;  // height of 0 triggers unsetting limitedVis since our data is not all loaded yet and it will get set later.
     }
 
-
 // do not re-calculate if not needed
 if (tg->ss)
     {
@@ -551,7 +550,11 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    //warn("spaceSaver key=[%s] window=%lu", key, (unsigned long)w); // DEBUG REMOVE
 	    struct hashEl *hel = hashLookup(sameItem, key);
 	    if (!hel)
+		{
+		if (tg->networkErrMsg) // probably timed-out before thread finished adding more items.
+		    break;
 		errAbort("unexpected error: lookup of key [%s] in sameItem hash failed.", key);
+		}
 	    struct sameItemNode *sin = (struct sameItemNode *)hel->val;
 	    if (!sin)
 		errAbort("sin empty (hel->val)!");
