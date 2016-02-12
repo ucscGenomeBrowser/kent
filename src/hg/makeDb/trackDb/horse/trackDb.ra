@@ -3,8 +3,22 @@
 include trackDb.chainNet.ra
 
 track refGene override
+release beta,public
 visibility pack
 priority 1
+
+track refSeqComposite override
+release alpha
+visibility pack
+priority 1
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 track intronEst override
 visibility hide
