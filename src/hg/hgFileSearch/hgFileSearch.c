@@ -114,7 +114,7 @@ static struct slRef *simpleSearchForTdbs(struct trix *trix,char **descWords,int 
 struct slRef *foundTdbs = NULL;
 
 struct trixSearchResult *tsList;
-for (tsList = trixSearch(trix, descWordCount, descWords, TRUE);
+for (tsList = trixSearch(trix, descWordCount, descWords, tsmExpand);
      tsList != NULL;
      tsList = tsList->next)
     {
