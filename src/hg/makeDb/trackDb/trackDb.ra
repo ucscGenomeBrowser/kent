@@ -2990,6 +2990,7 @@ allButtonPair on
     configurable on
     baseColorUseCds given
     baseColorDefault genomicCodons
+    pepTable ncbiRefSeqPepTable
 
 	track ncbiRefSeq
         release alpha
