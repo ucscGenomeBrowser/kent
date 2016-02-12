@@ -780,9 +780,12 @@ if (doLoad)
     hgRemoveTabFile(tabDir, tissueMedianTable);
 
     // Load tissue data table
+#ifdef FAST_STATS
+    // Finish implementation of this if we want to add mean+whiskers to hgTracks
     verbose(2, "Creating tissue data table\n");
     gtexTissueDataCreateTable(conn, tissueDataTable);
     hgLoadTabFile(conn, tabDir, tissueDataTable, &tissueDataFile);
+#endif
 
     // Load sample data table 
     verbose(2, "Creating sample data table\n");
