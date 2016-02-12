@@ -15,6 +15,7 @@ umask 002
 WORKDIR=$1
 export WORKDIR
 export PATH=$WORKDIR":$PATH"
+export UPLOADDIR="/usr/local/apache/htdocs/omimUpload"
 
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
@@ -39,31 +40,29 @@ echo doing upload
 
 # assumes hg18 and hg19 have the same tables
 hgsql -h mysqlbeta -N -e "SHOW TABLES LIKE 'omim%' " hg19 > omimTables
-rm -f pushList
+rm -f omimTableDump.tar omimTableDump.tar.gz
 
 for db in hg18 hg19 hg38
 do
     for table in `cat omimTables`
     do
-	echo $db.$table.tab >> pushList
+#	echo $db.$table.tab >> pushList
 	hgsql -N -e "SELECT * FROM $table" $db > $db.$table.tab
+	tar -rf omimTableDump.tar $db.$table.tab
+  rm $db.$table.tab
     done
 done
 
-# create script to scp the files
-rm -f scp.script
-for i in `cat pushList`
-do
-    echo scp -q -i omim.ftp.key  $i  omimftp@ftp.omim.org:/home/omimftp1/OMIM/$i
-done >> scp.script
-
-if sh -e scp.script
+if [ ! -e omimTableDump.tar ]
 then
-    mv omimGene2.date upload.omim2.date
-    echo "Process successful"
-else
-    echo "Process failed"
-    exit 1
+  echo "Process failed"
+  exit 1
 fi
 
+gzip omimTableDump.tar
+cp -p omimTableDump.tar.gz "$UPLOADDIR/omimTableDump.tgz"
+
+mv omimGene2.date upload.omim2.date
+
+echo "Process successful"
 exit 0
