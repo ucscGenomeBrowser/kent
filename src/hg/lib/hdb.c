@@ -4700,8 +4700,8 @@ char **row;
 char *answer;
 
 answer = NULL;
-sqlSafef(query, sizeof(query), "select %s from %s.%-s  where %-s;",
-      fldName, db, sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
+sqlSafef(query, sizeof(query), "select %s from %-s  where %-s;",
+      fldName,  sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 
