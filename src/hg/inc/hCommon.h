@@ -49,6 +49,9 @@ char *hgVarAnnogratorName();
 char *hgIntegratorName();
 /* Relative URL to annotation integrator program. */
 
+char *hgGeneName();
+/* Relative URL to gene details program (hgGene). */
+
 void fragToCloneName(char *fragName, char cloneName[128]);
 /* Convert fragment name to clone name. */
 

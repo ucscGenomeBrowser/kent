@@ -1,0 +1,51 @@
+#########################################################################
+# SWAP LASTZ human/hg38 Tree chimp/rheMac8 - (DONE - 2016-02-05 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/hg38/bed/lastzRheMac8.2016-02-05
+    cat fb.hg38.chainRheMac8Link.txt
+    # 2576861166 bases of 3049335806 (84.506%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.hg38.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.hg38.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg38/bed/lastzRheMac8.2016-02-05/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    234m24.287s
+
+    cat fb.rheMac8.chainHg38Link.txt
+    # 2499211352 bases of 3142093174 (79.540%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac8 hg38) > rbest.log 2>&1
+    # real    39m52.256s
+
+##############################################################################
+# SWAP LASTZ Rhesus rheMac8 (DONE - 2016-02-10 - Hiram)
+    # original alignment
+    mkdir /hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10
+    cd /hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10
+
+    cat fb.mm10.chainRheMac8Link.txt
+    #	918841829 bases of 2652783500 (34.637%) in intersection
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    110m33.219s
+
+    cat fb.rheMac8.chainMm10Link.txt
+    #	917131079 bases of 3142093174 (29.189%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac8 mm10) > rbest.log 2>&1
+    # real    409m8.252s
+
+##############################################################################
+

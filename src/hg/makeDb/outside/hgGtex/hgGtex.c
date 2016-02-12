@@ -781,7 +781,7 @@ if (doLoad)
 
     // Load tissue data table
     verbose(2, "Creating tissue data table\n");
-    gtexTissueMedianCreateTable(conn, tissueDataTable);
+    gtexTissueDataCreateTable(conn, tissueDataTable);
     hgLoadTabFile(conn, tabDir, tissueDataTable, &tissueDataFile);
 
     // Load sample data table 
