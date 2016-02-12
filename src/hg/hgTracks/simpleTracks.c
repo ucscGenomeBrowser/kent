@@ -6855,12 +6855,17 @@ char trackLabel[1024];
 char *labelString = tg->table;
 boolean isRefGene = TRUE;
 
-
 if (startsWith("ncbiRefSeq", labelString))
     {
     labelString="refSeqComposite";
     isRefGene = FALSE;
     }
+else if (tdbIsCompositeChild(tg->tdb) && sameWord("refGene", labelString))
+    {
+    labelString="refSeqComposite";  // manage the case of existing refGene
+    isRefGene = TRUE;               // track in composite without new tables
+    }
+
 safef(trackLabel, sizeof trackLabel, "%s.label", labelString);
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, trackLabel);

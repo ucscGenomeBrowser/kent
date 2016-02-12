@@ -1300,7 +1300,8 @@ TMPDIR=/dev/shm' > DEF
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` canFam3 rheMac3) \
         > rbest.log 2>&1
 XXX - running - Tue Sep 29 12:22:16 PDT 2015
-    # real    43m54.042s
+    # real    64m14.945s
+
 
 #########################################################################
 # LASTZ rhesus/rheMac3 vs. chicken/galGal4 - (DONE - 2015-09-25 - Hiram)
@@ -1372,5 +1373,22 @@ TMPDIR=/dev/shm' > DEF
     time (doRecipBest.pl -workhorse=hgwdev -continue=download  -buildDir=`pwd` \
       galGal4 rheMac3) > download.log 2>&1
     # real    0m4.349s
+
+#########################################################################
+# LIFTOVER TO rheMac8 (DONE - 2016-02-05 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/rheMac3/bed/blat.rheMac8.2016-02-05
+    cd /hive/data/genomes/rheMac3/bed/blat.rheMac8.2016-02-05
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac3/jkStuff/rheMac3.11.ooc \
+         rheMac3 rheMac8
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/rheMac3/jkStuff/rheMac3.11.ooc \
+         rheMac3 rheMac8) > doLiftOverToRheMac3.log 2>&1
+    # real    816m59.070s
+
+    # see if the liftOver menus function in the browser from rheMac2 to Mac8
 
 #########################################################################
