@@ -19,7 +19,20 @@ track xenoRefGene override
 priority 4
 
 track refGene override
+release beta,public
 priority 5
+
+track refSeqComposite override
+release alpha
+priority 5
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 # Literature
 

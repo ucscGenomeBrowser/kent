@@ -130,9 +130,9 @@ struct section *gadSection(struct sqlConnection *conn,
 	struct hash *sectionRa);
 /* Create GAD section. */
 
-struct section *malacardsSection(struct sqlConnection *conn, 
+struct section *malaCardsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
-/* Create malacards section. */
+/* Create malaCards section. */
 
 struct section *domainsSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);

@@ -11572,3 +11572,59 @@ EOF
     mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask
     ln -s /hive/data/genomes/mm10/snp142Mask/substitutions/* \
       /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/snp142Mask/
+
+##############################################################################
+# LASTZ Rhesus rheMac8 (DONE - 2016-02-10 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10
+    cd /hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10
+
+    printf '# rhesus vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rhesus RheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10RheMac8
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    239m18.376s
+
+    cat fb.mm10.chainRheMac8Link.txt
+    #	918841829 bases of 2652783500 (34.637%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 rheMac8) > rbest.log 2>&1 &
+    # real    421m31.807s
+
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRheMac8.2016-02-10/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=3000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    110m33.219s
+
+    cat fb.rheMac8.chainMm10Link.txt
+    #	917131079 bases of 3142093174 (29.189%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rheMac8 mm10) > rbest.log 2>&1
+    # real    409m8.252s
+
+##############################################################################
