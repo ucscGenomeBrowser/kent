@@ -352,13 +352,13 @@ printf("</p>");
 /* Tissue filter */
 printf("<br>");
 printf("<div><b>Tissues:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 if (isPopup)
     {
     printf("<a href='../cgi-bin/hgTrackUi?g=%s'><button type='button'>Change</button><a>", track);
     }
 else
     {
-    safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     puts("&nbsp;");
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
