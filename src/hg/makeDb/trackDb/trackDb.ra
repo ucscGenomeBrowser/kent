@@ -2990,7 +2990,6 @@ allButtonPair on
     configurable on
     baseColorUseCds given
     baseColorDefault genomicCodons
-    pepTable ncbiRefSeqPepTable
 
 	track ncbiRefSeq
         release alpha
@@ -3044,6 +3043,8 @@ allButtonPair on
     view zAlign
     color 48,168,219
     configurable on
+    type psl
+    pepTable ncbiRefSeqPepTable
 
 	track ncbiRefSeqPsl
         release alpha

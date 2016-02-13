@@ -7,7 +7,20 @@ visibility pack
 informant  Guinea pig N-SCAN uses human (hg18) as the informant.
 
 track refGene override
+release beta,public
 visibility hide
+
+track refSeqComposite override
+release alpha
+visibility hide
+
+    track ncbiRefGenesView override
+    release alpha
+    parent refSeqComposite on
+
+        track refGene override
+        release alpha
+        parent ncbiRefGenesView on
 
 track mrna override
 visibility hide

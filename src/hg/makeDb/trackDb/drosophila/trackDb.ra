@@ -1,14 +1,7 @@
-
 track refGene
-#replaces record refGene in parent dir missing/extra baseColorUseCds
-shortLabel RefSeq Genes
-longLabel RefSeq Genes
-group genes
+release beta,public
 priority 35
-visibility dense
-color 12,12,120
-type genePred refPep refMrna
-idXref refLink mrnaAcc name
+baseColorUseCds given
 
 track genscan override
 visibility dense
