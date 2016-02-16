@@ -1,7 +1,6 @@
 track refGene
 release beta,public
 priority 35
-baseColorUseCds given
 
 track genscan override
 visibility dense
