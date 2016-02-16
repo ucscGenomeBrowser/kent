@@ -123,12 +123,6 @@ if [ "$#" -eq 0 ] ; then
    fi
 fi
 
-# keep a log of all output of this script and the date
-echo --------------------------------- >> $LOGFILE
-date  >> $LOGFILE
-echo --------------------------------- >> $LOGFILE
-exec >> >(tee -a $LOGFILE) 2>&1
-
 # unless already calling self, update self and call self unless doing only cgis
 # self-updates are not done when suppressed with notSelf and also not in hgwdev-mode to allow testing of local updateBrowser.sh changes
 # Internal sidenote: if you want hgwdev CGIs and also the current hgwdev update
@@ -158,6 +152,14 @@ if [ -f /tmp/lastJob.pid ] && [ "$(ps x -o pgid | grep $(cat /tmp/lastJob.pid) |
     exit 4
 fi
 	
+# --- now do the update ---
+
+# keep a log of all output of this script and the date
+echo --------------------------------- >> $LOGFILE
+date  >> $LOGFILE
+echo --------------------------------- >> $LOGFILE
+exec >> >(tee -a $LOGFILE) 2>&1
+
 # not done, as old customTrash tables will be in innoDb format
 # and can't be read if we deactivate it now
 # deactivate inno-db support in mysql. Saves 400-500MB of RAM.
