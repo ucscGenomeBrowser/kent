@@ -3059,9 +3059,10 @@ allButtonPair on
         showDiffBasesMaxZoom 10000.0
         showCdsMaxZoom 10000.0
         showCdsAllScales .
-        baseColorDefault itemBases
+        baseColorDefault diffCodons
         pslSequence no
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
+        baseColorUseCds table ncbiRefSeqCds
 
 searchName refSeqComposite
 searchTable ncbiRefSeq
