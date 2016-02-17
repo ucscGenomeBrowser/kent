@@ -7301,6 +7301,8 @@ void setEMGeneTrack()
 {
 if (emGeneTable) // we already have it!
     return;
+if (trackHubDatabase(database)) // assembly hub? not supported yet
+    return; 
 emGeneTable = cloneString(cartOptionalString(cart, "emGeneTable"));
 if (emGeneTable)
     {
