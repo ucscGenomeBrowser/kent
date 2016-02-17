@@ -12460,11 +12460,11 @@ boolean doThisOmimEntry(struct track *tg, char *omimId)
 boolean doIt;
 boolean gotClassLabel;
 char labelName[255];
-boolean doClass1 = FALSE;
-boolean doClass2 = FALSE;
-boolean doClass3 = FALSE;
-boolean doClass4 = FALSE;
-boolean doOthers = FALSE;
+boolean doClass1 = TRUE;
+boolean doClass2 = TRUE;
+boolean doClass3 = TRUE;
+boolean doClass4 = TRUE;
+boolean doOthers = TRUE;
 
 struct hashEl *omimLocationLabels;
 struct hashEl *label;
@@ -12483,25 +12483,25 @@ if (!gotClassLabel) return(TRUE);
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
     {
-    if (endsWith(label->name, "class1") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class1") && sameString(label->val, "0"))
 	{
-	doClass1 = TRUE;
+	doClass1 = FALSE;
 	}
-    if (endsWith(label->name, "class2") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class2") && sameString(label->val, "0"))
 	{
-	doClass2 = TRUE;
+	doClass2 = FALSE;
 	}
-    if (endsWith(label->name, "class3") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class3") && sameString(label->val, "0"))
 	{
-	doClass3 = TRUE;
+	doClass3 = FALSE;
 	}
-    if (endsWith(label->name, "class4") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class4") && sameString(label->val, "0"))
 	{
-	doClass4 = TRUE;
+	doClass4 = FALSE;
 	}
-    if (endsWith(label->name, "others") && differentString(label->val, "0"))
+    if (endsWith(label->name, "others") && sameString(label->val, "0"))
 	{
-	doOthers = TRUE;
+	doOthers = FALSE;
 	}
     }
 
