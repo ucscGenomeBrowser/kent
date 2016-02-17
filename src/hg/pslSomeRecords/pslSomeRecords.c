@@ -10,6 +10,7 @@
 #include "psl.h"
 
 boolean tToo = FALSE;
+boolean not = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -24,6 +25,7 @@ errAbort(
   "          on each line\n"
   "   pslOut is the output psl file\n"
   "options:\n"
+  "   -not  - include psl if name is NOT in list\n"
   "   -tToo - if set, the list file is two column, qName and tName.\n"
   "           In this case only records matching on both q and t are\n"
   "           output\n"
@@ -31,6 +33,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"not", OPTION_BOOLEAN},
    {"tToo", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -69,7 +72,7 @@ while ((psl = pslNext(lf) ) != NULL)
 	}
     else
 	{
-	if (hashLookup(hash, psl->qName))
+	if (not ^ (hashLookup(hash, psl->qName) != NULL))
 	    pslTabOut(psl, f);
 	}
     pslFree(&psl);
@@ -83,6 +86,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 tToo = optionExists("tToo");
+not = optionExists("not");
 pslSomeRecords(argv[1], argv[2], argv[3]);
 return 0;
 }
