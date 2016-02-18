@@ -42,8 +42,8 @@ char **row2;
 
 int startPos;
 int endPos;
-int startPosBand1;
-int endPosBand1;
+int startPosBand1 = 0;
+int endPosBand1 = 0;
 int startPosBand2;
 int endPosBand2;
 
@@ -77,15 +77,15 @@ while (row2 != NULL)
     boolean band1Success;
     
     boolean band1HasTer;
-    boolean band2HasTer;
+/*    boolean band2HasTer;
     boolean band1HasCen;
-    boolean band2HasCen;
+    boolean band2HasCen; */
     
     band1Success      = FALSE;
     band1HasTer       = FALSE;
-    band2HasTer       = FALSE;
+/*    band2HasTer       = FALSE;
     band1HasCen       = FALSE;
-    band2HasCen       = FALSE;
+    band2HasCen       = FALSE; */
 
     omimId   = row2[0];
     location = row2[1];
@@ -161,7 +161,7 @@ while (row2 != NULL)
     	/* process "cen" */
     	if (pqc == 'c') 
     	    {
-	    band1HasCen  = TRUE;
+/*	    band1HasCen  = TRUE; */
 	    sqlSafef(query, sizeof query,
                     "select chromStart, chromEnd from %s where chrom = '%s' and type ='centromere'", gapTableName, chrom);
 	    }
@@ -235,7 +235,7 @@ while (row2 != NULL)
 	chpTer = strstr(band2, "ter");
 	if (chpTer != NULL) 
 	    {
-	    band2HasTer = TRUE;
+/*	    band2HasTer = TRUE; */
 	    *chpTer = '\0';
     	    sqlSafef(query, sizeof query,
             		"select max(chromEnd), max(chromEnd) from cytoBand where chrom = '%s' and name like '%s%c'", chrom, band2, '%');
@@ -245,7 +245,7 @@ while (row2 != NULL)
 	    chpCen = strstr(band2, "cen");
 	    if (chpCen != NULL) 
 	    	{
-	    	band2HasCen = TRUE;
+/*	    	band2HasCen = TRUE; */
     		sqlSafef(query, sizeof query,
             		"select chromStart, chromEnd from %s where chrom = '%s' and type = 'centromere'", gapTableName, chrom);
 	    	}

@@ -67,6 +67,7 @@
 #include "basicBed.h"
 #include "customFactory.h"
 #include "genbank.h"
+#include "bigWarn.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -7301,6 +7302,8 @@ void setEMGeneTrack()
 {
 if (emGeneTable) // we already have it!
     return;
+if (trackHubDatabase(database)) // assembly hub? not supported yet
+    return; 
 emGeneTable = cloneString(cartOptionalString(cart, "emGeneTable"));
 if (emGeneTable)
     {
@@ -7327,6 +7330,31 @@ for (window=windows->next; window; window=window->next)
 	return TRUE;
     }
 return FALSE;
+}
+
+static void setSharedErrorsAcrossWindows(struct track *track)
+/* Look for network errors across all windows
+ * if found, set all windows to same errMsg and set bigWarn track handlers. */
+{
+char *sharedErrMsg = NULL;
+struct track *tg;
+for (tg=track; tg; tg=tg->nextWindow)
+    {
+    if (!sharedErrMsg && tg->networkErrMsg)
+	{
+	sharedErrMsg = tg->networkErrMsg;
+	break;
+	}
+    }
+if (sharedErrMsg)
+    {
+    for (tg=track; tg; tg=tg->nextWindow)
+	{
+	tg->networkErrMsg = sharedErrMsg;
+	tg->drawItems = bigDrawWarning;
+	tg->totalHeight = bigWarnTotalHeight;
+	}
+    }
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -7651,7 +7679,23 @@ trackLoadingInProgress = FALSE;
 setGlobalsFromWindow(windows); // first window // restore globals
 trackList = windows->trackList;  // restore track list
 
+
+// Look for network errors across all windows
+// if found, set all windows to same errMsg and set bigWarn track handlers.
+for (track = trackList; track != NULL; track = track->next)
+    {
+    setSharedErrorsAcrossWindows(track);
+    struct track *sub;
+    for (sub=track->subtracks; sub; sub=sub->next)
+	{
+	setSharedErrorsAcrossWindows(sub);
+	}
+    }
+
+
+
 //////////////  END OF MULTI-WINDOW LOOP
+
 
 printTrackInitJavascript(trackList);
 

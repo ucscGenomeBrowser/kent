@@ -59,6 +59,7 @@ if [ "${WC}" -gt 0 ]; then
 # build the new OMIM track tables for hg18, hg19, hg38
 for db in hg18 hg19 hg38
 do
+  echo Running OMIM build for $db
   rm -rf $db
   mkdir -p $db
   cd $db
@@ -68,7 +69,7 @@ do
   ln -s ../mim2gene.txt ./mim2gene.txt
   ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl
 
-  csh  ../../buildOmimTracks.csh $db
+  ../../buildOmimTracks.sh $db
   ../../validateOmim.sh $db
   cd ..
 
@@ -82,8 +83,8 @@ do
 done
 
 
-rm -f "${WORKING}"/prev.md5sum.txt
-cp -p "${WORKING}/${today}"/md5sum.txt "${WORKING}"/prev.md5sum.txt
+rm -f "${WORKDIR}"/prev.md5sum.txt
+cp -p "${WORKDIR}/${today}"/md5sum.txt "${WORKDIR}"/prev.md5sum.txt
 echo "Omim Installed `date`" 
 
 else

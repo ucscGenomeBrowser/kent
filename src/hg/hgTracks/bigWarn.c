@@ -41,8 +41,18 @@ return result;
 void bigDrawWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
                  int xOff, int yOff, int width, MgFont *font, Color color,
                  enum trackVisibility vis)
-/* Draw the network error message */
+/* Draw the network error message, for the first window only. 
+ * Use the entire screen space across all windows. */
 {
+if (currentWindow != windows)
+    return;
+int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+hvGfxGetClip(hvg, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, fullInsideX, yOff, fullInsideWidth, tg->height);
+xOff = fullInsideX;
+width = fullInsideWidth;
+
 char message[1024];
 Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
 char *errMsg = bigWarnReformat(tg->networkErrMsg);
@@ -58,7 +68,8 @@ int m = tg->height / lineHeight;      /* Lines of text space available */
 if (m < 1) 
     m = 1;
 // make yellow background to draw user's attention to the err msg
-if (!sameOk(parentContainerType(tg), "multiWig")) // unless multiwig has already done it.
+
+if (!sameOk(parentContainerType(tg), "multiWig")) // multiWig knows full parent height
     hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
 // leading blank lines if any
 int bl = (m-n)/2;   
@@ -88,6 +99,8 @@ while (TRUE)
     ++nl;
     }
 freeMem(errMsg);
+hvGfxUnclip(hvg);
+hvGfxSetClip(hvg, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
 }
 
 int bigWarnTotalHeight(struct track *tg, enum trackVisibility vis)

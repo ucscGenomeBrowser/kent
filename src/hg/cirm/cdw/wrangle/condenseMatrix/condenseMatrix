@@ -143,8 +143,10 @@ def main(args):
     
     #Mappings were made with this command
     #zcat /hive/groups/cirm/software/kallisto/transcripts/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz | grep \> | cut -d' ' -f1,4 | tr -d '>' | sed -e 's/gene://'
-
-    humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
+    # Mmmm relative paths so it works on hgwdev and cirm-01
+    # Ensembl genes, ENSG***********, very hard to readm, replacing with the human readable genes.  
+    #humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
+    humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/ensembleTrscrptToHumReadGene.txt", False)
     mouseMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
     #ensembleExonToGene = dict()
     #for t in result.fetchall(): 

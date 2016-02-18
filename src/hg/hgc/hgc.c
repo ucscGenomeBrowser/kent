@@ -10466,7 +10466,7 @@ if (url != NULL && url[0] != 0)
 	else
 	    {
             printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp137&i=", dbSnpId);
+	       "../cgi-bin/hgc?g=snp144&i=", dbSnpId);
 	    }
         printf("%s</A></B>", dbSnpId);
 	}
