@@ -5688,7 +5688,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(psl->qName),
+	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(itemIn),
 			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
@@ -7031,6 +7031,21 @@ struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
 showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
+static struct dnaSeq *getBaseColorSequence(char *itemName, char *table)
+/* Grab sequence using the sequence and extFile table names out of BASE_COLOR_USE_SEQUENCE. */
+{
+struct trackDb *tdb = hashMustFindVal(trackHash, table);
+char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
+char *specCopy = cloneString(spec);
+
+// value is: extFile seqTbl extFileTbl
+char *words[3];
+int nwords = chopByWhite(specCopy, words, ArraySize(words));
+if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
+    errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
+return hDnaSeqGet(database, itemName, words[1], words[2]);
+}
+
 void htcCdnaAli(char *acc)
 /* Show alignment for accession. */
 {
@@ -7087,6 +7102,10 @@ else if (sameString("HInvGeneMrna", aliTable))
     /* get RNA accession for the gene id in the alignment */
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
+    }
+else if (sameString("ncbiRefSeqPsl", aliTable))
+    {
+    rnaSeq = getBaseColorSequence(acc, aliTable);
     }
 else
     {
@@ -7191,28 +7210,17 @@ else
     /* Look up alignments in database */
     hFindSplitTable(database, seqName, aliTable, table, &hasBin);
     sqlSafef(query, sizeof(query),
-	  "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d",
-	  table, acc, seqName, start);
+         "select * from %s where qName = '%s' and tName=\"%s\" and tStart=%d", 
+         table, acc, seqName, start);
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) == NULL)
 	errAbort("Couldn't find alignment for %s at %d", acc, start);
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
+    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || startsWith("altSeqLiftOverPsl", aliTable) || startsWith("ncbiRefSeqPsl", aliTable))
 	{
-        rnaSeq = NULL;
-	char *trackName = hGetTrackForTable(database, aliTable);
-	struct trackDb *tdb = hashMustFindVal(trackHash, trackName);
-        char *spec = trackDbRequiredSetting(tdb, BASE_COLOR_USE_SEQUENCE);
-        char *specCopy = cloneString(spec);
-
-        // value is: extFile seqTbl extFileTbl
-        char *words[3];
-        int nwords = chopByWhite(specCopy, words, ArraySize(words));
-        if ((nwords != ArraySize(words)) || !sameString(words[0], "extFile"))
-            errAbort("invalid %s track setting: %s", BASE_COLOR_USE_SEQUENCE, spec);
-        rnaSeq = hDnaSeqGet(database, acc, words[1], words[2]);
+        rnaSeq = getBaseColorSequence(acc, aliTable);
 	}
     else if (sameString("HInvGeneMrna", aliTable))
 	{
@@ -8257,6 +8265,19 @@ dnaSeqFree(&cdsDna);
 return prot;
 }
 
+
+
+void ncbiRefSeqSequence(char *itemName)
+{
+char *table = cartString(cart, "o");
+struct dnaSeq *rnaSeq = getBaseColorSequence(itemName, table );
+cartHtmlStart("RefSeq mRNA Sequence");
+
+printf("<PRE><TT>");
+printf(">%s\n", itemName);
+faWriteNext(stdout, NULL, rnaSeq->dna, rnaSeq->size);
+printf("</TT></PRE>");
+}
 
 
 void htcGeneMrna(char *geneName)
@@ -11507,7 +11528,7 @@ if (pslList)
     {
     int start = cartInt(cart, "o");
     printf("<H3>mRNA/Genomic Alignments</H3>");
-    printAlignments(pslList, start, "ncbiRefSeqPsl", "ncbiRefSeqPsl", itemName);
+    printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
     }
 else
     {
@@ -11516,24 +11537,24 @@ else
 
 htmlHorizontalLine();
 
-showGenePos(itemName, tdb);
+if (!sameString(tdb->track, "ncbiRefSeqPsl"))
+    showGenePos(itemName, tdb);
 
-printf("<h3>Links xyz to sequence:</h3>\n");
+printf("<h3>Links to sequence:</h3>\n");
 printf("<ul>\n");
-printf("<li>need to figure out how to make these links, these don't work.\n");
-
-// might need something like this: seq = hPepSeq(database, buffer);
-
 puts("<li>\n");
-hgcAnchorSomewhere("htcTranslatedProtein", itemName, "seqNcbiRefSeq",
-		       nrl->mrnaAcc);
+hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
 printf("Predicted Protein</a> \n");
 puts("</li>\n");
 puts("<li>\n");
-hgcAnchorSomewhere("htcGeneMrna", itemName, tdb->track, nrl->mrnaAcc);
+hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
 printf("%s</a> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
 puts("</li>\n");
+puts("<LI>\n");
+hgcAnchorSomewhere("getDna", itemName, tdb->track, seqName);
+printf("Genomic Sequence</A> from assembly\n");
+puts("</LI>\n");
 
 printf("</ul>\n");
 
@@ -24989,6 +25010,7 @@ else if (sameWord(table, "knownGene"))
     doKnownGene(tdb, item);
     }
 else if (sameWord(table, "ncbiRefSeq") ||
+         sameWord(table, "ncbiRefSeqPsl") ||
          sameWord(table, "ncbiRefSeqCurated") ||
          sameWord(table, "ncbiRefSeqPredicted") ||
          sameWord(table, "ncbiRefSeqOther") )
@@ -25425,6 +25447,10 @@ else if (sameWord(table, "htcTranslatedPredMRna"))
 else if (sameWord(table, "htcTranslatedMRna"))
     {
     htcTranslatedMRna(tdbForTableArg(), item);
+    }
+else if (sameWord(table, "ncbiRefSeqSequence"))
+    {
+    ncbiRefSeqSequence(item);
     }
 else if (sameWord(table, "htcGeneMrna"))
     {
