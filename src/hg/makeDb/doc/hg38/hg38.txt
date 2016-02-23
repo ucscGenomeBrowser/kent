@@ -6442,3 +6442,22 @@ rm tmpChrom
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
+# GWIPS-viz Ribo-seq - (DONE - 2016-02-05 - Steve)
+# contact Audrey Michel (audreymannion@gmail.com)
+# redmine #16765
+
+obtained bigWig file from shared Google drive
+https://drive.google.com/a/soe.ucsc.edu/folderview?id=0B_xvV_5tXzOGQ1h5NEh4bnhNTDg&usp=sharing_eid
+
+mkdir /hive/data/genomes/hg38/bed/gwipsvizRiboseq
+cp Global_RiboProElong.10_02_2016.bw /hive/data/genomes/hg38/bed/gwipsvizRiboseq/gwipsvizRiboseq.bw
+
+mkdir /gbdb/hg38/bbi/gwipsvizRiboseq
+cd /gbdb/hg38/bbi/gwipsvizRiboseq
+ln -s /hive/data/genomes/hg38/bed/gwipsvizRiboseq/gwipsvizRiboseq.bw gwipsvizRiboseq.bw
+
+hgsql hg38
+create table gwipsvizRiboseq select * from gc5BaseBw;
+update gwipsvizRiboseq set fileName="/gbdb/hg38/bbi/gwipsvizRiboseq/gwipsvizRiboseq.bw" where fileName="/gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw";
+
+#########################################################################
