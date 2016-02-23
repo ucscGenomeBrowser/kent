@@ -110,9 +110,9 @@ int errCt;
 
 if (!fileExists(oldFile))
     errAbort("Can't find file: %s\n", oldFile);
-fprintf(stderr, "Reading liftover chains\n");
+verbose(1, "Reading liftover chains\n");
 readLiftOverMap(mapFile, chainHash);
-fprintf(stderr, "Mapping coordinates\n");
+verbose(1, "Mapping coordinates\n");
 if (optionExists("gff"))
     {
     fprintf(stderr, "WARNING: -gff is not recommended.\nUse 'ldHgGene -out=<file.gp>' and then 'liftOver -genePred <file.gp>'\n");
