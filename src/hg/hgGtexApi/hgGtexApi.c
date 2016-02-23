@@ -11,6 +11,7 @@
 
 #include "common.h"
 #include "hdb.h"
+#include "htmshell.h"
 #include "hPrint.h"
 #include "dystring.h"
 #include "api.h"
@@ -67,8 +68,8 @@ long enteredMainTime = clock1000();
 struct dyString *output = newDyString(10000);
 
 cgiSpoof(&argc, argv);
-pushWarnHandler(apiWarnAbortHandler);
-pushAbortHandler(apiWarnAbortHandler);
+pushWarnHandler(htmlVaBadRequestAbort);
+pushAbortHandler(htmlVaBadRequestAbort);
 
 char *jsonp = cgiOptionalString("jsonp");
 geneResource(output);

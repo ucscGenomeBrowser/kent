@@ -4,7 +4,6 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
-#include "stdio.h"
 #include "api.h"
 
 void apiOut(char *text, char *jsonp)
@@ -23,13 +22,3 @@ else
     puts(text);
     }
 }
-
-void apiWarnAbortHandler(char *format, va_list args)
-/* warnAbort handler that aborts with an HTTP 400 status code. */
-{
-puts("Status: 400\n\n");
-vfprintf(stdout, format, args);
-puts("\n");
-exit(-1);
-}
-
