@@ -1,4 +1,4 @@
-# ENCODE Integrated Regulation Track (wrangler Kate)
+# ENCODE Integrated Regulation Track (lifted by Chris)
 
 track wgEncodeReg
 superTrack on show
@@ -29,14 +29,14 @@ include wgEncodeRegDnase.ra
     allButtonPair on
     pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
     origAssembly hg19
-
+	
 	track wgEncodeRegTxnCaltechRnaSeqGm12878R2x75Il200SigPooled
 	shortLabel GM12878
 	longLabel Transcription of GM12878 cells from ENCODE
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 1
-	color 85,152,255
+	color 255,128,128
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -46,7 +46,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 2
-	color 85,93,255
+	color 255,212,128
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -56,7 +56,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 3
-	color 157,85,255
+	color 227,255,128
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -66,7 +66,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 4
-	color 85,198,255
+	color 128,255,149
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -76,7 +76,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 5
-	color 85,255,190
+	color 128,255,242
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -86,7 +86,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 6
-	color 85,255,215
+	color 128,199,255
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -96,7 +96,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
         type bigWig 0 65535
 	priority 7
-	color 255,85,85
+	color 149,128,255
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -106,7 +106,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
 	type bigWig 0 65535
 	priority 8
-	color 85,238,255
+	color 227,128,255
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -116,7 +116,7 @@ include wgEncodeRegDnase.ra
 	parent wgEncodeRegTxn
 	type bigWig 0 65535
 	priority 9
-	color 255,209,85
+	color 255,128,212
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
 
@@ -143,7 +143,7 @@ include wgEncodeRegDnase.ra
 	shortLabel GM12878
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on GM12878 Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 85,152,255
+	color 255,128,128
 	type bigWig 0 5199
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -153,7 +153,7 @@ include wgEncodeRegDnase.ra
 	shortLabel H1-hESC
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on H1-hESC Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 85,93,255
+	color 255,212,128
 	type bigWig 0 8355
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -163,7 +163,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HSMM
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 85,255,190
+	color 120,235,204
 	type bigWig 0 6265
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -173,7 +173,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HUVEC
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 85,255,215
+	color 128,212,255
 	type bigWig 0 4666
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -183,7 +183,7 @@ include wgEncodeRegDnase.ra
 	shortLabel K562
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 255,85,85
+	color 128,128,255
 	type bigWig 0 5716
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -193,7 +193,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHEK
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 85,238,255
+	color 212,128,255
 	type bigWig 0 2669
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -203,7 +203,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHLF
 	longLabel H3K4Me1 Mark (Often Found Near Regulatory Elements) on NHLF Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me1
-	color 255,209,85
+	color 255,128,212
 	type bigWig 0 6866
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -231,7 +231,7 @@ include wgEncodeRegDnase.ra
 	shortLabel GM12878
 	longLabel H3K4Me3 Mark (Often Found Near Regulatory Elements) on GM12878 Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 85,152,255
+	color 255,128,128
 	type bigWig 0 5199
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -241,7 +241,7 @@ include wgEncodeRegDnase.ra
 	shortLabel H1-hESC
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on H1-hESC Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 85,93,255
+	color 255,212,128
 	type bigWig 0 6957
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -251,7 +251,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HSMM
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 85,255,190
+	color 120,235,204
 	type bigWig 0 25995
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -261,7 +261,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HUVEC
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 85,255,215
+	color 128,212,255
 	type bigWig 0 7852
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -271,7 +271,7 @@ include wgEncodeRegDnase.ra
 	shortLabel K562
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 255,85,85
+	color 128,128,255
 	type bigWig 0 9918
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -281,7 +281,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHEK
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 85,238,255
+	color 212,128,255
 	type bigWig 0 8230
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -291,7 +291,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHLF
 	longLabel H3K4Me3 Mark (Often Found Near Promoters) on NHLF Cells from ENCODE
 	parent wgEncodeRegMarkH3k4me3
-	color 255,209,85
+	color 255,128,212
 	type bigWig 0 19229
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -319,7 +319,7 @@ include wgEncodeRegDnase.ra
 	shortLabel GM12878
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on GM12878 Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 85,152,255
+	color 255,128,128
 	type bigWig 0 223899
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -329,7 +329,7 @@ include wgEncodeRegDnase.ra
 	shortLabel H1-hESC
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on H1-hESC Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 85,93,255
+	color 255,212,128
 	type bigWig 0 14898
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -339,7 +339,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HSMM
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on HSMM Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 85,255,190
+	color 120,235,204
 	type bigWig 0 5448
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -349,7 +349,7 @@ include wgEncodeRegDnase.ra
 	shortLabel HUVEC
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on HUVEC Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 85,255,215
+	color 128,212,255
 	type bigWig 0 3721
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -359,7 +359,7 @@ include wgEncodeRegDnase.ra
 	shortLabel K562
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on K562 Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 255,85,85
+	color 128,128,255
 	type bigWig 0 6249
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -369,7 +369,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHEK
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on NHEK Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 85,238,255
+	color 212,128,255
 	type bigWig 0 23439
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
@@ -379,7 +379,7 @@ include wgEncodeRegDnase.ra
 	shortLabel NHLF
 	longLabel H3K27Ac Mark (Often Found Near Regulatory Elements) on NHLF Cells from ENCODE
 	parent wgEncodeRegMarkH3k27ac
-	color 255,209,85
+	color 255,128,212
 	type bigWig 0 3851
 	pennantIcon 19.jpg ../goldenPath/help/liftOver.html "lifted from hg19"
 	origAssembly hg19
