@@ -199,7 +199,14 @@ set tRNAsDbs ailMel1,anoCar2,bosTau4,bosTau6,caeJap1,caePb1,caePb2,caeRem2,caeRe
 # Databases with the CGAP SAGE track
 set cgapSageDbs hg18,hg19,hg38,mm8
 
+
 # Define the shared identifiers and the fields they appear in.
+
+identifier fishClones
+"Comment"
+	hg38.fishClones.name
+	hg38.cloneEndRP11.name minCheck=.03
+	hg38.cloneEndCTD.name minCheck=.0015 
 
 identifier cosmicId
 "COSMIC entry ID"
@@ -2711,6 +2718,8 @@ identifier bacEndNames
     $danRer.bacEndPairsBad.lfNames comma
     $danRer.bacEndAlias.alias minCheck=0.55
     $hg.fishClones.beNames comma minCheck=0.70
+
+
 
 identifier danRerBacExtName
 "External name for BAC clones."
