@@ -3481,6 +3481,10 @@ var popUp = {
                  popUp.uiDialogOk($('#pop'), popUp.trackName);
                  // thanks to JAT for this cleverness to keep button functioning
                  popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                 if (popUp.saveAllVars[popUp.trackName+"_sel"] === 0) {       // hide
+                    // NOTE: once hidden, can't be unhidden by popup, so shut it down
+                    $(this).dialog("close");
+                }
             };
             uiDialogButtons.OK = function() {
                 popUp.uiDialogOk($('#pop'), popUp.trackName);
