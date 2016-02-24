@@ -290,6 +290,7 @@ pslSequence psl bigPsl
 pslTable bed bigPsl
 refSeqAnnoVersion genePred
 release *
+refUrl bam
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 sGroup_Birds wigMaf

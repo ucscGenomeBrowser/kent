@@ -1,0 +1,5 @@
+#!/bin/sh -e
+#
+# tawk - run awk with FS and OFS set to tabs.
+#
+exec awk -v 'FS=\t' -v 'OFS=\t' "$@"
