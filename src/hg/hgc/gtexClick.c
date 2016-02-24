@@ -236,7 +236,7 @@ printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
 // The actual transcript model is a union, so this identification is approximate
 // (used just to find a transcript class)
 //printf("<b>Ensembl Transcript ID:</b> %s<br>\n", gtexGene->transcriptId);
-printf("<b>Ensembl Transcript Class: </b><span style='color: %s'>%s</span><br>\n", 
+printf("<b>Ensembl Class: </b><span style='color: %s'>%s</span><br>\n", 
             gencodeTranscriptClassColorCode(gtexGene->transcriptClass), gtexGene->transcriptClass);
 printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                         hgTracksPathAndSettings(), database, 
