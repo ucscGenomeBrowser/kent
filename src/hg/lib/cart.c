@@ -772,10 +772,12 @@ if (didSessionLoad)
 
 if (newDatabase != NULL)
     {
-    // this is some magic to use the defaultPosition */
-    char *oldDb = cartOptionalString(cart, "db");
-    if (oldDb != NULL)
-        hashAdd(oldVars, "db", oldDb);
+    // this is some magic to use the defaultPosition and reset cart variables
+    struct hashEl *hel;
+    if ((hel = hashLookup(oldVars,"db")) != NULL)
+        hel->val = "none";
+    else
+        hashAdd(oldVars, "db", "none");
     cartSetString(cart,"db", newDatabase);
     }
 
