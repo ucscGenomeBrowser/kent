@@ -137,7 +137,6 @@ var genomePos = {
     undisguisePosition: function(position) // UN-DISGUISE VMODE
     {   // find the virt position
 	//  position should be real chrom span
-	//warn("undisguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return position; // some parsing error, return original
@@ -150,7 +149,6 @@ var genomePos = {
 	var newEnd = -1;
 	var lastW = null;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -172,7 +170,6 @@ var genomePos = {
 		    var e = Math.min(end, w.winEnd);
 		    var cs = s - w.winStart + w.virtStart;
 		    var ce = e - w.winStart + w.virtStart;
-		    //warn("cs="+cs+" ce="+ce); // DEBUG REMOVE
 		    if (newStart === -1)
 			newStart = cs;
 		    newEnd = ce;
@@ -182,14 +179,12 @@ var genomePos = {
 	}
         //  return new virt undisguised position as a string
 	var newPos = "virt:" + (newStart+1) + "-" + newEnd;
-	//warn("undisguisePosition newPos="+newPos); // DEBUG REMOVE
 	return newPos;
     },
 
     disguiseSize: function(position) // DISGUISE VMODE
     {   // find the real size of the windows spanned
 	//  position should be a real chrom span
-	//warn("disguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return 0;
@@ -197,7 +192,6 @@ var genomePos = {
         var end = pos.end;
 	var newSize = 0;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -209,20 +203,17 @@ var genomePos = {
 		if (w.winEnd > start && end > w.winStart) {
 		    var s = Math.max(start, w.winStart);
 		    var e = Math.min(end, w.winEnd);
-		    //warn("s="+s+" e="+e); // DEBUG REMOVE
 		    newSize += (e - s);
 		}
 	    }
 	}
         //  return real size of the disguised position 
-	//warn("disguiseSize newSize="+newSize); // DEBUG REMOVE
 	return newSize;
     },
 
     disguisePosition: function(position) // DISGUISE VMODE
     {   // find the single-chrom range spanned
 	//  position should be virt
-	//warn("disguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return position; // some parsing error, return original
@@ -233,7 +224,6 @@ var genomePos = {
 	var newEnd = -1;
 	var lastW = null;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -255,7 +245,6 @@ var genomePos = {
 		    var e = Math.min(end, w.virtEnd);
 		    var cs = s - w.virtStart + w.winStart;
 		    var ce = e - w.virtStart + w.winStart;
-		    //warn("cs="+cs+" ce="+ce); // DEBUG REMOVE
 		    if (newStart === -1)
 			newStart = cs;
 		    newEnd = ce;
@@ -265,7 +254,6 @@ var genomePos = {
 	}
         //  return new non-virt disguised position as a string
 	var newPos = chromName + ":" + (newStart+1) + "-" + newEnd;
-	//warn("disguisePosition newPos="+newPos); // DEBUG REMOVE
 	return newPos;
     },
 
@@ -422,11 +410,9 @@ var genomePos = {
 	var virtStart = -1, virtEnd = -1;
 	var s,e;
 	var i, len;
-	//warn("length of hgTracks.windows = "+hgTracks.windows.length); // DEBUG REMOVE
 	for (i = 0, len = hgTracks.windows.length; i < len; ++i) {
 	    var w = hgTracks.windows[i];
 	    var overlap = (chrom == w.chromName && chromEnd > w.winStart && w.winEnd > chromStart);
-	    //warn("w.chromName="+w.chromName+" w.winStart="+w.winStart+" w.winEnd="+w.winEnd+" overlap?="+overlap+" virtStart="+virtStart); // DEBUG REMOVE
 	    if (virtStart == -1) {
 		if (overlap) {
 		    // when they overlap the first time
@@ -434,7 +420,6 @@ var genomePos = {
 		    e = Math.min(chromEnd, w.winEnd);
 		    virtStart = w.virtStart + (s - w.winStart);
 		    virtEnd   = w.virtStart + (e - w.winStart);
-		    //warn("s="+s+" e="+e+" virtStart="+virtStart+" virtEnd="+virtEnd); // DEBUG REMOVE
 		} else {
 		    // until they overlap
 		    // do nothing
@@ -444,7 +429,6 @@ var genomePos = {
 		    // while they continue to overlap, extend
 		    e = Math.min(chromEnd, w.winEnd);
 		    virtEnd   = w.virtStart + (e - w.winStart);
-		    //warn("extend virtEnd="+virtEnd); // DEBUG REMOVE
 		} else {
 		    // when they do not overlap anymore, stop
 		    break;
@@ -543,7 +527,6 @@ var genomePos = {
     // Show the virtual and real positions of the windows
     {   
 	var position = genomePos.get();
-	//warn("positionDisplayDialog position="+position); // DEBUG REMOVE
         var positionDialog = $("#positionDialog")[0];
         if (!positionDialog) {
             $("body").append("<div id='positionDialog'><span id='positionDisplayPosition'></span>");
@@ -1019,7 +1002,6 @@ var dragSelect = {
 	var pos = parsePosition(newPosition);
 	var start = pos.start;
 	var end = pos.end;
-	//warn("highlightThisRegion: newPosition="+newPosition); // DEBUG REMOVE
         hgTracks.highlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#AAFFFF';
         hgTracks.highlight = imageV2.disguiseHighlight(hgTracks.highlight);
         // we include enableHighlightingDialog because it may have been changed by the dialog
@@ -2454,13 +2436,11 @@ var rightClick = {
                         }
                     } else if (cmd === 'highlightItem') {
 			if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
-			    //warn("hitFinish highlightItem chrom="+chrom+" chromStart="+chromStart+" chromEnd="+chromEnd); // DEBUG REMOVE
 			    // orig way only worked if the entire item was visible in the windows.
 			    //var result = genomePos.chromToVirtChrom(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
 			    var result = genomePos.convertChromPosToVirtCoords(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
-			    //warn("result.chromStart="+result.chromStart+" result.chromEnd="+result.chromEnd); // DEBUG REMOVE
 			    if (result.chromStart != -1)
 				{
 				var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
@@ -3225,8 +3205,6 @@ var popUpHgt = {
         cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
         cleanHtml = stripMainMenu(cleanHtml,false);  // DEBUG msg with true
 
-	//alert(cleanHtml); // DEBUG REMOVE
-
         $('#hgTracksDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
         // Strategy for popups with js:
@@ -3396,7 +3374,7 @@ var popUp = {
         // I fixed just such a bug in the code that handles refSeq.
 	// See commit daf92c0f9eb331ea60740e6802aabd241d4be363.
         var changedVars = varHashChanges(allVars,popUp.saveAllVars);
-	 // DEBUG REMOVE
+	 // DEBUG Examples:
 	//debugDumpFormCollection("saveAllVars", popUp.saveAllVars);
 	//debugDumpFormCollection("allVars", allVars);
 	//debugDumpFormCollection("changedVars", changedVars);
@@ -3877,15 +3855,11 @@ var imageV2 = {
         // this.cmd can be used to figure out which menu item triggered this.
         // this.id === appropriate track if we are retrieving just a single track.
 
-	//warn("updateImgAndMap got here 0");  // DEBUG REMOVE GALT
-
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
-
-	//alert(response);  //DEBUG REMOVE GALT
 
         var newJson = scrapeVariable(response, "hgTracks");
 
-	//alert(JSON.stringify(newJson)); // DEBUG REMOVE GALT
+	//alert(JSON.stringify(newJson)); // DEBUG Example
 
         var oldJson = hgTracks;
         var valid = false;
@@ -4158,11 +4132,9 @@ var imageV2 = {
     // undisguise highlight pos
     {
 	// UN-DISGUISE
-	//console.warn("undisguiseHighlight: got here 0"); // DEBUG REMOVE
 	if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
 	    var position = pos.chrom+":"+pos.start+"-"+pos.end;
 	    var newPosition = genomePos.undisguisePosition(position);
-	    //console.warn("undisguiseHighlight: newPosition="+newPosition); // DEBUG REMOVE
 	    var newPos = parsePosition(newPosition);
 	    if (newPos) {
 		pos.chrom = newPos.chrom;
@@ -4179,9 +4151,7 @@ var imageV2 = {
         var hexColor = '#FFAAAA';
         $('#highlightItem').remove();
         if (hgTracks.highlight) {
-	    //console.warn("highlightRegion: hgTracks.highlight="+hgTracks.highlight); // DEBUG REMOVE
             pos = parsePositionWithDb(hgTracks.highlight);
-	    //console.warn("highlightRegion: pos.chrom="+pos.chrom); // DEBUG REMOVE
 	    // UN-DISGUISE
 	    imageV2.undisguiseHighlight(pos);
             if (pos) {
