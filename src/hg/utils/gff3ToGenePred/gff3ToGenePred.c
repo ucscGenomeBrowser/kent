@@ -202,10 +202,13 @@ if (honorStartStopCodons)
     {
     setCdsStatFromCodons(gp, mrna);
     }
+else if (gp->cdsStart < gp->cdsEnd)
+    {
+    gp->cdsStartStat = gp->cdsEndStat = cdsComplete;
+    }
 else
     {
-    gp->cdsStartStat = cdsComplete;
-    gp->cdsEndStat = cdsComplete;
+    gp->cdsStartStat = gp->cdsEndStat = cdsNone;
     }
 return gp;
 }
