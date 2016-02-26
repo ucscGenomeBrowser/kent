@@ -203,10 +203,10 @@ set cgapSageDbs hg18,hg19,hg38,mm8
 # Define the shared identifiers and the fields they appear in.
 
 identifier fishClones
-"Comment"
-	hg38.fishClones.name
+"hg38 fishClones IDs linked to BAC Clone IDs"
+	hg38.fishClones.name dupeOk
 	hg38.cloneEndRP11.name minCheck=.03
-	hg38.cloneEndCTD.name minCheck=.0015 
+	hg38.cloneEndCTD.name minCheck=.0015
 
 identifier cosmicId
 "COSMIC entry ID"
