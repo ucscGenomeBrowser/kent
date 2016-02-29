@@ -349,28 +349,37 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     int gCount = 0;
     for (i = 0; i < el->count; ++i)
 	{
-	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);
-	double diff = abs((kid1Weight*kid1->vector[i] - kid2Weight*kid2->vector[i]));
-			
-	if (diff > 0.0){
-	    ++el->contGenes; 
-	    ++gCount;
-	    int index = i + 1; 
-	    if (gCount <= 10){
+	if (kid1->vector[i] == kid2->vector[i]) // Were doing thousands of merges, lets cut out useless compute where we can. 
+	    {
+	    el->vector[i] = kid1->vector[i];  
+	    continue;    
+	    }
+	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]); // Weight based on number of children. 
+	float diff; 
+	//if (((float)(kid1Weight*kid1->vector[i])) > ((float)(kid2Weight*kid2->vector[i]))) 
+	//    {diff = ((float)(kid1Weight*kid1->vector[i])) - ((float)(kid2Weight*kid2->vector[i]));}
+	//else {diff = ((float)(kid2Weight*kid2->vector[i])) - ((float)(kid1Weight*kid1->vector[i]));} 
+	if (((float)(kid1->vector[i])) > ((float)(kid2->vector[i]))) 
+	    {diff = ((float)(kid1->vector[i])) - ((float)(kid2->vector[i]));}
+	else {diff = ((float)(kid2->vector[i])) - ((float)(kid1->vector[i]));} 
+	++el->contGenes; 
+	++gCount;
+	int index = i + 1; 
+	if (gCount <= 10){
+	    struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
+	    slAddHead(&el->topGeneIndeces, newGene); 
+	    slSort(&el->topGeneIndeces, slDoubleIntCmp); 
+	    }
+	else{
+	    if (el->vector[i] > el->topGeneIndeces->val){
+		slPopHead(el->topGeneIndeces); 
 		struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
 		slAddHead(&el->topGeneIndeces, newGene); 
 		slSort(&el->topGeneIndeces, slDoubleIntCmp); 
 		}
-	    else{
-		if (el->vector[i] > el->topGeneIndeces->val){
-		    slPopHead(el->topGeneIndeces); 
-		    struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
-		    slAddHead(&el->topGeneIndeces, newGene); 
-		    slSort(&el->topGeneIndeces, slDoubleIntCmp); 
-		    }
-		}
 	    }
 	}
+    slReverse(&el->topGeneIndeces); 
     el->children = kid1->children + kid2->children;
     return (struct slList *)(el);
     }
@@ -489,7 +498,7 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     fprintf(outputFile,"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://d3js.org/d3.v3.min.js\" type=\"text/javascript\"></script>\n"); 
-    fprintf(outputFile,"<script src=\"d3.dendrograms.js\" type=\"text/javascript\"></script>\n"); 
+    fprintf(outputFile,"<script src=\"/js/d3.dendrograms.js\" type=\"text/javascript\"></script>\n"); 
     fprintf(outputFile,"<div class = \"dropdown\">\n"); 
     fprintf(outputFile,"	<div id = dropdown>\n");  
     fprintf(outputFile,"</div>\n");
