@@ -857,7 +857,7 @@ gorGor4.downloadDir = gorGor4
     # 64344606 bases of 2917333143 (2.206%) in intersection
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE 2015-01-08 - Jonathan)
+# all.joiner update, downloads and in pushQ - (DONE 2016-01-08 - Jonathan)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=gorGor4 -keys all.joiner

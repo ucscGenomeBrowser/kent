@@ -35,9 +35,9 @@ cat << EOF
 
 Usage: $0 [-hbf] [-d DATABASE DEV] [-b DATABASE BETA]
 
-        -h                  Display this help and exit
-        -d DATABASE DEV     Database to check on Dev, e.g. hg19 or hg38.
-        -b DATABASE BETA    Database to check on Beta.
+	-h                  Display this help and exit
+	-d DATABASE DEV     Database to check on Dev, e.g. hg19 or hg38.
+	-b DATABASE BETA    Database to check on Beta.
 	-f 		    Output lists of tables on Dev and Beta into 
 			    files.
 
@@ -57,6 +57,9 @@ Output is formatted as a table:
 
              dev db	beta db
 tableName    <time>	<time>
+
+If -f is used, the list of tables on Dev is output to <db>.tables and the list
+of tables on Beta is output to <db>.beta.tables.
 
 Notes: 
 - If a table isn't present on a machine, then you will see a "." in place
@@ -79,8 +82,11 @@ do
                         ;;
                 d)     
                         dbDev=$OPTARG
-                        dbBeta=$dbDev
-                        ;;
+			if [[ $dbBeta == "" ]]
+			then
+				dbBeta=$dbDev
+			fi
+			;;
                 b)     
                         dbBeta=$OPTARG
                         ;;
@@ -142,8 +148,18 @@ do
                 betaUpdate="."
         fi
 
+	# Variable to hold error/diff marking
+	error=""
+
+	# Check to see if table times match on Dev and Beta
+	if [[ $devUpdate != $betaUpdate ]] && [[ $devUpdate != "." ]] && [[ $betaUpdate != "." ]]
+	then
+		# If they don't match, mark diff lines with ***
+		error="***"
+	fi
+
 	# Update our output string with new info
-        output+="$tbl $devUpdate $betaUpdate\n"
+        output+="$tbl $devUpdate $betaUpdate $error\n"
 done
 
 # Output results to command line 
