@@ -66,3 +66,11 @@ hgGtex gtexV6 V6 $dataFile $sampleFile $subjectFile $tissueFile >&! parseData2.l
 # merge gtexV6Info into gtexInfo (i.e. add a row for V6)
 hgsql hgFixed -e 'select * from gtexInfoV6';
 hgsql hgFixed -e "insert into gtexInfo set version='V6', releaseDate='2015-10-01', maxMedianScore=711778"
+
+# Fix sample table (V6 format changed)
+# Required changes to hgGtex parser
+# 2016-03-01 kate
+
+hgGtex -tab=newtables -noData -noLoad gtex2V6 V6 $dataFile $sampleFile $subjectFile $tissueFile
+hgLoadSqlTab hgFixed gtexSample ~kate/kent/src/hg/lib/gtexSample.sql \
+                newtables/gtex2V6Sample.tab
