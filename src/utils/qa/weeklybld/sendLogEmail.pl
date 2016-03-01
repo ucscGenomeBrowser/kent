@@ -5,12 +5,14 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 if ($argc != 2) {
+  printf STDERR "usage: sendLogEmail.pl \$LASTNN \$BRANCHNN\n";
+  exit 255;
 }
 
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'};
+my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ' ann@soe.ucsc.edu';
 
 my @victims;
 my %victimEmail;

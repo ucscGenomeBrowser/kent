@@ -380,33 +380,23 @@ struct sameItemNode
     };
 
 
-static struct spaceSaver *findSpaceSaverAndFreeOldOnes(struct track *tg, enum trackVisibility vis)
-/* Find SpaceSaver in list, freeing older ones. Return spaceSaver found or NULL. */
+static struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
+/* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 {
-boolean found = FALSE;
-struct spaceSaver *result = NULL;
 struct spaceSaver *ss = NULL;
-struct spaceSaver *newSs = NULL; // tg->ss is actually a list of spaceSavers with different viz. with newest on top
-while ((ss = slPopHead(&tg->ss)))  // we needed to keep the old ss around to trigger proper viz changes.
+// tg->ss is actually a list of spaceSavers with different viz. with newest on top
+// We needed to keep the old ss around to trigger proper viz changes.
+// Sometimes vis changes because of limitedVis.
+// Sometimes the parent composite track's vis is being used to override subtrack vis.
+// Since it is not easy to be certain a vis will not be used again, we cannot free old spaceSavers.
+for(ss = tg->ss; ss; ss = ss->next)
     {
-    slAddHead(&newSs, ss);
-    if ((int)(ss->vis) == vis)
+    if (ss->vis == vis)
 	{
-	found = TRUE;
-	result = ss;
-	break;
+	return ss;
 	}
     }
-if (found)
-    {
-    while ((ss = slPopHead(&tg->ss)))
-	{
-	spaceSaverFree(&ss); // free older ones
-	}
-    }
-slReverse(&newSs);
-tg->ss = newSs;
-return result;
+return NULL;
 }
 
 
@@ -431,7 +421,7 @@ if (tg->ss)
     {
     if (tg->ss->window != currentWindow)
 	errAbort("unexpected current window %lu, expected %lu", (unsigned long) currentWindow, (unsigned long) tg->ss->window);
-    struct spaceSaver *ss = findSpaceSaverAndFreeOldOnes(tg, vis);
+    struct spaceSaver *ss = findSpaceSaver(tg, vis);
     if (ss)
 	return ss->rowCount;
     // Falls thru here if a new visibility is needed, such as full changing to pack after limitVisibility.
@@ -661,11 +651,7 @@ for(tg=tgSave; tg; tg=tg->nextWindow)
 tg = tgSave;
 spaceSaverFree(&ss);
 
-ss = findSpaceSaverAndFreeOldOnes(tg, vis);
-if (!ss)
-    errAbort("unexpected error findSpaceSaverAndFreeOldOnes returned NULL at end of pack function");
-
-return ss->rowCount;
+return tg->ss->rowCount;
 }
 
 int packCountRows(struct track *tg, int maxCount, boolean withLabels, enum trackVisibility vis)

@@ -1,4 +1,4 @@
-SUBDIRS = doOmimAv doOmimGene2 doOmimGeneSymbols doOmimLocation
+SUBDIRS = doOmimGene2 doOmimGeneSymbols doOmimLocation
 
 all: ${SUBDIRS:%=%.suball}
 
