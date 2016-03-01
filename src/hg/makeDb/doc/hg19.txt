@@ -30830,7 +30830,7 @@ wc -l gtexGeneV6.tab
         set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
       endif
       if ($c == "Y") then
-        set file = ALL.chr$c.phase3_integrated_v1a.20130502.genotypes.vcf.gz
+        set file = ALL.chr$c.phase3_integrated_v1b.20130502.genotypes.vcf.gz
       endif
       echo "/gbdb/hg19/1000Genomes/phase3/$file\tchr$c" >> tgpPhase3.txt
     end
