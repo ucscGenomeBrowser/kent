@@ -948,189 +948,56 @@ if (posCount != 1)
 hgp->posCount = posCount;
 }
 
-static char *startsWithShortHumanChromName(char *db, char *chrom)
-/* Return "cannonical" name of chromosome or NULL
- * if not a chromosome.  This expects no 'chr' in name. */
+static boolean hgFindChromBand(char *db, char *chrom, char *band, int *retStart, int *retEnd)
+/* Return start/end of band in chromosome. */
 {
-int num;
-char buf[64];
-char c = chrom[0];
-
-if (c == 'x' || c == 'X' || c == 'Y' || c == 'y')
-    {
-    safef(buf, sizeof(buf), "chr%c", toupper(c));
-    return hgOfficialChromName(db, buf);
-    }
-if (!isdigit(chrom[0]))
-    return NULL;
-num = atoi(chrom);
-if (num < 1 || num > 22)
-    return NULL;
-safef(buf, sizeof(buf), "chr%d", num);
-return hgOfficialChromName(db, buf);
-}
-
-static struct cytoBand *loadAllBands(char *db)
-/* Load up all bands from database. */
-{
-struct cytoBand *list = NULL, *el;
 struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr = NULL;
 char **row;
-
-sr = sqlGetResult(conn, "NOSQLINJ select * from cytoBand");
-while ((row = sqlNextRow(sr)) != NULL)
+struct dyString *query = sqlDyStringCreate("select chromStart, chromEnd from cytoBand "
+                                           "where chrom = '%s' and name = '%s'",
+                                           chrom, band);
+sr = sqlGetResult(conn, query->string);
+if ((row = sqlNextRow(sr)) != NULL)
     {
-    el = cytoBandLoad(row);
-    slAddHead(&list, el);
+    if (retStart)
+        *retStart = sqlUnsigned(row[0]);
+    if (retEnd)
+        *retEnd = sqlUnsigned(row[1]);
+    return TRUE;
     }
 sqlFreeResult(&sr);
-slReverse(&list);
 hFreeConn(&conn);
-return list;
+dyStringFree(&query);
+return FALSE;
 }
 
-static struct cytoBand *bandList = NULL;
-
-void hgFindChromBand(char *db, char *chromosome, char *band, int *retStart, int *retEnd)
-/* Return start/end of band in chromosome. */
-{
-struct cytoBand *chrStart = NULL, *chrEnd = NULL, *cb;
-int start = 0, end = 500000000;
-boolean anyMatch;
-char choppedBand[64], *s, *e;
-
-if (bandList == NULL)
-    bandList = loadAllBands(db);
-
-/* Find first band in chromosome. */
-for (cb = bandList; cb != NULL; cb = cb->next)
-    {
-    if (sameString(cb->chrom, chromosome))
-        {
-	chrStart = cb;
-	break;
-	}
-    }
-if (chrStart == NULL)
-    hUserAbort("Couldn't find chromosome %s in band list", chromosome);
-
-/* Find last band in chromosome. */
-for (cb = chrStart->next; cb != NULL; cb = cb->next)
-    {
-    if (!sameString(cb->chrom, chromosome))
-        break;
-    }
-chrEnd = cb;
-
-if (sameWord(band, "cen"))
-    {
-    for (cb = chrStart; cb != chrEnd; cb = cb->next)
-        {
-	if (cb->name[0] == 'p')
-	    start = cb->chromEnd - 500000;
-	else if (cb->name[0] == 'q')
-	    {
-	    end = cb->chromStart + 500000;
-	    break;
-	    }
-	}
-    *retStart = start;
-    *retEnd = end;
-    return;
-    }
-else if (sameWord(band, "qter"))
-    {
-    *retStart = *retEnd = hChromSize(db, chromosome);
-    *retStart -= 1000000;
-    return;
-    }
-/* Look first for exact match. */
-for (cb = chrStart; cb != chrEnd; cb = cb->next)
-    {
-    if (sameWord(cb->name, band))
-        {
-	*retStart = cb->chromStart;
-	*retEnd = cb->chromEnd;
-	return;
-	}
-    }
-
-/* See if query is less specific.... */
-strcpy(choppedBand, band);
-for (;;) 
-    {
-    anyMatch = FALSE;
-    for (cb = chrStart; cb != chrEnd; cb = cb->next)
-	{
-	if (startsWith(choppedBand, cb->name))
-	    {
-	    if (!anyMatch)
-		{
-		anyMatch = TRUE;
-		start = cb->chromStart;
-		}
-	    end = cb->chromEnd;
-	    }
-	}
-    if (anyMatch)
-	{
-	*retStart = start;
-	*retEnd = end;
-	return;
-	}
-    s = strrchr(choppedBand, '.');
-    if (s == NULL)
-	hUserAbort("Couldn't find anything like band '%s'", band);
-    else
-	{
-	e = choppedBand + strlen(choppedBand) - 1;
-	*e = 0;
-	if (e[-1] == '.')
-	   e[-1] = 0;
-        warn("Band %s%s is at higher resolution than data, chopping to %s%s",
-	    chromosome+3, band, chromosome+3, choppedBand);
-	}
-    }
-}
-
-boolean hgIsCytoBandName(char *db, char *spec, char **retChromName, char **retBandName)
+boolean hgParseCytoBandName(char *db, char *spec, char **retChromName, char **retBandName)
 /* Return TRUE if spec is a cytological band name including chromosome short 
  * name. Returns chromosome chrN name and band (with chromosome stripped off) */
 {
-char *fullChromName, *shortChromName;
-int len;
-int dotCount = 0;
-char *s, c;
-
-/* First make sure spec is in format to be a band name. */
-if ((fullChromName = startsWithShortHumanChromName(db, spec)) == NULL)
-    return FALSE;
-shortChromName = skipChr(fullChromName);
-len = strlen(shortChromName);
-spec += len;
-c = spec[0];
-if (c != 'p' && c != 'q')
-    return FALSE;
-/* the mouse bands can have a letter here, A-H, searchType cytoBand
- * doesn't seem to use the termRegx */
-if (!(isdigit(spec[1]) || (1 == countChars("ABCDEFGH", spec[1]))))
-    return FALSE;
-
-/* Make sure rest is digits with maybe one '.' */
-s = spec+2;
-while ((c = *s++) != 0)
+regmatch_t substrArr[5];
+// See if spec looks like a "chr"-less chromosome followed by a p or q, then a number,
+// and possibly a '.' and another number.
+// Mouse bands may have a letter A-H before the number, and may have no number.
+// Horse bands may have "pq".
+if (regexMatchSubstrNoCase(spec, "^(X|Y|[0-9]+)([pq]+[A-H]?([0-9]+(\\.[0-9]+)?)?)$",
+                           substrArr, ArraySize(substrArr)))
     {
-    if (c == '.')
-        ++dotCount;
-    else if (!isdigit(c))
-        return FALSE;
+    char chrSpec[PATH_LEN];
+    safencpy(chrSpec, sizeof(chrSpec), "chr", 3);
+    safencpy(chrSpec+3, sizeof(chrSpec)-3, spec, substrArr[1].rm_eo);
+    char *chromName = hgOfficialChromName(db, chrSpec);
+    if (chromName)
+        {
+        if (retChromName)
+            *retChromName = chromName;
+        if (retBandName)
+            *retBandName = cloneString(spec + substrArr[2].rm_so);
+        return TRUE;
+        }
     }
-if (dotCount > 1)
-    return FALSE;
-*retChromName = fullChromName;
-*retBandName = spec;
-return TRUE;
+return FALSE;
 }
 
 boolean hgFindCytoBand(char *db, char *spec, char **retChromName, int *retWinStart,
@@ -1140,10 +1007,9 @@ boolean hgFindCytoBand(char *db, char *spec, char **retChromName, int *retWinSta
 {
 char *bandName;
 
-if (!hgIsCytoBandName(db, spec, retChromName, &bandName))
+if (!hgParseCytoBandName(db, spec, retChromName, &bandName))
      return FALSE;
-hgFindChromBand(db, *retChromName, bandName, retWinStart, retWinEnd);
-return TRUE;
+return hgFindChromBand(db, *retChromName, bandName, retWinStart, retWinEnd);
 }
 
 boolean findChromContigPos(char *db, char *name, char **retChromName, 

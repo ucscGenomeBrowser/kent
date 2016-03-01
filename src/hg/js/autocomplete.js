@@ -6,6 +6,8 @@
    Requires three elements on page: positionDisplay (static display), positionInput (input textbox) and position (hidden).
 */
 
+var hgTracks = hgTracks || {};
+
 var suggestBox = {
     ajaxGet: function ajaxGet(db) {
         // Returns autocomplete source function

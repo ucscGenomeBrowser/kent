@@ -415,10 +415,17 @@ for (subtrack = tg->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	}
     }
 
-if (errMsgFound)
+if (errMsgFound && currentWindow==windows)  // first window
     {
+    int clipXBak, clipYBak, clipWidthBak, clipHeightBak;
+    hvGfxGetClip(hvg, &clipXBak, &clipYBak, &clipWidthBak, &clipHeightBak);
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, fullInsideX, yOff, fullInsideWidth, tg->height);
+    // use the height of the multiWig 
     Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
-    hvGfxBox(hvg, xOff, yOff, width, tg->height, yellow);
+    hvGfxBox(hvg, fullInsideX, yOff, fullInsideWidth, tg->height, yellow);
+    hvGfxUnclip(hvg);
+    hvGfxSetClip(hvg, clipXBak, clipYBak, clipWidthBak, clipHeightBak);
     }
 
 struct wigCartOptions *wigCart = tg->wigCartData;

@@ -2081,7 +2081,7 @@ searchTable cytoBand
 searchMethod exact
 searchType cytoBand
 shortCircuit 1
-termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(\.[0-9]+)?
+termRegex (x|y|[1-9][0-9]?)[pq]+[0-9]+(\.[0-9]+)?
 searchPriority 6
 padding 500000
 
@@ -3093,9 +3093,10 @@ allButtonPair on
         showDiffBasesMaxZoom 10000.0
         showCdsMaxZoom 10000.0
         showCdsAllScales .
-        baseColorDefault itemBases
+        baseColorDefault diffCodons
         pslSequence no
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
+        baseColorUseCds table ncbiRefSeqCds
 
 searchName refSeqComposite
 searchTable ncbiRefSeq

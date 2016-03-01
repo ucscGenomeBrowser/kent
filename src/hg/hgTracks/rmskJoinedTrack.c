@@ -316,8 +316,6 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
         rm = rmskJoinedLoad(row + rowOffset);
         slAddHead(&detailList, rm);
         }
-    //warn("rmskJoinedLoadItems tg->table=%s chromName=%s winStart=%d winEnd=%d, rowOffset=%d slCount(detailList)=%d", 
-	//tg->table, chromName, winStart, winEnd, rowOffset, slCount(detailList)); // DEBUG REMOVE
     slSort(&detailList, cmpRepeatDiv);
 
     sqlFreeResult(&sr);
@@ -378,14 +376,12 @@ if (tg->visibility == tvFull && baseWidth <= DETAIL_VIEW_MAX_SCALE)
              } // else if ( tg->visibility == tvSquish ...
         } // while ( detailList )
     // Create Hash Entry
-    //warn("rmskJoinedLoadItems tg->table=%s st->levelCount=%d", tg->table, st->levelCount); // DEBUG REMOVE
     hashReplace(subTracksHash, tg->table, st);
     slReverse(&fullRIList);
     tg->items = fullRIList;
     } // if ((tg->visibility == tvFull || ...
 else
    tg->items = classRIList;
-//warn("rmskJoinedLoadItems track=%s vis=%d slCount(tg->items)=%d", tg->track, tg->visibility, slCount(tg->items)); // DEBUG REMOVE
 }
 
 static void rmskJoinedFreeItems(struct track *tg)
@@ -443,7 +439,6 @@ else
 int rmskJoinedTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 setWg();
-//warn("rmskJoinedTotalHeight track=%s vis=%d winBaseCount=%d", tg->track, vis, winBaseCount); // DEBUG REMOVE
   // Are we in full view mode and at the scale needed to display
   // the detail view?
 //Disabled
@@ -456,13 +451,11 @@ if (tg->limitedVis == tvFull && winBaseCount <= DETAIL_VIEW_MAX_SCALE)
     if (st)
         {
         tg->height = (st->levelCount * rmskJoinedItemHeight(tg, NULL));
-	//warn("rmskJoinedTotalHeight track=%s st->levelCount=%d tg->height=%d", tg->track, st->levelCount, tg->height); // DEBUG REMOVE
         return tg->height;
         }
     else
         {
         tg->height = rmskJoinedItemHeight(tg, NULL);
-	//warn("rmskJoinedTotalHeight track=%s st is NULL tg->height=%d", tg->track, tg->height); // DEBUG REMOVE
         return tg->height;	// Just display one line
         }
     }

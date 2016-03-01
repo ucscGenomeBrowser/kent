@@ -656,6 +656,7 @@ AllocVar(cr);
 if (( next && newWinEnd   > winStart)
  || (!next && newWinStart < winEnd  ))
     {
+    cr->chrom = bed->chrom;
     cr->start = newWinStart;
     cr->end = newWinEnd;
     }

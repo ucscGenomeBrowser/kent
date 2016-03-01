@@ -30798,7 +30798,7 @@ wc -l gtexGeneV6.tab
         hg19 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
 
 #############################################################################
-# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie)
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie - table fixed 3/1/16)
     # It was kind of a pain to get the Aspera command line client ascp this time around --
     # turns out it's included in their web browser plugin package, which I didn't think to
     # obtain because I need a command-line tool not a web browser plugin.  Anyway,
@@ -30826,6 +30826,12 @@ wc -l gtexGeneV6.tab
     cp /dev/null tgpPhase3.txt
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
       set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+      if ($c == "X") then
+        set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
+      endif
+      if ($c == "Y") then
+        set file = ALL.chr$c.phase3_integrated_v1a.20130502.genotypes.vcf.gz
+      endif
       echo "/gbdb/hg19/1000Genomes/phase3/$file\tchr$c" >> tgpPhase3.txt
     end
     # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
@@ -31263,6 +31269,85 @@ TMPDIR=/dev/shm' > DEF
 
     time (doRecipBest.pl -buildDir=`pwd` danRer10 hg19) > rbest.log 2>&1
     # real    8m8.619s
+
+_EOF_
+##############################################################################
+# DBSNP B146 / SNP146 (DONE 2/10/16 angie)
+    # Redmine #16777
+    mkdir -p /hive/data/outside/dbSNP/146/human_hg19
+    cd /hive/data/outside/dbSNP/146/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b146_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b146_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b146_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b146_GRCh37p13
+build 146
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >>& do.log & tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b146_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b146_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#2 missingFromRsFasta.txt
+    cat missingFromRsFasta.txt
+#rs796052131
+#rs796052132
+    # Both of those get "invalid snp_id value", so no need to fetch fasta for them.
+    # For future reference, here's how to do it if necessary next time:
+    # Fetch fasta for those ids from dbSNP's batch_query.
+    # Go to this URL:
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab! -- then download the results:
+    # wget -O rs_fasta/rs_chBatchQuery.fas.gz $fileFromDbSnpEmail
+
+    # Check on the progress of the script.  If we did get sequence from dbSNP, and if the
+    # script has progressed past the loadDbSnp step and into the addToDbSnp step, then kill
+    # it and continue from addToDbSnp to pick up the added sequence.
+    # This time it was still in the loadDbSnp step, so no need to kill it.
+# *** All done!
+
+
+##############################################################################
+# SNP146 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 2/12/16 angie)
+    # Redmine #16777
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp146Ortho.2016-02-12
+    cd /hive/data/genomes/hg19/bed/snp146Ortho.2016-02-12
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP146 (DONE 2/12/16 angie)
+    # Redmine #16777
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp146Mask.2016-02-12
+    cd /hive/data/genomes/hg19/snp146Mask.2016-02-12
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
 
 ##############################################################################
 # Patents (26 Feb 2016, Max)

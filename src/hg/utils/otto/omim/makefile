@@ -1,4 +1,4 @@
-SUBDIRS = doOmimAv doOmimGene2 doOmimGeneSymbols doOmimLocation
+SUBDIRS = doOmimGene2 doOmimGeneSymbols doOmimLocation
 
 all: ${SUBDIRS:%=%.suball}
 
@@ -7,7 +7,7 @@ all: ${SUBDIRS:%=%.suball}
 
 # any changes must be committed (and this is checked).
 install: check-prefix installSub
-	cp omimWrapper.sh omim.tables buildOmimTracks.csh checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh ${PREFIX}
+	cp omimWrapper.sh omim.tables checkOmim.sh validateOmim.sh parseGeneMap.pl omimUploadWrapper.sh checkOmimUpload.sh doOmimPhenotype.pl buildOmimTracks.sh ${PREFIX}
 
 installSub: ${SUBDIRS:%=%.install}
 
