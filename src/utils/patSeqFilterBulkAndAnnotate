@@ -1,0 +1,213 @@
+#!/usr/bin/env python2.7
+
+import logging, sys, optparse, fileinput
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+from sys import stdin
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] bulkPatentList bulkBed nonBulkBed - reads bed12+ patent rows from stdin and a file with patent numbers that have submitted too many patents (bulk patent) and writes the input into either htBed or nonHtBed depending on whether a bed line has only bulk IDs in it")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    parser.add_option("-c", "--countsFile", dest="countsFname", action="store", help="tab file with (patentId,seqCount) lines. Used to annotate the patent IDs")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def readCounts(fname):
+    " return dict with ext patent Id -> count (integer) "
+    patCounts = {}
+    for line in open(fname):
+        patId, count = line.rstrip("\n").split("\t")[:2]
+        count = int(count)
+        patCounts[patId] = count
+    return patCounts
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    if options.countsFname:
+        patCounts = readCounts(options.countsFname)
+    else:
+        patCounts = None
+
+    bulkFname, bulkBeds, nonBulkBeds = args
+
+    bulkIds = set(open(bulkFname).read().splitlines())
+    bulkFh = open(bulkBeds, "w")
+    nonBulkFh = open(nonBulkBeds, "w")
+
+    # Input fields from patSeqSummarizeDocs:
+    #  1  3
+    #  2  22626477
+    #  3  22627119
+    #  4  ----3JvtXDgvMmPpPhgKRg
+    #  5  1000
+    #  6  -
+    #  7  22626477
+    #  8  22627119
+    #  9  0
+    # 10  1
+    # 11  642,
+    # 12  0,
+    # 13  3
+    # 14  1
+    # 15  0
+    # 16  Homo sapiens
+    # 17  16. Mar 2006 - 01. Jul 2008
+    # 18  US_A1_2006057564,US_H1_H2220,US_A1_2006057564
+    # 19  US_2006_0057564_A1,US_H002220_H1,US_2006_0057564_A1
+    # 20  123,234,345
+    # 21  Identification and mapping of single nucleotide polymorphisms in the human genome (3)
+    # 22  1,1,0
+    # 23  0,0,0
+
+    for line in stdin:
+        row = line.rstrip("\n").split("\t")
+        chrom, start, end, seqFprint, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts, docCount, claimCount, grantCount, orgDesc, dateDesc, intDocStr, extDocStr, seqIdStr, titleDesc, isGrantsStr, isInClaimsStr = row
+
+        # patLens uses the Ensembl genome files
+        if chrom=="MT":
+            continue
+        if chrom[0] in "0123456789XY":
+            chrom = "chr"+row[0]
+
+        extDocIds = extDocStr.split(',')
+        if len(set(extDocIds) - bulkIds)==0:
+            ofh = bulkFh
+        else:
+            ofh = nonBulkFh
+
+        isInClaims = (int(claimCount)>0)
+        grantCount = int(grantCount)
+        isGranted = (grantCount>0)
+        # got colors by email from Deniz Koellhoeffer
+        if isInClaims:
+            if isGranted:
+                newColor = "187,20,50"
+            else:
+                newColor = "10,116,178"
+        else:
+            if isGranted:
+                newColor = "227,180,2"
+            else:
+                newColor = "20,178,187"
+
+        # features have no name, 
+        # Maybe we will need sequence finger print for future linkouts ?
+        #seqFingerPrint = row[3]
+
+        # make up a shorter mouseover
+        titles = titleDesc.split(";")
+        titles = [t.split(" (")[0] for t in titles]
+        titles = [t for t in titles if t!="no title"]
+        # if we have really no title, use the document ID
+        if len(titles)==0:
+            title = extDocIds[0]
+        else:
+            title = titles[0]
+        mouseOver = title.strip()+ " (%s documents, %s in claims, %s granted)" % \
+            (docCount, claimCount, grantCount)
+        row.append(mouseOver)
+
+        # create document links to patSeq, limit them to X entries
+        maxShow = 30
+        intIds = intDocStr.split(",")
+        seqIds = seqIdStr.split(",")
+        extIds = extDocStr.split(',')
+        isInClaimsList = isInClaimsStr.split(",") # comma-sep list of 0/1: is seq in claims?
+        isGrantsList = isGrantsStr.split(",") # comma-sep list of 0/1: is patent a granted patent?
+        # create links to patent sequence on their website
+        appLinkParts = []
+        grantLinkParts = []
+        claimLinkParts = []
+        grantClaimLinkParts = []
+        for extId, seqId, isClaim, isGrant in zip(extIds, seqIds, isInClaimsList, isGrantsList):
+            isClaim = bool(int(isClaim))
+            isGrant = bool(int(isGrant))
+            #notes = ""
+            #if isGrant:
+                #notes += "&#7475;" # superscript unicode letter G
+            #if isClaim:
+                #notes += "&#7580;" # superscript unicode letter C
+            #if notes!="":
+                #label += " "+notes # make there is a space between notes and label
+
+            targetList = appLinkParts
+            if isClaim:
+                if isGrant:
+                    targetList = grantClaimLinkParts
+                else:
+                    targetList = claimLinkParts
+            else:
+                if isGrant:
+                    targetList = grantLinkParts
+                else:
+                    targetList = appLinkParts
+
+            label = "%s-%s" % (extId, seqId)
+            if patCounts is None:
+                targetList.append("%s/sequences/view/%s|%s" % (extId, seqId, label))
+            else:
+                targetList.append("%s/sequences/view/%s|%s (%d)" % (extId, seqId, label, patCounts[extId]))
+
+        appLinkField = ",".join(appLinkParts[:maxShow])
+        grantLinkField = ",".join(grantLinkParts[:maxShow])
+        claimLinkField = ",".join(claimLinkParts[:maxShow])
+        grantClaimLinkField = ",".join(grantClaimLinkParts[:maxShow])
+        
+        # create links to patent documents on their website
+        patLinkParts = ["%s" % x for x in extIds[:maxShow]]
+        patLinkField = ",".join(patLinkParts)
+
+        #row[18] = grantClaimLinkField
+        row.insert(19, appLinkField)
+        row.insert(19, claimLinkField)
+        row.insert(19, grantLinkField)
+        row[22] = patLinkField # overwrite the seqId number field, no need anymore
+
+        # also limit the extLinks field
+        #limitExtIds = extIds[:maxShow]
+        #shortExtDocStr = ", ".join(limitExtIds)
+        #if len(extIds)>maxShow:
+            #shortExtDocStr += shortExtDocStr + " (%d documents, but only %d shown)" % (len(extIds), maxShow)
+        #row[18] = shortExtDocStr
+        
+        #  remove the seqId numbers field, not needed anymore
+        # del row[19]
+        # remove the internal pub keys, not needed
+        del row[20]
+
+        # set the BED score field to the number of documents with this sequence in the claims
+        # by BED spec, max is 1000
+        newScore = str(min(int(claimCount), 1000))
+
+        #chrom, start, end, seqId, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts, docCount, claimCount, grantCount, orgDesc, dateDesc, intDocStr, extDocStr, seqIdStr, titleDesc, isGrantsStr, isInClaimsStr = row
+        newRow = (chrom, start, end, seqFprint, newScore, strand, thickStart, thickEnd, newColor, \
+            blockCount, blockSizes, blockStarts, \
+            docCount, claimCount, grantCount, \
+            orgDesc, dateDesc, \
+            titleDesc, patLinkField, \
+            grantClaimLinkField, grantLinkField, claimLinkField, appLinkField, \
+            mouseOver, "")
+        newRow = [str(x) for x in newRow]
+
+        #row.append(seqFingerPrint)
+
+        ofh.write("\t".join(newRow))
+        ofh.write("\n")
+
+main()

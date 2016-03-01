@@ -31265,3 +31265,42 @@ TMPDIR=/dev/shm' > DEF
     # real    8m8.619s
 
 ##############################################################################
+# Patents (26 Feb 2016, Max)
+
+# first prep the meta data
+cd /hive/data/genomes/hg19/bed/patents/data/
+sort sequence_details.csv -S10G -k7,7 -t$'\t' --parallel=20 > sequence_details.csv.s7 
+sort patent_details -S10G -k1b,1 -t$'\t' --parallel=20 > patent_details.csv.s1 
+join -1 7 -2 1 sequence_details.csv.s7 patent_details.csv.s1 -t $'\t' -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 2.3 2.4 2.5' > seqAndPatentJoined.tab &
+sort --parallel=40 seqAndPatentJoined.tab -k1,1 -S10G > seqAndPatentJoined.s1.tab
+
+# create list of high-throughput patents with >100 sequences
+# list is cross-organism!
+time sort -k4,4 -S10G --parallel=20 hg19.bed > hg19.s4.bed &
+cat seqAndPatentJoined.s1.tab | cut -f1,8 | cut -f2 | tabUniq -rs > patentSeqCounts.tab
+less patentSeqCounts.tab | tawk '($2>=100)' | cut -f1 > htPatents.txt
+
+# now summarize the documents to one line per sequence
+# takes two hours
+time patSeqSummarizeDocs seqAndPatentJoined.s1.tab > seqAndPatentSummary.tab
+
+# now convert the SAM files
+cd /hive/data/genomes/hg19/bed/patents/data/
+samtools view -S -t ensGenomeHg19/Homo_sapiens.GRCh37.75.dna.toplevel.fa.fai Homo_sapiens.GRCh37.75.s90c50.sam -h | grep -v ^MT > hg19.sam
+# convert to bed
+function sam2psl_pierre() { java -Dfile.encoding=UTF8 -Xmx500m    -cp "/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-jexl-2.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-logging-1.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/htsjdk-1.133.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/snappy-java-1.0.3-rc3.jar:/cluster/bin/jvarkit/dist-1.133/sam2psl.jar" com.github.lindenb.jvarkit.tools.misc.SamToPsl $*; }
+sam2psl_pierre hg19.sam 2> /dev/null > hg19.psl
+pslToBed hg19.psl hg19.bed
+# careful: this text includes tab characters
+sed -ri 's/_(16|0)	/	/g' hg19.bed
+
+# convert the hg19 bed to bigBed
+cd /hive/data/genomes/hg19/bed/patents/hg19
+join -t $'\t' -1 4 -2 1 ../data/hg19.s4.bed ../data/seqAndPatentSummary.tab -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 2.10 2.11 2.12' | patSeqFilterBulkAndAnnotate ../data/htPatents.txt patBulk.bed patNonBulk.bed -c ../data/seqCounts.tab
+bedSort patNonBulk.bed patNonBulk.bed 
+bedSort patBulk.bed patBulk.bed 
+bedToBigBed patNonBulk.bed /cluster/data/genomes/hg19/chrom.sizes patNonBulk.bb -tab -as=../patSummary.as -type=bed12+
+bedToBigBed patBulk.bed /cluster/data/genomes/hg19/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
+hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
+hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
+
