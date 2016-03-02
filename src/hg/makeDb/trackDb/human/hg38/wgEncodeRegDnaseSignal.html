@@ -5,10 +5,17 @@ cell types using overlapping colored graphs of signal density with graph colors
 assigned to cell types based on similarity of signal. The track is based on
 results of experiments performed by the John Stamatoyannapoulos lab at the
 University of Washington from September 2007 to January 2011 as part of the
-<a href="../ENCODE" target="_blank">ENCODE project first production phase</a>.
+<a href="../ENCODE" target="_blank">ENCODE project first production phase</a>.</p>
+<p>
 The signal graphs displayed here are also included in the comprehensive
 <a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegDnase">DNaseI HS</a> track,
-which also provides peak and region calls.
+which also provides peak and region calls and uses the same coloring based on
+similiarity of cell types (please note there is different coloring on the ENCODE hg38
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegTxn">Transcription</a> track,
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k4me1">Layered H3K4Me1</a> track,
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k4me3">Layered H3K4Me3</a> track, and
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k27ac">Layered H3K27Ac</a> track,
+which match the coloring used in their previous versions lifted from the hg19 assembly). 
 </p>
 
 <h2>Methods</h2>
@@ -19,6 +26,14 @@ described in the
 track description.
 Signal graphs were normalized so the average value genome-wide is 1.
 Colors for the signal graphs were assigned by the UCSC BigWigCluster tool.
+
+<p>
+The cell types were clustered into a binary tree, a rainbow was cast to the leaf nodes providing coloring based on similarity. 
+</p>
+<div align="center">
+<img style="margin:8px; border:1px solid; height:216; width;483;" src="/images/encode95CellsDendrogram.png" alt="ENCODE cell clustering by similarity">
+<font size=-1>Credit: Chris Eisenhart, J. Kent lab</font> 
+</div>
 </p>
 
 <h2>Credits</h2>
@@ -30,6 +45,14 @@ track description.
 </p>
 
 <h2>References</h2>
+<p>
+Miga KH, Eisenhart C, Kent WJ.
+<a href="http://nar.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=26163063" target="_blank">
+Utilizing mapping targets of sequences underrepresented in the reference assembly to reduce false
+positive alignments</a>.
+<em>Nucleic Acids Res</em>. 2015 Nov 16;43(20):e133.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26163063" target="_blank">26163063</a>
+</p>
 <p>
 Thurman RE, Rynes E, Humbert R, Vierstra J, Maurano MT, Haugen E, Sheffield NC, Stergachis AB, Wang
 H, Vernot B <em>et al</em>.

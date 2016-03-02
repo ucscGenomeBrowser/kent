@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-PATH=/cluster/bin/x86_64:$PATH
+PATH=/cluster/bin/x86_64:/cluster/bin/scripts:$PATH
 EMAIL="braney@soe.ucsc.edu,jcasper@soe.ucsc.edu"
 WORKDIR="/hive/data/outside/otto/omim"
 

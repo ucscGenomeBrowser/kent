@@ -2323,3 +2323,19 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	real    58m58.107s
 
 #############################################################################
+# LIFTOVER TO felCat8 (DONE - 2016-02-26 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/felCat4/bed/blat.felCat8.2016-02-26
+    cd /hive/data/genomes/felCat4/bed/blat.felCat8.2016-02-26
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/felCat4/jkStuff/felCat4.11.ooc felCat4 felCat8
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/felCat4/jkStuff/felCat4.11.ooc \
+           felCat4 felCat8) > doLiftOverToFelCat8.log 2>&1
+    # real    439m53.846s
+
+    # see if the liftOver menus function in the browser from rheMac2 to Mac8
+
+#########################################################################
