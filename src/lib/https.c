@@ -363,10 +363,11 @@ while (1)
 		    perror("pthread_sigmask");
 		    exit(1);
 		    }
+		errno = saveErrno;
 		if (bwtx == -1)
 		    {
-		    if ((saveErrno != 104)  // udcCache often closes causing "Connection reset by peer"
-		     && (saveErrno !=  32)) // udcCache often closes causing "Broken pipe"
+		    if ((errno != 104)  // udcCache often closes causing "Connection reset by peer"
+		     && (errno !=  32)) // udcCache often closes causing "Broken pipe"
 			xerrno("error writing https data back to user pipe");
 		    goto cleanup;
 		    }
