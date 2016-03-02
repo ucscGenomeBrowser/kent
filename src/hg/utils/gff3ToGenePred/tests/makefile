@@ -9,7 +9,7 @@ all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
-	minimalGenesTest
+	minimalGenesTest geneDefaultStatusUnknownTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -21,6 +21,10 @@ noGeneMRnaTest: mkout
 
 geneMRnaHonorTest: mkout
 	${gff3ToGenePred} -honorStartStopCodons input/geneMRna.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+geneDefaultStatusUnknownTest: mkout
+	${gff3ToGenePred} -defaultCdsStatusToUnknown input/geneMRna.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 discontinuousTest: mkout
