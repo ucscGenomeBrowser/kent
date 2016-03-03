@@ -460,6 +460,7 @@ urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www
         type bigBed 12 +
         visibility dense
         priority 1
+        release alpha
 
         track patBulk
         shortLabel Patent Lens Bulk patents
@@ -468,6 +469,7 @@ urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www
         type bigBed 12 +
         visibility hide
         priority 2
+        release alpha
 
 track transMap
 superTrack on
