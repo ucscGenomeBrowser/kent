@@ -11583,8 +11583,12 @@ EOF
     # peanuts!  good.
     # Make sure that sizes are identical, first diffs are normal -> IUPAC,
     # and first diffs' case is preserved:
-    foreach f (substitutions/chr*.fa)
-      faCmp $f ../ucsc/$f:t.gz |& grep -v "that differ"
+    mkdir tmpFa
+    cd tmpFa
+    twoBitToFa /hive/data/genomes/mm10/mm10.2bit stdout | faSplit byname stdin tmpFa
+    cd ..
+    foreach f (substitutions/chr*.fa.gz)
+      faCmp $f tmpFa/`basename $f subst.fa.gz`fa |& grep -v "that differ"
     end
 #chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10107 (y != c)
 #chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 60493 (R != A)
