@@ -1585,13 +1585,13 @@ for (;col != NULL && count < fieldCount;col=col->next)
     if (skipIds && slNameInList(skipIds, fieldName))
         continue;
 
-    // split this table to separate current row from the previous one, if the trackDb option is set
-    if (sepFields && slNameInList(sepFields, fieldName))
-        printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
-
     // skip this row if it's empty and "skipEmptyFields" option is set
     if (skipEmptyFields && isEmpty(fields[ix]))
         continue;
+
+    // split this table to separate current row from the previous one, if the trackDb option is set
+    if (sepFields && slNameInList(sepFields, fieldName))
+        printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
     printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
