@@ -106,7 +106,7 @@ struct bed *bed;
 
 /* Get translation from mRNA to protein from refLink table. */
 char query[2048];
-sqlSafef(query, sizeof query, "NOSQLINJ select mrnaAcc,protAcc from %s",refLinkTable);
+sqlSafef(query, sizeof query, "select mrnaAcc,protAcc from %s",refLinkTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
