@@ -1,14 +1,19 @@
 track cloneEndSuper
 compositeTrack on
-shortLabel NCBI Ends
-longLabel NCBI mapping of clone libraries end placements
+shortLabel Clone Ends
+longLabel Mapping of clone libraries end placements
 group map
 visibility hide
 type bed 3
 noInherit on
+dragAndDrop on
+subGroup1 source Source bacLib=Bac_libraries fosmid=Fosmid_library micer=MICER placements=Placements
+dimensions dimensionX=source
+sortOrder source=+
 
     track cloneEndB6Ng01
     parent cloneEndSuper on
+    subGroups source=bacLib
     shortLabel B6Ng01
     longLabel C57BL/6N mouse BAC clone set
     colorByStrand 0,0,128 0,128,0
@@ -20,6 +25,7 @@ noInherit on
 
     track cloneEndbMQ
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel bMQ
     longLabel B94_mq1 129S7/SvEv ES cell BAC library
     colorByStrand 0,0,128 0,128,0
@@ -31,6 +37,7 @@ noInherit on
 
     track cloneEndC3H
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel C3H
     longLabel C3H iBAC library
     colorByStrand 0,0,128 0,128,0
@@ -42,6 +49,7 @@ noInherit on
 
     track cloneEndCH29
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel CH29
     longLabel CHORI-29 NOD/LtJ BAC library
     colorByStrand 0,0,128 0,128,0
@@ -53,6 +61,7 @@ noInherit on
 
     track cloneEndDN
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel DN
     longLabel DIL (Diabetes and Inflammation Laboratory) NOD BAC library
     colorByStrand 0,0,128 0,128,0
@@ -64,6 +73,7 @@ noInherit on
 
     track cloneEndMHPN
     parent cloneEndSuper off
+    subGroups source=micer
     shortLabel MHPN
     longLabel MICER 5'Hprt library
     colorByStrand 0,0,128 0,128,0
@@ -75,6 +85,7 @@ noInherit on
 
     track cloneEndMHPP
     parent cloneEndSuper off
+    subGroups source=micer
     shortLabel MHPP
     longLabel MICER 3'Hprt library
     colorByStrand 0,0,128 0,128,0
@@ -86,6 +97,7 @@ noInherit on
 
     track cloneEndMSMg01
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel MSMg01
     longLabel Mus musculus molossinus male BAC library 1
     colorByStrand 0,0,128 0,128,0
@@ -97,6 +109,7 @@ noInherit on
 
     track cloneEndRP23
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel RP23
     longLabel RPCI-23 C57BL/6J female BAC library
     colorByStrand 0,0,128 0,128,0
@@ -108,6 +121,7 @@ noInherit on
 
     track cloneEndRP24
     parent cloneEndSuper off
+    subGroups source=bacLib
     shortLabel RP24
     longLabel RPCI-24 C57BL/6J male BAC library
     colorByStrand 0,0,128 0,128,0
@@ -119,6 +133,7 @@ noInherit on
 
     track cloneEndWI1
     parent cloneEndSuper off
+    subGroups source=fosmid
     shortLabel WI1
     longLabel WIBR-1 fosmid library
     colorByStrand 0,0,128 0,128,0
@@ -130,6 +145,7 @@ noInherit on
 
     track cloneEndmultipleMaps
     parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Multiple mappings
     longLabel Clone end placements that map to multiple locations in the genome
     colorByStrand 0,0,128 0,128,0
@@ -141,8 +157,9 @@ noInherit on
 
     track cloneEndbadEnds
     parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Bad end mappings
-    longLabel Clone end placements that map too far apart (3X median library size)
+    longLabel Clone end placements dropped at UCSC, map distance 3X median library size
     colorByStrand 0,0,128 0,128,0
     type bed 12
     visibility hide
@@ -151,7 +168,8 @@ noInherit on
     priority 13
 
     track cloneEndcoverageForward
-    parent cloneEndSuper on
+    parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Coverage forward strand
     longLabel Clone end placements overlap coverage on the forward strand
     type bigWig 0 5377
@@ -162,7 +180,8 @@ noInherit on
     priority 14
 
     track cloneEndcoverageReverse
-    parent cloneEndSuper on
+    parent cloneEndSuper off
+    subGroups source=placements
     shortLabel Coverage reverse strand
     longLabel Clone end placements overlap coverage on the reverse strand
     type bigWig 0 4112

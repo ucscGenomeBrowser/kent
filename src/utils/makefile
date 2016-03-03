@@ -153,7 +153,9 @@ SCRIPT_FILES = \
 	uniprotLift \
 	bedFixBlockOverlaps \
 	apacheLogParse \
-	extToolsChromeParse
+	extToolsChromeParse \
+	patSeqFilterBulkAndAnnotate \
+	patSeqSummarizeDocs
 
 # List of all directories to build
 

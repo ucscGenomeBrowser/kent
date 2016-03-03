@@ -2280,10 +2280,10 @@ char *cloneNotFirstWord(char *s)
 /* return part of string after first space, not changing s. Result has to be freed. */
 {
 if (s==NULL)
-    return "";
+    return emptyForNull(NULL);
 char* spcPos = stringIn(" ", s);
 if (spcPos==NULL)
-    return cloneString(s);
+    return emptyForNull(NULL);
 return cloneString(spcPos+1);
 }
 

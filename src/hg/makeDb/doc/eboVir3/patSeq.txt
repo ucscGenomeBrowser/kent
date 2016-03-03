@@ -1,0 +1,20 @@
+# Mar  1 2016, Max
+#
+# get sequence IDs that are annotated to be on ebola - we will miss annotation
+# errors
+cd /hive/data/genomes/hg19/bed/patents/eboVir3
+cat ../data/sequence_details.csv  | tawk '(tolower($5)~/(bola)|(filovir)|(ebov)/)' | cut -f1 | sort -u > seqIds.tab 
+# map and filter
+blat /hive/data/genomes/eboVir3/eboVir3.2bit eboVir3.nt.fa stdout -minScore=11 -noHead -stepSize=1 | pslCDnaFilter stdin stdout -minId=0.9 -minCover=0.9 | pslToBed stdin stdout | sort -k4 | uniq > matches.bed
+# makes all joins on the patent info a lot faster
+join seqIds.clean.tab ../data/seqAndPatentSummary.tab -t $'\t' > seqAndPatentSummary.eboVir3.tab
+# join meta info with BED file and annotate
+join -t $'\t' -1 4 -2 1 matches.bed seqAndPatentSummary.eboVir3.tab -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 2.10 2.11 2.12' | patSeqFilterBulkAndAnnotate ../data/htPatents.txt patBulk.bed patNonBulk.bed -c ../data/seqCounts.tab
+bedSort patBulk.bed patBulk.bed
+bedSort patNonBulk.bed patNonBulk.bed
+bedToBigBed patBulk.bed /cluster/data/genomes/eboVir3/chrom.sizes  patBulk.bb -tab -as=../patSummary.as -type=bed12+
+bedToBigBed patNonBulk.bed /cluster/data/genomes/eboVir3/chrom.sizes  patNonBulk.bb -tab -as=../patSummary.as -type=bed12+
+#hgBbiDbLink eboVir3 patNonBulk /gbdb/eboVir3/bbi/patNonBulk.bb
+#hgBbiDbLink eboVir3 patBulk /gbdb/eboVir3/bbi/patBulk.bb
+#ln -s `pwd`/patBulk.bb /gbdb/eboVir3/bbi/patBulk.bb
+#ln -s `pwd`/patNonBulk.bb /gbdb/eboVir3/bbi/patNonBulk.bb

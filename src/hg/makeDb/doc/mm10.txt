@@ -10554,7 +10554,7 @@ do
     cat separateLibs/${L}/mm10.badMap.bed
 done | sort -k1,1 -k2,2n > filteredDroppedEnds/badEnds.bed
 
-hgLoadBed -type=bed12 mm10 cloneEnd_badEnds filteredDroppedEnds/badEnds.bed \
+hgLoadBed -type=bed12 mm10 cloneEndbadEnds filteredDroppedEnds/badEnds.bed \
        > filteredDroppedEnds/loadBed.badEnds.log 2>&1
 
     # construct coverage bigWig files:
@@ -10578,6 +10578,53 @@ bedGraphToBigWig allEnds.reverse.bedGraph /hive/data/genomes/mm10/chrom.sizes \
         /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageForward.bw
     hgBbiDbLink mm10 cloneEnd_coverageReverse \
         /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageReverse.bw
+
+    ### Fixup the scores to indicate how many multiple mappings as mentioned
+    ### in the hg19 bacEnds description page: one mapping: score = 1000
+    ### multiple mappings: score = 1500/count
+    ### the sort | uniq -c | awk does this score calculation with the name
+    ###   in column 1
+    ### The join puts the existing table together with those scores
+    ### DONE - 2016-03-02 - Hiram
+
+    mkdir /hive/data/genomes/mm10/bed/cloneEnds/addCounts
+    cd /hive/data/genomes/mm10/bed/cloneEnds/addCounts
+    mkdir score withScore noScore withScore
+    for table in cloneEndB6Ng01 cloneEndC3H cloneEndCH29 cloneEndDN \
+cloneEndMHPN cloneEndMHPP cloneEndMSMg01 cloneEndRP23 cloneEndRP24 \
+cloneEndWI1 cloneEndbMQ cloneEndbadEnds cloneEndmultipleMaps
+do
+  hgsql -N -e "select name from $table;" mm10 | sort | uniq -c |
+      awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
+         | sort > score/mm10.$table.score.tab
+  hgsql -N -e "select * from $table order by name;" mm10 \
+      | sort -k5 > noScore/mm10.$table.tab
+  join -t'	' -1 5 noScore/mm10.$table.tab score/mm10.$table.score.tab \
+  | awk '{printf "%d\t%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%s\t%s\n", $2,$3,$4,$5,$1,$14,$7,$8,$9,$10,$11,$12,$13}' \
+    | sort -k2,2 -k3,3n > withScore/mm10.$table.withScore.tab
+  hgsql -e "delete from $table;" mm10
+  hgsql -e "load data local infile \"withScore/mm10.$table.withScore.tab\" into table $table;" mm10
+done
+
+    for table in cloneEndB6Ng01 cloneEndC3H cloneEndCH29 cloneEndDN \
+cloneEndMHPN cloneEndMHPP cloneEndMSMg01 cloneEndRP23 cloneEndRP24 \
+cloneEndWI1 cloneEndbMQ cloneEndbadEnds cloneEndmultipleMaps
+do
+    hgsql -N -e "select count(*) from $table;" mm10 | cat
+done
+#     95837
+#     42378
+#     50621
+#    100472
+#     58582
+#     28550
+#     78772
+#     83062
+#     50849
+#    324259
+#     72540
+#     11809
+#      4269
 
 ##############################################################################
 # 2014-08-17: import of UCSC GENCODE group processing of GENCODE VM3 (markd)
@@ -11536,8 +11583,12 @@ EOF
     # peanuts!  good.
     # Make sure that sizes are identical, first diffs are normal -> IUPAC,
     # and first diffs' case is preserved:
-    foreach f (substitutions/chr*.fa)
-      faCmp $f ../ucsc/$f:t.gz |& grep -v "that differ"
+    mkdir tmpFa
+    cd tmpFa
+    twoBitToFa /hive/data/genomes/mm10/mm10.2bit stdout | faSplit byname stdin tmpFa
+    cd ..
+    foreach f (substitutions/chr*.fa.gz)
+      faCmp $f tmpFa/`basename $f subst.fa.gz`fa |& grep -v "that differ"
     end
 #chr1 in substitutions/chr1.fa differs from chr1 at ../1/chr1.fa at base 10107 (y != c)
 #chr10 in substitutions/chr10.fa differs from chr10 at ../10/chr10.fa at base 60493 (R != A)
@@ -11628,3 +11679,24 @@ TMPDIR=/dev/shm
     # real    409m8.252s
 
 ##############################################################################
+# Patents (26 Feb 2016, Max)
+# convert SAM to BED
+cd /hive/data/genomes/hg19/bed/patents/data/
+samtools view -S -t ensGenomeMm10/Mus_musculus.GRCm38.75.dna.toplevel.fa.fai Mus_musculus.GRCm38.75.s90c50.sam -h > mm10.sam
+# convert to bed
+function sam2psl_pierre() { java -Dfile.encoding=UTF8 -Xmx500m    -cp "/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-jexl-2.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-logging-1.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/htsjdk-1.133.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/snappy-java-1.0.3-rc3.jar:/cluster/bin/jvarkit/dist-1.133/sam2psl.jar" com.github.lindenb.jvarkit.tools.misc.SamToPsl $*; }
+sam2psl_pierre mm10.sam 2> /dev/null > mm10.psl
+pslToBed mm10.psl mm10.bed
+# strip the BAM flag field from the BED name
+# careful: this line includes tab characters
+sed -ri 's/_(16|0)	/	/g' mm10.bed
+
+# now join meta with bed file
+cd ../mm10
+join -t $'\t' -1 4 -2 1 ../data/mm10.s4.bed ../data/seqAndPatentSummary.tab -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 2.10 2.11 2.12' | patSeqFilterBulkAndAnnotate ../data/htPatents.txt patBulk.bed patNonBulk.bed -c ../data/seqCounts.tab
+bedSort patNonBulk.bed patNonBulk.bed 
+bedSort patBulk.bed patBulk.bed 
+bedToBigBed patNonBulk.bed /cluster/data/genomes/mm10/chrom.sizes patNonBulk.bb -tab -as=../patSummary.as -type=bed12+
+bedToBigBed patBulk.bed /cluster/data/genomes/mm10/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
+hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
+hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb

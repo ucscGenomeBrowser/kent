@@ -435,6 +435,40 @@ pubsSequenceTable hgFixed.pubsBingSequenceAnnot
 pubsPslTrack pubsBingBlatPsl
 pubsMarkerTable hgFixed.pubsBingMarkerAnnot
 
+track patSeq
+shortLabel Lens Patents
+longLabel Lens PatSeq Patent Document Sequences
+group phenDis
+visibility hide
+type bigBed 12 +
+itemRgb on
+compositeTrack on
+release alpha
+linkIdInName on
+mouseOverField mouseOver
+url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/$[-$]?appInClaims=1
+urlLabel Open Lens PatSeq Analyzer with this chromosomal range
+skipFields mouseOver,fprint
+sepFields claimGrantSeqIds
+exonNumbers off
+urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www.lens.org/lens/patent/$$" claimSeqIds="http://www.lens.org/lens/patent/$$" grantSeqIds="http://www.lens.org/lens/patent/$$" appSeqIds="http://www.lens.org/lens/patent/$$"
+
+        track patNonBulk
+        shortLabel Patent Lens Non-bulk patents
+        longLabel Non-bulk patents
+        parent patSeq
+        type bigBed 12 +
+        visibility dense
+        priority 1
+
+        track patBulk
+        shortLabel Patent Lens Bulk patents
+        longLabel Bulk patents
+        parent patSeq
+        type bigBed 12 +
+        visibility hide
+        priority 2
+
 track transMap
 superTrack on
 shortLabel TransMap

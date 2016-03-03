@@ -944,23 +944,15 @@ if (sql != NULL)
 return id;
 }
 
-char* constructUrl(struct trackDb *tdb, char *urlSetting, char *idInUrl, boolean encode) 
+char* getUrlSetting(struct trackDb *tdb, char* urlSetting)
+/* get the "url" setting for the current track */
 {
-/* construct the url by replacing $$, etc in the url given by urlSetting.
- * Replace $$ with itemName.  */
-
-// check the url setting prefix and get the correct url setting from trackDb 
 char *url;
 if (sameWord(urlSetting, "url"))
     url = tdb->url;
 else
     url = trackDbSetting(tdb, urlSetting);
-
-if (url == NULL || url[0] == 0)
-    return NULL;
-
-char* eUrl = replaceInUrl(url, idInUrl, cart, database, seqName, winStart, winEnd, tdb->track, encode);
-return eUrl;
+return url;
 }
 
 void printIframe(struct trackDb *tdb, char *itemName)
@@ -968,7 +960,10 @@ void printIframe(struct trackDb *tdb, char *itemName)
  * the standard codes in it (like $$ for itemName, etc)
  */
 {
-char* eUrl = constructUrl(tdb, "iframeUrl", itemName, FALSE);
+char *url = getUrlSetting(tdb, "iframeUrl");
+if (url==NULL)
+    return;
+char *eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, FALSE);
 if (eUrl==NULL)
     return;
 
@@ -1005,15 +1000,30 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName, char *itemLabe
 char urlLabelSetting[32];
 
 // replace the $$ and other wildchards with the url given in tdb 
-char* eUrl = constructUrl(tdb, urlSetting, itemName, encode);
+char *url = getUrlSetting(tdb, "url");
+//char* eUrl = constructUrl(tdb, url, itemName, encode);
+if (url==NULL)
+    return;
+
+char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);
 if (eUrl==NULL)
     return;
 
 /* create the url label setting for trackDb from the url
    setting prefix */
 safef(urlLabelSetting, sizeof(urlLabelSetting), "%sLabel", urlSetting);
-printf("<B>%s </B>",
-       trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:"));
+char *linkLabel = trackDbSettingOrDefault(tdb, urlLabelSetting, "Outside Link:");
+
+// if we got no item name from hgTracks or the item name does not appear in the URL
+// there is no need to show the item name at all
+if (isEmpty(itemName) || !stringIn("$$", url))
+    {
+    printf("<A TARGET=_blank HREF='%s'>%s</A><BR>",eUrl, linkLabel);
+    return;
+    }
+
+printf("<B>%s </B>",linkLabel);
+
 printf("<A HREF=\"%s\" target=_blank>", eUrl);
 
 if (sameWord(tdb->table, "npredGene"))
@@ -1023,7 +1033,7 @@ if (sameWord(tdb->table, "npredGene"))
 else
     {
     char *label = itemName;
-    if (isNotEmpty(itemLabel) && !sameString(itemName, itemLabel))
+    if (isNotEmpty(itemLabel) && sameString(itemName, itemLabel))
         label = itemLabel;
     printf("%s</A><BR>\n", label);
     }
@@ -1478,14 +1488,26 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
     {
     if (itemId != slIds)
         printf(", ");
-    char *itemName = itemId->name;
+    char *itemName = trimSpaces(itemId->name);
+
     if (idNames)
         {
         unsigned int id = sqlUnsigned(itemName);
         if (id < nameCount)
             itemName = idNames[sqlUnsigned(itemName)];
         }
-    char *idUrl = replaceInUrl(url, trimSpaces(itemName), cart, database, seqName, winStart, 
+
+    // a | character can optionally be used to separate the ID used for $$ from the name shown in the link (like in Wikimedia markup)
+    char *idForUrl = itemName;
+    if (strstr(itemName, "|"))
+        {
+        char *parts[2];
+	chopString(itemName, "|", parts, ArraySize(parts));
+        idForUrl = parts[0];
+        itemName = parts[1];
+        }
+
+    char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
                     winEnd, tdb->track, TRUE);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
@@ -1522,7 +1544,21 @@ int count = 0;
 struct asColumn *col = as->columnList;
 char *urlsStr = trackDbSetting(tdb, "urls");
 struct hash* fieldToUrl = hashFromString(urlsStr);
+boolean skipEmptyFields = trackDbSettingOn(tdb, "skipEmptyFields");
 
+// make list of fields to skip
+char *skipFieldsStr = trackDbSetting(tdb, "skipFields");
+struct slName *skipIds = NULL;
+if (skipFieldsStr)
+    skipIds = slNameListFromComma(skipFieldsStr);
+
+// make list of fields that are separated from other fields
+char *sepFieldsStr = trackDbSetting(tdb, "sepFields");
+struct slName *sepFields = NULL;
+if (sepFieldsStr)
+    sepFields = slNameListFromComma(sepFieldsStr);
+
+// iterate over fields, print as table rows
 for (;col != NULL && count < fieldCount;col=col->next)
     {
     if (start > 0)  // skip past already known fields
@@ -1538,11 +1574,28 @@ for (;col != NULL && count < fieldCount;col=col->next)
             continue;
         }
 
-    // Print as table rows
+    char *fieldName = col->name;
+
     if (count == 0)
-        printf("<br><table>");
+        printf("<br><table class='bedExtraTbl'>");
+    
     count++;
-    printf("<tr><td><B>%s:</B></td>", col->comment);
+
+    // do not print a row if the fieldName from the .as file is in the "skipFields" list
+    if (skipIds && slNameInList(skipIds, fieldName))
+        continue;
+
+    // split this table to separate current row from the previous one, if the trackDb option is set
+    if (sepFields && slNameInList(sepFields, fieldName))
+        printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
+
+    // skip this row if it's empty and "skipEmptyFields" option is set
+    if (skipEmptyFields && isEmpty(fields[ix]))
+        continue;
+
+    // field description
+    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
     else if (asTypesIsFloating(col->lowType->type))
@@ -1558,6 +1611,11 @@ for (;col != NULL && count < fieldCount;col=col->next)
     }
 asObjectFree(&as);
 freeMem(fieldToUrl);
+if (skipIds)
+    slFreeList(skipIds);
+if (sepFields)
+    slFreeList(sepFields);
+
 if (count > 0)
     printf("</table>\n");
 
@@ -3893,7 +3951,7 @@ if (container == NULL && wordCount > 0)
 genericHeader(tdb, headerItem);
 
 itemForUrl = getIdInUrl(tdb, item);
-if (itemForUrl != NULL && itemForUrl[0] != 0)
+if (itemForUrl != NULL && trackDbSetting(tdb, "url"))
     {
     printCustomUrl(tdb, itemForUrl, item == itemForUrl);
     printIframe(tdb, itemForUrl);

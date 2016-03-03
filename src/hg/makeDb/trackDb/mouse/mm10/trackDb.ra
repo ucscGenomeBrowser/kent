@@ -13,6 +13,19 @@ html gold
 track gap override
 html gap
 
+# Local declaration so that patents are in the right group
+track patSeq override
+release alpha
+group pub
+
+track patNonBulk override
+release alpha
+group pub
+
+track patBulk override
+release alpha
+group pub
+
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly

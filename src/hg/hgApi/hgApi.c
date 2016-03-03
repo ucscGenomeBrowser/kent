@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 long enteredMainTime = clock1000();
 struct dyString *output = newDyString(10000);
 
+setUdcCacheDir();
 cgiSpoof(&argc, argv);
 pushWarnHandler(apiWarnAbortHandler);
 pushAbortHandler(apiWarnAbortHandler);
