@@ -5478,6 +5478,7 @@ tablesIgnored $kgDb
 tablesIgnored hg38
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
+    altSeqLiftOverPslP6
     centromeres
     coriellDelDup
     hg38Patch6Haplotypes
