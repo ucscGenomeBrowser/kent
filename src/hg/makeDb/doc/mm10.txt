@@ -10554,7 +10554,7 @@ do
     cat separateLibs/${L}/mm10.badMap.bed
 done | sort -k1,1 -k2,2n > filteredDroppedEnds/badEnds.bed
 
-hgLoadBed -type=bed12 mm10 cloneEnd_badEnds filteredDroppedEnds/badEnds.bed \
+hgLoadBed -type=bed12 mm10 cloneEndbadEnds filteredDroppedEnds/badEnds.bed \
        > filteredDroppedEnds/loadBed.badEnds.log 2>&1
 
     # construct coverage bigWig files:
@@ -10578,6 +10578,53 @@ bedGraphToBigWig allEnds.reverse.bedGraph /hive/data/genomes/mm10/chrom.sizes \
         /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageForward.bw
     hgBbiDbLink mm10 cloneEnd_coverageReverse \
         /gbdb/mm10/bbi/cloneEnd/cloneEnd_coverageReverse.bw
+
+    ### Fixup the scores to indicate how many multiple mappings as mentioned
+    ### in the hg19 bacEnds description page: one mapping: score = 1000
+    ### multiple mappings: score = 1500/count
+    ### the sort | uniq -c | awk does this score calculation with the name
+    ###   in column 1
+    ### The join puts the existing table together with those scores
+    ### DONE - 2016-03-02 - Hiram
+
+    mkdir /hive/data/genomes/mm10/bed/cloneEnds/addCounts
+    cd /hive/data/genomes/mm10/bed/cloneEnds/addCounts
+    mkdir score withScore noScore withScore
+    for table in cloneEndB6Ng01 cloneEndC3H cloneEndCH29 cloneEndDN \
+cloneEndMHPN cloneEndMHPP cloneEndMSMg01 cloneEndRP23 cloneEndRP24 \
+cloneEndWI1 cloneEndbMQ cloneEndbadEnds cloneEndmultipleMaps
+do
+  hgsql -N -e "select name from $table;" mm10 | sort | uniq -c |
+      awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
+         | sort > score/mm10.$table.score.tab
+  hgsql -N -e "select * from $table order by name;" mm10 \
+      | sort -k5 > noScore/mm10.$table.tab
+  join -t'	' -1 5 noScore/mm10.$table.tab score/mm10.$table.score.tab \
+  | awk '{printf "%d\t%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%s\t%s\n", $2,$3,$4,$5,$1,$14,$7,$8,$9,$10,$11,$12,$13}' \
+    | sort -k2,2 -k3,3n > withScore/mm10.$table.withScore.tab
+  hgsql -e "delete from $table;" mm10
+  hgsql -e "load data local infile \"withScore/mm10.$table.withScore.tab\" into table $table;" mm10
+done
+
+    for table in cloneEndB6Ng01 cloneEndC3H cloneEndCH29 cloneEndDN \
+cloneEndMHPN cloneEndMHPP cloneEndMSMg01 cloneEndRP23 cloneEndRP24 \
+cloneEndWI1 cloneEndbMQ cloneEndbadEnds cloneEndmultipleMaps
+do
+    hgsql -N -e "select count(*) from $table;" mm10 | cat
+done
+#     95837
+#     42378
+#     50621
+#    100472
+#     58582
+#     28550
+#     78772
+#     83062
+#     50849
+#    324259
+#     72540
+#     11809
+#      4269
 
 ##############################################################################
 # 2014-08-17: import of UCSC GENCODE group processing of GENCODE VM3 (markd)
