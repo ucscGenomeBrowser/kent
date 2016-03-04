@@ -494,7 +494,7 @@ int numClades = 0;
 struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
 // get only the clades that have actual active genomes
 char query[4096];
-safef(query, sizeof query, "NOSQLINJ SELECT DISTINCT(c.name), c.label FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority", cladeTable(),genomeCladeTable(), dbDbTable());
+safef(query, sizeof query, NOSQLINJ "SELECT DISTINCT(c.name), c.label FROM %s c, %s g, %s d WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 ORDER BY c.priority", cladeTable(),genomeCladeTable(), dbDbTable());
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

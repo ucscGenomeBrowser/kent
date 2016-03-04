@@ -557,7 +557,7 @@ return hash;
 struct hash *hashRefSeq(struct sqlConnection *conn)
 /* Get list of all RefSeq mRNAs */
 {
-return hashRow0(conn, "NOSQLINJ select mrnaAcc from refLink");
+return hashRow0(conn, NOSQLINJ "select mrnaAcc from refLink");
 }
 
 struct hash *wildHash(struct sqlConnection *conn, char *table, char *pattern)
@@ -763,7 +763,7 @@ struct binElement *list = binKeeperFindSorted(bins, 0, chromSize);
 
 /* Read mRNA table and split into hashes. */
 verbose(2, "Scanning mrna table\n");
-sr = sqlGetResult(conn, "NOSQLINJ select acc,type,author from mrna");
+sr = sqlGetResult(conn, NOSQLINJ "select acc,type,author from mrna");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *acc = row[0], *type = row[1], *author = row[2];

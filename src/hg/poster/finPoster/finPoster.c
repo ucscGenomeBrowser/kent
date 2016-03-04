@@ -1724,7 +1724,7 @@ struct hash *hash = newHash(16);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "NOSQLINJ select value from knownToEnsembl");
+sr = sqlGetResult(conn, NOSQLINJ "select value from knownToEnsembl");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hashAdd(hash, row[0], NULL);

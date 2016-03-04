@@ -462,7 +462,7 @@ if (popGroups == 0)
 // NOTE: overkill in memory accounting instead of dyString to:
 //       1) ensure result is in he->lm, 2) use nifty strSwapStrs()
 // Build the query string, converting NA18519-a,NA18519-b... to 'NA18519-a','NA18519-b'...
-int sizeQ = strlen("NOSQLINJ ") + strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END)
+int sizeQ = strlen(NOSQLINJ "") + strlen(POP_QUERY_BEG) + strlen(POP_QUERY_END)
           + strlen(haplo->subjectIds) + (haplo->subjects * 3) + (strlen(pop) * 2);
 
 char *popQuery = lmAlloc(he->lm,sizeQ);

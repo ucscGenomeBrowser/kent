@@ -302,7 +302,7 @@ static struct sqlResult *queryMarkerRows(struct sqlConnection *conn, char *marke
 {
 char query[4000];
 /* Mysql specific setting to make the group_concat function return longer strings */
-//sqlUpdate(conn, "NOSQLINJ SET SESSION group_concat_max_len = 100000");
+//sqlUpdate(conn, NOSQLINJ "SET SESSION group_concat_max_len = 100000");
  
 char artFilterSql[4000];
 artFilterSql[0] = 0;

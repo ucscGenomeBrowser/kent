@@ -202,7 +202,7 @@ char **row;
 char name[128];
 struct clonePos *el, *list = NULL;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from clonePos");
+sr = sqlGetResult(conn, NOSQLINJ "select * from clonePos");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = clonePosLoad(row);

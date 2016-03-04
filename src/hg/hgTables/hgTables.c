@@ -292,7 +292,7 @@ struct sqlResult *sr;
 char **row;
 struct region *region, *regionList = NULL;
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -344,7 +344,7 @@ struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd,name from encodeRegions order by name desc");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(region);
@@ -667,7 +667,7 @@ if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
     struct hTableInfo *hti;
-    sqlQuickQuery(conn, "NOSQLINJ select chrom from chromInfo limit 1",
+    sqlQuickQuery(conn, NOSQLINJ "select chrom from chromInfo limit 1",
 	chromName, sizeof(chromName));
     hti = hFindTableInfo(db, chromName, table);
     if (hti != NULL)
@@ -1361,19 +1361,19 @@ char *query = "";
 if (cartVarExists(cart, hgtaMetaStatus))
     {
     printf("Table status for database %s\n", database);
-    query = "NOSQLINJ SHOW TABLE STATUS";
+    query = NOSQLINJ "SHOW TABLE STATUS";
     }
 else if (cartVarExists(cart, hgtaMetaVersion))
     {
-    query = "NOSQLINJ SELECT @@VERSION";
+    query = NOSQLINJ "SELECT @@VERSION";
     }
 else if (cartVarExists(cart, hgtaMetaDatabases))
     {
-    query = "NOSQLINJ SHOW DATABASES";
+    query = NOSQLINJ "SHOW DATABASES";
     }
 else if (cartVarExists(cart, hgtaMetaTables))
     {
-    query = "NOSQLINJ SHOW TABLES";
+    query = NOSQLINJ "SHOW TABLES";
     }
 struct sqlResult *sr;
 char **row;

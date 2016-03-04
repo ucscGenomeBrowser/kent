@@ -3655,7 +3655,7 @@ identifier ensemblProteinId3 external=Ensembl
     $gbd.ensemblXref3.protein dupeOk
     $gbd.sfAssign.seqID minCheck=0.01
 
-set notEnsemblTranscriptId !allMis1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!ce11,!calMil1,!cerSim1,!chlSab2,!eboVir3,!felCat3,!felCat8,!manPen1,!macFas5,!micMur2,!nanPar1,!nasLar1,!ornAna2,!oxyTri2,!panPan1,!priPac3,!rheMac8,!rhiRox1,!taeGut2,!tarSyr2,!vicPac2,!xenTro7
+set notEnsemblTranscriptId !allMis1,!aptMan1,!aquChr2,!balAcu1,!bisBis1,!bosTau8,!braFlo2,!ce10,!calMil1,!cerSim1,!chlSab2,!eboVir3,!felCat3,!felCat8,!manPen1,!macFas5,!micMur2,!nanPar1,!nasLar1,!ornAna2,!oxyTri2,!panPan1,!priPac3,!rheMac8,!rhiRox1,!taeGut2,!tarSyr2,!vicPac2,!xenTro7
 
 identifier ensemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"
@@ -5037,6 +5037,11 @@ identifier ncbiGene
     $eboVir.ncbiGene.chrom dupeOk
     $eboVir.chromInfo.chrom
 
+identifier ws245Genes
+"WS245 gene track"
+    ce11.ws245Genes.name
+    ce11.ws245GenesPeptide.name
+
 identifier ncbiRefSeq
 "NCBI RefSeq gene track"
     hg38.ncbiRefSeq.name dupeOk
@@ -5478,6 +5483,7 @@ tablesIgnored $kgDb
 tablesIgnored hg38
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
+    altSeqLiftOverPslP6
     centromeres
     coriellDelDup
     hg38Patch6Haplotypes

@@ -76,7 +76,7 @@ char **row;
 
 /* Do a little join to get data to fit into the pcrServer. */
 sr = sqlGetResult(conn, 
-   "NOSQLINJ select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
+   NOSQLINJ "select dbDb.name,dbDb.genome,dbDb.description,blatServers.host,"
    "blatServers.port,dbDb.nibPath "
    "from dbDb,blatServers where "
    "dbDb.name = blatServers.db "

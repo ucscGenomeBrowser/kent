@@ -288,7 +288,7 @@ while (lineFileNextRowTab(lf, words, rowSize))
 	    sectionId = ptToInt(hel->val);
 	else
 	    {
-	    sqlUpdate(conn, "NOSQLINJ insert into sectionSet values(default)");
+	    sqlUpdate(conn, NOSQLINJ "insert into sectionSet values(default)");
 	    sectionId = sqlLastAutoId(conn);
 	    hashAdd(sectionSetHash, sectionSet, intToPt(sectionId));
 	    }

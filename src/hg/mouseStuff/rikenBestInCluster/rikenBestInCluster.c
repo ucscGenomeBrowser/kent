@@ -34,7 +34,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from rikenBorf");
+sr = sqlGetResult(conn, NOSQLINJ "select * from rikenBorf");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     borf = borfLoad(row);
@@ -55,7 +55,7 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 1;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from rikenOrientInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from rikenOrientInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     eoi = estOrientInfoLoad(row + rowOffset);
@@ -107,7 +107,7 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 1;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from rikenCluster");
+sr = sqlGetResult(conn, NOSQLINJ "select * from rikenCluster");
 uglyf("sr = %p\n", sr);
 while ((row = sqlNextRow(sr)) != NULL)
     {

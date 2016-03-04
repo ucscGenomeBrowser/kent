@@ -986,7 +986,7 @@ char chrom[32];
 char post[64];
 char fullName[128];
 
-strcpy(query, "NOSQLINJ SHOW TABLES");
+strcpy(query, NOSQLINJ "SHOW TABLES");
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {

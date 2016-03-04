@@ -28,7 +28,7 @@ struct sqlResult *sr;
 char **row;
 struct stsMarker marker;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from stsMarker");
+sr = sqlGetResult(conn, NOSQLINJ "select * from stsMarker");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     stsMarkerStaticLoad(row, &marker);

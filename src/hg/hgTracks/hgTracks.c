@@ -3811,7 +3811,7 @@ struct sqlResult *sr;
 char **row;
 int winCount = 0;
 char *query =
-"NOSQLINJ select chrom, size from chromInfo"
+NOSQLINJ "select chrom, size from chromInfo"
 " where chrom     like 'chr%'"
 " and   chrom not like '%_random'"
 " and   chrom not like 'chrUn%'";
@@ -7327,7 +7327,21 @@ trackList = windows->trackList;  // restore original track list
 // Loop over each window loading all tracks
 trackLoadingInProgress = TRUE;
 
-// TEMP HACK GALT REMOVE
+// LOAD OPTIMIZATION HACK GALT 
+// This is an attempt to try to optimize loading by having multiple regions
+// treated as a single span.  The hack just grabs the dimensions of the first and last windows
+// and uses the loader in the first window to load them, then copies the results to all tracks.
+// This basically has only been tried on BED-like tracks, and only for exon/gene-mostly vmodes.
+// I am not re-partitioning the results after the load, so this means all windows see all items.
+// The reason that tends to work is that by luck most BED handlers have code to check if the item
+// overlaps the current window and to skip it if it does not.
+// I do not expect something so simple would work with wigs and other track types.
+// Even if we do want to optimize the BED-like tracks (which are already the fastest loading type),
+// to handle all of the virtmodes properly, this would have be be done differently.
+// Instead of just lumping them all into a single range, you would have to cluster together
+// ranges that are close together and on the same chromosome.
+// Clearly this was just to test an idea for optimizing. 
+// NOT FINISHED.
 bool loadHack = FALSE; //TRUE;  // probably should only be tried on non-wiggle tracks
 //warn ("loadHack = %d", loadHack); // TODO
 int lastWinEnd = 0;
@@ -9113,12 +9127,12 @@ char msg1[512], msg2[512];
 int seqCount = 0;
 boolean truncating;
 
-seqCount = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
+seqCount = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
 truncating = (limit > 0) && (seqCount > limit);
 
 if (!truncating)
     {
-    sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo order by size desc");
+    sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo order by size desc");
     }
 else
     {

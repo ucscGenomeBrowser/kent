@@ -180,7 +180,7 @@ static void brokenRefPepGetBrokenLinks(struct sqlConnection *conn,
                                        struct brokenRefPepTbl *brpTbl)
 /* load refSeq peps that are not linked to gbSeq */
 {
-static char *query = "NOSQLINJ select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
+static char *query = NOSQLINJ "select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
     "left join gbExtFile on gbSeq.gbExtFile=gbExtFile.id "
     "where ((gbSeq.acc like \"NP__%\") or (gbSeq.acc like \"YP__%\")) "
     "and (gbExtFile.id is NULL)";
@@ -253,7 +253,7 @@ static void brokenRefPepGetSeqScan(struct sqlConnection *conn,
 /* load refSeq peps that have seq or extFile problems, including
  * checking fasta file contents*/
 {
-static char *query = "NOSQLINJ select id, acc, version, size, gbExtFile, file_offset, file_size "
+static char *query = NOSQLINJ "select id, acc, version, size, gbExtFile, file_offset, file_size "
     "from gbSeq where (acc like \"NP__%\") or (acc like \"YP__%\")";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
