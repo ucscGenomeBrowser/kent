@@ -35,7 +35,7 @@ struct sqlResult *sr;
 char **row;
 gChromSizes = hashNew(8);
 
-sr = sqlGetResult(conn, "NOSQLINJ SELECT chrom,size FROM chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "SELECT chrom,size FROM chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     unsigned sz = gbParseUnsigned(NULL, row[1]);

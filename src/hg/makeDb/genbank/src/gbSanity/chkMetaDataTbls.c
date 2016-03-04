@@ -142,7 +142,7 @@ char** row;
 
 gbVerbMsg(2, "load refSeqStatus table data");
 
-result = sqlGetResult(conn, "NOSQLINJ SELECT mrnaAcc,status FROM refSeqStatus");
+result = sqlGetResult(conn, NOSQLINJ "SELECT mrnaAcc,status FROM refSeqStatus");
 while ((row = sqlNextRow(result)) != NULL)
     loadRefSeqStatusRow(metaDataTbls, conn, row);
 sqlFreeResult(&result);
@@ -198,7 +198,7 @@ char** row;
 
 gbVerbMsg(2, "load relLink table data");
 
-result = sqlGetResult(conn, "NOSQLINJ SELECT mrnaAcc,name,product,protAcc,geneName,"
+result = sqlGetResult(conn, NOSQLINJ "SELECT mrnaAcc,name,product,protAcc,geneName,"
                       "prodName,locusLinkId,omimId from refLink");
 while ((row = sqlNextRow(result)) != NULL)
     loadRefLinkRow(metaDataTbls, conn, row);

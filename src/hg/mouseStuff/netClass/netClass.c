@@ -146,7 +146,7 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from gap order by chrom");
+sr = sqlGetResult(conn, NOSQLINJ "select * from gap order by chrom");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct agpGap gap;
@@ -218,7 +218,7 @@ struct sqlResult *sr;
 char **row;
 char *prevChrom = NULL;
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,chromStart,chromEnd from simpleRepeat"
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd from simpleRepeat"
 		  " order by chrom,chromStart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -331,7 +331,7 @@ char *prevChrom = NULL;
 struct simpleRange *prevRange = NULL, *prevNewRange = NULL;
 
 sr = sqlGetResult(conn,
-    "NOSQLINJ select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
+    NOSQLINJ "select genoName,genoStart,genoEnd,repName,repClass,repFamily from rmsk "
     "order by genoName,genoStart");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -658,7 +658,7 @@ else if (sqlTableExists(qConn, "ancientRepeat"))
 else
     errAbort("Can't find ancientRepeat table in %s or %s",
 	     sqlGetDatabase(tConn), sqlGetDatabase(qConn));
-sr = sqlGetResult(conn, "NOSQLINJ select name,family,class from ancientRepeat");
+sr = sqlGetResult(conn, NOSQLINJ "select name,family,class from ancientRepeat");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     sprintf(key, "%s.%s.%s", row[0], row[1], row[2]);
@@ -677,7 +677,7 @@ char **row;
 struct chrom *chromList = NULL, *chrom;
 struct hash *hash = hashNew(8);
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(chrom);

@@ -252,7 +252,7 @@ if (!customTrackNeedsLift(ctList))
 struct hash *ctgHash = newHash(0);
 struct ctgPos *ctg, *ctgList = NULL;
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from ctgPos");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from ctgPos");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
    {

@@ -23,7 +23,7 @@
 
 static char* GB_DELETE_TMP = "gbDelete_tmp";
 static char* createGbDeleteTmp = 
-"NOSQLINJ CREATE TABLE gbDelete_tmp ("
+NOSQLINJ "CREATE TABLE gbDelete_tmp ("
 "   acc varchar(20) not null primary key,"
 "   unique(acc)"
 ")"; 

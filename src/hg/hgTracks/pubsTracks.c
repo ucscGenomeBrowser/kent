@@ -74,7 +74,7 @@ if (!sqlTableExists(conn, "pubsClassColors"))
     {
     return;
     }
-char *query = "NOSQLINJ SELECT class, rgbColor FROM pubsClassColors";
+char *query = NOSQLINJ "SELECT class, rgbColor FROM pubsClassColors";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = NULL;
 while ((row = sqlNextRow(sr)) != NULL)

@@ -1854,7 +1854,7 @@ else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
     return;
     }
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, "NOSQLINJ select * from hgFixed.gvSrc");
+srcList = gvSrcLoadByQuery(conn, NOSQLINJ "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -5586,7 +5586,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, "NOSQLINJ select * from knownCds where name=\"%s\"",
+    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
 	gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);

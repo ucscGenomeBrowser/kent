@@ -87,7 +87,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"NOSQLINJ CREATE TABLE ContigLocusIdFilter (\n"
+NOSQLINJ "CREATE TABLE ContigLocusIdFilter (\n"
 "    snp_id int(11) not null,\n"
 "    contig_acc varchar(32) not null,\n"
 "    fxn_class tinyint(4) not null,\n"

@@ -2648,7 +2648,7 @@ boolean isFuzzy = sameWord(hfs->searchMethod, "fuzzy");
 // xrefQuery select ucscRetroInfo5.name, spDisplayID from %s where spDisplayID like '%s%%' and kgName = kgID
 
 struct dyString *dy = dyStringNew(256);
-dyStringAppend(dy, "NOSQLINJ ");
+dyStringAppend(dy, NOSQLINJ "");
 // in particular, if we could get to the upstream and change the first %s to %-s for the param corresponding to xrefTable, 
 // that would be nice.
 dyStringPrintf(dy, hfs->xrefQuery, sqlCkIl(hfs->xrefTable), sqlEscapeString(term)); // keep this sqlEscape

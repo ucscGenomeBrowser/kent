@@ -118,7 +118,7 @@ struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn, 
-	"NOSQLINJ select id,priority,gene,locusLink,refSeq,genbank from image");
+	NOSQLINJ "select id,priority,gene,locusLink,refSeq,genbank from image");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
@@ -132,7 +132,7 @@ uglyf("Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImag
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, "NOSQLINJ select name from knownGene");
+sr = sqlGetResult(hConn, NOSQLINJ "select name from knownGene");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];

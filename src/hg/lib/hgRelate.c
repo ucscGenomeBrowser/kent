@@ -27,7 +27,7 @@ static char extFileCreate[] =
 
 static char historyCreate[] =	
 /* This contains a row for each update made to database. */
-"NOSQLINJ create table history ("
+NOSQLINJ "create table history ("
   "ix int not null auto_increment primary key,"  /* Update number. */
   "startId int unsigned not null,"              /* Start this session's ids. */
   "endId int unsigned not null,"                /* First id for next session. */

@@ -117,7 +117,7 @@ struct hash *keepersForChroms(struct sqlConnection *conn)
 /* Create hash of binKeepers keyed by chromosome */
 {
 struct hash *keeperHash = hashNew(0);
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -236,7 +236,7 @@ vgAllProbes = sqlTableExists(probesConn,"vgAllProbes");
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
-        "NOSQLINJ select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
+        NOSQLINJ "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
 	",probe.id,submissionSet.privateUser,vgPrbMap.vgPrb,gene.id"
 	" from image,imageFile,imageProbe,probe,gene,submissionSet,vgPrbMap"
 	" where image.imageFile = imageFile.id"
@@ -270,7 +270,7 @@ verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSe
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
-sr = sqlGetResult(hConn, "NOSQLINJ select * from knownGene");
+sr = sqlGetResult(hConn, NOSQLINJ "select * from knownGene");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct genePred *known = genePredLoad(row);

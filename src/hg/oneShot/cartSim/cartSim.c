@@ -344,7 +344,7 @@ void cartSimulate(char *host, char *user, char *password, char *database)
 {
 /* Figure out size of tables. */
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-int userDbSize = sqlQuickNum(conn, "NOSQLINJ select count(*) from userDb");
+int userDbSize = sqlQuickNum(conn, NOSQLINJ "select count(*) from userDb");
 if (userDbSize == 0)
     errAbort("%s.%s table is empty", database, userTable);
 int maxSampleSize = 1024*1024;

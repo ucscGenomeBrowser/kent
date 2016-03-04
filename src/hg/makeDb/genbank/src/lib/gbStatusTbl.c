@@ -24,7 +24,7 @@ char* GB_STATUS_TBL = "gbStatus";
 
 /* sql to create the table */
 static char* createSql =
-"NOSQLINJ create table gbStatus ("
+NOSQLINJ "create table gbStatus ("
   "acc char(12) not null primary key,"         /* Genbank accession */
   "version smallint unsigned not null,"        /* genbank version number */
   "modDate date not null,"                     /* last modified date */
