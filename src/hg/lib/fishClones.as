@@ -5,7 +5,7 @@ table fishClones
    uint   chromStart;              "Start position in chromosome"
    uint   chromEnd;                "End position in chromosome"
    string name;                    "Name of clone"
-   uint score;                     "Score from 0-1000 if uniquely aligned, else 1500"
+   uint score;                     "Score from 0-1000"
    uint placeCount;                "Number of FISH clone mappings. Some mappings may be from non-sequence based methods"
    string[placeCount] bandStarts;  "Starting band of FISH clone mapping"
    string[placeCount] bandEnds;    "Ending band of FISH clone mapping"
