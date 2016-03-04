@@ -186,7 +186,7 @@ if(all)
         conn = sqlConnectRemote(host, user, password, hgcentral);
     else
         conn = hConnectCentral();
-    sr = sqlGetResult(conn, "NOSQLINJ select name from dbDb where active=1");
+    sr = sqlGetResult(conn, NOSQLINJ "select name from dbDb where active=1");
     while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("Found db %s\n", row[0]);

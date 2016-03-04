@@ -46,7 +46,7 @@
 
 static char* gbCdnaInfoCreate =
 /* This keeps track of mRNA. */
-"NOSQLINJ create table gbCdnaInfo ("
+NOSQLINJ "create table gbCdnaInfo ("
   "id int unsigned not null primary key,"         /* Id, same as seq ID. */
   "acc char(12) not null,"                        /* Genbank accession. */
   "version smallint unsigned not null,"           /* Genbank version. */
@@ -84,14 +84,14 @@ static char* gbCdnaInfoCreate =
   "index(author))";
 
 static char* refSeqStatusCreate = 
-"NOSQLINJ CREATE TABLE refSeqStatus ("
+NOSQLINJ "CREATE TABLE refSeqStatus ("
 "    mrnaAcc varchar(255) not null,"
 "    status enum('Unknown', 'Reviewed', 'Validated', 'Provisional', 'Predicted', 'Inferred') not null,"
 molEnumDef
 "    PRIMARY KEY(mrnaAcc))";
 
 static char* refLinkCreate = 
-"NOSQLINJ CREATE TABLE refLink (\n"
+NOSQLINJ "CREATE TABLE refLink (\n"
 "    name varchar(255) not null,        # Name displayed in UI\n"
 "    product varchar(255) not null,     # Name of protein product\n"
 "    mrnaAcc varchar(255) not null,     # mRNA accession\n"
@@ -124,7 +124,7 @@ static char* refLinkCreate =
  *    Unknown            = unknown
  */
 static char* refSeqSummaryCreate = 
-"NOSQLINJ CREATE TABLE refSeqSummary ("
+NOSQLINJ "CREATE TABLE refSeqSummary ("
 "  mrnaAcc varchar(255) not null,"
 "  completeness enum('Unknown', 'Complete5End', "
 "    'Complete3End', 'FullLength', 'IncompleteBothEnds',"
@@ -156,7 +156,7 @@ static char *raFieldTables[] =
 
 /* SQL to create gbMiscDiff table */
 static char* gbMiscDiffCreate = 
-"NOSQLINJ CREATE TABLE gbMiscDiff (\n"
+NOSQLINJ "CREATE TABLE gbMiscDiff (\n"
 "    acc char(12) not null,\n"
 "    mrnaStart int not null,\n"
 "    mrnaEnd int not null,\n"
@@ -169,7 +169,7 @@ static char* gbMiscDiffCreate =
 
 /* SQL to create gbWarn table */
 static char* gbWarnCreate = 
-"NOSQLINJ CREATE TABLE gbWarn ("
+NOSQLINJ "CREATE TABLE gbWarn ("
 "    acc char(12) not null,"
 "    reason enum(\"athRage\", \"orestes\") not null,"
 "    PRIMARY KEY(acc)"

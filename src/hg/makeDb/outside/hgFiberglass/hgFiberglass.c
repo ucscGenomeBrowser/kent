@@ -22,7 +22,7 @@ errAbort(
 }
 
 char *createString = 
-"NOSQLINJ CREATE TABLE fiberMouse (\n"
+NOSQLINJ "CREATE TABLE fiberMouse (\n"
     "chrom varchar(255) not null,	# Human chromosome or FPC contig\n"
     "chromStart int unsigned not null,	# Start position in chromosome\n"
     "chromEnd int unsigned not null,	# End position in chromosome\n"

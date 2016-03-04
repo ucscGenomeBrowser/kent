@@ -3811,7 +3811,7 @@ struct sqlResult *sr;
 char **row;
 int winCount = 0;
 char *query =
-"NOSQLINJ select chrom, size from chromInfo"
+NOSQLINJ "select chrom, size from chromInfo"
 " where chrom     like 'chr%'"
 " and   chrom not like '%_random'"
 " and   chrom not like 'chrUn%'";
@@ -9127,12 +9127,12 @@ char msg1[512], msg2[512];
 int seqCount = 0;
 boolean truncating;
 
-seqCount = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
+seqCount = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
 truncating = (limit > 0) && (seqCount > limit);
 
 if (!truncating)
     {
-    sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo order by size desc");
+    sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo order by size desc");
     }
 else
     {

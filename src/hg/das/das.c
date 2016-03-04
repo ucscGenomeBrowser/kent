@@ -309,7 +309,7 @@ char *table, *root;
 boolean isSplit, hasBin;
 char chromField[32], startField[32], endField[32];
 
-sr = sqlGetResult(conn, "NOSQLINJ show tables");
+sr = sqlGetResult(conn, NOSQLINJ "show tables");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     table = root = row[0];
@@ -973,7 +973,7 @@ printf("<DASEP>\n");
 printf("<ENTRY_POINTS href=\"%s\" version=\"7.00\">\n",
 	currentUrl());
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ci = chromInfoLoad(row);

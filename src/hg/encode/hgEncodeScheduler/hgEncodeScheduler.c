@@ -41,7 +41,7 @@ void initRunning(struct sqlConnection *conn)
 /* create running table if not exist */
 {
 char sql[512] = 
-"NOSQLINJ create table running ("
+NOSQLINJ "create table running ("
 "  pid int(10) unsigned,"
 "  project int(10) unsigned,"
 "  jobType varchar(255),"

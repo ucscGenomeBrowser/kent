@@ -526,7 +526,7 @@ if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
     if (sqlTableExists(conn, "chromInfo"))
-	hel->val = sqlQuickString(conn, "NOSQLINJ select chrom from chromInfo limit 1");
+	hel->val = sqlQuickString(conn, NOSQLINJ "select chrom from chromInfo limit 1");
     hFreeConn(&conn);
     }
 return hel->val;
@@ -538,7 +538,7 @@ int hChromCount(char *db)
 if (trackHubDatabase(db))
     return trackHubChromCount(db);
 struct sqlConnection *conn = hAllocConn(db);
-int count = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
+int count = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
 hFreeConn(&conn);
 return count;
 }
@@ -1272,7 +1272,7 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct slName *el = slNameNew(row[0]);
@@ -2589,7 +2589,7 @@ struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
 char query[1024];
-safef(query, sizeof query,  "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+safef(query, sizeof query,  NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -4340,7 +4340,7 @@ struct slPair *hGetCladeOptions()
  * useful for constructing a clade menu. */
 {
 // get only the clades that have actual active genomes
-char *query = "NOSQLINJ "
+char *query = NOSQLINJ ""
     "SELECT DISTINCT(c.name), c.label "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
@@ -4601,14 +4601,14 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 /* Get hash of active blat servers. */
-sr = sqlGetResult(conn, "NOSQLINJ select db from blatServers");
+sr = sqlGetResult(conn, NOSQLINJ "select db from blatServers");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], NULL);
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
 char query[1024];
-safef(query,  sizeof query, "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+safef(query,  sizeof query, NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -4722,7 +4722,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(0);
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
 sqlFreeResult(&sr);
@@ -4746,7 +4746,7 @@ struct slName *hChromList(char *db)
 /* Get the list of chrom names from the database's chromInfo table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct slName *list = sqlQuickList(conn, "NOSQLINJ select chrom from chromInfo");
+struct slName *list = sqlQuickList(conn, NOSQLINJ "select chrom from chromInfo");
 hFreeConn(&conn);
 return list;
 }

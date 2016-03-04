@@ -52,7 +52,7 @@ char *createString =
 ");\n";
 
 char *metaCreateString = 
-"NOSQLINJ CREATE TABLE metaChromGraph (\n"
+NOSQLINJ "CREATE TABLE metaChromGraph (\n"
 "    name varchar(255) not null,        # Corresponds to chrom graph table name\n"
 "    minVal double not null,    # Minimum value observed\n"
 "    maxVal double not null,    # Maximum value observed\n"

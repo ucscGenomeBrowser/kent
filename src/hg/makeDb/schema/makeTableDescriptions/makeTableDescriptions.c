@@ -46,7 +46,7 @@ if (sqlTableExists(conn, "chromInfo"))
     	database);
 
 sqlRemakeTable(conn, "tableDescriptions",
-   "NOSQLINJ CREATE TABLE tableDescriptions (\n"
+   NOSQLINJ "CREATE TABLE tableDescriptions (\n"
    "  tableName varchar(255) not null,\n"
    "  autoSqlDef longblob not null,\n"
    "  gbdAnchor varchar(255) not null,\n"

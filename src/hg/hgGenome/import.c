@@ -678,7 +678,7 @@ if (sqlTableExists(conn, "tableAccessControl"))
     struct sqlResult *sr = NULL;
     char **row = NULL;
     acHash = newHash(8);
-    sr = sqlGetResult(conn, "NOSQLINJ select name,host from tableAccessControl");
+    sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	struct slName *sln = slNameNew(chopAtFirstDot(row[1]));

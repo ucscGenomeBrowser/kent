@@ -190,7 +190,7 @@ molWtCnt = 0;
 /* Build up hash of swInterPro accessions.  We'll use this to count domains. */
 struct hash *swInterProHash = hashNew(23);
     {
-    struct sqlResult *sr = sqlGetResult(conn3, "NOSQLINJ select accession from swInterPro");
+    struct sqlResult *sr = sqlGetResult(conn3, NOSQLINJ "select accession from swInterPro");
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
         hashAdd(swInterProHash, row[0], NULL);

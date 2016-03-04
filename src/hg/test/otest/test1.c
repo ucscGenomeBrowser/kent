@@ -18,10 +18,10 @@ void dropAll()
 /* Drop all tables. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-sqlGetResult(conn, "NOSQLINJ drop table word");
-sqlGetResult(conn, "NOSQLINJ drop table lineWords");
-sqlGetResult(conn, "NOSQLINJ drop table lineSize");
-sqlGetResult(conn, "NOSQLINJ drop table commaLine");
+sqlGetResult(conn, NOSQLINJ "drop table word");
+sqlGetResult(conn, NOSQLINJ "drop table lineWords");
+sqlGetResult(conn, NOSQLINJ "drop table lineSize");
+sqlGetResult(conn, NOSQLINJ "drop table commaLine");
 sqlDisconnect(&conn);
 }
 
@@ -30,23 +30,23 @@ void createAll()
 {
 struct sqlConnection *conn = sqlConnect(database);
 sqlGetResult(conn,
-  "NOSQLINJ CREATE table word ("
+  NOSQLINJ "CREATE table word ("
    "id smallint not null primary key,"
    "word varchar(250) not null"
    ")" );
 sqlGetResult(conn,
-  "NOSQLINJ CREATE table lineSize ("
+  NOSQLINJ "CREATE table lineSize ("
    "id int(8) not null primary key,"
    "size smallint not null"
    ")" );
 sqlGetResult(conn,
-  "NOSQLINJ CREATE table lineWords ("
+  NOSQLINJ "CREATE table lineWords ("
    "line int(8) not null,"
    "word smallint not null,"
    "pos smallint not null"
    ")" );
 sqlGetResult(conn,
-  "NOSQLINJ CREATE table commaLine ("
+  NOSQLINJ "CREATE table commaLine ("
    "id int(8) not null primary key,"
    "size smallint not null,"
    "wordList blob not null"
@@ -212,7 +212,7 @@ char **row;
 wordCount = sqlTableSize(conn, "word");
 uglyf("Got %d words\n", wordCount);
 words = needMem(wordCount * sizeof(words[0]));
-sr = sqlQuery(conn, "NOSQLINJ select * from word");
+sr = sqlQuery(conn, NOSQLINJ "select * from word");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     words[i] = cloneString(row[1]);
@@ -251,7 +251,7 @@ end = clock1000();
 printf("Time to load words: %4.3f\n", 0.001*(end-start));
 start = clock1000();
 
-sr = sqlQuery(conn, "NOSQLINJ SELECT * from commaLine");
+sr = sqlQuery(conn, NOSQLINJ "SELECT * from commaLine");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int wordCount = sqlUnsigned(row[1]);

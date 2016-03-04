@@ -137,7 +137,7 @@ struct chromInfo *ret = NULL;
 unsigned totalSize = 0;
 
 if (sameWord(name, "all"))
-    sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+    sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 else
     {
     char select[256];
@@ -597,7 +597,7 @@ if (hTableExists(db, "gap"))
     int totalGapsThisChrom = 0;
     
     sr = sqlGetResult(conn,
-	"NOSQLINJ select chrom,chromStart,chromEnd from gap order by chrom");
+	NOSQLINJ "select chrom,chromStart,chromEnd from gap order by chrom");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	int gapSize = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);

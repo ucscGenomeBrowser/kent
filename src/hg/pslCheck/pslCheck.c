@@ -77,7 +77,7 @@ static struct hash *loadChromInfoSizes(struct sqlConnection *conn)
 {
 struct hash *sizes = hashNew(20);
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);

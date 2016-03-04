@@ -78,7 +78,7 @@ struct hash *getMysqlVars(char *host)
 {
 struct hash *hash = hashNew(0);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, NULL);
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show variables");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "show variables");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], cloneString(row[1]));
@@ -153,7 +153,7 @@ struct hash *tableTimeHash(char *host, boolean is5, char *database)
 {
 struct hash *hash = hashNew(0);
 struct sqlConnection *conn = sqlConnectRemote(host, user, password, database);
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show table status");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "show table status");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -286,7 +286,7 @@ if (allDatabases)
     {
     struct sqlConnection *conn = 
     	sqlConnectRemote(sourceHost, user, password, NULL);
-    struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show databases");
+    struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "show databases");
     char **row;
     while ((row = sqlNextRow(sr)) != NULL)
         {
