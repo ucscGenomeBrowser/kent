@@ -195,7 +195,7 @@ struct slName *chromGraphListAll(struct sqlConnection *conn)
 if (!sqlTableExists(conn, "metaChromGraph"))
     return NULL;
 else
-    return sqlQuickList(conn, "NOSQLINJ select name from metaChromGraph");
+    return sqlQuickList(conn, NOSQLINJ "select name from metaChromGraph");
 }
 
 char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn)

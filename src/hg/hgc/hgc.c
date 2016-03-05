@@ -22159,7 +22159,7 @@ struct cutter *cutters = NULL;
 struct slName *ret = NULL;
 
 conn = hAllocConn("hgFixed");
-cutters = cutterLoadByQuery(conn, "NOSQLINJ select * from cutters");
+cutters = cutterLoadByQuery(conn, NOSQLINJ "select * from cutters");
 ret = findIsoligamers(myEnzyme, cutters);
 hFreeConn(&conn);
 cutterFreeList(&cutters);

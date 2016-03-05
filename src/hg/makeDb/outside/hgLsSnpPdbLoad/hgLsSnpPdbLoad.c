@@ -48,7 +48,7 @@ static void buildLsSnpPdb(char *lsSnpProf, char *lsSnpDb, char *tabFile)
 struct sqlConnection *conn = sqlConnectProfile(lsSnpProf, lsSnpDb);
 FILE *fh = mustOpen(tabFile, "w");
 char *query =
-    "NOSQLINJ SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
+    NOSQLINJ "SELECT distinct pr.accession,ps.pdb_id,pstr.struct_type,ps.chain,SNP.name,ps.snp_position "
     "FROM Protein pr,PDB_SNP ps, SNP, PDB_Structure pstr "
     "WHERE (ps.snp_id = SNP.snp_id) AND (pr.prot_id = ps.prot_id) "
     "AND (pstr.pdb_id = ps.pdb_id)";

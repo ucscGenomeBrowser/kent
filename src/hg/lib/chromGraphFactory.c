@@ -489,7 +489,7 @@ static struct hash *chromInfoHash(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct hash *hash = hashNew(0);
-sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);

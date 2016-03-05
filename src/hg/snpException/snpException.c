@@ -35,7 +35,7 @@ struct sqlResult     *sr    = NULL;
 char                **row   = NULL;
 struct slName        *list  = NULL;
 struct slName        *el    = NULL;
-char                 *query = "NOSQLINJ select chrom from chromInfo";
+char                 *query = NOSQLINJ "select chrom from chromInfo";
 
 sr = sqlGetResult(conn, query);
 while ((row=sqlNextRow(sr))!=NULL)
@@ -80,7 +80,7 @@ struct sqlResult     *sr         = NULL;
 char                **row        = NULL;
 struct snpExceptions *list       = NULL;
 struct snpExceptions *el         = NULL;
-char                  query[256] = "NOSQLINJ select * from snpExceptions";
+char                  query[256] = NOSQLINJ "select * from snpExceptions";
 
 if (inputExceptionId>0)
     sqlSafef(query, sizeof(query), 

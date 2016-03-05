@@ -34,7 +34,7 @@ errAbort(
 }
 
 char *refLinkTableDef = 
-"NOSQLINJ CREATE TABLE refLink (\n"
+NOSQLINJ "CREATE TABLE refLink (\n"
 "    name varchar(255) not null,        # Name displayed in UI\n"
 "    product varchar(255) not null, 	# Name of protein product\n"
 "    mrnaAcc varchar(255) not null,	# mRNA accession\n"
@@ -54,7 +54,7 @@ char *refLinkTableDef =
 ")";
 
 char *refGeneTableDef = 
-"NOSQLINJ CREATE TABLE refGene ( \n"
+NOSQLINJ "CREATE TABLE refGene ( \n"
 "   name varchar(255) not null,	# mrna accession of gene \n"
 "   chrom varchar(255) not null,	# Chromosome name \n"
 "   strand char(1) not null,	# + or - for strand \n"
@@ -72,7 +72,7 @@ char *refGeneTableDef =
 ")";
 
 char *refPepTableDef =
-"NOSQLINJ CREATE TABLE refPep (\n"
+NOSQLINJ "CREATE TABLE refPep (\n"
 "    name varchar(255) not null,        # Accession of sequence\n"
 "    seq longblob not null,     # Peptide sequence\n"
 "              #Indices\n"
@@ -80,7 +80,7 @@ char *refPepTableDef =
 ")\n";
 
 char *refMrnaTableDef =
-"NOSQLINJ CREATE TABLE refMrna (\n"
+NOSQLINJ "CREATE TABLE refMrna (\n"
 "    name varchar(255) not null,        # Accession of sequence\n"
 "    seq longblob not null,     	# Nucleotide sequence\n"
 "              #Indices\n"
@@ -350,13 +350,13 @@ char cond_str[200];
 
 /* Make refLink and other tables table if they don't exist already. */
 sqlMaybeMakeTable(conn, "refLink", refLinkTableDef);
-sqlUpdate(conn, "NOSQLINJ delete from refLink");
+sqlUpdate(conn, NOSQLINJ "delete from refLink");
 sqlMaybeMakeTable(conn, "refGene", refGeneTableDef);
-sqlUpdate(conn, "NOSQLINJ delete from refGene");
+sqlUpdate(conn, NOSQLINJ "delete from refGene");
 sqlMaybeMakeTable(conn, "refPep", refPepTableDef);
-sqlUpdate(conn, "NOSQLINJ delete from refPep");
+sqlUpdate(conn, NOSQLINJ "delete from refPep");
 sqlMaybeMakeTable(conn, "refMrna", refMrnaTableDef);
-sqlUpdate(conn, "NOSQLINJ delete from refMrna");
+sqlUpdate(conn, NOSQLINJ "delete from refMrna");
 
 /* Scan through locus link to omim ID file and put in hash. */
     {

@@ -911,9 +911,9 @@ static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *lik
 {
 char query[256];
 if (likeExpr == NULL)
-    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES");
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), "NOSQLINJ SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -1398,9 +1398,9 @@ boolean fixedMultipleNOSQLINJ = FALSE;
 if (monitorFlags & JKSQL_TRACE)
     monitorPrintQuery(sc, query);
 
-if (startsWith("NOSQLINJ ", query))
+if (startsWith(NOSQLINJ "", query))
     {
-    query += strlen("NOSQLINJ "); // We know this query has been vetted for sql injection, skip over this tag.
+    query += strlen(NOSQLINJ ""); // We know this query has been vetted for sql injection, skip over this tag.
     }
 else
     {
@@ -1408,10 +1408,10 @@ else
     }
 
 // additional check finds errors of multiple NOSQLINJ tags
-if (strstr(query, "NOSQLINJ "))
+if (strstr(query, NOSQLINJ ""))
     {
     sqlCheckError("Oops, multiple occurrences of NOSQLINJ tag in query: %s", query);
-    query = replaceChars(query, "NOSQLINJ ", "");
+    query = replaceChars(query, NOSQLINJ "", "");
     fixedMultipleNOSQLINJ = TRUE;
     }
 
@@ -3761,11 +3761,11 @@ char escPunc = 0x01;  // using char 1 as special char to denote strings needing 
 char *newFormat = NULL;
 int newFormatSize = 2*formatLen + 1;
 if (newString)
-    newFormatSize += strlen("NOSQLINJ ");
+    newFormatSize += strlen(NOSQLINJ "");
 newFormat = needMem(newFormatSize);
 char *nf = newFormat;
 if (newString)
-    nf += safef(newFormat, newFormatSize, "%s", "NOSQLINJ ");
+    nf += safef(newFormat, newFormatSize, "%s", NOSQLINJ "");
 char *lastPct = NULL;
 int escStringsCount = 0;
 int escStringsSize = 0;
@@ -4102,7 +4102,7 @@ void sqlDyStringAppend(struct dyString *ds, char *string)
  * Adds the NOSQLINJ prefix if dy string is empty. */
 {
 if (ds->stringSize == 0)
-    dyStringAppend(ds, "NOSQLINJ ");
+    dyStringAppend(ds, NOSQLINJ "");
 dyStringAppendN(ds, string, strlen(string));
 }
 

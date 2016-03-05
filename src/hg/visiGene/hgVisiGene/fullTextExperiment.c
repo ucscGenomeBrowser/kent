@@ -75,7 +75,7 @@ if (sqlFieldIndex(conn, "submissionSet", "privateUser") >= 0)
     {
     struct sqlResult *sr;
     char **row;
-    sr = sqlGetResult(conn, "NOSQLINJ select id from submissionSet where privateUser!=0");
+    sr = sqlGetResult(conn, NOSQLINJ "select id from submissionSet where privateUser!=0");
     while ((row = sqlNextRow(sr)) != NULL)
         hashAdd(hash, row[0], NULL);
     sqlFreeResult(&sr);

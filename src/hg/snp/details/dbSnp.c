@@ -88,7 +88,7 @@ struct sqlResult *sr;
 char **row = NULL;
 struct slName *list = NULL;
 struct slName *el = NULL;
-char  *queryString = "NOSQLINJ select   chrom "
+char  *queryString = NOSQLINJ "select   chrom "
                      "from     chromInfo "
                      "where    chrom not like '%random' " 
                      "order by size desc";

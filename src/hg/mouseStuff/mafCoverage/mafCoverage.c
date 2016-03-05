@@ -45,7 +45,7 @@ struct sqlResult *sr;
 char **row;
 struct chromInfo *ci, *ciList = NULL;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     ci = chromInfoLoad(row);

@@ -62,7 +62,7 @@ return sqlQuickString(conn, s);
 struct slName *jaxSpecList(struct sqlConnection *conn)
 /* Get list of specimen id's. */
 {
-return sqlQuickList(conn, "NOSQLINJ select _Specimen_key from GXD_Specimen");
+return sqlQuickList(conn, NOSQLINJ "select _Specimen_key from GXD_Specimen");
 }
 
 void dumpRow(char **row, int size)
@@ -904,7 +904,7 @@ void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, struct
  * each submission set.   Returns outDir. */
 {
 struct dyString *query = dyStringNew(0);
-struct slName *ref, *refList = sqlQuickList(conn, "NOSQLINJ select distinct(_Refs_key) from GXD_Assay");
+struct slName *ref, *refList = sqlQuickList(conn, NOSQLINJ "select distinct(_Refs_key) from GXD_Assay");
 int refCount = 0;
 
 makeDir(outDir);
