@@ -23,6 +23,9 @@ def parseArgs():
     outBase - collect expression counts from all abundance.tsv files,
     given a directory containing kallisto output sub-directories.
 
+    Input files that end with "*.abundance.tsv" can be located either 
+    directly in dirName or one level beneath it.
+
     TPM transcript counts are written to <outBase>.tpm.tab
     TPM gene counts are written to <outBase>.geneTpm.tab
 
@@ -56,15 +59,31 @@ def parseArgs():
 
 # ==== functions =====
     
-def iterAbundPaths(dirname):
-    " yield all paths of files abundance.tsv in subdirs under dirname "
-    for subDir in glob.glob(join(dirname, "*")):
-        if not isdir(subDir):
-            continue
-        abdPath = join(subDir, "abundance.tsv")
-        if not isfile(abdPath):
-            continue
-        yield abdPath
+def findInputFiles(dirname):
+    """ return two lists: cellIds and all paths of files */abundance.tsv in subdirs under dirname 
+    subDir name is the cellId.
+
+    alternative input:
+    dirName can also be a directory full of *.abundance.tsv files where * is the cellId.
+    """
+    cellIds = []
+    filePaths = []
+    for inputPath in glob.glob(join(dirname, "*")):
+        # check if it's an abundance file
+        if inputPath.endswith(".abundance.tsv") and isfile(inputPath):
+            cellId = basename(inputPath).split(".")[0]
+            filePath = inputPath
+        else:
+            # check if it's a dir with the right filename in it
+            if not isdir(filePath):
+                continue
+            filePath = join(filePath, "abundance.tsv")
+            if not isfile(filePath):
+                continue
+            cellId = basename(inputPath)
+        cellIds.append(cellId)
+        filePaths.append(filePath)
+    return cellIds, filePaths
 
 def parseKallisto(fname):
     """ parse a kallisto abundance.tsv file, return dict transcriptId -> est_tpm 
@@ -104,7 +123,7 @@ def parseDict(fname, stripDot=False):
         ret[transId]=geneId
     return ret
         
-def outputBigMatrix(cellNames, results, outFname):
+def outputBigMatrix(cellNames, results, outFname, isGene=False):
     """
     given a list of cellNames and a list of transcript -> count dictionaries,
     write out a matrix with transcript -> counts in columns
@@ -112,9 +131,13 @@ def outputBigMatrix(cellNames, results, outFname):
     logging.info("Writing data to file %s" % outFname)
     ofh = open(outFname, "w")
     # write header
-    ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
+    if isGene:
+        ofh.write("#gene\t%s\n" % "\t".join(cellNames))
+    else:
+        ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
     
     # create a sorted list of all transcript names
+    logging.info("Getting transcript IDs")
     allTrans = set()
     for res in results:
         allTrans.update(res)
@@ -122,6 +145,7 @@ def outputBigMatrix(cellNames, results, outFname):
     allTrans.sort()
 
     # write out matrix
+    logging.info("Iterating over transcript IDs and writing to tab file")
     for trans in allTrans:
         ofh.write("%s\t" % trans)
         row = []
@@ -185,6 +209,7 @@ def sumTransToGene(transDictList, transFile):
     for transCounts in transDictList:
         geneCounts = defaultdict(float)
         for transId, count in transCounts.iteritems():
+            transId = transId.split(".")[0]
             geneId = transToGene.get(transId)
             if geneId is None:
                 noMapTransIds.add(transId)
@@ -231,11 +256,13 @@ def main():
 
     writeStats(inDir, statOutFname)
 
-    inFnames = list(iterAbundPaths(inDir))
+    cellNames, inFnames = findInputFiles(inDir)
+    assert(len(cellNames)==len(inFnames))
+
     if len(inFnames)==0:
         logging.info("No input files found")
         sys.exit(1)
-    logging.info("Found %d kallisto input files (abundance.tsv)" % len(inFnames))
+    logging.info("Found %d kallisto input files (*.abundance.tsv)" % len(inFnames))
 
     threadCount = options.threads
     logging.info("Using %d threads to parse input files" % threadCount)
@@ -246,14 +273,12 @@ def main():
     pool.close()
     pool.join()
 
-    # reduce the filenames to only their parent directory names
-    cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
+    logging.info("Done reading input files.")
 
-    #outputBigMatrixSparse(cellNames, results, outFname)
     outputBigMatrix(cellNames, results, transOutFname)
 
     geneOutFname = outBase+".geneTpm.tab"
     results = sumTransToGene(results, options.transFile)
-    outputBigMatrix(cellNames, results, geneOutFname)
+    outputBigMatrix(cellNames, results, geneOutFname, isGene=True)
 
 main()
