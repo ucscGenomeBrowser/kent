@@ -55,6 +55,7 @@ static struct optionSpec options[] = {
     };
 
 struct slDoubleInt
+/* Used to keep track of the top ten genes contributed */
     {
     struct slDoubleInt *next; 
     double val; 
@@ -77,7 +78,7 @@ struct bioExpVector
 
 
 struct slDoubleInt *slDoubleIntNew(double x, int y)
-/* Return a new double. */
+/* Return a new doubleInt */
 {
 struct slDoubleInt *a;
 AllocVar(a);
@@ -87,7 +88,7 @@ return a;
 }
 
 int slDoubleIntCmp(const void *va, const void *vb)
-/* Compare two slDoubles. */
+/* Compare two doubleInts */
 {
 const struct slDoubleInt *a = *((struct slDoubleInt **)va);
 const struct slDoubleInt *b = *((struct slDoubleInt **)vb);
@@ -293,8 +294,6 @@ void printHierarchicalJson(FILE *f, struct hacTree *tree, char *geneNamesFile)
 	return;
 	}
     double distance = 0;
-    
-    
     struct lineFile *lf = lineFileOpen(geneNamesFile, TRUE);
     char *line;
     struct slName *geneNames;
@@ -327,7 +326,6 @@ double slBioExpVectorDistance(const struct slList *item1, const struct slList *i
     return sqrt(sum);
     }
 
-
 struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slList *item2,
 				void *unusedExtraData)
 /* Make a new slPair where the name is the children names concattenated and the 
@@ -337,7 +335,7 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     verbose(3,"Merging...\n");
     const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
     const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
-    float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
+    float kid1Weight = kid1->children / (float)(kid1->children + kid2->children); //Weight based on number of children.
     float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
     struct bioExpVector *el;
     AllocVar(el);
@@ -349,19 +347,15 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     int gCount = 0;
     for (i = 0; i < el->count; ++i)
 	{
-	if (kid1->vector[i] == kid2->vector[i]) // Were doing thousands of merges, lets cut out useless compute where we can. 
+	if (kid1->vector[i] == kid2->vector[i]) // We are doing thousands of merges, lets cut out useless compute where we can. 
 	    {
 	    el->vector[i] = kid1->vector[i];  
 	    continue;    
 	    }
-	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]); // Weight based on number of children. 
+	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);  
 	float diff; 
-	//if (((float)(kid1Weight*kid1->vector[i])) > ((float)(kid2Weight*kid2->vector[i]))) 
-	//    {diff = ((float)(kid1Weight*kid1->vector[i])) - ((float)(kid2Weight*kid2->vector[i]));}
-	//else {diff = ((float)(kid2Weight*kid2->vector[i])) - ((float)(kid1Weight*kid1->vector[i]));} 
-	if (((float)(kid1->vector[i])) > ((float)(kid2->vector[i]))) 
-	    {diff = ((float)(kid1->vector[i])) - ((float)(kid2->vector[i]));}
-	else {diff = ((float)(kid2->vector[i])) - ((float)(kid1->vector[i]));} 
+	if (((float)(kid1->vector[i])) > ((float)(kid2->vector[i]))) diff = ((float)(kid1->vector[i])) - ((float)(kid2->vector[i]));
+	else diff = ((float)(kid2->vector[i])) - ((float)(kid1->vector[i]));
 	++el->contGenes; 
 	++gCount;
 	int index = i + 1; 
@@ -388,7 +382,6 @@ void colorLeaves(struct slRef *leafList)
 /* Assign colors of rainbow to leaves. */
     {
     float total = 0.0;
-    //double purplePos = 0.80;
     struct slRef *el, *nextEl;
 
     /* Loop through list once to figure out total, since we need to normalize */
@@ -422,18 +415,13 @@ void colorLeaves(struct slRef *leafList)
 	    bio1->color = whiteToBlackRainbowAtPos(normalized); 
 	    firstLine = FALSE;
 	    }
-	//if (distance != distance ) distance = 0 ;
-	//soFar += distance;
-	//double normalized = soFar/total;
 	double normalized = distance/total; 
 	if (normalized * 100 >= .95) bio2->color = whiteToBlackRainbowAtPos(.95);
 	else bio2->color = whiteToBlackRainbowAtPos(normalized*100); 
-	//bio2->color = saturatedRainbowAtPos(distance);
 	soFar += normalized;     
 	}
     /* Set first color to correspond to 0, since not set in above loop */
     struct bioExpVector *bio = leafList->val;
-    //bio->color = saturatedRainbowAtPos(0);
     bio->color = whiteToBlackRainbowAtPos(.95);
     }
 
@@ -485,7 +473,6 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     char *pageName = cloneString(jsonFile);
     chopSuffix(pageName);
     int textSize = 12 - log(nodeCount);  
-    //int radius = 540 + 270*log10(nodeCount);  
     int width = 10 * nodeCount; 
     int height = 10 * nodeCount; 
     int labelLength = 10+nameSize*(15-textSize);
@@ -493,7 +480,7 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
 
     fprintf(outputFile,"<!DOCTYPE html>\n"); 
     fprintf(outputFile,"<head>\n"); 
-    fprintf(outputFile,"<title>New dendrogram tests</title>\n"); 
+    fprintf(outputFile,"<title>%s</title>\n", pageName); 
     fprintf(outputFile,"<link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\">\n"); 
     fprintf(outputFile,"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n"); 
