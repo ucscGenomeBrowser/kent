@@ -76,14 +76,14 @@ while (faPepSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
     int displayIdLen = strlen(displayId);
 
     /* Do some tests. */
-    if (accLen < 6 || accLen > 8 || isdigit(acc[0]) || !isdigit(acc[accLen-1]))
+    if ((accLen != 6 && accLen != 10) || isdigit(acc[0]) || !isdigit(acc[accLen-1]))
         errAbort("wierd accession %s before line %d of %s", acc, lf->lineIx, lf->fileName);
     if (!isdigit(version[0]) || verLen > 4)
         errAbort("wierd version %s before line %d of %s", version, lf->lineIx, lf->fileName);
     if (countChars(displayId, '_') != 1 || displayIdLen < 6 || displayIdLen > 16)
         errAbort("wierd displayId %s before line %d of %s", displayId, lf->lineIx, lf->fileName);
     if (accLen + 1 + verLen >= sizeof(SpAcc))
-        errAbort("Need to increase size of SpAcc in spDb.h because of %s-%s", acc, version);
+        errAbort("Need to increase size of SpAcc in spDb.h because of %s-%s - need %d characters but only have %lu", acc, version, accLen + 1 + verLen, sizeof(SpAcc));
 
     /* Print out parsed results. */
     fprintf(varAcc, "%s-%s\t%s\t%s\n", acc, version, acc, version);
