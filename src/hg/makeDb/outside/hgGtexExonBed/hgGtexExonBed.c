@@ -114,7 +114,7 @@ int i;
 // Print trackDb
 fprintf(f, "track gtexExon\n");
 fprintf(f, "compositeTrack on\n");
-fprintf(f, "shortLabgel GTEx Exon\n");
+fprintf(f, "shortLabel GTEx Exon\n");
 fprintf(f, "longLabel  Exon Expression in 53 tissues from GTEx RNA-seq of 2921 samples (214 donors) \n");
 fprintf(f, "dragAndDrop subTracks\n");
 fprintf(f, "group expression\n");
