@@ -105,9 +105,11 @@ For automated download and analysis, the genome annotation is stored in a bigBed
 href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>. The files
 for this track are called <tt>patNonBulk.bb</tt> and <tt>patBulk.bb</tt>. Individual regions
 or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
-which is available as <a href="https://github.com/ucscGenomeBrowser/kent/">source code</a> and as a <a
-href="http://hgdownload.cse.ucsc.edu/admin/exe/">pre-compiled binary</a>. The command 
-to obtain the data as a tab-separated table looks like this:<BR>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions on downloading the source code or binary
+can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.<P>
+
+The command to obtain the data as a tab-separated table looks like this:<BR>
 <pre>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/patNonBulk.bb -chrom=chr5 -start=1000000 -end=2000000 output.tsv</pre>
 <!-- note for QA: the source code page in our help docs is not very helpful. We could use a better page -->
 A full log of the commands that were used to build this annotation is available
