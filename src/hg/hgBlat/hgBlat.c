@@ -570,7 +570,7 @@ if (seqList != NULL && seqList->name[0] == 0)
     }
 trimUniq(seqList);
 
-/* If feeling lucky only do the first on. */
+/* If feeling lucky only do the first one. */
 if(feelingLucky && seqList != NULL)
     {
     seqList->next = NULL;
