@@ -3465,6 +3465,10 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	if (rangeIntersection(winStart, winEnd, s, e) <= 0)
 	    continue;
 	tGap = e - s;
+        if (s < winStart)
+            s = winStart;
+        if (e > winEnd)
+            e = winEnd;
 	if (sf->qStart >= sf->next->qEnd)
 	    qGap = sf->qStart - sf->next->qEnd;
 	else
