@@ -2,20 +2,21 @@
 <P>This track shows genome matches to biomedical sequences submitted with patent application documents to
 patent offices around the world. The sequences, their mappings and selected
 patent information were gratefully provided by <a
-href="https://www.lens.org/lens/bio">PatSeq</a>, a search tool part of <a
-href="https://www.lens.org">The Lens</a>, <a href="http://www.cambia.org">Cambia</a>.</P>
+href="https://www.lens.org/lens/bio" target="_blank">PatSeq</a>, a search tool part of <a
+href="https://www.lens.org" target="_blank">The Lens</a>,
+<a href="http://www.cambia.org" target="_blank">Cambia</a>.</P>
 
-<p>This track contains more data than the NCBI Genbank Division "Patents", as the sequences were extracted from patents directly.</p>
+<p>This track contains more data than the NCBI Genbank Division &quot;Patents&quot;, as the sequences were extracted from patents directly.</p>
 
 <H2>Display Convention and Configuration</H2>
 
-<P>The data is split into two subtracks: one for sequences that are only part of patents that have submitted more than 100 sequences ("bulk patents")
-and a second track for all other sequences ("non-bulk patents").</P>
+<P>The data is split into two subtracks: one for sequences that are only part of patents that have submitted more than 100 sequences (&quot;bulk patents&quot;)
+and a second track for all other sequences (&quot;non-bulk patents&quot;).</P>
 
 <P>A sequence can be
 part of many patent documents, up to several thousands for some sequences. 
 This track shows only a single alignment for every sequence, colored based on
-its occurence in the different patent documents and using a color schema similar to <a href="https://www.lens.org">The Lens</a>.
+its occurence in the different patent documents and using a color schema similar to <a href="https://www.lens.org" target="_blank">The Lens</a>.
 
 <P>
 Based on the first sequence match, from top to bottom, the four different colours used follow this priority ranking:<BR>
@@ -28,7 +29,7 @@ Based on the first sequence match, from top to bottom, the four different colour
 </P>
 
 <P>Sequences referenced in the <a
-href="https://en.wikipedia.org/wiki/Patent_claim">claims</a> section of a
+href="https://en.wikipedia.org/wiki/Patent_claim" target="_blank">claims</a> section of a
 patent document define the scope of the invention and are important during
 litigation. Therefore, they are given priority in the color scheme. Patent
 grant documents form the basis of patent protection and are prioritized over
@@ -43,7 +44,7 @@ the mouse over.</P>
 <P>A click on a feature shows the details page with more information about the sequence
 of the alignment that was clicked. 
 The link at the top of the page opens the <a
-href="https://www.lens.org/lens/bio/patseqanalyzer">PatSeq Analyzer</a> with
+href="https://www.lens.org/lens/bio/patseqanalyzer" target="_blank">PatSeq Analyzer</a> with
 the chromosomal region covered by the feature that was clicked. PatSeq Analyzer
 is a specialized genome browser that allows viewing and filtering the patent
 sequence matches in detail.
@@ -62,7 +63,7 @@ The total number of sequences submitted with the patent document ("docSequenceCo
 shown in parentheses after the SEQIDNO. The links to the sequence are separated into the
 categories "granted and in claims", "granted", "in claims" and "applications"
 (=all others). Sequence identifiers link to the respective pages on <a
-href="https://www.lens.org/lens/bio">PatSeq</a>. A maximum of thirty documents
+href="https://www.lens.org/lens/bio" target="_blank">PatSeq</a>. A maximum of thirty documents
 are linked from this page per category; please use PatSeq Analyzer to view all
 matching documents.
 </P>
@@ -73,27 +74,35 @@ sequences are shown that have been referenced at least once in the claims.
 </P>
 
 <H2>Methods</H2>
-More than 96 million patent document files were collected by <a href="https://www.lens.org">The Lens</a>. 
-The <a href="http://web2.wipo.int/wipostad/en/standards/st25-en/1-0/view">ST.25</a>-formatted sequences were extracted 
+More than 96 million patent document files were collected by <a href="https://www.lens.org" target="_blank">The Lens</a>. 
+The <a href="http://web2.wipo.int/wipostad/en/standards/st25-en/1-0/view" target="_blank">ST.25</a>-formatted sequences were extracted 
 and mapped to genomes with the aligners BLAT and BWA. The minimal identity of the query over the alignment is 95%.
 
 <H2>Credits</H2>
-Thanks to the team behind <a href="https://www.lens.org">The Lens</a>, in particular 
-<a href="https://www.lens.org/about/team-members/cambia/">Osmat Jefferson and Deniz Koellhofer</a>,
+Thanks to the team behind <a href="https://www.lens.org" target="_blank">The Lens</a>, in particular 
+<a href="https://www.lens.org/about/team-members/cambia/" target="_blank">Osmat Jefferson and Deniz Koellhofer</a>,
 for making these data available.
 <P>
 
 <H2>Feedback</H2>
 Send suggestions on the way data in this track is visualized to our support
-address <a href="mailto:genome@soe.ucsc.edu">genome@soe.ucsc.edu</a>.
+address
+<A HREF="mailto:&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.
+&#117;&#99;&#115;&#99;.
+e&#100;&#117;">
+&#103;e&#110;&#111;&#109;e&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.e&#100;&#117;</A>.
+<!-- above address is genome at soe.ucsc.edu -->
 Questions on the data itself are best directed to <a
-href="mailto:support@cambia.org">support@cambia.org</a>.
+<A HREF="mailto:&#115;u&#112;&#112;&#111;&#114;&#116;&#64;&#99;&#97;&#109;&#98;&#105;a.
+o&#114;&#103;">
+&#115;u&#112;&#112;&#111;&#114;&#116;&#64;&#99;&#97;&#109;&#98;&#105;a.o&#114;&#103;</A>.
+<!-- above address is support at cambia.org -->
 </P>
 
 <H2>Data access</H2>
 The raw data can be explored interatively with the <a href="../cgi-bin/hgTables">Table Browser</a>.
 For automated download and analysis, the genome annotation is stored in a bigBed file that can be downloaded from <a
-href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/">our download server</a>. The files
+href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>. The files
 for this track are called <tt>patNonBulk.bb</tt> and <tt>patBulk.bb</tt>. Individual regions
 or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
 which is available as <a href="https://github.com/ucscGenomeBrowser/kent/">source code</a> and as a <a
@@ -110,20 +119,20 @@ build description</a>. In this text file, search for "patNonBulk" to find the ri
 <p>
 <a href="http://www.nature.com/news/the-patent-bargain-1.14333" target="_blank">
 Editorial: The patent bargain</a>
-<em>Nature</em> 504, 7479 (11 Dec 2013).
-</p>
-
-<p>
-Jefferson OA, Koellhofer D, Ehrich TH, Jefferson RA.
-<a href="http://www.nature.com/nbt/journal/v31/n12/full/nbt.2755.html" target="_blank">
-Transparency tools in gene patenting for informing policy and practice.</a>
-<em>Nat Biotechnol.</em>2013 Dec;31(12):1086-93. doi: 10.1038/nbt.2755.
-PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24316644" target="_blank">24316644</a>
+<em>Nature</em>. 2013 Dec 12;504(7479):187-188.
 </p>
 
 <p>
 <a href="http://www.nature.com/nbt/journal/v24/n5/full/nbt0506-474a.html" target="_blank">
-Patently transparent</a>
-<em>Nat Biotechnol.</em>2006 24:474
-PMID: <a href="https://www.ncbi.nlm.nih.gov/pubmed/16680110" target="_blank">16680110</a>
+Patently transparent</a>.
+<em>Nat Biotechnol</em>. 2006 May;24(5):474.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/16680110" target="_blank">16680110</a>
+</p>
+
+<p>
+Jefferson OA, K&#246;llhofer D, Ehrich TH, Jefferson RA.
+<a href="http://www.nature.com/nbt/journal/v31/n12/full/nbt.2755.html" target="_blank">
+Transparency tools in gene patenting for informing policy and practice</a>.
+<em>Nat Biotechnol</em>. 2013 Dec;31(12):1086-93.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24316644" target="_blank">24316644</a>
 </p>
