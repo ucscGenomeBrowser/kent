@@ -210,22 +210,14 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku galVar1) > do.log 2>&1
-XXX - running - Tue Mar  1 15:44:06 PST 2016
-    # real    481m50.689s
-
-    # broken cluster run due to sick machines, no real problem, it
-    # completed, continuing:
-    time  (doRepeatMasker.pl -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -continue=cat -smallClusterHub=ku galVar1) > cat.log 2>&1
-    #  real    61m1.143s
+    # real    920m31.663s
 
     cat faSize.rmsk.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1436601310 upper
-    #    1705490443 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %52.70 masked total, %54.28 masked real
+# 3187660572 bases (384823142 N's 2802837430 real 1720575153 upper
+#    1082262277 lower) in 179514 sequences in 1 files
+# Total size: mean 17757.2 sd 77110.0 min 309 (NW_007753091v1)
+#    max 3276566 (NW_007726111v1) median 913
+# %33.95 masked total, %38.61 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -233,8 +225,8 @@ XXX - running - Tue Mar  1 15:44:06 PST 2016
     # CC   RELEASE 20140131;
 
     time featureBits -countGaps galVar1 rmsk
-    # 1705908888 bases of 3236224332 (52.713%) in intersection
-    # real    2m52.924s
+    # 1082721915 bases of 3187660572 (33.966%) in intersection
+    # real    1m55.351s
 
     # why is it different than the faSize above ?
     # because rmsk masks out some N's as well as bases, the count above
@@ -243,8 +235,8 @@ XXX - running - Tue Mar  1 15:44:06 PST 2016
     # faster way to get the same result:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' galVar1 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1705908888.000000
-    # real    0m39.734s
+    # total 1082721915.000000
+    # real    0m36.946s
 
 ##########################################################################
 # running simple repeat (DONE - 2016-03-01 - Hiram)
@@ -254,11 +246,10 @@ XXX - running - Tue Mar  1 15:44:06 PST 2016
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         galVar1) > do.log 2>&1
-XXX - running - Tue Mar  1 15:44:34 PST 2016
-    # real    140m2.826s
+    # real    109m31.431s
 
     cat fb.simpleRepeat
-    # 298982788 bases of 3142093174 (9.515%) in intersection
+    # 106068577 bases of 2802917674 (3.784%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/galVar1
@@ -267,17 +258,17 @@ XXX - running - Tue Mar  1 15:44:34 PST 2016
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa galVar1.2bit stdout | faSize stdin > faSize.galVar1.2bit.txt
     cat faSize.galVar1.2bit.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1434869663 upper
-    #    1707222090 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %52.75 masked total, %54.33 masked real
+# 3187660572 bases (384823142 N's 2802837430 real 1719181078 upper
+#    1083656352 lower) in 179514 sequences in 1 files
+# Total size: mean 17757.2 sd 77110.0 min 309 (NW_007753091v1)
+#    max 3276566 (NW_007726111v1) median 913
+# %34.00 masked total, %38.66 masked real
 
     rm /gbdb/galVar1/galVar1.2bit
     ln -s `pwd`/galVar1.2bit /gbdb/galVar1/galVar1.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (DONE - 2016-02-10 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2016-03-04 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/galVar1/bed/microsat
     cd /cluster/data/galVar1/bed/microsat
@@ -288,27 +279,27 @@ XXX - running - Tue Mar  1 15:44:34 PST 2016
     hgLoadBed galVar1 microsat microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (DONE - 2016-02-02 - Hiram)
+## WINDOWMASKER (DONE - 2016-03-04 - Hiram)
 
     mkdir /hive/data/genomes/galVar1/bed/windowMasker
     cd /hive/data/genomes/galVar1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev galVar1) > do.log 2>&1
-    # real    665m37.329s
+    # real    639m26.741s
 
     # Masking statistics
     cat faSize.galVar1.cleanWMSdust.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1839176720 upper
-    #    1302915033 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %40.26 masked total, %41.47 masked real
+# 3187660572 bases (384823142 N's 2802837430 real 1884079862 upper
+#    918757568 lower) in 179514 sequences in 1 files
+# Total size: mean 17757.2 sd 77110.0 min 309 (NW_007753091v1)
+#    max 3276566 (NW_007726111v1) median 913
+# %28.82 masked total, %32.78 masked real
 
     cat fb.galVar1.rmsk.windowmaskerSdust.txt
-    # 1061810183 bases of 3236224332 (32.810%) in intersection
+    # 493373693 bases of 3187660572 (15.478%) in intersection
 
 ##########################################################################
-# cpgIslands - (DONE - 2016-02-04 - Hiram)
+# cpgIslands - (TBD - 2016-02-04 - Hiram)
     mkdir /hive/data/genomes/galVar1/bed/cpgIslands
     cd /hive/data/genomes/galVar1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
@@ -341,7 +332,7 @@ XXX - running - Tue Mar  1 15:45:09 PST 2016
     makeCytoBandIdeo.csh galVar1
 
 #########################################################################
-# genscan - (DONE - 2016-02-04 - Hiram)
+# genscan - (TBD - 2016-02-04 - Hiram)
     mkdir /hive/data/genomes/galVar1/bed/genscan
     cd /hive/data/genomes/galVar1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
@@ -359,7 +350,7 @@ XXX - running - Tue Mar  1 15:45:09 PST 2016
     # 52580737 bases of 3142093174 (1.673%) in intersection
 
 ########################################################################
-# Create kluster run files (DONE - 2016-02-03 - Hiram)
+# Create kluster run files (TBD - 2016-02-03 - Hiram)
 
     # numerator is galVar1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap galVar1 gap
@@ -392,7 +383,7 @@ XXX - running - Tue Mar  1 15:45:09 PST 2016
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2016-02-03,10 - Hiram)
+# GENBANK AUTO UPDATE (TBD - 2016-02-03,10 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -451,7 +442,7 @@ galVar1.upstreamGeneTbl = refGene
     make etc-update
 
 #############################################################################
-# augustus gene track (DONE - 2016-02-05 - Hiram)
+# augustus gene track (TBD - 2016-02-05 - Hiram)
 
     mkdir /hive/data/genomes/galVar1/bed/augustus
     cd /hive/data/genomes/galVar1/bed/augustus
@@ -461,52 +452,6 @@ galVar1.upstreamGeneTbl = refGene
 
     cat fb.galVar1.augustusGene.txt
     # 25248650 bases of 100286401 (25.177%) in intersection
-
-#########################################################################
-# LIFTOVER TO rheMac3 (DONE - 2016-02-05 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/galVar1/bed/blat.rheMac3.2016-02-05
-    cd /hive/data/genomes/galVar1/bed/blat.rheMac3.2016-02-05
-    doSameSpeciesLiftOver.pl -verbose=2 \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc \
-         galVar1 rheMac3
-    time (doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc \
-         galVar1 rheMac3) > doLiftOverToRheMac3.log 2>&1
-    # real    1015m0.435s
-
-    # see if the liftOver menus function in the browser from galVar1 to Mac3
-
-#########################################################################
-# LIFTOVER TO rheMac2 (DONE - 2016-02-05 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/galVar1/bed/blat.rheMac2.2016-02-05
-    cd /hive/data/genomes/galVar1/bed/blat.rheMac2.2016-02-05
-    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc \
-         galVar1 rheMac2
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc \
-         galVar1 rheMac2) > doLiftOverToRheMac2.log 2>&1
-    # real    873m23.446s
-    # failed cluster run, continuing with chain:
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc \
-         -continue=chain galVar1 rheMac2) > chain.log 2>&1
-    # real    31m30.389s
-
-    # see if the liftOver menus function in the browser from galVar1 to Mac2
-
-############################################################################
-## reset default position to rheMac3 position (DONE - 2016-02-09 - Hiram)
-    ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr14:63580522-63594072"
-	where name="galVar1";' hgcentraltest
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)

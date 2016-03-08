@@ -378,7 +378,7 @@ struct lm *localMem = lmInit(0);
 if (gThreadCount > 1)
     {
     clusters = hacTreeMultiThread(gThreadCount, (struct slList *)list, localMem,
-					    slBigWigDistance, slBigWigMerge, chromSizes, distanceHash);
+					    slBigWigDistance, slBigWigMerge, NULL, chromSizes, distanceHash);
     }
 else
     {

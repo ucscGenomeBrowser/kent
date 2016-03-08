@@ -439,8 +439,7 @@ searchPriority 3.53
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch3.ra beta,public
-include hg38Patch6.ra alpha
+include hg38Patch6.ra
 
 include knownGene.ra
 

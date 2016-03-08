@@ -111,3 +111,17 @@ priority 103.29
 	exonArrows off
 	showTopScorers 200
         priority 23
+
+track multizSnake
+shortLabel Snake Align
+longLabel Snake Alignments
+noInherit on
+irows on
+summary multizSnakeSummary
+frames multizSnakeFrames
+group x
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+speciesCodonDefault anoCar2
+speciesOrder thaSir0 pytBiv0 gekJap0

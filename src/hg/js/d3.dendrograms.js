@@ -30,7 +30,8 @@ d3.dendrogram.makeCartesianDendrogram(selector, nodes, options)
 				nodes children. 
 		  	diagonal
 				Function that creates the d attribute for an svg:path. Defaults to a
-				right-angle diagonal.
+				right-angle diagonal. To make the links smooth set diagonal to 
+				d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];})
 		  	skipTicks
 				Skip the background lines for context. 
 		  	skipBranchLengthScaling
@@ -64,7 +65,8 @@ d3.dendrogram.makeRadialDendrogram(selector, nodes, options)
 				nodes children. 
 		  	diagonal
 				Function that creates the d attribute for an svg:path. Defaults to a
-				right-angle diagonal.
+				right-angle diagonal. To make the links smooth set diagonal to 
+				d3.svg.diagonal.radial().projection(function(d){return [d.y, d.x / 180 * Math.PI];})
 		  	skipTicks
 				Skip the background lines for context. 
 		  	skipBranchLengthScaling
@@ -95,15 +97,22 @@ Internal functions:
 
 // The color alphabet that was proposed in "A Colour Alphabet and the Limits of Colour Coding" by Paul Green-Armytage 10 August 2010 
 // The color alphabet capitalizes the number of visibly unqiue colors. 
-var colorAlphabet = ["#015eff", "#fc0a18","#0cc402", "#aea7a5", "#ff15ae", "#d99f07", "#11a5fe", "#037e43", "#ba4455", "#d10aff", "#9354a6", "#7b6d2b", "#08bbbb", "#95b42d", "#b54e04", "#ee74ff", "#2d7593", "#e19772","#fa7fbe", "#fe035b", "#aea0db", "#905e76", "#92b27a", "#03c262"];
+var innerColorAlphabet = ["#015eff", "#fc0a18","#0cc402", "#aea7a5", "#ff15ae", "#d99f07", "#11a5fe", "#037e43","#ba4455", "#d10aff", "#9354a6", "#7b6d2b", "#08bbbb", "#95b42d", "#b54e04", "#ee74ff","#2d7593","#e19772","#fa7fbe", "#fe035b", "#aea0db", "#905e76", "#92b27a", "#03c262"];
 
+var middleColorAlphabet = ["#d10aff","#03c262","#d99f07","#7b6d2b","#2d7593","#7b6d2b", "#fe035b", "#aea0db","#ba4455","#9354a6","#08bbbb", "#95b42d", "#b54e04","#905e76", "#92b27a", "#ee74ff","#015eff", "#fc0a18","#0cc402", "#aea7a5", "#ff15ae", "#fa7fbe", "#11a5fe", "#037e43", "#e19772"];
+
+var outerColorAlphabet = ["#e19772","#2d7593","#fa7fbe", "#fe035b", "#aea0db", "#905e76", "#92b27a", "#03c262","#015eff", "#fc0a18","#0cc402", "#aea7a5", "#ff15ae", "#d99f07", "#11a5fe", "#037e43","#ba4455", "#d10aff", "#9354a6", "#7b6d2b", "#08bbbb", "#95b42d", "#b54e04", "#ee74ff"];
+
+// These are used for the distance legend, same legend used in the UCSC genome browser FAQ
+var distanceRange = ["#e2e2e2","#c6c6c6","#aaaaaa","#8d8d8d","#717171", "#555555", "#383838", "#1c1c1c", "#000000"];
+
+var distanceDomain = ["< 12.5% max distance", "12.5-25%", "25-37.5%","37.5-50%","50-62.5%", "62.5-75%", "75-87.5%", " > 87.5 % max distance"];
 
 if (!d3) { throw "d3 wasn't included!";}
 (function(){
 	
-	
 	d3.dendrogram = {}; 
-	var colors=d3.scale.category20().range(colorAlphabet); 
+	var colors; 
 	var legendRectSize=10;
 	var legendSpacing=3;
 	var currentLegend=-1;
@@ -139,7 +148,56 @@ if (!d3) { throw "d3 wasn't included!";}
 			};	
 		return diagonal;
 	  	};
-						
+	
+	d3.dendrogram.radialRightAngleDiagonal = function() {
+		return d3.dendrogram.rightAngleDiagonal()
+			.path(function(pathData) {
+				var src = pathData[0],
+					mid = pathData[1],
+					dst = pathData[2],
+					radius = Math.sqrt(src[0]*src[0] + src[1]*src[1]),
+					srcAngle = d3.dendrogram.coordinateToAngle(src, radius),
+					midAngle = d3.dendrogram.coordinateToAngle(mid, radius),
+					clockwise = Math.abs(midAngle - srcAngle) > Math.PI ? midAngle <= srcAngle : midAngle > srcAngle,
+					rotation = 0,
+					largeArc = 0,
+					sweep = clockwise ? 0 : 1;
+				return 'M' + src + ' ' +
+					"A" + [radius,radius] + ' ' + rotation + ' ' + largeArc+','+sweep + ' ' + mid +
+					'L' + dst;
+			})
+			.projection(function(d) {
+				var r = d.y, a = (d.x - 90) / 180 * Math.PI;
+				return [r * Math.cos(a), r * Math.sin(a)];
+			});
+	}; 
+
+	d3.dendrogram.coordinateToAngle = function(coord, radius) {
+		var wholeAngle = 2 * Math.PI,
+		quarterAngle = wholeAngle / 4;
+
+		var coordQuad = coord[0] >= 0 ? (coord[1] >= 0 ? 1 : 2) : (coord[1] >= 0 ? 4 : 3),
+		coordBaseAngle = Math.abs(Math.asin(coord[1] / radius));
+
+		// Since this is just based on the angle of the right triangle formed
+		// by the coordinate and the origin, each quad will have different 
+		// offsets
+		switch (coordQuad) {
+			case 1:
+				coordAngle = quarterAngle - coordBaseAngle;
+				break;
+			case 2:
+				coordAngle = quarterAngle + coordBaseAngle;
+				break;
+			case 3:
+				coordAngle = 2*quarterAngle + quarterAngle - coordBaseAngle;
+				break;
+			case 4:
+				coordAngle = 3*quarterAngle + coordBaseAngle;
+		}
+		return coordAngle;
+	};
+
 	function componentToHex(c) {
 		var hex = c.toString(16);
 		return hex.length == 1 ? "0" + hex : hex;
@@ -148,18 +206,54 @@ if (!d3) { throw "d3 wasn't included!";}
 	function rgbToHex(r, g, b) {
 		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 		}
-	
-	d3.dendrogram.leafColors = function(val, layer, shift,title, selector){
+
+	function capitalizeFirstLetter(string) {
+		return string.charAt(0).toUpperCase() + string.slice(1);
+	}
+
+	var prevInBut, prevMidBut, prevOutBut; 
+
+	d3.dendrogram.leafColors = function(val, layer, shift, title, selector, offset){
 		
 		var vis = d3.select(selector).select("svg").select("g").selectAll("g.leaf");
 		var first = 1;
 		var node = vis.selectAll("g."+ layer + "Leaf");
-		//var node = vis.selectAll(layer + "Leaf");
 		
+		if (layer == "inner")
+			{
+			colors = d3.scale.category20().range(innerColorAlphabet);
+			if (prevInBut) prevInBut.style("background", "rgb(239,239,239)");
+			} 
+		if (layer == "middle")
+			{
+			colors = d3.scale.category20().range(middleColorAlphabet);
+			if (prevMidBut) prevMidBut.style("background", "rgb(239,239,239)");
+			} 
+		if (layer == "outer")
+			{
+			colors = d3.scale.category20().range(outerColorAlphabet);
+			if (prevOutBut) prevOutBut.style("background", "rgb(239,239,239)");
+			}
+		
+		var ringName;
+		if (title.length > 20) ringName = capitalizeFirstLetter(title).substring(0,19)+"...";
+		else ringName = capitalizeFirstLetter(title); 
 
-		colors=d3.scale.category20().range(colorAlphabet); 
+		d3.select("#"+layer+"Dropdown").html(capitalizeFirstLetter(layer)+" ring: " + ringName);
 
-		node.selectAll("circle")
+		if (val == -1)  d3.select("#"+layer+"Dropdown").html(capitalizeFirstLetter(layer) + " ring"); 
+		
+		if (!d3.select("#"+layer+"RemoveButton")[0][0]){
+			addLeafButton("Remove", -1, layer, 10, '#'+layer+'DendroLeaves', selector, offset);
+			}
+		if (layer == "inner") prevInBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
+		if (layer == "middle") prevMidBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
+		if (layer == "outer") prevOutBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
+		
+		d3.select("#"+layer+capitalizeFirstLetter(title).replace("_", "")+"Button").selectAll("button")	
+			.style("background","cornflowerblue"); 
+
+		node.selectAll("polygon")
 			.style("fill", function(d){
 				// This block links the extra leaf json fields to a specific value (count). This value
 				// is provided when the buttons are written in the main function. 
@@ -168,12 +262,14 @@ if (!d3) { throw "d3 wasn't included!";}
 						{ 
 						vis.selectAll("text."+layer+"LegendTitle").remove(); 
 						vis.selectAll("text."+layer+"LegendTitleLabel").remove(); 
+						colors = d3.scale.category20().range(distanceRange).domain(distanceDomain); 
 						return d3.rgb(d.colorGroup);
 						}
 					if (val==-1)
 						{
 						vis.selectAll("text."+layer+"LegendTitle").remove(); 
 						vis.selectAll("text."+layer+"LegendTitleLabel").remove(); 
+						d3.select("#"+layer+"RemoveButton").remove();
 						return "none";
 						}
 					var count = 0;
@@ -196,31 +292,38 @@ if (!d3) { throw "d3 wasn't included!";}
 					}
 					else{return 'none';}
 				})
-		.style("stroke-width", ".1px") 
-		.attr("transform","translate(" + shift + "," + 0 + ")");
+		.style("stroke-width", ".2px") 
+		.attr("transform", "rotate(270)translate("+(-offset)+","+shift+")"); 
+		
 		updateLegend(colors.domain(), layer, (d3.select(selector).select("svg.legendSvg").select("g")), title, shift);
 		colors=d3.scale.category20();
 		};
 	
+	
 	d3.dendrogram.nodeColors = function(val, selector){
 		var vis = d3.select(selector).selectAll("svg");
-		var node=vis.selectAll("g.internalNode").selectAll("circle")
-		.style("fill",function(d){
-			if (d.name === " "){
-				if (val==2) return d3.rgb(d.whiteToBlack);
-				if (val==5) return d3.rgb(d.whiteToBlack);
-				if (val==3) return d3.rgb(d.whiteToBlackSqrt);
-				if (val==4) return d3.rgb(d.whiteToBlackQuad);
-				}
-			})
-		.attr("r", function(d){
-			if (d.name === " "){
-				if (val ==5) return 1; 	
-				else return 1 + Math.sqrt(d.kids);
-				}
-			}) 
-		;
-		};
+		var node=vis.selectAll("g.internalNode").selectAll("circle");
+		if (val < 6)
+			{
+			node.attr("r", function(d){
+				if (d.name === " "){
+					if (val == 2) return Math.sqrt(d.kids-1);
+					if (val == 3) return 1; 	
+					if (val == 4) return 3; 	
+					if (val == 5) return 5; 	
+					}
+				});
+			}
+		if (val > 5)
+			{
+			var link = vis.selectAll("path.link")
+				.attr("stroke-width", function(d){
+					if (val == 6) return ".04px"; 
+					if (val == 7) return ".2px"; 
+					if (val == 8) return "1px"; 
+					}); 
+			}
+		}; 
 	
 	updateLegend = function(val, layer, vis, title, shift){
 		// Remove the old legend, title and label.  
@@ -232,7 +335,7 @@ if (!d3) { throw "d3 wasn't included!";}
 		var legend=vis.selectAll('g.'+layer+'Legend').data(val); // Define the DOM elements
 		var horz, vert;
 		var first = 1; // Use this as a boolean to only draw the title and label one time. 
-		var viewerWidth = $(document).width();	// Scale to fit width
+		var viewerWidth = $(document).width()/3;	// Scale to fit width
 		var viewerHeight = $(document).height();  // Scale to fit height
 		
 		legend.enter() // Fill out the DOM elements 
@@ -241,27 +344,27 @@ if (!d3) { throw "d3 wasn't included!";}
 				.attr('transform', function (d, i){
 					var height=legendRectSize + legendSpacing;
 					var offset= height * colors.domain().length / 2; 
-					vert = (i * height - offset)+ (radius*(1/2)) + 80; // All legends are the same height, the width location varies	
+					vert = (i * height - offset) + (radius*(1/2)) ; // All legends are the same height, the width location varies	
 					// Asign the legend width for each ring, scale to fit. 
-					if (layer=="inner") horz= (viewerWidth*(1/35)); 
-					if (layer=="middle") horz= (viewerWidth*(3/35)); 
-					if (layer=="outer") horz= (viewerWidth*(5/35)); 
+					if (layer=="inner") horz= 20 ; //(viewerWidth*(1/37)) - 15; 
+					if (layer=="middle") horz= 40 + viewerWidth/3; 
+					if (layer=="outer") horz= 60 + 2*viewerWidth/3; 
 					if (first)
 						{
 						vis.append("text")// The layer, this is either 'inner', 'middle', or 'outer'.  
 							.attr('class',layer+'LegendTitle')
 							.style("font-size","16px")
 							.style("font-weight","bold")
-							.attr("transform", "translate(" + (horz-45) + "," + (vert-35)+ ")")
+							.attr("transform", "translate(" + (horz-15) + "," + (vert-35)+ ")")
 							.attr('x', legendRectSize + legendSpacing)
 							.attr('y', legendRectSize - legendSpacing)
-							.text(layer); 
+							.text(capitalizeFirstLetter(layer)); 
 
 						vis.append("text")// The title, this is mined from the meta data
 							.attr('class',layer+'LegendLabel')
 							.style("font-size","16px")
 							.style("font-weight","bold")
-							.attr("transform", "translate(" + (horz-45) + "," + (vert-15)+ ")")
+							.attr("transform", "translate(" + (horz-15) + "," + (vert-15)+ ")")
 							.attr('x', legendRectSize + legendSpacing)
 							.attr('y', legendRectSize - legendSpacing)
 						
@@ -321,9 +424,18 @@ if (!d3) { throw "d3 wasn't included!";}
 	//
 	// The addLeafButton function is used within this program to write buttons, the buttons themselves use the globally available 
 	// functions d3.dendrogram.leafColors and d3.dendrogram.nodeColors to apply the colors.  Note that these buttons exist only when the 
-	// program is being run, they are not present in the basic html.  
-	addLeafButton = function (title, count, layer, shift, dropdownSelector, graph) {
-		var leafButton = "<button onclick=\"d3.dendrogram.leafColors("+count+",\'"+layer+"\',"+shift+", \'"+title+"\', \'"+graph+"\')\">"+title+"</button>"; 
+	// program is being run, they are not present in the basic html.  This gets relatively dense fairly quickly.  
+	addLeafButton = function (title, count, layer, shift, dropdownSelector, graph, offset) {
+	var nameTag;
+
+	if (typeof title === 'string' && title.length > 20) nameTag =  capitalizeFirstLetter(title.substring(0,19)+"...");
+	else nameTag = capitalizeFirstLetter(title); 
+
+	var divId = layer+capitalizeFirstLetter(title).replace("_","");  // Divs break with underscores, probably other things too... 
+
+	var options = count+",\'"+layer+"\',"+shift+", \'"+title+"\',\'"+graph+ "\',"+ offset; 
+
+	var leafButton = "<div id=\""+divId+"Button\"</div><button onclick=\"d3.dendrogram.leafColors("+options+")\">"+nameTag+"</button>"; 
 		d3.select(dropdownSelector).append("li")
 		    .html(leafButton); 
 	};
@@ -334,33 +446,73 @@ if (!d3) { throw "d3 wasn't included!";}
 
 	// This is the first function that is run, it creates the dropdown skeleton which is populated at a later point. 
 	makeDropdownSkeleton = function (treeType){
-
-		var dropdown = d3.select("#dropdown").append("ul").attr("style","list-style-type:none;display:inline-flex");
+	// Generate the html buttons, use a base anchor '#dropdown' and append everything to that. 
+		var dropdown = d3.select("#dropdown").append("ul")	// Make a list of the dropdown buttons. 
+			.attr("style","list-style-type:none;display:inline-flex");
+		
 		d3.select("#dropdown").attr("style","position:fixed;z-index:2"); 		
 
 		if (treeType == "Dendro"){
-			var interiorNodeDropdown = dropdown.append("li").attr("class","dropdown");
-				interiorNodeDropdown.append("button").attr("class","btn btn-default dropdown-toggle")
-					.attr("type", "button").attr("data-toggle","dropdown").html("Inner "+treeType+" nodes").append("span").attr("class","caret"); 
-				interiorNodeDropdown.append("ul").attr("class","dropdown-menu").html("<div id=interiorDendroNodes </div>"); 
+			var interiorNodeDropdown = dropdown.append("li")// Add an element to the list of dropdown buttons 
+				.attr("class","dropdown");
+				
+			interiorNodeDropdown.append("button")	// The element is also a button 
+					.attr("class","btn btn-default dropdown-toggle") // and a dropdown list  
+					.attr("type", "button")	// of buttons. 
+					.attr("data-toggle","dropdown")	
+					.html("General control panel")	// Name the button 
+					.append("span").attr("class","caret"); // Give the button a carot. 
+				
+			interiorNodeDropdown.append("ul")
+				.attr("class","dropdown-menu")
+				.html("<div id=interiorDendroNodes </div>"); // Identify the button. 
 			}
 		
 		var innerDropdown = dropdown.append("li").attr("class","dropdown");
-			innerDropdown.append("button").attr("class","btn btn-default dropdown-toggle")
-				.attr("type", "button").attr("data-toggle","dropdown").html("Inner "+treeType+" leaves").append("span").attr("class","caret"); 
-			innerDropdown.append("ul").attr("class","dropdown-menu").html("<div id=inner"+treeType+"Leaves </div>"); 
+			
+		innerDropdown.append("button")
+			.attr("id", "innerDropdown")	//Identify a different part of the button so that it can be renamed
+			.attr("class","btn btn-default dropdown-toggle")
+			.attr("type", "button")
+			.attr("data-toggle","dropdown")
+			.html("Inner ring")
+			.append("span")
+				.attr("class","caret"); 
+			
+		innerDropdown.append("ul")
+			.attr("class","dropdown-menu")
+			.html("<div id=inner"+treeType+"Leaves </div>"); 
 		
-		var middleDropdown = dropdown.append("li").attr("class","dropdown");
-			middleDropdown.append("button").attr("class","btn btn-default dropdown-toggle")
-				.attr("type", "button").attr("data-toggle","dropdown").html("Middle "+treeType+"  leaves").append("span").attr("class","caret"); 
-			middleDropdown.append("ul").attr("class","dropdown-menu").html("<div id=middle"+treeType+"Leaves </div>"); 
+		var middleDropdown = dropdown.append("li")
+			.attr("class","dropdown");
+		
+		middleDropdown.append("button")
+			.attr("id", "middleDropdown")
+			.attr("class","btn btn-default dropdown-toggle")
+			.attr("type", "button")
+			.attr("data-toggle","dropdown")
+			.html("Middle ring")
+			.append("span")
+				.attr("class","caret"); 
+		
+		middleDropdown.append("ul")
+			.attr("class","dropdown-menu")
+			.html("<div id=middle"+treeType+"Leaves </div>"); 
 		
 		var outerDropdown = dropdown.append("li").attr("class","dropdown");
-			outerDropdown.append("button").attr("class","btn btn-default dropdown-toggle")
-				.attr("type", "button").attr("data-toggle","dropdown").html("Outer "+treeType+" leaves").append("span").attr("class","caret"); 
-			outerDropdown.append("ul").attr("class","dropdown-menu").html("<div id=outer"+treeType+"Leaves </div>"); 
-	
-	
+			
+		outerDropdown.append("button")
+			.attr("id", "outerDropdown")
+			.attr("class","btn btn-default dropdown-toggle")
+			.attr("type", "button")
+			.attr("data-toggle","dropdown")
+			.html("Outer ring")
+			.append("span")
+				.attr("class","caret"); 
+			
+		outerDropdown.append("ul")
+			.attr("class","dropdown-menu")
+			.html("<div id=outer"+treeType+"Leaves </div>"); 
 		};
 
 	// This function generates the cartesian dendrogram (flat).  
@@ -480,9 +632,9 @@ if (!d3) { throw "d3 wasn't included!";}
 										{
 										if (key != "x" && key!="y" && key!= "name" && key!="kids" && key!="length" && key!="colorGroup" && key!="parent" && key!="depth" && key!="rootDist")
 											{
-											addLeafButton(key, count, 'inner', 0, '#innerPhyloLeaves', '#phylogram') ;
-											addLeafButton(key, count, 'middle', 0, '#middlePhyloLeaves', '#phylogram'); 
-											addLeafButton(key, count, 'outer', 0, '#outerPhyloLeaves', '#phylogram'); 
+											addLeafButton(key, count, 'inner', 0, '#innerPhyloLeaves', '#phylogram', 0) ;
+											addLeafButton(key, count, 'middle', 0, '#middlePhyloLeaves', '#phylogram', 0); 
+											addLeafButton(key, count, 'outer', 0, '#outerPhyloLeaves', '#phylogram', 0); 
 											}
 										}
 										count += 1;
@@ -497,7 +649,7 @@ if (!d3) { throw "d3 wasn't included!";}
 		var innerLeaves = svgGroup.selectAll("g.innerLeaf")
 			.append("circle")
 				.attr("r", '3') 
-				.style("fil", 'none');
+				.style("fill", 'none');
 		
 		var middleLeaves = svgGroup.selectAll("g.middleLeaf")
 			.data(nodes)
@@ -587,22 +739,27 @@ if (!d3) { throw "d3 wasn't included!";}
 		
 		radius = (calc -50)/ 2; // Global for the legend placement. See function updateLegend.
 		var tree = options.tree || d3.layout.cluster()
-			.size([360, radius - 45]);
+			.size([360, radius - 45])
+			.separation(function separation(a, b) {
+				return (a.parent == b.parent ? 1 : 1) ; // Evenly place leaf nodes 
+				});
 		
 		
-		var zoomListener = d3.behavior.zoom().scaleExtent([1, 6])
+		var zoomListener = d3.behavior.zoom().scaleExtent([1, 10]) // Let the user zoom up to 10x 
 			.on("zoom", zoom); 
 		
-		var diagonal=d3.svg.diagonal.radial()
-			.projection(function(d){return [d.y, d.x / 180 * Math.PI];});
 		
+		var diagonal = options.diagonal || d3.dendrogram.radialRightAngleDiagonal(); // Makes links right angled. 
+
+		var scaling = options.scaling || 1; 
 		var width =  viewerWidth -25,
 			height = viewerHeight - 50; 
 
-		var metaHorz = (viewerWidth)/8,
-			metaVert = 6*(viewerHeight)/8; 
+		var metaHorz = (viewerWidth)/20,
+			metaVert = 1*(viewerHeight)/2; 
 		
 		var vis = options.vis || d3.select(selector)
+			.attr("style", "display:inline-flex") 
 			.append("svg")
 				.attr("width", 3*width/5 )
 				.attr("height", height)
@@ -611,10 +768,12 @@ if (!d3) { throw "d3 wasn't included!";}
 		
 		var legendVis = options.vis || d3.select(selector)
 			.append("svg")
+			.style("background","rgb(239,239,239)")
 			.attr("class", "legendSvg")
 			.attr("width", 2*width/5)
 			.attr("height", height); 
-
+		
+		// Append a rectangle to the page for the dendrogram, let it take up 2/3 the width
 		vis.append ("rect")
 			.attr("width", 3*width/5)
 			.attr("height", height)
@@ -622,7 +781,8 @@ if (!d3) { throw "d3 wasn't included!";}
 			.style("stroke","black")
 			.style("stroke-width","5")
 			.style("opacity","0.5");
-		  
+		
+		// Append a rectangle to the page for the legends, let it take up 1/3 the width
 		legendVis.append ("rect")
 			.attr("width", 2*width/5)
 			.attr("height", height)
@@ -655,34 +815,44 @@ if (!d3) { throw "d3 wasn't included!";}
 				.attr("class", "link")
 				.attr("fill", "none")
 				.attr("stroke", "black")
-				.attr("stroke-width", ".1px")
+				.attr("stroke-width", ".2px")
 				.attr("d", diagonal); 	
-		
+	
 		makeDropdownSkeleton("Dendro"); //Looks for the div 'dropdown' and generates the outer list and buttons
 		// For the radial display the interior node color options are constant (calculated on the backend in the C code)
-		addLeafButton("Remove ring", -1, 'inner', 10, '#innerDendroLeaves', '#dendrogram'); 
-		addLeafButton("Remove ring", -1, 'middle', 15, '#middleDendroLeaves', '#dendrogram'); 
-		addLeafButton("Remove ring", -1, 'outer', 20, '#outerDendroLeaves', '#dendrogram') ;
-		addLeafButton("Distance", 1, 'inner', 10, '#innerDendroLeaves', '#dendrogram'); 
-		addLeafButton("Distance", 1, 'middle', 15, '#middleDendroLeaves', '#dendrogram'); 
-		addLeafButton("Distance", 1, 'outer', 20, '#outerDendroLeaves', '#dendrogram') ;
-		
-		addNodeButton("#interiorDendroNodes" ,2, selector, "Tpm distance"); 
-		addNodeButton("#interiorDendroNodes" ,3, selector, "Square root tpm distance"); 
-		addNodeButton("#interiorDendroNodes" ,4, selector, "Quad root tpm distance"); 
-		addNodeButton("#interiorDendroNodes" ,5, selector, "Make nodes smaller"); 
+		addNodeButton("#interiorDendroNodes" ,2, selector, "Node size: sqrt(kids)"); 
+		addNodeButton("#interiorDendroNodes" ,3, selector, "Node size: small"); 
+		addNodeButton("#interiorDendroNodes" ,4, selector, "Node size: normal"); 
+		addNodeButton("#interiorDendroNodes" ,5, selector, "Node size: large"); 
+		addNodeButton("#interiorDendroNodes" ,6, selector, "Link width: thin"); 
+		addNodeButton("#interiorDendroNodes" ,7, selector, "Link width: normal"); 
+		addNodeButton("#interiorDendroNodes" ,8, selector, "Link width: thick"); 
 					
 		var first = 1; 
-
+		var leafCount; 
 
 		// These are true nodes in the sense that they are actually calculated and defined, 
 		// however this code is not repsonsible for the actual visuale representation. This
 		// block only handles the backend DOM construction, the shapes and colors are assigned later. 
+		var innerOffset, middleOffset, outerOffset, rawOffset; 
+		var inR=6, midR=13, outR=20; 
+
+
 		var trueNodes = svgGroup.selectAll("g")
 			.data(nodes).enter()
 			.append("g")
 				.attr("class", function(n) {
-			  		if (n.children) {
+					if (n.depth===0){
+						leafCount = n.kids; 
+						rawOffset = Math.PI*2*(radius)/(parseInt(leafCount)*3); 
+						innerOffset =  Math.PI*2*(radius+inR)/(parseInt((leafCount*(scaling))*2)); 
+						middleOffset =  Math.PI*2*(radius+midR)/(parseInt((leafCount*(scaling))*2)); 
+						outerOffset =   Math.PI*2*(radius+outR)/(parseInt((leafCount*(scaling))*2)); 
+						addLeafButton("Distance", 1, 'inner', inR, '#innerDendroLeaves', '#dendrogram', innerOffset); 
+						addLeafButton("Distance", 1, 'middle', midR, '#middleDendroLeaves', '#dendrogram', middleOffset); 
+						addLeafButton("Distance", 1, 'outer', outR, '#outerDendroLeaves', '#dendrogram', outerOffset) ;
+						}
+					if (n.children) {
 				  		return "internalNode";
 						}
 					else{
@@ -692,9 +862,9 @@ if (!d3) { throw "d3 wasn't included!";}
 								if (n.hasOwnProperty(key)) { 
 								// Give each dropdown button a bunch of options. 
 									if (key != "x" && key!="y" && key!= "name" && key!="kids" && key!="length" && key!="colorGroup" && key!="parent" && key!="depth" && key!="rootDist"){
-										addLeafButton(key, count, 'inner', 10, '#innerDendroLeaves', '#dendrogram'); 
-										addLeafButton(key, count, 'middle', 15, '#middleDendroLeaves', '#dendrogram'); 
-										addLeafButton(key, count, 'outer', 20, '#outerDendroLeaves', '#dendrogram') ;
+										addLeafButton(capitalizeFirstLetter(key), count, 'inner', inR, '#innerDendroLeaves', '#dendrogram', innerOffset); 
+										addLeafButton(capitalizeFirstLetter(key), count, 'middle', midR, '#middleDendroLeaves', '#dendrogram', middleOffset); 
+										addLeafButton(capitalizeFirstLetter(key), count, 'outer', outR, '#outerDendroLeaves', '#dendrogram', outerOffset);
 										}
 									}
 								count += 1;
@@ -706,8 +876,17 @@ if (!d3) { throw "d3 wasn't included!";}
 					})
 				.attr("transform", function(d){return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")";});
 		
-
-
+		function makePoints(n, k)
+			// Calculate the points for the polygon's. The Y value is automatically cast to 5, ie it will be 5
+			// pixels long. K is assumed to be the big end, while n is assumed to be the little end.  
+			{
+			var point1, point2, point4; 
+			point1 = (String((k-n)/2) + ",0").replace(" ", "");
+			point2 = (String((k+n)/2) + ",0").replace(" ", ""); 
+			point4 = (String(k) + ",7").replace(" ", ""); 
+			return(point2  + " " + point1 + " 0,7 "  + point4); 
+			}
+		
 		// This section handles the internal node visual representation, including the node initial size/color
 		// and the tooltips (on click visualizations) 
 		var filled = 1; 
@@ -716,7 +895,7 @@ if (!d3) { throw "d3 wasn't included!";}
 			.append("circle")
 				.attr("r", function(d){ // Handle node size
 					if (d.name==" "){
-					return 1 + Math.sqrt(d.kids);}
+					return Math.sqrt(d.kids-1);}
 					else{return 0;}
 					})
 				.style("fill", function(d){ // Handle node color 
@@ -725,41 +904,44 @@ if (!d3) { throw "d3 wasn't included!";}
 				.on("click", function(d) { // Tooltip stuffs
 					d3.select(this).style("fill", "red"); 
 					if (filled == 2) {
-						if (prevSel2.name==" "){prevSel.style("fill", prevSel2.whiteToBlack);}
-						else{prevSel.style("fill", "white");}
+						if (d3.select(this) != prevSel && d3.select(this) != prevSel2 && d != prevSel && d != prevSel2)
+							{
+							if (prevSel2.name==" "){prevSel.style("fill", prevSel2.whiteToBlack);}
+							else{prevSel.style("fill", "white");}
+							}
 						} 
 					tooltip.transition()
 					.duration(200)
 					.style("opacity", 0.9);
 					result = "<table border=\"1\">"; // Make the tooltip a table, the first section is the basic meta data
 					count = 1;
-					result = result +"<tr><td colspan=\"4\" style=\"font-weight:bold;font-size:14px;text-align:center\">Node meta data</td>"; 
+					result = result +"<tr><td colspan=\"4\" style=\"font-weight:bold;font-size:16px;text-align:center\">Node meta data</td>"; 
 					for (var key in d) {
 						if (d.hasOwnProperty(key)) {
 							if (key == "number" || key == "rootDist" || key == "kids" || key == "tpmDistance" || key == "length" || key == "contGenes" || key == "normalizedDistance" || key == "depth")
 								{
 								if (count == 1){
 									count = 2; 
-									result = result +"<tr><td style=\"font-weight:bold;font-size:10px;\">" + key + "</td><td style=\"font-weight:bold;font-size:10px;\">" + d[key] + "</td>"; 
+									result = result +"<tr><td style=\"font-weight:bold;font-size:12px;\">" + (key)+ "</td><td style=\"font-weight:bold;font-size:12px;\">" + (d[key]) + "</td>"; 
 									}
 								else{
 									count = 1; 
-									result = result +"<td style=\"font-weight:bold;font-size:10px;\">" + key + "</td><td style=\"font-weight:bold;font-size:10px;\">" + d[key] + "</td></tr>"; 
+									result = result +"<td style=\"font-weight:bold;font-size:12px;\">" + (key) + "</td><td style=\"font-weight:bold;font-size:12px;\">" + (d[key]) + "</td></tr>"; 
 									}
 								}
 							}
 						}
 					count = 1;
 					// This section handles the tooltip representation for the top contributing genes.  
-					result = result +"<tr><td colspan=\"2\" style=\"font-weight:bold;font-size:14px\">Top 10 contributing genes </td><td colspan=\"2\" style=\"font-weight:bold;font-size:14px\">TPM value contributed</td>"; 
+					result = result +"<tr><td colspan=\"2\" style=\"font-weight:bold;font-size:16px\">Top 10 contributing genes </td><td colspan=\"2\" style=\"font-weight:bold;font-size:16px\">TPM value contributed</td>"; 
 					for (var n in d.geneList){
 						if (count == 1){
 							count = 2; 
-							result = result +"<tr><td style=\"font-weight:bold;font-size:10px\">" + n + "</td><td style=\"font-weight:bold;font-size:10px\">" + d.geneList[n] + "</td>"; 
+							result = result +"<tr><td style=\"font-weight:bold;font-size:12px\">" + n + "</td><td style=\"font-weight:bold;font-size:12px\">" + d.geneList[n] + "</td>"; 
 							}
 						else{
 							count = 1; 
-							result = result +"<td style=\"font-weight:bold;font-size:10px\">" + n + "</td><td style=\"font-weight:bold;font-size:10px\">" + d.geneList[n] + "</td></tr>"; 
+							result = result +"<td style=\"font-weight:bold;font-size:12px\">" + n + "</td><td style=\"font-weight:bold;font-size:12px\">" + d.geneList[n] + "</td></tr>"; 
 							}
 						}
 					result = result + "</table"; 
@@ -778,82 +960,95 @@ if (!d3) { throw "d3 wasn't included!";}
 		leaves
 			.append("g")
 			.attr("class", "trueLeaf")
-			.append("circle")
-			.attr("r", function(d){
-				if (d.name !==" "){return 1;}})
-			.style("fill", function(d){
-				if (d.name ==" "){return "d.whiteToBlack";}
-				else { return "white";}
-				})
-			.style("stroke", "black")
-			.style("stroke-width", ".1px")
-			.on("click", function(d) {
-				d3.select(this).style("fill", "red"); 
-				if (filled == 2)
-					{
-					if (prevSel2.name==" "){prevSel.style("fill", prevSel2.whiteToBlack);}
-					else{prevSel.style("fill", "white");}
-					}
-				tooltip.transition()
-				.duration(200)
-				.style("opacity", 0.9);
-				result = "<table border=\"1\">";  
-				count = 1;
-				result = result +"<tr><td colspan=\"4\" style=\"font-weight:bold;font-size:14px;text-align:center\">Leaf meta data</td>"; 
-				for (var key in d) {
-					if (d.hasOwnProperty(key)) {
-						if (key != "x" && key!="y" && key!="kids" && key!="colorGroup" && key!="parent")
+			.append("polygon")
+				.style("fill","none")
+				.attr("points", makePoints(Math.PI*2*radius/(leafCount*(3/2)), Math.PI*2*(radius+5)/(leafCount*(3/2))))
+				.style("fill", "white")
+				.style("stroke", "black")
+				.style("stroke-width", ".1px")
+				// Leaves tooltip 	
+				.on("click", function(d) {
+					d3.select(this).style("fill", "red"); 
+					if (filled == 2)
+						{
+						if (d3.select(this) != prevSel && d3.select(this) != prevSel2 && d != prevSel && d != prevSel2)
 							{
-							var sub1 = key, sub2 = d[key]; 
-							if (typeof key === 'string' && key.length > 20)
+							if (prevSel2.name==" ")
 								{
-								sub1 = key.substring(0,19)+"...";
+								prevSel.style("fill", prevSel2.whiteToBlack);
 								}
-							if (typeof d[key] === 'string' && d[key].length > 20)
+							else
 								{
-								sub2 = d[key].substring(0,19)+"...";
-								}
-							if (count == 1){
-								count = 2; 
-								result = result +"<tr><td style=\"font-weight:bold;font-size:10px;\">" + sub1 + "</td><td style=\"font-weight:bold;font-size:10px;\">" + sub2 + "</td>"; 
-								}
-							else{
-								count = 1; 
-								result = result +"<td style=\"font-weight:bold;font-size:10px;\">" + sub1 + "</td><td style=\"font-weight:bold;font-size:10px;\">" + sub2 + "</td></tr>"; 
+								prevSel.style("fill", "white");
 								}
 							}
 						}
-					}
-				result = result + "</table"; 
-				tooltip.html(result)
-				.style("right", metaHorz + "px")
-				.style("top", metaVert + "px"); 
-				filled = 2;
-				prevSel = d3.select(this); 
-				prevSel2 = d; 
-				});
+					tooltip.transition()
+					.duration(200)
+					.style("opacity", 0.9);
+					result = "<table border=\"1\">";  
+					count = 1;
+					result = result +"<tr><td colspan=\"4\" style=\"font-weight:bold;font-size:16px;text-align:center\">Leaf meta data</td>"; 
+					for (var key in d) {
+						if (d.hasOwnProperty(key)) {
+							if (key != "x" && key!="y" && key!="kids" && key!="colorGroup" && key!="parent")
+								{
+								var sub1 = key, sub2 = d[key]; 
+								if (typeof key === 'string' && key.length > 12)
+									{
+									sub1 = capitalizeFirstLetter(key.substring(0,10)+"...");
+									}
+								if (typeof d[key] === 'string' && d[key].length > 20)
+									{
+									sub2 = capitalizeFirstLetter(d[key].substring(0,19)+"...");
+									}
+								if (count == 1){
+									count = 2; 
+									result = result +"<tr><td style=\"font-weight:bold;font-size:12px;\">" + sub1 + "</td><td style=\"font-weight:bold;font-size:12px;\">" + sub2 + "</td>"; 
+									}
+								else{
+									count = 1; 
+									result = result +"<td style=\"font-weight:bold;font-size:12px;\">" + sub1 + "</td><td style=\"font-weight:bold;font-size:12px;\">" + sub2 + "</td></tr>"; 
+									}
+								}
+							}
+						}
+					result = result + "</table"; 
+					tooltip.html(result)
+					.style("right", metaHorz + "px")
+					.style("top", metaVert + "px"); 
+					filled = 2;
+					prevSel = d3.select(this); 
+					prevSel2 = d; 
+					})
+				.attr("transform", "rotate(270)translate("+(-rawOffset)+",1)"); 
 
 		leaves
 			.append("g")
-			.attr("class", "outerLeaf")
-			.append("circle")
-				.attr("r", 2)
-				.style("fill","none");
+			.attr("class", "innerLeaf")
+			.attr("width","3px")
+			.attr("height","3px")
+			.append("polygon")
+				.style("fill","none")
+				.attr("points", makePoints(Math.PI*2*(radius+inR)/(leafCount*(scaling)), Math.PI*2*(radius+midR)/(leafCount*(scaling)) ));
 		
 		leaves
 			.append("g")
 			.attr("class", "middleLeaf")
-			.append("circle")
-				.attr("r", 2)
-				.style("fill","none");
+			.attr("width","3px")
+			.attr("height","3px")
+			.append("polygon")
+				.style("fill","none")
+				.attr("points", makePoints(Math.PI*2*(radius+midR)/(leafCount*(scaling)), Math.PI*2*(radius+outR)/(leafCount*(scaling))));
 		
 		leaves
 			.append("g")
-			.attr("class", "innerLeaf")
-			.append("circle")
-				 .attr("r",2)
-				 .style("fill","none");
-
+			.attr("class", "outerLeaf")
+			.attr("width","3px")
+			.attr("height","3px")
+			.append("polygon")
+				.style("fill","none")
+				.attr("points", makePoints(Math.PI*2*(radius+outR)/(leafCount*(scaling)), Math.PI*2*(radius+(outR + (outR -1)/3))/(leafCount*(scaling))));
 		
 		return {tree: tree, vis: svgGroup};
 		};
