@@ -392,8 +392,7 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     return (struct slList *)(el);
     }
 
-int tempC = 0; 
-const struct slList *temp = NULL; 
+const struct slList *lastLeaf = NULL; 
 
 bool slBioExpVectorCmp(const struct slList *item1, const struct slList *item2,
 				void *unusedExtraData)
@@ -402,8 +401,8 @@ bool slBioExpVectorCmp(const struct slList *item1, const struct slList *item2,
     {
     const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
     const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
-    if (kid1->children !=1 && kid2->children ==1) temp = item2; 
-    if (kid1->children ==1 && kid2->children !=1) temp = item1;
+    if (kid1->children !=1 && kid2->children ==1) lastLeaf = item2; 
+    if (kid1->children ==1 && kid2->children !=1) lastLeaf = item1;
     
     if (kid1->children > kid2->children)
 	{
@@ -416,22 +415,22 @@ bool slBioExpVectorCmp(const struct slList *item1, const struct slList *item2,
 	else{
 	    // These are two leaf siblings, things get a bit tricky here... 
 	    // First we find the closest neighbor (who should be a firstborn)
-	    if (temp == NULL) 
+	    if (lastLeaf == NULL) 
 		{
 		// This is the very first merge, not certain how to handle it so lets just return True for now
-		temp = item1; 
+		lastLeaf = item1; 
 		return TRUE; 
 		}
 	    else{
-		double score1 = slBioExpVectorDistance(item1, temp, NULL);
-		double score2 = slBioExpVectorDistance(item2, temp, NULL);
+		double score1 = slBioExpVectorDistance(item1, lastLeaf, NULL);
+		double score2 = slBioExpVectorDistance(item2, lastLeaf, NULL);
 		if (score1 < score2) 
 		    {
-		    temp = item2; 
+		    lastLeaf = item2; 
 		    return TRUE; 
 		    }
 		else{
-		    temp = item1; 
+		    lastLeaf = item1; 
 		    return FALSE;
 		    }
 		}
