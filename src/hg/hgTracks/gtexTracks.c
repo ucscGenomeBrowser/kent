@@ -36,11 +36,13 @@ struct gtexGeneInfo
     struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
                                         from BED table */
     struct genePred *geneModel; /* Gene structure from model table */
+    char *description;          /* Gene description */
     double *medians1;            /* Computed medians */
     double *medians2;            /* Computed medians for comparison (inverse) graph */
     int height;                  /* Item height in pixels */
     };
 
+#define MAX_DESC  200
 /***********************************************/
 /* Color gene models using GENCODE conventions */
 
@@ -345,6 +347,21 @@ while (geneBed != NULL)
     AllocVar(geneInfo);
     geneInfo->geneBed = geneBed;
     geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
+    // NOTE: Consider loading all gene descriptions to save queries
+    char query[256];
+    sqlSafef(query, sizeof(query),
+            "select kgXref.description from kgXref where geneSymbol='%s'", geneBed->name);
+    struct sqlConnection *conn = hAllocConn(database);
+    char *desc = sqlQuickString(conn, query);
+    hFreeConn(&conn);
+    if (desc)
+        {
+        char *fromDetail = strstrNoCase(desc, "(from");
+        *fromDetail = 0;
+        if (strlen(desc) > MAX_DESC)
+            strcpy(desc+MAX_DESC, "...");
+        geneInfo->description = desc;
+        }
     slAddHead(&list, geneInfo);
     geneBed = geneBed->next;
     geneInfo->geneBed->next = NULL;
@@ -722,36 +739,22 @@ return buf;
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box on gene model and label, and one for each tissue (bar in the graph) in
- * pack or ful modes.  Just single map for squish/dense modes */
+ * pack or full mode.  Just single map for squish/dense modes */
 {
 if (tg->visibility == tvDense || tg->visibility == tvSquish)
     {
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
     }
-// add map boxes to gene model and label
 struct gtexGeneInfo *geneInfo = item;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);        // label
 int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
-int yGene = yZero + gtexGeneMargin() - 1;
-if (!geneInfo->geneModel)
-    return;
-int geneStart = max(geneInfo->geneModel->txStart, winStart);
-int geneEnd = min(geneInfo->geneModel->txEnd, winEnd);
-double scale = scaleForWindow(insideWidth, winStart, winEnd);
-int x1 = round((double)((int)geneStart-winStart)*scale) + x;
-int x2 = round((double)((int)geneEnd-winStart)*scale) + x;
-int w = x2-x1;
-char query[256];
-sqlSafef(query, sizeof(query),
-        "select kgXref.description from kgXref, knownToEnsembl where knownToEnsembl.value='%s' and knownToEnsembl.name=kgXref.kgID", geneBed->transcriptId);
-struct sqlConnection *conn = hAllocConn(database);
-char *desc = sqlQuickString(conn, query);
-hFreeConn(&conn);
-mapBoxHc(hvg, start, end, x, yGene, w, gtexGeneModelHeight(extras)-1, tg->track, mapItemName, desc);
+//int yGene = yZero + gtexGeneMargin() - 1;
+int x1 = insideX;
+
 
 // add maps to tissue bars in expresion graph
 struct gtexTissue *tissues = getTissues();
@@ -801,6 +804,23 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
                 tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
         }
     x1 = x1 + barWidth + padding;
+    }
+
+// add map box with description to gene model
+// NOTE: this is "under" the tissue map boxes
+if (geneInfo->geneModel && geneInfo->description)
+    {
+    double scale = scaleForWindow(insideWidth, winStart, winEnd);
+    int geneStart = max(geneInfo->geneModel->txStart, winStart);
+    int geneEnd = min(geneInfo->geneModel->txEnd, winEnd);
+    int geneX = round((geneStart-winStart)*scale);
+    int w = round((geneEnd-winStart)*scale) - geneX;
+    x1 = insideX + geneX;
+    int labelWidth = mgFontStringWidth(tl.font, itemName);
+    if (x1-labelWidth <= insideX)
+        labelWidth = 0;
+    mapBoxHc(hvg, start, end, x1-labelWidth, y, w+labelWidth, geneInfo->height, tg->track, 
+                    mapItemName, geneInfo->description);
     }
 }
 
