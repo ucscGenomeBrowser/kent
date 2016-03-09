@@ -1,6 +1,6 @@
 # set for preview 1: move date and vNNN from REVIEWDAY to LASTREVIEWDAY
-setenv REVIEWDAY 2016-02-15             # v329 preview, increment vNNN and today
-setenv LASTREVIEWDAY 2016-01-18         # v328 preview
+setenv REVIEWDAY 2016-03-07             # v330 preview, increment vNNN and today
+setenv LASTREVIEWDAY 2016-02-15         # v329 preview
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
 setenv REVIEW2DAY 2016-02-22        # v329 preview2, increment vNNN and today
 setenv LASTREVIEW2DAY 2016-01-25    # v328 preview2

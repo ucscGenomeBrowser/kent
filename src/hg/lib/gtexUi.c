@@ -9,6 +9,7 @@
 #include "trackDb.h"
 #include "jsHelper.h"
 #include "gtexTissue.h"
+#include "gtexInfo.h"
 #include "gtexUi.h"
 
 #define SYSTEM_BRAIN            "Brain"
@@ -302,10 +303,10 @@ cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
 safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
 printf("&nbsp;&nbsp;<span class='%s'><b>View limits maximum:</b></span>\n", buf);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
-// TODO: set max from gtexInfo table
 int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
 cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
-printf("<span class='%s'>  RPKM (range 10-180000)</span>\n", buf);
+char *version = gtexVersion(tdb->table);
+printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
 printf("</div>");
 
 /* Sample selection */

@@ -4207,6 +4207,7 @@ if (withLabels)
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
             }
         else
+            // usual case
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
         hvGfxUnclip(hvg);
         hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
