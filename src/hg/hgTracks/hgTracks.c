@@ -7047,11 +7047,16 @@ void doNextPrevItem(boolean goNext, char *trackName)
 /* In case a next item arrow was clicked on a track, change */
 /* position (i.e. winStart, winEnd, etc.) based on what track it was */
 {
-// create custom trackList with just trackName
+// create new trackList with just trackName
 struct track *myTrackList = getTrackListForOneTrack(trackName);
 struct track *track = trackFindByName(myTrackList, trackName);
 if ((track != NULL) && (track->nextPrevItem != NULL))
+    {
+    // custom track big* tracks have pre-opened handle which we should not use
+    // because that same bbiFile will get used later in the full track list
+    track->bbiFile = NULL; 
     track->nextPrevItem(track, goNext);
+    }
 }
 
 
