@@ -5338,3 +5338,45 @@ char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn,
 {
 return bbiNameFromSettingOrTableChrom(tdb, conn, table, NULL);
 }
+
+char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+ * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+{
+if (suffix == NULL)
+    suffix = "";
+char *tableName = NULL;
+char likeExpr[64];
+safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
+struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
+if (snpNNNTables)
+    {
+    // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
+    struct slName *table = snpNNNTables;
+    while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
+        table = table->next;
+    if (table != NULL)
+        tableName = cloneString(table->name);
+    }
+else if (isEmpty(suffix))
+    {
+    // Before snpNNN* tables (e.g. hg16) there was a track with table 'snp', so check for that:
+    snpNNNTables = sqlListTablesLike(conn, "LIKE 'snp'");
+    if (snpNNNTables != NULL)
+        tableName = cloneString(snpNNNTables->name);
+    }
+slNameFreeList(&snpNNNTables);
+return tableName;
+}
+
+char *hFindLatestSnpTable(char *db, char *suffix)
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+ * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+{
+if (startsWith(hubTrackPrefix, db))
+    return NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *tableName = hFindLatestSnpTableConn(conn, suffix);
+hFreeConn(&conn);
+return tableName;
+}
