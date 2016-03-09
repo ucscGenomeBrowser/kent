@@ -357,7 +357,8 @@ while (geneBed != NULL)
     if (desc)
         {
         char *fromDetail = strstrNoCase(desc, "(from");
-        *fromDetail = 0;
+        if (fromDetail)
+            *fromDetail = 0;
         if (strlen(desc) > MAX_DESC)
             strcpy(desc+MAX_DESC, "...");
         geneInfo->description = desc;
@@ -581,6 +582,8 @@ return graphWidth;
 static void gtexGeneNonPropDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 {
+if (vis != tvFull && vis != tvPack)
+    return;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
