@@ -356,6 +356,7 @@ while (geneBed != NULL)
     hFreeConn(&conn);
     if (desc)
         {
+        // hg38 known genes has extra detail about source; strip it
         char *fromDetail = strstrNoCase(desc, "(from");
         if (fromDetail)
             *fromDetail = 0;
