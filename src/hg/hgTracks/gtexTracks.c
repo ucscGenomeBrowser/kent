@@ -607,7 +607,7 @@ Color clipColor = MG_MAGENTA;
 // add labels to comparison graphs
 if (geneInfo->medians2)
     {
-    hvGfxText(hvg, x1, yZero - tl.fontHeight + 1, labelColor, font, "F");
+    hvGfxText(hvg, x1, yZero - tl.fontHeight + 2, labelColor, font, "F");
     hvGfxText(hvg, x1, yZero + gtexGeneModelHeight(extras) + gtexGeneMargin() + 1, 
                 labelColor, font, "M");
     startX = startX + tl.mWidth+2;
