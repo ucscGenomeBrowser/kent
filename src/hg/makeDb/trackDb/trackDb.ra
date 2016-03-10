@@ -14,8 +14,7 @@ include trackDb.chainNet.insects.ra
 
 
 include trackDb.nt.ra
-include trackDb.genbank.ra beta,public
-include trackDb.genbank.new.ra alpha
+include trackDb.genbank.ra 
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something

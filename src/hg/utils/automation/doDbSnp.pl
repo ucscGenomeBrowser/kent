@@ -1138,12 +1138,6 @@ EOF
 
     #######################################################################
     # Extract observed alleles, molType and snp class from FASTA headers gnl
-    foreach rej (AltOnly)
-      if (-e $runDir/rs_fasta/rs_ch\$rej.fas.gz) then
-        mkdir -p $runDir/rs_fasta/rejects
-        mv $runDir/rs_fasta/rs_ch\$rej.fas.gz $runDir/rs_fasta/rejects/
-      endif
-    end
 
 #*** This would be a good place to check for missing flanking sequences
 

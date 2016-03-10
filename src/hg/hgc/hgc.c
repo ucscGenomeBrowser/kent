@@ -10536,18 +10536,18 @@ if (url != NULL && url[0] != 0)
 
     if (!sameWord(dbSnpId, "-"))
         {
-        printf("<B>dbSNP:</B> \n");
-        if (sameWord(database, "hg18"))
-	    {
-	    printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp130&i=", dbSnpId);
-	    }
-	else
-	    {
-            printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp144&i=", dbSnpId);
-	    }
-        printf("%s</A></B>", dbSnpId);
+        char *snpTable = hFindLatestSnpTable(database, NULL);
+        if (snpTable != NULL)
+            // NOTE: dbSnpId is not guaranteed to be found in snpTable and it might be
+            // a better idea to always link directly to dbSNP.
+            printf("<B>dbSNP:</B> \n"
+                   "<A HREF=\"../cgi-bin/hgc?hgsid=%s&g=%s&i=%s\">%s</A>",
+                   cartSessionId(cart), snpTable, dbSnpId, dbSnpId);
+        else
+            {
+            puts("<B>dbSNP:</B> ");
+            printDbSnpRsUrl(dbSnpId, "%s", dbSnpId);
+            }
 	}
     }
 
