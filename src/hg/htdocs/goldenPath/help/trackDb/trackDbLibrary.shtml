@@ -277,8 +277,10 @@
     complete description of a track in HTML format.  The path of this
     file name is relative to the path of the trackDb file.  The
     ".html" suffix is implied.</P>
-    <P>To be consisent with standard Genome Browser track descriptions, this description
-    should contain several sections:</P>
+    <p>To be consistent with standard Genome Browser track descriptions, this description
+    should contain several sections as seen below. Here is a link to an 
+    <a href="../examples/hubExamples/templatePage.html" 
+    target="_blank">example template</a> that you can use.</p>
     <P><B>Description</B></P>
     <P class="indent1">A few sentences describing the contents of the track and what
     it attempts to show.  The description can include additional
