@@ -33,7 +33,7 @@ outputFiles=false
 showHelp() {
 cat << EOF
 
-Usage: $0 [-hbf] [-d DATABASE DEV] [-b DATABASE BETA]
+Usage: $0 [-hf] [-d DATABASE DEV] [-b DATABASE BETA]
 
 	-h                  Display this help and exit
 	-d DATABASE DEV     Database to check on Dev, e.g. hg19 or hg38.
@@ -82,6 +82,7 @@ do
                         ;;
                 d)     
                         dbDev=$OPTARG
+			# Check if dbBeta is empty before trying to set it
 			if [[ $dbBeta == "" ]]
 			then
 				dbBeta=$dbDev
