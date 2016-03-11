@@ -16,7 +16,7 @@ and a second track for all other sequences (&quot;non-bulk patents&quot;).</P>
 <P>A sequence can be
 part of many patent documents, up to several thousands for some sequences. 
 This track shows only a single alignment for every sequence, colored based on
-its occurence in the different patent documents and using a color schema similar to <a href="https://www.lens.org" target="_blank">The Lens</a>.
+its occurence in the different patent documents and using a color schema similar to The Lens.
 
 <P>
 Based on the first sequence match, from top to bottom, the four different colours used follow this priority ranking:<BR>
@@ -54,14 +54,14 @@ sequence matches in detail.
 up to ten document titles and in parenthese how often they appear in the documents.
 This is followed by up to thirty links to patent documents. Shown below these
 are the links to the sequence in The Lens, in the format
-"patentDocumentIdentifier-SEQIDNO (docSequenceCount)". The "SEQ ID NO"
+&quot;patentDocumentIdentifier-SEQIDNO (docSequenceCount)&quot;. The &quot;SEQ ID NO&quot;
 is an integer number, the unique identifier of a patent sequence in a patent
 document. When a protein sequence has been annotated on a nucleotide sequence,
-the "SEQ ID NO" contains the reading frame separated by a ".", e.g. "1.1" would indicate the 
+the &quot;SEQ ID NO&quot; contains the reading frame separated by a &quot;.&quot;, e.g. &quot;1.1&quot; would indicate the
 first frame of SEQIDNO 1.
-The total number of sequences submitted with the patent document ("docSequenceCount") is
+The total number of sequences submitted with the patent document (&quot;docSequenceCount&quot;) is
 shown in parentheses after the SEQIDNO. The links to the sequence are separated into the
-categories "granted and in claims", "granted", "in claims" and "applications"
+categories &quot;granted and in claims&quot;, &quot;granted&quot;, &quot;in claims&quot; and &quot;applications&quot;
 (=all others). Sequence identifiers link to the respective pages on <a
 href="https://www.lens.org/lens/bio" target="_blank">PatSeq</a>. A maximum of thirty documents
 are linked from this page per category; please use PatSeq Analyzer to view all
@@ -69,12 +69,12 @@ matching documents.
 </P>
 
 <P>The score of the features in this track is the number of documents where the
-sequence appears in the claims. E.g. by setting the score filter to 1, only
+sequence appears in the claims. For example, by setting the score filter to 1, only
 sequences are shown that have been referenced at least once in the claims.
 </P>
 
 <H2>Methods</H2>
-More than 96 million patent document files were collected by <a href="https://www.lens.org" target="_blank">The Lens</a>. 
+More than 96 million patent document files were collected by The Lens.
 The <a href="http://web2.wipo.int/wipostad/en/standards/st25-en/1-0/view" target="_blank">ST.25</a>-formatted sequences were extracted 
 and mapped to genomes with the aligners BLAT and BWA. The minimal identity of the query over the alignment is 95%.
 
@@ -111,7 +111,6 @@ can be found <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_do
 
 The command to obtain the data as a tab-separated table looks like this:<BR>
 <pre>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/patNonBulk.bb -chrom=chr5 -start=1000000 -end=2000000 output.tsv</pre>
-<!-- note for QA: the source code page in our help docs is not very helpful. We could use a better page -->
 A full log of the commands that were used to build this annotation is available
 from our <a
 href="https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/hg/makeDb/doc/hg19.txt">database
