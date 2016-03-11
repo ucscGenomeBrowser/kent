@@ -5421,6 +5421,8 @@ tablesIgnored $gbd
     numtS
     numtSMitochondrion
     numtSMitochondrionChrPlacement
+    patBulk
+    patNonBulk
     qPcrPrimers
     quality
     qualityBw
