@@ -16,7 +16,7 @@ echo "Moving preview2 tag to current tip versions on $HOST [${0}: `date`]"
 # tag the branch preview2
 #  which marks the point for git reports
 #  this should not fail typically so -f to force not needed
-git push origin origin:refs/tags/v${NEXTNN}_preview2
+git push origin origin:refs/tags/v${NEXTNN}_preview2${preview2Subversion}
 if ( $status ) then
  echo "git shared-repo tag failed for tag v${NEXTNN}_preview2 on $HOST [${0}: `date`]"
  exit 1

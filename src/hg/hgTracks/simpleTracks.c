@@ -12722,7 +12722,7 @@ omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
-        "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", name);
+        "select repl2, dbSnpId, description from omimAv where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
