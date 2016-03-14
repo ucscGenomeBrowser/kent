@@ -32,19 +32,18 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-#db = mm10
+db = mm10
 #db = hg38
-db = hg19
-#$(error modify to get TSL levels out of gff file)
+#db = hg19
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
-    ver = M7
-    prevVer = M4
+    ver = M8
+    prevVer = M7
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGtfTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 82_38
+    ensemblVer = 83_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1
 else ifeq (${db},hg38)
@@ -309,8 +308,6 @@ ${tableRefSeqTab}: ${tableRefSeqMeta}
 	${copyTabGz}
 ${tableTranscriptionSupportLevelTab}: ${tableTranscriptionSupportLevelData}
 	${copyTab}
-${tableTranscriptionSupportLevelData}: ${transSupResultsTab}
-	${copyTab}
 # convert to zero-based, 1/2 open
 ${tablePolyAFeatureTab}: ${tablePolyAFeatureMeta}
 	@mkdir -p $(dir $@)
@@ -335,6 +332,7 @@ ${gencodeGp}: ${annotationGtf} ${ensemblToUcscChain}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
+	touch $@
 ${gencodeTsv}: ${annotationGtf}
 	@mkdir -p $(dir $@)
 	gencodeGtfToAttrs ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
