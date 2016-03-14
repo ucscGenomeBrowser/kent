@@ -2316,8 +2316,8 @@ if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     }
 else
     {
-    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
-    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon Edge");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon Edge");
     }
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
@@ -12722,7 +12722,7 @@ omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
-        "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", name);
+        "select repl2, dbSnpId, description from omimAv where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 

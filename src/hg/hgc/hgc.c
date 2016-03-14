@@ -307,6 +307,8 @@ char *cloneDbScript = "http://www.ncbi.nlm.nih.gov/clone?term=";
 char *traceScript = "http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=retrieve&val=";
 char *genMapDbScript = "http://genomics.med.upenn.edu/perl/genmapdb/byclonesearch.pl?clone=";
 char *uniprotFormat = "http://www.uniprot.org/uniprot/%s";
+char *dbSnpFormat = "http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s";
+char *clinVarFormat = "http://www.ncbi.nlm.nih.gov/clinvar/?term=%s[clv_acc]";
 
 /* variables for gv tables */
 char *gvPrevCat = NULL;
@@ -10501,57 +10503,58 @@ if (url != NULL && url[0] != 0)
     */
 
     sqlSafef(query, sizeof(query),
-          "select replStr from omimAvRepl where avId=%s;", avId);
+          "select repl2 from omimAv where avId=%s;", avId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
         {
-	if (row[0] != NULL)
-	    {
-            char *replStr;
-            char *chp;
-            replStr= cloneString(row[0]);
-
-            // just take the first AA replacement if there are multiple
-            chp = strstr(replStr, ",");
-            if (chp != NULL) *chp = '\0';
-
-	    printf("<BR><B>Amino Acid Replacement:</B> %s\n", replStr);
-	    }
-	}
+      	if (row[0] != NULL)
+	          printf("<BR><B>Amino Acid Replacement:</B> %s\n", row[0]);
+	      }
     sqlFreeResult(&sr);
 
-    dbSnpId = cloneString("-");
     printf("<BR>\n");
-    sqlSafef(query, sizeof(query),
-          "select dbSnpId from omimAvRepl where avId='%s'", avId);
 
+    sqlSafef(query, sizeof(query),
+          "select dbSnpId from omimAv where avId='%s'", avId);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
+    dbSnpId = cloneString("-");
     if (row != NULL)
-        {
-	dbSnpId = cloneString(row[0]);
-	}
+      	dbSnpId = cloneString(row[0]);
     sqlFreeResult(&sr);
 
     if (!sameWord(dbSnpId, "-"))
         {
-        printf("<B>dbSNP:</B> \n");
-        if (sameWord(database, "hg18"))
-	    {
-	    printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp130&i=", dbSnpId);
-	    }
-	else
-	    {
-            printf("<A HREF=\"%s%s\" >",
-	       "../cgi-bin/hgc?g=snp144&i=", dbSnpId);
-	    }
-        printf("%s</A></B>", dbSnpId);
-	}
+        struct slName *snpIdList, *thisSnpId;
+
+        printf("<b>dbSNP/ClinVar:</b> \n");
+
+        /* for each variant, print name and build a link for it if possible */
+        snpIdList = slNameListFromComma(dbSnpId);
+        while ((thisSnpId = slPopHead(&snpIdList)) != NULL)
+            {
+            if (strncmp(thisSnpId->name, "rs", 2) == 0) /* dbSnp ID */
+                printDbSnpRsUrl (thisSnpId->name, "%s", thisSnpId->name);
+            else if (strncmp(thisSnpId->name, "SCV", 3) == 0) /* ClinVar ID */
+                {
+                char clinVarUrl[2048];
+                safef (clinVarUrl, sizeof(clinVarUrl), clinVarFormat, thisSnpId->name);
+                printf ("<a href=\"%s\" target=\"_blank\">%s</a>", clinVarUrl, thisSnpId->name);
+                }
+            else
+                printf ("%s", thisSnpId->name);
+
+            slNameFree(&thisSnpId);
+
+            if (snpIdList != NULL)
+                printf (",");
+            }
+        printf("<br>\n");
+        }
     }
 
-printf("<HR>");
+printf("<hr>\n");
 printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, itemName);
 }
 
@@ -15324,13 +15327,15 @@ hFreeConn(&conn);
 void printDbSnpRsUrl(char *rsId, char *labelFormat, ...)
 /* Print a link to dbSNP's report page for an rs[0-9]+ ID. */
 {
-printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=%s\" "
-       "TARGET=_BLANK>", rsId);
+char dbSnpUrl[2048];
+safef (dbSnpUrl, sizeof(dbSnpUrl), dbSnpFormat, rsId);
+printf ("<a href=\"%s\" target=\"_blank\">", dbSnpUrl);
+
 va_list args;
 va_start(args, labelFormat);
 vprintf(labelFormat, args);
 va_end(args);
-printf("</A>");
+printf("</a>");
 }
 
 char *validateOrGetRsId(char *name, struct sqlConnection *conn)
@@ -24714,26 +24719,30 @@ dbIsFound = trackHubDatabase(database) || sqlDatabaseExists(database);
 
 // Try to deal with virt chrom position used by hgTracks.
 // Hack the cart vars to set to a non virtual chrom mode position
-if (startsWith("virt:", cartUsualString(cart, "position", "")))
+if (sameString("virt", cartString(cart, "c"))
+ || sameString("getDna", cartUsualString(cart, "g", "")) )
     {
-    char *nvPos = cartUsualString(cart, "nonVirtPosition", "");
-    /* parse non-virtual position */
-    char *pos = cloneString(nvPos);
-    char *colon = strchr(pos, ':');
-    if (!colon)
-    errAbort("position has no colon");
-    char *dash = strchr(pos, '-');
-    if (!dash)
-    errAbort("position has no dash");
-    *colon = 0;
-    *dash = 0;
-    char *chromName = cloneString(pos);
-    int winStart = atol(colon+1) - 1;
-    int winEnd = atol(dash+1);
-    cartSetString(cart, "position", nvPos);
-    cartSetString(cart, "c", chromName);
-    cartSetInt(cart, "l", winStart);
-    cartSetInt(cart, "r", winEnd);
+    char *nvPos = cartUsualString(cart, "nonVirtPosition", NULL);
+    if (nvPos)
+	{
+	// parse non-virtual position 
+	char *pos = cloneString(nvPos);
+	char *colon = strchr(pos, ':');
+	if (!colon)
+	errAbort("position has no colon");
+	char *dash = strchr(pos, '-');
+	if (!dash)
+	errAbort("position has no dash");
+	*colon = 0;
+	*dash = 0;
+	char *chromName = cloneString(pos);
+	int winStart = atol(colon+1) - 1;
+	int winEnd = atol(dash+1);
+	cartSetString(cart, "position", nvPos);
+	cartSetString(cart, "c", chromName);
+	cartSetInt(cart, "l", winStart);
+	cartSetInt(cart, "r", winEnd);
+	}
     }
 
 

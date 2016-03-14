@@ -18,25 +18,11 @@
                 } 
                 # trim leading/trailing spaces if any; 
                 # convert the Unicode in titles to HTML because non-ASCII gives Galaxy trouble. 
+                # NB: this conversion now handled externally by iconv.  If Galaxy can handle
+                # HTML entities, though, that might be even better - we could replace use of
+                # iconv with calls to HTML::Entities
                 foreach $i (0 .. $#w) { 
                   $w[$i] =~ s/^\s*//;  $w[$i] =~ s/\s*$//; 
-                  # ugh, clean out non-utf8 stuff before decoding utf8 into unicode: 
-                  $w[$i] =~ s/\222/'/g;
-                  $w[$i] =~ s/\366/o/g;
-                  $w[$i] =~ s/\337/B/g;
-                  $w[$i] =~ s/\226/-/g;
-                  $w[$i] =~ s/\265/u/g;
-                  $w[$i] =~ s/\374/u/g;
-                  $w[$i] =~ s/\240/ /g;
-                  $w[$i] =~ s/\302/A/g;
-                  $w[$i] =~ s/\303/A/g;
-                  $w[$i] =~ s/\237/B/g;
-                  $w[$i] =~ s/\274/4/g;
-                  $w[$i] =~ s/\357/i/g;
-                  $w[$i] =~ s/\277/?/g;
-                  $w[$i] =~ s/\266/P/g;
-                  $w[$i] =~ s/\247/c/g;
-                  $w[$i] = decode_utf8($w[$i], Encode::FB_CROAK); 
                   @chars = split(//, $w[$i]); 
                   $w[$i] = ""; 
                   foreach $c (@chars) { 

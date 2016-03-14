@@ -437,10 +437,6 @@ return ((sameString(tdb->grp, "user") || isHubTrack(tdb->track)) &&
 	(sameString(tdb->type, "pgSnp") || startsWith("vcf", tdb->type)));
 }
 
-// Function prototype to avoid shuffling code around:
-char *findLatestSnpTable(char *suffix);
-/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
-
 void selectVariants()
 /* Offer selection of user's variant custom tracks, example variants, pasted input etc. */
 {
@@ -481,7 +477,7 @@ for (ref = varTrackList;  ref != NULL;  ref = ref->next)
     printOption(tdb->track, selected, tdb->longLabel);
     }
 printOption(hgvaSampleVariants, selected, hgvaSampleVariantsLabel);
-boolean hasSnps = (findLatestSnpTable(NULL) != NULL);
+boolean hasSnps = (hFindLatestSnpTable(database, NULL) != NULL);
 if (hasSnps)
     printOption(hgvaUseVariantIds, selected, hgvaVariantIdsLabel);
 printf("</SELECT><BR>\n");
@@ -700,37 +696,11 @@ puts("<BR>");
 endCollapsibleSection();
 }
 
-char *findLatestSnpTable(char *suffix)
-/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any. */
-{
-if (startsWith(hubTrackPrefix, database))
-    return NULL;
-if (suffix == NULL)
-    suffix = "";
-char likeExpr[64];
-safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
-struct sqlConnection *conn = hAllocConn(database);
-struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
-
-hFreeConn(&conn);
-if ((snpNNNTables == NULL) || (slCount(snpNNNTables)==0))
-    return NULL;
-// Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
-struct slName *table = snpNNNTables;
-while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
-    table = table->next;
-char *tableName = NULL;
-if (table != NULL)
-    tableName = cloneString(table->name);
-slNameFreeList(&snpNNNTables);
-return tableName;
-}
-
 boolean findSnpBed4(char *suffix, char **retFileName, struct trackDb **retTdb)
 /* If we can find the latest snpNNNsuffix table, or better yet a bigBed file for it (faster),
  * set the appropriate ret* and return TRUE, otherwise return FALSE. */
 {
-char *table = findLatestSnpTable(suffix);
+char *table = hFindLatestSnpTable(database, suffix);
 if (table == NULL)
     return FALSE;
 boolean foundIt = FALSE;
@@ -2151,7 +2121,7 @@ static void rsIdsToVcfRecords(struct annoAssembly *assembly, struct slName *rsId
 {
 if (rsIds == NULL)
     return;
-char *table = findLatestSnpTable(NULL);
+char *table = hFindLatestSnpTable(database, NULL);
 if (table == NULL)
     return;
 struct sqlConnection *conn = hAllocConn(assembly->name);

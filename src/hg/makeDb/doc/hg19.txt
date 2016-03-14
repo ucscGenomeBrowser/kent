@@ -30830,7 +30830,7 @@ wc -l gtexGeneV6.tab
         set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
       endif
       if ($c == "Y") then
-        set file = ALL.chr$c.phase3_integrated_v1a.20130502.genotypes.vcf.gz
+        set file = ALL.chr$c.phase3_integrated_v1b.20130502.genotypes.vcf.gz
       endif
       echo "/gbdb/hg19/1000Genomes/phase3/$file\tchr$c" >> tgpPhase3.txt
     end
@@ -31272,7 +31272,7 @@ TMPDIR=/dev/shm' > DEF
 
 _EOF_
 ##############################################################################
-# DBSNP B146 / SNP146 (DONE 2/10/16 angie)
+# DBSNP B146 / SNP146 (DONE 3/11/16 angie)
     # Redmine #16777
     mkdir -p /hive/data/outside/dbSNP/146/human_hg19
     cd /hive/data/outside/dbSNP/146/human_hg19
@@ -31322,28 +31322,39 @@ EOF
     # script has progressed past the loadDbSnp step and into the addToDbSnp step, then kill
     # it and continue from addToDbSnp to pick up the added sequence.
     # This time it was still in the loadDbSnp step, so no need to kill it.
+
+    # 3/10/16 - I fixed a bug in doDbSnp.pl that caused a few thousand alt-only SNPs
+    # to be lost due to wrongly ignoring the rs_fasta/rs_chAltOnly.fas.gz file, and
+    # re-ran from the first step using rs_fasta data onward.
+    # I edited addToDbSnp.csh to wrap an "if (0) then ... endif" around all steps except the
+    # last step that creates the ucscGnl table from rs_fasta headers.
+    mkdir -p `cat workingDir`
+    csh -efx addToDbSnp.csh >>& do.log & tail -f do.log
+    # When that completed, I continued running from the bigJoin step.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin >>& do.log &
+    tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# SNP146 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 2/12/16 angie)
+# SNP146 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (IN PROGRESS 3/11/16 angie)
     # Redmine #16777
     screen -S ortho -t ortho
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/bed/snp146Ortho.2016-02-12
-    cd /hive/data/genomes/hg19/bed/snp146Ortho.2016-02-12
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp146Ortho.2016-03-11
+    cd /hive/data/genomes/hg19/bed/snp146Ortho.2016-03-11
     ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 \
       >>& do.log & tail -f do.log
 # *** All done!
 
 
 ##############################################################################
-# SNPMASKED SEQUENCE FOR SNP146 (DONE 2/12/16 angie)
+# SNPMASKED SEQUENCE FOR SNP146 (DONE 3/11/16 angie)
     # Redmine #16777
     screen -S mask -t mask
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 -debug
-# *** Steps were performed in /hive/data/genomes/hg19/snp146Mask.2016-02-12
-    cd /hive/data/genomes/hg19/snp146Mask.2016-02-12
+# *** Steps were performed in /hive/data/genomes/hg19/snp146Mask.2016-03-11
+    cd /hive/data/genomes/hg19/snp146Mask.2016-03-11
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 \
       >>& do.log & tail -f do.log
 # *** All done!
@@ -31388,4 +31399,48 @@ bedToBigBed patNonBulk.bed /cluster/data/genomes/hg19/chrom.sizes patNonBulk.bb 
 bedToBigBed patBulk.bed /cluster/data/genomes/hg19/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
 hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
 hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
+
+#########################################################################
+2016-03-02: import of UCSC GENCODE group processing of GENCODE V24lift37 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/V24lift37
+    cd /hive/data/genomes/hg19/bed/V24lift37
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense (results in gencode-cmp.tsv)
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.  Follow instructiuons in ra file to ensure
+    ## filters are correct.
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV24.ra human/hg19/wgEncodeGencodeV24lift37.ra
+    cp human/hg38/wgEncodeGencodeV24.html human/hg19/wgEncodeGencodeV24lift37.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg19/bed/gencodeV24lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
 

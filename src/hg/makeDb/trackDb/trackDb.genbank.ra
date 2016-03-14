@@ -11,6 +11,7 @@ color 12,12,120
 type genePred refPep refMrna
 idXref refLink mrnaAcc name
 baseColorUseCds given
+release beta,public
 
 track mrna
 table all_mrna
