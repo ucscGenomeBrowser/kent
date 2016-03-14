@@ -81,9 +81,11 @@ trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
 char cmd[256];
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
-safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s %s",  
+safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s %s %s",  
                                 gtexGene->name, dfTn.forCgi, pngTn.forHtml, 
-                                doLogTransform ? "log=TRUE" : "log=FALSE", version);
+                                doLogTransform ? "log=TRUE" : "log=FALSE", "order=alpha", version);
+//NOTE: use "order=score" to order bargraph by median RPKM, descending
+
 int ret = system(cmd);
 if (ret == 0)
     {
