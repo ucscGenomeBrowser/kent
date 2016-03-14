@@ -3,7 +3,7 @@ setenv REVIEWDAY 2016-03-07             # v330 preview, increment vNNN and today
 setenv LASTREVIEWDAY 2016-02-15         # v329 preview
 setenv previewSubversion                # empty string unless mistake, otherwise .1 etc
 # set for preview 2: move date and vNNN from REVIEW2DAY to LASTREVIEW2DAY
-setenv REVIEW2DAY 2016-03-11        # v330 preview2, increment vNNN and today
+setenv REVIEW2DAY 2016-03-14        # v330 preview2, increment vNNN and today
 setenv LASTREVIEW2DAY 2016-02-22    # v329 preview2
 setenv preview2Subversion .1        # empty string unless mistake, otherwise .1 etc
 # set these three for final build:  move date and vNNN from TODAY to LASTWEEK
