@@ -59,6 +59,16 @@ $ wc -l gtex*.tab
     2984854 gtexV6TissueData.tab
       56318 gtexV6TissueMedian.tab
 
+# NOTE: should have used -dropZeros when loading.
+select count(*) from gtexSampleData where score=0;
++-----------+
+| count(*)  |
++-----------+
+| 242219267 |
++-----------+
+
+hgsql hgFixed -e 'delete from gtexSampleDataV6 where score=0'
+
 # looks good, load tables 
 
 hgGtex gtexV6 V6 $dataFile $sampleFile $subjectFile $tissueFile >&! parseData2.log  &
