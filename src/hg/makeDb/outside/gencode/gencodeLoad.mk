@@ -38,12 +38,12 @@ db = mm10
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
-    ver = M8
-    prevVer = M7
+    ver = M9
+    prevVer = M8
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGtfTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 83_38
+    ensemblVer = 84_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1
 else ifeq (${db},hg38)
@@ -335,7 +335,7 @@ ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
 	touch $@
 ${gencodeTsv}: ${annotationGtf}
 	@mkdir -p $(dir $@)
-	gencodeGtfToAttrs ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
+	gencodeGtfToAttrs --keepGoing ${annotationGtf} $@.${tmpExt} --tslTabOut=${tableTranscriptionSupportLevelData}.${tmpExt}
 	mv -f ${tableTranscriptionSupportLevelData}.${tmpExt} ${tableTranscriptionSupportLevelData}
 	mv -f $@.${tmpExt} $@
 
@@ -396,7 +396,7 @@ ${checkDir}/${tableTranscriptSource}.checked: ${loadedDir}/${tableTranscriptSour
 	touch $@
 
 # make sure all basic are in comprehensive
-${checkDir}/${tableBasic}.checked: ${loadedDir}/${tableBasic}.genePredExt.loaded ${loadedDir}/${tableComp}.genePredExt.loaded ${loadedDir}/${tableAttrs}.tab.loaded
+${checkDir}/${tableBasic}.checked: ${loadedDir}/${tableBasic}.genePredExt.loaded ${loadedDir}/${tableComp}.genePredExt.loaded
 	@mkdir -p $(dir $@)
 	hgsql -Ne 'select * from ${tableBasic} where name not in (select name from ${tableComp});' ${db} | sort -u >$(basename $@).incorrect
 	@$(checkForIncorrect)
@@ -419,14 +419,14 @@ ${checkDir}/${tableComp}.pseudo.checked: ${loadedDir}/${tableComp}.genePredExt.l
 ##
 # compare number of tracks with previous
 ##
-cmpRelease:
+cmpRelease: loadTables
 	@echo 'table	V${prevVer}	V${ver}'  >gencode-cmp.tsv
 	@for tab in ${allTables} ; do \
 	    prevTab=$$(echo "$$tab" | sed 's/V${ver}/V${prevVer}/g') ; \
 	    echo "$${tab}	"$$(hgsql -Ne "select count(*) from $${prevTab}" ${db})"	"$$(hgsql -Ne "select count(*) from $${tab}" ${db}) ; \
 	done >>gencode-cmp.tsv
 
-joinerCheck:
+joinerCheck: loadTables
 	@mkdir -p check
 	for tbl in $$(hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} | egrep -v 'wgEncodeGencode2wayConsPseudo|wgEncodeGencodePolya') ; do echo  table=$$tbl; runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >check/joiner.out 2>&1
 
