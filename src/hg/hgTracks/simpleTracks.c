@@ -2316,8 +2316,8 @@ if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     }
 else
     {
-    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
-    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon Edge");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon Edge");
     }
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */

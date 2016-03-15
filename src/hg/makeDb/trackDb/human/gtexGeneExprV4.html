@@ -1,0 +1,44 @@
+<H2>Description</H2>
+This track shows median gene expression levels in 52 tissues, based on RNA-seq data
+from 2921 samples from 214 donors, generated and analyzed by the
+<a target="_blank" href="">NIH Genotype-Tissue Expression (GTEX) project</a>.
+
+<H2>Methods</H2>
+<P>
+Gene-level expression files from GTEx analysis (2014-01-17) of RNA-Seq data and sample metadata
+were downloaded from the <a target="_blank" href="http://www.gtexportal.org">GTEX portal</a>:
+<a href="http://www.gtexportal.org/static/datasets/gtex_analysis_2014_01_17/rna_seq_data/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct.gz">GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct</a>.</P>
+<P>
+Median expression level (RPKM) for each tissue was computed per gene, and coordinates
+were assigned by identifying the UCSC known gene canonical transcript for each Ensembl
+gene in the GTEX data file.</P>
+
+<H2>Sample Characteristics</H2>
+<table><tr>
+<td><img width='90%' border=1 src='/images/gtex/gtexSampleRin.V4.png'></td><td><img width='95%' border=1 src='/images/gtex/gtexSampleAge.V4.png'></td>
+</tr></table>
+<p>
+Extensive summary plots of GTEx sample characteristics are available at the 
+<a target="_blank" href="http://www.gtexportal.org">
+GTEx portal</a>.
+</p>
+
+<H2>Display Conventions</H2>
+<P>
+Each gene is represented by a colored bar graph, where bar color indicates tissue and
+relative bar height the median expression level.  The tissue color legend is shown below.
+The graph display is fixed width, height,
+and tissue order for all genes. The graph is shown beginning at the transcription start site of the canonical transcript (currently the UCSC known genes canonical transcript) for the gene. </P>
+<P>
+The details pages shows per-sample expression levels, along with a more detailed bar graph (Tukey plot).</P>
+
+<!--
+<H2>Credits</H2>
+
+<H2>References</H2>
+-->
+
+
+
+
+

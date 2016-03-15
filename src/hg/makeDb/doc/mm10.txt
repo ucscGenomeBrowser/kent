@@ -11383,10 +11383,8 @@ TMPDIR=/dev/shm
 
     ## Copy and update trackDb files from previous release.
     ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsVM7 order by transcriptType;
+    ## super track page.  Follow instructiuons in ra file to ensure
+    ## filters are correct.
     cd kent/src/hg/makeDb/trackDb
     cp mouse/mm10/wgEncodeGencodeVM4.ra mouse/mm10/wgEncodeGencodeVM7.ra
     cp mouse/mm10/wgEncodeGencodeVM4.html mouse/mm10/wgEncodeGencodeVM7.html
