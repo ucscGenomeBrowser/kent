@@ -950,8 +950,8 @@ verbose(2, "Parsed manifest and metadata into %d files\n", slCount(sfrList));
 /* Fake URL - system was built initially for remote files. */
 char submitUrl[PATH_LEN];
 safef(submitUrl, sizeof(submitUrl), "%s%s/%s", localPrefix, submitDir, manifestFile);
-if (stringIn("/", manifestFile))
-    errAbort("Please don't include a directory name in the manifest file path.  This is no longer needed.");
+if (startsWith("/", manifestFile))
+    errAbort("Please don't include full path to manifest file path.  This is no longer needed.");
 
 /* Figure out directory ID for submission */
 int hostId = cdwGetHost(conn, "localhost");
