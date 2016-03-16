@@ -90,13 +90,12 @@ void cdwMakeFileTags(char *database, char *table)
 struct sqlConnection *conn = cdwConnect(database);
 struct tagStorm *tags = cdwTagStorm(conn);
 struct slName *field, *fieldList = tagStormFieldList(tags);
+
 slSort(&fieldList, slNameCmpCase);
 struct hash *fieldHash = tagStormFieldHash(tags);
 
 /* Build up hash of column types */
 struct hash *tagType = tagStanzaInferType(tags);
-uglyf("Got %d els in tagType\n", tagType->elCount);
-
 
 struct dyString *query = dyStringNew(0);
 sqlDyStringPrintf(query, "CREATE TABLE %s (", table);
@@ -106,6 +105,8 @@ for (field = fieldList; field != NULL; field = field->next)
     char *sqlType = NULL;
     char *type = hashFindVal(tagType, field->name);
     assert(type != NULL);
+    if (!isSymbolString(field->name))
+        errAbort("Error - database needs work. Somehow symbol %s got in field list\n", field->name);
     if (sameString(type, "string"))
         {
 	sqlType = "varchar(255)";
@@ -123,7 +124,7 @@ for (field = fieldList; field != NULL; field = field->next)
 	errAbort("Unrecoginzed tag %s type in cdwMakeFileTags", type);
 	}
 
-    sqlDyStringPrintf(query, "%s%s %s", connector, field->name, sqlType);
+    dyStringPrintf(query, "\n%s%s %s", connector, field->name, sqlType);
     connector = ", ";
     }
 
@@ -152,19 +153,20 @@ for (i=0; i<ArraySize(keyFields); ++i)
 	assert(type != NULL);
 	if (sameString(type, "string"))
 	    {
-	    sqlDyStringPrintf(query, "%sINDEX(%s(16))", connector, key);
+	    dyStringPrintf(query, "%sINDEX(%s(16))", connector, key);
 	    }
 	else if (sameString(type, "float"))
 	    {
-	    sqlDyStringPrintf(query, "%sINDEX(%s)", connector, key);
+	    dyStringPrintf(query, "%sINDEX(%s)", connector, key);
 	    }
 	else
 	    {
-	    errAbort("Unrecoginzed tag %s type in cdwMakeFileTags2", type);
+	    errAbort("Unrecognized tag %s type in cdwMakeFileTags2", type);
 	    }
 	}
     }
-sqlDyStringPrintf(query, ")");
+dyStringPrintf(query, ")");
+verbose(2, "%s\n", query->string);
 sqlRemakeTable(conn, table, query->string);
 
 struct slRef *stanzaList = tagStanzasMatchingQuery(tags, "select * from files where accession");
@@ -178,17 +180,17 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
-	sqlDyStringPrintf(query, "%s%s", connector, tag->name);
+	dyStringPrintf(query, "%s%s", connector, tag->name);
 	connector = ",";
 	}
-    sqlDyStringPrintf(query, ") values (");
+    dyStringPrintf(query, ") values (");
     connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
-	sqlDyStringPrintf(query, "%s\"%s\"", connector, (char*)tag->val);
+	dyStringPrintf(query, "%s\"%s\"", connector, (char*)tag->val);
 	connector = ",";
 	}
-    sqlDyStringPrintf(query, ")");
+    dyStringPrintf(query, ")");
     sqlUpdate(conn, query->string);
     }
 dyStringFree(&query);
