@@ -5842,7 +5842,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
+char *cdwJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid,submitId";
 
 void cdwJobStaticLoad(char **row, struct cdwJob *ret)
 /* Load a row from cdwJob table into ret.  The contents of ret will
@@ -5856,6 +5856,7 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->submitId = sqlSigned(row[7]);
 }
 
 struct cdwJob *cdwJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -5888,8 +5889,8 @@ void cdwJobSaveToDb(struct sqlConnection *conn, struct cdwJob *el, char *tableNa
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid,  el->submitId);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -5908,6 +5909,7 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->submitId = sqlSigned(row[7]);
 return ret;
 }
 
@@ -5917,7 +5919,7 @@ struct cdwJob *cdwJobLoadAll(char *fileName)
 {
 struct cdwJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -5935,7 +5937,7 @@ struct cdwJob *cdwJobLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -5963,6 +5965,7 @@ ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
 ret->pid = sqlSignedComma(&s);
+ret->submitId = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -6012,11 +6015,13 @@ fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
 fputc(sep,f);
 fprintf(f, "%d", el->pid);
+fputc(sep,f);
+fprintf(f, "%d", el->submitId);
 fputc(lastSep,f);
 }
 
 
-char *cdwSubmitJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid";
+char *cdwSubmitJobCommaSepFieldNames = "id,commandLine,startTime,endTime,stderr,returnCode,pid,submitId";
 
 void cdwSubmitJobStaticLoad(char **row, struct cdwSubmitJob *ret)
 /* Load a row from cdwSubmitJob table into ret.  The contents of ret will
@@ -6030,6 +6035,7 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = row[4];
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->submitId = sqlSigned(row[7]);
 }
 
 struct cdwSubmitJob *cdwSubmitJobLoadByQuery(struct sqlConnection *conn, char *query)
@@ -6062,8 +6068,8 @@ void cdwSubmitJobSaveToDb(struct sqlConnection *conn, struct cdwSubmitJob *el, c
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d)", 
-	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s',%lld,%lld,'%s',%d,%d,%d)", 
+	tableName,  el->id,  el->commandLine,  el->startTime,  el->endTime,  el->stderr,  el->returnCode,  el->pid,  el->submitId);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -6082,6 +6088,7 @@ ret->endTime = sqlLongLong(row[3]);
 ret->stderr = cloneString(row[4]);
 ret->returnCode = sqlSigned(row[5]);
 ret->pid = sqlSigned(row[6]);
+ret->submitId = sqlSigned(row[7]);
 return ret;
 }
 
@@ -6091,7 +6098,7 @@ struct cdwSubmitJob *cdwSubmitJobLoadAll(char *fileName)
 {
 struct cdwSubmitJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -6109,7 +6116,7 @@ struct cdwSubmitJob *cdwSubmitJobLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwSubmitJob *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -6137,6 +6144,7 @@ ret->endTime = sqlLongLongComma(&s);
 ret->stderr = sqlStringComma(&s);
 ret->returnCode = sqlSignedComma(&s);
 ret->pid = sqlSignedComma(&s);
+ret->submitId = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -6186,6 +6194,8 @@ fputc(sep,f);
 fprintf(f, "%d", el->returnCode);
 fputc(sep,f);
 fprintf(f, "%d", el->pid);
+fputc(sep,f);
+fprintf(f, "%d", el->submitId);
 fputc(lastSep,f);
 }
 

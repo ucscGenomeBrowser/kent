@@ -529,6 +529,7 @@ CREATE TABLE cdwJob (
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
     pid int default 0,	# Process ID for running processes
+    submitId int default 0,	# Associated submission ID if any
               #Indices
     PRIMARY KEY(id)
 );
@@ -542,6 +543,7 @@ CREATE TABLE cdwSubmitJob (
     stderr longblob,	# The output to stderr of the run - may be nonempty even with success
     returnCode int default 0,	# The return code from system command - 0 for success
     pid int default 0,	# Process ID for running processes
+    submitId int default 0,	# Associated submission ID if any
               #Indices
     PRIMARY KEY(id)
 );

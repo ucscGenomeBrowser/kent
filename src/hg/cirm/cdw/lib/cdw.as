@@ -447,6 +447,7 @@ table cdwJob
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    int submitId;  "Associated submission ID if any"
     )
 
 table cdwSubmitJob
@@ -459,6 +460,7 @@ table cdwSubmitJob
     lstring stderr; "The output to stderr of the run - may be nonempty even with success"
     int returnCode; "The return code from system command - 0 for success"
     int pid;	"Process ID for running processes"
+    int submitId;  "Associated submission ID if any"
     )
 
 table cdwTrackViz

@@ -2299,7 +2299,7 @@ void cdwQaDnaseSingleStats5mOutput(struct cdwQaDnaseSingleStats5m *el, FILE *f, 
 #define cdwQaDnaseSingleStats5mCommaOut(el,f) cdwQaDnaseSingleStats5mOutput(el,f,',',',');
 /* Print out cdwQaDnaseSingleStats5m as a comma separated list including final comma. */
 
-#define CDWJOB_NUM_COLS 7
+#define CDWJOB_NUM_COLS 8
 
 extern char *cdwJobCommaSepFieldNames;
 
@@ -2314,6 +2314,7 @@ struct cdwJob
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
     int pid;	/* Process ID for running processes */
+    int submitId;	/* Associated submission ID if any */
     };
 
 void cdwJobStaticLoad(char **row, struct cdwJob *ret);
@@ -2371,7 +2372,7 @@ void cdwJobOutput(struct cdwJob *el, FILE *f, char sep, char lastSep);
 #define cdwJobCommaOut(el,f) cdwJobOutput(el,f,',',',');
 /* Print out cdwJob as a comma separated list including final comma. */
 
-#define CDWSUBMITJOB_NUM_COLS 7
+#define CDWSUBMITJOB_NUM_COLS 8
 
 extern char *cdwSubmitJobCommaSepFieldNames;
 
@@ -2386,6 +2387,7 @@ struct cdwSubmitJob
     char *stderr;	/* The output to stderr of the run - may be nonempty even with success */
     int returnCode;	/* The return code from system command - 0 for success */
     int pid;	/* Process ID for running processes */
+    int submitId;	/* Associated submission ID if any */
     };
 
 void cdwSubmitJobStaticLoad(char **row, struct cdwSubmitJob *ret);
