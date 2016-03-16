@@ -1055,20 +1055,21 @@ cdwWriteErrToTable(conn, table, id, err);
 }
 
 
-void cdwAddJob(struct sqlConnection *conn, char *command)
+void cdwAddJob(struct sqlConnection *conn, char *command, int submitId)
 /* Add job to queue to run. */
 {
 char query[256+strlen(command)];
-sqlSafef(query, sizeof(query), "insert into cdwJob (commandLine) values('%s')", command);
+sqlSafef(query, sizeof(query), "insert into cdwJob (commandLine,submitId) values('%s',%d)", 
+    command, submitId);
 sqlUpdate(conn, query);
 }
 
-void cdwAddQaJob(struct sqlConnection *conn, long long fileId)
+void cdwAddQaJob(struct sqlConnection *conn, long long fileId, int submitId)
 /* Create job to do QA on this and add to queue */
 {
 char command[64];
 safef(command, sizeof(command), "cdwQaAgent %lld", fileId);
-cdwAddJob(conn, command);
+cdwAddJob(conn, command, submitId);
 }
 
 int cdwSubmitPositionInQueue(struct sqlConnection *conn, char *url, unsigned *retJobId)
@@ -1402,7 +1403,7 @@ vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
 }
 
 void cdwFileResetTags(struct sqlConnection *conn, struct cdwFile *ef, char *newTags, 
-    boolean revalidate)
+    boolean revalidate, int submitId)
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
 /* Remove existing QA records and rerun QA agent on given file.   */
 {
@@ -1447,7 +1448,7 @@ if (revalidate)
     sqlUpdate(conn, query);
 
     /* schedule validator */
-    cdwAddQaJob(conn, ef->id);
+    cdwAddQaJob(conn, ef->id, submitId);
     }
 else
     {
