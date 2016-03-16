@@ -75,7 +75,7 @@ sqlSafef(query, sizeof(query),
    , assemblyId, name, (long long)ef->id, targetSize);
 sqlUpdate(conn, query);
 
-cdwAddQaJob(conn, ef->id);
+cdwAddQaJob(conn, ef->id, 0);
 
 printf("Added target %s, id %u,  size %lld\n", name, sqlLastAutoId(conn), targetSize);
 }
