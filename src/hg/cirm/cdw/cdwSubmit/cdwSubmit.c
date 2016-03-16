@@ -554,7 +554,7 @@ if (errCatchStart(errCatch))
     verbose(1, "copying %s\n", ef->submitFileName);
     int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user);
     close(fd);
-    cdwAddQaJob(conn, fileId);
+    cdwAddQaJob(conn, fileId, submitId);
     tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
     }
 errCatchEnd(errCatch);
@@ -627,7 +627,7 @@ sqlUpdate(conn, query);
 }
 
 int handleOldFileTags(struct sqlConnection *conn, 
-    struct hash *metaIdHash, struct submitFileRow *sfrList, boolean update)
+    struct hash *metaIdHash, struct submitFileRow *sfrList, boolean update, int submitId)
 /* Check metadata on files mentioned in manifest that by MD5 sum we already have in
  * warehouse.   We may want to update metadata on these. This returns the number
  * of files with tags updated. */
@@ -675,7 +675,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 	verbose(1, "updating tags for %s\n", newFile->submitFileName);
 	}
     if (updateMeta || updateTags)
-	cdwFileResetTags(conn, oldFile, newFile->tags, !noRevalidate);
+	cdwFileResetTags(conn, oldFile, newFile->tags, !noRevalidate, submitId);
     if (updateTags || updateName || updateMeta)
 	++updateCount;
     cgiDictionaryFree(&oldTags);
@@ -695,7 +695,9 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
 	{
 	cdwValidateTagName(pair->name);
 	if (justTest)	// ugly - will do this outside of test soon
+	    {
 	    cdwValidateTagVal(pair->name, pair->val);
+	    }
 	}
     rCheckTagValid(tagStorm, stanza->children);
     }
@@ -948,6 +950,8 @@ verbose(2, "Parsed manifest and metadata into %d files\n", slCount(sfrList));
 /* Fake URL - system was built initially for remote files. */
 char submitUrl[PATH_LEN];
 safef(submitUrl, sizeof(submitUrl), "%s%s/%s", localPrefix, submitDir, manifestFile);
+if (stringIn("/", manifestFile))
+    errAbort("Please don't include a directory name in the manifest file path.  This is no longer needed.");
 
 /* Figure out directory ID for submission */
 int hostId = cdwGetHost(conn, "localhost");
@@ -1042,7 +1046,7 @@ if (errCatchStart(errCatch))
 
     /* Deal with old files. This may throw an error.  We do it before downloading new
      * files since we want to fail fast if we are going to fail. */
-    int updateCount = handleOldFileTags(conn, metaIdHash, oldList, doUpdate);
+    int updateCount = handleOldFileTags(conn, metaIdHash, oldList, doUpdate, submitId);
     sqlSafef(query, sizeof(query), 
 	"update cdwSubmit set metaChangeCount=%d where id=%u",  updateCount, submitId);
     sqlUpdate(conn, query);
