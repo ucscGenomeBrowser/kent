@@ -1,6 +1,6 @@
 /* hgGtexGeneBed - Load BED6+ table of per-gene data from NIH Common Fund Gene Tissue Expression (GTEX)
         Format:  chrom, chromStart, chromEnd, name, score, strand,
-                        geneId, transcriptId, transcriptClass, expCount, expScores
+                        geneId, geneType, expCount, expScores
                                 (gtexGeneBed.as)
     Uses hgFixed data tables loaded via hgGtex, and various gene tables.
 */
@@ -13,13 +13,13 @@
 #include "hash.h"
 #include "jksql.h"
 #include "hgRelate.h"
+#include "hdb.h"
 #include "basicBed.h"
 #include "genePred.h"
 #include "linefile.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "gtexTissueMedian.h"
 #include "gtexGeneBed.h"
-#include "gtexTranscript.h"
 
 #define GTEX_TISSUE_MEDIAN_TABLE  "gtexTissueMedian"
 #define GTEX_GENE_MODEL_TABLE  "gtexGeneModel"
@@ -36,15 +36,13 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgGtexGeneBed - Load BED file of per gene data from GTEX data and sample tables\n"
+  "hgGtexGeneBed - Load BED file of per gene data from GTEX gene model, data and sample tables\n"
   "usage:\n"
   "   hgGtexGeneBed database table\n"
   "options:\n"
   "    -gtexVersion=VN (default \'%s\')\n"
   "    -gencodeVersion=VNN (default \'%s\')\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
-  " NOTE: if gtexGeneModel<version> table doesn't exist, this program will create a .tab file suitable\n"
-  "       for loading, and then quit.  Inspect the model file, load it, then re-run."
   , gtexVersion, gencodeVersion);
 }
 
@@ -94,10 +92,10 @@ struct genePred *gp;
 sqlSafef(query, sizeof(query), "SELECT * from %s", buf);
 verbose(2, "Reading %s table\n", buf);
 sr = sqlGetResult(conn, query);
+boolean hasBin = hIsBinned(database, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    /* skip bin */
-    gp = genePredLoad(row+1);
+    gp = genePredLoad(row + (hasBin ? 1 : 0));
     verbose(3, "...Adding gene model %s to modelHash\n", gp->name);
     hashAdd(modelHash, gp->name, gp);
     }
@@ -148,8 +146,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             maxVal = (geneBed->expScores[i] > maxVal ? geneBed->expScores[i] : maxVal);
         }
     geneBed->name = ga->geneName;
-    geneBed->transcriptId = "none";
-    geneBed->transcriptClass = ga->geneType;
+    geneBed->geneType = ga->geneType;
     slAddHead(&geneBeds, geneBed);
     }
 sqlFreeResult(&sr);
