@@ -33,7 +33,7 @@ struct gtexGeneInfo
 /* GTEx gene model, names, and expression medians */
     {
     struct gtexGeneInfo *next;  /* Next in singly linked list */
-    struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
+    struct gtexGeneBed *geneBed;/* Gene name, id, type, exp count and medians 
                                         from BED table */
     struct genePred *geneModel; /* Gene structure from model table */
     char *description;          /* Gene description */
@@ -77,40 +77,19 @@ statusColors.unknown = hvGfxFindColorIx(hvg, unknownColor.r, unknownColor.g, unk
 }
 
 static Color getGeneClassColor(struct hvGfx *hvg, struct gtexGeneBed *geneBed)
-/* Find GENCODE color for gene type.
- * NOTE: this is based on defined gene biotypes from GENCODE V19, mapped to the classes
- * defined for transcripts, as follows:
-
- * coding: IG_C_gene, IG_D_gene, IG_J_gene, IG_V_gene, 
-               TR_C_gene, TR_D_gene, TR_J_gene, TR_V_gene 
-               polymorphic_pseudogene, protein_coding
-
- * pseudo: IG_C_pseudogene, IG_J_pseudogene, IG_V_pseudogene, TR_J_pseudogene, TR_V_pseudogene,
-               pseudogene 
-
- * nonCoding: 3prime_overlapping_ncrna, Mt_rRNA, Mt_tRNA, antisense, lincRNA, miRNA, 
-                misc_RNA, processed_transcript, rRNA, sense_intronic, sense_overlapping, 
-                snRNA, snoRNA
-*/
-
+/* Find GENCODE color for gene type. */
 {
 initGeneColors(hvg);
-char *geneType = geneBed->transcriptClass;
-
-/* keep backwards compatibility with tables (V4 having transcript classes in table) */
-if (geneType == NULL)
+char *geneClass = gtexGeneClass(geneBed);
+if (geneClass == NULL)
     return statusColors.unknown;
-
-if (sameString(geneType, "coding") || sameString(geneType, "protein_coding") || 
-        sameString(geneType, "polymorphic_pseudogene") || endsWith(geneType, "_gene"))
+if (sameString(geneClass, "coding"))
     return statusColors.coding;
-
-if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") || 
-        endsWith(geneType, "_pseudogene"))
+if (sameString(geneClass, "nonCoding"))
     return statusColors.nonCoding;
-
-// A bit of a cheat here -- better a mapping table
-return statusColors.nonCoding;
+if (sameString(geneClass, "pseudo"))
+    return statusColors.pseudo;
+return statusColors.unknown;
 }
 
 /***********************************************/
@@ -565,7 +544,7 @@ static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
-// Color in dense mode using transcriptClass
+// Color in dense mode using geneClass
 Color statusColor = getGeneClassColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
     {

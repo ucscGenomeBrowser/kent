@@ -31,20 +31,20 @@ struct tissueSampleVals
     struct slDouble *valList;   /* used to create val array */
     };
 
-char *gencodeTranscriptClassColorCode(char *transcriptClass)
+char *geneClassColorCode(char *geneClass)
 /* Get HTML color code used by GENCODE for transcript class
- * WARNING: should share code with transcript color handling in hgTracks */
+ * WARNING: should share code with gene color handling in hgTracks */
 {
 char *unknown = "#010101";
-if (transcriptClass == NULL)
+if (geneClass == NULL)
     return unknown;
-if (sameString(transcriptClass, "coding"))
+if (sameString(geneClass, "coding"))
     return "#0C0C78";
-if (sameString(transcriptClass, "nonCoding"))
+if (sameString(geneClass, "nonCoding"))
     return "#006400";
-if (sameString(transcriptClass, "pseudo"))
+if (sameString(geneClass, "pseudo"))
     return "#FF33FF";
-if (sameString(transcriptClass, "problem"))
+if (sameString(geneClass, "problem"))
     return "#FE0000";
 return unknown;
 }
@@ -237,9 +237,10 @@ else
 printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
 // The actual transcript model is a union, so this identification is approximate
 // (used just to find a transcript class)
-//printf("<b>Ensembl Transcript ID:</b> %s<br>\n", gtexGene->transcriptId);
-printf("<b>Ensembl Class: </b><span style='color: %s'>%s</span><br>\n", 
-            gencodeTranscriptClassColorCode(gtexGene->transcriptClass), gtexGene->transcriptClass);
+char *geneClass = gtexGeneClass(gtexGene);
+printf("<b>GENCODE Biotype: </b> %s<br>\n", gtexGene->geneType); 
+printf("<b>Gene Class: </b><span style='color: %s'>%s</span><br>\n", 
+            geneClassColorCode(geneClass), geneClass);
 printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                         hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
