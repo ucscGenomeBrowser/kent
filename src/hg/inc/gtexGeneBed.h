@@ -86,5 +86,8 @@ void gtexGeneBedCreateTable(struct sqlConnection *conn, char *table);
 char *gtexVersionSuffix(char *table);
 /* Return version string for a GTEx track table.  For now, just supporting V4 (no suffix) and V6 */
 
+char *gtexGeneClass(struct gtexGeneBed *geneBed);
+/* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype */
+
 #endif /* GTEXGENEBED_H */
 

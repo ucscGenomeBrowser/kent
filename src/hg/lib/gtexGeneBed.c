@@ -250,3 +250,33 @@ if (endsWith(table, "V4"))
 return("");
 }
 
+char *gtexGeneClass(struct gtexGeneBed *geneBed)
+/* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype 
+ * Mapped as follows:
+
+ * coding: IG_C_gene, IG_D_gene, IG_J_gene, IG_V_gene, 
+               TR_C_gene, TR_D_gene, TR_J_gene, TR_V_gene 
+               polymorphic_pseudogene, protein_coding
+
+ * pseudo: IG_C_pseudogene, IG_J_pseudogene, IG_V_pseudogene, TR_J_pseudogene, TR_V_pseudogene,
+               pseudogene 
+
+ * nonCoding: 3prime_overlapping_ncrna, Mt_rRNA, Mt_tRNA, antisense, lincRNA, miRNA, 
+                misc_RNA, processed_transcript, rRNA, sense_intronic, sense_overlapping, 
+                snRNA, snoRNA
+ * (MarkD request out for approval).
+*/
+{
+char *geneType = geneBed->geneType;
+if (geneType == NULL)
+    return "unknown";
+if (sameString(geneType, "coding") || sameString(geneType, "protein_coding") ||
+        sameString(geneType, "polymorphic_pseudogene") || endsWith(geneType, "_gene"))
+    return "coding";
+if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") ||
+        endsWith(geneType, "_pseudogene"))
+    return "pseudo";
+// A bit of a cheat here -- better a mapping table
+return "nonCoding";
+}
+
