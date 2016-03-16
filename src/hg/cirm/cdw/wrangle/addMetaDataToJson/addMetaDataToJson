@@ -2,8 +2,9 @@
 # addMetaDataToJson
 """
 Add meta data to a .json clustered file, ie a .json created by expMatrixToJson.  
-List the fields that you would like to be added using the fields option, select 
-the column in the meta data file the connects to the .json 'names' field.
+By default only fields with 2-26 unique values are added, this is due to graphical
+restrains.  If you would like to override this then List the fields that you would 
+like using the fields option.  
 """
 import os
 import sys
@@ -31,7 +32,8 @@ def parseArgs(args):
     parser.add_argument ("--keyCol",
     help = " The meta data key column. Defaults to 'meta' column. ",
     type = int)
-    parser.add_argument ("--fields", 
+    parser.add_argument ("--override",
+    help = " Override the field limit (26) for a specified field",
     nargs="+",
     action = "store")
     parser.add_argument ("--verbose",
@@ -39,8 +41,9 @@ def parseArgs(args):
     action = "store_true")
     
     parser.set_defaults(verbose = False)
+    parser.set_defaults(override = [])
     parser.set_defaults(keyCol = None)
-    parser.set_defaults(fields = ["age","donor","tissue","lab"]) 
+    parser.set_defaults(fields = None) 
     if (len(sys.argv) == 1): 
         parser.print_help()
         exit(1)
@@ -81,6 +84,16 @@ def addJsonNameValPair(string, name, val):
 
 def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
     """
+    Input:
+        jsonFile - An opened file like object
+        metaData - A dict of tuples
+        metaFieldToCol - A dict
+        fields - A list
+        outputJson - An opened file like object
+    Go through the jsonFile and identify the json entries with corresponding metaData entries. 
+    Add the elements in fields and their corresponding values to the json. The output is printed
+    to outputJson.  
+        
     """
     doOnce = True
     for line in jsonFile: # Lets abuse python's string manipulation a bit...
@@ -108,15 +121,33 @@ def main(args):
     options = parseArgs(args)
     if (options.verbose): print ("Start adding meta data to the clustered .json and .html files.")
     
+    # Read in the header line of the meta data table, store the columns as a list
     with open(options.metaDataFile, "r") as f:
-        firstLine = f.readline()[:-1].split("\t")
+        line = f.readline()
+        metaFields = line[:-1].strip("#").split("\t")
 
-    metaData = common.readInTable(open(options.metaDataFile, "r"), firstLine.index("meta"), "\t")
+    # Read in the meta data table as a dict of tuples
+    metaData = common.readInTable(open(options.metaDataFile, "r"), metaFields.index("meta"), "\t")
+    if (options.fields != None): 
+        metaFields = options.fields
+    
     metaFieldToCol = dict()
-    for item in options.fields: 
-        metaFieldToCol.setdefault(item,firstLine.index(item))
-        
-    updateJson(options.jsonFile, metaData, metaFieldToCol, options.fields, options.outputJson)
+    newMetaFields = []
+    count = 0 
+    # Go through the meta data and identify the columns with between 2-26 unique values. These will 
+    # be added to the json file. This can be overwritten with the fields command. 
+    for item in metaFields: 
+        numUniqueElems = len(set([i[count] for i in metaData.values()])) 
+        if (item in options.override):
+            metaFieldToCol.setdefault(item,metaFields.index(item))
+            newMetaFields.append(item)
+        elif (numUniqueElems <= 26 and numUniqueElems > 1):
+            metaFieldToCol.setdefault(item,metaFields.index(item))
+            newMetaFields.append(item)
+        elif options.verbose: print ("The meta field %s has %i unique values, only fields with 2-26 unique values are accepted."%(item, numUniqueElems))
+        count += 1 
+
+    updateJson(options.jsonFile, metaData, metaFieldToCol, sorted(newMetaFields), options.outputJson)
 
     if (options.verbose): print ("Completed adding meta data to the clustered .json and .html files.")
 

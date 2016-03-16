@@ -154,7 +154,7 @@ char **row;
 FILE *out = mustOpen("../conf/passwords", "w");
 
 sr = sqlGetResult(conn,
-"NOSQLINJ select email,password from members where activated='Y'"
+NOSQLINJ "select email,password from members where activated='Y'"
 " and (expireDate='' or (current_date() < expireDate))");
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -477,7 +477,7 @@ hPrintf("<h1>Members</h1>");
 hPrintf("<table>");
 hPrintf("<th>email</th><th>password</th>");
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from members");
+sr = sqlGetResult(conn, NOSQLINJ "select * from members");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hPrintf("<tr><td>%s</td><td>%s</td></tr>",row[0],row[1]);
@@ -1130,7 +1130,7 @@ if (checkPwd(password,m->password))
 
 
     /* add payment button if needed */
-    char *currentDate=sqlQuickString(conn, "NOSQLINJ select current_date()");
+    char *currentDate=sqlQuickString(conn, NOSQLINJ "select current_date()");
     if (!sameString(m->activated,"Y") || strcmp(currentDate,m->expireDate)>0)
 	{
 	drawPaymentButton(conn, m->type);

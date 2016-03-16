@@ -140,6 +140,7 @@
 #endif /* LOWELAB_WIKI */
 
 #include "trackVersion.h"
+#include "genbank.h"
 
 #define CHROM_COLORS 26
 
@@ -379,33 +380,23 @@ struct sameItemNode
     };
 
 
-static struct spaceSaver *findSpaceSaverAndFreeOldOnes(struct track *tg, enum trackVisibility vis)
-/* Find SpaceSaver in list, freeing older ones. Return spaceSaver found or NULL. */
+static struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
+/* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 {
-boolean found = FALSE;
-struct spaceSaver *result = NULL;
 struct spaceSaver *ss = NULL;
-struct spaceSaver *newSs = NULL; // tg->ss is actually a list of spaceSavers with different viz. with newest on top
-while ((ss = slPopHead(&tg->ss)))  // we needed to keep the old ss around to trigger proper viz changes.
+// tg->ss is actually a list of spaceSavers with different viz. with newest on top
+// We needed to keep the old ss around to trigger proper viz changes.
+// Sometimes vis changes because of limitedVis.
+// Sometimes the parent composite track's vis is being used to override subtrack vis.
+// Since it is not easy to be certain a vis will not be used again, we cannot free old spaceSavers.
+for(ss = tg->ss; ss; ss = ss->next)
     {
-    slAddHead(&newSs, ss);
-    if ((int)(ss->vis) == vis)
+    if (ss->vis == vis)
 	{
-	found = TRUE;
-	result = ss;
-	break;
+	return ss;
 	}
     }
-if (found)
-    {
-    while ((ss = slPopHead(&tg->ss)))
-	{
-	spaceSaverFree(&ss); // free older ones
-	}
-    }
-slReverse(&newSs);
-tg->ss = newSs;
-return result;
+return NULL;
 }
 
 
@@ -418,24 +409,19 @@ int packCountRowsOverflow(struct track *tg, int maxCount,
 //  When true,  the extra rows are kept, printed at the bottom in dense and Last Row: overlow count appears at bottom of leftLabel area.
 //  When false, the extra rows are tossed, the count seems to equal overflow limit + 2, and limitVisibility lowers vis and retries.
 
-//warn("packCountRowsOverflow tg->track %s (%sfirst window) tg->visibility=%d tg->limitedVis=%d tg->limitedVisSet=%d vis=%d insideWidth=%d", 
-//tg->track, currentWindow == windows ? "" : "non-", tg->visibility, tg->limitedVis, tg->limitedVisSet, vis, insideWidth); // DEBUG REMOVE
-
 // do not calculate if still loading all windows
 if (trackLoadingInProgress) // we pack after all windows are loaded.
     {
     // do not set ss yet
-    //warn("trackLoadingInProgress, exiting currentWindow=%lu windows=%lu", (unsigned long) currentWindow, (unsigned long) windows); // DEBUG REMOVE
     return 0;  // height of 0 triggers unsetting limitedVis since our data is not all loaded yet and it will get set later.
     }
-
 
 // do not re-calculate if not needed
 if (tg->ss)
     {
     if (tg->ss->window != currentWindow)
 	errAbort("unexpected current window %lu, expected %lu", (unsigned long) currentWindow, (unsigned long) tg->ss->window);
-    struct spaceSaver *ss = findSpaceSaverAndFreeOldOnes(tg, vis);
+    struct spaceSaver *ss = findSpaceSaver(tg, vis);
     if (ss)
 	return ss->rowCount;
     // Falls thru here if a new visibility is needed, such as full changing to pack after limitVisibility.
@@ -501,7 +487,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		    //char *itemName = tg->itemName(tg, item);
 		    //char *itemDataName = getItemDataName(tg, itemName);
 		    //char *mapItemName = tg->mapItemName(tg, item);
-		    //warn("duplicate keys in same window.\n key=[%s] itemDataName=%s mapItemName=%s w=%lu sin->window=%lu",  // DEBUG REMOVE
+		    //warn("duplicate keys in same window.\n key=[%s] itemDataName=%s mapItemName=%s w=%lu sin->window=%lu",  // TODO
 			//key, itemDataName, mapItemName, (unsigned long) w, (unsigned long) sin->window);
 		    }
 		}
@@ -547,16 +533,18 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		safef(key, sizeof key, "%s",  tg->itemName(tg, item));
 	    else
 		safef(key, sizeof key, "%s:%d-%d %s", chrom, baseStart, baseEnd, mapItemName);
-	    //warn("spaceSaver key=[%s] window=%lu", key, (unsigned long)w); // DEBUG REMOVE
 	    struct hashEl *hel = hashLookup(sameItem, key);
 	    if (!hel)
+		{
+		if (tg->networkErrMsg) // probably timed-out before thread finished adding more items.
+		    break;
 		errAbort("unexpected error: lookup of key [%s] in sameItem hash failed.", key);
+		}
 	    struct sameItemNode *sin = (struct sameItemNode *)hel->val;
 	    if (!sin)
 		errAbort("sin empty (hel->val)!");
 	    if (!sin->done)
 		{ // still needs to be done
-		//warn("Reversed list."); // DEBUG REMOVE
 		slReverse(&hel->val);
 		sin = (struct sameItemNode *)hel->val;
 		}
@@ -663,12 +651,7 @@ for(tg=tgSave; tg; tg=tg->nextWindow)
 tg = tgSave;
 spaceSaverFree(&ss);
 
-ss = findSpaceSaverAndFreeOldOnes(tg, vis);
-if (!ss)
-    errAbort("unexpected error findSpaceSaverAndFreeOldOnes returned NULL at end of pack function");
-
-//warn("packCountRowsOverflow returning rowCount=%d vis=%d tg->track=%s tg->ss->window=%lu", tg->ss->rowCount, tg->ss->vis, tg->track, (unsigned long) tg->ss->window);
-return ss->rowCount;
+return tg->ss->rowCount;
 }
 
 int packCountRows(struct track *tg, int maxCount, boolean withLabels, enum trackVisibility vis)
@@ -728,9 +711,6 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
 /* Most fixed height track groups will use this to figure out the height
  * they use. */
 {
-
-//warn("calling tgFixedTotalHeightOptionalOverflow tg->track=%s. Passed in vis=%d lineHeight=%d, heightPer=%d, allowOverflow=%d", 
-	//tg->track, vis, lineHeight, heightPer, allowOverflow); // DEBUG REMOVE
 
 boolean doWiggle = cartOrTdbBoolean(cart, tg->tdb, "doWiggle" , FALSE);
 if (doWiggle)
@@ -801,8 +781,6 @@ switch (vis)
         rows = 1;
 	break;
     }
-//warn("called tgFixedTotalHeightOptionalOverflow tg->track=%s. tg->lineHeight=%d, tg->heightPer=%d, itemCount=%d, rows=%d", 
-	//tg->track, tg->lineHeight, tg->heightPer, itemCount, rows); // DEBUG REMOVE
 tg->height = rows * tg->lineHeight;
 return tg->height;
 }
@@ -918,7 +896,6 @@ boolean isWithCenterLabels(struct track *track)
 {
 if (!withCenterLabels)
     {
-    //warn("isWithCenterLabels returns FALSE because withCenterLabels is FALSE track %s", track->track); // DEBUG REMOVE
     return FALSE;
     }
 if (track != NULL)
@@ -926,11 +903,9 @@ if (track != NULL)
     char *centerLabelsDense = trackDbSetting(track->tdb, "centerLabelsDense");
     if (centerLabelsDense)
         {
-	//warn("isWithCenterLabels returns sameWord(centerLabelsDense, \"on\")=%d track %s", sameWord(centerLabelsDense, "on"), track->track); // DEBUG REMOVE
         return sameWord(centerLabelsDense, "on");
         }
     }
-//warn("isWithCenterLabels returns withCenterLabels=%d track %s", withCenterLabels, track->track); // DEBUG REMOVE
 return withCenterLabels;
 }
 
@@ -990,7 +965,6 @@ safef(pos,sizeof(pos),"%s:%ld-%ld", chrom, start+1, end);
 if (virtualSingleChrom())
     {
     char *newPos = disguisePositionVirtSingleChrom(pos); // DISGUISE POS
-    //warn("mapBoxReinvoke: pos=%s newPos=%s", pos, newPos);  // DEBUG REMOVE
     safef(pos,sizeof(pos),"%s", newPos);
     freeMem(newPos);
     }
@@ -1880,7 +1854,7 @@ else if (sameString("Disagree", cartString(cart, "gvDisclaimer")))
     return;
     }
 /* load as linked list once, outside of loop */
-srcList = gvSrcLoadByQuery(conn, "NOSQLINJ select * from hgFixed.gvSrc");
+srcList = gvSrcLoadByQuery(conn, NOSQLINJ "select * from hgFixed.gvSrc");
 /* load part need from gv table, outside of loop (load in hash?) */
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -2085,10 +2059,6 @@ void linkedFeaturesNextPrevExonFind(struct track *tg, boolean next, struct conve
 /* Find next-exon function for linkedFeatures.  Finds corresponding position on virtual chrom for new winStart/winEnd of exon non-virt position,
  * and returns it. This function was cloned from linkedFeaturesLabelNextPrevItem and modified. */
 {
-//warn("got here linkedFeaturesNextPrevExon next=%d", next); // DEBUG REMOVE
-
-// TODO we could exit this routine faster for the case where it would not be found
-//  if we know that the virt chrom is made out of ascending non-overlapping chrom regions.
 
 struct convertRange *cr;
 
@@ -2110,6 +2080,9 @@ if (!virtMode)
 	}
     return;
     }
+
+// TODO we could exit this routine faster for the case where it would not be found
+//  if we know that the virt chrom is made out of ascending non-overlapping chrom regions.
 
 // set found for skipIts
 for (cr=crList; cr; cr=cr->next)
@@ -2169,13 +2142,11 @@ if (end > start)
 		}
 	    }
 
-	//warn("Expanding search window to start=%ld end=%ld size=%ld sizeWanted=%ld", xStart, xEnd, size, sizeWanted); // DEBUG REMOVE
+	// Expanding search window to xStart, xEnd, size, sizeWanted
 
 	struct window *windows = makeWindowListFromVirtChrom(xStart, xEnd);
 
 	totalFetched += (xEnd - xStart);
-
-	//warn("#WINDOWS READ=%d grand totalFetched=%ld", slCount(windows), totalFetched); // DEBUG REMOVE
 
 	struct window *w;
 	for(w=windows; w; w=w->next)
@@ -2190,24 +2161,20 @@ if (end > start)
 		if (sameString(w->chromName, cr->chrom) && (cr->end > w->winStart) && (w->winEnd > cr->start)) // overlap
 		    { // clip exon to region
 
-		    //warn("region overlap: w->chromName=%s, w->winStart=%d w->winEnd=%d",w->chromName,w->winStart,w->winEnd); // DEBUG REMOVE
-
+		    //region overlaps?
 		    int s = max(w->winStart, cr->start); 
 		    int e = min(w->winEnd, cr->end);
 		    long vs = w->virtStart + (s - w->winStart);
 		    long ve = w->virtEnd - (w->winEnd - e);
 
-		    //warn("exon and region overlap: s=%d e=%d vs=%ld ve=%ld overlap=e-s=%d", s, e, vs, ve, e-s); // DEBUG REMOVE
-
+		    // exon and region overlap
 		    if (cr->found)
 			{ // if existing, extend its range
 			cr->vStart = min(vs, cr->vStart);
 			cr->vEnd = max(ve, cr->vEnd);
-			//warn("updating vr, new values vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
 			}
 		    else
 			{ // first find
-			//warn("creating new vr vs=%ld ve=%ld", vs, ve); // DEBUG REMOVE
 			cr->found = TRUE;
 			cr->vStart = vs;
 			cr->vEnd = ve;
@@ -2231,7 +2198,6 @@ if (end > start)
 	// give up if we read this amount without finding anything
 	if (totalFetched > (virtWinBaseCount+1000000)) //  max gene size supported 1MB supports most genes.
 	    {
-	    //warn("totalFetched=%ld > 1000000, breaking out of loop.", totalFetched); // DEBUG REMOVE
 	    break;
 	    }
 	
@@ -2274,8 +2240,7 @@ for (cr=crList; cr; cr=cr->next)
 	{
 	if (next)
 	    {
-	    //warn("nearest found vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
-	    // are we dangling off the end, need to expand search to find full span
+	    // if dangling off the end, need to expand search to find full span
 	    if ((cr->vEnd == end) && (end < virtSeqBaseCount))
 		{
 		sizeWanted = saveSizeWanted; 
@@ -2284,8 +2249,7 @@ for (cr=crList; cr; cr=cr->next)
 	    }
 	else
 	    {
-	    //warn("nearest found vStart=%ld vEnd=%ld", cr->vStart, cr->vEnd); // DEBUG REMOVE
-	    // are we dangling off the start, need to expand search to find full span
+	    // if dangling off the start, need to expand search to find full span
 	    if ((cr->vStart == start) && (start > 0)) 
 		{
 		sizeWanted = saveSizeWanted; 
@@ -2333,7 +2297,6 @@ boolean linkedFeaturesNextPrevItem(struct track *tg, struct hvGfx *hvg, void *it
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
 {
-//warn("virtMode=%d next=%d winStart=%d winEnd=%d", virtMode, next, winStart, winEnd); // DEBUG REMOVE
 boolean result = FALSE;
 struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
@@ -2353,8 +2316,8 @@ if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     }
 else
     {
-    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
-    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon Edge");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon Edge");
     }
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
@@ -2406,7 +2369,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 slReverse(&crList);
 
 // convert entire list of ranges to virt coords in parallel.
-//warn("translate gene in parallel");  // DEBUG REMOVE
+// translate gene parts in parallel
 linkedFeaturesNextPrevExonFind(tg, next, crList);
 
 if ((numExons + 1) != slCount(crList))
@@ -2415,9 +2378,6 @@ if ((numExons + 1) != slCount(crList))
 // translate tall
 cr = crList;
 long xTallStart = cr->vStart, xTallEnd = cr->vEnd;
-//warn("tall next=%d lf->tallStart=%d lf->tallEnd=%d xTallStart=%ld xTallEnd=%ld skipIt=%d", 
-    //next, lf->tallStart, lf->tallEnd, xTallStart, xTallEnd, cr->skipIt);  // DEBUG REMOVE
-
 
 for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, cr=cr->next, exonIx++)
     {
@@ -2428,8 +2388,6 @@ for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, 
 
     // translate exon
     long xExonStart = cr->vStart, xExonEnd = cr->vEnd;
-    //warn("exon exonIx=%d next=%d exon->start=%d exon->end=%d xExonStart=%ld xExonEnd=%ld skipIt=%d", 
-	//exonIx, next, exon->start, exon->end, xExonStart, xExonEnd, cr->skipIt);  // DEBUG REMOVE
 
     if ((xExonEnd != -1) && ((xExonEnd - xExonStart) > (newWinSize - (2 * bufferToEdge))))
 	bigExon = TRUE;
@@ -2666,7 +2624,7 @@ struct virtRange
     struct virtRange *next;
     long vStart;
     long vEnd;
-    char *item;  // DEBUG REMOVE
+    char *item;
     };
 
 int vrCmp(const void *va, const void *vb)
@@ -2696,7 +2654,6 @@ void linkedFeaturesLabelNextPrevItem(struct track *tg, boolean next)
 /* Default next-gene function for linkedFeatures.  Changes winStart/winEnd
  * and updates position in cart. */
 {
-//warn("got here linkedFeaturesLabelNextPrevItem virtWinStart=%ld virtWinEnd=%ld", virtWinStart, virtWinEnd); // DEBUG REMOVE
 
 long start = virtWinStart;
 long end = virtWinEnd;
@@ -2732,7 +2689,7 @@ if (end > start)
     for ( ; sizeWanted > 0 && sizeWanted < BIGNUM; )  
 	{
 
-	//warn("Expanding search window to start=%ld end=%ld size=%ld sizeWanted=%ld", start, end, size, sizeWanted); // DEBUG REMOVE
+	// Expanding search window to start, end, size, sizeWanted
 
 	// include the original window so we can detect overlap with it.
 	long xStart = start, xEnd = end;
@@ -2754,14 +2711,10 @@ if (end > start)
 	// To optimize when using tiny exon-like regions, merge nearby regions.
 	struct window *mergedWindows = makeMergedWindowList(windows);
 
-
-	//warn("#WINDOWS READ=%d mergedWindows=%d", slCount(windows), slCount(mergedWindows)); // DEBUG REMOVE
-
 	struct window *mw;
 	for(mw=mergedWindows; mw; mw=mw->next)
-	    {  // DEBUG TEST
+	    {
 
-	    //warn("WINDOW %ld-%ld %s:%d-%d", w->virtStart, w->virtEnd, w->chromName, w->winStart, w->winEnd); // DEBUG REMOVE
 	    struct bed *items = NULL;
 
 #ifndef GBROWSE
@@ -2803,15 +2756,10 @@ if (end > start)
 			long vs = w->virtStart + (s - w->winStart);
 			long ve = w->virtEnd - (w->winEnd - e);
 
-			//warn("item->name=%s item->chrom=%s item->chromStart=%d item->chromEnd=%d vs=%ld ve=%ld", 
-			    //item->name, item->chrom, item->chromStart, item->chromEnd, vs, ve);  // DEBUG REMOVE
-
 			// NOTE TODO should this key string code should be copied from the pack routine?
 			//  When I tried the pack code, mapItemName method was crashing, not sure why.
 			char key[1024];
 			safef(key, sizeof key, "%s:%d-%d %s", item->chrom, item->chromStart, item->chromEnd, item->name);
-
-			//warn("hash key=%s", key); // DEBUG REMOVE
 
 			struct hashEl *hel = hashLookup(hash, key);
 			struct virtRange *vr;
@@ -2820,15 +2768,13 @@ if (end > start)
 			    vr = hel->val;
 			    vr->vStart = min(vs, vr->vStart);
 			    vr->vEnd = max(ve, vr->vEnd);
-			    //warn("updating vr, new values vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd); // DEBUG REMOVE
 			    }
 			else
 			    { // create new vr
-			    //warn("creating new vr vs=%ld ve=%ld", vs, ve); // DEBUG REMOVE
 			    AllocVar(vr);
 			    vr->vStart = vs;
 			    vr->vEnd = ve;
-			    vr->item = cloneString(item->name); // DEBUG REMOVE
+			    vr->item = cloneString(item->name);
 			    vr->next = NULL;
 			    hashAdd(hash, key, vr);
 			    }
@@ -2845,7 +2791,6 @@ if (end > start)
 	slFreeList(&windows);
 
 	vrList = NULL;
-	//warn("create a list of vrs from hash");  // DEBUG REMOVE
 	// create a list of vrs from hash
 	struct hashCookie cookie = hashFirst(hash);
 	struct hashEl *hel;
@@ -2854,20 +2799,7 @@ if (end > start)
 	    slAddHead(&vrList, hel->val);
 	    //hel->val = NULL; // keep for reuse
 	    }
-	//warn("about to slReverse vrList from hash");  // DEBUG REMOVE
 	slReverse(&vrList);  // probably not needed.
-
-
-	/*
-	{  // DEBUG REMOVE
-	warn("VR List");
-	struct virtRange *vr;
-	for(vr=vrList; vr; vr=vr->next)
-	    warn("vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd);
-	
-	}
-	*/
-
     
 	/* If we got something, or weren't able to search as big as we wanted to */
 	/* (in case we're at the end of the chrom).  */
@@ -2889,20 +2821,9 @@ if (end > start)
 		{
 		slReverse(&goodList);
 		vrList = goodList;
-		//warn("vrList=goodList"); // DEBUG REMOVE
 		break;
 		}
 	    }
-
-	/*
-	{  // DEBUG REMOVE
-	warn("VR List after filtering out ones on the original screen.");
-	struct virtRange *vr;
-	for(vr=vrList; vr; vr=vr->next)
-	    warn("vr->vStart=%ld vr->vEnd=%ld", vr->vStart, vr->vEnd);
-	
-	}
-	*/
 
 try_again:    
 	sizeWanted *= 2;
@@ -2945,40 +2866,28 @@ if (vrList)
     if (next)
 	{
 	slSort(&vrList, vrCmp);
-	/* //final list
-	{  // DEBUG REMOVE
-	warn("Final good VR List");
-	struct virtRange *vr;
-	for(vr=vrList; vr; vr=vr->next)
-	    warn("vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item);
-	
-	}
-	*/
 	vr = vrList;  // first one is nearest
-	//warn("nearest found vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item); // DEBUG REMOVE
-
-	// are we dangling off the end, need to expand search to find full span
+	// if dangling off the end, need to expand search to find full span
         if ((vr->vEnd == end) && (end < virtSeqBaseCount))
 	    {
 	    sizeWanted = saveSizeWanted; 
 	    goto try_again;
 	    }
-	//warn("sizeWanted=%ld, bufferToEdge=%ld", sizeWanted, bufferToEdge);  // DEBUG REMOVE
 	if (vr->vEnd + bufferToEdge - sizeWanted < virtWinEnd)
 	    {
-	    //warn("case 1, item end plus 5%% buffer within one screen width ahead"); // DEBUG REMOVE
+	    // case 1, item end plus 5%% buffer within one screen width ahead
 	    virtWinEnd = vr->vEnd + bufferToEdge;
 	    virtWinStart = virtWinEnd - sizeWanted;
 	    }
 	else if (vr->vStart + bufferToEdge - sizeWanted < virtWinEnd)
 	    {
-	    //warn("case 2, (puzzling) item start plus 5%% buffer within one screen width ahead"); // DEBUG REMOVE
+	    // case 2, (puzzling) item start plus 5%% buffer within one screen width ahead
 	    virtWinEnd = vr->vStart + bufferToEdge;
 	    virtWinStart = virtWinEnd - sizeWanted;
 	    }
 	else
 	    {
-	    //warn("case 3, default. shift window to item start minus 5%% buffer"); // DEBUG REMOVE
+	    // case 3, default. shift window to item start minus 5%% buffer
 	    virtWinStart = vr->vStart - bufferToEdge;
 	    virtWinEnd = virtWinStart + sizeWanted;
 	    }
@@ -2987,41 +2896,28 @@ if (vrList)
 	{
 	slSort(&vrList, vrCmpEnd);
 	slReverse(&vrList);
-	/*
-	//final list
-	{  // DEBUG REMOVE
-	warn("Final good VR List");
-	struct virtRange *vr;
-	for(vr=vrList; vr; vr=vr->next)
-	    warn("vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item);
-	
-	}
-	*/
 	vr = vrList;  // first one is nearest
-	//warn("nearest found vr->vStart=%ld vr->vEnd=%ld vr->item=%s", vr->vStart, vr->vEnd, vr->item); // DEBUG REMOVE
-
-	// are we dangling off the start, need to expand search to find full span
+	// if dangling off the start, need to expand search to find full span
         if ((vr->vStart == start) && (start > 0)) 
 	    {
 	    sizeWanted = saveSizeWanted; 
 	    goto try_again;
 	    }
-	//warn("sizeWanted=%ld, bufferToEdge=%ld", sizeWanted, bufferToEdge);  // DEBUG REMOVE
 	if (vr->vStart - bufferToEdge + sizeWanted > virtWinStart)
 	    {
-	    //warn("case 1, item start minus 5%% buffer within one screen width behind"); // DEBUG REMOVE
+	    // case 1, item start minus 5%% buffer within one screen width behind
 	    virtWinStart = vr->vStart - bufferToEdge;
 	    virtWinEnd = virtWinStart + sizeWanted;
 	    }
         else if (vr->vEnd - bufferToEdge + sizeWanted > virtWinStart)
 	    {
-	    //warn("case 2, (puzzling) item end minus 5%% buffer within one screen width behind"); // DEBUG REMOVE
+	    // case 2, (puzzling) item end minus 5%% buffer within one screen width behind
 	    virtWinStart = vr->vEnd - bufferToEdge;
 	    virtWinEnd = virtWinStart + sizeWanted;
 	    }
         else
 	    {
-	    //warn("case 3, default. shift window to item end minus 5%% buffer"); // DEBUG REMOVE
+	    // case 3, default. shift window to item end minus 5%% buffer
 	    virtWinEnd = vr->vEnd + bufferToEdge;
 	    virtWinStart = virtWinEnd - sizeWanted;
 	    }
@@ -3032,8 +2928,6 @@ if (vrList)
 	virtWinStart = 0;
 
     virtWinBaseCount = virtWinEnd - virtWinStart;
-
-    //warn("RESULT: virtWinStart=%ld virtWinEnd=%ld virtWinBaseCount=%ld",virtWinStart,virtWinEnd,virtWinBaseCount); // DEBUG REMOVE
 
     }
 
@@ -3571,6 +3465,10 @@ for (sf = lf->components; sf != NULL; sf = sf->next)
 	if (rangeIntersection(winStart, winEnd, s, e) <= 0)
 	    continue;
 	tGap = e - s;
+        if (s < winStart)
+            s = winStart;
+        if (e > winEnd)
+            e = winEnd;
 	if (sf->qStart >= sf->next->qEnd)
 	    qGap = sf->qStart - sf->next->qEnd;
 	else
@@ -4197,7 +4095,6 @@ if (withLeftLabels && firstOverflow && currentWindow == windows) // first window
     hvGfxSetClip(hvgSide, leftLabelX, yOff, insideWidth, tg->height);
     char nameBuff[SMALLBUF];
     safef(nameBuff, sizeof(nameBuff), "Last Row: %d", overflowCount);
-    //warn("[%s] overflowRow %d window %lu", nameBuff, overflowRow, (unsigned long) currentWindow);  // DEBUG REMOVE
     mgFontStringWidth(font, nameBuff);
     hvGfxTextRight(hvgSide, leftLabelX, y, leftLabelWidth-1, tg->lineHeight,
                    color, font, nameBuff);
@@ -4224,8 +4121,6 @@ int eClp = (e > winEnd)   ? winEnd   : e;
 int x1 = round((sClp - winStart)*scale) + xOff;
 int x2 = round((eClp - winStart)*scale) + xOff;
 int textX = x1;
-
-//warn("genericDrawItem top x1=%d x2=%d xOff=%d insideX=%d insideWidth=%d", x1, x2, xOff, insideX, insideWidth); // DEBUG REMOVE
 
 if (tg->drawLabelInBox)
     withLeftLabels = FALSE;
@@ -4302,20 +4197,17 @@ if (withLabels)
     else
         {
 
-	//warn("textX=%d y=%d nameWidth=%d name=%s insideX=%d insideWidth=%d", textX, y, nameWidth, name, insideX, insideWidth);  // DEBUG REMOVE
-	//warn("DEBUG hgfxSetClip fullInsideX=%d yOff=%d fullInsideWidth=%d tg->height=%d", fullInsideX, yOff, fullInsideWidth, tg->height);  // DEBUG REMOVE
-	
 	// shift clipping to allow drawing label to left of currentWindow
 	int pdfSlop=nameWidth/5;
         hvGfxUnclip(hvg);
         hvGfxSetClip(hvg, textX-1-pdfSlop, y, nameWidth+1+pdfSlop, tg->heightPer);
         if(drawNameInverted)
             {
-	    //warn("drawNameInverted"); // DEBUG REMOVE
             hvGfxBox(hvg, textX - 1, y, nameWidth+1, tg->heightPer-1, color);
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
             }
         else
+            // usual case
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
         hvGfxUnclip(hvg);
         hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
@@ -4491,8 +4383,10 @@ freez(&counts);
 
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
-wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
 	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, &tg->graphUpperLimit, &tg->graphLowerLimit);
+wigDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
+	       tg->preDrawContainer, tg->preDrawContainer->preDrawZero, tg->preDrawContainer->preDrawSize, tg->graphUpperLimit, tg->graphLowerLimit);
 tg->mapsSelf = TRUE;
 hvGfxUnclip(hvg);
 }
@@ -5697,7 +5591,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, "NOSQLINJ select * from knownCds where name=\"%s\"",
+    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
 	gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);
@@ -5903,9 +5797,9 @@ if (hTableExists(database, "kgXref"))
             protDisplayId = sqlGetField("hg17", "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
 	    }
-        if (useMimId && hTableExists(database, "refLink"))
+        if (useMimId && sqlTableExists(conn, refLinkTable))
             {
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(r.omimId as char) from kgXref,%s r where kgID = '%s' and kgXref.refseq = r.mrnaAcc and r.omimId != 0",refLinkTable, lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -6077,11 +5971,11 @@ if (hTableExists(database, "kgXref"))
                 dyStringAppend(name, protDisplayId);
                 }
 	    }
-        if (useMimId && hTableExists(database, "refLink"))
+        if (useMimId && sqlTableExists(conn, refLinkTable))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            sqlSafef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
+            sqlSafef(cond_str, sizeof(cond_str), "select cast(r.omimId as char) from kgXref,%s r where kgID = '%s' and kgXref.refseq = r.mrnaAcc and r.omimId != 0",refLinkTable, lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId)
                 dyStringAppend(name, mimId);
@@ -6212,9 +6106,9 @@ sqlSafefFrag(cond_str, sizeof cond_str, "name='%s' ", lf->name);
 refAcc = sqlGetField(database, "refGene", "name", cond_str);
 if (refAcc != NULL)
     {
-    if (hTableExists(database, "refSeqStatus"))
+    if (sqlTableExists(conn, refSeqStatusTable))
         {
-        sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'", refAcc);
+        sqlSafef(query, sizeof query, "select status from %s where mrnaAcc = '%s'", refSeqStatusTable, refAcc);
         sr = sqlGetResult(conn, query);
         if ((row = sqlNextRow(sr)) != NULL)
             {
@@ -6661,7 +6555,7 @@ if (cacheEl == NULL)
     {
     char query[256];
     sqlSafef(query, sizeof query, 
-	"select organism.name from gbCdnaInfo,organism where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
+	"select o.name from %s g,%s o where g.acc = '%s' and g.organism = o.id", gbCdnaInfoTable, organismTable, acc);
     char *org = sqlQuickString(conn, query);
     if ((org != NULL) && (org[0] == '\0'))
         org = NULL;
@@ -6684,14 +6578,14 @@ char *getGeneName(struct sqlConnection *conn, char *acc)
 {
 static char nameBuf[256];
 char query[256], *name = NULL;
-if (hTableExists(database,  "refLink"))
+if (sqlTableExists(conn,  refLinkTable))
     {
     /* remove the version number if any */
     static char accBuf[1024];
     safecpy(accBuf, sizeof accBuf, acc);
     chopSuffix(accBuf);
 
-    sqlSafef(query, sizeof query, "select name from refLink where mrnaAcc = '%s'", accBuf);
+    sqlSafef(query, sizeof query, "select name from %s where mrnaAcc = '%s'", refLinkTable, accBuf);
     name = sqlQuickQuery(conn, query, nameBuf, sizeof(nameBuf));
     if ((name != NULL) && (name[0] == '\0'))
         name = NULL;
@@ -6848,11 +6742,18 @@ boolean useMim =  FALSE;
 char trackLabel[1024];
 char *labelString = tg->table;
 boolean isRefGene = TRUE;
-if (sameString(labelString, "ncbiRefCurated") || sameString(labelString, "ncbiRefPredicted"))
+
+if (startsWith("ncbiRefSeq", labelString))
     {
-    labelString="ncbiGene";
+    labelString="refSeqComposite";
     isRefGene = FALSE;
     }
+else if (tdbIsCompositeChild(tg->tdb) && sameWord("refGene", labelString))
+    {
+    labelString="refSeqComposite";  // manage the case of existing refGene
+    isRefGene = TRUE;               // track in composite without new tables
+    }
+
 safef(trackLabel, sizeof trackLabel, "%s.label", labelString);
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, trackLabel);
@@ -6920,7 +6821,14 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         {
         char *mimId;
         char query[256];
-        sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+        if  (isRefGene)
+            {
+            sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+            }
+        else
+            {
+            sqlSafef(query, sizeof(query), "select omimId from ncbiRefSeqLink where id = '%s'", lf->name);
+            }
         mimId = sqlQuickString(conn, query);
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
@@ -7041,7 +6949,7 @@ else
 	lf->extra = cloneString(lf->name);
 }
 
-void loadNcbiGene(struct track *tg)
+void loadNcbiRefSeq(struct track *tg)
 /* Load up RefSeq known genes. */
 {
 enum trackVisibility vis = tg->visibility;
@@ -7158,8 +7066,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
-sqlSafef(query, sizeof query, "select status from refSeqStatus where mrnaAcc = '%s'",
-        name);
+
+if (startsWith("ncbiRefSeq", tg->table))
+    {
+    sqlSafef(query, sizeof query, "select status from ncbiRefSeqLink where id = '%s'", name);
+    }
+else
+    sqlSafef(query, sizeof query, "select status from %s where mrnaAcc = '%s'",
+        refSeqStatusTable, name);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7201,16 +7115,18 @@ if (lf->itemAttr != NULL)
  * Predicted, Inferred(other) -> lightest
  * If no refSeqStatus, color it normally.
  */
-if (hTableExists(database,  "refSeqStatus"))
-    return refGeneColorByStatus(tg, lf->name, hvg);
-else
-    return(tg->ixColor);
+struct sqlConnection *conn = hAllocConn(database);
+Color color = tg->ixColor;
+if (sqlTableExists(conn,  refSeqStatusTable) || hTableExists(database,  "ncbiRefSeqLink"))
+    color = refGeneColorByStatus(tg, lf->name, hvg);
+hFreeConn(&conn);
+return color;
 }
 
-void ncbiGeneMethods(struct track *tg)
+void ncbiRefSeqMethods(struct track *tg)
 /* Make NCBI Genes track */
 {
-tg->loadItems = loadNcbiGene;
+tg->loadItems = loadNcbiRefSeq;
 tg->itemName = refGeneName;
 tg->mapItemName = ncbiRefGeneMapName;
 tg->itemColor = refGeneColor;
@@ -7326,7 +7242,7 @@ int cDnaReadDirectionForMrna(struct sqlConnection *conn, char *acc)
 int direction = -1;
 char query[512];
 char buf[SMALLBUF], *s = NULL;
-sqlSafef(query, sizeof query, "select direction from gbCdnaInfo where acc='%s'", acc);
+sqlSafef(query, sizeof query, "select direction from %s where acc='%s'", gbCdnaInfoTable, acc);
 if ((s = sqlQuickQuery(conn, query, buf, sizeof(buf))) != NULL)
     {
     direction = atoi(s);
@@ -12432,11 +12348,11 @@ boolean doThisOmimEntry(struct track *tg, char *omimId)
 boolean doIt;
 boolean gotClassLabel;
 char labelName[255];
-boolean doClass1 = FALSE;
-boolean doClass2 = FALSE;
-boolean doClass3 = FALSE;
-boolean doClass4 = FALSE;
-boolean doOthers = FALSE;
+boolean doClass1 = TRUE;
+boolean doClass2 = TRUE;
+boolean doClass3 = TRUE;
+boolean doClass4 = TRUE;
+boolean doOthers = TRUE;
 
 struct hashEl *omimLocationLabels;
 struct hashEl *label;
@@ -12455,25 +12371,25 @@ if (!gotClassLabel) return(TRUE);
 /* check which classes have been selected */
 for (label = omimLocationLabels; label != NULL; label = label->next)
     {
-    if (endsWith(label->name, "class1") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class1") && sameString(label->val, "0"))
 	{
-	doClass1 = TRUE;
+	doClass1 = FALSE;
 	}
-    if (endsWith(label->name, "class2") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class2") && sameString(label->val, "0"))
 	{
-	doClass2 = TRUE;
+	doClass2 = FALSE;
 	}
-    if (endsWith(label->name, "class3") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class3") && sameString(label->val, "0"))
 	{
-	doClass3 = TRUE;
+	doClass3 = FALSE;
 	}
-    if (endsWith(label->name, "class4") && differentString(label->val, "0"))
+    if (endsWith(label->name, "class4") && sameString(label->val, "0"))
 	{
-	doClass4 = TRUE;
+	doClass4 = FALSE;
 	}
-    if (endsWith(label->name, "others") && differentString(label->val, "0"))
+    if (endsWith(label->name, "others") && sameString(label->val, "0"))
 	{
-	doOthers = TRUE;
+	doOthers = FALSE;
 	}
     }
 
@@ -12806,7 +12722,7 @@ omimAvSnpBuffer[0] = '\0';
 
 conn = hAllocConn(database);
 sqlSafef(query,sizeof(query),
-        "select replStr, dbSnpId, description from omimAvRepl where avId='%s'", name);
+        "select repl2, dbSnpId, description from omimAv where avId='%s'", name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -14065,7 +13981,7 @@ if (sameWord(tdb->track, "ensGene"))
     else
 	track->longLabel = cloneString(tdb->longLabel);
     }
-else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRefCurated"))
+else if (startsWith("ncbiRef", tdb->track))
     {
     struct trackVersion *trackVersion = getTrackVersion(database, "ncbiRefSeq");
     if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
@@ -14073,6 +13989,7 @@ else if (sameWord(tdb->track, "ncbiRefCurated") || sameWord(tdb->track, "ncbiRef
 	char longLabel[1024];
 	safef(longLabel, sizeof(longLabel), "%s - Annotation Release %s", tdb->longLabel, trackVersion->version);
 	track->longLabel = cloneString(longLabel);
+	tdb->longLabel = cloneString(longLabel);
 	}
     else
 	track->longLabel = cloneString(tdb->longLabel);
@@ -14351,7 +14268,10 @@ registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
-registerTrackHandler("ncbiGene", ncbiGeneMethods);
+registerTrackHandler("ncbiRefSeq", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqCurated", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqPredicted", ncbiRefSeqMethods);
+registerTrackHandler("ncbiRefSeqOther", ncbiRefSeqMethods);
 registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
@@ -14509,7 +14429,6 @@ registerTrackHandler("chimpSimpleDiff", chimpSimpleDiffMethods);
 registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
-registerTrackHandler("dless", dlessMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("jaxAlleleLift", jaxAlleleMethods);

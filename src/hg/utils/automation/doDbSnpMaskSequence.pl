@@ -157,7 +157,8 @@ _EOF_
   );
   # Make a README.txt before executing so it will be symlinked along with the other files.
   my ($genome, $date, $source) = HgAutomate::getAssemblyInfo($dbHost, $db);
-  my $fh = &HgAutomate::mustOpen(">$runDir/substitutions/README.txt");
+  my $readmeFile = $opt_debug ? "/dev/null" : "$runDir/substitutions/README.txt";
+  my $fh = &HgAutomate::mustOpen(">$readmeFile");
   print $fh <<EOF
 This directory contains FASTA files which contain a modified version
 of the $date reference human genome assembly.

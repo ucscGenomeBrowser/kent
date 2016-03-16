@@ -20,7 +20,7 @@
 char* SEQ_TBL = "gbSeq";
 static char* createSql =
 /* This keeps track of a sequence. */
-"NOSQLINJ create table gbSeq ("
+NOSQLINJ "create table gbSeq ("
   "id int unsigned not null primary key," /* Unique ID across all tables. */
   "acc char(12) not null,"                /* Unique accession. */
   "version smallint unsigned not null,"   /* genbank version number */

@@ -8,7 +8,9 @@
 #include "hdb.h"
 #include "cheapcgi.h"
 #include "dystring.h"
+#include "jsonParse.h"
 #include "suggest.h"
+#include "genbank.h"
 
 static void fail(char *msg)
 {
@@ -21,8 +23,11 @@ int main(int argc, char *argv[])
 {
 long enteredMainTime = clock1000();
 
+cgiSpoof(&argc, argv);
 char *prefix = cgiOptionalString("prefix");
 char *database = cgiOptionalString("db");
+
+initGenbankTableNames(database);
 
 int exact = cgiOptionalInt("exact", 0);
 struct sqlConnection *conn;
@@ -57,9 +62,9 @@ if(exact)
               "from knownCanonical k, knownGene kg, kgXref x where k.transcript = x.kgID and k.transcript = kg.name "
               "and x.geneSymbol = '%s' order by x.geneSymbol, k.chrom, kg.txEnd - kg.txStart desc", prefix);
     else
-        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, description.name "
-              "from %s r, gbCdnaInfo, description where r.name2 = '%s' and gbCdnaInfo.acc = r.name "
-              "and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, prefix);
+        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+              "from %s r, %s g, %s d where r.name2 = '%s' and g.acc = r.name "
+              "and g.description = d.id order by r.name2, r.chrom, r.txEnd - r.txStart desc", table, gbCdnaInfoTable, descriptionTable, prefix);
     }
 else
     {
@@ -72,9 +77,9 @@ else
               "from knownCanonical k, knownGene kg, kgXref x where k.transcript = x.kgID and k.transcript = kg.name "
               "and x.geneSymbol LIKE '%s%%' order by x.geneSymbol, k.chrom, kg.txStart", prefix);
     else
-        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, description.name "
-              "from %s r, gbCdnaInfo, description where r.name2 LIKE '%s%%' and gbCdnaInfo.acc = r.name "
-              "and gbCdnaInfo.description = description.id order by r.name2, r.chrom, r.txStart", table, prefix);
+        sqlSafef(query, sizeof(query), "select r.name2, r.chrom, r.txStart, r.txEnd, r.name, d.name "
+              "from %s r, %s g, %s d where r.name2 LIKE '%s%%' and g.acc = r.name "
+              "and g.description = d.id order by r.name2, r.chrom, r.txStart", table, gbCdnaInfoTable, descriptionTable, prefix);
     }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -84,7 +89,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         count++;
         dyStringPrintf(str, "%s{\"value\": \"%s (%s)\", \"id\": \"%s:%d-%s\", \"internalId\": \"%s\"}", count == 1 ? "" : ",\n",
-                       row[0], javaScriptLiteralEncode(row[5]), row[1], atoi(row[2])+1, row[3], javaScriptLiteralEncode(row[4]));
+                       row[0], jsonStringEscape(row[5]), row[1], atoi(row[2])+1, row[3], jsonStringEscape(row[4]));
         }
     }
 

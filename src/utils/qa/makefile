@@ -113,6 +113,7 @@ install:
 	cp -p --remove-destination net.csh                 ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination printMan.csh            ${SCRIPTS}
+	cp -p --remove-destination qaAutoTrack.sh          ${SCRIPTS}
 	cp -p --remove-destination qaConfig.csh            ${SCRIPTS}
 	cp -p --remove-destination qaConfig.bash           ${SCRIPTS}
 	cp -p --remove-destination qaGbTracks              ${SCRIPTS}
@@ -132,7 +133,7 @@ install:
 	cp -p --remove-destination syncAday.csh            ${SCRIPTS}
 	cp -p --remove-destination trackDbGlobal.csh       ${SCRIPTS}
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
-	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
+	cp -p --remove-destination updateTimesDb.sh        ${SCRIPTS}
 	cp -p --remove-destination whoMadeIt.csh           ${SCRIPTS}
 	@echo Reminder: was your sandbox up to date?
 

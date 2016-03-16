@@ -111,7 +111,7 @@ struct slName *getTableNames(struct sqlConnection *conn)
 /* Return a list of names of tables that have not been excluded by 
  * command line options. */
 {
-char *query = hoursOld ? "NOSQLINJ show table status" : "NOSQLINJ show tables";
+char *query = hoursOld ? NOSQLINJ "show table status" : "NOSQLINJ show tables";
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct slName *tableList = NULL;
 char **row = NULL;

@@ -48,8 +48,16 @@ function initVars()
             //
             // Early versions of Chrome had this problem too, but this problem went away
             // as of Chrome 5.0.335.1 (or possibly earlier).
+            //
+            // KRR/JAT 2/2016:
+            // This Safari issue is likely resolved in all current versions.  However the test
+            // for version had been failing, likely for some time now.
+            // (As of 9.0.9, possibly earlier, the 3rd part of the version is included in the
+            // user agent string, so must be accounted for in string match)
+            // Consequences were that page refresh was used instead of img update (e.g. 
+            // for drag-zoom).  And UI dialog was unable to update (e.g. via Apply button).
             imageV2.mapIsUpdateable = false;
-            var reg = new RegExp("Version\/([0-9]+.[0-9]+) Safari");
+            var reg = new RegExp("Version\/([0-9]+.[0-9]+)(.[0-9]+)? Safari");
             var a = reg.exec(navigator.userAgent);
             if (a && a[1]) {
                 var version = Number(a[1]);
@@ -129,7 +137,6 @@ var genomePos = {
     undisguisePosition: function(position) // UN-DISGUISE VMODE
     {   // find the virt position
 	//  position should be real chrom span
-	//warn("undisguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return position; // some parsing error, return original
@@ -142,7 +149,6 @@ var genomePos = {
 	var newEnd = -1;
 	var lastW = null;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -164,7 +170,6 @@ var genomePos = {
 		    var e = Math.min(end, w.winEnd);
 		    var cs = s - w.winStart + w.virtStart;
 		    var ce = e - w.winStart + w.virtStart;
-		    //warn("cs="+cs+" ce="+ce); // DEBUG REMOVE
 		    if (newStart === -1)
 			newStart = cs;
 		    newEnd = ce;
@@ -174,14 +179,12 @@ var genomePos = {
 	}
         //  return new virt undisguised position as a string
 	var newPos = "virt:" + (newStart+1) + "-" + newEnd;
-	//warn("undisguisePosition newPos="+newPos); // DEBUG REMOVE
 	return newPos;
     },
 
     disguiseSize: function(position) // DISGUISE VMODE
     {   // find the real size of the windows spanned
 	//  position should be a real chrom span
-	//warn("disguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return 0;
@@ -189,7 +192,6 @@ var genomePos = {
         var end = pos.end;
 	var newSize = 0;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -201,20 +203,17 @@ var genomePos = {
 		if (w.winEnd > start && end > w.winStart) {
 		    var s = Math.max(start, w.winStart);
 		    var e = Math.min(end, w.winEnd);
-		    //warn("s="+s+" e="+e); // DEBUG REMOVE
 		    newSize += (e - s);
 		}
 	    }
 	}
         //  return real size of the disguised position 
-	//warn("disguiseSize newSize="+newSize); // DEBUG REMOVE
 	return newSize;
     },
 
     disguisePosition: function(position) // DISGUISE VMODE
     {   // find the single-chrom range spanned
 	//  position should be virt
-	//warn("disguisePosition position="+position); // DEBUG REMOVE
 	var pos = parsePosition(position);
 	if (!pos)
 	    return position; // some parsing error, return original
@@ -225,7 +224,6 @@ var genomePos = {
 	var newEnd = -1;
 	var lastW = null;
 	var windows = null;
-	//warn("start="+start+" end="+end); // DEBUG REMOVE
 	for (j=0; j < 3; ++j) {
 	    if (j === 0) windows = hgTracks.windowsBefore;
 	    if (j === 1) windows = hgTracks.windows;
@@ -247,7 +245,6 @@ var genomePos = {
 		    var e = Math.min(end, w.virtEnd);
 		    var cs = s - w.virtStart + w.winStart;
 		    var ce = e - w.virtStart + w.winStart;
-		    //warn("cs="+cs+" ce="+ce); // DEBUG REMOVE
 		    if (newStart === -1)
 			newStart = cs;
 		    newEnd = ce;
@@ -257,7 +254,6 @@ var genomePos = {
 	}
         //  return new non-virt disguised position as a string
 	var newPos = chromName + ":" + (newStart+1) + "-" + newEnd;
-	//warn("disguisePosition newPos="+newPos); // DEBUG REMOVE
 	return newPos;
     },
 
@@ -414,11 +410,9 @@ var genomePos = {
 	var virtStart = -1, virtEnd = -1;
 	var s,e;
 	var i, len;
-	//warn("length of hgTracks.windows = "+hgTracks.windows.length); // DEBUG REMOVE
 	for (i = 0, len = hgTracks.windows.length; i < len; ++i) {
 	    var w = hgTracks.windows[i];
 	    var overlap = (chrom == w.chromName && chromEnd > w.winStart && w.winEnd > chromStart);
-	    //warn("w.chromName="+w.chromName+" w.winStart="+w.winStart+" w.winEnd="+w.winEnd+" overlap?="+overlap+" virtStart="+virtStart); // DEBUG REMOVE
 	    if (virtStart == -1) {
 		if (overlap) {
 		    // when they overlap the first time
@@ -426,7 +420,6 @@ var genomePos = {
 		    e = Math.min(chromEnd, w.winEnd);
 		    virtStart = w.virtStart + (s - w.winStart);
 		    virtEnd   = w.virtStart + (e - w.winStart);
-		    //warn("s="+s+" e="+e+" virtStart="+virtStart+" virtEnd="+virtEnd); // DEBUG REMOVE
 		} else {
 		    // until they overlap
 		    // do nothing
@@ -436,7 +429,6 @@ var genomePos = {
 		    // while they continue to overlap, extend
 		    e = Math.min(chromEnd, w.winEnd);
 		    virtEnd   = w.virtStart + (e - w.winStart);
-		    //warn("extend virtEnd="+virtEnd); // DEBUG REMOVE
 		} else {
 		    // when they do not overlap anymore, stop
 		    break;
@@ -535,7 +527,6 @@ var genomePos = {
     // Show the virtual and real positions of the windows
     {   
 	var position = genomePos.get();
-	//warn("positionDisplayDialog position="+position); // DEBUG REMOVE
         var positionDialog = $("#positionDialog")[0];
         if (!positionDialog) {
             $("body").append("<div id='positionDialog'><span id='positionDisplayPosition'></span>");
@@ -565,7 +556,7 @@ var genomePos = {
                 resizable: false,
                 autoOpen: false,
                 minWidth: 400,
-                minHeight: 40, // DEBUG GALT
+                minHeight: 40,
                 buttons: {  
                     "OK": function() {
                         $(this).dialog("close");
@@ -1011,7 +1002,6 @@ var dragSelect = {
 	var pos = parsePosition(newPosition);
 	var start = pos.start;
 	var end = pos.end;
-	//warn("highlightThisRegion: newPosition="+newPosition); // DEBUG REMOVE
         hgTracks.highlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#AAFFFF';
         hgTracks.highlight = imageV2.disguiseHighlight(hgTracks.highlight);
         // we include enableHighlightingDialog because it may have been changed by the dialog
@@ -1184,6 +1174,9 @@ var dragSelect = {
                 else {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                     if (imageV2.inPlaceUpdate) {
+			if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+			    newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+			}
                         imageV2.navigateInPlace("position=" + newPosition, null, true);
                     } else {
                         jQuery('body').css('cursor', 'wait');
@@ -2443,13 +2436,11 @@ var rightClick = {
                         }
                     } else if (cmd === 'highlightItem') {
 			if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
-			    //warn("hitFinish highlightItem chrom="+chrom+" chromStart="+chromStart+" chromEnd="+chromEnd); // DEBUG REMOVE
 			    // orig way only worked if the entire item was visible in the windows.
 			    //var result = genomePos.chromToVirtChrom(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
 			    var result = genomePos.convertChromPosToVirtCoords(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
-			    //warn("result.chromStart="+result.chromStart+" result.chromEnd="+result.chromEnd); // DEBUG REMOVE
 			    if (result.chromStart != -1)
 				{
 				var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
@@ -2882,6 +2873,14 @@ var rightClick = {
                                 displayItemFunctions = true;
                             }
                         }
+                        if (isHgc && href.indexOf('g=gtexGene') !== -1) {
+                            // For GTEx gene mouseovers, replace title (which may be a tissue name) with 
+                            // item (gene) name
+                            a = /i=([^&]+)/.exec(href);
+                            if (a && a[1]) {
+                                title = a[1];
+                            }
+                        }
                         if (displayItemFunctions) {
                             o[rightClick.makeImgTag("magnify.png") + " Zoom to " +  title] = {
                                 onclick: function(menuItemClicked, menuObject) {
@@ -3206,8 +3205,6 @@ var popUpHgt = {
         cleanHtml = stripJsEmbedded(cleanHtml,false);// DEBUG msg with true
         cleanHtml = stripMainMenu(cleanHtml,false);  // DEBUG msg with true
 
-	//alert(cleanHtml); // DEBUG REMOVE
-
         $('#hgTracksDialog').html("<div id='pop' style='font-size:.9em;'>"+ cleanHtml +"</div>");
 
         // Strategy for popups with js:
@@ -3226,7 +3223,7 @@ var popUpHgt = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 700;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
 
@@ -3239,7 +3236,7 @@ var popUpHgt = {
             height: 'auto',
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,
@@ -3377,7 +3374,7 @@ var popUp = {
         // I fixed just such a bug in the code that handles refSeq.
 	// See commit daf92c0f9eb331ea60740e6802aabd241d4be363.
         var changedVars = varHashChanges(allVars,popUp.saveAllVars);
-	 // DEBUG REMOVE
+	 // DEBUG Examples:
 	//debugDumpFormCollection("saveAllVars", popUp.saveAllVars);
 	//debugDumpFormCollection("allVars", allVars);
 	//debugDumpFormCollection("changedVars", changedVars);
@@ -3447,9 +3444,31 @@ var popUp = {
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
         var popMaxWidth  = ($(window).width() - 40);
-        var popWidth     = 740;
+        var popWidth     = 640;
         if (popWidth > popMaxWidth)
             popWidth = popMaxWidth;
+
+        // Create dialog buttons for UI popup
+        var uiDialogButtons = {};
+        if (popUp.trackDescriptionOnly) {
+            uiDialogButtons.OK = function() {
+                $(this).dialog("close");
+            };
+        } else {
+            uiDialogButtons.Apply = function() {
+                 popUp.uiDialogOk($('#pop'), popUp.trackName);
+                 // thanks to JAT for this cleverness to keep button functioning
+                 popUp.saveAllVars = getAllVars( $('#hgTrackUiDialog'), popUp.trackName);
+                 if (popUp.saveAllVars[popUp.trackName+"_sel"] === 0) {       // hide
+                    // NOTE: once hidden, can't be unhidden by popup, so shut it down
+                    $(this).dialog("close");
+                }
+            };
+            uiDialogButtons.OK = function() {
+                popUp.uiDialogOk($('#pop'), popUp.trackName);
+                $(this).dialog("close");
+            };
+        }
 
         $('#hgTrackUiDialog').dialog({
             ajaxOptions: {
@@ -3460,21 +3479,18 @@ var popUp = {
             height: (popUp.trackDescriptionOnly ? popMaxHeight : 'auto'),
             width: popWidth,
             minHeight: 200,
-            minWidth: 700,
+            minWidth: 400,
             maxHeight: popMaxHeight,
             maxWidth: popMaxWidth,
             modal: true,
             closeOnEscape: true,
             autoOpen: false,
-            buttons: { "OK": function() {
-                    if ( ! popUp.trackDescriptionOnly )
-                        popUp.uiDialogOk($('#pop'), popUp.trackName);
-                    $(this).dialog("close");
-            }},
+            buttons: uiDialogButtons,
+
             // popup.ready() doesn't seem to work in open.
             
             open: function () {
-                if ( ! popUp.trackDescriptionOnly ) {
+                if (!popUp.trackDescriptionOnly) {
                     $('#hgTrackUiDialog').find('.filterBy,.filterComp').each(
                         function(i) {
                             if ($(this).hasClass('filterComp'))
@@ -3734,13 +3750,24 @@ var imageV2 = {
     updateChromImg: function (response)
     {   // Parse out new chrom 'ideoGram' (if available)
         // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif"
-        //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom'>
+        //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom' style='display: inline;'>
+	// If the ideo is hidden or missing, we supply a place-holder for dynamic update later.
+        // e.g.: <IMG SRC = ""
+        //                BORDER=1 WIDTH=1039 HEIGHT=0 USEMAP=#ideoMap id='chrom' style='display: none'>
         // Larry's regex voodoo:
         var a = /<IMG([^>]+SRC[^>]+id='chrom'[^>]*)>/.exec(response);
         if (a && a[1]) {
-            var b = /SRC\s*=\s*"([^")]+)"/.exec(a[1]);
-            if (b && b[1]) {
+            var b = /SRC\s*=\s*"([^")]*)"/.exec(a[1]);
+            if (b) { // tolerate empty SRC= string when no ideo
                 $('#chrom').attr('src', b[1]);
+		var c = /style\s*=\s*'([^')]+)'/.exec(a[1]);
+    		if (c && c[1]) {
+		    $('#chrom').attr('style', c[1]);
+		}
+		var d = /HEIGHT\s*=\s*(\d*)/.exec(a[1]);
+    		if (d && d[1]) {
+		    $('#chrom').attr('HEIGHT', d[1]);
+		}
                 // Even if we're on the same chrom, ideoMap may change because the label
                 // on the left changes width depending on band name, and that changes px scaling.
                 var ideoMapMatch = /<MAP Name=ideoMap>[\s\S]+?<\/MAP>/.exec(response);
@@ -3765,10 +3792,11 @@ var imageV2 = {
 	// Added by galt to update window separators
         // Parse out background image url
         // background-image:url("../trash/hgt/blueLines1563-118-12_hgwdev_galt_9df9_e33b30.png")
+        // background-image:url("../trash/hgt/winSeparators_hgwdev_galt_5bcb_baff60.png")
+	// This will only need to update when multi-region is on and is using winSeparators.
 
         var a = /background-image:url\("(..\/trash\/hgt\/winSeparators[^"]+[.]png)"\)/.exec(response);
         if (a && a[1]) {
-	    //warn("updateBackground called! winSepartors"+a[1]);
 	    $('td.tdData').css("background-image", "url("+a[1]+")");
 	}
 
@@ -3827,15 +3855,11 @@ var imageV2 = {
         // this.cmd can be used to figure out which menu item triggered this.
         // this.id === appropriate track if we are retrieving just a single track.
 
-	//warn("updateImgAndMap got here 0");  // DEBUG REMOVE GALT
-
         // update local hgTracks.trackDb to reflect possible side-effects of ajax request.
-
-	//alert(response);  //DEBUG REMOVE GALT
 
         var newJson = scrapeVariable(response, "hgTracks");
 
-	//alert(JSON.stringify(newJson)); // DEBUG REMOVE GALT
+	//alert(JSON.stringify(newJson)); // DEBUG Example
 
         var oldJson = hgTracks;
         var valid = false;
@@ -4108,11 +4132,9 @@ var imageV2 = {
     // undisguise highlight pos
     {
 	// UN-DISGUISE
-	//console.warn("undisguiseHighlight: got here 0"); // DEBUG REMOVE
 	if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
 	    var position = pos.chrom+":"+pos.start+"-"+pos.end;
 	    var newPosition = genomePos.undisguisePosition(position);
-	    //console.warn("undisguiseHighlight: newPosition="+newPosition); // DEBUG REMOVE
 	    var newPos = parsePosition(newPosition);
 	    if (newPos) {
 		pos.chrom = newPos.chrom;
@@ -4129,9 +4151,7 @@ var imageV2 = {
         var hexColor = '#FFAAAA';
         $('#highlightItem').remove();
         if (hgTracks.highlight) {
-	    //console.warn("highlightRegion: hgTracks.highlight="+hgTracks.highlight); // DEBUG REMOVE
             pos = parsePositionWithDb(hgTracks.highlight);
-	    //console.warn("highlightRegion: pos.chrom="+pos.chrom); // DEBUG REMOVE
 	    // UN-DISGUISE
 	    imageV2.undisguiseHighlight(pos);
             if (pos) {

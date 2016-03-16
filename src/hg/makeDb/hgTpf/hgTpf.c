@@ -23,7 +23,7 @@ errAbort(
   );
 }
 
-char *create = "NOSQLINJ CREATE TABLE tilingPath (\n"
+char *create = NOSQLINJ "CREATE TABLE tilingPath (\n"
     "chrom varchar(255) not null,	# Chromosome name: chr1, chr2, etc.\n"
     "accession varchar(255) not null,	# Clone accession or ? or GAP\n"
     "clone varchar(255) not null,	# Clone name in BAC library\n"

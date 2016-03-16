@@ -439,7 +439,8 @@ dlAddTail(list, node);
 }
 
 struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, 
-		    struct lm *localMem, hacDistanceFunction *distF, hacMergeFunction *mergeF,
+		    struct lm *localMem, hacDistanceFunction *distF, 
+		    hacMergeFunction *mergeF, hacSibCmpFunction *cmpF,
 		    void *extraData, struct hash *precalcDistanceHash)
 /* Construct hacTree minimizing number of merges called, and doing distance calls
  * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. 
@@ -451,6 +452,8 @@ struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList,
  *	distF - function that calculates distance between two items, passed items and extraData
  *	mergeF - function that creates a new item in same format as itemList from two passed
  *	         in items and the extraData.  Typically does average of two input items
+ *	cmpF - function that compares two items being merged to decide who becomes left child
+ *		and who is the right child. 
  *	extraData - parameter passed through to distF and mergeF, otherwise unused, may be NULL
  *	precalcDistanceHash - a hash containing at least some of the pairwise distances
  *	            between items on itemList, set with hacTreeDistanceHashAdd. 
@@ -482,10 +485,27 @@ for (i=1; i<count; ++i)
 	&aNode, &bNode);
 
     /* Allocated new hacTree item for them and fill it in with a merged value. */
-    struct hacTree *ht;
+    struct hacTree *ht, *left, *right;
     lmAllocVar(localMem, ht);
-    struct hacTree *left = ht->left = aNode->val;
-    struct hacTree *right = ht->right = bNode->val;
+    
+    /* Check if the user provided a function to determine sibling perference */ 
+    
+    if (cmpF != NULL)
+	{
+	if (cmpF(((struct hacTree *)aNode->val)->itemOrCluster, ((struct hacTree *)bNode->val)->itemOrCluster, extraData))
+	    {
+	    left = ht->left = aNode->val;
+	    right = ht->right = bNode->val;
+	    }
+	else{
+	    left = ht->left = bNode->val;
+	    right = ht->right = aNode->val;
+	    }
+	}
+    else{
+	left = ht->left = aNode->val;
+	right = ht->right = bNode->val;
+	}
     left->parent = right->parent = ht;
     ht->itemOrCluster = mergeF(left->itemOrCluster, right->itemOrCluster, extraData);
     ht->childDistance = distance;

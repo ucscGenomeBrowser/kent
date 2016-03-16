@@ -30,13 +30,13 @@ fi
 
 if [ -s ${priAsmPath}/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz ]; then
   zcat ${priAsmPath}/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz | grep -v "^#" | cut -f1 | sort -u \
-     | sed -e "s/^\([A-Za-z0-9]*\).\([0-9]*\)/${chrUN}\1v\2\t\1.\2/;"
+     | sed -e 's/^\([A-Za-z0-9_]*\).\([0-9]*\)/'${chrUN}'\1v\2\t\1.\2/;'
 fi
 
 if [ -s ${priAsmPath}/unlocalized_scaffolds/unlocalized.chr2scaf ]; then
 grep -v "^#" \
   ${priAsmPath}/unlocalized_scaffolds/unlocalized.chr2scaf \
-    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9]*\).\([0-9]*\)/chr\1_\2v\3_random\t\2.\3/;'
+    | sed -e 's/^\([A-Za-z0-9]*\)\t\([A-Za-z0-9]*\).\([0-9]*$\)/chr\1_\2v\3_random\t\2.\3/;'
 
 fi
 
@@ -55,7 +55,7 @@ else
      else
         if [ -s ${priAsmPath}/nuclear/unlocalized_scaffolds/unlocalized.chr2scaf ]; then
           grep -v "^#" ${priAsmPath}/nuclear/unlocalized_scaffolds/unlocalized.chr2scaf \
-           | cut -f2 | sed -e 's/\([A-Za-z0-9]*\).\([0-9]*\)/chrM_\1_random\t\1.\2/'
+           | cut -f2 | sed -e 's/\([A-Za-z0-9]*\).\([0-9]*$\)/chrM_\1_random\t\1.\2/'
         else
            echo "need to find multiple chrM accessions" 1>&2
         fi

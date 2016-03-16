@@ -94,6 +94,7 @@ DBS = \
 	fr1 fr2 fr3 \
 	gadMor1 \
 	galGal2 galGal3 galGal4 \
+	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 \
 	h1n1 \
@@ -142,7 +143,7 @@ DBS = \
 	priPac1 priPac2 priPac3 \
 	pteVam1 tarSyr1 tarSyr2 \
 	repeats2 \
-	rheMac2 rheMac3 rheMac7 \
+	rheMac2 rheMac3 rheMac7 rheMac8 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \
 	sacCer1 sacCer2 sacCer3 \

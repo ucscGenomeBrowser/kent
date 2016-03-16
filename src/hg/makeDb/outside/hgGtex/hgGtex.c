@@ -97,10 +97,18 @@ static struct optionSpec options[] = {
 #define SAMPLE_ORGAN_FIELD_INDEX 5
 #define SAMPLE_TISSUE_FIELD_INDEX 6
 #define SAMPLE_ISCHEMIC_FIELD_INDEX 7
-#define SAMPLE_BATCH_FIELD_INDEX 8
-#define SAMPLE_ISOLATION_FIELD_INDEX 9
-#define SAMPLE_DATE_FIELD_INDEX 10
 
+#define V6
+/* Sample file changed format between V4 and V6 */
+#ifdef V6
+   #define SAMPLE_BATCH_FIELD_INDEX 10
+   #define SAMPLE_ISOLATION_FIELD_INDEX 11
+   #define SAMPLE_DATE_FIELD_INDEX 12
+#else
+   #define SAMPLE_BATCH_FIELD_INDEX 8
+   #define SAMPLE_ISOLATION_FIELD_INDEX 9
+   #define SAMPLE_DATE_FIELD_INDEX 10
+#endif
 
 int parseSampleFileHeader(struct lineFile *lf)
 /* Parse GTEX sample file header. Return number of columns */
@@ -211,8 +219,12 @@ while (lineFileNext(lf, &line, NULL))
 
     //word = words[SAMPLE_ISCHEMIC_FIELD_INDEX];
     //sample->ischemicTime = (word ? cloneString(word) : "unknown");
+#ifdef V6
+    // Feb 2016: this field is not in posted V6 sample file.  Broad has been notified.
+    sample->ischemicTime = "n/a";
+#else
     sample->ischemicTime = cloneString(words[SAMPLE_ISCHEMIC_FIELD_INDEX]);
-
+#endif
     word = words[SAMPLE_RIN_FIELD_INDEX];
     sample->rin = (isNotEmpty(word) ? sqlFloat(word) : 0);
 
@@ -780,9 +792,12 @@ if (doLoad)
     hgRemoveTabFile(tabDir, tissueMedianTable);
 
     // Load tissue data table
+#ifdef FAST_STATS
+    // Finish implementation of this if we want to add mean+whiskers to hgTracks
     verbose(2, "Creating tissue data table\n");
-    gtexTissueMedianCreateTable(conn, tissueDataTable);
+    gtexTissueDataCreateTable(conn, tissueDataTable);
     hgLoadTabFile(conn, tabDir, tissueDataTable, &tissueDataFile);
+#endif
 
     // Load sample data table 
     verbose(2, "Creating sample data table\n");

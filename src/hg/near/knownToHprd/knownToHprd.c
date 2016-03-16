@@ -69,7 +69,7 @@ struct hash *spIdHash = newHash(18);
 struct hash *kgIdHash = newHash(18);
 int missing=0;  // how many recs had no match via kgXref
 
-sr = sqlGetResult(hConn, "NOSQLINJ select kgId, mRNA, spId from kgXref");
+sr = sqlGetResult(hConn, NOSQLINJ "select kgId, mRNA, spId from kgXref");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *kgId = row[0];

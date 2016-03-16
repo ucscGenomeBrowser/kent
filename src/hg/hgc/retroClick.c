@@ -97,11 +97,10 @@ if (under != NULL)
 }
 
 static void getGenbankInfo(struct sqlConnection *conn, struct mappingInfo *mi)
-/* get source gene info and version from gbCdnaInfo and save in mi */
+/* get source gene info and version from gbCdnaInfoTable and save in mi */
 {
 char query[512], **row;
 struct sqlResult *sr;
-char *defDb = database; 
 
 /* if id has been modified for multi-level ancestor mappings:
  *    NM_012345.1-1.1 -> db:NM_012345a.1.1
@@ -110,10 +109,9 @@ char *defDb = database;
  */
 
 sqlSafef(query, sizeof(query),
-      "select gbCdnaInfo.version, geneName.name, description.name "
-      "from %s.gbCdnaInfo, %s.geneName, %s.description "
-      "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.geneName=geneName.id and gbCdnaInfo.description = description.id",
-      defDb, defDb, defDb, mi->gbAcc);
+      "select g.version, gene.name, d.name "
+      "from %s g, %s gene, %s d "
+      "where g.acc=\"%s\" and g.geneName=gene.id and g.description = d.id", gbCdnaInfoTable, geneNameTable, descriptionTable,  mi->gbAcc);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -753,10 +751,10 @@ struct genbankCds cds;
 char **row;
 
 sqlSafef(query, sizeof(query),
-      "select cds.name "
-      "from %s.gbCdnaInfo, %s.cds "
-      "where gbCdnaInfo.acc=\"%s\" and gbCdnaInfo.cds=cds.id",
-      database, database, mi->gbAcc);
+      "select c.name "
+      "from %s g, %s c "
+      "where g.acc=\"%s\" and g.cds=c.id",
+      gbCdnaInfoTable, cdsTable, mi->gbAcc);
 
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);

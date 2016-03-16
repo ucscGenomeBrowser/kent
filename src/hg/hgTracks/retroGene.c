@@ -3,6 +3,7 @@
 
 
 #include "retroGene.h"
+#include "genbank.h"
 
 /* bit set of labels to use */
 enum {useOrgCommon = 0x01,
@@ -92,10 +93,10 @@ if (r != NULL)
         geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
         }
 
-    if (hTableExists(database, "refLink") )
+    if (sqlTableExists(conn, refLinkTable) )
         {
         sqlSafefFrag(cond_str, sizeof(cond_str), "mrnaAcc = '%s'", r->refSeq);
-        geneSymbol = sqlGetField(database, "refLink", "name", cond_str);
+        geneSymbol = sqlGetField(database, refLinkTable, "name", cond_str);
         }
     }
 hFreeConn(&conn);

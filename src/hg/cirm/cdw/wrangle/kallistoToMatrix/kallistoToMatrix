@@ -23,6 +23,9 @@ def parseArgs():
     outBase - collect expression counts from all abundance.tsv files,
     given a directory containing kallisto output sub-directories.
 
+    Input files that end with "*.abundance.tsv" can be located either 
+    directly in dirName or one level beneath it.
+
     TPM transcript counts are written to <outBase>.tpm.tab
     TPM gene counts are written to <outBase>.geneTpm.tab
 
@@ -40,7 +43,7 @@ def parseArgs():
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
     #parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and write the sum of all transcript TPMs into a file <outBase>.geneTpm.tab")
-    parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene, one per line. default %default", default="/hive/data/outside/gencode/release_22/gencode.v22.metadata.HGNC.gz")
+    parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene-symbol (sym is not used), one per line. default %default", default="/hive/data/outside/gencode/release_22/transToGene.tab")
     (options, args) = parser.parse_args()
     if args==[]:
         parser.print_help()
@@ -56,15 +59,31 @@ def parseArgs():
 
 # ==== functions =====
     
-def iterAbundPaths(dirname):
-    " yield all paths of files abundance.tsv in subdirs under dirname "
-    for subDir in glob.glob(join(dirname, "*")):
-        if not isdir(subDir):
-            continue
-        abdPath = join(subDir, "abundance.tsv")
-        if not isfile(abdPath):
-            continue
-        yield abdPath
+def findInputFiles(dirname):
+    """ return two lists: cellIds and all paths of files */abundance.tsv in subdirs under dirname 
+    subDir name is the cellId.
+
+    alternative input:
+    dirName can also be a directory full of *.abundance.tsv files where * is the cellId.
+    """
+    cellIds = []
+    filePaths = []
+    for inputPath in glob.glob(join(dirname, "*")):
+        # check if it's an abundance file
+        if inputPath.endswith(".abundance.tsv") and isfile(inputPath):
+            cellId = basename(inputPath).split(".")[0]
+            filePath = inputPath
+        else:
+            # check if it's a dir with the right filename in it
+            if not isdir(filePath):
+                continue
+            filePath = join(filePath, "abundance.tsv")
+            if not isfile(filePath):
+                continue
+            cellId = basename(inputPath)
+        cellIds.append(cellId)
+        filePaths.append(filePath)
+    return cellIds, filePaths
 
 def parseKallisto(fname):
     """ parse a kallisto abundance.tsv file, return dict transcriptId -> est_tpm 
@@ -91,14 +110,20 @@ def parseDict(fname, stripDot=False):
 
     ret = {}
     for line in ifh:
+        if line.startswith("#") or line.startswith("transcriptId"):
+            continue
         fs = line.rstrip("\n").split()
+        transId = fs[0]
+        geneId = fs[1]
+        assert("T" in transId) # Ensembl transcript identifiers always have a T in them
+        assert("G" in geneId)  # Ensembl gene identifiers always have a G in them
         if stripDot:
-            fs[0] = fs[0].split('.')[0]
-            fs[1] = fs[1].split('.')[0]
-        ret[fs[0]]=fs[1]
+            transId = transId.split('.')[0]
+            geneId = geneId.split('.')[0]
+        ret[transId]=geneId
     return ret
         
-def outputBigMatrix(cellNames, results, outFname):
+def outputBigMatrix(cellNames, results, outFname, isGene=False):
     """
     given a list of cellNames and a list of transcript -> count dictionaries,
     write out a matrix with transcript -> counts in columns
@@ -106,9 +131,13 @@ def outputBigMatrix(cellNames, results, outFname):
     logging.info("Writing data to file %s" % outFname)
     ofh = open(outFname, "w")
     # write header
-    ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
+    if isGene:
+        ofh.write("#gene\t%s\n" % "\t".join(cellNames))
+    else:
+        ofh.write("#transcript\t%s\n" % "\t".join(cellNames))
     
     # create a sorted list of all transcript names
+    logging.info("Getting transcript IDs")
     allTrans = set()
     for res in results:
         allTrans.update(res)
@@ -116,6 +145,7 @@ def outputBigMatrix(cellNames, results, outFname):
     allTrans.sort()
 
     # write out matrix
+    logging.info("Iterating over transcript IDs and writing to tab file")
     for trans in allTrans:
         ofh.write("%s\t" % trans)
         row = []
@@ -166,50 +196,29 @@ def outputBigMatrix(cellNames, results, outFname):
         #ofh.write("\n")
     #ofh.close()
     
-def addGencodeSpecial(transFile, transToGene):
-    """ special code for gencode: their file does not include a mapping of
-    transcripts that do not have symbols. So I added a special file and
-    detect and merge it here
-    """
-    transFile2 = join(dirname(transFile), "transToGene.tab")
-    if not isfile(transFile2):
-        return transToGene
-
-    transToGene2 = parseDict(transFile, stripDot=True)
-
-    for transId, geneId in transToGene2.iteritems():
-        if transId not in transToGene:
-            transToGene[transId] = geneId
-    return transToGene
-
 def sumTransToGene(transDictList, transFile):
     """ given a list of dict transcript -> tpm, and a map transcript -> gene,
     map all transcripts to genes and return a list of gene -> sum of tpms
-    If we have no gene name, leave the transcript names in there.
+    If we have no gene ID, drop the transcript entirely.
     """
     transToGene = parseDict(transFile, stripDot=True)
-    transToGene = addGencodeSpecial(transFile, transToGene)
-    # special code for gencode: their FTP files do not include a mapping of
-    # transcripts->genes that do not have symbols. So I added a special file and
-    # detect and merge it here
-    transFile2 = join(dirname(transFile), "transToGene.tab")
-    if isfile(transFile2):
-        logging.info("Reading %s" % transFile2)
-        transToGene2 = parseDict(transFile2, stripDot=True)
-        for transId, geneId in transToGene2.iteritems():
-            if transId not in transToGene:
-                transToGene[transId] = geneId
-
-    logging.info("Mapping %d transcript IDs to gene IDs (symbol or ENSG ID)" % len(transToGene))
+    logging.info("Mapping %d transcript IDs to gene IDs" % len(transToGene))
 
     newRes = []
+    noMapTransIds = set()
     for transCounts in transDictList:
         geneCounts = defaultdict(float)
         for transId, count in transCounts.iteritems():
-            geneId = transToGene.get(transId, transId)
-            geneCounts[geneId]+=count
+            transId = transId.split(".")[0]
+            geneId = transToGene.get(transId)
+            if geneId is None:
+                noMapTransIds.add(transId)
+            else:
+                geneCounts[geneId]+=count
         newRes.append(dict(geneCounts))
 
+    logging.info("no gene ID found for %d transcript IDs. These are probably scaffolds/patches/etc. Example IDs: %s" %
+        (len(noMapTransIds), list(noMapTransIds)[:5]))
     return newRes
     
 def writeStats(inDir, outFname):
@@ -247,11 +256,13 @@ def main():
 
     writeStats(inDir, statOutFname)
 
-    inFnames = list(iterAbundPaths(inDir))
+    cellNames, inFnames = findInputFiles(inDir)
+    assert(len(cellNames)==len(inFnames))
+
     if len(inFnames)==0:
         logging.info("No input files found")
         sys.exit(1)
-    logging.info("Found %d kallisto input files (abundance.tsv)" % len(inFnames))
+    logging.info("Found %d kallisto input files (*.abundance.tsv)" % len(inFnames))
 
     threadCount = options.threads
     logging.info("Using %d threads to parse input files" % threadCount)
@@ -262,14 +273,12 @@ def main():
     pool.close()
     pool.join()
 
-    # reduce the filenames to only their parent directory names
-    cellNames = [splitext(basename(dirname(f)))[0] for f in inFnames]
+    logging.info("Done reading input files.")
 
-    #outputBigMatrixSparse(cellNames, results, outFname)
     outputBigMatrix(cellNames, results, transOutFname)
 
     geneOutFname = outBase+".geneTpm.tab"
     results = sumTransToGene(results, options.transFile)
-    outputBigMatrix(cellNames, results, geneOutFname)
+    outputBigMatrix(cellNames, results, geneOutFname, isGene=True)
 
 main()

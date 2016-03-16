@@ -94,7 +94,7 @@ ensemblIdUrl genePred
 ensArchive genePred
 exonArrows genePred bed broadPeak
 exonArrowsDense bed
-exonNumbers genePred bed broadPeak psl bigPsl
+exonNumbers genePred bed broadPeak psl bigPsl bigBed
 expDrawExons expRatio
 expProbeTable expRatio
 expScale bed expRatio
@@ -290,6 +290,7 @@ pslSequence psl bigPsl
 pslTable bed bigPsl
 refSeqAnnoVersion genePred
 release *
+refUrl bam
 ucscRetroInfo psl bigPsl
 ucscRetroParentTables *
 sGroup_Birds wigMaf
@@ -344,6 +345,7 @@ searchTrix bigBed
 selectSubject psl bigPsl
 seqTable bed
 settingsByView *
+sepFields bigBed bigPsl bigGenePred
 shortLabel *
 showCdsAllScales psl bigPsl
 showCdsMaxZoom psl bigPsl
@@ -355,6 +357,8 @@ showSubtrackColorOnUi *
 showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak broadPeak
 signalFilterLimits bed narrowPeak broadPeak
+skipFields bigBed
+skipEmptyFields bigBed
 smoothingWindow wig bed5FloatScore bedGraph bigWig
 snpExceptions bed
 snpExceptionDesc bed

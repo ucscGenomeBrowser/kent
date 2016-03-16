@@ -15,12 +15,6 @@ include trackDb.pgSnp.ra
 
 # Genotype Tissue Expresssion (GTEx)
 include trackDb.gtex.ra
-#track gtexGene
-#type bed 6 +
-#shortLabel GTEx
-#longLabel Gene Expression in 53 tissues from GTEX RNA-seq of 2921 samples (214 donors)
-#html gtexGeneExpr
-#group expression
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
@@ -944,7 +938,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
-##### begin SNP142 BUG FIX RE-RELEASE
 track snp142Common
 shortLabel Common SNPs(142)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 142) Found in >= 1% of Samples
@@ -963,7 +956,6 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
-priority 1
 html snp142Common_bugFix
 
 track snp142Flagged
@@ -1023,8 +1015,6 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
-
-##### end SNP142 BUG FIX RE-RELEASE
 
 track snp144Common
 shortLabel Common SNPs(144)
@@ -1104,6 +1094,85 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
+
+track snp146Common
+shortLabel Common SNPs(146)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 146) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp146Seq
+snpExceptionDesc snp146ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp146CodingDbSnp,
+priority 1
+
+track snp146Flagged
+shortLabel Flagged SNPs(146)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 146) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp146Seq
+snpExceptionDesc snp146ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp146CodingDbSnp,
+
+track snp146Mult
+shortLabel Mult. SNPs(146)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 146) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp146Seq
+snpExceptionDesc snp146ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp146CodingDbSnp,
+
+track snp146
+shortLabel All SNPs(146)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 146)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
+chimpDb panTro3
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp146CodingDbSnp,
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -4500,7 +4569,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9861
+searchPriority 12.9855
 padding 250
 
 searchTable snp144Flagged
@@ -4508,7 +4577,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9862
+searchPriority 12.9856
 padding 250
 
 searchTable snp144Mult
@@ -4516,7 +4585,7 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9863
+searchPriority 12.9857
 padding 250
 
 searchTable snp144
@@ -4524,7 +4593,39 @@ searchMethod exact
 searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
-searchPriority 12.9864
+searchPriority 12.9858
+padding 250
+
+searchTable snp146Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9851
+padding 250
+
+searchTable snp146Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9852
+padding 250
+
+searchTable snp146Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9853
+padding 250
+
+searchTable snp146
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.954
 padding 250
 
 include cloneEnd.trackDb.ra

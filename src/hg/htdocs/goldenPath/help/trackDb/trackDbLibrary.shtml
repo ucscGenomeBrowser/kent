@@ -277,8 +277,10 @@
     complete description of a track in HTML format.  The path of this
     file name is relative to the path of the trackDb file.  The
     ".html" suffix is implied.</P>
-    <P>To be consisent with standard Genome Browser track descriptions, this description
-    should contain several sections:</P>
+    <p>To be consistent with standard Genome Browser track descriptions, this description
+    should contain several sections as seen below. Here is a link to an 
+    <a href="../examples/hubExamples/templatePage.html" 
+    target="_blank">example template</a> that you can use.</p>
     <P><B>Description</B></P>
     <P class="indent1">A few sentences describing the contents of the track and what
     it attempts to show.  The description can include additional
@@ -776,10 +778,56 @@
     the URLs in double quotes.  The default label for the identifier is the field
     description in the .as file (all text after the # mark). 
     </P> 
+    <P>
+    If the field contains a "|" symbol, the part before the symbol is used to
+    replace the $$ wildcard and the part after it as the label. This is similar
+    to how Wikpedia markup encodes links. In the example below, a value for the
+    field pmid of "115330|Doe, J. et al" would create a link with the URL
+    http://www.ncbi.nlm.nih.gov/pubmed/115330 and the label "Doe, J. et al" .
+    </P>
 
     <P><B>Example:</B></P>
     <pre>
     urls pmid="http://www.ncbi.nlm.nih.gov/pubmed/$$" spId="http://www.uniprot.org/uniprot/$$"
+    </pre>
+</DIV>
+
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred"></span>
+    <div class="format">
+        <code>skipEmptyFields on</code><BR>
+    </div>
+        
+    <P>If this setting is "on", the item details page will not show fields that
+    have empty values. This can be useful when you have numerous extra
+    fields but only few of them have a value.</P> 
+</DIV>
+
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred"></span>
+    <div class="format">
+        <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+    </div>
+        
+    <P>This setting can be used to suppress extra fields on the item details page.
+    It can be useful if you do not want to show fields that are only used for mouseOvers or labels.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>
+    skipFields mouseOver,labelField,hiddenField
+    </pre>
+</DIV>
+
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred"></span>
+    <div class="format">
+        <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
+    </div>
+        
+    <P>This setting changes the item details page and splits the table used for showing extra fields
+    before any of the specified fields.
+    It can be useful to visually separate extra fields into logical categories.
+    </P>
+    <P><B>Example:</B></P>
+    <pre>
+    sepFields pmid,spId
     </pre>
 </DIV>
 

@@ -195,6 +195,9 @@ include <tt>129.70.40.120</tt> also to the exception list.
 <h1>Starting a Blat enabled Assembly Hub on GBiB</h1>
 <div class="sectionContent">
 <p>
+<b>Acquiring GBiB and Assembly Hub</b>
+</p>
+<p>
 <em>Install GBiB</em>
 <ul>
 1. Acquire and install an operational Genome Browser in the Box:
@@ -218,26 +221,68 @@ into your GBiB: <tt>ssh browser@localhost -p 1235</tt>, using <tt>browser</tt> f
 <em>Wget example hub</em>
 <ul>
 <p>
-3. Navigate to the GBiB's folders directory: <b><tt>cd /folders</tt></b>
-</p>
-<p>
-Then use sudo to wget this
+3. Navigate to the GBiB's folders directory and then use sudo to wget this
 assembly hub:
 </p>
 <p>
 <ul>
+<p>
+<b><tt>cd /folders</tt></b>
+</p>
+<p>
 <tt>sudo wget -r --no-parent --reject "index.html*" -nH --cut-dirs=3 http://genome.ucsc.edu/goldenPath/help/examples/hubExamples/hubAssembly/plantAraTha1/</tt>
+</p>
 </ul>
+</p>
+</ul>
+<em>Load hub on your GBiB</em>
+<p>
+<ul>
+4. You now have all the required files on your local machine and can load this plant assembly hub
+by using this URL and selecting it under the &quot;group&quot; category where
+&quot;Plant araTha1&quot; displays:<br>
+</p>
+<p>
+</ul>
+<ul>
+<tt>
+<a href="http://127.0.0.1:1234/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank">http://127.0.0.1:1234/cgi-bin/hgGateway?genome=araTha1&amp;hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt</a>
+</tt>
+</ul>
+</p>
+<p>
+<b>Enabling Blat</b>
+</p>
+<em>Acquire gfServer utility to create local blat servers</em>
+<ul>
+<p>
+5. To enable blat you must acquire the gfServer utility. The UCSC Genome Browser and Blat
+software are free for academic, nonprofit, and personal use. Commercial download and
+installation of the Blat and In-Silico PCR software may be licensed through Kent Informatics
+(<a href="http://www.kentinformatics.com">http://www.kentinformatics.com</a>).
+</p>
+<p>
+You can obtain just the gfServer utility on your GBiB with the following command that will create
+a bin directory and install the tool.
+<p>
+<ul>
+<tt>mkdir ~/bin -p; rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/blat/gfServer ~/bin/</tt>
+</ul>
+</p>
+<p>
+The GBiB also includes a tool you can run on the commandline to download an entire suite
+of tools including gfServer: <tt>gbibAddTools</tt>
 </p>
 </ul>
 <em>Enable blat lines in genomes.txt</em>
 <ul>
 <p>
-4. Navigate to the genomes.txt file of this assembly hub: <tt>cd /folders/hubExamples/hubAssembly/plantAraTha1/</tt>
+6. Navigate to the genomes.txt file of this assembly hub: <tt>cd /folders/hubExamples/hubAssembly/plantAraTha1/</tt>
 </p>
 <p>
-Edit the currently commented-out blat lines with <tt>sudo vi genomes.txt</tt>.
-Use &quot;x&quot; when the cursor is over the <tt>#</tt> at the start of the line to remove it and 
+Edit the currently commented-out blat lines with <tt>sudo vi genomes.txt</tt> and
+use &quot;x&quot; when the cursor is over the <tt>#</tt> at the start of the line to remove it and
 <tt>:w!</tt> to save the changes and <tt>:q</tt> to quit.
 </p>
 <p>
@@ -251,7 +296,7 @@ transBlat localhost 17777<br>
 <em>Start gfServers on your assembly hub</em>
 <ul>
 <p>
-5. Change directories to the 2bit file: <tt>cd /folders/hubExamples/hubAssembly/plantAraTha1/araTha1</tt> 
+7. Change directories to the 2bit file: <tt>cd /folders/hubExamples/hubAssembly/plantAraTha1/araTha1</tt> 
 </p>
 <p>
 Run the two gfServer commands to start the blat servers:
@@ -268,12 +313,12 @@ gfServer start localhost 17779 -stepSize=5 araTha1.2bit &<br>
 <em>Load hub and use blat</em>
 <ul>
 <p>
-6. Load this plant assembly hub by using this URL and selecting it under the &quot;group&quot; category where
+8. Load this plant assembly hub by using this URL and selecting it under the &quot;group&quot; category where
 &quot;Plant araTha1&quot; displays:<br>
 <ul>
 <tt>
-<a href="http://127.0.0.1:1234/cgi-bin/hgGateway?hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt"
-target="_blank">http://127.0.0.1:1234/cgi-bin/hgGateway?hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt</a>
+<a href="http://127.0.0.1:1234/cgi-bin/hgGateway?genome=araTha1&hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt"
+target="_blank">http://127.0.0.1:1234/cgi-bin/hgGateway?genome=araTha1&amp;hubUrl=http://127.0.0.1:1234/folders/hubExamples/hubAssembly/plantAraTha1/hub.txt</a>
 </tt>
 </ul>
 </p>

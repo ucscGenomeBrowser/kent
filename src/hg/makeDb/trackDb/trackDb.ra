@@ -14,8 +14,7 @@ include trackDb.chainNet.insects.ra
 
 
 include trackDb.nt.ra
-include trackDb.genbank.ra beta,public
-include trackDb.genbank.new.ra alpha
+include trackDb.genbank.ra 
 
 # Root trackDb.ra file.  Files from the organism subdirectory and the database sub-sub directory
 # will be layered on.  Organism is something like 'human' and database is something
@@ -434,6 +433,42 @@ pubsArticleTable hgFixed.pubsBingArticle
 pubsSequenceTable hgFixed.pubsBingSequenceAnnot
 pubsPslTrack pubsBingBlatPsl
 pubsMarkerTable hgFixed.pubsBingMarkerAnnot
+
+track patSeq
+shortLabel Lens Patents
+longLabel Lens PatSeq Patent Document Sequences
+group phenDis
+visibility hide
+type bigBed 12 +
+itemRgb on
+compositeTrack on
+release alpha
+linkIdInName on
+mouseOverField mouseOver
+url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/$[-$]?appInClaims=1
+urlLabel Open Lens PatSeq Analyzer with this chromosomal range
+skipFields mouseOver,fprint
+sepFields claimGrantSeqIds
+exonNumbers off
+urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www.lens.org/lens/patent/$$" claimSeqIds="http://www.lens.org/lens/patent/$$" grantSeqIds="http://www.lens.org/lens/patent/$$" appSeqIds="http://www.lens.org/lens/patent/$$"
+
+        track patNonBulk
+        shortLabel Non-bulk patents
+        longLabel Patent Lens Non-bulk patents
+        parent patSeq
+        type bigBed 12 +
+        visibility dense
+        priority 1
+        release alpha
+
+        track patBulk
+        shortLabel Bulk patents
+        longLabel Patent Lens Bulk patents
+        parent patSeq
+        type bigBed 12 +
+        visibility hide
+        priority 2
+        release alpha
 
 track transMap
 superTrack on
@@ -2047,7 +2082,7 @@ searchTable cytoBand
 searchMethod exact
 searchType cytoBand
 shortCircuit 1
-termRegex (x|y|[1-9][0-9]?)(p|q)[0-9]+(\.[0-9]+)?
+termRegex (x|y|[1-9][0-9]?)[pq]+[0-9]+(\.[0-9]+)?
 searchPriority 6
 padding 500000
 
@@ -2905,66 +2940,12 @@ track ncbiRefOverlap
 shortLabel NCBI Overlaps
 longLabel NCBI Gene Annotations with Exon Overlaps
 group genes
-visibility pack
+visibility hide
 priority 1
 color 12,12,120
 type genePred 
 baseColorUseCds given
 baseColorDefault genomicCodons
-
-track ncbiGene
-shortLabel NCBI RefSeq
-longLabel NCBI RefSeq Genes
-compositeTrack on
-group genes
-visibility hide
-type genePred 
-baseColorUseCds given
-noInherit on
-baseColorDefault genomicCodons
-subGroup1 view Views curated=Curated predicted=Predicted
-
-    track ncbiRefCuratedView
-    shortLabel Curated
-    view curated
-    visibility pack
-    color 16,93,235
-    parent ncbiGene
-
-	track ncbiRefCurated
-	shortLabel RefSeq Curated
-        subGroups view=curated
-	longLabel  RefSeq Curated (NM_* and NR_*)
-	visibility pack
-	parent ncbiRefCuratedView
-
-    track ncbiRefPredictedView
-    shortLabel Predicted
-    view predicted
-    visibility hide
-    parent ncbiGene
-    color 48,168,219
-    spectrum on
-
-	track ncbiRefPredicted
-	shortLabel RefSeq Predicted
-        subGroups view=predicted
-	longLabel  RefSeq Predicted (XM_* and XR_*)
-	parent ncbiRefPredictedView
-
-#itemDetailsHtmlTable geneDesc
-#url http://mupit-ebola.icm.jhu.edu/ResidueFileUpload?residues=chr1%20%[
-#urlLabel muPIT protein structures
-
-#        track ucscGenePfam
-#        shortLabel Pfam in UCSC Gene
-#        longLabel Pfam Domains in UCSC Genes
-#        parent spUniprot
-#        group genes
-#        type bed 12
-#        color 20,0,250
-#        url http://pfam.sanger.ac.uk/family/$$
-#        release alpha
 
 searchTable ucscToINSDC
 shortCircuit 1
@@ -3020,106 +3001,134 @@ searchMethod fuzzy
 termRegex g[0-9]+(\.t[0-9]+)?
 searchPriority 50
 
-track xNcbiRefSeq
+track refSeqComposite
+release alpha
 compositeTrack on
-shortLabel xNCBI RefSeq
+shortLabel NCBI RefSeq
 longLabel RefSeq gene predictions from NCBI
 group genes
-visibility hide
+visibility pack
 color 16,93,235
 type genePred
-baseColorUseCds given
-baseColorDefault genomicCodons
+dragAndDrop subTracks
 noInherit on
-subGroup1 view Views genes=Genes alignments=Alignments bigPsl=BigPsl curated=Curated predicted=Predicted other=Other
+subGroup1 view Views aGenes=RefSeq_annotations zAlign=mRNA_alignments
+html refGene.new
+allButtonPair on
 
     track ncbiRefGenesView
-    shortLabel NCBI RefSeq genes
-    view genes
-    visibility pack
+    release alpha
+    shortLabel NCBI RefSeq genes, all genes, curated, predicted and other
+    view aGenes
     color 16,93,235
-    parent xNcbiRefSeq
+    parent refSeqComposite on
+    configurable on
+    baseColorUseCds given
+    baseColorDefault genomicCodons
 
 	track ncbiRefSeq
-	shortLabel NCBI RefSeq genes
-        subGroups view=genes
-        longLabel RefSeq gene predictions from NCBI
-	visibility pack
-	parent ncbiRefGenesView
+        release alpha
+        parent ncbiRefGenesView on
+        shortLabel All RefSeq
+        subGroups view=aGenes
+        longLabel All RefSeq annotations from NCBI
+        html refGene.new
+        priority 1
 
-    track ncbiRefAlignView
-    shortLabel Alignments
-    view alignments
-    visibility hide
-    parent xNcbiRefSeq
-    color 48,168,219
-
-	track ncbiRefSeqAlignments
-	shortLabel NCBI RefSeq alignments
-        subGroups view=alignments
-	longLabel Alignments of RefSeq gene predictions from NCBI
-	parent ncbiRefAlignView
-        type psl
-
-    track ncbiRefBigAlignView
-    shortLabel BigPsl Alignments
-    view bigPsl
-    visibility hide
-    parent xNcbiRefSeq
-    color 48,168,219
-
-	track ncbiRefSeqBigPsl
-	shortLabel Big PSL NCBI RefSeq alignments
-        subGroups view=bigPsl
-	longLabel Big PSL Alignments of RefSeq gene predictions from NCBI
-	parent ncbiRefBigAlignView
-        type bigPsl
-
-    track ncbiRefXCuratedView
-    shortLabel Curated
-    view curated
-    visibility pack
-    color 16,93,235
-    parent xNcbiRefSeq
+        track refGene
+        release alpha
+	parent ncbiRefGenesView off
+        shortLabel UCSC RefSeq
+        longLabel RefSeq UCSC alignments
+        subGroups view=aGenes
+        color 12,12,120
+        type genePred refPep refMrna
+        idXref refLink mrnaAcc name
+        html refGene.new
+        priority 2
 
 	track ncbiRefSeqCurated
+        release alpha
+	parent ncbiRefGenesView off
 	shortLabel RefSeq Curated
-        subGroups view=curated
+        subGroups view=aGenes
 	longLabel RefSeq Curated (NM_* and NR_*)
-	visibility pack
-	parent ncbiRefXCuratedView
-
-    track ncbiRefXPredictedView
-    shortLabel Predicted
-    view predicted
-    visibility hide
-    parent xNcbiRefSeq
-    color 48,168,219
-    spectrum on
+        priority 3
 
 	track ncbiRefSeqPredicted
+        release alpha
+	parent ncbiRefGenesView off
 	shortLabel RefSeq Predicted
-        subGroups view=predicted
+        subGroups view=aGenes
 	longLabel RefSeq Predicted (XM_* and XR_*)
-	parent ncbiRefXPredictedView
-
-    track ncbiRefXOtherView
-    shortLabel Other
-    view other
-    visibility hide
-    parent xNcbiRefSeq
-    color 48,168,219
-    spectrum on
+        priority 4
 
 	track ncbiRefSeqOther
+        release alpha
+	parent ncbiRefGenesView off
 	shortLabel RefSeq Other
-        subGroups view=other
+        subGroups view=aGenes
 	longLabel RefSeq other genes, not (NM_* or NR_* or XM_* or XR_*)
-	parent ncbiRefXOtherView
+        priority 5
 
+    track ncbiRefAlignView
+    release alpha
+    parent refSeqComposite off
+    shortLabel Alignments
+    view zAlign
+    color 48,168,219
+    configurable on
+    type psl
+    pepTable ncbiRefSeqPepTable
+
+	track ncbiRefSeqPsl
+        release alpha
+	parent ncbiRefAlignView off
+	shortLabel mRNA Alignments
+        subGroups view=zAlign
+	longLabel mRNA Alignments for RefSeq gene predictions from NCBI
+        type psl
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault diffCodons
+        pslSequence no
+        baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
+        baseColorUseCds table ncbiRefSeqCds
+
+searchName refSeqComposite
 searchTable ncbiRefSeq
 searchType genePred
 shortCircuit 1
 searchMethod fuzzy
-termRegex ^[NXYcir][MPRdn][12567_as][0-9]+(\.[0-9]+)?
+termRegex [35A-Za-z][.0-9A-Za-z-]+
 searchPriority 50
+
+searchName refSeqName2
+searchTable ncbiRefSeq
+searchMethod prefix
+query select chrom, txStart,txEnd, name from %s where name2 like '%s%%'
+searchPriority 50.1
+
+searchName ncbiRefSeqProtein
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq protAcc search alias
+shortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,protAcc from %s where protAcc like '%s%%'
+termRegex [NZY]P_[0-9]+(\.[0-9]+)?
+
+searchName ncbiRefSeqMrna
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod prefix
+searchDescription ncbiRefSeq mrnaAcc search alias
+shortCircuit 1
+xrefTable ncbiRefSeqLink
+xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
+termRegex [NX][MR]_[0-9]+(\.[0-9]+)?

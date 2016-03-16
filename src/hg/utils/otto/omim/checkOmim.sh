@@ -18,146 +18,78 @@ export PATH=$WORKDIR":$PATH"
 #	this is where we are going to work
 if [ ! -d "${WORKDIR}" ]; then
     echo "ERROR in OMIM release watch, Can not find the directory:     ${WORKDIR}" 
-#    echo "ERROR in OMIM release watch, Can not find the directory:
-#    ${WORKDIR}" \
-#	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
     exit 255
 fi
 
 cd "${WORKDIR}"
 
-ftppass=`cat ftp.pwd`
-ftppass2=`cat ftp2.pwd`
 
-#	create ftp response script for the ftp connection session
-rm -f ftp.omim.rsp
-echo "user anonymous ${ftppass}
-cd OMIM
-ls
-bye" > ftp.omim.rsp
-
-
-#	reorganize results files
-rm -f prev.release.list
-rm -f ls.check
-cp -p release.list prev.release.list
-rm -f release.list
-
-#	connect and list a directory, result to file: ls.check
-ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > ls.check
-
-#	fetch the release directory names from the ls.check result file
-grep "genemap" ls.check |grep -v key|sort > release.list
-chmod o+w release.list
-
-#	verify we are getting a proper list
-WC=`cat release.list | wc -l`
-if [ "${WC}" -lt 1 ]; then
-    echo "potential error in OMIM release watch,
-check release.list in ${WORKDIR}" 
-#	| mail -s "ERROR: OMIM watch" ${DEBUG_EMAIL}
-    exit 255
-fi
-
-#	see if anything is changing, if so, email notify, download, and build
-
-diff prev.release.list release.list  >release.diff || true
-WC=`cat release.diff | wc -l`
-if [ "${WC}" -gt 1 ]; then
-    echo -e "New OMIM update noted at:\n" \
-"ftp://ftp.omim.org/\n"`comm -13 prev.release.list release.list`"/" 
-#    | mail -s "OMIM update watch" ${EMAIL}
-
-FN=`cat release.diff |grep omim-|sed -e 's/omim-/\tomim-/'|cut -f 2`
+######################
+# Checking if there's a new release
 
 today=`date +%F`
 mkdir -p $today
 cd $today
 
-# prepare ftp2 download response file
-echo doing ftp2 ...
+# fetch remote files
+echo fetching files ...
+wget -nv -i ../omimUrls.txt -o wget.log
+if [ $? -ne 0 ]; then
+    echo "Potential error in OMIM release fetch,
+check wget.log in ${WORKDIR}/${today}"
+    exit 255
+fi
 
-#	create ftp response script for the ftp2 connection session
-rm -f ftp2.omim.rsp
-echo "user omimftp3 ${ftppass2}
-cd OMIM
-get mimAV.txt
-get geneMap2.txt
-bye" > ftp2.omim.rsp
+md5sum $(ls | grep -v wget.log) | sort > md5sum.txt
 
-# download the new mimAv.txt data file
-ftp -n -v -i ftp.omim.org  < ftp2.omim.rsp > ftp2.log
+if [ ! -e ../prev.md5sum.txt ]
+then
+    touch ../prev.md5sum.txt
+fi
 
-# prepare ftp download response file
-echo doing ftp ...
+diff md5sum.txt ../prev.md5sum.txt > release.diff || true
 
-rm -f ftp.omim.rsp
-echo "user anonymous ${ftppass}
-cd OMIM
-binary
-get genemap
-get mim2gene.txt
-get morbidmap
-bye" > ftp.omim.rsp
+WC=`cat release.diff | wc -l`
+if [ "${WC}" -gt 0 ]; then
+#####################
+# There's a new release!
+    echo -e "New OMIM update noted at:\n" \
+"http://omim.org/\n"`comm -13 ../prev.md5sum.txt md5sum.txt`"/" 
 
-# download the new data file
-ftp -n -v -i ftp.omim.org  < ftp.omim.rsp > ftp.log
+# build the new OMIM track tables for hg18, hg19, hg38
+for db in hg18 hg19 hg38
+do
+  echo Running OMIM build for $db
+  rm -rf $db
+  mkdir -p $db
+  cd $db
 
-# build the new OMIM track tables for hg18
-rm -rf hg18
-mkdir -p hg18
-cd hg18
+  ln -s ../genemap.txt ./genemap.txt
+  ln -s ../allelicVariants.txt ./allelicVariants.txt
+  ln -s ../mim2gene.txt ./mim2gene.txt
+  ln -s ../../doOmimPhenotype.pl ./doOmimPhenotype.pl
 
-ln -s ../genemap ./genemap
-ln -s ../mimAV.txt ./mimAV.txt
-ln -s ../mim2gene.txt ./mim2gene.txt
-ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
+  ../../buildOmimTracks.sh $db
+  ../../validateOmim.sh $db
+  cd ..
 
-csh  ../../buildOmimTracks.csh hg18
-../../validateOmim.sh hg18
-cd ..
-
-# build the new OMIM track tables for hg19
-rm -rf hg19
-mkdir -p hg19
-cd hg19
-
-ln -s ../genemap ./genemap
-ln -s ../mimAV.txt ./mimAV.txt
-ln -s ../mim2gene.txt ./mim2gene.txt
-ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
-
-csh  ../../buildOmimTracks.csh hg19
-../../validateOmim.sh hg19
-cd ..
-
-# build the new OMIM track tables for hg38
-rm -rf hg38
-mkdir -p hg38
-cd hg38
-
-ln -s ../genemap ./genemap
-ln -s ../mimAV.txt ./mimAV.txt
-ln -s ../mim2gene.txt ./mim2gene.txt
-ln -s ../../parseGeneMap.pl ./parseGeneMap.pl
-
-csh  ../../buildOmimTracks.csh hg38
-../../validateOmim.sh hg38
-cd ..
-
-# now install for both hg18 and hg19
-for i in `cat ../omim.tables`
-do 
-    n=$i"New"
-    o=$i"Old"
-    hgsqlSwapTables hg18 $n $i $o -dropTable3
-    hgsqlSwapTables hg19 $n $i $o -dropTable3
-    hgsqlSwapTables hg38 $n $i $o -dropTable3
+  # install new tables
+  for table in `cat ../omim.tables`
+  do 
+    new=$table"New"
+    old=$table"Old"
+    hgsqlSwapTables $db $new $table $old -dropTable3
+  done
 done
 
+
+rm -f "${WORKDIR}"/prev.md5sum.txt
+cp -p "${WORKDIR}/${today}"/md5sum.txt "${WORKDIR}"/prev.md5sum.txt
 echo "Omim Installed `date`" 
 
 else
     echo "No update `date` "
+    cd "${WORKDIR}"
+    rm -rf "${today}"
 fi
 

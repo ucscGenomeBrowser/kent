@@ -30770,13 +30770,35 @@ cd ..
 
 hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_contigs_exons.txt
 
-
-
-
-
-EOF
 #############################################################################
-# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie)
+# GTEx V6 (October 2015) Kate
+# Create BED from hgFixed tables (see doc/gtex)
+
+cd /hive/data/outside/gtex/V6
+
+# Load gene models (Gencode V19 transcript union from GTEx)
+gunzip gencode.v19.genes.patched_contigs.gtf.gz
+awk '$1 !~ /^#/ {print "chr"$0}' gencode.v19.genes.patched_contigs.gtf | sed 's/chrMT/chrM/' | \
+        gtfToGenePred stdin gencodeV19.hg19.genePred
+hgLoadGenePred hg19 gtexGeneModelV6 gencodeV19.hg19.genePred -infoOut=gtexGeneModelInfoV6.tab
+
+# Get transcript for each gene
+A#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtexGeneTranscriptsV6.tab
+#hgLoadSqlTab hgFixed gtexTranscriptV6 ~/kent/src/hg/lib/gtexTranscript.sql gtexGeneTranscriptsV6.tab
+
+# Load BED table
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -noLoad -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
+#Max score: 219385.906250
+wc -l gtexGeneV6.tab
+# 56318 gtexGeneV6.tab
+
+# table looks OK
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
+
+#############################################################################
+# 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie - table fixed 3/1/16)
     # It was kind of a pain to get the Aspera command line client ascp this time around --
     # turns out it's included in their web browser plugin package, which I didn't think to
     # obtain because I need a command-line tool not a web browser plugin.  Anyway,
@@ -30804,6 +30826,12 @@ EOF
     cp /dev/null tgpPhase3.txt
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
       set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz
+      if ($c == "X") then
+        set file = ALL.chr$c.phase3_shapeit2_mvncall_integrated_v1b.20130502.genotypes.vcf.gz
+      endif
+      if ($c == "Y") then
+        set file = ALL.chr$c.phase3_integrated_v1b.20130502.genotypes.vcf.gz
+      endif
       echo "/gbdb/hg19/1000Genomes/phase3/$file\tchr$c" >> tgpPhase3.txt
     end
     # hgBbiDbLink doesn't support the seq column so use hgLoadSqlTab:
@@ -31242,4 +31270,177 @@ TMPDIR=/dev/shm' > DEF
     time (doRecipBest.pl -buildDir=`pwd` danRer10 hg19) > rbest.log 2>&1
     # real    8m8.619s
 
+_EOF_
 ##############################################################################
+# DBSNP B146 / SNP146 (DONE 3/11/16 angie)
+    # Redmine #16777
+    mkdir -p /hive/data/outside/dbSNP/146/human_hg19
+    cd /hive/data/outside/dbSNP/146/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b146_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b146_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b146_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b146_GRCh37p13
+build 146
+buildAssembly 105
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >>& do.log & tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b146_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b146_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#2 missingFromRsFasta.txt
+    cat missingFromRsFasta.txt
+#rs796052131
+#rs796052132
+    # Both of those get "invalid snp_id value", so no need to fetch fasta for them.
+    # For future reference, here's how to do it if necessary next time:
+    # Fetch fasta for those ids from dbSNP's batch_query.
+    # Go to this URL:
+    #   http://www.ncbi.nlm.nih.gov/projects/SNP/dbSNP.cgi?list=rsfile
+    # Enter your email address, select FASTA as output format, and upload missingFromRsFasta.txt
+    # Wait for email with link to results -- don't close that tab! -- then download the results:
+    # wget -O rs_fasta/rs_chBatchQuery.fas.gz $fileFromDbSnpEmail
+
+    # Check on the progress of the script.  If we did get sequence from dbSNP, and if the
+    # script has progressed past the loadDbSnp step and into the addToDbSnp step, then kill
+    # it and continue from addToDbSnp to pick up the added sequence.
+    # This time it was still in the loadDbSnp step, so no need to kill it.
+
+    # 3/10/16 - I fixed a bug in doDbSnp.pl that caused a few thousand alt-only SNPs
+    # to be lost due to wrongly ignoring the rs_fasta/rs_chAltOnly.fas.gz file, and
+    # re-ran from the first step using rs_fasta data onward.
+    # I edited addToDbSnp.csh to wrap an "if (0) then ... endif" around all steps except the
+    # last step that creates the ucscGnl table from rs_fasta headers.
+    mkdir -p `cat workingDir`
+    csh -efx addToDbSnp.csh >>& do.log & tail -f do.log
+    # When that completed, I continued running from the bigJoin step.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNP146 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (IN PROGRESS 3/11/16 angie)
+    # Redmine #16777
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp146Ortho.2016-03-11
+    cd /hive/data/genomes/hg19/bed/snp146Ortho.2016-03-11
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP146 (DONE 3/11/16 angie)
+    # Redmine #16777
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp146Mask.2016-03-11
+    cd /hive/data/genomes/hg19/snp146Mask.2016-03-11
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# Patents (26 Feb 2016, Max)
+
+# first prep the meta data
+cd /hive/data/genomes/hg19/bed/patents/data/
+sort sequence_details.csv -S10G -k7,7 -t$'\t' --parallel=20 > sequence_details.csv.s7 
+sort patent_details -S10G -k1b,1 -t$'\t' --parallel=20 > patent_details.csv.s1 
+join -1 7 -2 1 sequence_details.csv.s7 patent_details.csv.s1 -t $'\t' -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 2.3 2.4 2.5' > seqAndPatentJoined.tab &
+sort --parallel=40 seqAndPatentJoined.tab -k1,1 -S10G > seqAndPatentJoined.s1.tab
+
+# create list of high-throughput patents with >100 sequences
+# list is cross-organism!
+time sort -k4,4 -S10G --parallel=20 hg19.bed > hg19.s4.bed &
+cat seqAndPatentJoined.s1.tab | cut -f1,8 | cut -f2 | tabUniq -rs > patentSeqCounts.tab
+less patentSeqCounts.tab | tawk '($2>=100)' | cut -f1 > htPatents.txt
+
+# now summarize the documents to one line per sequence
+# takes two hours
+time patSeqSummarizeDocs seqAndPatentJoined.s1.tab > seqAndPatentSummary.tab
+
+# now convert the SAM files
+cd /hive/data/genomes/hg19/bed/patents/data/
+samtools view -S -t ensGenomeHg19/Homo_sapiens.GRCh37.75.dna.toplevel.fa.fai Homo_sapiens.GRCh37.75.s90c50.sam -h | grep -v ^MT > hg19.sam
+# convert to bed
+function sam2psl_pierre() { java -Dfile.encoding=UTF8 -Xmx500m    -cp "/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-jexl-2.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/commons-logging-1.1.1.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/htsjdk-1.133.jar:/cluster/bin/jvarkit/htsjdk-1.133/dist/snappy-java-1.0.3-rc3.jar:/cluster/bin/jvarkit/dist-1.133/sam2psl.jar" com.github.lindenb.jvarkit.tools.misc.SamToPsl $*; }
+sam2psl_pierre hg19.sam 2> /dev/null > hg19.psl
+pslToBed hg19.psl hg19.bed
+# careful: this text includes tab characters
+sed -ri 's/_(16|0)	/	/g' hg19.bed
+
+# convert the hg19 bed to bigBed
+cd /hive/data/genomes/hg19/bed/patents/hg19
+join -t $'\t' -1 4 -2 1 ../data/hg19.s4.bed ../data/seqAndPatentSummary.tab -o '1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 1.10 1.11 1.12 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 2.10 2.11 2.12' | patSeqFilterBulkAndAnnotate ../data/htPatents.txt patBulk.bed patNonBulk.bed -c ../data/seqCounts.tab
+bedSort patNonBulk.bed patNonBulk.bed 
+bedSort patBulk.bed patBulk.bed 
+bedToBigBed patNonBulk.bed /cluster/data/genomes/hg19/chrom.sizes patNonBulk.bb -tab -as=../patSummary.as -type=bed12+
+bedToBigBed patBulk.bed /cluster/data/genomes/hg19/chrom.sizes patBulk.bb -tab -as=../patSummary.as -type=bed12+
+hgBbiDbLink hg19 patBulk /gbdb/hg19/bbi/patBulk.bb
+hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
+
+#########################################################################
+2016-03-02: import of UCSC GENCODE group processing of GENCODE V24lift37 (markd)
+    # download files
+    mkdir -p /hive/data/genomes/hg19/bed/V24lift37
+    cd /hive/data/genomes/hg19/bed/V24lift37
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set
+    # release and transcript support versions
+
+
+    # download, build and load tables
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense (results in gencode-cmp.tsv)
+        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.  Follow instructiuons in ra file to ensure
+    ## filters are correct.
+    cd kent/src/hg/makeDb/trackDb
+    cp human/hg38/wgEncodeGencodeV24.ra human/hg19/wgEncodeGencodeV24lift37.ra
+    cp human/hg38/wgEncodeGencodeV24.html human/hg19/wgEncodeGencodeV24lift37.html
+
+    # edit these plus human/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg19/bed/gencodeV24lift37
+    make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+

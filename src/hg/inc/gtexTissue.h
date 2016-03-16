@@ -84,6 +84,9 @@ void gtexTissueCreateTable(struct sqlConnection *conn, char *table);
 struct gtexTissue *gtexGetTissues();
 /* Get tissue id, descriptions, colors, etc. */
 
+struct hash *gtexGetTissueSampleCount();
+/* Return hash of sample counts keyed by tissue name */
+
 struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb);
 /* Increase brightness for better visibility of small items */
 

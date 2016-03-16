@@ -1,0 +1,159 @@
+# Download and load tissue expression and sample metadata for GTEx V6 (October 2015) from portal:
+#      gtexportal.org
+# 11/2015 KRR
+
+# Download normalized gene expression levels (RPKM)
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/rna_seq_data/GTEx_Analysis_v6_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct.gz
+gunzip $dataFile.gz
+wc -l $dataFile ../V4/*.gct
+    # 56321 GTEx_Analysis_v6_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct
+    # 55996 ../V4/GTEx_Analysis_2014-01-17_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct
+
+# Download subject and sample metadata and compare to V4
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/annotations/GTEx_Data_V6_Annotations_SampleAttributesDD.xlsx
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/annotations/GTEx_Data_V6_Annotations_SampleAttributesDS.txt
+wc -l *Sample*txt ../V4/*Sample*txt
+  11984 GTEx_Data_V6_Annotations_SampleAttributesDS.txt
+   4502 ../V4/GTEx_Data_2014-01-17_Annotations_SampleAttributesDS.txt
+
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/annotations/GTEx_Data_V6_Annotations_SubjectPhenotypesDS.txt
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/annotations/GTEx_Data_V6_Annotations_SubjectPhenotypes_DD.xlsx
+wc --l *Subject*txt ../V4/*Subject*txt
+  571 GTEx_Data_V6_Annotations_SubjectPhenotypesDS.txt
+  215 ../V4/GTEx_Data_2014-01-17_Annotations_SubjectPhenotypes_DS.txt
+
+# Twice as many donors and samples
+
+# NOTE: format of subject file has changed slightly -- no longer including the word 'years' in age column.  Sample file format appears unchanged.
+# Parser looks like it will work unchanged.
+
+# Start with tissues
+hgGtex $dataFile $sampleFile tissues.tab >&! parseTissues.log &
+
+# Looks like no changes from V4
+
+# Download gene models
+wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/reference/gencode.v19.genes.patched_contigs.gtf.gz
+
+
+# Create main tables
+set subjectFile = GTEx_Data_V6_Annotations_SubjectPhenotypesDS.txt
+set sampleFile = GTEx_Data_V6_Annotations_SampleAttributesDS.txt
+set dataFile = GTEx_Analysis_v6_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct
+set tissueFile = ../V4/portal/gtexColorTissue.dec.tab
+hgGtex -tab=tables -noLoad gtexV6 V6 $dataFile $sampleFile $subjectFile $tissueFile >&! parseData.log  &
+ls -l tables
+
+-rw-rw-r-- 1 kate genecats        9968 Dec 22 16:50 gtexV6Donor.tab
+-rw-rw-r-- 1 kate genecats          14 Dec 22 17:00 gtexV6Info.tab
+-rw-rw-r-- 1 kate genecats     1164893 Dec 22 16:50 gtexV6Sample.tab
+-rw-rw-r-- 1 kate genecats 30090841561 Dec 22 17:00 gtexV6SampleData.tab
+-rw-rw-r-- 1 kate genecats   184672753 Dec 22 17:00 gtexV6TissueData.tab
+-rw-rw-r-- 1 kate genecats    19436982 Dec 22 17:00 gtexV6TissueMedian.tab
+
+$ wc -l gtex*.tab
+        570 gtexV6Donor.tab
+          1 gtexV6Info.tab
+       8555 gtexV6Sample.tab
+  481800490 gtexV6SampleData.tab
+    2984854 gtexV6TissueData.tab
+      56318 gtexV6TissueMedian.tab
+
+# NOTE: should have used -dropZeros when loading.
+select count(*) from gtexSampleData where score=0;
++-----------+
+| count(*)  |
++-----------+
+| 242219267 |
++-----------+
+
+hgsql hgFixed -e 'alter table gtexSampleData disable keys; delete from gtexSampleData where score=0; alter table gtexSampleData enable keys'
+# 30 minutes or so
+
+# looks good, load tables 
+
+hgGtex gtexV6 V6 $dataFile $sampleFile $subjectFile $tissueFile >&! parseData2.log  &
+
+# merge gtexV6Info into gtexInfo (i.e. add a row for V6)
+hgsql hgFixed -e 'select * from gtexInfoV6';
+hgsql hgFixed -e "insert into gtexInfo set version='V6', releaseDate='2015-10-01', maxMedianScore=711778"
+
+# Fix sample table (V6 format changed)
+# Required changes to hgGtex parser
+# 2016-03-01 kate
+
+hgGtex -tab=newtables -noData -noLoad gtex2V6 V6 $dataFile $sampleFile $subjectFile $tissueFile
+hgLoadSqlTab hgFixed gtexSample ~kate/kent/src/hg/lib/gtexSample.sql \
+                newtables/gtex2V6Sample.tab
+
+# Investigate gene vs transcript types in GENCODE
+
+ select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'coding' order by geneType;
++------------------------+
+| geneType               |
++------------------------+
+| IG_C_gene              |
+| IG_D_gene              |
+| IG_J_gene              |
+| IG_V_gene              |
+| polymorphic_pseudogene |
+| protein_coding         |
+| TR_C_gene              |
+| TR_D_gene              |
+| TR_J_gene              |
+| TR_V_gene              |
++------------------------+
+10 rows in set (0.22 sec)
+
+select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'nonCoding' order by geneType;
++--------------------------+
+| geneType                 |
++--------------------------+
+| 3prime_overlapping_ncrna |
+| antisense                |
+| lincRNA                  |
+| miRNA                    |
+| misc_RNA                 |
+| Mt_rRNA                  |
+| Mt_tRNA                  |
+| polymorphic_pseudogene   |
+| processed_transcript     |
+| protein_coding           |
+| pseudogene               |
+| rRNA                     |
+| sense_intronic           |
+| sense_overlapping        |
+| snoRNA                   |
+| snRNA                    |
++--------------------------+
+16 rows in set (0.21 sec)
+
+
+elect distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'pseudo' order by geneType;
++-----------------+
+| geneType        |
++-----------------+
+| IG_C_pseudogene |
+| IG_J_pseudogene |
+| IG_V_pseudogene |
+| pseudogene      |
+| TR_J_pseudogene |
+| TR_V_pseudogene |
++-----------------+
+6 rows in set (0.14 sec)
+
+ select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'problem' order by geneType;
++------------------------+
+| geneType               |
++------------------------+
+| antisense              |
+| lincRNA                |
+| polymorphic_pseudogene |
+| processed_transcript   |
+| protein_coding         |
+| pseudogene             |
+| sense_intronic         |
++------------------------+
+7 rows in set (0.15 sec)
+
+

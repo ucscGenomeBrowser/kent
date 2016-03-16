@@ -7,12 +7,12 @@
 #include "memalloc.h"
 #include "jksql.h"
 #include "expData.h"
+#include "jsonWrite.h"
 #include "sqlList.h"
 #include "hacTree.h"
 #include "rainbow.h" 
 
 boolean clCSV = FALSE; // Converts the comma separated matrix into a tab based file. 
-boolean clMultiThreads = FALSE; // Allows the user to run the program with multiple threads, default is off. 
 int clThreads = 10; // The number of threads to run with the multiThreads option
 int clMemLim = 4; // The amount of memeory the program can use, read in Gigabytes. 
 float clLongest = 0;  // Used to normalize link distances in rlinkJson.
@@ -30,7 +30,6 @@ errAbort(
     "usage:\n"
     "   expMatrixToJson [options] matrix output\n"
     "options:\n"
-    "    -multiThreads      The program will run on multiple threads. \n"
     "    -CSV               The input matrix is in .csv format. \n"
     "    -threads=int       Sets the thread count for the multiThreads option, default is 10 \n"
     "    -memLim=int        Sets the amount of memeory the program can use before aborting. The default is 4G. \n"
@@ -45,13 +44,20 @@ errAbort(
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-    {"multiThreads", OPTION_BOOLEAN},
     {"CSV", OPTION_BOOLEAN},
     {"threads", OPTION_INT},
     {"memLim", OPTION_INT},
     {"descFile", OPTION_STRING},
     {"attributeTable", OPTION_STRING},
     {NULL, 0},
+    };
+
+struct slDoubleInt
+/* Used to keep track of the top ten genes contributed */
+    {
+    struct slDoubleInt *next; 
+    double val; 
+    int index; 
     };
 
 struct bioExpVector
@@ -64,7 +70,35 @@ struct bioExpVector
     double *vector;   //  An array allocated dynamically.
     struct rgbColor color;  // Color for this one
     int children;   // Number of bioExpVectors used to build the current 
+    struct slDoubleInt *topGeneIndeces; // The indeces for the top 10 genes that drove the clustering up to this point 
+    int contGenes; //The number of contributing genes
+    int mergeCount; //Number in the merge chain. 
     };
+
+
+struct slDoubleInt *slDoubleIntNew(double x, int y)
+/* Return a new doubleInt */
+    {
+    struct slDoubleInt *a;
+    AllocVar(a);
+    a->val = x;
+    a->index = y; 
+    return a;
+    }
+
+int slDoubleIntCmp(const void *va, const void *vb)
+/* Compare two doubleInts */
+{
+    const struct slDoubleInt *a = *((struct slDoubleInt **)va);
+    const struct slDoubleInt *b = *((struct slDoubleInt **)vb);
+    double diff = a->val - b->val;
+    if (diff < 0)
+	return -1;
+    else if (diff > 0)
+	return 1;
+    else
+	return 0;
+    }
 
 double stringToDouble(char *s)
 /* Convert string to a double.  Assumes all of string is number
@@ -104,6 +138,7 @@ struct bioExpVector *bioExpVectorListFromFile(char *matrixFile)
 	for (i = 0; i < el->count; ++i)
 	    el->vector[i] = stringToDouble(row[i]);
 	el->children = 1;
+	el->contGenes = 0;
 	slAddHead(&list, el);
 	}
     lineFileClose(&lf);
@@ -167,30 +202,12 @@ struct slRef *getOrderedLeafList(struct hacTree *tree)
     return leafList;
     }
 
-static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance)
-/* Recursively prints out the elements of the hierarchical .json file. */
-    {
-    struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
-    char *tissue = bio->name;
-    struct rgbColor colors = bio->color;
-    if (tree->childDistance > clLongest)
-	/* In practice the first distance will be the longest, and is used for normalization. */ 
-	clLongest = tree->childDistance;
-    int i;
-    for (i = 0;  i < level;  i++)
-	fputc(' ', f); // correct spacing for .json format
 
-    // *****LEAVES*****
-    if (tree->left == NULL && tree->right == NULL)
-	// Print the leaf nodes
-	{
-	fprintf(f, "{\"name\":\"%s\",\"kids\":\"0\",\"length\":\"%f\",\"colorGroup\":\"rgb(%i,%i,%i)\"}",
-			    tissue, tree->parent->childDistance, colors.r, colors.g, colors.b); 
-	return; 
-	}
-    else if (tree->left == NULL || tree->right == NULL)
-	errAbort("\nHow did we get a node with one NULL kid??");
-    
+static void printJsonNode(FILE *f, struct hacTree *tree, int level, double distance, struct slName *geneNames) 
+    {
+    int i; 
+    struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
+    struct rgbColor colors = bio->color;
     for (i = 0;  i < level + 1;  i++)
 	fputc(' ', f);
     distance = tree->childDistance/clLongest;
@@ -199,10 +216,21 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
 	{
 	length = tree->parent->childDistance;
 	}
-    // *****NODES*****
     ++internalNodes; 
-    fprintf(f, "{\"name\":\" \", \"number\":\"%i\", \"kids\":\"%i\", \"tpmDistance\": \"%f\", \"length\": \"%f\",  \"colorGroup\": \"rgb(%i,"
-			"%i,%i)\",",internalNodes,  bio->children , tree->childDistance, length, colors.r,colors.g,colors.b);
+    fprintf(f, "{\"name\":\" \", \"number\":\"%i\", \"kids\":\"%i\", \"tpmDistance\":"
+			"\"%f\", \"length\": \"%f\",  \"colorGroup\": \"rgb(%i,""%i,%i)\","
+			"\"contGenes\":\"%i\",\"geneList\": {",internalNodes,  bio->children,
+			tree->childDistance, length, colors.r,colors.g,colors.b, bio->contGenes);
+    
+    struct slDoubleInt *j;
+    for (j = bio->topGeneIndeces; j != NULL; j = j->next)
+	{
+	struct slName *geneName = slElementFromIx(geneNames, j->index); 
+	fprintf(f,"\"%s\":\"%f\"", geneName->name, j->val);  
+	if (j->next != NULL) fprintf(f, ", "); 
+	
+	}
+    fprintf(f , "},"); 
     if (distance != distance) distance = 0;
     struct rgbColor wTB; 
     struct rgbColor wTBsqrt; 
@@ -224,9 +252,37 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     for (i = 0;  i < level + 1;  i++)
 	fputc(' ', f);
     fprintf(f, "\"children\":[\n");
-    rPrintHierarchicalJson(f, tree->left, level+1, distance);
+    }
+
+static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance, struct slName *geneNames)
+/* Recursively prints out the elements of the hierarchical .json file. */
+    {
+    struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
+    char *tissue = bio->name;
+    struct rgbColor colors = bio->color;
+    if (tree->childDistance > clLongest)
+	/* In practice the first distance will be the longest, and is used for normalization. */ 
+	clLongest = tree->childDistance;
+    
+    int i;
+    for (i = 0;  i < level;  i++)
+	fputc(' ', f); // correct spacing for .json format
+    
+    if (tree->left == NULL && tree->right == NULL) // Check if the current node is a leaf
+	{
+	fprintf(f, "{\"name\":\"%s\",\"kids\":\"0\",\"length\":\"%f\",\"colorGroup\":\"rgb(%i,%i,%i)\"}",
+			    tissue, tree->parent->childDistance, colors.r, colors.g, colors.b); 
+	return; 
+	}
+    // Sanity check leaf nodes, they should not have any kids, definitely should not have a single kid. 
+    else if (tree->left == NULL || tree->right == NULL)
+	errAbort("\nHow did we get a node with one NULL kid??");
+    
+    printJsonNode(f, tree, level,  distance, geneNames); 
+    
+    rPrintHierarchicalJson(f, tree->left, level+1, distance, geneNames);
     fputs(",\n", f);
-    rPrintHierarchicalJson(f, tree->right, level+1, distance);
+    rPrintHierarchicalJson(f, tree->right, level+1, distance, geneNames);
     fputc('\n', f);
     // Closes the children block for node objects
     for (i=0;  i < level + 1;  i++)
@@ -237,7 +293,7 @@ static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, dou
     fputs("}", f);
     }
 
-void printHierarchicalJson(FILE *f, struct hacTree *tree)
+void printHierarchicalJson(FILE *f, struct hacTree *tree, char *geneNamesFile)
 /* Prints out the binary tree into .json format intended for d3
  * hierarchical layouts */
     {
@@ -247,10 +303,18 @@ void printHierarchicalJson(FILE *f, struct hacTree *tree)
 	return;
 	}
     double distance = 0;
-    rPrintHierarchicalJson(f, tree, 0, distance);
-    fputc('\n', f);
+    struct lineFile *lf = lineFileOpen(geneNamesFile, TRUE);
+    char *line;
+    struct slName *geneNames;
+    AllocVar(geneNames);
+    while (lineFileNextReal(lf, &line))
+	{
+	struct slName *geneName = newSlName(cloneString(line));
+	slAddTail(&geneNames, geneName);
+	}
+    lineFileClose(&lf);
+    rPrintHierarchicalJson(f, tree, 0, distance, geneNames);
     }
-
 
 double slBioExpVectorDistance(const struct slList *item1, const struct slList *item2, void *extraData)
 /* Return the absolute difference between the two kids' values. Weight based on how many nodes have been merged
@@ -269,6 +333,7 @@ double slBioExpVectorDistance(const struct slList *item1, const struct slList *i
     return sqrt(sum);
     }
 
+int mergeCount = 0; 
 
 struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slList *item2,
 				void *unusedExtraData)
@@ -279,7 +344,7 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     verbose(3,"Merging...\n");
     const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
     const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
-    float kid1Weight = kid1->children / (float)(kid1->children + kid2->children);
+    float kid1Weight = kid1->children / (float)(kid1->children + kid2->children); //Weight based on number of children.
     float kid2Weight = kid2->children / (float)(kid1->children + kid2->children);
     struct bioExpVector *el;
     AllocVar(el);
@@ -288,22 +353,99 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     el->count = kid1->count; 
     el->name = catTwoStrings(kid1->name, kid2->name);
     int i;
+    mergeCount++; 
+    int gCount = 0;
     for (i = 0; i < el->count; ++i)
 	{
-	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);
+	if (kid1->vector[i] == kid2->vector[i]) // We are doing thousands of merges, lets cut out useless compute where we can. 
+	    {
+	    el->vector[i] = kid1->vector[i];  
+	    continue;    
+	    }
+	el->vector[i] = (kid1Weight*kid1->vector[i] + kid2Weight*kid2->vector[i]);  
+	float diff; 
+	if (((float)(kid1->vector[i])) > ((float)(kid2->vector[i]))) diff = ((float)(kid1->vector[i])) - ((float)(kid2->vector[i]));
+	else diff = ((float)(kid2->vector[i])) - ((float)(kid1->vector[i]));
+	if (diff != 0.0) // Only consider diffs that are non zero
+	    {
+	    ++el->contGenes; // This gene is non zero so it is contributing 
+	    ++gCount;
+	    int index = i + 1; 
+	    if (gCount <= 10){
+		struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
+		slAddHead(&el->topGeneIndeces, newGene); 
+		slSort(&el->topGeneIndeces, slDoubleIntCmp); 
+		}
+	    else{
+		if (el->vector[i] > el->topGeneIndeces->val){
+		    slPopHead(el->topGeneIndeces); 
+		    struct slDoubleInt *newGene = slDoubleIntNew(diff, index); 
+		    slAddHead(&el->topGeneIndeces, newGene); 
+		    slSort(&el->topGeneIndeces, slDoubleIntCmp); 
+		    }
+		}
+	    }
 	}
+    slReverse(&el->topGeneIndeces); 
+    el->mergeCount = mergeCount; 
     el->children = kid1->children + kid2->children;
     return (struct slList *)(el);
     }
 
+const struct slList *lastLeaf = NULL; 
+
+bool slBioExpVectorCmp(const struct slList *item1, const struct slList *item2,
+				void *unusedExtraData)
+/* Compare two bioExpVectors to decide which one becomes the left child and which becomes the right. 
+ * Return TRUE if item 1 is left child and item 2 is right child.  */ 
+    {
+    const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
+    const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
+    if (kid1->children !=1 && kid2->children ==1) lastLeaf = item2; 
+    if (kid1->children ==1 && kid2->children !=1) lastLeaf = item1;
+    
+    if (kid1->children > kid2->children)
+	{
+	return TRUE; // Whoever has more kids gets to be first born 
+	}
+    else if (kid1->children < kid2->children)return FALSE;
+    else{
+	if (kid1->mergeCount < kid2->mergeCount) return TRUE;
+	else if (kid1->mergeCount > kid2->mergeCount)  return FALSE;
+	else{
+	    // These are two leaf siblings, things get a bit tricky here... 
+	    // First we find the closest neighbor (who should be a firstborn)
+	    if (lastLeaf == NULL) 
+		{
+		// This is the very first merge, not certain how to handle it so lets just return True for now
+		lastLeaf = item1; 
+		return TRUE; 
+		}
+	    else{
+		double score1 = slBioExpVectorDistance(item1, lastLeaf, NULL);
+		double score2 = slBioExpVectorDistance(item2, lastLeaf, NULL);
+		if (score1 < score2) 
+		    {
+		    lastLeaf = item2; 
+		    return TRUE; 
+		    }
+		else{
+		    lastLeaf = item1; 
+		    return FALSE;
+		    }
+		}
+	    }
+	}
+    }
+
 void colorLeaves(struct slRef *leafList)
-/* Assign colors of rainbow to leaves. */
+/* Assign colors to leaves. I am very unhappy with the inconsistencies here.  Namely the when you have two leaf siblings
+ * they are essentially assigned at random, which makes this metric fairly useless?  Im less than stoked*/
     {
     float total = 0.0;
-    //double purplePos = 0.80;
     struct slRef *el, *nextEl;
 
-    /* Loop through list once to figure out total, since we need to normalize */
+    /* Loop through list once to figure out the longest distance since we need to normalize */
     for (el = leafList; el != NULL; el = nextEl)
 	{
 	nextEl = el->next;
@@ -312,12 +454,9 @@ void colorLeaves(struct slRef *leafList)
 	struct bioExpVector *bio1 = el->val;
 	struct bioExpVector *bio2 = nextEl->val;
 	double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
-	if (distance != distance ) distance = 0;
-	total += distance;
+	if (distance > total) total = distance; 
 	}
 
-    if (total == 0) errAbort("There doesn't seem to be any difference between these matrix columns. Aborting."); 
-    double soFar = 0;
     /* Loop through list a second time to generate actual colors. */
     bool firstLine = TRUE; 
     for (el = leafList; el != NULL; el = nextEl)
@@ -328,25 +467,20 @@ void colorLeaves(struct slRef *leafList)
 	struct bioExpVector *bio1 = el->val;
 	struct bioExpVector *bio2 = nextEl->val;
 	double distance = slBioExpVectorDistance((struct slList *)bio1, (struct slList *)bio2, NULL);
-	if (firstLine) 
+	if (firstLine) // Handle the first two nodes, color them both the same 
 	    {
 	    double normalized = distance/total; 
-	    bio1->color = whiteToBlackRainbowAtPos(normalized); 
+	    struct rgbColor col = whiteToBlackRainbowAtPos(normalized); 
+	    bio1->color = col; 
+	    bio2->color = col; 
 	    firstLine = FALSE;
+	    continue;
 	    }
-	//if (distance != distance ) distance = 0 ;
-	//soFar += distance;
-	//double normalized = soFar/total;
 	double normalized = distance/total; 
-	if (normalized * 100 >= .95) bio2->color = whiteToBlackRainbowAtPos(.95);
-	else bio2->color = whiteToBlackRainbowAtPos(normalized*100); 
-	//bio2->color = saturatedRainbowAtPos(distance);
-	soFar += normalized;     
+	// Color the next node based on distance from previous leaf node
+	if (normalized >= .95) bio2->color = whiteToBlackRainbowAtPos(.95);
+	else bio2->color = whiteToBlackRainbowAtPos(normalized); 
 	}
-    /* Set first color to correspond to 0, since not set in above loop */
-    struct bioExpVector *bio = leafList->val;
-    //bio->color = saturatedRainbowAtPos(0);
-    bio->color = whiteToBlackRainbowAtPos(.95);
     }
 
 void convertInput(char *expMatrix, char *descFile, bool csv)
@@ -354,7 +488,7 @@ void convertInput(char *expMatrix, char *descFile, bool csv)
  * Namely a transposed table with the first column removed.  Makes use of system calls
  * to use cut, sed, kent utility rowsToCols, and paste (for descFile option). */
     {
-    char cmd1[1024], cmd2[1024];
+    char cmd[1024],cmd1[1024], cmd2[1024];
     if (csv)
 	/* A sed one liner will convert comma separated values into a tab separated values*/ 
 	{
@@ -363,7 +497,8 @@ void convertInput(char *expMatrix, char *descFile, bool csv)
 	verbose(2,"%s\n", cmd3);
 	mustSystem(cmd3); 
 	}
-
+    safef(cmd, 1024, "cut -f 1 %s | sed \'1d\' > %s.genes", expMatrix, expMatrix); 
+    mustSystem(cmd); 
     safef(cmd1, 1024, "cat %s | sed '1d' | rowsToCols stdin %s.transposedMatrix", expMatrix, expMatrix); 
     /* Exp matrices are X axis of cell lines and Y axis of transcripts. This causes long Y axis and short
      * X axis, which are not handled well in C.  The matrix is transposed to get around this issue. */ 
@@ -396,35 +531,27 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     char *pageName = cloneString(jsonFile);
     chopSuffix(pageName);
     int textSize = 12 - log(nodeCount);  
-    int radius = 540 + 270*log10(nodeCount);  
-    int width = 10 * nodeCount; 
-    int height = 10 * nodeCount; 
     int labelLength = 10+nameSize*(15-textSize);
     if (labelLength > 100) labelLength = 100;
 
     fprintf(outputFile,"<!DOCTYPE html>\n"); 
     fprintf(outputFile,"<head>\n"); 
-    fprintf(outputFile,"<title>New dendrogram tests</title>\n"); 
+    fprintf(outputFile,"<title>%s</title>\n", pageName); 
     fprintf(outputFile,"<link rel=\"stylesheet\" href=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css\">\n"); 
     fprintf(outputFile,"<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js\"></script>\n"); 
     fprintf(outputFile,"<script src=\"http://d3js.org/d3.v3.min.js\" type=\"text/javascript\"></script>\n"); 
-    fprintf(outputFile,"<script src=\"d3.dendrograms1.js\" type=\"text/javascript\"></script>\n"); 
+    fprintf(outputFile,"<script src=\"/js/d3.dendrograms.js\" type=\"text/javascript\"></script>\n"); 
     fprintf(outputFile,"<div class = \"dropdown\">\n"); 
     fprintf(outputFile,"	<div id = dropdown>\n");  
     fprintf(outputFile,"</div>\n");
     fprintf(outputFile,"<script>\n"); 
     fprintf(outputFile,"	function load() {\n"); 
     fprintf(outputFile,"	var data;\n\n"); 
-    fprintf(outputFile,"	d3.json(\"testClustersWMeta.json\", function(error,json){\n"); 
+    fprintf(outputFile,"	d3.json(\"%s\", function(error,json){\n", jsonFile); 
     fprintf(outputFile,"		if (error) return console.warn(error);\n"); 
     fprintf(outputFile,"		data = json;\n"); 
-    fprintf(outputFile,"			d3.dendrogram.makeCartesianDendrogram('#phylogram', data, {\n"); 
-    fprintf(outputFile,"			width: %i,\n", width); 
-    fprintf(outputFile,"			height: %i,\n", height); 
-    fprintf(outputFile,"			});\n\n"); 
     fprintf(outputFile,"			d3.dendrogram.makeRadialDendrogram('#dendrogram', data,{\n"); 
-    fprintf(outputFile,"			radius: %i,\n", radius); 
     fprintf(outputFile,"			});\n"); 
     fprintf(outputFile,"		});\n"); 
     fprintf(outputFile,"  	}\n"); 
@@ -437,10 +564,6 @@ void generateHtml(FILE *outputFile, int nameSize, char* jsonFile)
     fprintf(outputFile,"<body onload=\"load()\">\n"); 
     fprintf(outputFile,"<table>\n"); 
     fprintf(outputFile,"  <tr>\n"); 
-    fprintf(outputFile,"	<td>\n"); 
-    fprintf(outputFile,"	  <h1>Phylogram</h2>\n"); 
-    fprintf(outputFile,"	  <div id='phylogram'></div>\n"); 
-    fprintf(outputFile,"	</td>\n"); 
     fprintf(outputFile,"	<td>\n"); 
     fprintf(outputFile,"	  <h1>Dendrogram</h1>\n"); 
     fprintf(outputFile,"	  <div id='dendrogram'></div>\n"); 
@@ -472,31 +595,26 @@ void expData(char *matrixFile, char *outDir, char *descFile)
     /* Allocate new string that is a concatenation of two strings. */
     struct hacTree *clusters = NULL;
 
-    if (clMultiThreads)
-	{
-	verbose(2,"Using %i threads. \n", clThreads);  
-	clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem,
-						slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
-	}
-    else
-	{
-	verbose(2,"Using 1 threads. \n");  
-	clusters = hacTreeFromItems((struct slList *)list, localMem,
-						    slBioExpVectorDistance, slBioExpVectorMerge, NULL, NULL);
-	}
+    verbose(2,"Using %i threads. \n", clThreads);  
+    clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem, slBioExpVectorDistance,
+				slBioExpVectorMerge, slBioExpVectorCmp,  NULL, NULL);
 
     struct slRef *orderedList = getOrderedLeafList(clusters);
     colorLeaves(orderedList);
-    printHierarchicalJson(f, clusters);
+    printHierarchicalJson(f, clusters, catTwoStrings(matrixFile, ".genes"));
     FILE *htmlF = mustOpen(catTwoStrings(outDir,".html"),"w");
     generateHtml(htmlF,size,catTwoStrings(outDir,".json")); 
 
     // Remove temporary files
-    char cleanup[1024], cleanup2[1024];
+    // These temporary files are awful sloppy... Long term goal to get rid of them. 
+    char cleanup[1024], cleanup2[1024], cleanup3[1024];
     safef(cleanup, 1024, "rm %s.cellNames", matrixFile); 
     safef(cleanup2, 1024, "rm %s.transposedMatrix", matrixFile); 
+    safef(cleanup3, 1024, "rm %s.genes", matrixFile); 
     mustSystem(cleanup);
     mustSystem(cleanup2);
+    mustSystem(cleanup3);
+
     end = clock(); 
     verbose(2,"%lld allocated at end. The program took %f seconds to complete.\n", (long long)carefulTotalAllocated(), (double)(end-begin)/CLOCKS_PER_SEC);
     verbose(2,"Completed binary clustering of the expression matrix by euclidean distance (expMatrixToJson).\n");
@@ -507,7 +625,6 @@ int main(int argc, char *argv[])
     {
     optionInit(&argc, argv, options);
     clCSV = optionExists("CSV");
-    clMultiThreads = optionExists("multiThreads");
     clThreads = optionInt("threads", clThreads);
     clMemLim = optionInt("memLim", clMemLim); 
     clDescFile = optionVal("descFile", clDescFile);

@@ -18,6 +18,7 @@
 #include "customTrack.h"
 #include "hgSeq.h"
 #include "hgTables.h"
+#include "genbank.h"
 
 
 static char *genePredMenu[] =
@@ -104,7 +105,9 @@ struct bed *bed;
 
 
 /* Get translation from mRNA to protein from refLink table. */
-sr = sqlGetResult(conn, "NOSQLINJ select mrnaAcc,protAcc from refLink");
+char query[2048];
+sqlSafef(query, sizeof query, "select mrnaAcc,protAcc from %s",refLinkTable);
+sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *protAcc = row[1];

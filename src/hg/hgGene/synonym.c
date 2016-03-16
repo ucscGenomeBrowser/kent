@@ -11,6 +11,7 @@
 #include "hgGene.h"
 #include "spDb.h"
 #include "ccdsGeneMap.h"
+#include "genbank.h"
 
 
 static void printOurMrnaUrl(FILE *f, char *accession)
@@ -340,14 +341,14 @@ if (refSeqAcc[0] != 0)
 else if (mrnaAcc[0] != 0)
     {
     sqlSafefFrag(condStr, sizeof(condStr), "acc = '%s'", mrnaAcc);
-    if (sqlGetField(database, "gbCdnaInfo", "acc", condStr) != NULL)
+    if (sqlGetField(database, gbCdnaInfoTable, "acc", condStr) != NULL)
         {
     	hPrintf("<B>Representative RNA: </B> <A HREF=\"");
     	printOurMrnaUrl(stdout, mrnaAcc);
     	hPrintf("\">%s</A><BR>\n", mrnaAcc);
     	}
     else
-    /* do not show URL link if it is not found in gbCdnaInfo */
+    /* do not show URL link if it is not found in gbCdnaInfoTable */
     	{
     	hPrintf("<B>Representative RNA: %s </B>", mrnaAcc);
     	}

@@ -39,7 +39,7 @@ void makeSubDirs(char *db)
 struct sqlConnection *conn = NULL;
 struct sqlResult *sr = NULL;
 char **row;
-char *query = "NOSQLINJ select chrom from chromInfo";
+char *query = NOSQLINJ "select chrom from chromInfo";
 hSetDb(db);
 conn = hAllocConn();
 sr = sqlGetResult(conn, query);

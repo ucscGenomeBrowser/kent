@@ -1,0 +1,15 @@
+        track chainRheMac8
+        subTrack euarchontoglireChainNetViewchain off
+        subGroups view=chain species=gRhesus clade=bCerco
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain rheMac8
+        otherDb rheMac8
+
+        track netRheMac8
+        subTrack euarchontoglireChainNetViewnet on 
+        subGroups view=net species=gRhesus clade=bCerco
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign rheMac8 chainRheMac8
+        otherDb rheMac8

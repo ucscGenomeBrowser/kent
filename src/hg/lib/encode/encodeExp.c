@@ -511,7 +511,7 @@ encodExpAddTriggers(conn, tableName);
 int encodeExpIdMax(struct sqlConnection *conn) 
 /* Return largest ix value */
 {
-return sqlQuickNum(conn, "NOSQLINJ select max(ix) from " ENCODE_EXP_TABLE);
+return sqlQuickNum(conn, NOSQLINJ "select max(ix) from " ENCODE_EXP_TABLE);
 }
 
 /* END schema-dependent section */

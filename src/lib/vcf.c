@@ -980,17 +980,18 @@ struct vcfFile *vcfTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int
  * and reports all errors. Set maxErr to VCF_IGNORE_ERRS for silence */
 {
 struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
+if (lf == NULL)
+    return NULL;
 struct vcfFile *vcff = vcfFileHeaderFromLineFile(lf, maxErr);
 if (vcff == NULL)
     return NULL;
 if (isNotEmpty(chrom) && start != end)
     {
     if (lineFileSetTabixRegion(lf, chrom, start, end))
-        {
         vcff->records = vcfParseData(vcff, NULL, 0, 0, maxRecords);
-        lineFileClose(&(vcff->lf)); // Not sure why it is closed.  Angie?
-        }
+    lineFileClose(&(vcff->lf)); // file is all read in so we close it
     }
+
 return vcff;
 }
 

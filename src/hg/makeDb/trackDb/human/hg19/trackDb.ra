@@ -83,6 +83,14 @@ showCdsAllScales .
 showCdsMaxZoom 10000.0
 dataVersion Mar. 2013
 
+track cramTest2
+shortLabel cramTest2
+longLabel cramTest2
+bigDataUrl /hive/users/braney/cram/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
+type bam
+release alpha
+#refUrl http://hgwdev.cse.ucsc.edu/~braney/cramRef/%s
+
 searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
 searchDescription Retroposed Genes V5, Including Pseudogenes 
@@ -230,8 +238,10 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track oreganno override
+release beta,public
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
+html oregannoOld
 
 track laminB1Super override
 origAssembly hg18
@@ -2447,7 +2457,3 @@ group phenDis
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra
-
-track oregano override
-release beta,public
-html oregannoOld

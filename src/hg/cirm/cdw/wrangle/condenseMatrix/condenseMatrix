@@ -1,8 +1,11 @@
 #!/usr/bin/env python2.7
 # condenseMatrix
 """
-Condense an expression matrix from transcript rows to gene rows. 
-Currently only works for human expression matrices with ensemble transcripts. 
+Condense an expression matrix from transcript rows to human readable gene rows. The transcripts within
+a gene are totalled for each gene. 
+
+The environment variable CIRM must be set to the base cirm directory, on hgwdev this is /hive/groups/cirm
+The script looks for annotation/ensToHugo/trscrptToGene.hg38/mm10 within this directory. 
 """
 import os, sys, collections, argparse
 
@@ -11,6 +14,11 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
 import common
 import tempfile
 import subprocess
+
+
+# Ugly global to help with things. 
+matrixHeader = "" 
+
 
 def parseArgs(args):
     """
@@ -31,7 +39,7 @@ def parseArgs(args):
     options = parser.parse_args()
     return options
 
-def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
+def convertNames(inputFile, intermediateFile, humanMap, mouseMap, verbose):
     """
     Input:
         inputFile - an opened file (r).
@@ -41,6 +49,7 @@ def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
     names.  The new matrix is written to intermediateFile.  The conversion
     is accomplished with the ensembleExonToGene table. 
     """
+    global matrixHeader
     firstLine = True
     expCol = 0
     count = 0 
@@ -50,6 +59,7 @@ def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
             intermediateFile.write(line)
             expCol = len(line.split())
             count +=1
+            matrixHeader = line
             continue 
         splitLine = line.split()
         if (len(splitLine)!=expCol):
@@ -76,9 +86,17 @@ def convertNames(inputFile, intermediateFile, humanMap, mouseMap):
                 intermediateFile.write(splitLine[count] + "\t")
                 count +=1 
             intermediateFile.write("\n")
-        else: 
-            print ("The transcript, %s, was not found in the hash table. Aborting."%(splitLine[0]))
-            exit(1)
+        else: # The transcript wasn't found 
+            if (verbose): ("Warning! The transcript, %s, was not found in the hash table. "%(splitLine[0]))
+            count = 0 
+            for item in splitLine:
+                if (count == 0):
+                    intermediateFile.write("unknown"+splitLine[0] + "\t")
+                    count += 1
+                    continue
+                intermediateFile.write(splitLine[count] + "\t")
+                count +=1 
+            intermediateFile.write("\n")
         splitLine = None
 
 def collapseRows(intermediateFile, outputFile):
@@ -93,10 +111,12 @@ def collapseRows(intermediateFile, outputFile):
     firstLine = True
     newRow = []
     rowsInBlock = 0
-    skip = True
+    skip = False
     count = 0
+    outputFile.write(matrixHeader)
     for line in intermediateFile:
         splitLine = line.split()
+        expCols = len(splitLine) # Lets verify this is actually a matrix while we make it.
         if skip: # Skip the first row (header names)
             skip = False
             outputFile.write(line)
@@ -108,7 +128,7 @@ def collapseRows(intermediateFile, outputFile):
             exit(1)
         if firstLine: # This is the first line of the actual matrix
             firstLine = False
-            newRow = splitLine 
+            newRow = splitLine  
             rowsInBlock = 1
             continue
         if (splitLine[0]==newRow[0]): #Inside the same block, keep a summation of the items in this block. 
@@ -118,11 +138,9 @@ def collapseRows(intermediateFile, outputFile):
                 newRow[itemCount] = float(newRow[itemCount]) + float(splitLine[itemCount])
                 itemCount +=1 
         else:  # This is a flush statement, the current 'block' is complete and the collapsing occurs. 
-            # Disable the averaging for now...
             itemCount = 1
             for item in newRow[1:]:
                 newRow[itemCount] = str(float(newRow[itemCount]))
-            #    newRow[itemCount] = str(float(newRow[itemCount])/float(rowsInBlock))
                 itemCount += 1
             outputFile.write("\t".join(newRow) + "\n")
             newRow = splitLine 
@@ -139,36 +157,32 @@ def main(args):
     """
     options = parseArgs(args)
     if (options.verbose): print ("Start condensing the expression matrix from transcripts to genes (condenseMatrix).")
-    #result = common.sqlQuery("hg38","select transcript, gene from ensGtp") 
     
-    #Mappings were made with this command
-    #zcat /hive/groups/cirm/software/kallisto/transcripts/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz | grep \> | cut -d' ' -f1,4 | tr -d '>' | sed -e 's/gene://'
-
-    humanMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79HumanTrscrptToGene.tab", False)
-    mouseMap = common.dictFromTwoTabFile(os.environ['HOME']+"/kent/src/hg/cirm/cdw/wrangle/condenseMatrix/encode79MouseTrscrptToGene.tab", False)
-    #ensembleExonToGene = dict()
-    #for t in result.fetchall(): 
-    #    if (ensembleExonToGene.get(t[0])):    
-    #        print("A duplicate transcript was found. Something has gone wrong, aborting.")
-    #        exit(1) 
-    #    else: ensembleExonToGene.setdefault(t[0], t[1])
+    # The environment variable CIRM must be set to the base cirm directory, on hgwdev this is /hive/groups/cirm 
+    humanMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/trscptToGenes.hg38", False)
+    mouseMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/trscptToGenes.mm10", False)
+    
+    # Making use of python's temporary files. 
     intermediateFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
     finalFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)
     
     # Convert names
     if (options.verbose): print ("Converting names...")
-    convertNames(options.inputFile, intermediateFile, humanMap, mouseMap)
+    convertNames(options.inputFile, intermediateFile, humanMap, mouseMap, options.verbose)
+    
     
     # Sort
     if (options.verbose): print ("Sorting...")
-    os.system("sort -k 1 -r %s > %s"%(intermediateFile.name, finalFile.name))
+    os.system("sed '1D' %s | sort -k 1 -r > %s"%(intermediateFile.name, finalFile.name))
     
     # Collapse
     if (options.verbose): print ("Collapsing matrix...")
+    
     collapseRows(finalFile,options.outputFile)
     
     intermediateFile.close()
     finalFile.close()
+
     if (options.verbose): print ("Completed condensing the expression matrix from transcripts to genes (condenseMatrix).")
     
 if __name__ == "__main__" : 

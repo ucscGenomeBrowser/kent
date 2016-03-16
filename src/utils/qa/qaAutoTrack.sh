@@ -57,7 +57,13 @@ Usage: $0 [-hbv] [-d DATABASE] [-t TABLENAME]
 Performs basic QA for auto-pushed tracks, which includes:
 - Checks when data for track was last updated
 - Coverage from featureBits -countGaps
-- Percentage difference in coverage between now and the last time the script was run
+- Percentage difference in coverage between now and
+  the last time the script was run
+
+By default, all results are output to a file and only issues
+are output to the command line. Use the "-v" option to see
+results on the command line as well. All log files are output to:
+http://genecats.cse.ucsc.edu/qa/test-results/qaAutoTrack.
 
 Notes:
 	- For OMIM, ISCA, or ClinVar tracks use omim, isca, or clinvar as the table name.
@@ -76,13 +82,18 @@ function outputCovDiff () {
 		prevCov=$(egrep -A2 "^$3" $1 | grep "^Coverage New" | cut -d" " -f3-) # Grabs coverage from previous log file.
 		rawCountPrev=$(echo $prevCov | awk '{print $1}')
 
-		# Calculate diff between new and old coverage
-		rawCountDiff=$(echo $(expr $rawCount - $rawCountPrev)|tr -d -)
-		rawCountAvg=$(expr $rawCount / 2 + $rawCountPrev / 2)
-		percentDiff=$(awk -v rcd=$rawCountDiff -v rca=$rawCountAvg 'BEGIN{print 100 * rcd / rca}')
+		if [[ prevCov != "" ]] # Check needed so script doesn't fail if prevLogFile doesn't contain coverage info
+		then
+			# Calculate diff between new and old coverage
+			rawCountDiff=$(echo $(expr $rawCount - $rawCountPrev)|tr -d -)
+			rawCountAvg=$(expr $rawCount / 2 + $rawCountPrev / 2)
+			percentDiff=$(awk -v rcd=$rawCountDiff -v rca=$rawCountAvg 'BEGIN{print 100 * rcd / rca}')
 
-		# Build output string
-		output+="$3\nLast updated: $4\nCoverage New: $2\nCoverage Old: $prevCov\nCoverage Diff: $percentDiff%\n\n"
+			# Build output string
+			output+="$3\nLast updated: $4\nCoverage New: $2\nCoverage Old: $prevCov\nCoverage Diff: $percentDiff%\n\n"
+		else
+			output+="$3\nLast updated: $4\nCoverage New: $2\n\n"
+		fi
 	else
 		output+="$3\nLast updated: $4\nCoverage New: $2\n\n"
 	fi
@@ -94,13 +105,18 @@ function checkForIssues () {
 	# Raises an error if it's been too long since last update
 	if [ $(date -d "$1" +%s) -le $(date -d "$2" +%s) ]
 	then
-		issueNote+="$3 has not been updated since $1, see $logUrl/$db.$tableName.$currDate.txt for more details\n"
+		issueNote+="$3 has not been updated since $1\n"
 	fi
 
 	# Raises error if coverage diff between track versions is too large
-	if [[ "$4" != "" ]] && [[ $(echo $4 >= 10 | bc) -eq 1 ]]
+	if [[ "$4" != "" ]]
 	then
-		issueNote+="Large coverage diff for $3, see $logUrl/$db.$tableName.$currDate.txt for more details\n"
+		#Round our percentDiff to 3 decimal places. Really small numbers don't play nice with bc.
+		percentDiffRounded=$(echo $4 | xargs printf "%.3f\n")
+		if [ $(echo "$percentDiffRounded >= 10" | bc) -ne 0 ]
+		then
+			issueNote+="Large coverage diff for $3\n"
+		fi
 	fi
 }
 
@@ -127,11 +143,19 @@ do
 			bigBedMode="on"
 			;;
 		'?')
-			show_help >&2
+			showHelp >&2
 			exit 1
 			;;
 	esac
 done
+
+# Check if no command line options were supplied
+if [ $OPTIND -eq 1 ]
+then
+	showHelp >&2
+	exit 1
+fi
+
 shift "$((OPTIND-1))" # Shift off the options and optional --.
 
 ##### Main Program #####
@@ -179,17 +203,9 @@ then
 			ssh qateam@hgwbeta "/usr/local/apache/cgi-bin/utils/bigBedToBed $fileName stdout" > $MYTEMPFILE
 			tblCov=$(featureBits -countGaps $db $MYTEMPFILE 2>&1)
 
-			# temporary holder so we don't loose original input tableName
-			tableNameTemp=$tableName
-			# set tableName to tbl temporarily so we can use one output function for all tables
-			tableName=$tbl
-
-			outputCovDiff "$prevLogFile" "$tblCov" "$tableName" "$tblDate"
-			# reset tableName to original name
-			tableName=$tableNameTemp
-
+			outputCovDiff "$prevLogFile" "$tblCov" "$tbl" "$tblDate"
 			# Check for issues with table
-			checkForIssues "$tblDate" "$tooOld" "$tableName" "$percentDiff"
+			checkForIssues "$tblDate" "$tooOld" "$tbl" "$percentDiff"
 
 			rm -f $MYTEMPFILE
 		done
@@ -238,22 +254,18 @@ else
                 	if [[ $tbl == "omimGene2" ]] || [[ $tbl == "omimAvSnp" ]] || [[ $tbl == "omimLocation" ]] || [[ $tableName == "isca" ]]
                 	then
                         	tblCov=$(ssh qateam@hgwbeta "featureBits -countGaps $db $tbl 2>&1")
-				# temporary holder so we don't loose original input tableName
-				tableNameTemp=$tableName
-				# set tableName to tbl temporarily so we can use one output function for all tables
-				tableName=$tbl
 
-				outputCovDiff "$prevLogFile" "$tblCov" "$tableName" "$tblDate"
-				# reset tableName to original name
-				tableName=$tableNameTemp
+				outputCovDiff "$prevLogFile" "$tblCov" "$tbl" "$tblDate"
+				# Check for issues with table
+				checkForIssues "$tblDate" "$tooOld" "$tbl" "$percentDiff"
+
 			# Output for tables that don't contain coordinates
 			else
 				output+="$tbl\nLast updated: $tblDate\n\n"
+				# Check for issues with table
+				checkForIssues "$tblDate" "$tooOld" "$tbl" "$percentDiff"
 			fi
 		done
-		# Check for different issues with table
-		# Must be outside of for loop so as to only output one error message for the entire table set	
-		checkForIssues "$tblDate" "$tooOld" "$tableName" "$percentDiff"
 	# Tests for all other table based autopushed tracks
 	else
 		tblDate=$(hgsql -Ne "SELECT UPDATE_TIME FROM information_schema.tables WHERE TABLE_SCHEMA='$db' AND TABLE_NAME='$tableName'")
@@ -269,6 +281,9 @@ fi
 # Output results of tests
 if [[ $issueNote != "" ]]
 then
+	#Put URL to log file at end of issue note
+	issueNote+="\nSee $logUrl/$db.$tableName.$currDate.txt for more details about these errors.\n\n"
+
 	echo -e $issueNote | tee $currLogFile
 fi
 

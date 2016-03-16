@@ -12,7 +12,7 @@
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
-"NOSQLINJ create table gbLoaded ("
+NOSQLINJ "create table gbLoaded ("
   "srcDb enum('GenBank','RefSeq') not null,"   /* source database */
   "type enum('EST','mRNA') not null,"          /* mRNA or EST */
   "loadRelease char(8) not null,"              /* release version */

@@ -108,16 +108,15 @@
                 src="../../images/MultiRegionButton.png">
         <p>
         <b>Step 3. Configure the multi-region view</b><br>
-           By default, the browser is set to the traditional <b>single-chromosome 
-	   view</b> display mode. The display can be reset to this mode at any time by
-	   clicking this option.
+           By default, the <b>Exit multi-region mode</b> button is selected. 
+           This button returns the display to the traditional view.
 	   <ul>
 	      <li>To activate a multi-region view, click one of these options: <br>
               <table cellpadding=15>
                 <tr><td>
                     <ul>
-                       <li><b>Show exons</b> -- display only the exonic regions
-                       <li><b>genes using</b> -- display only those regions with gene
+                       <li><b>Show exons using</b> -- display only the exonic regions
+                       <li><b>Show genes using</b> -- display only those regions with gene
                        annotations in the specified genes track
                        <li><b>Custom regions from BED URL</b> -- display only those regions
                        listed in a specified BED file
@@ -130,7 +129,9 @@
                  <img style="border: 1px solid black; display: block;"
                        src="../../images/MultiRegionConfigurationWindow.png">
               </td></tr>
-              </table> 
+              </table>
+              <li>To quickly enter exon-only mode without configuring the padding option, use
+              the keyboard shortcut &quot;e v&quot;. 
 	      <li>Click the <b>Highlight alternating regions in multi-region view</b> box 
               to color alternating slices in blue. (optional)
 	      <li>Click submit to save your changes and return to the Genome Browser tracks
@@ -188,7 +189,7 @@
         <b>Gene-Only Mode</b><br>
 	<p>
         The gene-only view displays the bases and annotations that fall within the
-        coordinates of a gene, but hides all of the intergenic base except those used for
+        coordinates of a gene, but hides all of the intergenic bases except those used for
         padding (<a href="#Example2">Example 2</a>).  As with exon-only mode, the padding field 
 	sets the number of intergenic bases displayed to visually separate each gene slice. 
 
@@ -222,36 +223,37 @@
         Like BED custom tracks, comments are supported in the BED files used by multi-region
         mode. Comments are included at the top of the BED file, preceded by &quot;#&quot;. The 
 	supported comments are: 
-        <table>
-        <tr><td>
-           <ul style="list-style:none;">
-              <li>database
-              <li>shortDesc
-              <!--<li>padding-->
-           </ul>
-        </td>
-        <td>
-           <ul style="list-style:none;">
-              <li>The genome assembly database for which the BED file is intended. If the 
-		  file is loaded onto a different assembly, the custom regions mode will not work.
-              <li>(Optional) A short description of the custom region, displayed next to 
-		  the chromosome ideogram.
-              <!-- padding throwing debug error right now, uncomment when fixed
-              <li>Sets the size of the padding on either side of a BED entry in the browser
-                  tracks window. 
-              -->
-           </ul>
-        </td></tr>
-        </table>
         <br>
+        <table style="margin-left:40px">
+          <tr>
+	    <td style="vertical-align:top">
+	      database:
+            </td><td style="vertical-align:top">
+	      The genome assembly database for which the BED file is intended. If the file is 
+	      loaded onto a different assembly, the custom regions mode will not work.
+	    </td>
+	  </tr><tr>
+            <td style="vertical-align:top">shortDesc:
+	    </td><td style="vertical-align:top">
+	      (Optional) A short description of the custom region, displayed next to the chromosome 
+	      ideogram.
+	    </td>
+	  </tr>
+	  <tr>
+            <td style="vertical-align:top">
+	      padding:
+	    </td><td style="vertical-align:top">
+	      Sets the size of the padding on either side of a BED entry in the browser tracks 
+	      window. 
+	    </td>
+          </tr>
+        </table>
+	<br>
         Here is an example of a BED3 file with comments:<br>
-        <!-- add in
-          #padding 6
-             to this example when fixed.
-        --> 
         <pre>
       #database hg38
       #shortDesc Example of a short description
+      #padding 6
       chr1 pos1 pos2
       chr2 pos1 pos2
         </pre>
@@ -318,7 +320,13 @@
         <p>
         <img style="margin:auto; border: 1px solid black; display: block;"
              src="../../images/MultiRegionSOD1.png">
-
+        <p>
+        Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/exonOnlySession.txt">
+        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
+        mode and return to the default single chromosome view, use the keyboard shortcut 
+        &quot;d v&quot;.
+        
         <p>
         <a name="Example2"></a>
         <b>Example 2. Gene-only mode</b><br>
@@ -340,6 +348,13 @@
         <p>
         <img style="margin:auto; border: 1px solid black; display: block;"
              src="../../images/MultiRegionXGeneOnly.png">
+        
+        <p>
+        Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/geneOnlySession.txt">
+        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
+        mode and return to the default single chromosome view, use the keyboard shortcut 
+        &quot;d v&quot;.
         
         <p>
         <a name="Example3"></a>
@@ -369,6 +384,13 @@
              src="../../images/MultiRegionBEDFileOutOrder.png">
  
         <p>
+        Click
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed3Session.txt">
+        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
+        mode and return to the default single chromosome view, use the keyboard shortcut 
+        &quot;d v&quot;.
+        
+        <p>
         <a name="Example4"></a>
         <b>Example 4. BED12</b><br>
         <p>
@@ -390,6 +412,13 @@
         the Genome Browser display. 
         
         <p>
+        Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/bed12Session.txt">
+        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
+        mode and return to the default single chromosome view, use the keyboard shortcut 
+        &quot;d v&quot;.
+        
+        <p>
         <a name="Example5"></a>
         <b>Example 5. Haplotype</b><br>
         
@@ -401,6 +430,12 @@
         <img style="margin:auto; border: 1px solid black; display: block;"
              src="../../images/MultiRegionHaplotypeView.png">
         
+        <p>
+        Click 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/haplotypeSession.txt">
+        here</a> to view this example in the Genome Browser. To quickly exit multi-region 
+        mode and return to the default single chromosome view, use the keyboard shortcut 
+        &quot;d v&quot;.
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 

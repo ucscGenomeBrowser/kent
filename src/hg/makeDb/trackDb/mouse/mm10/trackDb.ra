@@ -13,6 +13,19 @@ html gold
 track gap override
 html gap
 
+# Local declaration so that patents are in the right group
+track patSeq override
+release alpha
+group pub
+
+track patNonBulk override
+release alpha
+group pub
+
+track patBulk override
+release alpha
+group pub
+
 track assemblyFrags
 shortLabel Contigs
 longLabel Contig fragments used in the assembly
@@ -324,6 +337,8 @@ include wgEncodeGencodeVM2.ra
 include wgEncodeGencodeVM3.ra
 include wgEncodeGencodeVM4.ra
 include wgEncodeGencodeVM7.ra
+include wgEncodeGencodeVM8.ra
+include wgEncodeGencodeVM9.ra
 
 include defaultPriority.ra
 

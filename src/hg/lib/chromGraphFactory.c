@@ -212,23 +212,6 @@ else
 return count;
 }
 
-static char *findSnpTable(struct sqlConnection *conn)
-/* Return name of SNP table if any */
-{
-char *tables[] = {
-"snp145", "snp144", "snp143", "snp142", "snp141",
-"snp140", "snp139", "snp138", "snp137", "snp136",
-"snp135", "snp134", "snp133", "snp132", "snp131", 
-"snp130", "snp129", "snp128", "snp127", "snp126", 
-"snp125", "snp"
-};
-int i;
-for (i=0; i<ArraySize(tables); ++i)
-    if (sqlTableExists(conn, tables[i]))
-	return tables[i];
-return NULL;
-}
-
 struct markerTypeRecognizer
 /* Helper to recognize a marker type. */
     {
@@ -346,7 +329,7 @@ if (sqlTableExists(conn, table))
     }
 
 /* SNP table */
-table = findSnpTable(conn);
+table = hFindLatestSnpTableConn(conn, NULL);
 if (table != NULL)
     {
     AllocVar(mtr);
@@ -489,7 +472,7 @@ static struct hash *chromInfoHash(struct sqlConnection *conn)
 struct sqlResult *sr;
 char **row;
 struct hash *hash = hashNew(0);
-sr = sqlGetResult(conn, "NOSQLINJ select * from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct chromInfo *ci = chromInfoLoad(row);
@@ -803,7 +786,7 @@ else if (sameString(markerType, cgfMarkerSts))
 	"stsAlias", "select alias,trueName from %s", report);
 else if (sameString(markerType, cgfMarkerSnp))
     {
-    char *snpTable = findSnpTable(conn);
+    char *snpTable = hFindLatestSnpTableConn(conn, NULL);
     if (snpTable == NULL)
         errAbort("No SNP table in %s", sqlGetDatabase(conn));
     char *query = "select chrom,chromStart,name from %s";

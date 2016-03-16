@@ -1,0 +1,23 @@
+#############################################################################
+# build ws245Gene track (DONE - 2015-06-23 - Hiram)
+
+mkdir /hive/data/genomes/ce11/bed/ws245Genes
+cd /hive/data/genomes/ce11/bed/ws245Genes
+
+printf "##gff-version 3\n" > filtered.gff3
+
+zcat ../../ws245/PRJNA13758/c_elegans.PRJNA13758.WS245.annotations.gff3.gz \
+   | awk '$2 == "WormBase" && ($3 == "CDS" || $3 == "exon" || $3 == "gene" || $3 == "three_prime_UTR" || $3 == "five_prime_UTR" || $3 == "intron" || $3 == "mRNA" || $3 == "antisense_RNA" || $3 == "piRNA" || $3 == "ncRNA" || $3 == "tRNA" || $3 == "miRNA" || $3 == "snoRNA" || $3 == "pre_miRNA" || $3 == "lincRNA" || $3 == "snRNA" || $3 == "rRNA" || $3 == "scRNA" || $3 == "pseudogenic_transcript" || $3 == "nc_primary_transcript")' | sed -e 's/antisense_RNA/mRNA/; s/piRNA/mRNA/; s/ncRNA/mRNA/; s/tRNA/mRNA/; s/miRNA/mRNA/; s/snoRNA/mRNA/; s/pre_miRNA/mRNA/; s/lincRNA/mRNA/; s/rRNA/mRNA/; s/scRNA/mRNA/; s/pseudogenic_transcript/mRNA/; s/nc_primary_transcript/mRNA/; s/^/chr/; s/^chrMtDNA/chrM/;' >> filtered.gff3
+
+gff3ToGenePred -warnAndContinue -maxParseErrors=-1 -maxConvertErrors=-1 \
+  filtered.gff3 stdout | sed -e 's/Transcript://; s/Gene://;' > ws245.annotations.gp
+
+genePredCheck -db=ce11 ws245.annotations.gp
+# checked: 57528 failed: 0
+
+
+hgLoadGenePred -genePredExt ce11 ws245Genes ws245.annotations.gp
+genePredCheck -db=ce11 ws245Genes
+
+# checked: 57528 failed: 0
+

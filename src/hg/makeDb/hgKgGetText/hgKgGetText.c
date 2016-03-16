@@ -49,7 +49,7 @@ if (slCount(kgXrefFields) != KGXREF_NUM_COLS)
     }
 slFreeList(kgXrefFields);
 
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from kgXref");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from kgXref");
 struct kgXref *kgList = NULL, *kg;
 char **row;
 struct hash *uniqHash = hashNew(18);

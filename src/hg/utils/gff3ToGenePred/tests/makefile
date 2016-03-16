@@ -8,7 +8,8 @@ cmdShouldFail = echo "Error: command should have failed" >&2; false
 all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
-	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest
+	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
+	minimalGenesTest geneDefaultStatusUnknownTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -20,6 +21,10 @@ noGeneMRnaTest: mkout
 
 geneMRnaHonorTest: mkout
 	${gff3ToGenePred} -honorStartStopCodons input/geneMRna.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+geneDefaultStatusUnknownTest: mkout
+	${gff3ToGenePred} -defaultCdsStatusToUnknown input/geneMRna.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 
 discontinuousTest: mkout
@@ -59,6 +64,12 @@ geneTranscriptTest: mkout
 transcriptCdsParentTest: mkout
 	${gff3ToGenePred} input/transcriptCdsParent.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+
+# pseudogene annotations tie exons directly to genes and have standalong gnenes
+minimalGenesTest: mkout
+	${gff3ToGenePred} -allowMinimalGenes -unprocessedRootsOut=output/$@.unprocessed input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+	diff expected/$@.unprocessed output/$@.unprocessed
 
 mkout:
 	@mkdir -p output

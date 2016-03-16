@@ -252,7 +252,7 @@ struct tableInfo *ti, *newList = NULL, *next;
 struct hash *splitHash = hashNew(0);
 
 chromList = sqlQuickList(conn,
-	"NOSQLINJ select chrom from chromInfo order by length(chrom) desc");
+	NOSQLINJ "select chrom from chromInfo order by length(chrom) desc");
 if (chromList == NULL)
     errAbort("Can't use unsplit because database has no chromInfo table");
 
@@ -433,7 +433,7 @@ struct sqlConnection *conn = dbConnect(database);
 struct sqlConnection *conn2 = dbConnect(database);
 int majorVersion = sqlMajorVersion(conn);
 int minorVersion = sqlMinorVersion(conn);
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ show table status");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "show table status");
 char **row;
 struct hash *fieldHash = hashNew(0);
 struct hash *typeHash = hashNew(0);

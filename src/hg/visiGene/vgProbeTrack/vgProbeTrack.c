@@ -1226,13 +1226,13 @@ static void init(struct sqlConnection *conn)
 if (!sqlTableExists(conn, "vgPrb"))
     {
     initTable(conn, "vgPrb", FALSE);  / * this most important table should never be nuked automatically * /
-    sqlUpdate(conn, "NOSQLINJ create index tName on vgPrb(tName(20));");
-    sqlUpdate(conn, "NOSQLINJ create index seq on vgPrb(seq(40));");
+    sqlUpdate(conn, NOSQLINJ "create index tName on vgPrb(tName(20));");
+    sqlUpdate(conn, NOSQLINJ "create index seq on vgPrb(seq(40));");
     }
 
 initTable(conn, "vgPrbMap", TRUE);
-sqlUpdate(conn, "NOSQLINJ create index probe on vgPrbMap(probe);");
-sqlUpdate(conn, "NOSQLINJ create index vgPrb on vgPrbMap(vgPrb);");
+sqlUpdate(conn, NOSQLINJ "create index probe on vgPrbMap(probe);");
+sqlUpdate(conn, NOSQLINJ "create index vgPrb on vgPrbMap(vgPrb);");
 
 initTable(conn, "vgPrbAli", TRUE);
 initTable(conn, "vgPrbAliAll", TRUE);
@@ -1431,7 +1431,7 @@ if (!fileExists(fasta))
 
 if (sqlTableExists(conn, "vgRemapTemp"))
     {
-    sqlUpdate(conn, "NOSQLINJ drop table vgRemapTemp;");
+    sqlUpdate(conn, NOSQLINJ "drop table vgRemapTemp;");
     }
 
 safef(cmd,sizeof(cmd),
@@ -1440,8 +1440,8 @@ safef(cmd,sizeof(cmd),
 verbose(1,"%s\n",cmd); system(cmd);
 
 /* required for mysql 5 longtext for case-insensitive comparisons of blobs */
-sqlUpdate(conn, "NOSQLINJ ALTER table vgRemapTemp modify seq longtext;");
-sqlUpdate(conn, "NOSQLINJ create index seq on vgRemapTemp(seq(40));");
+sqlUpdate(conn, NOSQLINJ "ALTER table vgRemapTemp modify seq longtext;");
+sqlUpdate(conn, NOSQLINJ "create index seq on vgRemapTemp(seq(40));");
 
 /* get remapped psl probes not yet aligned */
 dyStringClear(dy);
@@ -1461,7 +1461,7 @@ rc = 0;
 rc = sqlSaveQuery(conn, dy->string, "vgPrbReMap.psl", FALSE);
 verbose(1,"Count of Psls found for reMap: %d\n", rc);
 
-sqlUpdate(conn, "NOSQLINJ drop table vgRemapTemp;");
+sqlUpdate(conn, NOSQLINJ "drop table vgRemapTemp;");
 
 dyStringFree(&dy);
 

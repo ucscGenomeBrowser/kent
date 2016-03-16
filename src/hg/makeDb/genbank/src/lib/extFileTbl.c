@@ -25,7 +25,7 @@
 /* Name of table */
 char* EXT_FILE_TBL = "gbExtFile";
 static char* createSql =
-"NOSQLINJ create table gbExtFile ("
+NOSQLINJ "create table gbExtFile ("
   "id int unsigned not null primary key,"  /* Unique ID. */
   "path varchar(255) not null,"   /* Full path. Ends in '/' if a dir. */
   "size bigint unsigned not null,"            /* Size of file (checked) */
@@ -86,7 +86,7 @@ if (!sqlTableExists(conn, EXT_FILE_TBL))
 else
     {
     /* table exists, read existing entries */
-    sr = sqlGetResult(conn,"NOSQLINJ SELECT id,path,size FROM gbExtFile");
+    sr = sqlGetResult(conn,NOSQLINJ "SELECT id,path,size FROM gbExtFile");
     while ((row = sqlNextRow(sr)) != NULL)
         parseRow(eft, row);
     sqlFreeResult(&sr);
@@ -206,7 +206,7 @@ if (sqlTableExists(conn, EXT_FILE_TBL))
     {
     char **row;
     struct sqlResult *sr
-        = sqlGetResult(conn, "NOSQLINJ SELECT gbExtFile.id FROM gbExtFile "
+        = sqlGetResult(conn, NOSQLINJ "SELECT gbExtFile.id FROM gbExtFile "
                        "LEFT JOIN gbSeq on (gbSeq.gbExtFile = gbExtFile.id)"
                        "WHERE (gbSeq.gbExtFile IS NULL);");
     while ((row = sqlNextRow(sr)) != NULL)

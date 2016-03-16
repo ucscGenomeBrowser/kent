@@ -1,0 +1,194 @@
+<h2>Description</h2> 
+
+<p>
+Ribosome profiling (ribo-seq) is a technique that takes advantage of NGS
+technology to sequence ribosome-protected mRNA fragments and consequently
+allows the locations of translating ribosomes to be determined at the entire
+transcriptome level (Ingolia <em>et al</em>., 2009).
+</p>
+
+<p>
+For a more detailed description of the protocol, see Ingolia <em>et al</em>.
+(2012). For reviews on this technique and its applications, please refer to
+Ingolia (2014) and Michel <em>et al</em>. (2013).
+</p>
+
+<p>
+This track displays cumulative ribo-seq data obtained from human cells under
+different conditions and can be used for the exploration of human genomic loci
+that are being translated. The values on the y-axis represent the number of
+ribosome footprint sequence reads at a given position. As of February
+2016, the track contains data from 9 studies (see References section for
+details). Further details about the aggregated track and additional ribo-seq
+data from these and other studies including data obtained from other organisms
+can be found at the specialized ribo-seq browser
+<a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a>.
+</p>
+
+<h2>Methods</h2>
+
+<p>
+For each study used to generate this track, raw fastq files were downloaded from
+a repository (e.g., NCBI GEO datasets).
+<a href="https://cutadapt.readthedocs.org/en/stable/" target="_blank">Cutadapt</a>
+was used to trim the relevant adapter sequence from the reads, after which reads
+below 25 nt in length were discarded. The trimmed reads were aligned to
+ribosomal RNA using
+<a href="http://bowtie-bio.sourceforge.net/index.shtml" target="_blank">Bowtie</a>
+and aligning reads were discarded. The remaining reads were then aligned to the
+hg38 (GRCh38) genome assembly using Bowtie. An offset of 15 nt (to infer the
+position of the A-site) was added to the most 5' nucleotide coordinate of each
+uniquely-mapped read.
+</p>
+
+<p>
+The alignment files from each of the included studies were merged to generate
+this aggregate track.
+</p>
+
+<p>
+See individual studies at
+<a href="http://gwips.ucc.ie" target="_blank">GWIPS-viz</a> for a full
+description of the methods of data acquisition and processing.
+</p>
+
+<h2>Credits</h2>
+
+<p>
+Thanks to Audrey Michel, Stephen Kiniry and GWIPS-viz for providing the data for
+this track. If you wish to cite this track, please reference:
+</p>
+
+<p>
+Michel AM, Fox G, M Kiran A, De Bo C, O'Connor PB, Heaphy SM, Mullan JP, Donohue CA, Higgins DG,
+Baranov PV.
+<a href="http://nar.oxfordjournals.org/content/42/D1/D859.long" target="_blank">
+GWIPS-viz: development of a ribo-seq genome browser</a>.
+<em>Nucleic Acids Res</em>. 2014 Jan;42(Database issue):D859-64.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24185699" target="_blank">24185699</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3965066/" target="_blank">PMC3965066</a>
+</p>
+
+<h2>References</h2>
+
+<h3>Data</h3>
+
+<p>
+Battle A, Khan Z, Wang SH, Mitrano A, Ford MJ, Pritchard JK, Gilad Y.
+<a href="http://classic.sciencemag.org/content/347/6222/664.long" target="_blank">
+Impact of regulatory variation from RNA to protein</a>.
+<em>Science</em>. 2015 Feb 6;347(6222):664-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25657249" target="_blank"> 25657249</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4507520/" target="_blank">PMC4507520</a>
+</p>
+
+<p>
+Cenik C, Cenik ES, Byeon GW, Grubert F, Candille SI, Spacek D, Alsallakh B, Tilgner H, Araya CL, Tang H <em>et al</em>.
+<a href="http://genome.cshlp.org/content/early/2015/08/21/gr.193342.115?top=1" target="_blank">
+Integrative analysis of RNA, translation and protein levels reveals distinct regulatory variation across humans</a>.
+<em>Genome Res</em>. 2015 Nov;25(11):1610-21.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/?term=26297486" target="_blank"> 26297486</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4617958/" target="_blank">PMC4617958</a>
+</p>
+
+
+<p>
+Elkon R, Loayza-Puch F, Korkmaz G, Lopes R, van Breugel PC, Bleijerveld OB, Altelaar AM, Wolf E, Lorenzin F, Eilers M <em>et al</em>.
+<a href="http://embor.embopress.org/content/16/12/1723.long" target="_blank">
+Myc coordinates transcription and translation to enhance transformation and suppress invasiveness</a>.
+<em>EMBO Rep</em>. 2015 Dec;16(12):1723-36.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26538417" target="_blank"> 26538417</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4687422/" target="_blank">PMC4687422</a>
+</p>
+
+<p>
+Jang C, Lahens NF, Hogenesch JB, Sehgal A.
+<a href="http://genome.cshlp.org/content/25/12/1836.long" target="_blank">
+Ribosome profiling reveals an important role for translational control in circadian gene expression</a>.
+<em>Genome Res</em> 2015 Dec;25(12):1836-47.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26338483" target="_blank"> 26338483</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4665005/" target="_blank">PMC4665005</a>
+</p>
+
+<p>
+Ji Z, Song R, Regev A, Struhl K.
+<a href="http://elifesciences.org/content/4/e08890v2" target="_blank">
+Many lncRNAs, 5&#39UTRs, and pseudogenes are translated and some are likely to express functional proteins</a>.
+<em>Elife</em>. 2015 Dec 19;4.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26687005" target="_blank"> 26687005</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4739776/" target="_blank">PMC4739776</a>
+</p>
+
+<p>
+Sidrauski C, McGeachy AM, Ingolia NT, Walter P.
+<a href="http://elifesciences.org/content/4/e05033" target="_blank">
+The small molecule ISRIB reverses the effects of eIF2&#945; phosphorylation on translation and stress granule assembly</a>.
+<em>Elife</em>. 2015 Feb 26;4.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/25719440" target="_blank"> 25719440</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4341466/" target="_blank">PMC4341466</a>
+</p>
+
+<p>
+Tanenbaum ME, Stern-Ginossar N, Weissman JS, Vale RD.
+<a href="http://elifesciences.org/content/4/e07957" target="_blank">
+Regulation of mRNA translation during mitosis</a>.
+<em>Elife</em>. 2015 Aug 25;4.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26305499" target="_blank"> 26305499</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4548207/" target="_blank">PMC4548207</a>
+</p>
+
+<p>
+Tirosh O, Cohen Y, Shitrit A, Shani O, Le-Trilling VT, Trilling M, Friedlander G, Tanenbaum M, Stern-Ginossar N.
+<a href="http://journals.plos.org/plospathogens/article?id=10.1371/journal.ppat.1005288" target="_blank">
+The transcription and translation landscapes during human cytomegalovirus infection reveal novel host-pathogen interactions</a>.
+<em>PLoS Pathog</em>. 2015 Nov 24;11(11):e1005288.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26599541" target="_blank"> 26599541</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4658056/" target="_blank">PMC4658056</a>
+</p>
+
+<p>
+Werner A, Iwasaki S, McGourty CA, Medina-Ruiz S, Teerikorpi N, Fedrigo I, Ingolia NT, Rape M.
+<a href="http://www.nature.com/nature/journal/v525/n7570/full/nature14978.html" target="_blank">
+Cell fate determination by ubiquitin-dependent regulation of translation</a>.
+<em>Nature</em>. 2015 Sep 24;525(7570):523-7.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26399832" target="_blank"> 26399832</a>;
+PMC: <a href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC4602398/" target="_blank">PMC4602398</a>
+</p>
+
+<h3>Protocol/Technique</h3>
+
+<p>
+Ingolia NT.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/24468696" target="_blank">
+Ribosome profiling: new views of translation, from single codons to genome scale</a>.
+<em>Nat Rev Genet</em>. 2014 Mar;15(3):205-13.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/24468696" target="_blank">24468696</a>
+</p>
+
+<p>
+Ingolia NT, Brar GA, Rouskin S, McGeachy AM, Weissman JS.
+<a href="http://www.nature.com/nprot/journal/v7/n8/full/nprot.2012.086.html" target="_blank">
+The ribosome profiling strategy for monitoring translation in vivo by deep sequencing of ribosome-
+protected mRNA fragments</a>.
+<em>Nat Protoc</em>. 2012 Jul 26;7(8):1534-50.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/22836135" target="_blank">22836135</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3535016/" target="_blank">PMC3535016</a>
+</p>
+
+<p>
+Ingolia NT, Ghaemmaghami S, Newman JR, Weissman JS.
+<a href="http://www.ncbi.nlm.nih.gov/pubmed/19213877" target="_blank">
+Genome-wide analysis in vivo of translation with nucleotide resolution using ribosome profiling</a>.
+<em>Science</em>. 2009 Apr 10;324(5924):218-23.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/19213877" target="_blank">19213877</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2746483/" target="_blank">PMC2746483</a>
+</p>
+
+<p>
+Michel AM, Baranov PV.
+<a href="http://dx.doi.org/10.1002/wrna.1172" target="_blank">
+Ribosome profiling: a Hi-Def monitor for protein synthesis at the genome-wide scale</a>.
+<em>Wiley Interdiscip Rev RNA</em>. 2013 Sep-Oct;4(5):473-90.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/23696005" target="_blank">23696005</a>; PMC: <a
+href="http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3823065/" target="_blank">PMC3823065</a>
+</p>

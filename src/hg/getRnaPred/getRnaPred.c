@@ -96,7 +96,7 @@ struct nibTwoCache *nibTwoCache;
 
 /* grab the first chromsome file name, if it's a nib, convert to
  * directory name */
-sqlNeedQuickQuery(conn, "NOSQLINJ select fileName from chromInfo limit 1",
+sqlNeedQuickQuery(conn, NOSQLINJ "select fileName from chromInfo limit 1",
                   nibTwoPath, sizeof(nibTwoPath));
 if (nibIsFile(nibTwoPath))
     {
