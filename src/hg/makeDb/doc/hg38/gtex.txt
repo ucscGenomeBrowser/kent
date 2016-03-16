@@ -1,24 +1,42 @@
 #############################################################################
 # GTEx V6 (October 2015) Kate
 # Create BED from hgFixed tables (see doc/gtex)
+# Reloading during QA of track (fixing gene classes).  (March 2016) Kate
 
 cd /hive/data/outside/gtex/V6
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed hg38 -gtexVersion=V6 -noLoad -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
 
-# creates gtexGeneModelV6.hg38.genePred
-# NOTE: drops 192 transcripts.  One I spot-checked indeed didn't exist in our hg38 genes
-
+# see doc/hg19.txt for how this genePred was made
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+liftOver -genePred gencodeV19.hg19.genePred $chain gtexGeneModelV6.hg38.genePred \
+                gencode.V19.hg38.unmapped
+# 926 unmapped
 hgLoadGenePred hg38 gtexGeneModelV6 gtexGeneModelV6.hg38.genePred
 
-# Run again, to create bed table
-mkdir hg38; cd hg38
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -noLoad -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
+# OLD: creates gtexGeneModelV6.hg38.genePred
+# OLD: NOTE: drops 192 transcripts.  One I spot-checked indeed didn't exist in our hg38 genes
 
-Max score: 219385.906250
+cd /hive/data/genomes/hg38/bed
+mkdir -p gtex
+cd gtex
+
+# table renamed to gtexGeneModel later
+
+# Use latest GENCODE attrs file to get biotypes
+set gencodeVersion = V24
+
+# create bed table
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed  hg38 -gtexVersion=V6 \
+        -noLoad -gencodeVersion=$gencodeVersion gtexGeneBedV6 -verbose=2 >&! makeGeneBed.hg38.log
+
+# 45 genes not found in GENCODE attributes table
+
+#Max score: 219385.906250
 
 wc -l *.tab
-56126 gtexGeneBedV6.tab
+wc -l *.tab
+52896 gtexGeneBedV6.tab
+# 55810 gtexGeneBedV6.tab
 
-# looks good, so load up
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneBedV6 -verbose=2
+# looks ok so load up
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -gencodeVersion=$gencodeVersion gtexGeneBedV6 -verbose=2
 

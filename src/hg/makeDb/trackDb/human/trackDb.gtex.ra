@@ -7,6 +7,7 @@ group expression
 priority 10.15
 
 track gtexGeneV4
+release alpha
 type bed 6 +
 shortLabel GTEx Expr V4
 longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 2921 samples, 209 donors (V4, Aug 2014)

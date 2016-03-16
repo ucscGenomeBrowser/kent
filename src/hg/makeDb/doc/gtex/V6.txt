@@ -67,7 +67,8 @@ select count(*) from gtexSampleData where score=0;
 | 242219267 |
 +-----------+
 
-hgsql hgFixed -e 'delete from gtexSampleDataV6 where score=0'
+hgsql hgFixed -e 'alter table gtexSampleData disable keys; delete from gtexSampleData where score=0; alter table gtexSampleData enable keys'
+# 30 minutes or so
 
 # looks good, load tables 
 
@@ -84,3 +85,75 @@ hgsql hgFixed -e "insert into gtexInfo set version='V6', releaseDate='2015-10-01
 hgGtex -tab=newtables -noData -noLoad gtex2V6 V6 $dataFile $sampleFile $subjectFile $tissueFile
 hgLoadSqlTab hgFixed gtexSample ~kate/kent/src/hg/lib/gtexSample.sql \
                 newtables/gtex2V6Sample.tab
+
+# Investigate gene vs transcript types in GENCODE
+
+ select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'coding' order by geneType;
++------------------------+
+| geneType               |
++------------------------+
+| IG_C_gene              |
+| IG_D_gene              |
+| IG_J_gene              |
+| IG_V_gene              |
+| polymorphic_pseudogene |
+| protein_coding         |
+| TR_C_gene              |
+| TR_D_gene              |
+| TR_J_gene              |
+| TR_V_gene              |
++------------------------+
+10 rows in set (0.22 sec)
+
+select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'nonCoding' order by geneType;
++--------------------------+
+| geneType                 |
++--------------------------+
+| 3prime_overlapping_ncrna |
+| antisense                |
+| lincRNA                  |
+| miRNA                    |
+| misc_RNA                 |
+| Mt_rRNA                  |
+| Mt_tRNA                  |
+| polymorphic_pseudogene   |
+| processed_transcript     |
+| protein_coding           |
+| pseudogene               |
+| rRNA                     |
+| sense_intronic           |
+| sense_overlapping        |
+| snoRNA                   |
+| snRNA                    |
++--------------------------+
+16 rows in set (0.21 sec)
+
+
+elect distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'pseudo' order by geneType;
++-----------------+
+| geneType        |
++-----------------+
+| IG_C_pseudogene |
+| IG_J_pseudogene |
+| IG_V_pseudogene |
+| pseudogene      |
+| TR_J_pseudogene |
+| TR_V_pseudogene |
++-----------------+
+6 rows in set (0.14 sec)
+
+ select distinct(geneType) from wgEncodeGencodeAttrsV19 where transcriptClass = 'problem' order by geneType;
++------------------------+
+| geneType               |
++------------------------+
+| antisense              |
+| lincRNA                |
+| polymorphic_pseudogene |
+| processed_transcript   |
+| protein_coding         |
+| pseudogene             |
+| sense_intronic         |
++------------------------+
+7 rows in set (0.15 sec)
+
+

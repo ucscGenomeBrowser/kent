@@ -42,12 +42,13 @@ struct gtexGeneInfo
     int height;                  /* Item height in pixels */
     };
 
+
 #define MAX_DESC  200
 /***********************************************/
 /* Color gene models using GENCODE conventions */
 
 static struct rgbColor codingColor = {12, 12, 120}; // #0C0C78
-static struct rgbColor noncodingColor = {0, 100, 0}; // #006400
+static struct rgbColor nonCodingColor = {0, 100, 0}; // #006400
 static struct rgbColor pseudoColor = {255,51,255}; // #FF33FF
 static struct rgbColor problemColor = {254, 0, 0}; // #FE0000
 static struct rgbColor unknownColor = {1, 1, 1};
@@ -56,11 +57,12 @@ static struct statusColors
 /* Color values for gene models */
     {
     Color coding;
-    Color noncoding;
+    Color nonCoding;
     Color pseudo;
     Color problem;
     Color unknown;
     } statusColors = {0,0,0,0};
+
 
 static void initGeneColors(struct hvGfx *hvg)
 /* Get and cache indexes for color values */
@@ -68,27 +70,47 @@ static void initGeneColors(struct hvGfx *hvg)
 if (statusColors.coding != 0)
     return;
 statusColors.coding = hvGfxFindColorIx(hvg, codingColor.r, codingColor.g, codingColor.b);
-statusColors.noncoding = hvGfxFindColorIx(hvg, noncodingColor.r, noncodingColor.g, noncodingColor.b);
+statusColors.nonCoding = hvGfxFindColorIx(hvg, nonCodingColor.r, nonCodingColor.g, nonCodingColor.b);
 statusColors.pseudo = hvGfxFindColorIx(hvg, pseudoColor.r, pseudoColor.g, pseudoColor.b);
 statusColors.problem = hvGfxFindColorIx(hvg, problemColor.r, problemColor.g, problemColor.b);
 statusColors.unknown = hvGfxFindColorIx(hvg, unknownColor.r, unknownColor.g, unknownColor.b);
 }
 
-static Color getTranscriptStatusColor(struct hvGfx *hvg, struct gtexGeneBed *geneBed)
-/* Find GENCODE color for transcriptClass  of canonical transcript */
+static Color getGeneClassColor(struct hvGfx *hvg, struct gtexGeneBed *geneBed)
+/* Find GENCODE color for gene type.
+ * NOTE: this is based on defined gene biotypes from GENCODE V19, mapped to the classes
+ * defined for transcripts, as follows:
+
+ * coding: IG_C_gene, IG_D_gene, IG_J_gene, IG_V_gene, 
+               TR_C_gene, TR_D_gene, TR_J_gene, TR_V_gene 
+               polymorphic_pseudogene, protein_coding
+
+ * pseudo: IG_C_pseudogene, IG_J_pseudogene, IG_V_pseudogene, TR_J_pseudogene, TR_V_pseudogene,
+               pseudogene 
+
+ * nonCoding: 3prime_overlapping_ncrna, Mt_rRNA, Mt_tRNA, antisense, lincRNA, miRNA, 
+                misc_RNA, processed_transcript, rRNA, sense_intronic, sense_overlapping, 
+                snRNA, snoRNA
+*/
+
 {
 initGeneColors(hvg);
-if (geneBed->transcriptClass == NULL)
+char *geneType = geneBed->transcriptClass;
+
+/* keep backwards compatibility with tables (V4 having transcript classes in table) */
+if (geneType == NULL)
     return statusColors.unknown;
-if (sameString(geneBed->transcriptClass, "coding"))
+
+if (sameString(geneType, "coding") || sameString(geneType, "protein_coding") || 
+        sameString(geneType, "polymorphic_pseudogene") || endsWith(geneType, "_gene"))
     return statusColors.coding;
-if (sameString(geneBed->transcriptClass, "nonCoding"))
-    return statusColors.noncoding;
-if (sameString(geneBed->transcriptClass, "pseudo"))
-    return statusColors.pseudo;
-if (sameString(geneBed->transcriptClass, "problem"))
-    return statusColors.problem;
-return statusColors.unknown;
+
+if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") || 
+        endsWith(geneType, "_pseudogene"))
+    return statusColors.nonCoding;
+
+// A bit of a cheat here -- better a mapping table
+return statusColors.nonCoding;
 }
 
 /***********************************************/
@@ -544,7 +566,7 @@ struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 // Color in dense mode using transcriptClass
-Color statusColor = getTranscriptStatusColor(hvg, geneBed);
+Color statusColor = getGeneClassColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
     {
     bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
