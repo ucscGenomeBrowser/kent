@@ -121,7 +121,7 @@ for (fr = table->rowList; fr != NULL; fr = fr->next)
 	}
 
     /* Reset new tags and schedule revalidation */
-    cdwFileResetTags(conn, ef, tags->string, !noRevalidate);
+    cdwFileResetTags(conn, ef, tags->string, !noRevalidate, 0);
 
     /* Clean up temps. */
     dyStringFree(&tags);
