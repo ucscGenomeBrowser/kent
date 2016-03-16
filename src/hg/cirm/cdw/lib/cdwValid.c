@@ -75,7 +75,7 @@ void cdwValidateRcc(char *path)
 requireStartEndLines(path, "<Header>", "</Messages>");
 }
 
-boolean fileStartsWithOneOfPair(char *fileName,  char *one, char *two)
+static boolean fileStartsWithOneOfPair(char *fileName,  char *one, char *two)
 /* Return TRUE if file starts with either one of two strings. */
 {
 /* Figure out size of one and two strings. */
@@ -101,6 +101,13 @@ else if (twoLen >= sizeRead && memcmp(buf, two, twoLen) == 0)
 return FALSE;
 }
 
+static boolean fileStartsWith(char *path, char *string)
+/* Make sure file starts with string */
+{
+return fileStartsWithOneOfPair(path, string, string);
+}
+
+
 void cdwValidateIdat(char *path)
 /* Validate illumina idat file. */
 {
@@ -111,14 +118,14 @@ if (!fileStartsWithOneOfPair(path, "IDAT", "DITA"))
 void cdwValidatePdf(char *path)
 /* Make sure PDF really is PDF */
 {
-if (!fileStartsWithOneOfPair(path, "%PDF", "%PDF"))
+if (!fileStartsWith(path, "%PDF"))
     errAbort("%s in not a valid .pdf file, it does not start with %%PDF", fileNameOnly(path));
 }
 
 void cdwValidateCram(char *path)
 /* Validate cram file. */
 {
-if (!fileStartsWithOneOfPair(path, "CRAM", "CRAM"))
+if (!fileStartsWith(path, "CRAM"))
     errAbort("%s is not a valid .cram file, it does not start with CRAM", fileNameOnly(path));
 }
 
@@ -132,8 +139,15 @@ if (!fileStartsWithOneOfPair(path, "\xff\xd8\xff\xe0", "\xff\xd8\xff\xe1"))
 void cdwValidateBamIndex(char *path)
 /* Check .bam.bai really is index. */
 {
-if (!fileStartsWithOneOfPair(path, "BAI", "BAI"))
+if (!fileStartsWith(path, "BAI"))
     errAbort("%s is not a valid .bam.bai file", fileNameOnly(path));
+}
+
+void cdwValidateTabixIndex(char *path)
+/* Check that a tabix index file (used for VCF files among other things) starts with right characters */
+{
+if (!fileStartsWith(path, "TIDX"))
+    errAbort("%s is not a valid TABIX index file", fileNameOnly(path));
 }
 
 boolean cdwIsGzipped(char *path)
@@ -284,12 +298,22 @@ void cdwValidateTagName(char *tag)
 if (!isSymbolString(tag))
     errAbort("Bad tag symbol %s.", tag);
 // First see if it is in hash of allowed tags.
-if (hashLookup(cdwAllowedTagsHash(), tag) != NULL)
+struct hash *allowedHash = cdwAllowedTagsHash();
+if (hashLookup(allowedHash, tag) != NULL)
     return;
 // Otherwise see if it's one of the prefixes that allows anything afterwords 
-else if (startsWith("lab_", tag) || startsWith("user_", tag) 
-    || startsWith("GEO_", tag) || startsWith("SRA_", tag))
+else if (startsWith("lab_", tag) || startsWith("user_", tag) )
     {
+    return;
+    }
+else if (startsWith("GEO_", tag) || startsWith("SRA_", tag))
+    {
+    int tagLen = strlen(tag);
+    char lowerTag[tagLen+1];
+    strcpy(lowerTag, tag);
+    tolowers(lowerTag);
+    if (hashLookup(allowedHash, lowerTag))
+        errAbort("Please change %s tag to %s", tag, lowerTag);
     return;
     }
 // Otherwise see if it's one of our reserved but unimplemented things

@@ -28,6 +28,9 @@ void cdwValidateJpg(char *path);
 void cdwValidateBamIndex(char *path);
 /* Check .bam.bai really is index. */
 
+void cdwValidateTabixIndex(char *path);
+/* Check that a tabix index file (used for VCF files among other things) starts with right characters */
+
 boolean cdwIsGzipped(char *path);
 /* Return TRUE if file at path starts with GZIP signature */
 
