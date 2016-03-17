@@ -31,7 +31,7 @@ void fakeHomozygousity(char *output)
 {
 FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn = sqlConnect("hg18");
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select chrom,chromStart,chromEnd from ctgPos");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select chrom,chromStart,chromEnd from ctgPos");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

@@ -49,7 +49,7 @@ struct hash *ccdsStatusValLoad(struct sqlConnection *conn)
 {
 struct hash *statusVals = hashNew(0);
 struct sqlResult *sr = sqlGetResult(conn, 
-                                    "NOSQLINJ SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
+                                    NOSQLINJ "SELECT ccds_status_val_uid, ccds_status FROM CcdsStatusVals");
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {

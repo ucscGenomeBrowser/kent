@@ -241,12 +241,12 @@ static void addExtraIndices(struct sqlConnection *conn)
 {
 static char *adds[] =
     {
-    "NOSQLINJ ALTER TABLE Groups ADD INDEX (tax_id);",
-    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
-    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
-    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
-    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
-    "NOSQLINJ ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
+    NOSQLINJ "ALTER TABLE Groups ADD INDEX (tax_id);",
+    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (group_version_uid);",
+    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (ccds_status_val_uid);",
+    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (ncbi_build_number);",
+    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (first_ncbi_build_version);",
+    NOSQLINJ "ALTER TABLE GroupVersions ADD INDEX (last_ncbi_build_version);",
     NULL
     };
 int i;

@@ -8,7 +8,79 @@
 #include "linefile.h"
 #include "genbank.h"
 #include "dystring.h"
+#include "hgConfig.h"
 
+char *refSeqSummaryTable = "refSeqSummary";
+char *refSeqStatusTable = "refSeqStatus";
+char *gbCdnaInfoTable = "gbCdnaInfo";
+char *gbWarnTable = "gbWarn";
+char *authorTable = "author";
+char *descriptionTable = "description";
+char *productNameTable = "productName";
+char *organismTable = "organism";
+char *cdsTable = "cds";
+char *tissueTable = "tissue";
+char *developmentTable = "development";
+char *geneNameTable = "geneName";
+char *refLinkTable = "refLink";
+char *refPepTable = "refPep";
+char *cellTable = "cell";
+char *sourceTable = "source";
+char *libraryTable = "library";
+char *mrnaCloneTable = "mrnaClone";
+char *sexTable = "sex";
+char *keywordTable = "keyword";
+char *gbSeqTable = "gbSeq";
+char *gbExtFileTable = "gbExtFile";
+char *imageCloneTable = "imageClone";
+char *gbMiscDiffTable = "gbMiscDiff";
+
+#define MYBUFSIZE 2048
+inline char *addDatabase(char *database, char *buffer, char *table)
+{
+safef(buffer, MYBUFSIZE, "%s.%s",database,table);
+return cloneString(buffer);
+}
+
+void initGenbankTableNames(char *database)
+/* read hg.conf to get alternate table names */
+{
+static boolean inited = FALSE;
+
+if (inited)
+    return;
+
+char *genbankDb = cfgOptionEnvDefault("GENBANKDB", "genbankDb",
+    database);
+char buffer[MYBUFSIZE];
+
+refSeqStatusTable = addDatabase(genbankDb, buffer, "refSeqStatus");
+refSeqSummaryTable = addDatabase(genbankDb, buffer, "refSeqSummary");
+gbSeqTable = addDatabase(genbankDb, buffer, "gbSeq");
+gbExtFileTable = addDatabase(genbankDb, buffer, "gbExtFile");
+gbCdnaInfoTable = addDatabase(genbankDb, buffer, "gbCdnaInfo");
+authorTable = addDatabase(genbankDb, buffer, "author");
+descriptionTable = addDatabase(genbankDb, buffer, "description");
+productNameTable = addDatabase(genbankDb, buffer, "productName");
+organismTable = addDatabase(genbankDb, buffer, "organism");
+cdsTable = addDatabase(genbankDb, buffer, "cds");
+tissueTable = addDatabase(genbankDb, buffer, "tissue");       
+developmentTable = addDatabase(genbankDb, buffer, "development");
+geneNameTable = addDatabase(genbankDb, buffer, "geneName");
+refLinkTable = addDatabase(genbankDb, buffer, "refLink");
+cellTable = addDatabase(genbankDb, buffer, "cell");       
+sourceTable = addDatabase(genbankDb, buffer, "source");
+libraryTable = addDatabase(genbankDb, buffer, "library");
+mrnaCloneTable = addDatabase(genbankDb, buffer, "mrnaClone");
+sexTable = addDatabase(genbankDb, buffer, "sex");
+keywordTable = addDatabase(genbankDb, buffer, "keyword");
+refPepTable = addDatabase(genbankDb, buffer, "refPep");
+imageCloneTable = addDatabase(genbankDb, buffer, "imageClone");
+gbMiscDiffTable = addDatabase(genbankDb, buffer, "gbMiscDiff");
+gbWarnTable = addDatabase(genbankDb, buffer, "gbWarn");
+
+inited = TRUE;
+}
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";

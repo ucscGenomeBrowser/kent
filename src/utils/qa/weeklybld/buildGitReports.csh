@@ -55,14 +55,14 @@ endif
 
 @ NEXTNN=$BRANCHNN + 1
 if ( "$mode" == "review2") then
-    set thisTag="v${NEXTNN}_preview2"
-    set prevTag="v${NEXTNN}_preview"
+    set thisTag="v${NEXTNN}_preview2${preview2Subversion}"
+    set prevTag="v${NEXTNN}_preview${previewSubversion}"
 else if ( "$mode" == "review") then
-    set thisTag="v${NEXTNN}_preview"
-    set prevTag="v${BRANCHNN}_base"
+    set thisTag="v${NEXTNN}_preview${previewSubversion}"
+    set prevTag="v${BRANCHNN}_base${baseSubversion}"
 else
-    set thisTag="v${BRANCHNN}_base"
-    set prevTag="v${BRANCHNN}_preview2"
+    set thisTag="v${BRANCHNN}_base${baseSubversion}"
+    set prevTag="v${BRANCHNN}_preview2${preview2Subversion}"
 endif
 
 echo "BRANCHNN=$BRANCHNN"

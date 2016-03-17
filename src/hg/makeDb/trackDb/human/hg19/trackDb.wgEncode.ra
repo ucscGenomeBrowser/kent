@@ -18,6 +18,7 @@ include wgEncodeGencodeV7.ra
 include wgEncodeGencodeV14.ra
 include wgEncodeGencodeV17.ra
 include wgEncodeGencodeV19.ra
+include wgEncodeGencodeV24lift37.ra
 
 # UNC/BSU Proteogenomics (wrangler: fang)
 include wgEncodeUncBsuProt.release2.ra

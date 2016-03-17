@@ -13,7 +13,7 @@ char *IMAGE_CLONE_TBL = "imageClone";
 
 /* SQL to create the table */
 static char *createSql =
-"NOSQLINJ create table imageClone ("
+NOSQLINJ "create table imageClone ("
 "    imageId int not null,"                         /* imageId */
 "    acc char(12) not null,"                        /* GenBank accession */
 "    type enum('EST','mRNA') not null,"             /* EST or mRNA? */

@@ -13,6 +13,7 @@
 #include "htmshell.h"
 #include "genePred.h"
 #include "geneSimilarities.h"
+#include "genbank.h"
 
 
 static char *findRefSeqSummary(struct sqlConnection *conn,
@@ -41,7 +42,7 @@ static char *getAccVersion(struct sqlConnection *conn, char *acc)
 /* given a accession, get acc.ver */
 {
 char query[256], accver[64];
-sqlSafef(query, sizeof(query), "SELECT version FROM gbCdnaInfo WHERE acc=\"%s\"", acc);
+sqlSafef(query, sizeof(query), "SELECT version FROM %s WHERE acc=\"%s\"", gbCdnaInfoTable, acc);
 safef(accver, sizeof(accver), "%s.%d", acc, sqlNeedQuickNum(conn, query));
 return cloneString(accver);
 }
@@ -185,30 +186,30 @@ return inMBLabValidDb;
 }
 
 static void cdnaInfoLoad(struct cloneInfo *ci, struct sqlConnection *conn)
-/* Loading clone information from gbCdnaInfo relational tables. */
+/* Loading clone information from gbCdnaInfoTable relational tables. */
 {
-// data from gbCdnaInfo and friends
+// data from gbCdnaInfoTable and friends
 char query[1024];
 sqlSafef(query, sizeof(query),
       "select "
-      "description.name, organism.name, tissue.name, library.name,"
-      "development.name, geneName.name, productName.name, mrnaClone.name,"
-      "cds.name,keyword.name,gbCdnaInfo.moddate,gbCdnaInfo.version,"
-      "gbCdnaInfo.gi"
+      "des.name, o.name, t.name, l.name,"
+      "dev.name, gene.name, p.name, m.name,"
+      "c.name,k.name,g.moddate,g.version,"
+      "g.gi"
       " from "
-      "gbCdnaInfo,description,organism,tissue,library,development,"
-      "geneName,productName,mrnaClone,cds,keyword"
+      "%s g,%s des,%s o,%s t,%s l,%s dev,"
+      "%s gene,%s p,%s m,%s c,%s k"
       " where "
       "(acc = \"%s\") and"
-      "(description = description.id) and (organism = organism.id) and"
-      "(tissue = tissue.id) and (library = library.id) and"
-      "(development = development.id) and (geneName = geneName.id) and"
-      "(productName = productName.id) and (mrnaClone = mrnaClone.id) and"
-      "(cds = cds.id) and (keyword = keyword.id)", ci->acc);
+      "(description = des.id) and (organism = o.id) and"
+      "(tissue = t.id) and (library = l.id) and"
+      "(development = dev.id) and (geneName = gene.id) and"
+      "(productName = p.id) and (mrnaClone = m.id) and"
+      "(cds = c.id) and (keyword = k.id)", gbCdnaInfoTable, descriptionTable, organismTable, tissueTable, libraryTable, developmentTable,geneNameTable, productNameTable, mrnaCloneTable, cdsTable, keywordTable, ci->acc);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row = sqlNextRow(sr);
 if (row == NULL)
-    errAbort("can't find %s in gbCdnaInfo", ci->acc);
+    errAbort("can't find %s in %s", ci->acc, gbCdnaInfoTable);
 int i = 0;
 ci->desc = cloneString(row[i++]);
 ci->organism = cloneString(row[i++]);
@@ -572,9 +573,9 @@ static void prMiscDiffs(struct sqlConnection *conn, char *acc)
 /* print any gbMiscDiff rows for the accession */
 {
 struct gbMiscDiff *gmds = NULL, *gmd;
-if (sqlTableExists(conn, "gbMiscDiff"))
+if (sqlTableExists(conn, gbMiscDiffTable))
     gmds = sqlQueryObjs(conn, (sqlLoadFunc)gbMiscDiffLoad, sqlQueryMulti,
-                        "select * from gbMiscDiff where acc=\"%s\"", acc);
+                        "select * from %s where acc=\"%s\"", gbMiscDiffTable, acc);
 webNewSection("NCBI Clone Validation");
 if (gmds != NULL)
     {

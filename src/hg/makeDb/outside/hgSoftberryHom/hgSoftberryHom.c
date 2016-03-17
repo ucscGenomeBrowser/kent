@@ -56,7 +56,7 @@ lineFileClose(&lf);
 }
 
 /* #Protein homologies behind Softberry genes */
-char *createTable = "NOSQLINJ CREATE TABLE softberryHom (\n"
+char *createTable = NOSQLINJ "CREATE TABLE softberryHom (\n"
     "name varchar(255) not null,	# Softberry gene name\n"
     "giString varchar(255) not null,	# String with Genbank gi and accession\n"
     "description longblob not null,	# Freeform (except for no tabs) description\n"

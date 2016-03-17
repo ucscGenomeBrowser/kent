@@ -1940,10 +1940,10 @@ else
     char cigarSpec[strlen(cigar+1)];  // copy since parsing is destructive
     strcpy(cigarSpec, cigar);
     char *cigarNext = cigarSpec;
-    if (strand[0] == '-')
+    if (strand[1] == '-')
 	for(; *cigarNext; cigarNext++)
 	    ;
-    while(getNextCigarOp(cigarSpec, (strand[0] == '-'), &cigarNext, &op, &size))
+    while(getNextCigarOp(cigarSpec, (strand[1] == '-'), &cigarNext, &op, &size))
 	{
 	switch (op)
 	    {

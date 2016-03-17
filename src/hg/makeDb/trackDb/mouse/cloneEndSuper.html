@@ -3,15 +3,40 @@
 <p>
 This track shows the NCBI clone end predictions from the
 <a href="http://www.ncbi.nlm.nih.gov/clone/"
-target="_blank">NCBI Clone DB</a> database.
+target="_blank">NCBI Clone DB</a> database.   Libraries with more than
+20,000 clones are included in this track display.
 </p>
 
 <p>
-End information was extracted from the Clone DB FTP site
+Bacterial artificial chromosomes (BACs) are a key part of many
+large-scale sequencing projects.  A BAC typically consists of 50 - 300 kb of
+DNA.  During the early phase of a sequencing project, it is common
+to sequence a single read (approximately 500 bases) off each end of
+a large number of BACs.  Later on in the project, these BAC end reads
+can be mapped to the genome sequence.</p>
+<p>
+These BAC end pairs can be useful for validating the assembly over
+relatively long ranges.  In some cases, the BACs are useful biological
+reagents.  This track can also be used for determining which BAC
+contains a given gene, useful information for certain wet lab experiments.</p>
+<p>
+The scoring scheme used for this annotation assigns 1000 to an alignment
+when the BAC end pair aligns to only one location in the genome (after
+filtering).  When a BAC end pair or clone aligns to multiple locations, the
+score is calculated as 1500/(number of alignments).</p>
+
+<h2>Methods</h2>
+<p>
+The mappings of these BAC end sequences are taken directly from the
+NCBI Clone DB FTP site
 <a href="ftp://ftp.ncbi.nih.gov/repository/clone/reports/Mus_musculus/"
-target="_blank">ftp.ncbi.nih.gov/repository/clone/reports/Mus_musculus/</a>
-*.GCF_000001635.22.103.*.gff files.
-</p>
+target=_blank>ftp.ncbi.nih.gov/repository/clone/reports/Mus_musculus/</A>
+*.GCF_000001635.22.103.*.gff files.</p>
+<p>
+UCSC filtered the NCBI Clone DB mapped ends to drop ends that mapped to a
+region that was three times longer than the median size of the clones in
+the library.  Only libraries with more than
+20,000 clones are included in this track display.</p>
 
 <p>
 Click through on displayed items to the Clone DB database information,
@@ -20,29 +45,33 @@ including
 target="_blank">Clone DB distributor</a> references.
 </p>
 
-<p>
-UCSC filtered the NCBI Clone DB mapped ends to drop ends that mapped to a region
-that was three times longer than the median size of the clones in the library.
-</p>
+<table BORDER=1>
+<tr><th>library<br>name</th>
+    <th>total<br>clones</th>
+    <th>total&nbsp;end<br>sequences</th>
+    <th>NCBI&nbsp;mapped<br>ends</th>
+    <th>UCSC&nbsp;filtered<br>ends</th>
+    <th>UCSC<br>dropped</th>
+    <th>percent<br>dropped</th>
+</tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/832" target="_blank">B6Ng01</A></th><td align=right>128,007</td><td align=right>253,638</td><td align=right>98,478</td><td align=right>95,837</td><td align=right>2,641</td><td align=right>2.68</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/140" target="_blank">bMQ</a></th><td align=right>129,826</td><td align=right>244,222</td><td align=right>75,671</td><td align=right>72,540</td><td align=right>3,131</td><td align=right>4.14</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/142" target="_blank">C3H</a></th><td align=right>86,696</td><td align=right>169,665</td><td align=right>43,690</td><td align=right>42,378</td><td align=right>1,312</td><td align=right>3.00</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/136" target="_blank">CH29</a></th><td align=right>93,023</td><td align=right>340,272</td><td align=right>52,320</td><td align=right>50,621</td><td align=right>1,699</td><td align=right>3.25</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/130" target="_blank">DN</a></th><td align=right>180,218</td><td align=right>665,070</td><td align=right>106,463</td><td align=right>100,472</td><td align=right>5,991</td><td align=right>5.63</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/267" target="_blank">MHPN</a></th><td align=right>118,658</td><td align=right>208,707</td><td align=right>61,942</td><td align=right>58,582</td><td align=right>3,360</td><td align=right>5.42</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/268" target="_blank">MHPP</a></th><td align=right>67,769</td><td align=right>112,081</td><td align=right>30,594</td><td align=right>28,550</td><td align=right>2,044</td><td align=right>6.68</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/141" target="_blank">MSMg01</a></th><td align=right>175,178</td><td align=right>337,471</td><td align=right>83,677</td><td align=right>78,772</td><td align=right>4,905</td><td align=right>5.86</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/114" target="_blank">RP23</a></th><td align=right>175,999</td><td align=right>553,274</td><td align=right>85,082</td><td align=right>83,062</td><td align=right>2,020</td><td align=right>2.37</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/128" target="_blank">RP24</a></th><td align=right>163,859</td><td align=right>294,217</td><td align=right>52,470</td><td align=right>50,849</td><td align=right>1,621</td><td align=right>3.09</td></tr>
+<tr><th align=left><a href="http://www.ncbi.nlm.nih.gov/clone/library/genomic/131" target="_blank">WI1</a></th><td align=right>907,213</td><td align=right>1,822,723</td><td align=right>337,591</td><td align=right>324,259</td><td align=right>13,332</td><td align=right>3.95</td></tr>
+</table>
 
-<TABLE BORDER=1>
-<TR><TH>library<BR>name</TH>
-    <TH>total<BR>clones</TH>
-    <TH>total&nbsp;end<BR>sequences</TH>
-    <TH>NCBI&nbsp;mapped<BR>ends</TH>
-    <TH>UCSC&nbsp;filtered<BR>ends</TH>
-    <TH>UCSC<BR>dropped</TH>
-    <TH>percent<BR>dropped</TH>
-</TR>
-<TR><TH ALIGN=LEFT>B6Ng01</TH><TD ALIGN=RIGHT>128,007</TD><TD ALIGN=RIGHT>253,638</TD><TD ALIGN=RIGHT>98,478</TD><TD ALIGN=RIGHT>95,837</TD><TD ALIGN=RIGHT>2,641</TD><TD ALIGN=RIGHT>2.68</TD></TR>
-<TR><TH ALIGN=LEFT>bMQ</TH><TD ALIGN=RIGHT>129,826</TD><TD ALIGN=RIGHT>244,222</TD><TD ALIGN=RIGHT>75,671</TD><TD ALIGN=RIGHT>72,540</TD><TD ALIGN=RIGHT>3,131</TD><TD ALIGN=RIGHT>4.14</TD></TR>
-<TR><TH ALIGN=LEFT>C3H</TH><TD ALIGN=RIGHT>86,696</TD><TD ALIGN=RIGHT>169,665</TD><TD ALIGN=RIGHT>43,690</TD><TD ALIGN=RIGHT>42,378</TD><TD ALIGN=RIGHT>1,312</TD><TD ALIGN=RIGHT>3.00</TD></TR>
-<TR><TH ALIGN=LEFT>CH29</TH><TD ALIGN=RIGHT>93,023</TD><TD ALIGN=RIGHT>340,272</TD><TD ALIGN=RIGHT>52,320</TD><TD ALIGN=RIGHT>50,621</TD><TD ALIGN=RIGHT>1,699</TD><TD ALIGN=RIGHT>3.25</TD></TR>
-<TR><TH ALIGN=LEFT>DN</TH><TD ALIGN=RIGHT>180,218</TD><TD ALIGN=RIGHT>665,070</TD><TD ALIGN=RIGHT>106,463</TD><TD ALIGN=RIGHT>100,472</TD><TD ALIGN=RIGHT>5,991</TD><TD ALIGN=RIGHT>5.63</TD></TR>
-<TR><TH ALIGN=LEFT>MHPN</TH><TD ALIGN=RIGHT>118,658</TD><TD ALIGN=RIGHT>208,707</TD><TD ALIGN=RIGHT>61,942</TD><TD ALIGN=RIGHT>58,582</TD><TD ALIGN=RIGHT>3,360</TD><TD ALIGN=RIGHT>5.42</TD></TR>
-<TR><TH ALIGN=LEFT>MHPP</TH><TD ALIGN=RIGHT>67,769</TD><TD ALIGN=RIGHT>112,081</TD><TD ALIGN=RIGHT>30,594</TD><TD ALIGN=RIGHT>28,550</TD><TD ALIGN=RIGHT>2,044</TD><TD ALIGN=RIGHT>6.68</TD></TR>
-<TR><TH ALIGN=LEFT>MSMg01</TH><TD ALIGN=RIGHT>175,178</TD><TD ALIGN=RIGHT>337,471</TD><TD ALIGN=RIGHT>83,677</TD><TD ALIGN=RIGHT>78,772</TD><TD ALIGN=RIGHT>4,905</TD><TD ALIGN=RIGHT>5.86</TD></TR>
-<TR><TH ALIGN=LEFT>RP23</TH><TD ALIGN=RIGHT>175,999</TD><TD ALIGN=RIGHT>553,274</TD><TD ALIGN=RIGHT>85,082</TD><TD ALIGN=RIGHT>83,062</TD><TD ALIGN=RIGHT>2,020</TD><TD ALIGN=RIGHT>2.37</TD></TR>
-<TR><TH ALIGN=LEFT>RP24</TH><TD ALIGN=RIGHT>163,859</TD><TD ALIGN=RIGHT>294,217</TD><TD ALIGN=RIGHT>52,470</TD><TD ALIGN=RIGHT>50,849</TD><TD ALIGN=RIGHT>1,621</TD><TD ALIGN=RIGHT>3.09</TD></TR>
-<TR><TH ALIGN=LEFT>WI1</TH><TD ALIGN=RIGHT>907,213</TD><TD ALIGN=RIGHT>1,822,723</TD><TD ALIGN=RIGHT>337,591</TD><TD ALIGN=RIGHT>324,259</TD><TD ALIGN=RIGHT>13,332</TD><TD ALIGN=RIGHT>3.95</TD></TR>
-</TABLE>
+<h2>Credits</h2>
+<p>
+Additional information about the clone, including how it
+can be obtained, may be found at the
+<a href="http://www.ncbi.nlm.nih.gov/clone"
+target=_blank>NCBI Clone Registry</A>. To view the registry entry for a
+specific clone, open the details page for the clone and click on its name at
+the top of the page.</p>

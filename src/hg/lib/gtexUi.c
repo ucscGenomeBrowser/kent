@@ -9,6 +9,7 @@
 #include "trackDb.h"
 #include "jsHelper.h"
 #include "gtexTissue.h"
+#include "gtexInfo.h"
 #include "gtexUi.h"
 
 #define SYSTEM_BRAIN            "Brain"
@@ -29,7 +30,7 @@ static char *makeTissueColorPatch(struct gtexTissue *tis)
 /* Display a box colored by defined tissue color */
 {
 char buf[256];
-safef(buf, sizeof(buf), "<td bgcolor=%X></td>", tis->color);
+safef(buf, sizeof(buf), "<td bgcolor=#%06X></td>", tis->color);
 return(cloneString(buf));
 }
 
@@ -288,43 +289,50 @@ printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>",
 
 char cartVar[1024];
 char *selected = NULL;
+char buf[512];
+
+/* Data transform. When selected, the next control (view limits max) is disabled */
+printf("<div><b>Log10 transform:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
+boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
+safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
+cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+
+/* Viewing limits max.  This control is disabled if log transform is selected */
+// construct class so JS can toggle
+safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
+printf("&nbsp;&nbsp;<span class='%s'><b>View limits maximum:</b></span>\n", buf);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
+int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
+cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
+char *version = gtexVersion(tdb->table);
+printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
+printf("</div>");
 
 /* Sample selection */
 printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
 selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
-cgiMakeRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples);
+safef(buf, sizeof buf, "onchange='gtexSamplesChanged(\"%s\")'", track);
+char *command = buf;
+cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_ALL, isAllSamples, command);
 printf("All\n");
-cgiMakeRadioButton(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples);
+cgiMakeOnClickRadioButton(cartVar, GTEX_SAMPLES_COMPARE_SEX, !isAllSamples, command);
 printf("Compare by gender\n");
 printf("</div>");
 
-/* Comparison type */
-printf("<div><b>Comparison display:</b>\n");
+/* Comparison type. Disabled if All samples selected. */
+safef(buf, sizeof buf, "%sComparisonLabel %s", track, isAllSamples ? "disabled" : "");
+printf("<div><b><span class='%s'>Comparison display:</b></span>", buf);
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_COMPARISON_DISPLAY);
 selected = cartCgiUsualString(cart, cartVar, GTEX_COMPARISON_DEFAULT); 
 boolean isMirror = sameString(selected, GTEX_COMPARISON_MIRROR);
+
 cgiMakeRadioButton(cartVar, GTEX_COMPARISON_DIFF, !isMirror);
-printf("Difference graph\n");
+printf("<span class='%s'>Difference graph</span>", buf);
 cgiMakeRadioButton(cartVar, GTEX_COMPARISON_MIRROR, isMirror);
-printf("Two graphs\n");
-printf("</div>");
-
-/* Data transform */
-printf("<div><b>Log10 transform:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-cgiMakeCheckBox(cartVar, isLogTransform);
-
-/* Viewing limits max */
-printf("&nbsp;&nbsp;<b>View limits maximum:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
-// TODO: set max and initial limits from gtexInfo table
-int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
-cgiMakeIntVar(cartVar, viewMax, 4);
-//FIXME
-printf(" RPKM (range 10-180000)\n");
+printf("<span class='%s'>Two graphs</span>\n", buf);
 printf("</div>");
 
 /* Color scheme */
@@ -345,13 +353,13 @@ printf("</p>");
 /* Tissue filter */
 printf("<br>");
 printf("<div><b>Tissues:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
 if (isPopup)
     {
     printf("<a href='../cgi-bin/hgTrackUi?g=%s'><button type='button'>Change</button><a>", track);
     }
 else
     {
-    safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_TISSUE_SELECT);
     jsMakeCheckboxGroupSetClearButton(cartVar, TRUE);
     puts("&nbsp;");
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);

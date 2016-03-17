@@ -94,7 +94,7 @@ struct sqlResult *sr;
 char **row;
 struct refLink *list = NULL, *el;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from refLink");
+sr = sqlGetResult(conn, NOSQLINJ "select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = refLinkLoad(row);

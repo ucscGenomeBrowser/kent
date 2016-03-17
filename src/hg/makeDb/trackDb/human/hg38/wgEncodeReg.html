@@ -55,17 +55,22 @@ most general interest.
 By default, the transcription and histone mark displays use a transparent overlay method of 
 displaying data from a number of cell lines in a single track.  Each of the cell lines in this track
 is associated with a particular color, and these colors are relatively light and saturated so
-as to work best with the transparent overlay (colors assigned by BigWigCluster). 
-Unfortunately, outside the ENCODE Regulation tracks, older cell line
-color conventions are used that don't match the cell line colors used in
-the ENCODE Regulation tracks. The older colors were not used in the
-ENCODE Regulation tracks because they were too dark for the transparent
-overlay. The DNase 
+as to work best with the transparent overlay. The color of the transcription and histone mark tracks
+match their versions from their lifted source on the hg19 assembly.
 <!--  and Transcription Factor ChIP -->
-tracks contain information on so many cell lines
-that a color convention is inadequate.  Instead, these tracks show gray boxes where the darkness of
-the box is proportional to the maximum value seen in any cell line in that region. Clicking on
-the item takes you to a details page where the values for each cell line assayed are displayed.
+<p>
+The DNase tracks, which were not lifted from hg19, are colored differently 
+to reflect similarity of cell types. There are three DNase tracks starting with a transparent
+overlay DNase Signal Track to allow viewing signals from all 95 cell types in one track.
+The individual signals and the same coloring scheme can also be found in the DNase HS Track
+where processed peaks and hotspots are also called out as gray boxes with the darkness of
+each box reflecting the underlying signal value. Lastly, in the DNase Clusters track all observed
+hypersensitive regions in the different cell lines at the same location were clustered into a single box
+where a number to the left of the box indicates how many cell types showed a hypersensitivity 
+region and the darkness of the grey box is proportional to the the maximum value seen from one of
+the underlying cell lines. Clicking on these item takes you to a details page where
+additional information displays, such as the list of cell types that combined to form
+the cluster in the DNase Clusters track.
 </p>
 
 <h2>Credits</h2>

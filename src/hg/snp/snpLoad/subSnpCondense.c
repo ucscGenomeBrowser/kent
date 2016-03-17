@@ -94,7 +94,7 @@ void createTable()
 {
 struct sqlConnection *conn = hAllocConn();
 char *createString =
-"NOSQLINJ CREATE TABLE SNPSubSNPLinkCondense (\n"
+NOSQLINJ "CREATE TABLE SNPSubSNPLinkCondense (\n"
 "    snp_id int(11) not null,       \n"
 "    subsnpIds blob not null,\n"
 "    buildIds blob not null,\n"

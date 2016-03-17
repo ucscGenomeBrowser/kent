@@ -1337,3 +1337,89 @@ EOF
 
 
 ##############################################################################
+# DBSNP B146 / SNP146 (DONE 3/11/16 angie)
+    # Redmine #16777
+    mkdir -p /hive/data/outside/dbSNP/146/human_hg38
+    cd /hive/data/outside/dbSNP/146/human_hg38
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b146_GRCh38p2 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b146_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b146_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh38.p2 like b144 above, use the files usingSuggested.lft
+    # and ignoreContig constructed for b144.
+    cat > config.ra <<EOF
+db hg38
+orgDir human_9606_b146_GRCh38p2
+build 146
+buildAssembly 107
+liftUp ../../144/human_hg38/usingSuggested.lft
+refAssemblyLabel GRCh38.p2
+ignoreDbSnpContigsFile ../../144/human_hg38/ignoreContig
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >>& do.log & tail -f do.log
+
+    # The script hit an error:
+#HgStepManager: executing step 'loadDbSnp' Tue Feb  9 12:56:42 2016.
+#Expected to process 12 CREATE statements but got 8
+#         at /cluster/home/angie/kent/src/hg/utils/automation/doDbSnp.pl line 452.
+    # Turns out that schema/human_9606_table.sql.gz had tables named *_105 instead
+    # of *_107.  Fix that and continue with loadDbSnp.
+    mv human_9606_table.sql.{,orig.}gz
+    zcat human_9606_table.sql.orig.gz | sed -e 's/_105/_107/' > human_9606_table.sql
+    gzip human_9606_table.sql
+    hgsql '' -e 'drop database hg38snp146'
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp \
+      >>& do.log & tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b146_SNPContigLoc_107 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b146_SNPContigLoc_107.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+    # There were > 14,000 missing -- because dbSNP dumped fasta for GRCh38 a few days early,
+    # but dumped complete fasta for GRCh37.  Instead of doing a large batch query to duplicate
+    # what we already had in ../human_hg19/rs_fasta/, I decided to use ../human_hg19/rs_fasta.
+    mv rs_fasta rs_fasta.origIncomplete
+    ln -s ../human_hg19/rs_fasta .
+    # I edited addToDbSnp.csh to wrap an "if (0) then ... endif" around all steps except the
+    # last step that creates the ucscGnl table from rs_fasta headers.
+    mkdir -p `cat workingDir`
+    csh -efx addToDbSnp.csh >>& do.log & tail -f do.log
+    # When that completed, I continued running from the bigJoin step.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue bigJoin >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNP146 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 3/11/16 angie)
+    # Redmine #16777
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg38/bed/snp146Ortho.2016-03-11
+    cd /hive/data/genomes/hg38/bed/snp146Ortho.2016-03-11
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP146 (DONE 3/11/16 angie)
+    # Redmine #16777
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 146 -debug
+# *** Steps were performed in /hive/data/genomes/hg38/snp146Mask.2016-03-11
+    cd /hive/data/genomes/hg38/snp146Mask.2016-03-11
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################

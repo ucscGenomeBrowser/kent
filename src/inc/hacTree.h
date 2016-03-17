@@ -55,6 +55,10 @@ typedef double hacDistanceFunction(const struct slList *item1, const struct slLi
 typedef struct slList *(hacMergeFunction)(const struct slList *item1, const struct slList *item2,
 					  void *extraData);
 
+/* Optional caller-provided function to compare two children and determine first born. */ 
+typedef bool hacSibCmpFunction(const struct slList *item1, const struct slList *item2,
+					  void *extraData);
+
 /* Optional caller-provided function to compare two items or clusters for pre-sorting
  * and pre-clustering of identical items. */
 typedef int hacCmpFunction(const struct slList *item1, const struct slList *item2,
@@ -81,6 +85,7 @@ struct hacTree *hacTreeFromItems(const struct slList *itemList, struct lm *local
 
 struct hacTree *hacTreeMultiThread(int threadCount, struct slList *itemList, struct lm *localMem,
 				 hacDistanceFunction *distF, hacMergeFunction *mergeF,
+				 hacSibCmpFunction *cmpF, 
 				 void *extraData, struct hash *precalcDistanceHash);
 /* Construct hacTree minimizing number of merges called, and doing distance calls
  * in parallel when possible.   Do a lmCleanup(localMem) to free returned tree. 

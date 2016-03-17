@@ -108,7 +108,7 @@ To create a bigGenePred track, follow these steps:<BR>
   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
  <LI> Create the bigBed file from your sorted bigGenePred input file using the <TT>bedToBigBed</TT>
   utility like so: 
-  <TT><B>bedToBigBed</B> -as=bigGenePred.as bigGenePred.txt chrom.sizes myBigGenePred.bb</TT><BR>
+  <TT><B>bedToBigBed</B> -as=bigGenePred.as -type=bed12+8 bigGenePred.txt chrom.sizes myBigGenePred.bb</TT><BR>
  <LI> Move the newly created bigBed file (<TT>myBigGenePred.bb</TT>) to an http, 
   https, or ftp location.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 

@@ -712,7 +712,7 @@ printf("</FORM>\n");
 struct hash* loadDatasetDescs(struct sqlConnection *conn)
 /* Load cdwDataset table and return hash with name -> cdwDataset */
 {
-char* query = "NOSQLINJ SELECT * FROM cdwDataset;";
+char* query = NOSQLINJ "SELECT * FROM cdwDataset;";
 struct sqlResult *sr = sqlGetResult(conn, query);
 struct hash *descs = hashNew(7);
 char **row;

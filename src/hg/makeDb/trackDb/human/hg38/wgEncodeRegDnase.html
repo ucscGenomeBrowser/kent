@@ -4,6 +4,7 @@ These tracks contain the results of DNase I hypersensitivity experiments perform
 <a href="http://www.gs.washington.edu/faculty/stamj.htm" target="_blank">John Stamatoyannapoulos lab</a>
 at the University of Washington from September 2007 to January 2011, as part of the
 <a href="../ENCODE" target="_blank">ENCODE project first production phase</a>.
+Colors were assigned to cell types based on similarity of signal.
 </p>
 
 <p>
@@ -23,7 +24,7 @@ For more information about track configuration, see
 <p>
 Raw sequence data files were processed by the UCSC ENCODE DNase analysis pipeline (July 2014 specification), diagrammed here:
 <div align="center">
-<img style="margin:8px; border:1px solid; height:216; width;483;" src="../images/encodeDnasePipeline.png" alt="ENCODE DNase Pipeline">
+<img style="margin:8px; border:1px solid; height:216; width;483;" src="/images/encodeDnasePipeline.png" alt="ENCODE DNase Pipeline">
 <font size=-1>Credit: Qian Alvin Qin, X. Liu lab</font>
 </div>
 <p>
@@ -34,7 +35,19 @@ the Hotspot program to call peaks as well as broader regions of activity ('hotsp
 create signal density graphs.
 Signal graphs were normalized so the average value genome-wide is 1.
 </p>
-
+<p>
+The cell types were clustered into a binary tree, a rainbow was cast to the leaf nodes providing coloring based on similarity.
+</p>
+<div align="center">
+<img style="margin:8px; border:1px solid; height:216; width;483;" src="/images/encode95CellsDendrogram.png" alt="ENCODE cell clustering by similarity">
+<font size=-1>Credit: Chris Eisenhart, J. Kent lab</font> 
+</div>
+(Please note there is different coloring on the ENCODE hg38
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegTxn">Transcription</a> track,
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k4me1">Layered H3K4Me1</a> track,
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k4me3">Layered H3K4Me3</a> track, and
+<a target=_blank href="/cgi-bin/hgTrackUi?db=hg38&g=wgEncodeRegMarkH3k27ac">Layered H3K27Ac</a> track,
+which match the coloring used in their previous versions lifted from the hg19 assembly).
 <h2>Credits</h2>
 <p>
 The processed data for this track were produced by UCSC.  Credits for the primary data 
@@ -44,13 +57,14 @@ description.
 </p>
 
 <h2>References</h2>
-
 <p>
-Miga KE, Eisenhart E, Kent WJ.
+Miga KH, Eisenhart C, Kent WJ.
+<a href="http://nar.oxfordjournals.org/cgi/pmidlookup?view=long&amp;pmid=26163063" target="_blank">
 Utilizing mapping targets of sequences underrepresented in the reference assembly to reduce false
-positive alignments. <em>NAR Methods</em>. Accepted.
+positive alignments</a>.
+<em>Nucleic Acids Res</em>. 2015 Nov 16;43(20):e133.
+PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26163063" target="_blank">26163063</a>
 </p>
-
 <p>
 Thurman RE, Rynes E, Humbert R, Vierstra J, Maurano MT, Haugen E, Sheffield NC, Stergachis AB, Wang
 H, Vernot B <em>et al</em>.

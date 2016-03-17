@@ -5741,9 +5741,9 @@ cloneEndCTD cloneEndRP11 cloneEndWI2 cloneEndbadEnds cloneEndmultipleMaps
 do
   hgsql -N -e "select name from $table;" hg38 | sort | uniq -c |
       awk '{ if (1 == $1) {printf "%s\t1000\n", $2} else {printf "%s\t%d\n", $2, 1500/$1} }' \
-         | sort > score.hg38.$table.score.tab
+         | sort > score/hg38.$table.score.tab
   hgsql -N -e "select * from $table order by name;" hg38 \
-      > noScore/hg38.$table.tab
+      | sort -k5 > noScore/hg38.$table.tab
   join -t'^I' -1 5 noScore/hg38.$table.tab score/hg38.$table.score.tab \
   | awk '{printf "%d\t%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t%d\t%d\t%s\t%s\n", $2,$3,$4,$5,$1,$14,$7,$8,$9,$10,$11,$12,$13}' \
     | sort -k2,2 -k3,3n > withScore/hg38.$table.withScore.tab
@@ -6415,13 +6415,12 @@ rm tmpChrom
 
     ## Copy and update trackDb files from previous release.
     ## Change version and use lower priority so it sorts to top of
-    ## super track page.
-    ## Important to make sure filter attrs.transcriptType matches current set
-    ## figured out with
-    select distinct transcriptType from wgEncodeGencodeAttrsV24 order by transcriptType;
+    ## super track page.  Follow instructiuons in ra file to ensure
+    ## filters are correct.
     cd kent/src/hg/makeDb/trackDb
     cp human/hg38/wgEncodeGencodeV23.ra human/hg38/wgEncodeGencodeV24.ra
     cp human/hg38/wgEncodeGencodeV23.html human/hg38/wgEncodeGencodeV24.html
+
 
     # edit these plus human/hg38/trackDb.wgEncode.ra
     # - set priorities in wgEncodeGencodeV24.ra tracks so newest shows up first
@@ -6440,5 +6439,24 @@ rm tmpChrom
     ### NOT DONE SINCE TRACK NOT BEING PUSHED
     cd /hive/data/genomes/hg38/bed/gencodeV24
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+# GWIPS-viz Ribo-seq - (DONE - 2016-02-05 - Steve)
+# contact Audrey Michel (audreymannion@gmail.com)
+# redmine #16765
+
+obtained bigWig file from shared Google drive
+https://drive.google.com/a/soe.ucsc.edu/folderview?id=0B_xvV_5tXzOGQ1h5NEh4bnhNTDg&usp=sharing_eid
+
+mkdir /hive/data/genomes/hg38/bed/gwipsvizRiboseq
+cp Global_RiboProElong.10_02_2016.bw /hive/data/genomes/hg38/bed/gwipsvizRiboseq/gwipsvizRiboseq.bw
+
+mkdir /gbdb/hg38/bbi/gwipsvizRiboseq
+cd /gbdb/hg38/bbi/gwipsvizRiboseq
+ln -s /hive/data/genomes/hg38/bed/gwipsvizRiboseq/gwipsvizRiboseq.bw gwipsvizRiboseq.bw
+
+hgsql hg38
+create table gwipsvizRiboseq select * from gc5BaseBw;
+update gwipsvizRiboseq set fileName="/gbdb/hg38/bbi/gwipsvizRiboseq/gwipsvizRiboseq.bw" where fileName="/gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw";
 
 #########################################################################

@@ -22,6 +22,7 @@
 #include "hgColors.h"
 #include "hgGene.h"
 #include "obscure.h"
+#include "genbank.h"
 
 
 /* ---- Global variables. ---- */
@@ -396,7 +397,7 @@ addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 /* disable ortherOrg section for CGB servers for the time being */
 if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(malacardsSection(conn, sectionRa), conn, &sectionList);
+addGoodSection(malaCardsSection(conn, sectionRa), conn, &sectionList);
     addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
 /*if (isRgdGene(conn))
     {
@@ -648,6 +649,7 @@ void cartMain(struct cart *theCart)
 hgBotDelay();
 cart = theCart;
 getDbAndGenome(cart, &database, &genome, oldVars);
+initGenbankTableNames(database);
 getGenomeSettings();
 if (cartVarExists(cart, hggDoKgMethod))
     doKgMethod();

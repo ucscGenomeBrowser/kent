@@ -1,6 +1,7 @@
-all::
-	expMatrixToJson matrix.mx testClusters
-	mv testClusters* ~/public_html/tests
+test::
+	expMatrixToJson  matrix.mx testClusters
+	cp testClusters* ~/public_html/tests
+	cd /cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/addMetaDataToJson/tests && make 
 
 meta::
 	cd /cluster/home/ceisenhart/kent/src/hg/cirm/cdw/wrangle/addMetaDataToJson/tests && make 

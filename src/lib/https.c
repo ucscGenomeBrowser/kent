@@ -11,6 +11,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <signal.h>
 
 #include "common.h"
 #include "internet.h"
@@ -282,7 +283,7 @@ while (1)
 	    if (srd == -1)
 		{
 		if (errno != 104) // udcCache often closes causing "Connection reset by peer"
-		    xerrno("error reading https socket");
+		    xerrno("error reading user pipe for https socket");
 		goto cleanup;
 		}
 	    if (srd == 0) 
@@ -335,12 +336,39 @@ while (1)
 	    // write the https data received immediately back on socket to user, and it's ok if it blocks.
 	    while(bwt < brd)
 		{
+		// NOTE: Intended as a thread-specific library-safe way not to ignore SIG_PIPE for the entire application.
+		// temporarily block sigpipe on this thread
+		sigset_t sigpipe_mask;
+		sigemptyset(&sigpipe_mask);
+		sigaddset(&sigpipe_mask, SIGPIPE);
+		sigset_t saved_mask;
+		if (pthread_sigmask(SIG_BLOCK, &sigpipe_mask, &saved_mask) == -1) {
+		    perror("pthread_sigmask");
+		    exit(1);
+		}
 		int bwtx = write(params->sv[1], bbuf+bwt, brd-bwt);
+		int saveErrno = errno;
+		if ((bwtx == -1) && (saveErrno == EPIPE))
+		    { // if there was a EPIPE, accept and consume the SIGPIPE now.
+		    struct timespec zerotime = {0};
+		    if (sigtimedwait(&sigpipe_mask, 0, &zerotime) == -1) 
+			{
+			perror("sigtimedwait");
+			exit(1);
+			}
+		    }
+		// restore signal mask on this thread
+		if (pthread_sigmask(SIG_SETMASK, &saved_mask, 0) == -1) 
+		    {
+		    perror("pthread_sigmask");
+		    exit(1);
+		    }
+		errno = saveErrno;
 		if (bwtx == -1)
 		    {
 		    if ((errno != 104)  // udcCache often closes causing "Connection reset by peer"
 		     && (errno !=  32)) // udcCache often closes causing "Broken pipe"
-			xerrno("error writing https data back to user socket");
+			xerrno("error writing https data back to user pipe");
 		    goto cleanup;
 		    }
 		bwt += bwtx;
@@ -373,6 +401,10 @@ params->hostName = cloneString(hostName);
 params->port = port;
 
 socketpair(AF_UNIX, SOCK_STREAM, 0, params->sv);
+
+// netBlockBrokenPipes(); works, but is heavy handed 
+//  and ignores SIGPIPE on all connections for all threads in the entire application. 
+// We are trying something more subtle and library and thread-friendly instead.
 
 int rc;
 rc = pthread_create(&params->thread, NULL, netConnectHttpsThread, (void *)params);

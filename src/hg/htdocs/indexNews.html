@@ -37,105 +37,144 @@
 
     <!-- start news -->
   <hr>
-  <font color="#006666" size="4"><b>20 Jan 2016
-  - dbSNP 142 Available for mm10</b></font>
+  <font color="#006666" size="4"><b>8 Mar 2016
+  - Combine Multiple Regions of the Genome Browser into a Single Visualization!</b></font>
   <p>
-  Data from dbSNP build 142 is now available for the most recent mouse
-  assembly (mm10/GRCm38). As was the case for previous annotations
-  based on dbSNP data, there are three tracks in this release.
-  One is a track containing all mappings of reference SNPs to the
-  mouse assembly, labeled "All SNPs (142)". The other two tracks
-  are subsets of this track and show different interesting and
-  easily defined subsets of dbSNP:
-  </p>
-  <ul>
-  <li>Common SNPs (142): uniquely mapped variants that appear in
-  at least 1% of the population
-  <li>Mult. SNPs (142): variants that have been mapped to more
-  than one genomic location
-  </ul>
-  <p>
-  By default, only the Common SNPs (142) are visible. The other
-  tracks can be made visible using the track controls.
-  These three SNPs (142) tracks can be found on the Mouse Dec.
-  2011 (mm10/GRCm38) browser in the "Variation and Repeats" group.
-  </p>
-  Thank you to the <a href="http://www.ncbi.nlm.nih.gov/SNP/">
-  dbSNP</a> group at NCBI for making these data publicly available.
-  The tracks were produced at UCSC by Brian Raney, Angie Hinrichs
-  and Matthew Speir.
+  Have you ever wished you could remove all of the intronic or intergenic regions from the
+  Genome Browser display? Have you ever dreamed of being able to visualize multiple
+  far-flung regions of a genome? Well, now you can with the new &quot;multi-region&quot; option
+  in the Genome Browser!
   </p>
 
-<hr>
   <p>
-  <font color="#006666" size="4"><b> 08 January 2016 -
-  dbSNP 144 Available for hg19 and hg38</b></font>
-  <p>
-  We are pleased to announce the release of four tracks derived 
-  from NCBI <a href="http://www.ncbi.nlm.nih.gov/SNP/">
-  dbSNP</a> Build 144 data, available on the two most 
-  recent human assemblies GRCh37/hg19 and GRCh38/hg38. 
-  </p>
-  <p>
-  There are four SNP tracks available as part of this release. 
-  One is a track containing all mappings of reference SNPs 
-  to the human assembly, labeled "All SNPs (144)". 
-  The other three tracks are subsets of this track 
-  and show interesting and easily defined subsets of dbSNP:
+  The multi-region modes provide four different ways to manipulate the display.
+  First, we have an &quot;exon-only&quot; mode that allows you to
+  remove all of the intergenic and intronic sequences from the display, leaving you with
+  only the exonic regions. Next, there is the &quot;gene-only&quot; mode allowing you to remove only
+  the intergenic regions from the display, leaving the genes with exons and introns intact.
+  Then there is the &quot;custom regions&quot; mode that allows you to use a remote BED file to
+  specify the regions you are interested in viewing alongside each other. Lastly, for human
+  assemblies hg17 and newer, there is the &quot;alternative haplotype&quot; mode that allows you to
+  view a haplotype sequence inserted into its position in the reference genome.
   </p>
 
-  <ul>
-  <li>Common SNPs (144): uniquely mapped variants that appear 
-  in at least 1% of the population or are 100% non-reference</li>
-  <li>Flagged SNPs (144): uniquely mapped variants, excluding 
-  Common SNPs, that have been flagged by dbSNP as 
-  "clinically associated"</li>
-  <li>Mult. SNPs (144): variants that have been mapped to more 
-  than one genomic location</li> 
-  </ul>
   <p>
-  By default, only the Common SNPs (144) are visible; 
-  other tracks must be made visible using the track controls. 
-  You will find the other SNPs (144) tracks on both 
-  of GRCh37/hg19 and GRCh38/hg38 browsers in the "Variation" group.
+  To access these exciting, new multi-region modes, first select your organism and assembly
+  of interest and navigate to the Genome Browser visualization. Below the tracks display,
+  there is a button labeled &quot;multi-region&quot;. Clicking this button will bring up
+  a configuration box for the different multi-region modes. For example:
   </p>
+
   <p>
-  The tracks were produced at UCSC by Angie Hinrichs and 
-  Luvina Guruvadoo. We'd like to thank the dbSNP group at 
-  NCBI for providing access to these data. 
+  <img style="border: 1px solid black; display: block;"
+                src="images/MultiRegionButton.png">
   </p>
+
+  <p>
+  From this pop-up, you will be able to switch between the different modes or exit these
+  multi-region modes if desired. For instance:
+  </p>
+
+  <p>
+  <img style="border: 1px solid black; display: block;"
+                src="images/MultiRegionConfigurationWindow.png">
+  </p>
+
+  <p>
+  Additionally, you can enter the &quot;Exon-only&quot; mode by typing the keyboard shortcut
+  &quot;e&quot; then &quot;v&quot;. You can exit any of the multi-region modes and return to the
+  default Genome Browser display by typing the keyboard shortcut &quot;d&quot; then &quot;v&quot;.
+  </p>
+
+  <p>
+  For more information about each individual multi-region mode, please see the
+  <a href="goldenPath/help/multiRegionHelp.html">User Guide</a>.
+  </p>
+
+  <p>
+  Thank you to Galt Barber, Matthew Speir, and the entire UCSC Genome Browser quality assurance team for
+  all of their efforts in creating these exciting new display modes.
+  </p>
+
   <hr>
+<p>
+  <font color="#006666" size="4"><b> 10 February 2016 -
+  Two New Assemblies Now Available in the Genome Browser</b></font>
+  <p>
+  A Genome Browser is now available for the mouse lemur (<em>Microcebus murinus</em>)
+  assembly released May 2015 by the
+<A HREF="http://www.broadinstitute.org/scientific-community/science/projects/mammals-models/29-mammals-project"
+TARGET="_blank">The Broad Institute</A> and the
+<A HREF="https://www.hgsc.bcm.edu/non-human-primates/mouse-lemur-genome-project"
+TARGET="_blank">Baylor College of Medicine Human Genome Sequencing Center</A>.
+  For more information and statistics about this assembly, see the NCBI assembly record
+  for <a href="http://www.ncbi.nlm.nih.gov/assembly/329621" target="_blank"> Mmur_2.0</a>.
+There are 10,311 scaffolds with a total size of 2,438,804,424 bases.
+  </p>
+
+  <p>
+  Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+  <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/micMur2/">FTP server</a> or the
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html#mouse_lemur">Downloads</a> page.
+  Please observe the <a href="./goldenPath/credits.html#mouse_lemur_use">conditions for use</a> when
+  accessing and using these data sets.  The annotation tracks for this browser were
+  generated by UCSC and collaborators worldwide.  See the <a
+  href="./goldenPath/credits.html#mouse_lemur_credits">Credits</a> page for a detailed list of the
+  organizations and individuals who contributed to this release.
+  </p>
+  ---
+  <p>
+  A Genome Browser is now available for the platypus (<em>Ornithorhynchus anatinus</em>)
+  assembly released February 2007 by the
+<A HREF="http://genome.wustl.edu/genomes/detail/ornithorhynchus-anatinus/"
+TARGET=_blank>Genome Sequencing Center at Washington University, St. Louis</A>.
+For more information about this assembly, see
+<A HREF="http://www.ncbi.nlm.nih.gov/assembly/237598/" TARGET="_blank">
+Ornithorhynchus_anatinus-5.0.1</A> in the NCBI Assembly database. There are
+201,525 scaffolds with a total size of 1,996,826,513 bases.
+  </p>
+
+  <p>
+  Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+  <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/ornAna2/">FTP server</a> or the
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html#platypus">Downloads</a> page.
+  Please observe the <a href="./goldenPath/credits.html#platypus_use">conditions for use</a> when
+  accessing and using these data sets.  The annotation tracks for this browser were
+  generated by UCSC and collaborators worldwide.  See the <a
+  href="./goldenPath/credits.html#platypus_credits">Credits</a> page for a detailed list of the
+  organizations and individuals who contributed to this release.
+  </p>
+<hr>
+
 <!-- start archives -->
 <!--staged for future release
+
+	<p>
+	<font color="#006666" size="4"><b>8 Mar 2016
+	- Combine Multiple Regions of the Genome Browser into a Single Visualization!</b></font>
+	<a href="goldenPath/newsarch.html#030816">Read more</a>.
+        </p>
+
+        <p>
+        <font color="#006666" size="4"><b> 10 February 2016 -
+        Two New Assemblies Now Available in the Genome Browser</b>: </font>
+        Genome Browsers are now available for the mouse lemur 
+	(<em>Microcebus murinus</em>)
+        and platypus (<i>Ornithorhynchus anatinus</i>) assemblies.
+	<a href="goldenPath/newsarch.html#021016">Read more</a>. 
+        </p>
+
+-->
 	<font color="#006666" size="4"><b>20 Jan 2016 &mdash;
 	dbSNP 142 Available for mm10</b></font>
         <a href="goldenPath/newsarch.html#012016">Read more</a>.
         </p>
-
         <p>
         <font color="#006666" size="4"><b>08 January 2016 &mdash; 
-        dbSNP 144 Available for hg19 and hg38
+        dbSNP 144 Available for hg19 and hg38 </font></b>
         <a href="goldenPath/newsarch.html#010816">Read more</a>.
         </p>
 
--->
-        <p>
-        <font color="#006666" size="4"><b> 21 December 2015 -
-        Two New Assemblies Now Available in the Genome Browser</b></font>
-        <p>
-        Genome Browsers are now available for the frog (<em>Xenopus tropicalis</em>)
-        and cat (<i>Felis catus</i>) assemblies.
-	<a href="goldenPath/newsarch.html#122115">Read more</a>. 
-        </p>
-
-        <p>
-	<font color="#006666" size="4"><b>16 December 2015 &mdash;
-	Output from Related Tables Now Available in the Data Integrator</b>: </font>
-	You can now obtain data from these related tables in your output from the
-	<a href="cgi-bin/hgIntegaror">Data Integrator</a>.
-	<a href="goldenPath/newsarch.html#121615">Read more</a>.
-        </p>
-	
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>
     <BR></TD></TR></TABLE>

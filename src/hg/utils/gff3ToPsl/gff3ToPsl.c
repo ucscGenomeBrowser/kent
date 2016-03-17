@@ -147,8 +147,8 @@ struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid);
 if (!checkTarget(node, nsT))
     return; // invalid Target
 char strand[3];
-strand[0] = checkStrand(*node->targetStrand, "target");
-strand[1] = checkStrand(*node->strand, "query");
+strand[0] = checkStrand(*node->strand, "query");
+strand[1] = checkStrand(*node->targetStrand, "target");
 strand[2] = 0;
 struct psl *psl = pslFromGff3Cigar(node->seqid, nsQ->size,  node->start, node->end,
                                    nsT->name, nsT->size,  node->targetStart, node->targetEnd, 

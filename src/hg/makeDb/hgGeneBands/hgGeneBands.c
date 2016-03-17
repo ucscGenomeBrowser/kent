@@ -63,7 +63,7 @@ char **row;
 struct refLink rl;
 FILE *f = mustOpen(outFile, "w");
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from refLink");
+sr = sqlGetResult(conn, NOSQLINJ "select * from refLink");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     refLinkStaticLoad(row, &rl);

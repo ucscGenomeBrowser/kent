@@ -1,6 +1,7 @@
 normal::
 	 cp -p condenseMatrix ${HOME}/bin
 	 cp -p condenseMatrix ${HOME}/kent/src/pyLib/scripts
+
 test::
-	@if test -d tests -a -s tests/makefile; then (cd tests && ${MAKE} test); \ 
-	else echo "# no tests directory (or perhaps no tests/makefile) in $(CURDIR)"; fi
+	cd tests && ${MAKE}
+

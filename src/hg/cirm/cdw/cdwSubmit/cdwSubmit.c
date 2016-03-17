@@ -451,7 +451,7 @@ if (!isEmpty(tagsString))
 
 
 char **row;
-struct sqlResult *sr = sqlGetResult(conn, "NOSQLINJ select * from cdwSubscriber order by runOrder,id");
+struct sqlResult *sr = sqlGetResult(conn, NOSQLINJ "select * from cdwSubscriber order by runOrder,id");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct cdwSubscriber *subscriber = cdwSubscriberLoad(row);

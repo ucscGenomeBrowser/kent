@@ -32,6 +32,8 @@ errAbort(
   "   value will allow an unlimited number of errors.  Default is 50.\n"
   "  -honorStartStopCodons - only set CDS start/stop status to complete if there are\n"
   "   corresponding start_stop codon records\n"
+  "  -defaultCdsStatusToUnknown - default the CDS status to unknown rather\n"
+  "   than complete.\n"
   "  -allowMinimalGenes - normally this programs assumes that genes contains\n"
   "   transcripts which contain exons.  If this option is specified, genes with exons\n"
   "   as direct children of genes and stand alone genes with no exon or transcript\n"
@@ -65,6 +67,7 @@ static struct optionSpec options[] = {
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
     {"honorStartStopCodons", OPTION_BOOLEAN},
+    {"defaultCdsStatusToUnknown", OPTION_BOOLEAN},
     {"allowMinimalGenes", OPTION_BOOLEAN},
     {"attrsOut", OPTION_STRING},
     {"bad", OPTION_STRING},
@@ -74,6 +77,7 @@ static struct optionSpec options[] = {
 static boolean useName = FALSE;
 static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
+static boolean defaultCdsStatusToUnknown = FALSE;
 static boolean allowMinimalGenes = FALSE;
 static int maxParseErrors = 50;  // maximum number of errors during parse
 static int maxConvertErrors = 50;  // maximum number of errors during conversion
@@ -202,10 +206,13 @@ if (honorStartStopCodons)
     {
     setCdsStatFromCodons(gp, mrna);
     }
+else if (gp->cdsStart < gp->cdsEnd)
+    {
+    gp->cdsStartStat = gp->cdsEndStat = (defaultCdsStatusToUnknown ? cdsUnknown : cdsComplete);
+    }
 else
     {
-    gp->cdsStartStat = cdsComplete;
-    gp->cdsEndStat = cdsComplete;
+    gp->cdsStartStat = gp->cdsEndStat = cdsNone;
     }
 return gp;
 }
@@ -525,6 +532,9 @@ maxConvertErrors = optionInt("maxConvertErrors", maxConvertErrors);
 if (maxConvertErrors < 0)
     maxConvertErrors = INT_MAX;
 honorStartStopCodons = optionExists("honorStartStopCodons");
+defaultCdsStatusToUnknown = optionExists("defaultCdsStatusToUnknown");
+if (honorStartStopCodons && defaultCdsStatusToUnknown)
+    errAbort("can't specify both -honorStartStopCodons and -defaultCdsStatusToUnknown");
 allowMinimalGenes = optionExists("allowMinimalGenes");
 char *bad = optionVal("bad", NULL);
 if (bad != NULL)

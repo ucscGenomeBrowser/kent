@@ -5,12 +5,14 @@ use warnings;
 
 my $argc = scalar(@ARGV);
 if ($argc != 2) {
+  printf STDERR "usage: sendLogEmail.pl \$LASTNN \$BRANCHNN\n";
+  exit 255;
 }
 
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'};
+my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ' ann@soe.ucsc.edu';
 
 my @victims;
 my %victimEmail;
@@ -50,9 +52,9 @@ foreach my $victim (sort keys %victimEmail) {
        printf STDERR "# sending email to $toAddr\n";
        open (SH, "| /usr/sbin/sendmail -t -oi") or die "can not run sendmail";
        printf SH "To: %s\n", $toAddr;
-       printf SH "From: <ann\@soe.ucsc.edu> Ann Zweig\n";
+       printf SH "From: \"Ann Zweig\" <ann\@soe.ucsc.edu>\n";
        printf SH "Subject: Code summaries are due for %s\n", $victim;
-       printf SH "Cc: <ann\@soe.ucsc.edu> Ann Zweig\n";
+       printf SH "Cc: \"Ann Zweig\" <ann\@soe.ucsc.edu>\n";
        printf SH "\n";
        print SH `./summaryEmail.sh $victim`;
   }

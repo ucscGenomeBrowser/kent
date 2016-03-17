@@ -4,9 +4,10 @@ use strict;
 use warnings;
 
 my $argc = scalar(@ARGV);
-if ($argc != 2) {
-  printf STDERR "usage: gff3ToRefLink.pl [status.tab] [ncbi.gff] > refLink.tab\n";
+if ($argc != 3) {
+  printf STDERR "usage: gff3ToRefLink.pl [status.tab] [descriptions.tab] [ncbi.gff] > refLink.tab\n";
   printf STDERR "where status.tab is a two column file: name status\n";
+  printf STDERR "where descriptions.tab is a two column file: name description\n";
   printf STDERR "and the ncbi.gff file is the gff3 file to scan\n";
   printf STDERR "output to stdout is the tab separated data for each item\n";
   exit 255;
@@ -15,9 +16,10 @@ if ($argc != 2) {
 # this order list of items will keep the tab output consistent so all
 #  'columns' of the data in the tab output will be the same order always.
 # there is one other output before these items, the gene reviewed 'status'
+# and one column after these items, the 'description' string from gbProcess
 my @tabOrderOutput = ( 'name', 'product', 'mrnaAcc', 'protAcc', 'locusLinkId',
    'omimId', 'hgnc', 'genbank', 'pseudo', 'gbkey', 'source',
-   'gene_biotype', 'gene_synonym', 'ncrna_class', 'product', 'note', 'description' );
+   'gene_biotype', 'gene_synonym', 'ncrna_class', 'note' );
 
 # list of tag names that have dynamic content for each line, no need to
 # record this in the global set of tags
@@ -30,6 +32,7 @@ my %idToParent;  # key is an id, value is its parent
 my %idData;    # key is an ID, value is a pointer to a hash for
                # for the tags and values on this id
 my %statusData;  # key is name, value is status
+my %descriptionData;  # key is name, value is description from gbProcess
 
 my $statusFile = shift;
 if ($statusFile =~ m/.gz$/) {
@@ -43,6 +46,21 @@ while (my $line = <FH>) {
   chomp $line;
   my ($name, $status) = split('\s+', $line);
   $statusData{$name} = ucfirst(lc($status));
+}
+close (FH);
+
+my $descriptionFile = shift;
+if ($descriptionFile =~ m/.gz$/) {
+  open (FH, "zcat $descriptionFile|") or die "can not read $descriptionFile";
+} elsif ($descriptionFile =~ m/^stdin$/) {
+  open (FH, "</dev/stdin") or die "can not read $descriptionFile";
+} else {
+  open (FH, "<$descriptionFile") or die "can not read $descriptionFile";
+}
+while (my $line = <FH>) {
+  chomp $line;
+  my ($name, $description) = split('\t', $line, 2);
+  $descriptionData{$name} = $description;
 }
 close (FH);
 
@@ -191,6 +209,15 @@ foreach my $id (keys %idData) {
        }
      }
   }
+  if (exists ($idDataPtr->{'name'})) {     # if a 'mrnaAcc' name exists
+     my $aliasName = $idDataPtr->{'name'};
+     if (! exists($addAlias{$aliasName}) ) { # and there isn't an alias yet
+       if ($id =~ m/^gene|^rna|^cds/) {
+          printf STDERR "# requesting alias $aliasName for $id\n";
+          $addAlias{$aliasName} = $id;      # add alias if this is a gene or rna
+       }
+     }
+  }
 }
 
 # catch up with the alias requests
@@ -214,146 +241,28 @@ foreach my $id (keys %idData) {
   foreach my $dataTag (sort keys %$idDataPtr) {
     printf FH "\t%s\t%s\n", $dataTag, $idDataPtr->{$dataTag}
   }
+  my $idNoVersion = $id;
+  $idNoVersion =~ s/.[0-9]+$//;
+  my $description = "n/a";    # missing data says 'n/a'
+  if (exists($descriptionData{$idNoVersion})) {
+     $description = $descriptionData{$idNoVersion};
+  }
   # stdout output is for refLink.tab table
-  printf "%s", $id;
+  printf "%s", $id;    # first column
   # first column is the gene reviewed 'status'
   if (exists($statusData{$id})) {
-       printf "\t%s", $statusData{$id};
+       printf "\t%s", $statusData{$id};  # second column
   } else { printf "\tUnknown"; }
   # the rest go in order according to tabOrderOutput
   foreach my $tag ( @tabOrderOutput ) {
     if (exists($idDataPtr->{$tag})) {
-       printf "\t%s", $idDataPtr->{$tag};
-    } else { printf "\t"; }
+       my $dataOut = $idDataPtr->{$tag};
+       $dataOut =~ s/%2C/,/g;
+       $dataOut =~ s/%3B/;/g;
+       $dataOut =~ s/%25/%/g;
+       printf "\t%s", $dataOut;
+    } else { printf "\tn/a"; }    # missing data says 'n/a'
   }
-  printf "\n";
+  printf "\t%s\n", $description;  # last column
 }
 close (FH);
-
-
-exit 0;
-
-my %tagCountSurvey;  # key is tag, value is frequency count
-
-foreach my $parent (keys %parents) {
-  my $parentPtr = $parents{$parent};
-  my $tagCount = 0;
-  my $tagSize = 0;
-  my %requiredColumns;
-  printf STDERR "%s\n", $parent;
-  foreach my $key (keys %$parentPtr) {
-    my $tagValue = $parentPtr->{$key};
-    $tagValue =~ s/%25/%/g;
-    $tagValue =~ s/%2C/,/g;
-    $tagValue =~ s/%3B/;/g;
-    ++$tagCount;
-    $tagSize += length($tagValue);
-    $requiredColumns{$key} = $tagValue;
-    printf STDERR "\t%s\t%s\n", $key, $tagValue if ($key ne "children");
-  }
-  printf "%s", $parent;
-  foreach my $tag ( @tabOrderOutput ) {
-    if (exists($requiredColumns{$tag})) {
-       printf "\t%s", $requiredColumns{$tag};
-       $tagCountSurvey{$tag}++;
-    } else { printf "\t"; }
-  }
-  printf "\n";
-  printf STDERR "# %s %d tags, length %d characters\n", $parent, $tagCount, $tagSize;
-}
-
-printf STDERR "#### tag count survey ####\n";
-
-foreach my $tag ( @tabOrderOutput ) {
-  printf STDERR "%10d\t%s\n", $tagCountSurvey{$tag}, $tag;
-}
-
-printf STDERR "##### ide to parent relation #####\n";
-foreach my $id (keys %idToParent) {
-   my $parentForId = $idToParent{$id};
-   printf STDERR "%s\t%s\n", $parentForId, $id;
-}
-
-printf STDERR "##### parent name and children ids #####\n";
-
-foreach my $parent (keys %parents) {
-  my $parentPtr = $parents{$parent};
-  if (exists($parentPtr->{'children'})) {
-     my $childrenIds = $parentPtr->{'children'};
-     my $parentId = $parentPtr->{'parent'};
-     printf STDERR "%s", $parentId;
-     foreach my $child (keys %$childrenIds) {
-       printf STDERR "\t%s", $child if ($child ne $parentId);
-     }
-     printf STDERR "\n";
-  }
-}
-
-__END__
-
-# column 2 'source'
-
-1022911 BestRefSeq
-  12974 BestRefSeq%2CGnomon
-  25744 Curated Genomic
-     29 Curated Genomic%2CGnomon
-1964727 Gnomon
-  29865 RefSeq
-   1845 tRNAscan-SE
-
-
- X 197838 name
- X 197838 locusLinkId
- X 191554 product
- X 187269 genbank
- X 187256 mrnaAcc
- X 153988 hgnc
- X 102624 protAcc
- X 100712 omimId
- X 35159 note
-
-
-NC_000009.12    BestRefSeq      exon    133275162       133275214       .       -       .       ID=id755564;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-
-NC_000009.12    BestRefSeq      CDS     133262099       133262168       .       -       2       ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-
-hgsql -e 'select * from refLink where mrnaAcc="NM_020469"\G' hg38
-*************************** 1. row ***************************
-       name: ABO
-    product: histo-blood group ABO system transferase
-    mrnaAcc: NM_020469
-    protAcc: NP_065202
-   geneName: 65417
-   prodName: 385329
-locusLinkId: 28
-     omimId: 110300
-
-+-------------+------------------+------+-----+---------+-------+
-| Field       | Type             | Null | Key | Default | Extra |
-+-------------+------------------+------+-----+---------+-------+
-| name        | varchar(255)     | NO   | MUL | NULL    |       |
-| product     | varchar(255)     | NO   |     | NULL    |       |
-| mrnaAcc     | varchar(255)     | NO   | PRI | NULL    |       |
-| protAcc     | varchar(255)     | NO   | MUL | NULL    |       |
-| geneName    | int(10) unsigned | NO   | MUL | NULL    |       |
-| prodName    | int(10) unsigned | NO   | MUL | NULL    |       |
-| locusLinkId | int(10) unsigned | NO   | MUL | NULL    |       |
-| omimId      | int(10) unsigned | NO   | MUL | NULL    |       |
-+-------------+------------------+------+-----+---------+-------+
-
-
-NC_000009.12	BestRefSeq	mRNA	133255176	133275214	.	-	.	ID=rna67392;Parent=gene25179;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Name=NM_020469.2;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133275162	133275214	.	-	.	ID=id755564;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133262099	133262168	.	-	.	ID=id755565;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133261318	133261374	.	-	.	ID=id755566;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133259819	133259866	.	-	.	ID=id755567;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133258097	133258132	.	-	.	ID=id755568;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133257409	133257542	.	-	.	ID=id755569;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	exon	133255176	133256356	.	-	.	ID=id755570;Parent=rna67392;Dbxref=GeneID:28,Genbank:NM_020469.2,HGNC:HGNC:79,MIM:110300;Note=The RefSeq transcript has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=mRNA;gene=ABO;product=ABO blood group (transferase A%2C alpha 1-3-N-acetylgalactosaminyltransferase%3B transferase B%2C alpha 1-3-galactosyltransferase);transcript_id=NM_020469.2
-NC_000009.12	BestRefSeq	CDS	133275162	133275189	.	-	0	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133262099	133262168	.	-	2	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133261318	133261374	.	-	1	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133259819	133259866	.	-	1	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133258097	133258132	.	-	1	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133257409	133257542	.	-	1	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2
-NC_000009.12	BestRefSeq	CDS	133255666	133256356	.	-	2	ID=cds45730;Parent=rna67392;Dbxref=GeneID:28,Genbank:NP_065202.2,HGNC:HGNC:79,MIM:110300;Name=NP_065202.2;Note=The RefSeq protein has 1 frameshift compared to this genomic sequence;exception=annotated by transcript or proteomic data;gbkey=CDS;gene=ABO;product=histo-blood group ABO system transferase;protein_id=NP_065202.2

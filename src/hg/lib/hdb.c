@@ -526,7 +526,7 @@ if (hel->val == NULL)
     {
     struct sqlConnection *conn = hAllocConn(db);
     if (sqlTableExists(conn, "chromInfo"))
-	hel->val = sqlQuickString(conn, "NOSQLINJ select chrom from chromInfo limit 1");
+	hel->val = sqlQuickString(conn, NOSQLINJ "select chrom from chromInfo limit 1");
     hFreeConn(&conn);
     }
 return hel->val;
@@ -538,7 +538,7 @@ int hChromCount(char *db)
 if (trackHubDatabase(db))
     return trackHubChromCount(db);
 struct sqlConnection *conn = hAllocConn(db);
-int count = sqlQuickNum(conn, "NOSQLINJ select count(*) from chromInfo");
+int count = sqlQuickNum(conn, NOSQLINJ "select count(*) from chromInfo");
 hFreeConn(&conn);
 return count;
 }
@@ -1272,7 +1272,7 @@ struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "NOSQLINJ select chrom from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct slName *el = slNameNew(row[0]);
@@ -1650,7 +1650,7 @@ static boolean querySeqInfo(struct sqlConnection *conn, char *acc, char *seqTbl,
 /* lookup information in the seq or gbSeq table */
 {
 boolean gotIt = FALSE;
-if (hTableExists(sqlGetDatabase(conn), seqTbl))
+if (sqlTableExists(conn, seqTbl))
     {
     char query[256];
     sqlSafef(query, sizeof(query),
@@ -1684,8 +1684,8 @@ size_t size;
 off_t offset;
 char *extTable = NULL;
 /* try gbExtFile table first, as it tends to be  more performance sensitive */
-if (querySeqInfo(conn, acc, "gbSeq", "gbExtFile", retId, &extId, &size, &offset))
-    extTable = "gbExtFile";
+if (querySeqInfo(conn, acc, gbSeqTable, "gbExtFile", retId, &extId, &size, &offset))
+    extTable = gbExtFileTable;
 else if (querySeqInfo(conn, acc, "seq", "extFile", retId, &extId, &size, &offset))
     extTable = "extFile";
 else
@@ -1705,7 +1705,7 @@ static char* mustGetSeqAndId(struct sqlConnection *conn, char *acc,
 {
 char *buf= getSeqAndId(conn, acc, retId);
 if (buf == NULL)
-    errAbort("No sequence for %s in seq or gbSeq tables", acc);
+    errAbort("No sequence for %s in seq or %s tables", acc, gbSeqTable);
 return buf;
 }
 
@@ -1805,8 +1805,8 @@ if ((compatTable != NULL) && hTableExists(db, compatTable))
     }
 else
     {
-    if (hTableExists(db, "gbSeq"))
-        haveSeq = checkIfInTable(conn, acc, "acc", "gbSeq");
+    if (sqlTableExists(conn, gbSeqTable))
+        haveSeq = checkIfInTable(conn, acc, "acc", gbSeqTable);
     if ((!haveSeq) && hTableExists(db, "seq"))
         haveSeq = checkIfInTable(conn, acc, "acc", "seq");
     }
@@ -1938,15 +1938,15 @@ genbankDropVer(accId, acc);
 
 if (native && genbankIsRefSeqAcc(accId))
     {
-    sqlSafef(query, sizeof(query), "select product from refLink where mrnaAcc = \"%s\"", accId);
+    sqlSafef(query, sizeof(query), "select product from %s where mrnaAcc = \"%s\"", refLinkTable, accId);
     desc = sqlQuickString(conn, query);
     }
 
 if (desc == NULL)
     {
-    sqlSafef(query, sizeof(query), "select description.name from description,gbCdnaInfo "
-          "where gbCdnaInfo.acc = \"%s\" "
-          "and gbCdnaInfo.description = description.id", accId);
+    sqlSafef(query, sizeof(query), "select d.name from %s d, %s g "
+          "where g.acc = \"%s\" "
+          "and g.description = d.id", descriptionTable, gbCdnaInfoTable, accId);
     desc = sqlQuickString(conn, query);
     }
 hFreeConn(&conn);
@@ -2589,7 +2589,7 @@ struct dbDb *dbList = NULL, *db;
 struct hash *hash = sqlHashOfDatabases();
 
 char query[1024];
-safef(query, sizeof query,  "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+safef(query, sizeof query,  NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -4340,7 +4340,7 @@ struct slPair *hGetCladeOptions()
  * useful for constructing a clade menu. */
 {
 // get only the clades that have actual active genomes
-char *query = "NOSQLINJ "
+char *query = NOSQLINJ ""
     "SELECT DISTINCT(c.name), c.label "
     "FROM %s c, %s g, %s d "
     "WHERE c.name=g.clade AND d.organism=g.genome AND d.active=1 "
@@ -4601,14 +4601,14 @@ char **row;
 struct dbDb *dbList = NULL, *db;
 
 /* Get hash of active blat servers. */
-sr = sqlGetResult(conn, "NOSQLINJ select db from blatServers");
+sr = sqlGetResult(conn, NOSQLINJ "select db from blatServers");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(hash, row[0], NULL);
 sqlFreeResult(&sr);
 
 /* Scan through dbDb table, keeping ones that are indexed. */
 char query[1024];
-safef(query,  sizeof query, "NOSQLINJ select * from %s order by orderKey,name desc", dbDbTable());
+safef(query,  sizeof query, NOSQLINJ "select * from %s order by orderKey,name desc", dbDbTable());
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -4700,8 +4700,8 @@ char **row;
 char *answer;
 
 answer = NULL;
-sqlSafef(query, sizeof(query), "select %s from %s.%-s  where %-s;",
-      fldName, db, sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
+sqlSafef(query, sizeof(query), "select %s from %-s  where %-s;",
+      fldName,  sqlCheckIdentifiersList(tblName), condition);  // note some callers pass an entire tables list with aliases in tblName
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 
@@ -4722,7 +4722,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct sqlResult *sr;
 char **row;
 struct hash *hash = newHash(0);
-sr = sqlGetResult(conn, "NOSQLINJ select chrom,size from chromInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     hashAddInt(hash, row[0], sqlUnsigned(row[1]));
 sqlFreeResult(&sr);
@@ -4746,7 +4746,7 @@ struct slName *hChromList(char *db)
 /* Get the list of chrom names from the database's chromInfo table. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct slName *list = sqlQuickList(conn, "NOSQLINJ select chrom from chromInfo");
+struct slName *list = sqlQuickList(conn, NOSQLINJ "select chrom from chromInfo");
 hFreeConn(&conn);
 return list;
 }
@@ -5210,7 +5210,7 @@ char *hGenbankModDate(char *acc, struct sqlConnection *conn)
 {
 char query[128];
 sqlSafef(query, sizeof(query),
-      "select moddate from gbCdnaInfo where (acc = '%s')", acc);
+      "select moddate from %s where (acc = '%s')",gbCdnaInfoTable, acc);
 return sqlQuickString(conn, query);
 }
 
@@ -5337,4 +5337,46 @@ char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn,
 /* Return file name from bigDataUrl or little table. */
 {
 return bbiNameFromSettingOrTableChrom(tdb, conn, table, NULL);
+}
+
+char *hFindLatestSnpTableConn(struct sqlConnection *conn, char *suffix)
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+ * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+{
+if (suffix == NULL)
+    suffix = "";
+char *tableName = NULL;
+char likeExpr[64];
+safef(likeExpr, sizeof(likeExpr), "LIKE 'snp1__%s'", suffix);
+struct slName *snpNNNTables = sqlListTablesLike(conn, likeExpr);
+if (snpNNNTables)
+    {
+    // Skip to last in list -- highest number (show tables can't use rlike or 'order by'):
+    struct slName *table = snpNNNTables;
+    while (table->next != NULL && isdigit(table->next->name[4]) && isdigit(table->next->name[5]))
+        table = table->next;
+    if (table != NULL)
+        tableName = cloneString(table->name);
+    }
+else if (isEmpty(suffix))
+    {
+    // Before snpNNN* tables (e.g. hg16) there was a track with table 'snp', so check for that:
+    snpNNNTables = sqlListTablesLike(conn, "LIKE 'snp'");
+    if (snpNNNTables != NULL)
+        tableName = cloneString(snpNNNTables->name);
+    }
+slNameFreeList(&snpNNNTables);
+return tableName;
+}
+
+char *hFindLatestSnpTable(char *db, char *suffix)
+/* Return the name of the 'snp1__<suffix>' table with the highest build number, if any.
+ * suffix may be NULL to get the 'All SNPs' table (as opposed to Common, Flagged, Mult). */
+{
+if (startsWith(hubTrackPrefix, db))
+    return NULL;
+struct sqlConnection *conn = hAllocConn(db);
+char *tableName = hFindLatestSnpTableConn(conn, suffix);
+hFreeConn(&conn);
+return tableName;
 }

@@ -154,10 +154,12 @@
                         Very short sequences that go over a splice site in a
                         cDNA sequence can not be found, as they are not
                         in the genome, QPCR primers are a typical example.
-                        You can use In-Silico PCR and select a gene set as the
+                        You can use <A HREF="../cgi-bin/hgPcr">In-Silico PCR</A> and select a gene set as the
                         target for these cases. In general, In-Silico PCR
-                        is more sensitive and should be preferred for primers.
+                        is more sensitive and should be preferred for pairs of primers.
                         </P>
+                        
+                        <P>
                         If you are sure that the genome is the
                         right one and
                         that the sequence is indeed there, for example by using
@@ -166,7 +168,7 @@
                         version of Blat masks 11mers from the query that occur
                         more than 1024 times in the genome. The goal is to
                         improve speed but this may result in missing hits when
-                        you are searching for sequences in repeats.<P>
+                        you are searching for sequences in repeats.</P>
 
                         To find these matches with the online version of Blat,
                         you can add more flanking sequence to your query. If
@@ -619,6 +621,11 @@
                         range starts lower.<br>
 			For <em>minMatch</em>=1 (e.g., protein), the minimum guaranteed match length is:
                         1 * <em>stepSize</em> + <em>tileSize</em> - 1<br>
+			Note: There is also a &quot;minimum lucky size&quot; for hits. This is the
+			smallest possible hit that BLAT can find. This minimum lucky size can be
+			calculated using the formula:
+			<i>stepSize</i> + <i>tileSize</i>. For example, if we use a <i>tileSize</i>
+			of 11 and <i>stepSize</i> of 5, hits smaller than 16 bases won't be reported.
 			<LI>
 		 	Try using <em>-fine</em>.
 			<LI>

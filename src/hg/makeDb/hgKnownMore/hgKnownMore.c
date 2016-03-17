@@ -160,7 +160,7 @@ struct knownInfo *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
-sr = sqlGetResult(conn, "NOSQLINJ select * from knownInfo");
+sr = sqlGetResult(conn, NOSQLINJ "select * from knownInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = knownInfoLoad(row);
@@ -274,7 +274,7 @@ for (ki = kiList; ki != NULL; ki = ki->next)
 carefulClose(&f);
 
 printf("Loading database %s\n", database);
-sqlUpdate(conn, "NOSQLINJ delete from knownMore");
+sqlUpdate(conn, NOSQLINJ "delete from knownMore");
 sqlSafef(query, sizeof query, "load data local infile '%s' into table knownMore", tabName);
 sqlUpdate(conn, query);
 

@@ -179,6 +179,43 @@ browser pack snp132Common
 </TT></PRE>
 </P>
 
+<h3>Example Three</h3>
+<p>
+In this example, you will load a hub that has VCF data described in a hub's trackDb.txt file.
+First, navigate to the <a href="hubQuickStart.html" target="_blank">Basic Hub Quick Start Guide</a>
+and review an introduction to hubs.</p>
+</p>
+Visualizing VCF files in hubs involves creating three text files called the hub.txt, genomes.txt, and
+lastly trackDb.txt. The browser is given a URL to the top level hub.txt file that points to the
+related genomes.txt and trackDb.txt files. In the trackDb.txt, there are stanzas for each track
+that outlines the details for and type of each track to display, such as these lines for a VCF file
+located at the bigDataUrl location:
+<ul>
+<pre><tt>
+track vcf1
+bigDataUrl http://hgdownload.cse.ucsc.edu/gbdb/hg19/1000Genomes/ALL.chr21.integrated_phase1_v3.20101123.snps_indels_svs.genotypes.vcf.gz
+#Note: there is a corresponding fileName.vcf.gz.tbi in the same above directory
+shortLabel chr21 VCF example
+longLabel This chr21 VCF file is an example from the 1000 Genomes Phase 1 Integrated Variant Calls Track
+type vcfTabix
+visibility dense
+</tt></pre>
+</ul>
+Here is a direct link to the <a href="examples/hubDirectory/hg19/trackDb.txt" target="_blank">trackDb.txt</A>
+to see more information about this example hub, and below is a direct link to visualise the hub in the browser
+where this example VCF file displays in dense along side the other tracks in this hub.
+You can find more Track Hub VCF display options on the <a href="trackDb/trackDbHub.html#vcfTabix"
+target="_blank">Track Database (trackDb) Definition Document</a> page.
+<p>
+<ul>
+<pre><tt>
+<a href="../../cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt"
+target="_blank">http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&hubUrl=http://genome.ucsc.edu/goldenPath/help/examples/hubDirectory/hub.txt</a>
+</pre></tt>
+</ul>
+</p>
+<p>
+
 <H3>Sharing Your Data with Others</H3>
 <P>
 If you would like to share your VCF data track with a colleague, learn

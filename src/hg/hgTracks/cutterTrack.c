@@ -103,7 +103,7 @@ struct bed *bedList = NULL;
 int winSize = winEnd - winStart;
 
 conn = hAllocConn("hgFixed");
-cutters = cutterLoadByQuery(conn, "NOSQLINJ select * from cutters");
+cutters = cutterLoadByQuery(conn, NOSQLINJ "select * from cutters");
 windowDna = hDnaFromSeq(database, chromName, winStart, winEnd, dnaUpper);
 
 /* Do different things based on window size. */
