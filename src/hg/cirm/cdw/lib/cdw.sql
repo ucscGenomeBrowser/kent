@@ -534,20 +534,6 @@ CREATE TABLE cdwJob (
     PRIMARY KEY(id)
 );
 
-#A submission job to be run asynchronously and not too many all at once.
-CREATE TABLE cdwSubmitJob (
-    id int unsigned auto_increment,	# Submit id
-    commandLine longblob,	# Command line of job
-    startTime bigint default 0,	# Start time in seconds since 1970
-    endTime bigint default 0,	# End time in seconds since 1970
-    stderr longblob,	# The output to stderr of the run - may be nonempty even with success
-    returnCode int default 0,	# The return code from system command - 0 for success
-    pid int default 0,	# Process ID for running processes
-    submitId int default 0,	# Associated submission ID if any
-              #Indices
-    PRIMARY KEY(id)
-);
-
 #Some files can be visualized as a track. Stuff to help define that track goes here.
 CREATE TABLE cdwTrackViz (
     id int unsigned auto_increment,	# Id of this row in the table
