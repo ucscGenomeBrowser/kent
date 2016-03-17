@@ -72,7 +72,7 @@ sqlSafef(query, sizeof(query),
                 "values(%d, '%s', '%s', %lld, %lld, %lld, %d)"
 		, taxon, name, ucscDb, (long long)ef->id, baseCount, realBaseCount, seqCount);
 sqlUpdate(conn, query);
-cdwAddQaJob(conn, ef->id);
+cdwAddQaJob(conn, ef->id, 0);
 
 sqlDisconnect(&conn);
 }

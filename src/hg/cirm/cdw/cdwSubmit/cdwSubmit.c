@@ -29,6 +29,7 @@
 
 boolean doUpdate = FALSE;
 boolean noRevalidate = FALSE;
+boolean justTest = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -41,7 +42,8 @@ errAbort(
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
   "   -noRevalidate - if set don't run revalidator on update\n"
-  "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n");
+  "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n"
+  "   -test This will look at the manifest and meta, but not actually load the databas\n");
 }
 
 char *localPrefix = "local://localhost/";
@@ -52,6 +54,7 @@ static struct optionSpec options[] = {
    {"update", OPTION_BOOLEAN},
    {"noRevalidate", OPTION_BOOLEAN},
    {"md5", OPTION_STRING},
+   {"test", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -497,44 +500,6 @@ while ((c = *s++) != 0)
         errAbort("Character '%c' (binary %d) not allowed in fileName '%s'", c, (int)c, fileName);
 }
 
-void allGoodSymbolChars(char *symbol)
-/* Return TRUE if all chars are good for a basic symbol in a controlled vocab */
-{
-if (!sameString("n/a", symbol))
-    {
-    char c, *s = symbol;
-    while ((c = *s++) != 0)
-	if (!isalnum(c) && c != '_')
-	    errAbort("Character '%c' not allowed in symbol '%s'", c, symbol);
-    }
-}
-
-boolean isExperimentId(char *experiment)
-/* Return TRUE if it looks like an CIRM experiment ID */
-{
-return TRUE;
-}
-
-boolean isAllNum(char *s)
-/* Return TRUE if all characters are numeric (no leading - even) */
-{
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c))
-        return FALSE;
-return TRUE;
-}
-
-boolean isAllHexLower(char *s)
-/* Return TRUE if all chars are valid lower case hexadecimal. */
-{
-char c;
-while ((c = *s++) != 0)
-    if (!isdigit(c) && !(c >= 'a' && c <= 'f'))
-        return FALSE;
-return TRUE;
-}
-         
 boolean isSupportedFormat(char *format)
 /* Return TRUE if this is one of our supported formats */
 {
@@ -556,15 +521,6 @@ if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 
 if (startsWith("bed_", format))
     format += 4;
 return cdwIsSupportedBigBedFormat(format);
-}
-
-
-boolean isEmptyOrNa(char *s)
-/* Return TRUE if string is NULL, "", "n/a", or "N/A" */
-{
-if (isEmpty(s))
-    return TRUE;
-return sameWord(s, "n/a");
 }
 
 void prefetchChecks(char *format, char *fileName)
@@ -595,9 +551,10 @@ if (errCatchStart(errCatch))
 	&hostId, &submitDirId);
 
     prefetchChecks(format, ef->submitFileName);
+    verbose(1, "copying %s\n", ef->submitFileName);
     int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user);
     close(fd);
-    cdwAddQaJob(conn, fileId);
+    cdwAddQaJob(conn, fileId, submitId);
     tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
     }
 errCatchEnd(errCatch);
@@ -670,7 +627,7 @@ sqlUpdate(conn, query);
 }
 
 int handleOldFileTags(struct sqlConnection *conn, 
-    struct hash *metaIdHash, struct submitFileRow *sfrList, boolean update)
+    struct hash *metaIdHash, struct submitFileRow *sfrList, boolean update, int submitId)
 /* Check metadata on files mentioned in manifest that by MD5 sum we already have in
  * warehouse.   We may want to update metadata on these. This returns the number
  * of files with tags updated. */
@@ -718,7 +675,7 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
 	verbose(1, "updating tags for %s\n", newFile->submitFileName);
 	}
     if (updateMeta || updateTags)
-	cdwFileResetTags(conn, oldFile, newFile->tags, !noRevalidate);
+	cdwFileResetTags(conn, oldFile, newFile->tags, !noRevalidate, submitId);
     if (updateTags || updateName || updateMeta)
 	++updateCount;
     cgiDictionaryFree(&oldTags);
@@ -726,83 +683,6 @@ for (sfr = sfrList; sfr != NULL; sfr = sfr->next)
     }
 return updateCount;
 }
-
-#ifdef UNUSED
-void doValidatedEmail(struct cdwSubmit *submit, boolean isComplete)
-/* Send an email with info on all validated files */
-{
-struct sqlConnection *conn = cdwConnect();
-struct cdwUser *user = cdwUserFromId(conn, submit->userId);
-struct dyString *message = dyStringNew(0);
-/* Is this submission has no new file at all */
-if ((submit->oldFiles != 0) && (submit->newFiles == 0) &&
-    (submit->metaChangeCount == 0)  && isEmpty(submit->errorMessage)
-     && (submit->fileIdInTransit == 0))
-    {
-    dyStringPrintf(message, "Your submission from %s is completed, but validation was not performed for this submission since all files in validate.txt have been previously submitted and validated.\n", submit->url);
-    mailViaPipe(user->email, "CDW Validation Results", message->string, cdwDaemonEmail);
-    sqlDisconnect(&conn);
-    dyStringFree(&message);
-    return;
-    }
-
-if (isComplete)
-    dyStringPrintf(message, "Your submission from %s is completely validated\n", submit->url);
-else
-    dyStringPrintf(message, 
-	"Your submission hasn't validated after 24 hours, something is probably wrong\n"
-	"at %s\n", submit->url);
-dyStringPrintf(message, "\n#accession\tsubmitted_file_name\tnotes\n");
-char query[512];
-sqlSafef(query, sizeof(query),
-    "select licensePlate,submitFileName "
-    " from cdwFile left join cdwValidFile on cdwFile.id = cdwValidFile.fileId "
-    " where cdwFile.submitId = %u and cdwFile.id != %u"
-    , submit->id, submit->manifestFileId);
-struct sqlResult *sr = sqlGetResult(conn, query);
-char **row;
-
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *licensePlate = row[0];
-    char *submitFileName = row[1];
-    dyStringPrintf(message, "%s\t%s\t", naForNull(licensePlate), submitFileName);
-    if (licensePlate == NULL)
-        {
-	dyStringPrintf(message, "Not validating");
-	}
-    dyStringPrintf(message, "\n");
-    }
-sqlFreeResult(&sr);
-
-mailViaPipe(user->email, "CDW Validation Results", message->string, cdwDaemonEmail);
-sqlDisconnect(&conn);
-dyStringFree(&message);
-}
-#endif /* UNUSED */
-
-#ifdef UNUSED
-void waitForValidationAndSendEmail(struct cdwSubmit *submit, char *email)
-/* Poll database every 5 minute or so to see if finished. */
-{
-int maxSeconds = 3600*24;
-int secondsPer = 60*5;
-int seconds;
-for (seconds = 0; seconds < maxSeconds; seconds += secondsPer)
-    {
-    struct sqlConnection *conn = cdwConnect();
-    if (cdwSubmitIsValidated(submit, conn))
-         {
-	 doValidatedEmail(submit, TRUE);
-	 return;
-	 }
-    verbose(2, "waiting for validation\n");
-    sqlDisconnect(&conn);
-    sleep(secondsPer);	// Sleep for 5 more minutes
-    }
-doValidatedEmail(submit, FALSE);
-}
-#endif /* UNUSED */
 
 static void rCheckTagValid(struct tagStorm *tagStorm, struct tagStanza *list)
 /* Check tagStorm tags */
@@ -813,8 +693,11 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     struct slPair *pair;
     for (pair = stanza->tagList; pair != NULL; pair = pair->next)
 	{
-	if (!cdwValidateTagVal(pair->name, pair->val))
-	    errAbort("Unknown tag '%s' in %s", pair->name, tagStorm->fileName);
+	cdwValidateTagName(pair->name);
+	if (justTest)	// ugly - will do this outside of test soon
+	    {
+	    cdwValidateTagVal(pair->name, pair->val);
+	    }
 	}
     rCheckTagValid(tagStorm, stanza->children);
     }
@@ -874,8 +757,7 @@ int i;
 for (i=0; i<table->fieldCount; ++i)
     {
     char *field = table->fields[i];
-    if (!cdwValidateTagName(field))
-	errAbort("Unknown field '%s' in %s", field, table->name);
+    cdwValidateTagName(field);
     }
 
 /* Check meta.txt tags */
@@ -986,7 +868,7 @@ cgiEncodeHash(hash, cgi);
 char *md5 = hmacMd5("", cgi->string);
 
 struct dyString *query = dyStringNew(0);
-dyStringPrintf(query, "select id from cdwMetaTags where md5='%s' and tags='%s'", 
+sqlDyStringPrintf(query, "select id from cdwMetaTags where md5='%s' and tags='%s'", 
     md5, cgi->string);
 int metaTagsId = sqlQuickNum(conn, query->string);
 
@@ -994,7 +876,7 @@ int metaTagsId = sqlQuickNum(conn, query->string);
 if (metaTagsId == 0)
     {
     dyStringClear(query);
-    dyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
+    sqlDyStringAppend(query, "insert cdwMetaTags (tags,md5) values('");
     dyStringAppend(query, cgi->string);
     dyStringPrintf(query, "', '%s')", md5);
     sqlUpdate(conn, query->string);
@@ -1068,10 +950,15 @@ verbose(2, "Parsed manifest and metadata into %d files\n", slCount(sfrList));
 /* Fake URL - system was built initially for remote files. */
 char submitUrl[PATH_LEN];
 safef(submitUrl, sizeof(submitUrl), "%s%s/%s", localPrefix, submitDir, manifestFile);
+if (startsWith("/", manifestFile))
+    errAbort("Please don't include full path to manifest file path.  This is no longer needed.");
 
 /* Figure out directory ID for submission */
 int hostId = cdwGetHost(conn, "localhost");
 int submitDirId = cdwGetSubmitDir(conn, hostId, submitDir);
+
+if (justTest)
+    return;
 
 /* Create a submission record */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
@@ -1159,7 +1046,7 @@ if (errCatchStart(errCatch))
 
     /* Deal with old files. This may throw an error.  We do it before downloading new
      * files since we want to fail fast if we are going to fail. */
-    int updateCount = handleOldFileTags(conn, metaIdHash, oldList, doUpdate);
+    int updateCount = handleOldFileTags(conn, metaIdHash, oldList, doUpdate, submitId);
     sqlSafef(query, sizeof(query), 
 	"update cdwSubmit set metaChangeCount=%d where id=%u",  updateCount, submitId);
     sqlUpdate(conn, query);
@@ -1209,6 +1096,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 doUpdate = optionExists("update");
 noRevalidate = optionExists("noRevalidate");
+justTest = optionExists("test");
 if (optionExists("md5"))
     {
     char *md5File = optionVal("md5", NULL);

@@ -577,11 +577,6 @@ void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn,
     struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize)
 {
-/* Do precalculation for quicker auth check */
-int userId = 0;
-if (user != NULL)
-    userId = user->id;
-
 /* Get list of files we are authorized to see, and return early if empty */
 struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
 if (efList == NULL)
