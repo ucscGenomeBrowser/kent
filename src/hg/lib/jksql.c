@@ -1390,6 +1390,7 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
  */
 {
 struct sqlResult *res = NULL;
+struct sqlConnection *scMain = sc;
 long deltaTime;
 boolean fixedMultipleNOSQLINJ = FALSE;
 
@@ -1432,8 +1433,13 @@ if (mysqlError != 0 && sc->failoverConn && sameWord(sqlGetDatabase(sc), sqlGetDa
             scConnProfile(sc->failoverConn), query);
 
     sc = sc->failoverConn;
-    sqlConnectIfUnconnected(sc, TRUE);
-    mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+    sqlConnectIfUnconnected(sc, FALSE);
+    if (sc->conn)
+        mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+    else
+        // This database does not exist on the (slow-db) failover mysql server
+        // It makes more sense to the show the error message we got from our main db
+        sc = scMain;
     }
 
 if (mysqlError != 0)
