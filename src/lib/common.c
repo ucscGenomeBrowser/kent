@@ -3415,6 +3415,20 @@ while((*next != '\0')
 makeDir(pathBuf);
 }
 
+boolean isSymbolString(char *s)
+/* Return TRUE if s can be used as a symbol in the C language */
+{
+char c = *s++;
+if (!isalpha(c) && (c != '_'))
+    return FALSE;
+while ((c = *s++) != 0)
+    {
+    if (!(isalnum(c) || (c == '_')))
+	return FALSE;
+    }
+return TRUE;
+}
+
 boolean isNumericString(char *s)
 /* Return TRUE if string is numeric (integer or floating point) */
 {
@@ -3585,3 +3599,4 @@ if (stringIn("_hap", name) || stringIn("_alt", name))
 else
    return FALSE;
 }
+

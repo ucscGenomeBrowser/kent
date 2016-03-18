@@ -1,0 +1,272 @@
+##
+# WARNING: 
+#  - Must ensure attrs.transcriptType:Transcript_Biotype and tag:Tag
+#    matches current values (see ViewGenes documentation below)
+#  - adjust top track priority and search priorities by -0.001
+##
+track wgEncodeGencodeVM8
+compositeTrack on
+superTrack wgEncodeGencodeSuper hide
+shortLabel GENCODE VM8 (Ensembl 83)
+longLabel Gene Annotations from ENCODE/GENCODE Version M8 (Ensembl 83)
+group genes
+dragAndDrop subTracks
+priority 2.985
+visibility hide
+subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+allButtonPair on
+sortOrder name=+ view=+
+fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
+type genePred 
+configurable off
+wgEncodeGencodeVersion M8
+wgEncodeGencodeAttrs wgEncodeGencodeAttrsVM8
+wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportVM8
+wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceVM8
+wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceVM8
+wgEncodeGencodePdb wgEncodeGencodePdbVM8
+wgEncodeGencodePubMed wgEncodeGencodePubMedVM8
+wgEncodeGencodeRefSeq wgEncodeGencodeRefSeqVM8
+wgEncodeGencodeTag wgEncodeGencodeTagVM8
+wgEncodeGencodeTranscriptSupport wgEncodeGencodeTranscriptSupportVM8
+wgEncodeGencodeUniProt wgEncodeGencodeUniProtVM8
+wgEncodeGencodePolyAFeature wgEncodeGencodePolyAFeatureVM8
+wgEncodeGencodeAnnotationRemark wgEncodeGencodeAnnotationRemarkVM8
+wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLevelVM8
+
+    track wgEncodeGencodeVM8ViewGenes
+    shortLabel Genes
+    view aGenes
+    configurable on
+    visibility pack
+    subTrack wgEncodeGencodeVM8
+    type genePred
+    itemClassTbl wgEncodeGencodeAttrsVM8
+    itemClassNameColumn transcriptId
+    itemClassClassColumn transcriptClass
+    cdsDrawDefault genomic\ codons
+    baseColorUseCds given
+    baseColorDefault genomicCodons
+    geneClasses coding nonCoding pseudo problem
+    gClass_coding 12,12,120
+    gClass_nonCoding 0,153,0
+    gClass_pseudo 255,51,255
+    gClass_problem 254,0,0
+    highlightColor 255,255,0
+    # filterBy notes:
+    #  - attrs is an alias for the current wgEncodeGencodeAttrs in the sql
+    #  - transcriptMethod is a pseudo-column name, which is handled explictly in the code
+    #  - attrs.transcriptType must be updated as biotypes change.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(transcriptType) from wgEncodeGencodeAttrsVM8 order by transcriptType' mm10 | tr '\n' ','
+    #  - tag - is s pseudo-column name for join with the tag table.  This will get the current list of values:
+    #    hgsql -Ne 'select distinct(tag) from wgEncodeGencodeTagVM8 order by tag' mm10 | tr '\n' ','
+    #  - supportLevel is a pseudo-column name handled in the code
+    filterBy attrs.transcriptClass:Transcript_Class=coding,nonCoding,pseudo,problem \
+             transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+             attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,antisense,bidirectional_promoter_lncrna,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_D_pseudogene,IG_J_gene,IG_LV_gene,IG_V_gene,IG_V_pseudogene,lincRNA,macro_lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,ribozyme,rRNA,scaRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,sRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
+             tag:Tag=alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_uORF,pseudo_consens,readthrough_transcript,retained_intron_CDS,retained_intron_final,retained_intron_first,RNA_Seq_supported_only,RP_supported_TIS,seleno,sequence_error,upstream_ATG,upstream_uORF \
+             supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
+    highlightBy transcriptMethod:Transcript_Annotation_Method=manual,automatic,manual_only,automatic_only \
+                attrs.transcriptType:Transcript_Biotype=3prime_overlapping_ncrna,antisense,bidirectional_promoter_lncrna,IG_C_gene,IG_C_pseudogene,IG_D_gene,IG_D_pseudogene,IG_J_gene,IG_LV_gene,IG_V_gene,IG_V_pseudogene,lincRNA,macro_lncRNA,miRNA,misc_RNA,Mt_rRNA,Mt_tRNA,nonsense_mediated_decay,non_stop_decay,polymorphic_pseudogene,processed_pseudogene,processed_transcript,protein_coding,pseudogene,retained_intron,ribozyme,rRNA,scaRNA,sense_intronic,sense_overlapping,snoRNA,snRNA,sRNA,TEC,transcribed_processed_pseudogene,transcribed_unitary_pseudogene,transcribed_unprocessed_pseudogene,translated_processed_pseudogene,translated_unprocessed_pseudogene,TR_C_gene,TR_D_gene,TR_J_gene,TR_J_pseudogene,TR_V_gene,TR_V_pseudogene,unitary_pseudogene,unprocessed_pseudogene \
+                tag:Tag=alternative_3_UTR,alternative_5_UTR,appris_alternative_1,appris_alternative_2,appris_principal_1,appris_principal_2,appris_principal_3,appris_principal_4,appris_principal_5,basic,bicistronic,CCDS,cds_end_NF,cds_start_NF,dotter_confirmed,downstream_ATG,exp_conf,inferred_exon_combination,inferred_transcript_model,low_sequence_quality,mRNA_end_NF,mRNA_start_NF,NAGNAG_splice_site,NMD_exception,NMD_likely_if_extended,non_ATG_start,non_canonical_conserved,non_canonical_genome_sequence_error,non_canonical_other,non_canonical_polymorphism,non_canonical_TEC,non_canonical_U12,non_submitted_evidence,not_best_in_genome_evidence,not_organism_supported,overlapping_uORF,pseudo_consens,readthrough_transcript,retained_intron_CDS,retained_intron_final,retained_intron_first,RNA_Seq_supported_only,RP_supported_TIS,seleno,sequence_error,upstream_ATG,upstream_uORF \
+                supportLevel:Support_Level=tsl1,tsl2,tsl3,tsl4,tsl5,tslNA
+    
+        track wgEncodeGencodeBasicVM8
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeVM8ViewGenes on
+        shortLabel Basic
+        subGroups view=aGenes name=Basic
+        longLabel Basic Gene Annotation Set from ENCODE/GENCODE Version M8 (Ensembl 83)
+        type genePred
+        priority 1
+    
+        track wgEncodeGencodeCompVM8
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeVM8ViewGenes off
+        subGroups view=aGenes name=Comprehensive
+        shortLabel Comprehensive
+        longLabel Comprehensive Gene Annotation Set from ENCODE/GENCODE Version M8 (Ensembl 83)
+        type genePred
+        priority 2
+    
+        track wgEncodeGencodePseudoGeneVM8
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeVM8ViewGenes off
+        subGroups view=aGenes name=Pseudogenes 
+        shortLabel Pseudogenes
+        longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M8 (Ensembl 83)
+        type genePred
+        color 255,51,255
+        priority 3
+    
+    track wgEncodeGencodeVM8View2Way 
+    shortLabel 2-Way
+    view b2-way
+    visibility hide
+    subTrack wgEncodeGencodeVM8
+    type genePred
+    configurable off
+
+        track wgEncodeGencode2wayConsPseudoVM8
+        subTrack wgEncodeGencodeVM8View2Way off
+        subGroups view=b2-way name=yTwo-way
+        shortLabel 2-way Pseudogenes
+        longLabel 2-way Pseudogene Annotation Set from ENCODE/GENCODE Version M8 (Ensembl 83)
+        type genePred
+        color 255,51,255
+        priority 4
+    
+    track wgEncodeGencodeVM8ViewPolya
+    shortLabel PolyA
+    view cPolya
+    visibility hide
+    subTrack wgEncodeGencodeVM8
+    type genePred
+    configurable off
+
+        track wgEncodeGencodePolyaVM8
+        trackHandler wgEncodeGencode
+        subTrack wgEncodeGencodeVM8ViewPolya off
+        subGroups view=cPolya name=zPolyA
+        shortLabel PolyA
+        longLabel PolyA Transcript Annotation Set from ENCODE/GENCODE Version M8 (Ensembl 83)
+        type genePred
+        color 0,0,0
+        priority 5
+    
+# searchs for basic
+searchName wgEncodeGencodeBasicVM8
+searchTable wgEncodeGencodeBasicVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27401
+
+searchName wgEncodeGencodeBasicGeneSymVM8
+searchTable wgEncodeGencodeBasicVM8
+searchMethod exact
+searchType genePred
+searchPriority 2.27402
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeBasicGeneVM8
+searchTable wgEncodeGencodeBasicVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27403
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaTranscriptVM8
+searchTable wgEncodeGencodeBasicVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27404
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeBasicHavanaGeneVM8
+searchTable wgEncodeGencodeBasicVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27405
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for comp
+searchName wgEncodeGencodeCompVM8
+searchTable wgEncodeGencodeCompVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27406
+
+searchName wgEncodeGencodeCompGeneSymVM8
+searchTable wgEncodeGencodeCompVM8
+searchMethod exact
+searchType genePred
+searchPriority 2.27407
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodeCompGeneVM8
+searchTable wgEncodeGencodeCompVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27408
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaTranscriptVM8
+searchTable wgEncodeGencodeCompVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27409
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodeCompHavanaGeneVM8
+searchTable wgEncodeGencodeCompVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27410
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for pseudogene
+searchName wgEncodeGencodePseudoGeneVM8
+searchTable wgEncodeGencodePseudoGeneVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUST[0-9.]+
+searchPriority 2.27411
+
+searchName wgEncodeGencodePseudoGeneGeneSymVM8
+searchTable wgEncodeGencodePseudoGeneVM8
+searchMethod exact
+searchType genePred
+searchPriority 2.27412
+query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
+
+searchName wgEncodeGencodePseudoGeneGeneVM8
+searchTable wgEncodeGencodePseudoGeneVM8
+searchMethod prefix
+searchType genePred
+termRegex ENSMUSG[0-9.]+
+searchPriority 2.27413
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,geneId from %s where geneId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaTranscriptVM8
+searchTable wgEncodeGencodePseudoGeneVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUST[0-9.]+
+searchPriority 2.27414
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaTranscriptId from %s where havanaTranscriptId like '%s%%'
+
+searchName wgEncodeGencodePseudoGeneHavanaGeneVM8
+searchTable wgEncodeGencodePseudoGeneVM8
+searchMethod prefix
+searchType genePred
+termRegex OTTMUSG[0-9.]+
+searchPriority 2.27415
+xrefTable wgEncodeGencodeAttrsVM8
+xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
+
+# searchs for 2-way consensus
+searchName wgEncodeGencode2wayConsPseudoVM8
+searchTable wgEncodeGencode2wayConsPseudoVM8
+searchMethod exact
+searchType genePred
+termRegex PGOMOU[0-9.]+
+searchPriority 2.27416
+
+

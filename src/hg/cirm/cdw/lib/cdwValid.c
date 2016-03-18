@@ -75,7 +75,7 @@ void cdwValidateRcc(char *path)
 requireStartEndLines(path, "<Header>", "</Messages>");
 }
 
-boolean fileStartsWithOneOfPair(char *fileName,  char *one, char *two)
+static boolean fileStartsWithOneOfPair(char *fileName,  char *one, char *two)
 /* Return TRUE if file starts with either one of two strings. */
 {
 /* Figure out size of one and two strings. */
@@ -101,6 +101,13 @@ else if (twoLen >= sizeRead && memcmp(buf, two, twoLen) == 0)
 return FALSE;
 }
 
+static boolean fileStartsWith(char *path, char *string)
+/* Make sure file starts with string */
+{
+return fileStartsWithOneOfPair(path, string, string);
+}
+
+
 void cdwValidateIdat(char *path)
 /* Validate illumina idat file. */
 {
@@ -111,14 +118,14 @@ if (!fileStartsWithOneOfPair(path, "IDAT", "DITA"))
 void cdwValidatePdf(char *path)
 /* Make sure PDF really is PDF */
 {
-if (!fileStartsWithOneOfPair(path, "%PDF", "%PDF"))
+if (!fileStartsWith(path, "%PDF"))
     errAbort("%s in not a valid .pdf file, it does not start with %%PDF", fileNameOnly(path));
 }
 
 void cdwValidateCram(char *path)
 /* Validate cram file. */
 {
-if (!fileStartsWithOneOfPair(path, "CRAM", "CRAM"))
+if (!fileStartsWith(path, "CRAM"))
     errAbort("%s is not a valid .cram file, it does not start with CRAM", fileNameOnly(path));
 }
 
@@ -132,8 +139,15 @@ if (!fileStartsWithOneOfPair(path, "\xff\xd8\xff\xe0", "\xff\xd8\xff\xe1"))
 void cdwValidateBamIndex(char *path)
 /* Check .bam.bai really is index. */
 {
-if (!fileStartsWithOneOfPair(path, "BAI", "BAI"))
+if (!fileStartsWith(path, "BAI"))
     errAbort("%s is not a valid .bam.bai file", fileNameOnly(path));
+}
+
+void cdwValidateTabixIndex(char *path)
+/* Check that a tabix index file (used for VCF files among other things) starts with right characters */
+{
+if (!fileStartsWith(path, "TIDX"))
+    errAbort("%s is not a valid TABIX index file", fileNameOnly(path));
 }
 
 boolean cdwIsGzipped(char *path)
@@ -277,17 +291,30 @@ if (allowedHash == NULL)
 return allowedHash;
 }
 
-boolean cdwValidateTagName(char *tag)
+void cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
+// If it's not a legal C symbol, don't let it be a tag
+if (!isSymbolString(tag))
+    errAbort("Bad tag symbol %s.", tag);
 // First see if it is in hash of allowed tags.
-if (hashLookup(cdwAllowedTagsHash(), tag) != NULL)
-    return TRUE;
+struct hash *allowedHash = cdwAllowedTagsHash();
+if (hashLookup(allowedHash, tag) != NULL)
+    return;
 // Otherwise see if it's one of the prefixes that allows anything afterwords 
-else if (startsWith("lab_", tag) || startsWith("user_", tag) 
-    || startsWith("GEO_", tag) || startsWith("SRA_", tag))
+else if (startsWith("lab_", tag) || startsWith("user_", tag) )
     {
-    return TRUE;
+    return;
+    }
+else if (startsWith("GEO_", tag) || startsWith("SRA_", tag))
+    {
+    int tagLen = strlen(tag);
+    char lowerTag[tagLen+1];
+    strcpy(lowerTag, tag);
+    tolowers(lowerTag);
+    if (hashLookup(allowedHash, lowerTag))
+        errAbort("Please change %s tag to %s", tag, lowerTag);
+    return;
     }
 // Otherwise see if it's one of our reserved but unimplemented things
 else if (sameString("mixin", tag) || sameString("deprecated", tag) 
@@ -297,14 +324,158 @@ else if (sameString("mixin", tag) || sameString("deprecated", tag)
     errAbort("%s not implemented", tag);
     }
 // Otherwise, nope, doesn't validate.
-return FALSE;
+errAbort("Unknown tag '%s'", tag);
 }
 
-boolean cdwValidateTagVal(char *tag, char *val)
+static struct hash *makeStringHash(char **array, int size)
+/* Make a hash that contains all elements of array strings of given size */
+{
+struct hash *hash = hashNew(0);
+int i;
+for (i=0; i<size; ++i)
+    hashAdd(hash, array[i], NULL);
+return hash;
+}
+
+static struct hash *makeCvHash()
+/* Turn a bunch of lists of words into hashes for fast lookup of whether
+ * something is in a controlled vocabulary. */
+{
+/* These are just code generate things pasted in for now.  May do something more elegant and
+ * prettier later */
+char *assay[] =
+{
+"ATAC-seq",
+"broad-ChIP-seq",
+"DNAse-seq",
+"exome",
+"Hi-C",
+"long-RNA-seq",
+"methyl-ChIP-seq",
+"narrow-ChIP-seq",
+"RIP-seq",
+"short-RNA-seq",
+"WGBS",
+"WGS",
+};
+char *control[] =
+{
+"untreated",
+"input",
+"mock IP",
+};
+char *disease[] =
+{
+"DCM",
+"HCM",
+"TNM stage IIA, grade 3, ductal carcinoma",
+"chronic myelogenous leukemia (CML)",
+"acute promyelocytic leukemia",
+};
+char *enriched_in[] =
+{
+"coding",
+"exon",
+"genome",
+"intron",
+"open",
+"promoter",
+"unknown",
+"utr",
+"utr3",
+"utr5",
+};
+char *formats[] =
+{
+"bam",
+"bam.bai",
+"bed",
+"bigBed",
+"bigWig",
+"cram",
+"fasta",
+"fastq",
+"gtf",
+"html",
+"idat",
+"jpg",
+"pdf",
+"rcc",
+"text",
+"vcf",
+"unknown",
+};
+char *sequencer[] =
+{
+"Illumina HiSeq 2000",
+"Illumina HiSeq 2500",
+"Illumina HiSeq 3000",
+"Illumina HiSeq 4000",
+"Illumina HiSeq X Five",
+"Illumina HiSeq X Ten",
+"Illumina MiSeq",
+"Illumina MiSeq Dx",
+"Illumina MiSeq FGx",
+"Illumina NextSeq 500",
+"Illumina unknown",
+"PacBio RS II",
+"Ion Torrent Ion Proton",
+"Ion Torrent Ion PGM",
+"Ion Torrent Ion Chef",
+"454 GS FLX+ ",
+"454 GS Junior+ ",
+"SN7001226",
+"HiSeq G0821 SN605",
+"HiSeq at Illumina 700422R",
+"MiSeq G0823 M00361",
+};
+char *species[] =
+{
+"Homo sapiens",
+"Mus musculus",
+};
+char *strain[] =
+{
+"C57BL/6",
+"BALB/c",
+"Sftpc-Cre-ER-T2A-rtta -/- teto-GFP-H2B +/-",
+"Aqp5-Cre-ER +/- mtmg-tdTomato -/-",
+};
+char *target_epitope[] =
+{
+"H3K4Me1",
+"H3K4Me3",
+"H3K27Ac",
+"H3K27Me3",
+"5mC",
+"5hmC",
+};
+
+struct hash *hash = hashNew(0);
+hashAdd(hash, "assay", makeStringHash(assay, ArraySize(assay)));
+hashAdd(hash, "control", makeStringHash(control, ArraySize(control)));
+hashAdd(hash, "disease", makeStringHash(disease, ArraySize(disease)));
+hashAdd(hash, "enriched_in", makeStringHash(enriched_in, ArraySize(enriched_in)));
+hashAdd(hash, "formats", makeStringHash(formats, ArraySize(formats)));
+hashAdd(hash, "sequencer", makeStringHash(sequencer, ArraySize(sequencer)));
+hashAdd(hash, "species", makeStringHash(species, ArraySize(species)));
+hashAdd(hash, "strain", makeStringHash(strain, ArraySize(strain)));
+hashAdd(hash, "target_epitope", makeStringHash(target_epitope, ArraySize(target_epitope)));
+return hash;
+}
+
+void cdwValidateTagVal(char *tag, char *val)
 /* Make sure that tag is one of the allowed ones and that
  * val is compatible */
 {
-return cdwValidateTagName(tag);
+cdwValidateTagName(tag);
+static struct hash *cvHash = NULL;
+if (cvHash == NULL)
+    cvHash = makeCvHash();
+struct hash *hash = hashFindVal(cvHash, tag);
+if (hash != NULL)
+    if (!hashLookup(hash, val))
+       errAbort("%s is not a valid value for tag %s\n", val, tag);
 }
 
 struct slPair *cdwFormatList()

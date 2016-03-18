@@ -42,7 +42,7 @@ void changeFormat(struct sqlConnection *conn, struct cdwValidFile *vf, char *for
 {
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 char *newTags = cgiStringNewValForVar(ef->tags, tagToChange, format);
-cdwFileResetTags(conn, ef, newTags, TRUE);
+cdwFileResetTags(conn, ef, newTags, TRUE, 0);
 cdwFileFree(&ef);
 }
 

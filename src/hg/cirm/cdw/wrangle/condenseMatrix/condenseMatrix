@@ -159,8 +159,8 @@ def main(args):
     if (options.verbose): print ("Start condensing the expression matrix from transcripts to genes (condenseMatrix).")
     
     # The environment variable CIRM must be set to the base cirm directory, on hgwdev this is /hive/groups/cirm 
-    humanMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/trscptToGenes.hg38", False)
-    mouseMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/trscptToGenes.mm10", False)
+    humanMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/encode79HumanTrscrptToGene.tab", False)
+    mouseMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/encode79MouseTrscrptToGene.tab", False)
     
     # Making use of python's temporary files. 
     intermediateFile = tempfile.NamedTemporaryFile(mode="w+",bufsize=1)

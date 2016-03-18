@@ -453,8 +453,8 @@ exonNumbers off
 urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www.lens.org/lens/patent/$$" claimSeqIds="http://www.lens.org/lens/patent/$$" grantSeqIds="http://www.lens.org/lens/patent/$$" appSeqIds="http://www.lens.org/lens/patent/$$"
 
         track patNonBulk
-        shortLabel Patent Lens Non-bulk patents
-        longLabel Non-bulk patents
+        shortLabel Non-bulk patents
+        longLabel Patent Lens Non-bulk patents
         parent patSeq
         type bigBed 12 +
         visibility dense
@@ -462,8 +462,8 @@ urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www
         release alpha
 
         track patBulk
-        shortLabel Patent Lens Bulk patents
-        longLabel Bulk patents
+        shortLabel Bulk patents
+        longLabel Patent Lens Bulk patents
         parent patSeq
         type bigBed 12 +
         visibility hide

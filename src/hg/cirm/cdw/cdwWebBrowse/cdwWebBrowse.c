@@ -571,17 +571,46 @@ return suggestHash;
 }
 
 
+static struct hash *sqlHashFields(struct sqlConnection *conn, char *table)
+/* Return a hash containing all fields in table */
+{
+struct slName *field, *fieldList = sqlListFields(conn, table);
+struct hash *hash = hashNew(7);
+for (field = fieldList; field != NULL; field = field->next)
+    hashAdd(hash, field->name, NULL);
+slFreeList(&fieldList);
+return hash;
+}
+
+static char *filterFieldsToJustThoseInTable(struct sqlConnection *conn, char *fields, char *table)
+/* Return subset of all fields just containing those that exist in table */
+{
+struct hash *hash = sqlHashFields(conn, table);
+struct slName *name, *nameList = slNameListFromComma(fields);
+struct dyString *dy = dyStringNew(strlen(fields));
+char *separator = "";
+for (name = nameList; name != NULL; name = name->next)
+    {
+    char *s = name->name;
+    if (hashLookup(hash, s))
+	{
+        dyStringPrintf(dy, "%s%s", separator, s);
+	separator = ",";
+	}
+    }
+hashFree(&hash);
+slFreeList(&nameList);
+return dyStringCannibalize(&dy);
+}
+
+
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
-    char *searchString, char *fields, char *from, char *initialWhere,  
+    char *searchString, char *allFields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, int pageSize)
 {
-/* Do precalculation for quicker auth check */
-int userId = 0;
-if (user != NULL)
-    userId = user->id;
-
+char *fields = filterFieldsToJustThoseInTable(conn, allFields, "cdwFileTags");	    // TODO - remove and show Max bug
 /* Get list of files we are authorized to see, and return early if empty */
 struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
 if (efList == NULL)

@@ -251,10 +251,10 @@ void cdwWriteErrToTable(struct sqlConnection *conn, char *table, int id, char *e
 void cdwWriteErrToStderrAndTable(struct sqlConnection *conn, char *table, int id, char *err);
 /* Write out error message to errorMessage field of table. */
 
-void cdwAddJob(struct sqlConnection *conn, char *command);
+void cdwAddJob(struct sqlConnection *conn, char *command, int submitId);
 /* Add job to queue to run. */
 
-void cdwAddQaJob(struct sqlConnection *conn, long long fileId);
+void cdwAddQaJob(struct sqlConnection *conn, long long fileId, int submitId);
 /* Create job to do QA on this and add to queue */
 
 struct cdwSubmit *cdwSubmitFromId(struct sqlConnection *conn, long long id);
@@ -320,8 +320,8 @@ struct cdwFile *cdwFileInProgress(struct sqlConnection *conn, int submitId);
 struct cdwScriptRegistry *cdwScriptRegistryFromCgi();
 /* Get script registery from cgi variables.  Does authentication too. */
 
-void cdwFileResetTags(struct sqlConnection *conn, struct cdwFile *ef, char *newTags,
-    boolean revalidate);
+void cdwFileResetTags(struct sqlConnection *conn, struct cdwFile *ef, char *newTags, 
+    boolean revalidate, int submitId);
 /* Reset tags on file, strip out old validation and QA,  optionally schedule new validation 
  * and QA. */
 
