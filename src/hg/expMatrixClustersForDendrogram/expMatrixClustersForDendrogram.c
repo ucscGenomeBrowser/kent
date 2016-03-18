@@ -204,6 +204,9 @@ struct slRef *getOrderedLeafList(struct hacTree *tree)
 
 
 static void printJsonNode(FILE *f, struct hacTree *tree, int level, double distance, struct slName *geneNames) 
+/* Prints out a json node, NOTE this is not strict .json the downstream script
+ * addMetaDataToJson uses the line breaks to ease the .json additions (this lets it be done line by line, rather
+ * than unpacking the full .json). */ 
     {
     int i; 
     struct bioExpVector *bio = (struct bioExpVector *)tree->itemOrCluster;
@@ -247,11 +250,8 @@ static void printJsonNode(FILE *f, struct hacTree *tree, int level, double dista
 	}
     fprintf(f, "\"normalizedDistance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\", \"whiteTo", 
 			distance, wTB.r, wTB.g, wTB.b); 
-    fprintf(f, "BlackSqrt\":\"rgb(%i,%i,%i)\", \"whiteToBlackQuad\":\"rgb(%i,%i,%i)\",\n",
+    fprintf(f, "BlackSqrt\":\"rgb(%i,%i,%i)\", \"whiteToBlackQuad\":\"rgb(%i,%i,%i)\", \"children\":[\n",
 			wTBsqrt.r, wTBsqrt.g, wTBsqrt.b, wTBquad.r, wTBquad.g, wTBquad.b);
-    for (i = 0;  i < level + 1;  i++)
-	fputc(' ', f);
-    fprintf(f, "\"children\":[\n");
     }
 
 static void rPrintHierarchicalJson(FILE *f, struct hacTree *tree, int level, double distance, struct slName *geneNames)
@@ -392,13 +392,13 @@ struct slList *slBioExpVectorMerge(const struct slList *item1, const struct slLi
     return (struct slList *)(el);
     }
 
-const struct slList *lastLeaf = NULL; 
 
 bool slBioExpVectorCmp(const struct slList *item1, const struct slList *item2,
-				void *unusedExtraData)
+				void *extraData)
 /* Compare two bioExpVectors to decide which one becomes the left child and which becomes the right. 
  * Return TRUE if item 1 is left child and item 2 is right child.  */ 
     {
+    const struct slList *lastLeaf = extraData;  
     const struct bioExpVector *kid1 = (const struct bioExpVector *)item1;
     const struct bioExpVector *kid2 = (const struct bioExpVector *)item2;
     if (kid1->children !=1 && kid2->children ==1) lastLeaf = item2; 
@@ -595,9 +595,10 @@ void expData(char *matrixFile, char *outDir, char *descFile)
     /* Allocate new string that is a concatenation of two strings. */
     struct hacTree *clusters = NULL;
 
+    const struct slList *lastLeaf = NULL; 
     verbose(2,"Using %i threads. \n", clThreads);  
     clusters = hacTreeMultiThread(clThreads, (struct slList *)list, localMem, slBioExpVectorDistance,
-				slBioExpVectorMerge, slBioExpVectorCmp,  NULL, NULL);
+				slBioExpVectorMerge, slBioExpVectorCmp,(void *)lastLeaf, NULL);
 
     struct slRef *orderedList = getOrderedLeafList(clusters);
     colorLeaves(orderedList);
