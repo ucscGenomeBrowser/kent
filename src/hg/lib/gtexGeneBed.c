@@ -10,7 +10,46 @@
 
 
 
-char *gtexGeneBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,geneId,transcriptId,transcriptClass,expCount,expScores";
+char *gtexGeneBedCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,geneId,geneType,expCount,expScores";
+
+struct gtexGeneBed *gtexGeneBedLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all gtexGeneBed from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexGeneBedFreeList(). */
+{
+struct gtexGeneBed *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = gtexGeneBedLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void gtexGeneBedSaveToDb(struct sqlConnection *conn, struct gtexGeneBed *el, char *tableName, int updateSize)
+/* Save gtexGeneBed as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+char  *expScoresArray;
+expScoresArray = sqlFloatArrayToString(el->expScores, el->expCount);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s',%u,'%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->geneId,  el->geneType,  el->expCount,  expScoresArray );
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&expScoresArray);
+}
 
 struct gtexGeneBed *gtexGeneBedLoad(char **row)
 /* Load a gtexGeneBed from row fetched with select * from gtexGeneBed
@@ -19,7 +58,7 @@ struct gtexGeneBed *gtexGeneBedLoad(char **row)
 struct gtexGeneBed *ret;
 
 AllocVar(ret);
-ret->expCount = sqlUnsigned(row[9]);
+ret->expCount = sqlUnsigned(row[8]);
 ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
@@ -27,11 +66,10 @@ ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->geneId = cloneString(row[6]);
-ret->transcriptId = cloneString(row[7]);
-ret->transcriptClass = cloneString(row[8]);
+ret->geneType = cloneString(row[7]);
 {
 int sizeOne;
-sqlFloatDynamicArray(row[10], &ret->expScores, &sizeOne);
+sqlFloatDynamicArray(row[9], &ret->expScores, &sizeOne);
 assert(sizeOne == ret->expCount);
 }
 return ret;
@@ -43,7 +81,7 @@ struct gtexGeneBed *gtexGeneBedLoadAll(char *fileName)
 {
 struct gtexGeneBed *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +99,7 @@ struct gtexGeneBed *gtexGeneBedLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexGeneBed *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[11];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -89,8 +127,7 @@ ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->geneId = sqlStringComma(&s);
-ret->transcriptId = sqlStringComma(&s);
-ret->transcriptClass = sqlStringComma(&s);
+ret->geneType = sqlStringComma(&s);
 ret->expCount = sqlUnsignedComma(&s);
 {
 int i;
@@ -117,8 +154,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->geneId);
-freeMem(el->transcriptId);
-freeMem(el->transcriptClass);
+freeMem(el->geneType);
 freeMem(el->expScores);
 freez(pEl);
 }
@@ -162,11 +198,7 @@ fprintf(f, "%s", el->geneId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->transcriptId);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->transcriptClass);
+fprintf(f, "%s", el->geneType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->expCount);
@@ -200,8 +232,7 @@ sqlSafef(query, sizeof(query),
 "   score int unsigned not null,	# Score from 0-1000\n"
 "   strand char(1) not null,	# + or - for strand\n"
 "   geneId varchar(255) not null,	# Ensembl gene ID, referenced in GTEx data tables\n"
-"   transcriptId varchar(255) not null,	# Ensembl ID of Canonical transcript; determines genomic position\n"
-"   transcriptClass varchar(255) not null,	# GENCODE transcript class (coding, nonCoding, pseudo)\n"
+"   geneType varchar(255) not null,	# GENCODE gene biotype\n"
 "   expCount int unsigned not null,	# Number of experiment values\n"
 "   expScores longblob not null,	# Comma separated list of experiment scores\n"
           "#Indices\n"
@@ -217,5 +248,35 @@ char *gtexVersionSuffix(char *table)
 if (endsWith(table, "V4"))
     return("V4");
 return("");
+}
+
+char *gtexGeneClass(struct gtexGeneBed *geneBed)
+/* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype 
+ * Mapped as follows:
+
+ * coding: IG_C_gene, IG_D_gene, IG_J_gene, IG_V_gene, 
+               TR_C_gene, TR_D_gene, TR_J_gene, TR_V_gene 
+               polymorphic_pseudogene, protein_coding
+
+ * pseudo: IG_C_pseudogene, IG_J_pseudogene, IG_V_pseudogene, TR_J_pseudogene, TR_V_pseudogene,
+               pseudogene 
+
+ * nonCoding: 3prime_overlapping_ncrna, Mt_rRNA, Mt_tRNA, antisense, lincRNA, miRNA, 
+                misc_RNA, processed_transcript, rRNA, sense_intronic, sense_overlapping, 
+                snRNA, snoRNA
+ * (MarkD request out for approval).
+*/
+{
+char *geneType = geneBed->geneType;
+if (geneType == NULL)
+    return "unknown";
+if (sameString(geneType, "coding") || sameString(geneType, "protein_coding") ||
+        sameString(geneType, "polymorphic_pseudogene") || endsWith(geneType, "_gene"))
+    return "coding";
+if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") ||
+        endsWith(geneType, "_pseudogene"))
+    return "pseudo";
+// A bit of a cheat here -- better a mapping table
+return "nonCoding";
 }
 
