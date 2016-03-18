@@ -239,18 +239,18 @@ static void printJsonNode(FILE *f, struct hacTree *tree, int level, double dista
     struct rgbColor wTBsqrt; 
     struct rgbColor wTBquad; 
     if (distance == 0) {
-	wTB = whiteToBlackRainbowAtPos(0);
-	wTBsqrt = whiteToBlackRainbowAtPos(0);
-	wTBquad = whiteToBlackRainbowAtPos(0);
+	wTB = greyScaleRainbowAtPos(0);
+	wTBsqrt = greyScaleRainbowAtPos(0);
+	wTBquad = greyScaleRainbowAtPos(0);
 	}
     else  {
-	wTB = whiteToBlackRainbowAtPos(distance*.95);
-	wTBsqrt = whiteToBlackRainbowAtPos(sqrt(distance*.95));
-	wTBquad = whiteToBlackRainbowAtPos(sqrt(sqrt(distance*.95)));
+	wTB = greyScaleRainbowAtPos(distance*.95);
+	wTBsqrt = greyScaleRainbowAtPos(sqrt(distance*.95));
+	wTBquad = greyScaleRainbowAtPos(sqrt(sqrt(distance*.95)));
 	}
-    fprintf(f, "\"normalizedDistance\": \"%f\", \"whiteToBlack\":\"rgb(%i,%i,%i)\", \"whiteTo", 
+    fprintf(f, "\"normalizedDistance\": \"%f\", \"greyScale\":\"rgb(%i,%i,%i)\", \"whiteTo", 
 			distance, wTB.r, wTB.g, wTB.b); 
-    fprintf(f, "BlackSqrt\":\"rgb(%i,%i,%i)\", \"whiteToBlackQuad\":\"rgb(%i,%i,%i)\", \"children\":[\n",
+    fprintf(f, "BlackSqrt\":\"rgb(%i,%i,%i)\", \"greyScaleQuad\":\"rgb(%i,%i,%i)\", \"children\":[\n",
 			wTBsqrt.r, wTBsqrt.g, wTBsqrt.b, wTBquad.r, wTBquad.g, wTBquad.b);
     }
 
@@ -470,7 +470,7 @@ void colorLeaves(struct slRef *leafList)
 	if (firstLine) // Handle the first two nodes, color them both the same 
 	    {
 	    double normalized = distance/total; 
-	    struct rgbColor col = whiteToBlackRainbowAtPos(normalized); 
+	    struct rgbColor col = greyScaleRainbowAtPos(normalized); 
 	    bio1->color = col; 
 	    bio2->color = col; 
 	    firstLine = FALSE;
@@ -478,8 +478,8 @@ void colorLeaves(struct slRef *leafList)
 	    }
 	double normalized = distance/total; 
 	// Color the next node based on distance from previous leaf node
-	if (normalized >= .95) bio2->color = whiteToBlackRainbowAtPos(.95);
-	else bio2->color = whiteToBlackRainbowAtPos(normalized); 
+	if (normalized >= .95) bio2->color = greyScaleRainbowAtPos(.95);
+	else bio2->color = greyScaleRainbowAtPos(normalized); 
 	}
     }
 
