@@ -13,6 +13,8 @@ def parseArgs():
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-c", "--countsFile", dest="countsFname", action="store", help="tab file with (patentId,seqCount) lines. Used to annotate the patent IDs")
+    parser.add_option("-m", "--removeMt", dest="removeMt", action="store_true", help="remove the MT chrom, only useful for hg19")
+    parser.add_option("", "--renameM", dest="renameM", action="store_true", help="rename the MT chrom to chrM")
     #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
     #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
     (options, args) = parser.parse_args()
@@ -80,8 +82,10 @@ def main():
         chrom, start, end, seqFprint, score, strand, thickStart, thickEnd, itemRgb, blockCount, blockSizes, blockStarts, docCount, claimCount, grantCount, orgDesc, dateDesc, intDocStr, extDocStr, seqIdStr, titleDesc, isGrantsStr, isInClaimsStr = row
 
         # patLens uses the Ensembl genome files
-        if chrom=="MT":
+        if chrom=="MT" and options.removeMt:
             continue
+        if chrom=="MT" and options.renameM:
+            chrom = "chrM"
         if chrom[0] in "0123456789XY":
             chrom = "chr"+row[0]
 
