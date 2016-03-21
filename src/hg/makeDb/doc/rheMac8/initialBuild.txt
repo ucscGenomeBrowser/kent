@@ -516,6 +516,18 @@ rheMac8.upstreamGeneTbl = refGene
 
     # see if the liftOver menus function in the browser from rheMac8 to Mac2
 
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-03-21 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rheMac8", "blat1b", "17860", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rheMac8", "blat1b", "17861", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
 ############################################################################
 ## reset default position to rheMac3 position (DONE - 2016-02-09 - Hiram)
     ssh hgwdev
