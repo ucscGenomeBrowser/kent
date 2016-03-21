@@ -241,8 +241,8 @@ char *geneClass = gtexGeneClass(gtexGene);
 printf("<b>GENCODE Biotype: </b> %s<br>\n", gtexGene->geneType); 
 printf("<b>Gene Class: </b><span style='color: %s'>%s</span><br>\n", 
             geneClassColorCode(geneClass), geneClass);
-printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
-                        hgTracksPathAndSettings(), database, 
+printf("<b>Genomic Position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+                        database, hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
 printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
