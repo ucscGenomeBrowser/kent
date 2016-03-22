@@ -442,7 +442,7 @@ visibility hide
 type bigBed 12 +
 itemRgb on
 compositeTrack on
-release alpha
+release alpha,beta
 linkIdInName on
 mouseOverField mouseOver
 url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/$[-$]?appInClaims=1
@@ -459,7 +459,7 @@ urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www
         type bigBed 12 +
         visibility dense
         priority 1
-        release alpha
+        release alpha,beta
 
         track patBulk
         shortLabel Bulk patents
@@ -468,7 +468,7 @@ urls intDocIds="http://www.lens.org/lens/patent/$$" claimGrantSeqIds="http://www
         type bigBed 12 +
         visibility hide
         priority 2
-        release alpha
+        release alpha,beta
 
 track transMap
 superTrack on
