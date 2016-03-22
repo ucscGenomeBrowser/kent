@@ -157,7 +157,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 /*  Fill in tissue descriptions, fill values array and calculate stats for plotting
         Then make a list, suitable for sorting by tissue or score
     NOTE: Most of this not needed for R implementation */
-struct gtexTissue *tis = NULL, *tissues = gtexGetTissues();
+struct gtexTissue *tis = NULL, *tissues = gtexGetTissues(version);
 struct tissueSampleVals *tsList = NULL;
 int i;
 if (doLogTransform)

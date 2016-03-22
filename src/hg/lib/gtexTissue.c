@@ -7,6 +7,7 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "gtexInfo.h"
 #include "gtexTissue.h"
 
 
@@ -196,25 +197,27 @@ sqlSafef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
-struct gtexTissue *gtexGetTissues()
+struct gtexTissue *gtexGetTissues(char *version)
 /* Get tissue id, descriptions, colors, etc. */
 {
 char query[1024];
 struct sqlConnection *conn = hAllocConn("hgFixed");
-sqlSafef(query, sizeof(query), "select * from gtexTissue order by id");
+sqlSafef(query, sizeof(query), "select * from gtexTissue%s order by id", 
+                gtexVersionSuffix(version));
 struct gtexTissue *gtexTissues = gtexTissueLoadByQuery(conn, query);
 hFreeConn(&conn);
 return gtexTissues;
 }
 
-struct hash *gtexGetTissueSampleCount()
+struct hash *gtexGetTissueSampleCount(char *version)
 /* Return hash of sample counts keyed by tissue name */
 {
 char query[1024];
 struct sqlResult *sr;
 char **row;
 struct sqlConnection *conn = hAllocConn("hgFixed");
-sqlSafef(query, sizeof(query), "select tissue, count(tissue) from gtexSample group by tissue");
+sqlSafef(query, sizeof(query), "select tissue, count(tissue) from gtexSample%s group by tissue",
+                                        gtexVersionSuffix(version));
 struct hash *tscHash = hashNew(0);
 sr = sqlGetResult(conn,query);
 while ((row = sqlNextRow(sr)) != NULL)

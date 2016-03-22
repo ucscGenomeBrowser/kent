@@ -81,10 +81,10 @@ void gtexTissueOutput(struct gtexTissue *el, FILE *f, char sep, char lastSep);
 void gtexTissueCreateTable(struct sqlConnection *conn, char *table);
 /* Create expression record format table of given name. */
 
-struct gtexTissue *gtexGetTissues();
+struct gtexTissue *gtexGetTissues(char *version);
 /* Get tissue id, descriptions, colors, etc. */
 
-struct hash *gtexGetTissueSampleCount();
+struct hash *gtexGetTissueSampleCount(char *version);
 /* Return hash of sample counts keyed by tissue name */
 
 struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb);
