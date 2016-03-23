@@ -18,6 +18,7 @@ struct gtexGeneExtras
 /* Track info */
     {
     char *version;              /* Suffix to table name, e.g. 'V6' */
+    boolean codingOnly;       /* User filter to limit display to coding genes */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -95,36 +96,36 @@ return statusColors.unknown;
 /***********************************************/
 /* Cache tissue info */
 
-struct gtexTissue *getTissues()
+struct gtexTissue *getTissues(char *version)
 /* Get and cache tissue metadata from database */
 {
 static struct gtexTissue *gtexTissues = NULL;
 
 if (!gtexTissues)
-    gtexTissues = gtexGetTissues();
+    gtexTissues = gtexGetTissues(version);
 return gtexTissues;
 }
 
-int getTissueCount()
+int getTissueCount(char *version)
 /* Get and cache the number of tissues in GTEx tissue table */
 {
 static int tissueCount = 0;
 
 if (!tissueCount)
-    tissueCount = slCount(getTissues());
+    tissueCount = slCount(getTissues(version));
 return tissueCount;
 }
 
-char *getTissueName(int id)
+char *getTissueName(int id, char *version)
 /* Get tissue name from id, cacheing */
 {
 static char **tissueNames = NULL;
 
 struct gtexTissue *tissue;
-int count = getTissueCount();
+int count = getTissueCount(version);
 if (!tissueNames)
     {
-    struct gtexTissue *tissues = getTissues();
+    struct gtexTissue *tissues = getTissues(version);
     AllocArray(tissueNames, count);
     for (tissue = tissues; tissue != NULL; tissue = tissue->next)
         tissueNames[tissue->id] = cloneString(tissue->name);
@@ -134,10 +135,10 @@ if (id >= count)
 return tissueNames[id];
 }
 
-struct rgbColor *getGtexTissueColors()
+struct rgbColor *getGtexTissueColors(char *version)
 /* Get RGB colors from tissue table */
 {
-struct gtexTissue *tissues = getTissues();
+struct gtexTissue *tissues = getTissues(version);
 struct gtexTissue *tissue = NULL;
 int count = slCount(tissues);
 struct rgbColor *colors;
@@ -219,10 +220,10 @@ if (extras->isComparison)
         {
         //medians1[i] = -1, medians2[i] = -1;       // mark missing tissues ?
         struct slDouble *scores;
-        scores = hashFindVal(scoreHash1, getTissueName(i));
+        scores = hashFindVal(scoreHash1, getTissueName(i, extras->version));
         if (scores)
             medians1[i] = slDoubleMedian(scores);
-        scores = hashFindVal(scoreHash2, getTissueName(i));
+        scores = hashFindVal(scoreHash2, getTissueName(i, extras->version));
         if (scores)
             medians2[i] = slDoubleMedian(scores);
         }
@@ -254,7 +255,7 @@ static void filterTissues(struct track *tg)
 {
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexTissue *tis = NULL;
-extras->tissues = getTissues();
+extras->tissues = getTissues(extras->version);
 extras->tissueFilter = hashNew(0);
 if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, GTEX_TISSUE_SELECT))
     {
@@ -308,7 +309,8 @@ char *comparison = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COMPA
                         GTEX_COMPARISON_DEFAULT);
 extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FALSE;
 extras->maxMedian = gtexMaxMedianScore(extras->version);
-
+extras->codingOnly = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_CODING_GENE_FILTER,
+                                                        GTEX_CODING_GENE_FILTER_DEFAULT);
 /* Get geneModels in range */
 char buf[256];
 char *modelTable = "gtexGeneModel";
@@ -331,7 +333,7 @@ char *colorScheme = GTEX_COLORS_DEFAULT;
 #endif
 if (sameString(colorScheme, GTEX_COLORS_GTEX))
     {
-    extras->colors = getGtexTissueColors();
+    extras->colors = getGtexTissueColors(extras->version);
     }
 else
     {
@@ -345,6 +347,12 @@ filterTissues(tg);
 
 while (geneBed != NULL)
     {
+    if (extras->codingOnly && !gtexGeneIsCoding(geneBed))
+        {
+        // apologies for messy short-circuit
+        geneBed = geneBed->next;
+        continue;
+        }
     AllocVar(geneInfo);
     geneInfo->geneBed = geneBed;
     geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
@@ -522,7 +530,7 @@ int expCount = geneBed->expCount;
 double expScore;
 for (i=0; i<expCount; i++)
     {
-    if (!filterTissue(tg, getTissueName(i)))
+    if (!filterTissue(tg, getTissueName(i, extras->version)))
         continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
@@ -762,7 +770,7 @@ int x1 = insideX;
 
 
 // add maps to tissue bars in expresion graph
-struct gtexTissue *tissues = getTissues();
+struct gtexTissue *tissues = getTissues(extras->version);
 struct gtexTissue *tissue = NULL;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();
