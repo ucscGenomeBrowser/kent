@@ -10,15 +10,15 @@ html gap
 
 # Local declaration so that patents are in the right group
 track patSeq override
-release alpha
+release alpha,beta
 group pub
 
 track patNonBulk override
-release alpha
+release alpha,beta
 group pub
 
 track patBulk override
-release alpha
+release alpha,beta
 group pub
 
 #track gc5BaseBw override
