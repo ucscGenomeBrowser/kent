@@ -70,8 +70,10 @@ int i;
 for (tsv = tsvList; tsv != NULL; tsv = tsv->next)
     {
     int count = tsv->count;
+    // remove trailing parenthesized phrases as not worth label length
+    chopSuffixAt(tsv->description, '(');
     for (i=0; i<count; i++)
-        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->name, tsv->vals[i]);
+        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->description, tsv->vals[i]);
     }
 fclose(f);
 
@@ -88,12 +90,7 @@ safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %
 
 int ret = system(cmd);
 if (ret == 0)
-    {
     printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
-    //printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
-                    //pngTn.forHtml, imageWidth, imageHeight);
-                    //pngTn.forHtml, 900, 500);
-    }
 }
 
 struct gtexGeneBed *getGtexGene(char *item, char *table)
