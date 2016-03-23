@@ -31389,6 +31389,10 @@ sam2psl_pierre hg19.sam 2> /dev/null > hg19.psl
 pslToBed hg19.psl hg19.bed
 # careful: this text includes tab characters
 sed -ri 's/_(16|0)	/	/g' hg19.bed
+# sort by name
+# The -S10G parameter is only supported in newer sort versions
+# if it complains, just remove it. It will just take longer.
+time sort -k4,4 -S10G --parallel=20 hg19.bed > hg19.s4.bed
 
 # convert the hg19 bed to bigBed
 cd /hive/data/genomes/hg19/bed/patents/hg19

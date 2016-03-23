@@ -111,7 +111,7 @@ static struct hash* dbToProfile = NULL;           // db to sqlProfile
 // forward declarations to keep the git diffs clean
 static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
 	char *query, ResGetter *getter, boolean abort);
-static void sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort);
+static boolean sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort);
 bool sqlConnMustUseFailover(struct sqlConnection *sc);
 
 static char *envOverride(char *envName, char *defaultVal)
@@ -1277,16 +1277,17 @@ struct sqlConnection *sqlMayConnect(char *database)
 return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 }
 
-static void sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort)
-/* Take a yet unconnected sqlConnection object and connect it to the sql server. */
+static boolean sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort)
+/* Take a yet unconnected sqlConnection object and connect it to the sql server. 
+ * returns TRUE on success, FALSE otherwise. */
 {
 if (sc->conn!=NULL)
-    return;
+    return TRUE;
 char *profName = NULL;
 if (sc->profile)
     profName = sc->profile->name;
 struct sqlProfile *sp = sqlProfileMustGet(profName, sc->db);
-sqlConnRemoteFillIn(sc, sp, sc->db, abort, FALSE);
+return (sqlConnRemoteFillIn(sc, sp, sc->db, abort, FALSE) != NULL);
 }
 
 struct sqlConnection *sqlConnect(char *database)
@@ -1390,6 +1391,7 @@ static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,
  */
 {
 struct sqlResult *res = NULL;
+struct sqlConnection *scMain = sc;
 long deltaTime;
 boolean fixedMultipleNOSQLINJ = FALSE;
 
@@ -1432,8 +1434,12 @@ if (mysqlError != 0 && sc->failoverConn && sameWord(sqlGetDatabase(sc), sqlGetDa
             scConnProfile(sc->failoverConn), query);
 
     sc = sc->failoverConn;
-    sqlConnectIfUnconnected(sc, TRUE);
-    mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+    if (sqlConnectIfUnconnected(sc, FALSE))
+        mysqlError = mysql_real_query(sc->conn, query, strlen(query));
+    else
+        // This database does not exist on the (slow-db) failover mysql server
+        // It makes more sense to the show the error message we got from our main db
+        sc = scMain;
     }
 
 if (mysqlError != 0)
@@ -2524,8 +2530,7 @@ sc->db = cloneString(database);
 
 if (mustConnect)
     {
-    sqlConnectIfUnconnected(sc, FALSE);
-    if (sc->conn==NULL)
+    if (!sqlConnectIfUnconnected(sc, FALSE))
         {
         monitorPrint(sc, "SQL_SET_DB_FAILED", "%s", database);
         return -1;
