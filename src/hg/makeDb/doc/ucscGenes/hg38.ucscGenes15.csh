@@ -1596,7 +1596,7 @@ rm -r run.*/out
 ### get the full knownToLocusLinkTable
 # hgsql -Ne 'select value from knownToLocusLink' hg38 | sort -u >> knToLocusLink
 ###   query Wikipedia for each to if there is an article
-# for i in $(cat knToLocusLink); do lynx -dump "http://api.genewikiplus.org/biogps-plugins/wp/"$i | grep -m 1 "no results" >trash ; echo $? $i | grep "1 "| awk '{print $2}'>> workingLinks; done
+# for i in $(cat knToLocusLink); do lynx -dump "http://genewiki.sulab.org/map/wiki/"$i | grep -m 1 "no results" >trash ; echo $? $i | grep "1 "| awk '{print $2}'>> workingLinks; done
 ###   pull out all isoforms that have permitted LocusLinkIds
 # for i in $(cat workingLinks); do hgsql -Ne 'select * from knownToLocusLink where value like "'$i'"' hg38 >> knownToWikipediaNew; done
 ###   then load the table as knownToWikipedia using the knowToLocusLink INDICES.

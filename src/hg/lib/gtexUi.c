@@ -309,6 +309,13 @@ char *version = gtexVersion(tdb->table);
 printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
 printf("</div>");
 
+/* Filter on coding genes */
+printf("<div><b>Limit to protein coding genes:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
+boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
+cgiMakeCheckBox(cartVar, isCodingOnly);
+printf("</div>");
+
 /* Sample selection */
 printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);

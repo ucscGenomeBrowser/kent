@@ -272,3 +272,8 @@ if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") ||
 return "nonCoding";
 }
 
+boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed)
+/* Return TRUE if biotype indicates this is a protein coding gene */
+{
+return sameString("coding", gtexGeneClass(geneBed));
+}
