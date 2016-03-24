@@ -5,7 +5,8 @@
 #ifndef GTEXGENEBED_H
 #define GTEXGENEBED_H
 
-#define GTEXGENEBED_NUM_COLS 11
+#include "jksql.h"
+#define GTEXGENEBED_NUM_COLS 10
 
 extern char *gtexGeneBedCommaSepFieldNames;
 
@@ -20,11 +21,24 @@ struct gtexGeneBed
     unsigned score;	/* Score from 0-1000 */
     char strand[2];	/* + or - for strand */
     char *geneId;	/* Ensembl gene ID, referenced in GTEx data tables */
-    char *transcriptId;	/* Ensembl ID of Canonical transcript; determines genomic position */
-    char *transcriptClass;	/* GENCODE transcript class (coding, nonCoding, pseudo) */
+    char *geneType;	/* GENCODE gene biotype */
     unsigned expCount;	/* Number of experiment values */
     float *expScores;	/* Comma separated list of experiment scores */
     };
+
+struct gtexGeneBed *gtexGeneBedLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all gtexGeneBed from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with gtexGeneBedFreeList(). */
+
+void gtexGeneBedSaveToDb(struct sqlConnection *conn, struct gtexGeneBed *el, char *tableName, int updateSize);
+/* Save gtexGeneBed as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 
 struct gtexGeneBed *gtexGeneBedLoad(char **row);
 /* Load a gtexGeneBed from row fetched with select * from gtexGeneBed
@@ -64,11 +78,19 @@ void gtexGeneBedOutput(struct gtexGeneBed *el, FILE *f, char sep, char lastSep);
 /* Print out gtexGeneBed as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+
 void gtexGeneBedCreateTable(struct sqlConnection *conn, char *table);
 /* Create expression record format table of given name. */
 
 char *gtexVersionSuffix(char *table);
 /* Return version string for a GTEx track table.  For now, just supporting V4 (no suffix) and V6 */
+
+char *gtexGeneClass(struct gtexGeneBed *geneBed);
+/* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype */
+
+boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed);
+/* Return TRUE if biotype indicates this is a protein coding gene */
 
 #endif /* GTEXGENEBED_H */
 

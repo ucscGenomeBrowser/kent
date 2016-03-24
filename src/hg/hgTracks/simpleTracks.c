@@ -2397,7 +2397,9 @@ for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, 
 	if (xExonStart < virtWinEnd)
 	    {
 	    /* not an intron hanging over edge. */
-	    if ((xTallEnd != -1) && (xTallEnd > virtWinEnd) && (xTallEnd < xExonEnd) && (xTallEnd > xExonStart))
+	    if ((xTallStart != -1) && (xTallStart > virtWinEnd) && (xTallStart < xExonEnd) && (xTallStart > xExonStart))
+		linkedFeaturesMoveWinEnd(xTallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else if ((xTallEnd != -1) && (xTallEnd > virtWinEnd) && (xTallEnd < xExonEnd) && (xTallEnd > xExonStart))
 		linkedFeaturesMoveWinEnd(xTallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
 		linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
@@ -2420,7 +2422,9 @@ for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, 
 	if (xExonEnd > virtWinStart)
 	    {
 	    /* not an intron hanging over the edge. */
-	    if ((xTallStart != -1) && (xTallStart < virtWinStart) && (xTallStart > xExonStart) && (xTallStart < xExonEnd))
+	    if ((xTallEnd != -1) && (xTallEnd < virtWinStart) && (xTallEnd > xExonStart) && (xTallEnd < xExonEnd))
+		linkedFeaturesMoveWinStart(xTallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	    else if ((xTallStart != -1) && (xTallStart < virtWinStart) && (xTallStart > xExonStart) && (xTallStart < xExonEnd))
 		linkedFeaturesMoveWinStart(xTallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	    else
 		linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);

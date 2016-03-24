@@ -18,6 +18,7 @@ struct gtexGeneExtras
 /* Track info */
     {
     char *version;              /* Suffix to table name, e.g. 'V6' */
+    boolean codingOnly;       /* User filter to limit display to coding genes */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -33,7 +34,7 @@ struct gtexGeneInfo
 /* GTEx gene model, names, and expression medians */
     {
     struct gtexGeneInfo *next;  /* Next in singly linked list */
-    struct gtexGeneBed *geneBed;/* Gene name, id, canonical transcript, exp count and medians 
+    struct gtexGeneBed *geneBed;/* Gene name, id, type, exp count and medians 
                                         from BED table */
     struct genePred *geneModel; /* Gene structure from model table */
     char *description;          /* Gene description */
@@ -77,75 +78,54 @@ statusColors.unknown = hvGfxFindColorIx(hvg, unknownColor.r, unknownColor.g, unk
 }
 
 static Color getGeneClassColor(struct hvGfx *hvg, struct gtexGeneBed *geneBed)
-/* Find GENCODE color for gene type.
- * NOTE: this is based on defined gene biotypes from GENCODE V19, mapped to the classes
- * defined for transcripts, as follows:
-
- * coding: IG_C_gene, IG_D_gene, IG_J_gene, IG_V_gene, 
-               TR_C_gene, TR_D_gene, TR_J_gene, TR_V_gene 
-               polymorphic_pseudogene, protein_coding
-
- * pseudo: IG_C_pseudogene, IG_J_pseudogene, IG_V_pseudogene, TR_J_pseudogene, TR_V_pseudogene,
-               pseudogene 
-
- * nonCoding: 3prime_overlapping_ncrna, Mt_rRNA, Mt_tRNA, antisense, lincRNA, miRNA, 
-                misc_RNA, processed_transcript, rRNA, sense_intronic, sense_overlapping, 
-                snRNA, snoRNA
-*/
-
+/* Find GENCODE color for gene type. */
 {
 initGeneColors(hvg);
-char *geneType = geneBed->transcriptClass;
-
-/* keep backwards compatibility with tables (V4 having transcript classes in table) */
-if (geneType == NULL)
+char *geneClass = gtexGeneClass(geneBed);
+if (geneClass == NULL)
     return statusColors.unknown;
-
-if (sameString(geneType, "coding") || sameString(geneType, "protein_coding") || 
-        sameString(geneType, "polymorphic_pseudogene") || endsWith(geneType, "_gene"))
+if (sameString(geneClass, "coding"))
     return statusColors.coding;
-
-if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") || 
-        endsWith(geneType, "_pseudogene"))
+if (sameString(geneClass, "nonCoding"))
     return statusColors.nonCoding;
-
-// A bit of a cheat here -- better a mapping table
-return statusColors.nonCoding;
+if (sameString(geneClass, "pseudo"))
+    return statusColors.pseudo;
+return statusColors.unknown;
 }
 
 /***********************************************/
 /* Cache tissue info */
 
-struct gtexTissue *getTissues()
+struct gtexTissue *getTissues(char *version)
 /* Get and cache tissue metadata from database */
 {
 static struct gtexTissue *gtexTissues = NULL;
 
 if (!gtexTissues)
-    gtexTissues = gtexGetTissues();
+    gtexTissues = gtexGetTissues(version);
 return gtexTissues;
 }
 
-int getTissueCount()
+int getTissueCount(char *version)
 /* Get and cache the number of tissues in GTEx tissue table */
 {
 static int tissueCount = 0;
 
 if (!tissueCount)
-    tissueCount = slCount(getTissues());
+    tissueCount = slCount(getTissues(version));
 return tissueCount;
 }
 
-char *getTissueName(int id)
+char *getTissueName(int id, char *version)
 /* Get tissue name from id, cacheing */
 {
 static char **tissueNames = NULL;
 
 struct gtexTissue *tissue;
-int count = getTissueCount();
+int count = getTissueCount(version);
 if (!tissueNames)
     {
-    struct gtexTissue *tissues = getTissues();
+    struct gtexTissue *tissues = getTissues(version);
     AllocArray(tissueNames, count);
     for (tissue = tissues; tissue != NULL; tissue = tissue->next)
         tissueNames[tissue->id] = cloneString(tissue->name);
@@ -155,10 +135,10 @@ if (id >= count)
 return tissueNames[id];
 }
 
-struct rgbColor *getGtexTissueColors()
+struct rgbColor *getGtexTissueColors(char *version)
 /* Get RGB colors from tissue table */
 {
-struct gtexTissue *tissues = getTissues();
+struct gtexTissue *tissues = getTissues(version);
 struct gtexTissue *tissue = NULL;
 int count = slCount(tissues);
 struct rgbColor *colors;
@@ -240,10 +220,10 @@ if (extras->isComparison)
         {
         //medians1[i] = -1, medians2[i] = -1;       // mark missing tissues ?
         struct slDouble *scores;
-        scores = hashFindVal(scoreHash1, getTissueName(i));
+        scores = hashFindVal(scoreHash1, getTissueName(i, extras->version));
         if (scores)
             medians1[i] = slDoubleMedian(scores);
-        scores = hashFindVal(scoreHash2, getTissueName(i));
+        scores = hashFindVal(scoreHash2, getTissueName(i, extras->version));
         if (scores)
             medians2[i] = slDoubleMedian(scores);
         }
@@ -275,7 +255,7 @@ static void filterTissues(struct track *tg)
 {
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexTissue *tis = NULL;
-extras->tissues = getTissues();
+extras->tissues = getTissues(extras->version);
 extras->tissueFilter = hashNew(0);
 if (cartListVarExistsAnyLevel(cart, tg->tdb, FALSE, GTEX_TISSUE_SELECT))
     {
@@ -329,7 +309,8 @@ char *comparison = cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_COMPA
                         GTEX_COMPARISON_DEFAULT);
 extras->isDifference = sameString(comparison, GTEX_COMPARISON_DIFF) ? TRUE : FALSE;
 extras->maxMedian = gtexMaxMedianScore(extras->version);
-
+extras->codingOnly = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_CODING_GENE_FILTER,
+                                                        GTEX_CODING_GENE_FILTER_DEFAULT);
 /* Get geneModels in range */
 char buf[256];
 char *modelTable = "gtexGeneModel";
@@ -352,7 +333,7 @@ char *colorScheme = GTEX_COLORS_DEFAULT;
 #endif
 if (sameString(colorScheme, GTEX_COLORS_GTEX))
     {
-    extras->colors = getGtexTissueColors();
+    extras->colors = getGtexTissueColors(extras->version);
     }
 else
     {
@@ -366,6 +347,12 @@ filterTissues(tg);
 
 while (geneBed != NULL)
     {
+    if (extras->codingOnly && !gtexGeneIsCoding(geneBed))
+        {
+        // apologies for messy short-circuit
+        geneBed = geneBed->next;
+        continue;
+        }
     AllocVar(geneInfo);
     geneInfo->geneBed = geneBed;
     geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
@@ -543,7 +530,7 @@ int expCount = geneBed->expCount;
 double expScore;
 for (i=0; i<expCount; i++)
     {
-    if (!filterTissue(tg, getTissueName(i)))
+    if (!filterTissue(tg, getTissueName(i, extras->version)))
         continue;
     if (doTop)
         expScore = (geneInfo->medians1 ? geneInfo->medians1[i] : geneBed->expScores[i]);
@@ -565,7 +552,7 @@ static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
-// Color in dense mode using transcriptClass
+// Color in dense mode using geneClass
 Color statusColor = getGeneClassColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
     {
@@ -783,7 +770,7 @@ int x1 = insideX;
 
 
 // add maps to tissue bars in expresion graph
-struct gtexTissue *tissues = getTissues();
+struct gtexTissue *tissues = getTissues(extras->version);
 struct gtexTissue *tissue = NULL;
 int barWidth = gtexBarWidth();
 int padding = gtexGraphPadding();

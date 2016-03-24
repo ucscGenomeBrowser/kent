@@ -8,8 +8,7 @@ table gtexGeneBed
     uint   score;      "Score from 0-1000"
     char[1] strand;     "+ or - for strand"
     string geneId;      "Ensembl gene ID, referenced in GTEx data tables"
-    string transcriptId;       "Ensembl ID of Canonical transcript; determines genomic position"
-    string transcriptClass;    "GENCODE transcript class (coding, nonCoding, pseudo)
-    uint expCount;             "Number of experiment values"
+    string geneType;    "GENCODE gene biotype"
+    uint expCount;      "Number of experiment values"
     float[expCount] expScores; "Comma separated list of experiment scores"
     )

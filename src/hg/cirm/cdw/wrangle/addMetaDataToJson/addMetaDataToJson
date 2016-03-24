@@ -10,7 +10,7 @@ import os
 import sys
 import collections
 import argparse
-
+import json 
 # import the UCSC kent python library
 sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
 import common
@@ -82,7 +82,7 @@ def addJsonNameValPair(string, name, val):
     result += nameVal + string[findLastQuotation(string):]
     return result
 
-def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
+def updateJsonOld(jsonFile, metaData, metaFieldToCol, fields, outputJson):
     """
     Input:
         jsonFile - An opened file like object
@@ -100,7 +100,7 @@ def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
         if "name" in line: 
             elements = line.split(",")
             name = elements[0].split(":")[1].replace("\"","").replace(" ","")
-            if name != "":
+            if name != "": # This is a leaf node, it's name is a 'meta' tag value for the submission.   
                 if metaData.get(name): # We're here! This is the json entries that correspond to the leaf nodes...
                     newLine = line[:-1]
                     count = 0
@@ -111,8 +111,60 @@ def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
                     doOnce = False
                     outputJson.write(newLine+"\n") # Print the json entry
                     continue 
-        outputJson.write(line) # Print everything else
+            outputJson.write(line) # Print everything else
 
+def updateJson(jsonFile, metaData, metaFieldToCol, fields, outputJson):
+    """
+    Input:
+        jsonFile - An opened file like object
+        metaData - A dict of tuples
+        metaFieldToCol - A dict
+        fields - A list
+        outputJson - An opened file like object
+    Go through the jsonFile and identify the json entries with corresponding metaData entries. 
+    Add the elements in fields and their corresponding values to the json. The output is printed
+    to outputJson. IMPORTANT NOTE: This is heavily contingent on the line breaks in the initial .json
+    file. This script assumes that each object will be on its own line and have a variable 'name'. In some ways
+    this greatly simplifies the code. I took a crack at loading it in with the .json module but
+    adding the values correctly got increasingly difficult.  
+        
+    """
+    humanMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/genes.hg38", False)
+    mouseMap = common.dictFromTwoTabFile(os.environ['CIRM']+"annotation/ensToHugo/genes.mm10", False)
+    for line in jsonFile: # Lets abuse python's string manipulation a bit...
+        if  "name" in line: 
+            elements = line.split(",")
+            name = elements[0].split(":")[1].replace("\"","").replace(" ","")
+            if name != "": # This is a leaf node, it's name is a 'meta' tag value for the submission.   
+                if metaData.get(name): # We're here! This is the json entries that correspond to the leaf nodes...
+                    newLine = line[:-1]
+                    count = 0
+                    for item in fields: # Add in the new meta data fields to the json entry
+                        swap = addJsonNameValPair(newLine, item, metaData[name][metaFieldToCol[item]])
+                        newLine = swap 
+                        count +=1
+                    outputJson.write(newLine+"\n") # Print the json entry
+                    continue 
+            else: # This is an internal node, update the gene names
+                output =  line[:-1].split("geneList")[0] + "geneList\":{"
+                totalGenes = len(line[:-1].split("geneList")[1].split("{")[1].split("}")[0].split(","))
+                geneCount =0
+                for item in line[:-1].split("geneList")[1].split("{")[1].split("}")[0].split(","): 
+                    ++geneCount
+                    gene = item.split(":")[0].strip("\"")
+                    val = item.split(":")[1]
+                    if humanMap.get(gene): # Check for human gene names first (hg38)
+                        output+=  "\"" + humanMap[gene] + "\":" + val 
+                    elif mouseMap.get(item.split(":")[0].strip("\"")): # Next look for mouse gene names (mm10)
+                        output+=  "\"" + mouseMap[gene] + "\":" + val 
+                    else: # Finally give up and slap an 'unknown_' tag in front of the gene name. 
+                        output+=  "\"" + "unknown_"+gene + "\":" + val 
+                    if geneCount > totalGenes: 
+                        output+= ","
+                output += "}"+line[:-1].split("geneList")[1].split("{")[1].split("}")[1]
+            outputJson.write(output + "\n")
+            continue 
+        outputJson.write(line) # Print everything else
 
 def main(args):
     """
@@ -130,14 +182,21 @@ def main(args):
     metaData = common.readInTable(open(options.metaDataFile, "r"), metaFields.index("meta"), "\t")
     if (options.fields != None): 
         metaFields = options.fields
-    
+
+
     metaFieldToCol = dict()
     newMetaFields = []
     count = 0 
     # Go through the meta data and identify the columns with between 2-26 unique values. These will 
     # be added to the json file. This can be overwritten with the fields command. 
     for item in metaFields: 
-        numUniqueElems = len(set([i[count] for i in metaData.values()])) 
+        seenElements = []
+        for j in metaData.values(): 
+            if (j[count] == "n/a"): continue 
+            if (j[count] in seenElements): 
+                continue
+            else: seenElements.append(j[count])
+        numUniqueElems = len(seenElements)
         if (item in options.override):
             metaFieldToCol.setdefault(item,metaFields.index(item))
             newMetaFields.append(item)
@@ -145,7 +204,11 @@ def main(args):
             metaFieldToCol.setdefault(item,metaFields.index(item))
             newMetaFields.append(item)
         elif options.verbose: print ("The meta field %s has %i unique values, only fields with 2-26 unique values are accepted."%(item, numUniqueElems))
-        count += 1 
+        count += 1
+        #print (item, metaFields.index(item), numUniqueElems, metaFieldToCol) 
+                #metaFieldToCol, metaData)
+        #exit(1)
+
 
     updateJson(options.jsonFile, metaData, metaFieldToCol, sorted(newMetaFields), options.outputJson)
 
