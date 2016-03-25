@@ -2490,8 +2490,8 @@ char query[256];
 struct sqlConnection *conn = hAllocConn(database);
 int ret;
 
-sqlSafef(query, sizeof(query), "select id from organism where name = '%s'",
-				    hScientificName(database));
+sqlSafef(query, sizeof(query), "select id from %s where name = '%s'",
+				    organismTable, hScientificName(database));
 ret = sqlQuickNum(conn, query);
 hFreeConn(&conn);
 return ret;
