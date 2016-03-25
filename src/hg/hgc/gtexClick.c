@@ -242,7 +242,8 @@ printf("<b>Genomic Position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%
                         database, hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
-printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
+printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
+printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->name);
 puts("<p>");
 
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,

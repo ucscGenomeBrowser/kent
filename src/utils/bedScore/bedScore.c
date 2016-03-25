@@ -7,6 +7,7 @@
 #include "hash.h"
 #include "options.h"
 #include "sqlNum.h"
+#include "sqlList.h"
 #include "basicBed.h"
 #include "hmmstats.h"
 #include "dystring.h"
@@ -22,6 +23,7 @@
 static char *method = scoreEncode;
 static int col = 5;
 static int minScore = 0;
+static int doLog = 0;
 static int maxScore = 1000;
 static boolean uniform = FALSE;
 static struct scorer *scorer = NULL;
@@ -43,7 +45,8 @@ errAbort(
   "             std2 - score is maxed at 2 std devs \n"
   "             asinh - ENCODE Uniform TFBS (Steve Wilder, ENCODE AWG/EBI)\n"
   "   -minScore=N - Minimum score to assign (default %d). Not supported for 'reg' method\n"
-  "   -uniform    - Calculate uniform normalization factor across all input files\n"
+  "   -uniform   - Calculate uniform normalization factor across all input files\n"
+  "   -log  - Calculate based on log\n"
   "note:\n"
   "    If multiple files are specified, they must all be of same BED size\n.",
   /*
@@ -55,6 +58,7 @@ errAbort(
 /* Command line validation table. */
 static struct optionSpec options[] = {
    {"col", OPTION_INT},
+   {"log", OPTION_BOOLEAN},
    {"method", OPTION_STRING},
    {"minScore", OPTION_INT},
    {"uniform", OPTION_BOOLEAN},
@@ -130,7 +134,17 @@ if (wordCount != bedSize)
     errAbort("Unexpected number of fields in line #%d of BED %d file: %d", 
                     lineNum, bedSize, wordCount);
 bfl->bed5 = (struct bed5 *)bedLoad5(words);
-bfl->inputVal = sqlDouble(words[col-1]);
+char *input = words[col-1];
+if (stringIn(",", input))
+    {
+    // found comma-sep list, so sum values
+    bfl->inputVal = sqlSumDoublesCommaSep(input);
+    }
+else
+    bfl->inputVal = sqlDouble(input);
+verbose(2, "%0.2f\n", bfl->inputVal);
+if (doLog)
+    bfl->inputVal = log10(bfl->inputVal + 1);
 if (bedSize > 5)
     {
     // join (could be done quicker w/ custom code)
@@ -548,6 +562,7 @@ col = optionInt("col", col);
 minScore = optionInt("minScore", minScore);
 uniform = optionExists("uniform");
 method = optionVal("method", method);
+doLog = optionExists("log");
 scorer = scorerNew(method);
 bedScore(argc-1, &argv[1]);
 return 0;

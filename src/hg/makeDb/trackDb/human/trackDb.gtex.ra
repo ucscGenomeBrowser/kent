@@ -5,6 +5,7 @@ longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples from 5
 html gtexGeneExpr
 group expression
 priority 10.15
+spectrum on
 
 track gtexGeneV4
 release alpha

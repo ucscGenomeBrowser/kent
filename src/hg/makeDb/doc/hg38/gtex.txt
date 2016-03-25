@@ -1,7 +1,7 @@
 #############################################################################
 # GTEx V6 (October 2015) Kate
 # Create BED from hgFixed tables (see doc/gtex)
-# Reloading during QA of track (fixing gene classes).  (March 2016) Kate
+# Reloading during QA of track (fixing gene classes, adding scores).  (March 2016) Kate
 
 cd /hive/data/outside/gtex/V6
 
@@ -22,11 +22,11 @@ cd gtex
 # table renamed to gtexGeneModel later
 
 # Use latest GENCODE attrs file to get biotypes
-set gencodeVersion = V24
+
 
 # create bed table
 ~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed  hg38 -gtexVersion=V6 \
-        -noLoad -gencodeVersion=$gencodeVersion gtexGeneBedV6 -verbose=2 >&! makeGeneBed.hg38.log
+        -noLoad -gencodeVersion=$gencodeVersion gtexGeneBedV6 -verbose=2 >&! makeGeneBed.log
 
 # 45 genes not found in GENCODE attributes table
 
@@ -37,6 +37,46 @@ wc -l *.tab
 52896 gtexGeneBedV6.tab
 # 55810 gtexGeneBedV6.tab
 
-# looks ok so load up
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed hg38 -gtexVersion=V6 -gencodeVersion=$gencodeVersion gtexGeneBedV6 -verbose=2
+# exploratory for assigning score based on sum of scores (expScores field)
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=1 -method=std2 gtexGeneBedV6.tab gtexGeneBedV6.std2.bed
+$bedScore -col=10 -minScore=1 -method=encode gtexGeneBedV6.tab gtexGeneBedV6.encode.bed
+$bedScore -col=10 -minScore=1 -method=reg gtexGeneBedV6.tab gtexGeneBedV6.reg.bed
+$bedScore -col=10 -minScore=1 -method=asinh gtexGeneBedV6.tab gtexGeneBedV6.asinh.bed
+
+$bedScore -col=10 -minScore=1 -method=reg -log gtexGeneBedV6.tab gtexGeneBedV6.reg.log.bed
+$bedScore -log -col=10 -minScore=1 -method=std2 gtexGeneBedV6.tab gtexGeneBedV6.std2.log.bed
+$bedScore -log -col=10 -minScore=1 -method=encode gtexGeneBedV6.tab gtexGeneBedV6.encode.log.bed
+$bedScore -log -col=10 -minScore=1 -method=asinh gtexGeneBedV6.tab gtexGeneBedV6.asinh.log.bed
+
+# Using -log -method=encode, as this is closest to density plot of all scores
+# as here: GtexTotalExpressionDensity.png, GtexTotalExpressionFrequency.png
+textHistogram -real -autoScale=14 -log -col=5 gtexGeneBedV6.encode.log.bed
+1.000000 ************************************************************ 22889
+72.357214 *************************************************** 4862
+143.714428 ************************************************** 4199
+215.071643 ************************************************* 3931
+286.428857 ************************************************** 4329
+357.786071 *************************************************** 5419
+429.143285 ************************************************** 4472
+500.500500 ********************************************* 1953
+571.857714 ************************************** 564
+643.214928 ******************************** 200
+714.572142 ************************* 61
+785.929356 *********** 6
+857.286571 ******** 4
+928.643785 ************ 7
+
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneBedV6.tab gtexGeneBedV6.bed
+
+
+# load up
+set lib = ~/kent/src/hg/lib
+
+hgLoadBed hg38 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneBedNewV6 gtexGeneBedV6.bed
+
+
+
 
