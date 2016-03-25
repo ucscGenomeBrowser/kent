@@ -15,6 +15,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 #include "regexHelper.h"
+#include "genbank.h"
 
 
 char *database = NULL;
@@ -357,6 +358,7 @@ int checkHgFindSpec(char *db, char *termToSearch, boolean showSearches,
 boolean gotError = FALSE;
 
 database = db;
+initGenbankTableNames("gbMeta");
 
 if (isNotEmpty(termToSearch))
     gotError |= reportSearch(termToSearch);

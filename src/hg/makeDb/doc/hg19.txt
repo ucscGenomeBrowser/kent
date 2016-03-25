@@ -30687,11 +30687,15 @@ hgBbiDbLink hg19 spAnnot /gbdb/hg19/bbi/spAnnot.bb
 ##############################################################################
 
 ##############################################################################
-# GTEX Genotype-Tissue Expression(2015-03-09 Kate)
+# GTEX Genotype-Tissue Expression
 #
+# Loading Jan 2014 (V4) data. (2015-Mar kate)
+#
+# Added scores to BED table. (2016-Mar kate)
+
 # Data and sample info (metadata) loaded rom http://www.gtexportal.org to
 # tables in hgFixed.  Methods here:
-# kent/src/hg/makeDb/doc/gtex/2014.jan.txt
+# kent/src/hg/makeDb/doc/gtex/V4.txt
 
 # Load BED15ish table with tissue medians for each gene.  Coordinates are the
 # UCSC known genes canonical transcript for the ENSembl gene reported by GTEX.
@@ -30706,20 +30710,35 @@ hgsql hg19 -Ne 'select count(*) from knownToGencodeV19'
 # 75623
 # compared to 80184 for hg38 V20 GENCODE
 
+# reloaded 9/23/15 to repair tissue ordering problem
 
-hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
-# reload 9/23/15 to repair tissue ordering problem
+# reload and add scores (2016-mar kate)
+#hgGtexGeneBed hg19 -gencodeVersion=V19 gtexGene >&! log.txt
 
 # GTEX gene models are based on GENCODE V18.  Need a knownToGencodeV18 table to make this work
 #hgGtexGeneBed hg19 -gencodeVersion=V18 gtexGene >&! log.v18.txt
 
-wc -l log.txt 
-# 31823 errs - Can't find gene
-# Needs investigating. 
+set gencode = V24lift37
+# use latest attribute annotation
+~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        hg19 -noLoad -gtexVersion=V4 -gencodeVersion=$gencode gtexGeneV4 >&! log.V4.txt
 
-hgsql hg19 -Ne 'select count(*) from gtexGene'
-# 24170
-# Compared to 23911 for hg38 GENCODE V20 (which also had errs IFIRC)
+# Max score: 178212.765625
+# 1094 not found
+
+wc -l gtexGeneV4.tab
+# 54899 gtexGeneV4.tab
+
+# add scores (see hg38/gtex.txt for background)
+
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneV4.tab gtexGeneV4.bed
+
+# table looks OK, load it
+set lib = ~/kent/src/hg/lib
+hgLoadBed hg19 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneBedNewV4 gtexGeneV4.bed
 
 # Load exon data
 cd /hive/data/outside/GTEx/2014-01-17
@@ -30773,6 +30792,7 @@ hgGtexExonBed hg19 -trackDb -bright gtex ../gencode/gencode.v18.genes.patched_co
 #############################################################################
 # GTEx V6 (October 2015) Kate
 # Create BED from hgFixed tables (see doc/gtex)
+# Reload with scores (see hg38/gtex.txt)
 
 cd /hive/data/outside/gtex/V6
 
@@ -30787,15 +30807,34 @@ A#tail -n +2 gtexGeneModelInfoV6.tab | awk '{printf("%s\t%s\n", $1, $9)}' > gtex
 #hgLoadSqlTab hgFixed gtexTranscriptV6 ~/kent/src/hg/lib/gtexTranscript.sql gtexGeneTranscriptsV6.tab
 
 # Load BED table
-~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
-        hg19 -noLoad -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
-#Max score: 219385.906250
-wc -l gtexGeneV6.tab
-# 56318 gtexGeneV6.tab
+cd /hive/data/genomes/hg19/bed
+mkdir -p gtex
+cd gtex
 
-# table looks OK
+set gencode = V24lift37
+# use latest attribute annotaion
 ~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
-        hg19 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
+        hg19 -noLoad -gtexVersion=V6 -gencodeVersion=$gencode gtexGeneV6 >&! log.txt
+#Max score: 219385.906250
+# 925 genes not found in GencodeAttrs table
+wc -l gtexGeneV6.tab
+# 55393 gtexGeneV6.tab
+
+# add scores (see hg38/gtex.txt for background)
+
+set bedScore = ~/kent/src/utils/bedScore/bedScore
+$bedScore -col=10 -minScore=0 -log -method=encode gtexGeneV6.tab gtexGeneV6.bed
+
+# table looks OK, load it
+set lib = ~/kent/src/hg/lib
+
+hgLoadBed hg19 -noBin -tab -type=bed6+4 \
+        -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
+                gtexGeneBedNewV6 gtexGeneV6.bed
+
+
+#~/kent/src/hg/makeDb/outside/hgGtexGeneBed/hgGtexGeneBed \
+        #hg19 -gtexVersion=V6 -gencodeVersion=V19 gtexGeneV6 >&! log.txt
 
 #############################################################################
 # 1000 GENOMES PHASE 3 VARIANT CALLS (DONE 10/23/15 angie - table fixed 3/1/16)
