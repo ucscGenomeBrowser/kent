@@ -325,7 +325,6 @@ for (i=0; i<expCount; i++)
     }
 // threshold to consider this gene tissue specific -- a tissue contributes > 10% to 
 // total expression level
-//uglyf("gene=%s maxScore=%0.2f totalScore=%0.2f ", geneBed->name, maxScore, totalScore);
 if (totalScore < 1 || maxScore <= totalScore * .1)
     return -1;
 return maxNum;
@@ -339,7 +338,6 @@ int id = maxTissueForGene(geneBed);
 if (id < 0)
     return MG_BLACK;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-//uglyf("COLOR maxNum=%d<br>", maxNum);
 struct rgbColor color = extras->colors[id];
 return hvGfxFindColorIx(hvg, color.r, color.g, color.b);
 }
@@ -615,7 +613,6 @@ struct gtexGeneBed *geneBed = geneInfo->geneBed;
 Color statusColor = getGeneClassColor(hvg, geneBed);
 if (vis != tvFull && vis != tvPack)
     {
-uglyf("<br>drawAt %s\n", geneBed->name);
     bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
     return;
     }
