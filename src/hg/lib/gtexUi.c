@@ -126,7 +126,7 @@ puts("<style>\n"
 }
 
 static void makeTableTissueCheckboxes(char *name, struct gtexTissue *tissues, 
-                                        struct slName *checked, struct cart *cart, char *track)
+                        struct slName *checked, struct cart *cart, char *track, char *version)
 {
 initTissueTableStyle();
 char *onClick = "";
@@ -166,7 +166,7 @@ puts("</thead>");
 
 /* table body */
 printf("<tbody class='sortable noAltColors initBySortOrder'>");
-struct hash *tscHash = gtexGetTissueSampleCount();
+struct hash *tscHash = gtexGetTissueSampleCount(version);
 struct gtexTissue *tis;
 boolean isChecked = FALSE;
 for (tis = tissues; tis != NULL; tis = tis->next)
@@ -309,6 +309,13 @@ char *version = gtexVersion(tdb->table);
 printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
 printf("</div>");
 
+/* Filter on coding genes */
+printf("<div><b>Limit to protein coding genes:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
+boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
+cgiMakeCheckBox(cartVar, isCodingOnly);
+printf("</div>");
+
 /* Sample selection */
 printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
@@ -365,7 +372,7 @@ else
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     }
 printf("</div>");
-struct gtexTissue *tissues = gtexGetTissues();
+struct gtexTissue *tissues = gtexGetTissues(version);
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))
     selectedValues = cartOptionalSlNameListClosestToHome(cart, tdb, FALSE, GTEX_TISSUE_SELECT);
@@ -373,7 +380,7 @@ char *selectType = cgiUsualString("tis", "table");
 if (sameString(selectType, "group"))
     makeGroupedTissueCheckboxes(cartVar, tissues, selectedValues);
 else if (sameString(selectType, "table"))
-    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track);
+    makeTableTissueCheckboxes(cartVar, tissues, selectedValues, cart, track, version);
 else
     makeAllTissueCheckboxes(cartVar, tissues, selectedValues);
 

@@ -88,6 +88,9 @@ void gtexInfoCreateTable(struct sqlConnection *conn, char *table);
 double gtexMaxMedianScore(char *version);
 /* Retrieve max median score for latest (or named) version */
 
+char *gtexVersionSuffix(char *table);
+/* Return version string for a GTEx track table.  For now, just supporting V4 and V6 (default, no suffix )*/                                        
+
 char *gtexVersion(char *table);
 /* Return version string based on table suffix */
 

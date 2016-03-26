@@ -8,6 +8,9 @@
 struct hash;
 
 int sqlDoubleArray(char *s, double *array, int maxArraySize);
+double sqlSumDoublesCommaSep(char *s);
+/* Return sum of double values in a comma-separated list */
+
 int sqlFloatArray(char *s, float *array, int maxArraySize);
 int sqlUnsignedArray(char *s, unsigned *array, int maxArraySize);
 int sqlSignedArray(char *s, int *array, int maxArraySize);

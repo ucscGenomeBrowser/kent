@@ -242,14 +242,6 @@ sqlSafef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
-char *gtexVersionSuffix(char *table)
-/* Return version string for a GTEx track table.  For now, just supporting V4 and V6 (default, no suffix )*/
-{
-if (endsWith(table, "V4"))
-    return("V4");
-return("");
-}
-
 char *gtexGeneClass(struct gtexGeneBed *geneBed)
 /* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype 
  * Mapped as follows:
@@ -280,3 +272,8 @@ if (sameString(geneType, "pseudo") || sameString(geneType, "pseudogene") ||
 return "nonCoding";
 }
 
+boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed)
+/* Return TRUE if biotype indicates this is a protein coding gene */
+{
+return sameString("coding", gtexGeneClass(geneBed));
+}

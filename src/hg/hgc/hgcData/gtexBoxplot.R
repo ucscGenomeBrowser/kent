@@ -36,14 +36,14 @@ if (isScoreOrder) {
 }
 
 # draw graph
-png(file=outFile, width=1000, height=500)
+png(file=outFile, width=1070, height=600)
 # res=72 is default
 gray <- "#A6A6A6"
 darkgray <- "#737373"
 
 # plot with customized margins, symbol and line styles and colors, to mimic GTEx figure in
 # UCSC GTEx grant proposal
-par(mar=c(7,4,3,2) + 0.1, mgp=c(2,1,0), font.main=1)
+par(mar=c(12,4,3,1) + 0.1, mgp=c(2,1,0), font.main=1)
 yLabel <- if (isLog) "Log10 (RPKM+1)" else "RPKM"
 max <- max(df$rpkm)
 yLimit <- if (isLog) c(-.05, max+.1) else c(-(max*.02), max+ (max*.03))
@@ -66,15 +66,16 @@ y1 <- par("usr")[3]
 size <- .8
 adjust <- if (isLog) max/30 else .4*abs(y1)
 text(-.5, y1 + adjust, "N=", cex=size)
-# draw text twice (once in color, once in black) to make light colors readable
 text(1:count, y1 + adjust, exprPlot$n, cex=size, col="black")
-text(1:count, y1 + adjust, exprPlot$n, cex=size, col=colorsHex)
+# draw text twice (once in color, once in black) to make light colors readable
+text(1:count, y1 + adjust, exprPlot$n, cex=size, col=darkerColorsHex)
 
 # add X axis labels at 45 degree angle
 rot <- 45
 size <- 1
 adjust <- if (isLog) max/30 else .7*abs(y1)
 text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col="black")
-text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), col=colorsHex)
+text(1:count, y1 - adjust, cex=size, labels=labels, srt=rot, xpd=TRUE, adj=c(1,.5), 
+        col=darkerColorsHex)
 
 graphics.off()

@@ -89,5 +89,8 @@ char *gtexVersionSuffix(char *table);
 char *gtexGeneClass(struct gtexGeneBed *geneBed);
 /* Return gene "class" (analogous to GENCODE transcriptClass) for a GENCODE gene biotype */
 
+boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed);
+/* Return TRUE if biotype indicates this is a protein coding gene */
+
 #endif /* GTEXGENEBED_H */
 
