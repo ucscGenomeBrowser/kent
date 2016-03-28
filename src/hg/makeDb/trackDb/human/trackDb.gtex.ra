@@ -1,7 +1,7 @@
 track gtexGene
 type bed 6 +
 shortLabel GTEx Gene Expr
-longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples from 570 donors
+longLabel Gene Expression in 53 tissues from GTEx RNA-seq of 8555 samples (570 donors)
 html gtexGeneExpr
 group expression
 priority 10.15
@@ -17,6 +17,7 @@ group expression
 priority 10.1
 
 track gtexSnp
+release alpha
 type bed 4
 shortLabel GTEx Variant
 longLabel Genetic variants imputed from genotyping of GTEx samples (209 donors)
@@ -25,6 +26,7 @@ html getxEqtlSnp
 priority 10.15
 
 track gtexEqtlSnp
+release alpha
 type bed 4
 shortLabel GTEx eQTL
 longLabel Genetic variants identified by GTEx as significantly affecting gene expression
@@ -32,6 +34,7 @@ group expression
 priority 10.16
 
 track gtexExon
+release alpha
 compositeTrack on
 shortLabel GTEx Exon
 longLabel Exon Expression in 53 tissues from GTEx RNA-seq of 2921 samples (209 donors)
