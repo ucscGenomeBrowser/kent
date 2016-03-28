@@ -7567,10 +7567,10 @@ else if (scoreMin != 0 && scoreMax == 1000) // Changes gray level even when
     }
 }
 
-void bedLoadItemByQuery(struct track *tg, char *table,
-                        char *query, ItemLoader loader)
-/* Generic tg->item loader. If query is NULL use generic
- hRangeQuery(). */
+void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,  
+                                char *extraWhere, ItemLoader loader)
+/* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL 
+ * and extraWhere is not NULL */
 {
 struct sqlConnection *conn = hAllocConn(database);
 int rowOffset = 0;
@@ -7578,9 +7578,9 @@ struct sqlResult *sr = NULL;
 char **row = NULL;
 struct slList *itemList = NULL, *item = NULL;
 
-if(query == NULL)
+if (query == NULL)
     sr = hRangeQuery(conn, table, chromName,
-		     winStart, winEnd, NULL, &rowOffset);
+		     winStart, winEnd, extraWhere, &rowOffset);
 else
     sr = sqlGetResult(conn, query);
 
@@ -7593,6 +7593,18 @@ slSort(&itemList, bedCmp);
 sqlFreeResult(&sr);
 tg->items = itemList;
 hFreeConn(&conn);
+}
+
+void bedLoadItemWhere(struct track *tg, char *table, char *extraWhere, ItemLoader loader)
+/* Generic tg->item loader, adding extra clause to hgRangeQuery */
+{
+bedLoadItemByQueryWhere(tg, table, NULL, extraWhere, loader);
+}
+
+void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader loader)
+/* Generic tg->item loader. If query is NULL use generic hRangeQuery(). */
+{
+bedLoadItemByQueryWhere(tg, table, query, NULL, loader);
 }
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader)

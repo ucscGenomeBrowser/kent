@@ -277,3 +277,13 @@ boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed)
 {
 return sameString("coding", gtexGeneClass(geneBed));
 }
+
+float gtexGeneTotalMedianExpression(struct gtexGeneBed *geneBed)
+/* Return total of all tissue medians */
+{
+int i;
+float sum = 0.0;
+for (i=0; i<geneBed->expCount; i++)
+    sum += geneBed->expScores[i];
+return sum;
+}

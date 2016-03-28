@@ -375,7 +375,8 @@ safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "
 struct hash *modelHash = loadGeneModels(buf);
 
 /* Get geneBeds (names and all-sample tissue median scores) in range */
-bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);
+char *filter = getScoreFilterClause(cart, tg->tdb, NULL);
+bedLoadItemWhere(tg, tg->table, filter, (ItemLoader)gtexGeneBedLoad);
 
 /* Create geneInfo items with BED and geneModels */
 struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
