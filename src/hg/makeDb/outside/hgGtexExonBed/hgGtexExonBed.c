@@ -20,8 +20,7 @@
 #define GTEX_TISSUE_MEDIAN_TABLE  "gtexExonTissueMedian"
 
 // Versions are used to suffix tablenames
-char *gtexVersion = "";
-char *gencodeVersion = "V20";
+static char *version = "V6";
 
 boolean doLoad = FALSE;
 boolean trackDb = FALSE;
@@ -38,14 +37,14 @@ errAbort(
   "usage:\n"
   "   hgGtexExonBed database tableRoot exonCoordsFile\n"
   "options:\n"
-  "    -gtexVersion=VN (default \'%s\')\n"
+  "    -version=VN (default \'%s\')\n"
   "    -trackDb         trackDb only\n"
   "    -bright          assign bright colors to tracks\n"
-  , gtexVersion);
+  , version);
 }
 
 static struct optionSpec options[] = {
-    {"gtexVersion", OPTION_STRING},
+    {"version", OPTION_STRING},
     {"trackDb", OPTION_BOOLEAN},
     {"bright", OPTION_BOOLEAN},
     {NULL, 0},
@@ -99,7 +98,7 @@ if (!trackDb)
     }
 
 // Read in tissue info (in id order) from hgFixed table
-struct gtexTissue *gtexTissues = gtexGetTissues();
+struct gtexTissue *gtexTissues = gtexGetTissues(version);
 struct gtexTissue *tissue = NULL;
 
 char trackDbFile[64];
@@ -161,7 +160,7 @@ if (trackDb)
 
 // Read median data from hgFixed table and create BEDs
 verbose(2, "Reading gtexTissueExonMedian table\n");
-sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, gtexVersion);
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, version);
 sr = sqlGetResult(conn, query);
 struct gtexTissueMedian *exonMedians;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -187,7 +186,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-gtexVersion = optionVal("gtexVersion", gtexVersion);
+version = optionVal("version", version);
 trackDb = optionExists("trackDb");
 bright = optionExists("bright");
 hgGtexExonBed(argv[1], argv[2], argv[3]);
