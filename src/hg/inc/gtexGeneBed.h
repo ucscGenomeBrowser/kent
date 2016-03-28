@@ -23,7 +23,7 @@ struct gtexGeneBed
     char *geneId;	/* Ensembl gene ID, referenced in GTEx data tables */
     char *geneType;	/* GENCODE gene biotype */
     unsigned expCount;	/* Number of experiment values */
-    float *expScores;	/* Comma separated list of experiment scores */
+    float *expScores;	/* Experiment scores */
     };
 
 struct gtexGeneBed *gtexGeneBedLoadByQuery(struct sqlConnection *conn, char *query);
@@ -91,6 +91,9 @@ char *gtexGeneClass(struct gtexGeneBed *geneBed);
 
 boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed);
 /* Return TRUE if biotype indicates this is a protein coding gene */
+
+float gtexGeneTotalMedianExpression(struct gtexGeneBed *geneBed);
+/* Return total of all tissue medians */
 
 #endif /* GTEXGENEBED_H */
 
