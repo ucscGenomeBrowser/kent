@@ -34,7 +34,6 @@ group expression
 priority 10.16
 
 track gtexExon
-release alpha
 compositeTrack on
 shortLabel GTEx Exon
 longLabel Exon Expression in 53 tissues from GTEx RNA-seq of 2921 samples (209 donors)
