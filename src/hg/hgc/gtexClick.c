@@ -231,19 +231,19 @@ else
                         hgGeneName(), database, gtexGene->name, gtexGene->name);
     printf("<b>Description:</b> %s<br>\n", desc);
     }
-printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
+printf("<b>Ensembl gene ID:</b> %s<br>\n", gtexGene->geneId);
 // The actual transcript model is a union, so this identification is approximate
 // (used just to find a transcript class)
 char *geneClass = gtexGeneClass(gtexGene);
-printf("<b>GENCODE Biotype: </b> %s<br>\n", gtexGene->geneType); 
-printf("<b>Gene Class: </b><span style='color: %s'>%s</span><br>\n", 
+printf("<b>GENCODE biotype: </b> %s<br>\n", gtexGene->geneType); 
+printf("<b>Gene class: </b><span style='color: %s'>%s</span><br>\n", 
             geneClassColorCode(geneClass), geneClass);
-printf("<b>Genomic Position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+printf("<b>Total median expression: </b> %0.2f RPKM<br>\n", gtexGeneTotalMedianExpression(gtexGene));
+printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
+printf("<b>Genomic position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
                         database, hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
-printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
-printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->name);
 puts("<p>");
 
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
@@ -254,6 +254,7 @@ struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform,
                                                         versionSuffix, &maxVal);
 char *version = gtexVersion(tdb->table);
 drawGtexRBoxplot(gtexGene, tsvs, doLogTransform, version);
+printf("<br><a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a>\n", gtexGene->name);
 
 printTrackHtml(tdb);
 }
