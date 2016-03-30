@@ -291,7 +291,6 @@ char cartVar[1024];
 char buf[512];
 
 /* Filter on coding genes */
-
 printf("<div>");
 printf("<b>Limit to protein coding genes:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
