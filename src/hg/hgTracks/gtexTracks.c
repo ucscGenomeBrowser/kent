@@ -429,6 +429,10 @@ while (geneBed != NULL)
             *fromDetail = 0;
         if (strlen(desc) > MAX_DESC)
             strcpy(desc+MAX_DESC, "...");
+        // also strip 'homo sapiens' prefix
+        #define SPECIES_PREFIX  "Homo sapiens "
+        if (startsWith(SPECIES_PREFIX, desc))
+            desc += strlen(SPECIES_PREFIX);
         geneInfo->description = desc;
         }
     slAddHead(&list, geneInfo);
