@@ -600,7 +600,7 @@ return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), extr
 static void drawGraphBox(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
 /* Draw white background for graph */
 {
-Color lighterGray = MAKECOLOR_32(0xF5, 0xF5, 0xF5);
+Color lighterGray = MAKECOLOR_32(0xF3, 0xF3, 0xF3);
 int width = gtexGraphWidth(tg, geneInfo);
 int height = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 hvGfxOutlinedBox(hvg, x, y-height, width, height, MG_WHITE, lighterGray);
