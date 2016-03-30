@@ -849,7 +849,7 @@ if (tg->visibility == tvSquish)
     if (tisId > 1)
         maxTissue = getTissueDescription(tisId, extras->version);
     char buf[128];
-    safef(buf, sizeof buf, "%s %s%s", geneBed->name, tisId > 0 ? "^":"", maxTissue);
+    safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
     int x1, x2;
     getItemX(start, end, &x1, &x2);
     int width = x2-x1;
