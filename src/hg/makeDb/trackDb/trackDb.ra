@@ -444,7 +444,7 @@ itemRgb on
 compositeTrack on
 linkIdInName on
 mouseOverField mouseOver
-url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/$[-$]?appInClaims=1
+url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/${-$}?appInClaims=1
 urlLabel Open Lens PatSeq Analyzer with this chromosomal range
 skipFields mouseOver,fprint
 sepFields claimGrantSeqIds

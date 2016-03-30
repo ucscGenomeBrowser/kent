@@ -429,6 +429,10 @@ while (geneBed != NULL)
             *fromDetail = 0;
         if (strlen(desc) > MAX_DESC)
             strcpy(desc+MAX_DESC, "...");
+        // also strip 'homo sapiens' prefix
+        #define SPECIES_PREFIX  "Homo sapiens "
+        if (startsWith(SPECIES_PREFIX, desc))
+            desc += strlen(SPECIES_PREFIX);
         geneInfo->description = desc;
         }
     slAddHead(&list, geneInfo);
@@ -447,17 +451,17 @@ tg->items = list;
 /* Draw */
 
 /* Bargraph layouts for three window sizes */
-#define WIN_MAX_GRAPH 20000
-#define MAX_GRAPH_HEIGHT 100
+#define WIN_MAX_GRAPH 50000
+#define MAX_GRAPH_HEIGHT 175
 #define MAX_BAR_WIDTH 5
 #define MAX_GRAPH_PADDING 2
 
 #define WIN_MED_GRAPH 500000
-#define MED_GRAPH_HEIGHT 60
+#define MED_GRAPH_HEIGHT 100
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
 
-#define MIN_GRAPH_HEIGHT 20
+#define MIN_GRAPH_HEIGHT 35
 #define MIN_BAR_WIDTH 1
 #define MIN_GRAPH_PADDING 0
 
@@ -567,14 +571,6 @@ if (!doLogTransform)
 return valToHeight(useVal, useMax, gtexMaxGraphHeight(), doLogTransform);
 }
 
-static void drawGraphBase(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
-/* Draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression) */
-{
-Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
-int graphWidth = gtexGraphWidth(tg, geneInfo);
-hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
-}
-
 static int gtexGeneGraphHeight(struct track *tg, struct gtexGeneInfo *geneInfo, boolean doTop)
 /* Determine height in pixels of graph.  This will be the box for tissue with highest expression
    If doTop is false, compute height of bottom graph of comparison */
@@ -599,6 +595,24 @@ double viewMax = (double)cartUsualIntClosestToHome(cart, tg->tdb, FALSE,
                                 GTEX_MAX_LIMIT, GTEX_MAX_LIMIT_DEFAULT);
 double maxMedian = ((struct gtexGeneExtras *)tg->extraUiData)->maxMedian;
 return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), extras->doLogTransform);
+}
+
+static void drawGraphBox(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
+/* Draw white background for graph */
+{
+Color lighterGray = MAKECOLOR_32(0xF5, 0xF5, 0xF5);
+int width = gtexGraphWidth(tg, geneInfo);
+int height = gtexGeneGraphHeight(tg, geneInfo, TRUE);
+hvGfxOutlinedBox(hvg, x, y-height, width, height, MG_WHITE, lighterGray);
+//hvGfxBox(hvg, x, y-height, width, height, MG_WHITE);
+}
+
+static void drawGraphBase(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
+/* Draw faint line under graph to delineate extent when bars are missing (tissue w/ 0 expression) */
+{
+Color lightGray = MAKECOLOR_32(0xD1, 0xD1, 0xD1);
+int graphWidth = gtexGraphWidth(tg, geneInfo);
+hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 }
 
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
@@ -663,6 +677,7 @@ int graphX = gtexGraphX(geneBed);
 int x1 = xOff + graphX;         // x1 is at left of graph
 int keepX = x1;
 drawGraphBase(tg, geneInfo, hvg, keepX, yZero+1);
+drawGraphBox(tg, geneInfo, hvg, keepX, yZero+1);
 
 int startX = x1;
 struct rgbColor lineColor = {.r=0};
@@ -845,7 +860,7 @@ if (tg->visibility == tvSquish)
     if (tisId > 1)
         maxTissue = getTissueDescription(tisId, extras->version);
     char buf[128];
-    safef(buf, sizeof buf, "%s %s%s", geneBed->name, tisId > 0 ? "^":"", maxTissue);
+    safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
     int x1, x2;
     getItemX(start, end, &x1, &x2);
     int width = x2-x1;
