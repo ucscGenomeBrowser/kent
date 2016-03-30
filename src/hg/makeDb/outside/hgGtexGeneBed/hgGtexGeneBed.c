@@ -25,8 +25,8 @@
 #define GTEX_GENE_MODEL_TABLE  "gtexGeneModel"
 
 // Versions are used to suffix tablenames
-char *gtexVersion = "";
-char *gencodeVersion = "V19";
+static char *version = "V6";
+static char *gencodeVersion = "V19";
 
 boolean doLoad = FALSE;
 char *database, *table;
@@ -40,14 +40,14 @@ errAbort(
   "usage:\n"
   "   hgGtexGeneBed database table\n"
   "options:\n"
-  "    -gtexVersion=VN (default \'%s\')\n"
+  "    -version=VN (default \'%s\')\n"
   "    -gencodeVersion=VNN (default \'%s\')\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
-  , gtexVersion, gencodeVersion);
+  , version, gencodeVersion);
 }
 
 static struct optionSpec options[] = {
-    {"gtexVersion", OPTION_STRING},
+    {"version", OPTION_STRING},
     {"gencodeVersion", OPTION_STRING},
     {"noLoad", OPTION_BOOLEAN},
     {NULL, 0},
@@ -84,7 +84,7 @@ sqlFreeResult(&sr);
 
 // Get GTEx gene models
 // and GENCODE gene tables
-safef(buf, sizeof buf, "%s%s", GTEX_GENE_MODEL_TABLE, gtexVersion);
+safef(buf, sizeof buf, "%s%s", GTEX_GENE_MODEL_TABLE, version);
 if (!sqlTableExists(conn, buf))
     errAbort("Can't find gene model table %s", buf);
 struct hash *modelHash = newHash(0);
@@ -105,7 +105,7 @@ sqlFreeResult(&sr);
 verbose(2, "Reading gtexTissueMedian table\n");
 struct gtexGeneBed *geneBed, *geneBeds = NULL;
 struct gtexTissueMedian *gtexData;
-sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, gtexVersion);
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, version);
 sr = sqlGetResult(connFixed, query);
 float maxVal = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -182,7 +182,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 doLoad = !optionExists("noLoad");
-gtexVersion = optionVal("gtexVersion", gtexVersion);
+version = optionVal("version", version);
 gencodeVersion = optionVal("gencodeVersion", gencodeVersion);
 database = argv[1];
 table = argv[2];

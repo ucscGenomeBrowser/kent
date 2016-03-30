@@ -17382,7 +17382,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     int fieldCount = hasBin + (hasFrames ? 15 : 10);
     struct genePred *gp;
     if (hasFrames)
+        {
 	gp = genePredExtLoad(row+hasBin, fieldCount);
+        // Some tables have an exonFrames column but it's empty...
+        if (gp->exonFrames == NULL)
+            genePredAddExonFrames(gp);
+        }
     else
 	{
 	gp = genePredLoad(row+hasBin);

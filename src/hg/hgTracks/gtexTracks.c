@@ -375,7 +375,8 @@ safef(buf, sizeof(buf), "%s%s", modelTable, extras->version ? extras->version: "
 struct hash *modelHash = loadGeneModels(buf);
 
 /* Get geneBeds (names and all-sample tissue median scores) in range */
-bedLoadItem(tg, tg->table, (ItemLoader)gtexGeneBedLoad);
+char *filter = getScoreFilterClause(cart, tg->tdb, NULL);
+bedLoadItemWhere(tg, tg->table, filter, (ItemLoader)gtexGeneBedLoad);
 
 /* Create geneInfo items with BED and geneModels */
 struct gtexGeneInfo *geneInfo = NULL, *list = NULL;
@@ -483,11 +484,10 @@ return tvSquish;
 
 static int gtexGeneModelHeight(struct gtexGeneExtras *extras)
 {
-long winSize = virtWinBaseCount;
-if (winSize < WIN_MED_GRAPH && !extras->isComparison)
-    return tl.fontHeight;
-// too busy to show exon arrows if zoomed out or have double graphs
-return 8;
+enum trackVisibility vis = gtexGeneModelVis(extras);
+if (vis == tvSquish)
+    return trunc(tl.fontHeight/2) + 1;
+return tl.fontHeight;
 }
 
 static int gtexGraphPadding()
@@ -633,7 +633,7 @@ if (geneInfo->geneModel) // some BEDs do not have a corresponding geneModel reco
     struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneInfo->geneModel, FALSE);
     lf->filterColor = statusColor;
     linkedFeaturesDrawAt(tg, lf, hvg, xOff, yGene, scale, font, color, 
-                                gtexGeneModelVis(extras));
+                                    gtexGeneModelVis(extras));
     }
 tg->heightPer = heightPer;
 }
@@ -753,7 +753,14 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
 static int gtexGeneItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
 {
 if (tg->visibility == tvSquish || tg->visibility == tvDense)
+    {
+    if (tg->visibility == tvSquish)
+        {
+        tg->lineHeight = trunc(tl.fontHeight/2) + 1;
+        tg->heightPer = tg->lineHeight;
+        }
     return tgFixedItemHeight(tg, item);
+    }
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if (isMax)
     {
@@ -806,6 +813,18 @@ safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description,
 return buf;
 }
 
+static void getItemX(int start, int end, int *x1, int *x2)
+/* Return startX, endX based on item coordinates and current window */
+{
+int s = max(start, winStart);
+int e = min(end, winEnd);
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+assert(x1);
+*x1 = round((double)((int)s-winStart)*scale + insideX);
+assert(x2);
+*x2 = round((double)((int)e-winStart)*scale + insideX);
+}
+
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
                         char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* Create a map box on gene model and label, and one for each tissue (bar in the graph) in
@@ -826,8 +845,11 @@ if (tg->visibility == tvSquish)
     if (tisId > 1)
         maxTissue = getTissueDescription(tisId, extras->version);
     char buf[128];
-    safef(buf, sizeof buf, "%s %s%s", geneBed->name, tisId > 0 ? "+":"", maxTissue);
-    mapBoxHc(hvg, start, end, x, y, width, height, tg->track, mapItemName, buf);
+    safef(buf, sizeof buf, "%s %s%s", geneBed->name, tisId > 0 ? "^":"", maxTissue);
+    int x1, x2;
+    getItemX(start, end, &x1, &x2);
+    int width = x2-x1;
+    mapBoxHc(hvg, start, end, x1, y, width, height, tg->track, mapItemName, buf);
     return;
     }
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
@@ -891,16 +913,13 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
 // NOTE: this is "under" the tissue map boxes
 if (geneInfo->geneModel && geneInfo->description)
     {
-    double scale = scaleForWindow(insideWidth, winStart, winEnd);
-    int geneStart = max(geneInfo->geneModel->txStart, winStart);
-    int geneEnd = min(geneInfo->geneModel->txEnd, winEnd);
-    int geneX = round((geneStart-winStart)*scale);
-    int w = round((geneEnd-winStart)*scale) - geneX;
-    x1 = insideX + geneX;
+    int x1, x2;
+    getItemX(geneInfo->geneModel->txStart, geneInfo->geneModel->txEnd, &x1, &x2);
+    int w = x2-x1;
     int labelWidth = mgFontStringWidth(tl.font, itemName);
     if (x1-labelWidth <= insideX)
         labelWidth = 0;
-    mapBoxHc(hvg, start, end, x1-labelWidth, y, w+labelWidth, geneInfo->height, tg->track, 
+    mapBoxHc(hvg, start, end, x1-labelWidth, y, w+labelWidth, geneInfo->height-3, tg->track, 
                     mapItemName, geneInfo->description);
     }
 }
