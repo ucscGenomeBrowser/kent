@@ -90,7 +90,7 @@ else
       | sed "/$table/,/^tablesIgnored/\!d" | \
       grep "^tablesIgnored"
     if ( $status ) then 
-      echo "\n  Identifier not found, and not in tablesIgnored"
+      echo "\n  Identifier not found, and not in tablesIgnored: $table"
     endif
 
     rm -f xxIDxx
