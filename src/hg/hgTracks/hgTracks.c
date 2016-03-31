@@ -6959,10 +6959,28 @@ while(track)
 return (((float)totalDrawTime / winCount) + 0.5);
 }
 
+static int avgWigMafLoadTime(struct track *track)
+/* calculate average wigMaf loadtime across all windows */
+{
+int totalLoadTime = 0;
+int winCount = 0;
+while(track)
+    {
+    ++winCount;
+    if (startsWith("wigMaf", track->tdb->type))
+	if (track->subtracks)
+	    if (track->subtracks->loadTime)
+		totalLoadTime += track->subtracks->loadTime;
+    track = track->nextWindow;
+    }
+return (((float)totalLoadTime / winCount) + 0.5);
+}
+
 static void printTrackTiming()
 {
 hPrintf("<span class='trackTiming'>track, load time, draw time, total (first window)<br />\n");
-hPrintf("<span class='trackTiming'><idiv style='color:red' >average for all windows in red</idiv><br />\n");
+if (virtMode)
+    hPrintf("<span class='trackTiming'><idiv style='color:red' >average for all windows in red</idiv><br />\n");
 struct track *track;
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -6978,11 +6996,14 @@ for (track = trackList; track != NULL; track = track->next)
                 hPrintf("%s, %d, %d, %d<br />\n", subtrack->shortLabel,
                             subtrack->loadTime, subtrack->drawTime,
                             subtrack->loadTime + subtrack->drawTime);
-		int avgLoad = avgLoadTime(subtrack);
-		int avgDraw = avgDrawTime(subtrack);
-                hPrintf("<idiv style='color:red' >%s, %d, %d, %d</idiv><br />\n", subtrack->shortLabel,
-                            avgLoad, avgDraw,
-                            avgLoad + avgDraw);
+		if (virtMode)
+		    {
+		    int avgLoad = avgLoadTime(subtrack);
+		    int avgDraw = avgDrawTime(subtrack);
+		    hPrintf("<idiv style='color:red' >%s, %d, %d, %d</idiv><br />\n", subtrack->shortLabel,
+				avgLoad, avgDraw,
+				avgLoad + avgDraw);
+		    }
 		}
         }
     else
@@ -6990,17 +7011,26 @@ for (track = trackList; track != NULL; track = track->next)
         hPrintf("%s, %d, %d, %d<br />\n",
 		    track->shortLabel, track->loadTime, track->drawTime,
 		    track->loadTime + track->drawTime);
-	int avgLoad = avgLoadTime(track);
-	int avgDraw = avgDrawTime(track);
-	hPrintf("<idiv style='color:red' >%s, %d, %d, %d</idiv><br />\n", track->shortLabel,
-		    avgLoad, avgDraw,
-		    avgLoad + avgDraw);
         if (startsWith("wigMaf", track->tdb->type))
             if (track->subtracks)
                 if (track->subtracks->loadTime)
                     hPrintf("&nbsp; &nbsp; %s wiggle, load %d<br />\n",
                                 track->shortLabel, track->subtracks->loadTime);
         }
+	if (virtMode)
+	    {
+	    int avgLoad = avgLoadTime(track);
+	    int avgDraw = avgDrawTime(track);
+	    hPrintf("<idiv style='color:red' >%s, %d, %d, %d</idiv><br />\n", track->shortLabel,
+			avgLoad, avgDraw,
+			avgLoad + avgDraw);
+	    int avgWigMafLoad = avgWigMafLoadTime(track);
+	    if (avgWigMafLoad > 0)
+		{
+		hPrintf("<idiv style='color:red' >&nbsp; &nbsp; %s wiggle, load %d</idiv><br />\n",
+			    track->shortLabel, avgWigMafLoad);
+		}
+	    }
     }
 hPrintf("</span>\n");
 }
