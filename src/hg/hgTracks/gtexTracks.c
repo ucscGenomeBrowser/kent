@@ -467,6 +467,7 @@ tg->items = list;
 
 #define MARGIN_WIDTH 1
 
+
 static int gtexBarWidth()
 {
 long winSize = virtWinBaseCount;
@@ -615,6 +616,18 @@ int graphWidth = gtexGraphWidth(tg, geneInfo);
 hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 }
 
+static void getItemX(int start, int end, int *x1, int *x2)
+/* Return startX, endX based on item coordinates and current window */
+{
+int s = max(start, winStart);
+int e = min(end, winEnd);
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+assert(x1);
+*x1 = round((double)((int)s-winStart)*scale + insideX);
+assert(x2);
+*x2 = round((double)((int)e-winStart)*scale + insideX);
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw tissue expression bar graph over gene model. 
@@ -625,9 +638,17 @@ struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 // Color in squish mode using geneClass
 Color statusColor = getGeneClassColor(hvg, geneBed);
-if (vis != tvFull && vis != tvPack)
+if (vis == tvDense)
     {
     bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
+    return;
+    }
+if (vis == tvSquish)
+    {
+    int x1, x2;
+    getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
+    Color color = gtexGeneItemColor(tg, geneBed, hvg);
+    hvGfxBox(hvg, x1, y, x2-x1, tl.fontHeight/2 + 2, color);
     return;
     }
 
@@ -826,18 +847,6 @@ safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description,
                                 qualifier != NULL ? " " : "",
                                 doLogTransform ? "log " : "");
 return buf;
-}
-
-static void getItemX(int start, int end, int *x1, int *x2)
-/* Return startX, endX based on item coordinates and current window */
-{
-int s = max(start, winStart);
-int e = min(end, winEnd);
-double scale = scaleForWindow(insideWidth, winStart, winEnd);
-assert(x1);
-*x1 = round((double)((int)s-winStart)*scale + insideX);
-assert(x2);
-*x2 = round((double)((int)e-winStart)*scale + insideX);
 }
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
