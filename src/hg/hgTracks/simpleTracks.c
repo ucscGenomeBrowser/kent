@@ -615,6 +615,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		slAddHead(&nodeList, node);
 
 		noLabel = TRUE; // turns off labels for all following windows - for now.
+
 		}
     
 	    if (!foundWork)
@@ -628,6 +629,11 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
             if (tg->nonPropPixelWidth)
                 {
                 int npWidth = tg->nonPropPixelWidth(tg, item);
+		// account for label width unless we are already pushed against left side.
+		if (rangeList->start != 0 && !tg->drawLabelInBox && !tg->drawName && withLabels)
+		    npWidth += mgFontStringWidth(font,
+					       tg->itemName(tg, item)) + extraWidth;
+
                 if (npWidth > rangeWidth)
                     { // keep the first range but extend it
                     range = rangeList;
