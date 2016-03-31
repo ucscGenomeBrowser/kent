@@ -726,7 +726,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
     // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > viewMax)
-        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 1, clipColor);
+        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 2, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 
@@ -747,7 +747,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         {
         // brighten colors a bit so they'll be more visible at this scale
         struct hslColor hsl = mgRgbToHsl(fillColor);
-        hsl.s = min(1000, hsl.s + 300);
+        hsl.s = min(1000, hsl.s + 200);
         fillColor = mgHslToRgb(hsl);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
@@ -760,7 +760,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
     // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > viewMax)
-        hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
+        hvGfxBox(hvg, x1, yZero + height-1, barWidth, 2, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 }
