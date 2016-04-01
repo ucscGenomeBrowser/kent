@@ -4251,7 +4251,6 @@ if (withLabels)
         }
     else
         {
-
 	// shift clipping to allow drawing label to left of currentWindow
 	int pdfSlop=nameWidth/5;
         hvGfxUnclip(hvg);
@@ -4262,7 +4261,7 @@ if (withLabels)
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, MG_WHITE, font, name);
             }
         else
-            // usual case
+            // usual labeling
             hvGfxTextRight(hvg, textX, y, nameWidth, tg->heightPer, labelColor, font, name);
         hvGfxUnclip(hvg);
         hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
