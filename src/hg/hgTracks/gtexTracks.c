@@ -1047,10 +1047,12 @@ static void gtexGenePreDrawItems(struct track *tg, int seqStart, int seqEnd,
                                 struct hvGfx *hvg, int xOff, int yOff, int width,
                                 MgFont *font, Color color, enum trackVisibility vis)
 {
-if (vis == tvPack || vis == tvFull)
+if (vis == tvSquish || vis == tvDense)
     {
-    tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
-    tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
+    // NonProp routines not relevant to these modes, and they interfere
+    // NOTE: they must be installed by gtexGeneMethods() for pack mode
+    tg->nonPropDrawItemAt = NULL;
+    tg->nonPropPixelWidth = NULL;
     }
 }
 
@@ -1066,5 +1068,7 @@ tg->itemHeight = gtexGeneItemHeight;
 tg->itemStart = gtexGeneItemStart;
 tg->itemEnd = gtexGeneItemEnd;
 tg->totalHeight = gtexGeneTotalHeight;
+tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
+tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
 }
 
