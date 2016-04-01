@@ -296,6 +296,12 @@ printf("<b>Limit to protein coding genes:</b>\n");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
 boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
 cgiMakeCheckBox(cartVar, isCodingOnly);
+
+/* Show exons in gene model */
+printf("&nbsp;&nbsp;<b>Show GTEx gene model</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
+boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
+cgiMakeCheckBox(cartVar, showExons);
 printf("</div>");
 
 /* Data transform. When selected, the next control (view limits max) is disabled */
