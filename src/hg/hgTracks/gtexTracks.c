@@ -272,6 +272,26 @@ static int gtexSquishItemHeight()
 return tl.fontHeight - tl.fontHeight/2;
 }
 
+static int gtexGeneBoxModelHeight()
+/* Height of indicator box drawn under graph to show gene extent */
+{
+long winSize = virtWinBaseCount;
+//FIXME: dupes!!
+#define WIN_MAX_GRAPH 50000
+#define WIN_MED_GRAPH 500000
+
+#define MAX_GENE_BOX_HEIGHT     2
+#define MED_GENE_BOX_HEIGHT     2
+#define MIN_GENE_BOX_HEIGHT     1
+
+if (winSize < WIN_MAX_GRAPH)
+    return MAX_GENE_BOX_HEIGHT;
+else if (winSize < WIN_MED_GRAPH)
+    return MED_GENE_BOX_HEIGHT;
+else
+    return MIN_GENE_BOX_HEIGHT;
+}
+
 static int gtexGeneItemHeight(struct track *tg, void *item);
 
 static void filterTissues(struct track *tg)
@@ -501,7 +521,7 @@ return tvSquish;
 static int gtexGeneModelHeight(struct gtexGeneExtras *extras)
 {
 if (!extras->showExons)
-    return 1;
+    return gtexGeneBoxModelHeight()+3;
 enum trackVisibility vis = gtexGeneModelVis(extras);
 if (vis == tvSquish)
     return trunc(tl.fontHeight/2) + 1;
@@ -618,7 +638,6 @@ Color lighterGray = MAKECOLOR_32(0xF3, 0xF3, 0xF3);
 int width = gtexGraphWidth(tg, geneInfo);
 int height = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 hvGfxOutlinedBox(hvg, x, y-height, width, height, MG_WHITE, lighterGray);
-//hvGfxBox(hvg, x, y-height, width, height, MG_WHITE);
 }
 
 static void drawGraphBase(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
@@ -631,6 +650,7 @@ hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 
 static void getItemX(int start, int end, int *x1, int *x2)
 /* Return startX, endX based on item coordinates and current window */
+// TODO: Should be using simpleTracks.c scaledBoxToPixelCoords
 {
 int s = max(start, winStart);
 int e = min(end, winEnd);
@@ -641,6 +661,25 @@ assert(x2);
 *x2 = round((double)((int)e-winStart)*scale + insideX);
 }
 
+static void drawGeneExprBox(struct track *tg, struct gtexGeneBed *geneBed, struct hvGfx *hvg, int y)
+/* Draw box colored by max expressed tissue (if any), for use in squish mode */
+// TODO: Should be using simpleTracks.c:drawScaledBox
+{
+int x1, x2;
+getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
+Color color = gtexGeneItemColor(tg, geneBed, hvg);
+hvGfxBox(hvg, x1, y, x2-x1, gtexSquishItemHeight(), color);
+}
+
+static void drawGeneModelBox(struct track *tg, struct gtexGeneBed *geneBed, struct hvGfx *hvg, int y, Color color)
+/* Draw indicator bar under graph, covering extent of gene */
+// TODO: Should be using simpleTracks.c:drawScaledBox
+{
+int x1, x2;
+getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
+hvGfxBox(hvg, x1, y, x2-x1, gtexGeneBoxModelHeight(), color);
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw tissue expression bar graph over gene model. 
@@ -649,20 +688,14 @@ static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int 
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
-// Color in squish mode using geneClass
-Color statusColor = getGeneClassColor(hvg, geneBed);
 if (vis == tvDense)
     {
-    bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
+    bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, MG_WHITE, vis);     // color ignored (using grayscale)
     return;
     }
 if (vis == tvSquish)
     {
-    int x1, x2;
-    getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
-    Color color = gtexGeneItemColor(tg, geneBed, hvg);
-    int height = gtexSquishItemHeight();
-    hvGfxBox(hvg, x1, y, x2-x1, height, color);
+    drawGeneExprBox(tg, geneBed, hvg, y);
     return;
     }
 
@@ -677,6 +710,7 @@ int yZero = topGraphHeight + y - 1;  // yZero is bottom of graph
 int yGene = yZero + gtexGeneMargin() - 1;
 int heightPer = tg->heightPer;
 tg->heightPer = gtexGeneModelHeight(extras) + 1;
+Color statusColor = getGeneClassColor(hvg, geneBed);
 if (geneInfo->geneModel && extras->showExons)
     {
     struct linkedFeatures *lf = linkedFeaturesFromGenePred(tg, geneInfo->geneModel, FALSE);
@@ -685,9 +719,7 @@ if (geneInfo->geneModel && extras->showExons)
     }
 else
     {
-    tg->exonArrows = FALSE;
-    tg->colorShades = FALSE;
-    bedDrawSimpleAt(tg, geneBed, hvg, xOff, yGene+2, scale, font, statusColor, tvSquish);
+    drawGeneModelBox(tg, geneBed, hvg, yGene+2, statusColor);
     }
 tg->heightPer = heightPer;
 }
@@ -807,6 +839,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
 
 static int gtexGeneItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
 {
+int height;
 if (tg->visibility == tvSquish || tg->visibility == tvDense)
     {
     if (tg->visibility == tvSquish)
@@ -814,7 +847,7 @@ if (tg->visibility == tvSquish || tg->visibility == tvDense)
         tg->lineHeight = gtexSquishItemHeight();
         tg->heightPer = tg->lineHeight;
         }
-    int height = tgFixedItemHeight(tg, item);
+    height = tgFixedItemHeight(tg, item);
     return height;
     }
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
@@ -823,15 +856,18 @@ if (isMax)
     int extra = 0;
     if (((struct gtexGeneExtras *)tg->extraUiData)->isComparison)
         extra = gtexMaxGraphHeight() + 2;
-    return gtexMaxGraphHeight() + gtexGeneMargin() + gtexGeneModelHeight(extras) + extra;
+    height= gtexMaxGraphHeight() + gtexGeneMargin() + gtexGeneModelHeight(extras) + extra;
+    return height;
     }
 if (item == NULL)
     return 0;
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 
 if (geneInfo->height != 0)
+    {
     return geneInfo->height;
-int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
+    }
+    int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 topGraphHeight = max(topGraphHeight, tl.fontHeight);
 int bottomGraphHeight = 0;
 boolean isComparison = ((struct gtexGeneExtras *)tg->extraUiData)->isComparison;
@@ -840,7 +876,7 @@ if (isComparison)
     bottomGraphHeight = max(gtexGeneGraphHeight(tg, geneInfo, FALSE),
                                 tl.fontHeight) + gtexGeneMargin();
     }
-int height = topGraphHeight + bottomGraphHeight + gtexGeneMargin() + 
+height = topGraphHeight + bottomGraphHeight + gtexGeneMargin() + 
                 gtexGeneModelHeight(extras);
 return height;
 }
