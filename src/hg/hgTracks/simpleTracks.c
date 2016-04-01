@@ -557,6 +557,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 	    struct spaceRange *rangeList=NULL, *range;
 	    struct spaceNode *nodeList=NULL, *node;
             int rangeWidth = 0; // width in pixels of all ranges
+	    int leftLabelSize = 0;
 	    for(; sin; sin=sin->next)
 		{
 
@@ -585,8 +586,14 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		else
 		    start = round((double)(baseStart - w->winStart)*scale);
 		if (!tg->drawLabelInBox && !tg->drawName && withLabels && (!noLabel))
-		    start -= mgFontStringWidth(font,
+		    {
+		    leftLabelSize = mgFontStringWidth(font,
 					       tg->itemName(tg, item)) + extraWidth;
+		    if (start - leftLabelSize + winOffset < 0) 
+			leftLabelSize = -start;
+		    start -= leftLabelSize; 
+		    }
+
 		if (baseEnd >= w->winEnd)
 		    end = w->insideWidth;
 		else
@@ -598,10 +605,6 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 			end = w->insideWidth;
 		    }
     
-		if (start + winOffset < 0) 
-		    start = -winOffset;
-
-
 		AllocVar(range);
 		range->start = start + winOffset;
 		range->end = end + winOffset;
@@ -629,11 +632,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
             if (tg->nonPropPixelWidth)
                 {
                 int npWidth = tg->nonPropPixelWidth(tg, item);
-		// account for label width unless we are already pushed against left side.
-		if (rangeList->start != 0 && !tg->drawLabelInBox && !tg->drawName && withLabels)
-		    npWidth += mgFontStringWidth(font,
-					       tg->itemName(tg, item)) + extraWidth;
-
+		npWidth += leftLabelSize;
                 if (npWidth > rangeWidth)
                     { // keep the first range but extend it
                     range = rangeList;
