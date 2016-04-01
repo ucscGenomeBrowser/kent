@@ -615,6 +615,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		slAddHead(&nodeList, node);
 
 		noLabel = TRUE; // turns off labels for all following windows - for now.
+
 		}
     
 	    if (!foundWork)
@@ -628,6 +629,11 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
             if (tg->nonPropPixelWidth)
                 {
                 int npWidth = tg->nonPropPixelWidth(tg, item);
+		// account for label width unless we are already pushed against left side.
+		if (rangeList->start != 0 && !tg->drawLabelInBox && !tg->drawName && withLabels)
+		    npWidth += mgFontStringWidth(font,
+					       tg->itemName(tg, item)) + extraWidth;
+
                 if (npWidth > rangeWidth)
                     { // keep the first range but extend it
                     range = rangeList;
@@ -2309,6 +2315,7 @@ long newWinStart, newWinEnd;
 int numExons = 0;
 int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
+boolean isExon = FALSE;
 if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     {
     nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Block");
@@ -2316,9 +2323,11 @@ if (startsWith("chain", tg->tdb->type) || startsWith("lrg", tg->tdb->track))
     }
 else
     {
-    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon Edge");
-    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon Edge");
+    nextExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "nextExonText", "Next Exon");
+    prevExonText = trackDbSettingClosestToHomeOrDefault(tg->tdb, "prevExonText", "Prev Exon");
     }
+if (sameString(nextExonText,"Next Exon"))
+    isExon = TRUE;
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
 /* It seems like lf->components isn't necessarily sorted. */
@@ -2398,11 +2407,32 @@ for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, 
 	    {
 	    /* not an intron hanging over edge. */
 	    if ((xTallStart != -1) && (xTallStart > virtWinEnd) && (xTallStart < xExonEnd) && (xTallStart > xExonStart))
+		{
 		linkedFeaturesMoveWinEnd(xTallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "Coding Start of Exon";
+		    prevExonText = "Coding End of Exon";
+		    }
+		}
 	    else if ((xTallEnd != -1) && (xTallEnd > virtWinEnd) && (xTallEnd < xExonEnd) && (xTallEnd > xExonStart))
+		{
 		linkedFeaturesMoveWinEnd(xTallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "Coding End of Exon";
+		    prevExonText = "Coding Start of Exon";
+		    }
+		}
 	    else
+		{
 		linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "End of Exon";
+		    prevExonText = "Start of Exon";
+		    }
+		}
 	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
@@ -2423,11 +2453,32 @@ for (ref = exonList, cr=crList->next, exonIx = 0; ref != NULL; ref = ref->next, 
 	    {
 	    /* not an intron hanging over the edge. */
 	    if ((xTallEnd != -1) && (xTallEnd < virtWinStart) && (xTallEnd > xExonStart) && (xTallEnd < xExonEnd))
+		{
 		linkedFeaturesMoveWinStart(xTallEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "Coding Start of Exon";
+		    prevExonText = "Coding End of Exon";
+		    }
+		}
 	    else if ((xTallStart != -1) && (xTallStart < virtWinStart) && (xTallStart > xExonStart) && (xTallStart < xExonEnd))
+		{
 		linkedFeaturesMoveWinStart(xTallStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "Coding End of Exon";
+		    prevExonText = "Coding Start of Exon";
+		    }
+		}
 	    else
+		{
 		linkedFeaturesMoveWinStart(xExonStart, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+		if (isExon)
+		    {
+		    nextExonText = "End of Exon";
+		    prevExonText = "Start of Exon";
+		    }
+		}
 	    }
 	else if (bigExon)
 	    linkedFeaturesMoveWinEnd(xExonEnd, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);

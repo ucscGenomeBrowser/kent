@@ -266,6 +266,12 @@ if (extras->isComparison)
     }
 }
 
+static int gtexSquishItemHeight()
+/* Height of squished item (request to have it larger than usual) */
+{
+return tl.fontHeight - tl.fontHeight/2;
+}
+
 static int gtexGeneItemHeight(struct track *tg, void *item);
 
 static void filterTissues(struct track *tg)
@@ -470,6 +476,7 @@ tg->items = list;
 
 #define MARGIN_WIDTH 1
 
+
 static int gtexBarWidth()
 {
 long winSize = virtWinBaseCount;
@@ -607,7 +614,7 @@ return valToClippedHeight(maxExp, maxMedian, viewMax, gtexMaxGraphHeight(), extr
 static void drawGraphBox(struct track *tg, struct gtexGeneInfo *geneInfo, struct hvGfx *hvg, int x, int y)
 /* Draw white background for graph */
 {
-Color lighterGray = MAKECOLOR_32(0xF5, 0xF5, 0xF5);
+Color lighterGray = MAKECOLOR_32(0xF3, 0xF3, 0xF3);
 int width = gtexGraphWidth(tg, geneInfo);
 int height = gtexGeneGraphHeight(tg, geneInfo, TRUE);
 hvGfxOutlinedBox(hvg, x, y-height, width, height, MG_WHITE, lighterGray);
@@ -622,6 +629,18 @@ int graphWidth = gtexGraphWidth(tg, geneInfo);
 hvGfxBox(hvg, x, y, graphWidth, 1, lightGray);
 }
 
+static void getItemX(int start, int end, int *x1, int *x2)
+/* Return startX, endX based on item coordinates and current window */
+{
+int s = max(start, winStart);
+int e = min(end, winEnd);
+double scale = scaleForWindow(insideWidth, winStart, winEnd);
+assert(x1);
+*x1 = round((double)((int)s-winStart)*scale + insideX);
+assert(x2);
+*x2 = round((double)((int)e-winStart)*scale + insideX);
+}
+
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw tissue expression bar graph over gene model. 
@@ -632,9 +651,18 @@ struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 // Color in squish mode using geneClass
 Color statusColor = getGeneClassColor(hvg, geneBed);
-if (vis != tvFull && vis != tvPack)
+if (vis == tvDense)
     {
     bedDrawSimpleAt(tg, geneBed, hvg, xOff, y, scale, font, statusColor, vis);
+    return;
+    }
+if (vis == tvSquish)
+    {
+    int x1, x2;
+    getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
+    Color color = gtexGeneItemColor(tg, geneBed, hvg);
+    int height = gtexSquishItemHeight();
+    hvGfxBox(hvg, x1, y, x2-x1, height, color);
     return;
     }
 
@@ -738,7 +766,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         hvGfxOutlinedBox(hvg, x1, yZero-height+1, barWidth, height, fillColorIx, lineColorIx);
     // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > viewMax)
-        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 1, clipColor);
+        hvGfxBox(hvg, x1, yZero-height+1, barWidth, 2, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 
@@ -759,7 +787,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         {
         // brighten colors a bit so they'll be more visible at this scale
         struct hslColor hsl = mgRgbToHsl(fillColor);
-        hsl.s = min(1000, hsl.s + 300);
+        hsl.s = min(1000, hsl.s + 200);
         fillColor = mgHslToRgb(hsl);
         }
     int fillColorIx = hvGfxFindColorIx(hvg, fillColor.r, fillColor.g, fillColor.b);
@@ -772,7 +800,7 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
         hvGfxOutlinedBox(hvg, x1, yZero, barWidth, height, fillColorIx, lineColorIx);
     // mark clipped bar with magenta tip
     if (!extras->doLogTransform && expScore > viewMax)
-        hvGfxBox(hvg, x1, yZero + height, barWidth, 1, clipColor);
+        hvGfxBox(hvg, x1, yZero + height-1, barWidth, 2, clipColor);
     x1 = x1 + barWidth + graphPadding;
     }
 }
@@ -783,10 +811,11 @@ if (tg->visibility == tvSquish || tg->visibility == tvDense)
     {
     if (tg->visibility == tvSquish)
         {
-        tg->lineHeight = trunc(tl.fontHeight/2) + 1;
+        tg->lineHeight = gtexSquishItemHeight();
         tg->heightPer = tg->lineHeight;
         }
-    return tgFixedItemHeight(tg, item);
+    int height = tgFixedItemHeight(tg, item);
+    return height;
     }
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if (isMax)
@@ -839,18 +868,6 @@ safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description,
                                 qualifier != NULL ? " " : "",
                                 doLogTransform ? "log " : "");
 return buf;
-}
-
-static void getItemX(int start, int end, int *x1, int *x2)
-/* Return startX, endX based on item coordinates and current window */
-{
-int s = max(start, winStart);
-int e = min(end, winEnd);
-double scale = scaleForWindow(insideWidth, winStart, winEnd);
-assert(x1);
-*x1 = round((double)((int)s-winStart)*scale + insideX);
-assert(x2);
-*x2 = round((double)((int)e-winStart)*scale + insideX);
 }
 
 static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, char *itemName, 
@@ -972,9 +989,15 @@ static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 int height = 0;
 
-if (tg->visibility == tvSquish || tg->visibility == tvDense)
-    {
+if (tg->visibility == tvDense)
+    { 
     height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+    }
+else if (tg->visibility == tvSquish)
+    {
+    // for visibility, set larger than the usual squish, which is half font height
+    height = gtexSquishItemHeight() * 2;  // the squish packer halves this
+    height = tgFixedTotalHeightOptionalOverflow(tg, vis, height+1, height, FALSE);
     }
 else if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
     {
@@ -1033,9 +1056,23 @@ int graphWidth = gtexGraphWidth(tg, geneInfo);
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
 }
 
+static void gtexGenePreDrawItems(struct track *tg, int seqStart, int seqEnd,
+                                struct hvGfx *hvg, int xOff, int yOff, int width,
+                                MgFont *font, Color color, enum trackVisibility vis)
+{
+if (vis == tvSquish || vis == tvDense)
+    {
+    // NonProp routines not relevant to these modes, and they interfere
+    // NOTE: they must be installed by gtexGeneMethods() for pack mode
+    tg->nonPropDrawItemAt = NULL;
+    tg->nonPropPixelWidth = NULL;
+    }
+}
+
 void gtexGeneMethods(struct track *tg)
 {
 tg->drawItemAt = gtexGeneDrawAt;
+tg->preDrawItems = gtexGenePreDrawItems;
 tg->loadItems = gtexGeneLoadItems;
 tg->mapItem = gtexGeneMapItem;
 tg->itemName = gtexGeneItemName;
@@ -1047,6 +1084,4 @@ tg->totalHeight = gtexGeneTotalHeight;
 tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
 tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
 }
-
-
 
