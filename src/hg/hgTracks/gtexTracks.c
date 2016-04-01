@@ -265,6 +265,12 @@ if (extras->isComparison)
     }
 }
 
+static int gtexSquishItemHeight()
+/* Height of squished item (request to have it larger than usual) */
+{
+return tl.fontHeight - tl.fontHeight/2;
+}
+
 static int gtexGeneItemHeight(struct track *tg, void *item);
 
 static void filterTissues(struct track *tg)
@@ -648,7 +654,8 @@ if (vis == tvSquish)
     int x1, x2;
     getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
     Color color = gtexGeneItemColor(tg, geneBed, hvg);
-    hvGfxBox(hvg, x1, y, x2-x1, tl.fontHeight/2 + 2, color);
+    int height = gtexSquishItemHeight();
+    hvGfxBox(hvg, x1, y, x2-x1, height, color);
     return;
     }
 
@@ -792,10 +799,11 @@ if (tg->visibility == tvSquish || tg->visibility == tvDense)
     {
     if (tg->visibility == tvSquish)
         {
-        tg->lineHeight = trunc(tl.fontHeight/2) + 1;
+        tg->lineHeight = gtexSquishItemHeight();
         tg->heightPer = tg->lineHeight;
         }
-    return tgFixedItemHeight(tg, item);
+    int height = tgFixedItemHeight(tg, item);
+    return height;
     }
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 if (isMax)
@@ -968,9 +976,15 @@ static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 int height = 0;
 
-if (tg->visibility == tvSquish || tg->visibility == tvDense)
-    {
+if (tg->visibility == tvDense)
+    { 
     height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+    }
+else if (tg->visibility == tvSquish)
+    {
+    // for visibility, set larger than the usual squish, which is half font height
+    height = gtexSquishItemHeight() * 2;  // the squish packer halves this
+    height = tgFixedTotalHeightOptionalOverflow(tg, vis, height+1, height, FALSE);
     }
 else if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
     {
@@ -1029,9 +1043,21 @@ int graphWidth = gtexGraphWidth(tg, geneInfo);
 return max(geneBed->chromEnd, max(winStart, geneBed->chromStart) + graphWidth/scale);
 }
 
+static void gtexGenePreDrawItems(struct track *tg, int seqStart, int seqEnd,
+                                struct hvGfx *hvg, int xOff, int yOff, int width,
+                                MgFont *font, Color color, enum trackVisibility vis)
+{
+if (vis == tvPack || vis == tvFull)
+    {
+    tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
+    tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
+    }
+}
+
 void gtexGeneMethods(struct track *tg)
 {
 tg->drawItemAt = gtexGeneDrawAt;
+tg->preDrawItems = gtexGenePreDrawItems;
 tg->loadItems = gtexGeneLoadItems;
 tg->mapItem = gtexGeneMapItem;
 tg->itemName = gtexGeneItemName;
@@ -1040,9 +1066,5 @@ tg->itemHeight = gtexGeneItemHeight;
 tg->itemStart = gtexGeneItemStart;
 tg->itemEnd = gtexGeneItemEnd;
 tg->totalHeight = gtexGeneTotalHeight;
-tg->nonPropDrawItemAt = gtexGeneNonPropDrawAt;
-tg->nonPropPixelWidth = gtexGeneNonPropPixelWidth;
 }
-
-
 
