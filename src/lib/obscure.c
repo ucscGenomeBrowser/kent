@@ -460,7 +460,7 @@ return hashThisEqThatLine(line, lineIx, TRUE);
 }
 
 struct slName *stringToSlNames(char *string)
-/* Convert string to a list of slNames separated by
+/* split string and convert to a list of slNames separated by
  * white space, but allowing multiple words in quotes.
  * Quotes if any are stripped.  */
 {
@@ -494,7 +494,7 @@ return list;
 }
 
 struct slName *charSepToSlNames(char *string, char c)
-/* Convert character-separated list of items to slName list. 
+/* Split string and convert character-separated list of items to slName list. 
  * Note that the last occurence of c is optional.  (That
  * is for a comma-separated list a,b,c and a,b,c, are
  * equivalent. */
@@ -524,7 +524,7 @@ return list;
 }
 
 struct slName *commaSepToSlNames(char *commaSep)
-/* Convert comma-separated list of items to slName list.  */
+/* Split string and convert comma-separated list of items to slName list.  */
 {
 return charSepToSlNames(commaSep, ',');
 }

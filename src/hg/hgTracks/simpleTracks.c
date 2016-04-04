@@ -590,7 +590,7 @@ for(w=windows,tg=tgSave; w; w=w->next,tg=tg->nextWindow)
 		    leftLabelSize = mgFontStringWidth(font,
 					       tg->itemName(tg, item)) + extraWidth;
 		    if (start - leftLabelSize + winOffset < 0) 
-			leftLabelSize = -start;
+			leftLabelSize = start + winOffset;
 		    start -= leftLabelSize; 
 		    }
 
