@@ -1279,7 +1279,12 @@ return sqlConnProfile(sqlProfileMustGet(NULL, database), database, FALSE);
 
 static boolean sqlConnectIfUnconnected(struct sqlConnection *sc, bool abort)
 /* Take a yet unconnected sqlConnection object and connect it to the sql server. 
- * returns TRUE on success, FALSE otherwise. */
+ * returns TRUE on success, FALSE otherwise. 
+ * This allows us to have mysql connection objects with a server name, port,
+ * database etc, but no actual mysql connection setup yet. The connection is
+ * only done when a query comes in. This saves a lot of time, as the failover
+ * connection object is just tracking the database changes on the main
+ * connection, and connects only when really necessary.  */
 {
 if (sc->conn!=NULL)
     return TRUE;
