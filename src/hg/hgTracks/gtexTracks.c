@@ -661,25 +661,6 @@ assert(x2);
 *x2 = round((double)((int)e-winStart)*scale + insideX);
 }
 
-static void drawGeneExprBox(struct track *tg, struct gtexGeneBed *geneBed, struct hvGfx *hvg, int y)
-/* Draw box colored by max expressed tissue (if any), for use in squish mode */
-// TODO: Should be using simpleTracks.c:drawScaledBox
-{
-int x1, x2;
-getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
-Color color = gtexGeneItemColor(tg, geneBed, hvg);
-hvGfxBox(hvg, x1, y, x2-x1, gtexSquishItemHeight(), color);
-}
-
-static void drawGeneModelBox(struct track *tg, struct gtexGeneBed *geneBed, struct hvGfx *hvg, int y, Color color)
-/* Draw indicator bar under graph, covering extent of gene */
-// TODO: Should be using simpleTracks.c:drawScaledBox
-{
-int x1, x2;
-getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
-hvGfxBox(hvg, x1, y, x2-x1, gtexGeneBoxModelHeight(), color);
-}
-
 static void gtexGeneDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, 
                 double scale, MgFont *font, Color color, enum trackVisibility vis)
 /* Draw tissue expression bar graph over gene model. 
@@ -695,7 +676,9 @@ if (vis == tvDense)
     }
 if (vis == tvSquish)
     {
-    drawGeneExprBox(tg, geneBed, hvg, y);
+    Color color = gtexGeneItemColor(tg, geneBed, hvg);
+    int height = gtexSquishItemHeight();
+    drawScaledBox(hvg, geneBed->chromStart, geneBed->chromEnd, scale, xOff, y, height, color);
     return;
     }
 
@@ -719,7 +702,8 @@ if (geneInfo->geneModel && extras->showExons)
     }
 else
     {
-    drawGeneModelBox(tg, geneBed, hvg, yGene+2, statusColor);
+    int height = gtexGeneBoxModelHeight();
+    drawScaledBox(hvg, geneBed->chromStart, geneBed->chromEnd, scale, xOff, yGene+2, height, statusColor);
     }
 tg->heightPer = heightPer;
 }
@@ -928,9 +912,10 @@ if (tg->visibility == tvSquish)
     char buf[128];
     safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
     int x1, x2;
-    getItemX(start, end, &x1, &x2);
+    getItemX(geneBed->chromStart, geneBed->chromEnd, &x1, &x2);
     int width = x2-x1;
-    mapBoxHc(hvg, start, end, x1, y, width, height, tg->track, mapItemName, buf);
+    mapBoxHc(hvg, geneBed->chromStart, geneBed->chromEnd, x1, y, width, height, 
+                tg->track, mapItemName, buf);
     return;
     }
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
