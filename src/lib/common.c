@@ -1931,7 +1931,7 @@ return count;
  * outArray.  It returns the number of strings.
  * If you pass in NULL for outArray, it will just
  * return the number of strings that it *would*
- * chop. 
+ * chop. This splits the string.
  * GOTCHA: since multiple separators are skipped
  * and treated as one, it is impossible to parse 
  * a list with an empty string. 
