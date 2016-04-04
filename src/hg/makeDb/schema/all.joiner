@@ -5232,6 +5232,7 @@ identifier ncbiRefSeq
 
 identifier gtexDonor
 "GTEx donor ID"
+    hgFixed.gtexDonor.name
     hgFixed.gtexSample.donor
 
 identifier gtexSample
