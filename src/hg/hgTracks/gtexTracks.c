@@ -923,7 +923,6 @@ if (tg->visibility == tvDense)
 struct gtexGeneInfo *geneInfo = item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
-double scale = scaleForWindow(insideWidth, winStart, winEnd);
 if (tg->visibility == tvSquish)
     {
     int tisId = maxTissueForGene(geneBed);
@@ -932,8 +931,13 @@ if (tg->visibility == tvSquish)
         maxTissue = getTissueDescription(tisId, extras->version);
     char buf[128];
     safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
-    mapScaledBoxHc(hvg, geneBed->chromStart, geneBed->chromEnd, scale, x, y, height, 
-                        tg->track, mapItemName, buf);
+    int x1, x2;
+    int s = geneBed->chromStart;
+    int e = geneBed->chromEnd;
+    getItemX(s, e, &x1, &x2);
+    int width = max(1, x2-x1);
+    mapBoxHc(hvg, s, e, x1, y, width, height, 
+                 tg->track, mapItemName, buf);
     return;
     }
 int topGraphHeight = gtexGeneGraphHeight(tg, geneInfo, TRUE);
