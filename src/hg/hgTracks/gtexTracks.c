@@ -923,6 +923,8 @@ if (tg->visibility == tvDense)
 struct gtexGeneInfo *geneInfo = item;
 struct gtexGeneBed *geneBed = geneInfo->geneBed;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
+int geneStart = geneBed->chromStart;
+int geneEnd = geneBed->chromEnd;
 if (tg->visibility == tvSquish)
     {
     int tisId = maxTissueForGene(geneBed);
@@ -932,11 +934,9 @@ if (tg->visibility == tvSquish)
     char buf[128];
     safef(buf, sizeof buf, "%s %s", geneBed->name, maxTissue);
     int x1, x2;
-    int s = geneBed->chromStart;
-    int e = geneBed->chromEnd;
-    getItemX(s, e, &x1, &x2);
+    getItemX(geneStart, geneEnd, &x1, &x2);
     int width = max(1, x2-x1);
-    mapBoxHc(hvg, s, e, x1, y, width, height, 
+    mapBoxHc(hvg, geneStart, geneEnd, x1, y, width, height, 
                  tg->track, mapItemName, buf);
     return;
     }
@@ -979,7 +979,7 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
     char *qualifier = NULL;
     if (extras->isComparison && extras->isDifference)
         qualifier = "F-M";
-    mapBoxHc(hvg, start, end, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
+    mapBoxHc(hvg, geneStart, geneEnd, x1, yZero-height, barWidth, height, tg->track, mapItemName,  
                 tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
     // add map box to comparison graph
     if (geneInfo->medians2)
@@ -990,7 +990,7 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
         int y = yZero + gtexGeneModelHeight(extras) + gtexGeneMargin();  // y is top of bottom graph
         if (extras->isComparison && extras->isDifference)
             qualifier = "M-F";
-        mapBoxHc(hvg, start, end, x1, y, barWidth, height, tg->track, mapItemName,
+        mapBoxHc(hvg, geneStart, geneEnd, x1, y, barWidth, height, tg->track, mapItemName,
                 tissueExpressionText(tissue, expScore, extras->doLogTransform, qualifier));
         }
     x1 = x1 + barWidth + padding;
@@ -999,21 +999,22 @@ for (tissue = tissues; tissue != NULL; tissue = tissue->next, i++)
 // add map boxes with description to gene model
 if (geneInfo->geneModel && geneInfo->description)
     {
+    // perhaps these are just start, end ?
+    int itemStart = geneInfo->geneModel->txStart;
+    int itemEnd = gtexGeneItemEnd(tg, item);
     int x1, x2;
-    int s = geneInfo->geneModel->txStart;
-    int e = gtexGeneItemEnd(tg, item);
-    getItemX(s, e, &x1, &x2);
+    getItemX(itemStart, itemEnd, &x1, &x2);
     int w = x2-x1;
     int labelWidth = mgFontStringWidth(tl.font, itemName);
     if (x1-labelWidth <= insideX)
         labelWidth = 0;
     // map over label
     int itemHeight = geneInfo->height;
-    mapBoxHc(hvg, start, end, x1-labelWidth, y, labelWidth, itemHeight-3, 
+    mapBoxHc(hvg, geneStart, geneEnd, x1-labelWidth, y, labelWidth, itemHeight-3, 
                         tg->track, mapItemName, geneInfo->description);
     // map over gene model (extending to end of item)
     int geneModelHeight = gtexGeneModelHeight(extras);
-    mapBoxHc(hvg, start, end, x1, y+itemHeight-geneModelHeight-3, w, geneModelHeight,
+    mapBoxHc(hvg, geneStart, geneEnd, x1, y+itemHeight-geneModelHeight-3, w, geneModelHeight,
                         tg->track, mapItemName, geneInfo->description);
     } 
 }
