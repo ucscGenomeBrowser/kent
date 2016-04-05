@@ -12,10 +12,10 @@ CREATE TABLE gtexGeneBed (
     score int unsigned not null,	# Score from 0-1000
     strand char(1) not null,	# + or - for strand
     geneId varchar(255) not null,	# Ensembl gene ID, referenced in GTEx data tables
-    transcriptId varchar(255) not null,	# Ensembl ID of Canonical transcript; determines genomic position
-    transcriptClass varchar(255) not null,	# GENCODE transcript class (coding, nonCoding, pseudo)
+    geneType varchar(255) not null,	# GENCODE gene biotype
     expCount int unsigned not null,	# Number of experiment values
     expScores longblob not null,	# Comma separated list of experiment scores
               #Indices
-    PRIMARY KEY(chrom)
+    PRIMARY KEY(geneId),
+    INDEX(chrom(20), chromStart)
 );

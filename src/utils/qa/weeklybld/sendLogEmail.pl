@@ -12,7 +12,8 @@ if ($argc != 2) {
 my $lastNN = shift;
 my $branchNN = shift;
 
-my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ' ann@soe.ucsc.edu';
+my $buildMeisterEmail = $ENV{'BUILDMEISTEREMAIL'} . ',ann@soe.ucsc.edu';
+my $returnEmail = ' ann@soe.ucsc.edu';
 
 my @victims;
 my %victimEmail;
@@ -36,7 +37,7 @@ while (my $line = <FH>) {
 close (FH);
 
 my $victimList = join(' ', sort @victims);
-open (FH, "|mail -r $buildMeisterEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEmail") or die "can not run mail command";
+open (FH, "|mail -r $returnEmail -s 'Code summaries for v$branchNN are expected from....' $buildMeisterEmail") or die "can not run mail command";
 printf FH "%s\n", $victimList;
 close (FH);
 foreach my $victim (sort keys %victimEmail) {

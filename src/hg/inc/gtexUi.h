@@ -50,4 +50,12 @@
 /* Tissue filter */
 #define GTEX_TISSUE_SELECT      "tissues"
 
+/* Gene filter */
+#define GTEX_CODING_GENE_FILTER                 "codingOnly"
+#define GTEX_CODING_GENE_FILTER_DEFAULT         FALSE
+
+/* Hide exons */
+#define GTEX_SHOW_EXONS         "showExons"
+#define GTEX_SHOW_EXONS_DEFAULT FALSE
+
 #endif /* GTEXUI_H */

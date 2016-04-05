@@ -1,0 +1,361 @@
+Here lies code to implement the CIRM Data Warehouse (CDW).  The CDW is designed to track 
+a moderate number (1,000,000's) of big (>1GB) files.  It consists of three parts:
+1) A Linux file system with a fairly large block size.
+2) A MySQL database with tables tracking
+    a) Users (by their email name)
+    b) Submits (by date/submitter/hub)
+    c) Files (by hub file name and CDW license plate).
+    d) Groups and file permissions
+    e) Results of automatic quality assurance results on files.
+
+The schema for the database is in lib/*.as, with most of the information in cdw.as. 
+There is also a script lib/resetCdw that will delete the existing database and create 
+a new one on the test site (hgwdev).  This should be viewed as documentation rather than
+as a program to run at this point, since the test database has useful stuff. The programs
+that interact with the database directly are in C, and all start with the "cdw" prefix.  
+Arguably the most important program is cdwSubmit.  This program takes a tab separated manifest
+file that contains a line for each file in the submission, and a tag-storm format metadata
+file that describes the experiments the files came from, copies the files into the warehouse
+directory, and puts the file into the cdwFile table.  It also adds jobs to a table
+for the validation/QA script.
+
+The validation is done asynchronously.  It is driven by the cdwRunDaemon program, which looks
+for new rows in the cdwJob table,  and runs them, keeping a configurable number of jobs (currently
+14) running in parallel.  The validation is done by a simple linear shell script, cdwQaAgent, 
+which calls a number of C programs one after the other.  The first and perhaps most important
+of these is cdwMakeValidFile,  which insures that a file is of the format it claims to be in
+the manifest, gathers some preliminary statistics on the file, and adds the file to the cdwValidFile
+table.  At this point the file will have a name that looks like a license plate, something like
+CDW123ABC.
+
+Once the asynchronous validation is complete, a wrangle will check for errors, deal with them
+if necessary, and then run a few commands to index and otherwise prepare the data for web display.
+The web display program is cdwWebBrowse.
+
+
+PROCESS DESCRIPTION - WHAT PROGRAMS RUN WHEN
+-------------------------------
+1) cdwSubmit parses manifest.txt and meta.txt inputs and makes sure that the meta tags in the 
+manifest exist in the meta.txt. It also checks meta.txt to make sure there are only legal tags
+present. It then md5-sums each file. It creates a cdwSubmit table entry. Then it processes each 
+file in the manifest sequentially, copying it to the warehouse,  and puts a row for 'cdwQaAgent' 
+in the cdwJob table.  
+2) cdwDaemon (another instance) notices cdwQaAgent job, and starts it, capturing start/end times and stderr output.  This means the server side validation/automatic QA process typically starts as cdwSubmit is working on copying the next file.
+3) cdwQaAgent is just a very small shell script that invokes the next QA steps sequentially.
+4) cdwMakeValidFile checks the file format really is what it is supposed to be, and for many file formats will gather statistics such as how many items covering how many bases are in the file.  This information goes into the cdwValidFile table, along with the CIRM license plate.  For fastq files additional information gets stored in the cdwFastqFile table,  and a sample fastq containing just 250,000 reads is made.   These reads get aligned against the target genome to compute the mapRatio.  For fastq files, and files such as BAM and bigBed, that include genomic coordinates,  a sample of 250,000 items is turned into a simple (non-blocked) bed file for later use.  If there is an error during the cdwMakeValidFile phase the cdwValidFile table entry will not be made, and there will be a message posted on the cdwFile errorMessage column.
+5) cdwMakePairedEndQa checks for read concordance for faired end fastq files
+6) cdwMakeEnrichments will take the sample bed files produced in step 10, and see where it lands relative to all the regions specified (as .bigBed files) in the cdwQaEnrichTarget table for the relevant assembly. It puts the results in the cdwQaEnrich table,  which will have one row for each file/target combination.
+7) cdwMakeReplicateQa looks for any files that are in the database already with the same experiment and output type, but a different replicate.  For these it  uses the sample bed files from step 10 to make an entry in the cdwQaPairSampleOverlap table (aka cross-splatter or cross-enrichment analysis).  For bigWig files instead of the cross-enrichment, it does correlations, putting the results in the cdwQaPairCorrelation table.  These correlations are done genome wide, and also restricted to the regions specified as the target in the manifest.
+8) cdwMakeContaminationQa runs only on fastq files.  It subsamples the 250,000 read sample down to 100,000 reads,  and aligns these against all organisms specified in the cdwQaContamTarget table.  The mapRatio is that results is stored in the cdwQaContam table, with one entry for each fastq file/target pair.
+9) cdwMakeRepeatQa also runs only on fastq files.  (Potentially this could be extended to other files though.)  It aligns the 250,000 read sample against a RepeatMasker library for the organism,  and stores the results in the cdwQaRepeat table.  This will have one entry for each major repeat class (LINE, SINE, tRNA, rRNA, etc) that gets hit by the sample, and includes what proportion of reads align to that major repeat class.
+10)cdwMakeTrackViz will prepare some file types for visualization in the genome browser, adding
+them to the appropriate table, and if necessary creating indexes.
+
+TROUBLE_SHOOTING TIPS (8/17 JK)
+--------------------------------
+when troubleshooting the CDW,  the first thing to do is use 'ps' to determine if cdwDaemons are running.  There should be at least 1:
+
+        kent      5729     1  0 Aug14 ?        00:00:00 cdwRunDaemon cdw cdwJob 12 /data/www/userdata/cdwQaAgent.fifo -log=cdwQaAgent.
+
+If not, go to:
+
+        production: /data/cirm/cdw/startup
+        test: /cluster/home/kent/kent/src/hg/cirm/cdw/lib
+
+and run
+        ./restartDaemons
+
+At this point they'll be restarted.  If the daemons are working, the next thing to do is look at the recent entries in the cdwSubmit, cdwSubmitJob and cdwJob tables.   Look in the errorMessage and stderr fields.
+
+SETTING UP THINGS FOR WEB BROWSER APP
+---------------------------------------
+There's some things that need to happen after the majority of the database is made by the validation
+daemon and cdwSubmit.  
+
+o - Run cdwMakeFileTags now to create cdwFileTags table
+o - Run cdwTextForIndex in /gbdb/cdw to create full text for free index search
+o - Run ixIxx to make the full text index in /gbdb
+o - You *might* need to run cdwChangeAccess to update the accessibility to make things
+    group readable, (or if the access all tag is intended but left off, world readable)
+
+
+COMMAND LINE USAGE
+
+SUBMITTING NEW DATA FILES
+--------------------------------------------------------------------------------
+$ cdwSubmit 
+
+cdwSubmit - Submit URL with validated.txt to warehouse.
+usage:
+   cdwSubmit email /path/to/manifest.tab meta.tag
+options:
+   -update  If set, will update metadata on file it already has. The default behavior is to
+            report an error if metadata doesn't match.
+   -noRevalidate - if set don't run revalidator on update
+   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files
+--------------------------------------------------------------------------------
+$ cdwMakeFileTags
+
+cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.
+usage:
+   cdwMakeFileTags now
+options:
+   -table=tableName What table to store results in, default cdwFileTags
+   -database=databaseName What database to store results in, default cdw
+--------------------------------------------------------------------------------
+$ cdwSwapInSymLink
+
+cdwSwapInSymLink - Replace submission file with a symlink to file in warehouse.
+usage:
+   cdwSwapInSymLink startFileId endFileId
+options:
+   -xxx=XXX
+--------------------------------------------------------------------------------
+$ cdwChangeAccess
+
+cdwChangeAccess - Change access to files.
+usage:
+   cdwChangeAccess code ' boolean query in rql'
+where code is three letters encode who, direction, and access in the same fashion
+more modern versions of the unix chmod functino does.  The who can be either
+   a - for all
+   g - for group
+   u - for user
+and direction is either + to add a permission or - to take it away,  and access is either
+   r - for read
+   w - for write
+for instance a+r gives everyone read access
+options:
+   -dry - if set just print what we _would_ change access to.
+--------------------------------------------------------------------------------
+$ cdwTextForIndex
+
+cdwTextForIndex - Make text file used for building ixIxx indexes
+usage:
+   cdwTextForIndex out.txt
+options:
+   -xxx=XXX
+--------------------------------------------------------------------------------
+$ ixIxx
+
+ixIxx - Create indices for simple line-oriented file of format 
+<symbol> <free text>
+usage:
+   ixIxx in.text out.ix out.ixx
+Where out.ix is a word index, and out.ixx is an index into the index.
+options:
+   -prefixSize=N Size of prefix to index on in ixx.  Default is 5.
+   -binSize=N Size of bins in ixx.  Default is 64k.
+
+UPDATING DATABASE FOR NEW USERS, AND CHANGING USER GROUPS AND PERMISSIONS
+--------------------------------------------------------------------------------
+$ cdwCreateUser
+
+cdwCreateUser - Create a new user from email combo.
+usage:
+   cdwCreateUser email
+--------------------------------------------------------------------------------
+$ cdwCreateGroup
+
+cdwCreateGroup - Create a new group for access control.
+usage:
+   cdwCreateGroup name "Descriptive sentence or two."
+--------------------------------------------------------------------------------
+$ cdwGroupFile
+
+cdwGroupFile - Associate a file with a group.
+usage:
+   cdwGroupFile group 'boolean expression like after a SQL where'
+options:
+   -remove - instead of adding this group permission, subtract it
+   -dry - if set just print what we _would_ add group to.
+--------------------------------------------------------------------------------
+$ cdwGroupUser
+
+cdwGroupUser - Change user group settings.
+usage:
+   cdwGroupUser group user1@email.add ... userN@email.add
+options:
+   -primary Make this the new primary group (where user's file's initially live).
+   -remove Remove users from group rather than add
+
+ADDING NEW GENOMES, NEW ANALYSIS STEPS, NEW TYPES OF QA
+--------------------------------------------------------------------------------
+$ cdwAddAssembly
+
+cdwAddAssembly - Add an assembly to database.
+usage:
+   cdwAddAssembly taxon name ucscDb twoBitFile
+options:
+   -symLink=MD5SUM - if set then make symlink rather than copy and use MD5SUM
+                     rather than calculating it.  Just to speed up testing
+--------------------------------------------------------------------------------
+$ cdwAddStep
+
+cdwAddStep - Add a step to pipeline
+usage:
+   cdwAddStep name 'description in quotes'
+options:
+   -xxx=XXX
+--------------------------------------------------------------------------------
+$ cdwAddQaContamTarget
+
+cdwAddQaContamTarget - Add a new contamination target to warehouse.
+usage:
+   cdwAddQaContamTarget assemblyName
+options:
+   -xxx=XXX
+--------------------------------------------------------------------------------
+$ cdwAddQaEnrichTarget
+
+cdwAddQaEnrichTarget - Add a new enrichment target to warehouse.
+usage:
+   cdwAddQaEnrichTarget name db path
+where name is target name, db is a UCSC db name like 'hg19' or 'mm9' and path is absolute
+path to a simple non-blocked bed file with non-overlapping items.
+
+
+QUERY DATABASE FROM COMMAND LINE
+--------------------------------------------------------------------------------
+$ cdwQuery
+
+cdwQuery - Get list of tagged files.
+usage:
+   cdwQuery 'sql-like query'
+options:
+   -out=output format where format is ra, tab, or tags
+
+
+VALIDATION AND QA (RUN AUTOMATICALLY)
+--------------------------------------------------------------------------------
+$ cdwQaAgent
+
+Run all agents on a file
+echo usage:  cdwQaAgent fileId
+usage:  cdwQaAgent fileId
+
+# Note: this is in the ../ directory as it is a script.
+--------------------------------------------------------------------------------
+$ cdwMakeContaminationQa
+
+cdwMakeContaminationQa - Screen for contaminants by aligning against contaminant genomes.
+usage:
+   cdwMakeContaminationQa startId endId
+where startId and endId are id's in the cdwFile table
+options:
+   -keepTemp
+--------------------------------------------------------------------------------
+$ cdwMakeEnrichments
+
+cdwMakeEnrichments - Scan through database and make a makefile to calc. enrichments and 
+store in database. Enrichments similar to 'featureBits -countGaps' enrichments.
+usage:
+   cdwMakeEnrichments startFileId endFileId
+--------------------------------------------------------------------------------
+$ cdwMakePairedEndQa
+
+cdwMakePairedEndQa - Do alignments of paired-end fastq files and calculate distrubution of 
+insert size.
+usage:
+   cdwMakePairedEndQa startId endId
+options:
+   -maxInsert=N - maximum allowed insert size, default 1000
+--------------------------------------------------------------------------------
+$ cdwMakeRepeatQa
+
+cdwMakeRepeatQa - Figure out what proportion of things align to repeats.
+usage:
+   cdwMakeRepeatQa startFileId endFileId
+--------------------------------------------------------------------------------
+$ cdwMakeReplicateQa
+
+cdwMakeReplicateQa - Do qa level comparisons of replicates.
+usage:
+   cdwMakeReplicateQa startId endId
+--------------------------------------------------------------------------------
+$ cdwMakeTrackViz
+
+cdwMakeTrackViz - If possible make cdwTrackViz table entry for a file.
+usage:
+   cdwMakeTrackViz startFileId endFileId
+options:
+   -xxx=XXX
+--------------------------------------------------------------------------------
+$ cdwMakeValidFile
+
+cdwMakeValidFile - Add range of ids to valid file table.
+usage:
+   cdwMakeValidFile startId endId
+options:
+   maxErrCount=N - maximum errors allowed before it stops, default 1
+   -redo - redo validation even if have it already
+--------------------------------------------------------------------------------
+$ cdwVcfStats
+
+cdwVcfStats - Make a pass through vcf file gatherings some stats.
+usage:
+   cdwVcfStats in.vcf out.ra
+options:
+   -bed=out.bed - make simple bed3 here
+
+
+MANAGE AUTOMATICALLY RUN JOBS
+--------------------------------------------------------------------------------
+$ cdwRunDaemon
+
+cdwRunDaemon v3 - Run jobs on multiple processers in background.  This is done with
+a combination of infrequent polling of the database, and a unix fifo which can be
+sent a signal (anything ending with a newline actually) that tells it to go look
+at database now.
+usage:
+   cdwRunDaemon database table count fifo
+where:
+   database - mySQL database where cdwRun table lives
+   table - table with same six fields as cdwRun table
+   count - number of simultanious jobs to run
+   fifo - named pipe used to notify daemon of new data
+options:
+   -debug - don't fork, close stdout, and daemonize self
+   -log=logFile - send error messages and warnings of daemon itself to logFile
+        There are not many of these.  Error mesages from jobs daemon runs end up
+        in errorMessage fields of database.
+   -logFacility - sends error messages and such to system log facility instead.
+   -delay=N - delay this many seconds before starting a job, default 1
+--------------------------------------------------------------------------------
+$ cdwRetryJob
+
+cdwRetryJob - Add jobs that failed back to a cdwJob format queue.
+usage:
+   cdwRetryJob database jobTable
+options:
+   -dry - dry run, just print jobs that would rerun
+   -minId=minimum ID of job to retry, default 0
+   -maxTime=N.N - Maximum time (in days) for a job to succeed. Default  1
+--------------------------------------------------------------------------------
+$ cdwRunOnIds
+
+cdwRunOnIds - Run a cdw command line program (one that takes startId endId as it's two parameters) for a range of ids, putting it on cdwJob queue.
+usage:
+   cdwRunOnIds program 'queryString'
+Where queryString is a SQL command that should return a list of fileIds.
+Example
+   cdwRunOnIds cdwFixQualScore 'select fileId from cdwFastqFile where qualMean < 0'options:
+   -runTable=cdwTempJob -job table to use
+--------------------------------------------------------------------------------
+$ cdwJob
+
+cdwJob - Look at a cdwJob format table and report what's up, optionally do something about it.
+usage:
+   cdwJob command
+Where commands are:
+   status - report overall status
+   count - just count table size
+   failed - list failed jobs
+   running - list running jobs
+   fihished - list finished (but not failed) jobs
+options:
+   -database=<mysql database> default cdw
+   -table=<mysql table> default cdwJob
+--------------------------------------------------------------------------------
+
+

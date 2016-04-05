@@ -66,7 +66,7 @@ def findIndex(isMouse):
         result = os.getenv("HOME")+"/kent/src/hg/cirm/cdw/wrangle/kallistoOnFastqMani/Homo_sapiens.GRCh38.rel79.cdna.all.fa.index"
     return result
 
-def makeJob(kallisto, index, meta, bootstraps, files, single):
+def makeJob(kallisto, index, meta, bootstraps, files, single, s=1, l=180):
     """
     kallisto - A string
     index - A string
@@ -75,14 +75,26 @@ def makeJob(kallisto, index, meta, bootstraps, files, single):
     files - A list of strings 
     """ 
     cmd = "%(kallisto)s quant -i %(index)s -o %(meta)s " % locals()
-    if bootstraps > 0: cmd += "-b %(bootstraps)i " % locals()
+    if bootstraps > 0: cmd += "-b %(bootstraps)i  " % locals()
     for file in files: 
         cmd += " ../%s" % file 
     if single: 
-        cmd += " -single"
+        cmd += " --single -l %(l)i -s %(s)i" % locals()
     return cmd 
 
-def makeJobList(manifestFile, outputFile, isMouse, bootstraps, verbose):
+
+def addKallistoManiEntry(dir, meta, kallistoMani, isMouse):
+    """
+    Input:  dir - A string
+            meta - A string
+    """
+    ucscDb = ""
+    if isMouse: ucscDb = "mm10"
+    else: ucscDb = "hg38"
+    kallistoMani.write("%s/%s/abundance.tsv\t%s\tkallisto_abundance\tlevels\t%s\n"%(dir, meta , meta, ucscDb))
+
+
+def makeJobList(manifestFile, outputFile, isMouse, bootstraps, dir, verbose):
     """
     Input:
         manifestFile - A string
@@ -94,6 +106,8 @@ def makeJobList(manifestFile, outputFile, isMouse, bootstraps, verbose):
     headerLine = True
     index = findIndex(isMouse) 
     single = True 
+    kallistoMani = open("manifestKallisto.txt", "w")
+    kallistoMani.write("#file\tmeta\tformat\toutput\tucsc_db\n") 
     for line in open(manifestFile, "r"):   
         if headerLine: # Determine the index of the columns
             splitLine = line.strip("#").strip("\n").split("\t") 
@@ -123,11 +137,14 @@ def makeJobList(manifestFile, outputFile, isMouse, bootstraps, verbose):
             files.append(splitLine[fileCol])
         else: # A new meta, flush the old data and reset 
             job = makeJob(kallisto, index, meta, bootstraps, files, single)
+            addKallistoManiEntry(dir,meta,kallistoMani, isMouse)
             outputFile.write(job + "\n")        
             meta = splitLine[metaCol] 
             files = [splitLine[fileCol]]
     job = makeJob(kallisto, index, meta, bootstraps, files, single)
+    addKallistoManiEntry(dir,meta,kallistoMani,isMouse)
     outputFile.write(job + "\n")        
+    kallistoMani.close()
     outputFile.close()
 
 def paraRunKallisto(verbose, server):
@@ -158,7 +175,7 @@ def main(args):
 
     if options.verbose: print ("Start run kallisto on a batch of fastq files (kallistoOnFastqMani).")
     if options.verbose: print ("Making the job list...")
-    makeJobList("../"+options.manifestFile, open("jobList","w", 1),options.isMouse, options.bootstrap, options.verbose)
+    makeJobList("../"+options.manifestFile, open("jobList","w", 1),options.isMouse, options.bootstrap, options.outputDir, options.verbose)
    
     if options.verbose:
         print ("The first ten commands in the joblist are...")

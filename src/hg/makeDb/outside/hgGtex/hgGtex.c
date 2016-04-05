@@ -17,6 +17,7 @@
 #include "gtexTissueData.h"
 #include "gtexTissueMedian.h"
 
+/* globals */
 char *database = "hgFixed";
 char *tabDir = ".";
 boolean doLoad = FALSE;
@@ -27,6 +28,11 @@ boolean exon = FALSE;
 boolean dropZeros = FALSE;
 char *releaseDate = NULL;
 int limit = 0;
+
+int dataSampleCount = 0;
+FILE *sampleDataFile, *tissueDataFile;
+FILE *tissueMedianAllFile, *tissueMedianFemaleFile, *tissueMedianMaleFile;
+struct hash *donorHash;
 
 #define DATA_FILE_VERSION "#1.2"
 
@@ -46,8 +52,8 @@ errAbort(
   "The second syntax creates tables in hgFixed:\n"
   "  1. All data (rootSampleData) : a row for each gene+sample, with RPKM expression level\n"
   "  2. Tissue data (rootTissueData): a row for each gene+tissue, with min/max/q1/q2/median\n"
-  "  2. Median data (rootTissueMedian): a row for each gene with a list of median RPKM\n"
-  "             expression levels by tissue\n"
+  "  3. Median data (rootTissueMedian[All|Female|Male]): a row for each gene with a list of\n"
+  "             median RPKM expression levels by tissue. There are 3 of these\n"
   "  4. Sample (rootSample): a row per sample, with metadata from GTEX\n"
   "  5. Donor (rootDonor): a row per subject, with metadata from GTEX\n"
   "  6. Info: Info: version, release date, and max median score (merge this into existing\n"
@@ -59,7 +65,7 @@ errAbort(
   "    -noLoad  - Don't load database and don't clean up tab files\n"
   "    -noData  - Don't create data files/tables (just metadata)\n"
   "    -doRound - Round data values\n"
-  "    -dropZeros - Ignore zero-valued data rows\n"
+  "    -dropZeros - Ignore zero-valued data rows (not recommended)\n"
   "    -limit=N - Only do limit rows of data table, for testing\n"
   "    -exon -    Create exon tables instead of gene tables\n" 
   "                    1. All data (rootSampleExonData)\n"
@@ -80,6 +86,90 @@ static struct optionSpec options[] = {
    {"limit", OPTION_INT},
    {NULL, 0},
 };
+
+/****************************/
+/* Deal with donors */
+
+#define SUBJECT_FIRST_FIELD_LABEL "SUBJID"
+
+#define SUBJECT_NAME_FIELD 0
+        // GTEX-XXXX
+#define SUBJECT_GENDER_FIELD 1
+        // 1=Male (hmmf), 2=Female
+#define donorGetGender(x) (sqlUnsigned(x) == 1 ? "M" : "F")
+#define donorIsFemale(x) (sameString(x, "F"))
+#define SUBJECT_AGE_FIELD 2
+        // e.g. 60-69 years
+#define SUBJECT_DEATH_FIELD 3   
+        // Hardy scale 0-4 or empty (unknown?).  See .as for scale definitions.
+#define donorGetDeathClass(x) (isEmpty(x) ? -1 : sqlUnsigned(x))
+#define SUBJECT_LAST_FIELD SUBJECT_DEATH_FIELD
+
+int donorGetAge(char *age)
+/* Change '60-69 yrs' to numeric 60 */
+{
+char *pos;
+char *ageBuf = cloneString(age);
+pos = stringIn("-", ageBuf);
+if (pos == NULL)
+    return 0;
+*pos = '\0';
+return sqlUnsigned(ageBuf);
+}
+
+char *donorFromSampleId(char *sampleId)
+/* Parse donorId from sampleId */
+/*  donor is first 2 components of sampleId: GTEX-XXXX */
+{
+char *donor = cloneString(sampleId);
+*strchr(strchr(donor, '-')+1, '-') = 0;
+return donor;
+}
+
+boolean sampleIsFemale(char *sampleId)
+/* Return TRUE if sample is from a female donor */
+{
+char *donorId = donorFromSampleId(sampleId);
+struct gtexDonor *donor = hashMustFindVal(donorHash, donorId);
+return donorIsFemale(donor->gender);
+}
+
+struct gtexDonor *parseSubjectFile(struct lineFile *lf)
+{
+char *line;
+if (!lineFileNext(lf, &line, NULL))
+    errAbort("%s is empty", lf->fileName);
+if (!startsWith(SUBJECT_FIRST_FIELD_LABEL, line))
+    errAbort("unrecognized format - expecting subject file header in %s first line", lf->fileName);
+
+char *words[100];
+int wordCount;
+struct gtexDonor *donor=NULL, *donors = NULL;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    /* Convert line to donor record */
+    wordCount = chopTabs(line, words);
+    lineFileExpectWords(lf, SUBJECT_LAST_FIELD+1, wordCount);
+
+    AllocVar(donor);
+    char *subject = cloneString(words[SUBJECT_NAME_FIELD]);
+    char *gender = cloneString(words[SUBJECT_GENDER_FIELD]);
+    char *age = cloneString(words[SUBJECT_AGE_FIELD]);
+    char *deathClass = cloneString(words[SUBJECT_DEATH_FIELD]);
+
+    verbose(3, "subject: %s %s %s %s\n", subject, gender, age, deathClass);
+    donor->name = subject;
+    donor->gender = donorGetGender(gender);
+    donor->age = donorGetAge(age);
+    donor->deathClass = donorGetDeathClass(deathClass);
+    slAddTail(&donors, donor);
+    //slAddHead(&donors, donor);
+    //slReverse(&donors);
+    }
+verbose(2, "Found %d donors\n", slCount(donors));
+return(donors);
+}
 
 /****************************/
 /* Process sample file */
@@ -109,6 +199,7 @@ static struct optionSpec options[] = {
    #define SAMPLE_ISOLATION_FIELD_INDEX 9
    #define SAMPLE_DATE_FIELD_INDEX 10
 #endif
+
 
 int parseSampleFileHeader(struct lineFile *lf)
 /* Parse GTEX sample file header. Return number of columns */
@@ -196,10 +287,7 @@ while (lineFileNext(lf, &line, NULL))
     AllocVar(sample);
     sample->sampleId = sampleId;
 
-    /*  donor is first 2 components of sampleId: GTEX-XXXX */
-    char *donor = cloneString(sampleId);
-    *strchr(strchr(donor, '-')+1, '-') = 0;
-    sample->donor = donor;
+    sample->donor = donorFromSampleId(sampleId);
 
     verbose(4, "parseSamples: lookup %s in tissueNameHash\n", words[SAMPLE_TISSUE_FIELD_INDEX]);
     sample->tissue = hashMustFindVal(tissueNameHash, words[SAMPLE_TISSUE_FIELD_INDEX]);
@@ -335,7 +423,7 @@ if (!lineFileNext(lf, &line, NULL))
 if (!startsWith("Name\tDescription", line))
     errAbort("%s unrecognized format", lf->fileName);
 char *sampleIds[sampleCount+3];
-int dataSampleCount = chopTabs(line, sampleIds) - 2;
+dataSampleCount = chopTabs(line, sampleIds) - 2;
 if (headerSampleCount != dataSampleCount)
     warn("Sample count mismatch in data file: header=%d, columns=%d\n",
                 headerSampleCount, dataSampleCount);
@@ -366,22 +454,22 @@ struct slName *idList = slNameListFromStringArray(samples, dataSampleCount+2);
 return idList;
 }
 
-void dataRowsOut(char **row, 
-                FILE *allFile, int sampleCount,
-                FILE *medianFile, FILE *tissueDataFile, int tissueCount,  char *tissueOrder[],
-                struct hash *tissueOffsets, double *maxScoreRet, double *maxMedianRet)
+void dataRowsOut(char **row, int tissueCount,  char *tissueOrder[], struct hash *tissueOffsets, 
+                        double *maxScoreRet, double *maxMedianRet)
 /* Output expression levels per sample and tissue for one gene. Return max score, median computed */
 {
 int i=0, j=0;
 struct sampleOffset *sampleOffset, *sampleOffsets;
-double *sampleVals;
+double *sampleVals, *femaleSampleVals, *maleSampleVals;
 double maxMedian = 0;
 double maxScore = 0;
 
-/* Print geneId and tissue count to median table file */
+/* Print geneId and tissue count to median table files */
 char *gene = row[0];
-fprintf(medianFile, "%s\t%d\t", gene, tissueCount);
-verbose(2, "%s\n", gene);
+fprintf(tissueMedianAllFile, "%s\t%d\t", gene, tissueCount);
+fprintf(tissueMedianFemaleFile, "%s\t%d\t", gene, tissueCount);
+fprintf(tissueMedianMaleFile, "%s\t%d\t", gene, tissueCount);
+verbose(3, "%s\n", gene);
 
 for (i=0; i<tissueCount; i++)
     {
@@ -392,6 +480,9 @@ for (i=0; i<tissueCount; i++)
     verbose(3, "%s\t%s\t%d samples\t", gene, tissue, tissueSampleCount);
     verbose(3, "\n");
     AllocArray(sampleVals, tissueSampleCount);
+    AllocArray(femaleSampleVals, tissueSampleCount);
+    AllocArray(maleSampleVals, tissueSampleCount);
+    int mj =0, fj = 0;
     for (j = 0, sampleOffset = sampleOffsets; j < tissueSampleCount;
                 sampleOffset = sampleOffset->next, j++)
         {
@@ -401,29 +492,53 @@ for (i=0; i<tissueCount; i++)
         double val = sqlDouble(row[(sampleOffset->offset) + skip]);
         if (dropZeros && val == 0.0)
             continue;
-        // TODO: use gtexSampleDataOut
+
+        // Output to sample data file
+        //     TODO: use gtexSampleDataOut
         verbose(3, "    %s\t%s\t%s\t%0.3f\n", gene, sampleOffset->sample, tissue, val);
-        fprintf(allFile, "%s\t%s\t%s\t", gene, sampleOffset->sample, tissue);
+        fprintf(sampleDataFile, "%s\t%s\t%s\t", gene, sampleOffset->sample, tissue);
         if (doRound)
-            fprintf(allFile, "%d", round(val));
+            fprintf(sampleDataFile, "%d", round(val));
         else 
-            fprintf(allFile, "%0.3f", val);
-        fprintf(allFile, "\n");
+            fprintf(sampleDataFile, "%0.3f", val);
+        fprintf(sampleDataFile, "\n");
         sampleVals[j] = val;
         maxScore = max(val, maxScore);
+
+        // create gender subsets
+        if (sampleIsFemale(sampleOffset->sample))
+            femaleSampleVals[fj++] = val;
+        else
+            maleSampleVals[mj++] = val;
         }
-    /* Compute stats */
+    /* Compute stats for all samples */
     double min, q1, median, q3, max;
-    doubleBoxWhiskerCalc(tissueSampleCount, sampleVals, &min, &q1, &median, &q3, &max);
+    doubleBoxWhiskerCalc(j, sampleVals, &min, &q1, &median, &q3, &max);
     //medianVal = (float)doubleMedian(tissueSampleCount, sampleVals);
     maxMedian = max(median, maxMedian);
     verbose(3, "median %s %0.3f\n", tissue, median);
-
     /* If no rounding, then print as float, otherwise round */
     if (doRound)
-        fprintf(medianFile, "%d,", round(median));
+        fprintf(tissueMedianAllFile, "%d,", round(median));
     else 
-        fprintf(medianFile, "%0.3f,", median);
+        fprintf(tissueMedianAllFile, "%0.3f,", median);
+
+    /* Compute stats for gender subsets */
+    median = 0.0;
+    if (fj)
+        doubleBoxWhiskerCalc(fj, femaleSampleVals, &min, &q1, &median, &q3, &max);
+    if (doRound)
+        fprintf(tissueMedianFemaleFile, "%d,", round(median));
+    else 
+        fprintf(tissueMedianFemaleFile, "%0.3f,", median);
+        
+    median = 0.0;
+    if (mj)
+        doubleBoxWhiskerCalc(mj, maleSampleVals, &min, &q1, &median, &q3, &max);
+    if (doRound)
+        fprintf(tissueMedianMaleFile, "%d,", round(median));
+    else 
+        fprintf(tissueMedianMaleFile, "%0.3f,", median);
 
     // calculate other stats
     // print row in tissue data file
@@ -431,7 +546,9 @@ for (i=0; i<tissueCount; i++)
                                     gene, tissue, min, q1, median, q3, max);
     freez(&sampleVals);
     }
-fprintf(medianFile, "\n");
+fprintf(tissueMedianAllFile, "\n");
+fprintf(tissueMedianFemaleFile, "\n");
+fprintf(tissueMedianMaleFile, "\n");
 verbose(3, "max median: %0.3f\n", maxMedian);
 if (maxScoreRet)
     *maxScoreRet = maxScore;
@@ -486,72 +603,6 @@ for (i=0, el = helList; el != NULL; el = el->next, i++)
 carefulClose(&f);
 }
 
-/****************************/
-/* Deal with donors */
-
-#define SUBJECT_FIRST_FIELD_LABEL "SUBJID"
-
-#define SUBJECT_NAME_FIELD 0
-        // GTEX-XXXX
-#define SUBJECT_GENDER_FIELD 1
-        // 1=Male (hmmf), 2=Female
-#define donorGetGender(x) (sqlUnsigned(x) == 1 ? "M" : "F")
-#define SUBJECT_AGE_FIELD 2
-        // e.g. 60-69 years
-#define SUBJECT_DEATH_FIELD 3   
-        // Hardy scale 0-4 or empty (unknown?).  See .as for scale definitions.
-#define donorGetDeathClass(x) (isEmpty(x) ? -1 : sqlUnsigned(x))
-#define SUBJECT_LAST_FIELD SUBJECT_DEATH_FIELD
-
-int donorGetAge(char *age)
-/* Change '60-69 yrs' to numeric 60 */
-{
-char *pos;
-char *ageBuf = cloneString(age);
-pos = stringIn("-", ageBuf);
-if (pos == NULL)
-    return 0;
-*pos = '\0';
-return sqlUnsigned(ageBuf);
-}
-
-struct gtexDonor *parseSubjectFile(struct lineFile *lf)
-{
-char *line;
-if (!lineFileNext(lf, &line, NULL))
-    errAbort("%s is empty", lf->fileName);
-if (!startsWith(SUBJECT_FIRST_FIELD_LABEL, line))
-    errAbort("unrecognized format - expecting subject file header in %s first line", lf->fileName);
-
-char *words[100];
-int wordCount;
-struct gtexDonor *donor=NULL, *donors = NULL;
-
-while (lineFileNext(lf, &line, NULL))
-    {
-    /* Convert line to donor record */
-    wordCount = chopTabs(line, words);
-    lineFileExpectWords(lf, SUBJECT_LAST_FIELD+1, wordCount);
-
-    AllocVar(donor);
-    char *subject = cloneString(words[SUBJECT_NAME_FIELD]);
-    char *gender = cloneString(words[SUBJECT_GENDER_FIELD]);
-    char *age = cloneString(words[SUBJECT_AGE_FIELD]);
-    char *deathClass = cloneString(words[SUBJECT_DEATH_FIELD]);
-
-    verbose(3, "subject: %s %s %s %s\n", subject, gender, age, deathClass);
-    donor->name = subject;
-    donor->gender = donorGetGender(gender);
-    donor->age = donorGetAge(age);
-    donor->deathClass = donorGetDeathClass(deathClass);
-    slAddTail(&donors, donor);
-    //slAddHead(&donors, donor);
-    //slReverse(&donors);
-    }
-verbose(2, "Found %d donors\n", slCount(donors));
-return(donors);
-}
-
 
 /****************************/
 /* Main functions */
@@ -602,7 +653,7 @@ void hgGtex(char *tableRoot, char *version,
 char *line;
 int wordCount;
 FILE *f = NULL;
-FILE *tissueDataFile = NULL, *tissueMedianFile = NULL, *sampleDataFile = NULL, *infoFile = NULL;
+FILE *infoFile = NULL;
 int dataCount = 0;
 struct lineFile *lf;
 int dataSampleCount = 0;
@@ -612,6 +663,7 @@ struct hash  *sampleHash;
 struct gtexTissue *tissue, *tissues;
 tissues = gtexTissueLoadAllByChar(tissuesFile, '\t');
 struct hash *tissueNameHash = hashNew(0);
+donorHash = hashNew(0);
 char **tissueOrder = NULL;
 AllocArray(tissueOrder, slCount(tissues));
 for (tissue = tissues; tissue != NULL; tissue = tissue->next)
@@ -677,6 +729,7 @@ if (!exon)
     for (donor = donors; donor != NULL; donor = donor->next)
         {
         gtexDonorOutput(donor, donorFile, '\t', '\n');
+        hashAdd(donorHash, donor->name, donor);
         }
 
     if (doLoad)
@@ -718,16 +771,25 @@ if (!doData)
 
 /* Ready to process data items */
 
-/* Create sample data and tissue (median) data table files */
+/* Create sample data file */
 char sampleDataTable[64];
 safef(sampleDataTable, sizeof(sampleDataTable), "%s%sSampleData", tableRoot, exon ? "Exon": "");
 sampleDataFile = hgCreateTabFile(tabDir,sampleDataTable);
 
-char tissueMedianTable[64];
-safef(tissueMedianTable, sizeof(tissueMedianTable), "%s%sTissueMedian", tableRoot, 
-                                                        exon ? "Exon": "");
-tissueMedianFile = hgCreateTabFile(tabDir,tissueMedianTable);
 
+/* Create tissue median files */
+char tissueMedianAllTable[64], tissueMedianFemaleTable[64], tissueMedianMaleTable[64];
+safef(tissueMedianAllTable, sizeof(tissueMedianAllTable), "%s%sTissueMedianAll", 
+                tableRoot, exon ? "Exon": "");
+tissueMedianAllFile = hgCreateTabFile(tabDir,tissueMedianAllTable);
+safef(tissueMedianFemaleTable, sizeof(tissueMedianFemaleTable), "%s%sTissueMedianFemale", 
+                tableRoot, exon ? "Exon": "");
+tissueMedianFemaleFile= hgCreateTabFile(tabDir,tissueMedianFemaleTable);
+safef(tissueMedianMaleTable, sizeof(tissueMedianMaleTable), "%s%sTissueMedianMale", 
+                tableRoot, exon ? "Exon": "");
+tissueMedianMaleFile = hgCreateTabFile(tabDir,tissueMedianMaleTable);
+
+/* Create tissue summary data table */
 char tissueDataTable[64];
 safef(tissueDataTable, sizeof(tissueDataTable), "%s%sTissueData", tableRoot, exon ? "Exon": "");
 tissueDataFile = hgCreateTabFile(tabDir,tissueDataTable);
@@ -741,9 +803,9 @@ else
     parseDataFileHeader(lf, sampleCount, NULL);
 
 /* Parse expression values in data file. Each row is a gene (or exon)*/
-double maxMedian = 0, maxScore = 0;
 char **row;
 AllocArray(row, dataSampleCount+2);
+double maxMedian = 0, maxScore = 0;
 double rowMaxMedian, rowMaxScore;
 while (lineFileNext(lf, &line, NULL))
     {
@@ -753,8 +815,7 @@ while (lineFileNext(lf, &line, NULL))
     if (expected != dataSampleCount)
         errAbort("Expecting %d data points, got %d line %d of %s", 
 		dataSampleCount, wordCount-2, lf->lineIx, lf->fileName);
-    dataRowsOut(row, sampleDataFile, dataSampleCount, 
-                tissueMedianFile, tissueDataFile, tissueCount, tissueOrder, tissueOffsets,
+    dataRowsOut(row, tissueCount, tissueOrder, tissueOffsets,
                 &rowMaxMedian, &rowMaxScore);
     maxMedian = max(rowMaxMedian, maxMedian);
     maxScore = max(rowMaxScore, maxScore);
@@ -785,11 +846,21 @@ if (doLoad)
     hgLoadTabFile(conn, tabDir, infoTable, &infoFile);
     hgRemoveTabFile(tabDir, infoTable);
 
-    // Load tissue medians table
-    verbose(2, "Creating tissue medians table\n");
-    gtexTissueMedianCreateTable(conn, tissueMedianTable);
-    hgLoadTabFile(conn, tabDir, tissueMedianTable, &tissueMedianFile);
-    hgRemoveTabFile(tabDir, tissueMedianTable);
+    // Load tissue median tables
+    verbose(2, "Creating all tissue medians table\n");
+    gtexTissueMedianCreateTable(conn, tissueMedianAllTable);
+    hgLoadTabFile(conn, tabDir, tissueMedianAllTable, &tissueMedianAllFile);
+    hgRemoveTabFile(tabDir, tissueMedianAllTable);
+
+    verbose(2, "Creating female tissue medians table\n");
+    gtexTissueMedianCreateTable(conn, tissueMedianFemaleTable);
+    hgLoadTabFile(conn, tabDir, tissueMedianFemaleTable, &tissueMedianFemaleFile);
+    hgRemoveTabFile(tabDir, tissueMedianFemaleTable);
+    // Load tissue median tables
+    verbose(2, "Creating male tissue medians table\n");
+    gtexTissueMedianCreateTable(conn, tissueMedianMaleTable);
+    hgLoadTabFile(conn, tabDir, tissueMedianMaleTable, &tissueMedianMaleFile);
+    hgRemoveTabFile(tabDir, tissueMedianMaleTable);
 
     // Load tissue data table
 #ifdef FAST_STATS

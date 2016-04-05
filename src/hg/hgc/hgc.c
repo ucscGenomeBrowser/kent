@@ -2744,6 +2744,7 @@ if (!foundPep)
         puts("<LI>\n");
         /* put out correct message to describe translated mRNA */
         if ( sameString(geneTable, "ensGene")
+        ||   sameString(geneTable, "ws245Genes")
         ||   sameString(geneTable, "vegaGene")
         ||   sameString(geneTable, "vegaPseudoGene")
         ||   genbankIsRefSeqNonCodingMRnaAcc(geneName)
@@ -17381,7 +17382,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     int fieldCount = hasBin + (hasFrames ? 15 : 10);
     struct genePred *gp;
     if (hasFrames)
+        {
 	gp = genePredExtLoad(row+hasBin, fieldCount);
+        // Some tables have an exonFrames column but it's empty...
+        if (gp->exonFrames == NULL)
+            genePredAddExonFrames(gp);
+        }
     else
 	{
 	gp = genePredLoad(row+hasBin);

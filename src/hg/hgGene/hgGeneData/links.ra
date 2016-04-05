@@ -168,7 +168,7 @@ name wikipedia
 shortLabel Wikipedia
 tables knownToLocusLink
 idSql select value from knownToLocusLink where name = '%s';
-url http://api.genewikiplus.org/biogps-plugins/wp/%s
+url http://genewiki.sulab.org/map/wiki/%s
 priority 11
 
 name biogps

@@ -666,6 +666,11 @@ if (vf->format)	// We only can validate if we have something for format
 	cdwValidateBamIndex(path);
 	suffix = ".bam.bai";
 	}
+    else if (sameString(format, "vcf.idx"))
+        {
+	cdwValidateTabixIndex(path);
+	suffix = ".vcf.idx";
+	}
     else if (sameString(format, "2bit"))
         {
 	makeValid2Bit(conn, path, ef, vf);

@@ -465,6 +465,9 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
+track patSeq override
+url https://www.lens.org/lens/bio/patseqanalyzer#psa/mus_musculus/latest/chromosome/$s/${-$}?appInClaims=1
+
 searchTable cytoBand
 searchMethod exact
 searchType cytoBand

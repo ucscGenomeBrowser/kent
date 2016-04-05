@@ -1345,8 +1345,18 @@ char *hfsSetting = hgFindSpecSetting(hfs, "grepIndex");
 if (grepIndexRoot != NULL && hfsSetting != NULL)
     {
     char buf[1024];
+    char *dot;
+    // check to see if table name has database in it
+    if ((dot = strchr(table, '.')) != NULL)
+        {
+        *dot = 0;
+        db = table;
+        table = dot + 1;
+        }
     safef(buf, sizeof(buf), "%s/%s/%s.%s",
 	  grepIndexRoot, db, table, suffix);
+    if (dot)
+        *dot = '.';
     if (fileExists(buf))
 	return cloneString(buf);
     }
@@ -1395,6 +1405,17 @@ if (!isTooCommon(table, key))
 return idList;
 }
 
+static char *skipDb(char *tableName)
+/* retun a pointer past the datbase part of the table name (if any) */
+{
+char *dot = tableName;
+
+if ((dot = strchr(tableName, '.')) == NULL)
+    return tableName;
+
+return dot + 1;
+}
+
 static boolean gotAllGenbankGrepIndexFiles(char *db, struct hgFindSpec *hfs,
 					   char *tables[], int tableCount)
 /* Return TRUE if all tables have a readable genbank index file. */
@@ -1433,7 +1454,7 @@ for (i = 0;
      * in one step in SQL just because it somehow is much
      * faster this way (like 100x faster) when using mySQL. */
     field = tables[i];
-    if (!hTableExists(db, field))
+    if (!sqlTableExists(conn, field))
 	continue;
     if ((grepIndexFile = getGenbankGrepIndex(db, hfs, field, "idName")) != NULL)
 	idList = genbankGrepQuery(grepIndexFile, field, key);
@@ -1446,7 +1467,7 @@ for (i = 0;
         /* don't check srcDb to exclude refseq for compat with older tables */
 	sqlSafef(query, sizeof(query),
 	      "select acc, organism from %s where %s = '%s' "
-	      " and type = 'mRNA'", gbCdnaInfoTable, field, idEl->name);
+	      " and type = 'mRNA'", gbCdnaInfoTable, skipDb(field), idEl->name);
         // limit results to avoid CGI timeouts (#11626).
         if (limitResults != EXHAUSTIVE_SEARCH_REQUIRED)
             sqlSafefAppend(query, sizeof(query), " limit %d", limitResults);
@@ -1657,9 +1678,9 @@ static boolean findMrnaKeys(char *db, struct hgFindSpec *hfs,
 /* Find mRNA that has keyword in one of its fields. */
 {
 int alignCount;
-static char *tables[] = {
-	"productName", "geneName",
-	"author", "tissue", "cell", "description", "development", 
+char *tables[] = {
+	productNameTable, geneNameTable,
+	authorTable, tissueTable, cellTable, descriptionTable, developmentTable, 
 	};
 struct hash *allKeysHash = NULL;
 struct slName *allKeysList = NULL;
@@ -2811,8 +2832,11 @@ if (strlen(term)<2 && !
 if (isNotEmpty(hfs->termRegex) && ! regexMatchNoCase(term, hfs->termRegex))
     return(FALSE);
 
-if (! hTableOrSplitExists(db, hfs->searchTable))
-    return(FALSE);
+if (!(sameString(hfs->searchType, "mrnaKeyword") || sameString(hfs->searchType, "mrnaAcc") ))
+    {
+    if (! hTableOrSplitExists(db, hfs->searchTable))
+        return(FALSE);
+    }
 
 if (isNotEmpty(hfs->searchType) && searchSpecial(db, hfs, term, limitResults, hgp, relativeFlag,
 						 relStart, relEnd, &found))

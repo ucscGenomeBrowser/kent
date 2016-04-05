@@ -2,6 +2,8 @@
 #      gtexportal.org
 # 11/2015 KRR
 
+# Reloaded gtexSampleData table to restore zero-scored rows (2016-03-21 Kate)
+
 # Download normalized gene expression levels (RPKM)
 wget http://www.gtexportal.org/static/datasets/gtex_analysis_v6/rna_seq_data/GTEx_Analysis_v6_RNA-seq_RNA-SeQCv1.1.8_gene_rpkm.gct.gz
 gunzip $dataFile.gz
@@ -59,7 +61,8 @@ $ wc -l gtex*.tab
     2984854 gtexV6TissueData.tab
       56318 gtexV6TissueMedian.tab
 
-# NOTE: should have used -dropZeros when loading.
+# NOTE: half of the scores are zero valued.  Keeping -- if we drop them code must
+# be adapted so median computation and sample counts are correct
 select count(*) from gtexSampleData where score=0;
 +-----------+
 | count(*)  |
@@ -67,7 +70,8 @@ select count(*) from gtexSampleData where score=0;
 | 242219267 |
 +-----------+
 
-hgsql hgFixed -e 'alter table gtexSampleData disable keys; delete from gtexSampleData where score=0; alter table gtexSampleData enable keys'
+# keeping these instructions for reference, but we will keep zeros
+#hgsql hgFixed -e 'alter table gtexSampleData disable keys; delete from gtexSampleData where score=0; alter table gtexSampleData enable keys'
 # 30 minutes or so
 
 # looks good, load tables 
@@ -85,6 +89,30 @@ hgsql hgFixed -e "insert into gtexInfo set version='V6', releaseDate='2015-10-01
 hgGtex -tab=newtables -noData -noLoad gtex2V6 V6 $dataFile $sampleFile $subjectFile $tissueFile
 hgLoadSqlTab hgFixed gtexSample ~kate/kent/src/hg/lib/gtexSample.sql \
                 newtables/gtex2V6Sample.tab
+
+set dir = tables.2016-03-22
+mkdir $dir
+set hgGtex = ~kate/kent/src/hg/makeDb/outside/hgGtex/hgGtex
+$hgGtex -tab=$dir -noLoad gtex4V6 V6 $dataFile $sampleFile $subjectFile $tissueFile -verbose=2 >&! parseData4.log &
+ls -l $dir
+
+wc -l $dir
+        570 gtex4V6Donor.tab
+          1 gtex4V6Info.tab
+       8555 gtex4V6Sample.tab
+  481800490 gtex4V6SampleData.tab
+    2984854 gtex4V6TissueData.tab
+      56318 gtex4V6TissueMedianAll.tab
+      56318 gtex4V6TissueMedianFemale.tab
+      56318 gtex4V6TissueMedianMale.tab
+
+# looks OK (SampleData table same size), so load it
+cd $dir
+hgLoadSqlTab hgFixed gtexSampleDataV6_full ~kate/kent/src/hg/lib/gtexSampleData.sql \
+                $dir/gtex4V6SampleData.tab
+
+hgLoadSqlTab hgFixed gtexTissueMedianV6 ~kate/kent/src/hg/lib/gtexTissueMedian.sql \
+                $dir/gtex4V6TissueMedianAll.tab
 
 # Investigate gene vs transcript types in GENCODE
 

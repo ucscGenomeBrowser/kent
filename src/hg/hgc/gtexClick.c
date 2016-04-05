@@ -31,20 +31,20 @@ struct tissueSampleVals
     struct slDouble *valList;   /* used to create val array */
     };
 
-char *gencodeTranscriptClassColorCode(char *transcriptClass)
+char *geneClassColorCode(char *geneClass)
 /* Get HTML color code used by GENCODE for transcript class
- * WARNING: should share code with transcript color handling in hgTracks */
+ * WARNING: should share code with gene color handling in hgTracks */
 {
 char *unknown = "#010101";
-if (transcriptClass == NULL)
+if (geneClass == NULL)
     return unknown;
-if (sameString(transcriptClass, "coding"))
+if (sameString(geneClass, "coding"))
     return "#0C0C78";
-if (sameString(transcriptClass, "nonCoding"))
+if (sameString(geneClass, "nonCoding"))
     return "#006400";
-if (sameString(transcriptClass, "pseudo"))
+if (sameString(geneClass, "pseudo"))
     return "#FF33FF";
-if (sameString(transcriptClass, "problem"))
+if (sameString(geneClass, "problem"))
     return "#FE0000";
 return unknown;
 }
@@ -70,8 +70,10 @@ int i;
 for (tsv = tsvList; tsv != NULL; tsv = tsv->next)
     {
     int count = tsv->count;
+    // remove trailing parenthesized phrases as not worth label length
+    chopSuffixAt(tsv->description, '(');
     for (i=0; i<count; i++)
-        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->name, tsv->vals[i]);
+        fprintf(f, "%d\t%s\t%0.3f\n", sampleId++, tsv->description, tsv->vals[i]);
     }
 fclose(f);
 
@@ -88,15 +90,10 @@ safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %
 
 int ret = system(cmd);
 if (ret == 0)
-    {
     printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
-    //printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d><BR>\n",
-                    //pngTn.forHtml, imageWidth, imageHeight);
-                    //pngTn.forHtml, 900, 500);
-    }
 }
 
-struct gtexGeneBed *getGtexGene(char *item, char *table)
+static struct gtexGeneBed *getGtexGene(char *item, char *chrom, int start, int end, char *table)
 /* Retrieve gene info for this item from the main track table */
 {
 struct gtexGeneBed *gtexGene = NULL;
@@ -106,7 +103,9 @@ char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
-    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", table, item);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' "
+                                  " and chromStart = %d and chromEnd = %d", 
+                                        table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -157,7 +156,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 /*  Fill in tissue descriptions, fill values array and calculate stats for plotting
         Then make a list, suitable for sorting by tissue or score
     NOTE: Most of this not needed for R implementation */
-struct gtexTissue *tis = NULL, *tissues = gtexGetTissues();
+struct gtexTissue *tis = NULL, *tissues = gtexGetTissues(version);
 struct tissueSampleVals *tsList = NULL;
 int i;
 if (doLogTransform)
@@ -219,7 +218,9 @@ return desc;
 void doGtexGeneExpr(struct trackDb *tdb, char *item)
 /* Details of GTEx gene expression item */
 {
-struct gtexGeneBed *gtexGene = getGtexGene(item, tdb->table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct gtexGeneBed *gtexGene = getGtexGene(item, seqName, start, end, tdb->table);
 if (gtexGene == NULL)
     errAbort("Can't find gene %s in GTEx gene table %s\n", item, tdb->table);
 
@@ -234,17 +235,19 @@ else
                         hgGeneName(), database, gtexGene->name, gtexGene->name);
     printf("<b>Description:</b> %s<br>\n", desc);
     }
-printf("<b>Ensembl Gene ID:</b> %s<br>\n", gtexGene->geneId);
+printf("<b>Ensembl gene ID:</b> %s<br>\n", gtexGene->geneId);
 // The actual transcript model is a union, so this identification is approximate
 // (used just to find a transcript class)
-//printf("<b>Ensembl Transcript ID:</b> %s<br>\n", gtexGene->transcriptId);
-printf("<b>Ensembl Class: </b><span style='color: %s'>%s</span><br>\n", 
-            gencodeTranscriptClassColorCode(gtexGene->transcriptClass), gtexGene->transcriptClass);
-printf("<b>Genomic Position: </b><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
-                        hgTracksPathAndSettings(), database, 
+char *geneClass = gtexGeneClass(gtexGene);
+printf("<b>GENCODE biotype: </b> %s<br>\n", gtexGene->geneType); 
+printf("<b>Gene class: </b><span style='color: %s'>%s</span><br>\n", 
+            geneClassColorCode(geneClass), geneClass);
+printf("<b>Total median expression: </b> %0.2f RPKM<br>\n", gtexGeneTotalMedianExpression(gtexGene));
+printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
+printf("<b>Genomic position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+                        database, hgTracksPathAndSettings(), database, 
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
-printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a><br>\n", gtexGene->geneId);
 puts("<p>");
 
 boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
@@ -255,6 +258,7 @@ struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform,
                                                         versionSuffix, &maxVal);
 char *version = gtexVersion(tdb->table);
 drawGtexRBoxplot(gtexGene, tsvs, doLogTransform, version);
+printf("<br><a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a>\n", gtexGene->name);
 
 printTrackHtml(tdb);
 }

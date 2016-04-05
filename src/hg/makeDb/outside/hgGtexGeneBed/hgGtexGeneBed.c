@@ -1,6 +1,6 @@
 /* hgGtexGeneBed - Load BED6+ table of per-gene data from NIH Common Fund Gene Tissue Expression (GTEX)
         Format:  chrom, chromStart, chromEnd, name, score, strand,
-                        geneId, transcriptId, transcriptClass, expCount, expScores
+                        geneId, geneType, expCount, expScores
                                 (gtexGeneBed.as)
     Uses hgFixed data tables loaded via hgGtex, and various gene tables.
 */
@@ -13,20 +13,20 @@
 #include "hash.h"
 #include "jksql.h"
 #include "hgRelate.h"
+#include "hdb.h"
 #include "basicBed.h"
 #include "genePred.h"
 #include "linefile.h"
 #include "encode/wgEncodeGencodeAttrs.h"
 #include "gtexTissueMedian.h"
 #include "gtexGeneBed.h"
-#include "gtexTranscript.h"
 
 #define GTEX_TISSUE_MEDIAN_TABLE  "gtexTissueMedian"
 #define GTEX_GENE_MODEL_TABLE  "gtexGeneModel"
 
 // Versions are used to suffix tablenames
-char *gtexVersion = "";
-char *gencodeVersion = "V19";
+static char *version = "V6";
+static char *gencodeVersion = "V19";
 
 boolean doLoad = FALSE;
 char *database, *table;
@@ -36,20 +36,18 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgGtexGeneBed - Load BED file of per gene data from GTEX data and sample tables\n"
+  "hgGtexGeneBed - Load BED file of per gene data from GTEX gene model, data and sample tables\n"
   "usage:\n"
   "   hgGtexGeneBed database table\n"
   "options:\n"
-  "    -gtexVersion=VN (default \'%s\')\n"
+  "    -version=VN (default \'%s\')\n"
   "    -gencodeVersion=VNN (default \'%s\')\n"
   "    -noLoad  - If true don't load database and don't clean up tab files\n"
-  " NOTE: if gtexGeneModel<version> table doesn't exist, this program will create a .tab file suitable\n"
-  "       for loading, and then quit.  Inspect the model file, load it, then re-run."
-  , gtexVersion, gencodeVersion);
+  , version, gencodeVersion);
 }
 
 static struct optionSpec options[] = {
-    {"gtexVersion", OPTION_STRING},
+    {"version", OPTION_STRING},
     {"gencodeVersion", OPTION_STRING},
     {"noLoad", OPTION_BOOLEAN},
     {NULL, 0},
@@ -86,7 +84,7 @@ sqlFreeResult(&sr);
 
 // Get GTEx gene models
 // and GENCODE gene tables
-safef(buf, sizeof buf, "%s%s", GTEX_GENE_MODEL_TABLE, gtexVersion);
+safef(buf, sizeof buf, "%s%s", GTEX_GENE_MODEL_TABLE, version);
 if (!sqlTableExists(conn, buf))
     errAbort("Can't find gene model table %s", buf);
 struct hash *modelHash = newHash(0);
@@ -94,10 +92,10 @@ struct genePred *gp;
 sqlSafef(query, sizeof(query), "SELECT * from %s", buf);
 verbose(2, "Reading %s table\n", buf);
 sr = sqlGetResult(conn, query);
+boolean hasBin = hIsBinned(database, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    /* skip bin */
-    gp = genePredLoad(row+1);
+    gp = genePredLoad(row + (hasBin ? 1 : 0));
     verbose(3, "...Adding gene model %s to modelHash\n", gp->name);
     hashAdd(modelHash, gp->name, gp);
     }
@@ -107,7 +105,7 @@ sqlFreeResult(&sr);
 verbose(2, "Reading gtexTissueMedian table\n");
 struct gtexGeneBed *geneBed, *geneBeds = NULL;
 struct gtexTissueMedian *gtexData;
-sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, gtexVersion);
+sqlSafef(query, sizeof(query),"SELECT * from %s%s", GTEX_TISSUE_MEDIAN_TABLE, version);
 sr = sqlGetResult(connFixed, query);
 float maxVal = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -148,8 +146,7 @@ while ((row = sqlNextRow(sr)) != NULL)
             maxVal = (geneBed->expScores[i] > maxVal ? geneBed->expScores[i] : maxVal);
         }
     geneBed->name = ga->geneName;
-    geneBed->transcriptId = "none";
-    geneBed->transcriptClass = ga->geneType;
+    geneBed->geneType = ga->geneType;
     slAddHead(&geneBeds, geneBed);
     }
 sqlFreeResult(&sr);
@@ -185,7 +182,7 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 doLoad = !optionExists("noLoad");
-gtexVersion = optionVal("gtexVersion", gtexVersion);
+version = optionVal("version", version);
 gencodeVersion = optionVal("gencodeVersion", gencodeVersion);
 database = argv[1];
 table = argv[2];

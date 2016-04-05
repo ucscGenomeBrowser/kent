@@ -216,3 +216,12 @@ hgsql hgFixed -e "select sample, tissue, score as rpkm from gtexSampleData where
 'EOF'
 
 csh makeExprDf.csh BRCA1 > BRCA1.df.txt
+
+############
+# Migrate gene table to new schema (March 2015) Kate
+
+hgsql hg19 -e 'CREATE TABLE gtexGeneV4_new LIKE gtexGeneV4'
+hgsql hg19 -e 'INSERT gtexGeneV4_new SELECT * FROM gtexGeneV4'
+hgsql hg19 -e 'ALTER TABLE gtexGeneV4_new DROP COLUMN transcriptId'
+hgsql hg19 -e 'ALTER TABLE gtexGeneV4_new CHANGE COLUMN transcriptClass geneType varchar(255) not null'
+

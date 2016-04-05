@@ -464,12 +464,12 @@ searchPriority 21
 
 track ws245Genes
 shortLabel WS245 Genes
-longLabel Genes predictions from WormBase WS245 release
+longLabel Gene predictions from WormBase WS245 release
 group genes
 priority 32
 visibility pack
 color 0,0,200
-type genePred
+type genePred ws245GenesPeptide
 url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
 urlLabel WormBase:
 

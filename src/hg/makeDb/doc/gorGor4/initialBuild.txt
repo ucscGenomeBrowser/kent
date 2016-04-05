@@ -616,6 +616,37 @@ rmdir --ignore-fail-on-non-empty /dev/shm/$outputFN
     cat fb.gorGor4.genscanSubopt.txt
     # 42201199 bases of 2917333143 (1.447%) in intersection
 
+
+#########################################################################
+# genscan redo - (DONE - 2016-03-18 - Jonathan)
+# Turns out some chromosomes somehow lacked annotation (notably, chr4).
+# Re-doing from scratch with 1.8M windows
+    mkdir /hive/data/genomes/gorGor4/bed/genscanTakeTwo
+    cd /hive/data/genomes/gorGor4/bed/genscanTakeTwo
+    cp `which doGenscan.pl` .
+    # edit doGenscan.pl to change window size
+    time ./doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku gorGor4 > do.log 2>&1
+
+    # Everything finished except chr22 (out of memory error, suggesting
+    # 8 GB is not enough?).  Re-running that one on dev.
+    ./runGsBig.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed
+    # wait
+    # Crashed again.  Resized window to 2M from 1.8M.
+    ./runGsBigLastOne.csh chr22 000 gtf/000/chr22.gtf pep/000/chr22.pep subopt/000/chr22.bed
+    # Success!
+
+    # continuing
+    time doGenscan.pl -continue=makeBed  -buildDir=`pwd` -workhorse=hgwdev \
+    -dbHost=hgwdev -bigClusterHub=ku gorGor4 > makeBed.log 2>&1
+
+    # real    11m41.464s
+
+    cat fb.gorGor4.genscan.txt
+    # 51964982 bases of 2917333143 (1.781%) in intersection
+    cat fb.gorGor4.genscanSubopt.txt
+    # 53599149 bases of 2917333143 (1.837%) in intersection
+
 ########################################################################
 # Create kluster run files (DONE - 2015-10-19 - Hiram/Jonathan)
 
