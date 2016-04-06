@@ -1411,7 +1411,6 @@ char *trackName = NULL;
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = NULL;
 
-hgBotDelay();
 if (!sameString(curGroup->name, "allTables"))
     {
     trackName = cartString(cart, hgtaTrack);
@@ -1529,6 +1528,7 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 pushWarnHandler(earlyAbortHandler);
+hgBotDelay();
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
     {

@@ -93,7 +93,7 @@ if (ret == 0)
     printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
 }
 
-struct gtexGeneBed *getGtexGene(char *item, char *table)
+static struct gtexGeneBed *getGtexGene(char *item, char *chrom, int start, int end, char *table)
 /* Retrieve gene info for this item from the main track table */
 {
 struct gtexGeneBed *gtexGene = NULL;
@@ -103,7 +103,9 @@ char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
-    sqlSafef(query, sizeof(query), "select * from %s where name = '%s'", table, item);
+    sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' "
+                                  " and chromStart = %d and chromEnd = %d", 
+                                        table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
@@ -216,7 +218,9 @@ return desc;
 void doGtexGeneExpr(struct trackDb *tdb, char *item)
 /* Details of GTEx gene expression item */
 {
-struct gtexGeneBed *gtexGene = getGtexGene(item, tdb->table);
+int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+struct gtexGeneBed *gtexGene = getGtexGene(item, seqName, start, end, tdb->table);
 if (gtexGene == NULL)
     errAbort("Can't find gene %s in GTEx gene table %s\n", item, tdb->table);
 

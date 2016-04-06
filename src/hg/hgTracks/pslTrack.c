@@ -44,6 +44,16 @@ if (res >= maxShade) res = maxShade-1;
 return res;
 }
 
+static char *skipDb(char *tableName)
+/* retun a pointer past the datbase part of the table name (if any) */
+{
+char *dot = tableName;
+
+if ((dot = strchr(tableName, '.')) == NULL)
+    return tableName;
+
+return dot + 1;
+}
 
 static void filterMrna(struct track *tg, struct linkedFeatures **pLfList)
 /* Apply filters if any to mRNA linked features. */
@@ -93,7 +103,7 @@ for (fil = mud->filterList; fil != NULL; fil = fil->next)
     if (fil->pattern[0] != 0)   // Filled above
 	{
 	fil->hash = newHash(10);
-	if ((fil->mrnaTableIx = sqlFieldIndex(conn, gbCdnaInfoTable, fil->table)) < 0)
+	if ((fil->mrnaTableIx = sqlFieldIndex(conn, gbCdnaInfoTable, skipDb(fil->table))) < 0)
 	    internalErr();
 	}
     }
