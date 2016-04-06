@@ -166,9 +166,9 @@ priority 10
 
 name wikipedia
 shortLabel Wikipedia
-tables knownToLocusLink
-idSql select value from knownToLocusLink where name = '%s';
-url http://genewiki.sulab.org/map/wiki/%s
+tables knownToWikipedia
+idSql select value from knownToWikipedia where name = '%s';
+url https://en.wikipedia.org/wiki/%s
 priority 11
 
 name biogps

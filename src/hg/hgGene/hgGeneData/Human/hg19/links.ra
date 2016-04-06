@@ -15,11 +15,3 @@ url ../cgi-bin/hgPal?g=knownGene&c=%s&l=%s&r=%s&i=%s
 hgsid on
 dbInUrl on
 priority 1
-
-name wikipedia
-shortLabel Wikipedia
-tables knownToWikipedia
-idSql select value from knownToWikipedia where name = '%s';
-url http://genewiki.sulab.org/map/wiki/%s
-priority 11
-
