@@ -771,11 +771,6 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 
 typedef struct slList *(*ItemLoader)(char **row);
 
-void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,  
-                                char *extraWhere, ItemLoader loader);
-/* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL 
- * and extraWhere is not NULL. */
-
 void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader loader);
 /* Generic tg->item loader. If query is NULL use generic hRangeQuery(). */
 
