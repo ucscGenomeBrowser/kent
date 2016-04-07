@@ -812,10 +812,15 @@ for (i=0, tis=extras->tissues; i<expCount; i++, tis=tis->next)
 
 static int gtexGeneItemHeightOptionalMax(struct track *tg, void *item, boolean isMax)
 {
+// It seems that this can be called early or late
+enum trackVisibility vis = tg->visibility;
+if (tg->limitedVisSet)
+    vis = tg->limitedVis;
+
 int height;
-if (tg->visibility == tvSquish || tg->visibility == tvDense)
+if (vis == tvSquish || vis == tvDense)
     {
-    if (tg->visibility == tvSquish)
+    if (vis == tvSquish)
         {
         tg->lineHeight = gtexSquishItemHeight();
         tg->heightPer = tg->lineHeight;
@@ -915,7 +920,7 @@ static void gtexGeneMapItem(struct track *tg, struct hvGfx *hvg, void *item, cha
 /* Create a map box on gene model and label, and one for each tissue (bar in the graph) in
  * pack or full mode.  Just single map for squish/dense modes */
 {
-if (tg->visibility == tvDense)
+if (tg->limitedVis == tvDense)
     {
     genericMapItem(tg, hvg, item, itemName, itemName, start, end, x, y, width, height);
     return;
@@ -925,7 +930,7 @@ struct gtexGeneBed *geneBed = geneInfo->geneBed;
 struct gtexGeneExtras *extras = (struct gtexGeneExtras *)tg->extraUiData;
 int geneStart = geneBed->chromStart;
 int geneEnd = geneBed->chromEnd;
-if (tg->visibility == tvSquish)
+if (tg->limitedVis == tvSquish)
     {
     int tisId = maxTissueForGene(geneBed);
     char *maxTissue = "";
@@ -1039,24 +1044,23 @@ static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 {
 int height = 0;
 
-if (tg->visibility == tvDense)
+if (vis == tvDense)
     { 
     height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, FALSE);
     }
-else if (tg->visibility == tvSquish)
+else if (vis == tvSquish)
     {
     // for visibility, set larger than the usual squish, which is half font height
     height = gtexSquishItemHeight() * 2;  // the squish packer halves this
     height = tgFixedTotalHeightOptionalOverflow(tg, vis, height+1, height, FALSE);
     }
-else if ((tg->visibility == tvPack) || (tg->visibility == tvFull))
+else if ((vis == tvPack) || (vis == tvFull))
     {
-    if (!tg->ss)
-        {
-        // layout -- initially as fixed height
-        int height = gtexGeneMaxHeight(tg);
-        tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE); // TODO: allow oflow ?
-        }
+    // layout -- initially as fixed height
+    int height = gtexGeneMaxHeight(tg);  // TODO KATE
+    height = tl.fontHeight;
+    tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
+
     // set variable height rows
     if (tg->ss->rowCount != 0)
         {

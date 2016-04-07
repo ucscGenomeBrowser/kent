@@ -43,6 +43,7 @@
 #include "memgfx.h"
 #include "trackHub.h"
 #include "gtexUi.h"
+#include "genbank.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -1865,16 +1866,16 @@ struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
 {
 struct mrnaUiData *mud = newEmptyMrnaUiData(track);
 if (isXeno)
-    addMrnaFilter(mud, track, "organism", "org", "organism");
+    addMrnaFilter(mud, track, "organism", "org", organismTable);
 addMrnaFilter(mud, track, "accession", "acc", "acc");
-addMrnaFilter(mud, track, "author", "aut", "author");
-addMrnaFilter(mud, track, "library", "lib", "library");
-addMrnaFilter(mud, track, "tissue", "tis", "tissue");
-addMrnaFilter(mud, track, "cell", "cel", "cell");
-addMrnaFilter(mud, track, "keyword", "key", "keyword");
-addMrnaFilter(mud, track, "gene", "gen", "geneName");
-addMrnaFilter(mud, track, "product", "pro", "productName");
-addMrnaFilter(mud, track, "description", "des", "description");
+addMrnaFilter(mud, track, "author", "aut", authorTable);
+addMrnaFilter(mud, track, "library", "lib", libraryTable);
+addMrnaFilter(mud, track, "tissue", "tis", tissueTable);
+addMrnaFilter(mud, track, "cell", "cel", cellTable);
+addMrnaFilter(mud, track, "keyword", "key", keywordTable);
+addMrnaFilter(mud, track, "gene", "gen", geneNameTable);
+addMrnaFilter(mud, track, "product", "pro", productNameTable);
+addMrnaFilter(mud, track, "description", "des", descriptionTable);
 return mud;
 }
 
