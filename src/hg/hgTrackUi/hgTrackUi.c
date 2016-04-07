@@ -3025,11 +3025,11 @@ else if (tdb->type != NULL)
     if (cType != cfgNone)
         {
         cfgByCfgType(cType,database, cart, tdb,tdb->track, NULL, boxed);
+        if (startsWith("gtexGene", track))
+            gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
 #ifdef USE_HAL
 	if (cType == cfgSnake)
 	    cfgHalSnake(tdb, tdb->track);
-        if (startsWith("gtexGene", track))
-            gtexGeneUi(cart, tdb, tdb->track, NULL, TRUE);
 #endif
         }
     // NOTE: these cases that fall through the cracks should probably get folded into cfgByCfgType()
