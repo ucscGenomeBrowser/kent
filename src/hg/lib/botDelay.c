@@ -31,7 +31,7 @@ void botDelayMessage(char *ip, int millis)
 /* Print out message saying why you are stalled. */
 {
 time_t now = time(NULL);
-printf("<BR>There is a very high volume of traffic coming from your "
+warn("There is a very high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  So that other "
        "users get a fair share "
        "of our bandwidth, we are putting in a delay of %3.1f seconds "
@@ -45,7 +45,7 @@ printf("<BR>There is a very high volume of traffic coming from your "
        "If you are sharing an IP address with someone who is submitting "
        "large batch queries, we apologize for the "
        "inconvenience. Please contact genome-www@cse.ucsc.edu if "
-       "you think this delay is being imposed unfairly.<BR><HR>", 
+       "you think this delay is being imposed unfairly.", 
 	    ip, asctime(localtime(&now)), .001*millis);
 }
 
