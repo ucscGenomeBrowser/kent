@@ -492,7 +492,6 @@ tg->items = list;
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
 
-#define MIN_GRAPH_HEIGHT 35
 #define MIN_BAR_WIDTH 1
 #define MIN_GRAPH_PADDING 0
 
@@ -550,7 +549,7 @@ if (winSize < WIN_MAX_GRAPH)
 else if (winSize < WIN_MED_GRAPH)
     return MED_GRAPH_HEIGHT;
 else
-    return MIN_GRAPH_HEIGHT;
+    return tl.fontHeight * 4;
 }
 
 static int gtexGraphWidth(struct track *tg, struct gtexGeneInfo *geneInfo)
@@ -859,7 +858,8 @@ height = topGraphHeight + bottomGraphHeight + gtexGeneMargin() +
 return height;
 }
 
-static int gtexGeneMaxHeight(struct track *tg)
+//DEBUG RESTORE? static 
+int gtexGeneMaxHeight(struct track *tg)
 /* Maximum height in pixels of a gene graph */
 {
 return gtexGeneItemHeightOptionalMax(tg, NULL, TRUE);
@@ -1057,9 +1057,9 @@ else if (vis == tvSquish)
 else if ((vis == tvPack) || (vis == tvFull))
     {
     // layout -- initially as fixed height
-    int height = gtexGeneMaxHeight(tg);  // TODO KATE
-    height = tl.fontHeight;
-    tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
+    //int lineHeight = gtexGeneMaxHeight(tg);  // TODO KATE THIS MAY BE OBSOLETE
+    int lineHeight = tl.fontHeight;
+    height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, lineHeight, FALSE);
 
     // set variable height rows
     if (tg->ss->rowCount != 0)
