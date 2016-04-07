@@ -1057,8 +1057,8 @@ else if (vis == tvSquish)
 else if ((vis == tvPack) || (vis == tvFull))
     {
     // layout -- initially as fixed height
-    //int height = gtexGeneMaxHeight(tg);  // TODO KATE
-    int height = tl.fontHeight;
+    int height = gtexGeneMaxHeight(tg);  // TODO KATE
+    height = tl.fontHeight;
     tgFixedTotalHeightOptionalOverflow(tg, vis, height, height, FALSE);
 
     // set variable height rows
