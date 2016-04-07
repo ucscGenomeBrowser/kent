@@ -7616,7 +7616,7 @@ else if (scoreMin != 0 && scoreMax == 1000) // Changes gray level even when
     }
 }
 
-void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,  
+static void bedLoadItemByQueryWhere(struct track *tg, char *table, char *query,  
                                 char *extraWhere, ItemLoader loader)
 /* Generic itg->item loader, adding extra clause to hgRangeQuery if query is NULL 
  * and extraWhere is not NULL */
