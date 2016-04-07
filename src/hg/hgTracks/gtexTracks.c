@@ -492,7 +492,6 @@ tg->items = list;
 #define MED_BAR_WIDTH 3
 #define MED_GRAPH_PADDING 1
 
-#define MIN_GRAPH_HEIGHT 35
 #define MIN_BAR_WIDTH 1
 #define MIN_GRAPH_PADDING 0
 
@@ -550,7 +549,7 @@ if (winSize < WIN_MAX_GRAPH)
 else if (winSize < WIN_MED_GRAPH)
     return MED_GRAPH_HEIGHT;
 else
-    return MIN_GRAPH_HEIGHT;
+    return tl.fontHeight * 4;
 }
 
 static int gtexGraphWidth(struct track *tg, struct gtexGeneInfo *geneInfo)
