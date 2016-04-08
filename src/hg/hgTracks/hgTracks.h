@@ -1589,5 +1589,8 @@ void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xO
                             double scale, Color color, enum trackVisibility vis);
 /* Draw next item buttons and map boxes */
 
+struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
+/* Find SpaceSaver in list. Return spaceSaver found or NULL. */
+
 #endif /* HGTRACKS_H */
 
