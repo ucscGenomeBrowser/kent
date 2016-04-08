@@ -380,7 +380,7 @@ struct sameItemNode
     };
 
 
-static struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
+struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 {
 struct spaceSaver *ss = NULL;

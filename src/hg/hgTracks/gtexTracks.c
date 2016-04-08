@@ -1092,7 +1092,9 @@ if ((vis == tvPack) || (vis == tvFull))
 		}
 	    tg = tgSave;
 	    }
-	height = spaceSaverGetRowHeightsTotal(tg->ss);
+	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+	assert(ss); // viz matches, we have the right one
+	height = spaceSaverGetRowHeightsTotal(ss);
         }
     }
 tg->height = height;

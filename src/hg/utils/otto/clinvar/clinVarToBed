@@ -137,11 +137,13 @@ noAssCount = 0
 for line in ifh:
     line = line.replace(", ", ",").replace(";", ",") # replace, bigBed conventions
     line = line.rstrip("\n")
+    row = line.split("\t")
+    row = [f.replace("\0", "") for f in row ]
 
     alleleId, allType, name, geneId, geneSymbol, clinSign, snpAcc, dbVarAcc, \
       irvcAcc, inGtr, phenotypeIds, origin, assembly, chrom, start, end, cytogenetic, \
       reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds, varId, \
-      refAll, varAll, submCategories, chromAcc = line.split("\t")
+      refAll, varAll, submCategories, chromAcc = row
 
     if chrom=="" or assembly=="" or assembly=="NCBI36":
         noAssCount += 1
@@ -287,4 +289,6 @@ for fname in fnames:
     outFname = basename(outFname) # strip the archive/ part, put into current dir
     cmd = "bedToBigBed -tab -type=bed9+ -as=clinvar.as %s /hive/data/genomes/%s/chrom.sizes %s" % (fname, db, outFname)
     logging.debug(cmd)
-    assert(os.system(cmd)==0)
+    ret = os.system(cmd)
+    if ret != 0:
+        print "Could not run:", cmd

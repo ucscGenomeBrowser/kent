@@ -1501,16 +1501,18 @@ for (itemId = slIds; itemId!=NULL; itemId = itemId->next)
 
     // a | character can optionally be used to separate the ID used for $$ from the name shown in the link (like in Wikimedia markup)
     char *idForUrl = itemName;
+    boolean encode = TRUE;
     if (strstr(itemName, "|"))
         {
         char *parts[2];
 	chopString(itemName, "|", parts, ArraySize(parts));
         idForUrl = parts[0];
         itemName = parts[1];
+        encode = FALSE; // assume the link is already encoded
         }
 
     char *idUrl = replaceInUrl(url, idForUrl, cart, database, seqName, winStart, 
-                    winEnd, tdb->track, TRUE);
+                    winEnd, tdb->track, encode);
     printf("<a href=\"%s\" target=\"_blank\">%s</a>", idUrl, itemName);
     } 
 printf("</td></tr>\n");
