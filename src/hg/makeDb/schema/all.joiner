@@ -5346,13 +5346,13 @@ identifier gtexSample
 
 identifier gtexGeneId
 "GTEx gene ID (ENS gene)"
-    hgFixed.gtexSampleData.geneId
+    hgFixed.gtexSampleData.geneId dupeOk
     hg19,hg38.gtexGene.geneId
     hg19,hg38.gtexGeneModel.name
 
 identifier gtexTissue
 "Short name for GTEx tissue (UCSC)"
-    hgFixed.gtexSampleData.tissue
+    hgFixed.gtexSampleData.tissue dupeOk
     hgFixed.gtexTissue.name
 
 # Dependencies not already captured in identifiers
