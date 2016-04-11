@@ -11092,6 +11092,26 @@ TMPDIR=/dev/shm
     featureBits -countGaps mm10 ucscToRefSeq
     # 2730871774 bases of 2730871774 (100.000%) in intersection
 
+    # fixup 2016-04-11 - Hiram
+    # the chrM name is not correct, it was RefSeq instead of Genbank/INSDC:
+    hgsql -e 'select * from ucscToINSDC where name="NC_005089.1";' mm10
++-------+------------+----------+-------------+
+| chrom | chromStart | chromEnd | name        |
++-------+------------+----------+-------------+
+| chrM  |          0 |    16299 | NC_005089.1 |
++-------+------------+----------+-------------+
+
+    hgsql -e 'update ucscToINSDC set name="AY172335.1" where name="NC_005089.1";' mm10
+
+    hgsql -e 'select * from ucscToINSDC where name="AY172335.1";' mm10
++-------+------------+----------+------------+
+| chrom | chromStart | chromEnd | name       |
++-------+------------+----------+------------+
+| chrM  |          0 |    16299 | AY172335.1 |
++-------+------------+----------+-------------+
+
+
+
 #########################################################################
 
 # download and load ncbiGene track
