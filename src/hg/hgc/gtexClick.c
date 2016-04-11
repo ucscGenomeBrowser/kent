@@ -250,8 +250,11 @@ printf("<b>Genomic position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%
                         gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
 puts("<p>");
 
-boolean doLogTransform = cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
-                                                GTEX_LOG_TRANSFORM_DEFAULT);
+// set gtexDetails (e.g. to 'log') to show log transformed details page 
+//      if hgTracks is log-transformed
+boolean doLogTransform = (trackDbSetting(tdb, "gtexDetails") &&
+                                cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
+                                                GTEX_LOG_TRANSFORM_DEFAULT));
 double maxVal = 0.0;
 char *versionSuffix = gtexVersionSuffix(tdb->table);
 struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform, 
