@@ -876,6 +876,7 @@ static char *tissueExpressionText(struct gtexTissue *tissue, double expScore,
 /* Construct mouseover text for tissue graph */
 {
 static char buf[128];
+doLogTransform = FALSE; // for now, always display expression level on graph as raw RPKM
 safef(buf, sizeof(buf), "%s (%.1f %s%s%sRPKM)", tissue->description, 
                                 doLogTransform ? log10(expScore+1.0) : expScore,
                                 qualifier != NULL ? qualifier : "",
