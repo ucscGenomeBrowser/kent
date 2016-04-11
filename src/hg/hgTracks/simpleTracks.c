@@ -380,7 +380,7 @@ struct sameItemNode
     };
 
 
-static struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
+struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis)
 /* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 {
 struct spaceSaver *ss = NULL;
@@ -420,7 +420,12 @@ if (trackLoadingInProgress) // we pack after all windows are loaded.
 if (tg->ss)
     {
     if (tg->ss->window != currentWindow)
-	errAbort("unexpected current window %lu, expected %lu", (unsigned long) currentWindow, (unsigned long) tg->ss->window);
+	{
+	// altGraphX creates its own specialized spaceSavers for full vis.
+	// and the routines (hgTracks/altGraphXTrack.c and hg/lib/altGraphX.c) do not set ss->window or ss->vis.
+	if (!sameString(tg->tdb->type,"altGraphX"))
+	    errAbort("unexpected current window %lu, expected %lu", (unsigned long) currentWindow, (unsigned long) tg->ss->window);
+	}
     struct spaceSaver *ss = findSpaceSaver(tg, vis);
     if (ss)
 	return ss->rowCount;

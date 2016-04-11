@@ -1043,24 +1043,32 @@ static int gtexGeneTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Figure out total height of track. Set in track and also return it */
 {
 int height = 0;
+int lineHeight = 0;
+int heightPer = 0;
 
 if (vis == tvDense)
-    { 
-    height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fontHeight, FALSE);
+    {
+    heightPer = tl.fontHeight;
+    lineHeight=heightPer+1;
     }
 else if (vis == tvSquish)
     {
     // for visibility, set larger than the usual squish, which is half font height
-    height = gtexSquishItemHeight() * 2;  // the squish packer halves this
-    height = tgFixedTotalHeightOptionalOverflow(tg, vis, height+1, height, FALSE);
+    heightPer = gtexSquishItemHeight() * 2;  // the squish packer halves this
+    lineHeight=heightPer+1;
     }
 else if ((vis == tvPack) || (vis == tvFull))
     {
     // layout -- initially as fixed height
-    //int lineHeight = gtexGeneMaxHeight(tg);  // TODO KATE THIS MAY BE OBSOLETE
-    int lineHeight = tl.fontHeight;
-    height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, lineHeight, FALSE);
+    //heightPer = gtexGeneMaxHeight(tg);  // TODO KATE THIS MAY BE OBSOLETE
+    heightPer = tl.fontHeight;
+    lineHeight=heightPer;
+    }
 
+height = tgFixedTotalHeightOptionalOverflow(tg, vis, lineHeight, heightPer, FALSE);
+
+if ((vis == tvPack) || (vis == tvFull))
+    {
     // set variable height rows
     if (tg->ss->rowCount != 0)
         {
@@ -1084,7 +1092,9 @@ else if ((vis == tvPack) || (vis == tvFull))
 		}
 	    tg = tgSave;
 	    }
-	height = spaceSaverGetRowHeightsTotal(tg->ss);
+	struct spaceSaver *ss = findSpaceSaver(tg, vis); // ss is a list now
+	assert(ss); // viz matches, we have the right one
+	height = spaceSaverGetRowHeightsTotal(ss);
         }
     }
 tg->height = height;

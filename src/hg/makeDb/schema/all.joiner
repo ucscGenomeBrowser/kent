@@ -110,8 +110,11 @@ set turTru turTru1,turTru2
 set vicPac vicPac1,vicPac2
 set xenTro xenTro1,xenTro2,xenTro3,xenTro7
 
+
 # Define all organism/assembly-specific databases.
-set gbd $ailMel,$allMis,$anoCar,$anoGam,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macFas,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rhiRox,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro,braNey38
+set gbd $ailMel,$allMis,$anoCar,$anoGam,$apiMel,$aplCal,$aptMan,$aquChr,$balAcu,$bisBis,$bosTau,$braFlo,$bruMal,$caeAng,$caeJap,$caePb,$caeRem,$caeSp11,$canFam,$calJac,$calMil,$cavPor,$cb,$ce,$cerSim,$choHof,$chlSab,$chrPic,$ci,$cioSav,$criGri,$danRer,$dasNov,$dipOrd,$dm,$dp,$droMult,$droYak,$eboVir,$echTel,$equCab,$eriEur,$felCat,$fr,$gadMor,$galGal,$gasAcu,$geoFor,$gorGor,$haeCon,$hetGla,$hg,$latCha,$loxAfr,$manPen,$macEug,$macFas,$melGal,$melHap,$melInc,$melUnd,$micMur,$mm,$monDom,$musFur,$myoLuc,$nanPar,$nasLar,$nomLeu,$ochPri,$oreNil,$ornAna,$oryCun,$oryLat,$otoGar,$oviAri,$oxyTri,$panPan,$panTro,$papAnu,$papHam,$petMar,$ponAbe,$priPac,$proCap,$pteVam,$rheMac,$rhiRox,$rn,$sacCer,$saiBol,$sarHar,$sorAra,$speTri,$strPur,$susScr,$taeGut,$tarSyr,$tetNig,$triMan,$tupBel,$turTru,$vicPac,$xenTro,braNey38,braNey1
+
+set metaGbd $gbd
 
 # Define organism databases based on whole-genome shotgun projects
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -165,7 +168,7 @@ set ucscRetroDb hg19,hg38,mm9,mm10
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
 
-databasesChecked $gbd,$otherDb
+databasesChecked $gbd,$otherDb,gbMeta
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp090821,sp080707,sp070202,sp060115,sp051015,sp050415,sp040915,sp040515,sp040315,sp040115,qapushq,mysql-save,hgcentralangie,go070111,go060330,customTracks,customTrash,10Kgenomes,BRfoo,abc,andy,bioCyc070327,bioCyc090623,bioCyc100514,bosTau3Old,ccds,ccds20080404,ccdsNew,ccds_before,ctd,ctd021508,ctdOld,dark,elegansWS176,encpipeline_aamp,encpipeline_beta,encpipeline_galt,encpipeline_kate,encpipeline_prod,encpipeline_test,entrez,euaGli13,eutHer13,fakeDataE0,fanKgTemp,fanKgTemp2,fanTest,fanTest2,gencode,germlineVar_hg18,go040501,go041115,go050521,go050726,go060211,go061219,go080130,goJill,hg15test,hg18kg11,hg18snp130,hg18test,hg19Haps,hg19Patch10,hg19Patch9,hg19Patch5,hg19Patch2,hg19Patch2i,hg38Patch2,hg38Patch3,hg38Patch5,hg38Patch6,hg19snp131,hg19snp132,hg19snp134,hg19snp135,hg19snp137,hg19snp138,hg19snp141,hg38snp141,hg19snp142,hg38snp142,hg19snp144,hg38snp144,hg19snp146,hg38snp146,mm10snp138,canFam3snp139,bosTau7snp138,susScr3snp138,galGal4snp138,hgcentralgsid,hgcentralrhead,hgcentraltest2,hgcentraltestangie,hiv1,hivgne8,homIni13,homIni14,homIni20,homNea0,homPan20,influenza,information_schema,ismb2004,jkFoo,jorgetest,kgHg17FTemp,kgHg18ATemp,kgMm8ATemp,kgRn3DTemp,markd,markdCcds,markdMGC,membership,metaData_vsmalladi,metadata_krish,mikep,mm9Temp,mm10snp137,mmtv,nonAfr13,oldChoHof1,panTro2snp127,pathway,petMar0,pongo,proteins080707,proteins090821,qa,rah,reactome,rn4UCGenes,rn4snp130,snpCompare,snpFixed,sp100331,sp101005,t18,testMePrivl,tmpBioCychg18,tmpFoo12,tmpUcscGeneshg19,treeFam,uf,ug,vega33,vega40,visiGeneOld,visiGeneXml
 
 # Define various non-self chains
@@ -3028,6 +3031,16 @@ identifier orfeomeAccession typeOf=nativeMrnaAccession
     $gbd.orfeomeMrna.qName dupeOk
     $gbd.orfeomeGenes.name full
 
+identifier metaRefSeqId typeOf=mrnaAccession
+"RefSeq mRNA accession"
+    gbMeta.refLink.mrnaAcc
+    gbMeta.refSeqStatus.mrnaAcc
+    $metaGbd.refFlat.name
+    $metaGbd.refGene.name
+    $metaGbd.refMrna.name
+    $metaGbd.refSeqAli.qName
+    gbMeta.refSeqSummary.mrnaAcc 
+
 identifier refSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession"
     $gbd.refLink.mrnaAcc
@@ -3295,6 +3308,20 @@ identifier hugeId
 
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
+identifier metaGbCdnas
+"Connect metaGbd gbCdnaInfo with mRNA/EST"
+    gbMeta.gbCdnaInfo.acc
+    $metaGbd.all_mrna.qName
+    $metaGbd.all_est.qName
+    $metaGbd.refGene.name
+    $metaGbd.xenoRefGene.name
+    $metaGbd.gbMiscDiff.acc
+    $metaGbd.refSeqAli.qName
+    $metaGbd.xenoRefSeqAli.qName
+    $metaGbd.xenoMrna.qName
+    $metaGbd.xenoEst.qName
+    $metaGbd.gbWarn.acc
+
 identifier gbCdnas
 "Connects gbCdnaInfo with mRNA/EST"
     $gbd.gbCdnaInfo.acc
@@ -3308,6 +3335,78 @@ identifier gbCdnas
     $gbd.xenoMrna.qName
     $gbd.xenoEst.qName
     $gbd.gbWarn.acc
+
+identifier metaGenBankAuthor
+"Connects metaGenBank mRNA/EST and its author"
+    gbMeta.author.id
+    gbMeta.gbCdnaInfo.author
+
+identifier metaGenBankCds
+"Connects metaGenBank mRNA/EST and its coding region (CDS)"
+    gbMeta.cds.id
+    gbMeta.gbCdnaInfo.cds
+
+identifier metaGenBankCell
+"Connects metaGenBank mRNA/EST and the cell type it came from"
+    gbMeta.cell.id
+    gbMeta.gbCdnaInfo.cell
+
+identifier metaGenBankDevelopment
+"Connects metaGenBank mRNA/EST and development stage of the organism it came from"
+    gbMeta.development.id
+    gbMeta.gbCdnaInfo.development
+
+identifier metaGenBankDescription
+"Connects metaGenBank mRNA/EST and descriptive text"
+    gbMeta.description.id
+    gbMeta.gbCdnaInfo.description
+
+identifier metaGenBankGeneName
+"Connects metaGenBank mRNA/EST and gene name"
+    gbMeta.geneName.id
+    gbMeta.gbCdnaInfo.geneName
+    gbMeta.refLink.geneName
+
+identifier metaGenBankKeyword
+"Connects metaGenBank mRNA/EST and keyword"
+    gbMeta.keyword.id
+    gbMeta.gbCdnaInfo.keyword
+
+identifier metaGenBankLibrary
+"Connects metaGenBank mRNA/EST and cDNA library"
+    gbMeta.library.id
+    gbMeta.gbCdnaInfo.library
+
+identifier metaGenBankMrnaClone
+"Connects metaGenBank mRNA/EST and cDNA clone name"
+    gbMeta.mrnaClone.id
+    gbMeta.gbCdnaInfo.mrnaClone
+
+identifier metaGenBankOrganism
+"Connects metaGenBank mRNA/EST and organism it came from"
+    gbMeta.organism.id
+    gbMeta.gbCdnaInfo.organism
+
+identifier metaGenBankProductName
+"Connects metaGenBank mRNA/EST and protein product name"
+    gbMeta.productName.id
+    gbMeta.gbCdnaInfo.productName
+    gbMeta.refLink.prodName
+
+identifier metaGenBankSex
+"Connects metaGenBank mRNA/EST and sex mRNA came from"
+    gbMeta.sex.id
+    gbMeta.gbCdnaInfo.sex
+
+identifier metaGenBankSource
+"Connects metaGenBank mRNA/EST and source of mRNA"
+    gbMeta.source.id
+    gbMeta.gbCdnaInfo.source
+
+identifier metaGenBankTissue
+"Connects metaGenBank mRNA/EST and tissue mRNA isolated from"
+    gbMeta.tissue.id
+    gbMeta.gbCdnaInfo.tissue
 
 identifier genBankAuthor
 "Connects genBank mRNA/EST and its author"
@@ -3491,6 +3590,11 @@ identifier hgIkmcName
     $hg.hgIkmcExtra.name minCheck=0.99
 
 # "Biological" Gene Names
+
+identifier metaHugoName external=HUGO fuzzy
+"International Human Gene Identifier"
+    gbMeta.refLink.name
+    $metaGbd.refFlat.geneName
 
 identifier hugoName external=HUGO fuzzy
 "International Human Gene Identifier"
@@ -5242,13 +5346,13 @@ identifier gtexSample
 
 identifier gtexGeneId
 "GTEx gene ID (ENS gene)"
-    hgFixed.gtexSampleData.geneId
+    hgFixed.gtexSampleData.geneId dupeOk
     hg19,hg38.gtexGene.geneId
     hg19,hg38.gtexGeneModel.name
 
 identifier gtexTissue
 "Short name for GTEx tissue (UCSC)"
-    hgFixed.gtexSampleData.tissue
+    hgFixed.gtexSampleData.tissue dupeOk
     hgFixed.gtexTissue.name
 
 # Dependencies not already captured in identifiers
