@@ -44,7 +44,6 @@ html primateChainNet
         otherDb panPan1
 
         track chainGorGor4
-        release alpha
         subTrack primateChainNetViewchain off
         subGroups view=chain species=acGorilla clade=aaHominidae
         shortLabel $o_Organism Chain
@@ -182,7 +181,6 @@ include chainNetRBestOtoGar3.ra alpha
         otherDb panPan1
 
         track netGorGor4
-        release alpha
         subTrack primateChainNetViewnet off
         subGroups view=net species=acGorilla clade=aaHominidae
         shortLabel $o_Organism Net
