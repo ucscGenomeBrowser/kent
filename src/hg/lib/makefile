@@ -127,8 +127,14 @@ endif
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O)
 	ar rcus ../../lib/$(MACHTYPE)/jkhgap.a $(O)
 
+jWestBanner.h: jWestBanner.html
+	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestBanner.html > jWestBanner.h
+
+web.c: jWestBanner.h
+
 clean:
 	rm -f $(O);
+	rm -f jWestBanner.h
 	rm -f ../../lib/$(MACHTYPE)/jkhgap.a;
 
 ctags:

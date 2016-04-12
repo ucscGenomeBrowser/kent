@@ -4403,15 +4403,8 @@ struct slPair *pairList = NULL;
 if (isHubTrack(genome))
     {
     char *clade = trackHubAssemblyClade(genome);
-    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade), *dbDb;
-    for (dbDb = hubDbDbList;  dbDb != NULL;  dbDb = dbDb->next)
-	{
-	char *db = dbDb->name;
-	if (isEmpty(db))
-	    db = dbDb->genome;
-	slAddHead(&pairList, slPairNew(db, cloneString(db)));
-	}
-    slReverse(&pairList);
+    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade);
+    pairList = trackHubDbDbToValueLabel(hubDbDbList);
     }
 else
     {

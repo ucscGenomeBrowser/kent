@@ -82,6 +82,12 @@ void webEndSectionTables();
 /* Finish with section tables (but don't do /BODY /HTML lik
  * webEnd does. */
 
+void webStartJWest(struct cart *cart, char *db, char *title);
+/* Start HTML with new banner design by jWest (with modifications). */
+
+void webEndJWest();
+/* End HTML that was started with webStartJWest/ */
+
 void webVaWarn(char *format, va_list args);
 /* Warning handler that closes off web page. */
 
