@@ -1,237 +1,31 @@
-<!-- News Section ============================================- -->  
-<TABLE style="background-color:#888888; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-    <TR><TD>        
-    <TABLE style="background-color:#fffee8; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-        <TR><TD>        
-        <TABLE style="background-color:#D9E4F8; background-image: url('images/hr.gif'); width: 100%; border: 0px">
-            <TR><TD>
-            <!--cheap trick to get background on row to be continuous-->
-            <TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-                <TR><TD ALIGN="left">
-                 <font size="4"><a name="TOC"></a><b>&nbsp; News</b></font><a href="http://www.twitter.com/GenomeBrowser" target="_blank"><img src="http://twitter-badges.s3.amazonaws.com/t_small-a.png" title="Follow &#64;GenomeBrowser on Twitter" alt="Follow &#64;GenomeBrowser on Twitter" style="vertical-align:text-bottom; margin-left: 15px;"></a>
-                 <a title="Genome Browser Facebook page"
-                 href="http://www.facebook.com/ucscGenomeBrowser"
-                 target="_blank"><img
-                 src="/images/FB-f-Logo__blue_22.jpg"
-                 style="vertical-align:text-bottom; margin-left: 15px;"
-                 alt="Genome Browser Facebook page"></a>
-                 <a href="https://plus.google.com/107643636314131661344" rel="publisher"></a>
-               </TD>
-                <TD ALIGN="right"><A HREF="goldenPath/newsarch.html"><IMG 
-                SRC="images/news.jpg" ALT="" ALIGN="right" BORDER=0></A>
-            </TD></TR></TABLE>
-        </TD></TR></TABLE>
-        <TABLE style="background-color:#fffee8; width: 100%; padding: 0px">
-          <TR><TH HEIGHT=3></TH></TR>
-          <TR><TD WIDTH=10></TD>
-          <TD>
-          <P>
-          To receive announcements of new genome 
-          assembly releases, new software features, updates and 
-          training seminars by email, subscribe to the
-          <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
-          TARGET=_blank>genome-announce</A> mailing list. Please see our
-          <a href="http://genome.ucsc.edu/blog"
-          target=_blank>blog</a> for posts about Genome Browser tools, features, projects and more.
-          </p>
-   
-     <hr>      
-    <!-- start news -->
+<!-- News item template:
 
-  <font color="#006666" size="4"><b>30 June 2016 - CRAM Files Now Supported!</b></font>
-  <p>
-  <p>
-  We are excited to announce the support of CRAM files on the Browser!
-  Read more <a href="goldenPath/newsarch.html#0630B16">here</a>.</p>
-  <p>
-  See complete details on the <a href="goldenPath/help/cram.html" target="_blank">CRAM Track Format</a>
-  page. To load an example CRAM file from the 1000 Genomes Project where reads are displayed as
-  a bar graph using the &quot;Display data as a density graph&quot; option,
-  <a href="/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&hgct_customText=track%20type=bam%20name=%22CRAM%20Example%22%20description=%22A%201000%20Genomes%20CRAM%20file%22%20visibility=full%20bigDataUrl=ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00139/exome_alignment/HG00139.mapped.ILLUMINA.bwa.GBR.exome.20121211.bam.cram%20doWiggle=1"
-  target="_blank">click here</a>.
-  <p>
-  Thanks to Jonathan Casper and Brian Raney for the implementation of this feature.</p>
-  <hr>
+  <div class="jwNewsItem">
+    __DATE__ -
+    <a href="goldenPath/newsarch.html#__MMDDYY__">
+      __HEADLINE__
+    </a></div>
 
-  <font color="#006666" size="4"><b>30 June 2016 - Updated Gene Tracks Available for 
-  the Human (hg38) and Mouse (mm10) Assemblies</b></font>
-  <p>  
-  We are pleased to announce the release of an updated GENCODE Genes
-  track for the Human (GRCh38/hg38) assembly.
-  The GENCODE v24 gene set has 197,782 total transcripts, compared with 
-  195,178 in the previous version. 
-  The total number of canonical genes has increased from 49,534 to 49,948. 
-  Comparing the new gene set with the previous version: 
-  </p>
-  <p>
-  <ul>
-  <li>193,647 transcripts did not change.</li>
-  <li>128 transcripts were not carried forward to the new version.</li>
-  <li>997 transcripts are "compatible" with those in the previous set,
-  meaning that the two transcripts show consistent splicing. In most cases,
-  the old and new transcripts differ in the lengths of their UTRs.</li>
-  <li>406 transcripts overlap with those in the previous set, but do not
-  show consistent splicing (i.e., they contain overlapping introns with
-  differing splice sites).</li>
-  </ul>
-  <p>
-  More details about the GENCODE Genes track can be found on the
-  <a href="http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=hg38&g=knownGene">
-  GENCODE v24 track description page</a>.
-  </p>
-  <p>
-  Many thanks to Brian Raney and Luvina Guruvadoo for their work on this track!
-  </p>
-  ---
-  <p>
-  We are  pleased to announce the release of an updated UCSC Genes track for the 
-  Mouse (GRCm38/mm10) assembly.
-  The new release has 63,759 total transcripts, compared with 63,244
-  in the previous version. The total number of canonical genes has increased from 32,958
-  to 33,079. Comparing the new gene set with the previous version:
-  <ul>
-  <li>60,827 transcripts did not change between versions.</li>
-  <li>148 transcripts were not carried forward to the new version.</li>
-  <li>1,929 transcripts are &quot;compatible&quot; with those in the previous set, meaning
-  that the two transcripts show consistent splicing.  In most cases, the old and new
-  transcripts differ in the lengths of their UTRs.</li>
-  <li>340 transcripts overlap with those in the previous set, but do not show consistent
-  splicing (i.e., they contain overlapping introns with differing splice sites).</li>
-  </ul>
-  </p>
-  <p>
-  More details about the new UCSC Genes track can be found on the
-  <a href="../cgi-bin/hgTrackUi?db=mm10&g=knownGene">UCSC Genes track
-  description page</a>.
-  </p>
-
-  <p>
-  Many thanks to Jonathan Casper and Christopher Lee for their work on this track!
-  </p>
-  <hr>
-
-
-  <font color="#006666" size="4"><b>27 June 2016 - New Way to Share Sessions - Public Sessions!</b></font>
-  <p>
-  We are excited to announce the release of the
-  <a href="cgi-bin/hgPublicSessions">Public Sessions</a>
-  page, the newest way to share your UCSC Genome Browser snapshots with your colleagues
-  and the world. The Public Sessions page collects sessions that users have elected to share 
-  publicly. Sessions on this page can be filtered based on assembly, name, or a phrase from
-  the description. Sessions can also be sorted based on their popularity or creation date.
-  To add your own sessions to this Public Sessions page, just check the box under "post in
-  public listing" on the session management page.
-  </p>
-
-  <p>
-  The Genome Browser <a href="cgi-bin/hgSession">session management</a> page has also received an
-  update with the release of the new Public Sessions page. Sessions are now arranged in a table,
-  where varying numbers of sessions can be displayed on a page of this table. Sessions can now be
-  filtered and ordered based on session name, primary assembly, and creation date. Clicking on the
-  session name now displays that session in the Genome Browser. Session details, such as the name
-  or the description, can be changed using the "details" button in the new table layout.
-  </p>
-
-  <p>
-  The release of the new Public Sessions page also marks a change in our session expiration policy.
-  We no longer expire sessions and associated custom tracks four months after their last use.
-  Please note, however, that the UCSC Genome Browser is not a data storage service and that we
-  encourage you to keep local copies of your session contents and custom track data.
-  </p>
-
-  <p>
-  For more information about using sessions to share snapshots of the UCSC Genome Browser,
-  please see the <a href="goldenPath/help/hgSessionHelp.html">User Guide</a> or our blog post,
-  "<a href="http://genome.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
-  target="_blank">How to share your UCSC screenthoughts</a>."
-  </p>
-
-  <p>
-  Thanks to Jonathan Casper and Matthew Speir for their work on this new tool.
-  </p>
-
-  <hr>
- 
-  <font color="#006666" size="4"><b>15 June 2016 - New Official Asian Mirror Released</b></font>
-  <p>
-  We are pleased to announce the introduction of a new supported Genome Browser mirror 
-  to serve our users in Asia. The genome-asia server 
-  <a href="http://genome-asia.ucsc.edu" target="_blank">(http://genome-asia.ucsc.edu)</a>, 
-  which is administered by UCSC, is physically located at the 
-  <a href="http://www.yokohama.riken.jp/english/" target="_blank">RIKEN Yokohama Campus</a>
-  in Japan.
-  </p>
-  <p>
-  Genome-asia is intended as an alternate, faster access point for those Browser users 
-  who are geographically closer to Asia than to the western United States. The mirror 
-  is functionally identical to the U.S.-based server, with one exception. Custom tracks 
-  residing on the U.S. server are not automatically accessible from the genome-asia mirror; 
-  therefore, the use of these custom tracks and saved sessions containing them will require 
-  some manual intervention.
-  </p>
-  <p>
-  Genome Browser users located in Asia will be automatically redirected to genome-asia 
-  when they click the "Genomes" menu item on the Genome Browser home page, but will have 
-  the option to remain on the U.S.-based server. In addition to the 
-  genome-asia mirror, we continue to support a Europe-based Genome Browser mirror 
-  <a href="http://genome-euro.ucsc.edu" target="_blank">(http://genome-euro.ucsc.edu)</a>
-  in Bielefeld, Germany. A third-party mirror in 
-  <a href="http://genome-mirror.moma.ki.au.dk/" target="_blank">Aarhus, Denmark</a>, 
-  is available as an emergency backup in the rare event 
-  that our three supported sites are offline.
-  </p>
-  <p>
-  We wish to express our special thanks to Dr. Hideya Kawaji at the 
-  <a href="http://www.riken.jp/en/research/labs/accc/" target="_blank">RIKEN Advanced 
-  Center for Computing and Communication</a> for making this possible. We would also 
-  like to acknowledge the following members of the UCSC Genome Browser team for their efforts: 
-  Galt Barber, Robert Kuhn, Jorge Garcia, and Luvina Guruvadoo.
-  </p>
-  <hr>
-
-<!-- start archives -->
-<!--staged for future release
-
-        <p>
-        <font color="#006666" size="4"><b>30 June 2016 - Updated Gene Tracks Available for 
-        the Human (hg38) and Mouse (mm10) Assemblies </b> </font>
-        We are pleased to announce the release of updated GENCODE Genes and UCSC Genes tracks
-        for the Human (GRCh38/hg38) and Mouse (GRCm38/mm10) assemblies.
-        <a href="goldenPath/newsarch.html#063016">Read more</a>.
-        </p>
-
-	<p>
-	<font color="#006666" size="4"><b>27 June 2016 - New Way to Share Sessions - Public Sessions!</b> </font>
-	We are excited to announce the release of the
-	<a href="cgi-bin/hgPublicSessions">Public Sessions</a>
-	page, the newest way to share your UCSC Genome Browser snapshots with your colleagues
-	and the world.
-	<a href="goldenPath/newsarch.html#062816">Read more</a>.
-	</p>
-
-	<p>
-	<font color="#006666" size="4"><b>15 June 2016 - New Official Asian Mirror Released</b>: </font>
-	We are pleased to announce the introduction of a new supported Genome Browser mirror
-	to serve our users in Asia.
-	<a href="goldenPath/newsarch.html#061516">Read more</a>.
-	</p>
+  1. replace __DATE__ with something like 'Apr. 29, 2016'
+  2. replace __MMDDYY__ with something like '042916'
+  3. replace __HEADLINE__ with the news item's headline like 'Awesome New Feature'
 -->
 
-       <p>
-        <font color="#006666" size="4"><b>6 June 2016 - New video:  Exon-only mode</b></font>
-        We are proud to announce a new <a href="https://www.youtube.com/watch?v=mNEJBOkf_Gk" target="_blank">video</a> demonstrating the
-        exon-only feature.  This feature is useful in gene-expresson studies and
-        for those doing whole-exome sequencing.
-        <a href="goldenPath/newsarch.html#060616">Read more</a>.
-       </p>
+  <div class="jwNewsItem">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016">
+      CRAM Files Now Supported!
+    </a></div>
 
-        <p>
-        <font color="#006666" size="4"><b>1 June 2016 - New Density Graph Feature!</b></font>
-        The Genome Browser is proud to announce a new &quot;density graph&quot; feature for
-        a variety of tracks, including BAM custom tracks, that converts data into a summary display.
-	<a href="goldenPath/newsarch.html#060116">Read more</a>.
-        </p>
-            </TD><TD WIDTH=15>
-         </TD></TR></TABLE>
-    <BR></TD></TR></TABLE>
-</TD></TR></TABLE>
+  <div class="jwNewsItem">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016">
+      Updated Gene Tracks Available for the Human (hg38) and Mouse (mm10) Assemblies
+    </a></div>
+
+  <div class="jwNewsItem">
+    Jun. 28, 2016 -
+    <a href="goldenPath/newsarch.html#062816">
+      New Way to Share Sessions - Public Sessions!
+    </a></div>
+
