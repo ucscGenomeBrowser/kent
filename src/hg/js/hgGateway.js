@@ -648,6 +648,30 @@ var autocompleteCat = (function() {
                }
              });
 
+    function removeDups(inList, isDup) {
+        // Return a list with only unique items from inList, using isDup(a, b) -> true if a =~ b
+        var inLength = inList.length;
+        // inListDups is an array of boolean flags for marking duplicates, parallel to inList.
+        var inListDups = [];
+        var outList = [];
+        var i, j;
+        for (i = 0;  i < inLength;  i++) {
+            // If something has already been marked as a duplicate, skip it.
+            if (! inListDups[i]) {
+                // the first time we see a value, add it to outList.
+                outList.push(inList[i]);
+                for (j = i+1;  j < inLength;  j++) {
+                    // Now scan the rest of inList to find duplicates of inList[i].
+                    // We can skip items previously marked as duplicates.
+                    if (!inListDups[j] && isDup(inList[i], inList[j])) {
+                        inListDups[j] = true;
+                    }
+                }
+            }
+        }
+        return outList;
+    }
+
     function init($input, options) {
         // Set up an autocomplete and watermark for $input, with a callback options.onSelect
         // for when the user chooses a result.
@@ -656,6 +680,15 @@ var autocompleteCat = (function() {
         // If options.searchObj is provided, it is used in addition to baseUrl; first the term is
         // looked up in searchObj and then also queried using baseUrl.  Values in searchObj
         // should have the same structure as the value returned by a baseUrl query.
+        // options.isDuplicate (if provided) is a function (a, b) -> boolean that returns
+        // true if autocomplete items a and b are redundant; it is used to remove duplicates
+        // from autocomplete results.
+        // The following two options apply only when using our locally modified jquery-ui:
+        // If options.enterSelectsIdentical is true, then if the user hits Enter in the text input
+        // and their term has an exact match in the autocomplete results, that result is selected.
+        // options.onEnterTerm (if provided) is a callback function (jqEvent, jqUi) invoked
+        // when the user hits Enter, after handling enterSelectsIdentical.
+
         // The function closure allows us to keep a private cache of past searches.
         var cache = {};
 
@@ -672,6 +705,10 @@ var autocompleteCat = (function() {
             $.getJSON(url)
                .done(function(results) {
                 var combinedResults = results.concat(searchObjResults);
+                // Optionally remove duplicates identified by options.isDuplicate
+                if (options.isDuplicate) {
+                    combinedResults = removeDups(combinedResults, options.isDuplicate);
+                }
                 cache[term] = combinedResults;
                 acCallback(combinedResults);
             });
@@ -1287,6 +1324,17 @@ var hgGateway = (function() {
         updateDescription(uiState.description);
     }
 
+    function speciesResultsEquiv(a, b) {
+        // For autocompleteCat's option isDuplicate: return true if species search results
+        // a and b would be redundant (and hence one should be removed).
+        if (a.db !== b.db) {
+            return false;
+        } else if (a.genome === b.genome) {
+            return true;
+        }
+        return false;
+    }
+
     // Server response event handlers
 
     function checkJsonData(jsonData, callerName) {
@@ -1524,6 +1572,7 @@ var hgGateway = (function() {
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
                                    searchObj: searchObj,
+                                   isDuplicate: speciesResultsEquiv,
                                    enterSelectsIdentical: true });
             updateFindPositionSection(uiState);
             $('#selectAssembly').change(onChangeDbMenu);
