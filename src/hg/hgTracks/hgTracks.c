@@ -1185,6 +1185,14 @@ tg->tdb = tdb;
 return tg;
 }
 
+Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color)
+/* For tracks having light track display but needing a darker label */
+{
+if (trackDbSetting(track->tdb, "darkerLabels"))
+    return somewhatDarkerColor(hvg, color);
+return color;
+}
+
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -1206,6 +1214,7 @@ struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 Color labelColor = (track->labelColor ?
                         track->labelColor : track->ixColor);
+labelColor = maybeDarkerLabels(track, hvg, labelColor);
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 if (vis == tvHide)
@@ -1296,6 +1305,8 @@ switch (vis)
 
             if (track->itemLabelColor != NULL)
                 labelColor = track->itemLabelColor(track, item, hvg);
+            else
+                labelColor = maybeDarkerLabels(track, hvg, labelColor);
 
             /* Do some fancy stuff for sample tracks.
              * Draw y-value limits for 'sample' tracks. */
@@ -1489,6 +1500,7 @@ if (track->limitedVis != tvHide)
                                                 tdbComposite->colorG, tdbComposite->colorB);
                 }
             }
+        labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
@@ -1646,6 +1658,7 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+labelColor = maybeDarkerLabels(track, hvg, labelColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
 		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
