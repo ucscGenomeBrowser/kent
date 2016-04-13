@@ -648,41 +648,14 @@ var autocompleteCat = (function() {
                }
              });
 
-    function removeDups(inList, isDup) {
-        // Return a list with only unique items from inList, using isDup(a, b) -> true if a =~ b
-        var inLength = inList.length;
-        // inListDups is an array of boolean flags for marking duplicates, parallel to inList.
-        var inListDups = [];
-        var outList = [];
-        var i, j;
-        for (i = 0;  i < inLength;  i++) {
-            // If something has already been marked as a duplicate, skip it.
-            if (! inListDups[i]) {
-                // the first time we see a value, add it to outList.
-                outList.push(inList[i]);
-                for (j = i+1;  j < inLength;  j++) {
-                    // Now scan the rest of inList to find duplicates of inList[i].
-                    // We can skip items previously marked as duplicates.
-                    if (!inListDups[j] && isDup(inList[i], inList[j])) {
-                        inListDups[j] = true;
-                    }
-                }
-            }
-        }
-        return outList;
-    }
-
     function init($input, options) {
         // Set up an autocomplete and watermark for $input, with a callback options.onSelect
         // for when the user chooses a result.
         // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
         // it anyway in case the same input had a previous db's autocomplete in effect.
-        // If options.searchObj is provided, it is used in addition to baseUrl; first the term is
-        // looked up in searchObj and then also queried using baseUrl.  Values in searchObj
-        // should have the same structure as the value returned by a baseUrl query.
-        // options.isDuplicate (if provided) is a function (a, b) -> boolean that returns
-        // true if autocomplete items a and b are redundant; it is used to remove duplicates
-        // from autocomplete results.
+        // options.onServerReply (if given) is a function (Array, term) -> Array that
+        // post-processes the list of items returned by the server before the list is
+        // passed back to autocomplete for rendering.
         // The following two options apply only when using our locally modified jquery-ui:
         // If options.enterSelectsIdentical is true, then if the user hits Enter in the text input
         // and their term has an exact match in the autocomplete results, that result is selected.
@@ -696,21 +669,13 @@ var autocompleteCat = (function() {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
             var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
-            var searchObjResults = [];
-            _.forEach(options.searchObj, function(results, key) {
-                if (_.startsWith(key.toUpperCase(), term.toUpperCase())) {
-                    searchObjResults = searchObjResults.concat(results);
-                }
-            });
             $.getJSON(url)
                .done(function(results) {
-                var combinedResults = results.concat(searchObjResults);
-                // Optionally remove duplicates identified by options.isDuplicate
-                if (options.isDuplicate) {
-                    combinedResults = removeDups(combinedResults, options.isDuplicate);
+                if (_.isFunction(options.onServerReply)) {
+                    results = options.onServerReply(results, term);
                 }
-                cache[term] = combinedResults;
-                acCallback(combinedResults);
+                cache[term] = results;
+                acCallback(results);
             });
             // ignore errors to avoid spamming people on flaky network connections
             // with tons of error messages (#8816).
@@ -738,7 +703,6 @@ var autocompleteCat = (function() {
 
         // Provide default values where necessary:
         options.onSelect = options.onSelect || console.log;
-        options.searchObj = options.searchObj || {};
         options.enterSelectsIdentical = options.enterSelectsIdentical || false;
 
         $input.autocompleteCat({
@@ -872,12 +836,7 @@ var hgGateway = (function() {
         if (label !== 'root' && label !== 'cellular organisms') {
             searchObj[label] = myResults;
         }
-        return searchObj;
-    }
-
-    function addAutocompleteCommonNames(searchObj) {
-        // After searchObj is constructed by autocompleteFromTree, add aliases for
-        // some common names that map to scientific names in the tree.
+        // Add aliases for some common names that map to scientific names in the tree.
         _.forEach(commonToSciNames, function(sciName, commonName) {
             var label, addMyLabel;
             if (searchObj[sciName]) {
@@ -886,6 +845,7 @@ var hgGateway = (function() {
                 searchObj[commonName] = _.map(searchObj[sciName], addMyLabel);
             }
         });
+        return searchObj;
     }
 
     function makeStripe(id, color, stripeHeight, scrollTop, onClickStripe) {
@@ -1324,6 +1284,30 @@ var hgGateway = (function() {
         updateDescription(uiState.description);
     }
 
+    function removeDups(inList, isDup) {
+        // Return a list with only unique items from inList, using isDup(a, b) -> true if a =~ b
+        var inLength = inList.length;
+        // inListDups is an array of boolean flags for marking duplicates, parallel to inList.
+        var inListDups = [];
+        var outList = [];
+        var i, j;
+        for (i = 0;  i < inLength;  i++) {
+            // If something has already been marked as a duplicate, skip it.
+            if (! inListDups[i]) {
+                // the first time we see a value, add it to outList.
+                outList.push(inList[i]);
+                for (j = i+1;  j < inLength;  j++) {
+                    // Now scan the rest of inList to find duplicates of inList[i].
+                    // We can skip items previously marked as duplicates.
+                    if (!inListDups[j] && isDup(inList[i], inList[j])) {
+                        inListDups[j] = true;
+                    }
+                }
+            }
+        }
+        return outList;
+    }
+
     function speciesResultsEquiv(a, b) {
         // For autocompleteCat's option isDuplicate: return true if species search results
         // a and b would be redundant (and hence one should be removed).
@@ -1333,6 +1317,33 @@ var hgGateway = (function() {
             return true;
         }
         return false;
+    }
+
+    function searchByKeyNoCase(searchObj, term) {
+        // Return a concatenation of searchObj list values whose keys start with term
+        // (case-insensitive).
+        var termUpCase = term.toUpperCase();
+        var searchObjResults = [];
+        _.forEach(searchObj, function(results, key) {
+            if (_.startsWith(key.toUpperCase(), termUpCase)) {
+                searchObjResults = searchObjResults.concat(results);
+            }
+        });
+        return searchObjResults;
+    }
+
+    function processSpeciesAutocompleteItems(searchObj, results, term) {
+        // This (bound to searchObj) is passed into autocompleteCat as options.onServerReply.
+        // The server sends a list of items that may include duplicates and can have
+        // results from dbDb and/or assembly hubs.  Also look for results from the
+        // phylogenetic tree, and insert those before the assembly hub matches.
+        // Then remove duplicates and return the processed results which will then
+        // be used to render the menu.
+        var phyloResults = searchByKeyNoCase(searchObj, term);
+        var hubResultIx = _.findIndex(results, function(result) { return !! result.hubUrl; });
+        var hubResults = hubResultIx >= 0 ? results.splice(hubResultIx) : [];
+        var combinedResults = results.concat(phyloResults).concat(hubResults);
+        return removeDups(combinedResults, speciesResultsEquiv);
     }
 
     // Server response event handlers
@@ -1562,7 +1573,7 @@ var hgGateway = (function() {
         // initialize event handlers.
         $(function() {
             var searchObj = autocompleteFromTree(dbDbTree);
-            addAutocompleteCommonNames(searchObj);
+            var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
             scrollbarWidth = findScrollbarWidth();
             drawSpeciesPicker();
             setRightColumnWidth();
@@ -1571,8 +1582,7 @@ var hgGateway = (function() {
                                  { baseUrl: 'hgGateway?hggw_term=',
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
-                                   searchObj: searchObj,
-                                   isDuplicate: speciesResultsEquiv,
+                                   onServerReply: processSpeciesResults,
                                    enterSelectsIdentical: true });
             updateFindPositionSection(uiState);
             $('#selectAssembly').change(onChangeDbMenu);
