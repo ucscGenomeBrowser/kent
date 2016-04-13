@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel Primate Chain/Net
 longLabel Primate Genomes, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aaChimp=Chimp abBonobo=Bonobo acGorilla=Gorilla adOrangutan=Orangutan aeGibbon=Gibbon afCrab=Crag-eating_macaque agBaboon=Baboon ahRhesus=Rhesus aiGreenMonkey=Green_Monkey ajSnub=Golden_snub-nosed_monkey akProboscis=Proboscis_monkey alSquirrel=Squirrel_monkey amMarmoset=Marmoset anTarsier=Tarsier aoMouse_lemur=Mouse_lemur apBushbaby=Bushbaby
+subGroup2 species Species aaChimp=Chimp abBonobo=Bonobo acGorilla=Gorilla adOrangutan=Orangutan aeGibbon=Gibbon afCrab=Crab-eating_macaque agBaboon=Baboon ahRhesus=Rhesus aiGreenMonkey=Green_Monkey ajSnub=Golden_snub-nosed_monkey akProboscis=Proboscis_monkey alSquirrel=Squirrel_monkey amMarmoset=Marmoset anTarsier=Tarsier aoMouse_lemur=Mouse_lemur apBushbaby=Bushbaby
 subGroup3 clade Clade aaHominidae=Hominidae abHylobatidae=Hylobatidae acCercopithecinae=Cercopithecinae adCebidae=Cebidae aeHaplorrhini=Haplorrhini afStrepsirrhini=Strepsirrhini
 dragAndDrop subTracks
 visibility hide
@@ -44,7 +44,6 @@ html primateChainNet
         otherDb panPan1
 
         track chainGorGor4
-        release alpha
         subTrack primateChainNetViewchain off
         subGroups view=chain species=acGorilla clade=aaHominidae
         shortLabel $o_Organism Chain
@@ -182,7 +181,6 @@ include chainNetRBestOtoGar3.ra alpha
         otherDb panPan1
 
         track netGorGor4
-        release alpha
         subTrack primateChainNetViewnet off
         subGroups view=net species=acGorilla clade=aaHominidae
         shortLabel $o_Organism Net

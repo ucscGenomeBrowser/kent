@@ -1,0 +1,19 @@
+mkdir /hive/groups/browser/wikipediaScrape
+cd /hive/groups/browser/wikipediaScrape
+# get all the pages in the category "Human Proteins"
+wget "https://petscan.wmflabs.org/?language=en&project=wikipedia&depth=1&categories=Human+proteins&format=tsv&ns%5B0%5D=1&interface_language=en&&&doit=" -O humanProteins.lst
+
+mkdir pages
+for i in `tawk '{print $1}' humanProteins.lst`; 
+do echo $i; 
+wget "https://en.wikipedia.org/wiki/$i" -O pages/$i; 
+sleep 2;
+done
+
+# create a mapping of symbols to pages
+for i in pages/*; 
+do 
+    f=`basename $i`; 
+    grep genenames $i | sed 's/.*hgnc_id.*">//' | sed 's?</a></span>&#160;;?;?' | sed 's/<.*//' | \
+    awk -v name=$f  'BEGIN {OFS="\t"} {n=split($0, a, ";");for (ii=1; ii<= n; ii++) print a[ii],name}'; 
+done | tr -d ' ' | sort  > symbolToPage.txt

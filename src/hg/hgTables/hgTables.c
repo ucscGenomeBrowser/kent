@@ -179,6 +179,7 @@ va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
 va_end(args);
+hgBotDelay();
 }
 
 void htmlClose()
@@ -232,6 +233,7 @@ void textOpen()
  *	at main() exit.
  */
 {
+hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
 char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
@@ -1411,7 +1413,6 @@ char *trackName = NULL;
 char *table = cartString(cart, hgtaTable);
 struct trackDb *track = NULL;
 
-hgBotDelay();
 if (!sameString(curGroup->name, "allTables"))
     {
     trackName = cartString(cart, hgtaTrack);

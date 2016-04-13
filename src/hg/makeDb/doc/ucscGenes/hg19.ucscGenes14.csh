@@ -1598,3 +1598,10 @@ rm -r run.*/out
 # for i in $(cat workingLinks); do hgsql -Ne 'select * from knownToLocusLink where value like "'$i'"' hg19 >> knownToWikipediaNew; done
 ###   then load the table as knownToWikipedia using the knowToLocusLink INDICES.
 
+## braney's knownToWikipedia logic
+# maybe rescrape wikipedia following instructions in doc/wikipediaScrape.txt
+mkdir $dir/wikipedia
+cd $dir/wikipedia
+hgsql hg19 -e "select geneSymbol,name from knownGene g, kgXref x where g.name=x.kgId " | sort > hg19.symbolToId.txt
+join -t $'\t'   /hive/groups/browser/wikipediaScrape/symbolToPage.txt hg19.symbolToId.txt | tawk '{print $3,$2}' | sort | uniq > hg19.idToPage.txt
+hgLoadSqlTab hg19 knownToWikipedia $HOME/kent/src/hg/lib/knownTo.sql hg19.idToPage.txt

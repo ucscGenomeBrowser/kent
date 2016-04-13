@@ -758,7 +758,7 @@ for (word=wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     char *s = cloneString(word->name);
     struct trixSearchResult *tsr, *tsrList;
     tolowers(s);
-    tsrList = trixSearch(trix, 1, &s, FALSE);
+    tsrList = trixSearch(trix, 1, &s, tsmExact);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         visiSearcherAdd(searcher, sqlUnsigned(tsr->itemId), 1.0, wordIx, 1);
     trixSearchResultFreeList(&tsrList);

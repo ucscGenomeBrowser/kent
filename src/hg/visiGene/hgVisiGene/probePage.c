@@ -73,7 +73,7 @@ static void bacProbeInfo(struct sqlConnection *conn, int probeId, int taxon)
 char query[256];
 int bacId;
 char *name = NULL;
-char *genomeDb = hDbForTaxon(conn, taxon);
+char *genomeDb = hDbForTaxon(taxon);
 boolean gotMapping = FALSE;
 
 /* Start new line. */

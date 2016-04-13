@@ -31,6 +31,7 @@ codonToPos: returns genomic position for given exon; parameters: exon, table and
 #include "hdb.h"
 #include "mdb.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "hPrint.h"
 #include "dystring.h"
 #include "hui.h"
@@ -45,8 +46,8 @@ struct dyString *output = newDyString(10000);
 
 setUdcCacheDir();
 cgiSpoof(&argc, argv);
-pushWarnHandler(apiWarnAbortHandler);
-pushAbortHandler(apiWarnAbortHandler);
+pushWarnHandler(htmlVaBadRequestAbort);
+pushAbortHandler(htmlVaBadRequestAbort);
 
 char *database = cgiString("db");
 char *cmd = cgiString("cmd");

@@ -1,0 +1,8 @@
+track chainNetHg19 override
+chainMinScore 5000
+
+track chainNetHg38 override
+matrix 16 100,-174,-43,-144,-174,93,-176,-43,-43,-176,93,-174,-144,-43,-174,100
+
+track chainNetTarSyr2 override
+matrix 16 100,-174,-26,-120,-174,96,-173,-26,-26,-173,96,-174,-120,-26,-174,100

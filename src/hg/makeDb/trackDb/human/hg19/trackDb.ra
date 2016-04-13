@@ -17,6 +17,9 @@ track tRNAs override
 track gap override
 visibility hide
 
+track patSeq override
+url https://www.lens.org/lens/bio/patseqanalyzer#psa/homo_sapiens/latest/chromosome/$s/${-$}?appInClaims=1
+
 track encodeRegions override
 shortLabel ENCODE Pilot
 longLabel Regions Used for ENCODE Pilot Project (1%)

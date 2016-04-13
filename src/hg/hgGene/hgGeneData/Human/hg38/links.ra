@@ -16,13 +16,6 @@ priority 10
 #dbInUrl on
 #priority 1
 
-name wikipedia
-shortLabel Wikipedia
-tables knownToWikipedia
-idSql select value from knownToWikipedia where name = '%s';
-url http://genewiki.sulab.org/map/wiki/%s
-priority 11
-
 name gencode
 shortLabel Gencode
 tables knownToGencodeV20

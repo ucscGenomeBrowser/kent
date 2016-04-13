@@ -288,8 +288,21 @@ printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>",
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
 
 char cartVar[1024];
-char *selected = NULL;
 char buf[512];
+
+/* Filter on coding genes */
+printf("<div>");
+printf("<b>Limit to protein coding genes:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
+boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
+cgiMakeCheckBox(cartVar, isCodingOnly);
+
+/* Show exons in gene model */
+printf("&nbsp;&nbsp;<b>Show GTEx gene model</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
+boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
+cgiMakeCheckBox(cartVar, showExons);
+printf("</div>");
 
 /* Data transform. When selected, the next control (view limits max) is disabled */
 printf("<div><b>Log10 transform:</b>\n");
@@ -309,17 +322,11 @@ char *version = gtexVersion(tdb->table);
 printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
 printf("</div>");
 
-/* Filter on coding genes */
-printf("<div><b>Limit to protein coding genes:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
-boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
-cgiMakeCheckBox(cartVar, isCodingOnly);
-printf("</div>");
-
+#ifdef COMPARISON
 /* Sample selection */
 printf("<div><b>Samples:</b>&nbsp;");
 safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SAMPLES);
-selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
+char *selected = cartCgiUsualString(cart, cartVar, GTEX_SAMPLES_DEFAULT); 
 boolean isAllSamples = sameString(selected, GTEX_SAMPLES_ALL);
 safef(buf, sizeof buf, "onchange='gtexSamplesChanged(\"%s\")'", track);
 char *command = buf;
@@ -341,6 +348,7 @@ printf("<span class='%s'>Difference graph</span>", buf);
 cgiMakeRadioButton(cartVar, GTEX_COMPARISON_MIRROR, isMirror);
 printf("<span class='%s'>Two graphs</span>\n", buf);
 printf("</div>");
+#endif
 
 /* Color scheme */
 // We don't need the rainbow color scheme, but may want another (e.g. different

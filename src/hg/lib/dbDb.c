@@ -2,7 +2,7 @@
  * generated dbDb.h and dbDb.sql.  This module links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2014 The Regents of the University of California 
+/* Copyright (C) 2004, 2016 The Regents of the University of California
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
@@ -11,6 +11,9 @@
 #include "jksql.h"
 #include "dbDb.h"
 
+
+
+char *dbDbCommaSepFieldNames = "name,description,nibPath,organism,defaultPos,active,orderKey,genome,scientificName,htmlPath,hgNearOk,hgPbOk,sourceName,taxId";
 
 void dbDbStaticLoad(char **row, struct dbDb *ret)
 /* Load a row from dbDb table into ret.  The contents of ret will
@@ -30,6 +33,7 @@ ret->htmlPath = row[9];
 ret->hgNearOk = sqlSigned(row[10]);
 ret->hgPbOk = sqlSigned(row[11]);
 ret->sourceName = row[12];
+ret->taxId = sqlSigned(row[13]);
 }
 
 struct dbDb *dbDbLoad(char **row)
@@ -52,6 +56,7 @@ ret->htmlPath = cloneString(row[9]);
 ret->hgNearOk = sqlSigned(row[10]);
 ret->hgPbOk = sqlSigned(row[11]);
 ret->sourceName = cloneString(row[12]);
+ret->taxId = sqlSigned(row[13]);
 return ret;
 }
 
@@ -61,7 +66,7 @@ struct dbDb *dbDbLoadAll(char *fileName)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileRow(lf, row))
     {
@@ -79,7 +84,7 @@ struct dbDb *dbDbLoadAllByChar(char *fileName, char chopper)
 {
 struct dbDb *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[13];
+char *row[14];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -113,6 +118,7 @@ ret->htmlPath = sqlStringComma(&s);
 ret->hgNearOk = sqlSignedComma(&s);
 ret->hgPbOk = sqlSignedComma(&s);
 ret->sourceName = sqlStringComma(&s);
+ret->taxId = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -195,6 +201,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->sourceName);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->taxId);
 fputc(lastSep,f);
 }
 

@@ -197,7 +197,7 @@ if (!isEmpty(simpleEntry))
         getSearchTrixFile(database, trixFile, sizeof(trixFile));
         struct trix *trix = trixOpen(trixFile);
 
-        struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
+        struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExpand);
         for ( ; tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);

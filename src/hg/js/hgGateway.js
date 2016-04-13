@@ -1,30 +1,1547 @@
-$(document).ready(function() {
-    suggestBox.init(document.orgForm.db.value, 
-        $('#suggestTrack').length > 0, 
-	function(item) {
-	    $('#positionDisplay').text(item.id);
-	    $('#position').val(item.id);
-	}, 
-	function(position) {
-	    $('#positionDisplay').text(position);
-	    $('#position').val(position);
-	});
+// hgGateway - autocomplete + graphical interface to select species, assembly & position.
 
-    // Default the image width to current browser window width (#2633).
-    var ele = $('input[name=pix]');
-    if (ele.length && (!ele.val() || ele.val().length === 0)) {
-        ele.val(calculateHgTracksWidth());
-    }
+// Copyright (C) 2016 The Regents of the University of California
 
-    if ($("#suggestTrack").length) {
-        // Make sure suggestTrack is visible when user chooses something via gene select (#3484).
-        $(document.mainForm).submit(function(event) {
-            if ($('#hgFindMatches').length) {
-                var track = $("#suggestTrack").val();
-                if (track) {
-                    $("<input type='hidden' name='" + track + "'value='pack'>").appendTo($(event.currentTarget));
-                }
+// Several modules are defined in this file -- if some other code needs them someday,
+// they can be moved out to lib files.
+
+// function svgCreateEl: convenience function for creating new SVG elements, used by
+// speciesTree and rainbow modules.
+
+// speciesTree: module that exports draw() function for drawing a phylogenetic tree
+// (and list of hubs above the tree, if any) in a pre-existing SVG element -- see
+// hg/hgGateway/hgGateway.html.
+
+// rainbow: module that exports draw() function and colors.  draw() adds stripes using
+// a spectrum of colors that are associated to species groups.  The hgGateway view code
+// uses coordinates of stripes within the tree image to create a corresponding "rainbow"
+// slider bar to the left of the phylogenetic tree container.
+
+// autocompleteCat: customized JQuery autocomplete plugin that includes watermark and
+// can display results broken down by category (for example, genomes from various
+// assembly hubs and native genomes).
+
+// hgGateway: module of mostly view/controller code (model state comes directly from server).
+
+// Globals:
+/* globals calculateHgTracksWidth */ // pragma for jshint; function is defined in utils.js
+var dbDbTree = dbDbTree || ['dbDbTree is missing!', []];
+var cart = cart || undefined;
+
+function svgCreateEl(type, config) {
+    // Helper function for creating a new SVG element and initializing its
+    // properties and attributes.  Type is something like 'rect', 'text', 'g', etc;
+    // config is an object like { id: 'newThingie', x: 0, y: 10, title: 'blah blah' }.
+    var svgns = 'http://www.w3.org/2000/svg';
+    var xlinkns = 'http://www.w3.org/1999/xlink';
+    var el = document.createElementNS(svgns, type);
+    var title, titleEl;
+    if (el) {
+        _.forEach(config, function(value, setting) {
+            if (setting === 'textContent') {
+                // Text content (the text in a text element or title element) is a property:
+                el.textContent = value;
+            } else if (setting === 'href') {
+                // href comes from a different namespace so must use setAttributeNS:
+                el.setAttributeNS(xlinkns, 'href', value);
+            } else if (setting === 'title') {
+                title = value;
+            } else if (setting === 'className') {
+                el.setAttribute('class', value);
+            } else {
+                // Most of the time we're just setting an attribute:
+                el.setAttribute(setting, value);
             }
         });
     }
-});
+    // Mouseover title actually requires creating a child element.
+    // Strangely, if I did this in the above loop, the child element was lost if
+    // props/attributes were set afterwards!!  So save title for last.
+    if (title) {
+        titleEl = document.createElementNS(svgns, 'title');
+        titleEl.textContent = title;
+        el.appendChild(titleEl);
+    }
+    return el;
+}
+
+///////////////////////////// Module: speciesTree /////////////////////////////
+
+var speciesTree = (function() {
+    // SVG phylogenetic tree of species in the browser (with connected assembly hubs above tree)
+
+    // Layout parameters/configuration (object passed into draw can override these defaults):
+    var cfg = { labelRightX: 230,
+                labelStartY: 18,
+                speciesLineOffsetX: 8,
+                branchLength: 5,
+                halfTextHeight: 4,
+                hubLineOffset: 100,
+                labelLineHeight: 18,
+                paddingRight: 5,
+                paddingBottom: 5,
+                branchPadding: 2,
+                onClickSpeciesName: 'console.log',
+                onClickHubName:     'console.log',
+                trackHubsUrl: '',
+                containerWidth: 370
+              };
+
+    function checkTree(node) {
+        // Return true if node and its descendants are of the form
+        // Array[ label:String, taxId:Number, sciName:String, Array[ [node]...] ]
+        // e.g. ['root', taxId0, sciName0,
+        //       [ ['leaf1', taxId1, sciName1, []],
+        //         ['leaf2', taxId2, sciName2, []] ]
+        //      ]
+        if (! _.isString(node[0])) {
+            console.log('label is not a string', node);
+            return false;
+        }
+        if (! _.isNumber(node[1])) {
+            console.log('taxId is not a number', node);
+            return false;
+        }
+        if (! (node[2] === null || _.isString(node[2]))) {
+            console.log('sciName is not null or string', node);
+            return false;
+        }
+        return _.every(node[3], checkTree);
+    }
+
+    function addDepth(node) {
+        // Each node is of the form [ label, taxId, sciName, node[] ]
+        // e.g. ['root', taxId0, sciName0,
+        //       [ ['leaf1', taxId1, sciName1, []],
+        //         ['leaf2', taxId2, sciName2, []] ]
+        //      ]
+        // Add a fifth property to node: depth, i.e. the maximum number of
+        // branching nodes along any path from node to a leaf.
+        // Returns depth.
+        var kids = node[3];
+        var depth, deepestKid;
+        if (!kids || kids.length === 0) {
+            // Leaf: depth is 0
+            depth = 0;
+        } else if (kids.length === 1) {
+            // Node with one child: pass-through, depth is child's depth
+            depth = addDepth(kids[0]);
+        } else {
+            // Node with multiple children: depth is 1 + max child depth
+            deepestKid = _.max(kids, addDepth);
+            depth = 1 + deepestKid[4];
+        }
+        node[4] = depth;
+        return depth;
+    }
+
+    function addSpeciesLabel(svg, label, taxId, sciName, y) {
+        // Add a species label to svg at y offset
+        var onClickString = cfg.onClickSpeciesName + '(' + taxId + ')';
+        var text = svgCreateEl('text', { x: cfg.labelRightX, y: y,
+                                         name: 'textEl_' + taxId,
+                                         title: sciName,
+                                         textContent: label,
+                                         onclick: onClickString });
+        svg.appendChild(text);
+    }
+
+    function addLine(svg, x1, y1, x2, y2, mouseover) {
+        // Add <line x1=x1, y1=y1, x2=x2, y2=y2 /> optionally with mouseover title
+        var config = { x1: x1, y1: y1,
+                       x2: x2, y2: y2,
+                       title: mouseover };
+        var line;
+        if (x1 === x2) {
+            // vertical lines get special styling
+            config.className = 'vert';
+        }
+        line = svgCreateEl('line', config);
+        svg.appendChild(line);
+    }
+
+    function calcBranchX(kidRetList, depth, parentDepth, parentNodeDepth) {
+        // Return the x offset used for drawing lines from children and a vertical line
+        // connecting them.
+        // If the branch from parent is longer than the minimum length, we can scale myX
+        // to reflect how many nodes are skipped in branches to the right vs. to the left,
+        // ensuring the minimum branch length on either side.  Without this adjustment,
+        // we sometimes get very long branches that skip only one node to the right of short
+        // branches that skip many nodes.
+        var myX;
+        var kidMaxX = _.max(kidRetList, 'x').x;
+        var branchSteps = parentDepth - depth;
+        var kidMinNodeDepth, ratioSkipped, stepsX;
+        if (branchSteps > 1) {
+            kidMinNodeDepth = _.min(kidRetList, 'nodeDepth').nodeDepth;
+            ratioSkipped = kidMinNodeDepth / (kidMinNodeDepth + parentNodeDepth);
+            stepsX = (branchSteps+1) * ratioSkipped;
+            // Make sure there is at least one step (min branch width) before and after
+            // stepsX.
+            if (stepsX < 1) {
+                stepsX = 1;
+            } else if (stepsX > branchSteps) {
+                stepsX = branchSteps;
+            }
+            myX = kidMaxX + cfg.branchLength * stepsX;
+        } else {
+            // Only one change in depth level, so short branch:
+            myX = kidMaxX + cfg.branchLength;
+        }
+        return myX;
+    }
+
+    function drawNode(svg, node, leafY, leafTops, parentDepth, parentNodeDepth) {
+        // Each node is of the form [ label, taxId, sciName, node[], depth ]
+        // e.g. ['root', taxId0, sciName0,
+        //       [ ['leaf1', taxId1, sciName1, [], 0],
+        //         ['leaf2', taxId2, sciName2, [], 0] ],
+        //       1,
+        //      ]
+        // depth is the max number of branching nodes under this node.
+        // Recursively draw the tree by generating new SVG elements and adding them to svg.
+        // Returns  {x:, y:, leafY:} where x and y are the endpoint for the parent's branch
+        // to this node and leafY is the Y offset for the next leaf label.
+        // For leaf nodes, draw labels, store y in leafTops, and return label coordinates.
+        // Nodes with a single child don't draw anything, they simply return the
+        // child's info.
+        // Nodes with multiple children draw a horizontal line to each child and
+        // a vertical line connecting the horizontal lines.  They return the {X,Y} of
+        // the midpoint of the vertical line.
+        // optional arg parentDepth is the depth of the parent node as defined above.
+        // optional arg parentNodeDepth is 1 plus the number of single-child nodes that were
+        // skipped on the way from the last branching ancestor.
+        // For internal use, the return object also includes nodeDepth: 1 + number of
+        // nodes skipped between this node and the next branching descendant or leaf
+        // and mouseover: horizontal line labels showing child label plus any skipped
+        // nodes' labels.
+        var label = node[0], taxId = node[1], sciName = node[2], kids = node[3], depth = node[4];
+        var myX, myY;
+        var kidRet, kidRetList, kidMinY, kidMaxY, extraSpace;
+        parentDepth = parentDepth || 1;
+        parentNodeDepth = parentNodeDepth || 1;
+        if (!kids || kids.length === 0) {
+            // leaf node: draw species label, store myY in leafTops
+            addSpeciesLabel(svg, label, taxId, sciName, leafY);
+            myX = cfg.labelRightX + cfg.speciesLineOffsetX;
+            myY = leafY - cfg.halfTextHeight;
+            leafTops[label] = leafY - cfg.labelLineHeight;
+            return { x: myX, y: myY, leafY: leafY + cfg.labelLineHeight, nodeDepth: 1 };
+        } else if (kids.length === 1) {
+            // Single child: don't draw anything (keep the rendering compact),
+            // but make a note that we skipped a node so we can use it for mouseover text
+            kidRet = drawNode(svg, kids[0], leafY, leafTops, parentDepth, parentNodeDepth + 1);
+            kidRet.nodeDepth++;
+            if (kidRet.mouseover) {
+                kidRet.mouseover += ' - ' + label;
+            } else {
+                kidRet.mouseover = label;
+            }
+            return kidRet;
+        } else {
+            // Multiple children.  First pass to draw kids and gather their coords,
+            // second pass to draw lines connecting kids.
+            extraSpace = (depth - 1) * cfg.branchPadding;
+            kidRetList = _.map(kids, function(kid) {
+                var kidRet = drawNode(svg, kid, leafY, leafTops, depth, 1);
+                if (! kidRet.mouseover) {
+                    // If nothing was skipped, use kid's sciName / label (same as kid's vert line)
+                    var kidLabel = kid[0], kidSciName = kid[2];
+                    kidRet.mouseover = kidSciName ? kidSciName : kidLabel;
+                }
+                leafY = kidRet.leafY + extraSpace;
+                return kidRet;
+            });
+            myX = calcBranchX(kidRetList, depth, parentDepth, parentNodeDepth);
+            // Draw horizontal lines from kids
+            _.forEach(kidRetList, function(kidRet) {
+                addLine(svg, kidRet.x, kidRet.y, myX, kidRet.y, kidRet.mouseover);
+            });
+            // Draw vertical line connecting kids
+            kidMinY = kidRetList[0].y;
+            kidMaxY = kidRetList[kids.length-1].y;
+            addLine(svg, myX, kidMinY, myX, kidMaxY, label);
+            myY = (kidMinY + kidMaxY) / 2;
+            return { x: myX, y: myY, leafY: leafY, nodeDepth: 1, mouseover: label };
+        }
+    }
+
+    function addTrackHubsLink(svg, x, y) {
+        // Add a label with link to hgHubConnect at the given position.
+        var a = svgCreateEl('a', { 'href': cfg.hgHubConnectUrl });
+        var text = svgCreateEl('text', { x: x, y: y,
+                                         textContent: 'Hub Genomes',
+                                         className: 'trackHubsLink' });
+        a.appendChild(text);
+        svg.appendChild(a);
+    }
+
+    function doubleQuote(string) {
+        return '"' + string + '"';
+    }
+
+    function addHubLabel(svg, hub, y) {
+        // Add a track hub label to svg at y offset
+        var label = hub.shortLabel + ' (' + hub.assemblyCount + ')';
+        // There are a bunch of hub properties to pass to the onClick handler;
+        // too bad we can't pass a bound function but instead must build a string:
+        var onClickString = cfg.onClickHubName + '(' +
+                            doubleQuote(hub.hubUrl) + ', ' +
+                            hub.taxId + ', ' +
+                            doubleQuote(hub.defaultDb) + ', ' +
+                            doubleQuote(hub.name) +
+                            ')';
+        var text = svgCreateEl('text', { x: cfg.labelRightX, y: y,
+                                         textContent: label,
+                                         name: 'textEl_' + hub.name,
+                                         onclick: onClickString,
+                                         title: hub.longLabel });
+        svg.appendChild(text);
+    }
+
+    function drawHubs(svg, hubList, yIn) {
+        // Add a label for each hub in hubList, with a separator line below and
+        // "Hub Genomes" link instead of a tree.
+        var y = yIn;
+        var hub, i, textX, textY, lineX1, lineY, lineX2;
+        if (hubList && hubList.length) {
+            for (i = 0;  i < hubList.length;  i++) {
+                hub = hubList[i];
+                addHubLabel(svg, hub, y);
+                y += cfg.labelLineHeight;
+            }
+            textX = cfg.labelRightX + cfg.speciesLineOffsetX;
+            textY = (yIn + y - cfg.labelLineHeight) / 2;
+            addTrackHubsLink(svg, textX, textY);
+            lineX1 = cfg.hubLineOffset;
+            lineY = y - cfg.halfTextHeight;
+            lineX2 = cfg.containerWidth - cfg.speciesLineOffsetX;
+            addLine(svg, lineX1, lineY, lineX2, lineY);
+            y += cfg.labelLineHeight;
+        }
+        return y;
+    }
+
+    function draw(svg, dbDbTree, hubList, cfgOverrides) {
+        // dbDbTree is the root node of a phylogenetic tree that we render in svg.
+        // cfgOverrides should be used to provide (names of) meaningful onclick functions
+        // and track hub URL.
+        // Return the width and height of the tree, the top offset of the tree (below hubs
+        // if any), and an object with the top coords of each label/leaf.
+        // Instead of tacking a bunch of children directly onto svg, make a <g> (group)
+        // and append that to svg when done.
+        // First see if there's already something there that we will replace:
+        var oldG = svg.getElementById('hubsAndTree');
+        var newG = svgCreateEl('g', { id: 'hubsAndTree' });
+        // y offsets of tops of species labels (leaves of dbDbTree), filled in by drawNode.
+        var leafTops = {};
+        var hubBottomY, treeInfo, width, height;
+        if (! checkTree(dbDbTree)) {
+            console.error('dbDbTree in wrong format', dbDbTree);
+            return;
+        }
+        _.assign(cfg, cfgOverrides);
+        hubBottomY = drawHubs(newG, hubList, cfg.labelStartY);
+        addDepth(dbDbTree);
+        treeInfo = drawNode(newG, dbDbTree, hubBottomY, leafTops);
+        width = treeInfo.x + cfg.paddingRight;
+        height = treeInfo.leafY - cfg.labelLineHeight + cfg.paddingBottom;
+        if (oldG) {
+            svg.removeChild(oldG);
+        }
+        svg.appendChild(newG);
+        return { width: width, height: height,
+                 yTree: hubBottomY - cfg.labelLineHeight,
+                 leafTops: leafTops };
+    }
+
+    return { draw: draw };
+
+}()); // speciesTree
+
+
+///////////////////////////// Module: rainbow /////////////////////////////
+
+var rainbow = (function() {
+    // Add rainbow stripes with cute species icons on the left of an SVG element that
+    // already has a phylogenetic tree drawn by speciesTree.
+
+    // Layout parameters/configuration (object passed into draw can override these defaults):
+    var cfg = { stripeWidth: 69,
+                iconX: 2,
+                iconYOffset: -14,
+                iconWidth: 65,
+                iconHeight: 65,
+                iconSpriteUrl: '../images/jWestIconsAlpha65px.png',
+                iconSpriteWidth: 325,
+                iconSpriteHeight: 325
+                };
+
+    // Color spectrum for slider and tree display:
+    var stripeColors = [ '#7E1F16',
+                         '#A12321',
+                         '#C15026',
+                         '#DF6933',
+                         '#EB8734',
+                         '#B57E2A',
+                         '#CD9C2A',
+                         '#CFB32B',
+                         '#959E38',
+                         '#3A8349',
+                         '#216D6D',
+                         '#4C749B',
+                         '#31469A',
+                         '#7E4475',
+                         '#231F1F' ];
+
+    // Hubs go above the species rainbow -- give them their own color of stripe:
+    var hubColor = '#60180C';
+
+    // Taxonomy IDs for assigning rainbow stripes to species groups:
+    var stripeTaxIds = [ 9443,   // Primates
+                         314146, // Euarchontoglires
+                         9362,   // Insectivora
+                         91561,  // Cetartiodactyla
+                         314145, // Laurasiatheria
+                         9397,   // Chiroptera
+                         9347,   // Eutheria
+                         40674,  // Mammalia
+                         32523,  // Tetrapoda
+                         7742,   // Vertebrata
+                         33511,  // Deuterostomia
+                         33392,  // Endopterygota
+                         6072,   // Eumetazoa
+                         2759,   // Eukaryota
+                         1 ];    // root
+
+    // Cute species icons placed along the stripe also help to orient.
+    // This maps leaf labels to icon names:
+    var iconSpeciesToName = { Human: 'Human',
+                              Mouse: 'Mouse',
+                              'D. melanogaster': 'Fly',
+                              'C. elegans': 'Worm',
+                              'S. cerevisiae': 'Yeast',
+                              'Rhesus': 'Monkey',
+                              Hedgehog: 'Hedgehog',
+                              // Pig: 'Pig',
+                              Cow: 'Cow',
+                              'Killer whale': 'Orca',
+                              Horse: 'Horse',
+                              Dog: 'Dog',
+                              'Pacific walrus': 'Walrus',
+                              'Megabat': 'Bat',
+                              Elephant: 'Elephant',
+                              Manatee: 'Manatee',
+                              Armadillo: 'Armadillo',
+                              'Wallaby': 'Kangaroo',
+                              'Zebra finch': 'Bird',
+                              Lizard: 'Lizard',
+                              'X. tropicalis': 'Frog',
+                              'Fugu': 'Fish',
+                              'Ebola virus': 'Ebola'
+                            };
+
+    // The icon sprite image has 5 rows and 5 columns:
+    var spriteRowCol = { Human: [0,0],
+                         Mouse: [0,1],
+                         Fly: [0,3],
+                         Worm: [0,4],
+                         Yeast: [1,0],
+                         Monkey: [1,1],
+                         Hedgehog: [1,2],
+                         Pig: [1,3],
+                         Cow: [1,4],
+                         Orca: [2,0],
+                         Horse: [2,1],
+                         Dog: [2,2],
+                         Walrus: [2,3],
+                         Bat: [2,4],
+                         Elephant: [3,0],
+                         Manatee: [3,1],
+                         Armadillo: [3,2],
+                         Kangaroo: [3,3],
+                         Bird: [3,4],
+                         Lizard: [4,0],
+                         Frog: [4,1],
+                         Fish: [4,2],
+                         Ebola: [4,3]
+                       };
+
+    // Some icon drawings are shorter than others, and some need to be moved up to make space
+    // for close neighbors.
+    var iconFudgeY = { Human: 20,
+                         Mouse: 0,
+                         Fly: 0,
+                         Worm: 0,
+                         Monkey: 0,
+                         Hedgehog: -18,
+                         Pig: -5,
+                         Cow: 0,
+                         Orca: 0,
+                         Horse: -8,
+                         Dog: 15,
+                         Walrus: 0,
+                         Bat: 0,
+                         Elephant: -20,
+                         Manatee: 20,
+                         Armadillo: 0,
+                         Kangaroo: 0,
+                         Bird: 0,
+                         Lizard: -20,
+                         Frog: -10,
+                         Fish: 0,
+                         Yeast: -15,
+                         Ebola: 0
+                       };
+
+    function findStripeTops(node, parentStripeIx, leafTops, stripeTops, yPrev) {
+        // Each node is of the form [ label, taxId, sciName, node[], ... ]
+        // Recursively find the top coordinate of each stripe in stripeTaxIds,
+        // using node taxId.  Modifies stripeTops.  Returns the y of the top of the
+        // last leaf visited.
+        var label = node[0], taxId = node[1], kids = node[3];
+        var stripeIx = stripeTaxIds.indexOf(taxId);
+        var i;
+        // Inherit parent stripe unless this node is found in stripeTaxIds:
+        if (stripeIx < 0) {
+            stripeIx = parentStripeIx;
+        }
+        if (!kids || kids.length === 0) {
+            // leaf node: if this stripe's top coord has not yet been assigned,
+            // assign it.
+            if (stripeTops[stripeIx] === undefined) {
+                stripeTops[stripeIx] = (leafTops[label] + yPrev) / 2;
+            }
+            yPrev = leafTops[label];
+        } else {
+            // descend to children
+            for (i = 0;  i < kids.length;  i++) {
+                yPrev = findStripeTops(kids[i], stripeIx, leafTops, stripeTops, yPrev);
+            }
+        }
+        return yPrev;
+    }
+
+    function addRectFill(svg, x, y, width, height, color) {
+        // Add filled rectangle to svg
+        var rect = svgCreateEl('rect', { x: x, y: y,
+                                         width: width, height: height,
+                                         style: 'fill:' + color + '; stroke:' + color });
+        svg.appendChild(rect);
+    }
+
+    function drawStripes(svg, dbDbTree, yTop, height, leafTops) {
+        var stripeCount = stripeColors.length;
+        var lastStripeIx = stripeCount - 1;
+        var stripeTops = [];
+        var i, stripeHeight;
+        findStripeTops(dbDbTree, lastStripeIx, leafTops, stripeTops, yTop);
+        // Add an extra "stripe" coord so we have the coord for the bottom of the last stripe:
+        stripeTops[stripeCount] = height;
+        // Initialize missing stripes to 0-height (top = next stripe's top), if any:
+        for (i = stripeCount - 1;  i >= 0;  i--) {
+            if (stripeTops[i] === undefined) {
+                console.warn("No species found for stripe " + i + ", taxId " + stripeTaxIds[i]);
+                stripeTops[i] = stripeTops[i+1];
+            }
+        }
+        for (i = 0;  i < stripeCount;  i++) {
+            stripeHeight = stripeTops[i+1] - stripeTops[i];
+            addRectFill(svg, 0, stripeTops[i], cfg.stripeWidth, stripeHeight, stripeColors[i]);
+        }
+        // Add stripe for hubs, if any:
+        if (yTop > 0) {
+            addRectFill(svg, 0, 0, cfg.stripeWidth, yTop, hubColor);
+        }
+        return stripeTops;
+    }
+
+    function drawOneIcon(svg, name, y) {
+        // Create an image, offset so that the icon is positioned where we need it,
+        // and use a clip-path to limit display to just that icon, not the whole sprite image.
+        var iconY = y + cfg.iconYOffset + iconFudgeY[name];
+        var rowCol = spriteRowCol[name];
+        var row = rowCol[0], column = rowCol[1];
+        var clipPathId = 'clip' + name;
+        var img = svgCreateEl('image', { x: cfg.iconX - (column * cfg.iconWidth),
+                                         y: iconY - (row * cfg.iconHeight),
+                                         width: cfg.iconSpriteWidth,
+                                         height: cfg.iconSpriteHeight,
+                                         style: 'clip-path: url(#' + clipPathId + ')',
+                                         href: cfg.iconSpriteUrl });
+        // Set the y of the pre-existing clip path:
+        var rect = $('#' + clipPathId + ' rect')[0];
+        rect.setAttribute('y', iconY);
+        svg.appendChild(img);
+    }
+
+    function drawIcons(svg, leafTops) {
+        // For each icon listed in iconSpeciesToName, look up the species' y offset in
+        // the tree and add the icon to svg.
+        _.forEach(iconSpeciesToName, function (name, species) {
+            var y = leafTops[species];
+            if (y >= 0) {
+                drawOneIcon(svg, name, y);
+            }
+        });
+    }
+
+    function draw(svg, dbDbTree, yTree, height, leafTops) {
+        // Draw stripes with colors corresponding to species groups and cute-species icons.
+        // Return y offsets of stripes so that a slider widget can be drawn accordingly.
+        // Instead of tacking a bunch of children directly onto svg, make a <g> (group)
+        // and append that to svg when done.
+        // First see if there's already something there that we will replace:
+        var oldG = svg.getElementById('stripesAndIcons');
+        var newG = svgCreateEl('g', { id: 'stripesAndIcons' });
+        var stripeTops = drawStripes(newG, dbDbTree, yTree, height, leafTops);
+        drawIcons(newG, leafTops);
+        if (oldG) {
+            svg.removeChild(oldG);
+        }
+        svg.appendChild(newG);
+        return stripeTops;
+    }
+
+    return { draw: draw,
+             colors: stripeColors,
+             hubColor: hubColor
+             };
+}()); // rainbow
+
+
+///////////////////////////// Module: autocompleteCat /////////////////////////////
+
+var autocompleteCat = (function() {
+    // Customize jQuery UI autocomplete to show item categories and support html markup in labels.
+    // Adapted from https://jqueryui.com/autocomplete/#categories and
+    // http://forum.jquery.com/topic/using-html-in-autocomplete
+    // Also adds watermarm to input.
+    $.widget("custom.autocompleteCat",
+             $.ui.autocomplete,
+             {
+               _renderMenu: function(ul, items) {
+                   var that = this;
+                   var currentCategory = "";
+                   // There's no this._super as shown in the doc, so I can't override
+                   // _create as shown in the doc -- just do this every time we render...
+                   this.widget().menu("option", "items", "> :not(.ui-autocomplete-category)");
+                   $.each(items,
+                          function(index, item) {
+                              // Add a heading each time we see a new category:
+                              if (item.category && item.category !== currentCategory) {
+                                  ul.append("<li class='ui-autocomplete-category'>" +
+                                            item.category + "</li>" );
+                                  currentCategory = item.category;
+                              }
+                              that._renderItem( ul, item );
+                          });
+               },
+               _renderItem: function(ul, item) {
+                 // In order to use HTML markup in the autocomplete, one has to overwrite
+                 // autocomplete's _renderItem method using .html instead of .text.
+                 // http://forum.jquery.com/topic/using-html-in-autocomplete
+                   return $("<li></li>")
+                       .data("item.autocomplete", item)
+                       .append($("<a></a>").html(item.label))
+                       .appendTo(ul);
+               }
+             });
+
+    function init($input, options) {
+        // Set up an autocomplete and watermark for $input, with a callback options.onSelect
+        // for when the user chooses a result.
+        // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
+        // it anyway in case the same input had a previous db's autocomplete in effect.
+        // If options.searchObj is provided, it is used in addition to baseUrl; first the term is
+        // looked up in searchObj and then also queried using baseUrl.  Values in searchObj
+        // should have the same structure as the value returned by a baseUrl query.
+        // The function closure allows us to keep a private cache of past searches.
+        var cache = {};
+
+        var doSearch = function(term, acCallback) {
+            // Look up term in searchObj and by sending an ajax request
+            var timestamp = new Date().getTime();
+            var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
+            var searchObjResults = [];
+            _.forEach(options.searchObj, function(results, key) {
+                if (_.startsWith(key.toUpperCase(), term.toUpperCase())) {
+                    searchObjResults = searchObjResults.concat(results);
+                }
+            });
+            $.getJSON(url)
+               .done(function(results) {
+                var combinedResults = results.concat(searchObjResults);
+                cache[term] = combinedResults;
+                acCallback(combinedResults);
+            });
+            // ignore errors to avoid spamming people on flaky network connections
+            // with tons of error messages (#8816).
+        };
+
+        var autoCompleteSource = function(request, acCallback) {
+            // This is a callback for jqueryui.autocomplete: when the user types
+            // a character, this is called with the input value as request.term and an acCallback
+            // for this to return the result to autocomplete.
+            // See http://api.jqueryui.com/autocomplete/#option-source
+            var results = cache[request.term];
+            if (results) {
+                acCallback(results);
+            } else if (options.baseUrl) {
+                doSearch(request.term, acCallback);
+            }
+        };
+
+        var autoCompleteSelect = function(event, ui) {
+            // This is a callback for autocomplete to let us know that the user selected
+            // a term from the list.  See http://api.jqueryui.com/autocomplete/#event-select
+            options.onSelect(ui.item);
+            $input.blur();
+        };
+
+        // Provide default values where necessary:
+        options.onSelect = options.onSelect || console.log;
+        options.searchObj = options.searchObj || {};
+        options.enterSelectsIdentical = options.enterSelectsIdentical || false;
+
+        $input.autocompleteCat({
+            delay: 500,
+            minLength: 2,
+            source: autoCompleteSource,
+            select: autoCompleteSelect,
+            enterSelectsIdentical: options.enterSelectsIdentical,
+            enterTerm: options.onEnterTerm
+        });
+
+        if (options.watermark) {
+            $input.Watermark(options.watermark, '#686868');
+        }
+    }
+
+    return { init: init };
+}()); // autocompleteCat
+
+
+///////////////////////////// Module: hgGateway /////////////////////////////
+
+var hgGateway = (function() {
+    // Interactive parts of the new gateway page: species autocomplete,
+    // graphical species-picker, db select, and position autocomplete.
+
+    // Constants
+    var speciesWatermark = 'Enter species or common name';
+    var positionWatermark = 'Enter position, gene symbol or search terms';
+    // Shortcuts to popular species:
+    var favIconTaxId = [ ['Human', 9606],
+                         ['Mouse', 10090],
+                         ['Rat', 10116],
+                         ['Fly', 7227],
+                         ['Worm', 6239],
+                         ['Yeast', 559292] ];
+    // Aliases for species autocomplete:
+    var commonToSciNames = { bats: 'Chiroptera',
+                             bees: 'Apoidea',
+                             birds: 'Aves',
+                             fish: 'Actinopterygii',
+                             fly: 'Diptera',
+                             flies: 'Diptera',
+                             frogs: 'Anura',
+                             fruitfly: 'Drosophila',
+                             'fruit fly': 'Drosophila',
+                             honeybees: 'Apinae',
+                             'honey bees': 'Apinae',
+                             monkeys: 'Simiiformes',
+                             mosquitos: 'Culicidae',
+                             worms: 'Nematoda',
+                             yeast: 'Ascomycota' };
+
+    var getBetterBrowserMessage = '<P style="padding-left: 10px;">' +
+                                  'Our website has detected that you are using ' +
+                                  'an outdated browser that will prevent you from ' +
+                                  'accessing certain features. An update is not ' +
+                                  'required, but it is strongly recommended to ' +
+                                  'improve your browsing experience. ' +
+                                  'Please use the following links to upgrade your ' +
+                                  'existing browser to ' +
+                                  '<A HREF="https://www.mozilla.org/en-US/firefox/new/">' +
+                                  ' FireFox</A> or ' +
+                                  '<A HREF="https://www.google.com/chrome/browser/">' +
+                                  'Chrome</A>.' +
+                                  '</P>';
+
+    // Globals
+    // Set this to true to see server requests and responses in the console.
+    var debugCartJson = false;
+    // This is a global (within wrapper function scope) so event handlers can use it
+    // without needing to bind functions.
+    var scrollbarWidth = 0;
+    // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
+    var uiState = {};
+
+    function setupFavIcons() {
+        // Set up onclick handlers for shortcut buttons and labels
+        var i, name, taxId, onClick;
+        for (i = 0;  i < favIconTaxId.length;  i++) {
+            name = favIconTaxId[i][0];
+            taxId = favIconTaxId[i][1];
+            // When user clicks on icon, set the taxId (default database);
+            // scroll the image to that species and clear the species autocomplete input.
+            onClick = setTaxId.bind(null, taxId, null, true, true);
+            // Onclick for both the icon and its sibling label:
+            $('.jwIconSprite' + name).parent().children().click(onClick);
+        }
+    }
+
+    function addCategory(cat, item) {
+        // Clone item, add category: cat to it and return it (helper function, see below).
+        var clone = {};
+        _.assign(clone, item, { category: cat });
+        return clone;
+    }
+
+    function autocompleteFromTree(node) {
+        // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
+        // Returns an object mapping each label of node and descendants to a list of
+        // result objects with the same structure that we'd get from a server request.
+        var searchObj = {};
+        var myResults = [];
+        var label = node[0], taxId = node[1], kids = node[3];
+        var addMyLabel;
+        if (!kids || kids.length === 0) {
+            // leaf node: return autocomplete result for species
+            myResults = [ { genome: label,
+                            label: label,
+                            taxId: taxId } ];
+        } else {
+            // Accumulate the list of all children's result lists;
+            // keep each's child searchObj mappings unless the child is a leaf
+            // (which would be redundant with server autocomplete results).
+            addMyLabel = addCategory.bind(null, label);
+            myResults = _.flatten(
+                _.map(kids, function(kid) {
+                    var kidLabel = kid[0], kidKids = kid[3];
+                    var kidObj = autocompleteFromTree(kid);
+                    // Clone kid's result list and add own label as category:
+                    var kidResults = _.map(kidObj[kidLabel], addMyLabel);
+                    // Add kid's mappings to searchObj only if kid is not a leaf.
+                    if (kidKids && kidKids.length > 0) {
+                        _.assign(searchObj, kidObj);
+                    }
+                    return kidResults;
+                })
+            );
+        }
+        // Exclude some overly broad categories:
+        if (label !== 'root' && label !== 'cellular organisms') {
+            searchObj[label] = myResults;
+        }
+        return searchObj;
+    }
+
+    function addAutocompleteCommonNames(searchObj) {
+        // After searchObj is constructed by autocompleteFromTree, add aliases for
+        // some common names that map to scientific names in the tree.
+        _.forEach(commonToSciNames, function(sciName, commonName) {
+            var label, addMyLabel;
+            if (searchObj[sciName]) {
+                label = sciName + ' (' + commonName + ')';
+                addMyLabel = addCategory.bind(null, label);
+                searchObj[commonName] = _.map(searchObj[sciName], addMyLabel);
+            }
+        });
+    }
+
+    function makeStripe(id, color, stripeHeight, scrollTop, onClickStripe) {
+        // Return an empty div with specified background color and height
+        var $stripe = $('<div class="jwRainbowStripe">');
+        $stripe.attr('id', 'rainbowStripe' + id);
+        $stripe.attr('title', 'Click to scroll the tree display');
+        $stripe.css('background-color', color);
+        $stripe.height(stripeHeight);
+        $stripe.click(onClickStripe.bind(null, scrollTop));
+        return $stripe;
+    }
+
+    function makeRainbowSliderStripes($slider, onClickStripe, svgHeight, stripeColors, stripeTops) {
+        // Set up the rainbow slider bar for the speciesPicker.
+        // The stripeColors array determines the number of stripes and their colors.
+        // stripeTops contains the pixel y coordinates of the top of each stripe;
+        // we convert these to pixel heights of HTML div stripes.
+        // onClickStripe is bound to the normalized top coord of each stripe
+        // (the ratio of stripe's top coord to slider bar height, in the range
+        // 0.0 to (1.0 - 1/stripeColors.length)).
+        var i, $stripe, scrollTop, stripeHeight, svgStripeHeight;
+        var sliderHeight = $('#speciesPicker').outerHeight();
+        $slider.empty();
+        if (stripeTops[0] > 0) {
+            // Add a placeholder stripe for hubs at the top
+            stripeHeight = sliderHeight * stripeTops[0] / svgHeight;
+            $stripe = makeStripe('Hub', rainbow.hubColor, stripeHeight, 0, onClickStripe);
+            $slider.append($stripe);
+        }
+        for (i = 0;  i < stripeColors.length;  i++) {
+            svgStripeHeight = stripeTops[i+1] - stripeTops[i];
+            stripeHeight = sliderHeight * svgStripeHeight / svgHeight;
+            scrollTop = stripeTops[i] / svgHeight;
+            $stripe = makeStripe(i, stripeColors[i], stripeHeight, scrollTop, onClickStripe);
+            $slider.append($stripe);
+        }
+    }
+
+    function resizeSliderIcon($sliderIcon, svgHeight, sliderBarHeight) {
+        // Make the slider icon's height cover the same portion of the slider bar
+        // as the visible part of the tree is compared to the entire tree image height.
+        var visiblePortion = _.min([1, sliderBarHeight / svgHeight]);
+        var iconHeight = visiblePortion * sliderBarHeight;
+        // Set the icon rectangle's height and triangle vertical offset.
+        var svg = document.getElementById('sliderSvg');
+        var rect = document.getElementById('sliderRectangle');
+        var tri = document.getElementById('sliderTriangle');
+        var strokeWidth = 3, triangleHeight = 6;
+        svg.setAttribute('height', iconHeight);
+        rect.setAttribute('height', iconHeight - strokeWidth);
+        tri.setAttribute('d', 'm 2.5,' + ((iconHeight - triangleHeight) / 2) + ' 0,6 4,-3 z');
+        $sliderIcon.height(iconHeight);
+    }
+
+    function initRainbowSlider(svgHeight, stripeColors, stripeTops) {
+        // Once we know the height of the hubs & tree image, initialize the rainbow slider
+        // widget for coordinated scrolling.  Dragging the slider causes the image to scroll.
+        // Scrolling the image causes the slider to move.  Clicking on a stripe causes the
+        // image to scroll and the slider to move.
+        var $speciesPicker = $('#speciesPicker');
+        var $sliderBar = $('#rainbowSlider');
+        var sliderBarTop = $sliderBar.offset().top;
+        var sliderBarHeight = $speciesPicker.outerHeight();
+        var $sliderIcon = $('#sliderSvgContainer');
+        var sliderIconLeft = $sliderIcon.offset().left;
+        var $speciesTree = $('#speciesTree');
+        // When the user moves the slider, causing the image to scroll, don't do the
+        // image onscroll action (do that only when the user scrolls the image).
+        var inhibitImageOnScroll = false;
+        // Don't let the slider hang off the bottom when the user clicks the bottom stripe:
+        var maxNormalizedTop = 1 - (sliderBarHeight / svgHeight);
+
+        // Define several helper functions within this function scope so they can use
+        // the variables defined above.
+        var scrollImage = function(normalizedTop) {
+            // Scroll the hubs+tree image to a normalized top coord scaled by svgHeight.
+            $speciesPicker.scrollTop(svgHeight * normalizedTop);
+        };
+
+        var moveSlider = function(normalizedTop) {
+            // Move the slider icon to a normalized top coord scaled by sliderBarHeight.
+            $sliderIcon.offset({ top: sliderBarTop + (normalizedTop * sliderBarHeight),
+                                 left: sliderIconLeft.left });
+        };
+
+        var onClickStripe = function(normalizedTop) {
+            // The user clicked a stripe; move the slider to the top of that stripe and
+            // scroll the tree image to the top of the corresponding stripe in the image.
+            inhibitImageOnScroll = true;
+            if (normalizedTop > maxNormalizedTop) {
+                normalizedTop = maxNormalizedTop;
+            }
+            scrollImage(normalizedTop);
+            moveSlider(normalizedTop);
+        };
+
+        var onDragSlider = function(event, ui) {
+            // The user dragged the slider; scroll the tree image to the corresponding
+            // position.
+            var sliderTop = ui.offset.top - sliderBarTop;
+            var normalizedTop = sliderTop / sliderBarHeight;
+            inhibitImageOnScroll = true;
+            scrollImage(normalizedTop);
+        };
+
+        var onScrollImage = function() {
+            // The user scrolled the image -- or the user did something else which caused
+            // the image to scroll, in which case we don't need to do anything more.
+            var imageTop, normalizedTop;
+            if (inhibitImageOnScroll) {
+                inhibitImageOnScroll = false;
+                return;
+            }
+            imageTop = -$speciesTree.offset().top + sliderBarTop + 1;
+            normalizedTop = imageTop / svgHeight;
+            moveSlider(normalizedTop);
+        };
+
+        // This might be called before the species image has been created; if so, do nothing.
+        if (! $speciesTree || speciesTree.length === 0) {
+            return;
+        }
+
+        makeRainbowSliderStripes($sliderBar, onClickStripe, svgHeight, stripeColors, stripeTops);
+        resizeSliderIcon($sliderIcon, svgHeight, sliderBarHeight);
+        $sliderIcon.draggable({ axis: 'y',
+                                containment: '#speciesGraphic',
+                                drag: onDragSlider
+                                });
+        $sliderIcon.show();
+        $speciesPicker.scroll(onScrollImage);
+    }
+
+    function findScrollbarWidth() {
+        var widthPlain = $("#sbTestContainerDPlain").width();
+        var widthInsideScroll = $("#sbTestContainerDInsideScroll").width();
+        $('#sbTestContainer').hide();
+        return widthPlain - widthInsideScroll;
+    }
+
+    function setRightColumnWidth() {
+        // Adjust the width of the "Find Position" section so it fits to the right of the
+        // "Browse/Select Species" section.
+        var ieFudge = scrollbarWidth ? scrollbarWidth + 4 : 0;
+        var extraFudge = 4;
+        var rightColumnWidth = ($('#pageContent').width() -
+                                $('#selectSpeciesSection').width() -
+                                ieFudge - extraFudge);
+        if (rightColumnWidth >= 400) {
+            $('#findPositionSection').width(rightColumnWidth);
+        }
+    }
+
+    function setSpeciesPickerSizes(svgWidth, svgHeight) {
+        // Adjust widths and heights of elements in #speciesPicker according to svg size.
+        $('#speciesTree').width(svgWidth);
+        $('#speciesTree').height(svgHeight);
+        $('#speciesTreeContainer').height(svgHeight);
+        // Make #speciesTreeContainer skinnier if a scrollbar is taking up space
+        // in #speciesPicker.
+        var leftover = ($("#speciesPicker").width() - scrollbarWidth);
+        $("#speciesTreeContainer").width(leftover);
+    }
+
+    function highlightLabel(selectedName, scrollToItem) {
+        // Highlight the selected species.
+        // jQuery (at least our old version of it) can find the SVG text elements but can't
+        // directly manipulate their class, so do it manually.
+        var $sp = $('#speciesPicker');
+        var y = $sp.scrollTop();
+        $('svg text').each(function(ix, el) {
+            var elName = el.getAttribute('name');
+            var elClass = el.getAttribute('class');
+            if (!elClass || elClass.indexOf('trackHubsLabel') < 0) {
+                if (elName === selectedName) {
+                    el.setAttribute('class', 'selected');
+                    y = el.getAttribute('y');
+                } else if (elClass === 'selected') {
+                    el.setAttribute('class', '');
+                }
+            }
+        });
+        if (scrollToItem) {
+            $sp.scrollTop(y - 100);
+        }
+    }
+
+    function hubNameFromDb(db) {
+        var matches = db ? db.match(/^(hub_[0-9]+)_/) : null;
+        if (matches) {
+            return matches[1];
+        } else {
+            return null;
+        }
+    }
+
+    function highlightLabelForDb(db, taxId) {
+        var hubName = hubNameFromDb(db);
+        if (hubName) {
+            highlightLabel('textEl_' + hubName, true);
+        } else {
+            highlightLabel('textEl_' + taxId, true);
+        }
+    }
+
+    function drawSpeciesPicker() {
+        var svg, spTree, stripeTops;
+        if (document.createElementNS) {
+            // Draw the phylogenetic tree and do layout adjustments
+            svg = document.getElementById('speciesTree');
+            spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
+                                       { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
+                                         onClickHubName: 'hgGateway.onClickHubName',
+                                         hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
+                                         containerWidth: $('#speciesPicker').width()
+                                       });
+            setSpeciesPickerSizes(spTree.width, spTree.height);
+            highlightLabelForDb(uiState.db, uiState.taxId);
+            stripeTops = rainbow.draw(svg, dbDbTree, spTree.yTree, spTree.height, spTree.leafTops);
+            initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+        } else {
+            $('#speciesTreeContainer').html(getBetterBrowserMessage);
+        }
+    }
+
+    function onSelectGene(item) {
+        // Set the position from an autocomplete result;
+        // set hgFindMatches and make sure suggestTrack is in pack mode for highlighting the match.
+        var newPos = item.id;
+        var settings;
+        $('#positionDisplay').text(newPos);
+        if (uiState.suggestTrack) {
+            settings = { 'hgFind.matches': item.internalId };
+            settings[uiState.suggestTrack] = 'pack';
+            cart.send({ cgiVar: settings });
+            cart.flush();
+        }
+        // Overwrite the selected item w/actual position after the autocomplete plugin is done:
+        function overwriteWithPos() {
+            $('#positionInput').val(newPos);
+        }
+        window.setTimeout(overwriteWithPos, 0);
+    }
+
+    function updateGoButtonPosition() {
+        // If there's room for the go button to appear to the right of #selectAssembly and
+        // #positionInput, align the top of the go button with the bottom of #selectAssembly.
+        // Otherwise let it hang out below.
+        var $fpic = $('#findPosInputContainer');
+        var fpicOffset = $fpic.offset();
+        var fpicRight = fpicOffset.left + $fpic.width();
+        var $button = $('.jwGoButtonContainer');
+        var buttonOffset = $button.offset();
+        var $select;
+        if (buttonOffset.left > fpicRight) {
+            // Align button top with select bottom.
+            $select = $('#selectAssembly');
+            buttonOffset.top = $select.offset().top + $select.height();
+        } else {
+            // Button wraps around to below inputs; remove any previous vertical offsetting.
+            buttonOffset.top = fpicOffset.top + $fpic.height() + 10;
+        }
+        $button.offset(buttonOffset);
+    }
+
+    function setAssemblyOptions(uiState) {
+        var assemblySelectLabel = 'Assembly';
+        if (uiState.dbOptions) {
+            var html = '', option, i, selected;
+            for (i = 0;  i < uiState.dbOptions.length;  i++) {
+                option = uiState.dbOptions[i];
+                selected = (option.value === uiState.db) ? 'selected ' : '';
+                html += '<option ' + selected + 'value="' + option.value + '">' +
+                        option.label + '</option>';
+            }
+            $('#selectAssembly').html(html);
+        }
+        if (uiState.genomeLabel) {
+            if (uiState.hubUrl && uiState.genomeLabel.indexOf('Hub') < 0) {
+                assemblySelectLabel = uiState.genomeLabel + ' Hub Assembly';
+            } else {
+                assemblySelectLabel = uiState.genomeLabel + ' Assembly';
+            }
+        }
+        $('#selectAssemblyLabel').text(assemblySelectLabel);
+    }
+
+    function trackHubSkipHubName(name) {
+        // Just like hg/lib/trackHub.c's...
+        var matches;
+        if (name && (matches = name.match(/^hub_[0-9]+_(.*)/)) !== null) {
+            return matches[1];
+        } else {
+            return name;
+        }
+    }
+
+    function setAssemblyDescriptionTitle(db, genome) {
+        $('#descriptionGenome').html(trackHubSkipHubName(genome));
+        $('#descriptionDb').html(trackHubSkipHubName(db));
+    }
+
+    function insertNamedAnchor(string, ix, anchorName) {
+        return string.substring(0, ix) + '<a name="' + anchorName + '"></a>' + string.substring(ix);
+    }
+
+    function linkToNamedAnchor(title, anchor) {
+        return '<a class="jwAnchor" href="#' + anchor + '">' +
+               '<i class="fa fa-arrow-right jwAnchorArrow"></i> ' +
+               title + '</a><br>';
+    }
+
+    function addSubsectionLink(section, title, anchor) {
+        var ix = section.bottom.indexOf(title);
+        if (ix >= 0) {
+            section.bottom = insertNamedAnchor(section.bottom, ix, anchor);
+            section.anchors += linkToNamedAnchor(title, anchor);
+        }
+    }
+
+    function digestDescription(description) {
+        // Search for familiar patterns in our description.html text and if possible,
+        // break it into a top (summary and photo), anchor section (links to useful
+        // subsections of details), and bottom (details).
+        var section = { top: '', anchors: '', bottom: ''};
+        var re, matches;
+        // IE8 can't handle the regex syntax [^] ("not the null character") which matches newlines
+        // in later versions.  So wrap this in a try/catch:
+        try {
+            re = new RegExp('([^]*?)<HR>([^]*?Search the assembly[^]*)');
+            if (description) {
+                matches = description.match(re);
+                if (matches) {
+                    section.top = matches[1];
+                    section.bottom = matches[2];
+                } else {
+                    matches = description.match(/([^]*?)(<H3>Sample position queries<\/H3>[^]*)/i);
+                    if (matches) {
+                        section.top = matches[1];
+                        section.bottom = matches[2];
+                    } else {
+                        section.top = description;
+                    }
+                }
+                // Make links to subsections (if found):
+                addSubsectionLink(section, 'Search the assembly', 'searchHelp');
+                addSubsectionLink(section, 'Download sequence and annotation data', 'download');
+                addSubsectionLink(section, 'Sample Position Queries', 'sampleQueries');
+                addSubsectionLink(section, 'Sample position queries', 'sampleQueries');
+                addSubsectionLink(section, 'Assembly Details', 'assemblyDetails');
+                addSubsectionLink(section, 'Assembly details', 'assemblyDetails');
+                addSubsectionLink(section, 'Genbank Pipeline Details', 'genbankDetails');
+            }
+        }
+        catch (exc) {
+            section.top = description;
+        }
+        return section;
+    }
+
+    function tweakDescriptionPhotoWidth() {
+        // Our description.html files assume a pretty wide display area, but now we're
+        // squeezed to the right of the 'Select Species' section.  If there's a large
+        // image, scale it down.  The enclosing table is usually sized to leave a lot
+        // of space to the left of the image, so shrink that too.
+        // This must be called *after* #descriptionTextTop is updated with the new content.
+        var width, scaleFactor, newWidth;
+        var $table = $('#descriptionTextTop table').first();
+        var $img = $('#descriptionTextTop table img').first();
+        if ($img.length) {
+            width = $img.width();
+            if (width > 175) {
+                // Scale to 150px wide, preserving aspect ratio
+                newWidth = 150;
+                scaleFactor = newWidth / width;
+                $img.width(newWidth)
+                    .height($img.height() * scaleFactor);
+                width = newWidth;
+            }
+            if ($table.width() - width > 20) {
+                $table.width(width + 10);
+            }
+            // hg19's description.html sets a height for its table that pushes the
+            // links section down; unneeded & unwanted here, so remove height if set:
+            $table.removeAttr('height');
+        }
+    }
+
+    function updateDescription(description) {
+        // We got the contents of a db's description.html -- tweak its format to fit
+        // the new design.
+        var sections = digestDescription(description);
+        $('#descriptionTextTop').html(sections.top);
+        $('#descriptionAnchors').html(sections.anchors);
+        $('#descriptionTextBottom').html(sections.bottom);
+        if (sections.anchors) {
+            $('#descriptionAnchors').show();
+        } else {
+            $('#descriptionAnchors').hide();
+        }
+        if (sections.bottom) {
+            $('#descriptionTextBottom').show();
+        } else {
+            $('#descriptionTextBottom').hide();
+        }
+        tweakDescriptionPhotoWidth();
+        // Apply JWest formatting to all anchors in description.
+        // We can't simply style all <a> tags that way because autocomplete uses <a>'s.
+        $('#descriptionTextTop a').addClass('jwAnchor');
+        $('#descriptionTextBottom a').addClass('jwAnchor');
+        // Apply square bullet style to all ul's in description.
+        $('#descriptionTextTop ul').addClass('jwNoBullet');
+        $('#descriptionTextTop li').addClass('jwSquareBullet');
+        $('#descriptionTextBottom ul').addClass('jwNoBullet');
+        $('#descriptionTextBottom li').addClass('jwSquareBullet');
+    }
+
+    function updateFindPositionSection(uiState) {
+        var suggestUrl = null;
+        if (uiState.suggestTrack) {
+            suggestUrl = 'hgSuggest?db=' + uiState.db + '&prefix=';
+        }
+        setAssemblyOptions(uiState);
+        if (uiState.position) {
+            $('#positionDisplay').text(uiState.position);
+        }
+        autocompleteCat.init($('#positionInput'),
+                             { baseUrl: suggestUrl,
+                               watermark: positionWatermark,
+                               onSelect: onSelectGene,
+                               enterSelectsIdentical: true,
+                               onEnterTerm: goToHgTracks });
+        updateGoButtonPosition();
+        setAssemblyDescriptionTitle(uiState.db, uiState.genome);
+        updateDescription(uiState.description);
+    }
+
+    // Server response event handlers
+
+    function checkJsonData(jsonData, callerName) {
+        // Return true if jsonData isn't empty and doesn't contain an error;
+        // otherwise complain on behalf of caller.
+        if (! jsonData) {
+            alert(callerName + ': empty response from server');
+        } else if (jsonData.error) {
+            console.error(jsonData.error);
+            alert(callerName + ': error from server: ' + jsonData.error);
+        } else {
+            if (debugCartJson) {
+                console.log('from server:\n', jsonData);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    function updateStateAndPage(jsonData) {
+        // Update uiState with new values and update the page.
+        var hubsChanged = !_.isEqual(jsonData.hubs, uiState.hubs);
+        // In rare cases, there can be a genome (e.g. Baboon) with multiple species/taxIds
+        // (e.g. Papio anubis for papAnu1 vs. Papio hamadryas for papHam1).  Changing the
+        // db can result in changing the taxId too.  In that case, update the highlighted
+        // species in the tree image.
+        if (jsonData.taxId !== uiState.taxId) {
+            highlightLabel('textEl_' + jsonData.taxId, false);
+        }
+        _.assign(uiState, jsonData);
+        updateFindPositionSection(uiState);
+        if (hubsChanged) {
+            drawSpeciesPicker();
+        }
+    }
+
+    function handleRefreshState(jsonData) {
+        if (checkJsonData(jsonData, 'handleRefreshState')) {
+            updateStateAndPage(jsonData);
+        }
+    }
+
+    function handleSetDb(jsonData) {
+        // Handle the server's response to cartJson command setDb or setHubDb
+        if (checkJsonData(jsonData, 'handleSetDb') &&
+            trackHubSkipHubName(jsonData.db) === trackHubSkipHubName(uiState.db)) {
+            updateStateAndPage(jsonData);
+        } else {
+            console.log('handleSetDb ignoring: ' + trackHubSkipHubName(jsonData.db) +
+                        ' !== ' + trackHubSkipHubName(uiState.db));
+        }
+    }
+
+    function handleSetTaxId(jsonData) {
+        // Handle the server's response to the setTaxId cartJson command.
+        if (checkJsonData(jsonData, 'handleSetTaxId') && jsonData.taxId === uiState.taxId) {
+            // Update uiState with new values and update the page:
+            _.assign(uiState, jsonData);
+            updateFindPositionSection(uiState);
+        } else {
+            console.log('handleSetTaxId ignoring: ' + jsonData.taxId +
+                        ' !== ' + uiState.taxId);
+        }
+    }
+
+    // UI Event Handlers
+
+    function clearWatermarkInput($input, watermark) {
+        // Note: it is not necessary to re-.Watermark if we upgrade the plugin to version >= 3.1
+        $input.val('').Watermark(watermark);
+    }
+
+    function clearSpeciesInput() {
+        // Replace anything typed into the species input with the watermark.
+        clearWatermarkInput($('#speciesSearch'), speciesWatermark);
+    }
+
+    function clearPositionInput() {
+        // Replace anything typed into the position input with the watermark.
+        clearWatermarkInput($('#positionInput'), positionWatermark);
+    }
+
+    function setTaxId(taxId, db, doScrollToItem, doClearSpeciesInput) {
+        // The user has selected a species (and possibly even a particular database) --
+        // if we're not already using it, change to it.
+        var cmd;
+        if (taxId !== uiState.taxId || (db && db !== uiState.db)) {
+            uiState.taxId = taxId;
+            uiState.hubUrl = null;
+            cmd = { setTaxId: { taxId: '' + taxId } };
+            if (db) {
+                uiState.db = db;
+                cmd.setTaxId.db = db;
+            }
+            cart.send(cmd, handleSetTaxId);
+            cart.flush();
+            clearPositionInput();
+        }
+        highlightLabel('textEl_' + taxId, doScrollToItem);
+        if (doClearSpeciesInput) {
+            clearSpeciesInput();
+        }
+  }
+
+    function setHubDb(hubUrl, taxId, db, hubName, isAutocomplete) {
+        // User clicked on a hub name (switch to its default genome) or selected an
+        // assembly hub from autocomplete (switch to that assembly hub db).
+        var cmd;
+        if (hubUrl !== uiState.hubUrl ||
+            (isAutocomplete && db !== uiState.db)) {
+            uiState.hubUrl = hubUrl;
+            uiState.taxId = taxId;
+            uiState.db = trackHubSkipHubName(db);
+            // Use cart variables to connect to the selected hub and switch to db
+            // (hubConnectLoadHubs, called by cartNew)
+            cmd = { cgiVar: { hubUrl: hubUrl,
+                              genome: trackHubSkipHubName(db) },
+                    setHubDb: { hubUrl: hubUrl,
+                                taxId: '' + taxId }
+                    };
+            cart.send(cmd, handleSetDb);
+            cart.flush();
+            clearPositionInput();
+        }
+        highlightLabel('textEl_' + hubName, isAutocomplete);
+        if (! isAutocomplete) {
+            clearSpeciesInput();
+        }
+    }
+
+
+    function setDbFromAutocomplete(item) {
+        // The user has selected a result from the species-search autocomplete.
+        // It might be a taxId and/or db from dbDb, or it might be a hub db.
+        var taxId = item.taxId || -1;
+        var db = item.db;
+        if (item.hubUrl) {
+            // The autocomplete sends the hub database from hubPublic.dbList,
+            // without the hub prefix -- restore the prefix here.
+            db = item.hubName + '_' + item.db;
+            setHubDb(item.hubUrl, taxId, db, item.hubName, true);
+        } else {
+            setTaxId(taxId, item.db, true, false);
+        }
+    }
+
+    function onClickSpeciesLabel(taxId) {
+        // When user clicks on a label, use that taxId (default db);
+        // don't scroll to the label because if they clicked on it they can see it already;
+        // do clear the autocomplete input.
+        setTaxId(taxId, null, false, true);
+    }
+
+    function onClickHubName(hubUrl, taxId, db, hubName) {
+        // This is just a wrapper -- the draw module has to know all about the contents
+        // of each hub object in hubList anyway.
+        setHubDb(hubUrl, taxId, db, hubName, false);
+    }
+
+    function onChangeDbMenu() {
+        // The user selected a different db for this genome; get db info from server.
+        var db = $('#selectAssembly').val();
+        var cmd;
+        if (db !== uiState.db) {
+            setAssemblyDescriptionTitle(db, uiState.genome);
+            cmd = { setDb: { db: db } };
+            if (uiState.hubUrl) {
+                cmd.setDb.hubUrl = uiState.hubUrl;
+            }
+            cart.send(cmd, handleSetDb);
+            cart.flush();
+            uiState.db = db;
+            clearPositionInput();
+        }
+    }
+
+    function onClickCopyPosition() {
+        // Copy the displayed position into the position input:
+        var posDisplay = $('#positionDisplay').text();
+        $('#positionInput').val(posDisplay);
+    }
+
+    function goToHgTracks() {
+        // Create and submit a form for hgTracks with hidden inputs for org, db and position.
+        var position = $('#positionInput').val();
+        var posDisplay = $('#positionDisplay').text();
+        var pix = uiState.pix || calculateHgTracksWidth();
+        var $form;
+        if (! position || position === '' || position === positionWatermark) {
+            position = posDisplay;
+        }
+        // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
+        $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+        // Make a form and submit it.  In order for this to work in IE, the form
+        // must be appended to the body.
+        $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                  '<input type=hidden name="org" value="' + uiState.genome + '">' +
+                  '<input type=hidden name="db" value="' + uiState.db + '">' +
+                  '<input type=hidden name="position" value="' + position + '">' +
+                  '<input type=hidden name="pix" value="' + pix + '">' +
+                  '</form>');
+        $('body').append($form);
+        $form.submit();
+    }
+
+    function replaceHgsidInLinks() {
+        // Substitute '$hgsid' with real hgsid in <a> href's.
+        $('a').each(function(ix, aEl) {
+            var href = aEl.getAttribute('href');
+            if (href && href.indexOf('$hgsid') >= 0) {
+                aEl.setAttribute('href', href.replace('$hgsid', window.hgsid));
+            }
+        });
+    }
+
+    function init() {
+        // Boot up the page; initialize elements and install event handlers.
+        cart.setCgi('hgGateway');
+        cart.debug(debugCartJson);
+        // Get state from cart
+        cart.send({ getUiState: {} }, handleRefreshState);
+        cart.flush();
+
+        // When page has loaded, draw the species tree, do layout adjustments and
+        // initialize event handlers.
+        $(function() {
+            var searchObj = autocompleteFromTree(dbDbTree);
+            addAutocompleteCommonNames(searchObj);
+            scrollbarWidth = findScrollbarWidth();
+            drawSpeciesPicker();
+            setRightColumnWidth();
+            setupFavIcons();
+            autocompleteCat.init($('#speciesSearch'),
+                                 { baseUrl: 'hgGateway?hggw_term=',
+                                   watermark: speciesWatermark,
+                                   onSelect: setDbFromAutocomplete,
+                                   searchObj: searchObj,
+                                   enterSelectsIdentical: true });
+            updateFindPositionSection(uiState);
+            $('#selectAssembly').change(onChangeDbMenu);
+            $('#positionDisplay').click(onClickCopyPosition);
+            $('#copyPosition').click(onClickCopyPosition);
+            $('.jwGoButtonContainer').click(goToHgTracks);
+            $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
+            $(window).resize(updateGoButtonPosition);
+            replaceHgsidInLinks();
+        });
+    }
+
+    return { init: init,
+             // For use by speciesTree.draw SVG (text-only onclick):
+             onClickSpeciesLabel: onClickSpeciesLabel,
+             onClickHubName: onClickHubName
+           };
+
+}()); // hgGateway
+
+hgGateway.init();

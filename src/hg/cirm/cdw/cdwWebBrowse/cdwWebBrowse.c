@@ -680,7 +680,7 @@ if (!isEmpty(searchString))
     int wordCount = chopLine(lowered, words);
     char *trixPath = "/gbdb/cdw/cdw.ix";
     struct trix *trix = trixOpen(trixPath);
-    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, TRUE);
+    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, tsmExpand);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         {
 	intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);

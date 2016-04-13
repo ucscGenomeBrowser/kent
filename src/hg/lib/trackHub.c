@@ -228,6 +228,26 @@ struct dbDb *trackHubGetDbDbs(char *clade)
 return getDbDbs(clade, FALSE);
 }
 
+struct slPair *trackHubDbDbToValueLabel(struct dbDb *hubDbDbList)
+/* Given a trackHub (list of) track hub dbDb which may be missing some info,
+ * return an slPair of value and label suitable for making a select/menu option. */
+{
+struct dbDb *dbDb;
+struct slPair *pairList = NULL;
+for (dbDb = hubDbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+    {
+    char *db = dbDb->name;
+    if (isEmpty(db))
+        db = dbDb->genome;
+    char *label = dbDb->description;
+    if (isEmpty(label))
+        label = trackHubSkipHubName(db);
+    slAddHead(&pairList, slPairNew(db, cloneString(label)));
+    }
+slReverse(&pairList);
+return pairList;
+}
+
 struct slName *trackHubAllChromNames(char *database)
 /* Return a list of all the chrom names in this assembly hub database. */
 /* Free with slFreeList. */

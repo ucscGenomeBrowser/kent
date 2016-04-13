@@ -1,0 +1,418 @@
+/* Jeff West's graphic design for new gateway page, see
+ * http://redmine.cse.ucsc.edu/attachments/download/1727/FINAL_ART_GenomeBrowser.jpg,
+ * with a few tweaks (e.g. sprites). */
+
+body {
+    background: white;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    margin: 0px;
+}
+
+input {
+    padding: 2px;
+    border-radius: 3px;
+    border: gray 1px solid;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.010em;
+}
+
+select {
+    background: white;
+    height: 25px;
+    border-radius: 3px;
+    border: gray 1px solid;
+    font-family: 'Lato', Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.010em;
+}
+
+/* We can't style all <a>s this way because autocomplete uses <a>s. */
+a.jwAnchor, a.jwAnchor:link, a.jwAnchor:visited,
+.jwStaticMain a, .jwStaticMain a:link, .jwStaticMain a:visited,
+.jwFooterContainer a, .jwFooterContainer a:link, .jwFooterContainer a:visited {
+    color: #003a72;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.ui-autocomplete-category {
+    /* Adapted from https://jqueryui.com/autocomplete/#categories */
+    font-weight: bold;
+    line-height: 1.5;
+    background: lightgray;
+}
+
+.ui-menu-item {
+    /* This is necessary if a background color is specified in .ui-autocomplete-category above;
+     * the category labels actually extend upwards, behind the preceding items! */
+    background: white;
+}
+
+div.jwBanner {
+    background: #f9f9f9; /* #dddee3; /* jWest: #f4f4eb; */
+    padding: 5px;
+    padding-left: 20px;
+}
+
+div.jwUcscLogoWrapper {
+    display: inline-block;
+    width: 172px;
+    height: 55px;
+}
+
+img.jwBannerHelixLogo {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+div.jwBannerTitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: 31px;
+    color: #003a72;
+    display: inline;
+    vertical-align: bottom;
+}
+
+div.jwBannerSubtitle {
+    font-style: italic;
+    font-size: 13px;
+    text-align: center;
+    padding: 5px;
+}
+
+div.jwRow {
+    clear: both;
+}
+
+div.jwColumn {
+    display: inline-block;
+    float: left;
+}
+
+div.jwStaticLeftColumn {
+    width: 400px;
+}
+
+div.jwStaticRightColumn {
+    width: 500px;
+}
+
+div.jwFloatRight {
+    display: inline-block;
+    float: right;
+}
+
+div.jwSection {
+    margin: 5px;
+    overflow: hidden;
+}
+
+div.jwSectionTitle {
+    background-color: #eaca92;
+    margin: 0px;
+    padding: 5px;
+    padding-left: 20px;
+    font-weight: bold;
+    font-size: 21px;
+    letter-spacing: -0.005em;
+}
+
+div.jwSectionContents {
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+div.jwSubsectionTitle {
+    color: #003a72;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    font-weight: bold;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+}
+
+div.jwSubsectionContents {
+    padding-bottom: 5px;
+}
+
+div.jwStaticMain {
+    padding-left: 20px;
+}
+
+.jwStaticMain .jwSectionTitle,
+.jwStaticMain .jwSectionContents {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.jwStaticMain .jwSectionContents {
+    padding-top: 5px;
+}
+
+ul.jwNoBullet {
+    list-style-type: none;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
+ul.jwLessIndent {
+    /* Override default padding; leave room for square bullets */
+    padding-left: 1em;
+}
+
+li.jwSquareBullet {
+    position: relative;
+}
+
+li.jwSquareBullet::before {
+    content: '';
+    background-color: #7E1F16;
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    top: 0.5em;
+    left: -1em;
+}
+
+.jwTextBlue {
+    color: #003a72;
+}
+
+div.jwWarningBox {
+    border: 2px solid red;
+    width: 75%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 5px;
+    text-align: center;
+}
+
+.jwSingleLineRightColumn {
+    display: inline-block;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 455px;
+}
+
+.jwSmallText {
+    font-size: small;
+    line-height: 1.1em;
+    margin-bottom: 0.5em;
+}
+
+div.jwIconWrapper {
+    display: inline-block;
+    padding-bottom: 5px;
+    padding-right: 9px;
+    text-align: center;
+}
+
+div.jwIconSpriteLabel {
+    color: #003a72;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+div.jwIconSprite {
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+}
+
+div.jwIconSpriteHuman {
+    background: url('../images/jWestIcons55px.png') no-repeat -0px -0px;
+}
+
+div.jwIconSpriteMouse {
+    background: url('../images/jWestIcons55px.png') no-repeat -55px -0px;
+}
+
+div.jwIconSpriteRat {
+    background: url('../images/jWestIcons55px.png') no-repeat -110px -0px;
+}
+
+div.jwIconSpriteFly {
+    background: url('../images/jWestIcons55px.png') no-repeat -165px -0px;
+}
+
+div.jwIconSpriteWorm {
+    background: url('../images/jWestIcons55px.png') no-repeat -220px -0px;
+}
+
+div.jwIconSpriteYeast {
+    background: url('../images/jWestIcons55px.png') no-repeat -0px -55px;
+}
+
+div.jwSliderWidget {
+    position: relative;
+}
+
+div.jwSliderIcon {
+    position: absolute;
+    z-index: 1;
+}
+
+div.jwRainbowSlider {
+    margin-left: 10px;
+    margin-right: 5px;
+    width: 15px;
+    display: inline-block;
+    float: left;
+}
+
+div.jwRainbowStripe {
+    height: 40px;
+}
+
+div.jwSpeciesPicker {
+    border: solid black 1px;
+    width: 370px;
+    height: 598px;
+    display: inline-block;
+    overflow: auto;
+}
+
+.jwInputLabel {
+    padding-top: 10px;
+    color: #003a72;
+    font-weight: bold;
+    font-size: 14px;
+    letter-spacing: 0.050em;
+}
+
+.jwPosDisplay {
+    padding-right: 10px;
+}
+
+div.jwDescriptionTitle {
+    background-color: #4c759c;
+    padding: 5px;
+    font-size: 17px;
+    color: white;
+}
+
+div.jwDescriptionText {
+    font-size: 15px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+div.jwGoButtonContainer {
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+div.jwGoButton {
+    display: inline-block;
+    vertical-align: top;
+    color: white;
+    background-color: #003a72; /* #31469A: rainbow dark blue */
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 6px;
+    padding-bottom: 4px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+div.jwGoButton:hover {
+    font-weight: bold;
+}
+
+.jwGoIcon {
+    color: #003a72; /* #31469A: rainbow dark blue */
+}
+
+div.jwAllCapsButton {
+    display: inline-block;
+    height: 18px;
+    vertical-align: top;
+    text-align: center;
+    color: #f9f9f9;
+    background-color: #003a72;
+    text-transform: uppercase;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+div.jwAllCapsButton:hover {
+    font-weight: bold;
+}
+
+div.jwWhiteButton {
+    display: inline-block;
+    font-size: 15px;
+    vertical-align: top;
+    background-color: white;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 3px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+div.jwWhiteButton:hover {
+    font-weight: bold;
+}
+
+div.jwFooterColumn {
+    display: inline-block;
+    width: 23%;
+    border-left: 1px solid black;
+    padding-left: 10px;
+    text-transform: uppercase;
+    font-size: smaller;
+    vertical-align: top;
+}
+
+div.jwFooterIcons {
+    vertical-align: bottom;
+}
+
+div.jwFooterContainer {
+    background-color: #f9f9f9;
+    padding: 20px;
+    padding-left: 100px;
+    font-size: 14px;
+}
+
+div.jwDonateButton {
+    width: 60px;
+    margin-top: 3px;
+}
+
+div.jwFooterCopyright {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: smaller;
+    margin-top: 1.5em;
+}
+
+.jwAnchorArrow {
+    vertical-align: middle;
+    font-size: 0.5em;
+}
+
+/* Layout tweaks for hgGateway.html */
+
+#findPosInputContainer {
+    margin-right: 10px;
+}
+
+.vertSpacerAbovePosition {
+    padding-top: 20px;
+}
+
+.vertSpacerBelowPosition {
+    padding-top: 32px;
+}

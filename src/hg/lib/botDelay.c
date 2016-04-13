@@ -31,7 +31,7 @@ void botDelayMessage(char *ip, int millis)
 /* Print out message saying why you are stalled. */
 {
 time_t now = time(NULL);
-printf("<BR>There is a very high volume of traffic coming from your "
+warn("There is a very high volume of traffic coming from your "
        "site (IP address %s) as of %s (California time).  So that other "
        "users get a fair share "
        "of our bandwidth, we are putting in a delay of %3.1f seconds "
@@ -45,7 +45,7 @@ printf("<BR>There is a very high volume of traffic coming from your "
        "If you are sharing an IP address with someone who is submitting "
        "large batch queries, we apologize for the "
        "inconvenience. Please contact genome-www@cse.ucsc.edu if "
-       "you think this delay is being imposed unfairly.<BR><HR>", 
+       "you think this delay is being imposed unfairly.", 
 	    ip, asctime(localtime(&now)), .001*millis);
 }
 
@@ -85,7 +85,7 @@ else
 return botCheckString;
 }
 
-void botDelayCgi(char *host, int port)
+void botDelayCgi(char *host, int port, boolean noWarn)
 /* Connect with bottleneck server and sleep the
  * amount it suggests for IP address calling CGI script. */
 {
@@ -103,7 +103,10 @@ if (ip != NULL)
 	    if (millis > 20000)
 	        botTerminateMessage(ip, millis);
 	    else
-		botDelayMessage(ip, millis);
+		{
+		if (!noWarn)
+		    botDelayMessage(ip, millis);
+		}
 	    }
 	sleep1000(millis);
 	}
@@ -138,7 +141,8 @@ if (exceptIps)
     }
 return FALSE;
 }
-void hgBotDelay()
+
+static void hgBotDelayExt(boolean noWarn)
 /* High level bot delay call - looks up bottleneck server
  * in hg.conf. */
 {
@@ -149,7 +153,19 @@ char *host = cfgOption("bottleneck.host");
 char *port = cfgOption("bottleneck.port");
 
 if (host != NULL && port != NULL)
-    botDelayCgi(host, atoi(port));
+    botDelayCgi(host, atoi(port), noWarn);
+}
+
+void hgBotDelay()
+/* High level bot delay call - for use with regular webpage output */ 
+{
+hgBotDelayExt(FALSE);
+}
+
+void hgBotDelayNoWarn()
+/* High level bot delay call without warning - for use with non-webpage outputs */
+{
+hgBotDelayExt(TRUE);
 }
 
 int hgBotDelayTime()

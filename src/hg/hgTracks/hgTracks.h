@@ -772,8 +772,10 @@ void bedDrawSimple(struct track *tg, int seqStart, int seqEnd,
 typedef struct slList *(*ItemLoader)(char **row);
 
 void bedLoadItemByQuery(struct track *tg, char *table, char *query, ItemLoader loader);
-/* Generic tg->item loader. If query is NULL use generic
- hRangeQuery(). */
+/* Generic tg->item loader. If query is NULL use generic hRangeQuery(). */
+
+void bedLoadItemWhere(struct track *tg, char *table, char *extraWhere, ItemLoader loader);
+/* Generic tg->item loader, adding extra clause to hgRangeQuery. */
 
 void bedLoadItem(struct track *tg, char *table, ItemLoader loader);
 /* Generic tg->item loader. */
@@ -1586,6 +1588,9 @@ struct bbiFile *fetchBbiForTrack(struct track *track);
 void genericDrawNextItem(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y,
                             double scale, Color color, enum trackVisibility vis);
 /* Draw next item buttons and map boxes */
+
+struct spaceSaver *findSpaceSaver(struct track *tg, enum trackVisibility vis);
+/* Find SpaceSaver in list. Return spaceSaver found or NULL. */
 
 #endif /* HGTRACKS_H */
 

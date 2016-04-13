@@ -31,6 +31,7 @@ return startsWith(hubTrackPrefix, trackName);
 }
 
 static char *hubStatusTableName = NULL;
+static char *_hubPublicTableName = NULL;
 
 static char *getHubStatusTableName()
 /* return the hubStatus table name from the environment, 
@@ -43,8 +44,17 @@ if (hubStatusTableName == NULL)
 return hubStatusTableName;
 }
 
+char *hubPublicTableName()
+/* Get the name of the table that lists public hubs.  Don't free the result. */
+{
+if (_hubPublicTableName == NULL)
+    _hubPublicTableName = cfgOptionEnvDefault("HGDB_HUB_PUBLIC_TABLE", hubPublicTableConfVariable,
+                                             defaultHubPublicTableName);
+return _hubPublicTableName;
+}
+
 boolean hubConnectTableExists()
-/* Return TRUE if the hubPublic table exists. */
+/* Return TRUE if the hubStatus table exists. */
 {
 struct sqlConnection *conn = hConnectCentral();
 boolean exists = sqlTableExists(conn, getHubStatusTableName());
@@ -507,7 +517,7 @@ return id;
 }
 
 // global to hold hubUrl we added if any
-struct hubConnectStatus  *gNewHub;
+static struct hubConnectStatus *gNewHub = NULL;
 
 struct hubConnectStatus  *hubConnectNewHub()
 /* return the hub for the hubUrl we added (if any) */
@@ -778,6 +788,31 @@ struct hubConnectStatus *hubConnectGetHubs()
 return globalHubList;
 }
 
+struct trackHub *hubConnectGetHub(char *hubUrl)
+/* Return the connected hub for hubUrl, or NULL if not found.  Do not free result. */
+{
+struct hubConnectStatus *status;
+for (status = globalHubList;  status != NULL;  status = status->next)
+    {
+    if (sameString(status->hubUrl, hubUrl))
+        return status->trackHub;
+    }
+return NULL;
+}
+
+struct trackHub *hubConnectGetHubForDb(char *db)
+/* Return the connected hub for db, or NULL if not found.  Do not free result. */
+{
+unsigned hubId = hubIdFromTrackName(db);
+struct hubConnectStatus *status;
+for (status = globalHubList;  status != NULL;  status = status->next)
+    {
+    if (status->id == hubId)
+        return status->trackHub;
+    }
+return NULL;
+}
+
 char *hubConnectLoadHubs(struct cart *cart)
 /* load the track data hubs.  Set a static global to remember them */
 {
@@ -787,4 +822,16 @@ struct hubConnectStatus  *hubList =  hubConnectStatusListFromCart(cart);
 globalHubList = hubList;
 
 return newDatabase;
+}
+
+char *hubNameFromUrl(char *hubUrl)
+/* Given the URL for a hub, return its hub_# name. */
+{
+char query[PATH_LEN*4];
+sqlSafef(query, sizeof(query), "select concat('hub_', id) from %s where hubUrl = '%s'",
+         getHubStatusTableName(), hubUrl);
+struct sqlConnection *conn = hConnectCentral();
+char *name = sqlQuickString(conn, query);
+hDisconnectCentral(&conn);
+return name;
 }
