@@ -93,7 +93,7 @@ DBS = \
 	felCat3 felCat4 felCat5  felCat8 \
 	fr1 fr2 fr3 \
 	gadMor1 \
-	galGal2 galGal3 galGal4 \
+	galGal2 galGal3 galGal4 galGal5 \
 	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 \
