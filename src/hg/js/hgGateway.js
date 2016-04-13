@@ -1149,73 +1149,15 @@ var hgGateway = (function() {
         $('#descriptionDb').html(trackHubSkipHubName(db));
     }
 
-    function insertNamedAnchor(string, ix, anchorName) {
-        return string.substring(0, ix) + '<a name="' + anchorName + '"></a>' + string.substring(ix);
-    }
-
-    function linkToNamedAnchor(title, anchor) {
-        return '<a class="jwAnchor" href="#' + anchor + '">' +
-               '<i class="fa fa-arrow-right jwAnchorArrow"></i> ' +
-               title + '</a><br>';
-    }
-
-    function addSubsectionLink(section, title, anchor) {
-        var ix = section.bottom.indexOf(title);
-        if (ix >= 0) {
-            section.bottom = insertNamedAnchor(section.bottom, ix, anchor);
-            section.anchors += linkToNamedAnchor(title, anchor);
-        }
-    }
-
-    function digestDescription(description) {
-        // Search for familiar patterns in our description.html text and if possible,
-        // break it into a top (summary and photo), anchor section (links to useful
-        // subsections of details), and bottom (details).
-        var section = { top: '', anchors: '', bottom: ''};
-        var re, matches;
-        // IE8 can't handle the regex syntax [^] ("not the null character") which matches newlines
-        // in later versions.  So wrap this in a try/catch:
-        try {
-            re = new RegExp('([^]*?)<HR>([^]*?Search the assembly[^]*)');
-            if (description) {
-                matches = description.match(re);
-                if (matches) {
-                    section.top = matches[1];
-                    section.bottom = matches[2];
-                } else {
-                    matches = description.match(/([^]*?)(<H3>Sample position queries<\/H3>[^]*)/i);
-                    if (matches) {
-                        section.top = matches[1];
-                        section.bottom = matches[2];
-                    } else {
-                        section.top = description;
-                    }
-                }
-                // Make links to subsections (if found):
-                addSubsectionLink(section, 'Search the assembly', 'searchHelp');
-                addSubsectionLink(section, 'Download sequence and annotation data', 'download');
-                addSubsectionLink(section, 'Sample Position Queries', 'sampleQueries');
-                addSubsectionLink(section, 'Sample position queries', 'sampleQueries');
-                addSubsectionLink(section, 'Assembly Details', 'assemblyDetails');
-                addSubsectionLink(section, 'Assembly details', 'assemblyDetails');
-                addSubsectionLink(section, 'Genbank Pipeline Details', 'genbankDetails');
-            }
-        }
-        catch (exc) {
-            section.top = description;
-        }
-        return section;
-    }
-
     function tweakDescriptionPhotoWidth() {
         // Our description.html files assume a pretty wide display area, but now we're
         // squeezed to the right of the 'Select Species' section.  If there's a large
         // image, scale it down.  The enclosing table is usually sized to leave a lot
         // of space to the left of the image, so shrink that too.
-        // This must be called *after* #descriptionTextTop is updated with the new content.
+        // This must be called *after* #descriptionText is updated with the new content.
         var width, scaleFactor, newWidth;
-        var $table = $('#descriptionTextTop table').first();
-        var $img = $('#descriptionTextTop table img').first();
+        var $table = $('#descriptionText table').first();
+        var $img = $('#descriptionText table img').first();
         if ($img.length) {
             width = $img.width();
             if (width > 175) {
@@ -1238,30 +1180,14 @@ var hgGateway = (function() {
     function updateDescription(description) {
         // We got the contents of a db's description.html -- tweak its format to fit
         // the new design.
-        var sections = digestDescription(description);
-        $('#descriptionTextTop').html(sections.top);
-        $('#descriptionAnchors').html(sections.anchors);
-        $('#descriptionTextBottom').html(sections.bottom);
-        if (sections.anchors) {
-            $('#descriptionAnchors').show();
-        } else {
-            $('#descriptionAnchors').hide();
-        }
-        if (sections.bottom) {
-            $('#descriptionTextBottom').show();
-        } else {
-            $('#descriptionTextBottom').hide();
-        }
+        $('#descriptionText').html(description);
         tweakDescriptionPhotoWidth();
         // Apply JWest formatting to all anchors in description.
         // We can't simply style all <a> tags that way because autocomplete uses <a>'s.
-        $('#descriptionTextTop a').addClass('jwAnchor');
-        $('#descriptionTextBottom a').addClass('jwAnchor');
+        $('#descriptionText a').addClass('jwAnchor');
         // Apply square bullet style to all ul's in description.
-        $('#descriptionTextTop ul').addClass('jwNoBullet');
-        $('#descriptionTextTop li').addClass('jwSquareBullet');
-        $('#descriptionTextBottom ul').addClass('jwNoBullet');
-        $('#descriptionTextBottom li').addClass('jwSquareBullet');
+        $('#descriptionText ul').addClass('jwNoBullet');
+        $('#descriptionText li').addClass('jwSquareBullet');
     }
 
     function updateFindPositionSection(uiState) {
