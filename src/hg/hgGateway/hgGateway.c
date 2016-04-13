@@ -300,8 +300,8 @@ else
     doMainPage();
 }
 
-// We find matches from various fields of dbDb:
-enum dbDbMatchType { ddmtUndef, ddmtDb, ddmtGenome, ddmtSciName, ddmtDescription };
+// We find matches from various fields of dbDb, and prefer them in this order:
+enum dbDbMatchType { ddmtDescription=0, ddmtGenome=1, ddmtDb=2, ddmtSciName=3 };
 
 struct dbDbMatch
     // Info about a match of a search term to some field of dbDb, including info that
@@ -339,9 +339,9 @@ if (diff == 0)
     diff = b->isWord - a->isWord;
 if (diff == 0 && a->isWord && b->isWord)
     diff = a->offset - b->offset;
-// Use int values of type, in descending numeric order:
+// Use int values of type:
 if (diff == 0)
-    diff = (int)(b->type) - (int)(a->type);
+    diff = (int)(a->type) - (int)(b->type);
 if (diff == 0)
     diff = a->dbDb->orderKey - b->dbDb->orderKey;
 if (diff == 0)
@@ -429,8 +429,6 @@ static void writeDbDbMatch(struct jsonWrite *jw, struct dbDbMatch *match, char *
 struct dbDb *dbDb = match->dbDb;
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "genome", dbDb->genome);
-if (match->type == ddmtDb)
-    jsonWriteString(jw, "db", dbDb->name);
 // label includes <b> tag to highlight the match for term.
 char label[PATH_LEN*4];
 // value is placed in the input box when user selects the item.
@@ -451,12 +449,12 @@ else if (match->type == ddmtGenome)
     }
 else if (match->type == ddmtDb)
     {
-    safef(value, sizeof(value), "%s (%s %s)",
-          dbDb->name, dbDb->genome, dbDb->description);
+    safecpy(value, sizeof(value), dbDb->name);
     char *bolded = boldTerm(dbDb->name, term, match->offset, match->type);
     safef(label, sizeof(label), "%s (%s %s)",
           bolded, dbDb->genome, dbDb->description);
     freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
     }
 else if (match->type == ddmtDescription)
     {
@@ -466,6 +464,7 @@ else if (match->type == ddmtDescription)
     safef(label, sizeof(label), "%s (%s %s)",
           dbDb->name, dbDb->genome, bolded);
     freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
     }
 else
     errAbort("writeDbDbMatch: unrecognized dbDbMatchType value %d (db %s, term %s)",
