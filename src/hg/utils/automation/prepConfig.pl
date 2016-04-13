@@ -48,6 +48,7 @@ my $taxId = "notFound";
 my $ncbiBioProject = "notFound";
 my $ncbiGenomeId = "notFound";
 my $ncbiAssemblyId = "notFound";
+my $genomeCladePriority = "notFound";
 
 open (FH, "<$asmReport") or die "can not read $asmReport";
 while (my $line = <FH>) {
@@ -116,10 +117,21 @@ if ( -s $mitoChr2Acc ) {
   printf STDERR "# going to need a mitoAcc ?\n";
 }
 
+# do not need a genomeCladePriority if it already exists for this organism
+my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$commonName";' hgcentraltest | wc -l`;
+chomp $genomeCladeExists;
+# if does not exist, use the most common value for this clade
+if ( $genomeCladeExists != 1 ) {
+  $genomeCladePriority = `hgsql -N -e 'select priority from genomeClade where clade="$clade";' hgcentraltest | sort | uniq -c | sort -rn | head -1 | awk '{print \$NF}'`;
+  chomp $genomeCladePriority;
+}
+
 printf "# config parameters for makeGenomeDb.pl:\n";
 printf "db %s\n", $db;
 printf "clade %s\n", $clade;
-# printf "genomeCladePriority xxx\n";
+if ( $genomeCladeExists != 1 ) {
+   printf "genomeCladePriority %d\n", $genomeCladePriority;
+}
 printf "scientificName %s\n", $sciName;
 printf "commonName %s\n", ucfirst($commonName);
 printf "assemblyDate %s\n", $asmDate;
