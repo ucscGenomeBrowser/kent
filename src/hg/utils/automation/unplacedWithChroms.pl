@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 sub usage() {
-  printf STDERR "usage: ./unplacedWithChroms.pl ../genbank/*_assembly_structure/Primary_Assembly\n";
+  printf STDERR "usage: ./unplacedWithChroms.pl ../refseq/*_assembly_structure/Primary_Assembly\n";
 }
 
 my $argc = scalar(@ARGV);
@@ -15,34 +15,36 @@ if ($argc != 1) {
 }
 
 my $primary = shift(@ARGV);
+my %ucscToNcbiName;   # key is ucscName, value is ncbi name
 
 my $agpFile =  "$primary/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz";
-my $fastaFile =  "$primary/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz";
 open (FH, "zcat $agpFile|") or die "can not read $agpFile";
 open (UC, ">chrUn.agp") or die "can not write to chrUn.agp";
 while (my $line = <FH>) {
     if ($line =~ m/^#/) {
         print UC $line;
     } else {
+        chomp $line;
+        my $ncbiName = $line;
+        $ncbiName =~ s/\s.*//;
+        my $ucscName = "chrUn_$ncbiName";
+        $ucscName =~ s/\./v/;
         $line =~ s/\./v/;
-        printf UC "chrUn_%s", $line;
+        printf UC "chrUn_%s\n", $line;
+        $ucscToNcbiName{$ucscName} = $ncbiName;
     }
 }
 close (FH);
 close (UC);
 
-open (FH, "zcat $fastaFile|") or die "can not read $fastaFile";
-open (UC, ">chrUn.fa") or die "can not write to chrUn.fa";
-while (my $line = <FH>) {
-    if ($line =~ m/^>/) {
-        chomp $line;
-        $line =~ s/ .*//;
-        $line =~ s/\./v/;
-        $line =~ s/>//;
-        printf UC ">chrUn_$line\n";
-    } else {
-        print UC $line;
-    }
+my $sequenceCount = 0;
+open (FA, "|gzip -c > chrUn.fa.gz") or die "can not write to chrUn.fa.gz";
+foreach my $ucscName (sort keys %ucscToNcbiName) {
+  my $ncbiName = $ucscToNcbiName{$ucscName};
+  printf FA ">%s\n", $ucscName;
+  print FA `twoBitToFa -noMask refseq.2bit:$ncbiName stdout | grep -v "^>"`;
+  ++$sequenceCount;
 }
-close (FH);
-close (UC);
+close (FA);
+
+printf STDERR "# processed %d sequences into chrUn.fa.gz\n", $sequenceCount;

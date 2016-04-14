@@ -18,6 +18,10 @@ alpha:
 	${GITUP}
 	${MAKE} doInstall DEST=${DOCUMENTROOT}/js
 
+topAlpha:
+	${GITUP}
+	${MAKE} doInstallTop DEST=${DOCUMENTROOT}/js
+
 beta:
 	${GITUP} 
 	${MAKE} doInstall DEST=${DOCUMENTROOT}-beta/js extra=-forceVersionNumbers

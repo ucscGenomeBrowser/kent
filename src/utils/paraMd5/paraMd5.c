@@ -14,7 +14,7 @@ void usage()
 errAbort(
   "paraMd5 - Make md5 sums for files in parallel.\n"
   "usage:\n"
-  "   paraMd5 XXX\n"
+  "   paraMd5 file(s)\n"
   "options:\n"
   "   -threads=N - number of threads - default %d\n"
   , threads
@@ -40,12 +40,14 @@ void doOneMd5(void *item, void *context)
 {
 struct paraMd5 *p = item; // Convert item to known type
 p->md5 = md5HexForFile(p->fileName);
+verbose(1, ".");
 }
 
 
 void paraMd5(int fileCount, char *files[])
 /* paraMd5 - Make md5 sums for files in parallel.. */
 {
+/* Make a list of things we want to process in parallel */
 struct paraMd5 *list = NULL, *el;
 int i;
 for (i=0; i<fileCount; ++i)
@@ -55,7 +57,12 @@ for (i=0; i<fileCount; ++i)
     slAddHead(&list, el);
     }
 slReverse(&list);
+
+/* Do the parallel execution */
 pthreadDoList(threads, list, doOneMd5, NULL);
+verbose(1, "\n");
+
+/* Print out results */
 for (el = list; el != NULL; el = el->next)
     {
     printf("%s  %s\n", el->md5, el->fileName);

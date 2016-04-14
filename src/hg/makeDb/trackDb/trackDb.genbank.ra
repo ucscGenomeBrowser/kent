@@ -154,7 +154,7 @@ termRegex N(M|R)_[0-9]{6}[0-9]*
 searchPriority 9.5
 
 searchName mrnaAcc
-searchTable gbCdnaInfo
+searchTable all_mrna
 searchMethod prefix
 searchType mrnaAcc
 shortCircuit 1
@@ -174,7 +174,7 @@ searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
 
 searchName mrnaKeyword
-searchTable gbCdnaInfo
+searchTable all_mrna
 searchType mrnaKeyword
 searchPriority 15
 grepIndex genbankGrep
