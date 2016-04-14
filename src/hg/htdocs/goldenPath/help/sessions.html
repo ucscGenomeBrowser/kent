@@ -26,8 +26,15 @@
   <ul><b>
     <li><a class="toc" href="#What">What is a Session?</a>
     <li><a class="toc" href="#Gallery">Session Gallery</a>
+      <ul>
+        <li><a class="toc" href="#dna">DNA/Codon View</a>
+        <li><a class="toc" href="#evolution">Evolution</a>
+        <li><a class="toc" href="#snp">SNPs and Disease</a>
+        <li><a class="toc" href="#tfbs">Expression/Regulation: TFBS/RNA-seq/ChIP-seq</a>
+        <li><a class="toc" href="#mlq">Mailing List Support</a>
+      </ul>
     <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
-  </b></ul>
+</b></ul>
 </td>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
@@ -51,6 +58,10 @@ and <a href="hgSessionHelp.html#Share" target="_blank">share</a> sessions.
 <div class="section">
 <h1>Session Gallery</h1>
 <div class="sectionContent">
+
+<!-- Topic Division --> 
+<a name="dna"></a>
+<h3><em>DNA/Codon View</em></h3>
 
 <!-- Session INFO: This comes from an educational collection: https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
 <h4 class="title">Examples of Stop Codons in the hg19 Assembly</h4>
@@ -101,21 +112,6 @@ target="_blank">flip the view</a>.
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
-<h4 class="title">Examples of Codon Wobble in the hg19 Assembly</h4>
-<div class="sectionContent">
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble"
-target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.wobble.png"></center></a>
-<p>
-The above session helps illustrate the how codon wobble in bases diverges
-through evolution when the amino acid is the same (note the conservation score graph).
-There is a conservation of function through evolution with V > I > F amino acids and
- K > R substitutions. Here is an additional example session displaying
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble2"
-target="_blank">wobble</a>.
-</p>
-</div><!-- .sectionContent -->
-
-<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
 <h4 class="title">Examples of Split Codons in the hg19 Assembly</h4>
 <div class="sectionContent">
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.split"
@@ -134,6 +130,65 @@ Using the multi-region exon-only feature available under the top blue menu bar a
 to more clearly see the split codon above.
 </p>
 </div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Different Codon Numbering in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.codonNums.png"></center></a>
+<p>
+The above session helps illustrate the how same region in an exon can have different codon
+numbering reflecting different isoforms and that it is important to use caution when reading
+codon numbers in the literature. Here is an additional view of the region zoomed out 300x to display
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums2"
+target="_blank">the alternate splicing</a>.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="evolution"></a>
+<h3><em>Evolution</em></h3>
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Codon Wobble in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.wobble.png"></center></a>
+<p>
+The above session helps illustrate the how codon wobble in bases diverges
+through evolution when the amino acid is the same (note the conservation score graph).
+There is a conservation of function through evolution with V > I > F amino acids and
+ K > R substitutions. Here is an additional example session displaying
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble2"
+target="_blank">wobble</a>.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Evolution in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp.png"></center></a>
+<p>
+This session shows alignments of three species (Chimp, Gorilla, and Orangutan) against chr2 in hg19
+and how the same sequences are found in two separate chromosomes in the other species.
+</p>
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp2"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp2.png"></center></a>
+<p>
+Zooming in above to a region of human chr2 you can see heterochromatin around a vestigial
+centromere which has not evolved away yet. By using the top blue menu bar under View to
+select &quot;In Other Genomes (Convert)&quot; you can select the Chimp assembly panTro4 and
+see that these coordinates in hg19 (chr2:126,645,017-138,651,416) coincide with the
+centromere in the Chimp chr2B:
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp3"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp3.png"></center></a>
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="snp"></a>
+<h3><em>SNPs and Disease</em></h3>
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
 <h4 class="title">Examples of SNP coloring and ABO variant details in the hg19 Assembly</h4>
@@ -155,20 +210,6 @@ target="_blank"><center><img width="70%" height="70%" src="../../images/aboVaria
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
-<h4 class="title">Examples of Different Codon Numbering in the hg19 Assembly</h4>
-<div class="sectionContent">
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums"
-target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.codonNums.png"></center></a>
-<p>
-The above session helps illustrate the how same region in an exon can have different codon
-numbering reflecting different isoforms and that it is important to use caution when reading
-codon numbers in the literature. Here is an additional view of the region zoomed out 300x to display
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums2"
-target="_blank">the alternate splicing</a>.
-</p>
-</div><!-- .sectionContent -->
-
-<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
 <h4 class="title">Examples of OMIM allelic variants in the hg19 Assembly</h4>
 <div class="sectionContent">
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.OMIM"
@@ -182,28 +223,6 @@ In the above and this zoomed in session you can <a href="../../cgi-bin/hgTracks?
 target="_blank">mouseover OMIM variants to access details</a> such as OMIM Allelic Variant 136350.0021
 in the far right to see &quot;PRO366LEU,rs121909641:HYPOGONADOTROPIC HYPOGONADISM 2
 WITH ANOSMIA, SUSCEPTIBILITY TO&quot; to learn additional information about each variant.
-</p>
-</div><!-- .sectionContent -->
-
-<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
-<h4 class="title">Examples of Evolution in the hg19 Assembly</h4>
-<div class="sectionContent">
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp"
-target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp.png"></center></a>
-<p>
-This session shows alignments of three species (Chimp, Gorilla, and Orangutan) against chr2 in hg19
-and how the same sequences are found in two separate chromosomes in the other species.
-</p>
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp2"
-target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp2.png"></center></a>
-<p>
-Zooming in above to a region of human chr2 you can see heterochromatin around a vestigial
-centromere which has not evolved away yet. By using the top blue menu bar under View to
-select &quot;In Other Genomes (Convert)&quot; you can select the Chimp assembly panTro4 and
-see that these coordinates in hg19 (chr2:126,645,017-138,651,416) coincide with the
-centromere in the Chimp chr2B: 
-<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp3"
-target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp3.png"></center></a>
 </p>
 </div><!-- .sectionContent -->
 
@@ -238,6 +257,10 @@ and loss of copies and a rare genetic disorder when some genes are deleted or un
 </p>
 </div><!-- .sectionContent -->
 
+<!-- Topic Division -->
+<a name="tfbs"></a>
+<h3><em>Expression/Regulation: TFBS/RNA-seq/ChIP-seq</em></h3>
+
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
 <h4 class="title">Microarray Probset data in the hg19 Assembly</h4>
 <div class="sectionContent">
@@ -261,6 +284,25 @@ GENCODE gene sets, Transcription Levels by RNA-seq, H3K27Ac histone mark, DNaseI
 Hypersensitivity, ChIP-seq Transcription Factor binding sites, and Genome Segmentations.
 </p>
 </div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="mlq"></a>
+<h3><em>Mailing List Support</em></h3>
+
+<!-- Session INFO: This comes from the ENCODE index.html -->
+<h4 class="title">Example of displaying repeats in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.AluY"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.AluY.png"></center></a>
+<p>
+A user was interested in an intron region of the gene PHKB where a repeat element for AluY was given.
+The user could not find the Alu repeat, and 
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/_X1bURBW8ho/TRs18-kez2AJ"
+target="_blank">the response</a> was to aid the user in turning on the RepeatMasker track
+where information on repeats, such as the AluY element desired, is contained.
+</p>
+</div><!-- .sectionContent -->
+
 
 </div><!-- .sectionContent -->
 </div><!-- .section -->
