@@ -6434,6 +6434,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
+printf("<B>Entrez nucleotide:</B><A TARGET=_blank HREF='http://www.ncbi.nlm.nih.gov/nuccore/%s'> %s</A><BR>\n", fragName, fragName);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
