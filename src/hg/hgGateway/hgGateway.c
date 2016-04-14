@@ -275,9 +275,9 @@ jsIncludeFile("utils.js",NULL);
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
 char *hostCode = (hIsPrivateHost() || hIsPreviewHost()) ? "hgwdev" : "rr";
 
-//#*** FOR EVALUATION PERIOD ONLY -- TODO: remove!
-hostCode = "rr";
-//#*** FOR EVALUATION PERIOD ONLY
+// Keep using dbDbTaxonomy.rr.js on demo6 for testing.
+if (hHostHasPrefix("hgwdev-demo6"))
+    hostCode = "rr";
 
 printf("<script src=\"../js/dbDbTaxonomy.%s.js\"></script>\n", hostCode);
 
