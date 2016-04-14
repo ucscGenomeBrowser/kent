@@ -653,9 +653,15 @@ var autocompleteCat = (function() {
         // for when the user chooses a result.
         // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
         // it anyway in case the same input had a previous db's autocomplete in effect.
-        // If options.searchObj is provided, it is used in addition to baseUrl; first the term is
-        // looked up in searchObj and then also queried using baseUrl.  Values in searchObj
-        // should have the same structure as the value returned by a baseUrl query.
+        // options.onServerReply (if given) is a function (Array, term) -> Array that
+        // post-processes the list of items returned by the server before the list is
+        // passed back to autocomplete for rendering.
+        // The following two options apply only when using our locally modified jquery-ui:
+        // If options.enterSelectsIdentical is true, then if the user hits Enter in the text input
+        // and their term has an exact match in the autocomplete results, that result is selected.
+        // options.onEnterTerm (if provided) is a callback function (jqEvent, jqUi) invoked
+        // when the user hits Enter, after handling enterSelectsIdentical.
+
         // The function closure allows us to keep a private cache of past searches.
         var cache = {};
 
@@ -663,17 +669,13 @@ var autocompleteCat = (function() {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
             var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
-            var searchObjResults = [];
-            _.forEach(options.searchObj, function(results, key) {
-                if (_.startsWith(key.toUpperCase(), term.toUpperCase())) {
-                    searchObjResults = searchObjResults.concat(results);
-                }
-            });
             $.getJSON(url)
                .done(function(results) {
-                var combinedResults = results.concat(searchObjResults);
-                cache[term] = combinedResults;
-                acCallback(combinedResults);
+                if (_.isFunction(options.onServerReply)) {
+                    results = options.onServerReply(results, term);
+                }
+                cache[term] = results;
+                acCallback(results);
             });
             // ignore errors to avoid spamming people on flaky network connections
             // with tons of error messages (#8816).
@@ -701,7 +703,6 @@ var autocompleteCat = (function() {
 
         // Provide default values where necessary:
         options.onSelect = options.onSelect || console.log;
-        options.searchObj = options.searchObj || {};
         options.enterSelectsIdentical = options.enterSelectsIdentical || false;
 
         $input.autocompleteCat({
@@ -835,12 +836,7 @@ var hgGateway = (function() {
         if (label !== 'root' && label !== 'cellular organisms') {
             searchObj[label] = myResults;
         }
-        return searchObj;
-    }
-
-    function addAutocompleteCommonNames(searchObj) {
-        // After searchObj is constructed by autocompleteFromTree, add aliases for
-        // some common names that map to scientific names in the tree.
+        // Add aliases for some common names that map to scientific names in the tree.
         _.forEach(commonToSciNames, function(sciName, commonName) {
             var label, addMyLabel;
             if (searchObj[sciName]) {
@@ -849,6 +845,7 @@ var hgGateway = (function() {
                 searchObj[commonName] = _.map(searchObj[sciName], addMyLabel);
             }
         });
+        return searchObj;
     }
 
     function makeStripe(id, color, stripeHeight, scrollTop, onClickStripe) {
@@ -1152,73 +1149,15 @@ var hgGateway = (function() {
         $('#descriptionDb').html(trackHubSkipHubName(db));
     }
 
-    function insertNamedAnchor(string, ix, anchorName) {
-        return string.substring(0, ix) + '<a name="' + anchorName + '"></a>' + string.substring(ix);
-    }
-
-    function linkToNamedAnchor(title, anchor) {
-        return '<a class="jwAnchor" href="#' + anchor + '">' +
-               '<i class="fa fa-arrow-right jwAnchorArrow"></i> ' +
-               title + '</a><br>';
-    }
-
-    function addSubsectionLink(section, title, anchor) {
-        var ix = section.bottom.indexOf(title);
-        if (ix >= 0) {
-            section.bottom = insertNamedAnchor(section.bottom, ix, anchor);
-            section.anchors += linkToNamedAnchor(title, anchor);
-        }
-    }
-
-    function digestDescription(description) {
-        // Search for familiar patterns in our description.html text and if possible,
-        // break it into a top (summary and photo), anchor section (links to useful
-        // subsections of details), and bottom (details).
-        var section = { top: '', anchors: '', bottom: ''};
-        var re, matches;
-        // IE8 can't handle the regex syntax [^] ("not the null character") which matches newlines
-        // in later versions.  So wrap this in a try/catch:
-        try {
-            re = new RegExp('([^]*?)<HR>([^]*?Search the assembly[^]*)');
-            if (description) {
-                matches = description.match(re);
-                if (matches) {
-                    section.top = matches[1];
-                    section.bottom = matches[2];
-                } else {
-                    matches = description.match(/([^]*?)(<H3>Sample position queries<\/H3>[^]*)/i);
-                    if (matches) {
-                        section.top = matches[1];
-                        section.bottom = matches[2];
-                    } else {
-                        section.top = description;
-                    }
-                }
-                // Make links to subsections (if found):
-                addSubsectionLink(section, 'Search the assembly', 'searchHelp');
-                addSubsectionLink(section, 'Download sequence and annotation data', 'download');
-                addSubsectionLink(section, 'Sample Position Queries', 'sampleQueries');
-                addSubsectionLink(section, 'Sample position queries', 'sampleQueries');
-                addSubsectionLink(section, 'Assembly Details', 'assemblyDetails');
-                addSubsectionLink(section, 'Assembly details', 'assemblyDetails');
-                addSubsectionLink(section, 'Genbank Pipeline Details', 'genbankDetails');
-            }
-        }
-        catch (exc) {
-            section.top = description;
-        }
-        return section;
-    }
-
     function tweakDescriptionPhotoWidth() {
         // Our description.html files assume a pretty wide display area, but now we're
         // squeezed to the right of the 'Select Species' section.  If there's a large
         // image, scale it down.  The enclosing table is usually sized to leave a lot
         // of space to the left of the image, so shrink that too.
-        // This must be called *after* #descriptionTextTop is updated with the new content.
+        // This must be called *after* #descriptionText is updated with the new content.
         var width, scaleFactor, newWidth;
-        var $table = $('#descriptionTextTop table').first();
-        var $img = $('#descriptionTextTop table img').first();
+        var $table = $('#descriptionText table').first();
+        var $img = $('#descriptionText table img').first();
         if ($img.length) {
             width = $img.width();
             if (width > 175) {
@@ -1241,30 +1180,14 @@ var hgGateway = (function() {
     function updateDescription(description) {
         // We got the contents of a db's description.html -- tweak its format to fit
         // the new design.
-        var sections = digestDescription(description);
-        $('#descriptionTextTop').html(sections.top);
-        $('#descriptionAnchors').html(sections.anchors);
-        $('#descriptionTextBottom').html(sections.bottom);
-        if (sections.anchors) {
-            $('#descriptionAnchors').show();
-        } else {
-            $('#descriptionAnchors').hide();
-        }
-        if (sections.bottom) {
-            $('#descriptionTextBottom').show();
-        } else {
-            $('#descriptionTextBottom').hide();
-        }
+        $('#descriptionText').html(description);
         tweakDescriptionPhotoWidth();
         // Apply JWest formatting to all anchors in description.
         // We can't simply style all <a> tags that way because autocomplete uses <a>'s.
-        $('#descriptionTextTop a').addClass('jwAnchor');
-        $('#descriptionTextBottom a').addClass('jwAnchor');
+        $('#descriptionText a').addClass('jwAnchor');
         // Apply square bullet style to all ul's in description.
-        $('#descriptionTextTop ul').addClass('jwNoBullet');
-        $('#descriptionTextTop li').addClass('jwSquareBullet');
-        $('#descriptionTextBottom ul').addClass('jwNoBullet');
-        $('#descriptionTextBottom li').addClass('jwSquareBullet');
+        $('#descriptionText ul').addClass('jwNoBullet');
+        $('#descriptionText li').addClass('jwSquareBullet');
     }
 
     function updateFindPositionSection(uiState) {
@@ -1285,6 +1208,68 @@ var hgGateway = (function() {
         updateGoButtonPosition();
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
+    }
+
+    function removeDups(inList, isDup) {
+        // Return a list with only unique items from inList, using isDup(a, b) -> true if a =~ b
+        var inLength = inList.length;
+        // inListDups is an array of boolean flags for marking duplicates, parallel to inList.
+        var inListDups = [];
+        var outList = [];
+        var i, j;
+        for (i = 0;  i < inLength;  i++) {
+            // If something has already been marked as a duplicate, skip it.
+            if (! inListDups[i]) {
+                // the first time we see a value, add it to outList.
+                outList.push(inList[i]);
+                for (j = i+1;  j < inLength;  j++) {
+                    // Now scan the rest of inList to find duplicates of inList[i].
+                    // We can skip items previously marked as duplicates.
+                    if (!inListDups[j] && isDup(inList[i], inList[j])) {
+                        inListDups[j] = true;
+                    }
+                }
+            }
+        }
+        return outList;
+    }
+
+    function speciesResultsEquiv(a, b) {
+        // For autocompleteCat's option isDuplicate: return true if species search results
+        // a and b would be redundant (and hence one should be removed).
+        if (a.db !== b.db) {
+            return false;
+        } else if (a.genome === b.genome) {
+            return true;
+        }
+        return false;
+    }
+
+    function searchByKeyNoCase(searchObj, term) {
+        // Return a concatenation of searchObj list values whose keys start with term
+        // (case-insensitive).
+        var termUpCase = term.toUpperCase();
+        var searchObjResults = [];
+        _.forEach(searchObj, function(results, key) {
+            if (_.startsWith(key.toUpperCase(), termUpCase)) {
+                searchObjResults = searchObjResults.concat(results);
+            }
+        });
+        return searchObjResults;
+    }
+
+    function processSpeciesAutocompleteItems(searchObj, results, term) {
+        // This (bound to searchObj) is passed into autocompleteCat as options.onServerReply.
+        // The server sends a list of items that may include duplicates and can have
+        // results from dbDb and/or assembly hubs.  Also look for results from the
+        // phylogenetic tree, and insert those before the assembly hub matches.
+        // Then remove duplicates and return the processed results which will then
+        // be used to render the menu.
+        var phyloResults = searchByKeyNoCase(searchObj, term);
+        var hubResultIx = _.findIndex(results, function(result) { return !! result.hubUrl; });
+        var hubResults = hubResultIx >= 0 ? results.splice(hubResultIx) : [];
+        var combinedResults = results.concat(phyloResults).concat(hubResults);
+        return removeDups(combinedResults, speciesResultsEquiv);
     }
 
     // Server response event handlers
@@ -1514,7 +1499,7 @@ var hgGateway = (function() {
         // initialize event handlers.
         $(function() {
             var searchObj = autocompleteFromTree(dbDbTree);
-            addAutocompleteCommonNames(searchObj);
+            var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
             scrollbarWidth = findScrollbarWidth();
             drawSpeciesPicker();
             setRightColumnWidth();
@@ -1523,7 +1508,7 @@ var hgGateway = (function() {
                                  { baseUrl: 'hgGateway?hggw_term=',
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
-                                   searchObj: searchObj,
+                                   onServerReply: processSpeciesResults,
                                    enterSelectsIdentical: true });
             updateFindPositionSection(uiState);
             $('#selectAssembly').change(onChangeDbMenu);

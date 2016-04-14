@@ -225,6 +225,7 @@ char *cdwAllowedTags[] = {
     "differentiation",
     "disease",
     "disease_stage",
+    "dna_concentration",
     "donor",
     "enriched_in",
     "file",
@@ -252,6 +253,7 @@ char *cdwAllowedTags[] = {
     "pmid",
     "ratio_260_280",
     "replicate",
+    "rin",
     "rna_spike_in",
     "seq_library",
     "seq_library_prep",
@@ -275,6 +277,7 @@ char *cdwAllowedTags[] = {
     "treatment",
     "ucsc_db",
     "update_date",
+    "version",
     };
 
 struct hash *cdwAllowedTagsHash()

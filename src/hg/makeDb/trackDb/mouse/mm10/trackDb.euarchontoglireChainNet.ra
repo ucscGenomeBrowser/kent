@@ -83,7 +83,7 @@ html chainNet
         otherDb papHam1
 
 include chainNetRheMac3.ra beta,public
-include chainNetRheMac8.ra alpha
+include chainNetRheMac8.ra
 
         track chainNomLeu2
         subTrack euarchontoglireChainNetViewchain off
