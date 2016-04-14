@@ -438,7 +438,8 @@ var rainbow = (function() {
                               Lizard: 'Lizard',
                               'X. tropicalis': 'Frog',
                               'Fugu': 'Fish',
-                              'Ebola virus': 'Ebola'
+                              'Zaire ebolavirus': 'Ebola',  // on hgwdev April 2016
+                              'Ebola virus': 'Ebola'        // on RR April 2016
                             };
 
     // The icon sprite image has 5 rows and 5 columns:
@@ -480,7 +481,7 @@ var rainbow = (function() {
                          Orca: 0,
                          Horse: -8,
                          Dog: 15,
-                         Walrus: 0,
+                         Walrus: 40,
                          Bat: 0,
                          Elephant: -20,
                          Manatee: 20,
