@@ -52,7 +52,8 @@ photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight\n" 
   > photoReference.txt
 
 # this information is from the top of 
-#    rouAeg1/refseq/GCF_001466805.2_Raegyp2.0_assembly_report.txt
+#    rouAeg1/refseq/*_assembly_report.txt
+#    (aka: rouAeg1/refseq/GCF_001466805.2_Raegyp2.0_assembly_report.txt)
 
 # Assembly name:  Raegyp2.0
 # Organism name:  Rousettus aegyptiacus (Egyptian rousette)
@@ -85,206 +86,203 @@ photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight\n" 
 #############################################################################
 # establish config.ra file (DONE - Hiram - 2016-04-12)
     cd /hive/data/genomes/rouAeg1
-    ~/kent/src/hg/utils/automation/prepConfig.pl rouAeg1 vertebrate bats \
-       refseq/GCF_001466805.2_Raegyp2.0_assembly_report.txt \
-         > rouAeg1.config.ra
+    ~/kent/src/hg/utils/automation/prepConfig.pl rouAeg1 mammal bats \
+       refseq/*_assembly_report.txt > rouAeg1.config.ra
+
+    # verify it looks sane
+    cat rouAeg1.config.ra
+# config parameters for makeGenomeDb.pl:
+db rouAeg1
+clade mammal
+genomeCladePriority 35
+scientificName Rousettus aegyptiacus
+commonName Egyptian rousette
+assemblyDate Mar 2016
+assemblyLabel Boston University School of Medicine
+assemblyShortLabel Raegyp2.0
+orderKey 5316
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_007393.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rouAeg1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rouAeg1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bats
+photoCreditURL https://commons.wikimedia.org/wiki/User:MathKnight
+photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight
+ncbiGenomeId 7672
+ncbiAssemblyId 707221
+ncbiAssemblyName Raegyp2.0
+ncbiBioProject 309421
+genBankAccessionID GCF_001466805.2
+taxId 9407
 
 #############################################################################
-# setup UCSC named files (DONE - 2016-01-08 - Hiram)
+# setup UCSC named files (DONE - 2016-04-12 - Hiram)
 
-    # measure what we have here:
-    faSize *genomic.fna.gz
-# 3236224332 bases (94132579 N's 3142091753 real 1857179349 upper
-#      1284912404 lower) in 284728 sequences in 1 files
-# Total size: mean 11366.0 sd 1223261.8 min 116 (NW_014950235.1)
-#      max 225584828 (NC_027893.1) median 941
-# %39.70 masked total, %40.89 masked real
+    mkdir /hive/data/genomes/rouAeg1/ucsc
+    cd /hive/data/genomes/rouAeg1/ucsc
+    # measure what is in the refseq release:
+    faSize ../refseq/*genomic.fna.gz
+# 1910250568 bases (482376 N's 1909768192 real 1408250300 upper 501517892 lower) in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464.1) max 8996366 (NW_015492809.1) median 262214
+# %26.25 masked total, %26.26 masked real
 
     # check for duplicate sequences:
 
-    mkdir /hive/data/genomes/rouAeg1/ucsc
-    cd /hive/data/genomes/rouAeg1/ucsc
-    faToTwoBit ../refseq/GCF_000772875.2_Mmul_8.0.1_genomic.fna.gz refseq.2bit
-    #  real    1m32.684s
+    time faToTwoBit -noMask ../refseq/*_genomic.fna.gz refseq.2bit
+    #  real    0m52.302s
     twoBitDup refseq.2bit
-    # no output is a good result
-    rm refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
 
-#############################################################################
-# fixup to UCSC naming scheme (TBD - 2016-01-29 - Hiram)
-    mkdir /hive/data/genomes/rouAeg1/ucsc
-    cd /hive/data/genomes/rouAeg1/ucsc
-
-    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
-       ../refseq/*_assembly_structure/Primary_Assembly
-NC_027904.1 12
-NC_027902.1 10
-NC_027913.1 X
-NC_027897.1 5
-NC_027903.1 11
-NC_027896.1 4
-NC_027901.1 9
-NC_027912.1 20
-NC_027898.1 6
-NC_027899.1 7
-NC_027905.1 13
-NC_027907.1 15
-NC_027911.1 19
-NC_027906.1 14
-NC_027914.1 Y
-NC_027910.1 18
-NC_027909.1 17
-NC_027908.1 16
-NC_027900.1 8
-NC_027895.1 3
-NC_027894.1 2
-NC_027893.1 1
-
-real    0m42.032s
-
-    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
-       ../refseq/*_assembly_structure/Primary_Assembly
-    #  real    0m8.257s
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../rouAeg1.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_007393.1
 
     zcat \
   ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
-     | grep -v "^#" | sed -e 's/^NC_005943.1/chrM/;' > chrM.agp
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
 
-    zcat ../refseq/*_assembly_structure/non-nuclear/assem*/FASTA/*.fna.gz \
-      | sed -e 's/^>.*/>chrM/;' > chrM.fa
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
 
-    # verify nothing lost compared to genbank:
-    faSize *.fa
-#  3236224332 bases (94132579 N's 3142091753 real 3142091753 upper
-#    0 lower) in 284728 sequences in 24 files
-#  Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-#    max 225584828 (chr1) median 941
-#  %0.00 masked total, %0.00 masked real
+    # no longer need this 2bit
+    rm refseq.2bit
 
-    # same totals as above: (except for masking)
-# 3236224332 bases (94132579 N's 3142091753 real 1857179349 upper
-#      1284912404 lower) in 284728 sequences in 1 files
+    # the mito sequence is already named chrM
+    printf "NC_007393.1\n" > excludeMito.txt
+    # simple conversion of names .1 to v1
+    time faSomeRecords -exclude ../refseq/*_genomic.fna.gz excludeMito.txt \
+        stdout | sed -e 's/.1 Rou.*/v1/;' > ucsc.fa
+    # real    1m49.479s
+    time gzip ucsc.fa
+    # real    10m21.337s
+
+    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e 's/.1\t/v1\t/;' > ucsc.agp
+
+    # verify correspondence
+    faToTwoBit *.fa.gz test.2bit
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these 2bit files
+    rm test.2bit refseq.2bit
 
 #############################################################################
-#  Initial database build (TBD - 2016-01-29 - Hiram)
-
-    cd /hive/data/genomes/rouAeg1
-    printf "%s" \
-# Config parameters for makeGenomeDb.pl:
-db rouAeg1
-clade primate
-genomeCladePriority 15
-scientificName Macaca mulatta
-commonName rhesus
-assemblyDate Nov. 2015
-assemblyLabel Baylor College of Medicine Genome Sequencing Center
-assemblyShortLabel BCM Mmul_8.0.1
-orderKey 18411
-# chrM GCF_000005875.1 included in assembly
-# mitoAcc NC_005943.1
-mitoAcc none
-fastaFiles /hive/data/genomes/rouAeg1/ucsc/*.fa
-agpFiles /hive/data/genomes/rouAeg1/ucsc/*.agp
-# qualFiles none
-dbDbSpeciesDir rhesus
-photoCreditURL http://www.wakehealth.edu/Faculty/Kaplan-Jay-R.htm
-# photoCreditURL http://caplab.yale.edu/
-# http://www.ncbi.nlm.nih.gov/sutils/static/GP_IMAGE/rhesus.jpg
-# photoCreditName Dr. Laurie Santos
-photoCreditName J.R. Kaplan
-ncbiGenomeId 215
-ncbiAssemblyId 2715158
-ncbiAssemblyName Mmul_8.0.1
-ncbiBioProject 12537
-genBankAccessionID GCF_000772875.2
-taxId 9544' > rouAeg1.config.ra
+#  Initial database build (DONE - 2016-04-13 - Hiram)
 
     # verify sequence and AGP are OK:
-    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
-         -stop=agp rouAeg1.config.ra > agp.log 2>&1
-    # real    4m50.591s
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rouAeg1.config.ra) > agp.log 2>&1
+    # real    1m44.502s
 
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db rouAeg1.config.ra) > db.log 2>&1
-    # real    30m6.878s
+    # real    16m6.304s
+
+    # forgot to drop db rouAeg1 for a rerunning
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=dbDb rouAeg1.config.ra) > dbDb.log 2>&1
+    # real    0m9.467s
 
     # check in the trackDb files created and add to trackDb/makefile
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2016-02-05 - Hiram)
-    # fixup the translateNames.sh file from rn6 work to use the new
-    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
+# ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
 
     mkdir /hive/data/genomes/rouAeg1/bed/ucscToINSDC
     cd /hive/data/genomes/rouAeg1/bed/ucscToINSDC
 
     # find accession for chrM
     grep chrM ../../rouAeg1.agp
-# chrM    1       16564   1       O       NC_005943.1     1       16564   +
+# chrM    1       16706   1       O       NC_007393.1     1       16706   +
+
     # use that accession here:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_005943.1 
+        ../../refseq/GCF_*structure/Primary_Assembly NC_007393.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    # there is no name for chrM/NC_007393.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
     # should be same line counts throughout:
     wc -l *
-    # 284728 name.coordinate.tab
-    # 284728 ucscToINSDC.bed
-    # 284728 ucscToINSDC.txt
+    # 2490 insdc.refseq.txt
+    # 2490 insdcToUcsc.txt
+    # 2490 name.coordinate.tab
+    # 2490 ucscToINSDC.bed
+    # 2490 ucscToINSDC.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 20
-    # use the 16 in this sed
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab rouAeg1 ucscToINSDC stdin ucscToINSDC.bed
     checkTableCoords rouAeg1
     # should cover %100 entirely:
     featureBits -countGaps rouAeg1 ucscToINSDC
-    # 3236224332 bases of 3236224332 (100.000%) in intersection
+    # 1910250568 bases of 1910250568 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-02-05 - Hiram)
-    hgsql -N -e "select frag from gold;" rouAeg1 | sort | head -1
-AC205186.3
+# fixup search rule for assembly track/gold table (DONE - 2016-04-14 - Hiram)
 
-    hgsql -N -e "select frag from gold;" rouAeg1 | sort | tail -2
-JSUE03348490.1
-NC_005943.1
+    cd ~/kent/src/hg/makeDb/trackDb/bats/rouAeg1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" rouAeg1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+# 2489 LOCP.1
+#    1 NC_.1
+
+    # implies a search rule of: '[CLNOP_]+[0-9]+(\.[0-9]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" rouAeg1 | wc -l
-    # 348580
+    # 2490
 
     hgsql -N -e "select frag from gold;" rouAeg1 \
-       | egrep -e '[AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 348580
+       | egrep -e '[CLNOP_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 2490
 
     hgsql -N -e "select frag from gold;" rouAeg1 \
-       | egrep -v -e '[AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[CLNOP_]+[0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/rouAeg1/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?
+termRegex [CLNOP_]+[0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
-#########################################################################
-
 ##########################################################################
-# running repeat masker (TBD - 2016-01-29 - Hiram)
+# running repeat masker (DONE - 2016-04-14 - Hiram)
     mkdir /hive/data/genomes/rouAeg1/bed/repeatMasker
     cd /hive/data/genomes/rouAeg1/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku rouAeg1) > do.log 2>&1
+XXX - running - Thu Apr 14 11:01:34 PDT 2016
     # real    481m50.689s
 
     # broken cluster run due to sick machines, no real problem, it
@@ -321,13 +319,14 @@ searchPriority 8
     # real    0m39.734s
 
 ##########################################################################
-# running simple repeat (TBD - 2016-01-29 - Hiram)
+# running simple repeat (DONE - 2016-04-14 - Hiram)
 
     mkdir /hive/data/genomes/rouAeg1/bed/simpleRepeat
     cd /hive/data/genomes/rouAeg1/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         rouAeg1) > do.log 2>&1
+XXX - running - Thu Apr 14 11:02:00 PDT 2016
     # real    140m2.826s
 
     cat fb.simpleRepeat
