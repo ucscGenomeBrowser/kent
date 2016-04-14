@@ -5534,13 +5534,8 @@ sqlDyStringAppend(dy,
                "select g.type,g.direction,"
                "so.name,o.name,l.name,m.name,"
                "se.name,t.name,dev.name,ce.name,cd.name,"
-               "des.name,a.name,gene.name,p.name,");
-if (haveGbSeq)
-    dyStringAppend(dy,
-                   "gbS.size,g.moddate,gbS.gbExtFile,gbS.file_offset,gbS.file_size ");
-else
-    dyStringAppend(dy,
-		   "se.size,se.gb_date,se.extFile,se.file_offset,se.file_size ");
+               "des.name,a.name,gene.name,p.name,"
+               "gbS.size,g.moddate,gbS.gbExtFile,gbS.file_offset,gbS.file_size ");
 
 /* If the gbCdnaInfoTAble table has a "version" column then will show it */
 if (hasVersion)
