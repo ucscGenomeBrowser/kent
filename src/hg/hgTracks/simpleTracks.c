@@ -10861,45 +10861,37 @@ return name;
 }
 
 void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int itemY, int lineHeight)
-/* put text anchored on right upper corner, doing separate colors if needed */
+/* Put text anchored on right upper corner, doing separate colors if needed. */
 {
+struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 int textX = x1 - width - 2;
 boolean snapLeft = (textX < fullInsideX);
-int clipYBak = 0, clipHeightBak = 0;
-struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 if (snapLeft)        /* Snap label to the left. */
     {
     if (hvgSide != NULL)
         hvgWhich = hvgSide;
-    hvGfxGetClip(hvgWhich, NULL, &clipYBak, NULL, &clipHeightBak);
-    hvGfxUnclip(hvgWhich);
-    hvGfxSetClip(hvgWhich, leftLabelX, itemY, fullInsideX - leftLabelX, lineHeight); // width was insideWidth
     textX = leftLabelX;
     width = leftLabelWidth-1;
     }
-
+int clipX, clipY, clipWidth, clipHeight;
+hvGfxGetClip(hvgWhich, &clipX, &clipY, &clipWidth, &clipHeight);
+hvGfxUnclip(hvgWhich);
+hvGfxSetClip(hvgWhich, textX, y, width, height);
 if (sameString(display, "freq"))
     {
-    Color allC = MG_BLACK;
+    color = MG_BLACK;
     if (startsWith("A", allele))
-        allC = MG_RED;
+        color = MG_RED;
     else if (startsWith("C", allele))
-        allC = MG_BLUE;
+        color = MG_BLUE;
     else if (startsWith("G", allele))
-        allC = darkGreenColor;
+        color = darkGreenColor;
     else if (startsWith("T", allele))
-        allC = MG_MAGENTA;
-    hvGfxTextRight(hvgWhich, textX, y, width, height, allC, font, allele);
+        color = MG_MAGENTA;
     }
-else
-    {
-    hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
-    }
-if (snapLeft)
-    {
-    hvGfxUnclip(hvgWhich);  // TODO GALT shoulld this be fullInsideX and fullInsideWidth:?
-    hvGfxSetClip(hvgWhich, insideX, clipYBak, insideWidth, clipHeightBak);
-    }
+hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
+hvGfxUnclip(hvgWhich);
+hvGfxSetClip(hvgWhich, clipX, clipY, clipWidth, clipHeight);
 }
 
 void pgSnpDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -11122,7 +11114,7 @@ void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
  * We don't want the default left labels when in full mode because they can overlap
  * with the item-drawing labels, but we do still need dense mode left labels. */
 {
-if (tg->visibility == tvDense)
+if (vis == tvDense)
     {
     if (isCenterLabelIncluded(tg))
 	yOff += mgFontLineHeight(font);
