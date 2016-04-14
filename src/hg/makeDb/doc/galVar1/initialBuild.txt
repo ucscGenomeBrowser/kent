@@ -367,7 +367,19 @@ searchPriority 8
     cat fb.galVar1.augustusGene.txt
     # 66133815 bases of 2802917674 (2.359%) in intersection
 
-########################################################################
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-04-14 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galVar1", "blat1a", "17860", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galVar1", "blat1a", "17861", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
 # Create kluster run files (DONE - 2016-03-07 - Hiram)
 
     # numerator is galVar1 gapless bases "real" as reported by:
