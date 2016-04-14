@@ -81,8 +81,10 @@ commonName Chicken
 assemblyDate Dec 2015
 assemblyLabel International Chicken Genome Consortium
 assemblyShortLabel Gallus_gallus-5.0
-orderKey 14755
-mitoAcc NC_001323.1
+orderKey 3314
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001323.1
+mitoAcc none
 fastaFiles /hive/data/genomes/galGal5/ucsc/*.fa.gz
 agpFiles /hive/data/genomes/galGal5/ucsc/*.agp
 # qualFiles none
@@ -97,47 +99,105 @@ genBankAccessionID GCF_000002315.4
 taxId 9031
 
 #############################################################################
-# setup UCSC named files (TBD - 2016-04-12 - Hiram)
+# setup UCSC named files (DONE - 2016-04-13 - Hiram)
 
     mkdir /hive/data/genomes/galGal5/ucsc
     cd /hive/data/genomes/galGal5/ucsc
     # measure what is in the refseq release:
     faSize ../refseq/*genomic.fna.gz
-# 1910250568 bases (482376 N's 1909768192 real 1408250300 upper 501517892 lower) in 2490 sequences in 1 files
-# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464.1) max 8996366 (NW_015492809.1) median 262214
-# %26.25 masked total, %26.26 masked real
+# 1230258557 bases (11766024 N's 1218492533 real 916521624 upper
+#    301970909 lower) in 23475 sequences in 1 files
+# Total size: mean 52407.2 sd 2051122.3 min 200 (NT_479312.1)
+#    max 196202544 (NC_006088.4) median 6930
+# %24.55 masked total, %24.78 masked real
 
     # check for duplicate sequences:
-
-    time faToTwoBit ../refseq/*_genomic.fna.gz refseq.2bit
+    time faToTwoBit -noMask ../refseq/*_genomic.fna.gz refseq.2bit
     #  real    0m52.302s
     twoBitDup refseq.2bit
     # no output is a good result, otherwise, would have to eliminate duplicates
-    # no longer need this 2bit
-    rm refseq.2bit
+    # the scripts creating the fasta here will be using this refseq.2bit file
+    # remove it later
 
-    # the mito sequence will be picked up by makeGenomeDb.pl
-    printf "NC_007393.1\n" > excludeMito.txt
-    # simple conversion of names .1 to v1
-    time faSomeRecords -exclude ../refseq/*_genomic.fna.gz excludeMito.txt \
-        stdout | sed -e 's/.1 Rou.*/v1/;' > ucsc.fa
-    # real    1m49.479s
-    time gzip ucsc.fa
-    # real    10m21.337s
+    # new option required to ucscCompositeAgp.pl 2016-04-13
+    time ./ucscCompositeAgp.pl \
+      ../refseq/*_genomic.fna.gz ../refseq/*_assembly_structure/Primary_Assembly
+# constructing refseq.2bit from ../refseq/GCF_000002315.4_Gallus_gallus-5.0_genomic.fna.gz
+NC_006088.4 chr1
+NC_006089.4 chr2
+NC_006090.4 chr3
+NC_006091.4 chr4
+NC_006092.4 chr5
+NC_006093.4 chr6
+NC_006094.4 chr7
+NC_006095.4 chr8
+NC_006096.4 chr9
+NC_006097.4 chr10
+NC_006098.4 chr11
+NC_006099.4 chr12
+NC_006100.4 chr13
+NC_006101.4 chr14
+NC_006102.4 chr15
+NC_006103.4 chr16
+NC_006104.4 chr17
+NC_006105.4 chr18
+NC_006106.4 chr19
+NC_006107.4 chr20
+NC_006108.4 chr21
+NC_006109.4 chr22
+NC_006110.4 chr23
+NC_006111.4 chr24
+NC_006112.3 chr25
+NC_006113.4 chr26
+NC_006114.4 chr27
+NC_006115.4 chr28
+NC_006119.3 chr32
+NC_006126.4 chrW
+NC_006127.4 chrZ
+NC_008465.3 chr33
+NC_008466.3 chrLGE64
+NC_028739.1 chr30
+NC_028740.1 chr31
 
-    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
-        | sed -e 's/.1\t/v1\t/;' > ucsc.agp
+real    6m42.463s
 
-    # verify correspondence
-    faToTwoBit ucsc.fa.gz test.2bit
-    time checkAgpAndFa ucsc.agp test.2bit 2>&1 | tail
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+
+    ./unlocalizedWithChroms.pl ../refseq/*_assembly_structure/Primary_Assembly
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../galGal5.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001323.1
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:NC_001323.1 stdout | grep -v "^>" >> chrM.fa
+
+    # verify fasta and AGPs agree
+    time faToTwoBit *.fa.gz test.2bit
+    # real    0m37.886s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
     # All AGP and FASTA entries agree - both files are valid
 
-    # no longer need this 2bit
-    rm test.2bit
+    # and no sequence lost from orginal:
+    twoBitToFa test.2bit stdout | faSize stdin
+# 1230258557 bases (11766024 N's 1218492533 real 1218492533 upper 0 lower)
+#    in 23475 sequences in 1 files
+# Total size: mean 52407.2 sd 2051122.3 min 200 (chrUn_NT_479312v1)
+#    max 196202544 (chr1) median 6930
+
+    # same numbers as above (except for upper/lower masking)
+
+    # no longer need these temporary 2bit files
+    rm test.2bit refseq.2bit
 
 #############################################################################
-#  Initial database build (TBD - 2016-04-12 - Hiram)
+#  Initial database build (DONE - 2016-04-14 - Hiram)
 
     # verify sequence and AGP are OK:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
@@ -147,84 +207,104 @@ taxId 9031
     # then finish it off:
     time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
        -fileServer=hgwdev -continue=db galGal5.config.ra) > db.log 2>&1
-    # real    30m6.878s
+    # real    11m9.465s
 
-    # check in the trackDb files created and add to trackDb/makefile
+    # check in the trackDb files created in TemporaryTrackDbCheckout/
+    #    and add galGal5 to trackDb/makefile
 
 #########################################################################
-# ucscToINSDC table/track (TBD - 2016-02-05 - Hiram)
-    # fixup the translateNames.sh file from rn6 work to use the new
-    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
+# ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
 
     mkdir /hive/data/genomes/galGal5/bed/ucscToINSDC
     cd /hive/data/genomes/galGal5/bed/ucscToINSDC
 
     # find accession for chrM
     grep chrM ../../galGal5.agp
-# chrM    1       16564   1       O       NC_005943.1     1       16564   +
+# chrM    1       16775   1       O       NC_001323.1     1       16775   +
+
     # use that accession here:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly NC_005943.1 
+        ../../refseq/GCF_*structure/Primary_Assembly NC_001323.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+    # there is no name for chrM/NC_001323.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
     # should be same line counts throughout:
     wc -l *
-    # 284728 name.coordinate.tab
-    # 284728 ucscToINSDC.bed
-    # 284728 ucscToINSDC.txt
+    # 23475 insdc.refseq.txt
+    # 23475 insdcToUcsc.txt
+    # 23475 name.coordinate.tab
+    # 23475 ucscToINSDC.bed
+    # 23475 ucscToINSDC.txt
 
     cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 20
-    # use the 16 in this sed
-    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+    # 27
+    # use the 27 in this sed
+    sed -e "s/21/27/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
          | hgLoadSqlTab galGal5 ucscToINSDC stdin ucscToINSDC.bed
     checkTableCoords galGal5
     # should cover %100 entirely:
     featureBits -countGaps galGal5 ucscToINSDC
-    # 3236224332 bases of 3236224332 (100.000%) in intersection
+    # 1230258557 bases of 1230258557 (100.000%) in intersection
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-02-05 - Hiram)
-    hgsql -N -e "select frag from gold;" galGal5 | sort | head -1
-AC205186.3
+# fixup search rule for assembly track/gold table (DONE - 2016-04-14 - Hiram)
+    cd kent/src/hg/makeDb/trackDb/chicken/galGal5
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" galGal5 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+  24806 AADN.1
+     47 AC.1
+    310 AC.2
+    327 AC.3
+     74 AC.4
+     20 AC.5
+      1 AC.6
+      1 NC_.1
 
-    hgsql -N -e "select frag from gold;" galGal5 | sort | tail -2
-JSUE03348490.1
-NC_005943.1
+    # implies a rule: '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?'
 
-    # verify this rule will find them all or eliminate them all:
+    # verify this rule will find them all and eliminate them all:
     hgsql -N -e "select frag from gold;" galGal5 | wc -l
-    # 348580
+    # 25586
 
     hgsql -N -e "select frag from gold;" galGal5 \
-       | egrep -e '[AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?' | wc -l
-    # 348580
+       | egrep -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
+    # 25586
 
     hgsql -N -e "select frag from gold;" galGal5 \
-       | egrep -v -e '[AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?' | wc -l
     # 0
 
-    # hence, add to trackDb/rhesus/galGal5/trackDb.ra
+    # hence, add to trackDb/chicken/galGal5/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [AJN][CS][U2_][E0-9][0-9]+(\.[0-9]+)?
+termRegex [AN][AC][D0-9_][N0-9][0-9]+(\.[0-9]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
     # verify searches work in the position box
 
-#########################################################################
-
 ##########################################################################
-# running repeat masker (TBD - 2016-01-29 - Hiram)
+# running repeat masker (DONE - 2016-04-14 - Hiram)
     mkdir /hive/data/genomes/galGal5/bed/repeatMasker
     cd /hive/data/genomes/galGal5/bed/repeatMasker
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku galGal5) > do.log 2>&1
+XXX - running - Thu Apr 14 10:56:40 PDT 2016
     # real    481m50.689s
 
     # broken cluster run due to sick machines, no real problem, it
@@ -261,13 +341,14 @@ searchPriority 8
     # real    0m39.734s
 
 ##########################################################################
-# running simple repeat (TBD - 2016-01-29 - Hiram)
+# running simple repeat (DONE - 2016-04-14 - Hiram)
 
     mkdir /hive/data/genomes/galGal5/bed/simpleRepeat
     cd /hive/data/genomes/galGal5/bed/simpleRepeat
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         galGal5) > do.log 2>&1
+XXX - running - Thu Apr 14 10:57:32 PDT 2016
     # real    140m2.826s
 
     cat fb.simpleRepeat
