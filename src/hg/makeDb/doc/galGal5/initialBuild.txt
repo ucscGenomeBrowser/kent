@@ -519,8 +519,8 @@ galGal5.downloadDir = galGal5
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial galGal5
-    # logFile: var/build/logs/2016.04.14-16:19:12.galGal5.initalign.log
-XXX - running - Thu Apr 14 16:19:26 PDT 2016
+    # logFile: var/build/logs/2016.04.15-09:58:43.galGal5.initalign.log
+XXX - running - Fri Apr 15 09:58:54 PDT 2016
     #   real    2229m7.259s
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.galGal5
@@ -555,10 +555,10 @@ XXX - running - Thu Apr 14 16:19:26 PDT 2016
     # 25248650 bases of 100286401 (25.177%) in intersection
 
 #########################################################################
-# LIFTOVER TO galGal4 (DONE - 2016-04-14 - Hiram)
+# LIFTOVER TO galGal4 (DONE - 2016-04-15 - Hiram)
     ssh hgwdev
-    mkdir /hive/data/genomes/galGal5/bed/blat.galGal4.2016-04-14
-    cd /hive/data/genomes/galGal5/bed/blat.galGal4.2016-04-14
+    mkdir /hive/data/genomes/galGal5/bed/blat.galGal4.2016-04-15
+    cd /hive/data/genomes/galGal5/bed/blat.galGal4.2016-04-15
     doSameSpeciesLiftOver.pl -verbose=2 \
         -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/galGal5/jkStuff/galGal5.11.ooc \
@@ -566,20 +566,20 @@ XXX - running - Thu Apr 14 16:19:26 PDT 2016
     time (doSameSpeciesLiftOver.pl -verbose=2 \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/galGal5/jkStuff/galGal5.11.ooc \
-         galGal5 galGal4) > doLiftOverToRheMac3.log 2>&1
-    # real    1015m0.435s
+         galGal5 galGal4) > doLiftOverToGalGal4.log 2>&1
+    # real    86m43.038s
 
     # see if the liftOver menus function in the browser from galGal5 to galGal4
 
 #########################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-03-21 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2016-04-15 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("galGal5", "blat1b", "17860", "1", "0"); \
+	VALUES ("galGal5", "blat1b", "17862", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("galGal5", "blat1b", "17861", "0", "1");' \
+	VALUES ("galGal5", "blat1b", "17863", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
