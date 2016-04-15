@@ -238,7 +238,7 @@ genePredCheck -db=$db $db.other.gp
 zegrep -v "NG_" $downloadDir/${asmId}_genomic.gff.gz \\
   | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
 gff3ToPsl $downloadDir/$asmId.chrom.sizes $downloadDir/rna.chrom.sizes \\
-  gffForPsl.gff $asmId.psl 
+  gffForPsl.gff stdout | pslPosTarget stdin $asmId.psl
 simpleChain -outPsl $asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout $downloadDir/${asmId}To${db}.lift drop stdin \\
    | gzip -c > $db.psl.gz
@@ -250,7 +250,7 @@ pslSort dirs stdout \\
    ./tmpdir $db.psl.gz $db.someRecords.psl | gzip -c > $asmId.$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=$db $asmId.$db.psl.gz
-$gbffToCds $downloadDir/${asmId}_rna.gbff.gz > $asmId.rna.cds
+$gbffToCds $downloadDir/${asmId}_rna.gbff.gz | sort > $asmId.rna.cds
 rm -f tmp.bigPsl
 pslToBigPsl -fa=$downloadDir/$asmId.rna.fa.gz -cds=$asmId.rna.cds $db.psl.gz tmp.bigPsl
 sort -k1,1 -k2,2n tmp.bigPsl > $asmId.$db.bigPsl
@@ -292,8 +292,13 @@ genePredCheck -db=$db ncbiRefSeqPredicted
 hgLoadGenePred -genePredExt $db ncbiRefSeqOther process/$db.other.gp
 genePredCheck -db=$db ncbiRefSeqOther
 
-hgLoadSqlTab $db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql \\
-   process/$asmId.rna.cds 
+# select only coding genes to have CDS records
+
+hgsql -N -e 'select name from ncbiRefSeq where cdsStart!=cdsEnd;' $db \\
+  | sort -u > coding.cds.name.list
+
+join -t'\t' coding.cds.name.list process/$asmId.rna.cds \\
+  | hgLoadSqlTab $db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql stdin
 
 # loading the cross reference data
 hgLoadSqlTab $db ncbiRefSeqLink ~/kent/src/hg/lib/ncbiRefSeqLink.sql \\
