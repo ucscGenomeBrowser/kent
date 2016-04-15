@@ -1206,9 +1206,12 @@ var hgGateway = (function() {
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
-        updateGoButtonPosition();
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
+        if (uiState.db) {
+            $('#findPositionContents').show();
+        }
+        updateGoButtonPosition();
     }
 
     function removeDups(inList, isDup) {
