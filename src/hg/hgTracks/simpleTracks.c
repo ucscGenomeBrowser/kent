@@ -1094,8 +1094,10 @@ if (x < xEnd)
             }
         else
             {
-            safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
+	    // NOTE: chopped out winStart/winEnd
+	    // NOTE: Galt added winStart/winEnd back in for multi-region
+            safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), chromName, winStart, winEnd, start, end, encodedTrack, encodedItem); 
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
