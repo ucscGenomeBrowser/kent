@@ -89,7 +89,7 @@ static void listAssemblyHubs(struct jsonWrite *jw)
 /* Write out JSON describing assembly hubs (not track-only hubs) connected in the cart. */
 {
 jsonWriteListStart(jw, "hubs");
-struct hubConnectStatus *status, *statusList = hubConnectStatusListFromCartAll(cart);
+struct hubConnectStatus *status, *statusList = hubConnectStatusListFromCart(cart);
 for (status = statusList;  status != NULL;  status = status->next)
     {
     struct trackHub *hub = status->trackHub;
