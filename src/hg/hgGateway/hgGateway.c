@@ -503,7 +503,7 @@ static void addIfFirstMatch(struct dbDb *dbDb, enum dbDbMatchType type, int offs
 /* If target doesn't already have a match in matchHash, compute matchLength and isWord,
  * and then add the new match to pMatchList and add target to matchHash. */
 {
-if (! hashLookup(matchHash, target))
+if (dbDb->active && ! hashLookup(matchHash, target))
     {
     char *termInTarget = (offset >= 0) ? target+offset : target;
     int matchLength = countSame(term, termInTarget);
