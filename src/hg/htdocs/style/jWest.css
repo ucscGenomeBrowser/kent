@@ -117,6 +117,7 @@ div.jwSectionTitle {
     font-weight: bold;
     font-size: 21px;
     letter-spacing: -0.005em;
+    width: 100%;
 }
 
 div.jwSectionContents {
