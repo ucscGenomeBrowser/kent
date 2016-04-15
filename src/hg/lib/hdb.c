@@ -4409,7 +4409,8 @@ if (isHubTrack(genome))
 else
     {
     struct dyString *dy = sqlDyStringCreate("select name,description from %s "
-					    "where genome = '%s' order by orderKey", dbDbTable(), genome);
+					    "where genome = '%s' and active "
+                                            "order by orderKey", dbDbTable(), genome);
     struct sqlConnection *conn = hConnectCentral();
     pairList = sqlQuickPairList(conn, dy->string);
     hDisconnectCentral(&conn);

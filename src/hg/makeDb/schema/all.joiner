@@ -4302,9 +4302,6 @@ identifier snpName137
     $gbd.snp137Seq.acc minCheck=.98
     $gbd.snp137CodingDbSnp.name minCheck=.90
     $hg.snp137OrthoPt3Pa2Rm2.name
-    # gwasCatalog SNPs were mapped to hg19 using snp137.  Move this down to snp138
-    # and update trackDb settings if we remap to new dbSNP version:
-    hg19.gwasCatalog.name minCheck=0.99
 
 identifier snpException137
 "Exceptions that UCSC annotated on dbSNP version 137"
@@ -4377,6 +4374,10 @@ identifier snpName144
     $gbd.snp144Seq.acc minCheck=.98
     $gbd.snp144CodingDbSnp.name minCheck=.90
     $hg.snp144OrthoPt4Pa2Rm3.name
+    # gwasCatalog SNPs were mapped to hg19/hg38 using snp144.  Move this down to snp146
+    # and update trackDb settings if we remap to new dbSNP version:
+    hg19.gwasCatalog.name minCheck=0.99
+    hg38.gwasCatalog.name minCheck=0.99
 
 identifier snpException144
 "Exceptions that UCSC annotated on dbSNP version 144"

@@ -185,7 +185,7 @@ linesAt 1,3
 
 track gwasCatalog
 shortLabel GWAS Catalog
-longLabel NHGRI Catalog of Published Genome-Wide Association Studies
+longLabel NHGRI-EBI Catalog of Published Genome-Wide Association Studies
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 group phenDis
