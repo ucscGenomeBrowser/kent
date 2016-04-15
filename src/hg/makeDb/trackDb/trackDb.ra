@@ -3095,12 +3095,21 @@ allButtonPair on
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
 
-searchName refSeqComposite
+searchName refSeqCompositeAccession
 searchTable ncbiRefSeq
 searchType genePred
-shortCircuit 1
+semiShortCircuit 1
 searchMethod fuzzy
-termRegex [35A-Za-z][.0-9A-Za-z-]+
+termRegex ([NX][MR]|YP)_[0-9]+(\.[0-9]+)
+dontCheck ..[^_].*
+searchPriority 50
+
+searchName refSeqCompositeName
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod fuzzy
+termRegex ..[^_].*
+dontCheck ([NX][MR]|YP)_[0-9]+(\.[0-9]+)
 searchPriority 50
 
 searchName refSeqName2
@@ -3114,7 +3123,7 @@ searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq protAcc search alias
-shortCircuit 1
+semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NZY]P_[0-9]+(\.[0-9]+)?
@@ -3124,7 +3133,7 @@ searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq mrnaAcc search alias
-shortCircuit 1
+semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
 termRegex [NX][MR]_[0-9]+(\.[0-9]+)?
