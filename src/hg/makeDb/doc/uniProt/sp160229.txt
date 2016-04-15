@@ -66,4 +66,5 @@ makeTableDescriptions sp$DBDATE ~/kent/src/hg/protein/spToDb/spDbTables.as
 # Zip up tab files for people who prefer them to database.
 gzip *.txt
 
-
+# Don't forget to ask the admins to update the database softlink - "uniProt"
+# should go to this newest version of the sp* database.
