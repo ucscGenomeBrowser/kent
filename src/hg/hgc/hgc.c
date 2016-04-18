@@ -5764,12 +5764,8 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-if (startsWith("ucscRetro", table))
-    {
-    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
-    }
-else
-    sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
+
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
