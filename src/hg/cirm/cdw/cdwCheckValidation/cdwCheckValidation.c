@@ -8,13 +8,11 @@
 #include "cdwLib.h"
 #include "obscure.h"
 
-boolean gWait = FALSE; 
-boolean gRetry = FALSE; 
-boolean gStatus = FALSE;
-boolean gScripting = FALSE;
-boolean gFailed = FALSE; 
+
+// Options and an int to keep track of the validation. 
 int gSubmitId = -1; 
-int validationComplete = -1; 
+boolean gWait = FALSE; 
+boolean gLong = FALSE; 
 
 
 void usage()
@@ -25,214 +23,273 @@ errAbort(
   "\t\t     file metrics for the submission. Returns 0 if the submission has completed \n"
   "\t\t     and -1 otherwise. \n"
   "usage:\n"
-  "\tcdwCheckValidation user@email.address outputFile\n"
+  "\tcdwCheckValidation command user@email.address outputFile\n"
+  "commands are one of:\n"
+  "   status - print information\n"
+  "   failed - list failed files\n"
+  "   retry - rerun validation on failed files\n"
   "options:\n"
-  "\t-submitId - Over ride the auto selection and use this specific id, this ignores the email provided. \n"
-  "\t-wait - Wait until all files have been processed by cdwQaAgent, check every 5 seconds or so.\n"
-  "\t-retry - Requeue the files that failed, highly recommended to run with the -failed option first to see what your about to queue up.\n"
-  "\t-status - Print the status only, skip file metrics. \n"
-  "\t-scripting - Print nothing at all.\n"
-  "\t-failed - Print out just the failed files."
-  );
+  "\t-submitId - Over ride the auto selection and use this specific id, this ignores the email"
+  "provided. \n"
+  "\t-wait - Wait until all files have been processed by cdwQaAgent, check every 5 seconds or" 
+  "so.\n"
+  "\t-long - Prints file-by-file status as well as overall status. \n");
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
     {"submitId", OPTION_STRING}, 
     {"wait", OPTION_BOOLEAN}, 
-    {"retry", OPTION_BOOLEAN}, 
-    {"status", OPTION_BOOLEAN},
-    {"scripting", OPTION_BOOLEAN},
-    {"failed", OPTION_BOOLEAN},
+    {"long", OPTION_BOOLEAN}, 
     {NULL, 0},
 };
 
 
-int getSubmitId(char *cdwUser, FILE *f)
+int getSubmitId(FILE *f, char *cdwUser, char *command)
 /* Use the user email to get the userId out of cdwUser, then use the cdwUser id to key into 
  * cdwSubmit and grab the last submission */ 
 {
 struct sqlConnection *conn = sqlConnect("cdw"); 
-struct sqlConnection *conn2 = sqlConnect("cdw"); 
-// Query the cdwUser table to find the userId
+// Query the cdwUser table to find the userId associated with the email address. 
 char query[1024]; 
-sqlSafef(query, 1024, "select * from cdwUser where email = '%s';", cdwUser);
+sqlSafef(query, sizeof(query), "select * from cdwUser where email = '%s';", cdwUser);
 struct cdwUser *submitter = cdwUserLoadByQuery(conn,query); 
-if (submitter == NULL) uglyAbort("There are no users associated with the provided email %s",cdwUser); 
-if (!gScripting && !gStatus && !gFailed && !gRetry) fprintf(f,"User email:\t%s\nUser id:\t%i\n",submitter->email, submitter->id); 
+if (submitter == NULL)
+    uglyAbort("There are no users associated with the provided email %s",cdwUser); 
 
-// Use the userId to key into cdwSubmit and get the last submission id 
-char query2[1024];
-sqlSafef(query2, 1024, "select * from cdwSubmit where userId=%i order by id desc limit 1", submitter->id);  
-struct cdwSubmit *submission = cdwSubmitLoadByQuery(conn2, query2);
+// Use the userId to key into cdwSubmit and get the last submission id. 
+sqlSafef(query, sizeof(query), "select * from cdwSubmit where userId=%i order by id desc limit 1",
+	    submitter->id);  
+struct cdwSubmit *submission = cdwSubmitLoadByQuery(conn, query);
 if (submission == NULL) uglyAbort("There are no submissions associated with the provided id.");
-if (!gScripting && !gStatus && !gFailed && !gRetry) fprintf(f,"Submission id:\t%i\n",submission->id); 
+
+// Print out stats. 
+if (startsWith("status",command)) 
+    {
+    fprintf(f,"User email:\t%s\nUser id:\t%i\n",submitter->email, submitter->id); 
+    fprintf(f,"Submission id:\t%i\n",submission->id); 
+    }
 sqlDisconnect(&conn); 
-sqlDisconnect(&conn2); 
 
 return submission->id; 
 }
 
-int secondsUsed(struct cdwJob *jobList)
+int secondsUsed(int submitId)
 /* Lets figure out how long things have taken. */
 {
-struct cdwJob *iter; 
-int totTime = 0;
-for (iter = jobList; iter->next != NULL; iter = iter->next)
-    {
-    totTime += (iter->endTime - iter->startTime);
-    }
-return totTime; 
+struct sqlConnection *conn = sqlConnect("cdw"); 
+char query[1024]; 
+
+// Get when the first job started. 
+sqlSafef(query, sizeof(query), "select min(startTime) from cdwJob where submitId = '%i'"
+	" and startTime != 0", submitId);
+int batchStart = sqlQuickNum(conn, query);
+
+// Get when the last job finished. 
+sqlSafef(query, sizeof(query), "select max(endTime) from cdwJob where submitId = '%i'"
+	" and endTime != 0", submitId);
+int batchEnd = sqlQuickNum(conn, query);
+
+sqlDisconnect(&conn); 
+return batchEnd - batchStart; 
 }
 
 void printEnrichmentStats(FILE *f, struct cdwValidFile *validFile)
-/* Enrichment stats require a bit of table jummping. The flow goes like this,
- * 0. start with a cdwValidFile.fileId and get the cdwValidFile.enrichedIn and cdwValidFile.ucscDb values. 
- * 1.1 use cdwValidFile.ucscDb value to query into cdwAssembly.ucscDb value
- * 1.2 use cdwAssembly.ucscDb value to get cdwAssembly.id
- * 2.1 use cdwAssembly.id value to get cdwQaEnrichTarget.assemblyId 
- * 2.2 use cdwValidFile.enrichedIn to get cdwQaEnrichTarget.name. 
- * NOTE that here we add in chrX, chrY and chrM (sometimes) as possible cdwAsEnrichTarget.name possibilities.
- * 2.3 use cdwQaEnrichTarget.assemblyId and cdwQaEnrichTarget.name values to get cdwQaEnrichTarget.id values
- * 3.1 use cdwValidFile.fileId to query into cdwQaEnrich.fileId
- * 3.2 use cdwQaEnrichTarget.id to query into cdwQaEnrich.qaEnrichTargetId
- * This gives us the enrichment values we want for a given file id.  */ 
+// Print out the enrichment stats for a valid file. 
 {
 struct sqlConnection *conn = sqlConnect("cdw"); 
-char query[1024], query2[1024];
+char query[1024];
 fprintf(f, " Enrich");
-if (!validFile->ucscDb) return;
-// Step 1
-sqlSafef(query, 1024, "select * from cdwAssembly where ucscDb = '%s'", validFile->ucscDb); 
-struct cdwAssembly *assembly = cdwAssemblyLoadByQuery(conn, query);
-// Step 2
-if (!assembly) return;
-sqlSafef(query2, 1024, "select * from cdwQaEnrichTarget where assemblyId = %i and (name = '%s' "
-	"or name = 'chrX' or name = 'chrY' or name = 'chrM') ", assembly->id, validFile->enrichedIn); 
-struct cdwQaEnrichTarget *enrichTarget = cdwQaEnrichTargetLoadByQuery(conn, query2);
-// Step 3 
-if (!enrichTarget) return;
-struct cdwQaEnrichTarget *iter;
+// Return if no ucscDb is specified. 
+if (!validFile->ucscDb)
+    return;
 
-for (iter = enrichTarget; ; iter = iter->next)
+// Get the assembly id, default to hg19.  
+char ucscDb[128] = "hg19";
+if (!startsWith(validFile->ucscDb, " "))
+    safef(ucscDb, sizeof(ucscDb), "%s", validFile->ucscDb); 
+sqlSafef(query, sizeof(query), "select * from cdwAssembly where ucscDb = '%s'", ucscDb);
+struct cdwAssembly *assembly = cdwAssemblyLoadByQuery(conn, query);
+if (!assembly) return;
+
+
+// Get the list of enrichment targets for this valid file.  
+char enrichedIn[128] = "exon";
+if (!startsWith(validFile->enrichedIn," "))
+    safef(enrichedIn, sizeof(enrichedIn), "%s", validFile->enrichedIn); 
+sqlSafef(query, sizeof(query), "select * from cdwQaEnrichTarget where assemblyId = %i and name in" 
+	"('%s', 'chrX', 'chrY', 'chrM')", assembly->id, enrichedIn); 
+struct cdwQaEnrichTarget *targetList = cdwQaEnrichTargetLoadByQuery(conn, query);
+if (!targetList) 
+    return;
+
+// Loop through the list of enrichment targets and print stats. 
+struct cdwQaEnrichTarget *target;
+for (target = targetList; ; target = target->next)
     {
-    
-    char tQuery[1024]; 
-    sqlSafef(tQuery, 1024, "select * from cdwQaEnrich where fileId = %i and qaEnrichTargetId = %i", validFile->fileId, iter->id); 
-    //uglyf("whats gucci! %s\n",tQuery); 
-    struct cdwQaEnrich *enrich = cdwQaEnrichLoadByQuery(conn, tQuery);
-    fprintf(f," %s: %0.3f", iter->name, enrich->enrichment);
-    if (iter->next == NULL) break;
-    else fprintf(f,",");
-    
+    sqlSafef(query, sizeof(query), "select enrichment from cdwQaEnrich where fileId = %i and"
+		" qaEnrichTargetId = %i", validFile->fileId, target->id); 
+    double enrichment = sqlQuickDouble(conn, query);
+    fprintf(f," %s: %0.3f", target->name, enrichment);
+    if (target->next == NULL)
+	break;
+    else 
+	fprintf(f,",");
     }
 sqlDisconnect(&conn); 
 }
 
-void printTimeStats(struct cdwJob *cdwJobCompleteList, int files, int totalFiles, FILE *f)
+void printTimeStats(FILE *f, struct cdwJob *jobList, int finJobs)
+// Print out the time so far and an estimate of the time remaining in a pretty fashion.
 {
-int timeSoFar = secondsUsed(cdwJobCompleteList); 
+int timeSoFar = secondsUsed(jobList->submitId); 
 
 int hours, minutes, seconds; 
+// Do math magic to get the proper hours, minutes and seconds. 
 hours = timeSoFar/3600; 
 minutes = (timeSoFar - (hours*3600))/ 60; 
 seconds = (timeSoFar - (hours*3600) - (minutes*60)); 
+assert(slCount(jobList) > 0); 
 
-float perComplete = (float)(totalFiles)/(float)(files); 
-
-float estTimeRemaining = ((float)timeSoFar / (float)perComplete) - timeSoFar; 
+// Determine average time so far, multiply it by the number of jobs remaining.  
+double avgTimeSoFar = (double) timeSoFar / (double) finJobs; 
+int jobsRemaining = slCount(jobList) - finJobs; 
+double estTimeRemaining = avgTimeSoFar * jobsRemaining; 
+    
 int eHours, eMinutes, eSeconds; 
 eHours = estTimeRemaining/3600; 
 eMinutes = (estTimeRemaining - (eHours*3600))/ 60; 
 eSeconds = (estTimeRemaining - (eHours*3600) - (eMinutes*60)); 
 
-fprintf(f,"Time so far:\t%ih %im %is\nTime remaining:\t%ih %im %is\n", hours, minutes, seconds, eHours, eMinutes, eSeconds); 
+fprintf(f,"Time so far:\t%ih %im %is\nTime remaining:\t%ih %im %is\n", hours, minutes, seconds,
+	    eHours, eMinutes, eSeconds); 
 }
-
-void printAllValidationStats(struct cdwJob *cdwJobCompleteList, int files, int totalFiles, FILE *f)
-/* Takes in a linked list of fileId's and a float describing how much of the submission is done 
- * prints out stats and summarizes the total submission*/ 
+		
+void printValidFileStats(FILE *f, char *fileId)
+// Print out the stats for a valid file. Enrichment stats are handled in their own function. 
 {
 struct sqlConnection *conn = sqlConnect("cdw"); 
-struct cdwJob *iter;
-int failedFiles = 0; 
-float totMap = 0.0, totUniqMap = 0.0, totCov = 0.0;  // Keep track of the totals for averaging later.  
+char query[1024]; 
+sqlSafef(query, sizeof(query), "select * from cdwValidFile where fileId = %s", fileId); 
+struct cdwValidFile *validFile = cdwValidFileLoadByQuery(conn, query);
+sqlDisconnect(&conn);
 
-// Unpack the list of cdwJob entries and spit out some stats. 
-    
-if (!gStatus && !gFailed && !gRetry) fprintf(f,"Printing file statistics...\n");
-for (iter = cdwJobCompleteList; ; iter = iter->next)
+if (!validFile)
+    // Usually indicates an errant cdwAddQaJob in some code some where. 
     {
-    // The command line field in cdwJob has a very specific format that is being expoited here.  The field will always
-    // follow this format "cdwQaAgent <fileId>".  
-    struct slName *commandLine = charSepToSlNames(iter->commandLine, *" ");
-    // Look at the command line field, cut it on white space and store it as two slName elements in a list. 
-    char *fileId =  commandLine->next->name; // Grab the second slName in the list, this is the fileID.
-    // Verify the file is not in cdqQaFail. 
-    // Mine stats from a good validated file, this typically only works for fastq files. 
-    // Get a valid file. 
-    char query[1024]; 
-    sqlSafef(query, 1024, "select * from cdwValidFile where fileId = %s", fileId); 
-    struct cdwValidFile *validFile = cdwValidFileLoadByQuery(conn, query);
-    
-    if (iter->returnCode!=0)
-	{
-	if (!gStatus)
-	    {
-	    if (!gRetry) fprintf(f,"File id: %s | Valid: No\n", fileId); 
-	    //if (gRetry) fprintf(f,"cdqQaAgent %s\n",fileId); 
-	    if (gRetry) cdwAddQaJob(conn, (long long int) fileId, iter->submitId);
-	    }
-	failedFiles += 1; 
-	continue;
-	}
-    
-    //For all other files there will likely not be enrichment or mapping stats. 
-    totMap += validFile->mapRatio; 
-    totUniqMap += validFile->uniqueMapRatio;
-    totCov += validFile->sampleCoverage;
-    
-    if (!gStatus && !gFailed && !gRetry) 
-	{
-	// Print n/a if the file doesn't have the metrics we are looking for. 
-	char mapRatio[128] = "n/a";
-	char uniqueMapRatio[128] = "n/a";
-	char coverage[128] = "n/a";
-	if (validFile->mapRatio) safef(mapRatio, 128, "%0.3f", validFile->mapRatio); 
-	
-	if (validFile->uniqueMapRatio) safef(uniqueMapRatio, 128, "%0.3f", validFile->uniqueMapRatio); 
-	if (validFile->sampleCoverage) safef(coverage, 128, "%0.3f", validFile->sampleCoverage); 
-	fprintf(f,"File id: %s | Valid: Yes | Format: %s | Map ratio: %s | " 
-			"Unique map ratio: %s| Sample coverage: %s |", fileId, validFile->format, 
-			mapRatio, uniqueMapRatio, coverage); //Mine and print stats
-	printEnrichmentStats(f, validFile);
-	fprintf(f," |\n");
-	}
-    if (iter->next == NULL) break;
+    fprintf(f,"File id: %s | Status: corrupted | The file passed validation yet has no entry in"
+	    " cdwValidFile |  \n", fileId);
+    sqlDisconnect(&conn); 
+    return; 
     }
-    
-// There was probably a good reason for this at one point. Now there are a bunch of if' statements. 
-if (!gFailed && !gRetry)
+// Default these to n/a to prevent seg faults. 
+
+if (!validFile->mapRatio || !validFile->uniqueMapRatio || !validFile->sampleCoverage)
     {
-    fprintf(f,"Total files:\t%i\n",files); 
-    fprintf(f,"Files that completed cdwQaAgent:\t%i\n", totalFiles); 
-    if (!gStatus) fprintf(f,"\tPercent of submission:\t%f\n", 100*((float)(totalFiles)/(float)(files)));
-    fprintf(f,"Passed validation:\t%i\n",  files - failedFiles);  
+    fprintf(f,"File id: %s | Valid: Yes | Format: %s |\n", fileId, validFile->format);
+    return;
     }
 
-if (!gRetry) fprintf(f,"Failed validation:\t%i\n", failedFiles);
-
-if (!gStatus && !gFailed && !gRetry)
-    {
-    fprintf(f,"\tPercent of submission past cdwQaAgent:\t%f\n\tPercent of total submission:\t\t%f\n", 100*(float)(failedFiles)/(float)(totalFiles), 100*(float)(failedFiles)/(float)(files)); 
-    fprintf(f,"Average map ratio of validated submission:\t%f\n", (float) totMap/(float) (totalFiles - failedFiles) );
-    fprintf(f,"Average unique map ratio of validated submission:\t%f\n", (float) totUniqMap/(float) (totalFiles - failedFiles) );
-    fprintf(f,"Average coverage of validated submission:\t\t%f\n", (float) totCov/(float) (totalFiles - failedFiles) );
-    printTimeStats(cdwJobCompleteList, files, totalFiles, f);
-    }
-
-sqlDisconnect(&conn); 
+fprintf(f,"File id: %s | Valid: Yes | Format: %s | Map ratio (mr): %f | Unique mr: %f| "
+		"Coverage: %f |", fileId, validFile->format, validFile->mapRatio, 
+		validFile->uniqueMapRatio, validFile->sampleCoverage);
+printEnrichmentStats(f, validFile);
+fprintf(f," |\n");
+return; 
 }
+    
+void printSubmissionStatistics(FILE *f, struct cdwJob *jobList, char *command)
+/* Take a list of jobs and gather stats. Different stats are printed to file f depending on the
+ * command given. */
+{
+if (!jobList)
+    uglyAbort("There are no jobs on the joblist"); 
+
+// Keep track of all the possible job types. 
+int finJobs = 0, workingJobs = 0, queuedJobs = 0, failedJobs = 0, validFiles = 0; 
+
+if (startsWith("status", command) && gLong) 
+    fprintf(f,"Printing file statistics...\n");
+
+// Loop through all jobs and gather stats. 
+struct cdwJob *job;
+for (job = jobList;; job = job->next)
+    {
+    char *prefix = "cdwQaAgent ";
+    assert(startsWith(prefix, job->commandLine)); 
+    char *fileId = job->commandLine + strlen(prefix);
+    if (job->startTime > 0)
+	{
+	if (job->endTime > 0)
+	// Finished jobs. 
+	    {
+	    ++finJobs; 
+	    if (job->returnCode == 0)
+	    // Jobs that passed validation. 
+		{
+		++validFiles; 
+		if (startsWith("status", command) && gLong) 
+		    printValidFileStats(f, fileId);
+		}
+	    else
+	    // Jobs that failed validation. 
+		{
+		++failedJobs;
+		if (startsWith("failed", command))
+		    fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileId, job->stderr);  
+		if (startsWith("status", command) && gLong) 
+		   fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileId, job->stderr);  
+		if (startsWith(" retry",command))
+		    {
+		    fprintf(f,"Rerunning file %s \n", fileId); 
+		    struct sqlConnection *conn = sqlConnect("cdw"); 
+		    cdwAddQaJob(conn, (long long int) fileId, job->submitId);
+		    sqlDisconnect(&conn); 
+		    }
+		}
+	    }
+	else
+	// Working jobs.
+	    {
+	    ++workingJobs;
+	    if (startsWith("status", command) && gLong) 
+		fprintf(f,"File id: %s | Valid: running | Run time: %i | \n", fileId, (int)((unsigned)time(NULL) - job->startTime));  
+	    }
+	}
+    else
+    // Queued jobs.  
+	{
+	++queuedJobs;
+	if (startsWith("status", command) && gLong) 
+	    fprintf(f,"File id: %s | Valid: queued | \n", fileId);  
+	}
+    if (!job->next) 
+	break;
+    }
+
+// Print out overall submission stats. 
+
+if (startsWith("status", command))
+    {
+    fprintf(f,"Total files:\t%i\n",slCount(jobList)); 
+    fprintf(f,"Finished validation:\t%i\n", finJobs); 
+    fprintf(f,"Passed validation:\t\e[1;32m%i\e[0m\n",  validFiles);  
+    fprintf(f,"Failed validation:\t\e[1;31m%i\e[0m\n",  failedJobs);  
+    fprintf(f,"Jobs in progress:\t%i\n", workingJobs); 
+    fprintf(f,"Jobs queued:\t%i\n", queuedJobs); 
+    printTimeStats(f, jobList, finJobs);
+    if (slCount(jobList) == finJobs)
+	fprintf(f,"Status:\t\e[1;32mCompleted\e[0m\n"); 
+    else
+	fprintf(f,"Status:\tIn progress\n"); 
+    
+    }
+if (startsWith("retry", command))
+    fprintf(f,"Started revalidating %i files.\n", failedJobs); 
+if (startsWith("failed", command))
+    fprintf(f,"%i files failed validation.\n", failedJobs); 
+}
+    
 
 void waitLoop(int submitId)
 /* Hang out and wait for all files in the submission to pass through cdwQaAgent. */ 
@@ -240,21 +297,22 @@ void waitLoop(int submitId)
 for (;;)
     {
     struct sqlConnection *conn = sqlConnect("cdw"); 
-    struct sqlConnection *conn2 = sqlConnect("cdw"); 
 
     // Grab all cdwJob entries with the submitId. 
     char query[1024]; 
-    sqlSafef(query, 1024, "select * from cdwJob where submitId = '%i';", submitId);
-    struct cdwJob *cdwJobList = cdwJobLoadByQuery(conn, query);
-    if (!cdwJobList) uglyAbort("The submission has no entries in cdwJob, it could be corrupted or submitted before submitId's were implemented.");
-    // Grab all cdwJob entries that have completed.  
-    char query2[1024]; 
-    sqlSafef(query2, 1024, "select * from cdwJob where submitId = '%i' and startTime < endTime;", submitId);
-    struct cdwJob *cdwJobCompletedList = cdwJobLoadByQuery(conn2, query2);
+    sqlSafef(query, sizeof(query), "select * from cdwJob where submitId = '%i';", submitId);
+    struct cdwJob *jobList = cdwJobLoadByQuery(conn, query);
+    if (!jobList) uglyAbort("The submission has no entries in cdwJob.\nThere are several "
+		    "possibilities as to why; the submission could be corrupted, submitted before\n"
+		    " submitId's were implemented or the submission is still copying files and has "
+			"not started validation");
+    // Determine how many cdwJob entries that have completed.  
+    sqlSafef(query, sizeof(query), "select count(*) from cdwJob where submitId = '%i'"
+		" and endTime > 0", submitId);
+    int finJobs = sqlQuickNum(conn, query);
 
     sqlDisconnect(&conn); 
-    sqlDisconnect(&conn2); 
-    if (slCount(cdwJobList) != slCount(cdwJobCompletedList))
+    if (slCount(jobList) != finJobs)
 	{
 	sleep(5); 
 	}
@@ -265,61 +323,56 @@ for (;;)
     }
 }
 
-void cdwCheckValidation(char *cdwUser, char *outputFile)
-/* cdwCheckValidation - Check if a cdwSubmit validation step has completed. */
+void cdwCheckValidation(char *command, char *cdwUser, char *outputFile)
+/* cdwCheckValidation - Check if a submission has completed validation. */
 {
 
 struct sqlConnection *conn = sqlConnect("cdw"); 
-struct sqlConnection *conn2 = sqlConnect("cdw"); 
 
 FILE *f = mustOpen(outputFile,"w"); 
-int submitId; 
+int submitId;
+// If no submitId is given grab the last submission associated with the users email address. 
 if (gSubmitId == -1)
-    submitId = getSubmitId(cdwUser, f); // Grab the submit id, lets the user give an email address. 
+    submitId = getSubmitId(f, cdwUser, command);
 else submitId = gSubmitId; 
 
 // Grab all cdwJob entries with the submitId. 
 char query[1024]; 
-sqlSafef(query, 1024, "select * from cdwJob where submitId = '%i';", submitId);
-struct cdwJob *cdwJobList = cdwJobLoadByQuery(conn, query);
-if (!cdwJobList) uglyAbort("The submission has no entries in cdwJob, it could be corrupted or submitted before submitId's were implemented.");
-// Grab all cdwJob entries that have completed.  
-char query2[1024]; 
-sqlSafef(query2, 1024, "select * from cdwJob where submitId = '%i' and startTime < endTime;", submitId);
-struct cdwJob *cdwJobCompletedList = cdwJobLoadByQuery(conn2, query2);
+sqlSafef(query, sizeof(query), "select * from cdwJob where submitId = '%i';", submitId);
+struct cdwJob *jobList = cdwJobLoadByQuery(conn, query);
 
+
+if (!jobList) uglyAbort("The submission has no entries in cdwJob.\nThere are several "
+		    "possibilities as to why; the submission could be corrupted, submitted before\n"
+		    " submitId's were implemented or the submission is still copying files and has "
+		    "not started validation");
+assert(slCount(jobList) > 0);
 if (gWait) waitLoop(submitId); 
 
+sqlSafef(query, sizeof(query), "select count(*) from cdwJob where submitId = '%i' and endTime > 0",
+	    submitId);
+int finJobs = sqlQuickNum(conn, query);
 sqlDisconnect(&conn); 
-sqlDisconnect(&conn2); 
-if (slCount(cdwJobList) != slCount(cdwJobCompletedList))
-    {
-    if (gScripting) exit(-1);
-    else if (!gRetry) fprintf(f,"Status:\t\tRunning\n");
-    }
-else 
-    {
-    validationComplete = 0; 
-    if (gScripting) exit(0);
-    else if (!gRetry) fprintf(f,"Status:\t\tComplete\n"); 
-    }
-// Go through the completed job entries and mine stats. Print some overall stats as well. 
-printAllValidationStats(cdwJobCompletedList, slCount(cdwJobList) , slCount(cdwJobCompletedList), f ); 
 
+// Go through the jobList, gather and print statistics. 
+printSubmissionStatistics(f, jobList, command); 
+
+// Check if the submission has finished validation. 
+if (finJobs == slCount(jobList))
+    exit(0);
+else 
+    exit(-1); 
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-gRetry = optionExists("retry"); 
 gWait = optionExists("wait");
+gLong = optionExists("long"); 
 gSubmitId = optionInt("submitId", gSubmitId);
-gStatus = optionExists("status");
-gScripting = optionExists("scripting");
-gFailed = optionExists("failed");
-if (argc != 3)
+if (argc != 4)
     usage();
-cdwCheckValidation(argv[1], argv[2]);
-return validationComplete;
+cdwCheckValidation(argv[1], argv[2], argv[3]);
+return 0;
 }
