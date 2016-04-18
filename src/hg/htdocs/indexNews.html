@@ -62,38 +62,45 @@
   <!-- Staging for Tuesday Announcement of GTEX track
   <hr>
   <font color="#006666" size="4"><b>19 April 2016
-  - New GTEx Gene Tissue Expression Track for hg19 and hg38</b></font>
+  - New GTEx Gene Expression Track for hg19 and hg38</b></font>
   <p>
   We are excited to announce the release of a new gene expression track based on data from the NIH
   <a href="http://commonfund.nih.gov/GTEx/index" TARGET = _BLANK> Genotype-Tissue Expression (GTEx)</a> project.  
-  This track displays tissue-specific expression based on RNA-Seq data of 53 tissues from 570 donors, obtained from
+  This track displays tissue-specific gene expression based on RNA-Seq in 53 tissues from 570 donors, obtained from
   the GTEx 'midpoint' data release (October 2015, V6).
   The original data for this 
   track can be found at the <a href="http://www.gtexportal.org/home" target = _blank>GTEX Portal</a> 
   hosted by the Broad Institute.
   <p>
   This track also features a new display method that extends the traditional Genome Browser 
-  display &mdash; a bar graph!  Each gene is represented by a graph with colored bars depicting the median expression 
-  level (in RPKM) of each tissue assayed by the GTEX project.
-  Note that the graph is a fixed width, and starts at the gene transcription start.
+  display &mdash; a bar graph!  Each gene in the annotation includes a graph with colored bars depicting 
+  the median expression level (in RPKM) of each tissue assayed by the GTEX project.  
+  The bars are colored by tissue using GTEx conventions. To see the tissue and expression level, 
+  mouseover a bar in the graph.
+  (You can also see the color legend from the 
+  <a href="../../cgi-bin/hgTrackUi?db=hg19&g=gtexGene" target=_blank>track configuration page</a>, 
+  which can be displayed alongside the track).
+  Below the bar graph is a line indicating the gene extent that was used to generate the annotation, colored
+  by gene class using GENCODE conventions (e.g. <span style='color: #0c0c78'>blue</span> for protein-coding, 
+  <span style='color: #006400'>green</span> for non-coding).
   <p>
   <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://hgwdev.cse.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession" 
   target=_blank>
   <center><img src="images/gtexAnnounceExample.png" width=75%></center></a>
   <p>
-  Notice how the bar graphs extend past the gene models underneath them? These gene
-  models represent the target of the RNA-Seq experiment, and the graph displays the RPKM levels
-  across many different tissues for the <em>entire</em> gene. In the
+  User alert: notice how the bar graphs sometimes extend past the gene itself?  This is because all bar graphs in the
+  display are the same width (and have the same tissue ordering) to make it easy to compare. So in this screenshot,
+  and this
   <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://hgwdev.cse.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession" 
-  target=_blank>example</a> above, the TCAP and NEUROD2 bar graphs actually extend past the 
-  gene model, and traditionally the three large purple bars  would be associated with the 
-  intergenic region between the two genes. However, in this case those three purple bars indicate 
-  that the entire TCAP gene is highly expressed in cardiac and skeletal muscle tissue. Clicking 
-  on the graph brings up a description page which displays a more detailed box and whisker plot of
+  target=_blank>example multi-region session</a> ,
+  the three tall purple-spectrum bars in the TCAP annotation indicate this <em>entire</em> gene is highly expressed in 
+  cardiac and skeletal muscle (not that there are expression peaks in the intergenic region beyond the gene).
+
+  Clicking on the graph brings up a description page which displays a more detailed box and whisker plot of
   the RPKM data, as well as a description of the methods used to generate the data. 
   <p>
   Credit goes to Kate Rosenbloom and Christopher Lee for the implementation and testing of this feature.
-  -->
+-->
   <hr>
   <p>
   <font color="#006666" size="4"><b> 15 April 2016 -
