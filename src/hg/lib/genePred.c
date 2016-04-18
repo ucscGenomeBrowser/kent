@@ -1114,8 +1114,11 @@ if (end > cds->end)
 
 if (start < end)
     {
-    /* compute from end if it is complete in mRNA */
-    if (cds->endComplete)
+    /* Compute from end if it is complete in mRNA and start is not complete.
+     * This is doesn't as the end is more likely completely.  However, so
+     * code doesn't correctly create CDS to indicate completeness, so don't
+     * use CDS end unless we know start is incomplete. */
+    if (cds->endComplete && !cds->startComplete)
         {
         int fr = (cds->end-start) % 3;
         frame = (fr == 2) ? 1 : ((fr == 1) ? 2 : 0);
