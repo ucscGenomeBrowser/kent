@@ -874,7 +874,15 @@ static bool sqlTableCacheTableExists(struct sqlConnection *conn, char* table)
 {
 char query[1024];
 char *tableListTable = cfgVal("showTableCache");
-sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
+char *dot = strchr(table, '.');
+if (dot)
+    {
+    *dot = 0;
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s.%s WHERE tableName='%s'", table, tableListTable, dot+1);
+    *dot = '.';
+    }
+else
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
 return (sqlQuickNum(conn, query)!=0);
 }
 

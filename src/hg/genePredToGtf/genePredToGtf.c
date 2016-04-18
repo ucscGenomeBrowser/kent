@@ -357,7 +357,7 @@ void genePredWriteToGtf(struct genePred *gp, char *source,
 /* Write out genePredName to GTF file. */
 {
 int i;
-char *name = findUniqueName(dupeHash, gp->name);
+mv old/char *name = findUniqueName(dupeHash, gp->name);
 char *geneName = gp->name2;
 char *chrom = gp->chrom;
 char strand = gp->strand[0];
