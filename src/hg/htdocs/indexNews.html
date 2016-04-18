@@ -59,7 +59,7 @@
   the UCSC Genome Browser team, for their efforts in creating these tracks.
   </p>
 -->
-  <!-- Staging for Tuesday Announcement of GTEX track-->
+  <!-- Staging for Tuesday Announcement of GTEX track
   <hr>
   <font color="#006666" size="4"><b>19 April 2016
   - New GTEx Gene Tissue Expression Track for hg19 and hg38</b></font>
@@ -77,18 +77,23 @@
   level (in RPKM) of each tissue assayed by the GTEX project.
   Note that the graph is a fixed width, and starts at the gene transcription start.
   <p>
-  <center><img src="images/gtexAnnounceExample.png"></center>
+  <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://hgwdev.cse.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession" 
+  target=_blank>
+  <center><img src="images/gtexAnnounceExample.png" width=75%></center></a>
   <p>
-  Notice how the blue gene-model underneath the graph shown here extends past the end of the graph? This gene
-  model represents the target of the RNA-Seq experiment, and the graph displays the RPKM levels
-  across many different tissues for the <em>entire</em> gene. Traditionally the 3 purple bars 
-  would be associated with the intron of TCAP gene, in this case those three bars indicate that 
-  the entire gene is highly expressed in cardiac and skeletal muscle tissue. Clicking on the graph 
-  brings up a description page which displays a more detailed box and whisker plot of the RPKM 
-  data, as well as a description of the methods used to generate the data. 
+  Notice how the bar graphs extend past the gene models underneath them? These gene
+  models represent the target of the RNA-Seq experiment, and the graph displays the RPKM levels
+  across many different tissues for the <em>entire</em> gene. In the
+  <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://hgwdev.cse.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession" 
+  target=_blank>example</a> above, the TCAP and NEUROD2 bar graphs actually extend past the 
+  gene model, and traditionally the three large purple bars  would be associated with the 
+  intergenic region between the two genes. However, in this case those three purple bars indicate 
+  that the entire TCAP gene is highly expressed in cardiac and skeletal muscle tissue. Clicking 
+  on the graph brings up a description page which displays a more detailed box and whisker plot of
+  the RPKM data, as well as a description of the methods used to generate the data. 
   <p>
-  Credit goes to Kate Rosenbloom for implementing and Christopher Lee for quality reviewing this feature.
-  <-->
+  Credit goes to Kate Rosenbloom and Christopher Lee for the implementation and testing of this feature.
+  -->
   <hr>
   <p>
   <font color="#006666" size="4"><b> 15 April 2016 -
