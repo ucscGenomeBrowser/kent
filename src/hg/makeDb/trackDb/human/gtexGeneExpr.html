@@ -16,6 +16,9 @@ tissue, and the bar color indicates the tissue.
 <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img border='1' src="../images/gtex/gtexGeneTcap.png"><br>
 The bargraph display has the same width and tissue order for all genes.
 Mouse hover over a bar will show the tissue and median expression level.
+The squish display mode draws a rectangle for each gene, colored to indicate the tissue
+with highest expression level if it contributes more than 10% to the overall expression
+(and colored black if no tissue predominates).
 Tissue colors were assigned to conform to the GTEx Consortium publication conventions.</p>
 <p>
 The GTEx transcript model used to quantify expression level is displayed below the graph,
@@ -25,13 +28,12 @@ colored to indicate the transcript class
 <span style='color: #FF33FF'>pseudogene</span>, 
 <span style='color: #FE0000'>problem</span>), 
 following GENCODE conventions.
+</p>
 <P>
-The track configuration page provides a filter to limit the tissues displayed, choice of
-raw or log transformed expression level display, and an option to segment the samples 
-by gender and display a difference graph.
-</P>
 Click-through on a graph displays a boxplot of expression level quartiles with outliers, 
 per tissue, along with a link to the corresponding gene page on the GTEX Portal.</P>
+The track configuration page provides controls to limit the genes and tissues displayed,
+and to select raw or log transformed expression level display.</P>
 
 <H2>Methods</H2>
 Tissue samples were obtained using the GTEx standard operating procedures for informed consent
