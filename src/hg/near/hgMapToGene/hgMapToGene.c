@@ -54,6 +54,7 @@ errAbort(
   "           This overrides the choice of the best element per gene."
   "   -exclude=exclude.txt - exclude.txt is a 1-column file with the \n"
   "           accessions of sequences to exlcude from the mapping\n"
+  "   -trackDb=trackDb - Name of the trackDb table to find types in\n"
   );
 }
 
@@ -78,6 +79,7 @@ static struct optionSpec options[] = {
    {"exclude", OPTION_STRING},
    {"geneTableType", OPTION_STRING},
    {"tempDb", OPTION_STRING},
+   {"trackDb", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -554,7 +556,10 @@ intronsToo = optionExists("intronsToo");
 ignoreStrand = optionExists("ignoreStrand");
 createOnly = optionExists("createOnly");
 prefix = optionVal("prefix", NULL);
-trackDb = cfgOption("db.trackDb");
+if (optionExists("trackDb"))
+    trackDb = optionVal("trackDb", NULL);
+else
+    trackDb = cfgOption("db.trackDb");
 if(trackDb == NULL)
     trackDb = "trackDb";
 
