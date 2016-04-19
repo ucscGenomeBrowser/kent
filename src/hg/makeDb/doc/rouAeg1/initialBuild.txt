@@ -190,7 +190,28 @@ taxId 9407
 
     # check in the trackDb files created and add to trackDb/makefile
 
-#########################################################################
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-04-14 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rouAeg1/rouAeg1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rouAeg1) > do.log 2>&1
+    # real    5m44.521s
+
+    cat fb.rouAeg1.cpgIslandExtUnmasked.txt
+    # 86926460 bases of 1910250568 (4.551%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-04-14 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/cytoBand
+    cd /hive/data/genomes/rouAeg1/bed/cytoBand
+    makeCytoBandIdeo.csh rouAeg1
+
+#############################################################################
 # ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
     # the sequence here is working for a 'refseq' assembly with a chrM
     # situation may be specific depending upon what is available in the assembly
@@ -282,22 +303,14 @@ searchPriority 8
     time  (doRepeatMasker.pl -buildDir=`pwd` \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -smallClusterHub=ku rouAeg1) > do.log 2>&1
-XXX - running - Thu Apr 14 11:01:34 PDT 2016
-    # real    481m50.689s
-
-    # broken cluster run due to sick machines, no real problem, it
-    # completed, continuing:
-    time  (doRepeatMasker.pl -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -continue=cat -smallClusterHub=ku rouAeg1) > cat.log 2>&1
-    #  real    61m1.143s
+    # real    572m12.798s
 
     cat faSize.rmsk.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1436601310 upper
-    #    1705490443 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %52.70 masked total, %54.28 masked real
+# 1910250568 bases (482376 N's 1909768192 real 1292012610 upper 617755582 lower)
+#     in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464v1)
+#    max 8996366 (NW_015492809v1) median 262214
+# %32.34 masked total, %32.35 masked real
 
     egrep -i "versi|relea" do.log
     # RepeatMasker version open-4.0.5
@@ -305,18 +318,19 @@ XXX - running - Thu Apr 14 11:01:34 PDT 2016
     # CC   RELEASE 20140131;
 
     time featureBits -countGaps rouAeg1 rmsk
-    # 1705908888 bases of 3236224332 (52.713%) in intersection
-    # real    2m52.924s
+    # 617755753 bases of 1910250568 (32.339%) in intersection
+    # real    0m29.128s
 
     # why is it different than the faSize above ?
-    # because rmsk masks out some N's as well as bases, the count above
+    # because rmsk masks out some N's as well as bases, the faSize count above
     #   separates out the N's from the bases, it doesn't show lower case N's
 
     # faster way to get the same result:
     time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' rouAeg1 \
         | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
-    # total 1705908888.000000
-    # real    0m39.734s
+
+    # total 617755753.000000
+    # real    0m24.382s
 
 ##########################################################################
 # running simple repeat (DONE - 2016-04-14 - Hiram)
@@ -326,11 +340,10 @@ XXX - running - Thu Apr 14 11:01:34 PDT 2016
     time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
         -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
         rouAeg1) > do.log 2>&1
-XXX - running - Thu Apr 14 11:02:00 PDT 2016
-    # real    140m2.826s
+    # real    9m33.566s
 
     cat fb.simpleRepeat
-    # 298982788 bases of 3142093174 (9.515%) in intersection
+    # 19230683 bases of 1910250568 (1.007%) in intersection
 
     # add to rmsk after it is done:
     cd /hive/data/genomes/rouAeg1
@@ -339,17 +352,16 @@ XXX - running - Thu Apr 14 11:02:00 PDT 2016
     #   you can safely ignore the warning about fields >= 13
     twoBitToFa rouAeg1.2bit stdout | faSize stdin > faSize.rouAeg1.2bit.txt
     cat faSize.rouAeg1.2bit.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1434869663 upper
-    #    1707222090 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %52.75 masked total, %54.33 masked real
+# 1910250568 bases (482376 N's 1909768192 real 1291369125 upper
+#    618399067 lower) in 2490 sequences in 1 files
+#    max 8996366 (NW_015492809v1) median 262214
+# %32.37 masked total, %32.38 masked real
 
     rm /gbdb/rouAeg1/rouAeg1.2bit
     ln -s `pwd`/rouAeg1.2bit /gbdb/rouAeg1/rouAeg1.2bit
 
 #########################################################################
-# CREATE MICROSAT TRACK (TBD - 2016-02-10 - Hiram)
+# CREATE MICROSAT TRACK (DONE - 2016-04-15 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/rouAeg1/bed/microsat
     cd /cluster/data/rouAeg1/bed/microsat
@@ -358,109 +370,124 @@ XXX - running - Thu Apr 14 11:02:00 PDT 2016
        ../simpleRepeat/simpleRepeat.bed > microsat.bed
 
     hgLoadBed rouAeg1 microsat microsat.bed
+    # Read 43339 elements of size 4 from microsat.bed
 
 ##########################################################################
-## WINDOWMASKER (TBD - 2016-02-02 - Hiram)
+## WINDOWMASKER (DONE - 2016-04-15 - Hiram)
 
     mkdir /hive/data/genomes/rouAeg1/bed/windowMasker
     cd /hive/data/genomes/rouAeg1/bed/windowMasker
     time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
         -dbHost=hgwdev rouAeg1) > do.log 2>&1
-    # real    665m37.329s
+    # real    179m23.881s
 
     # Masking statistics
     cat faSize.rouAeg1.cleanWMSdust.txt
-    # 3236224332 bases (94132579 N's 3142091753 real 1839176720 upper
-    #    1302915033 lower) in 284728 sequences in 1 files
-    # Total size: mean 11366.0 sd 1223261.8 min 116 (chrUn_NW_014950235v1)
-    #    max 225584828 (chr1) median 941
-    # %40.26 masked total, %41.47 masked real
+# 1910250568 bases (482376 N's 1909768192 real 1396731798 upper 513036394 lower)
+#     in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464v1)
+#    max 8996366 (NW_015492809v1) median 262214
+# %26.86 masked total, %26.86 masked real
 
     cat fb.rouAeg1.rmsk.windowmaskerSdust.txt
-    # 1061810183 bases of 3236224332 (32.810%) in intersection
+    # 242421551 bases of 1910250568 (12.691%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2016-02-04 - Hiram)
+# ncbiRefSeq - (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/ncbiRefSeq
+    cd /hive/data/genomes/rouAeg1/bed/ncbiRefSeq
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-stop=download \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > download.log 2>&1
+    # real    17m29.693s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=process -stop=process \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > process.log 2>&1
+    # real    5m46.726s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=load -stop=load \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > load.log 2>&1
+    # real    0m27.378s
+
+    featureBits -countGaps rouAeg1 ncbiRefSeq
+# 99026731 bases of 1910250568 (5.184%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-04-15 - Hiram)
     mkdir /hive/data/genomes/rouAeg1/bed/cpgIslands
     cd /hive/data/genomes/rouAeg1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku rouAeg1) > do.log 2>&1
-    # real    45m39.560s
+    # real    5m19.286s
 
     cat fb.rouAeg1.cpgIslandExt.txt
-    # 21989740 bases of 3142093174 (0.700%) in intersection
+    # 80027987 bases of 1910250568 (4.189%) in intersection
 
 ##############################################################################
-# cpgIslands on UNMASKED sequence (TBD - 2016-01-29 - Hiram)
-    mkdir /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
-    cd /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
-
-    # run stepwise so the loading can be done in a different table
-    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
-       -tableName=cpgIslandExtUnmasked \
-          -maskedSeq=/hive/data/genomes/rouAeg1/rouAeg1.unmasked.2bit \
-             -workhorse=hgwdev -smallClusterHub=ku rouAeg1) > do.log 2>&1
-    # real    60m39.280s
-
-    cat fb.rouAeg1.cpgIslandExtUnmasked.txt
-    # 41820506 bases of 3142093174 (1.331%) in intersection
-
-#############################################################################
-# cytoBandIdeo - (TBD - 2016-01-29 - Hiram)
-    mkdir /hive/data/genomes/rouAeg1/bed/cytoBand
-    cd /hive/data/genomes/rouAeg1/bed/cytoBand
-    makeCytoBandIdeo.csh rouAeg1
-
-#########################################################################
-# genscan - (TBD - 2016-02-04 - Hiram)
+# genscan - (DONE - 2016-04-15 - Hiram)
     mkdir /hive/data/genomes/rouAeg1/bed/genscan
     cd /hive/data/genomes/rouAeg1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku rouAeg1) > do.log 2>&1
-    # real    65m53.319s
-    # two broken, run with window size 2,000,000 to finish, then continue:
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku rouAeg1) > makeBed.log 2>&1
-    # real    21m55.093s
+    # real    17m23.384s
 
     cat fb.rouAeg1.genscan.txt
-    # 54559229 bases of 3142093174 (1.736%) in intersection
+    # 60809045 bases of 1910250568 (3.183%) in intersection
 
     cat fb.rouAeg1.genscanSubopt.txt
-    # 52580737 bases of 3142093174 (1.673%) in intersection
+    # 50801373 bases of 1910250568 (2.659%) in intersection
 
 ########################################################################
 # Create kluster run files (TBD - 2016-02-03 - Hiram)
 
     # numerator is rouAeg1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap rouAeg1 gap
-    # 72500454 bases of 2763479500 (2.624%) in intersection
+    # 0 bases of 1910250568 (0.000%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2763479500 / 2861349177 \) \* 1024
-    #  ( 2763479500 / 2861349177 ) * 1024 = 988.975072
+    calc \( 1910250568 / 2861349177 \) \* 1024
+    #  ( 1910250568 / 2861349177 ) * 1024 = 683.627359
 
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=600 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/rouAeg1
     blat rouAeg1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rouAeg1.11.ooc \
-        -repMatch=900
-    #   Wrote 43065 overused 11-mers to jkStuff/rouAeg1.11.ooc
+        -repMatch=600
+    #   Wrote 30666 overused 11-mers to jkStuff/rouAeg1.11.ooc
+
+    # there are no gaps ?
+    hgsql -e 'select count(*) from gap;' rouAeg1
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
 
     #   check non-bridged gaps to see what the typical size is:
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' rouAeg1 \
-        | sort -k7,7nr | ave -col=7 stdin
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' rouAeg1 \
+#         | sort -k7,7nr | ave -col=7 stdin
     #   most non-bridged gaps have size = 100
     #   decide on a minimum gap for this break, use either 100 or 5000 will
     #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
     #   so use 100 here to get more liftOver row.
-    gapToLift -verbose=2 -minGap=100 rouAeg1 jkStuff/nonBridged.lft \
-        -bedFile=jkStuff/nonBridged.bed
+#     gapToLift -verbose=2 -minGap=100 rouAeg1 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
 # GENBANK AUTO UPDATE (TBD - 2016-02-03,10 - Hiram)
@@ -468,38 +495,42 @@ XXX - running - Thu Apr 14 11:02:00 PDT 2016
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
-    # #organism       mrnaCnt estCnt  refSeqCnt
-    # Macaca mulatta  378586  60372   5778
+    # #organism          mrnaCnt estCnt  refSeqCnt
+    # Rousettus aegyptiacus   9       0       0
 
-    # edit etc/genbank.conf to add rouAeg1 just before rheMac2
-# rouAeg1 Macaca mulatta (rhesus)
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add rouAeg1 just before saiBol1
+# rouAeg1 Rousettus aegyptiacus (Egyptian rousette (fruit bat))
 rouAeg1.serverGenome = /hive/data/genomes/rouAeg1/rouAeg1.2bit
 rouAeg1.clusterGenome = /hive/data/genomes/rouAeg1/rouAeg1.2bit
 rouAeg1.ooc = /hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc
-rouAeg1.lift = /hive/data/genomes/rouAeg1/jkStuff/rouAeg1.nonBridged.lft
+rouAeg1.lift = no
 rouAeg1.perChromTables = no
-rouAeg1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-rouAeg1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-rouAeg1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-rouAeg1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-rouAeg1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-rouAeg1.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+rouAeg1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+rouAeg1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+rouAeg1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+rouAeg1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+rouAeg1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+rouAeg1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+rouAeg1.refseq.mrna.native.load = no
+rouAeg1.genbank.est.native.load = no
 rouAeg1.downloadDir = rouAeg1
-rouAeg1.genbank.mrna.xeno.load = yes
-rouAeg1.refseq.mrna.native.load  = yes
-rouAeg1.refseq.mrna.xeno.load  = yes
-rouAeg1.upstreamGeneTbl = refGene
 
-    git commit -m "Added rouAeg1; refs #16744" etc/genbank.conf
+    git commit -m "Added rouAeg Egyptian rousette (fruit bat) - Rousettus aegyptiacus; refs #17167" etc/genbank.conf src/lib/gbGenome.c
     git push
     # update /cluster/data/genbank/:
     make etc-update
+    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial rouAeg1
-    # logFile: var/build/logs/2016.02.04-11:28:59.rouAeg1.initalign.log
+    # logFile: var/build/logs/2016.04.19-13:27:55.rouAeg1.initalign.log
+XXX - running - Tue Apr 19 13:28:09 PDT 2016
     #   real    2229m7.259s
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.rouAeg1
@@ -534,7 +565,6 @@ rouAeg1.upstreamGeneTbl = refGene
     # 25248650 bases of 100286401 (25.177%) in intersection
 
 #########################################################################
-# LIFTOVER TO rheMac3 (TBD - 2016-02-05 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/rouAeg1/bed/blat.rheMac3.2016-02-05
     cd /hive/data/genomes/rouAeg1/bed/blat.rheMac3.2016-02-05
@@ -579,9 +609,9 @@ rouAeg1.upstreamGeneTbl = refGene
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("rouAeg1", "blat1b", "17860", "1", "0"); \
+	VALUES ("rouAeg1", "blat1d", "17862", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("rouAeg1", "blat1b", "17861", "0", "1");' \
+	VALUES ("rouAeg1", "blat1d", "17863", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
