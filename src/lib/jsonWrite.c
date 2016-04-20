@@ -36,19 +36,25 @@ if (jw != NULL)
     }
 }
 
-static void jsonWritePushObjStack(struct jsonWrite *jw, bool val)
-/* Push val on stack */
+static void jsonWritePushObjStack(struct jsonWrite *jw, bool isNotEmpty, bool isObject)
+/* Push a new object or list on stack */
 {
 int stackIx = jw->stackIx + 1;
 if (stackIx >= ArraySize(jw->objStack))
     errAbort("Stack overflow in jsonWritePush");
-jw->objStack[stackIx] = val;
+jw->objStack[stackIx].isNotEmpty = isNotEmpty;
+jw->objStack[stackIx].isObject = isObject;
 jw->stackIx = stackIx;
 }
 
-static void jsonWritePopObjStack(struct jsonWrite *jw)
+static void jsonWritePopObjStack(struct jsonWrite *jw, bool isObject)
 /* pop object stack and just discard val. */
 {
+boolean topIsObject = jw->objStack[jw->stackIx].isObject;
+if (topIsObject != isObject)
+    errAbort("jsonWrite: expected to close %s but was told to close %s",
+             topIsObject ? "object" : "list",
+             isObject ? "object" : "list");
 int stackIx = jw->stackIx - 1;
 if (stackIx < 0)
     errAbort("Stack underflow in jsonWritePopObjStack");
@@ -58,10 +64,10 @@ jw->stackIx = stackIx;
 INLINE void jsonWriteMaybeComma(struct jsonWrite *jw)
 /* If this is not the first item added to an object or list, write a comma. */
 {
-if (jw->objStack[jw->stackIx] != 0)
+if (jw->objStack[jw->stackIx].isNotEmpty)
     dyStringAppend(jw->dy, ","JW_SEP);
 else
-    jw->objStack[jw->stackIx] = 1;
+    jw->objStack[jw->stackIx].isNotEmpty = TRUE;
 }
 
 void jsonWriteTag(struct jsonWrite *jw, char *var)
@@ -134,7 +140,7 @@ void jsonWriteListStart(struct jsonWrite *jw, char *var)
 struct dyString *dy = jw->dy;
 jsonWriteTag(jw, var);
 dyStringAppend(dy, "["JW_SEP);
-jsonWritePushObjStack(jw, FALSE);
+jsonWritePushObjStack(jw, FALSE, FALSE);
 }
 
 void jsonWriteListEnd(struct jsonWrite *jw)
@@ -142,7 +148,7 @@ void jsonWriteListEnd(struct jsonWrite *jw)
 {
 struct dyString *dy = jw->dy;
 dyStringAppend(dy, "]"JW_SEP);
-jsonWritePopObjStack(jw);
+jsonWritePopObjStack(jw, FALSE);
 }
 
 void jsonWriteObjectStart(struct jsonWrite *jw, char *var)
@@ -151,7 +157,7 @@ void jsonWriteObjectStart(struct jsonWrite *jw, char *var)
 jsonWriteTag(jw, var);
 struct dyString *dy = jw->dy;
 dyStringAppend(dy, "{"JW_SEP);
-jsonWritePushObjStack(jw, FALSE);
+jsonWritePushObjStack(jw, FALSE, TRUE);
 }
 
 void jsonWriteObjectEnd(struct jsonWrite *jw)
@@ -159,7 +165,7 @@ void jsonWriteObjectEnd(struct jsonWrite *jw)
 {
 struct dyString *dy = jw->dy;
 dyStringAppend(dy, "}"JW_SEP);
-jsonWritePopObjStack(jw);
+jsonWritePopObjStack(jw, TRUE);
 }
 
 void jsonWriteStringf(struct jsonWrite *jw, char *var, char *format, ...)
@@ -223,4 +229,20 @@ if (jwB)
     dyStringAppendN(jwA->dy, jwB->dy->string, jwB->dy->stringSize);
 else if (var)
     dyStringAppend(jwA->dy, "null");
+}
+
+int jsonWritePopToLevel(struct jsonWrite *jw, uint level)
+/* Close out the objects and lists that are deeper than level, so we end up at level ready to
+ * add new items.  Return the level that we end up with, which may not be the same as level,
+ * if level is deeper than the current stack. */
+{
+int i;
+for (i = jw->stackIx;  i > level;  i--)
+    {
+    if (jw->objStack[i].isObject)
+        jsonWriteObjectEnd(jw);
+    else
+        jsonWriteListEnd(jw);
+    }
+return jw->stackIx;
 }

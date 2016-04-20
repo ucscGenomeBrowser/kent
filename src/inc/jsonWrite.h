@@ -14,12 +14,19 @@
 #ifndef JSONWRITE_H
 #define JSONWRITE_H
 
+struct jwObjInfo
+/* Helps keep track of whether a comma is needed and whether we need to close an object or list */
+    {
+    bool isNotEmpty;		/* TRUE if an item has already been added to this object or list */
+    bool isObject;		/* TRUE if item is an object (not a list). */
+    };
+
 struct jsonWrite
 /* Object to help output JSON */
      {
      struct jsonWrite *next;
      struct dyString *dy;	/* Most of this module is building json text in here */
-     bool objStack[128];	/* We need stack deep enough to handle nested objects and lists */
+     struct jwObjInfo objStack[128]; /* Make stack deep enough to handle nested objects and lists */
      int stackIx;		/* Current index in stack */
      };
 
@@ -88,5 +95,10 @@ void jsonWriteAppend(struct jsonWrite *jwA, char *var, struct jsonWrite *jwB);
 /* Append jwB's contents to jwA's.  If jwB is non-NULL, it must be fully closed (no unclosed
  * list or object).  If var is non-NULL, write it out as a tag before appending.
  * If both var and jwB are NULL, leave jwA unchanged. */
+
+int jsonWritePopToLevel(struct jsonWrite *jw, uint level);
+/* Close out the objects and lists that are deeper than level, so we end up at level ready to
+ * add new items.  Return the level that we end up with, which may not be the same as level,
+ * if level is deeper than the current stack. */
 
 #endif /* JSONWRITE_H */
