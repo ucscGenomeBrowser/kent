@@ -92,7 +92,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodePseudoGeneVM9
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM9ViewGenes on
+        subTrack wgEncodeGencodeVM9ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M9 (Ensembl 84)
