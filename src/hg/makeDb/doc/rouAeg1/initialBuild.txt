@@ -530,8 +530,12 @@ rouAeg1.downloadDir = rouAeg1
 
     time ./bin/gbAlignStep -initial rouAeg1
     # logFile: var/build/logs/2016.04.19-13:27:55.rouAeg1.initalign.log
-XXX - running - Tue Apr 19 13:28:09 PDT 2016
-    #   real    2229m7.259s
+    #   real    472m50.234s
+     tail -2 var/build/logs/2016.04.19-13:27:55.rouAeg1.initalign.log
+# hgwdev 2016.04.19-21:19:14 rouAeg1.initalign: Succeeded: rouAeg1
+# hgwdev 2016.04.19-21:20:45 rouAeg1.initalign: finish
+
+
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.rouAeg1
 
@@ -539,8 +543,10 @@ XXX - running - Tue Apr 19 13:28:09 PDT 2016
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad rouAeg1
-    # logFile: var/dbload/hgwdev/logs/2016.02.09-14:37:59.rouAeg1.dbload.log
-    #  real    205m12.078s
+    # logFile: var/dbload/hgwdev/logs/2016.04.20-10:24:34.rouAeg1.dbload.log
+    # real    10m50.471s
+    tail -1 var/dbload/hgwdev/logs/2016.04.20-10:24:34.rouAeg1.dbload.log
+# hgwdev 2016.04.20-10:35:24 rouAeg1.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -548,63 +554,25 @@ XXX - running - Tue Apr 19 13:28:09 PDT 2016
     # add rouAeg1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added rouAeg1 - Rhesus refs #16744" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rouAeg1 Egyptian rousette fruit bat - Rousettus aegyptiacus - refs #17167" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-02-05 - Hiram)
+# augustus gene track (DONE - 2016-04-20 - Hiram)
 
     mkdir /hive/data/genomes/rouAeg1/bed/augustus
     cd /hive/data/genomes/rouAeg1/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev rouAeg1) > do.log 2>&1
+    # real    70m56.666s
 
     cat fb.rouAeg1.augustusGene.txt
-    # 25248650 bases of 100286401 (25.177%) in intersection
+    # 54429943 bases of 1910250568 (2.849%) in intersection
 
 #########################################################################
-    ssh hgwdev
-    mkdir /hive/data/genomes/rouAeg1/bed/blat.rheMac3.2016-02-05
-    cd /hive/data/genomes/rouAeg1/bed/blat.rheMac3.2016-02-05
-    doSameSpeciesLiftOver.pl -verbose=2 \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc \
-         rouAeg1 rheMac3
-    time (doSameSpeciesLiftOver.pl -verbose=2 \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc \
-         rouAeg1 rheMac3) > doLiftOverToRheMac3.log 2>&1
-    # real    1015m0.435s
-
-    # see if the liftOver menus function in the browser from rouAeg1 to Mac3
-
-#########################################################################
-# LIFTOVER TO rheMac2 (TBD - 2016-02-05 - Hiram)
-    ssh hgwdev
-    mkdir /hive/data/genomes/rouAeg1/bed/blat.rheMac2.2016-02-05
-    cd /hive/data/genomes/rouAeg1/bed/blat.rheMac2.2016-02-05
-    doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc \
-         rouAeg1 rheMac2
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc \
-         rouAeg1 rheMac2) > doLiftOverToRheMac2.log 2>&1
-    # real    873m23.446s
-    # failed cluster run, continuing with chain:
-    time (doSameSpeciesLiftOver.pl -verbose=2 -buildDir=`pwd` \
-        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
-        -ooc=/hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc \
-         -continue=chain rouAeg1 rheMac2) > chain.log 2>&1
-    # real    31m30.389s
-
-    # see if the liftOver menus function in the browser from rouAeg1 to Mac2
-
-##########################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-03-21 - Hiram)
+#  BLATSERVERS ENTRY (DONE - 2016-04-19 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
