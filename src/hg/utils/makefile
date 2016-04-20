@@ -42,6 +42,7 @@ UTILS_APPLIST = \
 	pslToBigPsl \
 	pslMap \
 	tdbQuery \
+	transMapPslToGenePred \
 	twoBitMask
 
 SCRIPT_FILES = \
