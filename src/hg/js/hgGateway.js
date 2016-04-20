@@ -802,7 +802,7 @@ var hgGateway = (function() {
         return clone;
     }
 
-    function autocompleteFromTree(node) {
+    function autocompleteFromNode(node) {
         // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
         // Returns an object mapping each label of node and descendants to a list of
         // result objects with the same structure that we'd get from a server request.
@@ -826,7 +826,7 @@ var hgGateway = (function() {
             myResults = _.flatten(
                 _.map(kids, function(kid) {
                     var kidLabel = kid[0], kidKids = kid[3];
-                    var kidObj = autocompleteFromTree(kid);
+                    var kidObj = autocompleteFromNode(kid);
                     // Clone kid's result list and add own label as category:
                     var kidResults = _.map(kidObj[kidLabel], addMyLabel);
                     // Add kid's mappings to searchObj only if kid is not a leaf.
@@ -841,6 +841,14 @@ var hgGateway = (function() {
         if (label !== 'root' && label !== 'cellular organisms') {
             searchObj[label] = myResults;
         }
+        return searchObj;
+    }
+
+    function autocompleteFromTree(node, searchObj) {
+        // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
+        // searchObj is extended to map each label of node and descendants to a list of
+        // result objects with the same structure that we'd get from a server request.
+        _.assign(searchObj, autocompleteFromNode(node));
         // Add aliases for some common names that map to scientific names in the tree.
         _.forEach(commonToSciNames, function(sciName, commonName) {
             var label, addMyLabel;
@@ -850,7 +858,6 @@ var hgGateway = (function() {
                 searchObj[commonName] = _.map(searchObj[sciName], addMyLabel);
             }
         });
-        return searchObj;
     }
 
     function makeStripe(id, color, stripeHeight, scrollTop, onClickStripe) {
@@ -1095,13 +1102,11 @@ var hgGateway = (function() {
     }
 
     function drawSpeciesPicker() {
-        // Prune inactive genomes from dbDbTree.
         // If dbDbTree is nonempty and SVG is supported, draw the tree; if SVG is not supported,
         // use the space to suggest that the user install a better browser.
         // If dbDbTree doesn't exist, leave the "Represented Species" section hidden.
         var svg, spTree, stripeTops;
-        var activeTaxIds = _.invert(activeGenomes);
-        if (dbDbTree && pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+        if (dbDbTree) {
             if (document.createElementNS) {
                 // Draw the phylogenetic tree and do layout adjustments
                 svg = document.getElementById('speciesTree');
@@ -1548,19 +1553,26 @@ var hgGateway = (function() {
 
     function init() {
         // Boot up the page; initialize elements and install event handlers.
+        var searchObj = {};
+        // We need a bound function to pass into autocompleteCat.init below;
+        // however, autocompleteFromTree is even slower than drawing the tree because of
+        // all the copying.  So bind now, fill in searchObj later.
+        var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
         cart.setCgi('hgGateway');
         cart.debug(debugCartJson);
         // Get state from cart
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
+        // Prune inactive genomes from dbDbTree.
+        var activeTaxIds = _.invert(activeGenomes);
+        if (dbDbTree && ! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+            // no more dbDbTree descendants left after pruning
+            dbDbTree = null;
+        }
 
-        // When page has loaded, draw the species tree, do layout adjustments and
-        // initialize event handlers.
+        // When page has loaded, do layout adjustments and initialize event handlers.
         $(function() {
-            var searchObj = autocompleteFromTree(dbDbTree);
-            var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
             scrollbarWidth = findScrollbarWidth();
-            drawSpeciesPicker();
             setRightColumnWidth();
             setupFavIcons();
             autocompleteCat.init($('#speciesSearch'),
@@ -1569,7 +1581,6 @@ var hgGateway = (function() {
                                    onSelect: setDbFromAutocomplete,
                                    onServerReply: processSpeciesResults,
                                    enterSelectsIdentical: true });
-            updateFindPositionSection(uiState);
             $('#selectAssembly').change(onChangeDbMenu);
             $('#positionDisplay').click(onClickCopyPosition);
             $('#copyPosition').click(onClickCopyPosition);
@@ -1577,6 +1588,8 @@ var hgGateway = (function() {
             $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
             $(window).resize(updateGoButtonPosition);
             replaceHgsidInLinks();
+            // Fill in searchObj here once everything is displayed.
+            autocompleteFromTree(dbDbTree, searchObj);
         });
     }
 
