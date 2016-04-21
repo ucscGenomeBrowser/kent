@@ -363,7 +363,7 @@ static void convertPslBlockCds(struct psl *mappedPsl, int iBlock, struct genePre
 // on the positive strand, frame is adjusted from the start, on the negative strand, from the end.
 int cdsOff = (pslQStrand(mappedPsl) == '+')
     ? (mappedQCds.start - srcQueryExon->qCdsStart)
-    : (srcQueryExon->qCdsEnd - mappedQCds.end);
+    : -(srcQueryExon->qCdsEnd - mappedQCds.end);
 mappedGp->exonFrames[iExon] = frameIncr(srcQueryExon->frame, cdsOff);
 
 if (mappedGp->cdsStart == mappedGp->txEnd)
