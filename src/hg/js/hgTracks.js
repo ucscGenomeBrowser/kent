@@ -3280,6 +3280,17 @@ var popUpHgt = {
     }
 };
 
+// A function to show the keyboard help dialog box, bound to ? and called from the menu bar
+function showHotkeyHelp() {
+    $("#hotkeyHelp").dialog({width:'600'});
+}
+
+// A function to add the keyboard help dialog box to the menubar
+function addKeyboardHelpEntry() {
+    html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a></li>';
+    $('#help .last').before(html);
+}
+
 // A function for the keyboard shortcut:
 // View DNA
 function gotoGetDnaPage() {

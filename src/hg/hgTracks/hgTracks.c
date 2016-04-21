@@ -9367,7 +9367,7 @@ hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+hPrintf("Mousetrap.bind('?', showHotkeyHelp());\n");
 
 // menu
 if (gotExtTools)
@@ -9379,6 +9379,8 @@ hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtM
 hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+// also add an entry to the help menu that shows the keyboard shortcut help dialog
+hPrintf("$(document).ready(addKeyboardHelpEntry);");
 
 hPrintf("</script>\n");
 
