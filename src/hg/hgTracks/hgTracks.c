@@ -9374,7 +9374,7 @@ hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', showHotkeyHelp());\n");
+hPrintf("Mousetrap.bind('?', showHotkeyHelp);\n");
 
 // menu
 if (gotExtTools)
