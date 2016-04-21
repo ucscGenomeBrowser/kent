@@ -71,7 +71,8 @@ TEST_DIRS = \
 	gtfToGenePred \
 	overlapSelect \
 	pslMap \
-	refSeqGet
+	refSeqGet \
+	transMapPslToGenePred
 
 APPS = $(DIRS) $(UTILS_APPLIST)
 

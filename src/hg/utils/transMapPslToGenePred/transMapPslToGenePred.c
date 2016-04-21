@@ -10,6 +10,16 @@
 #include "genePredReader.h"
 #include "psl.h"
 #include "hash.h"
+#include "dnautil.h"
+
+/*
+ * Notes:
+ *  - Must dealt with block structure that is different than the source genePred.  TransMap
+ *    may split or merge blocks.   This builds a genePred with the number of blocks generated
+ *    by intersecting the two block structures and then packs the genePred at the end.
+ *  - Strand may have changed, so this must be handled with all query coordinates.
+ */
+
 
 
 void usage()
@@ -38,16 +48,18 @@ errAbort(
   "\n");
 }
 
-/*
- * Notes:
- *   - if pslMap mergers blocks and the frame is inconsistent with the source of the merged blocks, the genePred
- *     block will not be split to store frameshifts. 
- */
-
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
+
+static void swapBoolean(boolean *a, boolean *b)
+/* swap two booleans */
+{
+boolean hold = *a;
+*a = *b;
+*b = hold;
+}
 
 static int frameIncr(int frame, int amt)
 /* increment an interger frame by positive or negative amount. Frame of -1
@@ -62,6 +74,21 @@ else
     int amt3 = (-amt) % 3;
     return (frame - (amt - amt3)) % 3;
     }
+}
+
+static int genePredExonSize(struct genePred* gp, int iExon)
+/* calculate size of an exon in a genePred */
+{
+return gp->exonEnds[iExon] - gp->exonStarts[iExon];
+}
+
+static int genePredSize(struct genePred* gp)
+/* calculate size of an all of the exons in a genePred */
+{
+int iExon, size = 0;
+for (iExon = 0; iExon < gp->exonCount; iExon++)
+    size += genePredExonSize(gp, iExon);
+return size;
 }
 
 static int pslBlockQueryToTarget(struct psl *psl, int iBlock, int pos)
@@ -84,8 +111,7 @@ if (genePredCdsSize(gp)!= genePredCdsSize(gp0))
     return FALSE;
 for (iExon = 0; iExon < gp->exonCount; iExon++)
     {
-    if (((gp->exonEnds[iExon] - gp->exonStarts[iExon])
-         != (gp0->exonEnds[iExon] - gp0->exonStarts[iExon]))
+    if ((genePredExonSize(gp, iExon) != genePredExonSize(gp0, iExon))
         || (gp->exonFrames[iExon] != gp0->exonFrames[iExon]))
         return FALSE;
     }
@@ -121,7 +147,7 @@ return srcGenePredMap;
 }
 
 static struct genePred* srcGenePredFind(struct hash* srcGenePredMap,
-                                        char* qName)
+                                        char* qName, int qSize)
 {
 // ignore unique suffix everything after the last
 char qNameBase[512];
@@ -132,6 +158,9 @@ if (dash != NULL)
 struct genePred* gp = hashFindVal(srcGenePredMap, qNameBase);
 if (gp == NULL)
     errAbort("can't find source genePred for %s with name %s", qName, qNameBase);
+if (genePredSize(gp) != qSize)
+    errAbort("size of query computed from genePred %s (%d), doesn't match expected %s (%d)",
+             qNameBase, genePredSize(gp), qName, qSize);
 return gp;
 }
 
@@ -143,47 +172,82 @@ struct range
 };
 
 struct srcQueryExon
-/* source query exon ranges, cds, and frame. */
+/* source query exon ranges, cds, and frame.  These are all in to positive
+ * strand coordinates. */
 {
-    int qStart;    // computed query range of exon
+    int qStart;         // computed query range of exon
     int qEnd;
-    int qCdsStart; // query range of CDS in exon
+    int qSize;
+    int qCdsStart;      // query range of CDS in exon
     int qCdsEnd;
-    boolean cdsBegin;  // is the the start/end of full cds?
-    boolean cdsEnd;
     int frame;
+    boolean cdsBegin;   // is the the start/end of full cds?
+    boolean cdsEnd;
 };
 
+static void srcQueryExonMakeCdsPos(struct genePred* srcGp,
+                                   int qStart, int iExon, int qSize,
+                                   struct range tCds, struct srcQueryExon* srcQueryExon)
+/* fill in srcQueryExon CDS information for the positive strand */
+{
+// map target CDS range in exon to query
+srcQueryExon->qCdsStart = qStart + (tCds.start - srcGp->exonStarts[iExon]);
+srcQueryExon->qCdsEnd = qStart + (tCds.end - srcGp->exonStarts[iExon]);
+
+// is full cds being/end in this exon?
+srcQueryExon->cdsBegin = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
+    && (srcGp->cdsStart < srcGp->exonEnds[iExon]);
+srcQueryExon->cdsEnd = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
+    && (srcGp->cdsEnd <= srcGp->exonEnds[iExon]);
+}
+
+static void srcQueryExonMakeCdsNeg(struct genePred* srcGp,
+                                   int qEnd, int iExon, int qSize,
+                                   struct range tCds, struct srcQueryExon* srcQueryExon)
+/* fill in srcQueryExon CDS information for the negative strand */
+{
+// map target CDS range in exon to query
+srcQueryExon->qCdsStart = qEnd - (tCds.end - srcGp->exonStarts[iExon]);
+srcQueryExon->qCdsEnd = qEnd - (tCds.start - srcGp->exonStarts[iExon]);
+
+// is full cds being/end in this exon?
+srcQueryExon->cdsBegin = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
+    && (srcGp->cdsEnd <= srcGp->exonEnds[iExon]);
+srcQueryExon->cdsEnd = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
+    && (srcGp->cdsStart < srcGp->exonEnds[iExon]);
+}
+
 static int srcQueryExonMake(struct genePred* srcGp,
-                            int qStart, int iExon,
+                            int qStart, int iExon, int qSize,
                             struct srcQueryExon* srcQueryExon)
 /* update CDS and frame info for an exon and return next qStart */
 {
-int qEnd = qStart + (srcGp->exonEnds[iExon] - srcGp->exonStarts[iExon]);
+int qEnd = qStart + genePredExonSize(srcGp, iExon);
 srcQueryExon->qStart = qStart;
 srcQueryExon->qEnd = qEnd;
+srcQueryExon->qSize = qSize;
 srcQueryExon->frame = srcGp->exonFrames[iExon];
 
 // find what part of exon is in CDS
-int tCdsStart = max(srcGp->exonStarts[iExon], srcGp->cdsStart);
-int tCdsEnd = min(srcGp->exonEnds[iExon], srcGp->cdsEnd);
-
-if (tCdsStart >= tCdsEnd)
+struct range tCds = {max(srcGp->exonStarts[iExon], srcGp->cdsStart),
+                     min(srcGp->exonEnds[iExon], srcGp->cdsEnd)};
+if (tCds.start >= tCds.end)
     {
     // no CDS in exon
     srcQueryExon->qCdsStart = srcQueryExon->qCdsEnd = 0;
     srcQueryExon->cdsBegin = srcQueryExon->cdsEnd = FALSE;
     }
-else
+else 
     {
     // part or all of exon is CDS
-    srcQueryExon->qCdsStart = qStart + (tCdsStart - srcGp->exonStarts[iExon]);
-    srcQueryExon->qCdsEnd =  qStart + (tCdsEnd - srcGp->exonStarts[iExon]);
-    // is full cds being/end in this exon?
-    srcQueryExon->cdsBegin = (srcGp->exonStarts[iExon] <= srcGp->cdsStart)
-        && (srcGp->cdsStart < srcGp->exonEnds[iExon]);
-    srcQueryExon->cdsEnd = (srcGp->exonStarts[iExon] < srcGp->cdsEnd)
-        && (srcGp->cdsEnd <= srcGp->exonEnds[iExon]);
+    if (srcGp->strand[0] == '+')
+        srcQueryExonMakeCdsPos(srcGp, qStart, iExon, qSize, tCds, srcQueryExon);
+    else
+        srcQueryExonMakeCdsNeg(srcGp, qEnd, iExon, qSize, tCds, srcQueryExon);
+    assert(srcQueryExon->qCdsStart < srcQueryExon->qCdsEnd);
+    assert(srcQueryExon->qStart <= srcQueryExon->qCdsStart);
+    assert(srcQueryExon->qCdsEnd <= srcQueryExon->qEnd);
+    assert(srcQueryExon->frame >= 0);
     }
 return qEnd;
 }
@@ -193,37 +257,70 @@ static void srcQueryExonBuild(struct genePred* srcGp,
 /* create a list of query positions to frames.  Array should hold all
  * be the length of the src */
 {
+// building in strand-order generates coorect coordinate
 int qStart = 0;
+int qSize = genePredSize(srcGp);
 int iExon;
-for (iExon = 0; iExon < srcGp->exonCount; iExon++)
-    qStart = srcQueryExonMake(srcGp, qStart, iExon, &(srcQueryExons[iExon]));
+if (srcGp->strand[0] == '+')
+    {
+    for (iExon = 0; iExon < srcGp->exonCount; iExon++)
+        qStart = srcQueryExonMake(srcGp, qStart, iExon, qSize, &(srcQueryExons[iExon]));
+    }
+else
+    {
+    for (iExon = srcGp->exonCount-1; iExon >= 0; iExon--)
+        qStart = srcQueryExonMake(srcGp, qStart, iExon, qSize, &(srcQueryExons[iExon]));
+    }
+}
+
+struct srcQueryExon srcQueryExonReverse(struct srcQueryExon* srcQueryExon)
+/* reverse a srcQueryExon structure */
+{
+struct srcQueryExon rev = *srcQueryExon;
+reverseIntRange(&rev.qStart, &rev.qEnd, rev.qSize);
+if (rev.qCdsStart < rev.qCdsEnd)
+    reverseIntRange(&rev.qCdsStart, &rev.qCdsEnd, rev.qSize);
+// note: frame is always in direction of transcription
+rev.frame = srcQueryExon->frame;
+swapBoolean(&rev.cdsBegin, &rev.cdsEnd);
+return rev;
 }
 
 static struct srcQueryExon* srcQueryExonFind(struct genePred* srcGp,
                                              struct srcQueryExon* srcQueryExons,
-                                             struct psl *mappedPsl, int iBlock)
-/* find srcQueryExon object containing the mapped block  */
+                                             int qStart)
+/* find srcQueryExon object containing the mapped block. qStart is positive strand */
 {
-int qStart = pslQStart(mappedPsl, iBlock);
 int iExon;
 for (iExon = 0; iExon < srcGp->exonCount; iExon++)
     {
     if ((srcQueryExons[iExon].qStart <= qStart) && (qStart < srcQueryExons[iExon].qEnd))
-        {
         return srcQueryExons + iExon;
-        }
     }
 errAbort("could't find find mapped query block start %d in sourceGenePred %s", qStart, srcGp->name);
 return NULL;
 }
 
+static struct srcQueryExon srcQueryExonFindStrand(struct genePred* srcGp,
+                                                  struct srcQueryExon* srcQueryExons,
+                                                  int qStart, char qStrand)
+/* find srcQueryExon object containing the mapped block, mapping to the desired strand.
+ *  qStart is on the specified strand. */
+{
+int qStartPos = (qStrand == '+') ? qStart : (srcQueryExons[0].qSize - qStart)-1;
+struct srcQueryExon srcQueryExon = *srcQueryExonFind(srcGp, srcQueryExons, qStartPos);
+if (qStrand == '-')
+    srcQueryExon = srcQueryExonReverse(&srcQueryExon);
+return srcQueryExon;
+}
+
 static struct range srcQueryExonMappedQueryCds(struct srcQueryExon* srcQueryExon,
-                                               struct psl *mappedPsl, int iBlock)
-/* find intersection of CDS in mapped block with the query, start >= end if no intersection */
+                                               struct range mappedQRange)
+/* find intersection of CDS in mapped block with the query, start >= end if no intersection. */
 {
 struct range mappedQCds;
-mappedQCds.start = max(srcQueryExon->qCdsStart, pslQStart(mappedPsl, iBlock));
-mappedQCds.end = min(srcQueryExon->qCdsEnd, pslQEnd(mappedPsl, iBlock));
+mappedQCds.start = max(srcQueryExon->qCdsStart, mappedQRange.start);
+mappedQCds.end = min(srcQueryExon->qCdsEnd, mappedQRange.end);
 return mappedQCds;
 }
 
@@ -254,45 +351,73 @@ static void convertPslBlockCds(struct psl *mappedPsl, int iBlock, struct genePre
                                struct genePred *mappedGp, int iExon)
 /* Update CDS bounds and frame for a block with CDS */
 {
-int cdsOff = (mappedQCds.start - srcQueryExon->qCdsStart);
+// on the positive strand, frame is adjusted from the start, on the negative strand, from the end.
+int cdsOff = (pslQStrand(mappedPsl) == '+')
+    ? (mappedQCds.start - srcQueryExon->qCdsStart)
+    : (srcQueryExon->qCdsEnd - mappedQCds.end);
+mappedGp->exonFrames[iExon] = frameIncr(srcQueryExon->frame, cdsOff);
 
-int frame = frameIncr(srcQueryExon->frame, cdsOff);
-mappedGp->exonFrames[iExon] = frame;
 if (mappedGp->cdsStart == mappedGp->txEnd)
     convertPslBlockCdsStart(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp);
 convertPslBlockCdsEnd(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp);
 }
 
-static void convertPslBlock(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
-                            struct srcQueryExon* srcQueryExons, struct genePred *mappedGp)
-/* convert one block to an genePred exon, including setting frame and CDS bounds */
+static int convertPslBlockRegion(struct psl *mappedPsl, int iBlock, int qNext, struct genePred* srcGp,
+                                 struct srcQueryExon* srcQueryExons, struct genePred *mappedGp,
+                                 unsigned *currentExonSpace)
+/* Convert a region of one block to an genePred exon, return the offset of the
+ * next part of the block to convert.  Regions must be converted because
+ * blocks can be merged by transmap and not have a one-to-one mapping to the
+ * source genePred regions.
+ */
 {
 int iExon = mappedGp->exonCount;
-struct srcQueryExon* srcQueryExon = srcQueryExonFind(srcGp, srcQueryExons, mappedPsl, iBlock);
-struct range mappedQCds = srcQueryExonMappedQueryCds(srcQueryExon, mappedPsl, iBlock);
+if (iExon >= *currentExonSpace)
+    genePredGrow(mappedGp, currentExonSpace);
+
+// NOTE: all query coordinates are converted to mappedPsl query strand
+
+// determine intersection range of mapped psl block regions and source genePred
+struct srcQueryExon srcQueryExon = srcQueryExonFindStrand(srcGp, srcQueryExons, qNext, pslQStrand(mappedPsl));
+struct range mappedQRange = {qNext, min(pslQEnd(mappedPsl, iBlock), srcQueryExon.qEnd)};
+assert(mappedQRange.start < mappedQRange.end);
+
+struct range mappedQCds = srcQueryExonMappedQueryCds(&srcQueryExon, mappedQRange);
 if (mappedQCds.start < mappedQCds.end)
-    convertPslBlockCds(mappedPsl, iBlock, srcGp, srcQueryExon, mappedQCds, mappedGp, iExon);
+    convertPslBlockCds(mappedPsl, iBlock, srcGp, &srcQueryExon, mappedQCds, mappedGp, iExon);
 else
     mappedGp->exonFrames[iExon] = -1; // no CDS in block
-mappedGp->exonStarts[iExon] = pslTStart(mappedPsl, iBlock);
-mappedGp->exonEnds[iExon] = pslTEnd(mappedPsl, iBlock);
+mappedGp->exonStarts[iExon] = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQRange.start);
+mappedGp->exonEnds[iExon] = pslBlockQueryToTarget(mappedPsl, iBlock, mappedQRange.end);
 mappedGp->exonCount++;
+return mappedQRange.end;
+}
+
+static void convertPslBlock(struct psl *mappedPsl, int iBlock, struct genePred* srcGp,
+                            struct srcQueryExon* srcQueryExons, struct genePred *mappedGp,
+                            unsigned *currentExonSpace)
+/* convert one block to an genePred exon, including setting frame and CDS bounds */
+{
+int qNext = pslQStart(mappedPsl, iBlock);
+while (qNext < pslQEnd(mappedPsl, iBlock))
+    qNext = convertPslBlockRegion(mappedPsl, iBlock, qNext, srcGp, srcQueryExons, mappedGp, currentExonSpace);
 }
 
 static struct genePred* createGenePred(struct genePred* srcGp, struct srcQueryExon *srcQueryExons,
                                        struct psl *mappedPsl)
 /* create genePred from mapped PSL */
 {
+unsigned currentExonSpace = mappedPsl->blockCount;
 // setup cdsStart and cdsEnd as txEnd, 0 to indicate not yet set
 struct genePred *mappedGp = genePredNew(mappedPsl->qName, mappedPsl->tName, pslQStrand(mappedPsl),
                                         mappedPsl->tStart, mappedPsl->tEnd,
                                         mappedPsl->tEnd, 0,
-                                        genePredAllFlds, mappedPsl->blockCount);
+                                        genePredAllFlds, currentExonSpace);
 mappedGp->score = srcGp->score;
 mappedGp->name2 = cloneString(srcGp->name2);
 int iBlock;
 for (iBlock = 0; iBlock < mappedPsl->blockCount; iBlock++)
-    convertPslBlock(mappedPsl, iBlock, srcGp, srcQueryExons, mappedGp);
+    convertPslBlock(mappedPsl, iBlock, srcGp, srcQueryExons, mappedGp, &currentExonSpace);
 if (mappedGp->cdsStart >= mappedGp->cdsEnd)
     {
     // for to common representation of no CDS.
@@ -302,13 +427,82 @@ if (mappedGp->cdsStart >= mappedGp->cdsEnd)
 return mappedGp;
 }
 
+static boolean haveAdjacentFrames(struct genePred *mappedGp, int iExon)
+/* do two block have adjacent frames? */
+{
+return (frameIncr(mappedGp->exonFrames[iExon], genePredExonSize(mappedGp, iExon))
+        == mappedGp->exonFrames[iExon+1]);
+}
+
+static boolean canMergeBlocks(struct genePred *mappedGp, int iExon)
+/* check if blocks are adjacent and can be merged with consistent frame */
+{
+// can merge -1 frames with any adjacent frame
+return ((mappedGp->exonEnds[iExon] == mappedGp->exonStarts[iExon+1])
+        && (((mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1))
+            || haveAdjacentFrames(mappedGp, iExon)));
+}
+
+static void mergeAdjacentFrames(struct genePred *mappedGp, int iExon)
+/* merge frames for two adjacent blocks that are being merged */
+{
+// update frame, handling case were one block has CDS and the other doesn't
+if (mappedGp->strand[0] == '+')
+    {
+    // + strand, keep first frame
+    mappedGp->exonFrames[iExon] = (mappedGp->exonFrames[iExon] >= 0)
+        ? mappedGp->exonFrames[iExon]
+        : mappedGp->exonFrames[iExon+1];
+    }
+else
+    {
+    // - strand, keep second frame
+    mappedGp->exonFrames[iExon] = (mappedGp->exonFrames[iExon] >= 0)
+        ? mappedGp->exonFrames[iExon]
+        : mappedGp->exonFrames[iExon+1];
+    }
+}   
+
+static void shiftBlock(struct genePred *mappedGp, int iExon)
+/* shift up block arrays by one, overwriting iExon entry */
+{
+mappedGp->exonStarts[iExon] = mappedGp->exonStarts[iExon+1];
+mappedGp->exonEnds[iExon] = mappedGp->exonEnds[iExon+1];
+mappedGp->exonFrames[iExon] = mappedGp->exonFrames[iExon+1];
+}
+
+static void mergeAdjacentBlocks(struct genePred *mappedGp, int iExon)
+/* merge two blocks that are adjacent */
+{
+mappedGp->exonEnds[iExon] = mappedGp->exonEnds[iExon+1];
+mergeAdjacentFrames(mappedGp, iExon);
+
+// move subsequent blocks
+for (iExon++; iExon < mappedGp->exonCount-1; iExon++)
+    shiftBlock(mappedGp, iExon);
+mappedGp->exonCount--;
+}
+
+static void mergeGenePredBlocks(struct genePred *mappedGp)
+/* merge adjacent genePred `exons' as long as they have consistent frame */
+{
+int iExon = 0;
+while (iExon < mappedGp->exonCount-1)
+    {
+    if (canMergeBlocks(mappedGp, iExon))
+        mergeAdjacentBlocks(mappedGp, iExon);
+    else
+        iExon++;
+    }
+}
+
 static void convertPsl(struct hash* srcGenePredMap, struct psl *mappedPsl, FILE* genePredOutFh)
 /* convert a single PSL */
 {
 if (pslTStrand(mappedPsl) == '-')
     pslRc(mappedPsl); // target must be `+'
 
-struct genePred* srcGp = srcGenePredFind(srcGenePredMap, mappedPsl->qName);
+struct genePred* srcGp = srcGenePredFind(srcGenePredMap, mappedPsl->qName, mappedPsl->qSize);
 if (genePredBases(srcGp) != mappedPsl->qSize)
     errAbort("srcGenePred %s exon size %d does not match mappedPsl %s qSize %d",
              srcGp->name, genePredBases(srcGp), mappedPsl->qName, mappedPsl->qSize);
@@ -316,6 +510,7 @@ struct srcQueryExon srcQueryExons[srcGp->exonCount];
 srcQueryExonBuild(srcGp, srcQueryExons);
 
 struct genePred *mappedGp = createGenePred(srcGp, srcQueryExons, mappedPsl);
+mergeGenePredBlocks(mappedGp);
 if (genePredCheck("mappedGenePred", stderr, -1, mappedGp))
     errAbort("invalid genePred created");
 

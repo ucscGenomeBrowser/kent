@@ -8,6 +8,7 @@ test: musTest
 
 musTest: mkdirs
 	${transMapPslToGenePred} input/musstrain.src.gp input/musstrain.mapped.psl output/$@.mapped.gp
+	genePredCheck -verbose=0 output/$@.mapped.gp
 	diff expected/$@.mapped.gp output/$@.mapped.gp
 
 clean::
