@@ -45,13 +45,22 @@ errAbort(
   "point, this program may be extended to do handle genbank alignments correctly.\n"
   "\n"
   "Options:\n"
+  "  -nonCodingGapFillMax=0 - fill gaps in non-coding regions upto this many bases\n"
+  "   in length.\n"
+  "  -codingGapFillMax=0 - fill gaps in coding regions upto this many bases\n"
+  "   in length.  Only coding gaps that are a multiple of three will be fill,\n"
+  "   with the max rounded down.\n"
   "\n");
 }
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
+    {"nonCodingGapFillMax", OPTION_INT},
+    {"codingGapFillMax", OPTION_INT},
     {NULL, 0}
 };
+static int nonCodingGapFillMax = 0;
+static int codingGapFillMax = 0;
 
 static void swapBoolean(boolean *a, boolean *b)
 /* swap two booleans */
@@ -434,13 +443,27 @@ return (frameIncr(mappedGp->exonFrames[iExon], genePredExonSize(mappedGp, iExon)
         == mappedGp->exonFrames[iExon+1]);
 }
 
+static boolean hasAdjacentNonCoding(struct genePred *mappedGp, int iExon)
+/* are one or both adjacent blocks non-coding? */
+{
+return (mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1);
+}
+
+static boolean canMergeFrames(struct genePred *mappedGp, int iExon)
+/* check if frames can be merged, -1 frames merge with with any adjacent
+ * frame */
+{
+return hasAdjacentNonCoding(mappedGp, iExon) || haveAdjacentFrames(mappedGp, iExon);
+}
+    
+
 static boolean canMergeBlocks(struct genePred *mappedGp, int iExon)
 /* check if blocks are adjacent and can be merged with consistent frame */
 {
-// can merge -1 frames with any adjacent frame
-return ((mappedGp->exonEnds[iExon] == mappedGp->exonStarts[iExon+1])
-        && (((mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1))
-            || haveAdjacentFrames(mappedGp, iExon)));
+int maxGapFill = hasAdjacentNonCoding(mappedGp, iExon)
+    ? nonCodingGapFillMax : codingGapFillMax;
+return ((mappedGp->exonStarts[iExon+1] - mappedGp->exonEnds[iExon]) <= maxGapFill)
+        && canMergeFrames(mappedGp, iExon);
 }
 
 static void mergeAdjacentFrames(struct genePred *mappedGp, int iExon)
@@ -543,6 +566,10 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
+nonCodingGapFillMax = optionInt("nonCodingGapFillMax", nonCodingGapFillMax);
+codingGapFillMax = optionInt("codingGapFillMax", codingGapFillMax);
+codingGapFillMax = (codingGapFillMax/3)*3; // round
+
 char *srcGenePredFile = argv[1];
 char *mappedPslFile = argv[2];
 char *mappedGenePredFile = argv[3];
