@@ -130,8 +130,8 @@ table2WayConsPseudo = ${tablePre}2wayConsPseudo${rel}
 table2WayConsPseudoGp = ${tableDir}/${table2WayConsPseudo}.gp
 
 # obtained from gencode.v*.polyAs.gtf
-tablePolya = ${tablePre}Polya${rel}
-tablePolyaGp = ${tableDir}/${tablePolya}.gp
+tablePolyA = ${tablePre}Polya${rel}
+tablePolyAGp = ${tableDir}/${tablePolyA}.gp
 
 # other metadata
 tableGeneSourceMeta = ${relDir}/gencode.v${ver}.metadata.Gene_source.gz
@@ -262,7 +262,7 @@ ${table2WayConsPseudoGp}: ${pseudo2WayGtf}
 	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gtfToGenePred -ignoreGroupsWithoutExons stdin $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tablePolyaGp}: ${polyAGtf}
+${tablePolyAGp}: ${polyAGtf}
 	@mkdir -p $(dir $@)
 	gencodePolyaGtfToGenePred $< $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
