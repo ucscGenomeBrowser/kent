@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -5,4 +7,12 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+
+searchName assemblyAcc
+searchTable gold
+searchMethod prefix
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 5
+shortCircuit 1
+termRegex [A-Z]{4}[0-9]{8,10}(\.[0-9]+)?
 

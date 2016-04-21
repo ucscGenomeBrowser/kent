@@ -64,8 +64,8 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track gwasCatalog override
-snpTable snp137
-snpVersion 137
+snpTable snp144
+snpVersion 144
 
 track ucscRetroAli5
 shortLabel Retroposed Genes

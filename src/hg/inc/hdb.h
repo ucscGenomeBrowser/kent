@@ -111,7 +111,7 @@ boolean hDbIsActive(char *database);
 char *hDefaultDb(void);
 /* Return the default db if all else fails */
 
-char *hDbForTaxon(struct sqlConnection *conn, int taxon);
+char *hDbForTaxon(int taxon);
 /* Get database associated with NCBI taxon number if any. */
 
 char *hDbForSciName(char *sciName);
@@ -793,6 +793,9 @@ char *hFreezeDate(char *database);
 char *hFreezeDateOpt(char *database);
 /* Return freeze date of database or NULL if unknown database
  *  Use freeMem when done. */
+
+int hTaxId(char *database);
+/* Return taxId (NCBI Taxonomy ID) associated with database. */
 
 char *hGenomeOrArchive(char *database);
 /* Return genome name associated from the regular or the archive database. */

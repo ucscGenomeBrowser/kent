@@ -186,8 +186,9 @@ char *encodedTrack = cgiEncode(tg->track);
 if (theImgBox && curImgTrack)
     {
     char link[512];     // FIXME: winStart/winEnd are not right when using a portal
-    safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s", hgcNameAndSettings(),
-        chromName, winStart, winEnd, encodedTrack);
+    // winStart/winEnd added back by Galt for multi-region
+    safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s", hgcNameAndSettings(),
+        chromName, winStart, winEnd, winStart, winEnd, encodedTrack);
 #ifdef IMAGEv2_SHORT_MAPITEMS
     if (xOff < insideX && xOff+width > insideX)
         warn("cgDrawEither(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",

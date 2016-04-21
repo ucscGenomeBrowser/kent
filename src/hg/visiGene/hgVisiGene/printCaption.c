@@ -40,7 +40,7 @@ sqlSafef(query, sizeof(query),
     "select taxon from gene where id = %d", geneId);
 taxon = sqlQuickNum(conn, query);
 
-genomeDb = hDbForTaxon(conn, taxon);
+genomeDb = hDbForTaxon(taxon);
 if (genomeDb != NULL)
     {
     /* Make sure known genes track exists - we may need

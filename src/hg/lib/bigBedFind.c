@@ -74,7 +74,7 @@ while (val != NULL)
 if (trixWordCount == 0)
     return NULL;
 
-struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
+struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExpand);
 struct hgPos *posList = NULL;
 char *description = NULL;   // we're not filling in this field at the moment
 for ( ; tsList != NULL; tsList = tsList->next)

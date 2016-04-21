@@ -7275,14 +7275,21 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsSuperTrackChild(track->tdb))
         limitSuperTrackVis(track);
 
-    /* remove cart priority variables if they are set
-       to the default values in the trackDb */
-    if (!hTrackOnChrom(track->tdb, chromName))
+    /* hide tracks not on any windows chromNames */
+    boolean hideIt = TRUE;
+    struct window *w;
+    for (w = windows; w; w=w->next)
+        {
+        if (hTrackOnChrom(track->tdb, w->chromName))
+            hideIt = FALSE;
+        }
+    if (hideIt)
         {
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
-	}
+        }
     }
+
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList);

@@ -167,6 +167,7 @@ graphTypeDefault wig bigWig
 gridDefault bed bedGraph wig bigWig
 group *
 groupings expRatio
+gtexDetails bed
 hapClusterEnabled vcf vcfTabix
 hapClusterColorBy vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix

@@ -1,0 +1,622 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the rouAeg1
+
+# New starting procedure, 2016-04-12
+#
+#  Must find the photograph first, can not continue until finding
+#  the photograph.
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2016-04-12 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/rouAeg1
+cd ~/kent/src/hg/makeDb/doc/rouAeg1
+
+sed -e 's/rheMac8/rouAeg1/g; s/RheMac8/RouAeg1/g; s/DONE/TBD/g;' \
+  ../rheMac8/initialBuild.txt > initialBuild.txt
+
+# the files required are probably already here, take a look into:
+#  /hive/data/outside/ncbi/genomes/refseq/<subSet>/<scientificName>/all_assembly_versions
+# and merely symlink them in:
+
+mkdir -p /hive/data/genomes/rouAeg1/refseq
+cd -p /hive/data/genomes/rouAeg1/refseq
+ln -s  /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Rousettus_aegyptiacus/all_assembly_versions/* ./
+
+# need to find the photo, check NCBI 'genome' page to see what photo they
+# display, if they do not have one, can usually find a public domain photo
+# in wikimedia commons: https://commons.wikimedia.org/wiki/Main_Page
+
+mkdir /hive/data/genomes/rouAeg1/photo
+cd /hive/data/genomes/rouAeg1/photo
+
+# this photo from: Oren Peles  https://www.linkedin.com/in/oren-peles-398aa617
+#  to commons via:  https://commons.wikimedia.org/wiki/User:MathKnight
+wget --timestamping \
+"https://upload.wikimedia.org/wikipedia/commons/1/15/PikiWiki_Israel_11327_Wildlife_and_Plants_of_Israel-Bat-003.jpg"
+
+convert -geometry 400x300 \
+   PikiWiki_Israel_11327_Wildlife_and_Plants_of_Israel-Bat-003.jpg \
+      Rousettus_aegyptiacus.jpg
+
+# check this Rousettus_aegyptiacus.jpg into ~/kent/src/hg/htdocs/images/
+# and copy that to /usr/local/apache/htdocs/images/
+
+# construct the required photoReference.txt
+cd /hive/data/genomes/rouAeg1
+printf "photoCreditURL https://commons.wikimedia.org/wiki/User:MathKnight
+photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight\n" \
+  > photoReference.txt
+
+# this information is from the top of 
+#    rouAeg1/refseq/*_assembly_report.txt
+#    (aka: rouAeg1/refseq/GCF_001466805.2_Raegyp2.0_assembly_report.txt)
+
+# Assembly name:  Raegyp2.0
+# Organism name:  Rousettus aegyptiacus (Egyptian rousette)
+# Isolate:  1219
+# Sex:  male
+# Taxid:          9407
+# BioSample:      SAMN04287759
+# BioProject:     PRJNA309421
+# Submitter:      Boston University School of Medicine
+# Date:           2016-3-17
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    LOCP02
+# Assembly method: SparseAssembler v. OCTOBER-2015; DBG2OLC v. OCTOBER-2015;
+# LINKS v. 1.5.1; L_RNA_Scaffolder v. OCTOBER-2015; SSPACE v. 3.0
+# Expected final version: No
+# Genome coverage: 169.2x
+# Sequencing technology: Illumina HiSeq; PacBio
+# GenBank assembly accession: GCA_001466805.2 (latest)
+# RefSeq assembly accession: GCF_001466805.2 (species-representative latest)
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_001466885.2      GCF_001466885.2 Primary Assembly
+##      GCF_000053295.1 non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2016-04-12)
+    cd /hive/data/genomes/rouAeg1
+    ~/kent/src/hg/utils/automation/prepConfig.pl rouAeg1 mammal bats \
+       refseq/*_assembly_report.txt > rouAeg1.config.ra
+
+    # verify it looks sane
+    cat rouAeg1.config.ra
+# config parameters for makeGenomeDb.pl:
+db rouAeg1
+clade mammal
+genomeCladePriority 35
+scientificName Rousettus aegyptiacus
+commonName Egyptian rousette
+assemblyDate Mar 2016
+assemblyLabel Boston University School of Medicine
+assemblyShortLabel Raegyp2.0
+orderKey 5316
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_007393.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rouAeg1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rouAeg1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bats
+photoCreditURL https://commons.wikimedia.org/wiki/User:MathKnight
+photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight
+ncbiGenomeId 7672
+ncbiAssemblyId 707221
+ncbiAssemblyName Raegyp2.0
+ncbiBioProject 309421
+genBankAccessionID GCF_001466805.2
+taxId 9407
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-04-12 - Hiram)
+
+    mkdir /hive/data/genomes/rouAeg1/ucsc
+    cd /hive/data/genomes/rouAeg1/ucsc
+    # measure what is in the refseq release:
+    faSize ../refseq/*genomic.fna.gz
+# 1910250568 bases (482376 N's 1909768192 real 1408250300 upper 501517892 lower) in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464.1) max 8996366 (NW_015492809.1) median 262214
+# %26.25 masked total, %26.26 masked real
+
+    # check for duplicate sequences:
+
+    time faToTwoBit -noMask ../refseq/*_genomic.fna.gz refseq.2bit
+    #  real    0m52.302s
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../rouAeg1.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_007393.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+
+    # no longer need this 2bit
+    rm refseq.2bit
+
+    # the mito sequence is already named chrM
+    printf "NC_007393.1\n" > excludeMito.txt
+    # simple conversion of names .1 to v1
+    time faSomeRecords -exclude ../refseq/*_genomic.fna.gz excludeMito.txt \
+        stdout | sed -e 's/.1 Rou.*/v1/;' > ucsc.fa
+    # real    1m49.479s
+    time gzip ucsc.fa
+    # real    10m21.337s
+
+    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e 's/.1\t/v1\t/;' > ucsc.agp
+
+    # verify correspondence
+    faToTwoBit *.fa.gz test.2bit
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these 2bit files
+    rm test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-04-13 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp rouAeg1.config.ra) > agp.log 2>&1
+    # real    1m44.502s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db rouAeg1.config.ra) > db.log 2>&1
+    # real    16m6.304s
+
+    # forgot to drop db rouAeg1 for a rerunning
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=dbDb rouAeg1.config.ra) > dbDb.log 2>&1
+    # real    0m9.467s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-04-14 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/rouAeg1/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/rouAeg1/rouAeg1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku rouAeg1) > do.log 2>&1
+    # real    5m44.521s
+
+    cat fb.rouAeg1.cpgIslandExtUnmasked.txt
+    # 86926460 bases of 1910250568 (4.551%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-04-14 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/cytoBand
+    cd /hive/data/genomes/rouAeg1/bed/cytoBand
+    makeCytoBandIdeo.csh rouAeg1
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/rouAeg1/bed/ucscToINSDC
+    cd /hive/data/genomes/rouAeg1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../rouAeg1.agp
+# chrM    1       16706   1       O       NC_007393.1     1       16706   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_007393.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    # there is no name for chrM/NC_007393.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    # 2490 insdc.refseq.txt
+    # 2490 insdcToUcsc.txt
+    # 2490 name.coordinate.tab
+    # 2490 ucscToINSDC.bed
+    # 2490 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab rouAeg1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords rouAeg1
+    # should cover %100 entirely:
+    featureBits -countGaps rouAeg1 ucscToINSDC
+    # 1910250568 bases of 1910250568 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2016-04-14 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/bats/rouAeg1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" rouAeg1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+# 2489 LOCP.1
+#    1 NC_.1
+
+    # implies a search rule of: '[CLNOP_]+[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" rouAeg1 | wc -l
+    # 2490
+
+    hgsql -N -e "select frag from gold;" rouAeg1 \
+       | egrep -e '[CLNOP_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 2490
+
+    hgsql -N -e "select frag from gold;" rouAeg1 \
+       | egrep -v -e '[CLNOP_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/rouAeg1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [CLNOP_]+[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2016-04-14 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/repeatMasker
+    cd /hive/data/genomes/rouAeg1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku rouAeg1) > do.log 2>&1
+    # real    572m12.798s
+
+    cat faSize.rmsk.txt
+# 1910250568 bases (482376 N's 1909768192 real 1292012610 upper 617755582 lower)
+#     in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464v1)
+#    max 8996366 (NW_015492809v1) median 262214
+# %32.34 masked total, %32.35 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps rouAeg1 rmsk
+    # 617755753 bases of 1910250568 (32.339%) in intersection
+    # real    0m29.128s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' rouAeg1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+
+    # total 617755753.000000
+    # real    0m24.382s
+
+##########################################################################
+# running simple repeat (DONE - 2016-04-14 - Hiram)
+
+    mkdir /hive/data/genomes/rouAeg1/bed/simpleRepeat
+    cd /hive/data/genomes/rouAeg1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        rouAeg1) > do.log 2>&1
+    # real    9m33.566s
+
+    cat fb.simpleRepeat
+    # 19230683 bases of 1910250568 (1.007%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/rouAeg1
+    twoBitMask rouAeg1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed rouAeg1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa rouAeg1.2bit stdout | faSize stdin > faSize.rouAeg1.2bit.txt
+    cat faSize.rouAeg1.2bit.txt
+# 1910250568 bases (482376 N's 1909768192 real 1291369125 upper
+#    618399067 lower) in 2490 sequences in 1 files
+#    max 8996366 (NW_015492809v1) median 262214
+# %32.37 masked total, %32.38 masked real
+
+    rm /gbdb/rouAeg1/rouAeg1.2bit
+    ln -s `pwd`/rouAeg1.2bit /gbdb/rouAeg1/rouAeg1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-04-15 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/rouAeg1/bed/microsat
+    cd /cluster/data/rouAeg1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed rouAeg1 microsat microsat.bed
+    # Read 43339 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-04-15 - Hiram)
+
+    mkdir /hive/data/genomes/rouAeg1/bed/windowMasker
+    cd /hive/data/genomes/rouAeg1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev rouAeg1) > do.log 2>&1
+    # real    179m23.881s
+
+    # Masking statistics
+    cat faSize.rouAeg1.cleanWMSdust.txt
+# 1910250568 bases (482376 N's 1909768192 real 1396731798 upper 513036394 lower)
+#     in 2490 sequences in 1 files
+# Total size: mean 767168.9 sd 1115019.8 min 1869 (NW_015494464v1)
+#    max 8996366 (NW_015492809v1) median 262214
+# %26.86 masked total, %26.86 masked real
+
+    cat fb.rouAeg1.rmsk.windowmaskerSdust.txt
+    # 242421551 bases of 1910250568 (12.691%) in intersection
+
+##########################################################################
+# ncbiRefSeq - (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/ncbiRefSeq
+    cd /hive/data/genomes/rouAeg1/bed/ncbiRefSeq
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-stop=download \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > download.log 2>&1
+    # real    17m29.693s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=process -stop=process \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > process.log 2>&1
+    # real    5m46.726s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=load -stop=load \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Rousettus_aegyptiacus \
+          GCF_001466805.2_Raegyp2.0 rouAeg1) > load.log 2>&1
+    # real    0m27.378s
+
+    featureBits -countGaps rouAeg1 ncbiRefSeq
+# 99026731 bases of 1910250568 (5.184%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/cpgIslands
+    cd /hive/data/genomes/rouAeg1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku rouAeg1) > do.log 2>&1
+    # real    5m19.286s
+
+    cat fb.rouAeg1.cpgIslandExt.txt
+    # 80027987 bases of 1910250568 (4.189%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/rouAeg1/bed/genscan
+    cd /hive/data/genomes/rouAeg1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku rouAeg1) > do.log 2>&1
+    # real    17m23.384s
+
+    cat fb.rouAeg1.genscan.txt
+    # 60809045 bases of 1910250568 (3.183%) in intersection
+
+    cat fb.rouAeg1.genscanSubopt.txt
+    # 50801373 bases of 1910250568 (2.659%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2016-02-03 - Hiram)
+
+    # numerator is rouAeg1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap rouAeg1 gap
+    # 0 bases of 1910250568 (0.000%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 1910250568 / 2861349177 \) \* 1024
+    #  ( 1910250568 / 2861349177 ) * 1024 = 683.627359
+
+    # ==> use -repMatch=600 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/rouAeg1
+    blat rouAeg1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/rouAeg1.11.ooc \
+        -repMatch=600
+    #   Wrote 30666 overused 11-mers to jkStuff/rouAeg1.11.ooc
+
+    # there are no gaps ?
+    hgsql -e 'select count(*) from gap;' rouAeg1
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' rouAeg1 \
+#         | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#     gapToLift -verbose=2 -minGap=100 rouAeg1 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (TBD - 2016-02-03,10 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism          mrnaCnt estCnt  refSeqCnt
+    # Rousettus aegyptiacus   9       0       0
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add rouAeg1 just before saiBol1
+# rouAeg1 Rousettus aegyptiacus (Egyptian rousette (fruit bat))
+rouAeg1.serverGenome = /hive/data/genomes/rouAeg1/rouAeg1.2bit
+rouAeg1.clusterGenome = /hive/data/genomes/rouAeg1/rouAeg1.2bit
+rouAeg1.ooc = /hive/data/genomes/rouAeg1/jkStuff/rouAeg1.11.ooc
+rouAeg1.lift = no
+rouAeg1.perChromTables = no
+rouAeg1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+rouAeg1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+rouAeg1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+rouAeg1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+rouAeg1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+rouAeg1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+rouAeg1.refseq.mrna.native.load = no
+rouAeg1.genbank.est.native.load = no
+rouAeg1.downloadDir = rouAeg1
+
+    git commit -m "Added rouAeg Egyptian rousette (fruit bat) - Rousettus aegyptiacus; refs #17167" etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial rouAeg1
+    # logFile: var/build/logs/2016.04.19-13:27:55.rouAeg1.initalign.log
+    #   real    472m50.234s
+     tail -2 var/build/logs/2016.04.19-13:27:55.rouAeg1.initalign.log
+# hgwdev 2016.04.19-21:19:14 rouAeg1.initalign: Succeeded: rouAeg1
+# hgwdev 2016.04.19-21:20:45 rouAeg1.initalign: finish
+
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.rouAeg1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad rouAeg1
+    # logFile: var/dbload/hgwdev/logs/2016.04.20-10:24:34.rouAeg1.dbload.log
+    # real    10m50.471s
+    tail -1 var/dbload/hgwdev/logs/2016.04.20-10:24:34.rouAeg1.dbload.log
+# hgwdev 2016.04.20-10:35:24 rouAeg1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add rouAeg1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added rouAeg1 Egyptian rousette fruit bat - Rousettus aegyptiacus - refs #17167" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (DONE - 2016-04-20 - Hiram)
+
+    mkdir /hive/data/genomes/rouAeg1/bed/augustus
+    cd /hive/data/genomes/rouAeg1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev rouAeg1) > do.log 2>&1
+    # real    70m56.666s
+
+    cat fb.rouAeg1.augustusGene.txt
+    # 54429943 bases of 1910250568 (2.849%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-04-19 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rouAeg1", "blat1d", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("rouAeg1", "blat1d", "17863", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## reset default position to rheMac3 position (TBD - 2016-02-09 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chr14:63580522-63594072"
+	where name="rouAeg1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=rouAeg1 -tableCoverage all.joiner
+    joinerCheck -database=rouAeg1 -times all.joiner
+    joinerCheck -database=rouAeg1 -keys all.joiner
+
+    cd /hive/data/genomes/rouAeg1
+    time (makeDownloads.pl rouAeg1) > downloads.log 2>&1
+    #  real    27m1.207s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/rouAeg1/pushQ
+    cd /hive/data/genomes/rouAeg1/pushQ
+    time makePushQSql.pl rouAeg1 > rouAeg1.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/rouAeg1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/rouAeg1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/rouAeg1/bbi/quality.bw
+    # WARNING: rouAeg1 does not have seq
+    # WARNING: rouAeg1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p rouAeg1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/rouAeg1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

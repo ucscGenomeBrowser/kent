@@ -264,7 +264,7 @@ return vcfInfoString;
 static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))?$";
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
-    "<ID=([A-Za-z0-9_:-]+),"
+    "<ID=([\\.+A-Za-z0-9_:-]+),"
     "Number=(\\.|A|G|[0-9-]+),"
     "Type=([A-Za-z]+),"
     "Description=\"?(.*)\"?>$";

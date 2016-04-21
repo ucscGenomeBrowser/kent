@@ -14,4 +14,5 @@ table dbDb
     byte hgNearOk;      "Have hgNear for this?"
     byte hgPbOk;        "Have pbTracks for this?"
     string sourceName;  "Source build/release/version of the assembly"
+    int taxId;          "NCBI Taxonomy ID for genome"
     )

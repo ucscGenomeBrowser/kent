@@ -2,13 +2,15 @@
  * generated dbDb.c and dbDb.sql.  This header links the database and
  * the RAM representation of objects. */
 
-/* Copyright (C) 2004 The Regents of the University of California 
+/* Copyright (C) 2004, 2016 The Regents of the University of California
  * See README in this or parent directory for licensing information. */
 
 #ifndef DBDB_H
 #define DBDB_H
 
-#define DBDB_NUM_COLS 13
+#define DBDB_NUM_COLS 14
+
+extern char *dbDbCommaSepFieldNames;
 
 struct dbDb
 /* Description of annotation database */
@@ -27,6 +29,7 @@ struct dbDb
     signed char hgNearOk;	/* Have hgNear for this? */
     signed char hgPbOk;	/* Have pbTracks for this? */
     char *sourceName;	/* Source build/release/version of the assembly */
+    int taxId;	/* NCBI Taxonomy ID for genome */
     };
 
 void dbDbStaticLoad(char **row, struct dbDb *ret);

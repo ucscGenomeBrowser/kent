@@ -311,6 +311,21 @@ va_end(argscp);
 fflush(stderr);
 }
 
+void htmlVaBadRequestAbort(char *format, va_list args)
+/* Print out an HTTP header 400 status code (Bad Request) and message,
+ * then exit with error.  For use as an errAbort handler. */
+{
+puts("Status: 400\r");
+puts("Content-Type: text/plain; charset=UTF-8\r");
+puts("\r");
+if (format != NULL)
+    {
+    vfprintf(stdout, format, args);
+    fprintf(stdout, "\n");
+    }
+exit(-1);
+}
+
 void htmlAbort()
 /* Terminate HTML file. */
 {

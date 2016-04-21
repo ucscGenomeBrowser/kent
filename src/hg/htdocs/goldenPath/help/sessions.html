@@ -26,8 +26,15 @@
   <ul><b>
     <li><a class="toc" href="#What">What is a Session?</a>
     <li><a class="toc" href="#Gallery">Session Gallery</a>
+      <ul>
+        <li><a class="toc" href="#dna">DNA/Codon View</a>
+        <li><a class="toc" href="#evolution">Evolution</a>
+        <li><a class="toc" href="#snp">SNPs and Disease</a>
+        <li><a class="toc" href="#tfbs">Expression/Regulation: TFBS/RNA-seq/ChIP-seq</a>
+        <li><a class="toc" href="#mlq">Mailing List Support</a>
+      </ul>
     <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
-  </b></ul>
+</b></ul>
 </td>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
@@ -37,32 +44,266 @@
 <h1>What is a Session?</h1>
 <div class="sectionContent">
 <p>
-A <A HREF="hgSessionHelp.html">Session</A> is a specific set of track combinations, 
-including custom tracks. Multiple sessions may be saved for future reference, for 
-comparing different data sets, or for sharing with your colleagues. 
-Follow these links to learn how to <A HREF="hgSessionHelp.html#Create">create</A>
-and <A HREF="hgSessionHelp.html#Share">share</A> Sessions.
+A <a href="hgSessionHelp.html" target="_blank">session</a> is a specific set of track
+combinations, that can include custom tracks allowing snapshots of browser activities.
+Multiple sessions may be saved for future reference, for comparing different data sets, or
+for sharing with your colleagues. Follow these links to learn how to
+<a href="hgSessionHelp.html#Create" target="_blank">create</a>
+and <a href="hgSessionHelp.html#Share" target="_blank">share</a> sessions.
 </p>
 
 </div><!-- .sectionContent -->
 </div><!-- .section -->
-
 <a name="Gallery"></a>
 <div class="section">
 <h1>Session Gallery</h1>
 <div class="sectionContent">
-<p><b>One sentence description of session.</b></p>
+
+<!-- Topic Division --> 
+<a name="dna"></a>
+<h3><em>DNA/Codon View</em></h3>
+
+<!-- Session INFO: This comes from an educational collection: https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Stop Codons in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.stopCodons"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.stopCodons.png"></center></a>
 <p>
-More details about the session, including the link to view it.
+The above session helps illustrate the display of how one gene can have  different
+transcripts with different stop codons, displayed in red in the browser.
 </p>
-<p><b>One sentence description of session.</b></p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from our wiki: http://genomewiki.cse.ucsc.edu/index.php/Genome_Browser_Session_Gallery -->
+<h4 class="title">Premature Stop in the hg18 Reference Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg18.stop"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg18.stop.png"></center></a>
 <p>
-More details about the session, including the link to view it.
-</p>
-<p><b>One sentence description of session.</b></p>
+A premature stop codon was found in the hg18 reference genome and about half of
+people of European descent. The UCSC Genes track was forced to skip the codon.
+<a href="../../cgi-bin/hgc?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg18.stop&c=chr18&o=59530817&t=59530818&g=hgdpGeo&i=rs4940595"
+target="_blank"><center><img width="40%" height="40%" src="../../images/hg18.stop2.png"></center></a>
 <p>
-More details about the session, including the link to view it.
+Clicking the top highlighted rs4940595 in the <a href="../../cgi-bin/hgTrackUi?db=hg18&g=hgdpGeo"
+target="_blank" >Human Genome Diversity Project SNP Population Allele Frequencies</a> track will
+display the world frequency image regarding this variant. In the more recent hg38 reference
+genome this area displays differently.
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg38.stop"
+target="_blank">Link to region in hg38 for comparison</a>.
 </p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Start Codons in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.startCodon"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.startCodon.png"></center></a>
+<p>
+The above session helps illustrate the display of how one gene can have different
+transcripts with different start codons, displayed in green in the browser.
+Here is an example session displaying 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.reverseStart"
+target="_blank">a start codon on the reverse strand</a>. By clicking the &quot;reverse&quot; button
+below the browser one can
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.reverseStart2"
+target="_blank">flip the view</a>.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Split Codons in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.split"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.split.png"></center></a>
+<p>
+The above session helps illustrate how a codon can be split between splice sites.
+By clicking the little double-headed arrow on the left of one of the transcripts one can see the
+other part of the codon. Note that there are different AAs (G or R) depending on the different
+splicing upstream for different isoforms.
+</p>
+<p>
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.split2"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.split2.png"></center></a>
+Using the multi-region exon-only feature available under the top blue menu bar and View selecting
+&quot;Multi-Region&quot; you can remove introns adjusting padding down to just one base (or none) 
+to more clearly see the split codon above.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Different Codon Numbering in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.codonNums.png"></center></a>
+<p>
+The above session helps illustrate the how same region in an exon can have different codon
+numbering reflecting different isoforms and that it is important to use caution when reading
+codon numbers in the literature. Here is an additional view of the region zoomed out 300x to display
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums2"
+target="_blank">the alternate splicing</a>.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="evolution"></a>
+<h3><em>Evolution</em></h3>
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Codon Wobble in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.wobble.png"></center></a>
+<p>
+The above session helps illustrate the how codon wobble in bases diverges
+through evolution when the amino acid is the same (note the conservation score graph).
+There is a conservation of function through evolution with V > I > F amino acids and
+ K > R substitutions. Here is an additional example session displaying
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble2"
+target="_blank">wobble</a>.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Evolution in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp.png"></center></a>
+<p>
+This session shows alignments of three species (Chimp, Gorilla, and Orangutan) against chr2 in hg19
+and how the same sequences are found in two separate chromosomes in the other species.
+</p>
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp2"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp2.png"></center></a>
+<p>
+Zooming in above to a region of human chr2 you can see heterochromatin around a vestigial
+centromere which has not evolved away yet. By using the top blue menu bar under View to
+select &quot;In Other Genomes (Convert)&quot; you can select the Chimp assembly panTro4 and
+see that these coordinates in hg19 (chr2:126,645,017-138,651,416) coincide with the
+centromere in the Chimp chr2B:
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp3"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp3.png"></center></a>
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="snp"></a>
+<h3><em>SNPs and Disease</em></h3>
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of SNP coloring and ABO variant details in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.SNPcolor"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.SNPcolor.png"></center></a>
+<p>
+The above session helps illustrate how SNPs are color coded regarding whether they
+represent a nonsense, missense, or frameshift variation. These SNPs are around the ABO gene and
+represent blood group variation.
+</p>
+<p>By clicking into the gene track for one of the isoforms of the ABO gene one can see additional variant
+details by clicking the &quot;Gene Alleles&quot; link to jump down to the &quot;Common Gene Haplotype
+Alleles&quot; section and mouseover highlighted variant amino acids to see changes in nucleotide and
+AA sequences.
+<a href="http://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc004cda.1&hgg_prot=P16442&hgg_chrom=chr9&hgg_start=136130562&hgg_end=136150630&hgg_type=knownGene&db=hg19#geneAlleles"
+target="_blank"><center><img width="70%" height="70%" src="../../images/aboVariantDetails.png"></center></a>
+<p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of OMIM allelic variants in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.OMIM"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.OMIM.png"></center></a>
+<p>
+The top track in the above session displays OMIM allelic variants. By clicking the items one
+can learn the details and find additional links to the allelic variants in the
+Online Mendelian Inheritance in Man (OMIM) database.
+</p>
+In the above and this zoomed in session you can <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.OMIM2"
+target="_blank">mouseover OMIM variants to access details</a> such as OMIM Allelic Variant 136350.0021
+in the far right to see &quot;PRO366LEU,rs121909641:HYPOGONADOTROPIC HYPOGONADISM 2
+WITH ANOSMIA, SUSCEPTIBILITY TO&quot; to learn additional information about each variant.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of CAG Repeats in Huntingtin in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.CAGrepeat"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.CAGrepeat.png"></center></a>
+<p>
+The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=oligoMatch"
+target="_blank" >Short Match Track</a> to display matches of &quot;cagcagcagcagcagcag&quot;
+repeats in a polyglutamine region (Note Qs) of the gene HTT, Huntingtin, linked to Huntington's disease.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Examples of Segmental Duplications in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.segDup"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.segDup.png"></center></a>
+<p>
+The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=genomicSuperDups"
+target="_blank" >Segmental Dups</a> to display regions detected as putative genomic duplications
+within the golden path and shows X-linked colorblindness as a recombination hotspot in the opsin
+region where genes encode for light absorbing visual pigments.
+</p>
+<p>
+Another example featuring the Segmental Dups track is the 
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.segDup2"
+target="_blank">15q11 Prader-Willi region</a> in which same-chromosome duplications lead to gain
+and loss of copies and a rare genetic disorder when some genes are deleted or unexpressed.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="tfbs"></a>
+<h3><em>Expression/Regulation: TFBS/RNA-seq/ChIP-seq</em></h3>
+
+<!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
+<h4 class="title">Microarray Probset data in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.microArray"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.microArray.png"></center></a>
+<p>
+The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=genotypeArrays"
+target="_blank" >Microarray Probesets</a> track to display Affymetrix, Agilent, and
+Illumina probe information.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Session INFO: This comes from the ENCODE index.html -->
+<h4 class="title">View ENCODE data (2003 - 2012) in the UCSC Genome Browser</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration"
+target="_blank"><center><img width="70%" height="70%" src="../../images/encode/browser.png"></center></a>
+<p>
+The above session highlights some key integrated track data from the ENCODE project including
+GENCODE gene sets, Transcription Levels by RNA-seq, H3K27Ac histone mark, DNaseI
+Hypersensitivity, ChIP-seq Transcription Factor binding sites, and Genome Segmentations.
+</p>
+</div><!-- .sectionContent -->
+
+<!-- Topic Division -->
+<a name="mlq"></a>
+<h3><em>Mailing List Support</em></h3>
+
+<!-- Session INFO: This comes from the ENCODE index.html -->
+<h4 class="title">Example of displaying repeats in the hg19 Assembly</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.AluY"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.AluY.png"></center></a>
+<p>
+A user was interested in an intron region of the gene PHKB where a repeat element for AluY was given.
+The user could not find the Alu repeat, and 
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/_X1bURBW8ho/TRs18-kez2AJ"
+target="_blank">the response</a> was to aid the user in turning on the RepeatMasker track
+where information on repeats, such as the AluY element desired, is contained.
+</p>
+</div><!-- .sectionContent -->
+
+
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
@@ -71,7 +312,30 @@ More details about the session, including the link to view it.
 <h1>Troubleshooting Common Problems</h1>
 <div class="sectionContent">
 <p>
-Some text here.
+Please see the <a href="http://genome.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
+target="_blank">How to share your UCSC screenthoughts</a> blog entry for a thorough 
+discussion about sessions.
+</p>
+<p>
+Most new users make the mistake of sharing a URL of the current view to others for collaboration. 
+This can lead to many problems as each URL is given a unique identifier called a <b>&quot;hgsid&quot;</b>
+that allows users to continue actively manipulating their data across different platforms
+(FireFox,Chrome,IE). The person one shares the link with will be interpreted as the same user
+and will have the power to continue manipulating the original shared content.
+</p>
+When you want to share information in the browser in a more permanent fashion you should
+create a session and share the resulting URL. From the Session page, copy the link that says
+&quot;Browser&quot; with a right-click.  The URL should look something like the following:
+<tt>
+http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doOtherUser=submit&hgS_otherUserName=</b>sessionGallery<b>&hgS_otherUserSessionName=</b>hg19_watsonKriek
+</tt> 
+</p>
+<p>
+In the above case a user name was created called <tt>sessionGallery</tt> and a session was created
+called <tt>hg19_watsonKriek</tt>. This more stable link is the best way to share information, with 
+the only further improvement being to locally download your session file and then remotely share it
+from your own private collection in an internet accessible location using the
+<tt><b>hgS_loadUrlName=</b></tt> option. For example seen in this link: <tt>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doLoadUrl=submit&hgS_loadUrlName=</b>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</tt>
 </p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->

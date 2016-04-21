@@ -93,7 +93,7 @@ DBS = \
 	felCat3 felCat4 felCat5  felCat8 \
 	fr1 fr2 fr3 \
 	gadMor1 \
-	galGal2 galGal3 galGal4 \
+	galGal2 galGal3 galGal4 galGal5 \
 	galVar1 \
 	gasAcu1 \
 	gorGor1 gorGor2 gorGor3 gorGor4 \
@@ -131,7 +131,7 @@ DBS = \
 	otoGar1 otoGar3 tupBel1\
 	oviAri1 oviAri3 \
 	oxyTri2 \
-	panPan1 \
+	panPan1 panPan2 \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 \
 	papHam1 papAnu2 \
@@ -146,6 +146,7 @@ DBS = \
 	rheMac2 rheMac3 rheMac7 rheMac8 \
 	rhiRox1 \
 	rn3 rn4 rn5 rn6 \
+	rouAeg1 \
 	sacCer1 sacCer2 sacCer3 \
 	saiBol1 \
 	sarHar1 \

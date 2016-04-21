@@ -185,7 +185,7 @@ linesAt 1,3
 
 track gwasCatalog
 shortLabel GWAS Catalog
-longLabel NHGRI Catalog of Published Genome-Wide Association Studies
+longLabel NHGRI-EBI Catalog of Published Genome-Wide Association Studies
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 group phenDis
@@ -1020,7 +1020,7 @@ track snp144Common
 shortLabel Common SNPs(144)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 144) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp144Seq
@@ -1035,7 +1035,6 @@ orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
-priority 1
 
 track snp144Flagged
 shortLabel Flagged SNPs(144)

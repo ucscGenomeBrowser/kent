@@ -132,6 +132,10 @@ void htmlVaWarn(char *format, va_list args);
 /* Write an error message.  (Generally you just call warn() or errAbort().
  * This is exposed mostly for the benefit of the cart.) */
 
+void htmlVaBadRequestAbort(char *format, va_list args);
+/* Print out an HTTP header 400 status code (Bad Request) and message,
+ * then exit with error.  For use as an errAbort handler. */
+
 char *htmlWarnStartPattern();
 /* Return starting pattern for warning message. */
 

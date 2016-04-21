@@ -28,7 +28,7 @@ fi
 
 cd "${WORKDIR}"/upload
 
-rm omimGene2.date
+rm -f omimGene2.date
 touch omimGene2.date
 hgsqlTableDate hg19 omimGene2 omimGene2.date
 if test \! omimGene2.date -nt upload.omim2.date

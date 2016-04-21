@@ -159,12 +159,13 @@ return count;
 
 void wrapFileName(struct fieldedTable *table, struct fieldedRow *row, 
     char *field, char *val, char *shortVal, void *context)
-/* Write out wrapper that links us to something nice */
+/* Write out wrapper that links us to metadata display */
 {
 printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=%s&cdwFileVal=%s&%s\">",
     field, val, cartSidUrlString(cart));
 printf("%s</A>", shortVal);
 }
+
 
 void wrapTagField(struct fieldedTable *table, struct fieldedRow *row, 
     char *field, char *val, char *shortVal, void *context)
@@ -341,6 +342,16 @@ return cdwTrackVizLoadByQuery(conn, query);
 }
 
 
+void wrapFileVis(struct sqlConnection *conn, struct cdwFile *ef, char *unwrapped)
+/* Wrap hyperlink link to file around unwrapped text.  Link goes to file in vf. */
+{
+char *host = hHttpHost();
+printf("<A HREF=\"");
+printf("http://%s/cdw/%s", host, ef->cdwFileName);
+printf("\">");
+printf("%s</A>", unwrapped);
+}
+
 boolean wrapTrackVis(struct sqlConnection *conn, struct cdwValidFile *vf, char *unwrapped)
 /* Attempt to wrap genome browser link around unwrapped text.  Link goes to file in vf. */
 {
@@ -409,6 +420,43 @@ if (accIx >= 0)
     }
 if (!printed)
     printf("%s", shortVal);
+}
+
+boolean isWebBrowsableFormat(char *format)
+/* Return TRUE if it's one of the web-browseable formats */
+{
+char *formats[] = {"html", "jpg", "pdf", "text", };
+return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
+}
+
+void wrapFormat(struct fieldedTable *table, struct fieldedRow *row, 
+    char *field, char *val, char *shortVal, void *context)
+/* Write out wrapper that links us to something nice */
+{
+struct sqlConnection *conn = context;
+char *format = val;
+if (isWebBrowsableFormat(format))
+     {
+     /* Get file name out of table */
+     int fileNameIx = stringArrayIx("file_name", table->fields, table->fieldCount);
+     if (fileNameIx < 0)
+        errAbort("Expecting a file_name in this table");
+     char *fileName = row->row[fileNameIx];
+
+     /* Convert file to accession by chopping off at first dot */
+     char *acc = cloneString(fileName);
+     char *dot = strchr(acc, '.');
+     if (dot != NULL)
+         *dot = 0;
+
+     struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+     struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
+     if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
+	   wrapFileVis(conn, ef, shortVal);
+     freez(&acc);
+     }
+else
+     printf("%s", format);
 }
 
 void wrapMetaNearAccession(struct fieldedTable *table, struct fieldedRow *row, 
@@ -632,7 +680,7 @@ if (!isEmpty(searchString))
     int wordCount = chopLine(lowered, words);
     char *trixPath = "/gbdb/cdw/cdw.ix";
     struct trix *trix = trixOpen(trixPath);
-    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, TRUE);
+    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, wordCount, words, tsmExpand);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
         {
 	intValTreeAdd(searchPassTree, sqlUnsigned(tsr->itemId), tsr);
@@ -709,6 +757,7 @@ if (!isEmpty(where))
 struct hash *wrappers = hashNew(0);
 hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
+hashAdd(wrappers, "format", wrapFormat);
 accessibleFilesTable(cart, conn, searchString,
   "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,body_part",
   "cdwFileTags", where, 

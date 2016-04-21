@@ -1,310 +1,759 @@
-/* hgGateway - Human Genome Browser Gateway. */
-
-/* Copyright (C) 2014 The Regents of the University of California 
- * See README in this or parent directory for licensing information. */
+/* hgGateway: make it easy to select a species and assembly
+ *
+ * Copyright (C) 2016 The Regents of the University of California
+ *
+ * This CGI has three modes of operation:
+ *  - HTML output for main page (default); most HTML is in hgGateway.html
+ *  - cart-based JSON responses to ajax requests from javascript (using hg/lib/cartJson.c)
+ *    (if CGI param CARTJSON_COMMAND exists)
+ *  - no cart; fast JSON responses to species-search autocomplete requests
+ *    (if CGI param SEARCH_TERM exists)
+ */
 #include "common.h"
-#include "linefile.h"
-#include "hash.h"
-#include "cheapcgi.h"
-#include "htmshell.h"
-#include "obscure.h"
-#include "web.h"
 #include "cart.h"
-#include "hdb.h"
-#include "dbDb.h"
-#include "hgFind.h"
+#include "cartJson.h"
+#include "cheapcgi.h"
+#include "errCatch.h"
+#include "googleAnalytics.h"
 #include "hCommon.h"
-#include "hui.h"
-#include "customTrack.h"
-#include "hubConnect.h"
 #include "hgConfig.h"
+#include "hdb.h"
+#include "htmshell.h"
+#include "hubConnect.h"
+#include "hui.h"
 #include "jsHelper.h"
-#include "hPrint.h"
+#include "jsonParse.h"
+#include "obscure.h"  // for readInGulp
+#include "regexHelper.h"
 #include "suggest.h"
-#include "search.h"
-#include "geoMirror.h"
 #include "trackHub.h"
+#include "trix.h"
+#include "web.h"
 
-struct cart *cart = NULL;
-struct hash *oldVars = NULL;
-char *clade = NULL;
-char *organism = NULL;
-char *db = NULL;
+/* Global Variables */
+struct cart *cart = NULL;             /* CGI and other variables */
+struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 
-// TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
-extern struct dyString *dyUpgradeError;
+#define SEARCH_TERM "hggw_term"
 
-void hgGateway()
-/* hgGateway - Human Genome Browser Gateway. */
+static char *maybeGetDescriptionText(char *db)
+/* Slurp the description.html file for db into a string (if possible, don't die if
+ * we can't read it) and return it. */
 {
-char *defaultPosition = hDefaultPos(db);
-char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
-boolean gotClade = hGotClade();
-char *survey = cfgOptionEnv("HGDB_SURVEY", "survey");
-char *surveyLabel = cfgOptionEnv("HGDB_SURVEY_LABEL", "surveyLabel");
-boolean supportsSuggest = FALSE;
-if (!trackHubDatabase(db))
-    supportsSuggest = assemblySupportsGeneSuggest(db);
+struct errCatch *errCatch = errCatchNew();
+char *descText = NULL;
+if (errCatchStart(errCatch))
+    {
+    char *htmlPath = hHtmlPath(db);
+    descText = udcFileReadAll(htmlPath, NULL, 0, NULL);
+    }
+errCatchEnd(errCatch);
+// Just ignore errors for now.
+return descText;
+}
 
-/* JavaScript to copy input data on the change genome button to a hidden form
-This was done in order to be able to flexibly arrange the UI HTML
-*/
-char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
-char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
-char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
+static int trackHubCountAssemblies(struct trackHub *hub)
+/* Return the number of hub's genomes that are hub assemblies, i.e. that have a twoBitPath. */
+{
+int count = 0;
+struct trackHubGenome *genome;
+for (genome = hub->genomeList;  genome != NULL;  genome = genome->next)
+    {
+    if (isNotEmpty(genome->twoBitPath))
+        count++;
+    }
+return count;
+}
 
-/*
-   If we are changing databases via explicit cgi request,
-   then remove custom track data which will
-   be irrelevant in this new database .
-   If databases were changed then use the new default position too.
-*/
+static char *trackHubDefaultAssembly(struct trackHub *hub)
+/* If hub->defaultDb is an assembly genome, return it; otherwise return the first assembly.
+ * Don't free result. */
+{
+char *defaultDb = hub->defaultDb;
+char *firstAssemblyDb = NULL;
+struct trackHubGenome *genome;
+for (genome = hub->genomeList;  genome != NULL;  genome = genome->next)
+    {
+    if (isNotEmpty(genome->twoBitPath))
+        {
+        if (sameString(defaultDb, genome->name))
+            return defaultDb;
+        else if (firstAssemblyDb == NULL)
+            firstAssemblyDb = genome->name;
+        }
+    }
+return firstAssemblyDb;
+}
 
-if (sameString(position, "genome") || sameString(position, "hgBatch"))
-    position = defaultPosition;
+static void listAssemblyHubs(struct jsonWrite *jw)
+/* Write out JSON describing assembly hubs (not track-only hubs) connected in the cart. */
+{
+jsonWriteListStart(jw, "hubs");
+struct hubConnectStatus *status, *statusList = hubConnectStatusListFromCart(cart);
+for (status = statusList;  status != NULL;  status = status->next)
+    {
+    struct trackHub *hub = status->trackHub;
+    if (hub == NULL)
+        continue;
+    int assemblyCount = trackHubCountAssemblies(hub);
+    if (assemblyCount > 0)
+        {
+        jsonWriteObjectStart(jw, NULL);
+        jsonWriteString(jw, "name", hub->name);
+        jsonWriteString(jw, "shortLabel", hub->shortLabel);
+        jsonWriteString(jw, "longLabel", hub->longLabel);
+        jsonWriteString(jw, "defaultDb", trackHubDefaultAssembly(hub));
+        jsonWriteString(jw, "hubUrl", status->hubUrl);
+        jsonWriteNumber(jw, "assemblyCount", assemblyCount);
+        jsonWriteString(jw, "errorMessage", status->errorMessage);
+        // We might be able to do better than this for taxId, for example if defaultDb is local
+        // or if hub genomes ever specify taxId...
+        jsonWriteNumber(jw, "taxId", 0);
+        jsonWriteObjectEnd(jw);
+        }
+    }
+jsonWriteListEnd(jw);
+}
 
-jsIncludeFile("jquery.js", NULL);
+
+static void writeFindPositionInfo(struct jsonWrite *jw, char *db, int taxId, char *hubUrl,
+                                  char *position)
+/* Write JSON for the info needed to populate the 'Find Position' section. */
+{
+char *genome = hGenome(db);
+if (isEmpty(genome))
+    {
+    jsonWriteStringf(jw, "error", "No genome for db '%s'", db);
+    }
+else
+    {
+    jsonWriteString(jw, "db", db);
+    jsonWriteNumber(jw, "taxId", taxId);
+    jsonWriteString(jw, "genome", genome);
+    struct slPair *dbOptions = NULL;
+    char genomeLabel[PATH_LEN*4];
+    if (isNotEmpty(hubUrl))
+        {
+        struct trackHub *hub = hubConnectGetHub(hubUrl);
+        if (hub == NULL)
+            {
+            jsonWriteStringf(jw, "error", "Can't connect to hub at '%s'", hubUrl);
+            return;
+            }
+        struct dbDb *dbDbList = trackHubGetDbDbs(hub->name);
+        dbOptions = trackHubDbDbToValueLabel(dbDbList);
+        safecpy(genomeLabel, sizeof(genomeLabel), hub->shortLabel);
+        jsonWriteString(jw, "hubUrl", hubUrl);
+        }
+    else
+        {
+        dbOptions = hGetDbOptionsForGenome(genome);
+        safecpy(genomeLabel, sizeof(genomeLabel), genome);
+        }
+    jsonWriteValueLabelList(jw, "dbOptions", dbOptions);
+    jsonWriteString(jw, "genomeLabel", genomeLabel);
+    jsonWriteString(jw, "position", position);
+    char *suggestTrack = NULL;
+    if (! trackHubDatabase(db))
+        suggestTrack = assemblyGeneSuggestTrack(db);
+    jsonWriteString(jw, "suggestTrack", suggestTrack);
+    char *description = maybeGetDescriptionText(db);
+    //#*** TODO: move jsonStringEscape inside jsonWriteString
+    char *encoded = jsonStringEscape(description);
+    jsonWriteString(jw, "description", encoded);
+    listAssemblyHubs(jw);
+    }
+}
+
+static void setTaxId(struct cartJson *cj, struct hash *paramHash)
+/* Set db and genome according to taxId (and/or db) and return the info we'll need
+ * to fill in the findPosition section. */
+{
+char *taxIdStr = cartJsonRequiredParam(paramHash, "taxId", cj->jw, "setTaxId");
+char *db = cartJsonOptionalParam(paramHash, "db");
+int taxId = atoi(taxIdStr);
+if (isEmpty(db))
+    db = hDbForTaxon(taxId);
+if (isEmpty(db))
+    jsonWriteStringf(cj->jw, "error", "No db for taxId '%s'", taxIdStr);
+else
+    {
+    writeFindPositionInfo(cj->jw, db, taxId, NULL, hDefaultPos(db));
+    cartSetString(cart, "db", db);
+    cartSetString(cart, "position", hDefaultPos(db));
+    }
+}
+
+static void setHubDb(struct cartJson *cj, struct hash *paramHash)
+/* Set db and genome according to hubUrl (and/or db and hub) and return the info we'll need
+ * to fill in the findPosition section. */
+{
+char *hubUrl = cartJsonRequiredParam(paramHash, "hubUrl", cj->jw, "setHubDb");
+char *taxIdStr = cartJsonOptionalParam(paramHash, "taxId");
+int taxId = taxIdStr ? atoi(taxIdStr) : -1;
+// cart's db was already set by magic handling of hub CGI variables sent along
+// with this command.
+char *db = cartString(cart, "db");
+if (isEmpty(db))
+    jsonWriteStringf(cj->jw, "error", "No db for hubUrl '%s'", hubUrl);
+else
+    writeFindPositionInfo(cj->jw, db, taxId, hubUrl, hDefaultPos(db));
+}
+
+static void setDb(struct cartJson *cj, struct hash *paramHash)
+/* Set taxId and genome according to db and return the info we'll need to fill in
+ * the findPosition section. */
+{
+char *db = cartJsonRequiredParam(paramHash, "db", cj->jw, "setDb");
+char *hubUrl = cartJsonOptionalParam(paramHash, "hubUrl");
+int taxId = hTaxId(db);
+writeFindPositionInfo(cj->jw, db, taxId, hubUrl, hDefaultPos(db));
+cartSetString(cart, "db", db);
+cartSetString(cart, "position", hDefaultPos(db));
+}
+
+static void getUiState(struct cartJson *cj, struct hash *paramHash)
+/* Write out JSON for hgGateway.js's uiState object using current cart settings. */
+{
+char *db = cartUsualString(cj->cart, "db", hDefaultDb());
+char *position = cartUsualString(cart, "position", hDefaultPos(db));
+char *hubUrl = NULL;
+if (trackHubDatabase(db))
+    {
+    struct trackHub *hub = hubConnectGetHubForDb(db);
+    hubUrl = hub->url;
+    }
+writeFindPositionInfo(cj->jw, db, hTaxId(db), hubUrl, position);
+// If cart already has a pix setting, pass that along; otherwise the JS will
+// set pix according to web browser window width.
+int pix = cartUsualInt(cj->cart, "pix", 0);
+if (pix)
+    jsonWriteNumber(cj->jw, "pix", pix);
+}
+
+static void doCartJson()
+/* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
+{
+struct cartJson *cj = cartJsonNew(cart);
+cartJsonRegisterHandler(cj, "setTaxId", setTaxId);
+cartJsonRegisterHandler(cj, "setDb", setDb);
+cartJsonRegisterHandler(cj, "setHubDb", setHubDb);
+cartJsonRegisterHandler(cj, "getUiState", getUiState);
+cartJsonExecute(cj);
+}
+
+static void printActiveGenomes()
+/* Print out JSON for an object mapping each genome that has at least one db with active=1
+ * to its taxId.  */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+struct sqlConnection *conn = hConnectCentral();
+char *query = NOSQLINJ "select distinct(genome),taxId from dbDb where active=1 "
+    "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    jsonWriteNumber(jw, row[0], atoi(row[1]));
+hDisconnectCentral(&conn);
+jsonWriteObjectEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
+
+static void doMainPage()
+/* Send HTML with javascript to bootstrap the user interface. */
+{
+// Start web page with new banner
+char *db = NULL, *genome = NULL, *clade = NULL;
+getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+webStartJWest(cart, db, "Genome Browser Gateway");
+
+// The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
+// file containing a string constant that we #include and print here (see makefile).
+puts(
+#include "hgGateway.html.h"
+);
+
+// Set global JS variables hgsid and activeGenomes
+// We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
+// "window.hgsid = ".
+puts("<script>");
+printf("window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
+puts("window.activeGenomes =");
+printActiveGenomes();
+puts(";");
+puts("</script>");
+
+puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
+puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
+puts("<script src=\"../js/cart.js\"></script>");
+
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("ajax.js", NULL);
-jsIncludeFile("autocomplete.js", NULL);
-jsIncludeFile("hgGateway.js", NULL);
-jsIncludeFile("utils.js", NULL);
 jsIncludeFile("jquery.watermarkinput.js", NULL);
+jsIncludeFile("utils.js",NULL);
 
-puts("<CENTER style='font-size:small;'>"
-     "The UCSC Genome Browser was created by the \n"
-     "<A HREF=\"../staff.html\">Genome Bioinformatics Group of UC Santa Cruz</A>.\n"
-     "<BR>"
-     "Software Copyright (c) The Regents of the University of California.\n"
-     "All rights reserved.\n"
-     "</CENTER>\n");
+// Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", NULL);
+if (isNotEmpty(dbDbTree))
+    printf("<script src=\"%s\"></script>\n", dbDbTree);
 
-puts("<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
-     "<CENTER>"
-     "<table style='background-color:#FFFEF3; border: 1px solid #CCCC99;'>\n"
-     "<tr><td>\n");
+// Main JS for hgGateway:
+puts("<script src=\"../js/hgGateway.js\"></script>");
 
-puts("<table><tr>");
-if (gotClade)
-    puts("<td align=center valign=baseline>group</td>");
-puts("<td align=center valign=baseline>genome</td>\n"
-     "<td align=center valign=baseline>assembly</td>\n"
-     "<td align=center valign=baseline>position</td>\n"
-     "<td align=center valign=baseline>search term</td>\n"
-     "<td align=center valign=baseline> &nbsp; </td>\n"
-     "</tr>\n<tr>");
+webIncludeFile("inc/jWestFooter.html");
 
-if (gotClade)
-    {
-    puts("<td align=center>\n");
-    printCladeListHtml(organism, onChangeClade);
-    puts("</td>\n");
-    }
-
-puts("<td align=center>\n");
-if (gotClade)
-    printGenomeListForCladeHtml(db, onChangeOrg);
-else
-    printGenomeListHtml(db, onChangeOrg);
-puts("</td>\n");
-
-puts("<td align=center>\n");
-printAssemblyListHtml(db, onChangeDB);
-puts("</td>\n");
-
-puts("<td align=center>\n");
-hPrintf("<span class='positionDisplay' id='positionDisplay' title='click to copy position to input box'>%s</span>", addCommasToPos(db, position));
-hPrintf("<input type='hidden' name='position' id='position' value='%s'>\n", addCommasToPos(db, position));
-puts("</td><td align=center>\n");
-hPrintf("<input class='positionInput' type='text' name='hgt.positionInput' id='positionInput' size='45'>\n");
-if(supportsSuggest)
-    hPrintf("<input type='hidden' name='hgt.suggestTrack' id='suggestTrack' value='%s'>\n", assemblyGeneSuggestTrack(db));
-printf("</td>\n");
-
-cartSetString(cart, "position", position);
-cartSetString(cart, "db", db);
-cartSetString(cart, "org", organism);
-if (gotClade)
-    cartSetString(cart, "clade", clade);
-
-freez(&defaultPosition);
-position = NULL;
-
-puts("<td align=center>");
-hButton("Submit", "submit");
-/* This is a clear submit button that browsers will use by default when enter is pressed in position box. FIXME: This should be done with js onchange event! */
-printf("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>");
-cartSaveSession(cart);  /* Put up hgsid= as hidden variable. */
-puts("</td>\n"
-     "</tr></table>\n"
-     "</td></tr>\n");
-
-puts("<tr><td><CENTER><BR>\n"
-     "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> "
-     "the browser user interface settings to their defaults.");
-
-#define SURVEY 1
-#ifdef SURVEY
-if (survey && differentWord(survey, "off"))
-    printf("&nbsp;&nbsp;&nbsp;<span style='background-color:yellow;'>"
-           "<A HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></span>", 
-           survey, surveyLabel ? surveyLabel : "Take survey");
-#endif
-
-puts("<BR>\n"
-     "</CENTER>\n"
-     "</td></tr><tr><td><CENTER>\n");
-
-puts("<TABLE BORDER=\"0\">");
-puts("<TR>");
-
-if (isSearchTracksSupported(db,cart))
-    {
-    puts("<TD VALIGN=\"TOP\">");
-    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
-    puts("</TD>");
-    }
-
-// custom track button. disable hgCustom button on GSID server, until
-// necessary additional work is authorized.
-puts("<TD VALIGN=\"TOP\">");
-
-/* disable CT for CGB servers for the time being */
-if (!hIsGsidServer() && !hIsCgbServer())
-    {
-    boolean hasCustomTracks = customTracksExist(cart, NULL);
-    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-           hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
-           hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
-    }
-puts("</TD>");
-
-if (hubConnectTableExists())
-    {
-    puts("<TD VALIGN=\"TOP\">");
-    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
-           "../cgi-bin/hgHubConnect", "track hubs", "Import tracks");
-    puts("</TD>");
-    }
-
-// configure button
-puts("<TD VALIGN=\"TOP\">");
-cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display",
-                     "Configure track selections and browser display");
-puts("</TD>");
-
-puts("</TR></TABLE>");
-
-puts("</CENTER>\n"
-"</td></tr></table>\n"
-);
-puts("</CENTER>");
-
-if(!cartVarExists(cart, "pix"))
-    // put a hidden input for pix on page so default value can be filled in on the client side
-    hPrintf("<input type='hidden' name='pix' value=''>\n");
-
-puts("</FORM>");
-if (hIsPreviewHost())
-    {
-puts("<P>"
-"WARNING: This is our preview site. It is a weekly mirror of our internal development server for public access.  "
-"Data and tools here are under construction, have not been quality reviewed, and are subject to change "
-"at any time.  We provide this site for early access, with the warning that it is less available "
-"and stable than our public site.  For high-quality reviewed annotations on our production server, visit "
-"      <A HREF=\"http://genome.ucsc.edu\">http://genome.ucsc.edu</A>."
-"</P><BR>");
-    }
-else if (hIsPrivateHost())
-    {
-puts("<P>WARNING: This is our development and test site.  It usually works, but it is filled with tracks in various "
-"stages of construction, and others of little interest to people outside of our local group. "
-"It is usually slow because we are building databases on it. The documentation is poor. "
- "More data than usual is flat out wrong.  Maybe you want to go to "
-	 "<A HREF=\"http://genome.ucsc.edu\">genome.ucsc.edu</A> instead.");
-    }
-
-if (hIsGsidServer())
-    {
-    webNewSection("%s", "Sequence View\n");
-    printf("%s","Sequence View is a customized version of the UCSC Genome Browser, which is "
-           "specifically tailored to provide functions needed for the GSID HIV Data Browser.\n");
-    }
-
-hgPositionsHelpHtml(organism, db);
-
-puts("<FORM ACTION=\"../cgi-bin/hgGateway\" METHOD=\"GET\" NAME=\"orgForm\">");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-if (gotClade)
-    printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", clade);
-else
-    printf("<input type=\"hidden\" name=\"clade\" value=\"%s\">\n", "mammal");
-
-printf("<input type=\"hidden\" name=\"org\" value=\"%s\">\n", organism);
-printf("<input type=\"hidden\" name=\"db\" value=\"%s\">\n", db);
-puts("</FORM><BR>");
+webEndJWest();
 }
 
 void doMiddle(struct cart *theCart)
-/* Set up pretty web display and save cart in global. */
+/* Depending on invocation, either perform a query and print out results
+ * or display the main page. */
 {
-char *scientificName = NULL;
 cart = theCart;
-
-if(cgiIsOnWeb())
-    checkForGeoMirrorRedirect(cart);
-getDbGenomeClade(cart, &db, &organism, &clade, oldVars);
-if (! hDbIsActive(db))
-    {
-    db = hDefaultDb();
-    organism = hGenome(db);
-    clade = hClade(organism);
-    }
-scientificName = hScientificName(db);
-if (hIsGsidServer())
-    cartWebStart(theCart, db, "GSID %s Sequence View (UCSC Genome Browser) Gateway \n", organism);
+if (cgiOptionalString(CARTJSON_COMMAND))
+    doCartJson();
 else
-    {
-    char buffer[128];
-
-    /* tell html routines *not* to escape htmlOut strings*/
-    htmlNoEscape();
-    buffer[0] = 0;
-    if ((scientificName != NULL) && (*scientificName != 0))
-	{
-	if (sameString(clade,"ancestor"))
-	    safef(buffer, sizeof(buffer), "(<I>%s</I> Ancestor) ", scientificName);
-	else
-	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
-	}
-    cartWebStart(theCart, db, "%s %s%s Gateway\n", trackHubSkipHubName(organism), buffer, hBrowserName());
-    htmlDoEscape();
-    }
-
-cartFlushHubWarnings();
-hgGateway();
-
-// TODO REMOVE AFTER AUTOUPGRADE COMPLETE: (added 2014-03-09)
-if (dyUpgradeError)
-    warn("%s", dyUpgradeError->string);
-
-cartWebEnd();
+    doMainPage();
 }
 
-char *excludeVars[] = {NULL};
+// We find matches from various fields of dbDb, and prefer them in this order:
+enum dbDbMatchType { ddmtDescription=0, ddmtGenome=1, ddmtDb=2, ddmtSciName=3 };
+
+struct dbDbMatch
+    // Info about a match of a search term to some field of dbDb, including info that
+    // helps prioritize matches.
+    {
+    struct dbDbMatch *next;
+    struct dbDb *dbDb;        // the row of dbDb in which a match was found
+    enum dbDbMatchType type;  // which field the match was found in
+    int offset;               // offset of the search term in the dbDb value
+    boolean isWord;           // TRUE if the the search term matches the word at offset
+    boolean isComplete;       // TRUE if the search term matches the entire target string
+    };
+
+static struct dbDbMatch *dbDbMatchNew(struct dbDb *dbDb, enum dbDbMatchType type, int offset,
+                                      boolean isWord, boolean isComplete)
+/* Allocate and return a new dbDbMatch.  Do not free dbDb until done with this. */
+{
+struct dbDbMatch *ddm;
+AllocVar(ddm);
+ddm->dbDb = dbDb;
+ddm->type = type;
+ddm->offset = offset;
+ddm->isWord = isWord;
+ddm->isComplete = isComplete;
+return ddm;
+}
+
+static int dbDbMatchCmp(const void *va, const void *vb)
+/* Compare two matches by type, orderKey, offset and genome. */
+{
+const struct dbDbMatch *a = *((struct dbDbMatch **)va);
+const struct dbDbMatch *b = *((struct dbDbMatch **)vb);
+int diff = b->isComplete - a->isComplete;
+if (diff == 0)
+    diff = b->isWord - a->isWord;
+if (diff == 0 && a->isWord && b->isWord)
+    diff = a->offset - b->offset;
+// Use int values of type:
+if (diff == 0)
+    diff = (int)(a->type) - (int)(b->type);
+if (diff == 0)
+    diff = a->dbDb->orderKey - b->dbDb->orderKey;
+if (diff == 0)
+    diff = a->offset - b->offset;
+if (diff == 0)
+    diff = strcmp(a->dbDb->genome, b->dbDb->genome);
+return diff;
+}
+
+INLINE void safeAddN(char **pDest, int *pSize, char *src, int len)
+/* Copy len bytes of src into dest.  Subtract len from *pSize and add len to *pDest,
+ * for building up a string bit by bit. */
+{
+safencpy(*pDest, *pSize, src, len);
+*pSize -= len;
+*pDest += len;
+}
+
+INLINE void safeAdd(char **pDest, int *pSize, char *src)
+/* Copy src into dest.  Subtract len from *pSize and add len to *pDest,
+ * for building up a string bit by bit. */
+{
+safeAddN(pDest, pSize, src, strlen(src));
+}
+
+static char *boldTerm(char *target, char *term, int offset, enum dbDbMatchType type)
+/* Return a string with <b>term</b> swapped in for term at offset.
+ * If offset is negative and type is ddmtSciName, treat term as an abbreviated species
+ * name (term = "G. species" vs. target = "Genus species"): bold the first letter of the
+ * genus and the matching portion of the species. */
+{
+int termLen = strlen(term);
+int targetLen = strlen(target);
+if (offset + termLen > targetLen)
+    errAbort("boldTerm: invalid offset (%d) for term '%s' (length %d) in target '%s' (length %d)",
+             offset, term, termLen, target, targetLen);
+else if (offset < 0 && type != ddmtSciName)
+    errAbort("boldTerm: negative offset (%d) given for type %d", offset, type);
+// Allocate enough to have two bolded chunks:
+int resultSize = targetLen + 2*strlen("<b></b>") + 1;
+char result[resultSize];
+char *p = result;
+int size = sizeof(result);
+if (offset >= 0)
+    {
+    // The part of target before the term:
+    safeAddN(&p, &size, target, offset);
+    // The bolded term:
+    safeAdd(&p, &size, "<b>");
+    safeAddN(&p, &size, target+offset, termLen);
+    safeAdd(&p, &size, "</b>");
+    // The rest of the target after the term:
+    safeAdd(&p, &size, target+offset+termLen);
+    // Accounting tweak -- we allocate enough for two bolded chunks, but use only one here:
+    size -= strlen("<b></b>");
+    }
+else
+    {
+    // Term is abbreviated scientific name -- bold the first letter of the genus:
+    safeAdd(&p, &size, "<b>");
+    safeAddN(&p, &size, target, 1);
+    safeAdd(&p, &size, "</b>");
+    // add the rest of the genus:
+    char *targetSpecies = skipLeadingSpaces(skipToSpaces(target));
+    int targetOffset = targetSpecies - target;
+    safeAddN(&p, &size, target+1, targetOffset-1);
+    // bold the matching portion of the species:
+    char *termSpecies = skipLeadingSpaces(skipToSpaces(term));
+    termLen = strlen(termSpecies);
+    safeAdd(&p, &size, "<b>");
+    safeAddN(&p, &size, targetSpecies, termLen);
+    safeAdd(&p, &size, "</b>");
+    // add the rest of the species:
+    safeAdd(&p, &size, targetSpecies+termLen); 
+    }
+if (*p != '\0' || size != 1)
+    errAbort("boldTerm: bad arithmetic (size is %d, *p is '%c')", size, *p);
+return cloneStringZ(result, resultSize);
+}
+
+static void writeDbDbMatch(struct jsonWrite *jw, struct dbDbMatch *match, char *term,
+                           char *category)
+/* Write out the JSON encoding of a match in dbDb. */
+{
+struct dbDb *dbDb = match->dbDb;
+jsonWriteObjectStart(jw, NULL);
+jsonWriteString(jw, "genome", dbDb->genome);
+// label includes <b> tag to highlight the match for term.
+char label[PATH_LEN*4];
+// value is placed in the input box when user selects the item.
+char value[PATH_LEN*4];
+if (match->type == ddmtSciName)
+    {
+    safef(value, sizeof(value), "%s (%s)", dbDb->scientificName, dbDb->genome);
+    char *bolded = boldTerm(dbDb->scientificName, term, match->offset, match->type);
+    safef(label, sizeof(label), "%s (%s)", bolded, dbDb->genome);
+    freeMem(bolded);
+    }
+else if (match->type == ddmtGenome)
+    {
+    safecpy(value, sizeof(value), dbDb->genome);
+    char *bolded = boldTerm(dbDb->genome, term, match->offset, match->type);
+    safecpy(label, sizeof(label), bolded);
+    freeMem(bolded);
+    }
+else if (match->type == ddmtDb)
+    {
+    safecpy(value, sizeof(value), dbDb->name);
+    char *bolded = boldTerm(dbDb->name, term, match->offset, match->type);
+    safef(label, sizeof(label), "%s (%s %s)",
+          bolded, dbDb->genome, dbDb->description);
+    freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
+    }
+else if (match->type == ddmtDescription)
+    {
+    safef(value, sizeof(value), "%s (%s %s)",
+          dbDb->name, dbDb->genome, dbDb->description);
+    char *bolded = boldTerm(dbDb->description, term, match->offset, match->type);
+    safef(label, sizeof(label), "%s (%s %s)",
+          dbDb->name, dbDb->genome, bolded);
+    freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
+    }
+else
+    errAbort("writeDbDbMatch: unrecognized dbDbMatchType value %d (db %s, term %s)",
+             match->type, dbDb->name, term);
+jsonWriteString(jw, "label", label);
+jsonWriteString(jw, "value", value);
+jsonWriteNumber(jw, "taxId", dbDb->taxId);
+if (isNotEmpty(category))
+    jsonWriteString(jw, "category", category);
+jsonWriteObjectEnd(jw);
+}
+
+int wordMatchOffset(char *term, char *target)
+/* If some word of target starts with term (case insensitive), return the offset of
+ * that word in target; otherwise return -1. */
+{
+if (startsWith(term, target))
+    return 0;
+int targetLen = strlen(target);
+char targetClone[targetLen+1];
+safecpy(targetClone, sizeof(targetClone), target);
+char *p = targetClone;
+while (nextWord(&p) && p != NULL)
+    {
+    // skip punctuation like parentheses
+    while (*p != '\0' && ! isalnum(*p))
+        p++;
+    if (startsWith(term, p))
+        return p - targetClone;
+    }
+return -1;
+}
+
+static void addIfFirstMatch(struct dbDb *dbDb, enum dbDbMatchType type, int offset, char *target,
+                            char *term, struct hash *matchHash, struct dbDbMatch **pMatchList)
+/* If target doesn't already have a match in matchHash, compute matchLength and isWord,
+ * and then add the new match to pMatchList and add target to matchHash. */
+{
+if (dbDb->active && ! hashLookup(matchHash, target))
+    {
+    char *termInTarget = (offset >= 0) ? target+offset : target;
+    int matchLength = countSame(term, termInTarget);
+    // is the match complete up to a word boundary in termInTarget?
+    boolean isWord = (matchLength == strlen(term) &&
+                       (termInTarget[matchLength] == '\0' || isspace(termInTarget[matchLength])));
+    boolean isComplete = sameString(term, target);
+    struct dbDbMatch *match = dbDbMatchNew(dbDb, type, offset, isWord, isComplete);
+    slAddHead(pMatchList, match);
+    hashStore(matchHash, target);
+    }
+}
+
+static void checkTerm(char *term, char *target, enum dbDbMatchType type, struct dbDb *dbDb,
+                      struct hash *matchHash, struct dbDbMatch **pMatchList)
+/* If target starts with term (case-insensitive), and target is not already in matchHash,
+ * add target to matchHash and add a new match to pMatchList. */
+{
+// Make uppercase version of target for case-insensitive matching.
+int targetLen = strlen(target);
+char targetUpcase[targetLen + 1];
+safencpy(targetUpcase, sizeof(targetUpcase), target, targetLen);
+touppers(targetUpcase);
+int offset = wordMatchOffset(term, targetUpcase);
+if (offset >= 0)
+    {
+    addIfFirstMatch(dbDb, type, offset, targetUpcase, term, matchHash, pMatchList);
+    }
+else if (offset < 0 && type == ddmtSciName && term[0] == targetUpcase[0])
+    {
+    // For scientific names ("Genus species"), see if the user entered the term as 'G. species'
+    // e.g. term 'P. trog' for target 'Pan troglodytes'
+    regmatch_t substrArr[3];
+    if (regexMatchSubstrNoCase(term, "^[a-z](\\.| ) *([a-z]+)", substrArr, ArraySize(substrArr)))
+        {
+        char *termSpecies = term + substrArr[2].rm_so;
+        char *targetSpecies = skipLeadingSpaces(skipToSpaces(targetUpcase));
+        if (targetSpecies && startsWithNoCase(termSpecies, targetSpecies))
+            {
+            // Keep the negative offset since we can't just bold one chunk of target...
+            addIfFirstMatch(dbDb, type, offset, targetUpcase, term, matchHash, pMatchList);
+            }
+        }
+    }
+}
+
+static struct dbDbMatch *searchDbDb(struct dbDb *dbDbList, char *term)
+/* Search various fields of dbDb for matches to term and sort by relevance. */
+{
+struct dbDbMatch *matchList = NULL;
+struct hash *matchHash = hashNew(0);
+struct dbDb *dbDb;
+for (dbDb = dbDbList;  dbDb != NULL; dbDb = dbDb->next)
+    {
+    checkTerm(term, dbDb->name, ddmtDb, dbDb, matchHash, &matchList);
+    // Skip experimental stuff on hgwdev with bogus taxId unless the db name matches term.
+    if (dbDb->taxId >= 2)
+        {
+        checkTerm(term, dbDb->genome, ddmtGenome, dbDb, matchHash, &matchList);
+        checkTerm(term, dbDb->scientificName, ddmtSciName, dbDb, matchHash, &matchList);
+        }
+    // dbDb.description is a little too much for autocomplete ("br" would match dozens
+    // of Broad assemblies), but we do need to recognize "GRC".
+    if (startsWith("GR", term))
+        checkTerm(term, dbDb->description, ddmtDescription, dbDb, matchHash, &matchList);
+    }
+slSort(&matchList, dbDbMatchCmp);
+return matchList;
+}
+
+// Assembly hub match:
+
+struct aHubMatch
+    // description of an assembly hub db
+    {
+    struct aHubMatch *next;
+    char *shortLabel;          // hub shortLabel
+    char *hubUrl;              // hub url
+    char *aDb;                 // assembly db hosted by hub
+    };
+
+static struct aHubMatch *aHubMatchNew(char *shortLabel, char *hubUrl, char *aDb)
+/* Allocate and return a description of an assembly hub db. */
+{
+struct aHubMatch *match;
+AllocVar(match);
+match->shortLabel = cloneString(shortLabel);
+match->hubUrl = cloneString(hubUrl);
+match->aDb = cloneString(aDb);
+return match;
+}
+
+static struct aHubMatch *filterTrixSearchMatches(struct dbDb *dbDbList,
+                                                 struct trixSearchResult *tsrList)
+/* Collect the assembly hub matches (not track hub matches) from a search in hub trix files. */
+{
+if (tsrList == NULL)
+    return NULL;
+struct aHubMatch *aHubMatchList = NULL;
+// Make a hash of local dbs so we can tell which hub dbs must be assembly hubs
+// not track hubs.
+struct hash *localDbs = hashNew(0);
+struct dbDb *dbDb;
+for (dbDb = dbDbList;  dbDb != NULL;  dbDb = dbDb->next)
+    hashStore(localDbs, dbDb->name);
+
+// tsrList gives hub URLs which we can then look up in hubPublic.
+struct dyString *query = sqlDyStringCreate("select shortLabel,hubUrl,dbList from %s "
+                                           "where hubUrl in (",
+                                           hubPublicTableName());
+struct trixSearchResult *tsr;
+for (tsr = tsrList;  tsr != NULL; tsr = tsr->next)
+    {
+    if (tsr != tsrList)
+        dyStringAppend(query, ", ");
+    dyStringPrintf(query, "'%s'", tsr->itemId);
+    }
+dyStringAppendC(query, ')');
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = sqlGetResult(conn, query->string);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *shortLabel = row[0];
+    char *hubUrl = row[1];
+    struct slName *dbName, *dbList = slNameListFromComma(row[2]);
+    for (dbName = dbList;  dbName != NULL;  dbName = dbName->next)
+        if (! hashLookup(localDbs, dbName->name))
+            {
+            slAddHead(&aHubMatchList, aHubMatchNew(shortLabel, hubUrl, dbName->name));
+            }
+    }
+slReverse(&aHubMatchList);
+hDisconnectCentral(&conn);
+return aHubMatchList;
+}
+
+static void writeAssemblyHubMatches(struct jsonWrite *jw, struct aHubMatch *aHubMatchList)
+/* Write out JSON for each assembly in each assembly hub that matched the search term. */
+{
+struct aHubMatch *aHubMatch;
+for (aHubMatch = aHubMatchList;  aHubMatch != NULL;  aHubMatch = aHubMatch->next)
+    {
+    jsonWriteObjectStart(jw, NULL);
+    jsonWriteString(jw, "genome", aHubMatch->shortLabel);
+    jsonWriteString(jw, "db", aHubMatch->aDb);
+    jsonWriteString(jw, "hubUrl", aHubMatch->hubUrl);
+    jsonWriteString(jw, "hubName", hubNameFromUrl(aHubMatch->hubUrl));
+    // Add a category label for customized autocomplete-with-categories.
+    char category[PATH_LEN*4];
+    safef(category, sizeof(category), "Assembly Hub: %s", aHubMatch->shortLabel);
+    jsonWriteString(jw, "category", category);
+    jsonWriteString(jw, "value", aHubMatch->aDb);
+    // Use just the db as label, since shortLabel is included in the category label.
+    jsonWriteString(jw, "label", aHubMatch->aDb);
+    jsonWriteObjectEnd(jw);
+    }
+}
+
+static struct aHubMatch *searchPublicHubs(struct dbDb *dbDbList, char *term)
+/* Search for term in public hub trix files -- return a list of matches to assembly hubs
+ * (i.e. hubs that host an assembly with 2bit etc as opposed to only providing tracks.) */
+{
+struct aHubMatch *aHubMatchList = NULL;
+char *trixFile = cfgOptionEnvDefault("HUBSEARCHTRIXFILE", "hubSearchTrixFile",
+                                     hReplaceGbdb("/gbdb/hubs/public.ix"));
+if (fileExists(trixFile))
+    {
+    struct trix *trix = trixOpen(trixFile);
+    char termCopy[strlen(term)+1];
+    safecpy(termCopy, sizeof(termCopy), term);
+    tolowers(termCopy);
+    char *words[512];
+    int wordCount = chopByWhite(termCopy, words, ArraySize(words));
+    struct trixSearchResult *tsrList = trixSearch(trix, wordCount, words, tsmFirstFive);
+    aHubMatchList = filterTrixSearchMatches(dbDbList, tsrList);
+    trixClose(&trix);
+    }
+return aHubMatchList;
+}
+
+static char *getSearchTermUpperCase()
+/* If we don't have the SEARCH_TERM cgi param, exit with an HTTP Bad Request response.
+ * If we do, convert it to upper case for case-insensitive matching and return it. */
+{
+pushAbortHandler(htmlVaBadRequestAbort);
+char *term = cgiOptionalString(SEARCH_TERM);
+touppers(term);
+if (isEmpty(term))
+    errAbort("Missing required CGI parameter %s", SEARCH_TERM);
+popAbortHandler();
+return term;
+}
+
+static void lookupTerm()
+/* Look for matches to term in hgcentral and print as JSON for autocomplete if found. */
+{
+char *term = getSearchTermUpperCase();
+
+// Write JSON response with list of matches
+puts("Content-Type:text/javascript\n");
+
+struct dbDb *dbDbList = hDbDbList();
+struct dbDbMatch *matchList = searchDbDb(dbDbList, term);
+struct aHubMatch *aHubMatchList = searchPublicHubs(dbDbList, term);
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteListStart(jw, NULL);
+// Write out JSON for dbDb matches, if any; add category if we found assembly hub matches too.
+char *category = aHubMatchList ? "UCSC databases" : NULL;
+struct dbDbMatch *match;
+for (match = matchList;  match != NULL;  match = match->next)
+    writeDbDbMatch(jw, match, term, category);
+// Write out assembly hub matches, if any.
+writeAssemblyHubMatches(jw, aHubMatchList);
+jsonWriteListEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
 
 int main(int argc, char *argv[])
-/* Process command line. */
+/* Process CGI / command line. */
 {
-long enteredMainTime = clock1000();
-oldVars = hashNew(10);
+/* Null terminated list of CGI Variables we don't want to save
+ * permanently. */
+char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
 cgiSpoof(&argc, argv);
-
 setUdcCacheDir();
-
-
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
-cgiExitTime("hgGateway", enteredMainTime);
+if (cgiOptionalString(SEARCH_TERM))
+    // Skip the cart for speedy searches
+    lookupTerm();
+else
+    cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

@@ -458,3 +458,7 @@ searchType genePred
 searchMethod prefix
 termRegex chr[0-9MUXYn]+[BGHIJKLv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
 searchPriority 50
+
+track gwasCatalog override
+snpTable snp144
+snpVersion 144

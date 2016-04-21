@@ -452,6 +452,56 @@ if (getNamesOnly) // too bad we had not choice but to get the merge names this w
 }
 
 
+void insertDetailsCssAndJs(FILE *h)
+/* insert needed CSS and JS helper functions to support showing and hiding details */
+{
+fprintf(h, 
+"<style>"
+".details { display: none; }"  // default to hidden
+"</style>\n");
+
+fprintf(h, 
+"<script language='JavaScript'>"
+"function getCSSRule(search) {"
+"  return [].map.call(document.styleSheets, function(item) {"
+"    return [].slice.call(item.cssRules);"
+"  }).reduce(function(a, b) {"
+"    return b.concat(a);"
+"  }).filter(function(rule) {"
+"    return rule.selectorText.lastIndexOf(search) === rule.selectorText.length - search.length;"
+"  })[0];"
+"}"
+"</script>\n");
+}
+
+void insertShowDetailsLink(FILE *h)
+/* Insert Show Details link with onclick. */
+{
+fprintf(h, "<a href='#' onclick=\""
+"if (this.innerText === 'Hide details') {"
+"  getCSSRule('.details').style.display = 'none'; "
+"  this.innerText = 'Show details'; "
+"} else {"
+"  getCSSRule('.details').style.display = 'inline'; "
+"  this.innerText = 'Hide details'; "
+"}"
+"return false;"
+"\">Show details</a>\n"
+);
+/* Comments found with the code:
+It wasn't working in some cases. 
+I changed the third return rule... into return 
+ return rule.selectorText === search;
+and now it seems to work always.
+	
+There are rule objects that do not have the selectorText property, e.g. @font-face{..}. 
+Therefore I altered the return rules.selectorText... line to
+ return rule && rule.selectorText ? (rule.selectorText.lastIndexOf(search) === rule.selectorText.length - search.length) : -1;
+*/
+}
+
+
+
 void doUserCommits(char *u, struct commit *commits, int *saveUlc, int *saveUfc)
 /* process one user, commit-view */
 {
@@ -462,10 +512,15 @@ safef(userPath, sizeof(userPath), "%s/%s/%s/%s/index.html", outDir, outPrefix, "
 
 FILE *h = mustOpen(userPath, "w");
 fprintf(h, "<html>\n<head>\n<title>Commits for %s</title>\n</head>\n</body>\n", u);
+
+insertDetailsCssAndJs(h);
+
 fprintf(h, "<h1>Commits for %s</h1>\n", u);
 
 fprintf(h, "switch to <A href=\"index-by-file.html\">files view</A>, <A href=\"../index.html\">user index</A>\n");
 fprintf(h, "<h3>%s to %s (%s to %s) %s</h3>\n", startTag, endTag, startDate, endDate, title);
+
+insertShowDetailsLink(h);
 
 fprintf(h, "<ul>\n");
 
@@ -483,8 +538,11 @@ for(c = commits; c; c = c->next)
     {
     if (sameString(c->author, u))
 	{
-	//fprintf(h, "%s\n", c->commitId);
-	//fprintf(h, "%s\n", c->date);
+        fprintf(h, "<span class='details' >"); // toggle details none, inline //style='display:inline;'
+	fprintf(h, "%s ", c->commitId);
+	fprintf(h, "%s ", c->date);
+	fprintf(h, "<br>\n");
+	fprintf(h, "</span>\n");
 
 	char *cc = htmlEncode(c->comment);
 	char *ccc = replaceChars(cc, "&#x0A;", "<br>\n");
@@ -570,6 +628,7 @@ for(c = commits; c; c = c->next)
 
 	    }
 	fprintf(h, "</li>\n");
+	fprintf(h, "<br>\n");
 	}
     }
 fprintf(h, "</ul>\n");
@@ -612,16 +671,20 @@ FILE *h = mustOpen(userPath, "w");
 if (u)
     {
     fprintf(h, "<html>\n<head>\n<title>File Changes for %s</title>\n</head>\n</body>\n", u);
+    insertDetailsCssAndJs(h);
     fprintf(h, "<h1>File Changes for %s</h1>\n", u);
     fprintf(h, "switch to <A href=\"index.html\">commits view</A>, <A href=\"../index.html\">user index</A>");
     }
 else
     {
     fprintf(h, "<html>\n<head>\n<title>All File Changes</title>\n</head>\n</body>\n");
+    insertDetailsCssAndJs(h);
     fprintf(h, "<h1>All File Changes</h1>\n");
     }
 
 fprintf(h, "<h3>%s to %s (%s to %s) %s</h3>\n", startTag, endTag, startDate, endDate, title);
+
+insertShowDetailsLink(h);
 
 fprintf(h, "<ul>\n");
 
@@ -707,8 +770,12 @@ for(cf = comFiles; cf; cf = cf->next)
 	, f->linesChanged
 	, cHtml, cDiff, fHtml, fDiff);
 
-    //fprintf(h, "  %s\n", c->commitId);
-    //fprintf(h, "  %s\n", c->date);
+    fprintf(h, "<span class='details' >"); // toggle details none, inline //style='display:inline;'
+    fprintf(h, "%s", c->commitId);
+    fprintf(h, " %s", c->date);
+    fprintf(h, "<br>\n");
+    fprintf(h, "</span>\n");
+
     char *cc = htmlEncode(c->comment);
     char *ccc = replaceChars(cc, "&#x0A;", "<br>\n");
     fprintf(h, "    %s\n", ccc);

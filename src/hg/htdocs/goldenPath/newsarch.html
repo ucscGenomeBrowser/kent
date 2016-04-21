@@ -42,8 +42,9 @@
 
 <!-- ============= 2015 archived news ============= -->
 <a name="2016"></a>
-<a name="040716"></a><!-- add <hr> to bottom of first entry when pushing down-->
-  <font color="#006666" size="4"><b>7 Apr 2016
+<!--
+<a name="042016"></a>
+  <font color="#006666" size="4"><b>20 Apr 2016
   - Data from the Lens PatSeq Database Now Available</b></font>
   <p>
   We are pleased to announce the release of a set of tracks containing data from the
@@ -62,6 +63,176 @@
   Thanks to our collaborators at the Lens, Osmat Jefferson and Deniz Koellhofer, for providing the
   data and feedback on the visualization. Thank you to Max Haeussler and Matthew Speir, members of
   the UCSC Genome Browser team, for their efforts in creating these tracks.
+  </p>
+  <hr>
+-->
+
+  <a name="042016"></a><!-- add <hr> to bottom of first entry when pushing down-->
+  <font color="#006666" size="4"><b>20 April 2016
+  - New GTEx Gene Expression Track for hg19 and hg38</b></font>
+  <p>
+  We are excited to announce the release of a new gene expression track based on data from the NIH
+  <a href="http://commonfund.nih.gov/GTEx/index" TARGET = _BLANK> Genotype-Tissue
+  Expression</a> (GTEx) project.  
+  This track displays tissue-specific gene expression based on RNA-seq in 53 tissues from 570 
+  donors obtained from the GTEx 'midpoint' data release (V6, October 2015).
+  The original data for this 
+  track can be found at the <a href="http://www.gtexportal.org/home" target = _blank>GTEX Portal</a>
+  hosted by the Broad Institute.
+  <p>
+  This track also features a new gene expression display method that extends the traditional Genome 
+  Browser display &mdash; a horizontal bar graph. Every gene is annotated by a graph with colored 
+  bars, each of which corresponds to a specific tissue assayed by the GTEx project. Within
+  a graph, the bar color indicates the tissue type, using GTEx conventions, and the bar height 
+  depicts the median expression level (in RPKM).  
+  To quickly view the tissue and expression level represented by a bar in the tracks display, 
+  mouse over the bar in the graph.
+  The complete tissue color legend is shown on the 
+  <a href="../cgi-bin/hgTrackUi?db=hg19&g=gtexGene" target=_blank>track configuration page</a>, 
+  and can also be popped up for viewing alongside the track.
+  Below the bar graph, a line is shown indicating the gene extent that was used to generate the 
+  annotation, colored by gene class using GENCODE conventions 
+  (e.g. <span style='color: #0c0c78'>blue</span> for protein-coding, 
+  <span style='color: #006400'>green</span> for non-coding).
+  <p>
+  <a href="../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession.txt" 
+  target=_blank>
+  <center><img src="../images/gtexAnnounceExample.png" width=75%></center></a>
+  <p>
+  User alert: In the figure above, do you notice how the bar graph sometimes extends past the 
+  righthand end of the associated gene annotation? This is because all bar graphs in the
+  display are the same width (and have the same tissue ordering) to facilitate comparison.
+  For example, in this figure (which may also be viewed 
+  <a href="../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession.txt" 
+  target=_blank>here</a>),
+  the three tall bars in the TCAP annotation indicate this <em>entire</em> gene is highly expressed 
+  in cardiac and skeletal muscle. It does <em>not</em> indicate that there are expression peaks in 
+  the intergenic region beyond the gene!
+  <p>
+  Similar to other Genome Browser track displays, clicking on the graph will bring up a description 
+  page that shows a detailed box and whiskers plot of
+  the RPKM data, as well as a description of the methods used to generate the data. 
+  <p>
+  Credit goes to Kate Rosenbloom and Christopher Lee for the implementation and testing of this 
+  feature.
+  </p>
+  <hr>
+
+<a name="041516_2"></a>
+  <p>
+  <font color="#006666" size="4"><b> 15 April 2016 -
+  dbSNP 146 Available for hg19 and hg38</b></font>
+  <p>
+  We are pleased to announce the release of four tracks derived
+  from NCBI <a href="http://www.ncbi.nlm.nih.gov/SNP/">
+  dbSNP</a> Build 146 data, available on the two most
+  recent human assemblies GRCh37/hg19 and GRCh38/hg38.
+  NCBI's dbSNP database is a collection of &quot;simple nucleotide
+  polymorphisms&quot; (SNPs), which are a class of genetic variations
+  that include single nucleotide polymorphisms and small
+  insertions/deletions (indels). This immense database contains over
+  150 million such SNPs that cover the human genome.
+  </p>
+  <p>
+  There are four SNP tracks available as part of this release.
+  One is a track containing all mappings of reference SNPs
+  to the human assembly, labeled &quot;All SNPs (146)&quot;.
+  The other three tracks are subsets of this track
+  and show interesting and easily defined subsets of dbSNP:
+  </p>
+
+  <ul>
+  <li>Common SNPs (146): uniquely mapped variants that appear
+  in at least 1% of the population or are 100% non-reference.</li>
+  <li>Flagged SNPs (146): uniquely mapped variants, excluding
+  Common SNPs, that have been flagged by dbSNP as
+  &quot;clinically associated&quot;.</li>
+  <li>Mult. SNPs (146): variants that have been mapped to more
+  than one genomic location. This track has been shrinking over
+  the course of the last few releases as dbSNP now excludes most
+  SNPs whose flanking sequences map to multiple locations in
+  the genome.</li>
+  </ul>
+
+  <p>
+  By default, only the Common SNPs (146) are visible;
+  other tracks must be made visible using the track controls.
+  You will find the other SNPs (146) tracks on both
+  of GRCh37/hg19 and GRCh38/hg38 browsers in the &quot;Variation&quot; group.
+  </p>
+  <p>
+  The tracks were produced at UCSC by Angie Hinrichs and
+  Matthew Speir. We'd like to thank the dbSNP group at
+  NCBI for providing access to these data.
+  </p>
+  <hr>
+
+<a name="041516_1"></a>
+  <p>
+  <font color="#006666" size="4"><b> 15 April 2016 -
+  Three New Assemblies Now Available in the Genome Browser</b></font>
+  <p>
+  A Genome Browser is now available for the gorilla (<em>Gorilla gorilla gorilla</em>)
+  assembly released December 2014 by the Wellcome Trust Sanger Institute.
+  For more information and statistics about this assembly, see the NCBI assembly record
+  for <a href="http://www.ncbi.nlm.nih.gov/assembly/503571" target="_blank">gorGor4</a>.  
+  There are 25 complete chromosomes alongside 40,667 scaffolds with a total size of
+  3,063,362,754 bases.
+  </p>
+
+  <p>
+  Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+  <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/gorGor4/">FTP server</a> or the
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html#gorilla">Downloads</a> page.
+  Please observe the <a href="credits.html#gorilla_use">conditions for use</a> when
+  accessing and using these data sets.  The annotation tracks for this browser were
+  generated by UCSC and collaborators worldwide.  See the <a
+  href="credits.html#gorilla_credits">Credits</a> page for a detailed list of the
+  organizations and individuals who contributed to this release.
+  </p>
+  - - -
+  <p>
+  A Genome Browser is now available for the rhesus monkey (<em>Macaca mulatta</em>)
+  assembly released November 2015 by the
+  <A HREF="https://www.hgsc.bcm.edu/non-human-primates/rhesus-monkey-genome-project"
+  TARGET="_blank">Baylor College of Medicine Human Genome Sequencing Center</A>. 
+  For more information and statistics about this assembly, see the NCBI assembly record
+  for <a href="http://www.ncbi.nlm.nih.gov/assembly/2715158" target="_blank"> Mmul_8.0.1</a>.  
+  There are 23 complete chromosomes alongside 284,705 scaffolds with a total size of
+  3,236,224,332 bases.
+  </p>
+
+  <p>
+  Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+  <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/rheMac8/">FTP server</a> or the
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html#rhesus">Downloads</a> page.
+  Please observe the <a href="credits.html#rhesus_use">conditions for use</a> when
+  accessing and using these data sets.  The annotation tracks for this browser were
+  generated by UCSC and collaborators worldwide.  See the <a
+  href="credits.html#rhesus_credits">Credits</a> page for a detailed list of the
+  organizations and individuals who contributed to this release.
+  </p>
+  - - -
+  <p>
+  A Genome Browser is now available for the crab-eating macaque (<em>Macaca fascicularis</em>)
+  assembly released June 2013 by the
+  <A HREF="http://genome.wustl.edu/genomes/detail/macaca-fascicularis/"
+  TARGET=_blank>Genome Sequencing Center at Washington University, St. Louis</A>.
+  For more information about this assembly, see
+  <A HREF="http://www.ncbi.nlm.nih.gov/assembly/704988"
+  TARGET="_blank">Macaca_fascicularis_5.0</A> in the NCBI Assembly database. There are
+  22 complete chromosomes alongside 7,579 scaffolds with a total size of 2,946,843,737 bases.
+  </p>
+
+  <p>
+  Bulk downloads of the sequence and annotation data may be obtained from the Genome Browser
+  <a href="ftp://hgdownload.soe.ucsc.edu/goldenPath/macFas5/">FTP server</a> or the
+  <a href="http://hgdownload.soe.ucsc.edu/downloads.html#crab-eating_macaque">Downloads</a> page.
+  Please observe the <a href="credits.html#crab-eating_macaque_use">conditions for use</a> when
+  accessing and using these data sets.  The annotation tracks for this browser were
+  generated by UCSC and collaborators worldwide.  See the <a
+  href="credits.html#crab-eating_macaque_credits">Credits</a> page for a detailed list of the
+  organizations and individuals who contributed to this release.
   </p>
   <hr>
 

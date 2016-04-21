@@ -472,33 +472,32 @@ hDisconnectCentral(&centralConn);
 return db;
 }
 
-char *hDbForTaxon(struct sqlConnection *conn, int taxon)
-/* Get database associated with NCBI taxon number if any. */
+char *hDbForTaxon(int taxon)
+/* Get defaultDb database associated with NCBI taxon number if any. */
 {
 char *db = NULL;
-char *binomial = NULL;
-char query[256];
-
-/* Figure out scientific name. */
 if (taxon != 0)
     {
-    sqlSafef(query, sizeof(query),
-	"select binomial from uniProt.taxon where id=%d", taxon);
-    binomial = sqlQuickString(conn, query);
-    }
-/* Get default database for that organism. */
-if (binomial != NULL)
-    {
     struct sqlConnection *centralConn = hConnectCentral();
+    char query[512];
     sqlSafef(query, sizeof(query),
-        "select f.name from %s d,%s f "
-	"where d.scientificName='%s' "
-	"and d.name not like 'zoo%%' "
-	"and d.name = f.name ", dbDbTable(), defaultDbTable(), binomial);
+             "select d.name from %s d, %s f "
+             "where d.taxId = %d "
+             "and d.name not like 'zoo%%' "
+             "and d.name = f.name ", dbDbTable(), defaultDbTable(), taxon);
     db = sqlQuickString(centralConn, query);
+    // Rarely, we have one genome (like Baboon) that actually encompasses different species
+    // and taxons (P. anubis and P. hamadryas).  defaultDb only has one (P. anubis), so the
+    // query comes up empty for the other.  If so, try again using orderKey instead of defaultDb:
+    if (isEmpty(db))
+        {
+        sqlSafef(query, sizeof(query),
+                 "select name from %s where taxId = %d order by orderKey limit 1",
+                 dbDbTable(), taxon);
+        db = sqlQuickString(centralConn, query);
+        }
     hDisconnectCentral(&centralConn);
     }
-freeMem(binomial);
 return db;
 }
 
@@ -2482,6 +2481,15 @@ char *hFreezeDateOpt(char *database)
 return hDbDbOptionalField(database, "description");
 }
 
+int hTaxId(char *database)
+/* Return taxId (NCBI Taxonomy ID) associated with database. */
+{
+char *taxIdStr = hDbDbOptionalField(database, "taxId");
+if (isNotEmpty(taxIdStr))
+    return atoi(taxIdStr);
+return 0;
+}
+
 int hOrganismID(char *database)
 /* Get organism ID from relational organism table */
 /* Return 0 if not found. */
@@ -4395,20 +4403,14 @@ struct slPair *pairList = NULL;
 if (isHubTrack(genome))
     {
     char *clade = trackHubAssemblyClade(genome);
-    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade), *dbDb;
-    for (dbDb = hubDbDbList;  dbDb != NULL;  dbDb = dbDb->next)
-	{
-	char *db = dbDb->name;
-	if (isEmpty(db))
-	    db = dbDb->genome;
-	slAddHead(&pairList, slPairNew(db, cloneString(db)));
-	}
-    slReverse(&pairList);
+    struct dbDb *hubDbDbList = trackHubGetDbDbs(clade);
+    pairList = trackHubDbDbToValueLabel(hubDbDbList);
     }
 else
     {
     struct dyString *dy = sqlDyStringCreate("select name,description from %s "
-					    "where genome = '%s' order by orderKey", dbDbTable(), genome);
+					    "where genome = '%s' and active "
+                                            "order by orderKey", dbDbTable(), genome);
     struct sqlConnection *conn = hConnectCentral();
     pairList = sqlQuickPairList(conn, dy->string);
     hDisconnectCentral(&conn);

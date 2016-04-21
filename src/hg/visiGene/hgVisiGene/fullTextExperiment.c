@@ -147,7 +147,7 @@ chopByWhite(dupe, words, wordCount);
 /* if (wordCount != 1 || 
 	(matchList = matchGeneName(conn, words[0],privateHash)) == NULL) */
     {
-    tsrList = trixSearch(trix, wordCount, words, hasWild);
+    tsrList = trixSearch(trix, wordCount, words, hasWild ? tsmExpand : tsmExact);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 	{
 	if (!isPrivate(conn, privateHash, tsr->itemId))

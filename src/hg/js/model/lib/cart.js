@@ -17,13 +17,13 @@
 //     cart.flush();
 //
 // In model's UI handler for when user changes some input or clicks on a button:
-//     cart.send({ cgiVars: { someCartVar: newVal },
+//     cart.send({ cgiVar: { someCartVar: newVal },
 //                 doSomething: { what: 'etc' }
 //               },
 //               handleServerResponse, handleServerFailure);
 //
 // In model's UI handler for when user uploads a file:
-//     cart.uploadFile({ cgiVars: { someCartVar: newVal },
+//     cart.uploadFile({ cgiVar: { someCartVar: newVal },
 //                       doSomething: { what: 'etc' }
 //                     },
 //                     jqueryFileInput,
@@ -51,6 +51,9 @@ var cart = (function() {
     // queue of commands from send() and uploadFile(), to send with accumulated cgiVars
     // when flush() is called:
     var requestQueue = [];
+
+    // debugging flag for console.log messages
+    var debug = false;
 
     // Private functions:
 
@@ -130,8 +133,15 @@ var cart = (function() {
         if (jqXHR.readyState < 4) {
             return true;
         }
-        console.log('Request failed: ', arguments);
+        console.error('Request failed: ', arguments);
         alert('Request failed: ' + textStatus);
+    }
+
+    function debugLog() {
+        // If debug is true, use console.log to print info.
+        if (debug) {
+            console.log(arguments);
+        }
     }
 
     function ajaxParamsForReq(reqObj) {
@@ -143,7 +153,7 @@ var cart = (function() {
             dataType: 'json'
         };
         var paramString = reqToString(reqObj);
-        console.log('cart.flush: data =', reqObj, ', params = ' + paramString);
+        debugLog('cart.flush: data =', reqObj, ', params = ' + paramString);
         return ajaxParams;
     }
 
@@ -173,8 +183,8 @@ var cart = (function() {
                 processData: false,
                 contentType: false
             });
-            console.log('cart.flush: posting FormData for input ' + fileInputName +
-                        ', reqObj =', reqObj, ', params = ' + paramString);
+            debugLog('cart.flush: posting FormData for input ' + fileInputName +
+                     ', reqObj =', reqObj, ', params = ' + paramString);
         } else {
             // Use JQuery plugin bifrost to upload the file using a hidden iframe as target,
             // in order to support IE <10.  It breaks on IE11 though, go figure.
@@ -184,8 +194,8 @@ var cart = (function() {
                 dataType: 'iframe json',
                 fileInputs: jqFileInput
             });
-            console.log('cart.flush: using jquery.bifrost plugin for input ' + fileInputName +
-                        ', data =', reqObj, ', params = ' + paramString);
+            debugLog('cart.flush: using jquery.bifrost plugin for input ' + fileInputName +
+                     ', data =', reqObj, ', params = ' + paramString);
         }
         return ajaxParams;
     }
@@ -248,6 +258,10 @@ var cart = (function() {
                 });
             cgiVars = {};
             requestQueue = [];
+        },
+
+        debug: function(isOn) {
+            debug = isOn;
         }
 
     };

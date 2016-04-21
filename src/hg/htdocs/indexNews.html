@@ -36,8 +36,9 @@
           </p>
 
     <!-- start news -->
+<!-- Staged for later release
   <hr>
-  <font color="#006666" size="4"><b>7 Apr 2016
+  <font color="#006666" size="4"><b>20 Apr 2016
   - Data from the Lens PatSeq Database Now Available</b></font>
   <p>
   We are pleased to announce the release of a set of tracks containing data from the
@@ -57,61 +58,93 @@
   data and feedback on the visualization. Thank you to Max Haeussler and Matthew Speir, members of
   the UCSC Genome Browser team, for their efforts in creating these tracks.
   </p>
+-->
 
   <hr>
-  <font color="#006666" size="4"><b>4 Apr 2016
-  - New video shows how to obtain sequence or coordinates for exons. </b></font>
+  <font color="#006666" size="4"><b>20 April 2016
+  - New GTEx Gene Expression Track for hg19 and hg38</b></font>
   <p>
-  We have released a new <A HREF =
-  "http://genome.ucsc.edu/training/vids/index.html#vid08" TARGET =
-  _BLANK>video</A> to our YouTube channel.  This newest installment in our effort
-  to share the capabilities of the Genome Browser shows how to
-  use the Table Browser to obtain either the sequences or the coordinates for
-  exons in the genes from a chosen region of the genome.
-  </p>
-
+  We are excited to announce the release of a new gene expression track based on data from the NIH
+  <a href="http://commonfund.nih.gov/GTEx/index" TARGET = _BLANK> Genotype-Tissue Expression</a> 
+  (GTEx) project.  
+  This track displays tissue-specific gene expression based on RNA-seq in 53 tissues from 570 
+  donors obtained from the GTEx 'midpoint' data release (V6, October 2015).
+  The original data for this 
+  track can be found at the <a href="http://www.gtexportal.org/home" target = _blank>GTEX Portal</a>
+  hosted by the Broad Institute.
   <p>
-  We also want to take this opportuinty to remind you that we offer
-  on-site <A HREF = "http://genome.ucsc.edu/training/index.html" TARGET =
-  _BLANK>workshops</A> to help you and your colleagues make the most out
-  of the Genome Browser.
+  This track also features a new gene expression display method that extends the traditional Genome 
+  Browser display &mdash; a horizontal bar graph. Every gene is annotated by a graph with colored 
+  bars, each of which corresponds to a specific tissue assayed by the GTEx project. Within
+  a graph, the bar color indicates the tissue type, using GTEx conventions, and the bar height 
+  depicts the median expression level (in RPKM).  
+  To quickly view the tissue and expression level represented by a bar in the tracks display, 
+  mouse over the bar in the graph.
+  The complete tissue color legend is shown on the 
+  <a href="../../cgi-bin/hgTrackUi?db=hg19&g=gtexGene" target=_blank>track configuration page</a>, 
+  and can also be popped up for viewing alongside the track.
+  Below the bar graph, a line is shown indicating the gene extent that was used to generate the 
+  annotation, colored by gene class using GENCODE conventions 
+  (e.g. <span style='color: #0c0c78'>blue</span> for protein-coding, 
+  <span style='color: #006400'>green</span> for non-coding).
+  <p>
+  <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession.txt" 
+  target=_blank>
+  <center><img src="images/gtexAnnounceExample.png" width=75%></center></a>
+  <p>
+  User alert: In the figure above, do you notice how the bar graph sometimes extends past the 
+  righthand end of the associated gene annotation? This is because all bar graphs in the
+  display are the same width (and have the same tissue ordering) to facilitate comparison.
+  For example, in this figure (which may also be viewed 
+  <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/gtexAnnouncementSession.txt" 
+  target=_blank>here</a>),
+  the three tall bars in the TCAP annotation indicate this <em>entire</em> gene is highly expressed 
+  in cardiac and skeletal muscle. It does <em>not</em> indicate that there are expression peaks in 
+  the intergenic region beyond the gene!
+  <p>
+  Similar to other Genome Browser track displays, clicking on the graph will bring up a description 
+  page that shows a detailed box and whiskers plot of
+  the RPKM data, as well as a description of the methods used to generate the data. 
+  <p>
+  Credit goes to Kate Rosenbloom and Christopher Lee for the implementation and testing of this 
+  feature.
   </p>
   <hr>
 
 <!-- start archives -->
 <!--staged for future release
-	<p>
-	<font color="#006666" size="4"><b>7 Apr 2016
+        <p>
+	<font color="#006666" size="4"><b>20 Apr 2016
 	- Data from the Lens PatSeq Database Now Available</b>: </font>
 	We are pleased to announce the release of a set of tracks containing data from the
 	<a href="https://www.lens.org/" target="_blank">Lens</a>
 	PatSeq database in the UCSC Genome Browser.
-	<a href="goldenPath/newsarch.html#040716">Read more</a>.
+	<a href="goldenPath/newsarch.html#042016">Read more</a>.
 
-  <p>
-	<font color="#006666" size="4"><b>4 Apr 2016
-        - New video shows how to obtain sequence or coordinates for exons. </b></font>
-	<a href="goldenPath/newsarch.html#040416">Read more</a>.
-	</p>
-
+        <p>
+        <font color="#006666" size="4"><b>19 April 2016
+        - New Genotyping Tissue Expression Track for hg19 and hg38!</b></font>
+        <p>
+        We are excited to announce the release of a new track based on data from the 
+        <a href="http://commonfund.nih.gov/GTEx/index" 
+	TARGET = _BLANK>Genotyping Tissue Expression Consortium</a> V6 data freeze. 
+	<a href="goldenPath/newsarch.html#04202016">Read more</a>.
 -->
-  <p>
-  <font color="#006666" size="4"><b>1 Apr 2016
-  - Going Back to Our Roots!</b></font>
-  <a href="goldenPath/newsarch.html#040116">Read more</a>.
-  </p>
 
-	<p>
-	<font color="#006666" size="4"><b>21 Mar 2016
-	- Genome Browsers for <i>C. elegans</i> and Brown Kiwi Now Available.</b></font>
-	<a href="goldenPath/newsarch.html#030816">Read more</a>.
+        <p>
+	<font color="#006666" size="4"><b> 15 April 2016 -
+	dbSNP 146 Available for hg19 and hg38</b>: </font>
+	We are pleased to announce the release of four tracks derived
+	from NCBI <a href="http://www.ncbi.nlm.nih.gov/SNP/">dbSNP</a> Build 146 data.
+	<a href="goldenPath/newsarch.html#041516_2">Read more</a>.
 	</p>
 
 	<p>
-	<font color="#006666" size="4"><b>8 Mar 2016
-	- Combine Multiple Regions of the Genome Browser into a Single Visualization!</b></font>
-	<a href="goldenPath/newsarch.html#030816">Read more</a>.
+	<font color="#006666" size="4"><b>15 April 2016
+	- Genome Browsers for Gorilla, Rhesus, and Crab-Eating Macacque Now Available.</b></font>
+	<a href="goldenPath/newsarch.html#041516_1">Read more</a>.
 	</p>
+
 
             </TD><TD WIDTH=15>
          </TD></TR></TABLE>

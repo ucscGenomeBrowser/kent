@@ -45,10 +45,10 @@ qaToQac assembly.quals.gz stdout | qacAgpLift assembly.agp stdin cavPor3.qual.qa
 # 98.4% of bases have q >= 40
 # 97.72% of bases have q >= 50
 
-   cut -f 1 assembly.agp | uniq -c | wc -l 
+   cut -f 1 assembly.agp | uniq -c | wc -l
    # Number of scaffolds: 3143
    cut -f 1 assembly.agp | uniq -c | sort -b -n -r | cut -c 1-8 | uniq -c | sort -n -r -b | head -3
-   # Number of scaffolds with single contig: 2176 thus 967 multi-contig scaffolds   
+   # Number of scaffolds with single contig: 2176 thus 967 multi-contig scaffolds
 
 
 
@@ -65,7 +65,7 @@ genomeCladePriority 35
 scientificName Cavia porcellus
 commonName Guinea Pig
 assemblyDate Feb. 2008
-assemblyLabel Broad Institute cavPor3 
+assemblyLabel Broad Institute cavPor3
 orderKey 99
 #mitoAcc AJ222767
 mitoAcc 5679797
@@ -116,7 +116,7 @@ cut -f 2 chrom.sizes | ave stdin
 	# - (optional) Clean up /cluster/data/cavPor3/TemporaryTrackDbCheckout
 	# - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
 		
-   
+
 
 
 #########################################################################
@@ -158,7 +158,7 @@ cut -f 2 chrom.sizes | ave stdin
     screen # use a screen to manage this job
     mkdir /cluster/data/cavPor3/bed/simpleRepeat
     cd /cluster/data/cavPor3/bed/simpleRepeat
-    # 
+    #
     doSimpleRepeat.pl -buildDir=/cluster/data/cavPor3/bed/simpleRepeat \
 	cavPor3 > do.log 2>&1 &
 
@@ -186,7 +186,7 @@ cut -f 2 chrom.sizes | ave stdin
     #  U count: mean 613942.2 sd 3764766.9
     #  L count: mean 233185.6 sd 1462738.3
     #  %26.92 masked total, %27.53 masked real
-    # >>> NOTE: 2723219641 bases matche chrome.sizes above but not featureBits which is 2663369733 
+    # >>> NOTE: 2723219641 bases matche chrome.sizes above but not featureBits which is 2663369733
 
     twoBitToFa cavPor3.rmsk.2bit stdout | faSize stdin
     # 2723219641 bases (59849908 N's 2663369733 real 1931053208 upper 732316525 lower) in 3144 sequences in 1 files
@@ -252,7 +252,7 @@ done
     hgLoadBed cavPor3 windowmaskerSdust cleanWMask.bed.gz
     # Loaded 14547726 elements of size 4
     featureBits cavPor3 windowmaskerSdust
-    # 931034439 bases of 2663369733 (34.957%) in intersection 
+    # 931034439 bases of 2663369733 (34.957%) in intersection
 
     #	mask the sequence with this clean mask
     zcat cleanWMask.bed.gz \
@@ -290,7 +290,7 @@ cavPor3.refseq.mrna.native.load = no
 cavPor3.refseq.mrna.xeno.load = yes
 cavPor3.genbank.mrna.xeno.load = yes
 cavPor3.genbank.est.native.load = yes
-        
+
     cvs ci -m "Added cavPor3." etc/genbank.conf
     # update /cluster/data/genbank/:
     make etc-update
@@ -298,7 +298,7 @@ cavPor3.genbank.est.native.load = yes
 
     # Edit src/lib/gbGenome.c to add new species.
     # static char *cavPorNames[] = {"Cavia porcellus", NULL};
-    # static struct dbToSpecies dbToSpeciesMap[] = { ...>>> {"cavPor", cavPorNames}, 
+    # static struct dbToSpecies dbToSpeciesMap[] = { ...>>> {"cavPor", cavPorNames},
 
     cvs ci -m "Added guinea pig." src/lib/gbGenome.c
     make install-server
@@ -308,7 +308,7 @@ cavPor3.genbank.est.native.load = yes
     cd /cluster/data/genbank
 
     # This is a call to a script that will push our jobs out to the cluster
-    # since it's a big job.  
+    # since it's a big job.
     time nice -n +19 bin/gbAlignStep -initial cavPor3 &
     #	logFile: var/build/logs/2008.03.10-14:14:43.cavPor3.initalign.log
     #	real    567m7.431s
@@ -358,7 +358,7 @@ cavPor3.genbank.est.native.load = yes
 #########################################################################
 #  REstarting Genbank (beg: 2008-05-22   Done: 2008-05-23 - Tim)
 
-    ### QA found empty refLink table which led MarkD to determine that in genbank.conf cavPor3 used default params 
+    ### QA found empty refLink table which led MarkD to determine that in genbank.conf cavPor3 used default params
     ### which were not appropriate.  The last 4 lines listed below were added, and genbank started again
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
@@ -381,18 +381,18 @@ cavPor3.refseq.mrna.xeno.load = yes
 cavPor3.genbank.mrna.xeno.load = yes
 cavPor3.genbank.est.native.load = yes
     ### The last 4 lines listed above were added, and genbank started again
-        
+
     # update /cluster/data/genbank/:
     make etc-update
     cvs ci -m "Turned off native and on xeno." etc/genbank.conf
 
     # Edit src/lib/gbGenome.c to add new species.
     # static char *cavPorNames[] = {"Cavia porcellus", NULL};
-    # static struct dbToSpecies dbToSpeciesMap[] = { ...>>> {"cavPor", cavPorNames}, 
+    # static struct dbToSpecies dbToSpeciesMap[] = { ...>>> {"cavPor", cavPorNames},
 
     #cvs ci -m "Added guinea pig." src/lib/gbGenome.c
     make install-server
-    
+
     ### Mark Deikhens recommends:
     # You are not really realigning, but aligning additional.  If you
     # just kick off an initial alignment, it *should* align the
@@ -400,7 +400,7 @@ cavPor3.genbank.est.native.load = yes
     # happen when a new, full release is made, and a new refseq just
     # came out.  So kick on the alignment and let me know when its
     # done and I can take a look.
-    # 
+    #
     # Also, to just reload everything, include the -drop flag on your
     # command line.  That is usually easiest; way waste your time
     # figuring out weird cases when the computer can just do the work.
@@ -410,13 +410,13 @@ cavPor3.genbank.est.native.load = yes
     cd /cluster/data/genbank
 
     # This is a call to a script that will push our jobs out to the cluster
-    # since it's a big job.  
+    # since it's a big job.
     time nice -n +19 bin/gbAlignStep -initial cavPor3 &
     # logFile: var/build/logs/2008.05.22-15:44:34.cavPor3.initalign.log
     # real    182m21.821s
     # gbAlignInstall: complete: real=2.35
     # genbank 2008.05.22-18:46:56 cavPor3.initalign: finish
-    
+
     # Mark Deikhens: Look good, load it.
 
     # load database when finished
@@ -428,7 +428,7 @@ cavPor3.genbank.est.native.load = yes
 
 ############################################################################
 #	DONE - 2008-04-10 - Tim
-#	Reset default position to Math1=ATOH1=NM_005172=scaffold_15:19047435-19048046 
+#	Reset default position to Math1=ATOH1=NM_005172=scaffold_15:19047435-19048046
     hgsql -e \
 'update dbDb set defaultPos="scaffold_15:19047434-19048046" where name="cavPor3";' \
 	hgcentraltest
@@ -492,7 +492,7 @@ done
     cd /cluster/data/cavPor3/bed/genscan
     # Make 3 subdirectories for genscan to put their output files in
     mkdir gtf pep subopt
-    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # Generate a list file, genome.list, of all the hard-masked contigs that
     # *do not* consist of all-N's (which would cause genscan to blow up)
     #	Since we split on gaps, we have no chunks like that.  You can
     #	verify with faCount on the chunks.
@@ -519,7 +519,7 @@ _EOF_
     chmod +x runGsBig
     cat << \_EOF_ > template
 #LOOP
-runGsBig /san/sanvol1/scratch/cavPor3/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed} 
+runGsBig /san/sanvol1/scratch/cavPor3/hardChunks $(file1) {check out line gtf/$(root1).gtf} {check out line pep/$(root1).pep} {check out line subopt/$(root1).bed}
 #ENDLOOP
 _EOF_
     # << happy emacs
@@ -555,7 +555,7 @@ _EOF_
     ##Insufficient memory error: results may be unreliable.
     ##Insufficient memory error: results may be unreliable.
     ##Insufficient memory error: results may be unreliable.
-    ####### However, these are not the simply the largest files:                      
+    ####### However, these are not the simply the largest files:
     [tdreszer@memk /cluster/data/cavPor3/bed/genscan] ll /san/sanvol1/scratch/cavPor3/hardChunks/c_19.fa
     -rw-rw-r--  1 tdreszer protein 4408036 Apr  8 15:39 /san/sanvol1/scratch/cavPor3/hardChunks/c_19.fa
     [tdreszer@memk /cluster/data/cavPor3/bed/genscan] ll /san/sanvol1/scratch/cavPor3/hardChunks/c_152.fa
@@ -583,7 +583,7 @@ _EOF_
     popd # cd /cluster/data/cavPor3/bed/genscan
     ls -1Sr /san/sanvol1/scratch/cavPor3/hardChunks/c_rt*.fa > genome_rt.list
 
-    gensub2 genome_rt.list single template jobList_rt   
+    gensub2 genome_rt.list single template jobList_rt
     para create jobList_rt
     para try, check, push, check, ...
 
@@ -630,7 +630,7 @@ _EOF_
     ssh kkstore05
     cd /cluster/data/cavPor3/bed/genscan
     sort -k1,1 -k4.4n gtf/c_*.gtf > genscan.gtf
-    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt.bed 
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt.bed
     cat pep/c_*.pep > genscan.pep
 
     # Load into the database as so:
@@ -655,17 +655,17 @@ _EOF_
 ### ### QA found missing genscan data, so retrying the unlucky 7 by splitting on gaps
     ssh memk
     pushd /san/sanvol1/scratch/cavPor3/hardChunks
-    faSplit gap c_rt01_0000.fa 1000000 c_rt_01_0000_gap_ 
-    faSplit gap c_rt32_0005.fa 1000000 c_rt_32_0005_gap_ 
-    faSplit gap c_rt71_0025.fa 1000000 c_rt_71_0025_gap_ 
-    faSplit gap c_rt107_0010.fa 1000000 c_rt_107_0010_gap_ 
-    faSplit gap c_rt111_0010.fa 1000000 c_rt_111_0010_gap_ 
-    faSplit gap c_rt151_0010.fa 1000000 c_rt_151_0010_gap_ 
-    faSplit gap c_rt19_0010.fa 1000000 c_rt_19_0010_gap_ 
+    faSplit gap c_rt01_0000.fa 1000000 c_rt_01_0000_gap_
+    faSplit gap c_rt32_0005.fa 1000000 c_rt_32_0005_gap_
+    faSplit gap c_rt71_0025.fa 1000000 c_rt_71_0025_gap_
+    faSplit gap c_rt107_0010.fa 1000000 c_rt_107_0010_gap_
+    faSplit gap c_rt111_0010.fa 1000000 c_rt_111_0010_gap_
+    faSplit gap c_rt151_0010.fa 1000000 c_rt_151_0010_gap_
+    faSplit gap c_rt19_0010.fa 1000000 c_rt_19_0010_gap_
     popd # cd /cluster/data/cavPor3/bed/genscan
     ls -1Sr /san/sanvol1/scratch/cavPor3/hardChunks/c_rt*_gap_*.fa > genome_gap.list
 
-    gensub2 genome_gap.list single template jobList_gap   
+    gensub2 genome_gap.list single template jobList_gap
     para create jobList_gap
     para try, check, push, check, ...
     # 219 jobs in batch
@@ -679,7 +679,7 @@ _EOF_
     ssh kkstore05
     cd /cluster/data/cavPor3/bed/genscan
     sort -k1,1 -k4.4n gtf/c_*.gtf > genscan_full.gtf
-    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed 
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed
     cat pep/c_*.pep > genscan_full.pep
 
     # Load into the database as so:
@@ -689,7 +689,7 @@ _EOF_
     # Read 70478 transcripts in 454271 lines in 1 files
     # 70478 groups 2398 seqs 1 sources 1 feature types
     # 70478 gene predictions
-    
+
     hgPepPred cavPor3 generic genscanPep genscan_full.pep
     hgLoadBed cavPor3 genscanSubopt genscanSubopt_full.bed
     #   Loaded 605836 elements of size 6
@@ -697,9 +697,9 @@ _EOF_
     #   let's check the numbers
     time nice -n +19 featureBits cavPor3 genscan
     #   76489707 bases of 2663369733 (2.872%) in intersection
-    
+
 ### ### ### Total defeat.  faSplit on gaps results in new sequence names that donot match to the known scaffold_nnnn sequences.
-    
+
     # Clean up mess:
     cd /cluster/data/cavPor3/bed/genscan
     pushd /san/sanvol1/scratch/cavPor3/hardChunks
@@ -708,7 +708,7 @@ _EOF_
     rm gtf/c_rt_*_gap_*.gtf
     rm pep/c_rt_*_gap_*.pep
     rm subopt/c_rt_*_gap_*.bed
-    
+
     # Try the seven culprits one more time.
 cat << \_EOF_ > genome_oneMoreTime.list
 /san/sanvol1/scratch/cavPor3/hardChunks/c_rt19_0010.fa
@@ -722,7 +722,7 @@ _EOF_
 
     ssh memk
     cd /cluster/data/cavPor3/bed/genscan
-    gensub2 genome_oneMoreTime.list single template jobList_oneMoreTime   
+    gensub2 genome_oneMoreTime.list single template jobList_oneMoreTime
     para create jobList_oneMoreTime
     para push, check, ...
     #  para status
@@ -737,7 +737,7 @@ _EOF_
     # crash   1       617.00  602.73  mkr0u5  1182097 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt71_0025.fa gtf/c_rt71_0025.gtf pep/c_rt71_0025.pep subopt/c_rt71_0025.bed
     # crash   1       922.00  896.75  mkr0u3  1182098 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt32_0005.fa gtf/c_rt32_0005.gtf pep/c_rt32_0005.pep subopt/c_rt32_0005.bed
     # crash   1       1307.00 1258.05 mkr0u7  1182099 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt01_0000.fa gtf/c_rt01_0000.gtf pep/c_rt01_0000.pep subopt/c_rt01_0000.bed
-    
+
     # One down, 6 to go.  Try lowering window size on gsBig
 
     mv runGsBig runGsBig.24
@@ -773,9 +773,9 @@ _EOF_
     # done    2       617.00  602.73  mkr0u5  1182097 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt71_0025.fa gtf/c_rt71_0025.gtf pep/c_rt71_0025.pep subopt/c_rt71_0025.bed
     # crash   2       922.00  896.75  mkr0u3  1182098 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt32_0005.fa gtf/c_rt32_0005.gtf pep/c_rt32_0005.pep subopt/c_rt32_0005.bed
     # done    2       1307.00 1258.05 mkr0u7  1182099 runGsBig /san/sanvol1/scratch/cavPor3/hardChunks c_rt01_0000.fa gtf/c_rt01_0000.gtf pep/c_rt01_0000.pep subopt/c_rt01_0000.bed
-    
+
     # All but two!
-    
+
     para push, check, ...
     #  para status
     # 7 jobs in batch
@@ -795,7 +795,7 @@ _EOF_
     ssh kkstore05
     cd /cluster/data/cavPor3/bed/genscan
     sort -k1,1 -k4.4n gtf/c_*.gtf > genscan_full.gtf
-    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed 
+    sort -k1,1 -k2,2n subopt/c_*.bed > genscanSubopt_full.bed
     cat pep/c_*.pep > genscan_full.pep
 
     # Load into the database as so:
@@ -805,7 +805,7 @@ _EOF_
     # Read 70161 transcripts in 453022 lines in 1 files
     # 70161 groups 2185 seqs 1 sources 1 feature types
     # 70161 gene predictions
-    
+
     hgPepPred cavPor3 generic genscanPep genscan_full.pep
     hgLoadBed cavPor3 genscanSubopt genscanSubopt_full.bed
     #   Loaded 603786 elements of size 6
@@ -813,7 +813,7 @@ _EOF_
     #   let's check the numbers
     time nice -n +19 featureBits cavPor3 genscan
     #   82960328 bases of 2663369733 (3.115%) in intersection
-    
+
 
 #########################################################################
 # CPGISLANDS (DONE - 2008-04-10 - Tim)
@@ -832,9 +832,9 @@ _EOF_
     #	gcc readseq.c cpg_lh.c -o cpglh.exe
     cd ../..
     ln -s hg3rdParty/cpgIslands/cpglh.exe .
-    
-    # There may be warnings about "bad character" for IUPAC ambiguous 
-    # characters like R, S, etc.  Ignore the warnings.  
+
+    # There may be warnings about "bad character" for IUPAC ambiguous
+    # characters like R, S, etc.  Ignore the warnings.
     mkdir results
     echo ../../hardMasked/*.hard.fa | sed -e "s/ /\n/g" | while read F
     do
@@ -926,7 +926,7 @@ _EOF_
     cat fb.hg18.chainCavPor3Link.txt
     #   1267036494 bases of 2881515245 (43.971%) in intersection
 
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cd /cluster/data/hg18/bed/blastzCavPor3.2008-04-10
     cat << \_EOF_ > DEF
 BLASTZ_M=50
@@ -948,7 +948,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/hg18/bed/blastzCavPor3.2008-04-10
 TMPDIR=/scratch/tmp
 _EOF_
-   
+
 
     mkdir /cluster/data/cavPor3/bed/blastz.hg18.swap
     ssh kkstore05 # where cavPor3 is located
@@ -963,7 +963,7 @@ _EOF_
     # chainSplit chain cavPor3.hg18.all.chain.gz
     # sh: pipe error: Too many open files
     # Can't open chain/scaffold_621.chain to append: Too many open files
-    
+
     #	broken down during netSynteny.csh due to too many open files on
     #	a chainSplit
     #	However, there is no need to split when we have scaffolds.
@@ -1016,7 +1016,7 @@ _EOF_
     # NOTE: be sure to ls the data in above script on workhorse machine before starting script
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	    -syntenicNet > do.log 2>&1 
+	    -syntenicNet > do.log 2>&1
     # <ctl-A><ctl-d>  ps -ef | grep blastzCavPor3
     # real    1764m55.155s
     tail do.log
@@ -1028,7 +1028,7 @@ _EOF_
     #    757283793 bases of 2620346127 (28.900%) in intersection
 
     cd /cluster/data/mm9/bed/blastzCavPor3.2008-04-10
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cat << \_EOF_ > DEF
 BLASTZ_M=50
 
@@ -1119,7 +1119,7 @@ _EOF_
     # NOTE: be sure to ls the data in above script on workhorse machine before starting script
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-	    -syntenicNet > do.log 2>&1 
+	    -syntenicNet > do.log 2>&1
     # <ctl-A><ctl-d>  ps -ef | grep blastzCavPor3
     # real    1507m5.132s
     tail do.log
@@ -1131,7 +1131,7 @@ _EOF_
     #   106239838 bases of 1042591351 (10.190%) in intersection
 
     cd /cluster/data/galGal3/bed/blastzCavPor3.2008-04-10
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cat << \_EOF_ > DEF
 BLASTZ_M=50
 BLASTZ_Y=3400
@@ -1207,12 +1207,12 @@ _EOF_
     # NOTE: be sure to ls the data in above script on workhorse machine before starting script
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	   -stop=partition > do.log 2>&1 & 
+	   -stop=partition > do.log 2>&1 &
     ## used stop, then `wc -l run.blastz/cavPor3.lst` * `wc -l run.balstz/monDom4.lst`
     ## to find out size based upon DEF SEQn_CHUNK and SEQn_LIMIT then:
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	   -continue=blastz > do.log 2>&1 & 
+	   -continue=blastz > do.log 2>&1 &
     # <ctl-A><ctl-d>  ps -ef | grep blastzCavPor3
     #real    2818m19.825s
     tail do.log
@@ -1223,25 +1223,25 @@ _EOF_
     # Command failed:
     # ssh -x hgwdev nice /cluster/data/cavPor3/bed/blastzOryCun1.2008-04-11/axtChain/loadUp.csh
 
-    # mysql> select count(*) from chainOryCun1Link; > 119,306,828   mm9-oryCun1 has ~40m spread out among ~20 chr tbls 
+    # mysql> select count(*) from chainOryCun1Link; > 119,306,828   mm9-oryCun1 has ~40m spread out among ~20 chr tbls
     # featureBits cavPor3 chainOryCun1Link
     # 439282179 bases of 2663369733 (16.493%) in intersection
     # Options:
-    # 1) combine small scaffolds into a scaffoldUn 
-    #    Have to restart all blastzs  Awkward since not clear dividing line between scaffold/superscaffold 
+    # 1) combine small scaffolds into a scaffoldUn
+    #    Have to restart all blastzs  Awkward since not clear dividing line between scaffold/superscaffold
     # 2) Do not have the raw chains available at all.  Just have reciprocal best
     # 3) Go back to the idea of greater masking.
 
     ## [tdreszer@hgwdev /cluster/data/cavPor3] textHistogram -col=2 -binSize=40000000 chrom.sizes
     ##   0 ************************************************************ 3126
     ## 40000000  16
-    ## 80000000  2   
+    ## 80000000  2
     ## [tdreszer@hgwdev /cluster/data/cavPor3] textHistogram -col=2 -binSize=10000000 chrom.sizes
     ##  0 ************************************************************ 3079
     ## 10000000 * 26
     ## 20000000  14
     ## 30000000  7
-    ## 40000000  5  
+    ## 40000000  5
     ## 50000000  4
     ## 60000000  5
     ## 70000000  2
@@ -1300,7 +1300,7 @@ _EOF_
     # failed due to experiments dir being in the way
     cd /cluster/data/cavPor3/bed/blastzOryCun1.2008-04-11/axtChain
     mv experiments old.experiments
-    
+
     time nice -n +19 /cluster/bin/scripts/doRecipBest.pl cavPor3 oryCun1 \
 	> rbestResume.log 2>&1 &
     # hung for some unknown reason.  Starting again
@@ -1320,7 +1320,7 @@ _EOF_
     cd /cluster/data/cavPor3/bed/blastzOryCun1.2008-04-11/
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	   -continue=download > doResumeAtDownload.log 2>&1 & 
+	   -continue=download > doResumeAtDownload.log 2>&1 &
     # real    3m21.480s
     # *** All done!
     # *** Make sure that goldenPath/cavPor3/vsOryCun1/README.txt is accurate.
@@ -1336,7 +1336,7 @@ _EOF_
     cat fb.cavPor3.chainOryCun1Link.txt
     #   752079320 bases of 2663369733 (28.238%) in intersection
 
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cd /cluster/data/cavPor3/bed/blastzOryCun1.2008-04-11
     cat << \_EOF_ > DEF
 BLASTZ_M=50
@@ -1366,13 +1366,13 @@ _EOF_
 	/cluster/data/cavPor3/bed/blastzOryCun1.2008-04-11/DEF \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	    -swap > do.log 2>&1
-    # <ctl-A><ctl-d>  
+    # <ctl-A><ctl-d>
     # real    492m11.337s
     # load data local infile 'link.tab' into table chainCavPor3Link
     # mySQL error 1114: The table 'chainCavPor3Link' is full
     # Command failed:
     # ssh -x hgwdev nice /cluster/data/oryCun1/bed/blastz.cavPor3.swap/axtChain/loadUp.csh
-    # wc -l link.tab  210745564 
+    # wc -l link.tab  210745564
 
     ###################################################################
     # Manual load again
@@ -1458,7 +1458,7 @@ _EOF_
     cat fb.rn4.chainCavPor3Link.txt
     #   716379861 bases of 2571531505 (27.858%) in intersection
 
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cat << \_EOF_ > DEF
 BLASTZ_M=50
 
@@ -1585,10 +1585,10 @@ _EOF_
     ## ../psl/chr5.nib:chr5:20000000-30010000/chr5.nib:chr5:20000000-30010000_part042.lst.psl
     ########### Case sensitive path name!!! "Psl" vs "psl"
 
-    ssh kkstore04 
+    ssh kkstore04
     screen # use screen to control this job
     cd /cluster/data/monDom4/bed/blastzCavPor3.2008-04-11
-   ######### Change locations in DEF due to Hiram's new methods    
+   ######### Change locations in DEF due to Hiram's new methods
    cat << \_EOF_ > DEF
 # opossum vs guineaPigs
 
@@ -1636,7 +1636,7 @@ _EOF_
     time nice -n +19 doBlastzChainNet.pl \
 	/cluster/data/monDom4/bed/blastzCavPor3.2008-04-11/DEF \
 	-chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
-	-swap -chainLinearGap=loose -bigClusterHub=pk > do.log 2>&1 
+	-swap -chainLinearGap=loose -bigClusterHub=pk > do.log 2>&1
     # real    238m31.843s
     # Loading 18041915 chains into cavPor3.chainMonDom4
     # Can't start query:
@@ -1688,7 +1688,7 @@ _EOF_
     time nice -n +19 doBlastzChainNet.pl \
 	/cluster/data/monDom4/bed/blastzCavPor3.2008-04-11/DEF \
 	-chainMinScore=5000 -verbose=2 -smallClusterHub=memk \
-	-swap -chainLinearGap=loose -bigClusterHub=pk -continue=download > doDowload.log 2>&1 
+	-swap -chainLinearGap=loose -bigClusterHub=pk -continue=download > doDowload.log 2>&1
     # real    0m36.604s
     # *** All done!
     # *** Make sure that goldenPath/cavPor3/vsMonDom4/README.txt is accurate.
@@ -1697,7 +1697,7 @@ _EOF_
 ############################################################################
 # FINAL BLASTZS STEPS:
 # Be sure to add chainCavPor3.html,netCavPor3.html to makeDb/trackDb and update makeDb/trackDb/trackDb.ra
-# Any orgs with non-standard priority update {org}/priority.ra 
+# Any orgs with non-standard priority update {org}/priority.ra
 # Any orgs with differnent BLASTZ_Q=HoxD55.q will need chain{DB}.html and trackDb.ra at assembly level
 
 #Modified (possibly merged) files:
@@ -1741,7 +1741,7 @@ _EOF_
     # *** If you have to make any edits that would always apply to future
     #     assemblies from the same sequencing center, please edit them into
     #     ~/kent/src/hg/utils/automation/makeDownloads.pl (or ask Angie for help).
-    
+
     # the downloads are located at: http://hgwdev.cse.ucsc.edu/goldenPath/cavPor3/
     mv goldenPath old.goldenPath
     mv jkStuff/downloads.log jkStuff/old.downloads.log
@@ -1749,7 +1749,7 @@ _EOF_
     -workhorse=hgwdev cavPor3 >> jkStuff/downloads.log 2>&1
     # real    24m23.427s
     # *** Please take a look at the downloads for cavPor3 using a web browser.
-    # *** The downloads directory is: /usr/local/apache/htdocs/goldenPath/cavPor3. 
+    # *** The downloads directory is: /usr/local/apache/htdocs/goldenPath/cavPor3.
     # *** Edit each README.txt to resolve any notes marked with "***":
     #      /cluster/data/cavPor3/goldenPath/database/README.txt
     #      /cluster/data/cavPor3/goldenPath/bigZips/README.txt
@@ -1771,12 +1771,12 @@ _EOF_
     # cavPor3 does not have extFile
     ### Not needed because output is from multiz, visiGene, affyProbes, cloneend, stsMarker, nibbImageProbes
     ### Kate suggests updating makePushQsql to require gbSeq and gbExtFile instead, but it already does.
-    # 
+    #
     #  *** All done!
     #  *** Please edit the output to ensure correctness before using.
     #  *** 1. Resolve any warnings output by this script.
     #  *** 2. Remove any entries which should not be pushed.
-    ### All accounted for but: genscanSubopt which is not in pushQ.sql but is in 
+    ### All accounted for but: genscanSubopt which is not in pushQ.sql but is in
 
     #  *** 3. Add tables associated with the main track table (e.g. *Pep tables
     #         for gene prediction tracks).
@@ -1805,7 +1805,7 @@ _EOF_
     #      Queue web interface to check the contents of all entries.
     ssh hgwbeta
     cd /cluster/data/cavPor3/jkStuff
-    hgsql qapushq < pushQ.sql 
+    hgsql qapushq < pushQ.sql
     ### All is there
     #  *** If you haven't already, please add cavPor3 to makeDb/schema/all.joiner !
     #      It should be in both $gbd and $chainDest.
@@ -1827,7 +1827,7 @@ _EOF_
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
     twoBitToFa -seqList=less1meg.lst  cavPor3.unmasked.2bit temp.fa
-    faSplit about temp.fa 1000000 blastDb/y 
+    faSplit about temp.fa 1000000 blastDb/y
 
     cd blastDb
     for i in *.fa
@@ -1840,8 +1840,8 @@ _EOF_
 
     mkdir -p /san/sanvol1/scratch/cavPor3/blastDb
     cd /cluster/data/cavPor3/blastDb
-    for i in nhr nin nsq; 
-    do 
+    for i in nhr nin nsq;
+    do
 	echo $i
 	cp *.$i /san/sanvol1/scratch/cavPor3/blastDb
     done
@@ -1862,9 +1862,9 @@ _EOF_
    split -l 357 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -1900,21 +1900,21 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/cavPor3/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
         if pslCheck -prot $3.tmp
-        then                  
-            mv $3.tmp $3     
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0               
-    fi                      
-fi                         
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    exit 
-    
+    exit
+
     ssh pk
     cd /cluster/data/cavPor3/bed/tblastn.hg18KG
     para create blastSpec
@@ -1961,7 +1961,7 @@ chainOne $(path1)
 # Longest finished job:            5502s      91.70m     1.53h    0.06d
 # Submission to last job:          7032s     117.20m     1.95h    0.08d
 
-# ran 4 crashed jobs on memk.  
+# ran 4 crashed jobs on memk.
 Completed: 4 of 4 jobs
 CPU time in finished jobs:       1673s      27.88m     0.46h    0.02d  0.000 y
 IO & Wait Time:                   529s       8.81m     0.15h    0.01d  0.000 y
@@ -1983,13 +1983,13 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
     cd ..
     pslCheck blastHg18KG.psl
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/cavPor3/bed/tblastn.hg18KG
     hgLoadPsl cavPor3 blastHg18KG.psl
 
     # check coverage
-    featureBits cavPor3 blastHg18KG 
+    featureBits cavPor3 blastHg18KG
 # 35569442 bases of 2663369733 (1.336%) in intersection
 
     featureBits cavPor3 all_mrna blastHg18KG  -enrichment
@@ -2000,12 +2000,12 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
     rm -rf /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/blastOut
 #end tblastn
 ############################### Make editor happy: _EOF_
- 
+
 #########################################################################
 ## 7-Way Multiz (STARTED - 2008-04-25 - Tim)
 ##
 
-#  From Jim: A minimal set would be human/mouse/rabbit/chicken.  
+#  From Jim: A minimal set would be human/mouse/rabbit/chicken.
 #  Add rat and possum if you feel like turning the crank a little more.
 
     #	the all.chain.gz files were split up via kluster jobs on memk
@@ -2036,7 +2036,7 @@ Submission to last job:          1299s      21.65m     0.36h    0.02d
 (((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
 _EOF_
     #	<< happy emacs
-    
+
     # verify all blastz's exists
     cat << \_EOF_ > listMafs.csh
 #!/bin/csh -fe
@@ -2068,7 +2068,7 @@ _EOF_
     /cluster/bin/phast/all_dists cavPor3.7-way.nh > 7way.distances.txt
     #    ERROR: Can't parse distance in tree ("0.014587
     #").
-    #[hgwdev:tdreszer multiz7way> m cavPor3.7-way.nh 
+    #[hgwdev:tdreszer multiz7way> m cavPor3.7-way.nh
     # (((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587
     # ,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
     # Problem is that tree should not contain 'n' so reecho and retry
@@ -2103,12 +2103,12 @@ _EOF_
     # GuineaPig_cavPor3       Rat_rn4         0.487980
     # GuineaPig_cavPor3       Opossum_monDom4 0.835961
     # GuineaPig_cavPor3       Chicken_galGal3 1.211508
-    
-    # Note that guinneaPig is closer to human than to other rodents.  
-    # This may be reasonable, since the speed of evolution (length of tree limbs) 
+
+    # Note that guinneaPig is closer to human than to other rodents.
+    # This may be reasonable, since the speed of evolution (length of tree limbs)
     # in rodents is greater than for primates.  For instance mm9 is closer to hg18
     # than it is to either cavPor2 or oryCun1
-    
+
     #	use the calculated
     #	distances in the table below to order the organisms and check
     #	the button order on the browser.
@@ -2170,7 +2170,7 @@ do
     cd /scratch/tmp
     rm -fr ${D} ${D}.maf
 done
-    
+
     #   create a run-time list of contigs to operate on, not all contigs
     #   exist in all alignments, but we want all contig names used in any
     #   alignment:
@@ -2246,7 +2246,7 @@ _EOF_
     | gensub2 stdin single template jobList
 
     para create jobList
-    para try ... check ... 
+    para try ... check ...
     # Checking finished jobs
     # Completed: 10 of 296 jobs
     # CPU time in finished jobs:       4355s      72.59m     1.21h    0.05d  0.000 y
@@ -2278,7 +2278,7 @@ _EOF_
     # Checking finished jobs
     # ranOk: 296
     # total jobs in batch: 296
-    
+
     # put the split maf results back together into a single maf file
     #   eliminate duplicate comments
     ssh kkstore05
@@ -2318,7 +2318,7 @@ done >> togetherMaf/cavPor3.7way.maf
     # Loading multiz7way into database
     # Loaded 6939217 mafs in 1 files from /gbdb/cavPor3/multiz7way/maf
     # Advisory lock has been released
-    # 
+    #
     # real    7m7.421s
     # user    1m50.625s
     # sys     0m34.191s
@@ -2344,7 +2344,7 @@ done >> togetherMaf/cavPor3.7way.maf
     #   paste this tree into the on-line phyloGif tool:
     #   http://genome.ucsc.edu/cgi-bin/phyloGif
     #   to create the image for the tree diagram
-    
+
     ### Note the ground squirrel (Spermophilus tridecemlineatus) is not in the mm9 30-way
     ### Add it a same distance from other rodents as rabbit
 
@@ -2364,18 +2364,18 @@ done >> togetherMaf/cavPor3.7way.maf
 (((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
 _EOF_
     #   << happy emacs
-    
+
     # Add squirrel at same distance to guineaPig and Mouse as rabbits:
    # Alternative tree: ((((((GuineaPig_cavPor3:0.202990,(Mouse_mm9:0.076274,Rat_rn4:0.084383):0.200607):0.017175,Squirrel_speTri0:0.208548):0.017175,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
     cat << _EOF_ > cavPor3.8-way.nh
 (((((GuineaPig_cavPor3:0.202990,((Mouse_mm9:0.076274,Rat_rn4:0.084383):0.18602,Squirrel_speTri0:0.208548):0.014587):0.034350,Rabbit_oryCun1:0.208548):0.014587,Human_hg18:0.126901):0.263313,Opossum_monDom4:0.320721):0.207444,Chicken_galGal3:0.488824);
 _EOF_
     #   << happy emacs
-    
+
     cd /cluster/data/cavPor3/bed/multiz8way
     cp ../multiz7way/species.list .
     echo speTri0 >> species.list
-    
+
     # verify all blastz's exists
     cat << \_EOF_ > listMafs.csh
 #!/bin/csh -fe
@@ -2404,7 +2404,7 @@ _EOF_
     # oryCun1 mafRBestNet
     # rn4 mafNet
     # speTri0 mafs not found
-    
+
     ### After some back and forth on my own, Kate finally got the speTri0 Mafs together:
     # galGal3 mafNet
     # hg18 mafNet
@@ -2453,12 +2453,12 @@ _EOF_
     # GuineaPig_cavPor3       Rat_rn4 0.487980
     # GuineaPig_cavPor3       Opossum_monDom4 0.835961
     # GuineaPig_cavPor3       Chicken_galGal3 1.211508
-    
-    # Note that guinneaPig is closer to human than to other rodents.  
-    # This may be reasonable, since the speed of evolution (length of tree limbs) 
+
+    # Note that guinneaPig is closer to human than to other rodents.
+    # This may be reasonable, since the speed of evolution (length of tree limbs)
     # in rodents is greater than for primates.  For instance mm9 is closer to hg18
     # than it is to either cavPor2 or oryCun1
-    
+
     ## ??? time nice -n +19 featureBits cavPor3 axtChain/cavPor3.speTri0.rbest.chain.psl >& fb.cavPor3.speTri0.rbest.chain.psl.txt &
 
 
@@ -2542,7 +2542,7 @@ done | sort -u > /tmp/8-way.contig.list
     mkdir /cluster/data/cavPor3/bed/multiz8way/splitRun
     cp -p /tmp/8-way.contig.list \
     /cluster/data/cavPor3/bed/multiz8way/splitRun
-    # wc -l 8-way.contig.list 
+    # wc -l 8-way.contig.list
     # 296 8-way.contig.list
 
 
@@ -2604,13 +2604,13 @@ _EOF_
     | gensub2 stdin single template jobList
 
     para create jobList
-    para try ... check ... 
-    
+    para try ... check ...
+
     ## first 20 failed because of tree.8.nh:
-    
+
     ### Hand edited tree.8.nh from cavPor3.8-way.nh to:
     # (((((cavPor3 ((mm9 rn4) speTri0)) oryCun1) hg18) monDom4) galGal3)
-    
+
     # Next 10 succeeded
     # 296 jobs in batch
     # 15118 jobs (including everybody's) in Parasol queue.
@@ -2624,7 +2624,7 @@ _EOF_
     # Longest finished job:            1482s      24.70m     0.41h    0.02d
     # Submission to last job:          2712s      45.20m     0.75h    0.03d
     # Estimated complete:                 0s       0.00m     0.00h    0.00d
-    
+
     para push; para check
     # 296 jobs in batch
     # 13908 jobs (including everybody's) in Parasol queue.
@@ -2694,7 +2694,7 @@ done >> togetherMaf/cavPor3.8way.maf
     # real    4m26.559s
     # user    2m35.837s
     # sys     0m47.660s
-    
+
     # load summary table
     time nice -n +19 cat /gbdb/cavPor3/multiz8way/maf/*.maf \
 	| hgLoadMafSummary cavPor3 -minSize=30000 -mergeGap=1500 \
@@ -2706,7 +2706,7 @@ done >> togetherMaf/cavPor3.8way.maf
     # real    5m31.133s
     # user    4m55.729s
     # sys     0m21.743s
-    
+
     # Gap Annotation
     # prepare bed files with gap info
     ssh kkstore05
@@ -2747,13 +2747,13 @@ do
     ln -s  /cluster/data/${DB}/chrom.sizes ${DB}.len
     echo ${DB}.len  >> sizes
 done
-    # galGal3 
-    # hg18 
-    # mm9 
-    # monDom4 
-    # oryCun1 
-    # rn4 
-    # speTri0 
+    # galGal3
+    # hg18
+    # mm9
+    # monDom4
+    # oryCun1
+    # rn4
+    # speTri0
 
     ssh memk
     #	temporarily copy the cavPor3.8way.maf file onto the memk
@@ -2764,7 +2764,7 @@ do
 /cluster/data/cavPor3/bed/multiz8way/togetherMaf/cavPor3.8way.maf \
 	/scratch/data/cavPor3/maf/
 done
-    
+
     mkdir /cluster/data/cavPor3/bed/multiz8way/anno/splitMaf
     #	need to split up the single maf file into individual
     #	per-scaffold maf files to run annotation on
@@ -2903,13 +2903,13 @@ _EOF_
     # Longest finished job:             171s       2.85m     0.05h    0.00d
     # Submission to last job:           651s      10.85m     0.18h    0.01d
     # Estimated complete:                 0s       0.00m     0.00h    0.00d
-    
+
     #	put the results back together into a single file
     ssh kkstore05
     cd /cluster/data/cavPor3/bed/multiz8way/anno
     grep "^##maf version" maf/file_0//scaffold_0.maf \
 	| sort -u > cavPor3.anno.8way.maf
-    ##maf version=1 scoring=autoMZ.v1   
+    ##maf version=1 scoring=autoMZ.v1
     find ./maf -type f -depth -name "*.maf" | while read F
 do
     grep -v -h "^#" "${F}"
@@ -2949,17 +2949,17 @@ done >> cavPor3.anno.8way.maf
     rm /gbdb/cavPor3/multiz8way/maf/multiz8way.maf
     rmdir /gbdb/cavPor3/multiz8way/maf
 
-# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
-# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far 
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
+# ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
 # ### >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> got this far
 
 ##################
 # Effort to move to hive
 ##################
- 
+
 ssh hgwdev
 mv /hive/archive/store12/cavPor3 /hive/data/genomes/cavPor3
 ln -sf /hive/data/genomes/cavPor3 /cluster/data/cavPor3
@@ -3046,7 +3046,7 @@ done
 #############################################################################
 # phastCons 5-way (DONE - 2008-03-19 - Hiram)
 
-    # split 5way mafs into 10M chunks and generate sufficient statistics 
+    # split 5way mafs into 10M chunks and generate sufficient statistics
     # files for # phastCons
     ssh memk
     mkdir /cluster/data/cavPor3/bed/multiz5way/msa.split
@@ -3215,7 +3215,7 @@ rm -fr $tmp
     time nice -n +19 hgLoadBed cavPor3 phastConsElements5way mostConserved.bed
     #	Loaded 1005876 elements of size 5
 
-    # Try for 5% overall cov, and 70% CDS cov 
+    # Try for 5% overall cov, and 70% CDS cov
     #	We don't have any gene tracks to compare CDS coverage
     #	--rho .31 --expected-length 45 --target-coverage .3
     featureBits cavPor3 phastConsElements5way
@@ -3224,7 +3224,7 @@ rm -fr $tmp
     # Create merged posterier probability file and wiggle track data files
     # currently doesn't matter where this is performed, the san is the same
     # network distance from all machines.
-    # sort by chromName, chromStart so that items are in numerical order 
+    # sort by chromName, chromStart so that items are in numerical order
     #  for wigEncode
     cd /san/sanvol1/scratch/cavPor3/multiz5way/cons/all
     mkdir -p phastCons5wayScores
@@ -3370,14 +3370,14 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     mkdir /cluster/data/cavPor3/blastDb
     cd /cluster/data/cavPor3
     grep -v chrUn chrom.sizes | awk '{print $1}' > chr.lst
-    for i in `cat chr.lst`; 
-    do twoBitToFa  cavPor3.unmasked.2bit -seq=$i stdout; 
+    for i in `cat chr.lst`;
+    do twoBitToFa  cavPor3.unmasked.2bit -seq=$i stdout;
     done > temp.fa
     faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
 
     grep chrUn chrom.sizes | awk '{print $1}' > chr.lst
-    for i in `cat chr.lst`; 
-    do twoBitToFa  cavPor3.unmasked.2bit -seq=$i stdout; 
+    for i in `cat chr.lst`;
+    do twoBitToFa  cavPor3.unmasked.2bit -seq=$i stdout;
     done > temp.fa
     faSplit sequence temp.fa 150 blastDb/y
     rm temp.fa chr.lst
@@ -3393,8 +3393,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
     mkdir -p /san/sanvol1/scratch/cavPor3/blastDb
     cd /cluster/data/cavPor3/blastDb
-    for i in nhr nin nsq; 
-    do 
+    for i in nhr nin nsq;
+    do
 	echo $i
 	cp *.$i /san/sanvol1/scratch/cavPor3/blastDb
     done
@@ -3414,9 +3414,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
    split -l 361 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/kgfa/kg
    ln -s /cluster/bluearc/cavPor3/bed/tblastn.hg18KG/kgfa kgfa
    cd kgfa
-   for i in *; do 
-     nice pslxToFa $i $i.fa; 
-     rm $i; 
+   for i in *; do
+     nice pslxToFa $i $i.fa;
+     rm $i;
      done
    cd ..
    ls -1S kgfa/*.fa > kg.lst
@@ -3452,22 +3452,22 @@ then
 	liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/cavPor3/blastDb.lft carry $f.2
         liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.3
 
-        if pslCheck -prot $3.tmp                                                  
-        then                                                                      
-            mv $3.tmp $3                                                          
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
             rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0                                                                    
-    fi                                                                            
-fi                                                                                
+        exit 0
+    fi
+fi
 rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
     # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    exit 
-    
+    exit
+
     ssh pk
     cd /cluster/data/cavPor3/bed/tblastn.hg18KG
     para create blastSpec
@@ -3530,13 +3530,13 @@ chainOne $(path1)
     cd ..
     pslCheck blastHg18KG.psl
 
-    # load table 
+    # load table
     ssh hgwdev
     cd /cluster/data/cavPor3/bed/tblastn.hg18KG
     hgLoadPsl cavPor3 blastHg18KG.psl
 
     # check coverage
-    featureBits cavPor3 blastHg18KG 
+    featureBits cavPor3 blastHg18KG
 # 40254923 bases of 2731830700 (1.474%) in intersection
 
     featureBits cavPor3 refGene:cds blastHg18KG  -enrichment
@@ -3645,7 +3645,7 @@ BLASTZ_M=50
 
 # TARGET: Mouse MM9
 SEQ1_DIR=/scratch/data/cavPor3/cavPor3.2bit
-SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes 
+SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes
 SEQ1_CHUNK=10000000
 SEQ1_LAP=10000
 
@@ -3714,7 +3714,7 @@ cat > over.csh << 'EOF'
     mkdir /usr/local/apache/htdocs/goldenPath/cavPor3/vsSpeTri0
     /cluster/bin/scripts/doRecipBest.pl cavPor3 speTri0 >&! rbest.log &
 
-    # TODO: 
+    # TODO:
     # load chains in database and check coverage
     # NOTE: exhausts mem on hgwdev -- need to try this on kolossus ?
     cd axtChain
@@ -3780,38 +3780,38 @@ see doc/builds.txt for specific details.
 # ### Found this in Kate's unchecked in cavPor3.txt.  I need it to continue the blastz to get the maf for multiz !!
 # ### #############################################################################
 # ### # BLASTZ/CHAIN/NET 2X Ground squirrel: speTri0 (In progress 2008-05-16 kate)
-# ### 
+# ###
 # ###     ssh kkstore05
 # ###     cd /cluster/data/cavPor3/bed
 # ###     mkdir blastzSpeTri0.2008-05-16
 # ###     cd blastzSpeTri0.2008-05-16
-# ### 
+# ###
 # ###     cat << '_EOF_' > DEF
 # ### # Mouse vs. Ground squirrel
-# ### 
+# ###
 # ### BLASTZ_M=50
-# ### 
+# ###
 # ### # TARGET: Mouse MM9
 # ### SEQ1_DIR=/scratch/data/cavPor3/cavPor3.2bit
-# ### SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes 
+# ### SEQ1_LEN=/cluster/data/cavPor3/chrom.sizes
 # ### SEQ1_CHUNK=10000000
 # ### SEQ1_LAP=10000
-# ### 
+# ###
 # ### # QUERY: Ground squirrel speTri0
 # ### SEQ2_DIR=/scratch/data/speTri0/speTri0.2bit
 # ### SEQ2_LEN=/cluster/data/speTri0/chrom.sizes
 # ### SEQ2_CHUNK=30000000
 # ### SEQ2_LIMIT=500
 # ### SEQ2_LAP=0
-# ### 
+# ###
 # ### BASE=/cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16
 # ### TMPDIR=/scratch/tmp
 # ### '_EOF_'
 # ###     # << happy emacs
-# ### 
+# ###
 # ###     doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
 # ###       -chainMinScore=3000 -chainLinearGap=medium >& do.log &
-# ### 
+# ###
 # ###     # got here
 # ###     ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastzSpeTri0
 ln -s blastzSpeTri0.2008-05-16 /cluster/data/cavPor3/bed/blastz.speTri0
@@ -3851,7 +3851,7 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
      /scratch/data/speTri0/speTri0.2bit \
      tmp.chain &
      #Error reading 4 bytes: Success
-     
+
      ssh pk; para shove -retries=6
     # 233 jobs in batch
     # 503 jobs (including everybody's) in Parasol queue.
@@ -3869,13 +3869,13 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     tail do.log
     # Command failed:
     # ssh -x kki nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/run/doChainRun.csh
- 
+
     ssh kkstore05 # store12->kkstore05
     cd /cluster/data/cavPor3/bed/blastz.speTri0
-    screen 
+    screen
 
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
-       -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1 
+       -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1
     # real    220m10.699s
     # tail do.log
     # writing /dev/null
@@ -3884,22 +3884,22 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     # chainStitchId stdin stdout
     # gzip -c
     # Killed
-    # 
+    #
     # gzip: stdout: Broken pipe
     # Command failed:
     # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/netChains.csh
-    
+
     cp netChain.csh netChain.restart.csh
     # edit to restart in correct place
     ./netChain.restart.csh
-    
+
     ### After some searching I was able to figure out that   = octal "\031"
     # Now I can find the original problem file and try to rebuild it:
-    grep -n -P "\031" cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl 
+    grep -n -P "\031" cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl
     # 4253:62 40      0       0       1       1       1       6       +       scaffold_6393.1-308827  308827  149765  149868  scaffold_'      61004451   49604348        49604456        3       2,38,35,       149765,149794,149833,   49604348,49604383,49604421,
 
     # For comparison:
-    tail -55 cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl | head -5  
+    tail -55 cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl | head -5
     # 91      37      0       0       1       8       3       16      +       scaffold_6393.1-308827  308827  244021  244157  scaffold_7      61004451   48951564        48951708        5       18,25,14,15,56, 244021,244039,244072,244086,244101,     48951564,48951583,48951608,48951629,48951652,
     # 62      32      0       0       0       0       0       0       +       scaffold_6393.1-08827  308827  54194   54288   scaffold_7      61004451   49114670        49114764        1       94,     54194,  49114670,
     # 62      40      0       0       1       1       1       6       +       scaffold_6393.1-308827  308827  149765  149868  scaffold_'      61004451   49604348        49604456        3       2,38,35,       149765,149794,149833,   49604348,49604383,49604421,
@@ -3913,7 +3913,7 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     ll ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007*
     # -rw-rw-r--  1 tdreszer protein 785511 Jun  3 13:11 ../psl/cavPor3.2bit:scaffold_7:40000000-50010000/cavPor3.2bit:scaffold_7:40000000-50010000_part007.lst.new.psl
     # -rw-rw-r--  1 kate     protein 785511 May 16 19:40 ../psl/cavPor3.2bit:scaffold_7:40000000-50010000/cavPor3.2bit:scaffold_7:40000000-50010000_part007.lst.psl
-    grep -n -P "\031" ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl 
+    grep -n -P "\031" ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl
     tail -55 ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl | head -5
     # 91      37      0       0       1       8       3       16      +       scaffold_6393.1-308827  308827  244021  244157  scaffold_7      61004451        48951564        48951708       518,25,14,15,56, 244021,244039,244072,244086,244101,     48951564,48951583,48951608,48951629,48951652,
     # 62      32      0       0       0       0       0       0       +       scaffold_6393.1-308827  308827  54194   54288   scaffold_7      61004451        49114670        49114764       194,     54194,  49114670,
@@ -3922,31 +3922,31 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     # 29      8       0       0       0       0       0       0       +       scaffold_6393.1-308827  308827  160121  160158  scaffold_7      61004451        49620825        49620862       137,     160121, 49620825,
     mv ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl.old
     mv ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.new.psl ../psl/cavPor3.2bit\:scaffold_7\:40000000-50010000/cavPor3.2bit\:scaffold_7\:40000000-50010000_part007.lst.psl
-    
+
     # Okay, we are NOW done with run.blastz so it is on to run.cat
     ssh kkstore05
     cd ../run.cat
-    ./cat.csh cavPor3.2bit:scaffold_7:40000000-50010000 cavPor3.2bit:scaffold_7:40000000-50010000.psl.new.gz 
+    ./cat.csh cavPor3.2bit:scaffold_7:40000000-50010000 cavPor3.2bit:scaffold_7:40000000-50010000.psl.new.gz
     ll cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.*
     # -rw-rw-r--  1 tdreszer protein 38048414 Jun  3 13:28 cavPor3.2bit:scaffold_7:40000000-50010000.psl.new.gz
     # -rw-rw-r--  1 tdreszer protein 38048475 May 18 08:13 cavPor3.2bit:scaffold_7:40000000-50010000.psl.old.gz
     mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.new.gz cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz
     mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.old.gz cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz.old
     mv cavPor3.2bit\:scaffold_7\:40000000-50010000.psl.gz* ../pslParts/
-    
+
     # Okay, we are now done with run.cat.  What can be done for axtChain?
     # run on same cluster machine
     ssh kkr4u00
     cd /cluster/data/cavPor3/bed/blastz.speTri0/axtChain/run
     ./chain.csh cavPor3.2bit:scaffold_7: chain/cavPor3.2bit:scaffold_7:.chain
-    ll chain/cavPor3.2bit\:scaffold_7\:.chain 
+    ll chain/cavPor3.2bit\:scaffold_7\:.chain
     # -rw-rw-r--  1 tdreszer protein 304948646 Jun  3 15:05 chain/cavPor3.2bit:scaffold_7:.chain
 
     # Okay, NOW we are ready to consider restarting doBlastzChainNet.pl
     # Though I assume that some of what was already done, will be in the way.
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
        -chainMinScore=3000 -chainLinearGap=medium -continue chainMerge >> do.log 2>&1
-    # postProcessChains: looks like this was run successfully already (cavPor3.speTri0.all.chain.gz exists). 
+    # postProcessChains: looks like this was run successfully already (cavPor3.speTri0.all.chain.gz exists).
     # Either run with -continue net or some later stage, or move aside/remove /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/cavPor3.speTri0.all.chain.gz and run again.
     mv axtChain/cavPor3.speTri0.all.chain.gz axtChain/cavPor3.speTri0.all.chain.gz.old
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
@@ -3961,23 +3961,23 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
        -chainMinScore=3000 -chainLinearGap=medium -continue net >> do.log 2>&1
     real    204m20.325s
-    
-    tail do.log 
+
+    tail do.log
     # writing /dev/null
     # memory usage 2427514880, utime 5453 s/100, stime 405
     # netChainSubset -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz stdout
     # chainStitchId stdin stdout
     # gzip -c
-    # 
+    #
     # gzip: stdout: Broken pipe
-    # Killed  
+    # Killed
     # Command failed:
     # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain/netChains.csh
-    
+
     ### Can't seem to get ahead!!!
 
     ## Doing each step in netChains.csh manually...
-    
+
     cd /cluster/data/cavPor3/bed/blastzSpeTri0.2008-05-16/axtChain
 
     # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
@@ -3988,7 +3988,7 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
 
     # Make liftOver chains:
     netChainSubset -verbose=0 noClass.net cavPor3.speTri0.all.chain.gz netChainSubset.out
-    ll netChainSubset.out 
+    ll netChainSubset.out
     # -rw-rw-r--  1 tdreszer protein 73728 Jun  6 17:12 netChainSubset.out
 
     chainStitchId netChainSubset.out chainStitchId.out
@@ -4006,19 +4006,19 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
       | gzip -c > ../axtNet/cavPor3.speTri0.net.axt.gz
 
     ### Okay Kate rescued this by adjusting file sizes to handle memory
-    
-    ssh kkstore05 
-    cd /cluster/data/cavPor3/bed/blastz.speTri0 
+
+    ssh kkstore05
+    cd /cluster/data/cavPor3/bed/blastz.speTri0
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF -bigClusterHub=pk  \
-       -chainMinScore=3000 -chainLinearGap=medium -continue net >> doAferChain.log 2>&1 
+       -chainMinScore=3000 -chainLinearGap=medium -continue net >> doAferChain.log 2>&1
 
 
-     
+
 
     # NOTE: be sure to ls the data in above script on workhorse machine before starting script
     time nice -n +19 doBlastzChainNet.pl `pwd`/DEF \
     -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-        -syntenicNet > do.log 2>&1 
+        -syntenicNet > do.log 2>&1
     # <ctl-A><ctl-d>  ps -ef | grep blastzCavPor3
     # real    1764m55.155s
     tail do.log
@@ -4030,7 +4030,7 @@ zcat ../../pslParts/cavPor3.2bit\:scaffold_7\:*.psl.gz \
     #    757283793 bases of 2620346127 (28.900%) in intersection
 
     cd /cluster/data/mm9/bed/blastzCavPor3.2008-04-10
-    ######### Change locations in DEF due to Hiram's new methods    
+    ######### Change locations in DEF due to Hiram's new methods
     cat << \_EOF_ > DEF
 BLASTZ_M=50
 
@@ -4066,7 +4066,7 @@ _EOF_
     # ssh -x kolossus nice /cluster/data/cavPor3/bed/blastz.mm9.swap/axtChain/netSynteny.csh
 
     #   broken down during netSynteny.csh due to too many open files on
-    #   a chainSplit      
+    #   a chainSplit
     #   However, there is no need to split when we have scaffolds.
     #   Kate fixes doBlastzChainNet.pl and retry:
 
@@ -4215,7 +4215,7 @@ cat > finish.csh << 'EOF'
     end
 'EOF'
     # oops, forgot to mkdir, so 'empty' files were lost
-    ls *.maf | wc -l 
+    ls *.maf | wc -l
     # 1491
     tar cvfz rodent3way.tar.gz *.maf
 
@@ -4325,7 +4325,7 @@ see doc/builds.txt for specific details.
 # lastz Rabbit oryCun2 swap (DONE - 2010-01-22 - Hiram)
     #	original alignment
     cd /hive/data/genomes/oryCun2/bed/lastzCavPor3.2010-01-21
-    cat fb.oryCun2.chainCavPor3Link.txt 
+    cat fb.oryCun2.chainCavPor3Link.txt
     #	964546600 bases of 2604023284 (37.041%) in intersection
 
     #	and for the swap
@@ -4336,7 +4336,7 @@ see doc/builds.txt for specific details.
 	-swap -noLoadChainSplit -workhorse=hgwdev -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    186m1.649s
-    cat fb.cavPor3.chainOryCun2Link.txt 
+    cat fb.cavPor3.chainOryCun2Link.txt
     #	1003499831 bases of 2663369733 (37.678%) in intersection
 
 ############################################################################
@@ -4368,7 +4368,7 @@ see doc/builds.txt for specific details.
 ############################################################################
 # SWAP lastz mm10 (DONE - 2012-03-19 - Hiram)
     # original alignment to mm10
-    cat /hive/data/genomes/mm10/bed/lastzCavPor3.2012-03-16/fb.mm10.chainCavPor3Link.txt 
+    cat /hive/data/genomes/mm10/bed/lastzCavPor3.2012-03-16/fb.mm10.chainCavPor3Link.txt
     #	754642254 bases of 2652783500 (28.447%) in intersection
 
     # and this swap
@@ -4380,7 +4380,7 @@ see doc/builds.txt for specific details.
 	-workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
 	-chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
     #	real    80m23.870s
-    cat fb.cavPor3.chainMm10Link.txt 
+    cat fb.cavPor3.chainMm10Link.txt
     #	775452752 bases of 2663369733 (29.115%) in intersection
     # set sym link to indicate this is the lastz for this genome:
     cd /hive/data/genomes/cavPor3/bed
@@ -4405,3 +4405,120 @@ XXX - this one has problems, needs to be fixed
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# LASTZ Guinea pig/cavPor3 - Malayan flying lemur/galVar1
+#      (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/cavPor3/bed/lastzGalVar1.2016-04-15
+    cd /hive/data/genomes/cavPor3/bed/lastzGalVar1.2016-04-15
+
+    printf '# Malayan flying lemur vs Guinea pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.54/bin/lastz
+
+# TARGET: Guinea pig cavPor3
+SEQ1_DIR=/hive/data/genomes/cavPor3/cavPor3.wmTrf.2bit
+SEQ1_LEN=/hive/data/genomes/cavPor3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+
+# QUERY: Malayan flying lemur galVar1
+SEQ2_DIR=/hive/data/genomes/galVar1/galVar1.2bit
+SEQ2_LEN=/hive/data/genomes/galVar1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/cavPor3/bed/lastzGalVar1.2016-04-15
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    #     cat fb.cavPor3.chainTupBel1Link.txt
+
+    cat fb.cavPor3.chainGalVar1Link.txt
+    # 1300265220 bases of 2663369733 (48.820%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` cavPor3 galVar1) > rbest.log 2>&1 &
+    # real    161m43.865s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galVar1/bed/blastz.cavPor3.swap
+    cd /hive/data/genomes/galVar1/bed/blastz.cavPor3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/cavPor3/bed/lastzGalVar1.2016-04-15/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    355m25.890s
+
+    cat fb.galVar1.chainCavPor3Link.txt
+    # 1357961680 bases of 2802917674 (48.448%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` galVar1 cavPor3) > rbest.log 2>&1
+    # real    231m8.085s
+
+##############################################################################
+# LASTZ Guinea pig/cavPor3 - Tree shrew/tupBel1
+#      (DONE - 2016-04-15 - Hiram)
+    mkdir /hive/data/genomes/cavPor3/bed/lastzTupBel1.2016-04-15
+    cd /hive/data/genomes/cavPor3/bed/lastzTupBel1.2016-04-15
+
+    printf '# Tree shrew vs Guinea pig
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+
+# TARGET: Guinea pig cavPor3
+SEQ1_DIR=/hive/data/genomes/cavPor3/cavPor3.wmTrf.2bit
+SEQ1_LEN=/hive/data/genomes/cavPor3/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=30
+
+# QUERY: Tree shrew tupBel1
+SEQ2_DIR=/hive/data/genomes/tupBel1/tupBel1.2bit
+SEQ2_LEN=/hive/data/genomes/tupBel1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=800
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/cavPor3/bed/lastzTupBel1.2016-04-15
+TMPDIR=/dev/shm
+' > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -syntenicNet -fileServer=hgwdev \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    597m13.526s
+
+    cat fb.cavPor3.chainTupBel1Link.txt
+    # 745589338 bases of 2663369733 (27.994%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` cavPor3 tupBel1) > rbest.log 2>&1 &
+    # real    187m21.483s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupBel1/bed/blastz.cavPor3.swap
+    cd /hive/data/genomes/tupBel1/bed/blastz.cavPor3.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/cavPor3/bed/lastzTupBel1.2016-04-15/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    256m16.390s
+
+    cat fb.tupBel1.chainCavPor3Link.txt
+    # 747820632 bases of 2137225476 (34.990%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` tupBel1 cavPor3) > rbest.log 2>&1
+    # real    262m6.256s
+
+#########################################################################
