@@ -47,12 +47,13 @@
             </div>
           </div>
 
-          <div class="jwSubsectionTitle">
+          <!-- This subsection is hidden unless hgGateway.js has a tree to draw. -->
+          <div id="representedSpeciesTitle" class="jwSubsectionTitle" style="display: none;">
             Represented Species
           </div>
-          <div id="speciesGraphic" class="jwSubsectionContents">
+          <div id="speciesGraphic" class="jwSubsectionContents" style="display: none;">
             <div id="sliderWidgetContainer" class="jwSliderWidget">
-              <div id="sliderSvgContainer" class="jwSliderIcon" style="display: none;">
+              <div id="sliderSvgContainer" class="jwSliderIcon">
                 <svg id="sliderSvg"
                      xmlns:svg="http://www.w3.org/2000/svg"
                      xmlns="http://www.w3.org/2000/svg"

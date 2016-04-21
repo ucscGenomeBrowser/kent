@@ -25,7 +25,8 @@
 
 // Globals:
 /* globals calculateHgTracksWidth */ // pragma for jshint; function is defined in utils.js
-var dbDbTree = dbDbTree || ['dbDbTree is missing!', []];
+var dbDbTree = dbDbTree || undefined;
+var activeGenomes = activeGenomes || undefined;
 var cart = cart || undefined;
 
 function svgCreateEl(type, config) {
@@ -805,6 +806,9 @@ var hgGateway = (function() {
         // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
         // Returns an object mapping each label of node and descendants to a list of
         // result objects with the same structure that we'd get from a server request.
+        if (! node) {
+            return;
+        }
         var searchObj = {};
         var myResults = [];
         var label = node[0], taxId = node[1], kids = node[3];
@@ -977,7 +981,6 @@ var hgGateway = (function() {
                                 containment: '#speciesGraphic',
                                 drag: onDragSlider
                                 });
-        $sliderIcon.show();
         $speciesPicker.scroll(onScrollImage);
     }
 
@@ -1053,23 +1056,75 @@ var hgGateway = (function() {
         }
     }
 
-    function drawSpeciesPicker() {
-        var svg, spTree, stripeTops;
-        if (document.createElementNS) {
-            // Draw the phylogenetic tree and do layout adjustments
-            svg = document.getElementById('speciesTree');
-            spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
-                                       { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
-                                         onClickHubName: 'hgGateway.onClickHubName',
-                                         hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
-                                         containerWidth: $('#speciesPicker').width()
-                                       });
-            setSpeciesPickerSizes(spTree.width, spTree.height);
-            highlightLabelForDb(uiState.db, uiState.taxId);
-            stripeTops = rainbow.draw(svg, dbDbTree, spTree.yTree, spTree.height, spTree.leafTops);
-            initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+    function pruneInactive(node, activeGenomes, activeTaxIds) {
+        // Return true if some leaf descendant of node is in activeGenomes or activeTaxIds.
+        // Remove any child that returns false.
+        // If one of {genome, taxId} matches but not the other, tweak the other to match dbDb,
+        // Since we'll be using the hgwdev dbDbTree on the RR which may have been tweaked.
+        var genome = node[0], taxId = node[1], kids = node[3];
+        var hasActiveLeaf = false, i, dbDbTaxId, dbDbGenome;
+        if (!kids || kids.length === 0) {
+            // leaf node: is it active?
+            dbDbTaxId = activeGenomes[genome];
+            if (dbDbTaxId) {
+                hasActiveLeaf = true;
+                node[1] = dbDbTaxId;
+            }
+            // Yet another special case for Baboon having one genome with two species...
+            // maybe we should just change dbDb?
+            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562)) {
+                hasActiveLeaf = true;
+            } else {
+                dbDbGenome = activeTaxIds[taxId];
+                if (dbDbGenome) {
+                    hasActiveLeaf = true;
+                    node[0] = dbDbGenome;
+                }
+            }
         } else {
-            $('#speciesTreeContainer').html(getBetterBrowserMessage);
+            // parent node: splice out any child nodes with no active leaves
+            for (i = kids.length - 1;  i >= 0;  i--) {
+                if (pruneInactive(kids[i], activeGenomes, activeTaxIds)) {
+                    hasActiveLeaf = true;
+                } else {
+                    kids.splice(i, 1);
+                }
+            }
+        }
+        return hasActiveLeaf;
+    }
+
+    function drawSpeciesPicker() {
+        // Prune inactive genomes from dbDbTree.
+        // If dbDbTree is nonempty and SVG is supported, draw the tree; if SVG is not supported,
+        // use the space to suggest that the user install a better browser.
+        // If dbDbTree doesn't exist, leave the "Represented Species" section hidden.
+        var svg, spTree, stripeTops;
+        var activeTaxIds = _.invert(activeGenomes);
+        if (dbDbTree && pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+            if (document.createElementNS) {
+                // Draw the phylogenetic tree and do layout adjustments
+                svg = document.getElementById('speciesTree');
+                spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
+                                          { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
+                                            onClickHubName: 'hgGateway.onClickHubName',
+                                            hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
+                                            containerWidth: $('#speciesPicker').width()
+                                            });
+                setSpeciesPickerSizes(spTree.width, spTree.height);
+                highlightLabelForDb(uiState.db, uiState.taxId);
+                stripeTops = rainbow.draw(svg, dbDbTree,
+                                          spTree.yTree, spTree.height, spTree.leafTops);
+            } else {
+                $('#speciesTreeContainer').html(getBetterBrowserMessage);
+            }
+            $('#representedSpeciesTitle').show();
+            $('#speciesGraphic').show();
+            if (dbDbTree) {
+                // This needs to be done after things are visible so the slider gets the
+                // right position.
+                initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+            }
         }
     }
 

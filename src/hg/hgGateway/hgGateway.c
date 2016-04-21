@@ -242,6 +242,25 @@ cartJsonRegisterHandler(cj, "getUiState", getUiState);
 cartJsonExecute(cj);
 }
 
+static void printActiveGenomes()
+/* Print out JSON for an object mapping each genome that has at least one db with active=1
+ * to its taxId.  */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+struct sqlConnection *conn = hConnectCentral();
+char *query = NOSQLINJ "select distinct(genome),taxId from dbDb where active=1 "
+    "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    jsonWriteNumber(jw, row[0], atoi(row[1]));
+hDisconnectCentral(&conn);
+jsonWriteObjectEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 static void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
@@ -250,16 +269,20 @@ char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 webStartJWest(cart, db, "Genome Browser Gateway");
 
-// Edit the HTML in hgGateway.html (see makefile):
+// The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
+// file containing a string constant that we #include and print here (see makefile).
 puts(
 #include "hgGateway.html.h"
 );
 
-// Set global JS variable hgsid
+// Set global JS variables hgsid and activeGenomes
 // We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
 // "window.hgsid = ".
 puts("<script>");
 printf("window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
+puts("window.activeGenomes =");
+printActiveGenomes();
+puts(";");
 puts("</script>");
 
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
@@ -273,13 +296,9 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *hostCode = (hIsPrivateHost() || hIsPreviewHost()) ? "hgwdev" : "rr";
-
-// Keep using dbDbTaxonomy.rr.js on demo6 for testing.
-if (hHostHasPrefix("hgwdev-demo6"))
-    hostCode = "rr";
-
-printf("<script src=\"../js/dbDbTaxonomy.%s.js\"></script>\n", hostCode);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", NULL);
+if (isNotEmpty(dbDbTree))
+    printf("<script src=\"%s\"></script>\n", dbDbTree);
 
 // Main JS for hgGateway:
 puts("<script src=\"../js/hgGateway.js\"></script>");

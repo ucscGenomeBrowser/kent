@@ -120,7 +120,7 @@ taxId 9031
     # remove it later
 
     # new option required to ucscCompositeAgp.pl 2016-04-13
-    time ./ucscCompositeAgp.pl \
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
       ../refseq/*_genomic.fna.gz ../refseq/*_assembly_structure/Primary_Assembly
 # constructing refseq.2bit from ../refseq/GCF_000002315.4_Gallus_gallus-5.0_genomic.fna.gz
 NC_006088.4 chr1
@@ -482,7 +482,7 @@ XXX - running - Thu Apr 14 16:04:40 PDT 2016
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-02-03,10 - Hiram)
+# GENBANK AUTO UPDATE (TBD - 2016-04-15,19 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -520,8 +520,11 @@ galGal5.downloadDir = galGal5
 
     time ./bin/gbAlignStep -initial galGal5
     # logFile: var/build/logs/2016.04.15-09:58:43.galGal5.initalign.log
-XXX - running - Fri Apr 15 09:58:54 PDT 2016
-    #   real    2229m7.259s
+    #   real    5678m9.548s
+    tail var/build/logs/2016.04.15-09:58:43.galGal5.initalign.log
+    #    hgwdev 2016.04.19-08:29:59 galGal5.initalign: Succeeded: galGal5
+    #    hgwdev 2016.04.19-08:36:52 galGal5.initalign: finish
+
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.galGal5
 
@@ -529,8 +532,10 @@ XXX - running - Fri Apr 15 09:58:54 PDT 2016
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad galGal5
-    # logFile: var/dbload/hgwdev/logs/2016.02.09-14:37:59.galGal5.dbload.log
-    #  real    205m12.078s
+    # var/dbload/hgwdev/logs/2016.04.19-08:38:37.galGal5.dbload.log
+    #  real    195m36.119s
+    tail -1 var/dbload/hgwdev/logs/2016.04.19-08:38:37.galGal5.dbload.log
+    #  hgwdev 2016.04.19-11:54:13 galGal5.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -538,7 +543,7 @@ XXX - running - Fri Apr 15 09:58:54 PDT 2016
     # add galGal5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added galGal5 - Rhesus refs #16744" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added galGal5 - chicken refs #17168" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 

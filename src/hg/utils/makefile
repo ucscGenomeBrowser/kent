@@ -42,6 +42,7 @@ UTILS_APPLIST = \
 	pslToBigPsl \
 	pslMap \
 	tdbQuery \
+	transMapPslToGenePred \
 	twoBitMask
 
 SCRIPT_FILES = \
@@ -70,7 +71,8 @@ TEST_DIRS = \
 	gtfToGenePred \
 	overlapSelect \
 	pslMap \
-	refSeqGet
+	refSeqGet \
+	transMapPslToGenePred
 
 APPS = $(DIRS) $(UTILS_APPLIST)
 
