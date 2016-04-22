@@ -9386,8 +9386,15 @@ hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtM
 hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+// links to a few tools
+hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
-hPrintf("$(document).ready(addKeyboardHelpEntry);");
+hPrintf("$(document).ready(addKeyboardHelpEntries);");
 
 hPrintf("</script>\n");
 

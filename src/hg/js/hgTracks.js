@@ -3285,10 +3285,35 @@ function showHotkeyHelp() {
     $("#hotkeyHelp").dialog({width:'600'});
 }
 
-// A function to add the keyboard help dialog box to the menubar
-function addKeyboardHelpEntry() {
-    html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a></li>';
+// A function to add an entry for the keyboard help dialog box to the menubar 
+// and add text that indicates the shortcuts to many static menubar items as suggested by good old IBM CUA/SAA
+function addKeyboardHelpEntries() {
+    html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
+
+    html = '<span class="shortcut">s s</span>';
+    $('#sessionsMenuLink').after(html);
+
+    html = '<span class="shortcut">c t</span>';
+    $('#customTracksMenuLink').after(html);
+
+    html = '<span class="shortcut">t h</span>';
+    $('#trackHubsMenuLink').after(html);
+
+    html = '<span class="shortcut">t b</span>';
+    $('#blatMenuLink').after(html);
+
+    html = '<span class="shortcut">t t</span>';
+    $('#tableBrowserMenuLink').after(html);
+
+    html = '<span class="shortcut">t i</span>';
+    $('#ispMenuLink').after(html);
+
+    html = '<span class="shortcut">c f</span>';
+    $('#configureMenuLink').after(html);
+
+    html = '<span class="shortcut">c r</span>';
+    $('#cartResetMenuLink').after(html);
 }
 
 // A function for the keyboard shortcut:
