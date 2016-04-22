@@ -363,7 +363,7 @@ static void convertPslBlockCds(struct psl *mappedPsl, int iBlock, struct genePre
 // on the positive strand, frame is adjusted from the start, on the negative strand, from the end.
 int cdsOff = (pslQStrand(mappedPsl) == '+')
     ? (mappedQCds.start - srcQueryExon->qCdsStart)
-    : -(srcQueryExon->qCdsEnd - mappedQCds.end);
+    : (srcQueryExon->qCdsEnd - mappedQCds.end);
 mappedGp->exonFrames[iExon] = frameIncr(srcQueryExon->frame, cdsOff);
 
 if (mappedGp->cdsStart == mappedGp->txEnd)
@@ -429,7 +429,7 @@ for (iBlock = 0; iBlock < mappedPsl->blockCount; iBlock++)
     convertPslBlock(mappedPsl, iBlock, srcGp, srcQueryExons, mappedGp, &currentExonSpace);
 if (mappedGp->cdsStart >= mappedGp->cdsEnd)
     {
-    // for to common representation of no CDS.
+    // use common representation of no CDS.
     mappedGp->cdsStart = mappedGp->cdsEnd = mappedGp->txEnd;
     mappedGp->cdsStartStat = mappedGp->cdsEndStat = cdsNone;
     }
@@ -455,7 +455,6 @@ static boolean canMergeFrames(struct genePred *mappedGp, int iExon)
 {
 return hasAdjacentNonCoding(mappedGp, iExon) || haveAdjacentFrames(mappedGp, iExon);
 }
-    
 
 static boolean canMergeBlocks(struct genePred *mappedGp, int iExon)
 /* check if blocks are adjacent and can be merged with consistent frame */
@@ -480,9 +479,9 @@ if (mappedGp->strand[0] == '+')
 else
     {
     // - strand, keep second frame
-    mappedGp->exonFrames[iExon] = (mappedGp->exonFrames[iExon] >= 0)
-        ? mappedGp->exonFrames[iExon]
-        : mappedGp->exonFrames[iExon+1];
+    mappedGp->exonFrames[iExon] = (mappedGp->exonFrames[iExon+1] >= 0)
+        ? mappedGp->exonFrames[iExon+1]
+        : mappedGp->exonFrames[iExon];
     }
 }   
 
