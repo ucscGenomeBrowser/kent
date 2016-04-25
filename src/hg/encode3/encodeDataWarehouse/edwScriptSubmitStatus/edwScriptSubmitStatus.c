@@ -116,28 +116,13 @@ puts("\r");
 printf("%s", dy->string);
 }
 
-static void badRequestWarn(char *format, va_list args)
-/* Put up HTTP bad request error. */
-{
-puts("Status: 400\r");
-puts("Content-Type: text/plain; charset=UTF-8\r");
-puts("\r");
-
-if (format != NULL) 
-    {
-    vfprintf(stdout, format, args);
-    fprintf(stdout, "\n");
-    }
-}
-
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 if (!cgiIsOnWeb())
    usage();
 cgiSpoof(&argc, argv);
-pushWarnHandler(badRequestWarn);
+pushAbortHandler(htmlVaBadRequestAbort);
 edwScriptSubmitStatus();
 return 0;
 }

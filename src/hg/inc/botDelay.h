@@ -9,7 +9,7 @@ int botDelayTime(char *host, int port, char *ip);
 /* Figure out suggested delay time for ip address in
  * milliseconds. */
 
-void botDelayCgi(char *host, int port);
+void botDelayCgi(char *host, int port, boolean noWarn);
 /* Connect with bottleneck server and sleep the
  * amount it suggests for IP address calling CGI script. */
 
@@ -17,8 +17,10 @@ void botDelayMessage(char *ip, int millis);
 /* Print out message saying why you are stalled. */
 
 void hgBotDelay();
-/* High level bot delay call - looks up bottleneck server
- * in hg.conf. */
+/* High level bot delay call - for use with regular webpage output */ 
+
+void hgBotDelayNoWarn();
+/* High level bot delay call without warning - for use with non-webpage output */
 
 int hgBotDelayTime();
 /* Get suggested delay time from cgi. */

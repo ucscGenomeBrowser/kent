@@ -18,6 +18,7 @@ CREATE TABLE dbDb (
     hgNearOk tinyint not null,	# Have hgNear for this?
     hgPbOk tinyint not null,	# Have pbTracks for this?
     sourceName varchar(255) not null,	# Source build/release/version of the assembly
+    taxId int not null,	# NCBI Taxonomy ID for genome
               #Indices
     PRIMARY KEY(name)
 );

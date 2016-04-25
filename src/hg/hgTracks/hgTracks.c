@@ -7275,14 +7275,21 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsSuperTrackChild(track->tdb))
         limitSuperTrackVis(track);
 
-    /* remove cart priority variables if they are set
-       to the default values in the trackDb */
-    if (!hTrackOnChrom(track->tdb, chromName))
+    /* hide tracks not on any windows chromNames */
+    boolean hideIt = TRUE;
+    struct window *w;
+    for (w = windows; w; w=w->next)
+        {
+        if (hTrackOnChrom(track->tdb, w->chromName))
+            hideIt = FALSE;
+        }
+    if (hideIt)
         {
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
-	}
+        }
     }
+
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList);
@@ -9367,7 +9374,7 @@ hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+hPrintf("Mousetrap.bind('?', showHotkeyHelp);\n");
 
 // menu
 if (gotExtTools)
@@ -9379,6 +9386,15 @@ hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtM
 hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+// links to a few tools
+hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+
+// also add an entry to the help menu that shows the keyboard shortcut help dialog
+hPrintf("$(document).ready(addKeyboardHelpEntries);");
 
 hPrintf("</script>\n");
 

@@ -31,7 +31,8 @@ UTIL_DIRS = \
     cdwRunOnIds \
     cdwSubmit \
     cdwSwapInSymLink \
-    cdwUndeprecate
+    cdwUndeprecate \
+    utils/cdwVcfStats
 
 CGI_DIRS = \
     cdwWebAuthLogin \

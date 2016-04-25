@@ -753,7 +753,7 @@ char *path = makeIndexPath(db);
 trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);
-tsrList = trixSearch(trix, keyCount, keyWords, TRUE);
+tsrList = trixSearch(trix, keyCount, keyWords, tsmExpand);
 if (tsrList != NULL)
     {
     struct hgPosTable *table = addKnownGeneTable(db, hgp);

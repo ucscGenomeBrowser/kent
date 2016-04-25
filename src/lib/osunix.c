@@ -268,7 +268,7 @@ time_t fileModTime(char *pathName)
 {
 struct stat st;
 if (stat(pathName, &st) < 0)
-    errAbort("stat failed in fileModTime: %s", pathName);
+    errnoAbort("stat failed in fileModTime: %s", pathName);
 return st.st_mtime;
 }
 

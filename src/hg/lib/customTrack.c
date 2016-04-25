@@ -433,7 +433,7 @@ return result;
 char *customTrackFileVar(char *database)
 /* return CGI var name containing custom track filename for a database */
 {
-char buf[64];
+char buf[512];
 safef(buf, sizeof buf, "%s%s", CT_FILE_VAR_PREFIX, database);
 return cloneString(buf);
 }

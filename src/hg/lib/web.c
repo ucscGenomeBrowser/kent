@@ -317,7 +317,6 @@ webStartWrapperGatewayHeader(theCart, db, headerText, format, args, TRUE, TRUE,
 va_end(args);
 }
 
-
 void webEndSection()
 /* Close down a section */
 {
@@ -429,6 +428,36 @@ if(!webInTextMode)
     puts( "</BODY></HTML>");
     webPopErrHandlers();
     }
+}
+
+void webStartJWest(struct cart *cart, char *db, char *title)
+/* Start HTML with new banner design by jWest (with modifications). */
+{
+puts("Content-type:text/html\n");
+printf(
+#include "jWestBanner.h"
+       , title, title);
+webPushErrHandlersCartDb(cart, db);
+htmlWarnBoxSetup(stdout);
+
+// Add hotlinks bar
+char *navBar = menuBar(cart, db);
+if (navBar)
+    {
+    puts(navBar);
+    // Override nice-menu.css's menu background and fonts:
+    puts("<link rel=\"stylesheet\" href=\"../style/jWest.afterNiceMenu.css\">");
+    }
+webHeadAlreadyOutputed = TRUE;
+errAbortSetDoContentType(FALSE);
+}
+
+void webEndJWest()
+/* End HTML that was started with webStartJWest. */
+{
+googleAnalytics();
+puts("</body></html>");
+webPopErrHandlers();
 }
 
 static boolean gotWarnings = FALSE;

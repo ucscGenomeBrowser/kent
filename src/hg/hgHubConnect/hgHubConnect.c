@@ -293,7 +293,7 @@ int trixWordCount = chopString(hubSearchTerms, " ", NULL, 0);
 char *trixWords[trixWordCount];
 trixWordCount = chopString(hubSearchTerms, " ", trixWords, trixWordCount);
 
-struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, TRUE);
+struct trixSearchResult *tsList = trixSearch(trix, trixWordCount, trixWords, tsmExpand);
 for ( ; tsList != NULL; tsList = tsList->next)
     hashStore(urlSearchHash, tsList->itemId);
 

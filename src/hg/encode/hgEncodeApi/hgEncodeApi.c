@@ -39,6 +39,7 @@ http://api.wgEncode.ucsc.edu/experiments/assembly=hg19
 
 #include "common.h"
 #include "hdb.h"
+#include "htmshell.h"
 #include "mdb.h"
 #include "hPrint.h"
 #include "dystring.h"
@@ -146,8 +147,8 @@ long enteredMainTime = clock1000();
 struct dyString *output = newDyString(10000);
 
 cgiSpoof(&argc, argv);
-pushWarnHandler(apiWarnAbortHandler);
-pushAbortHandler(apiWarnAbortHandler);
+pushWarnHandler(htmlVaBadRequestAbort);
+pushAbortHandler(htmlVaBadRequestAbort);
 
 char *cmd = cgiString("cmd");
 char *jsonp = cgiOptionalString("jsonp");

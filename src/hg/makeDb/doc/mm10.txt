@@ -11092,6 +11092,26 @@ TMPDIR=/dev/shm
     featureBits -countGaps mm10 ucscToRefSeq
     # 2730871774 bases of 2730871774 (100.000%) in intersection
 
+    # fixup 2016-04-11 - Hiram
+    # the chrM name is not correct, it was RefSeq instead of Genbank/INSDC:
+    hgsql -e 'select * from ucscToINSDC where name="NC_005089.1";' mm10
++-------+------------+----------+-------------+
+| chrom | chromStart | chromEnd | name        |
++-------+------------+----------+-------------+
+| chrM  |          0 |    16299 | NC_005089.1 |
++-------+------------+----------+-------------+
+
+    hgsql -e 'update ucscToINSDC set name="AY172335.1" where name="NC_005089.1";' mm10
+
+    hgsql -e 'select * from ucscToINSDC where name="AY172335.1";' mm10
++-------+------------+----------+------------+
+| chrom | chromStart | chromEnd | name       |
++-------+------------+----------+------------+
+| chrM  |          0 |    16299 | AY172335.1 |
++-------+------------+----------+-------------+
+
+
+
 #########################################################################
 
 # download and load ncbiGene track
@@ -11785,5 +11805,217 @@ hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
     # output in check/joiner.out
     cd /hive/data/genomes/mm10/bed/gencodeVM9
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+##############################################################################
+# LASTZ Rat rn6 (DONE - 2016-04-09 - Jonathan)
+    mkdir /hive/data/genomes/mm10/bed/lastzRn6.2016-04-07
+    cd /hive/data/genomes/mm10/bed/lastzRn6.2016-04-07
+
+    printf '# rat vs mouse
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn6
+SEQ2_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ2_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=500
+
+BASE=/hive/data/genomes/mm10/bed/lastzRn6.2016-04-07
+TMPDIR=/dev/shm
+' > DEF
+
+    #	establish a screen to control this job
+    screen -S mm10Rn6
+    time (doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > do.log 2>&1
+    #   real    501m43.495s
+
+    cat fb.mm10.chainRn6Link.txt
+    #	1880453869 bases of 2652783500 (70.886%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` mm10 rn6) > rbest.log 2>&1 &
+    # real    766m50.090s
+
+    mkdir /hive/data/genomes/rn6/bed/blastz.mm10.swap
+    cd /hive/data/genomes/rn6/bed/blastz.mm10.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/mm10/bed/lastzRn6.2016-04-07/DEF \
+	-swap -syntenicNet \
+	-workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+	-chainMinScore=5000 -chainLinearGap=medium) > swap.log 2>&1
+    #	real    234m59.393s
+
+    cat fb.rn6.chainMm10Link.txt
+    #   1938597957 bases of 2729860805 (71.015%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 mm10) > rbest.log 2>&1
+    # real    882m38.624s
+
+#########################################################################
+## 4-Way Multiz for UCSC Genes construction (TBD - 2016-04-06 - Jonathan)
+# mm10, hg38, canFam3, rn6
+
+    mkdir /hive/data/genomes/mm10/bed/multiz4way
+    cd /hive/data/genomes/mm10/bed/multiz4way
+
+    # extract a tree for the 4 we need
+    /cluster/bin/phast/tree_doctor \
+	--prune-all-but hg38,mm10,canFam3,rn6 $HOME/kent/src/hg/utils/phyloTrees/191way.nh > 4way.nh
+
+    # this looks like:
+    ((hg38:0.145908,(mm10:0.084509,rn6:0.091589):0.271974):0.020593,canFam3:0.165928);
+
+
+    # Use this specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/mm10_4way.gif
+
+    /cluster/bin/phast/all_dists 4way.nh > 4way.distances.txt
+    #	Use this output to create the table below
+    grep -i mm10 4way.distances.txt | sort -k3,3n
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainMm10Link   chain    linearGap
+#    distance                      on mm10    on other   minScore
+#  1  0.176098 - rat rn6        (% 70.886) (% 71.015)       5000     medium
+#  2  0.502391 - human hg38     (% 35.372) (% 31.653)       3000     medium
+#  3  0.543004 - dog canFam3    (% 29.144) (% 31.624)       3000     medium
+
+    #   using the syntenic nets
+    cd /cluster/data/mm10/bed/multiz4way
+    mkdir mafLinks
+    cd mafLinks
+    mkdir rn6 canFam3 hg38
+
+    for D in hg38 canFam3 rn6
+do
+    cd $D
+    ln -s ../../../lastz.${D}/mafSynNet/*.maf.gz ./
+    cd ..
+done
+
+    #   determine what is the newest version of multiz and use that
+    cd /hive/data/genomes/mm10/bed/multiz4way
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh ku
+    cd /hive/data/genomes/mm10/bed/multiz4way
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+    4way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir run maf
+    cd run
+
+    #   NOTE: you need to set the db and multiz dirname properly in this
+    #   script
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = mm10
+set c = $1
+set maf = $2
+set binDir = /hive/data/genomes/mm10/bed/multiz4way/penn
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/mm10/bed/multiz4way/mafLinks
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+    continue
+    endif
+    if (-e $in.gz) then
+    zcat $in.gz > $out
+    else if (-e $in) then
+    cp $in $out
+    else
+    echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+./autoMultiz $(root1) {check out line+ /hive/data/genomes/mm10/bed/multiz4way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cut -f1 /cluster/data/mm10/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 66 jobs
+    para try ... check ... push ... etc ...
+
+# Completed: 66 of 66 jobs
+# CPU time in finished jobs:      34495s     574.91m     9.58h    0.40d  0.001 y
+# IO & Wait Time:                   826s      13.77m     0.23h    0.01d  0.000 y
+# Average job time:                 535s       8.92m     0.15h    0.01d
+# Longest finished job:            2765s      46.08m     0.77h    0.03d
+# Submission to last job:          2776s      46.27m     0.77h    0.03d
+
+    #   combine results into a single file for loading and gbdb reference
+    cd /hive/data/genomes/mm10/bed/multiz4way
+    grep "^#" maf/chr1_GL456210_random.maf | grep -v "eof maf" > multiz4way.maf
+    grep -h -v "^#" maf/*.maf >> multiz4way.maf
+    grep "^#" maf/chr1_GL456210_random.maf | grep "eof maf" >> multiz4way.maf
+
+    #	makes a 6.5 Gb file:
+    #   -rw-rw-r-- 1 6928752890 Apr 12 10:18 multiz4way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/mm10/bed/multiz4way
+    mkdir /gbdb/mm10/multiz4way
+    ln -s /hive/data/genomes/mm10/bed/multiz4way/multiz4way.maf \
+	/gbdb/mm10/multiz4way
+    #	the hgLoadMaf generates huge tmp files, locate them in /dev/shm
+    cd /dev/shm
+    time nice -n +19 hgLoadMaf mm10 multiz4way
+    #   Loaded 5300158 mafs in 1 files from /gbdb/mm10/multiz4way
+    #   real    1m41.656s
+
+    cd /hive/data/genomes/mm10/bed/multiz4way
+    time (cat /gbdb/mm10/multiz4way/*.maf \
+        | hgLoadMafSummary -verbose=2 -minSize=10000 \
+	-mergeGap=500 -maxSize=50000 mm10 multiz4waySummary stdin)
+    # Created 1310955 summary blocks from 9774995 components and 5300158 mafs
+    # real    2m27.913s
+    mv /dev/shm/multiz4way.tab .
+# -rw-rw-r-- 1 277435502 Apr 12 12:11 multiz4way.tab
+# -rw-rw-r-- 1  59271980 Apr 12 12:16 multiz4waySummary.tab
+    wc -l multiz4way*.tab
+    # 5300158 multiz4way.tab
+    # 1310955 multiz4waySummary.tab
+    # 6611113 total
 
 #########################################################################

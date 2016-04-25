@@ -1,0 +1,66 @@
+# for emacs: -*- mode: sh; -*-
+
+# Use the NCBI taxonomy database and hgcentraltest.dbDb to construct a tree
+# of the species offered in the GB, encoded as a JS file.
+
+# When this is stable, we should consider folding it into makeGenomeDb.pl.
+
+#############################################################################
+# FETCH LATEST NCBI TAXONOMY (DONE 4/18/16 angie)
+    set date = `date +%Y_%m_%d`
+    mkdir -p /hive/data/outside/ncbi/taxonomy/$date
+    cd /hive/data/outside/ncbi/taxonomy/$date
+    wget ftp://ftp.ncbi.nih.gov/pub/taxonomy/taxdump.tar.gz
+    tar xvzf taxdump.tar.gz
+
+
+#############################################################################
+# BUILD DBDBTAXONOMY.JS (DONE 4/18/16 angie)
+    # Find latest NCBI Taxonomy dump directory and set its name here:
+    set date = 2016_04_18
+    cd /hive/data/outside/ncbi/taxonomy/$date
+
+    # Dump some dbDb columns for active databases, filtering out experimental
+    # databases that use 0 or 1 as a placeholder taxId:
+    hgsql hgcentraltest \
+        -NBe 'select taxId,name,genome,scientificName from dbDb where active=1 and taxId > 1' \
+    | sort > dbDb.taxId.alphSort.txt
+    # Look for dbDb.taxId values that are out of date.
+    cut -f 1 dbDb.taxId.alphSort.txt | uniq | sort > taxId.alphSort.txt
+    sort names.dmp > names.alphSort.txt
+    join -a 1 taxId.alphSort.txt names.alphSort.txt | grep -v \|
+    # If there is any output, it is a list of outdated taxIds that are not in names.dmp.
+    # They might appear in merged.dmp or delnodes.dmp.
+    # If any outdated taxIds appear, then find out what the latest taxIds are by searching
+    # for the dbDb.scientificName values in names.dmp.
+    # Then update dbDb.taxId values and start over.
+
+    # When everything looks good, make a file with just taxId and genome.
+    # Filter out some wacky experimental dbs that also use Human & Mouse's taxIds.
+    # Baboon has two species with one dbDb.genome value; add species to disambiguate.
+    # Use full-line uniq instead of sort -k -u because we want to find lines that have
+    # the same genome, just different taxIds.
+    cut -f 1,3 dbDb.taxId.alphSort.txt | uniq \
+    | egrep -v 'Venter|hg19Haplotypes|tarInv|Mm10haps' \
+    | sed -re 's/^9555\tBaboon$/9555\tBaboon (anubis)/; \
+               s/^9562\tBaboon$/9562\tBaboon (hamadryas)/;' \
+    | sort -k2 \
+    | uniq \
+      > taxIdGenome.txt
+
+    # Look in taxIdGenome.rr.txt for cases of same genome value, different species
+    # (aside from Baboon).
+    less taxIdGenome.txt
+
+    # Run a script to create the Javascript file:
+    ~/kent/src/hg/utils/dbDbTaxonomy.pl taxIdGenome.txt nodes.dmp names.dmp \
+      > ~/kent/src/hg/js/dbDbTaxonomy.js
+
+    # Look at the git diff:
+    cd ~/kent/src/hg/js
+    git diff dbDbTaxonomy.js
+    # Verify that changes are as expected (new genome?).
+    # git commit and push
+
+
+#############################################################################

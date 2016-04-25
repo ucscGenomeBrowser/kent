@@ -70,7 +70,7 @@ safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
 for (i=0; i<wordCount; ++i)
     tolowers(words[i]);
 trix = trixOpen(ixFile);
-tsList = trixSearch(trix, wordCount, words, TRUE);
+tsList = trixSearch(trix, wordCount, words, tsmExpand);
 dumpTsList(tsList);
 trixSearchResultFreeList(&tsList);
 trixClose(&trix);

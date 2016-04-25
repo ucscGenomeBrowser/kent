@@ -37,13 +37,18 @@ void usage()
 errAbort(
   "cdwSubmit - Submit URL with validated.txt to warehouse.\n"
   "usage:\n"
-  "   cdwSubmit email /path/to/manifest.tab meta.tag\n"
+  "   cdwSubmit email manifest.txt meta.txt\n"
+  "where email is the email address associated with the data set, typically from the lab, not the\n"
+  "wrangler.  You need to do a cdwAddUser with the email address if it's the first submission \n"
+  "from that user.  Manifest.txt is a tab separated file with a header line and then one line \n"
+  "per file. Meta.txt is in tagStorm format.\n"
+  "\n"
   "options:\n"
   "   -update  If set, will update metadata on file it already has. The default behavior is to\n"
   "            report an error if metadata doesn't match.\n"
   "   -noRevalidate - if set don't run revalidator on update\n"
   "   -md5=md5sum.txt Take list of file MD5s from output of md5sum command on list of files\n"
-  "   -test This will look at the manifest and meta, but not actually load the databas\n");
+  "   -test This will look at the manifest and meta, but not actually load the database\n");
 }
 
 char *localPrefix = "local://localhost/";

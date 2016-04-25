@@ -7,17 +7,12 @@
 #include "jksql.h"
 #include "hdb.h"
 #include "cheapcgi.h"
+#include "htmshell.h"
 #include "dystring.h"
 #include "jsonParse.h"
 #include "suggest.h"
 #include "genbank.h"
 
-static void fail(char *msg)
-{
-puts("Status: 400\n\n");
-puts(msg);
-exit(-1);
-}
 
 int main(int argc, char *argv[])
 {
@@ -39,13 +34,15 @@ boolean hasKnownCanonical;
 struct dyString *str = newDyString(10000);
 char *table;
 
+pushAbortHandler(htmlVaBadRequestAbort);
 if(prefix == NULL || database == NULL)
-    fail("Missing prefix or database parameter");
+    errAbort("%s", "Missing prefix and/or db CGI parameter");
 
 conn = hAllocConn(database);
 table = connGeneSuggestTable(conn);
 if(table == NULL)
-    fail("gene autosuggest is not supported for this assembly");
+    errAbort("gene autosuggest is not supported for db '%s'", database);
+popAbortHandler();
 
 hasKnownCanonical = sameString(table, "knownCanonical");
 

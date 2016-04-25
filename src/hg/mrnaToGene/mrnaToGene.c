@@ -170,7 +170,50 @@ if (dash != NULL)
 return cdsStr;
 }
 
-struct genbankCds getCds(struct sqlConnection *conn, struct psl *psl)
+/* CDS return when the is no CDS */
+static struct genbankCds NO_CDS = {-1, -1, FALSE, FALSE};
+
+static struct genbankCds getCdsAll(struct psl *psl)
+/* return CDS structure when it is assume the transcript is CDS */
+{
+struct genbankCds cds;
+cds.start = psl->qStart;
+cds.end = psl->qEnd;
+if (psl->strand[0] == '-')
+    reverseIntRange(&cds.start, &cds.end, psl->qSize);
+cds.startComplete = TRUE;
+cds.endComplete = TRUE;
+return cds;
+}
+
+static struct genbankCds getCdsFromSpec(struct sqlConnection *conn, struct psl *psl)
+/* get CDS from specification in database or file */
+{
+struct genbankCds cds = NO_CDS;
+char cdsBuf[4096];
+char *cdsStr = getCdsForAcc(conn, psl->qName, cdsBuf, sizeof(cdsBuf));
+if (cdsStr == NULL)
+    {
+    if (!gQuiet)
+        fprintf(stderr, "Warning: no CDS for %s\n", psl->qName);
+    }
+else if (!genbankCdsParse(cdsStr, &cds))
+    {
+    if (!gQuiet)
+        fprintf(stderr, "Warning: invalid CDS for %s: %s\n",
+                psl->qName, cdsStr);
+    }
+else if ((cds.end-cds.start) > psl->qSize)
+    {
+    if (!gQuiet)
+        fprintf(stderr, "Warning: CDS for %s (%u..%u) longer than qSize (%u)\n",
+                psl->qName, cds.start, cds.end, psl->qSize);
+    cds = NO_CDS;
+    }
+return cds;
+}
+
+static struct genbankCds getCds(struct sqlConnection *conn, struct psl *psl)
 /* Lookup the CDS, either in the database or hash, or generate for query.  If
  * not found and looks like a it has a genbank version, try without the
  * version.  If allCds is true, generate a cds that covers the query.  Conn
@@ -178,52 +221,12 @@ struct genbankCds getCds(struct sqlConnection *conn, struct psl *psl)
  * obtained, start and end are both set to -1.  If there is an error parsing
  * it, start and end are both set to 0. */
 {
-struct genbankCds cds;
-ZeroVar(&cds);
 if (gNoCds)
-    {
-    cds.start = -1;
-    cds.end = -1;
-    cds.startComplete = FALSE;
-    cds.endComplete = FALSE;
-    }
+    return NO_CDS;
 else if (gAllCds)
-    {
-    cds.start = psl->qStart;
-    cds.end = psl->qEnd;
-    if (psl->strand[0] == '-')
-        reverseIntRange(&cds.start, &cds.end, psl->qSize);
-    cds.startComplete = TRUE;
-    cds.endComplete = TRUE;
-    }
+    return getCdsAll(psl);
 else
-    {
-    char cdsBuf[4096];
-    char *cdsStr = getCdsForAcc(conn, psl->qName, cdsBuf, sizeof(cdsBuf));
-    if (cdsStr == NULL)
-        {
-        if (!gQuiet)
-            fprintf(stderr, "Warning: no CDS for %s\n", psl->qName);
-        cds.start = cds.end = -1;
-        }
-    else
-        {
-        if (!genbankCdsParse(cdsStr, &cds))
-            {
-            if (!gQuiet)
-                fprintf(stderr, "Warning: invalid CDS for %s: %s\n",
-                        psl->qName, cdsStr);
-            }
-        else if ((cds.end-cds.start) > psl->qSize)
-            {
-            if (!gQuiet)
-                fprintf(stderr, "Warning: CDS for %s (%u..%u) longer than qSize (%u)\n",
-                        psl->qName, cds.start, cds.end, psl->qSize);
-            cds.start = cds.end = -1;
-            }
-        }
-    }
-return cds;
+    return getCdsFromSpec(conn, psl);
 }
 
 struct genePred* pslToGenePred(struct psl *psl, struct genbankCds *cds)

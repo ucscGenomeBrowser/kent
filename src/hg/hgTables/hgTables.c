@@ -179,6 +179,7 @@ va_list args;
 va_start(args, format);
 vaHtmlOpen(format, args);
 va_end(args);
+hgBotDelay();
 }
 
 void htmlClose()
@@ -232,6 +233,7 @@ void textOpen()
  *	at main() exit.
  */
 {
+hgBotDelayNoWarn();  // delay but suppress warning at 10-20 sec delay level because this is not html output.
 char *fileName = cartUsualString(cart, hgtaOutFileName, "");
 char *compressType = cartUsualString(cart, hgtaCompressType,
 				     textOutCompressNone);
@@ -1528,7 +1530,6 @@ struct sqlConnection *conn = NULL;
 if (!trackHubDatabase(database))
     conn = curTrack ? hAllocConnTrack(database, curTrack) : hAllocConn(database);
 pushWarnHandler(earlyAbortHandler);
-hgBotDelay();
 /* only allows view table schema function for CGB or GSID servers for the time being */
 if (hIsCgbServer() || hIsGsidServer())
     {

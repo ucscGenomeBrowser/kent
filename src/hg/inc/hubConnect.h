@@ -153,6 +153,12 @@ char *hubConnectLoadHubs(struct cart *cart);
 struct hubConnectStatus *hubConnectGetHubs();
 /* return the static global to the track data hubs */
 
+struct trackHub *hubConnectGetHub(char *hubUrl);
+/* Return the connected hub for hubUrl, or NULL if not found.  Do not free result. */
+
+struct trackHub *hubConnectGetHubForDb(char *db);
+/* Return the connected hub for db, or NULL if not found.  Do not free result. */
+
 struct trackDb *hubCollectTracks( char *database, struct grp **pGroupList);
 /* Generate trackDb structures for all the tracks in attached hubs.  
  * Make grp structures for each hub. Returned group list is reversed. */
@@ -162,4 +168,11 @@ char *hubConnectSkipHubPrefix(char *trackName);
 
 struct hubConnectStatus *hubConnectNewHub();
 /* return the hub of the hubUrl we added (if any) */
+
+char *hubPublicTableName();
+/* Get the name of the table that lists public hubs.  Don't free the result. */
+
+char *hubNameFromUrl(char *hubUrl);
+/* Given the URL for a hub, return its hub_# name. */
+
 #endif /* HUBCONNECT_H */

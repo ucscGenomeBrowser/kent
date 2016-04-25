@@ -179,5 +179,10 @@ boolean trackHubGetBlatParams(char *database, boolean isTrans, char **pHost,
 
 struct dbDb *trackHubGetBlatDbDbs();
 /* Get a list of connected track hubs that have blat servers */
+
+struct slPair *trackHubDbDbToValueLabel(struct dbDb *hubDbDbList);
+/* Given a trackHub (list of) track hub dbDb which may be missing some info,
+ * return an slPair of value and label suitable for making a select/menu option. */
+
 #endif /* TRACKHUB_H */
 
