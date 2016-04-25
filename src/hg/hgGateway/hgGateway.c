@@ -267,6 +267,10 @@ static void doMainPage()
 // Start web page with new banner
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+// If CGI has &lastDbPos=..., handle that here and save position to cart so it's in place for
+// future cartJson calls.
+char *position = cartGetPosition(cart, db, NULL);
+cartSetString(cart, "position", position);
 webStartJWest(cart, db, "Genome Browser Gateway");
 
 // The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
