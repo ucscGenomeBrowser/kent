@@ -480,7 +480,10 @@ else
 
 printf("See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
        "TARGET=_BLANK>Sessions User's Guide</A> "
-       "for more information about this tool.<P/>\n");
+       "for more information about this tool. "
+       "See the <A HREF=\"../goldenPath/help/sessions.html\" "
+       "TARGET=_BLANK>Session Gallery</A> "
+       "for example sessions.<P/>\n");
 
 showCartLinks();
 
@@ -541,7 +544,9 @@ printf("<LI>If a saved settings file is available from a web server, "
        "settings file, e.g. http://www.mysite.edu/~me/mySession.txt .  "
        "In this type of link, you can replace "
        "\"hgSession\" with \"hgTracks\" in order to proceed directly to "
-       "the Genome Browser.</LI>\n",
+       "the Genome Browser. For an example page using such links "
+       "please see the <A HREF=\"../goldenPath/help/sessions.html\" "
+       "TARGET=_BLANK>Session Gallery</A>.</LI>\n",
        dyUrl->string);
 printf("</UL>\n");
 dyStringFree(&dyUrl);
