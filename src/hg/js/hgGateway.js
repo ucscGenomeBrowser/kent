@@ -617,7 +617,7 @@ var autocompleteCat = (function() {
     // Customize jQuery UI autocomplete to show item categories and support html markup in labels.
     // Adapted from https://jqueryui.com/autocomplete/#categories and
     // http://forum.jquery.com/topic/using-html-in-autocomplete
-    // Also adds watermarm to input.
+    // Also adds watermark to input.
     $.widget("custom.autocompleteCat",
              $.ui.autocomplete,
              {
@@ -716,6 +716,7 @@ var autocompleteCat = (function() {
         });
 
         if (options.watermark) {
+            $input.css('color', 'black');
             $input.Watermark(options.watermark, '#686868');
         }
     }
@@ -1151,12 +1152,25 @@ var hgGateway = (function() {
         }
     }
 
+    function addCommasToPosition(pos) {
+        // Return seqName:start-end pos with commas inserted in start and end as necessary.
+        var posComma = pos;
+        var fourDigits = /(^.*:.*[0-9])([0-9]{3}\b.*)/;
+        var matches = fourDigits.exec(posComma);
+        while (matches) {
+            posComma = matches[1] + ',' + matches[2];
+            matches = fourDigits.exec(posComma);
+        }
+        return posComma;
+    }
+
     function onSelectGene(item) {
         // Set the position from an autocomplete result;
         // set hgFindMatches and make sure suggestTrack is in pack mode for highlighting the match.
         var newPos = item.id;
+        var newPosComma = addCommasToPosition(newPos);
         var settings;
-        $('#positionDisplay').text(newPos);
+        $('#positionDisplay').text(newPosComma);
         if (uiState.suggestTrack) {
             settings = { 'hgFind.matches': item.internalId };
             settings[uiState.suggestTrack] = 'pack';
@@ -1165,7 +1179,7 @@ var hgGateway = (function() {
         }
         // Overwrite the selected item w/actual position after the autocomplete plugin is done:
         function overwriteWithPos() {
-            $('#positionInput').val(newPos);
+            $('#positionInput').val(newPosComma);
         }
         window.setTimeout(overwriteWithPos, 0);
     }
@@ -1272,7 +1286,7 @@ var hgGateway = (function() {
         }
         setAssemblyOptions(uiState);
         if (uiState.position) {
-            $('#positionDisplay').text(uiState.position);
+            $('#positionDisplay').text(addCommasToPosition(uiState.position));
         }
         autocompleteCat.init($('#positionInput'),
                              { baseUrl: suggestUrl,
@@ -1418,7 +1432,8 @@ var hgGateway = (function() {
 
     function clearWatermarkInput($input, watermark) {
         // Note: it is not necessary to re-.Watermark if we upgrade the plugin to version >= 3.1
-        $input.val('').Watermark(watermark);
+        $input.css('color', 'black');
+        $input.val('').Watermark(watermark ,'#686868');
     }
 
     function clearSpeciesInput() {
@@ -1528,7 +1543,7 @@ var hgGateway = (function() {
     function onClickCopyPosition() {
         // Copy the displayed position into the position input:
         var posDisplay = $('#positionDisplay').text();
-        $('#positionInput').val(posDisplay);
+        $('#positionInput').val(posDisplay).focus();
     }
 
     function goToHgTracks() {
