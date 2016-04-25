@@ -1,0 +1,15 @@
+        track chainGalGal5
+        subTrack vertebrateChainNetViewchain on 
+        subGroups view=chain species=eChicken clade=bDino
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal5
+        otherDb galGal5
+
+        track netGalGal5
+        subTrack vertebrateChainNetViewnet on 
+        subGroups view=net species=eChicken clade=bDino
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal5 chainGalGal5
+        otherDb galGal5
