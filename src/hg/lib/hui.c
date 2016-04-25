@@ -4828,7 +4828,7 @@ char *canDoCoverage = cfgOptionEnvDefault("HGDB_CAN_DO_COVERAGE",
 if (differentString(canDoCoverage, "on"))
     return;
 
-printf("<BR><B>Display data as a density graph:</B> ");
+printf("<BR><BR><B>Display data as a density graph:</B> ");
 char varName[64];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
 boolean option = cartUsualBoolean(cart, varName, FALSE);
