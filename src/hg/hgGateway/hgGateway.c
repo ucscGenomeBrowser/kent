@@ -273,6 +273,9 @@ char *position = cartGetPosition(cart, db, NULL);
 cartSetString(cart, "position", position);
 webStartJWest(cart, db, "Genome Browser Gateway");
 
+if(cgiIsOnWeb())
+    checkForGeoMirrorRedirect(cart);
+
 // The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
 // file containing a string constant that we #include and print here (see makefile).
 puts(
@@ -308,6 +311,8 @@ if (isNotEmpty(dbDbTree))
 puts("<script src=\"../js/hgGateway.js\"></script>");
 
 webIncludeFile("inc/jWestFooter.html");
+
+cartFlushHubWarnings();
 
 webEndJWest();
 }
