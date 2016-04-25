@@ -4441,6 +4441,7 @@ unsigned *counts = countOverlaps(tg);
 countsToPixels(counts, pre);
 freez(&counts);
 
+tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
 wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
