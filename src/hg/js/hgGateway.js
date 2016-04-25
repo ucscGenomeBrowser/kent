@@ -23,11 +23,10 @@
 
 // hgGateway: module of mostly view/controller code (model state comes directly from server).
 
-// Globals:
-/* globals calculateHgTracksWidth */ // pragma for jshint; function is defined in utils.js
-var dbDbTree = dbDbTree || undefined;
-var activeGenomes = activeGenomes || undefined;
-var cart = cart || undefined;
+// Globals (pragma for jshint):
+/* globals dbDbTree, activeGenomes, cart */
+/* globals calculateHgTracksWidth */ // function is defined in utils.js
+
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
@@ -780,6 +779,8 @@ var hgGateway = (function() {
     var scrollbarWidth = 0;
     // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
     var uiState = {};
+    // This is dbDbTree after pruning -- null if dbDbTree has no children left
+    var prunedDbDbTree;
 
     function setupFavIcons() {
         // Set up onclick handlers for shortcut buttons and labels
@@ -998,6 +999,22 @@ var hgGateway = (function() {
         return widthPlain - widthInsideScroll;
     }
 
+    function updateGoButtonPosition() {
+        // If there's enough room for the Go button to be to the right of the inputs,
+        // set its height to the midpoint of theirs.
+        var $goButton = $('.jwGoButtonContainer');
+        var goOffset = $goButton.offset();
+        var menuOffset = $('#selectAssembly').offset();
+        var inputOffset = $('#positionInput').offset();
+        var verticalMidpoint = (menuOffset.top + inputOffset.top) / 2;
+        if (goOffset.left > inputOffset.left) {
+            $goButton.offset({top: verticalMidpoint });
+        } else {
+            // If the window shrinks and there's no longer room for the button, undo the above.
+            $goButton.css('top', 0);
+        }
+    }
+
     function setRightColumnWidth() {
         // Adjust the width of the "Find Position" section so it fits to the right of the
         // "Browse/Select Species" section.
@@ -1009,6 +1026,7 @@ var hgGateway = (function() {
         if (rightColumnWidth >= 400) {
             $('#findPositionSection').width(rightColumnWidth);
         }
+        updateGoButtonPosition();
     }
 
     function setSpeciesPickerSizes(svgWidth, svgHeight) {
@@ -1101,7 +1119,7 @@ var hgGateway = (function() {
         return hasActiveLeaf;
     }
 
-    function drawSpeciesPicker() {
+    function drawSpeciesPicker(dbDbTree) {
         // If dbDbTree is nonempty and SVG is supported, draw the tree; if SVG is not supported,
         // use the space to suggest that the user install a better browser.
         // If dbDbTree doesn't exist, leave the "Represented Species" section hidden.
@@ -1125,7 +1143,7 @@ var hgGateway = (function() {
             }
             $('#representedSpeciesTitle').show();
             $('#speciesGraphic').show();
-            if (dbDbTree) {
+            if (dbDbTree && document.createElementNS) {
                 // This needs to be done after things are visible so the slider gets the
                 // right position.
                 initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
@@ -1150,27 +1168,6 @@ var hgGateway = (function() {
             $('#positionInput').val(newPos);
         }
         window.setTimeout(overwriteWithPos, 0);
-    }
-
-    function updateGoButtonPosition() {
-        // If there's room for the go button to appear to the right of #selectAssembly and
-        // #positionInput, align the top of the go button with the bottom of #selectAssembly.
-        // Otherwise let it hang out below.
-        var $fpic = $('#findPosInputContainer');
-        var fpicOffset = $fpic.offset();
-        var fpicRight = fpicOffset.left + $fpic.width();
-        var $button = $('.jwGoButtonContainer');
-        var buttonOffset = $button.offset();
-        var $select;
-        if (buttonOffset.left > fpicRight) {
-            // Align button top with select bottom.
-            $select = $('#selectAssembly');
-            buttonOffset.top = $select.offset().top + $select.height();
-        } else {
-            // Button wraps around to below inputs; remove any previous vertical offsetting.
-            buttonOffset.top = fpicOffset.top + $fpic.height() + 10;
-        }
-        $button.offset(buttonOffset);
     }
 
     function setAssemblyOptions(uiState) {
@@ -1251,7 +1248,24 @@ var hgGateway = (function() {
         $('#descriptionText li').addClass('jwSquareBullet');
     }
 
+    function initFindPositionContents() {
+        // Unhide contents of Find Position section and adjust layout.
+        $('#findPositionContents').show();
+        // Set assembly menu's width to same as position input.
+        var posWidth = $('#positionInput').outerWidth();
+        var $select = $('#selectAssembly');
+        $select.outerWidth(posWidth);
+        // For some reason, it doesn't set it to posWidth, it sets it to posWidth-2...
+        // detect and adjust.
+        var weirdDiff = posWidth - $select.outerWidth();
+        if (weirdDiff) {
+            $select.outerWidth(posWidth + weirdDiff);
+        }
+        updateGoButtonPosition();
+    }
+
     function updateFindPositionSection(uiState) {
+        // Update the assembly menu, positionInput and description.
         var suggestUrl = null;
         if (uiState.suggestTrack) {
             suggestUrl = 'hgSuggest?db=' + uiState.db + '&prefix=';
@@ -1268,10 +1282,9 @@ var hgGateway = (function() {
                                onEnterTerm: goToHgTracks });
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
-        if (uiState.db) {
-            $('#findPositionContents').show();
+        if (uiState.db && $('#findPositionContents').css('display') === 'none') {
+            initFindPositionContents();
         }
-        updateGoButtonPosition();
     }
 
     function removeDups(inList, isDup) {
@@ -1368,7 +1381,7 @@ var hgGateway = (function() {
         _.assign(uiState, jsonData);
         updateFindPositionSection(uiState);
         if (hubsChanged) {
-            drawSpeciesPicker();
+            drawSpeciesPicker(prunedDbDbTree);
         }
     }
 
@@ -1565,9 +1578,9 @@ var hgGateway = (function() {
         cart.flush();
         // Prune inactive genomes from dbDbTree.
         var activeTaxIds = _.invert(activeGenomes);
+        prunedDbDbTree = dbDbTree;
         if (dbDbTree && ! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
-            // no more dbDbTree descendants left after pruning
-            dbDbTree = null;
+            prunedDbDbTree = null;
         }
 
         // When page has loaded, do layout adjustments and initialize event handlers.
@@ -1586,10 +1599,9 @@ var hgGateway = (function() {
             $('#copyPosition').click(onClickCopyPosition);
             $('.jwGoButtonContainer').click(goToHgTracks);
             $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
-            $(window).resize(updateGoButtonPosition);
             replaceHgsidInLinks();
             // Fill in searchObj here once everything is displayed.
-            autocompleteFromTree(dbDbTree, searchObj);
+            autocompleteFromTree(prunedDbDbTree, searchObj);
         });
     }
 
