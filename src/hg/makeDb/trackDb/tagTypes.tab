@@ -67,6 +67,7 @@ configureByPopup *
 container *
 controlledVocabulary *
 coriellUrlBase bed
+darkerLabels *
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
