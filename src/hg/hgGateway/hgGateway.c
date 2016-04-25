@@ -273,6 +273,43 @@ char *position = cartGetPosition(cart, db, NULL);
 cartSetString(cart, "position", position);
 webStartJWest(cart, db, "Genome Browser Gateway");
 
+if (cgiIsOnWeb())
+    checkForGeoMirrorRedirect(cart);
+
+#define WARNING_BOX_START "<div id=\"previewWarningRow\" class=\"jwRow\">" \
+         "<div id=\"previewWarningBox\" class=\"jwWarningBox\">"
+
+#define UNDER_DEV "Data and tools on this site are under development, have not been reviewed " \
+         "for quality, and are subject to change at any time. "
+
+#define MAIN_SITE "The high-quality, reviewed public site of the UCSC Genome Browser is " \
+         "available for use at <a href=\"http://genome.ucsc.edu/\">http://genome.ucsc.edu/</a>."
+
+#define WARNING_BOX_END "</div></div>"
+
+if (hIsPreviewHost())
+    {
+    puts(WARNING_BOX_START
+         "WARNING: This is the UCSC Genome Browser preview site. "
+         "This website is a weekly mirror of our internal development server for public access. "
+         UNDER_DEV
+         "We provide this site for early access, with the warning that it is less available "
+         "and stable than our public site. "
+         MAIN_SITE
+         WARNING_BOX_END);
+    }
+
+if (hIsPrivateHost())
+    {
+    puts(WARNING_BOX_START
+         "WARNING: This is the UCSC Genome Browser development site. "
+         "This website is used for testing purposes only and is not intended for general public "
+         "use. "
+         UNDER_DEV
+         MAIN_SITE
+         WARNING_BOX_END);
+    }
+
 // The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
 // file containing a string constant that we #include and print here (see makefile).
 puts(
@@ -308,6 +345,8 @@ if (isNotEmpty(dbDbTree))
 puts("<script src=\"../js/hgGateway.js\"></script>");
 
 webIncludeFile("inc/jWestFooter.html");
+
+cartFlushHubWarnings();
 
 webEndJWest();
 }
