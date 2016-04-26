@@ -177,6 +177,7 @@ hgGene genePred
 hgsid bed genePred
 highlightBy genePred
 highlightColor genePred
+hoverMetadata wig bigWig
 html *
 htmlFile customTracks
 htmlUrl customTracks
