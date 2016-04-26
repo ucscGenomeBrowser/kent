@@ -17,7 +17,7 @@ nonCodingFillTest: mkdirs
 	diff expected/$@.mapped.gp output/$@.mapped.gp
 
 codingFillTest: mkdirs
-	${transMapPslToGenePred} -codingGapFillMax=10 input/musstrain.src.gp input/musstrain.mapped.psl output/$@.mapped.gp
+	${transMapPslToGenePred} -codingGapFillMax=13 input/musstrain.src.gp input/musstrain.mapped.psl output/$@.mapped.gp
 	genePredCheck -verbose=0 output/$@.mapped.gp
 	diff expected/$@.mapped.gp output/$@.mapped.gp
 
