@@ -1332,6 +1332,9 @@ boolean isCenterLabelConditionallySeen(struct track *track);
                 (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
 // Center labels may be conditionally included
 
+Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
+/* For tracks having light track display but needing a darker label */
+
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
 
