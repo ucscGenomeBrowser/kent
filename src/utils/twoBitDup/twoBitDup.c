@@ -10,6 +10,7 @@
 #include "dnaseq.h"
 #include "math.h"
 #include "udc.h"
+#include "md5.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -64,8 +65,11 @@ for (index = tbf->indexList; index != NULL; index = index->next)
 	printf("%s and %s are identical\n", index->name, (char *)hel->val);
     else
 	hel = hashAdd(seqHash, seq->dna, index->name);
-    if (keyListFile)
-       fprintf(keyListFile, "%x\t%s\n", hel->hashVal, index->name);
+    if (keyListFile) {
+       char *md5Sum = md5HexForString(seq->dna);
+       fprintf(keyListFile, "%s\t%s\n", md5Sum, index->name);
+       freeMem(md5Sum);
+    }
     freeDnaSeq(&seq);
     }
 }

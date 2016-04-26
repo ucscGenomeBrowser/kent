@@ -286,6 +286,12 @@ div.jwSpeciesPicker {
     letter-spacing: 0.050em;
 }
 
+.jwCurrentPos {
+    padding-left: 3px;
+    font-size: 13px;
+    color: #333333;
+}
+
 .jwPosDisplay {
     padding-right: 10px;
 }
@@ -415,5 +421,5 @@ div.jwFooterCopyright {
 }
 
 .vertSpacerBelowPosition {
-    padding-top: 32px;
+    padding-top: 14px;
 }

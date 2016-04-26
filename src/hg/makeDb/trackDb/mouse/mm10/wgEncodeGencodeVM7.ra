@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeVM7
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE VM7 (Ensembl 82)
 longLabel Gene Annotations from ENCODE/GENCODE Version M7 (Ensembl 82)
 group genes

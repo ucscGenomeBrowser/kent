@@ -439,8 +439,20 @@ return mappedGp;
 static boolean haveAdjacentFrames(struct genePred *mappedGp, int iExon)
 /* do two block have adjacent frames? */
 {
-return (frameIncr(mappedGp->exonFrames[iExon], genePredExonSize(mappedGp, iExon))
-        == mappedGp->exonFrames[iExon+1]);
+if ((mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1))
+    return TRUE;  // adjacent with non-coding
+else if (mappedGp->strand[0] == '+')
+    {
+    int cdsOff = max(mappedGp->exonStarts[iExon], mappedGp->cdsStart) - mappedGp->exonStarts[iExon];
+    return (frameIncr(mappedGp->exonFrames[iExon], cdsOff)
+            == mappedGp->exonFrames[iExon+1]);
+    }
+else
+    {
+    int cdsOff = mappedGp->exonStarts[iExon+1] - min(mappedGp->exonStarts[iExon+1], mappedGp->cdsEnd);
+    return (frameIncr(mappedGp->exonFrames[iExon+1], cdsOff)
+            == mappedGp->exonFrames[iExon]);
+    }
 }
 
 static boolean hasAdjacentNonCoding(struct genePred *mappedGp, int iExon)
