@@ -772,7 +772,7 @@ var hgGateway = (function() {
                                   'Chrome</A>.' +
                                   '</P>';
 
-    // Globals
+    // Globals (within this function scope)
     // Set this to true to see server requests and responses in the console.
     var debugCartJson = false;
     // This is a global (within wrapper function scope) so event handlers can use it
@@ -782,6 +782,8 @@ var hgGateway = (function() {
     var uiState = {};
     // This is dbDbTree after pruning -- null if dbDbTree has no children left
     var prunedDbDbTree;
+    // This keeps track of which gene the user has selected most recently from autocomplete.
+    var selectedGene = null;
 
     function setupFavIcons() {
         // Set up onclick handlers for shortcut buttons and labels
@@ -1177,11 +1179,16 @@ var hgGateway = (function() {
             cart.send({ cgiVar: settings });
             cart.flush();
         }
-        // Overwrite the selected item w/actual position after the autocomplete plugin is done:
-        function overwriteWithPos() {
-            $('#positionInput').val(newPosComma);
+        function overwriteWithGene() {
+            $('#positionInput').val(item.geneSymbol);
         }
-        window.setTimeout(overwriteWithPos, 0);
+        if (item.geneSymbol) {
+            selectedGene = item.geneSymbol;
+            // Overwrite item's long value with symbol after the autocomplete plugin is done:
+            window.setTimeout(overwriteWithGene, 0);
+        } else {
+            selectedGene = item.value;
+        }
     }
 
     function setAssemblyOptions(uiState) {
@@ -1294,6 +1301,7 @@ var hgGateway = (function() {
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
+        selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
         if (uiState.db && $('#findPositionContents').css('display') === 'none') {
@@ -1552,7 +1560,8 @@ var hgGateway = (function() {
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
         var $form;
-        if (! position || position === '' || position === positionWatermark) {
+        if (! position || position === '' || position === positionWatermark ||
+            position === selectedGene) {
             position = posDisplay;
         }
         // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
@@ -1560,6 +1569,7 @@ var hgGateway = (function() {
         // Make a form and submit it.  In order for this to work in IE, the form
         // must be appended to the body.
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                  '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
                   '<input type=hidden name="db" value="' + uiState.db + '">' +
                   '<input type=hidden name="position" value="' + position + '">' +
