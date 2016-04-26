@@ -67,6 +67,7 @@ html vertebrateChainNet
 
 include chainNetGalGal3.ra beta,public
 include chainNetGalGal4.ra alpha
+include chainNetGalGal5.ra alpha
 
         track chainGeoFor1
         subTrack vertebrateChainNetViewchain off

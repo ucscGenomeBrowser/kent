@@ -85,8 +85,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     if(!strchr(row[1], '_'))
         {
         count++;
-        dyStringPrintf(str, "%s{\"value\": \"%s (%s)\", \"id\": \"%s:%d-%s\", \"internalId\": \"%s\"}", count == 1 ? "" : ",\n",
-                       row[0], jsonStringEscape(row[5]), row[1], atoi(row[2])+1, row[3], jsonStringEscape(row[4]));
+        dyStringPrintf(str, "%s{\"value\": \"%s (%s)\", "
+                       "\"id\": \"%s:%d-%s\", "
+                       "\"geneSymbol\": \"%s\", "
+                       "\"internalId\": \"%s\"}",
+                       count == 1 ? "" : ",\n", row[0], jsonStringEscape(row[5]),
+                       row[1], atoi(row[2])+1, row[3],
+                       jsonStringEscape(row[0]),
+                       jsonStringEscape(row[4]));
         }
     }
 

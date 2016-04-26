@@ -4828,8 +4828,8 @@ char *canDoCoverage = cfgOptionEnvDefault("HGDB_CAN_DO_COVERAGE",
 if (differentString(canDoCoverage, "on"))
     return;
 
-printf("<BR><B>Display data as a density graph:</B> ");
-char varName[64];
+printf("<BR><BR><B>Display data as a density graph:</B> ");
+char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
 boolean option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);

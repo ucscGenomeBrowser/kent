@@ -3,8 +3,8 @@ compositeTrack on
 shortLabel Legacy Chain/Net
 longLabel Previous genome versions, Chain and Net Alignments
 subGroup1 view Views chain=Chains net=Nets
-subGroup2 species Species aRat=Rat bNMRat=Naked_mole_rat cChimp=Chimp dGibbon=Gibbon eHuman=Human fCat=Cat gCow=Cow hAlpaca=Alpaca hPig=Pig iArmadillo=Armadillo jDolphin=Dolphin kTenrec=Tenrec lTilapia=Nile_tilapia tLamprey=Lamprey
-subGroup3 clade Clade aRodent=Rodent bHom=Hominidae cXena=Xenarthra dLaura=Laurasiatheria eCarn=Carnivora fAfro=Afrotheria fPerco=Percomorpha gPetro=Petromyzon
+subGroup2 species Species aRat=Rat bNMRat=Naked_mole_rat cChimp=Chimp dGibbon=Gibbon eHuman=Human fCat=Cat gCow=Cow hAlpaca=Alpaca hPig=Pig iArmadillo=Armadillo jDolphin=Dolphin kTenrec=Tenrec lChicken=Chicken mTilapia=Nile_tilapia tLamprey=Lamprey
+subGroup3 clade Clade aRodent=Rodent bHom=Hominidae cXena=Xenarthra dLaura=Laurasiatheria eCarn=Carnivora fAves=Aves gAfro=Afrotheria hPerco=Percomorpha iPetro=Petromyzon
 dragAndDrop subTracks
 visibility hide
 group compGeno
@@ -84,7 +84,7 @@ html chainNet
 
         track chainEchTel1
         subTrack previousVersionsChainNetViewchain off
-        subGroups view=chain species=kTenrec clade=fAfro
+        subGroups view=chain species=kTenrec clade=gAfro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain echTel1
@@ -122,9 +122,17 @@ html chainNet
         type chain turTru1
         otherDb turTru1
 
+        track chainGalGal4
+        subTrack previousVersionsChainNetViewchain off
+        subGroups view=chain species=lChicken clade=fAves
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain galGal4
+        otherDb galGal4
+
         track chainOreNil1
         subTrack previousVersionsChainNetViewchain off
-        subGroups view=chain species=lTilapia clade=fPerco
+        subGroups view=chain species=mTilapia clade=hPerco
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain oreNil1
@@ -132,7 +140,7 @@ html chainNet
 
         track chainPetMar1
         subTrack previousVersionsChainNetViewchain off
-        subGroups view=chain species=tLamprey clade=gPetro
+        subGroups view=chain species=tLamprey clade=iPetro
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
         type chain petMar1
@@ -202,7 +210,7 @@ html chainNet
 
         track netEchTel1
         subTrack previousVersionsChainNetViewnet on
-        subGroups view=net species=kTenrec clade=fAfro
+        subGroups view=net species=kTenrec clade=gAfro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign echTel1 chainEchTel1
@@ -240,9 +248,17 @@ html chainNet
         type netAlign turTru1 chainTurTru1
         otherDb turTru1
 
+        track netGalGal4
+        subTrack previousVersionsChainNetViewnet off
+        subGroups view=net species=lChicken clade=fAves
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign galGal4 chainGalGal4
+        otherDb galGal4
+
         track netOreNil1
         subTrack previousVersionsChainNetViewnet on
-        subGroups view=net species=lTilapia clade=fPerco
+        subGroups view=net species=mTilapia clade=hPerco
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign oreNil1 chainOreNil1
@@ -250,7 +266,7 @@ html chainNet
 
         track netPetMar1
         subTrack previousVersionsChainNetViewnet on
-        subGroups view=net species=tLamprey clade=gPetro
+        subGroups view=net species=tLamprey clade=iPetro
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign petMar1 chainPetMar1
