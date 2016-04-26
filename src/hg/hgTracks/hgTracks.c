@@ -68,6 +68,7 @@
 #include "customFactory.h"
 #include "genbank.h"
 #include "bigWarn.h"
+#include "wigCommon.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -4896,6 +4897,9 @@ if (withLeftLabels)
             y += REMOTE_TRACK_HEIGHT;
         else
             {
+            boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+            if (doWiggle)
+                track->drawLeftLabels = wigLeftLabels;
         #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox && track->limitedVis != tvDense)
                 y += sliceHeight;
