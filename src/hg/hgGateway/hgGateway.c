@@ -299,7 +299,7 @@ if (hIsPreviewHost())
          WARNING_BOX_END);
     }
 
-if (hIsPrivateHost())
+if (hIsPrivateHost() && !hHostHasPrefix("hgwdev-demo6"))
     {
     puts(WARNING_BOX_START
          "WARNING: This is the UCSC Genome Browser development site. "
