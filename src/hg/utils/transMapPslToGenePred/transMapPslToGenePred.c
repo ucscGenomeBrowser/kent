@@ -45,11 +45,13 @@ errAbort(
   "point, this program may be extended to do handle genbank alignments correctly.\n"
   "\n"
   "Options:\n"
-  "  -nonCodingGapFillMax=0 - fill gaps in non-coding regions upto this many bases\n"
+  "  -nonCodingGapFillMax=0 - fill gaps in non-coding regions up to this many bases\n"
   "   in length.\n"
-  "  -codingGapFillMax=0 - fill gaps in coding regions upto this many bases\n"
+  "  -codingGapFillMax=0 - fill gaps in coding regions up to this many bases\n"
   "   in length.  Only coding gaps that are a multiple of three will be fill,\n"
   "   with the max rounded down.\n"
+  "  -noBlockMerge - don't do any block merging of genePred, even of adjacent blocks.\n"
+  "   Mainly for debugging.\n"
   "\n");
 }
 
@@ -57,10 +59,12 @@ errAbort(
 static struct optionSpec optionSpecs[] = {
     {"nonCodingGapFillMax", OPTION_INT},
     {"codingGapFillMax", OPTION_INT},
+    {"noBlockMerge", OPTION_BOOLEAN},
     {NULL, 0}
 };
 static int nonCodingGapFillMax = 0;
 static int codingGapFillMax = 0;
+static boolean noBlockMerge = FALSE;
 
 static void swapBoolean(boolean *a, boolean *b)
 /* swap two booleans */
@@ -443,14 +447,18 @@ if ((mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1)
     return TRUE;  // adjacent with non-coding
 else if (mappedGp->strand[0] == '+')
     {
+    // how much of CDS is in this exon
     int cdsOff = max(mappedGp->exonStarts[iExon], mappedGp->cdsStart) - mappedGp->exonStarts[iExon];
-    return (frameIncr(mappedGp->exonFrames[iExon], cdsOff)
+    int cdsIncr = genePredExonSize(mappedGp, iExon) - cdsOff;
+    return (frameIncr(mappedGp->exonFrames[iExon], cdsIncr)
             == mappedGp->exonFrames[iExon+1]);
     }
 else
     {
-    int cdsOff = mappedGp->exonStarts[iExon+1] - min(mappedGp->exonStarts[iExon+1], mappedGp->cdsEnd);
-    return (frameIncr(mappedGp->exonFrames[iExon+1], cdsOff)
+    // how much of CDS is in nezxt exon
+    int cdsOff = mappedGp->exonEnds[iExon+1] - min(mappedGp->exonEnds[iExon+1], mappedGp->cdsEnd);
+    int cdsIncr = genePredExonSize(mappedGp, iExon+1) - cdsOff;
+    return (frameIncr(mappedGp->exonFrames[iExon+1], cdsIncr)
             == mappedGp->exonFrames[iExon]);
     }
 }
@@ -544,7 +552,8 @@ struct srcQueryExon srcQueryExons[srcGp->exonCount];
 srcQueryExonBuild(srcGp, srcQueryExons);
 
 struct genePred *mappedGp = createGenePred(srcGp, srcQueryExons, mappedPsl);
-mergeGenePredBlocks(mappedGp);
+if (!noBlockMerge)
+    mergeGenePredBlocks(mappedGp);
 if (genePredCheck("mappedGenePred", stderr, -1, mappedGp))
     errAbort("invalid genePred created");
 
@@ -580,6 +589,7 @@ if (argc != 4)
 nonCodingGapFillMax = optionInt("nonCodingGapFillMax", nonCodingGapFillMax);
 codingGapFillMax = optionInt("codingGapFillMax", codingGapFillMax);
 codingGapFillMax = (codingGapFillMax/3)*3; // round
+noBlockMerge = optionExists("noBlockMerge");
 
 char *srcGenePredFile = argv[1];
 char *mappedPslFile = argv[2];
