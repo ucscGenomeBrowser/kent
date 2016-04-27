@@ -1190,7 +1190,7 @@ Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color)
 /* For tracks having light track display but needing a darker label */
 {
 if (trackDbSetting(track->tdb, "darkerLabels"))
-    return somewhatDarkerColor(hvg, color);
+    return slightlyDarkerColor(hvg, color);
 return color;
 }
 
