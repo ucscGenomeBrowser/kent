@@ -1,6 +1,7 @@
 #	"$Id: trackDb.chainNet.ra,v 1.8 2010/03/19 18:11:33 antonio Exp $";
 
 track chainNetChiLan1 override
+release alpha
 priority 205.31
 matrix 16 97,-162,-37,-160,-162,100,-173,-37,-37,-173,100,-162,-160,-37,-162,97
 chainMinScore 5000
