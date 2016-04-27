@@ -4831,7 +4831,8 @@ if (differentString(canDoCoverage, "on"))
 printf("<BR><BR><B>Display data as a density graph:</B> ");
 char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
-boolean option = cartUsualBoolean(cart, varName, FALSE);
+boolean parentLevel = isNameAtParentLevel(tdb,varName);
+boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
 wigCfgUi(cart,tdb,name,title,TRUE);
