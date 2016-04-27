@@ -321,6 +321,16 @@ rgbColor.b = (2*(int)rgbColor.b)/3;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
+Color slightlyDarkerColor(struct hvGfx *hvg, Color color)
+/* Get a slightly darker shade of a color - 1/4 of the way towards black. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (9*(int)rgbColor.r)/10;
+rgbColor.g = (9*(int)rgbColor.g)/10;
+rgbColor.b = (9*(int)rgbColor.b)/10;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
 Color lighterColor(struct hvGfx *hvg, Color color)
 /* Get lighter shade of a color - half way between this color and white */
 {
