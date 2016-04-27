@@ -138,10 +138,10 @@ searchTable cloneEndmultipleMaps
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
+termRegex [CR][HNP]([-0-9A-Z_])+
 
 searchTable cloneEndbadEnds
 searchType bed
 searchMethod prefix
 searchPriority 50
-termRegex [ACGRW][BHIOPT2]([-0-9A-Z_])+
+termRegex [CR][HNP]([-0-9A-Z_])+
