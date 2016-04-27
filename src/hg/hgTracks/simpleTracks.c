@@ -312,7 +312,7 @@ return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color)
-/* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
+/* Get a somewhat darker shade of a color - 1/3 of the way towards black. */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (2*(int)rgbColor.r)/3;
