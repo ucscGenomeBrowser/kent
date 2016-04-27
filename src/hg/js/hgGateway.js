@@ -1284,6 +1284,17 @@ var hgGateway = (function() {
         updateGoButtonPosition();
     }
 
+    function processHgSuggestResults(results, term) {
+        // Make matching part of the gene symbol bold
+        _.each(results, function(item) {
+            if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
+                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                             item.value.substring(term.length);
+            }
+        });
+        return results;
+    }
+
     function updateFindPositionSection(uiState) {
         // Update the assembly menu, positionInput and description.
         var suggestUrl = null;
@@ -1297,6 +1308,7 @@ var hgGateway = (function() {
         autocompleteCat.init($('#positionInput'),
                              { baseUrl: suggestUrl,
                                watermark: positionWatermark,
+                               onServerReply: processHgSuggestResults,
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
