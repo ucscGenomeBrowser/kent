@@ -1138,7 +1138,6 @@ var hgGateway = (function() {
                                             containerWidth: $('#speciesPicker').width()
                                             });
                 setSpeciesPickerSizes(spTree.width, spTree.height);
-                highlightLabelForDb(uiState.db, uiState.taxId);
                 stripeTops = rainbow.draw(svg, dbDbTree,
                                           spTree.yTree, spTree.height, spTree.leafTops);
             } else {
@@ -1147,8 +1146,8 @@ var hgGateway = (function() {
             $('#representedSpeciesTitle').show();
             $('#speciesGraphic').show();
             if (dbDbTree && document.createElementNS) {
-                // This needs to be done after things are visible so the slider gets the
-                // right position.
+                // These need to be done after things are visible because heights are 0 when hidden.
+                highlightLabelForDb(uiState.db, uiState.taxId);
                 initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
             }
         }
