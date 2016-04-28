@@ -52,8 +52,8 @@ return unknown;
 /********************************************************/
 /* R implementation.  Invokes R script */
 
-void drawGtexRBoxplot(struct gtexGeneBed *gtexGene, struct tissueSampleVals *tsvList,
-                        boolean doLogTransform, char *version)
+boolean drawGtexRBoxplot(char *geneName, struct tissueSampleVals *tsvList,
+                        boolean doLogTransform, char *version, struct tempName *pngTn)
 /* Draw a box-and-whiskers plot from GTEx sample data, using R boxplot */
 {
 /* Create R data frame.  This is a tab-sep file, one row per sample, 
@@ -78,19 +78,21 @@ for (tsv = tsvList; tsv != NULL; tsv = tsv->next)
 fclose(f);
 
 // Plot to PNG file
-struct tempName pngTn;
-trashDirFile(&pngTn, "hgc", "gtexGene", ".png");
+if (!pngTn)
+    return FALSE;
+trashDirFile(pngTn, "hgc", "gtexGene", ".png");
 char cmd[256];
 
 /* Exec R in quiet mode, without reading/saving environment or workspace */
 safef(cmd, sizeof(cmd), "Rscript --vanilla --slave hgcData/gtexBoxplot.R %s %s %s %s %s %s",  
-                                gtexGene->name, dfTn.forCgi, pngTn.forHtml, 
+                                geneName, dfTn.forCgi, pngTn->forHtml, 
                                 doLogTransform ? "log=TRUE" : "log=FALSE", "order=alpha", version);
 //NOTE: use "order=score" to order bargraph by median RPKM, descending
 
 int ret = system(cmd);
 if (ret == 0)
-    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    return TRUE;
+return FALSE;
 }
 
 static struct gtexGeneBed *getGtexGene(char *item, char *chrom, int start, int end, char *table)
@@ -118,11 +120,10 @@ hFreeConn(&conn);
 return gtexGene;
 }
 
-struct tissueSampleVals *getTissueSampleVals(struct gtexGeneBed *gtexGene, boolean doLogTransform,
+struct tissueSampleVals *getTissueSampleVals(char *geneId, boolean doLogTransform,
                                                 char *version, double *maxValRet)
 /* Get sample data for the gene.  Optionally log10 it. Return maximum value seen */
 {
-// TODO: support version table name.  Likely move to lib.
 struct hash *tsHash = hashNew(0);
 struct tissueSampleVals *tsv;
 struct hashEl *hel;
@@ -133,11 +134,10 @@ char query[256];
 char **row;
 char buf[256];
 char *sampleDataTable = "gtexSampleData";
-safef(buf, sizeof(buf), "%s%s", sampleDataTable, version);
+safef(buf, sizeof(buf), "%s%s", sampleDataTable, gtexVersionSuffixFromVersion(version));
 struct sqlConnection *conn = hAllocConn("hgFixed");
 assert(sqlTableExists(conn, buf));
-sqlSafef(query, sizeof(query), "select * from %s where geneId='%s'", 
-                buf, gtexGene->geneId);
+sqlSafef(query, sizeof(query), "select * from %s where geneId='%s'", buf, geneId);
 struct sqlResult *sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -191,6 +191,18 @@ for (tis = tissues; tis != NULL; tis = tis->next)
 if (maxValRet != NULL)
     *maxValRet = maxVal;
 return tsList;
+}
+
+boolean gtexGeneBoxplot(char *geneId, char *geneName, char *version, 
+                                boolean doLogTransform, struct tempName *pngTn)
+/* Create a png temp file with boxplot of GTEx expression values for this gene. 
+ * GeneId is the Ensembl gene ID.  GeneName is the HUGO name, used for graph title;
+ * If NULL, label with the Ensembl gene ID */
+{
+struct tissueSampleVals *tsvs;
+tsvs  = getTissueSampleVals(geneId, doLogTransform, version, NULL);
+char *label = geneName ? geneName : geneId;
+return drawGtexRBoxplot(label, tsvs, doLogTransform, version, pngTn);
 }
 
 char *getGeneDescription(struct gtexGeneBed *gtexGene)
@@ -255,12 +267,10 @@ puts("<p>");
 boolean doLogTransform = (trackDbSetting(tdb, "gtexDetails") &&
                                 cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
                                                 GTEX_LOG_TRANSFORM_DEFAULT));
-double maxVal = 0.0;
-char *versionSuffix = gtexVersionSuffix(tdb->table);
-struct tissueSampleVals *tsvs = getTissueSampleVals(gtexGene, doLogTransform, 
-                                                        versionSuffix, &maxVal);
 char *version = gtexVersion(tdb->table);
-drawGtexRBoxplot(gtexGene, tsvs, doLogTransform, version);
+struct tempName pngTn;
+if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &pngTn))
+    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
 printf("<br><a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>View at GTEx portal</a>\n", gtexGene->name);
 
 printTrackHtml(tdb);

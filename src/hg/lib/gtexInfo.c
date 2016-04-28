@@ -198,11 +198,16 @@ return("");
 }
 
 char *gtexVersion(char *table)
-/* Return version string based on table suffix */
+/* Return version string based on table suffix. Default version tables have no suffix */
 {
 char *suffix = gtexVersionSuffix(table);
-// Currently the V4 tables have no suffix
 return (sameString(suffix, "")) ? GTEX_DEFAULT_VERSION : suffix;
+}
+
+char *gtexVersionSuffixFromVersion(char *version)
+/* Return version table suffix for a version */
+{
+return (sameString(version, GTEX_DEFAULT_VERSION)) ? "" : version;
 }
 
 double gtexMaxMedianScore(char *version)
