@@ -173,8 +173,8 @@ sub doClusterRun {
   my $paraHub = $bigClusterHub;
 
   # First, make sure previous step has completed:
-  if ( ! $opt_debug && ( ! -s "$runDir/parts.list" ) ) {
-    die "doClusterRun: previous 'setup' step has not completed, no parts.list file present.\n";
+  if ( ! $opt_debug && ( ! -s "$runDir/part.list" ) ) {
+    die "doClusterRun: previous 'setup' step has not completed, no part.list file present.\n";
   }
   # Then, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/run.time" ) ) {
