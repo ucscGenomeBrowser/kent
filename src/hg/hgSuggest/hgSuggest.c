@@ -84,12 +84,17 @@ while ((row = sqlNextRow(sr)) != NULL)
     // ignore funny chroms (e.g. _hap chroms. See redmine #4257.
     if(!strchr(row[1], '_'))
         {
+        // We have some very long descriptions, e.g. 4277 chars for hg38 CLOCK, so truncate:
+        const int maxDesc = 120;
+        char *description = row[5];
+        if (strlen(description) > maxDesc + 4)
+            strcpy(description + maxDesc, "...");
         count++;
         dyStringPrintf(str, "%s{\"value\": \"%s (%s)\", "
                        "\"id\": \"%s:%d-%s\", "
                        "\"geneSymbol\": \"%s\", "
                        "\"internalId\": \"%s\"}",
-                       count == 1 ? "" : ",\n", row[0], jsonStringEscape(row[5]),
+                       count == 1 ? "" : ",\n", row[0], jsonStringEscape(description),
                        row[1], atoi(row[2])+1, row[3],
                        jsonStringEscape(row[0]),
                        jsonStringEscape(row[4]));
