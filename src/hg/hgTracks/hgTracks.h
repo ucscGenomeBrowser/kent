@@ -699,6 +699,9 @@ Color darkerColor(struct hvGfx *hvg, Color color);
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color);
 /* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
 
+Color slightlyDarkerColor(struct hvGfx *hvg, Color color);
+/* Get a slightly darker shade of a color - 1/4 of the way towards black. */
+
 Color lighterColor(struct hvGfx *hvg, Color color);
 /* Get lighter shade of a color - half way between this color and white */
 

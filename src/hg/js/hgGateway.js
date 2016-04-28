@@ -1023,6 +1023,9 @@ var hgGateway = (function() {
         // "Browse/Select Species" section.
         var ieFudge = scrollbarWidth ? scrollbarWidth + 4 : 0;
         var extraFudge = 4;
+        var $contents = $('#findPositionContents');
+        var sectionContentsPadding = (_.parseInt($contents.css("padding-left")) +
+                                      _.parseInt($contents.css("padding-right")));
         var rightColumnWidth = ($('#pageContent').width() -
                                 $('#selectSpeciesSection').width() -
                                 ieFudge - extraFudge);
@@ -1030,6 +1033,8 @@ var hgGateway = (function() {
             $('#findPositionSection').width(rightColumnWidth);
         }
         updateGoButtonPosition();
+        $('#findPositionTitle').outerWidth(rightColumnWidth + extraFudge);
+        $('#descriptionTitle').outerWidth(rightColumnWidth - sectionContentsPadding);
     }
 
     function setSpeciesPickerSizes(svgWidth, svgHeight) {
@@ -1138,7 +1143,6 @@ var hgGateway = (function() {
                                             containerWidth: $('#speciesPicker').width()
                                             });
                 setSpeciesPickerSizes(spTree.width, spTree.height);
-                highlightLabelForDb(uiState.db, uiState.taxId);
                 stripeTops = rainbow.draw(svg, dbDbTree,
                                           spTree.yTree, spTree.height, spTree.leafTops);
             } else {
@@ -1147,8 +1151,8 @@ var hgGateway = (function() {
             $('#representedSpeciesTitle').show();
             $('#speciesGraphic').show();
             if (dbDbTree && document.createElementNS) {
-                // This needs to be done after things are visible so the slider gets the
-                // right position.
+                // These need to be done after things are visible because heights are 0 when hidden.
+                highlightLabelForDb(uiState.db, uiState.taxId);
                 initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
             }
         }
@@ -1285,6 +1289,17 @@ var hgGateway = (function() {
         updateGoButtonPosition();
     }
 
+    function processHgSuggestResults(results, term) {
+        // Make matching part of the gene symbol bold
+        _.each(results, function(item) {
+            if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
+                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                             item.value.substring(term.length);
+            }
+        });
+        return results;
+    }
+
     function updateFindPositionSection(uiState) {
         // Update the assembly menu, positionInput and description.
         var suggestUrl = null;
@@ -1298,6 +1313,7 @@ var hgGateway = (function() {
         autocompleteCat.init($('#positionInput'),
                              { baseUrl: suggestUrl,
                                watermark: positionWatermark,
+                               onServerReply: processHgSuggestResults,
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
