@@ -131,7 +131,7 @@ sub doSetup {
 twoBitInfo $twoBit stdout | sort -k2nr | cut -f1 > part.list
 export partCount=`cat part.list | wc -l`
 if [ "\${partCount}" -lt 5000 ]; then
-  time ( /cluster/home/hiram/kent/src/utils/twoBitDup/twoBitDup -keyList=stdout $twoBit | grep -v "are duplicates" | sort > $db.idKeys.txt) > twoBitDup.log 2>&1
+  time ( twoBitDup -keyList=stdout $twoBit | grep -v "are identical" | sort > $db.idKeys.txt) > twoBitDup.log 2>&1
 else
   mkdir -p splitList
   split -a 3 -d -l 5000 part.list splitList/part
