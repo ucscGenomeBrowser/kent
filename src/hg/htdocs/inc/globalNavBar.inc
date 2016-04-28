@@ -24,6 +24,7 @@
 <li class="menuparent" id="tools2"><a href="../cgi-bin/hgTracks">Genome Browser</a>
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a id="configureMenuLink" href="../cgi-bin/hgTracks?hgTracksConfigPage=configure">Configure</a></li>
+	<li><a id="trackSearchMenuLink" href="../cgi-bin/hgTracks?hgt_tSearch=track+search">Track Search</a></li>
 	<li><a id="cartResetMenuLink" href="../cgi-bin/cartReset">Reset All User Settings</a></li>
         </ul>
 </li>
