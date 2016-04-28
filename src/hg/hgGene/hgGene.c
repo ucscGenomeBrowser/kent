@@ -625,6 +625,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 #define  ALIGNIDFIELD      11  // Gencode Id
     if (hasAttrId)
 	curAlignId = cloneString(row[ALIGNIDFIELD]);
+    else
+	curAlignId = gp->name;
     }
 sqlFreeResult(&sr);
 if (gp == NULL)
@@ -695,7 +697,7 @@ else
 	{
 	/* Default case - start fancy web page. */
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
-	    genome, curGeneName, curGeneId);
+	    genome, curGeneName, curAlignId);
 	webMain(conn);
 	cartWebEnd();
 	}
