@@ -1023,6 +1023,9 @@ var hgGateway = (function() {
         // "Browse/Select Species" section.
         var ieFudge = scrollbarWidth ? scrollbarWidth + 4 : 0;
         var extraFudge = 4;
+        var $contents = $('#findPositionContents');
+        var sectionContentsPadding = (_.parseInt($contents.css("padding-left")) +
+                                      _.parseInt($contents.css("padding-right")));
         var rightColumnWidth = ($('#pageContent').width() -
                                 $('#selectSpeciesSection').width() -
                                 ieFudge - extraFudge);
@@ -1030,6 +1033,8 @@ var hgGateway = (function() {
             $('#findPositionSection').width(rightColumnWidth);
         }
         updateGoButtonPosition();
+        $('#findPositionTitle').outerWidth(rightColumnWidth + extraFudge);
+        $('#descriptionTitle').outerWidth(rightColumnWidth - sectionContentsPadding);
     }
 
     function setSpeciesPickerSizes(svgWidth, svgHeight) {
