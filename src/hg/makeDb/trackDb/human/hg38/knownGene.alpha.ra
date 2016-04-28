@@ -1,7 +1,7 @@
 
 track knownGene 
-shortLabel GENCODE v22
-longLabel  GENCODE v22 Comprehensive Transcript Set (only Basic displayed by default)
+shortLabel GENCODE v24
+longLabel  GENCODE v24 Comprehensive Transcript Set (only Basic displayed by default)
 group genes
 visibility pack
 priority 1
@@ -18,7 +18,7 @@ intronGap 12
 isGencode on
 html knownGene
 
-track knownGeneOld8
+track knownGeneOld9
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -26,12 +26,12 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg8ToKg9
+oldToNew kg9ToKg10
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld8
-searchTable knownGeneOld8
+searchName knownGeneOld9
+searchTable knownGeneOld9
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'

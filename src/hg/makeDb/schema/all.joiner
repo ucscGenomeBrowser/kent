@@ -3286,6 +3286,8 @@ identifier knownGeneId dependency
     $kgDb,!mm10.kg5ToKg6.newId exclude=
     $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb.kg7ToKg8.newId exclude=
+    $kgDb.kg8ToKg9.newId exclude=
+    $kgDb.kg9ToKg10.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
