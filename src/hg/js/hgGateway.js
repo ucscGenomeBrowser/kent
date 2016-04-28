@@ -345,6 +345,9 @@ var speciesTree = (function() {
         addDepth(dbDbTree);
         treeInfo = drawNode(newG, dbDbTree, hubBottomY, leafTops);
         width = treeInfo.x + cfg.paddingRight;
+        if (width < cfg.containerWidth) {
+            width = cfg.containerWidth;
+        }
         height = treeInfo.leafY - cfg.labelLineHeight + cfg.paddingBottom;
         if (oldG) {
             svg.removeChild(oldG);
@@ -542,7 +545,6 @@ var rainbow = (function() {
         // Initialize missing stripes to 0-height (top = next stripe's top), if any:
         for (i = stripeCount - 1;  i >= 0;  i--) {
             if (stripeTops[i] === undefined) {
-                console.warn("No species found for stripe " + i + ", taxId " + stripeTaxIds[i]);
                 stripeTops[i] = stripeTops[i+1];
             }
         }
@@ -780,22 +782,34 @@ var hgGateway = (function() {
     var scrollbarWidth = 0;
     // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
     var uiState = {};
+    // This is used to check whether a taxId is found in activeGenomes:
+    var activeTaxIds = _.invert(activeGenomes);
     // This is dbDbTree after pruning -- null if dbDbTree has no children left
-    var prunedDbDbTree;
+    var prunedDbDbTree = null;
     // This keeps track of which gene the user has selected most recently from autocomplete.
     var selectedGene = null;
 
     function setupFavIcons() {
         // Set up onclick handlers for shortcut buttons and labels
+        var haveIcon = false;
         var i, name, taxId, onClick;
         for (i = 0;  i < favIconTaxId.length;  i++) {
             name = favIconTaxId[i][0];
             taxId = favIconTaxId[i][1];
-            // When user clicks on icon, set the taxId (default database);
-            // scroll the image to that species and clear the species autocomplete input.
-            onClick = setTaxId.bind(null, taxId, null, true, true);
-            // Onclick for both the icon and its sibling label:
-            $('.jwIconSprite' + name).parent().children().click(onClick);
+            if (activeTaxIds[taxId]) {
+                // When user clicks on icon, set the taxId (default database);
+                // scroll the image to that species and clear the species autocomplete input.
+                onClick = setTaxId.bind(null, taxId, null, true, true);
+                // Onclick for both the icon and its sibling label:
+                $('.jwIconSprite' + name).parent().children().click(onClick);
+                haveIcon = true;
+            } else {
+                // Inactive on this site -- hide it
+                $('.jwIconSprite' + name).parent().hide();
+            }
+        }
+        if (! haveIcon) {
+            $('#popSpeciesTitle').text('Species Search');
         }
     }
 
@@ -1105,7 +1119,8 @@ var hgGateway = (function() {
             }
             // Yet another special case for Baboon having one genome with two species...
             // maybe we should just change dbDb?
-            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562)) {
+            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562) &&
+                     activeGenomes.Baboon) {
                 hasActiveLeaf = true;
             } else {
                 dbDbGenome = activeTaxIds[taxId];
@@ -1618,10 +1633,11 @@ var hgGateway = (function() {
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
         // Prune inactive genomes from dbDbTree.
-        var activeTaxIds = _.invert(activeGenomes);
-        prunedDbDbTree = dbDbTree;
-        if (dbDbTree && ! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
-            prunedDbDbTree = null;
+        if (window.dbDbTree) {
+            prunedDbDbTree = dbDbTree;
+            if (! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+                prunedDbDbTree = null;
+            }
         }
 
         // When page has loaded, do layout adjustments and initialize event handlers.
