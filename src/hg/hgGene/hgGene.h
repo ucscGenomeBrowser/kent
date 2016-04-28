@@ -170,6 +170,9 @@ struct section *allelesSection(struct sqlConnection *conn,
 void prGRShortKg(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews short label associated to this refGene item */
 
+struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa);
+/* Create GTEx gene expression section. */
+
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 
 	struct hash *sectionRa);
