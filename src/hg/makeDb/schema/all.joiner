@@ -4956,9 +4956,9 @@ identifier gvSrcId
 #links between oreganno (regulatory annotation) and related tables
 identifier oregId
 "ORegAnno track identifier: links annotations to attributes and external links"
-    $hg,$dm,$sacCer,$mm.oreganno.id
-    $hg,$dm,$sacCer,$mm.oregannoAttr.id
-    $hg,$dm,$sacCer,$mm.oregannoLink.id
+    $hg,$dm,$sacCer,$mm,$canFam.oreganno.id
+    $hg,$dm,$sacCer,$mm,$canFam.oregannoAttr.id
+    $hg,$dm,$sacCer,$mm,$canFam.oregannoLink.id
 
 # retroposon track, dbRIP_* and polyGenotype table link
 identifier dbRIPNameAlu fuzzy
