@@ -45,7 +45,7 @@ char query[512];
 struct sqlResult *sr;
 if (sqlTableExists(conn, table))
     {
-    sqlSafef(query, sizeof query, "select * from %s where name = '%s' and chrom = '%s' "
+    sqlSafef(query, sizeof query, "SELECT * FROM %s WHERE name = '%s' AND chrom = '%s' "
                                   " and chromStart = %d and chromEnd = %d", 
                                         table, item, chrom, start, end);
     sr = sqlGetResult(conn, query);
@@ -69,12 +69,15 @@ if (sameString(database, "hg38"))
     char *geneId = cloneString(gtexGene->geneId);
     chopSuffix(geneId);
     sqlSafef(query, sizeof(query), 
-        "select kgXref.description from kgXref, knownCanonical where knownCanonical.protein like '%%%s%%' and knownCanonical.transcript=kgXref.kgID", geneId);
+        "SELECT kgXref.description FROM kgXref, knownCanonical WHERE "
+                "knownCanonical.protein LIKE '%%%s%%' AND "
+                "knownCanonical.transcript=kgXref.kgID", geneId);
     }
 else
     {
     sqlSafef(query, sizeof(query), 
-                "select kgXref.description from kgXref where geneSymbol='%s'", gtexGene->name);
+                "SELECT kgXref.description FROM kgXref WHERE geneSymbol='%s'", 
+                        gtexGene->name);
     }
 struct sqlConnection *conn = hAllocConn(database);
 char *desc = sqlQuickString(conn, query);
@@ -111,22 +114,23 @@ printf("<b>Gene class: </b><span style='color: %s'>%s</span><br>\n",
             geneClassColorCode(geneClass), geneClass);
 printf("<b>Total median expression: </b> %0.2f RPKM<br>\n", gtexGeneTotalMedianExpression(gtexGene));
 printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
-printf("<b>Genomic position: </b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
-                        database, hgTracksPathAndSettings(), database, 
-                        gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
-                        gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
+printf("<b>Genomic position: "
+                "</b>%s <a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d-%d</a><br>\n", 
+                    database, hgTracksPathAndSettings(), database, 
+                    gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd,
+                    gtexGene->chrom, gtexGene->chromStart+1, gtexGene->chromEnd);
 puts("<p>");
 
 // set gtexDetails (e.g. to 'log') to show log transformed details page 
 //      if hgTracks is log-transformed
-boolean doLogTransform = (trackDbSetting(tdb, "gtexDetails") &&
-                                cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
+boolean doLogTransform = 
+        (trackDbSetting(tdb, "gtexDetails") &&
+            cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
                                                 GTEX_LOG_TRANSFORM_DEFAULT));
 char *version = gtexVersion(tdb->table);
 struct tempName pngTn;
 if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &pngTn))
     printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
 gtexPortalLink(gtexGene->geneId);
-
 printTrackHtml(tdb);
 }
