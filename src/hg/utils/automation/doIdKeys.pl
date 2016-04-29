@@ -131,7 +131,7 @@ sub doSetup {
 twoBitInfo $twoBit stdout | sort -k2nr | cut -f1 > part.list
 export partCount=`cat part.list | wc -l`
 if [ "\${partCount}" -lt 5000 ]; then
-  time ( /cluster/home/hiram/kent/src/utils/twoBitDup/twoBitDup -keyList=stdout $twoBit | grep -v "are duplicates" | sort > $db.idKeys.txt) > twoBitDup.log 2>&1
+  time ( twoBitDup -keyList=stdout $twoBit | grep -v "are identical" | sort > $db.idKeys.txt) > twoBitDup.log 2>&1
 else
   mkdir -p splitList
   split -a 3 -d -l 5000 part.list splitList/part
@@ -173,8 +173,8 @@ sub doClusterRun {
   my $paraHub = $bigClusterHub;
 
   # First, make sure previous step has completed:
-  if ( ! $opt_debug && ( ! -s "$runDir/parts.list" ) ) {
-    die "doClusterRun: previous 'setup' step has not completed, no parts.list file present.\n";
+  if ( ! $opt_debug && ( ! -s "$runDir/part.list" ) ) {
+    die "doClusterRun: previous 'setup' step has not completed, no part.list file present.\n";
   }
   # Then, make sure we're starting clean.
   if ( ! $opt_debug && ( -s "$runDir/run.time" ) ) {
