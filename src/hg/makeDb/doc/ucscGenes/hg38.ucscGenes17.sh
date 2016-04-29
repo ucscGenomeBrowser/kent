@@ -129,6 +129,10 @@ hgMapToGene -type=psl -tempDb=$tempDb $db all_mrna knownGene knownToMrnaSingle
 
 makeGencodeKnownGene $db $tempDb $GENCODE_VERSION txToAcc.tab
 
+hgsql $tempDb -Ne "select k.name, g.geneId, g.geneStatus, g.geneType,g.transcriptName,g.transcriptType,g.transcriptStatus, g.havanaGeneId,  g.ccdsId, g.supportLevel, g.transcriptClass from knownGene k, wgEncodeGencodeAttrs$GENCODE_VERSION g where k.alignID=g.transcriptId" > knownAttrs.tab
+hgLoadSqlTab -notOnServer $tempDb knownAttrs $kent/src/hg/lib/knownAttrs.sql knownAttrs.tab
+
+
 tawk '$4=="new" {print $3}' oldToNew.tab | sort > new.txt
 sort knownGene.gp | join -t $'\t' new.txt /dev/stdin > new.gp
 sort knownGene.gp | join -t $'\t' lost.txt /dev/stdin | wc
