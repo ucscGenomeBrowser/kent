@@ -53,3 +53,6 @@ showTopScorers 200
 color 100,50,170
 type bed 5 .
 html phastConsElements
+
+track oreganno override
+pennantIcon 1.jpg ../goldenPath/help/liftOver.html "lifted from sacCer1"
