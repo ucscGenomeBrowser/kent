@@ -411,6 +411,7 @@ else
 addGoodSection(rgdGeneRawSection(conn, sectionRa), conn, &sectionList);
 
 //addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
+addGoodSection(gtexSection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */
 if (strstr(database, "danRer") == NULL)
     {
