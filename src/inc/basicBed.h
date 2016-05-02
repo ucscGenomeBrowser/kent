@@ -136,6 +136,9 @@ int bedCmpSize(const void *va, const void *vb);
 int bedCmpChromStrandStart(const void *va, const void *vb);
 /* Compare to sort based on chrom,strand,chromStart. */
 
+int bedCmpChromStrandStartName(const void *va, const void *vb);
+/* Compare to sort based on name, chrom,strand,chromStart. */
+
 struct bedLine
 /* A line in a bed file with chromosome, start position parsed out. */
     {
