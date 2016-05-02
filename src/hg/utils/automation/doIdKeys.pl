@@ -231,6 +231,10 @@ fi
 if [ -s $db.idKeys.txt ]; then
   printf "# finalStep: $db.idKeys.txt file is present and done\\n" 1>&2
   cut -f 1 $db.idKeys.txt | md5sum | awk '{print \$1}' > $db.keySignature.txt
+  cut -f1 $db.idKeys.txt | sort | uniq -c | awk '\$1 > 1' > $db.hasDups.txt
+  if [ ! -s $db.hasDups.txt ]; then
+    rm -f $db.hasDups.txt
+  fi
 else
   printf "ERROR: finalstep: $db.idKeys.txt file is missing\\n" 1>&2
   exit 255
