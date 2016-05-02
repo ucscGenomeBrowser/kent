@@ -280,7 +280,7 @@ cgiMakeHiddenVar(buf, "0");
 void gtexPortalLink(char *geneId)
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 {
-printf("<br><a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
+printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
         "View at GTEx portal</a>\n", geneId);
 }
 

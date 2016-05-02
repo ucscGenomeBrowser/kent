@@ -44,7 +44,10 @@ static void gtexPrint(struct section *section, struct sqlConnection *conn, char 
 struct tempName pngTn;
 char *ensGene = section->items;
 if (gtexGeneBoxplot(ensGene, NULL, GTEX_DEFAULT_VERSION, FALSE, &pngTn))
-    hPrintf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    hPrintf("<img src = '%s' border=1><br>\n", pngTn.forHtml);
+hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&gtexGene=pack'>"
+                "View in GTEx track of Genome Browser</a>", cartSidUrlString(cart));
+hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
 gtexPortalLink(ensGene);
 }
 
