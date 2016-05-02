@@ -948,28 +948,72 @@ if (posCount != 1)
 hgp->posCount = posCount;
 }
 
+INLINE boolean setStartEndFromQuery(struct sqlConnection *conn, char *query,
+                                    int *retStart, int *retEnd)
+/* Run query (which must have start and end as first two output columns)
+ * and collect min start and max end from resulting rows.  Return FALSE if no rows. */
+{
+boolean foundIt = FALSE;
+int minStart = BIGNUM;
+int maxEnd = 0;
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    int start = sqlUnsigned(row[0]);
+    int end = sqlUnsigned(row[1]);
+    if (start < minStart)
+        minStart = start;
+    if (end > maxEnd)
+        maxEnd = end;
+    foundIt = TRUE;
+    }
+sqlFreeResult(&sr);
+if (foundIt)
+    {
+    if (retStart != NULL)
+        *retStart = minStart;
+    if (retEnd != NULL)
+        *retEnd = maxEnd;
+    }
+return foundIt;
+}
+
+
 static boolean hgFindChromBand(char *db, char *chrom, char *band, int *retStart, int *retEnd)
 /* Return start/end of band in chromosome. */
 {
 struct sqlConnection *conn = hAllocConn(db);
-struct sqlResult *sr = NULL;
-char **row;
 struct dyString *query = sqlDyStringCreate("select chromStart, chromEnd from cytoBand "
                                            "where chrom = '%s' and name = '%s'",
                                            chrom, band);
-sr = sqlGetResult(conn, query->string);
-if ((row = sqlNextRow(sr)) != NULL)
+boolean foundIt = setStartEndFromQuery(conn, query->string, retStart, retEnd);
+if (! foundIt)
     {
-    if (retStart)
-        *retStart = sqlUnsigned(row[0]);
-    if (retEnd)
-        *retEnd = sqlUnsigned(row[1]);
-    return TRUE;
+    // No exact match -- if band has a '.', chop at the '.' in case we only have more coarse data.
+    // Otherwise try prefix search.
+    dyStringClear(query);
+    int len = strlen(band);
+    char truncBand[len+1];
+    safecpy(truncBand, sizeof(truncBand), band);
+    char *dot = strchr(truncBand, '.');
+    if (dot)
+        {
+        *dot = 0;
+        sqlDyStringPrintf(query, "select chromStart, chromEnd from cytoBand "
+                       "where chrom = '%s' and name = '%s'",
+                       chrom, truncBand);
+        }
+    else
+        {
+        sqlDyStringPrintf(query, "select chromStart, chromEnd from cytoBand "
+                       "where chrom = '%s' and name like '%s%%'", chrom, band);
+        }
+    foundIt = setStartEndFromQuery(conn, query->string, retStart, retEnd);
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 dyStringFree(&query);
-return FALSE;
+return foundIt;
 }
 
 boolean hgParseCytoBandName(char *db, char *spec, char **retChromName, char **retBandName)
