@@ -4,13 +4,13 @@
 ##
 track wgEncodeGencodeV24lift37
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Gene V24lift37
 longLabel  Gene Annotations from GENCODE Version 24lift37
 group genes
 dragAndDrop subTracks
 priority 34.181
-visibility pack
+visibility hide
 subGroup1 view View aGenes=Genes
 subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes
 allButtonPair on
@@ -90,7 +90,7 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV24lift37
     
         track wgEncodeGencodePseudoGeneV24lift37
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeV24lift37ViewGenes on
+        subTrack wgEncodeGencodeV24lift37ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from GENCODE Version 24lift37 (Ensembl 83)
