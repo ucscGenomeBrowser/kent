@@ -130,7 +130,8 @@ boolean doLogTransform =
 char *version = gtexVersion(tdb->table);
 struct tempName pngTn;
 if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &pngTn))
-    printf("<IMG SRC = \"%s\" BORDER=1><BR>\n", pngTn.forHtml);
+    printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
+printf("<br>");
 gtexPortalLink(gtexGene->geneId);
 printTrackHtml(tdb);
 }
