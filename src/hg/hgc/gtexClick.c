@@ -94,6 +94,7 @@ struct gtexGeneBed *gtexGene = getGtexGene(item, seqName, start, end, tdb->table
 if (gtexGene == NULL)
     errAbort("Can't find gene %s in GTEx gene table %s\n", item, tdb->table);
 
+char *version = gtexVersion(tdb->table);
 genericHeader(tdb, item);
 printf("<b>Gene: </b>");
 char *desc = getGeneDescription(gtexGene);
@@ -112,6 +113,10 @@ char *geneClass = gtexGeneClass(gtexGene);
 printf("<b>GENCODE biotype: </b> %s<br>\n", gtexGene->geneType); 
 printf("<b>Gene class: </b><span style='color: %s'>%s</span><br>\n", 
             geneClassColorCode(geneClass), geneClass);
+int tisId;
+float highLevel = gtexGeneHighestMedianExpression(gtexGene, &tisId);
+printf("<b>Highest median expression: </b> %0.2f RPKM in %s<br>\n", 
+                highLevel, gtexGetTissueDescription(tisId, version));
 printf("<b>Total median expression: </b> %0.2f RPKM<br>\n", gtexGeneTotalMedianExpression(gtexGene));
 printf("<b>Score: </b> %d<br>\n", gtexGene->score); 
 printf("<b>Genomic position: "
@@ -127,7 +132,6 @@ boolean doLogTransform =
         (trackDbSetting(tdb, "gtexDetails") &&
             cartUsualBooleanClosestToHome(cart, tdb, FALSE, GTEX_LOG_TRANSFORM,
                                                 GTEX_LOG_TRANSFORM_DEFAULT));
-char *version = gtexVersion(tdb->table);
 struct tempName pngTn;
 if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &pngTn))
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
