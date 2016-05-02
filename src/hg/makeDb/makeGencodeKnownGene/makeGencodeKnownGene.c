@@ -18,9 +18,11 @@ errAbort(
   "usage:\n"
   "   makeGencodeKnownGene database tempDatabase version# txToAcc.tab \n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -justKnown\n"
   );
 }
+
+boolean justKnown;
 
 struct hashes
 {
@@ -43,6 +45,7 @@ struct hash *hgncDescriptionFromGeneName;
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
+   {"justKnown", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -493,8 +496,6 @@ return b->length - a->length;
 static void outputKnownCanonical( struct genePred *compGenePreds, struct hashes *hashes)
 {
 // walk throught the different genes in the Attrs table and choose a transcriptfor each one
-// TODO: right now we're choosing an arbitrary one, we should at least
-// make sure it's in the basic set
 /*
 struct hashCookie cookie = hashFirst(hashes->genToAttrs);
 //while ((el = hashNext(&cookie)) != NULL)
@@ -634,9 +635,11 @@ hashes.genToPdb = getMapTable(conn, "select transcriptId, pdbId from wgEncodeGen
 //hashes.descriptionFromUniProtId = getMapTable(uconn, "select c.acc, v.val from commentVal v, comment c where v.id=c.commentVal", NULL);
 //printf("descriptionFromUniProtId %ld\n", time(NULL) - start);
 hashes.genToTags = getMapTable(conn, "select transcriptId, tag from wgEncodeGencodeTag", version);
-outputKnownCanonical(compGenePreds, &hashes);
-exit(1);
+if (!justKnown)
+    outputKnownCanonical(compGenePreds, &hashes);
 outputKnownGene(compGenePreds, &hashes);
+if (justKnown)
+    exit(0);
 outputKnownGeneColor(compGenePreds, &hashes);
 hashes.genToMrna = getMapTable(tconn, "select name, value from knownToMrnaSingle", NULL);
 outputKgXref(conn, compGenePreds, &hashes);
@@ -650,6 +653,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+justKnown = optionExists("justKnown");
 makeGencodeKnownGene(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
