@@ -802,6 +802,9 @@ if (cgiOptionalString(SEARCH_TERM))
     // Skip the cart for speedy searches
     lookupTerm();
 else
+    {
+    oldVars = hashNew(10);
     cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    }
 return 0;
 }
