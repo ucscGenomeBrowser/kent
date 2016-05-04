@@ -24,6 +24,7 @@
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
+struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 
 #define SEARCH_TERM "hgcd_term"
 
@@ -161,7 +162,8 @@ static void doMainPage()
 {
 //#*** A lot of this is copied from hgIntegrator... libify!
 
-char *db = cartUsualString(cart, "db", hDefaultDb());
+char *db = NULL, *genome = NULL, *clade = NULL;
+getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               "", "UCSC Genome Browser Databases",
                               TRUE, FALSE, TRUE, TRUE);
@@ -271,9 +273,9 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
-struct hash *oldVars = NULL;
 cgiSpoof(&argc, argv);
 setUdcCacheDir();
+oldVars = hashNew(10);
 if (cgiOptionalString(SEARCH_TERM))
     // Skip the cart for speedy searches
     lookupTerm();

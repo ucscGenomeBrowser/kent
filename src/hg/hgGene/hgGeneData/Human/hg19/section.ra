@@ -1,17 +1,21 @@
 # hg19 specific sections.
 
-# Immediately before the microarray section
 name geneAlleles
 shortLabel Gene Alleles
 longLabel Common Gene Haplotype Alleles
 priority 38
+visibility hide
 
-# will replace microarray section
 name gtex
-shortLabel GTEx Gene Expression
+shortLabel RNA-seq Expression
 longLabel Gene Expression in 53 Tissues from GTEx RNA-seq
 priority 39
 
+name microarray
+shortLabel Microarray Expression
+longLabel Microarray Expression Data
+priority 40
+visibility hide
 
 
 

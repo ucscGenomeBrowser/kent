@@ -5668,8 +5668,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
-	gp->name);
+    sqlSafef(query, sizeof query, "select * from knownCds where name=\"%s\"", gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = NULL;

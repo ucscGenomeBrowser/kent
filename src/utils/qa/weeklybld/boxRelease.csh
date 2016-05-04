@@ -10,7 +10,7 @@ if ( "$1" == "" ) then
     exit 0
 endif
 
-set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+set runCount=`ps aux | grep VBoxHeadless | grep -w 'browserbox' | wc -l`
 if ("$runCount" == "0") then
     VBoxHeadless -s browserbox &
     echo waiting for VM to boot...
@@ -28,7 +28,7 @@ endif
 echo shutting down the box
 VBoxManage  controlvm  browserbox acpipowerbutton
 while (1) 
-    set runCount=`ps aux | grep VBoxHeadless | grep 'browserbox$' | wc -l`
+    set runCount=`ps aux | grep VBoxHeadless | grep -w 'browserbox' | wc -l`
     if ("$runCount" == "0") then
 	 echo box has stopped
 	 break

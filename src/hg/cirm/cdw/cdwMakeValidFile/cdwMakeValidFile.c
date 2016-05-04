@@ -858,6 +858,8 @@ sqlSafef(query, sizeof(query),
     "and updateTime != 0", 
     startId, endId);
 struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
+if (efList == NULL)
+    errAbort("No files in %d to %d", startId, endId);
 
 for (ef = efList; ef != NULL; ef = ef->next)
     {

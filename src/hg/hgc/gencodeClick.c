@@ -270,9 +270,9 @@ static bool geneHasApprisTranscripts(struct trackDb *tdb, struct sqlConnection *
 /* check if any transcript in a gene has an APPRIS tags */
 {
 char query[1024];
-safef(query, sizeof(query),
-      "%s tag where tag.tag like \"appris%%\" and transcriptId in "
-      "(select transcriptId from %s where geneId=\"%s\")",
+sqlSafefFrag(query, sizeof(query),
+      "%s tag where tag.tag like 'appris%%' and transcriptId in "
+      "(select transcriptId from %s where geneId='%s')",
       getGencodeTable(tdb, "wgEncodeGencodeTag"),
       getGencodeTable(tdb, "wgEncodeGencodeAttrs"),
       transAttrs->geneId);

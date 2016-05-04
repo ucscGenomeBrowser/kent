@@ -240,6 +240,7 @@ char *cdwAllowedTags[] = {
     "karyotype",
     "keywords",
     "lab",
+    "lane",
     "life_stage",
     "md5",
     "meta",
