@@ -6069,6 +6069,7 @@ tablesIgnored mm9
     rest
 
 tablesIgnored mm10
+    cloneEnd%
     mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1

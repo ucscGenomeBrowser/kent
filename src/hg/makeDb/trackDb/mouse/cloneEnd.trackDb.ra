@@ -170,7 +170,7 @@ sortOrder source=+
     track cloneEndcoverageForward
     parent cloneEndSuper off
     subGroups source=placements
-    shortLabel Coverage forward strand
+    shortLabel Coverage forward
     longLabel Clone end placements overlap coverage on the forward strand
     type bigWig 0 5377
     visibility full
@@ -182,7 +182,7 @@ sortOrder source=+
     track cloneEndcoverageReverse
     parent cloneEndSuper off
     subGroups source=placements
-    shortLabel Coverage reverse strand
+    shortLabel Coverage reverse
     longLabel Clone end placements overlap coverage on the reverse strand
     type bigWig 0 4112
     visibility full

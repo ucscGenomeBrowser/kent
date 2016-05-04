@@ -239,4 +239,15 @@ hsl.s = min(1000, hsl.s + 300);
 return mgHslToRgb(hsl);
 }
 
+char *gtexGetTissueDescription(int id, char *version)
+/* Get description for a tissue specified by id.  
+ * Use for single queries (o/w use gtexGetTissues) */
+{
+char query[1024];
+struct sqlConnection *conn = hAllocConn("hgFixed");
+sqlSafef(query, sizeof(query), "select description from gtexTissue%s where id=%d\n", 
+                gtexVersionSuffix(version), id);
+return sqlQuickString(conn, query);
+}
+
 

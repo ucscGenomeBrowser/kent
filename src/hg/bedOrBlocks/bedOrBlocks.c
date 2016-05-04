@@ -21,13 +21,16 @@ errAbort(
   "merged bed. The in.bed should contain 12-column (blocked) beds.\n"
   "All beds on the same strand of the same chromosome will be merged.\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -useName\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"useName", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean useName = FALSE;
 
 struct bed *bedFromRangeTree(struct rbTree *rangeTree, char *chrom, char *name, char *strand)
 /* Create a bed based on range tree */
@@ -85,7 +88,10 @@ void bedOrBlocks(char *inFile, char *outFile)
 {
 struct bed *start, *end, *inList = bedLoadNAll(inFile, 12);
 FILE *f = mustOpen(outFile, "w");
-slSort(&inList, bedCmpChromStrandStart);
+if (useName)
+    slSort(&inList, bedCmpChromStrandStartName);
+else
+    slSort(&inList, bedCmpChromStrandStart);
 for (start = inList; start != NULL; start = end)
     {
     for (end = start->next; end != NULL; end = end->next)
@@ -94,6 +100,10 @@ for (start = inList; start != NULL; start = end)
 	    break;
 	if (start->strand[0] != end->strand[0])
 	    break;
+        if (useName && differentString(start->name, end->name))
+            break;
+        if (useName && start->chromEnd < end->chromStart)
+            break;
 	}
     doStrand(start, end, f);
     }
@@ -106,6 +116,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+useName = optionExists("useName");
 bedOrBlocks(argv[1], argv[2]);
 return 0;
 }

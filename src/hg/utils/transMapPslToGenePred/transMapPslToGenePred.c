@@ -441,11 +441,11 @@ return mappedGp;
 }
 
 static boolean haveAdjacentFrames(struct genePred *mappedGp, int iExon)
-/* do two block have adjacent frames? */
+/* do two block have adjacent frames?  */
 {
-if ((mappedGp->exonFrames[iExon] == -1) || (mappedGp->exonFrames[iExon+1] == -1))
-    return TRUE;  // adjacent with non-coding
-else if (mappedGp->strand[0] == '+')
+assert(mappedGp->exonFrames[iExon] >= 0);
+assert(mappedGp->exonFrames[iExon+1] >= 0);
+if (mappedGp->strand[0] == '+')
     {
     // how much of CDS is in this exon
     int cdsOff = max(mappedGp->exonStarts[iExon], mappedGp->cdsStart) - mappedGp->exonStarts[iExon];

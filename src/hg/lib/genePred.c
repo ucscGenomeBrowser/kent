@@ -1114,10 +1114,15 @@ if (end > cds->end)
 
 if (start < end)
     {
-    /* Compute from end if it is complete in mRNA and start is not complete.
-     * This is doesn't as the end is more likely completely.  However, so
-     * code doesn't correctly create CDS to indicate completeness, so don't
-     * use CDS end unless we know start is incomplete. */
+    /* Compute frame from end of RNA if CDS end is marked complete and start
+     * is not complete.  This is done as the end of an RNA is more likely
+     * completely due to reverse transcriptase not replicating the entire RNA.
+     * However, code that create CDS from genePreds doesn't always create a
+     * CDS specification that indicates incompleteness. So don't use CDS end
+     * unless we know start is incomplete, mean code tried to set it.  This is
+     * not a perfect solution, as handling of CDS specification is naive and
+     * doesn't account for truncated start or stop.  Incomplete codons can
+     * result in frame shift even is CDS completeness is set correctly. */
     if (cds->endComplete && !cds->startComplete)
         {
         int fr = (cds->end-start) % 3;
