@@ -1177,11 +1177,11 @@ char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
 char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
 boolean doFilterTopScorers = FALSE;
 char *words[3];
-char query[512];
+char cartVar[512];
 int filterTopScoreCt = 0;
 char *filterTopScoreTable = NULL;
 
-safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersOn");
 if (filterTopScorers != NULL)
     {
     if (chopLine(cloneString(filterTopScorers), words) == 3)
@@ -1196,12 +1196,12 @@ if (bedSize >= 5 && showTopScorers != NULL)
     {
     /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
-    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, cartVar, doFilterTopScorers);
     if (doFilterTopScorers && hTableExists(database, filterTopScoreTable))
         {
         /* limit to those in the top N, from table */
-        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
-        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, cartVar, filterTopScoreCt);
         }
     else
         /* show all */
@@ -5534,13 +5534,8 @@ sqlDyStringAppend(dy,
                "select g.type,g.direction,"
                "so.name,o.name,l.name,m.name,"
                "se.name,t.name,dev.name,ce.name,cd.name,"
-               "des.name,a.name,gene.name,p.name,");
-if (haveGbSeq)
-    dyStringAppend(dy,
-                   "gbS.size,g.moddate,gbS.gbExtFile,gbS.file_offset,gbS.file_size ");
-else
-    dyStringAppend(dy,
-		   "se.size,se.gb_date,se.extFile,se.file_offset,se.file_size ");
+               "des.name,a.name,gene.name,p.name,"
+               "gbS.size,g.moddate,gbS.gbExtFile,gbS.file_offset,gbS.file_size ");
 
 /* If the gbCdnaInfoTAble table has a "version" column then will show it */
 if (hasVersion)
@@ -5769,12 +5764,8 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-if (startsWith("ucscRetro", table))
-    {
-    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
-    }
-else
-    sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
+
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -6434,6 +6425,7 @@ sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 agpFragStaticLoad(row+hasBin, &frag);
 
+printf("<B>Entrez nucleotide:</B><A TARGET=_blank HREF='http://www.ncbi.nlm.nih.gov/nuccore/%s'> %s</A><BR>\n", fragName, fragName);
 printf("<B>Clone Fragment ID:</B> %s<BR>\n", frag.frag);
 printf("<B>Clone Fragment Type:</B> %s<BR>\n", frag.type);
 printf("<B>Clone Bases:</B> %d-%d<BR>\n", frag.fragStart+1, frag.fragEnd);
@@ -14787,7 +14779,7 @@ if (row != NULL)
 	stsInfoRatFree(&infoRow);
 
 	/* Find sts in clone sequece alignment info */
-        safef(query1, sizeof(query1), "qName = '%s'", stsClone);
+        sqlSafefFrag(query1, sizeof(query1), "qName = '%s'", stsClone);
 	sr2 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query1,
 			  &hasBin);
 	i = 0;

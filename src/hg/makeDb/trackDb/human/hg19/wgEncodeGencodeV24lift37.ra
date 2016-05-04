@@ -4,15 +4,15 @@
 ##
 track wgEncodeGencodeV24lift37
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE Gene V24lift37
 longLabel  Gene Annotations from GENCODE Version 24lift37
 group genes
 dragAndDrop subTracks
 priority 34.181
-visibility pack
-subGroup1 view View aGenes=Genes b2-way=2-way  cPolya=PolyA
-subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes yTwo-way=2-way_Pseudogenes zPolyA=PolyA
+visibility hide
+subGroup1 view View aGenes=Genes
+subGroup2 name Name Basic=Basic Comprehensive=Comprehensive Pseudogenes=Pseudogenes
 allButtonPair on
 sortOrder name=+ view=+
 fileSortOrder labVersion=Contents dccAccession=UCSC_Accession
@@ -20,7 +20,6 @@ type genePred
 configurable off
 wgEncodeGencodeVersion 24lift37
 wgEncodeGencodeAttrs wgEncodeGencodeAttrsV24lift37
-wgEncodeGencodeExonSupport wgEncodeGencodeExonSupportV24lift37
 wgEncodeGencodeGeneSource wgEncodeGencodeGeneSourceV24lift37
 wgEncodeGencodeTranscriptSource wgEncodeGencodeTranscriptSourceV24lift37
 wgEncodeGencodePdb wgEncodeGencodePdbV24lift37
@@ -91,49 +90,13 @@ wgEncodeGencodeEntrezGene wgEncodeGencodeEntrezGeneV24lift37
     
         track wgEncodeGencodePseudoGeneV24lift37
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeV24lift37ViewGenes on
+        subTrack wgEncodeGencodeV24lift37ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from GENCODE Version 24lift37 (Ensembl 83)
         type genePred
         color 255,51,255
         priority 3
-    
-    track wgEncodeGencodeV24lift37View2Way 
-    shortLabel 2-Way
-    view b2-way
-    visibility hide
-    subTrack wgEncodeGencodeV24lift37
-    type genePred
-    configurable off
-
-        track wgEncodeGencode2wayConsPseudoV24lift37
-        trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeV24lift37View2Way off
-        subGroups view=b2-way name=yTwo-way
-        shortLabel 2-way Pseudogenes
-        longLabel 2-way Pseudogene Annotation Set from GENCODE Version 24lift37 (Ensembl 83)
-        type genePred
-        color 255,51,255
-        priority 4
-    
-    track wgEncodeGencodeV24lift37ViewPolya
-    shortLabel PolyA
-    view cPolya
-    visibility hide
-    subTrack wgEncodeGencodeV24lift37
-    type genePred
-    configurable off
-
-        track wgEncodeGencodePolyaV24lift37
-        trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeV24lift37ViewPolya off
-        subGroups view=cPolya name=zPolyA
-        shortLabel PolyA
-        longLabel PolyA Transcript Annotation Set from GENCODE Version 24lift37 (Ensembl 83)
-        type genePred
-        color 0,0,0
-        priority 5
     
 # searchs for basic
 searchName wgEncodeGencodeBasicV24lift37
@@ -260,13 +223,3 @@ termRegex OTTHUMG[0-9.]+
 searchPriority 2.27315
 xrefTable wgEncodeGencodeAttrsV24lift37
 xrefQuery select transcriptId,havanaGeneId from %s where havanaGeneId like '%s%%'
-
-# searchs for 2-way consensus
-searchName wgEncodeGencode2wayConsPseudoV24lift37
-searchTable wgEncodeGencode2wayConsPseudoV24lift37
-searchMethod exact
-searchType genePred
-termRegex PGOHUM[0-9.]+
-searchPriority 2.27316
-
-

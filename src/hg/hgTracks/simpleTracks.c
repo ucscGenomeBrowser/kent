@@ -312,12 +312,22 @@ return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color)
-/* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
+/* Get a somewhat darker shade of a color - 1/3 of the way towards black. */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (2*(int)rgbColor.r)/3;
 rgbColor.g = (2*(int)rgbColor.g)/3;
 rgbColor.b = (2*(int)rgbColor.b)/3;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+Color slightlyDarkerColor(struct hvGfx *hvg, Color color)
+/* Get a slightly darker shade of a color - 1/4 of the way towards black. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (9*(int)rgbColor.r)/10;
+rgbColor.g = (9*(int)rgbColor.g)/10;
+rgbColor.b = (9*(int)rgbColor.b)/10;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
@@ -728,7 +738,13 @@ if (doWiggle)
     struct wigCartOptions *wigCart = tg->wigCartData;
     if (tg->wigCartData == NULL)
 	{
-	wigCart = wigCartOptionsNew(cart, tg->tdb, 0, NULL );
+        // fake the trackDb range for this auto-wiggle
+        int wordCount = 3;
+        char *words[3];
+        words[0] = "wig";
+        words[1] = "0";
+        words[2] = "127";
+	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
 	tg->wigCartData = (void *) wigCart;
 	}
     return wigTotalHeight(tg, vis);
@@ -1094,8 +1110,10 @@ if (x < xEnd)
             }
         else
             {
-            safef(link,sizeof(link),"%s&c=%s&o=%d&t=%d&g=%s&i=%s",
-                hgcNameAndSettings(), chromName, start, end, encodedTrack, encodedItem); // NOTE: chopped out winStart/winEnd
+	    // NOTE: chopped out winStart/winEnd
+	    // NOTE: Galt added winStart/winEnd back in for multi-region
+            safef(link,sizeof(link),"%s&c=%s&l=%d&r=%d&o=%d&t=%d&g=%s&i=%s",
+                hgcNameAndSettings(), chromName, winStart, winEnd, start, end, encodedTrack, encodedItem); 
             }
         if (extra != NULL)
             safef(link+strlen(link),sizeof(link)-strlen(link),"&%s", extra);
@@ -4439,6 +4457,7 @@ unsigned *counts = countOverlaps(tg);
 countsToPixels(counts, pre);
 freez(&counts);
 
+tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
 wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
@@ -5649,8 +5668,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
-	gp->name);
+    sqlSafef(query, sizeof query, "select * from knownCds where name=\"%s\"", gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = NULL;
@@ -10861,45 +10879,37 @@ return name;
 }
 
 void pgSnpTextRight(char *display, struct hvGfx *hvg, int x1, int y, int width, int height, Color color, MgFont *font, char *allele, int itemY, int lineHeight)
-/* put text anchored on right upper corner, doing separate colors if needed */
+/* Put text anchored on right upper corner, doing separate colors if needed. */
 {
+struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 int textX = x1 - width - 2;
 boolean snapLeft = (textX < fullInsideX);
-int clipYBak = 0, clipHeightBak = 0;
-struct hvGfx *hvgWhich = hvg;    // There may be a separate image for sideLabel!
 if (snapLeft)        /* Snap label to the left. */
     {
     if (hvgSide != NULL)
         hvgWhich = hvgSide;
-    hvGfxGetClip(hvgWhich, NULL, &clipYBak, NULL, &clipHeightBak);
-    hvGfxUnclip(hvgWhich);
-    hvGfxSetClip(hvgWhich, leftLabelX, itemY, fullInsideX - leftLabelX, lineHeight); // width was insideWidth
     textX = leftLabelX;
     width = leftLabelWidth-1;
     }
-
+int clipX, clipY, clipWidth, clipHeight;
+hvGfxGetClip(hvgWhich, &clipX, &clipY, &clipWidth, &clipHeight);
+hvGfxUnclip(hvgWhich);
+hvGfxSetClip(hvgWhich, textX, y, width, height);
 if (sameString(display, "freq"))
     {
-    Color allC = MG_BLACK;
+    color = MG_BLACK;
     if (startsWith("A", allele))
-        allC = MG_RED;
+        color = MG_RED;
     else if (startsWith("C", allele))
-        allC = MG_BLUE;
+        color = MG_BLUE;
     else if (startsWith("G", allele))
-        allC = darkGreenColor;
+        color = darkGreenColor;
     else if (startsWith("T", allele))
-        allC = MG_MAGENTA;
-    hvGfxTextRight(hvgWhich, textX, y, width, height, allC, font, allele);
+        color = MG_MAGENTA;
     }
-else
-    {
-    hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
-    }
-if (snapLeft)
-    {
-    hvGfxUnclip(hvgWhich);  // TODO GALT shoulld this be fullInsideX and fullInsideWidth:?
-    hvGfxSetClip(hvgWhich, insideX, clipYBak, insideWidth, clipHeightBak);
-    }
+hvGfxTextRight(hvgWhich, textX, y, width, height, color, font, allele);
+hvGfxUnclip(hvgWhich);
+hvGfxSetClip(hvgWhich, clipX, clipY, clipWidth, clipHeight);
 }
 
 void pgSnpDrawAt(struct track *tg, void *item, struct hvGfx *hvg, int xOff, int y, double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -11122,7 +11132,7 @@ void pgSnpLeftLabels(struct track *tg, int seqStart, int seqEnd,
  * We don't want the default left labels when in full mode because they can overlap
  * with the item-drawing labels, but we do still need dense mode left labels. */
 {
-if (tg->visibility == tvDense)
+if (vis == tvDense)
     {
     if (isCenterLabelIncluded(tg))
 	yOff += mgFontLineHeight(font);

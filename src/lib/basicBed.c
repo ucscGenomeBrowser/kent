@@ -167,6 +167,23 @@ int b_size = b->chromEnd - b->chromStart;
 return (a_size - b_size);
 }
 
+int bedCmpChromStrandStartName(const void *va, const void *vb)
+/* Compare to sort based on chrom,strand,chromStart. */
+{
+const struct bed *a = *((struct bed **)va);
+const struct bed *b = *((struct bed **)vb);
+int dif;
+
+dif = strcmp(a->name, b->name);
+if (dif == 0)
+    dif = strcmp(a->chrom, b->chrom);
+if (dif == 0)
+    dif = strcmp(a->strand, b->strand);
+if (dif == 0)
+    dif = a->chromStart - b->chromStart;
+return dif;
+}
+
 int bedCmpChromStrandStart(const void *va, const void *vb)
 /* Compare to sort based on chrom,strand,chromStart. */
 {

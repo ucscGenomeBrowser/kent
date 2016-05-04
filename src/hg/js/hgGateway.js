@@ -23,10 +23,10 @@
 
 // hgGateway: module of mostly view/controller code (model state comes directly from server).
 
-// Globals:
-/* globals calculateHgTracksWidth */ // pragma for jshint; function is defined in utils.js
-var dbDbTree = dbDbTree || ['dbDbTree is missing!', []];
-var cart = cart || undefined;
+// Globals (pragma for jshint):
+/* globals dbDbTree, activeGenomes, cart */
+/* globals calculateHgTracksWidth */ // function is defined in utils.js
+
 
 function svgCreateEl(type, config) {
     // Helper function for creating a new SVG element and initializing its
@@ -345,6 +345,9 @@ var speciesTree = (function() {
         addDepth(dbDbTree);
         treeInfo = drawNode(newG, dbDbTree, hubBottomY, leafTops);
         width = treeInfo.x + cfg.paddingRight;
+        if (width < cfg.containerWidth) {
+            width = cfg.containerWidth;
+        }
         height = treeInfo.leafY - cfg.labelLineHeight + cfg.paddingBottom;
         if (oldG) {
             svg.removeChild(oldG);
@@ -438,7 +441,8 @@ var rainbow = (function() {
                               Lizard: 'Lizard',
                               'X. tropicalis': 'Frog',
                               'Fugu': 'Fish',
-                              'Ebola virus': 'Ebola'
+                              'Zaire ebolavirus': 'Ebola',  // on hgwdev April 2016
+                              'Ebola virus': 'Ebola'        // on RR April 2016
                             };
 
     // The icon sprite image has 5 rows and 5 columns:
@@ -480,7 +484,7 @@ var rainbow = (function() {
                          Orca: 0,
                          Horse: -8,
                          Dog: 15,
-                         Walrus: 0,
+                         Walrus: 40,
                          Bat: 0,
                          Elephant: -20,
                          Manatee: 20,
@@ -541,7 +545,6 @@ var rainbow = (function() {
         // Initialize missing stripes to 0-height (top = next stripe's top), if any:
         for (i = stripeCount - 1;  i >= 0;  i--) {
             if (stripeTops[i] === undefined) {
-                console.warn("No species found for stripe " + i + ", taxId " + stripeTaxIds[i]);
                 stripeTops[i] = stripeTops[i+1];
             }
         }
@@ -616,7 +619,7 @@ var autocompleteCat = (function() {
     // Customize jQuery UI autocomplete to show item categories and support html markup in labels.
     // Adapted from https://jqueryui.com/autocomplete/#categories and
     // http://forum.jquery.com/topic/using-html-in-autocomplete
-    // Also adds watermarm to input.
+    // Also adds watermark to input.
     $.widget("custom.autocompleteCat",
              $.ui.autocomplete,
              {
@@ -653,9 +656,15 @@ var autocompleteCat = (function() {
         // for when the user chooses a result.
         // If options.baseUrl is null, the autocomplete will not do anything, but we (re)initialize
         // it anyway in case the same input had a previous db's autocomplete in effect.
-        // If options.searchObj is provided, it is used in addition to baseUrl; first the term is
-        // looked up in searchObj and then also queried using baseUrl.  Values in searchObj
-        // should have the same structure as the value returned by a baseUrl query.
+        // options.onServerReply (if given) is a function (Array, term) -> Array that
+        // post-processes the list of items returned by the server before the list is
+        // passed back to autocomplete for rendering.
+        // The following two options apply only when using our locally modified jquery-ui:
+        // If options.enterSelectsIdentical is true, then if the user hits Enter in the text input
+        // and their term has an exact match in the autocomplete results, that result is selected.
+        // options.onEnterTerm (if provided) is a callback function (jqEvent, jqUi) invoked
+        // when the user hits Enter, after handling enterSelectsIdentical.
+
         // The function closure allows us to keep a private cache of past searches.
         var cache = {};
 
@@ -663,17 +672,13 @@ var autocompleteCat = (function() {
             // Look up term in searchObj and by sending an ajax request
             var timestamp = new Date().getTime();
             var url = options.baseUrl + encodeURIComponent(term) + '&_=' + timestamp;
-            var searchObjResults = [];
-            _.forEach(options.searchObj, function(results, key) {
-                if (_.startsWith(key.toUpperCase(), term.toUpperCase())) {
-                    searchObjResults = searchObjResults.concat(results);
-                }
-            });
             $.getJSON(url)
                .done(function(results) {
-                var combinedResults = results.concat(searchObjResults);
-                cache[term] = combinedResults;
-                acCallback(combinedResults);
+                if (_.isFunction(options.onServerReply)) {
+                    results = options.onServerReply(results, term);
+                }
+                cache[term] = results;
+                acCallback(results);
             });
             // ignore errors to avoid spamming people on flaky network connections
             // with tons of error messages (#8816).
@@ -701,7 +706,6 @@ var autocompleteCat = (function() {
 
         // Provide default values where necessary:
         options.onSelect = options.onSelect || console.log;
-        options.searchObj = options.searchObj || {};
         options.enterSelectsIdentical = options.enterSelectsIdentical || false;
 
         $input.autocompleteCat({
@@ -714,6 +718,7 @@ var autocompleteCat = (function() {
         });
 
         if (options.watermark) {
+            $input.css('color', 'black');
             $input.Watermark(options.watermark, '#686868');
         }
     }
@@ -769,7 +774,7 @@ var hgGateway = (function() {
                                   'Chrome</A>.' +
                                   '</P>';
 
-    // Globals
+    // Globals (within this function scope)
     // Set this to true to see server requests and responses in the console.
     var debugCartJson = false;
     // This is a global (within wrapper function scope) so event handlers can use it
@@ -777,18 +782,34 @@ var hgGateway = (function() {
     var scrollbarWidth = 0;
     // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
     var uiState = {};
+    // This is used to check whether a taxId is found in activeGenomes:
+    var activeTaxIds = _.invert(activeGenomes);
+    // This is dbDbTree after pruning -- null if dbDbTree has no children left
+    var prunedDbDbTree = null;
+    // This keeps track of which gene the user has selected most recently from autocomplete.
+    var selectedGene = null;
 
     function setupFavIcons() {
         // Set up onclick handlers for shortcut buttons and labels
+        var haveIcon = false;
         var i, name, taxId, onClick;
         for (i = 0;  i < favIconTaxId.length;  i++) {
             name = favIconTaxId[i][0];
             taxId = favIconTaxId[i][1];
-            // When user clicks on icon, set the taxId (default database);
-            // scroll the image to that species and clear the species autocomplete input.
-            onClick = setTaxId.bind(null, taxId, null, true, true);
-            // Onclick for both the icon and its sibling label:
-            $('.jwIconSprite' + name).parent().children().click(onClick);
+            if (activeTaxIds[taxId]) {
+                // When user clicks on icon, set the taxId (default database);
+                // scroll the image to that species and clear the species autocomplete input.
+                onClick = setTaxId.bind(null, taxId, null, true, true);
+                // Onclick for both the icon and its sibling label:
+                $('.jwIconSprite' + name).parent().children().click(onClick);
+                haveIcon = true;
+            } else {
+                // Inactive on this site -- hide it
+                $('.jwIconSprite' + name).parent().hide();
+            }
+        }
+        if (! haveIcon) {
+            $('#popSpeciesTitle').text('Species Search');
         }
     }
 
@@ -799,10 +820,13 @@ var hgGateway = (function() {
         return clone;
     }
 
-    function autocompleteFromTree(node) {
+    function autocompleteFromNode(node) {
         // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
         // Returns an object mapping each label of node and descendants to a list of
         // result objects with the same structure that we'd get from a server request.
+        if (! node) {
+            return;
+        }
         var searchObj = {};
         var myResults = [];
         var label = node[0], taxId = node[1], kids = node[3];
@@ -820,7 +844,7 @@ var hgGateway = (function() {
             myResults = _.flatten(
                 _.map(kids, function(kid) {
                     var kidLabel = kid[0], kidKids = kid[3];
-                    var kidObj = autocompleteFromTree(kid);
+                    var kidObj = autocompleteFromNode(kid);
                     // Clone kid's result list and add own label as category:
                     var kidResults = _.map(kidObj[kidLabel], addMyLabel);
                     // Add kid's mappings to searchObj only if kid is not a leaf.
@@ -838,9 +862,12 @@ var hgGateway = (function() {
         return searchObj;
     }
 
-    function addAutocompleteCommonNames(searchObj) {
-        // After searchObj is constructed by autocompleteFromTree, add aliases for
-        // some common names that map to scientific names in the tree.
+    function autocompleteFromTree(node, searchObj) {
+        // Traverse dbDbTree to make autocomplete result lists for all non-leaf node labels.
+        // searchObj is extended to map each label of node and descendants to a list of
+        // result objects with the same structure that we'd get from a server request.
+        _.assign(searchObj, autocompleteFromNode(node));
+        // Add aliases for some common names that map to scientific names in the tree.
         _.forEach(commonToSciNames, function(sciName, commonName) {
             var label, addMyLabel;
             if (searchObj[sciName]) {
@@ -979,7 +1006,6 @@ var hgGateway = (function() {
                                 containment: '#speciesGraphic',
                                 drag: onDragSlider
                                 });
-        $sliderIcon.show();
         $speciesPicker.scroll(onScrollImage);
     }
 
@@ -990,17 +1016,39 @@ var hgGateway = (function() {
         return widthPlain - widthInsideScroll;
     }
 
+    function updateGoButtonPosition() {
+        // If there's enough room for the Go button to be to the right of the inputs,
+        // set its height to the midpoint of theirs.
+        var $goButton = $('.jwGoButtonContainer');
+        var goOffset = $goButton.offset();
+        var menuOffset = $('#selectAssembly').offset();
+        var inputOffset = $('#positionInput').offset();
+        var verticalMidpoint = (menuOffset.top + inputOffset.top) / 2;
+        if (goOffset.left > inputOffset.left) {
+            $goButton.offset({top: verticalMidpoint });
+        } else {
+            // If the window shrinks and there's no longer room for the button, undo the above.
+            $goButton.css('top', 0);
+        }
+    }
+
     function setRightColumnWidth() {
         // Adjust the width of the "Find Position" section so it fits to the right of the
         // "Browse/Select Species" section.
         var ieFudge = scrollbarWidth ? scrollbarWidth + 4 : 0;
         var extraFudge = 4;
+        var $contents = $('#findPositionContents');
+        var sectionContentsPadding = (_.parseInt($contents.css("padding-left")) +
+                                      _.parseInt($contents.css("padding-right")));
         var rightColumnWidth = ($('#pageContent').width() -
                                 $('#selectSpeciesSection').width() -
                                 ieFudge - extraFudge);
         if (rightColumnWidth >= 400) {
             $('#findPositionSection').width(rightColumnWidth);
         }
+        updateGoButtonPosition();
+        $('#findPositionTitle').outerWidth(rightColumnWidth + extraFudge);
+        $('#descriptionTitle').outerWidth(rightColumnWidth - sectionContentsPadding);
     }
 
     function setSpeciesPickerSizes(svgWidth, svgHeight) {
@@ -1055,64 +1103,111 @@ var hgGateway = (function() {
         }
     }
 
-    function drawSpeciesPicker() {
-        var svg, spTree, stripeTops;
-        if (document.createElementNS) {
-            // Draw the phylogenetic tree and do layout adjustments
-            svg = document.getElementById('speciesTree');
-            spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
-                                       { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
-                                         onClickHubName: 'hgGateway.onClickHubName',
-                                         hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
-                                         containerWidth: $('#speciesPicker').width()
-                                       });
-            setSpeciesPickerSizes(spTree.width, spTree.height);
-            highlightLabelForDb(uiState.db, uiState.taxId);
-            stripeTops = rainbow.draw(svg, dbDbTree, spTree.yTree, spTree.height, spTree.leafTops);
-            initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+    function pruneInactive(node, activeGenomes, activeTaxIds) {
+        // Return true if some leaf descendant of node is in activeGenomes or activeTaxIds.
+        // Remove any child that returns false.
+        // If one of {genome, taxId} matches but not the other, tweak the other to match dbDb,
+        // Since we'll be using the hgwdev dbDbTree on the RR which may have been tweaked.
+        var genome = node[0], taxId = node[1], kids = node[3];
+        var hasActiveLeaf = false, i, dbDbTaxId, dbDbGenome;
+        if (!kids || kids.length === 0) {
+            // leaf node: is it active?
+            dbDbTaxId = activeGenomes[genome];
+            if (dbDbTaxId) {
+                hasActiveLeaf = true;
+                node[1] = dbDbTaxId;
+            }
+            // Yet another special case for Baboon having one genome with two species...
+            // maybe we should just change dbDb?
+            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562) &&
+                     activeGenomes.Baboon) {
+                hasActiveLeaf = true;
+            } else {
+                dbDbGenome = activeTaxIds[taxId];
+                if (dbDbGenome) {
+                    hasActiveLeaf = true;
+                    node[0] = dbDbGenome;
+                }
+            }
         } else {
-            $('#speciesTreeContainer').html(getBetterBrowserMessage);
+            // parent node: splice out any child nodes with no active leaves
+            for (i = kids.length - 1;  i >= 0;  i--) {
+                if (pruneInactive(kids[i], activeGenomes, activeTaxIds)) {
+                    hasActiveLeaf = true;
+                } else {
+                    kids.splice(i, 1);
+                }
+            }
         }
+        return hasActiveLeaf;
+    }
+
+    function drawSpeciesPicker(dbDbTree) {
+        // If dbDbTree is nonempty and SVG is supported, draw the tree; if SVG is not supported,
+        // use the space to suggest that the user install a better browser.
+        // If dbDbTree doesn't exist, leave the "Represented Species" section hidden.
+        var svg, spTree, stripeTops;
+        if (dbDbTree) {
+            if (document.createElementNS) {
+                // Draw the phylogenetic tree and do layout adjustments
+                svg = document.getElementById('speciesTree');
+                spTree = speciesTree.draw(svg, dbDbTree, uiState.hubs,
+                                          { onClickSpeciesName: 'hgGateway.onClickSpeciesLabel',
+                                            onClickHubName: 'hgGateway.onClickHubName',
+                                            hgHubConnectUrl: 'hgHubConnect?hgsid=' + window.hgsid,
+                                            containerWidth: $('#speciesPicker').width()
+                                            });
+                setSpeciesPickerSizes(spTree.width, spTree.height);
+                stripeTops = rainbow.draw(svg, dbDbTree,
+                                          spTree.yTree, spTree.height, spTree.leafTops);
+            } else {
+                $('#speciesTreeContainer').html(getBetterBrowserMessage);
+            }
+            $('#representedSpeciesTitle').show();
+            $('#speciesGraphic').show();
+            if (dbDbTree && document.createElementNS) {
+                // These need to be done after things are visible because heights are 0 when hidden.
+                highlightLabelForDb(uiState.db, uiState.taxId);
+                initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
+            }
+        }
+    }
+
+    function addCommasToPosition(pos) {
+        // Return seqName:start-end pos with commas inserted in start and end as necessary.
+        var posComma = pos;
+        var fourDigits = /(^.*:.*[0-9])([0-9]{3}\b.*)/;
+        var matches = fourDigits.exec(posComma);
+        while (matches) {
+            posComma = matches[1] + ',' + matches[2];
+            matches = fourDigits.exec(posComma);
+        }
+        return posComma;
     }
 
     function onSelectGene(item) {
         // Set the position from an autocomplete result;
         // set hgFindMatches and make sure suggestTrack is in pack mode for highlighting the match.
         var newPos = item.id;
+        var newPosComma = addCommasToPosition(newPos);
         var settings;
-        $('#positionDisplay').text(newPos);
+        $('#positionDisplay').text(newPosComma);
         if (uiState.suggestTrack) {
             settings = { 'hgFind.matches': item.internalId };
             settings[uiState.suggestTrack] = 'pack';
             cart.send({ cgiVar: settings });
             cart.flush();
         }
-        // Overwrite the selected item w/actual position after the autocomplete plugin is done:
-        function overwriteWithPos() {
-            $('#positionInput').val(newPos);
+        function overwriteWithGene() {
+            $('#positionInput').val(item.geneSymbol);
         }
-        window.setTimeout(overwriteWithPos, 0);
-    }
-
-    function updateGoButtonPosition() {
-        // If there's room for the go button to appear to the right of #selectAssembly and
-        // #positionInput, align the top of the go button with the bottom of #selectAssembly.
-        // Otherwise let it hang out below.
-        var $fpic = $('#findPosInputContainer');
-        var fpicOffset = $fpic.offset();
-        var fpicRight = fpicOffset.left + $fpic.width();
-        var $button = $('.jwGoButtonContainer');
-        var buttonOffset = $button.offset();
-        var $select;
-        if (buttonOffset.left > fpicRight) {
-            // Align button top with select bottom.
-            $select = $('#selectAssembly');
-            buttonOffset.top = $select.offset().top + $select.height();
+        if (item.geneSymbol) {
+            selectedGene = item.geneSymbol;
+            // Overwrite item's long value with symbol after the autocomplete plugin is done:
+            window.setTimeout(overwriteWithGene, 0);
         } else {
-            // Button wraps around to below inputs; remove any previous vertical offsetting.
-            buttonOffset.top = fpicOffset.top + $fpic.height() + 10;
+            selectedGene = item.value;
         }
-        $button.offset(buttonOffset);
     }
 
     function setAssemblyOptions(uiState) {
@@ -1152,73 +1247,15 @@ var hgGateway = (function() {
         $('#descriptionDb').html(trackHubSkipHubName(db));
     }
 
-    function insertNamedAnchor(string, ix, anchorName) {
-        return string.substring(0, ix) + '<a name="' + anchorName + '"></a>' + string.substring(ix);
-    }
-
-    function linkToNamedAnchor(title, anchor) {
-        return '<a class="jwAnchor" href="#' + anchor + '">' +
-               '<i class="fa fa-arrow-right jwAnchorArrow"></i> ' +
-               title + '</a><br>';
-    }
-
-    function addSubsectionLink(section, title, anchor) {
-        var ix = section.bottom.indexOf(title);
-        if (ix >= 0) {
-            section.bottom = insertNamedAnchor(section.bottom, ix, anchor);
-            section.anchors += linkToNamedAnchor(title, anchor);
-        }
-    }
-
-    function digestDescription(description) {
-        // Search for familiar patterns in our description.html text and if possible,
-        // break it into a top (summary and photo), anchor section (links to useful
-        // subsections of details), and bottom (details).
-        var section = { top: '', anchors: '', bottom: ''};
-        var re, matches;
-        // IE8 can't handle the regex syntax [^] ("not the null character") which matches newlines
-        // in later versions.  So wrap this in a try/catch:
-        try {
-            re = new RegExp('([^]*?)<HR>([^]*?Search the assembly[^]*)');
-            if (description) {
-                matches = description.match(re);
-                if (matches) {
-                    section.top = matches[1];
-                    section.bottom = matches[2];
-                } else {
-                    matches = description.match(/([^]*?)(<H3>Sample position queries<\/H3>[^]*)/i);
-                    if (matches) {
-                        section.top = matches[1];
-                        section.bottom = matches[2];
-                    } else {
-                        section.top = description;
-                    }
-                }
-                // Make links to subsections (if found):
-                addSubsectionLink(section, 'Search the assembly', 'searchHelp');
-                addSubsectionLink(section, 'Download sequence and annotation data', 'download');
-                addSubsectionLink(section, 'Sample Position Queries', 'sampleQueries');
-                addSubsectionLink(section, 'Sample position queries', 'sampleQueries');
-                addSubsectionLink(section, 'Assembly Details', 'assemblyDetails');
-                addSubsectionLink(section, 'Assembly details', 'assemblyDetails');
-                addSubsectionLink(section, 'Genbank Pipeline Details', 'genbankDetails');
-            }
-        }
-        catch (exc) {
-            section.top = description;
-        }
-        return section;
-    }
-
     function tweakDescriptionPhotoWidth() {
         // Our description.html files assume a pretty wide display area, but now we're
         // squeezed to the right of the 'Select Species' section.  If there's a large
         // image, scale it down.  The enclosing table is usually sized to leave a lot
         // of space to the left of the image, so shrink that too.
-        // This must be called *after* #descriptionTextTop is updated with the new content.
+        // This must be called *after* #descriptionText is updated with the new content.
         var width, scaleFactor, newWidth;
-        var $table = $('#descriptionTextTop table').first();
-        var $img = $('#descriptionTextTop table img').first();
+        var $table = $('#descriptionText table').first();
+        var $img = $('#descriptionText table img').first();
         if ($img.length) {
             width = $img.width();
             if (width > 175) {
@@ -1241,50 +1278,128 @@ var hgGateway = (function() {
     function updateDescription(description) {
         // We got the contents of a db's description.html -- tweak its format to fit
         // the new design.
-        var sections = digestDescription(description);
-        $('#descriptionTextTop').html(sections.top);
-        $('#descriptionAnchors').html(sections.anchors);
-        $('#descriptionTextBottom').html(sections.bottom);
-        if (sections.anchors) {
-            $('#descriptionAnchors').show();
-        } else {
-            $('#descriptionAnchors').hide();
-        }
-        if (sections.bottom) {
-            $('#descriptionTextBottom').show();
-        } else {
-            $('#descriptionTextBottom').hide();
-        }
+        $('#descriptionText').html(description);
         tweakDescriptionPhotoWidth();
         // Apply JWest formatting to all anchors in description.
         // We can't simply style all <a> tags that way because autocomplete uses <a>'s.
-        $('#descriptionTextTop a').addClass('jwAnchor');
-        $('#descriptionTextBottom a').addClass('jwAnchor');
+        $('#descriptionText a').addClass('jwAnchor');
         // Apply square bullet style to all ul's in description.
-        $('#descriptionTextTop ul').addClass('jwNoBullet');
-        $('#descriptionTextTop li').addClass('jwSquareBullet');
-        $('#descriptionTextBottom ul').addClass('jwNoBullet');
-        $('#descriptionTextBottom li').addClass('jwSquareBullet');
+        $('#descriptionText ul').addClass('jwNoBullet');
+        $('#descriptionText li').addClass('jwSquareBullet');
+    }
+
+    function initFindPositionContents() {
+        // Unhide contents of Find Position section and adjust layout.
+        $('#findPositionContents').show();
+        // Set assembly menu's width to same as position input.
+        var posWidth = $('#positionInput').outerWidth();
+        var $select = $('#selectAssembly');
+        $select.outerWidth(posWidth);
+        // For some reason, it doesn't set it to posWidth, it sets it to posWidth-2...
+        // detect and adjust.
+        var weirdDiff = posWidth - $select.outerWidth();
+        if (weirdDiff) {
+            $select.outerWidth(posWidth + weirdDiff);
+        }
+        updateGoButtonPosition();
+    }
+
+    function processHgSuggestResults(results, term) {
+        // Make matching part of the gene symbol bold
+        _.each(results, function(item) {
+            if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
+                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                             item.value.substring(term.length);
+            }
+        });
+        return results;
     }
 
     function updateFindPositionSection(uiState) {
+        // Update the assembly menu, positionInput and description.
         var suggestUrl = null;
         if (uiState.suggestTrack) {
             suggestUrl = 'hgSuggest?db=' + uiState.db + '&prefix=';
         }
         setAssemblyOptions(uiState);
         if (uiState.position) {
-            $('#positionDisplay').text(uiState.position);
+            $('#positionDisplay').text(addCommasToPosition(uiState.position));
         }
         autocompleteCat.init($('#positionInput'),
                              { baseUrl: suggestUrl,
                                watermark: positionWatermark,
+                               onServerReply: processHgSuggestResults,
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
-        updateGoButtonPosition();
+        selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
+        if (uiState.db && $('#findPositionContents').css('display') === 'none') {
+            initFindPositionContents();
+        }
+    }
+
+    function removeDups(inList, isDup) {
+        // Return a list with only unique items from inList, using isDup(a, b) -> true if a =~ b
+        var inLength = inList.length;
+        // inListDups is an array of boolean flags for marking duplicates, parallel to inList.
+        var inListDups = [];
+        var outList = [];
+        var i, j;
+        for (i = 0;  i < inLength;  i++) {
+            // If something has already been marked as a duplicate, skip it.
+            if (! inListDups[i]) {
+                // the first time we see a value, add it to outList.
+                outList.push(inList[i]);
+                for (j = i+1;  j < inLength;  j++) {
+                    // Now scan the rest of inList to find duplicates of inList[i].
+                    // We can skip items previously marked as duplicates.
+                    if (!inListDups[j] && isDup(inList[i], inList[j])) {
+                        inListDups[j] = true;
+                    }
+                }
+            }
+        }
+        return outList;
+    }
+
+    function speciesResultsEquiv(a, b) {
+        // For autocompleteCat's option isDuplicate: return true if species search results
+        // a and b would be redundant (and hence one should be removed).
+        if (a.db !== b.db) {
+            return false;
+        } else if (a.genome === b.genome) {
+            return true;
+        }
+        return false;
+    }
+
+    function searchByKeyNoCase(searchObj, term) {
+        // Return a concatenation of searchObj list values whose keys start with term
+        // (case-insensitive).
+        var termUpCase = term.toUpperCase();
+        var searchObjResults = [];
+        _.forEach(searchObj, function(results, key) {
+            if (_.startsWith(key.toUpperCase(), termUpCase)) {
+                searchObjResults = searchObjResults.concat(results);
+            }
+        });
+        return searchObjResults;
+    }
+
+    function processSpeciesAutocompleteItems(searchObj, results, term) {
+        // This (bound to searchObj) is passed into autocompleteCat as options.onServerReply.
+        // The server sends a list of items that may include duplicates and can have
+        // results from dbDb and/or assembly hubs.  Also look for results from the
+        // phylogenetic tree, and insert those before the assembly hub matches.
+        // Then remove duplicates and return the processed results which will then
+        // be used to render the menu.
+        var phyloResults = searchByKeyNoCase(searchObj, term);
+        var hubResultIx = _.findIndex(results, function(result) { return !! result.hubUrl; });
+        var hubResults = hubResultIx >= 0 ? results.splice(hubResultIx) : [];
+        var combinedResults = results.concat(phyloResults).concat(hubResults);
+        return removeDups(combinedResults, speciesResultsEquiv);
     }
 
     // Server response event handlers
@@ -1319,7 +1434,7 @@ var hgGateway = (function() {
         _.assign(uiState, jsonData);
         updateFindPositionSection(uiState);
         if (hubsChanged) {
-            drawSpeciesPicker();
+            drawSpeciesPicker(prunedDbDbTree);
         }
     }
 
@@ -1356,7 +1471,8 @@ var hgGateway = (function() {
 
     function clearWatermarkInput($input, watermark) {
         // Note: it is not necessary to re-.Watermark if we upgrade the plugin to version >= 3.1
-        $input.val('').Watermark(watermark);
+        $input.css('color', 'black');
+        $input.val('').Watermark(watermark ,'#686868');
     }
 
     function clearSpeciesInput() {
@@ -1466,7 +1582,7 @@ var hgGateway = (function() {
     function onClickCopyPosition() {
         // Copy the displayed position into the position input:
         var posDisplay = $('#positionDisplay').text();
-        $('#positionInput').val(posDisplay);
+        $('#positionInput').val(posDisplay).focus();
     }
 
     function goToHgTracks() {
@@ -1475,7 +1591,8 @@ var hgGateway = (function() {
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
         var $form;
-        if (! position || position === '' || position === positionWatermark) {
+        if (! position || position === '' || position === positionWatermark ||
+            position === selectedGene) {
             position = posDisplay;
         }
         // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
@@ -1483,6 +1600,7 @@ var hgGateway = (function() {
         // Make a form and submit it.  In order for this to work in IE, the form
         // must be appended to the body.
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                  '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
                   '<input type=hidden name="db" value="' + uiState.db + '">' +
                   '<input type=hidden name="position" value="' + position + '">' +
@@ -1504,35 +1622,43 @@ var hgGateway = (function() {
 
     function init() {
         // Boot up the page; initialize elements and install event handlers.
+        var searchObj = {};
+        // We need a bound function to pass into autocompleteCat.init below;
+        // however, autocompleteFromTree is even slower than drawing the tree because of
+        // all the copying.  So bind now, fill in searchObj later.
+        var processSpeciesResults = processSpeciesAutocompleteItems.bind(null, searchObj);
         cart.setCgi('hgGateway');
         cart.debug(debugCartJson);
         // Get state from cart
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
+        // Prune inactive genomes from dbDbTree.
+        if (window.dbDbTree) {
+            prunedDbDbTree = dbDbTree;
+            if (! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+                prunedDbDbTree = null;
+            }
+        }
 
-        // When page has loaded, draw the species tree, do layout adjustments and
-        // initialize event handlers.
+        // When page has loaded, do layout adjustments and initialize event handlers.
         $(function() {
-            var searchObj = autocompleteFromTree(dbDbTree);
-            addAutocompleteCommonNames(searchObj);
             scrollbarWidth = findScrollbarWidth();
-            drawSpeciesPicker();
             setRightColumnWidth();
             setupFavIcons();
             autocompleteCat.init($('#speciesSearch'),
                                  { baseUrl: 'hgGateway?hggw_term=',
                                    watermark: speciesWatermark,
                                    onSelect: setDbFromAutocomplete,
-                                   searchObj: searchObj,
+                                   onServerReply: processSpeciesResults,
                                    enterSelectsIdentical: true });
-            updateFindPositionSection(uiState);
             $('#selectAssembly').change(onChangeDbMenu);
             $('#positionDisplay').click(onClickCopyPosition);
             $('#copyPosition').click(onClickCopyPosition);
             $('.jwGoButtonContainer').click(goToHgTracks);
             $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
-            $(window).resize(updateGoButtonPosition);
             replaceHgsidInLinks();
+            // Fill in searchObj here once everything is displayed.
+            autocompleteFromTree(prunedDbDbTree, searchObj);
         });
     }
 

@@ -872,18 +872,31 @@ jsonWriteString(cj->jw, cartSessionVarName(), cartSessionId(cj->cart));
 char *commandJson = cgiOptionalString(CARTJSON_COMMAND);
 if (commandJson)
     {
-    struct jsonElement *commandObj = jsonParse(commandJson);
-    struct hash *commandHash = jsonObjectVal(commandObj, "commandObj");
-    // change* commands need to go first!  Really we need an ordered map type here...
-    // for now, just make a list and sort to put change commands at the front.
-    struct slPair *commandList = NULL, *cmd;
-    struct hashCookie cookie = hashFirst(commandHash);
-    struct hashEl *hel;
-    while ((hel = hashNext(&cookie)) != NULL)
-        slAddHead(&commandList, slPairNew(hel->name, hel->val));
-    slSort(&commandList, commandCmp);
-    for (cmd = commandList;  cmd != NULL;  cmd = cmd->next)
-	doOneCommand(cj, cmd->name, (struct jsonElement *)cmd->val);
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+        {
+        struct jsonElement *commandObj = jsonParse(commandJson);
+        struct hash *commandHash = jsonObjectVal(commandObj, "commandObj");
+        // change* commands need to go first!  Really we need an ordered map type here...
+        // for now, just make a list and sort to put change commands at the front.
+        struct slPair *commandList = NULL, *cmd;
+        struct hashCookie cookie = hashFirst(commandHash);
+        struct hashEl *hel;
+        while ((hel = hashNext(&cookie)) != NULL)
+            slAddHead(&commandList, slPairNew(hel->name, hel->val));
+        slSort(&commandList, commandCmp);
+        for (cmd = commandList;  cmd != NULL;  cmd = cmd->next)
+            doOneCommand(cj, cmd->name, (struct jsonElement *)cmd->val);
+        }
+    errCatchEnd(errCatch);
+    if (errCatch->gotError)
+        {
+        jsonWritePopToLevel(cj->jw, 1);
+        //#*** TODO: move jsonStringEscape inside jsonWriteString
+        char *encoded = jsonStringEscape(errCatch->message->string);
+        jsonWriteString(cj->jw, "error", encoded);
+        }
+    errCatchFree(&errCatch);
     }
 
 cartJsonPrintWarnings(cj->jw);

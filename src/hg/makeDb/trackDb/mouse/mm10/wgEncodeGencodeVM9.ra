@@ -7,7 +7,7 @@
 track wgEncodeGencodeVM9
 compositeTrack on
 superTrack wgEncodeGencodeSuper pack
-shortLabel GENCODE VM9 (Ensembl 83)
+shortLabel GENCODE VM9 (Ensembl 84)
 longLabel Gene Annotations from ENCODE/GENCODE Version M9 (Ensembl 84)
 group genes
 dragAndDrop subTracks
@@ -92,7 +92,7 @@ wgEncodeGencodeTranscriptionSupportLevel wgEncodeGencodeTranscriptionSupportLeve
     
         track wgEncodeGencodePseudoGeneVM9
         trackHandler wgEncodeGencode
-        subTrack wgEncodeGencodeVM9ViewGenes on
+        subTrack wgEncodeGencodeVM9ViewGenes off
         subGroups view=aGenes name=Pseudogenes 
         shortLabel Pseudogenes
         longLabel Pseudogene Annotation Set from ENCODE/GENCODE Version M9 (Ensembl 84)

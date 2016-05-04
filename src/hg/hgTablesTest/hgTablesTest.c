@@ -52,7 +52,7 @@ errAbort(
   "   -dbs=N - Number of databases per organism to test. Default %d\n"
   "   -groups=N - Number of groups to test (default all)\n"
   "   -tracks=N - Number of tracks per group to test (default %d)\n"
-  "   -tables=N - Number of tables per track to test (deault %d)\n"
+  "   -tables=N - Number of tables per track to test (default %d)\n"
   "   -verbose=N - Set to 0 for silent operation, 2 or 3 for debugging\n"
   "   -appendLog - Append to log file rather than creating it\n"
   , clOrgs, clDbs, clTracks, clTables);

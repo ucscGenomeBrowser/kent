@@ -1,26 +1,26 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the galVar1
-# Rhesus - Macaca mulatta
+# Malayan flying lemur - Galeopterus variegatus
 
-# Assembly Name:  Mmul_8.0.1
-# Organism name:  Macaca mulatta
-# Taxid:          9544
-# Submitter:      Baylor College of Medicine Genome Sequencing Center
-# Date:           2015-11-30
-# BioSample:      SAMN02981228
+# Assembly Name:  G_variegatus-3.0.2
+# Organism name:  Galeopterus variegatus
+# Taxid:          482537
+# Submitter:      Washington University (WashU)
+# Date:           2014-6-5
+# BioSample:      SAMN01758971
 # Assembly type:  haploid
 # Release type:   major
-# Assembly level: Chromosome
+# Assembly level: Scaffold
 # Genome representation: full
-# GenBank Assembly Accession: GCA_000772875.3 (latest)
-# RefSeq Assembly Accession: GCF_000772875.2 (species-representative latest)
+# GenBank Assembly Accession: GCA_000696425.1 (latest)
+# RefSeq Assembly Accession: GCF_000696425.1 (species-representative latest)
 # RefSeq Assembly and GenBank Assemblies Identical: no
 #
 ## Assembly-Units:
 ## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
-## GCA_000772885.3      GCF_000772885.2 Primary Assembly
-##      GCF_000005875.1 non-nuclear
+## GCA_000696435.1      GCF_000696435.1 Primary Assembly
+##      GCF_000037935.1 non-nuclear
 
 #############################################################################
 # fetch sequence from new style download directory (DONE - 2016-02-26 - Hiram)
@@ -136,9 +136,9 @@ taxId 482537
     # check in the trackDb files created and add to trackDb/makefile
 
 #########################################################################
-# ucscToINSDC table/track (DONE - 2016-03-01 - Hiram)
-    # fixup the translateNames.sh file from rn6 work to use the new
-    # genbank structure  (copied over from rn6/bed/ucscToINSDC)
+# ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
 
     mkdir /hive/data/genomes/galVar1/bed/ucscToINSDC
     cd /hive/data/genomes/galVar1/bed/ucscToINSDC
@@ -150,13 +150,24 @@ taxId 482537
     # use that accession here:
     ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
         ../../refseq/GCF_*structure/Primary_Assembly NC_004031.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+    # there is no name for chrM/NC_001323.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
 
     awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
          | sort > name.coordinate.tab
-    join name.coordinate.tab ucscToINSDC.txt | tr '[ ]' '[\t]' \
-         > ucscToINSDC.bed
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
     # should be same line counts throughout:
     wc -l *
+    # 179514 insdc.refseq.txt
+    # 179514 insdcToUcsc.txt
     # 179514 name.coordinate.tab
     # 179514 ucscToINSDC.bed
     # 179514 ucscToINSDC.txt
@@ -188,7 +199,6 @@ NC_004031.1
     hgsql -N -e "select frag from gold;" galVar1 \
        | egrep -e '[JN][MC][Z_][W0]0[0-9]+(\.[0-9]+)?' | wc -l
     # 511878
-
 
     hgsql -N -e "select frag from gold;" galVar1 \
        | egrep -v -e '[JN][MC][Z_][W0]0[0-9]+(\.[0-9]+)?' | wc -l
@@ -299,15 +309,15 @@ searchPriority 8
     # 493373693 bases of 3187660572 (15.478%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2016-02-04 - Hiram)
+# cpgIslands - (DONE - 2016-03-07 - Hiram)
     mkdir /hive/data/genomes/galVar1/bed/cpgIslands
     cd /hive/data/genomes/galVar1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku galVar1) > do.log 2>&1
-    # real    45m39.560s
+    # real    21m45.475s
 
     cat fb.galVar1.cpgIslandExt.txt
-    # 21989740 bases of 3142093174 (0.700%) in intersection
+    # 30462018 bases of 2802917674 (1.087%) in intersection
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2016-03-01 - Hiram)
@@ -319,11 +329,10 @@ searchPriority 8
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/galVar1/galVar1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku galVar1) > do.log 2>&1
-XXX - running - Tue Mar  1 15:45:09 PST 2016
-    # real    60m39.280s
+    # real    43m23.093s
 
     cat fb.galVar1.cpgIslandExtUnmasked.txt
-    # 41820506 bases of 3142093174 (1.331%) in intersection
+    # 33579201 bases of 2802917674 (1.198%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2016-03-01 - Hiram)
@@ -332,95 +341,126 @@ XXX - running - Tue Mar  1 15:45:09 PST 2016
     makeCytoBandIdeo.csh galVar1
 
 #########################################################################
-# genscan - (TBD - 2016-02-04 - Hiram)
+# genscan - (DONE - 2016-03-07 - Hiram)
     mkdir /hive/data/genomes/galVar1/bed/genscan
     cd /hive/data/genomes/galVar1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku galVar1) > do.log 2>&1
-    # real    65m53.319s
-    # two broken, run with window size 2,000,000 to finish, then continue:
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku galVar1) > makeBed.log 2>&1
-    # real    21m55.093s
+    # real    92m41.897s
 
     cat fb.galVar1.genscan.txt
-    # 54559229 bases of 3142093174 (1.736%) in intersection
+    # 66144712 bases of 2802917674 (2.360%) in intersection
 
     cat fb.galVar1.genscanSubopt.txt
-    # 52580737 bases of 3142093174 (1.673%) in intersection
+    # 75687535 bases of 2802917674 (2.700%) in intersection
 
-########################################################################
-# Create kluster run files (TBD - 2016-02-03 - Hiram)
+#############################################################################
+# augustus gene track (DONE - 2016-03-07 - Hiram)
+
+    mkdir /hive/data/genomes/galVar1/bed/augustus
+    cd /hive/data/genomes/galVar1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev galVar1) > do.log 2>&1
+    # real    88m28.161s
+
+    cat fb.galVar1.augustusGene.txt
+    # 66133815 bases of 2802917674 (2.359%) in intersection
+
+##########################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-04-14 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galVar1", "blat1a", "17860", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("galVar1", "blat1a", "17861", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# Create kluster run files (DONE - 2016-03-07 - Hiram)
 
     # numerator is galVar1 gapless bases "real" as reported by:
     featureBits -noRandom -noHap galVar1 gap
-    # 72500454 bases of 2763479500 (2.624%) in intersection
+    # 384742898 bases of 2802917674 (13.727%) in intersection
 
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 2763479500 / 2861349177 \) \* 1024
-    #  ( 2763479500 / 2861349177 ) * 1024 = 988.975072
+    calc \( 2802917674 / 2861349177 \) \* 1024
+    #  ( 2802917674 / 2861349177 ) * 1024 = 1003.088935
 
-    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    # ==> use -repMatch=1000 according to size scaled down from 1024 for human.
     #   and rounded down to nearest 50
     cd /hive/data/genomes/galVar1
     blat galVar1.2bit \
          /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/galVar1.11.ooc \
-        -repMatch=900
-    #   Wrote 43065 overused 11-mers to jkStuff/galVar1.11.ooc
+        -repMatch=1000
+    #   Wrote 26641 overused 11-mers to jkStuff/galVar1.11.ooc
 
-    #   check non-bridged gaps to see what the typical size is:
-    hgsql -N \
-        -e 'select * from gap where bridge="no" order by size;' galVar1 \
-        | sort -k7,7nr | ave -col=7 stdin
+    #   there are no non-bridged gaps, no need to run up this liftUp file:
+#     hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' galVar1 \
+#         | sort -k7,7nr | ave -col=7 stdin
     #   most non-bridged gaps have size = 100
     #   decide on a minimum gap for this break, use either 100 or 5000 will
     #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
     #   so use 100 here to get more liftOver row.
-    gapToLift -verbose=2 -minGap=100 galVar1 jkStuff/nonBridged.lft \
-        -bedFile=jkStuff/nonBridged.bed
+#     gapToLift -verbose=2 -minGap=100 galVar1 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-02-03,10 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2016-03-08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism       mrnaCnt estCnt  refSeqCnt
-    # Macaca mulatta  378586  60372   5778
+    # Galeopterus variegatus
+    # there is no entry for this species in the organism.lst file
 
-    # edit etc/genbank.conf to add galVar1 just before rheMac2
-# galVar1 Macaca mulatta (rhesus)
+    # edit etc/genbank.conf to add galVar1 just before micMur2
+
+# galVar1 - Galeopterus variegatus - Malayan flying lemur
 galVar1.serverGenome = /hive/data/genomes/galVar1/galVar1.2bit
 galVar1.clusterGenome = /hive/data/genomes/galVar1/galVar1.2bit
 galVar1.ooc = /hive/data/genomes/galVar1/jkStuff/galVar1.11.ooc
-galVar1.lift = /hive/data/genomes/galVar1/jkStuff/galVar1.nonBridged.lft
+galVar1.lift = no
 galVar1.perChromTables = no
-galVar1.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
-galVar1.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
-galVar1.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
-galVar1.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
-galVar1.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
-galVar1.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
 galVar1.downloadDir = galVar1
-galVar1.genbank.mrna.xeno.load = yes
-galVar1.refseq.mrna.native.load  = yes
-galVar1.refseq.mrna.xeno.load  = yes
-galVar1.upstreamGeneTbl = refGene
+galVar1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+galVar1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+galVar1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+galVar1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+galVar1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+galVar1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+# the defaults: genbank.mrna.native.load, yes genbank.est.native.load yes
+# refseq.mrna.native.load yes, refseq.mrna.xeno.load yes
+# are good enough even though nothing exists for 'native' for this one
+# galVar1.upstreamGeneTbl = refGene
 
-    git commit -m "Added galVar1; refs #16744" etc/genbank.conf
+    git commit -m "Added galVar1 - Galeopterus variegatus - Malayan flying lemur ; no redmine" etc/genbank.conf
     git push
     # update /cluster/data/genbank/:
     make etc-update
+
+    # Edit src/lib/gbGenome.c to add new species.
+    git commit -m "Added galVar1 Galeopterus variegatus - Malayan flying lemur no redmine" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial galVar1
-    # logFile: var/build/logs/2016.02.04-11:28:59.galVar1.initalign.log
-    #   real    2229m7.259s
+    # logFile: var/build/logs/2016.03.07-12:33:47.galVar1.initalign.log
+    #   real    843m10.492s
+
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.galVar1
 
@@ -428,8 +468,9 @@ galVar1.upstreamGeneTbl = refGene
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad galVar1
-    # logFile: var/dbload/hgwdev/logs/2016.02.09-14:37:59.galVar1.dbload.log
-    #  real    205m12.078s
+    # logFile: var/dbload/hgwdev/logs/2016.03.08-09:51:06.galVar1.dbload.log
+    #  real    58m6.227s
+
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -437,38 +478,31 @@ galVar1.upstreamGeneTbl = refGene
     # add galVar1 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added galVar1 - Rhesus refs #16744" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added galVar1 - Galeopterus variegatus/Malayan flying lemur refs #17180" etc/align.dbs etc/hgwdev.dbs
+
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-02-05 - Hiram)
-
-    mkdir /hive/data/genomes/galVar1/bed/augustus
-    cd /hive/data/genomes/galVar1/bed/augustus
-    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
-        -species=human -dbHost=hgwdev \
-           -workhorse=hgwdev galVar1) > do.log 2>&1
-
-    cat fb.galVar1.augustusGene.txt
-    # 25248650 bases of 100286401 (25.177%) in intersection
-
-#########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2016-04-14 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=galVar1 -tableCoverage all.joiner
     joinerCheck -database=galVar1 -times all.joiner
     joinerCheck -database=galVar1 -keys all.joiner
+    git commit -m 'adding rules for galVar1 refs #17180' all.joiner
+    git push
 
     cd /hive/data/genomes/galVar1
     time (makeDownloads.pl galVar1) > downloads.log 2>&1
-    #  real    27m1.207s
+    #  real    19m37.483s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/galVar1/pushQ
     cd /hive/data/genomes/galVar1/pushQ
     time makePushQSql.pl galVar1 > galVar1.pushQ.sql 2> stderr.out
+    #  real    5m46.564s
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/galVar1/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/galVar1/wib/quality.wib

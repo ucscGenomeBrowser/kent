@@ -1161,12 +1161,17 @@ if (tg->mapsSelf)
 	}
     else
 #endif /* GBROWSE */
-        itemName = cloneString(tg->track);
+    itemName = cloneString(tg->track);
 
     // Don't bother if we are imageV2 and a dense child.
     if (!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
-    mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track,
-            itemName, NULL);
+        {
+        char *title = NULL;
+        if (trackDbSetting(tg->tdb, "hoverMetadata"))
+            title = trackDbSetting(tg->tdb, "metadata");
+        mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track, 
+                        itemName, title);
+        }
     freeMem(itemName);
     }
 }

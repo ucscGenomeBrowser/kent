@@ -39,6 +39,7 @@ int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 int  kgVersion = KG_UNKNOWN;	/* KG version */
+int measureTiming = FALSE;
 
 //#include "rgdInfo.c"
 
@@ -268,11 +269,11 @@ safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEn
 commaPos = addCommasToPos(database, buffer);
 
 hPrintf("<B>Transcript (Including UTRs)</B><br>\n");
-hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp%s&nbsp",commaPos);
+hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
 sprintLongWithCommas(buffer, (long long)curGeneEnd - curGeneStart);
-hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
-hPrintf("<B>Total Exon Count:</B>&nbsp%d&nbsp", exonCnt);
-hPrintf("<B>Strand:</B>&nbsp%s<br>\n",curGenePred->strand);
+hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
+hPrintf("<B>Total Exon Count:</B>&nbsp;%d&nbsp;", exonCnt);
+hPrintf("<B>Strand:</B>&nbsp;%s<br>\n",curGenePred->strand);
 
 cdsStart = curGenePred->cdsStart;
 cdsEnd = curGenePred->cdsEnd;
@@ -289,10 +290,10 @@ if (cdsStart < cdsEnd)
     hPrintf("<B>Coding Region</B><br>\n");
     safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, cdsStart+1, cdsEnd);
     commaPos = addCommasToPos(database, buffer);
-    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp%s&nbsp",commaPos);
+    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
     sprintLongWithCommas(buffer, (long long)cdsEnd - cdsStart);
-    hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
-    hPrintf("<B>Coding Exon Count:</B>&nbsp%d&nbsp\n", cdsExonCnt);
+    hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
+    hPrintf("<B>Coding Exon Count:</B>&nbsp;%d&nbsp;\n", cdsExonCnt);
     }
 fflush(stdout);
 }
@@ -366,10 +367,15 @@ static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
-//printf("<br>adding %s section \n", section->name);fflush(stdout); 
-if (section != NULL && hashLookup(section->settings, "hide") == NULL
-   && section->exists(section, conn, curGeneId))
-     slAddHead(pList, section);
+//uglyf("<br>adding %s section \n", section->name);fflush(stdout); 
+if (section == NULL || hashLookup(section->settings, "hide") != NULL)
+    return;
+long startTime = clock1000();
+if (section->exists(section, conn, curGeneId))
+    {
+    section->checkTime = clock1000() - startTime;
+    slAddHead(pList, section);
+    }
 }
 
 struct section *loadSectionList(struct sqlConnection *conn)
@@ -410,7 +416,7 @@ else
 */
 addGoodSection(rgdGeneRawSection(conn, sectionRa), conn, &sectionList);
 
-//addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
+addGoodSection(gtexSection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */
 if (strstr(database, "danRer") == NULL)
     {
@@ -481,6 +487,15 @@ safef(buf, sizeof(buf), "%s%s_%s_%s", hggPrefix, "section", section, "close");
 return buf;
 }
 
+boolean sectionIsOpen(struct section *section)
+/* Check cart and ra to see if section is open(-) or closed(+) */
+{
+char *closeVarName = sectionCloseVar(section->name);
+char *vis = sectionSetting(section, "visibility");
+int defaultClosed = (vis && sameString(vis, "hide")) ? 1 : 0;
+return !(cartUsualInt(cart, closeVarName, defaultClosed));
+}
+
 void printSections(struct section *sectionList, struct sqlConnection *conn,
 	char *geneId)
 /* Print each section in turn. */
@@ -488,8 +503,7 @@ void printSections(struct section *sectionList, struct sqlConnection *conn,
 struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
-    char *closeVarName = sectionCloseVar(section->name);
-    boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+    boolean isOpen = sectionIsOpen(section);
     char *otherState = (isOpen ? "1" : "0");
     char *indicator = (isOpen ? "-" : "+");
     char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
@@ -497,13 +511,16 @@ for (section = sectionList; section != NULL; section = section->next)
     //keep the following line for future debugging need
     //printf("<br>printing %s section\n", section->name);fflush(stdout);
     dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);
+    char *closeVarName = sectionCloseVar(section->name);
     dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
     	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
     webNewSection("%s",header->string);
     if (isOpen)
 	{
+        long startTime = clock1000();
 	section->print(section, conn, geneId);
+        section->printTime = clock1000() - startTime;
 	}
     else
 	{
@@ -511,6 +528,26 @@ for (section = sectionList; section != NULL; section = section->next)
 	}
     dyStringFree(&header);
     }
+}
+
+void printTiming(struct section *sectionList)
+/* Print timing for each section, if measureTiming is set */
+{
+if (!measureTiming)
+    return;
+struct section *section;
+int total = 0;
+printf("<p><b>section, check time, print time, total</b><br>\n");
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    boolean isOpen = sectionIsOpen(section);
+    int sectionTime = section->checkTime + section->printTime;
+    printf("%s, %d, %d, %d %s<br>\n", section->shortLabel, section->checkTime, section->printTime,
+                                sectionTime, isOpen ? "" : "closed");
+    total += sectionTime;
+    }
+printf("<b>total = %d\n", total);
+printf("</p>");
 }
 
 void webMain(struct sqlConnection *conn)
@@ -524,6 +561,7 @@ sectionList = loadSectionList(conn);
 printIndex(sectionList);
 printUpdateTime(database, tdb, NULL);
 printSections(sectionList, conn, curGeneId);
+printTiming(sectionList);
 }
 
 static char *findGeneId(struct sqlConnection *conn, char *name)
@@ -625,6 +663,8 @@ if ((row = sqlNextRow(sr)) != NULL)
 #define  ALIGNIDFIELD      11  // Gencode Id
     if (hasAttrId)
 	curAlignId = cloneString(row[ALIGNIDFIELD]);
+    else
+	curAlignId = gp->name;
     }
 sqlFreeResult(&sr);
 if (gp == NULL)
@@ -694,8 +734,9 @@ else
     else
 	{
 	/* Default case - start fancy web page. */
+	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
-	    genome, curGeneName, curGeneId);
+	    genome, curGeneName, curAlignId);
 	webMain(conn);
 	cartWebEnd();
 	}

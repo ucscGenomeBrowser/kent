@@ -1,0 +1,147 @@
+track cloneEndSuper
+compositeTrack on
+shortLabel Clone Ends
+longLabel Mapping of clone libraries end placements
+group map
+visibility hide
+type bed 3
+noInherit on
+dragAndDrop on
+subGroup1 source Source Ariken=Riken Bchori=Chori Cplacements=Placements
+dimensions dimensionX=source
+sortOrder source=+
+
+    track cloneEndRNB1
+    parent cloneEndSuper off
+    subGroups source=Ariken
+    shortLabel RNB1
+    longLabel Riken Bioresource Center DNA Bank RNB1
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility pack
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 1
+
+    track cloneEndRNB2
+    parent cloneEndSuper off
+    subGroups source=Ariken
+    shortLabel RNB2
+    longLabel Riken Bioresource Center DNA Bank RNB2
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility hide
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 2
+
+    track cloneEndCH230
+    parent cloneEndSuper off
+    subGroups source=Bchori
+    shortLabel CH230
+    longLabel CHORI BACPAC Resources Center (BPRC) CHORI-230
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility hide
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 3
+
+    track cloneEndRP32
+    parent cloneEndSuper off
+    subGroups source=Bchori
+    shortLabel RP32
+    longLabel CHORI BACPAC Resources Center (BPRC) RPCI-32
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility hide
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 4
+
+    track cloneEndmultipleMaps
+    parent cloneEndSuper off
+    subGroups source=Cplacements
+    shortLabel Multiple mappings
+    longLabel Clone end placements that map to multiple locations in the genome
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility hide
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 23
+
+    track cloneEndbadEnds
+    parent cloneEndSuper off
+    subGroups source=Cplacements
+    shortLabel Bad end mappings
+    longLabel Clone end placements dropped at UCSC, map distance 3X median library size
+    colorByStrand 0,0,128 0,128,0
+    type bed 12
+    visibility hide
+    url http://www.ncbi.nlm.nih.gov/clone/?term=$$
+    urlLabel NCBI CloneDB:
+    priority 24
+
+    track cloneEndcoverageForward
+    parent cloneEndSuper off
+    subGroups source=Cplacements
+    shortLabel Coverage forward
+    longLabel Clone end placements overlap coverage on the forward strand
+    type bigWig 0 5377
+    visibility full
+    autoScale on
+    alwaysZero on
+    maxHeightPixels 128:35:16
+    windowingFunction mean
+    priority 25
+
+    track cloneEndcoverageReverse
+    parent cloneEndSuper off
+    subGroups source=Cplacements
+    shortLabel Coverage reverse
+    longLabel Clone end placements overlap coverage on the reverse strand
+    type bigWig 0 4112
+    visibility full
+    negateValues 1
+    alwaysZero on
+    maxHeightPixels 128:35:16
+    windowingFunction mean
+    autoScale on
+    priority 26
+
+searchTable cloneEndRNB1
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RNB1-([0-9A-Z])+
+
+searchTable cloneEndRNB2
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RNB2-([0-9A-Z])+
+
+searchTable cloneEndCH230
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex CH230-([0-9A-Z])+
+
+searchTable cloneEndRP32
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex RP32-([0-9A-Z])+
+
+searchTable cloneEndmultipleMaps
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [CR][HNP]([-0-9A-Z_])+
+
+searchTable cloneEndbadEnds
+searchType bed
+searchMethod prefix
+searchPriority 50
+termRegex [CR][HNP]([-0-9A-Z_])+

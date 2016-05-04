@@ -30,6 +30,7 @@ struct hotLink
     char *id;
     char *mouseOver;
     char *onClick;
+    char *shortcut;
     boolean inactive; /* greyed out */
     boolean external;
     };
@@ -57,11 +58,20 @@ le->mouseOver=mouseOver;
 }
 
 static void appendLinkWithOnclick(struct hotLink **links, char *url, char *name, char *id, 
-    char *mouseOver, char *onClick, boolean external, boolean inactive)
+    char *mouseOver, char *onClick, char *shortcut, boolean external, boolean inactive)
 {
 appendLinkMaybeInactive(links, url, name, id, mouseOver, external, inactive);
 struct hotLink *le = slLastEl(links);
 le->onClick=onClick;
+le->shortcut=shortcut;
+}
+
+static void appendLinkWithShortcut(struct hotLink **links, char *url, char *name, char *id, 
+    char *mouseOver, char *shortcut, boolean external, boolean inactive)
+{
+appendLinkMaybeInactive(links, url, name, id, mouseOver, external, inactive);
+struct hotLink *le = slLastEl(links);
+le->shortcut=shortcut;
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -193,6 +203,9 @@ for(i = 0, link = links; link != NULL; i++, link = link->next)
         dyStringPrintf(menuHtml, "id='%s'%s>%s</a>\n", link->id, 
             link->external ? " TARGET='_blank'" : "", encodedName);
         }
+    if (!isEmpty(link->shortcut))
+        dyStringPrintf(menuHtml, "<span class='shortcut'>%s</span>", link->shortcut);
+
     dyStringPrintf(menuHtml, "</li>\n");
     freez(&encodedName);
 
@@ -220,14 +233,15 @@ safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.psOutput=on", uiVars);
 appendLink(&links, buf, "PDF/PS", "pdfLink", FALSE);
 safef(buf, sizeof(buf), "%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s",
       hgcNameAndSettings(), winStart, chromName, winStart, winEnd, database, uiVars);
-appendLink(&links, buf, "DNA", "dnaLink", FALSE);
+//appendLink(&links, buf, "DNA", "dnaLink", FALSE);
+appendLinkWithShortcut(&links, buf, "DNA", "dnaLink", "Show DNA sequence in view", "v d", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgConvert?hgsid=%s&db=%s", cartSessionId(cart), database);
 appendLink(&links, buf, "In Other Genomes (Convert)", "convertMenuLink", FALSE);
 
 // add the sendTo menu
 if (fileExists("extTools.ra"))
     {
-    appendLinkWithOnclick(&links, "#", "In External Tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", FALSE, FALSE);
+    appendLinkWithOnclick(&links, "#", "In External Tools", "extToolLink", "Show current sequence on a third-party website", "showExtToolDialog(); return false;", "s t", FALSE, FALSE);
     }
 
 
@@ -411,16 +425,16 @@ else if (sameString(database, "ce2"))
 // finish View menu
 appendLink(&links, "", "", "", FALSE); // separator line
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgTracksConfigPage=configure", uiVars);
-appendLink(&links, buf, "Configure Browser", "configureMenuLink", FALSE);
+appendLinkWithShortcut(&links, buf, "Configure Browser", "configureMenuLink", "Open configuration menu", "c f", FALSE, FALSE);
 
 // multi-region
-appendLinkWithOnclick(&links, "#", "Multi-Region", "multiRegionLink", "Show multi-region options", "popUpHgt.hgTracks('multi-region config'); return false;", FALSE, FALSE);
+appendLinkWithOnclick(&links, "#", "Multi-Region", "multiRegionLink", "Show multi-region options", "popUpHgt.hgTracks('multi-region config'); return false;", "", FALSE, FALSE);
 
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.reset=on", uiVars);
-appendLink(&links, buf, "Default Tracks", "defaultTracksMenuLink", FALSE);
+appendLinkWithShortcut(&links, buf, "Default Tracks", "defaultTracksMenuLink", "Show only default tracks", "d t", FALSE, FALSE);
 safef(buf, sizeof(buf), "../cgi-bin/hgTracks?%s&hgt.defaultImgOrder=on", uiVars);
-appendLink(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", FALSE);
-appendLink(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", FALSE);
+appendLinkWithShortcut(&links, buf, "Default Track Order", "defaultTrackOrderMenuLink", "Re-order tracks to be in default order", "d o", FALSE, FALSE);
+appendLinkWithShortcut(&links, "../cgi-bin/cartReset", "Reset All User Settings", "cartResetMenuLink", "Clear user data, e.g. active tracks, track configuration, custom data, ...", "c r", FALSE, FALSE);
 
 struct dyString *viewMenu = dyStringCreate("<li class='menuparent' id='view'><span>View</span>\n<ul>\n");
 freeLinksAndConvert(links, viewMenu);

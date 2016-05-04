@@ -89,7 +89,7 @@ static void listAssemblyHubs(struct jsonWrite *jw)
 /* Write out JSON describing assembly hubs (not track-only hubs) connected in the cart. */
 {
 jsonWriteListStart(jw, "hubs");
-struct hubConnectStatus *status, *statusList = hubConnectStatusListFromCartAll(cart);
+struct hubConnectStatus *status, *statusList = hubConnectStatusListFromCart(cart);
 for (status = statusList;  status != NULL;  status = status->next)
     {
     struct trackHub *hub = status->trackHub;
@@ -242,24 +242,93 @@ cartJsonRegisterHandler(cj, "getUiState", getUiState);
 cartJsonExecute(cj);
 }
 
+static void printActiveGenomes()
+/* Print out JSON for an object mapping each genome that has at least one db with active=1
+ * to its taxId.  */
+{
+struct jsonWrite *jw = jsonWriteNew();
+jsonWriteObjectStart(jw, NULL);
+struct sqlConnection *conn = hConnectCentral();
+// Join with defaultDb because in rare cases, different taxIds (species vs. subspecies)
+// may be used for different assemblies of the same species.  Using defaultDb means that
+// we send a taxId consistent with the taxId of the assembly that we'll change to when
+// the species is selected from the tree.
+char *query = NOSQLINJ "select dbDb.genome, taxId from dbDb, defaultDb "
+    "where defaultDb.name = dbDb.name and active = 1 "
+    "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    jsonWriteNumber(jw, row[0], atoi(row[1]));
+hDisconnectCentral(&conn);
+jsonWriteObjectEnd(jw);
+puts(jw->dy->string);
+jsonWriteFree(&jw);
+}
+
 static void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
 // Start web page with new banner
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+// If CGI has &lastDbPos=..., handle that here and save position to cart so it's in place for
+// future cartJson calls.
+char *position = cartGetPosition(cart, db, NULL);
+cartSetString(cart, "position", position);
 webStartJWest(cart, db, "Genome Browser Gateway");
 
-// Edit the HTML in hgGateway.html (see makefile):
+if (cgiIsOnWeb())
+    checkForGeoMirrorRedirect(cart);
+
+#define WARNING_BOX_START "<div id=\"previewWarningRow\" class=\"jwRow\">" \
+         "<div id=\"previewWarningBox\" class=\"jwWarningBox\">"
+
+#define UNDER_DEV "Data and tools on this site are under development, have not been reviewed " \
+         "for quality, and are subject to change at any time. "
+
+#define MAIN_SITE "The high-quality, reviewed public site of the UCSC Genome Browser is " \
+         "available for use at <a href=\"http://genome.ucsc.edu/\">http://genome.ucsc.edu/</a>."
+
+#define WARNING_BOX_END "</div></div>"
+
+if (hIsPreviewHost())
+    {
+    puts(WARNING_BOX_START
+         "WARNING: This is the UCSC Genome Browser preview site. "
+         "This website is a weekly mirror of our internal development server for public access. "
+         UNDER_DEV
+         "We provide this site for early access, with the warning that it is less available "
+         "and stable than our public site. "
+         MAIN_SITE
+         WARNING_BOX_END);
+    }
+
+if (hIsPrivateHost() && !hHostHasPrefix("hgwdev-demo6"))
+    {
+    puts(WARNING_BOX_START
+         "WARNING: This is the UCSC Genome Browser development site. "
+         "This website is used for testing purposes only and is not intended for general public "
+         "use. "
+         UNDER_DEV
+         MAIN_SITE
+         WARNING_BOX_END);
+    }
+
+// The visible page elements are all in ./hgGateway.html, which is transformed into a quoted .h
+// file containing a string constant that we #include and print here (see makefile).
 puts(
 #include "hgGateway.html.h"
 );
 
-// Set global JS variable hgsid
+// Set global JS variables hgsid and activeGenomes
 // We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
 // "window.hgsid = ".
 puts("<script>");
 printf("window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
+puts("window.activeGenomes =");
+printActiveGenomes();
+puts(";");
 puts("</script>");
 
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
@@ -273,18 +342,16 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *hostCode = (hIsPrivateHost() || hIsPreviewHost()) ? "hgwdev" : "rr";
-
-//#*** FOR EVALUATION PERIOD ONLY -- TODO: remove!
-hostCode = "rr";
-//#*** FOR EVALUATION PERIOD ONLY
-
-printf("<script src=\"../js/dbDbTaxonomy.%s.js\"></script>\n", hostCode);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", NULL);
+if (isNotEmpty(dbDbTree))
+    printf("<script src=\"%s\"></script>\n", dbDbTree);
 
 // Main JS for hgGateway:
 puts("<script src=\"../js/hgGateway.js\"></script>");
 
 webIncludeFile("inc/jWestFooter.html");
+
+cartFlushHubWarnings();
 
 webEndJWest();
 }
@@ -300,8 +367,8 @@ else
     doMainPage();
 }
 
-// We find matches from various fields of dbDb:
-enum dbDbMatchType { ddmtUndef, ddmtDb, ddmtGenome, ddmtSciName, ddmtDescription };
+// We find matches from various fields of dbDb, and prefer them in this order:
+enum dbDbMatchType { ddmtDescription=0, ddmtGenome=1, ddmtDb=2, ddmtSciName=3 };
 
 struct dbDbMatch
     // Info about a match of a search term to some field of dbDb, including info that
@@ -339,9 +406,9 @@ if (diff == 0)
     diff = b->isWord - a->isWord;
 if (diff == 0 && a->isWord && b->isWord)
     diff = a->offset - b->offset;
-// Use int values of type, in descending numeric order:
+// Use int values of type:
 if (diff == 0)
-    diff = (int)(b->type) - (int)(a->type);
+    diff = (int)(a->type) - (int)(b->type);
 if (diff == 0)
     diff = a->dbDb->orderKey - b->dbDb->orderKey;
 if (diff == 0)
@@ -429,8 +496,6 @@ static void writeDbDbMatch(struct jsonWrite *jw, struct dbDbMatch *match, char *
 struct dbDb *dbDb = match->dbDb;
 jsonWriteObjectStart(jw, NULL);
 jsonWriteString(jw, "genome", dbDb->genome);
-if (match->type == ddmtDb)
-    jsonWriteString(jw, "db", dbDb->name);
 // label includes <b> tag to highlight the match for term.
 char label[PATH_LEN*4];
 // value is placed in the input box when user selects the item.
@@ -451,12 +516,12 @@ else if (match->type == ddmtGenome)
     }
 else if (match->type == ddmtDb)
     {
-    safef(value, sizeof(value), "%s (%s %s)",
-          dbDb->name, dbDb->genome, dbDb->description);
+    safecpy(value, sizeof(value), dbDb->name);
     char *bolded = boldTerm(dbDb->name, term, match->offset, match->type);
     safef(label, sizeof(label), "%s (%s %s)",
           bolded, dbDb->genome, dbDb->description);
     freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
     }
 else if (match->type == ddmtDescription)
     {
@@ -466,6 +531,7 @@ else if (match->type == ddmtDescription)
     safef(label, sizeof(label), "%s (%s %s)",
           dbDb->name, dbDb->genome, bolded);
     freeMem(bolded);
+    jsonWriteString(jw, "db", dbDb->name);
     }
 else
     errAbort("writeDbDbMatch: unrecognized dbDbMatchType value %d (db %s, term %s)",
@@ -504,7 +570,7 @@ static void addIfFirstMatch(struct dbDb *dbDb, enum dbDbMatchType type, int offs
 /* If target doesn't already have a match in matchHash, compute matchLength and isWord,
  * and then add the new match to pMatchList and add target to matchHash. */
 {
-if (! hashLookup(matchHash, target))
+if (dbDb->active && ! hashLookup(matchHash, target))
     {
     char *termInTarget = (offset >= 0) ? target+offset : target;
     int matchLength = countSame(term, termInTarget);
@@ -736,6 +802,9 @@ if (cgiOptionalString(SEARCH_TERM))
     // Skip the cart for speedy searches
     lookupTerm();
 else
+    {
+    oldVars = hashNew(10);
     cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    }
 return 0;
 }

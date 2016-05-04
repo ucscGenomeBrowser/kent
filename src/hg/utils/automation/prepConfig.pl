@@ -48,10 +48,12 @@ my $taxId = "notFound";
 my $ncbiBioProject = "notFound";
 my $ncbiGenomeId = "notFound";
 my $ncbiAssemblyId = "notFound";
+my $genomeCladePriority = "notFound";
 
 open (FH, "<$asmReport") or die "can not read $asmReport";
 while (my $line = <FH>) {
   chomp $line;
+  $line =~ s///g;
   if ($line =~ m/^#\s+Assembly name:/) {
     $asmName = $line;
     $asmName =~ s/.*y name:\s+//;
@@ -62,6 +64,7 @@ while (my $line = <FH>) {
        $commonName = $line;
        $commonName =~ s/.*\(//;
        $commonName =~ s/\)//;
+       $commonName = ucfirst($commonName);
     }
     $sciName = $line;
     $sciName =~ s/.*m name:\s+//;
@@ -96,26 +99,52 @@ while (my $line = <FH>) {
 
 close (FH);
 
-my $orderKey = `(printf "%s\t%s\n" "$db" "$commonName"; hgsql -N -e 'select name,organism,orderKey from dbDb order by orderKey;' hgcentraltest) | sort -k2 | grep -C 1 "$commonName" | cut -f3 | xargs echo | awk '{printf "%d", \$1+(\$2-\$1)/2}'`;
+my $previousOrder = `hgsql -N -e 'select orderKey from dbDb where organism="$commonName";' hgcentraltest | wc -l`;
+chomp $previousOrder;
+my $orderKey = 0;
+if ($previousOrder > 0) {
+  $orderKey = `hgsql -N -e 'select min(orderKey) from dbDb where organism="$commonName";' hgcentraltest | awk '{printf "%d", \$1-1}'`;
+} else {
+  $orderKey = `(printf "%s\t%s\n" "$db" "$commonName"; hgsql -N -e 'select name,organism,orderKey from dbDb order by orderKey;' hgcentraltest) | sort -k2 | grep -C 1 "$commonName" | cut -f3 | xargs echo | awk '{printf "%d", \$1+(\$2-\$1)/2}'`;
+}
 chomp $orderKey;
 
 my $mitoAcc = "notFound";
 if ( -s $mitoChr2Acc ) {
   $mitoAcc = `tail -1 $mitoChr2Acc | awk '{print \$NF}'`;
   chomp $mitoAcc;
+} else {
+  printf STDERR "# going to need a mitoAcc ?\n";
+}
+
+# do not need a genomeCladePriority if it already exists for this organism
+my $genomeCladeExists = `hgsql -N -e 'select genome from genomeClade where genome="$commonName";' hgcentraltest | wc -l`;
+chomp $genomeCladeExists;
+# if does not exist, use the most common value for this clade
+if ( $genomeCladeExists != 1 ) {
+  $genomeCladePriority = `hgsql -N -e 'select priority from genomeClade where clade="$clade";' hgcentraltest | sort | uniq -c | sort -rn | head -1 | awk '{print \$NF}'`;
+  chomp $genomeCladePriority;
 }
 
 printf "# config parameters for makeGenomeDb.pl:\n";
 printf "db %s\n", $db;
 printf "clade %s\n", $clade;
-# printf "genomeCladePriority xxx\n";
+if ( $genomeCladeExists != 1 ) {
+   printf "genomeCladePriority %d\n", $genomeCladePriority;
+}
 printf "scientificName %s\n", $sciName;
-printf "commonName %s\n", $commonName;
+printf "commonName %s\n", ucfirst($commonName);
 printf "assemblyDate %s\n", $asmDate;
 printf "assemblyLabel %s\n", $submitter;
 printf "assemblyShortLabel %s\n", $asmName;
 printf "orderKey %s\n", $orderKey;
+if ( -s $mitoChr2Acc ) {
+  printf "# mitochondrial sequence included in refseq release\n";
+  printf "# mitoAcc %s\n", $mitoAcc;
+  printf "mitoAcc none\n";
+} else {
 printf "mitoAcc %s\n", $mitoAcc;
+}
 printf "fastaFiles /hive/data/genomes/$db/ucsc/*.fa.gz\n";
 printf "agpFiles /hive/data/genomes/$db/ucsc/*.agp\n";
 printf "# qualFiles none\n";

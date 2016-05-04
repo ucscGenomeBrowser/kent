@@ -30,7 +30,8 @@ safecpy(ret->strand, sizeof(ret->strand), row[4]);
 {
 int i;
 char *s = row[6];
-AllocArray(ret->vertices, ret->vertexCount);
+if (ret->vertexCount)
+    AllocArray(ret->vertices, ret->vertexCount);
 for (i=0; i<ret->vertexCount; ++i)
     {
     s = sqlEatChar(s, '{');
