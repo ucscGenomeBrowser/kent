@@ -6,9 +6,8 @@
 #longLabel Common Gene Haplotype Alleles
 #priority 38
 
-# will replace microarray section
 name gtex
-shortLabel GTEx Gene Expression
+shortLabel RNA-seq Expression
 longLabel Gene Expression in 53 Tissues from GTEx RNA-seq
 priority 39
 

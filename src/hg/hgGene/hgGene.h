@@ -48,6 +48,8 @@ struct section
     char *rgdGeneTable;	/* Which table to use. */
 
     void *extras;        // Contains any section specific stuff
+    int checkTime;      // Time to check existence (for performance tuning) */
+    int printTime;      // Time to print (for performance tuning) */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
