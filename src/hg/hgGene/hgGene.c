@@ -39,6 +39,7 @@ int curGeneStart,curGeneEnd;	/* Position in chromosome. */
 struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 int  kgVersion = KG_UNKNOWN;	/* KG version */
+int measureTiming = FALSE;
 
 //#include "rgdInfo.c"
 
@@ -366,10 +367,15 @@ static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
-//printf("<br>adding %s section \n", section->name);fflush(stdout); 
-if (section != NULL && hashLookup(section->settings, "hide") == NULL
-   && section->exists(section, conn, curGeneId))
-     slAddHead(pList, section);
+//uglyf("<br>adding %s section \n", section->name);fflush(stdout); 
+if (section == NULL || hashLookup(section->settings, "hide") != NULL)
+    return;
+long startTime = clock1000();
+if (section->exists(section, conn, curGeneId))
+    {
+    section->checkTime = clock1000() - startTime;
+    slAddHead(pList, section);
+    }
 }
 
 struct section *loadSectionList(struct sqlConnection *conn)
@@ -410,7 +416,6 @@ else
 */
 addGoodSection(rgdGeneRawSection(conn, sectionRa), conn, &sectionList);
 
-//addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gtexSection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */
 if (strstr(database, "danRer") == NULL)
@@ -504,7 +509,9 @@ for (section = sectionList; section != NULL; section = section->next)
     webNewSection("%s",header->string);
     if (isOpen)
 	{
+        long startTime = clock1000();
 	section->print(section, conn, geneId);
+        section->printTime = clock1000() - startTime;
 	}
     else
 	{
@@ -512,6 +519,27 @@ for (section = sectionList; section != NULL; section = section->next)
 	}
     dyStringFree(&header);
     }
+}
+
+void printTiming(struct section *sectionList)
+/* Print timing for each section, if measureTiming is set */
+{
+if (!measureTiming)
+    return;
+struct section *section;
+int total = 0;
+printf("<p><b>section, check time, print time, total</b><br>\n");
+for (section = sectionList; section != NULL; section = section->next)
+    {
+    char *closeVarName = sectionCloseVar(section->name);
+    boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+    int sectionTime = section->checkTime + section->printTime;
+    printf("%s, %d, %d, %d %s<br>\n", section->shortLabel, section->checkTime, section->printTime,
+                                sectionTime, isOpen ? "" : "closed");
+    total += sectionTime;
+    }
+printf("<b>total = %d\n", total);
+printf("</p>");
 }
 
 void webMain(struct sqlConnection *conn)
@@ -525,6 +553,7 @@ sectionList = loadSectionList(conn);
 printIndex(sectionList);
 printUpdateTime(database, tdb, NULL);
 printSections(sectionList, conn, curGeneId);
+printTiming(sectionList);
 }
 
 static char *findGeneId(struct sqlConnection *conn, char *name)
@@ -697,6 +726,7 @@ else
     else
 	{
 	/* Default case - start fancy web page. */
+	measureTiming =  isNotEmpty(cartOptionalString(cart, "measureTiming"));
 	cartWebStart(cart, database, "%s Gene %s (%s) Description and Page Index",
 	    genome, curGeneName, curAlignId);
 	webMain(conn);
