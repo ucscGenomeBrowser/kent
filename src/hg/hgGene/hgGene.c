@@ -269,11 +269,11 @@ safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, curGeneStart+1, curGeneEn
 commaPos = addCommasToPos(database, buffer);
 
 hPrintf("<B>Transcript (Including UTRs)</B><br>\n");
-hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp%s&nbsp",commaPos);
+hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
 sprintLongWithCommas(buffer, (long long)curGeneEnd - curGeneStart);
-hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
-hPrintf("<B>Total Exon Count:</B>&nbsp%d&nbsp", exonCnt);
-hPrintf("<B>Strand:</B>&nbsp%s<br>\n",curGenePred->strand);
+hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
+hPrintf("<B>Total Exon Count:</B>&nbsp;%d&nbsp;", exonCnt);
+hPrintf("<B>Strand:</B>&nbsp;%s<br>\n",curGenePred->strand);
 
 cdsStart = curGenePred->cdsStart;
 cdsEnd = curGenePred->cdsEnd;
@@ -290,10 +290,10 @@ if (cdsStart < cdsEnd)
     hPrintf("<B>Coding Region</B><br>\n");
     safef(buffer, sizeof buffer, "%s:%d-%d", curGeneChrom, cdsStart+1, cdsEnd);
     commaPos = addCommasToPos(database, buffer);
-    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp%s&nbsp",commaPos);
+    hPrintf("<B>&nbsp;&nbsp;&nbsp;Position:</B>&nbsp;%s %s&nbsp;",database, commaPos);
     sprintLongWithCommas(buffer, (long long)cdsEnd - cdsStart);
-    hPrintf("<B>Size:</B>&nbsp%s&nbsp", buffer);
-    hPrintf("<B>Coding Exon Count:</B>&nbsp%d&nbsp\n", cdsExonCnt);
+    hPrintf("<B>Size:</B>&nbsp;%s&nbsp;", buffer);
+    hPrintf("<B>Coding Exon Count:</B>&nbsp;%d&nbsp;\n", cdsExonCnt);
     }
 fflush(stdout);
 }
@@ -487,6 +487,15 @@ safef(buf, sizeof(buf), "%s%s_%s_%s", hggPrefix, "section", section, "close");
 return buf;
 }
 
+boolean sectionIsOpen(struct section *section)
+/* Check cart and ra to see if section is open(-) or closed(+) */
+{
+char *closeVarName = sectionCloseVar(section->name);
+char *vis = sectionSetting(section, "visibility");
+int defaultClosed = (vis && sameString(vis, "hide")) ? 1 : 0;
+return !(cartUsualInt(cart, closeVarName, defaultClosed));
+}
+
 void printSections(struct section *sectionList, struct sqlConnection *conn,
 	char *geneId)
 /* Print each section in turn. */
@@ -494,8 +503,7 @@ void printSections(struct section *sectionList, struct sqlConnection *conn,
 struct section *section;
 for (section = sectionList; section != NULL; section = section->next)
     {
-    char *closeVarName = sectionCloseVar(section->name);
-    boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+    boolean isOpen = sectionIsOpen(section);
     char *otherState = (isOpen ? "1" : "0");
     char *indicator = (isOpen ? "-" : "+");
     char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
@@ -503,6 +511,7 @@ for (section = sectionList; section != NULL; section = section->next)
     //keep the following line for future debugging need
     //printf("<br>printing %s section\n", section->name);fflush(stdout);
     dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);
+    char *closeVarName = sectionCloseVar(section->name);
     dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
     	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
     dyStringAppend(header, section->longLabel);
@@ -531,8 +540,7 @@ int total = 0;
 printf("<p><b>section, check time, print time, total</b><br>\n");
 for (section = sectionList; section != NULL; section = section->next)
     {
-    char *closeVarName = sectionCloseVar(section->name);
-    boolean isOpen = !(cartUsualInt(cart, closeVarName, 0));
+    boolean isOpen = sectionIsOpen(section);
     int sectionTime = section->checkTime + section->printTime;
     printf("%s, %d, %d, %d %s<br>\n", section->shortLabel, section->checkTime, section->printTime,
                                 sectionTime, isOpen ? "" : "closed");
