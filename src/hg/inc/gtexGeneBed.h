@@ -95,5 +95,8 @@ boolean gtexGeneIsCoding(struct gtexGeneBed *geneBed);
 float gtexGeneTotalMedianExpression(struct gtexGeneBed *geneBed);
 /* Return total of all tissue medians */
 
+float gtexGeneHighestMedianExpression(struct gtexGeneBed *geneBed, int *tissueIdRet);
+/* Return tissue median and id of tissue with highest expression of this gene */
+
 #endif /* GTEXGENEBED_H */
 

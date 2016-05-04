@@ -90,6 +90,9 @@ struct hash *gtexGetTissueSampleCount(char *version);
 struct rgbColor gtexTissueBrightenColor(struct rgbColor rgb);
 /* Increase brightness for better visibility of small items */
 
+char *gtexGetTissueDescription(int id, char *version);
+/* Get description for a tissue specified by id.  
+ * Use for single queries (o/w use gtexGetTissues) */
 
 #endif /* GTEXTISSUE_H */
 
