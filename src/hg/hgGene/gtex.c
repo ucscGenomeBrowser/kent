@@ -16,14 +16,6 @@
 #include "gtexGeneBed.h"
 #include "gtexUi.h"
 
-static struct gtexSectionInfo 
-    {
-    char *ensGene;
-    float totalLevel;
-    float highestLevel;
-    char *highestTissue;
-    } gtexGeneInfo;
-
 static boolean gtexExists(struct section *section, struct sqlConnection *conn, char *geneId)
 /* Return TRUE if GTEx data exists for this gene */
 {
@@ -39,41 +31,43 @@ sqlSafef(query, sizeof(query),
 char *ensGene = sqlQuickString(conn, query);
 if (!ensGene)
     return FALSE;
+
 // construct full accession (with version) in gtexGene table
 sqlSafef(query, sizeof(query), 
     "select geneId from gtexGene where geneId like '%s%%'", ensGene);
 ensGene = sqlQuickString(conn, query);
 if (!ensGene)
     return FALSE;
-
-// get gtexGene median expression values
-sqlSafef(query, sizeof(query), 
-    "SELECT * from gtexGene WHERE geneId='%s'", ensGene);
-struct gtexGeneBed *gtexGene = gtexGeneBedLoadByQuery(conn, query);
-assert(gtexGene);
-gtexGeneInfo.ensGene = cloneString(ensGene);
-gtexGeneInfo.totalLevel = gtexGeneTotalMedianExpression(gtexGene);
-int tisId;
-gtexGeneInfo.highestLevel = gtexGeneHighestMedianExpression(gtexGene, &tisId);
-gtexGeneInfo.highestTissue = gtexGetTissueDescription(tisId, NULL);
-section->items = &gtexGeneInfo;
+section->items = ensGene;
 return TRUE;
 }
 
 static void gtexPrint(struct section *section, struct sqlConnection *conn, char *geneId)
 /* Print out GTEx gene expression boxplot */
 {
+char *ensGene = section->items;
+
+// get gtexGene median expression values
+char query[512];
+sqlSafef(query, sizeof(query), "SELECT * from gtexGene WHERE geneId='%s'", ensGene);
+struct gtexGeneBed *gtexGene = gtexGeneBedLoadByQuery(conn, query);
+assert(gtexGene);
+
+int tisId;
+float highestLevel = gtexGeneHighestMedianExpression(gtexGene, &tisId);
+char *highestTissue = gtexGetTissueDescription(tisId, NULL);
+float totalLevel = gtexGeneTotalMedianExpression(gtexGene);
+printf("<b>Highest median expression: </b> %0.2f RPKM in %s\n", highestLevel, highestTissue);
+printf("<br><b>Total median expression: </b> %0.2f RPKM<br><br>\n", totalLevel);
+
 struct tempName pngTn;
-struct gtexSectionInfo *info = section->items;
-printf("<b>Highest median expression: </b> %0.2f RPKM in %s\n", 
-                info->highestLevel, info->highestTissue);
-printf("<br><b>Total median expression: </b> %0.2f RPKM<br><br>\n", info->totalLevel);
-if (gtexGeneBoxplot(info->ensGene, NULL, GTEX_DEFAULT_VERSION, FALSE, &pngTn))
+if (gtexGeneBoxplot(ensGene, NULL, GTEX_DEFAULT_VERSION, FALSE, &pngTn))
     hPrintf("<img src = '%s' border=1><br>\n", pngTn.forHtml);
 hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&gtexGene=pack'>"
                 "View in GTEx track of Genome Browser</a>", cartSidUrlString(cart));
+
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
-gtexPortalLink(info->ensGene);
+gtexPortalLink(ensGene);
 }
 
 struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa)

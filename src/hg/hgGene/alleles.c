@@ -10,6 +10,12 @@
 #include "haplotypes.h"
 #include "hgGene.h"
 
+static struct allelesInfo {
+    struct genePred *gp;
+    struct vcfFile *vcf;
+    struct haploExtras *he;
+    } allelesInfo;
+
 static boolean allelesExists(struct section *section,
         struct sqlConnection *conn, char *geneId)
 // Return TRUE if common haplotype alleles exist.
@@ -20,11 +26,10 @@ if (cartUsualBoolean(cart, HAPLO_RESET_ALL, FALSE))
 
 // Start with the default variables for haplotype retrieval
 struct haploExtras *he = haplotypeExtrasDefault(database, 0);
-section->extras = he;
 
 // Need to get genePred struct from geneId
 char where[128];
-safef(where,sizeof(where),"name = '%s'",geneId);
+sqlSafefFrag(where, sizeof(where),"name = '%s'",geneId);
 struct genePred *gp = genePredReaderLoadQuery(conn,he->geneTable, where);
 if (gp == NULL || gp->cdsStart == gp->cdsEnd)  // Ain't interested in non-protein coding genes
     {
@@ -33,7 +38,7 @@ if (gp == NULL || gp->cdsStart == gp->cdsEnd)  // Ain't interested in non-protei
     }
 
 he->chrom = gp->chrom; // Probably not needed
-he->justModel = lmCloneString(he->lm,geneId);
+he->justModel = lmCloneString(he->lm, geneId);
 //he->growTree = FALSE; // Tree growing not needed here
 
 // Need to determine the correct vcf file and open it
@@ -42,14 +47,28 @@ if (haplotypesDiscoverVcfFile(he, gp->chrom) == NULL)
     haplotypeExtrasFree(&he);
     return FALSE;
     }
-
-struct vcfFile *vcff = vcfTabixFileMayOpen(he->inFile, NULL, 0, 0,VCF_IGNORE_ERRS, 0);
-if (vcff == NULL)
+struct vcfFile *vcf = vcfTabixFileMayOpen(he->inFile, NULL, 0, 0,VCF_IGNORE_ERRS, 0);
+if (vcf == NULL)
     {
     haplotypeExtrasFree(&he);
     return FALSE;
     }
-vcfFileMakeReusePool(vcff,1024 * 1024);
+allelesInfo.gp = gp;
+allelesInfo.he = he;
+allelesInfo.vcf = vcf;
+section->items = &allelesInfo;
+return TRUE;
+}
+
+static void allelesPrint(struct section *section, struct sqlConnection *conn, char *geneId)
+// Print out common gene haplotype alleles.
+{
+struct allelesInfo *info = section->items;
+struct vcfFile *vcf = info->vcf;
+struct haploExtras *he = info->he;
+struct genePred *gp = info->gp;
+
+vcfFileMakeReusePool(vcf,1024 * 1024);
 
 // All or Limit to the 99%
 boolean rareVars =  cartUsualBoolean(cart, HAPLO_RARE_VAR, FALSE);
@@ -70,19 +89,8 @@ else if (he->populationsMinor)
     }
 
 // Need to generate haplotypes
-section->items = geneHapSetForOneModel(he,vcff,gp,TRUE);
-
-return TRUE;// (section->items != NULL);
-}
-
-static void allelesPrint(struct section *section,
-	struct sqlConnection *conn, char *geneId)
-// Print out common gene haplotype alleles.
-{
-struct haploExtras *he = section->extras;
-struct haplotypeSet *hapSet = section->items;
+struct haplotypeSet *hapSet = geneHapSetForOneModel(he, vcf, gp, TRUE);
 geneAllelesTableAndControls(cart, geneId, he, hapSet);
-
 haplotypeExtrasFree(&he);
 }
 

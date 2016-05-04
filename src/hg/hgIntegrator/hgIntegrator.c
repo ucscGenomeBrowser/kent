@@ -35,6 +35,7 @@
 
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
+struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 
 #define QUERY_SPEC "hgi_querySpec"
 #define UI_CHOICES "hgi_uiChoices"
@@ -809,7 +810,8 @@ textOutClose(&textOutPipe, &savedStdout);
 void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
-char *db = cartUsualString(cart, "db", hDefaultDb());
+char *db = NULL, *genome = NULL, *clade = NULL;
+getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               "", "Data Integrator",
                               TRUE, FALSE, TRUE, TRUE);
@@ -868,9 +870,9 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {DO_QUERY, CARTJSON_COMMAND, NULL,};
-struct hash *oldVars = NULL;
 cgiSpoof(&argc, argv);
 setUdcCacheDir();
+oldVars = hashNew(10);
 cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
