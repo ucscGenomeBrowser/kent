@@ -209,6 +209,7 @@ char *cdwAllowedTags[] = {
     "antibody",
     "assay",
     "assay_seq",
+    "average_insert_size",
     "biomaterial_provider",
     "biosample_date",
     "body_part",
@@ -249,6 +250,7 @@ char *cdwAllowedTags[] = {
     "output",
     "paired_end",
     "passage_number",
+    "pcr_cycles",
     "pipeline",
     "pmid",
     "ratio_260_280",
@@ -373,6 +375,7 @@ char *disease[] =
 "HCM",
 "TNM stage IIA, grade 3, ductal carcinoma",
 "chronic myelogenous leukemia (CML)",
+"LQT",
 "acute promyelocytic leukemia",
 };
 char *enriched_in[] =
