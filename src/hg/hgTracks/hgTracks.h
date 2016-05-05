@@ -136,6 +136,9 @@ struct track
     void (*freeItems)(struct track *tg);
     /* Free item list. */
 
+    struct hash *attrTable;
+    /* Persistent table to speed up lookup of attributes in secondary tables (optional). */
+
     Color (*itemColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color of item (optional). */
 
