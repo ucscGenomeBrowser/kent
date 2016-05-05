@@ -217,6 +217,7 @@ table cdwValidFile
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"
+    string lane;	"What sequencing lane if any associated with this file."
     )
 
 table cdwFastqFile
