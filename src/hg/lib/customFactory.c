@@ -2108,10 +2108,26 @@ static struct customFactory bigWigFactory =
 
 /*** Big Bed Factory - for big client-side BED tracks ***/
 
+static boolean bigMafRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigMaf track */
+{
+return (sameType(type, "bigMaf"));
+}
+
+static boolean bigPslRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigPsl track */
+{
+return (sameType(type, "bigPsl"));
+}
+
 static boolean bigGenePredRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
-/* Return TRUE if looks like we're handling a wig track */
+/* Return TRUE if looks like we're handling a bigGenePred track */
 {
 return (sameType(type, "bigGenePred"));
 }
@@ -2153,8 +2169,26 @@ setBbiViewLimits(track);
 return track;
 }
 
+static struct customFactory bigMafFactory =
+/* Factory for bigMaf tracks */
+    {
+    NULL,
+    "bigPsl",
+    bigMafRecognizer,
+    bigBedLoader,
+    };
+
+static struct customFactory bigPslFactory =
+/* Factory for bigPsl tracks */
+    {
+    NULL,
+    "bigPsl",
+    bigPslRecognizer,
+    bigBedLoader,
+    };
+
 static struct customFactory bigGenePredFactory =
-/* Factory for bigBed tracks */
+/* Factory for bigGenePred tracks */
     {
     NULL,
     "bigGenePred",
@@ -2629,6 +2663,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigGenePredFactory);
+    slAddTail(&factoryList, &bigPslFactory);
+    slAddTail(&factoryList, &bigMafFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
     slAddTail(&factoryList, &microarrayFactory);
