@@ -251,6 +251,7 @@ char *cdwAllowedTags[] = {
     "output",
     "paired_end",
     "passage_number",
+    "pcr_cycles",
     "pipeline",
     "pmid",
     "ratio_260_280",
