@@ -261,6 +261,7 @@ CREATE TABLE cdwValidFile (
     pairedEnd varchar(255) default '',	# The paired_end tag from the manifest.  Values 1,2 or ''
     qaVersion tinyint default 0,	# Version of QA pipeline making status decisions
     uniqueMapRatio double default 0,	# Fraction of reads that map uniquely to genome for bams and fastqs
+    lane varchar(255) default '',	# What sequencing lane if any associated with this file.
               #Indices
     PRIMARY KEY(id),
     INDEX(licensePlate),

@@ -1177,11 +1177,11 @@ char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
 char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
 boolean doFilterTopScorers = FALSE;
 char *words[3];
-char query[512];
+char cartVar[512];
 int filterTopScoreCt = 0;
 char *filterTopScoreTable = NULL;
 
-safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersOn");
 if (filterTopScorers != NULL)
     {
     if (chopLine(cloneString(filterTopScorers), words) == 3)
@@ -1196,12 +1196,12 @@ if (bedSize >= 5 && showTopScorers != NULL)
     {
     /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
-    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, cartVar, doFilterTopScorers);
     if (doFilterTopScorers && hTableExists(database, filterTopScoreTable))
         {
         /* limit to those in the top N, from table */
-        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
-        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, cartVar, filterTopScoreCt);
         }
     else
         /* show all */
@@ -7053,7 +7053,17 @@ unsigned int cdsStart = 0, cdsEnd = 0;
 writeFramesetType();
 puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
-tdb = hashFindVal(trackHash, aliTable);
+if (isCustomTrack(aliTable))
+    {
+    struct customTrack *ctList = getCtList();
+    struct customTrack *ct = NULL;
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        if (sameString(aliTable, ct->tdb->track))
+            break;
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(trackHash, aliTable);
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
 
 /* Get some environment vars. */
@@ -14779,7 +14789,7 @@ if (row != NULL)
 	stsInfoRatFree(&infoRow);
 
 	/* Find sts in clone sequece alignment info */
-        safef(query1, sizeof(query1), "qName = '%s'", stsClone);
+        sqlSafefFrag(query1, sizeof(query1), "qName = '%s'", stsClone);
 	sr2 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query1,
 			  &hasBin);
 	i = 0;
@@ -20717,6 +20727,8 @@ struct customTrack *ctList = getCtList();
 struct customTrack *ct;
 struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *item = cartString(cart, "i");
 char *type;
 fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
@@ -20734,6 +20746,8 @@ else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
+else if (sameWord(type, "bigPsl"))
+    genericBigPslClick(NULL, ct->tdb, item, start, end);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 #ifdef USE_BAM
@@ -24802,7 +24816,7 @@ if ((!isCustomTrack(track) && dbIsFound)
         typeLine = cloneString(tdb->type);
         wordCount = chopLine(typeLine, words);
         if (wordCount < 1)
-         errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
+            errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
                     parentWigMaf);
         safef(wigType, 128, "wig ");
         for (i = 1; i < wordCount; ++i)

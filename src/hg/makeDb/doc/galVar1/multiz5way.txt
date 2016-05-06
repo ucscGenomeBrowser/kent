@@ -337,7 +337,7 @@ done >> multiz5way.maf
     rm multiz5way*.tab
 
 ##############################################################################
-# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (TBD - 2015-04-14 - Hiram)
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2015-05-04 - Hiram)
     # mafAddIRows has to be run on single chromosome maf files, it does not
     #	function correctly when more than one reference sequence
     #	are in a single file.  Need to split of the maf file into individual
@@ -347,10 +347,9 @@ done >> multiz5way.maf
 
     time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
         /dev/null . ../../multiz5way.maf
-    #   real    18m58.525s
-
+    #   real    4m59.924s
     find . -type f | wc -l
-    #   89197
+    #   77237
 
     # check for N.bed files everywhere:
     cd /hive/data/genomes/galVar1/bed/multiz5way/anno
@@ -386,11 +385,10 @@ do
     echo mkdir -p result/${D}
     mkdir -p result/${D}
 done
-    cat << '_EOF_' > template
-#LOOP
+    printf '#LOOP
 mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/galVar1/galVar1.2bit {check out exists+ result/$(path1)}
 #ENDLOOP
-'_EOF_'
+' > template
     # << happy emacs
 
     find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
@@ -398,12 +396,12 @@ mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/galVar1/galVar1.2b
     # limit jobs on a node with the ram=32g requirement because they go fast
     para -ram=32g create jobList
     para try ... check ... push ...
-# Completed: 89197 of 89197 jobs
-# CPU time in finished jobs:     169379s    2822.98m    47.05h    1.96d  0.005 y
-# IO & Wait Time:                229156s    3819.27m    63.65h    2.65d  0.007 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest finished job:              13s       0.22m     0.00h    0.00d
-# Submission to last job:          1746s      29.10m     0.48h    0.02d
+# Completed: 76237 of 76237 jobs
+# CPU time in finished jobs:      63114s    1051.90m    17.53h    0.73d  0.002 y
+# IO & Wait Time:                194221s    3237.02m    53.95h    2.25d  0.006 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:          2312s      38.53m     0.64h    0.03d
 
     # verify all result files have some content, look for 0 size files:
     find ./result -type f -size 0
@@ -412,23 +410,23 @@ mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/galVar1/galVar1.2b
     find ./result -type f | xargs ls -og | sort -k3nr | tail
 
     # combine into one file  (the 1>&2 redirect sends the echo to stderr)
-    head -q -n 1  result/8/4/ABRT02305379v1.maf > galVar1.5way.maf
+    head -q -n 1 result/4/0/NW_007804317v1.maf > galVar1.5way.maf
     time find ./result -type f | while read F
 do
     echo "${F}" 1>&2
     grep -h -v "^#" ${F}
 done >> galVar1.5way.maf
-    # real    29m25.870s
+    # real    16m7.367s
 
     #	these maf files do not have the end marker, this does nothing:
-    #	tail -q -n 1 result/8/4/ABRT02305379v1.maf >> galVar1.5way.maf
+    #	tail -q -n 1 result/4/0/NW_007804317v1.maf >> galVar1.5way.maf
     # How about an official end marker:
     echo "##eof maf" >> galVar1.5way.maf
     ls -og
-# -rw-rw-r--  1 84345995664 Apr 14 09:27 galVar1.5way.maf
+# -rw-rw-r--  1 13063560432 May  4 10:33 galVar1.5way.maf
 
     du -hsc galVar1.5way.maf
-    # 79G     galVar1.5way.maf
+    # 13G     galVar1.5way.maf
 
     # construct symlinks to get the individual maf files into gbdb:
     rm /gbdb/galVar1/multiz5way/multiz5way.maf   # remove previous results
@@ -437,17 +435,17 @@ done >> galVar1.5way.maf
     # Load into database
     cd /dev/shm
     time hgLoadMaf -pathPrefix=/gbdb/galVar1/multiz5way galVar1 multiz5way
-# Loaded 30369211 mafs in 1 files from /gbdb/galVar1/multiz5way
-# real    19m43.000s
+    # Loaded 11015101 mafs in 1 files from /gbdb/galVar1/multiz5way
+    # real    3m55.357s
 
     time hgLoadMafSummary -verbose=2 -minSize=30000 \
 	-mergeGap=1500 -maxSize=200000 galVar1 multiz5waySummary \
         /gbdb/galVar1/multiz5way/multiz5way.maf
-    # Created 676756 summary blocks from 57801948 components and 30369211 mafs from /gbdb/galVar1/multiz5way/multiz5way.maf
-    # real    18m49.166s
+    # Created 62787 summary blocks from 1838380 components and 11015101 mafs from /gbdb/galVar1/multiz5way/multiz5way.maf
+    # real    2m45.214s
 
-    # -rw-rw-r--  1 1556576627 Apr 14 09:45 multiz5way.tab
-    # -rw-rw-r--  1   33691934 Apr 14 10:18 multiz5waySummary.tab
+    # -rw-rw-r-- 1 596358396 May  4 10:37 multiz5way.tab
+    # -rw-rw-r-- 1   3313263 May  4 12:54 multiz5waySummary.tab
 
     rm multiz5way*.tab
 
@@ -457,126 +455,84 @@ done >> galVar1.5way.maf
     mkdir /hive/data/genomes/galVar1/bed/multiz5way/frames
     cd /hive/data/genomes/galVar1/bed/multiz5way/frames
 #   survey all the genomes to find out what kinds of gene tracks they have
-    cat << '_EOF_' > showGenes.csh
-#!/bin/csh -fe
+    printf '#!/bin/csh -fe
 foreach db (`cat ../species.list`)
-    echo -n "${db}: "
-    set tables = `hgsql $db -N -e "show tables like '%Gene%'"`
+    printf "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
     foreach table ($tables)
         if ($table == "ensGene" || $table == "refGene" || \
-           $table == "mgcGenes" || $table == "knownGene" || \
-           $table == "xenoRefGene" ) then
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
            set count = `hgsql $db -N -e "select count(*) from $table"`
             echo -n "${table}: ${count}, "
         endif
     end
     set orgName = `hgsql hgcentraltest -N -e \
-            "select scientificName from dbDb where name='$db'"`
-    set orgId = `hgsql hg19 -N -e \
-            "select id from organism where name='$orgName'"`
+            "select scientificName from dbDb where name='"'"'$db'"'"'"`
+    set orgId = `hgsql $db -N -e \
+            "select id from organism where name='"'"'$orgName'"'"'"`
     if ($orgId == "") then
         echo "Mrnas: 0"
     else
-        set count = `hgsql hg19 -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        set count = `hgsql $db -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
         echo "Mrnas: ${count}"
     endif
 end
-'_EOF_'
+' > showGenes.csh
     # << happy emacs
     chmod +x ./showGenes.csh
     time ./showGenes.csh
-# galVar1: xenoRefGene: 317648, Mrnas: 8
-# calJac3: ensGene: 55116, refGene: 220, xenoRefGene: 314108, Mrnas: 294478
-# saiBol1: xenoRefGene: 444473, Mrnas: 85
-# nasLar1: xenoRefGene: 325305, Mrnas: 4
-# rhiRox1: xenoRefGene: 331524, Mrnas: 11
-# chlSab2: xenoRefGene: 221155, Mrnas: 37897
-# papAnu2: ensGene: 29030, refGene: 493, xenoRefGene: 306504, Mrnas: 146334
-# rheMac3: refGene: 6533, xenoRefGene: 285257, Mrnas: 443919
-# macFas5: refGene: 2270, xenoRefGene: 285932, Mrnas: 177465
-# hg38: ensGene: 208239, knownGene: 104178, mgcGenes: 34081, refGene: 57740, xenoRefGene: 178096, Mrnas: 10985957
-# panTro4: ensGene: 29160, refGene: 2685, xenoRefGene: 290723, Mrnas: 11222
-# panPan1: xenoRefGene: 397450, Mrnas: 566
-# gorGor3: ensGene: 35410, xenoRefGene: 351847, Mrnas: 1
-# ponAbe2: ensGene: 29447, refGene: 3567, xenoRefGene: 299670, Mrnas: 0
-# nomLeu3: xenoRefGene: 198058, Mrnas: 49
-# micMur1: ensGene: 37458, xenoRefGene: 555344, Mrnas: 59
-# otoGar3: ensGene: 28565, xenoRefGene: 420000, Mrnas: 13
-# tupBel1: ensGene: 34727, xenoRefGene: 663425, Mrnas: 2506
-# mm10: ensGene: 103734, knownGene: 63244, mgcGenes: 26768, refGene: 34922, xenoRefGene: 166911, Mrnas: 5226373
-# canFam3: ensGene: 29884, refGene: 2160, xenoRefGene: 256615, Mrnas: 387766
-
-# real    5m46.618s
+# galVar1: ncbiRefSeq: 41547, xenoRefGene: 473670, Mrnas: 0
+# tupBel1: ensGene: 34727, xenoRefGene: 688682, Mrnas: 2509
+# hg38: ensGene: 208239, knownGene: 197782, mgcGenes: 35390, ncbiRefSeq:
+#      161913, refGene: 63332, xenoRefGene: 181602, Mrnas: 11351569
+# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 26768, ncbiRefSeq:
+#      116846, refGene: 35838, xenoRefGene: 172783, Mrnas: 5250157
+# cavPor3: ensGene: 26129, refGene: 488, xenoRefGene: 296142, Mrnas: 21235
 
     # from that summary, use these gene sets:
     # knownGene - hg38 mm10
-    # ensGene - canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #     otoGar3 tupBel1
-    # refGene - macFas5 rheMac3
-    # xenoRefGene - galVar1
-    # no annotation: nasLar1 rhiRox1 panPan1 nomLeu3 chlSab2 saiBol1
-
-    #   1. knownGene: hg38
+    # ncbiRefSeq - galVar1
+    # ensGene - tupBel1 cavPor3
+ 
+    mkdir genes
+    #   1. knownGene: hg38 mm10
     for DB in hg38 mm10
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > genes/${DB}.gp.gz
+    printf "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-    # checked: 21887 failed: 0
-    # checked: 21036 failed: 0
+# hg38: checked: 21375 failed: 0
+# mm10: checked: 21100 failed: 0
 
-    #   2. ensGene: canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1
-    #               otoGar3 tupBel1
-    for DB in canFam3 panTro4 gorGor3 ponAbe2 papAnu2 calJac3 micMur1 \
-       otoGar3 tupBel1
+    #   2. ensGene: tupBel1 cavPor3
+    for DB in tupBel1 cavPor3
 do
-hgsql -N -e "select
-name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
 from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /dev/shm/${DB}.tmp.gz
     mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
-    echo -n "# ${DB}: "
+    printf "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# canFam3: checked: 19507 failed: 0
-# panTro4: checked: 18657 failed: 0
-# gorGor3: checked: 20758 failed: 0
-# ponAbe2: checked: 20220 failed: 0
-# papAnu2: checked: 18904 failed: 0
-# calJac3: checked: 20827 failed: 0
-# micMur1: checked: 28641 failed: 0
-# otoGar3: checked: 19472 failed: 0
 # tupBel1: checked: 29256 failed: 0
+# cavPor3: checked: 18631 failed: 0
 
-    #   3. refGene for macFas5 rheMac3
-    for DB in macFas5 rheMac3
-do
-hgsql -N -e "select * from refGene" ${DB} | cut -f2- \
-      | genePredSingleCover stdin stdout | gzip -2c \
-        > /dev/shm/${DB}.tmp.gz
-    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
-    echo -n "# ${DB}: "
-    genePredCheck -db=${DB} genes/${DB}.gp.gz
-done
-# macFas5: checked: 2196 failed: 0
-# rheMac3: checked: 5801 failed: 0
-
-    #   4. xenoRefGene for galVar1
+    #   3. ncbiRefSeq for galVar1
     for DB in galVar1
 do
-    hgsql -N -e "select
-name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
-from xenoRefGene" ${DB} \
+hgsql -N -e "select * from ncbiRefSeq" ${DB} | cut -f2- \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /dev/shm/${DB}.tmp.gz
     mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
     echo -n "# ${DB}: "
     genePredCheck -db=${DB} genes/${DB}.gp.gz
 done
-# galVar1: checked: 29314 failed: 0
+# galVar1: checked: 23389 failed: 0
 
     # verify counts for genes are reasonable:
     for T in genes/*.gz
@@ -584,55 +540,37 @@ do
     echo -n "# $T: "
     zcat $T | cut -f1 | sort | uniq -c | wc -l
 done
-# genes/calJac3.gp.gz: 20827
-# genes/canFam3.gp.gz: 19507
-# genes/gorGor3.gp.gz: 20758
-# genes/hg38.gp.gz: 21887
-# genes/macFas5.gp.gz: 2120
-# genes/micMur1.gp.gz: 16240
-# genes/mm10.gp.gz: 22159
-# genes/otoGar3.gp.gz: 19472
-# genes/panTro4.gp.gz: 18657
-# genes/papAnu2.gp.gz: 18904
-# genes/ponAbe2.gp.gz: 20220
-# genes/rheMac3.gp.gz: 5626
-# genes/galVar1.gp.gz: 24868
+# genes/cavPor3.gp.gz: 18631
+# genes/galVar1.gp.gz: 23054
+# genes/hg38.gp.gz: 21375
+# genes/mm10.gp.gz: 21100
 # genes/tupBel1.gp.gz: 15407
 
     time (cat ../anno/galVar1.5way.maf \
 	| genePredToMafFrames galVar1 stdin stdout \
-          `egrep -v "nasLar1|rhiRox1|panPan1|nomLeu3|chlSab2|saiBol1" \
-            ../species.list.txt | xargs echo \
-              | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+          `cat ../species.list.txt | xargs echo \
+            | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
 		| gzip > multiz5wayFrames.bed.gz)
-    #   real    18m8.453s
+    # real    2m59.575s
 
-    # verify there are frames on everything, should be 14 species:
-    zcat multiz5wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c
-# 223819 calJac3
-# 233806 canFam3
-# 221546 gorGor3
-# 220701 hg38
-#  16309 macFas5
-# 200742 micMur1
-# 211533 mm10
-# 214022 otoGar3
-# 205286 panTro4
-# 209513 papAnu2
-# 219206 ponAbe2
-#  45987 rheMac3
-# 215621 galVar1
-# 195293 tupBel1
+    # verify there are frames on everything, should be 5 species:
+    zcat multiz5wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+       | sed -e 's/^/# /;'
+#  215465 cavPor3
+#  192421 galVar1
+#  223000 hg38
+#  224647 mm10
+#  193994 tupBel1
 
     #   load the resulting file
     ssh hgwdev
     cd /hive/data/genomes/galVar1/bed/multiz5way/frames
     time hgLoadMafFrames galVar1 multiz5wayFrames multiz5wayFrames.bed.gz
-    #   real    0m26.783s
+    #   real    0m10.869s
 
     time featureBits -countGaps galVar1 multiz5wayFrames
-    # 42787229 bases of 3453864774 (1.239%) in intersection
-    # real    1m54.920s
+    # 37650990 bases of 3187660572 (1.181%) in intersection
+    # real    1m3.863s
 
     #   enable the trackDb entries:
 # frames multiz5wayFrames

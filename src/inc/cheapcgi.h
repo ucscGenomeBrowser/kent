@@ -575,6 +575,9 @@ struct cgiParsedVars *cgiParsedVarsNew(char *cgiString);
 void cgiParsedVarsFree(struct cgiParsedVars **pTags);
 /* Free up memory associated with cgiParsedVars */
 
+void cgiParsedVarsFreeList(struct cgiParsedVars **pList);
+/* Free up list of cgiParsedVars */
+
 char *cgiScriptDirUrl();
 /* Return the cgi-bin directory path on this webserver.
  * This is not the local directory but the <path> part after the server

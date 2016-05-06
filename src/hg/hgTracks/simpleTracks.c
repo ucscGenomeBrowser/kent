@@ -1953,24 +1953,25 @@ winEnd = winEndCopy;
 return list;
 }
 
-boolean oregannoFilterType (struct oreganno *el)
+
+
+
+boolean oregannoFilterType (struct oreganno *el, struct hash *attrTable)
 /* filter of the type of region from the oregannoAttr table */
 {
 int cnt = 0;
-struct oregannoAttr *attr = NULL;
-char query[256];
-struct sqlConnection *conn = hAllocConn(database);
+struct oregannoAttr *attr = hashFindVal(attrTable, el->id);
+boolean tmpAttr = FALSE;
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
-attr = oregannoAttrLoadByQuery(conn, query);
-hFreeConn(&conn);
 if (attr == NULL)
     {
     AllocVar(attr);
     attr->attrVal = cloneString("NULL");
     attr->id = NULL; /* so free will work */
     attr->attribute = NULL;
+    tmpAttr = TRUE;
     }
+
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
     if ((!cartVarExists(cart, oregannoTypeString[cnt])
@@ -1978,11 +1979,13 @@ for (cnt = 0; cnt < oregannoTypeSize; cnt++)
         && differentString(cartString(cart, oregannoTypeString[cnt]), "0")))
         && (cmpWordsWithEmbeddedNumbers(oregannoTypeDbValue[cnt], attr->attrVal))==0)
         {
-        oregannoAttrFree(&attr);
+        if (tmpAttr == TRUE)
+            oregannoAttrFree(&attr);
         return TRUE; /* include this type */
         }
     }
-oregannoAttrFree(&attr);
+if (tmpAttr == TRUE)
+    oregannoAttrFree(&attr);
 return FALSE;
 }
 
@@ -2000,7 +2003,7 @@ sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct oreganno *el = oregannoLoad(row);
-    if (!oregannoFilterType(el))
+    if (!oregannoFilterType(el, tg->attrTable))
         oregannoFree(&el);
     else
         slAddHead(&list, el);
@@ -5668,8 +5671,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
-	gp->name);
+    sqlSafef(query, sizeof query, "select * from knownCds where name=\"%s\"", gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = NULL;
@@ -12011,17 +12013,14 @@ Color oregannoColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct oreganno *el = item;
 struct oregannoAttr *details = NULL;
-struct sqlConnection *conn = hAllocConn(database);
 char *id = NULL;
-char query[256];
 Color itemColor = MG_BLACK;
 if (el->id != NULL)
     id = el->id;
 else
     id = el->name;
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", id);
-details = oregannoAttrLoadByQuery(conn, query);
+details = hashFindVal(tg->attrTable, id);
 /* ORegAnno colors 666600 (Dark Green), CCCC66 (Tan), CC0033 (Red),
                    CCFF99 (Background Green)                        */
 if (sameString(details->attrVal, "REGULATORY POLYMORPHISM"))
@@ -12041,8 +12040,6 @@ else if (sameString(details->attrVal, "Regulatory Haplotype"))
     itemColor = hvGfxFindColorIx(hvg, 213, 94, 0);  /* Vermillion */
 else if (sameString(details->attrVal, "miRNA Binding Site"))
     itemColor = hvGfxFindColorIx(hvg, 0, 158, 115);  /* bluish Green */
-oregannoAttrFreeList(&details);
-hFreeConn(&conn);
 return itemColor;
 }
 
@@ -12319,6 +12316,9 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
+struct sqlConnection *conn = hAllocConn(database);
+tg->attrTable = oregannoLoadAttrHash(conn);
+hFreeConn(&conn);
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;

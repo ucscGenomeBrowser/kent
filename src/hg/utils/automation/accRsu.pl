@@ -27,22 +27,36 @@ if ($file =~ m/stdin/) {
 
 my $acc = "";
 my $rsu = "";
+my $def = "";
 
 while (my $line = <FH>) {
   chomp $line;
   if ($line =~ m/^acc /) {
-    if (length($acc)) {
-      printf STDERR "# no rsu for %s\n", $acc
+    if (length($rsu)) {
+      printf "%s\t%s\n", $acc, $rsu;
+    } elsif (length($def)) {
+      printf "%s\t%s\n", $acc, $def;
+    } elsif (length($acc)) {
+      printf STDERR "# no rsu or def for %s\n", $acc
     }
+    $def = "";
+    $rsu = "";
     $acc = $line;
     $acc =~ s/^acc //;
   } elsif ($line =~ m/^rsu/) {
-    if (length($acc)) {
-       $rsu = $line;
-       $rsu =~ s/^rsu //;
-       printf "%s\t%s\n", $acc, $rsu;
-    }
-    $acc = "";
+    $rsu = $line;
+    $rsu =~ s/^rsu //;
+  } elsif ($line =~ m/^def/) {
+    $def = $line;
+    $def =~ s/^def //;
   }
 }
 close (FH);
+
+if (length($rsu)) {
+  printf "%s\t%s\n", $acc, $rsu;
+} elsif (length($def)) {
+  printf "%s\t%s\n", $acc, $def;
+} elsif (length($acc)) {
+  printf STDERR "# no rsu or def for %s\n", $acc
+}
