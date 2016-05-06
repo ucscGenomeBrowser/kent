@@ -20748,6 +20748,8 @@ else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
 else if (sameWord(type, "bigPsl"))
     genericBigPslClick(NULL, ct->tdb, item, start, end);
+else if (sameWord(type, "bigMaf"))
+    genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 #ifdef USE_BAM
@@ -24790,7 +24792,7 @@ if (isCustomTrack(track))
     }
 
 if ((!isCustomTrack(track) && dbIsFound)
-||  ((ct!= NULL) && (ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf")))
+||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (sameString("htcBigPslAli", track) )
