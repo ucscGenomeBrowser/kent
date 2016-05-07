@@ -3205,7 +3205,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-if (isHubTrack(tdb->track))
+if (isHubTrack(tdb->track) || isCustomTrack(tdb->track))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
@@ -20746,6 +20746,8 @@ else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
+else if (sameWord(type, "bigChain"))
+    genericChainClick(NULL, ct->tdb, item, start, "seq");
 else if (sameWord(type, "bigPsl"))
     genericBigPslClick(NULL, ct->tdb, item, start, end);
 else if (sameWord(type, "bigMaf"))

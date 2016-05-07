@@ -2116,6 +2116,14 @@ static boolean bigMafRecognizer(struct customFactory *fac,
 return (sameType(type, "bigMaf"));
 }
 
+static boolean bigChainRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigChain track */
+{
+return (sameType(type, "bigChain"));
+}
+
 static boolean bigPslRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2168,6 +2176,15 @@ errCatchFree(&errCatch);
 setBbiViewLimits(track);
 return track;
 }
+
+static struct customFactory bigChainFactory =
+/* Factory for bigChain tracks */
+    {
+    NULL,
+    "bigChain",
+    bigChainRecognizer,
+    bigBedLoader,
+    };
 
 static struct customFactory bigMafFactory =
 /* Factory for bigMaf tracks */
@@ -2664,6 +2681,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigGenePredFactory);
     slAddTail(&factoryList, &bigPslFactory);
+    slAddTail(&factoryList, &bigChainFactory);
     slAddTail(&factoryList, &bigMafFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);

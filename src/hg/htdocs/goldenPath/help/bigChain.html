@@ -2,7 +2,7 @@
 <HTML>
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<TITLE>UCSC Genome Browser: bigGenePred Track Format</TITLE>
+	<TITLE>UCSC Genome Browser: bigChain Track Format</TITLE>
 	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
@@ -18,19 +18,18 @@
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 	<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;  bigGenePred Track Format</b></FONT>
+		<FONT SIZE="4"><b>&nbsp;  bigChain Track Format</b></FONT>
 	</TD></TR></TABLE>
 	<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
-The bigGenePred format stores annotation items that are a
-linked collection of exons, much as 
-<A HREF="../../FAQ/FAQformat.html#format1">BED</A> files indexed as bigBeds do,
-but bigGenePred has additional information about the coding frames and other
-gene specific information in eight additional fields.</p>
+
+ 	
+    The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously.  bigChain files are
+<A HREF="chain.html">Chain</A> files indexed as bigBeds are.
 <p>
-bigGenePred files are created using the program <TT>bedToBigBed</TT> with a
-special AutoSQL file that defines the fields of the bigGenePred.   The
+bigChain files are created using the program <TT>bedToBigBed</TT> with a
+special AutoSQL file that defines the fields of the bigChain.   The
 resulting bigBed files are in an indexed binary format.  The main advantage of
 the bigBed files is that only portions of the files needed to display a
 particular region are transferred to UCSC. So for large data sets, bigBed is
@@ -40,40 +39,29 @@ Only the portion that is needed
 for the chromosomal position you are currently viewing is locally cached as a 
 &quot;sparse file&quot;.</P>
 
-<H4><A name=bigGenePred></A>Big Gene Predictions</H4>
-The following AutoSQL definition is used for bigGenePred gene prediction files. 
-This is the <A HREF="examples/bigGenePred.as"><tt>bigGenePred.as</tt></A>
+<H4><A name=bigChain></A>Big Gene Predictions</H4>
+The following AutoSQL definition is used for bigChain gene prediction files. 
+This is the <A HREF="examples/bigChain.as"><tt>bigChain.as</tt></A>
 file defined by the <tt>-as=</tt> option when using <tt>bedToBigBed</tt>.
-Click this <A HREF="examples/bigGenePred.txt"><tt>bed12+8</tt></A> file for
-an example of bigGenePred input. In alternative-splicing situations, each
-transcript has its own row.
+Click this <A HREF="examples/bigChain.txt"><tt>bed6+6</tt></A> file for
+an example of bigChain input. 
 <PRE>
-
-table bigGenePred
-"bigGenePred gene models"
-   (
-   string chrom;       "Reference sequence chromosome or scaffold"
-   uint   chromStart;  "Start position in chromosome"
-   uint   chromEnd;    "End position in chromosome"
-   string name;        "Name or ID of item, ideally both human readable and unique"
-   uint score;         "Score (0-1000)"
-   char[1] strand;     "+ or - for strand"
-   uint thickStart;    "Start of where display should be thick (start codon)"
-   uint thickEnd;      "End of where display should be thick (stop codon)"
-   uint reserved;       "RGB value (use R,G,B string in input file)"
-   int blockCount;     "Number of blocks"
-   int[blockCount] blockSizes; "Comma separated list of block sizes"
-   int[blockCount] chromStarts; "Start positions relative to chromStart"
-   string name2;       "Alternative/human readable name"
-   string cdsStartStat; "enum('none','unk','incmpl','cmpl')"
-   string cdsEndStat;   "enum('none','unk','incmpl','cmpl')"
-   int[blockCount] exonFrames; "Exon frame {0,1,2}, or -1 if no frame for exon"
-   string type;        "Transcript type"
-   string geneName;    "Primary identifier for gene"
-   string geneName2;   "Alternative/human readable gene name"
-   string geneType;    "Gene type"
-   )
-
+table bigChain
+"bigChain pairwise alignment"
+    (
+    string chrom;       "Reference sequence chromosome or scaffold"
+    uint   chromStart;  "Start position in chromosome"
+    uint   chromEnd;    "End position in chromosome"
+    string name;        "Name or ID of item, ideally both human readable and unique"
+    uint score;         "Score (0-1000)"
+    char[1] strand;     "+ or - for strand"
+    uint tSize;         "size of target sequence"
+    string qName;       "name of query sequence"
+    uint qSize;         "size of query sequence"
+    uint qStart;        "start of alignment on query sequence"
+    uint qEnd;          "end of alignment on query sequence"
+    uint chainScore;    "score from chain"
+    )
 </PRE>
 
 <P>Note that the <TT>bedToBigBed</TT> utility uses a substantial amount of 
@@ -81,16 +69,21 @@ memory; somewhere on the order of 1.25 times more RAM than the
 uncompressed BED input file.</P>
 
 <P>
-To create a bigGenePred track, follow these steps:<BR>
+To create a bigChain track, follow these steps:<BR>
 
+hgLoadChain -noBin -test hg38 bigChain chr22_KI270731v1_random.hg38.mm10.rbest.chain
+ sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7,$9,$10,$1}' > chr22_KI270731v1_random.hg38.mm10.rbest.bigChain
+bedToBigBed -type=bed6+5 -tab -as=bigChain.as chr22_KI270731v1_random.hg38.mm10.rbest.bigChain chrom.sizes bigChain.bb
+ awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n  > bigChain.bigLink
+  bedToBigBed -type=bed4+1 -as=bigLink.as bigChain.bigLink chrom.sizes bigChain.link.bb
 <OL>
- <LI> Create a <tt>bed12+8</tt> bigGenePred format file that has the first twelve fields
+ <LI> Create a <tt>bed6+6</tt> bigChain format file that has the first twelve fields
   described by a normal BED file as described <A HREF="../../FAQ/FAQformat.html#format1">here</A>.
   (You can also read about genePred <A HREF="../../FAQ/FAQformat.html#format9">here</A>.)  
    <UL>
-    <LI> Your bigGenePred file must have the extra eight fields described in the AutoSQL file above:
+    <LI> Your bigChain file must have the extra eight fields described in the AutoSQL file above:
     <tt>name2, cdsStartStat, cdsEndStat, exonFrames, type, geneName, geneName2, geneType.</tt> 
-    <LI> Your bigGenePred file must be sorted by chrom then chromStart. You can use
+    <LI> Your bigChain file must be sorted by chrom then chromStart. You can use
     the UNIX sort command to do this: 
     <TT>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</TT>
    </UL>
@@ -106,9 +99,9 @@ To create a bigGenePred track, follow these steps:<BR>
   database, the hg38.chrom.sizes are located at
   <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
   target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
- <LI> Create the bigBed file from your sorted bigGenePred input file using the <TT>bedToBigBed</TT>
+ <LI> Create the bigBed file from your sorted bigChain input file using the <TT>bedToBigBed</TT>
   utility like so: 
-  <TT><B>bedToBigBed</B> -as=bigGenePred.as -type=bed12+8 bigGenePred.txt chrom.sizes myBigGenePred.bb</TT><BR>
+  <TT><B>bedToBigBed</B> -as=bigChain.as -type=bed12+8 bigChain.txt chrom.sizes myBigGenePred.bb</TT><BR>
  <LI> Move the newly created bigBed file (<TT>myBigGenePred.bb</TT>) to an http, 
   https, or ftp location.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 
@@ -119,8 +112,7 @@ To create a bigGenePred track, follow these steps:<BR>
   to tracks of type bigBed. 
   The most basic version of the &quot;track&quot; line will look something 
   like this:<BR>
-  <TT>track type=bigGenePred name="My Big GenePred" description="A Gene Set
-  Built from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigGenePred.bb</TT>
+  <TT>track type=bigChain name="My Big Chain"  bigDataUrl=http://myorg.edu/mylab/myBigGenePred.bb linkDataUrl=http://myorg.edu/mylab/myBigGenePred.bb </TT>
  <LI> Paste this custom track line into the text box in the 
   <A HREF="../../cgi-bin/hgCustom">custom track</A> management page.
 </OL>
@@ -132,35 +124,35 @@ A full list of the available options can be seen by running
 <p>
 <H3>Example One</H3>
 </p>
-<P>In this example, you will use an existing bigGenePred file to create a bigGenePred 
-custom track.  A bigGenePred file that contains data on the hg38 
+<P>In this example, you will use an existing bigChain file to create a bigChain 
+custom track.  A bigChain file that contains data on the hg38 
 assembly has been placed on our http server.  
-You can create a custom track using this bigGenePred file by constructing a 
+You can create a custom track using this bigChain file by constructing a 
 &quot;track&quot; line that references this file like so:</P>
 
-<TT>track type=bigGenePred name=&quot;bigGenePred Example One&quot; 
-description=&quot;A bigGenePred file&quot; 
-bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</TT>
+<TT>track type=bigChain name=&quot;bigChain Example One&quot; 
+description=&quot;A bigChain file&quot; 
+bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb</TT>
 
 <P>Paste the above &quot;track&quot; line into the 
 <A HREF="../../cgi-bin/hgCustom?db=hg38">custom track</A> management page for the
 human assembly hg38 (Dec. 2013), then press the <EM>submit</EM> button.
 <p>
 Custom tracks can also be loaded via one URL line.  The below link loads the same
-bigGenePred track, but includes parameters on the URL line:
+bigChain track, but includes parameters on the URL line:
 <p>
-<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb"
-target="_blank"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigGenePred%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb</tt></a>
+<a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigChain%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb"
+target="_blank"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigChain%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb</tt></a>
 </p>
 <p>
-With this example bigGenePred loaded, click into a gene from the track.  Note
+With this example bigChain loaded, click into a gene from the track.  Note
 that the details page has a &quot;Links to sequence:&quot; section that includes
 &quot;Translated Protein&quot;, &quot;Predicted mRNA&quot;, and &quot;Genomic
 Sequence&quot; links. Click the &quot;Go to ... track controls&quot; link.
 There change the &quot;Color track by codons:&quot; option from &quot;OFF&quot;
 too &quot;genomic codons&quot; and be sure &quot;Display mode:&quot is &quot;full&quot;
 then click &quot;Submit&quot;.  Then zoom to a region where amino acids display,
-such as <tt>chr9:133,255,650-133,255,700</tt> and see how bigGenePred allows
+such as <tt>chr9:133,255,650-133,255,700</tt> and see how bigChain allows
 the display of codons. Click back into the track controls page and click the box next
 to &quot;Show codon numbering&quot;. Return to the browser to see amino acid
 numbering.</p>
@@ -169,33 +161,33 @@ You can also add a parameter in the custom track line,
 <tt>baseColorDefault=genomicCodons</tt>, to set the display of codons:
 <p>
 <tt>browser position chr10:67,884,600-67,884,900<br>
-track type=bigGenePred baseColorDefault=genomicCodons name="bigGenePred Example Two" description="A bigGenePred file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigGenePred.bb
+track type=bigChain baseColorDefault=genomicCodons name="bigChain Example Two" description="A bigChain file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigChain.bb
 </tt>
 <p>
 Paste the above into the hg38 <A HREF="../../cgi-bin/hgCustom?db=hg38">custom track</A>
-page to see an example of bigGenePred amino acid display around the beginning of the gene SIRT1
+page to see an example of bigChain amino acid display around the beginning of the gene SIRT1
 on chromosome 10.</p>
 </p>
 
 <H3>Example Two</H3>
-<P>In this example, you will create your own bigGenePred file from an existing 
-bigGenePred input file.
+<P>In this example, you will create your own bigChain file from an existing 
+bigChain input file.
 
 <UL>
- <LI> Save this <tt>bed12+8</tt> <A HREF="examples/bigGenePred.txt">bigGenePred.txt</A>
+ <LI> Save this <tt>bed12+8</tt> <A HREF="examples/bigChain.txt">bigChain.txt</A>
   example input file to your machine (<EM>satisfies above step 1</EM>).
  <LI> Download the <TT>bedToBigBed</TT> <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</A>
  (<EM>step 2</EM>).
  <LI> Save this <tt>hg38.chrom.sizes</tt> <A HREF="hg38.chrom.sizes">text file</A> to your machine.
   It contains the chrom.sizes for the human (hg38) assembly 
   (<EM>step 3</EM>).
- <LI> Save this <tt>bigGenePred.as</tt> <A HREF="examples/bigGenePred.as"> text file</A> to your machine.
+ <LI> Save this <tt>bigChain.as</tt> <A HREF="examples/bigChain.as"> text file</A> to your machine.
  <LI> Run the utility to create the bigBed output file 
   (<EM>step 4</EM>):<BR>
-  <TT><B>bedToBigBed</B> -type=bed12+8 -tab -as=bigGenePred.as bigGenePred.txt hg38.chrom.sizes bigGenePred.bb</TT>
- <LI> Place the bigBed file you just created (<TT>bigGenePred.bb</TT>) on a 
+  <TT><B>bedToBigBed</B> -type=bed12+8 -tab -as=bigChain.as bigChain.txt hg38.chrom.sizes bigChain.bb</TT>
+ <LI> Place the bigBed file you just created (<TT>bigChain.bb</TT>) on a 
   web-accessible server (<EM>step 5</EM>).
- <LI> Construct a &quot;track&quot; line that points to your bigGenePred file
+ <LI> Construct a &quot;track&quot; line that points to your bigChain file
   (see <EM>step 6</EM>).
  <LI> Create the custom track on the human assembly hg38 (Dec. 2013), and 
   view it in the genome browser (see <EM>step 7</EM>).
@@ -205,14 +197,14 @@ including numbering.
 
 <H3>Sharing Your Data with Others</H3>
 <P>
-If you would like to share your bigGenePred data track with a colleague, learn
+If you would like to share your bigChain data track with a colleague, learn
 how to create a URL by looking at <B><EM>Example 11</EM></B> on
 <A HREF="customTrack.html#SHARE">this</A> page.
 </P>
 
 <H3>Extracting Data from bigBed Format</H3>
 <P>
-Since the bigGenePred files are an extension of bigBed files, which are indexed binary files, 
+Since the bigChain files are an extension of bigBed files, which are indexed binary files, 
 they can be difficult to
 extract data from.  We have developed the following 
 programs, all of which are available from the 
@@ -232,7 +224,7 @@ at the command line with no parameters to see the usage statement.
 
 <H3>Troubleshooting</H3>
 <P>If you encounter an error when you run the <TT>bedToBigBed</TT> program,
-it may be because your input bigGenePred file has data off the end of a chromosome.
+it may be because your input bigChain file has data off the end of a chromosome.
 In this case, use the <TT>bedClip</TT> program 
 <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">here</A> before the
 <TT>bedToBigBed</TT> program.  It will remove the row(s) in your input BED
