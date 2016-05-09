@@ -172,7 +172,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     if (sameString(track->tdb->type, "bigPsl"))
 	{
 	char *seq, *cds;
-	struct psl *psl = pslFromBigPsl(chromName, bb, seqBaseCount, &seq, &cds); 
+	struct psl *psl = pslFromBigPsl(chromName, bb,  &seq, &cds); 
 	int sizeMul = 1;  // we're assuming not protein at the moment
 	boolean isXeno = 0;  // just affects grayIx
 	boolean nameGetsPos = FALSE; // we want the name to stay the name

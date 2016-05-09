@@ -2941,7 +2941,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-pslList = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), NULL, NULL);
+pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
 printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
@@ -7088,7 +7088,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-psl = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), &seq, &cdsString);
+psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 
