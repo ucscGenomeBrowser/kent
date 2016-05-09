@@ -1,5 +1,5 @@
 #!/bin/sh -e
-
+set -eEu -o pipefail
 #	Do not modify this script, modify the source tree copy:
 #	src/utils/decipher/checkDecipher.sh
 #	This script is used via a cron job and kept in $HOME/bin/scripts/
