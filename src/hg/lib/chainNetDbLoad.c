@@ -273,7 +273,6 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     {
     bigBedIntervalToRow(bb, chrom, startBuf, endBuf, bedRow, ArraySize(bedRow));
     unsigned chainId = sqlUnsigned(bedRow[3]);
-    printf("chainId %d\n", chainId);
     if (chainId == id)
         {
         struct cBlock *cBlock;

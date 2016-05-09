@@ -3205,7 +3205,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-if (isHubTrack(tdb->track))
+if (isHubTrack(tdb->track) || isCustomTrack(tdb->track))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
@@ -7053,7 +7053,17 @@ unsigned int cdsStart = 0, cdsEnd = 0;
 writeFramesetType();
 puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
-tdb = hashFindVal(trackHash, aliTable);
+if (isCustomTrack(aliTable))
+    {
+    struct customTrack *ctList = getCtList();
+    struct customTrack *ct = NULL;
+    for (ct = ctList; ct != NULL; ct = ct->next)
+        if (sameString(aliTable, ct->tdb->track))
+            break;
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(trackHash, aliTable);
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
 
 /* Get some environment vars. */
@@ -20717,6 +20727,8 @@ struct customTrack *ctList = getCtList();
 struct customTrack *ct;
 struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *item = cartString(cart, "i");
 char *type;
 fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
@@ -20734,6 +20746,12 @@ else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
+else if (sameWord(type, "bigChain"))
+    genericChainClick(NULL, ct->tdb, item, start, "seq");
+else if (sameWord(type, "bigPsl"))
+    genericBigPslClick(NULL, ct->tdb, item, start, end);
+else if (sameWord(type, "bigMaf"))
+    genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 #ifdef USE_BAM
@@ -24776,7 +24794,7 @@ if (isCustomTrack(track))
     }
 
 if ((!isCustomTrack(track) && dbIsFound)
-||  ((ct!= NULL) && (ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf")))
+||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (sameString("htcBigPslAli", track) )
@@ -24802,7 +24820,7 @@ if ((!isCustomTrack(track) && dbIsFound)
         typeLine = cloneString(tdb->type);
         wordCount = chopLine(typeLine, words);
         if (wordCount < 1)
-         errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
+            errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
                     parentWigMaf);
         safef(wigType, 128, "wig ");
         for (i = 1; i < wordCount; ++i)

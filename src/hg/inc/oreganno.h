@@ -217,5 +217,10 @@ void oregannoLinkOutput(struct oregannoLink *el, FILE *f, char sep, char lastSep
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct hash *oregannoLoadAttrHash(struct sqlConnection *conn);
+/* Construct a hash table of the entries in the oregannoAttr table, indexed by ID.
+ * Free with hashFreeWithVals(&attrHash, oregannoAttrFree).
+ */
+
 #endif /* OREGANNO_H */
 

@@ -35,6 +35,9 @@
         <li><a class="toc" href="#mlq">Mailing List Support</a>
       </ul>
     <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
+      <ul>
+        <li><a class="toc" href="#links">Creating Links</a>
+        <li><a class="toc" href="#customTracks">Custom Tracks</a>
 </b></ul>
 </td>
 </div><!-- .sectionContent -->
@@ -329,6 +332,8 @@ where information on repeats, such as the AluY element desired, is contained.
 <div class="section">
 <h1>Troubleshooting Common Problems</h1>
 <div class="sectionContent">
+<a name="links"></a>
+<h3><em>Creating Links</em></h3>
 <p>
 Please see the <a href="http://genome.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
 target="_blank">How to share your UCSC screenthoughts</a> blog entry for a thorough 
@@ -354,6 +359,38 @@ called <tt>hg19_watsonKriek</tt>. This more stable link is the best way to share
 the only further improvement being to locally download your session file and then remotely share it
 from your own private collection in an internet accessible location using the
 <tt><b>hgS_loadUrlName=</b></tt> option. For example seen in this link: <tt>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doLoadUrl=submit&hgS_loadUrlName=</b>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</tt>
+</p>
+<a name="customTracks"></a>
+<h3><em>Custom Tracks</em></h3>
+<p>
+We have changed our policy about the persistence of session data including custom tracks in sessions.
+In the past saved sessions were only committed to persist for four months after the last access
+and custom tracks in sessions were subject to persist for at least 48 hours after the last time
+they were viewed. We have now moved to not remove session data, unless deleted, and to not remove
+custom tracks in sessions. However, <b>please note that the UCSC Genome Browser is not a data
+storage service</b>, so you will want to keep backups of all your custom tracks on a local 
+machine, just in case there is a possible loss of data due to unforeseen circumstances.
+</p>
+<p>
+For mirrors, when loading sessions that contain custom data from custom tracks or hubs an
+issue can arise. If you create a session on our genome-euro machine with custom
+track data, and then try to load that session on our machine in the US, the custom track
+data will not populate through only the saved session file. The session only points to where
+the custom track data exists on a machine, and if loaded on a new machine that does not have the
+custom track in the same location, the custom track data will not be available to display.
+One fix for this issue is to load your custom tracks on both machines, then the sessions 
+should find the data on each machine. A similar issue can occur with hubs, where different
+machines will have different prefixes for each hub, and so sessions on different machines
+will call the hubs by different unique identifiers. You can read some more information about
+these differences in sessions <a href="genomeEuro.html#sessions" target="_blank">here</a>. 
+</p>
+<p>
+Lastly, please note that track data from BLAT results will not persist like session custom tracks.
+If you perform a BLAT search and create a session to keep those BLAT results, the BLAT display
+will not persist.  However, if you wish to make BLAT data remain, you can set the BLAT results
+to &quot;Output type: psl no header&quot; and then paste the results into the custom track
+page, perhaps giving a top line such as <code>track name=&quot;blat&quot;
+description=&quot;My BLAT results for X,Y,Z&quot;</code> to describe it.    
 </p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->

@@ -2360,6 +2360,19 @@ if (tags != NULL)
     }
 }
 
+void cgiParsedVarsFreeList(struct cgiParsedVars **pList)
+/* Free up list of cgiParsedVars */
+{
+struct cgiParsedVars *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cgiParsedVarsFree(&el);
+    }
+*pList = NULL;
+}
+
 void cgiEncodeHash(struct hash *hash, struct dyString *dy)
 /* Put a cgi-encoding of a string valued hash into dy.  Tags are always
  * alphabetical to make it easier to compare if two hashes are same. */
