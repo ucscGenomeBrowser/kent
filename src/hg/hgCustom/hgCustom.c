@@ -207,7 +207,7 @@ addIntro();
 puts("<P>");
 
 /* row for error message */
-if (err)
+if (isNotEmpty(err))
     printf("<P><B>&nbsp;&nbsp;&nbsp;&nbsp;<span style='color:RED; font-style:italic;'>"
            "Error</span>&nbsp;%s</B><P>", err);
 
@@ -1114,7 +1114,7 @@ long thisTime = clock1000();
 
 cart = theCart;
 measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
-initialDb = cloneString(cartString(cart, "db"));
+initialDb = cloneString(cartUsualString(cart, "db", ""));
 getDbAndGenome(cart, &database, &organism, oldVars);
 
 customFactoryEnableExtraChecking(TRUE);
@@ -1333,12 +1333,10 @@ else
 	long lastTime = clock1000();
 	loadTime = lastTime - thisTime;
 	}
-    if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
+    if (ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
-    else if (ctParseError)
-	doAddCustom(warn);
     else
-        doAddCustom(NULL);
+	doAddCustom(warn);
     }
 cartRemovePrefix(cart, hgCt);
 cartRemove(cart, CT_CUSTOM_TEXT_VAR);
