@@ -87,6 +87,8 @@ uncompressed BED input file.</P>
 <P>
 To create a bigPsl track, follow these steps:<BR>
 
+pslToBigPsl  bigPsl.psl stdout -cds=bigPsl.cds -fa=bigPsl.fa  | sort -k1,1 -k2,2n > bigPsl.txt
+
 <OL>
  <LI> Create a <tt>bed12+12</tt> bigPsl format file that has the first twelve fields
   described by a normal BED file as described <A HREF="../../FAQ/FAQformat.html#format1">here</A>.
@@ -171,7 +173,7 @@ numbering.</p>
 You can also add a parameter in the custom track line,
 <tt>baseColorDefault=genomicCodons</tt>, to set the display of codons:
 <p>
-<tt>browser position chr10:67,884,600-67,884,900<br>
+<tt>browser position chr1:11,874-14,361 <br>
 track type=bigPsl baseColorDefault=genomicCodons name="bigPsl Example Two" description="A bigPsl file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb
 </tt>
 <p>
@@ -185,7 +187,7 @@ on chromosome 10.</p>
 bigPsl input file.
 
 <UL>
- <LI> Save this <tt>bed12+8</tt> <A HREF="examples/bigPsl.txt">bigPsl.txt</A>
+ <LI> Save this <tt>bed12+12</tt> <A HREF="examples/bigPsl.txt">bigPsl.txt</A>
   example input file to your machine (<EM>satisfies above step 1</EM>).
  <LI> Download the <TT>bedToBigBed</TT> <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</A>
  (<EM>step 2</EM>).
