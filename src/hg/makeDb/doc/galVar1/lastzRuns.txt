@@ -55,8 +55,7 @@ TMPDIR=/dev/shm
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupBel1 galVar1) \
             > rbest.log 2>&1
-XXX - running - Tue Apr 26 16:41:32 PDT 2016
-    # real    196m46.991s
+    # real    183m49.967s
 
 #########################################################################
 
