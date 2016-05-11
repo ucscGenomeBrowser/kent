@@ -229,6 +229,7 @@ char *cdwAllowedTags[] = {
     "dna_concentration",
     "donor",
     "enriched_in",
+    "experiment",
     "file",
     "file_part",
     "fluidics_chip",
@@ -374,6 +375,7 @@ char *disease[] =
 {
 "DCM",
 "HCM",
+"LQT",
 "TNM stage IIA, grade 3, ductal carcinoma",
 "chronic myelogenous leukemia (CML)",
 "acute promyelocytic leukemia",
@@ -413,6 +415,7 @@ char *formats[] =
 };
 char *sequencer[] =
 {
+"Illumina HiSeq",
 "Illumina HiSeq 2000",
 "Illumina HiSeq 2500",
 "Illumina HiSeq 3000",
