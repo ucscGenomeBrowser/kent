@@ -44,6 +44,7 @@
 #include "trackHub.h"
 #include "gtexUi.h"
 #include "genbank.h"
+#include "htmlPage.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -329,7 +330,7 @@ if (downloadLink)
         printf(",");
     }
 if (metadataLink)
-    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE);
+    printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
 if (links > 1)
     printf("</td></tr></table>");
