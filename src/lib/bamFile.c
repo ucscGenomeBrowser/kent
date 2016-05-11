@@ -258,7 +258,7 @@ if (samfile->format.format == cram)
                 errAbort("cannot find reference %s.  Cannot create file %s.",md5String, pendingFile);  
             fprintf(downFile,  "%s\n", server);
             fclose(downFile);
-            errAbort("cannot find reference %s.  Downloading from %s. Pending in %s",md5String, server, pendingFile);
+            errAbort("Cannot find reference %s.  Downloading from %s. Please refresh screen to check download status.",md5String, server);
             }
         }
     }
