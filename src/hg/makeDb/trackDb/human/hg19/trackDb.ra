@@ -651,6 +651,17 @@ noInherit on
     #type bed 5
     #release alpha
 
+track snpedia
+shortLabel SNPedia
+longLabel SNPedia: dbSNPs with a SNPedia article
+group phenDis
+visibility hide
+color 50,0,100
+type bigBed 4 
+bigDataUrl /gbdb/hg19/bbi/snpedia.bb
+url https://www.snpedia.com/index.php/$$
+release alpha
+
 track cons46way
 compositeTrack on
 shortLabel Cons 46-Way
