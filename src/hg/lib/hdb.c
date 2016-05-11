@@ -770,6 +770,20 @@ static void tableListHashAdd(struct hash *dbTblHash, char *profile, char *db)
  * cache it to save a lot of querying if we will check existence of
  * lots of tables. */
 {
+if (trackHubDatabase(db))
+    {
+    struct trackHub *hub = hubConnectGetHubForDb(db);
+    if (hub != NULL)
+        {
+        struct trackHubGenome *hubGenome = trackHubFindGenome(hub, db);
+        struct trackDb *tdbList = trackHubTracksForGenome(hub, hubGenome), *tdb;
+        for (tdb = tdbList;  tdb != NULL;  tdb = tdb->next)
+            {
+            hashAdd(dbTblHash, tdb->table, slNameNew(tdb->table));
+            }
+        }
+    return;
+    }
 struct sqlConnection *conn = hAllocConnProfile(profile, db);
 struct slName *allTables =  sqlListTables(conn);
 
