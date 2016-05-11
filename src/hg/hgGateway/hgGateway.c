@@ -45,7 +45,8 @@ char *descText = NULL;
 if (errCatchStart(errCatch))
     {
     char *htmlPath = hHtmlPath(db);
-    descText = udcFileReadAll(htmlPath, NULL, 0, NULL);
+    if (isNotEmpty(htmlPath))
+        descText = udcFileReadAll(htmlPath, NULL, 0, NULL);
     }
 errCatchEnd(errCatch);
 // Just ignore errors for now.
