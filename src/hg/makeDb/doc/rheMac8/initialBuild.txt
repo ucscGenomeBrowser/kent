@@ -472,9 +472,10 @@ rheMac8.upstreamGeneTbl = refGene
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev rheMac8) > do.log 2>&1
+    # real    95m5.905s
 
     cat fb.rheMac8.augustusGene.txt
-    # 25248650 bases of 100286401 (25.177%) in intersection
+    # 49244982 bases of 3142093174 (1.567%) in intersection
 
 #########################################################################
 # LIFTOVER TO rheMac3 (DONE - 2016-02-05 - Hiram)
@@ -550,6 +551,8 @@ rheMac8.upstreamGeneTbl = refGene
     mkdir /hive/data/genomes/rheMac8/pushQ
     cd /hive/data/genomes/rheMac8/pushQ
     time makePushQSql.pl rheMac8 > rheMac8.pushQ.sql 2> stderr.out
+    #  real    5m51.393s
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/rheMac8/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/rheMac8/wib/quality.wib

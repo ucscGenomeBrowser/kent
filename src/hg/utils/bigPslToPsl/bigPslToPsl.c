@@ -42,7 +42,7 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     
     for(; bbList; bbList = bbList->next)
 	{
-	struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList,  end, NULL, NULL);
+	struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList, NULL, NULL);
 
 	for(psl=pslList; psl; psl = psl->next)
 	    pslTabOut(psl, f);
