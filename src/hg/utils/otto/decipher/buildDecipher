@@ -1,5 +1,6 @@
 #!/bin/sh -e
 # get raw data file from DECIPHER
+set -eEu -o pipefail
 
 #cp $1  decipherRawNew.txt -p
 sort $1| grep -v '#' | uniq >  decipherRawNew.txt 
@@ -20,7 +21,7 @@ cp j.tmp decipherNew.bed
 hgLoadBed hg19 decipherNew decipherNew.bed
 
 # Create knownToDecipher table
-hgMapToGene -noLoad -all -type="bed 4" hg19 decipherNew knownGene knownToDecipherNew
+hgMapToGene -trackDb=trackDb -noLoad -all -type="bed 4" hg19 decipherNew knownGene knownToDecipherNew
 hgsql hg19 -e 'drop table if exists knownToDecipherNew'
 hgsql hg19 -e 'create table knownToDecipherNew select * from knownToDecipher limit 0'
 sort knownToDecipherNew.tab | uniq > knownToDecipherNew.uniq

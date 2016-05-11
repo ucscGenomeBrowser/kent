@@ -58,3 +58,13 @@
 
 # 12 base query deletion with 9 base target insertion (C57BL_6NJ v1509)
 320	63	0	0	1	9	2	640	-	ENSMUST00000089900.9-3	1981	0	392	chr15	110139955	65643835	65644858	3	178,79,126,	1589,1767,1855,	65643835,65644641,65644732,
+
+# exons with 3' end of CDS is deleted, however 3'UTR parts of terminal exon
+# are aligned with a gap; 5' CDS truncated, 18bp gap not merged  (C57BL_6NJ v1509)
+424	26	0	26	2	399	5	27133	-	ENSMUST00000166121.3-4	1184	309	1184	chr14	127425899	56228994	56256603	7	65,56,39,132,50,60,74,	0,66,122,559,691,741,801,	56228994,56229059,56229116,56252776,56253973,56256451,56256529,
+
+# this has a 3-base query deletion followed by a 19 base block, followed by a
+# 1-base query-insertion. The genePred appears to have a 3-base indel that
+# shoud be gap-filled. It is correctly not filled due source gene having a
+# one-base frame-shifting deletion.   (C57BL_6NJ v1509)
+1754	14	161	6	1	1	7	3666	+	ENSMUST00000151231.8-3	1936	0	1936	chrX	173080199	101260784	101266385	8	1394,19,19,160,83,46,42,172,	0,1394,1413,1433,1593,1676,1722,1764,	101260784,101262194,101262216,101264424,101265106,101265462,101266088,101266213,

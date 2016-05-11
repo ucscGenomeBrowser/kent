@@ -249,7 +249,12 @@ static void printActiveGenomes()
 struct jsonWrite *jw = jsonWriteNew();
 jsonWriteObjectStart(jw, NULL);
 struct sqlConnection *conn = hConnectCentral();
-char *query = NOSQLINJ "select distinct(genome),taxId from dbDb where active=1 "
+// Join with defaultDb because in rare cases, different taxIds (species vs. subspecies)
+// may be used for different assemblies of the same species.  Using defaultDb means that
+// we send a taxId consistent with the taxId of the assembly that we'll change to when
+// the species is selected from the tree.
+char *query = NOSQLINJ "select dbDb.genome, taxId from dbDb, defaultDb "
+    "where defaultDb.name = dbDb.name and active = 1 "
     "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
@@ -797,6 +802,9 @@ if (cgiOptionalString(SEARCH_TERM))
     // Skip the cart for speedy searches
     lookupTerm();
 else
+    {
+    oldVars = hashNew(10);
     cartEmptyShellNoContent(doMiddle, hUserCookie(), excludeVars, oldVars);
+    }
 return 0;
 }

@@ -460,5 +460,8 @@ boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 /* Return list of references to stanzas that match RQL query */
 
+struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef);
+/* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
+ * with cgiParsedVarsFreeList() */
 
 #endif /* CDWLIB_H */

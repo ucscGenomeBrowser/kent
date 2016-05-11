@@ -270,7 +270,29 @@ for (sn = ss->nodeList; sn != NULL; sn = sn->next)
     hvGfxBox(hvg, x1, y, w, heightPer, col);
     textWidth = mgFontStringWidth(font, s);
     if ((textWidth <= w) && (!nofrag))
-	hvGfxTextCentered(hvg, x1, y, w, heightPer, MG_WHITE, font, s); 
+	hvGfxTextCentered(hvg, x1, y, w, heightPer, MG_WHITE, font, s);
+    // BUG NOT WORTH FIXING PRESENTLY
+    // hgTracks.js wants to match the id of the right-click to the track name in the
+    // javascript variable hgTracks->trackDb, which is an array.
+    // Unfortunately, this track is really called "clonePos".  Used by hg16, hg17, hg18.
+    // But it wants to use an alternate hgc method below calleed "hgClone".
+    // That part is ok, but the problem is that it also causes it to emit the id as hgClone too.
+    // In any case, more code would have to be written to create extended functions to pass in
+    // extra variables.  This takes some time to write and test, and it also complicates the code.
+    // After examining the source, it seems that ONLY this coverage track is doing this weird thing.
+    // All the others tracks using mapBoxHc are passing in the actual track name.
+    // Fixing this problem for this one track is not worthwhile at this time.
+    //
+    // Note that we were unable to simply rename the hgc method from hgClone to clonePos
+    // because BOTH methods already exist in hgc and are being used it seems.
+    // Rather than potentially losing other functionality,
+    // we will tolerate the broken right-click for clonePos.
+    // The track items are mapped twice: once here,
+    // and once by the standard drawing routines elsewhere, 
+    // which produces a right-clickable map, but loses the extra hgClone functionality.
+    // Although suppressing one or the other might be a small improvement, it is not the total fix.
+    // The real fix would be being able to specify an alternate g=hgClone method without changing its track id from clonePos.
+    // Currently the code as it exists changes BOTH the method and the id when you specify an alternate name like "hgClone".
     if (baseWidth <= 2000000)
 	{
 	psl = cfa->psl;

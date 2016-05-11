@@ -3288,7 +3288,7 @@ function showHotkeyHelp() {
 // A function to add an entry for the keyboard help dialog box to the menubar 
 // and add text that indicates the shortcuts to many static menubar items as suggested by good old IBM CUA/SAA
 function addKeyboardHelpEntries() {
-    html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
+    var html = '<li><a title="List all possible keyboard shortcuts" href="javascript:showHotkeyHelp()">Keyboard Shortcuts</a><span class="shortcut">?</span></li>';
     $('#help .last').before(html);
 
     html = '<span class="shortcut">s s</span>';
@@ -3308,6 +3308,9 @@ function addKeyboardHelpEntries() {
 
     html = '<span class="shortcut">t i</span>';
     $('#ispMenuLink').after(html);
+
+    html = '<span class="shortcut">t s</span>';
+    $('#trackSearchMenuLink').after(html);
 
     html = '<span class="shortcut">c f</span>';
     $('#configureMenuLink').after(html);

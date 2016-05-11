@@ -94,4 +94,7 @@ char *gtexVersionSuffix(char *table);
 char *gtexVersion(char *table);
 /* Return version string based on table suffix */
 
+char *gtexVersionSuffixFromVersion(char *version);
+/* Return version table suffix for a version */
+
 

@@ -611,7 +611,7 @@ FILE *f = mustOpen(outFile, "w");
 char *row[TXGRAPH_NUM_COLS];
 struct nibTwoCache *ntc = nibTwoCacheNew(dnaPath);
 struct dnaSeq *chrom = NULL;
-while (lineFileRow(lf, row))
+while ( lineFileChopNextTab(lf, row, ArraySize(row)))
     {
     struct txGraph *txg = txGraphLoad(row);
     if (chrom == NULL || !sameString(chrom->name, txg->tName))

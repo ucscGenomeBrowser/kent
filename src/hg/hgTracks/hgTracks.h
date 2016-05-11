@@ -136,6 +136,9 @@ struct track
     void (*freeItems)(struct track *tg);
     /* Free item list. */
 
+    struct hash *attrTable;
+    /* Persistent table to speed up lookup of attributes in secondary tables (optional). */
+
     Color (*itemColor)(struct track *tg, void *item, struct hvGfx *hvg);
     /* Get color of item (optional). */
 
@@ -698,6 +701,9 @@ Color darkerColor(struct hvGfx *hvg, Color color);
 
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color);
 /* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
+
+Color slightlyDarkerColor(struct hvGfx *hvg, Color color);
+/* Get a slightly darker shade of a color - 1/4 of the way towards black. */
 
 Color lighterColor(struct hvGfx *hvg, Color color);
 /* Get lighter shade of a color - half way between this color and white */
@@ -1331,6 +1337,9 @@ boolean isCenterLabelConditionallySeen(struct track *track);
 #define isCenterLabelIncluded(track) \
                 (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
 // Center labels may be conditionally included
+
+Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color);
+/* For tracks having light track display but needing a darker label */
 
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */

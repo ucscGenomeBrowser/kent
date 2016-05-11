@@ -345,6 +345,9 @@ var speciesTree = (function() {
         addDepth(dbDbTree);
         treeInfo = drawNode(newG, dbDbTree, hubBottomY, leafTops);
         width = treeInfo.x + cfg.paddingRight;
+        if (width < cfg.containerWidth) {
+            width = cfg.containerWidth;
+        }
         height = treeInfo.leafY - cfg.labelLineHeight + cfg.paddingBottom;
         if (oldG) {
             svg.removeChild(oldG);
@@ -542,7 +545,6 @@ var rainbow = (function() {
         // Initialize missing stripes to 0-height (top = next stripe's top), if any:
         for (i = stripeCount - 1;  i >= 0;  i--) {
             if (stripeTops[i] === undefined) {
-                console.warn("No species found for stripe " + i + ", taxId " + stripeTaxIds[i]);
                 stripeTops[i] = stripeTops[i+1];
             }
         }
@@ -772,7 +774,7 @@ var hgGateway = (function() {
                                   'Chrome</A>.' +
                                   '</P>';
 
-    // Globals
+    // Globals (within this function scope)
     // Set this to true to see server requests and responses in the console.
     var debugCartJson = false;
     // This is a global (within wrapper function scope) so event handlers can use it
@@ -780,20 +782,34 @@ var hgGateway = (function() {
     var scrollbarWidth = 0;
     // This holds everything we need to know to draw the page: taxId, db, hubs, description etc.
     var uiState = {};
+    // This is used to check whether a taxId is found in activeGenomes:
+    var activeTaxIds = _.invert(activeGenomes);
     // This is dbDbTree after pruning -- null if dbDbTree has no children left
-    var prunedDbDbTree;
+    var prunedDbDbTree = null;
+    // This keeps track of which gene the user has selected most recently from autocomplete.
+    var selectedGene = null;
 
     function setupFavIcons() {
         // Set up onclick handlers for shortcut buttons and labels
+        var haveIcon = false;
         var i, name, taxId, onClick;
         for (i = 0;  i < favIconTaxId.length;  i++) {
             name = favIconTaxId[i][0];
             taxId = favIconTaxId[i][1];
-            // When user clicks on icon, set the taxId (default database);
-            // scroll the image to that species and clear the species autocomplete input.
-            onClick = setTaxId.bind(null, taxId, null, true, true);
-            // Onclick for both the icon and its sibling label:
-            $('.jwIconSprite' + name).parent().children().click(onClick);
+            if (activeTaxIds[taxId]) {
+                // When user clicks on icon, set the taxId (default database);
+                // scroll the image to that species and clear the species autocomplete input.
+                onClick = setTaxId.bind(null, taxId, null, true, true);
+                // Onclick for both the icon and its sibling label:
+                $('.jwIconSprite' + name).parent().children().click(onClick);
+                haveIcon = true;
+            } else {
+                // Inactive on this site -- hide it
+                $('.jwIconSprite' + name).parent().hide();
+            }
+        }
+        if (! haveIcon) {
+            $('#popSpeciesTitle').text('Species Search');
         }
     }
 
@@ -1021,6 +1037,9 @@ var hgGateway = (function() {
         // "Browse/Select Species" section.
         var ieFudge = scrollbarWidth ? scrollbarWidth + 4 : 0;
         var extraFudge = 4;
+        var $contents = $('#findPositionContents');
+        var sectionContentsPadding = (_.parseInt($contents.css("padding-left")) +
+                                      _.parseInt($contents.css("padding-right")));
         var rightColumnWidth = ($('#pageContent').width() -
                                 $('#selectSpeciesSection').width() -
                                 ieFudge - extraFudge);
@@ -1028,6 +1047,8 @@ var hgGateway = (function() {
             $('#findPositionSection').width(rightColumnWidth);
         }
         updateGoButtonPosition();
+        $('#findPositionTitle').outerWidth(rightColumnWidth + extraFudge);
+        $('#descriptionTitle').outerWidth(rightColumnWidth - sectionContentsPadding);
     }
 
     function setSpeciesPickerSizes(svgWidth, svgHeight) {
@@ -1098,7 +1119,8 @@ var hgGateway = (function() {
             }
             // Yet another special case for Baboon having one genome with two species...
             // maybe we should just change dbDb?
-            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562)) {
+            else if (_.startsWith(genome, 'Baboon ') && (taxId === 9555 || taxId === 9562) &&
+                     activeGenomes.Baboon) {
                 hasActiveLeaf = true;
             } else {
                 dbDbGenome = activeTaxIds[taxId];
@@ -1136,7 +1158,6 @@ var hgGateway = (function() {
                                             containerWidth: $('#speciesPicker').width()
                                             });
                 setSpeciesPickerSizes(spTree.width, spTree.height);
-                highlightLabelForDb(uiState.db, uiState.taxId);
                 stripeTops = rainbow.draw(svg, dbDbTree,
                                           spTree.yTree, spTree.height, spTree.leafTops);
             } else {
@@ -1145,8 +1166,8 @@ var hgGateway = (function() {
             $('#representedSpeciesTitle').show();
             $('#speciesGraphic').show();
             if (dbDbTree && document.createElementNS) {
-                // This needs to be done after things are visible so the slider gets the
-                // right position.
+                // These need to be done after things are visible because heights are 0 when hidden.
+                highlightLabelForDb(uiState.db, uiState.taxId);
                 initRainbowSlider(spTree.height, rainbow.colors, stripeTops);
             }
         }
@@ -1177,11 +1198,16 @@ var hgGateway = (function() {
             cart.send({ cgiVar: settings });
             cart.flush();
         }
-        // Overwrite the selected item w/actual position after the autocomplete plugin is done:
-        function overwriteWithPos() {
-            $('#positionInput').val(newPosComma);
+        function overwriteWithGene() {
+            $('#positionInput').val(item.geneSymbol);
         }
-        window.setTimeout(overwriteWithPos, 0);
+        if (item.geneSymbol) {
+            selectedGene = item.geneSymbol;
+            // Overwrite item's long value with symbol after the autocomplete plugin is done:
+            window.setTimeout(overwriteWithGene, 0);
+        } else {
+            selectedGene = item.value;
+        }
     }
 
     function setAssemblyOptions(uiState) {
@@ -1278,6 +1304,17 @@ var hgGateway = (function() {
         updateGoButtonPosition();
     }
 
+    function processHgSuggestResults(results, term) {
+        // Make matching part of the gene symbol bold
+        _.each(results, function(item) {
+            if (_.startsWith(item.value.toUpperCase(), term.toUpperCase())) {
+                item.value = '<b>' + item.value.substring(0, term.length) + '</b>' +
+                             item.value.substring(term.length);
+            }
+        });
+        return results;
+    }
+
     function updateFindPositionSection(uiState) {
         // Update the assembly menu, positionInput and description.
         var suggestUrl = null;
@@ -1291,9 +1328,11 @@ var hgGateway = (function() {
         autocompleteCat.init($('#positionInput'),
                              { baseUrl: suggestUrl,
                                watermark: positionWatermark,
+                               onServerReply: processHgSuggestResults,
                                onSelect: onSelectGene,
                                enterSelectsIdentical: true,
                                onEnterTerm: goToHgTracks });
+        selectedGene = null;
         setAssemblyDescriptionTitle(uiState.db, uiState.genome);
         updateDescription(uiState.description);
         if (uiState.db && $('#findPositionContents').css('display') === 'none') {
@@ -1552,7 +1591,8 @@ var hgGateway = (function() {
         var posDisplay = $('#positionDisplay').text();
         var pix = uiState.pix || calculateHgTracksWidth();
         var $form;
-        if (! position || position === '' || position === positionWatermark) {
+        if (! position || position === '' || position === positionWatermark ||
+            position === selectedGene) {
             position = posDisplay;
         }
         // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
@@ -1560,6 +1600,7 @@ var hgGateway = (function() {
         // Make a form and submit it.  In order for this to work in IE, the form
         // must be appended to the body.
         $form = $('<form action="hgTracks" method=GET id="mainForm">' +
+                  '<input type=hidden name="hgsid" value="' + window.hgsid + '">' +
                   '<input type=hidden name="org" value="' + uiState.genome + '">' +
                   '<input type=hidden name="db" value="' + uiState.db + '">' +
                   '<input type=hidden name="position" value="' + position + '">' +
@@ -1592,10 +1633,11 @@ var hgGateway = (function() {
         cart.send({ getUiState: {} }, handleRefreshState);
         cart.flush();
         // Prune inactive genomes from dbDbTree.
-        var activeTaxIds = _.invert(activeGenomes);
-        prunedDbDbTree = dbDbTree;
-        if (dbDbTree && ! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
-            prunedDbDbTree = null;
+        if (window.dbDbTree) {
+            prunedDbDbTree = dbDbTree;
+            if (! pruneInactive(dbDbTree, activeGenomes, activeTaxIds)) {
+                prunedDbDbTree = null;
+            }
         }
 
         // When page has loaded, do layout adjustments and initialize event handlers.

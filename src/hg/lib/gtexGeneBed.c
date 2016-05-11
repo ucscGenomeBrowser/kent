@@ -287,3 +287,21 @@ for (i=0; i<geneBed->expCount; i++)
     sum += geneBed->expScores[i];
 return sum;
 }
+
+float gtexGeneHighestMedianExpression(struct gtexGeneBed *geneBed, int *tissueIdRet)
+/* Return tissue median and id of tissue with highest expression of this gene */
+{
+int i;
+float maxScore = 0.0;
+assert(tissueIdRet);
+for (i=0; i<geneBed->expCount; i++)
+    {
+    float score = geneBed->expScores[i];
+    if (score > maxScore)
+        {
+        maxScore = score;
+        *tissueIdRet = i;
+        }
+    }
+return maxScore;
+}

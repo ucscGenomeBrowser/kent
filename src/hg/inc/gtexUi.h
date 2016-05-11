@@ -58,4 +58,13 @@
 #define GTEX_SHOW_EXONS         "showExons"
 #define GTEX_SHOW_EXONS_DEFAULT FALSE
 
+void gtexPortalLink(char *geneId);
+/* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
+
+boolean gtexGeneBoxplot(char *geneId, char *geneName, char *version, 
+                                boolean doLogTransform, struct tempName *pngTn);
+/* Create a png temp file with boxplot of GTEx expression values for this gene. 
+ * GeneId is the Ensembl gene ID.  GeneName is the HUGO name, used for graph title;
+ * If NULL, label with the Ensembl gene ID */
+
 #endif /* GTEXUI_H */

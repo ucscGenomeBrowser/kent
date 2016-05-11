@@ -67,6 +67,7 @@ configureByPopup *
 container *
 controlledVocabulary *
 coriellUrlBase bed
+darkerLabels *
 dataUrl customTracks
 dataVersion *
 dateSubmitted bedGraph bed
@@ -167,7 +168,6 @@ graphTypeDefault wig bigWig
 gridDefault bed bedGraph wig bigWig
 group *
 groupings expRatio
-gtexDetails bed
 hapClusterEnabled vcf vcfTabix
 hapClusterColorBy vcf vcfTabix
 hapClusterTreeAngle vcf vcfTabix
@@ -177,6 +177,7 @@ hgGene genePred
 hgsid bed genePred
 highlightBy genePred
 highlightColor genePred
+hoverMetadata wig bigWig
 html *
 htmlFile customTracks
 htmlUrl customTracks

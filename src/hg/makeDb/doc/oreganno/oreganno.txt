@@ -67,8 +67,11 @@
     cd /hive/data/inside/oreganno/09-17-2015/bedResults
     liftOver  -bedPlus=4 sacCer1.oreganno.bed /gbdb/sacCer1/liftOver/sacCer1ToSacCer3.over.chain.gz \
     sacCer3.oreganno.bed sacCer3.unmapped.bed
-    cp -p sacCer1.attr.bed sacCer3.attr.bed
-    cp -p sacCer1.link.bed sacCer3.link.bed
+
+    # strip out attr and link entries for items that didn't survive the lift;
+    # otherwise joinerCheck complains
+    grep -vf <(grep -oP 'OREG\w+' sacCer3.unmapped.bed) sacCer1.attr.bed > sacCer3.attr.bed
+    grep -vf <(grep -oP 'OREG\w+' sacCer3.unmapped.bed) sacCer1.link.bed > sacCer3.link.bed
 
     # Fixing naming schemes to due to some UPPER CASE and
     # some Mixed Case type names.

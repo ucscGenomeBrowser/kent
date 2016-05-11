@@ -22,7 +22,8 @@ table bigPsl
 
     lstring  oSequence;  "Sequence on other chrom (or edit list, or empty)"
     string   oCDS;       "CDS in NCBI format"
-    uint    oBlock;     "Block number on other sequence"
+
+    uint    chromSize;"Size of target chromosome"
 
     uint match;        "Number of bases matched."
     uint misMatch; " Number of bases that don't match "

@@ -3286,9 +3286,12 @@ identifier knownGeneId dependency
     $kgDb,!mm10.kg5ToKg6.newId exclude=
     $kgDb,!mm10.kg6ToKg7.newId exclude=
     $kgDb.kg7ToKg8.newId exclude=
+    $kgDb.kg8ToKg9.newId exclude=
+    $kgDb.kg9ToKg10.newId exclude=
     $kgDb,!hg16.kgTargetAli.qName full
     hg19.knownGeneTxMrna.name
     hg19.knownGeneTxPep.name
+    $kgDb.knownAttrs.kgID
 
 identifier knownGeneOld7Id dependency
 "Previous UCSC Gene build"
@@ -4954,9 +4957,9 @@ identifier gvSrcId
 #links between oreganno (regulatory annotation) and related tables
 identifier oregId
 "ORegAnno track identifier: links annotations to attributes and external links"
-    $hg,$dm,$sacCer,$mm.oreganno.id
-    $hg,$dm,$sacCer,$mm.oregannoAttr.id
-    $hg,$dm,$sacCer,$mm.oregannoLink.id
+    $hg,$dm,$sacCer,$mm,$canFam.oreganno.id
+    $hg,$dm,$sacCer,$mm,$canFam.oregannoAttr.id
+    $hg,$dm,$sacCer,$mm,$canFam.oregannoLink.id
 
 # retroposon track, dbRIP_* and polyGenotype table link
 identifier dbRIPNameAlu fuzzy
@@ -6066,6 +6069,7 @@ tablesIgnored mm9
     rest
 
 tablesIgnored mm10
+    cloneEnd%
     mm10Haplotypes
     altSeqLiftOverPslP1
     altSeqPatchesP1

@@ -99,9 +99,18 @@ div.jwStaticRightColumn {
     width: 500px;
 }
 
+div.jwFloatLeft {
+    display: inline-block;
+    float: left;
+}
+
 div.jwFloatRight {
     display: inline-block;
     float: right;
+}
+
+div.jwClearBoth {
+    clear: both;
 }
 
 div.jwSection {

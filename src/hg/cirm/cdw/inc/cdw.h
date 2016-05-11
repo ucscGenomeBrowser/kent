@@ -1158,7 +1158,7 @@ void cdwExperimentOutput(struct cdwExperiment *el, FILE *f, char sep, char lastS
 #define cdwExperimentCommaOut(el,f) cdwExperimentOutput(el,f,',',',');
 /* Print out cdwExperiment as a comma separated list including final comma. */
 
-#define CDWVALIDFILE_NUM_COLS 23
+#define CDWVALIDFILE_NUM_COLS 24
 
 extern char *cdwValidFileCommaSepFieldNames;
 
@@ -1189,6 +1189,7 @@ struct cdwValidFile
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
     double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */
+    char *lane;	/* What sequencing lane if any associated with this file. */
     };
 
 void cdwValidFileStaticLoad(char **row, struct cdwValidFile *ret);

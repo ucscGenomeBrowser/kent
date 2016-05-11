@@ -1360,8 +1360,9 @@ dyStringPrintf(dy, " replicateQaStatus=0,");
 dyStringPrintf(dy, " part='%s',", el->part);
 dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
 dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
-#if (CDWVALIDFILE_NUM_COLS != 23)
+dyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
+dyStringPrintf(dy, " lane='%s'", el->lane);
+#if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
 dyStringPrintf(dy, " where id=%lld\n", (long long)id);
@@ -1397,7 +1398,8 @@ vf->enrichedIn = cloneString(cdwLookupTag(tags, "enriched_in"));
 vf->ucscDb = cloneString(cdwLookupTag(tags, "ucsc_db"));
 vf->part = cloneString(cdwLookupTag(tags, "file_part"));
 vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
-#if (CDWVALIDFILE_NUM_COLS != 23)
+vf->lane = cloneString(cdwLookupTag(tags, "lane"));
+#if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
 }
@@ -1455,10 +1457,10 @@ else
     /* The revalidation case relies on cdwMakeValidFile to update the cdwValidFile table.
      * Here we must do it ourselves. */
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    struct cgiParsedVars *tags = cgiParsedVarsNew(newTags);
+    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
     cdwValidFileFieldsFromTags(vf, tags);
     cdwValidFileUpdateDb(conn, vf, vf->id);
-    cgiParsedVarsFree(&tags);
+    cgiParsedVarsFreeList(&tags);
     cdwValidFileFree(&vf);
     }
 }
@@ -2057,5 +2059,24 @@ rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
 rqlStatementFree(&rql);
 lmCleanup(&lm);
 return list;
+}
+
+struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef)
+/* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
+ * with cgiParsedVarsFreeList() */
+{
+struct cgiParsedVars *tagsList = cgiParsedVarsNew(ef->tags);
+struct cgiParsedVars *parentTags = NULL;
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select tags from cdwMetaTags where id=%u", ef->metaTagsId);
+char *metaCgi = sqlQuickString(conn, query);
+if (metaCgi != NULL)
+    {
+    parentTags = cgiParsedVarsNew(metaCgi);
+    tagsList->next = parentTags;
+    freez(&metaCgi);
+    }
+return tagsList;
 }
 
