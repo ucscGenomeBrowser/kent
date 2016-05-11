@@ -1007,7 +1007,6 @@ done > tmpMostConserved.bed
     time hgWiggle -doHistogram -db=galVar1 \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    phastCons5way > histogram.data 2>&1
-XXX - running - Fri May  6 16:23:36 PDT 2016
     #	real    4m6.489s
 
     #	create plot of histogram:
@@ -1181,7 +1180,6 @@ sleep 4
     time hgWiggle -doHistogram \
 	-hBinSize=0.003432 -hBinCount=1000 -hMinVal=-2.559 -verbose=2 \
 	    -db=galVar1 phyloP5way > histogram.data 2>&1
-XXX - running - Wed May 11 10:56:23 PDT 2016
     # real    4m20.444s
 
     # find the Y range for the 2:5 graph
