@@ -546,3 +546,15 @@ CREATE TABLE cdwTrackViz (
               #Indices
     PRIMARY KEY(id)
 );
+
+#A dataset is a collection of files, usually associated to a paper
+CREATE TABLE cdwDataset (
+    name varchar(255) default '',	# Short name of this dataset, one word, no spaces
+    label varchar(255) default '',	# short title of the dataset, a few words
+    description longblob,	# Description of dataset, can be a complete html paragraph.
+    pmid varchar(255) default '',	# Pubmed ID of abstract
+    pmcid varchar(255) default '',	# PubmedCentral ID of paper full text
+    metaDivTags varchar(255) default '',	# Comma separated list of fields use to make tree out of metadata
+              #Indices
+    UNIQUE(name)
+);
