@@ -2444,7 +2444,7 @@ void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep);
 #define cdwTrackVizCommaOut(el,f) cdwTrackVizOutput(el,f,',',',');
 /* Print out cdwTrackViz as a comma separated list including final comma. */
 
-#define CDWDATASET_NUM_COLS 5
+#define CDWDATASET_NUM_COLS 6
 
 extern char *cdwDatasetCommaSepFieldNames;
 
@@ -2457,6 +2457,7 @@ struct cdwDataset
     char *description;	/* Description of dataset, can be a complete html paragraph. */
     char *pmid;	/* Pubmed ID of abstract */
     char *pmcid;	/* PubmedCentral ID of paper full text */
+    char *metaDivTags;	/* Comma separated list of fields use to make tree out of metadata */
     };
 
 void cdwDatasetStaticLoad(char **row, struct cdwDataset *ret);

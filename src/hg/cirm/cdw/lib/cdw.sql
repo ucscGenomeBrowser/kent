@@ -554,6 +554,7 @@ CREATE TABLE cdwDataset (
     description longblob,	# Description of dataset, can be a complete html paragraph.
     pmid varchar(255) default '',	# Pubmed ID of abstract
     pmcid varchar(255) default '',	# PubmedCentral ID of paper full text
+    metaDivTags varchar(255) default '',	# Comma separated list of fields use to make tree out of metadata
               #Indices
     UNIQUE(name)
 );

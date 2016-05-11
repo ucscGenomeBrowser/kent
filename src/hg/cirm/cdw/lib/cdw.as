@@ -470,4 +470,5 @@ table cdwDataset
     lstring description;  "Description of dataset, can be a complete html paragraph."
     string pmid;  "Pubmed ID of abstract"
     string pmcid;  "PubmedCentral ID of paper full text"
+    string metaDivTags; "Comma separated list of fields use to make tree out of metadata"
     )
