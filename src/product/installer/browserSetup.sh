@@ -1130,10 +1130,11 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
 "on customTrash.* TO ctdbuser@localhost IDENTIFIED by 'ctdbpassword';"
     
+    # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
-    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
+    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
     # mm9 needs an empty hg18 database
-    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
+    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
     
     $MYSQL -e "FLUSH PRIVILEGES;"
 }
@@ -1390,13 +1391,25 @@ function downloadGenomes
 # stop the mysql database server, so we can write into its data directory
 function stopMysql
 {
-    service mysqld stop
+    if [ -f /etc/init.d/mysql ]; then 
+            service mysqld stop
+    elif [ -f /etc/init.d/mysqld ]; then 
+            service mysqld stop
+    else
+        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+    fi
 }
 
 # start the mysql database server
 function startMysql
 {
-    service mysqld start
+    if [ -f /etc/init.d/mysql ]; then 
+            service mysqld start
+    elif [ -f /etc/init.d/mysqld ]; then 
+            service mysqld start
+    else
+        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+    fi
 }
 
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
