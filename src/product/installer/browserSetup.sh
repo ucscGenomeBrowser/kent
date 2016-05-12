@@ -1645,8 +1645,6 @@ if [ "$DIST" == "none" ]; then
     exit 3
 fi
 
-echo $#
-echo $2
 if [[ "$#" -gt "1" && "${2:0:1}" == "-"  ]]; then
   echo "Error: The options have to be specfied before the command, not after it."
   echo
