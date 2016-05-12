@@ -4134,7 +4134,6 @@ type bed 3
         subGroups view=atot phen=path level=det
 
 	track iscaBenignGainCum
-  release alpha
 	parent iscaViewTotal
 	shortLabel Benign Gain
 	longLabel ClinGen CNVs: Benign Gain Total
@@ -4142,7 +4141,6 @@ type bed 3
         subGroups view=atot phen=ben level=det
 
 	track iscaBenignLossCum
-  release alpha
 	parent iscaViewTotal
 	shortLabel Benign Loss
 	longLabel ClinGen CNVs: Benign Loss Total
