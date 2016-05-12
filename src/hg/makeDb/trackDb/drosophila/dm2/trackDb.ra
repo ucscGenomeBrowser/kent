@@ -613,7 +613,3 @@ searchTable nscanGene
 searchType genePred
 termRegex chr[0-9LRUnX]+.[0-9]+.seq.masked.[0-9]{3}.1
 searchPriority 50
-
-track oreganno override
-release beta,public
-html oregannoOld
