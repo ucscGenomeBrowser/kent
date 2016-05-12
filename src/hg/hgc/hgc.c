@@ -7055,11 +7055,7 @@ puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
 if (isCustomTrack(aliTable))
     {
-    struct customTrack *ctList = getCtList();
-    struct customTrack *ct = NULL;
-    for (ct = ctList; ct != NULL; ct = ct->next)
-        if (sameString(aliTable, ct->tdb->track))
-            break;
+    struct customTrack *ct = lookupCt(aliTable);
     tdb = ct->tdb;
     }
 else
