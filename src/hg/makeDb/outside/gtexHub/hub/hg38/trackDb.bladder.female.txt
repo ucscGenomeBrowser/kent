@@ -1,0 +1,36 @@
+    track gtexRnaSignalSRR1092208
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1092208.hg38.bigWig
+    shortLabel bladder F SE5C
+    longLabel GTEx RNA signal from female Bladder (GTEX-SE5C-1026-SM-4BRUG)
+    subGroups age=a40 tissue=bladder donor=GTEXSE5C
+    color 227,184,136
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-1026-SM-4BRUG \
+            tissue=bladder autolysisScore=1 rnaIntegrity=7.7 batch=BP-23389 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1093930
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1093930.hg38.bigWig
+    shortLabel bladder F S4UY
+    longLabel GTEx RNA signal from female Bladder (GTEX-S4UY-0926-SM-4AD6O)
+    subGroups age=a40 tissue=bladder donor=GTEXS4UY
+    color 227,184,136
+    metadata donor=GTEX-S4UY age=40 sex=F hardyScore=0 sample=GTEX-S4UY-0926-SM-4AD6O \
+            tissue=bladder autolysisScore=1 rnaIntegrity=8.3 batch=BP-22895 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR1097296
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1097296.hg38.bigWig
+    shortLabel bladder F S32W
+    longLabel GTEx RNA signal from female Bladder (GTEX-S32W-1126-SM-4AD5V)
+    subGroups age=a50 tissue=bladder donor=GTEXS32W
+    color 227,184,136
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1126-SM-4AD5V \
+            tissue=bladder autolysisScore=1 rnaIntegrity=8 batch=BP-22611 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+

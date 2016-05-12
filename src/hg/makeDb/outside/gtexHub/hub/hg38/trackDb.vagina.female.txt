@@ -1,0 +1,1050 @@
+    track gtexRnaSignalSRR1070789
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1070789.hg38.bigWig
+    shortLabel vagina F SE5C
+    longLabel GTEx RNA signal from female Vagina (GTEX-SE5C-1126-SM-4BRWZ)
+    subGroups age=a40 tissue=vagina donor=GTEXSE5C
+    color 247,205,200
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-1126-SM-4BRWZ \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.4 batch=BP-23389 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1071832
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1071832.hg38.bigWig
+    shortLabel vagina F QDT8
+    longLabel GTEx RNA signal from female Vagina (GTEX-QDT8-2526-SM-48TYX)
+    subGroups age=a30 tissue=vagina donor=GTEXQDT8
+    color 247,205,200
+    metadata donor=GTEX-QDT8 age=30 sex=F hardyScore=4 sample=GTEX-QDT8-2526-SM-48TYX \
+            tissue=vagina autolysisScore=2 rnaIntegrity=7.4 batch=BP-20207 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/18/2011
+
+    track gtexRnaSignalSRR1072129
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1072129.hg38.bigWig
+    shortLabel vagina F S7SF
+    longLabel GTEx RNA signal from female Vagina (GTEX-S7SF-1426-SM-4AT5A)
+    subGroups age=a20 tissue=vagina donor=GTEXS7SF
+    color 247,205,200
+    metadata donor=GTEX-S7SF age=20 sex=F hardyScore=0 sample=GTEX-S7SF-1426-SM-4AT5A \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.8 batch=BP-23169 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalSRR1073045
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1073045.hg38.bigWig
+    shortLabel vagina F PWN1
+    longLabel GTEx RNA signal from female Vagina (GTEX-PWN1-2526-SM-48TDS)
+    subGroups age=a40 tissue=vagina donor=GTEXPWN1
+    color 247,205,200
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-2526-SM-48TDS \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.1 batch=BP-19818 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalSRR1073095
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1073095.hg38.bigWig
+    shortLabel vagina F S341
+    longLabel GTEx RNA signal from female Vagina (GTEX-S341-1226-SM-4AD5S)
+    subGroups age=a40 tissue=vagina donor=GTEXS341
+    color 247,205,200
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-1226-SM-4AD5S \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.9 batch=BP-22768 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/29/2012
+
+    track gtexRnaSignalSRR1075150
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1075150.hg38.bigWig
+    shortLabel vagina F PWCY
+    longLabel GTEx RNA signal from female Vagina (GTEX-PWCY-1726-SM-48TD3)
+    subGroups age=a20 tissue=vagina donor=GTEXPWCY
+    color 247,205,200
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-1726-SM-48TD3 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.2 batch=BP-19461 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1079143
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1079143.hg38.bigWig
+    shortLabel vagina F T2IS
+    longLabel GTEx RNA signal from female Vagina (GTEX-T2IS-1926-SM-4DM74)
+    subGroups age=a20 tissue=vagina donor=GTEXT2IS
+    color 247,205,200
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-1926-SM-4DM74 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.5 batch=BP-24519 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR1079356
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1079356.hg38.bigWig
+    shortLabel vagina F XV7Q
+    longLabel GTEx RNA signal from female Vagina (GTEX-XV7Q-1626-SM-4BRWC)
+    subGroups age=a40 tissue=vagina donor=GTEXXV7Q
+    color 247,205,200
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-1626-SM-4BRWC \
+            tissue=vagina autolysisScore=2 rnaIntegrity=7.5 batch=BP-34437 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalSRR1079686
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1079686.hg38.bigWig
+    shortLabel vagina F U3ZN
+    longLabel GTEx RNA signal from female Vagina (GTEX-U3ZN-0926-SM-4DXTU)
+    subGroups age=a30 tissue=vagina donor=GTEXU3ZN
+    color 247,205,200
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-0926-SM-4DXTU \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.2 batch=BP-25493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR1080580
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1080580.hg38.bigWig
+    shortLabel vagina F TMMY
+    longLabel GTEx RNA signal from female Vagina (GTEX-TMMY-1926-SM-4DXUU)
+    subGroups age=a40 tissue=vagina donor=GTEXTMMY
+    color 247,205,200
+    metadata donor=GTEX-TMMY age=40 sex=F hardyScore=0 sample=GTEX-TMMY-1926-SM-4DXUU \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8 batch=BP-25192 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalSRR1082423
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1082423.hg38.bigWig
+    shortLabel vagina F S4UY
+    longLabel GTEx RNA signal from female Vagina (GTEX-S4UY-1326-SM-4AD4X)
+    subGroups age=a40 tissue=vagina donor=GTEXS4UY
+    color 247,205,200
+    metadata donor=GTEX-S4UY age=40 sex=F hardyScore=0 sample=GTEX-S4UY-1326-SM-4AD4X \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.9 batch=BP-22899 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR1083171
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1083171.hg38.bigWig
+    shortLabel vagina F TML8
+    longLabel GTEx RNA signal from female Vagina (GTEX-TML8-1126-SM-4DXSS)
+    subGroups age=a40 tissue=vagina donor=GTEXTML8
+    color 247,205,200
+    metadata donor=GTEX-TML8 age=40 sex=F hardyScore=0 sample=GTEX-TML8-1126-SM-4DXSS \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8 batch=BP-25072 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/07/2012
+
+    track gtexRnaSignalSRR1084228
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1084228.hg38.bigWig
+    shortLabel vagina F T6MO
+    longLabel GTEx RNA signal from female Vagina (GTEX-T6MO-1226-SM-4DM5S)
+    subGroups age=a40 tissue=vagina donor=GTEXT6MO
+    color 247,205,200
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-1226-SM-4DM5S \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.5 batch=BP-24887 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1087463
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1087463.hg38.bigWig
+    shortLabel vagina F PX3G
+    longLabel GTEx RNA signal from female Vagina (GTEX-PX3G-2526-SM-48TZV)
+    subGroups age=a20 tissue=vagina donor=GTEXPX3G
+    color 247,205,200
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-2526-SM-48TZV \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.3 batch=BP-19883 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalSRR1093124
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1093124.hg38.bigWig
+    shortLabel vagina F Q734
+    longLabel GTEx RNA signal from female Vagina (GTEX-Q734-1426-SM-48TZQ)
+    subGroups age=a40 tissue=vagina donor=GTEXQ734
+    color 247,205,200
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-1426-SM-48TZQ \
+            tissue=vagina autolysisScore=2 rnaIntegrity=7.4 batch=BP-20047 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1093410
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1093410.hg38.bigWig
+    shortLabel vagina F WEY5
+    longLabel GTEx RNA signal from female Vagina (GTEX-WEY5-0826-SM-4LMIH)
+    subGroups age=a40 tissue=vagina donor=GTEXWEY5
+    color 247,205,200
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0826-SM-4LMIH \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.1 batch=BP-27205 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalSRR1093814
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1093814.hg38.bigWig
+    shortLabel vagina F UPIC
+    longLabel GTEx RNA signal from female Vagina (GTEX-UPIC-1426-SM-4IHLQ)
+    subGroups age=a20 tissue=vagina donor=GTEXUPIC
+    color 247,205,200
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-1426-SM-4IHLQ \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.3 batch=BP-29546 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalSRR1097728
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1097728.hg38.bigWig
+    shortLabel vagina F PWOO
+    longLabel GTEx RNA signal from female Vagina (GTEX-PWOO-2026-SM-48TDE)
+    subGroups age=a40 tissue=vagina donor=GTEXPWOO
+    color 247,205,200
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-2026-SM-48TDE \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.1 batch=BP-19856 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/02/2011
+
+    track gtexRnaSignalSRR1328464
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1328464.hg38.bigWig
+    shortLabel vagina F ZTPG
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZTPG-2226-SM-57WF9)
+    subGroups age=a20 tissue=vagina donor=GTEXZTPG
+    color 247,205,200
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-2226-SM-57WF9 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.5 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1330018
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1330018.hg38.bigWig
+    shortLabel vagina F ZXES
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZXES-0626-SM-5E45P)
+    subGroups age=a30 tissue=vagina donor=GTEXZXES
+    color 247,205,200
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-0626-SM-5E45P \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.9 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1330450
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1330450.hg38.bigWig
+    shortLabel vagina F WYVS
+    longLabel GTEx RNA signal from female Vagina (GTEX-WYVS-1426-SM-4ONCV)
+    subGroups age=a40 tissue=vagina donor=GTEXWYVS
+    color 247,205,200
+
+    track gtexRnaSignalSRR1334791
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1334791.hg38.bigWig
+    shortLabel vagina F 12WSJ
+    longLabel GTEx RNA signal from female Vagina (GTEX-12WSJ-1326-SM-5GCOB)
+    subGroups age=a40 tissue=vagina donor=GTEX12WSJ
+    color 247,205,200
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-1326-SM-5GCOB \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.1 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1337840
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1337840.hg38.bigWig
+    shortLabel vagina F 12ZZX
+    longLabel GTEx RNA signal from female Vagina (GTEX-12ZZX-1926-SM-5EGKC)
+    subGroups age=a40 tissue=vagina donor=GTEX12ZZX
+    color 247,205,200
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-1926-SM-5EGKC \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.8 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1354159
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1354159.hg38.bigWig
+    shortLabel vagina F YJ8O
+    longLabel GTEx RNA signal from female Vagina (GTEX-YJ8O-1226-SM-5P9JE)
+    subGroups age=a40 tissue=vagina donor=GTEXYJ8O
+    color 247,205,200
+    metadata donor=GTEX-YJ8O age=40 sex=F hardyScore=1 sample=GTEX-YJ8O-1226-SM-5P9JE \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.3 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1376963
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1376963.hg38.bigWig
+    shortLabel vagina F ZC5H
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZC5H-2226-SM-4WAWS)
+    subGroups age=a40 tissue=vagina donor=GTEXZC5H
+    color 247,205,200
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-2226-SM-4WAWS \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.1 batch=BP-42024 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1380523
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1380523.hg38.bigWig
+    shortLabel vagina F 11XUK
+    longLabel GTEx RNA signal from female Vagina (GTEX-11XUK-1326-SM-5EQM4)
+    subGroups age=a40 tissue=vagina donor=GTEX11XUK
+    color 247,205,200
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-1326-SM-5EQM4 \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.6 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1385524
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1385524.hg38.bigWig
+    shortLabel vagina F 1399S
+    longLabel GTEx RNA signal from female Vagina (GTEX-1399S-2326-SM-5K7YV)
+    subGroups age=a30 tissue=vagina donor=GTEX1399S
+    color 247,205,200
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-2326-SM-5K7YV \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1397030
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1397030.hg38.bigWig
+    shortLabel vagina F 11VI4
+    longLabel GTEx RNA signal from female Vagina (GTEX-11VI4-0726-SM-5GU5B)
+    subGroups age=a40 tissue=vagina donor=GTEX11VI4
+    color 247,205,200
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0726-SM-5GU5B \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1397242
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1397242.hg38.bigWig
+    shortLabel vagina F 11EM3
+    longLabel GTEx RNA signal from female Vagina (GTEX-11EM3-1826-SM-5A5KO)
+    subGroups age=a20 tissue=vagina donor=GTEX11EM3
+    color 247,205,200
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-1826-SM-5A5KO \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.8 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1401403
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1401403.hg38.bigWig
+    shortLabel vagina F ZYWO
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZYWO-2026-SM-5GIDA)
+    subGroups age=a40 tissue=vagina donor=GTEXZYWO
+    color 247,205,200
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-2026-SM-5GIDA \
+            tissue=vagina autolysisScore=0 rnaIntegrity=6.6 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1401860
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1401860.hg38.bigWig
+    shortLabel vagina F ZGAY
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZGAY-2226-SM-4YCCX)
+    subGroups age=a40 tissue=vagina donor=GTEXZGAY
+    color 247,205,200
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-2226-SM-4YCCX \
+            tissue=vagina autolysisScore=0 rnaIntegrity=6.6 batch=BP-43141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1415529
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1415529.hg38.bigWig
+    shortLabel vagina F 13U4I
+    longLabel GTEx RNA signal from female Vagina (GTEX-13U4I-2026-SM-5LU3L)
+    subGroups age=a40 tissue=vagina donor=GTEX13U4I
+    color 247,205,200
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-2026-SM-5LU3L \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1420259
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1420259.hg38.bigWig
+    shortLabel vagina F 13QBU
+    longLabel GTEx RNA signal from female Vagina (GTEX-13QBU-1726-SM-5IJFQ)
+    subGroups age=a40 tissue=vagina donor=GTEX13QBU
+    color 247,205,200
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-1726-SM-5IJFQ \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.3 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1443224
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1443224.hg38.bigWig
+    shortLabel vagina F 11P81
+    longLabel GTEx RNA signal from female Vagina (GTEX-11P81-2126-SM-5HL6N)
+    subGroups age=a30 tissue=vagina donor=GTEX11P81
+    color 247,205,200
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-2126-SM-5HL6N \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.3 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1447172
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1447172.hg38.bigWig
+    shortLabel vagina F 14AS3
+    longLabel GTEx RNA signal from female Vagina (GTEX-14AS3-1726-SM-5RQJV)
+    subGroups age=a40 tissue=vagina donor=GTEX14AS3
+    color 247,205,200
+    metadata donor=GTEX-14AS3 age=40 sex=F hardyScore=0 sample=GTEX-14AS3-1726-SM-5RQJV \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1457949
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1457949.hg38.bigWig
+    shortLabel vagina F ZP4G
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZP4G-0826-SM-4WWF3)
+    subGroups age=a20 tissue=vagina donor=GTEXZP4G
+    color 247,205,200
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0826-SM-4WWF3 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.2 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1472486
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1472486.hg38.bigWig
+    shortLabel vagina F 14BMU
+    longLabel GTEx RNA signal from female Vagina (GTEX-14BMU-1926-SM-5S2QC)
+    subGroups age=a20 tissue=vagina donor=GTEX14BMU
+    color 247,205,200
+    metadata donor=GTEX-14BMU age=20 sex=F hardyScore=0 sample=GTEX-14BMU-1926-SM-5S2QC \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.9 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1476807
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1476807.hg38.bigWig
+    shortLabel vagina F YFC4
+    longLabel GTEx RNA signal from female Vagina (GTEX-YFC4-2926-SM-5IFJ8)
+    subGroups age=a40 tissue=vagina donor=GTEXYFC4
+    color 247,205,200
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-2926-SM-5IFJ8 \
+            tissue=vagina autolysisScore=2 rnaIntegrity=7.1 batch=BP-45268 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR2135401
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR2135401.hg38.bigWig
+    shortLabel vagina F W5X1
+    longLabel GTEx RNA signal from female Vagina (GTEX-W5X1-2226-SM-5CHTP_rep1)
+    subGroups age=a40 tissue=vagina donor=GTEXW5X1
+    color 247,205,200
+
+    track gtexRnaSignalSRR815944
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR815944.hg38.bigWig
+    shortLabel vagina F P78B
+    longLabel GTEx RNA signal from female Vagina (GTEX-P78B-2226-SM-3P5ZZ)
+    subGroups age=a40 tissue=vagina donor=GTEXP78B
+    color 247,205,200
+    metadata donor=GTEX-P78B age=40 sex=F hardyScore=-1 sample=GTEX-P78B-2226-SM-3P5ZZ \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.8 batch=BP-19090 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2011
+
+    track gtexRnaSignalSRR820859
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR820859.hg38.bigWig
+    shortLabel vagina F P4PP
+    longLabel GTEx RNA signal from female Vagina (GTEX-P4PP-2526-SM-3P61P)
+    subGroups age=a30 tissue=vagina donor=GTEXP4PP
+    color 247,205,200
+    metadata donor=GTEX-P4PP age=30 sex=F hardyScore=0 sample=GTEX-P4PP-2526-SM-3P61P \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.5 batch=BP-18663 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2011
+
+    track gtexRnaSignalSRR1076892
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1076892.hg38.bigWig
+    shortLabel vagina F W5WG
+    longLabel GTEx RNA signal from female Vagina (GTEX-W5WG-1026-SM-4LMIF)
+    subGroups age=a50 tissue=vagina donor=GTEXW5WG
+    color 247,205,200
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-1026-SM-4LMIF \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.9 batch=BP-27126 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1079706
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1079706.hg38.bigWig
+    shortLabel vagina F QCQG
+    longLabel GTEx RNA signal from female Vagina (GTEX-QCQG-1226-SM-48U23)
+    subGroups age=a50 tissue=vagina donor=GTEXQCQG
+    color 247,205,200
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-1226-SM-48U23 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.4 batch=BP-20113 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSRR1080534
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1080534.hg38.bigWig
+    shortLabel vagina F XUW1
+    longLabel GTEx RNA signal from female Vagina (GTEX-XUW1-0326-SM-4BOOR)
+    subGroups age=a50 tissue=vagina donor=GTEXXUW1
+    color 247,205,200
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-0326-SM-4BOOR \
+            tissue=vagina autolysisScore=0 rnaIntegrity=6.7 batch=BP-34129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1083337
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1083337.hg38.bigWig
+    shortLabel vagina F UJHI
+    longLabel GTEx RNA signal from female Vagina (GTEX-UJHI-1326-SM-4IHJO)
+    subGroups age=a50 tissue=vagina donor=GTEXUJHI
+    color 247,205,200
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-1326-SM-4IHJO \
+            tissue=vagina autolysisScore=0 rnaIntegrity=6.5 batch=BP-25965 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalSRR1330474
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1330474.hg38.bigWig
+    shortLabel vagina F WRHU
+    longLabel GTEx RNA signal from female Vagina (GTEX-WRHU-2926-SM-4MVNQ)
+    subGroups age=a50 tissue=vagina donor=GTEXWRHU
+    color 247,205,200
+    metadata donor=GTEX-WRHU age=50 sex=F hardyScore=1 sample=GTEX-WRHU-2926-SM-4MVNQ \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.9 batch=BP-28775 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalSRR1332775
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1332775.hg38.bigWig
+    shortLabel vagina F ZVT2
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZVT2-0626-SM-5GICR)
+    subGroups age=a50 tissue=vagina donor=GTEXZVT2
+    color 247,205,200
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-0626-SM-5GICR \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.4 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1335089
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1335089.hg38.bigWig
+    shortLabel vagina F 146FH
+    longLabel GTEx RNA signal from female Vagina (GTEX-146FH-2626-SM-5Q5E1)
+    subGroups age=a50 tissue=vagina donor=GTEX146FH
+    color 247,205,200
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-2626-SM-5Q5E1 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.6 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1362597
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1362597.hg38.bigWig
+    shortLabel vagina F ZLWG
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZLWG-1126-SM-4WWFQ)
+    subGroups age=a50 tissue=vagina donor=GTEXZLWG
+    color 247,205,200
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-1126-SM-4WWFQ \
+            tissue=vagina autolysisScore=0 rnaIntegrity=8.8 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1366672
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1366672.hg38.bigWig
+    shortLabel vagina F 1399U
+    longLabel GTEx RNA signal from female Vagina (GTEX-1399U-1526-SM-5J2N7)
+    subGroups age=a50 tissue=vagina donor=GTEX1399U
+    color 247,205,200
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-1526-SM-5J2N7 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.9 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1377672
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1377672.hg38.bigWig
+    shortLabel vagina F 113JC
+    longLabel GTEx RNA signal from female Vagina (GTEX-113JC-1926-SM-5N9GE)
+    subGroups age=a50 tissue=vagina donor=GTEX113JC
+    color 247,205,200
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-1926-SM-5N9GE \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.7 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1406157
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1406157.hg38.bigWig
+    shortLabel vagina F 13N11
+    longLabel GTEx RNA signal from female Vagina (GTEX-13N11-1526-SM-5L3FL)
+    subGroups age=a50 tissue=vagina donor=GTEX13N11
+    color 247,205,200
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-1526-SM-5L3FL \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.4 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1410612
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1410612.hg38.bigWig
+    shortLabel vagina F 11I78
+    longLabel GTEx RNA signal from female Vagina (GTEX-11I78-2026-SM-5987C)
+    subGroups age=a50 tissue=vagina donor=GTEX11I78
+    color 247,205,200
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-2026-SM-5987C \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.7 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1414496
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1414496.hg38.bigWig
+    shortLabel vagina F 132AR
+    longLabel GTEx RNA signal from female Vagina (GTEX-132AR-1626-SM-5EGHP)
+    subGroups age=a50 tissue=vagina donor=GTEX132AR
+    color 247,205,200
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-1626-SM-5EGHP \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.9 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1416865
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1416865.hg38.bigWig
+    shortLabel vagina F X15G
+    longLabel GTEx RNA signal from female Vagina (GTEX-X15G-1926-SM-4PQZQ)
+    subGroups age=a50 tissue=vagina donor=GTEXX15G
+    color 247,205,200
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-1926-SM-4PQZQ \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.3 batch=BP-30525 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1417130
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1417130.hg38.bigWig
+    shortLabel vagina F 147F3
+    longLabel GTEx RNA signal from female Vagina (GTEX-147F3-1526-SM-5SIAK)
+    subGroups age=a50 tissue=vagina donor=GTEX147F3
+    color 247,205,200
+    metadata donor=GTEX-147F3 age=50 sex=F hardyScore=0 sample=GTEX-147F3-1526-SM-5SIAK \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.9 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1417296
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1417296.hg38.bigWig
+    shortLabel vagina F ZAJG
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZAJG-2926-SM-5HL8P)
+    subGroups age=a50 tissue=vagina donor=GTEXZAJG
+    color 247,205,200
+    metadata donor=GTEX-ZAJG age=50 sex=F hardyScore=3 sample=GTEX-ZAJG-2926-SM-5HL8P \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.9 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1420912
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1420912.hg38.bigWig
+    shortLabel vagina F ZE7O
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZE7O-2426-SM-57WD7)
+    subGroups age=a50 tissue=vagina donor=GTEXZE7O
+    color 247,205,200
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-2426-SM-57WD7 \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.3 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1435816
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1435816.hg38.bigWig
+    shortLabel vagina F 13D11
+    longLabel GTEx RNA signal from female Vagina (GTEX-13D11-1326-SM-5IJFY)
+    subGroups age=a50 tissue=vagina donor=GTEX13D11
+    color 247,205,200
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-1326-SM-5IJFY \
+            tissue=vagina autolysisScore=0 rnaIntegrity=7.8 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1445920
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1445920.hg38.bigWig
+    shortLabel vagina F ZZPU
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZZPU-2226-SM-5EGIV)
+    subGroups age=a50 tissue=vagina donor=GTEXZZPU
+    color 247,205,200
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-2226-SM-5EGIV \
+            tissue=vagina autolysisScore=0 rnaIntegrity=9.2 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1455969
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1455969.hg38.bigWig
+    shortLabel vagina F Y8LW
+    longLabel GTEx RNA signal from female Vagina (GTEX-Y8LW-1426-SM-5RQJJ)
+    subGroups age=a50 tissue=vagina donor=GTEXY8LW
+    color 247,205,200
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-1426-SM-5RQJJ \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.5 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1459101
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1459101.hg38.bigWig
+    shortLabel vagina F 14A5I
+    longLabel GTEx RNA signal from female Vagina (GTEX-14A5I-2726-SM-5SIB3)
+    subGroups age=a50 tissue=vagina donor=GTEX14A5I
+    color 247,205,200
+    metadata donor=GTEX-14A5I age=50 sex=F hardyScore=4 sample=GTEX-14A5I-2726-SM-5SIB3 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.2 batch=BP-47656 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1475062
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1475062.hg38.bigWig
+    shortLabel vagina F Y114
+    longLabel GTEx RNA signal from female Vagina (GTEX-Y114-1926-SM-4TT8J)
+    subGroups age=a50 tissue=vagina donor=GTEXY114
+    color 247,205,200
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-1926-SM-4TT8J \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.2 batch=BP-35169 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSRR1481375
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1481375.hg38.bigWig
+    shortLabel vagina F 131XG
+    longLabel GTEx RNA signal from female Vagina (GTEX-131XG-2126-SM-5DUXG)
+    subGroups age=a50 tissue=vagina donor=GTEX131XG
+    color 247,205,200
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-2126-SM-5DUXG \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.9 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1487638
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1487638.hg38.bigWig
+    shortLabel vagina F Y3IK
+    longLabel GTEx RNA signal from female Vagina (GTEX-Y3IK-2226-SM-4YCD4)
+    subGroups age=a50 tissue=vagina donor=GTEXY3IK
+    color 247,205,200
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-2226-SM-4YCD4 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.9 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSRR808682
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR808682.hg38.bigWig
+    shortLabel vagina F OHPK
+    longLabel GTEx RNA signal from female Vagina (GTEX-OHPK-2526-SM-3MJH9)
+    subGroups age=a50 tissue=vagina donor=GTEXOHPK
+    color 247,205,200
+    metadata donor=GTEX-OHPK age=50 sex=F hardyScore=0 sample=GTEX-OHPK-2526-SM-3MJH9 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.3 batch=BP-17781 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/20/2011
+
+    track gtexRnaSignalSRR814137
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR814137.hg38.bigWig
+    shortLabel vagina F PLZ4
+    longLabel GTEx RNA signal from female Vagina (GTEX-PLZ4-2726-SM-3P61A)
+    subGroups age=a50 tissue=vagina donor=GTEXPLZ4
+    color 247,205,200
+    metadata donor=GTEX-PLZ4 age=50 sex=F hardyScore=-1 sample=GTEX-PLZ4-2726-SM-3P61A \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.4 batch=BP-19216 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2011
+
+    track gtexRnaSignalSRR1070286
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1070286.hg38.bigWig
+    shortLabel vagina F RWS6
+    longLabel GTEx RNA signal from female Vagina (GTEX-RWS6-1726-SM-47JXP)
+    subGroups age=a60 tissue=vagina donor=GTEXRWS6
+    color 247,205,200
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-1726-SM-47JXP \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.3 batch=BP-22521 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2012
+
+    track gtexRnaSignalSRR1089106
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1089106.hg38.bigWig
+    shortLabel vagina F TSE9
+    longLabel GTEx RNA signal from female Vagina (GTEX-TSE9-2526-SM-4DXUS)
+    subGroups age=a60 tissue=vagina donor=GTEXTSE9
+    color 247,205,200
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-2526-SM-4DXUS \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.8 batch=BP-25326 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalSRR1095599
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1095599.hg38.bigWig
+    shortLabel vagina F XUJ4
+    longLabel GTEx RNA signal from female Vagina (GTEX-XUJ4-1626-SM-4BONV)
+    subGroups age=a60 tissue=vagina donor=GTEXXUJ4
+    color 247,205,200
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-1626-SM-4BONV \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.1 batch=BP-34262 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1318390
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1318390.hg38.bigWig
+    shortLabel vagina F QVJO
+    longLabel GTEx RNA signal from female Vagina (GTEX-QVJO-2526-SM-4R1KB)
+    subGroups age=a60 tissue=vagina donor=GTEXQVJO
+    color 247,205,200
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-2526-SM-4R1KB \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.8 batch=BP-20982 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2011
+
+    track gtexRnaSignalSRR1320650
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1320650.hg38.bigWig
+    shortLabel vagina F 13PL7
+    longLabel GTEx RNA signal from female Vagina (GTEX-13PL7-2726-SM-5L3GB)
+    subGroups age=a60 tissue=vagina donor=GTEX13PL7
+    color 247,205,200
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-2726-SM-5L3GB \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.2 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1322115
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1322115.hg38.bigWig
+    shortLabel vagina F 146FR
+    longLabel GTEx RNA signal from female Vagina (GTEX-146FR-2426-SM-5NQAU)
+    subGroups age=a60 tissue=vagina donor=GTEX146FR
+    color 247,205,200
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-2426-SM-5NQAU \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.4 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1323957
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1323957.hg38.bigWig
+    shortLabel vagina F 11GSP
+    longLabel GTEx RNA signal from female Vagina (GTEX-11GSP-2226-SM-5HL5Q)
+    subGroups age=a60 tissue=vagina donor=GTEX11GSP
+    color 247,205,200
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-2226-SM-5HL5Q \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.6 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1351605
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1351605.hg38.bigWig
+    shortLabel vagina F 13QIC
+    longLabel GTEx RNA signal from female Vagina (GTEX-13QIC-1826-SM-5J1MY)
+    subGroups age=a60 tissue=vagina donor=GTEX13QIC
+    color 247,205,200
+    metadata donor=GTEX-13QIC age=60 sex=F hardyScore=2 sample=GTEX-13QIC-1826-SM-5J1MY \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.8 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1358238
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1358238.hg38.bigWig
+    shortLabel vagina F ZVT3
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZVT3-2726-SM-5GU5X)
+    subGroups age=a60 tissue=vagina donor=GTEXZVT3
+    color 247,205,200
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-2726-SM-5GU5X \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.2 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1370597
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1370597.hg38.bigWig
+    shortLabel vagina F 11DXX
+    longLabel GTEx RNA signal from female Vagina (GTEX-11DXX-1726-SM-5H11T)
+    subGroups age=a60 tissue=vagina donor=GTEX11DXX
+    color 247,205,200
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-1726-SM-5H11T \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.4 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1377881
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1377881.hg38.bigWig
+    shortLabel vagina F ZQG8
+    longLabel GTEx RNA signal from female Vagina (GTEX-ZQG8-1126-SM-51MRL)
+    subGroups age=a60 tissue=vagina donor=GTEXZQG8
+    color 247,205,200
+    metadata donor=GTEX-ZQG8 age=60 sex=F hardyScore=0 sample=GTEX-ZQG8-1126-SM-51MRL \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.2 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1381821
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1381821.hg38.bigWig
+    shortLabel vagina F 13PVR
+    longLabel GTEx RNA signal from female Vagina (GTEX-13PVR-1426-SM-5S2PW)
+    subGroups age=a60 tissue=vagina donor=GTEX13PVR
+    color 247,205,200
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-1426-SM-5S2PW \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.7 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1409108
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1409108.hg38.bigWig
+    shortLabel vagina F 11TTK
+    longLabel GTEx RNA signal from female Vagina (GTEX-11TTK-2726-SM-5GU58)
+    subGroups age=a60 tissue=vagina donor=GTEX11TTK
+    color 247,205,200
+    metadata donor=GTEX-11TTK age=60 sex=F hardyScore=4 sample=GTEX-11TTK-2726-SM-5GU58 \
+            tissue=vagina autolysisScore=1 rnaIntegrity=5.9 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1414447
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1414447.hg38.bigWig
+    shortLabel vagina F 12WSB
+    longLabel GTEx RNA signal from female Vagina (GTEX-12WSB-2426-SM-5EGJC)
+    subGroups age=a60 tissue=vagina donor=GTEX12WSB
+    color 247,205,200
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-2426-SM-5EGJC \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.7 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1439976
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1439976.hg38.bigWig
+    shortLabel vagina F 131YS
+    longLabel GTEx RNA signal from female Vagina (GTEX-131YS-2426-SM-5J2OD)
+    subGroups age=a60 tissue=vagina donor=GTEX131YS
+    color 247,205,200
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-2426-SM-5J2OD \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.2 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1440560
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1440560.hg38.bigWig
+    shortLabel vagina F NL3G
+    longLabel GTEx RNA signal from female Vagina (GTEX-NL3G-2526-SM-4SOIE)
+    subGroups age=a60 tissue=vagina donor=GTEXNL3G
+    color 247,205,200
+    metadata donor=GTEX-NL3G age=60 sex=F hardyScore=2 sample=GTEX-NL3G-2526-SM-4SOIE \
+            tissue=vagina autolysisScore=1 rnaIntegrity=6.3 batch=BP-17209 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/20/2011
+
+    track gtexRnaSignalSRR1454050
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1454050.hg38.bigWig
+    shortLabel vagina F 11EMC
+    longLabel GTEx RNA signal from female Vagina (GTEX-11EMC-1926-SM-5A5JU)
+    subGroups age=a60 tissue=vagina donor=GTEX11EMC
+    color 247,205,200
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-1926-SM-5A5JU \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.5 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1455545
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1455545.hg38.bigWig
+    shortLabel vagina F 14DAQ
+    longLabel GTEx RNA signal from female Vagina (GTEX-14DAQ-2326-SM-5S2QX)
+    subGroups age=a60 tissue=vagina donor=GTEX14DAQ
+    color 247,205,200
+    metadata donor=GTEX-14DAQ age=60 sex=F hardyScore=4 sample=GTEX-14DAQ-2326-SM-5S2QX \
+            tissue=vagina autolysisScore=2 rnaIntegrity=6.4 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1456634
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR1456634.hg38.bigWig
+    shortLabel vagina F 12WSD
+    longLabel GTEx RNA signal from female Vagina (GTEX-12WSD-2926-SM-5LZUH)
+    subGroups age=a60 tissue=vagina donor=GTEX12WSD
+    color 247,205,200
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-2926-SM-5LZUH \
+            tissue=vagina autolysisScore=1 rnaIntegrity=7.1 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR811403
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR811403.hg38.bigWig
+    shortLabel vagina F N7MT
+    longLabel GTEx RNA signal from female Vagina (GTEX-N7MT-1926-SM-3LK5N)
+    subGroups age=a60 tissue=vagina donor=GTEXN7MT
+    color 247,205,200
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-1926-SM-3LK5N \
+            tissue=vagina autolysisScore=0 rnaIntegrity=9.5 batch=BP-16831 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2011
+
+    track gtexRnaSignalSRR811675
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl vagina/gtexRnaSignalSRR811675.hg38.bigWig
+    shortLabel vagina F OHPL
+    longLabel GTEx RNA signal from female Vagina (GTEX-OHPL-2526-SM-3MJGT)
+    subGroups age=a60 tissue=vagina donor=GTEXOHPL
+    color 247,205,200
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-2526-SM-3MJGT \
+            tissue=vagina autolysisScore=1 rnaIntegrity=8.4 batch=BP-17823 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/21/2011
+

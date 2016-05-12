@@ -1,0 +1,2097 @@
+    track gtexRnaSignalSRR1075825
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1075825.hg19.bigWig
+    shortLabel nerveTibi M XPT6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XPT6-2126-SM-4B66P)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXXPT6
+    color 255,215,0
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-2126-SM-4B66P \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=8.2 batch=BP-33777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSRR1079850
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1079850.hg19.bigWig
+    shortLabel nerveTibi M SNMC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-SNMC-1626-SM-4DM52)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXSNMC
+    color 255,215,0
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-1626-SM-4DM52 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.7 batch=BP-23823 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalSRR1091184
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1091184.hg19.bigWig
+    shortLabel nerveTibi M XAJ8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XAJ8-1126-SM-47JYA)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXXAJ8
+    color 255,215,0
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-1126-SM-47JYA \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-31551 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1096222
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1096222.hg19.bigWig
+    shortLabel nerveTibi M XMK1
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XMK1-2426-SM-4B66I)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXXMK1
+    color 255,215,0
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-2426-SM-4B66I \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.4 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalSRR1096500
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1096500.hg19.bigWig
+    shortLabel nerveTibi M X5EB
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-X5EB-2526-SM-4E3HY)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXX5EB
+    color 255,215,0
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-2526-SM-4E3HY \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-36136 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/14/2013
+
+    track gtexRnaSignalSRR1098385
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1098385.hg19.bigWig
+    shortLabel nerveTibi M TKQ1
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-TKQ1-1326-SM-4DXU7)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXTKQ1
+    color 255,215,0
+    metadata donor=GTEX-TKQ1 age=30 sex=M hardyScore=0 sample=GTEX-TKQ1-1326-SM-4DXU7 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-29992 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1318046
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1318046.hg19.bigWig
+    shortLabel nerveTibi M 12C56
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12C56-1826-SM-5EQ6D)
+    subGroups age=a20 tissue=nerveTibial donor=GTEX12C56
+    color 255,215,0
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-1826-SM-5EQ6D \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.8 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1320987
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1320987.hg19.bigWig
+    shortLabel nerveTibi M XBEW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XBEW-0926-SM-4QASR)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXXBEW
+    color 255,215,0
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0926-SM-4QASR \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.6 batch=BP-36349 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalSRR1332095
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1332095.hg19.bigWig
+    shortLabel nerveTibi M 12584
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12584-0326-SM-59HK2)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX12584
+    color 255,215,0
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-0326-SM-59HK2 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1333083
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1333083.hg19.bigWig
+    shortLabel nerveTibi M WHSE
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WHSE-1026-SM-57WAX)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXWHSE
+    color 255,215,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-1026-SM-57WAX \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.5 batch=BP-41604 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1333106
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1333106.hg19.bigWig
+    shortLabel nerveTibi M 11NSD
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11NSD-1826-SM-5N9CF)
+    subGroups age=a20 tissue=nerveTibial donor=GTEX11NSD
+    color 255,215,0
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-1826-SM-5N9CF \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1348138
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1348138.hg19.bigWig
+    shortLabel nerveTibi M 11O72
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11O72-0526-SM-5Q5AO)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX11O72
+    color 255,215,0
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-0526-SM-5Q5AO \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1350196
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1350196.hg19.bigWig
+    shortLabel nerveTibi M 14E6C
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14E6C-1026-SM-5SI6P)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX14E6C
+    color 255,215,0
+    metadata donor=GTEX-14E6C age=40 sex=M hardyScore=4 sample=GTEX-14E6C-1026-SM-5SI6P \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1350392
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1350392.hg19.bigWig
+    shortLabel nerveTibi M 11P7K
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11P7K-2226-SM-5GU56)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX11P7K
+    color 255,215,0
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-2226-SM-5GU56 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1363947
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1363947.hg19.bigWig
+    shortLabel nerveTibi M 1339X
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-1339X-2726-SM-5PNYU)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX1339X
+    color 255,215,0
+
+    track gtexRnaSignalSRR1367739
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1367739.hg19.bigWig
+    shortLabel nerveTibi M 13S86
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13S86-2426-SM-5S2MX)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX13S86
+    color 255,215,0
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-2426-SM-5S2MX \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.9 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1368240
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1368240.hg19.bigWig
+    shortLabel nerveTibi M Y8E4
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Y8E4-0826-SM-4VBRS)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXY8E4
+    color 255,215,0
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-0826-SM-4VBRS \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1379403
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1379403.hg19.bigWig
+    shortLabel nerveTibi M Z9EW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Z9EW-2026-SM-5CVMQ)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXZ9EW
+    color 255,215,0
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-2026-SM-5CVMQ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1402491
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1402491.hg19.bigWig
+    shortLabel nerveTibi M ZVTK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZVTK-0826-SM-5GZXI)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXZVTK
+    color 255,215,0
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0826-SM-5GZXI \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1405078
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1405078.hg19.bigWig
+    shortLabel nerveTibi M YJ8A
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-YJ8A-0726-SM-5Q5A6)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXYJ8A
+    color 255,215,0
+
+    track gtexRnaSignalSRR1406521
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1406521.hg19.bigWig
+    shortLabel nerveTibi M YB5E
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-YB5E-2326-SM-5IFIJ)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXYB5E
+    color 255,215,0
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-2326-SM-5IFIJ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.9 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1409239
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1409239.hg19.bigWig
+    shortLabel nerveTibi M 14A6H
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14A6H-2626-SM-5NQBO)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX14A6H
+    color 255,215,0
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-2626-SM-5NQBO \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1410286
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1410286.hg19.bigWig
+    shortLabel nerveTibi M ZTX8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZTX8-1726-SM-51MSB)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXZTX8
+    color 255,215,0
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1726-SM-51MSB \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=8 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1417178
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1417178.hg19.bigWig
+    shortLabel nerveTibi M 146FQ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-146FQ-0426-SM-5NQBA)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX146FQ
+    color 255,215,0
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0426-SM-5NQBA \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1419985
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1419985.hg19.bigWig
+    shortLabel nerveTibi M 11LCK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11LCK-1326-SM-5Q5AN)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX11LCK
+    color 255,215,0
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-1326-SM-5Q5AN \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1432913
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1432913.hg19.bigWig
+    shortLabel nerveTibi M 11P82
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11P82-1926-SM-5Q5AU)
+    subGroups age=a20 tissue=nerveTibial donor=GTEX11P82
+    color 255,215,0
+
+    track gtexRnaSignalSRR1440919
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1440919.hg19.bigWig
+    shortLabel nerveTibi M 145LT
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-145LT-1926-SM-5QGP5)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX145LT
+    color 255,215,0
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-1926-SM-5QGP5 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1444786
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1444786.hg19.bigWig
+    shortLabel nerveTibi M ZAB4
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZAB4-1826-SM-5HL8O)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXZAB4
+    color 255,215,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-1826-SM-5HL8O \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1448098
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1448098.hg19.bigWig
+    shortLabel nerveTibi M 11EQ9
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11EQ9-2326-SM-5HL5H)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX11EQ9
+    color 255,215,0
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-2326-SM-5HL5H \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1452824
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1452824.hg19.bigWig
+    shortLabel nerveTibi M 1314G
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-1314G-1826-SM-5LZVA)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX1314G
+    color 255,215,0
+    metadata donor=GTEX-1314G age=30 sex=M hardyScore=0 sample=GTEX-1314G-1826-SM-5LZVA \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.1 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1453192
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1453192.hg19.bigWig
+    shortLabel nerveTibi M 11DXW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11DXW-0426-SM-5H12E)
+    subGroups age=a40 tissue=nerveTibial donor=GTEX11DXW
+    color 255,215,0
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-0426-SM-5H12E \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1453392
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1453392.hg19.bigWig
+    shortLabel nerveTibi M Y9LG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Y9LG-2226-SM-4VDS9)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXY9LG
+    color 255,215,0
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-2226-SM-4VDS9 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1455761
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1455761.hg19.bigWig
+    shortLabel nerveTibi M 11ZUS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11ZUS-1226-SM-5FQU8)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX11ZUS
+    color 255,215,0
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-1226-SM-5FQU8 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-44312 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1459631
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1459631.hg19.bigWig
+    shortLabel nerveTibi M 14E6E
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14E6E-2226-SM-5SI6F)
+    subGroups age=a30 tissue=nerveTibial donor=GTEX14E6E
+    color 255,215,0
+    metadata donor=GTEX-14E6E age=30 sex=M hardyScore=0 sample=GTEX-14E6E-2226-SM-5SI6F \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.2 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1459845
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1459845.hg19.bigWig
+    shortLabel nerveTibi M 12126
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12126-0626-SM-5Q5AQ)
+    subGroups age=a20 tissue=nerveTibial donor=GTEX12126
+    color 255,215,0
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0626-SM-5Q5AQ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1473040
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1473040.hg19.bigWig
+    shortLabel nerveTibi M 144GM
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-144GM-2126-SM-5LU3P)
+    subGroups age=a20 tissue=nerveTibial donor=GTEX144GM
+    color 255,215,0
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-2126-SM-5LU3P \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1475501
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1475501.hg19.bigWig
+    shortLabel nerveTibi M ZYT6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZYT6-1426-SM-5E43U)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXZYT6
+    color 255,215,0
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-1426-SM-5E43U \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.9 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1488918
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1488918.hg19.bigWig
+    shortLabel nerveTibi M ZA64
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZA64-2126-SM-5Q5A8)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXZA64
+    color 255,215,0
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-2126-SM-5Q5A8 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR612611
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR612611.hg19.bigWig
+    shortLabel nerveTibi M R55C
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-R55C-1926-SM-2TF4K)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXR55C
+    color 255,215,0
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-1926-SM-2TF4K \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-21341 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR613687
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613687.hg19.bigWig
+    shortLabel nerveTibi M PLZ6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-PLZ6-1726-SM-2S1O6)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXPLZ6
+    color 255,215,0
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-1726-SM-2S1O6 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-19256 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR614287
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR614287.hg19.bigWig
+    shortLabel nerveTibi M NFK9
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-NFK9-0426-SM-2YUNK)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXNFK9
+    color 255,215,0
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0426-SM-2YUNK \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=9.5 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR614431
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR614431.hg19.bigWig
+    shortLabel nerveTibi M QEG4
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QEG4-1126-SM-2S1P7)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXQEG4
+    color 255,215,0
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-1126-SM-2S1P7 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR614791
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR614791.hg19.bigWig
+    shortLabel nerveTibi M QV31
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QV31-1526-SM-2S1QB)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXQV31
+    color 255,215,0
+
+    track gtexRnaSignalSRR615153
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615153.hg19.bigWig
+    shortLabel nerveTibi M QLQW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QLQW-1426-SM-2S1QU)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXQLQW
+    color 255,215,0
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-1426-SM-2S1QU \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-20740 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/12/2011
+
+    track gtexRnaSignalSRR615165
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615165.hg19.bigWig
+    shortLabel nerveTibi M Q2AH
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Q2AH-1926-SM-2S1PN)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXQ2AH
+    color 255,215,0
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-1926-SM-2S1PN \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR615683
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615683.hg19.bigWig
+    shortLabel nerveTibi M R55E
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-R55E-0426-SM-2TC65)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXR55E
+    color 255,215,0
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0426-SM-2TC65 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-21443 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR615790
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615790.hg19.bigWig
+    shortLabel nerveTibi M NPJ8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-NPJ8-1726-SM-2YUNB)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXNPJ8
+    color 255,215,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-1726-SM-2YUNB \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=8.7 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR615850
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615850.hg19.bigWig
+    shortLabel nerveTibi M QESD
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QESD-1726-SM-2S1R7)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXQESD
+    color 255,215,0
+
+    track gtexRnaSignalSRR615994
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR615994.hg19.bigWig
+    shortLabel nerveTibi M QEG5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QEG5-0526-SM-2S1PC)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXQEG5
+    color 255,215,0
+
+    track gtexRnaSignalSRR655911
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR655911.hg19.bigWig
+    shortLabel nerveTibi M WFG8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WFG8-2526-SM-3GILR)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXWFG8
+    color 255,215,0
+
+    track gtexRnaSignalSRR656994
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR656994.hg19.bigWig
+    shortLabel nerveTibi M PVOW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-PVOW-0626-SM-2XCF6)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXPVOW
+    color 255,215,0
+    metadata donor=GTEX-PVOW age=40 sex=M hardyScore=2 sample=GTEX-PVOW-0626-SM-2XCF6 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.1 batch=BP-19441 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2011
+
+    track gtexRnaSignalSRR657540
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR657540.hg19.bigWig
+    shortLabel nerveTibi M Q2AI
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Q2AI-1626-SM-2S1P9)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXQ2AI
+    color 255,215,0
+
+    track gtexRnaSignalSRR662414
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR662414.hg19.bigWig
+    shortLabel nerveTibi M P44H
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-P44H-0526-SM-2XCF1)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXP44H
+    color 255,215,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0526-SM-2XCF1 \
+            tissue=nerveTibial autolysisScore=2 rnaIntegrity=6.8 batch=BP-18616 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/01/2011
+
+    track gtexRnaSignalSRR664072
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR664072.hg19.bigWig
+    shortLabel nerveTibi M U8XE
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-U8XE-0526-SM-3DB8R)
+    subGroups age=a30 tissue=nerveTibial donor=GTEXU8XE
+    color 255,215,0
+
+    track gtexRnaSignalSRR812080
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR812080.hg19.bigWig
+    shortLabel nerveTibi M O5YT
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-O5YT-1726-SM-3NMD7)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXO5YT
+    color 255,215,0
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-1726-SM-3NMD7 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7 batch=BP-17533 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSRR813704
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR813704.hg19.bigWig
+    shortLabel nerveTibi M WZTO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WZTO-1026-SM-3NM9P)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXWZTO
+    color 255,215,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-1026-SM-3NM9P \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-29831 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR814052
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR814052.hg19.bigWig
+    shortLabel nerveTibi M OIZI
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-OIZI-0426-SM-2XCEF)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXOIZI
+    color 255,215,0
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-0426-SM-2XCEF \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-18178 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/11/2011
+
+    track gtexRnaSignalSRR820350
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR820350.hg19.bigWig
+    shortLabel nerveTibi M WOFM
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WOFM-1626-SM-3MJFX)
+    subGroups age=a20 tissue=nerveTibial donor=GTEXWOFM
+    color 255,215,0
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-1626-SM-3MJFX \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.4 batch=BP-28509 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalSRR820938
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR820938.hg19.bigWig
+    shortLabel nerveTibi M SNOS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-SNOS-1626-SM-3NMA4)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXSNOS
+    color 255,215,0
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-1626-SM-3NMA4 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-24514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR821124
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR821124.hg19.bigWig
+    shortLabel nerveTibi M WH7G
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WH7G-2626-SM-3NMBE)
+    subGroups age=a40 tissue=nerveTibial donor=GTEXWH7G
+    color 255,215,0
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-2626-SM-3NMBE \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-27853 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR1070159
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1070159.hg19.bigWig
+    shortLabel nerveTibi M T2YK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-T2YK-0326-SM-4DM7D)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXT2YK
+    color 255,215,0
+    metadata donor=GTEX-T2YK age=50 sex=M hardyScore=4 sample=GTEX-T2YK-0326-SM-4DM7D \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-24618 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR1070597
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1070597.hg19.bigWig
+    shortLabel nerveTibi M UPJH
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-UPJH-0626-SM-4IHJN)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXUPJH
+    color 255,215,0
+    metadata donor=GTEX-UPJH age=50 sex=M hardyScore=2 sample=GTEX-UPJH-0626-SM-4IHJN \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=8.3 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1072724
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1072724.hg19.bigWig
+    shortLabel nerveTibi M XOTO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XOTO-0326-SM-4B66K)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXXOTO
+    color 255,215,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0326-SM-4B66K \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-33606 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1076559
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1076559.hg19.bigWig
+    shortLabel nerveTibi M X585
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-X585-0426-SM-4E3JZ)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXX585
+    color 255,215,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0426-SM-4E3JZ \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-36201 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/19/2013
+
+    track gtexRnaSignalSRR1082809
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1082809.hg19.bigWig
+    shortLabel nerveTibi M VUSG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-VUSG-2726-SM-4KKZJ)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXVUSG
+    color 255,215,0
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-2726-SM-4KKZJ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-27126 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1086417
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1086417.hg19.bigWig
+    shortLabel nerveTibi M R55F
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-R55F-0226-SM-48FCI)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXR55F
+    color 255,215,0
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-0226-SM-48FCI \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=5.8 batch=BP-21404 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2012
+
+    track gtexRnaSignalSRR1095334
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1095334.hg19.bigWig
+    shortLabel nerveTibi M XXEK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XXEK-2526-SM-4BRUR)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXXXEK
+    color 255,215,0
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-2526-SM-4BRUR \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-34929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/09/2013
+
+    track gtexRnaSignalSRR1097055
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1097055.hg19.bigWig
+    shortLabel nerveTibi M XGQ4
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XGQ4-2526-SM-4AT57)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXXGQ4
+    color 255,215,0
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-2526-SM-4AT57 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.9 batch=BP-32474 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1310645
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1310645.hg19.bigWig
+    shortLabel nerveTibi M 117YX
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-117YX-2426-SM-5GZZJ)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX117YX
+    color 255,215,0
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-2426-SM-5GZZJ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.3 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1311308
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1311308.hg19.bigWig
+    shortLabel nerveTibi M 111CU
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-111CU-2226-SM-5N9G5)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX111CU
+    color 255,215,0
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-2226-SM-5N9G5 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=5.7 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1320053
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1320053.hg19.bigWig
+    shortLabel nerveTibi M 144GN
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-144GN-2526-SM-5LU54)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX144GN
+    color 255,215,0
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-2526-SM-5LU54 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1320624
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1320624.hg19.bigWig
+    shortLabel nerveTibi M 145LV
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-145LV-2526-SM-5S2VA)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX145LV
+    color 255,215,0
+    metadata donor=GTEX-145LV age=50 sex=M hardyScore=0 sample=GTEX-145LV-2526-SM-5S2VA \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-48818 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1323336
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1323336.hg19.bigWig
+    shortLabel nerveTibi M 144FL
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-144FL-0426-SM-5O9A1)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX144FL
+    color 255,215,0
+    metadata donor=GTEX-144FL age=50 sex=M hardyScore=2 sample=GTEX-144FL-0426-SM-5O9A1 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1326427
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1326427.hg19.bigWig
+    shortLabel nerveTibi M ZAB5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZAB5-1926-SM-5HL7O)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZAB5
+    color 255,215,0
+
+    track gtexRnaSignalSRR1336048
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1336048.hg19.bigWig
+    shortLabel nerveTibi M 11UD2
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11UD2-0426-SM-5EQ5W)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX11UD2
+    color 255,215,0
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0426-SM-5EQ5W \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1336930
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1336930.hg19.bigWig
+    shortLabel nerveTibi M 13FLV
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13FLV-2326-SM-5K7UK)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13FLV
+    color 255,215,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-2326-SM-5K7UK \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.6 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1345628
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1345628.hg19.bigWig
+    shortLabel nerveTibi M 13NZ9
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13NZ9-0726-SM-5J1ME)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13NZ9
+    color 255,215,0
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0726-SM-5J1ME \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-46734 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1347726
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1347726.hg19.bigWig
+    shortLabel nerveTibi M XBEC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XBEC-0426-SM-4QART)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXXBEC
+    color 255,215,0
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-0426-SM-4QART \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-36136 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/14/2013
+
+    track gtexRnaSignalSRR1356683
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1356683.hg19.bigWig
+    shortLabel nerveTibi M 13X6J
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13X6J-0426-SM-5O9D3)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13X6J
+    color 255,215,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0426-SM-5O9D3 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1360607
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1360607.hg19.bigWig
+    shortLabel nerveTibi M 13111
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13111-2026-SM-5GCMN)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13111
+    color 255,215,0
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-2026-SM-5GCMN \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1362621
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1362621.hg19.bigWig
+    shortLabel nerveTibi M 1192X
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-1192X-0326-SM-5H11U)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX1192X
+    color 255,215,0
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-0326-SM-5H11U \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.2 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1364914
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1364914.hg19.bigWig
+    shortLabel nerveTibi M 139T6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-139T6-1726-SM-5PNZ3)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX139T6
+    color 255,215,0
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-1726-SM-5PNZ3 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1368896
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1368896.hg19.bigWig
+    shortLabel nerveTibi M 145MH
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-145MH-1426-SM-5QGPO)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX145MH
+    color 255,215,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-1426-SM-5QGPO \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1376895
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1376895.hg19.bigWig
+    shortLabel nerveTibi M 11NUK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11NUK-0426-SM-5HL5V)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX11NUK
+    color 255,215,0
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-0426-SM-5HL5V \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1382912
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1382912.hg19.bigWig
+    shortLabel nerveTibi M Z93S
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Z93S-0826-SM-5HL7Y)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZ93S
+    color 255,215,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0826-SM-5HL7Y \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1384941
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1384941.hg19.bigWig
+    shortLabel nerveTibi M 145LU
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-145LU-0726-SM-5QGP2)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX145LU
+    color 255,215,0
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0726-SM-5QGP2 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1385190
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1385190.hg19.bigWig
+    shortLabel nerveTibi M 131XE
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-131XE-2526-SM-5EQ57)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX131XE
+    color 255,215,0
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-2526-SM-5EQ57 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1397200
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1397200.hg19.bigWig
+    shortLabel nerveTibi M 13O3P
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13O3P-0326-SM-5K7VM)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13O3P
+    color 255,215,0
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0326-SM-5K7VM \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1402219
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1402219.hg19.bigWig
+    shortLabel nerveTibi M 11H98
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11H98-0426-SM-5HL55)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX11H98
+    color 255,215,0
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0426-SM-5HL55 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1403526
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1403526.hg19.bigWig
+    shortLabel nerveTibi M 13OVL
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13OVL-1526-SM-5K7WA)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13OVL
+    color 255,215,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-1526-SM-5K7WA \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1414117
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1414117.hg19.bigWig
+    shortLabel nerveTibi M ZVE2
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZVE2-0426-SM-59HJ7)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZVE2
+    color 255,215,0
+    metadata donor=GTEX-ZVE2 age=50 sex=M hardyScore=0 sample=GTEX-ZVE2-0426-SM-59HJ7 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.4 batch=BP-43441 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1418243
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1418243.hg19.bigWig
+    shortLabel nerveTibi M 13O3Q
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13O3Q-2626-SM-5KM3S)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13O3Q
+    color 255,215,0
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-2626-SM-5KM3S \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.4 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1418323
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1418323.hg19.bigWig
+    shortLabel nerveTibi M 131XH
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-131XH-2526-SM-5GCND)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX131XH
+    color 255,215,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-2526-SM-5GCND \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1431694
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1431694.hg19.bigWig
+    shortLabel nerveTibi M ZYFD
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZYFD-0426-SM-5E45X)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZYFD
+    color 255,215,0
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-0426-SM-5E45X \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1433107
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1433107.hg19.bigWig
+    shortLabel nerveTibi M ZDYS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZDYS-1526-SM-4WKFY)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZDYS
+    color 255,215,0
+
+    track gtexRnaSignalSRR1433623
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1433623.hg19.bigWig
+    shortLabel nerveTibi M ZYFC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZYFC-0626-SM-5GIDR)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZYFC
+    color 255,215,0
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0626-SM-5GIDR \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1434417
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1434417.hg19.bigWig
+    shortLabel nerveTibi M 13OW6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13OW6-0226-SM-5J1NB)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13OW6
+    color 255,215,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0226-SM-5J1NB \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.8 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1437226
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1437226.hg19.bigWig
+    shortLabel nerveTibi M 13O21
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13O21-1826-SM-5MR5M)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13O21
+    color 255,215,0
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-1826-SM-5MR5M \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1441051
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1441051.hg19.bigWig
+    shortLabel nerveTibi M ZVZP
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZVZP-2626-SM-51MR4)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXZVZP
+    color 255,215,0
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-2626-SM-51MR4 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=5.4 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1443332
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1443332.hg19.bigWig
+    shortLabel nerveTibi M 12WSL
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12WSL-2826-SM-5LZWL)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX12WSL
+    color 255,215,0
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-2826-SM-5LZWL \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.7 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1445002
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1445002.hg19.bigWig
+    shortLabel nerveTibi M 144GL
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-144GL-0426-SM-5QGOZ)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX144GL
+    color 255,215,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0426-SM-5QGOZ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1447019
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1447019.hg19.bigWig
+    shortLabel nerveTibi M 13FHP
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13FHP-0326-SM-5K7U2)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13FHP
+    color 255,215,0
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0326-SM-5K7U2 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1453504
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1453504.hg19.bigWig
+    shortLabel nerveTibi M 14BIL
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14BIL-0426-SM-5SIA3)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX14BIL
+    color 255,215,0
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-0426-SM-5SIA3 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1476165
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1476165.hg19.bigWig
+    shortLabel nerveTibi M 13W46
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13W46-0526-SM-5IJBD)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13W46
+    color 255,215,0
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-0526-SM-5IJBD \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1476825
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1476825.hg19.bigWig
+    shortLabel nerveTibi M 13PVQ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13PVQ-0426-SM-5J1OG)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13PVQ
+    color 255,215,0
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0426-SM-5J1OG \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1476844
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1476844.hg19.bigWig
+    shortLabel nerveTibi M 13OW7
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13OW7-0526-SM-5J1N2)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX13OW7
+    color 255,215,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0526-SM-5J1N2 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.8 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1479740
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1479740.hg19.bigWig
+    shortLabel nerveTibi M 11DXZ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11DXZ-2526-SM-5N9BG)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX11DXZ
+    color 255,215,0
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-2526-SM-5N9BG \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1498765
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1498765.hg19.bigWig
+    shortLabel nerveTibi M 14DAR
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14DAR-2226-SM-5S2VT)
+    subGroups age=a50 tissue=nerveTibial donor=GTEX14DAR
+    color 255,215,0
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-2226-SM-5S2VT \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR613030
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613030.hg19.bigWig
+    shortLabel nerveTibi M PSDG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-PSDG-0626-SM-2S1OE)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXPSDG
+    color 255,215,0
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-0626-SM-2S1OE \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-19411 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR613054
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613054.hg19.bigWig
+    shortLabel nerveTibi M QXCU
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QXCU-0126-SM-2TC5Q)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXQXCU
+    color 255,215,0
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0126-SM-2TC5Q \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.8 batch=BP-21102 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/29/2011
+
+    track gtexRnaSignalSRR613102
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613102.hg19.bigWig
+    shortLabel nerveTibi M RUSQ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-RUSQ-1826-SM-2TF6E)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXRUSQ
+    color 255,215,0
+    metadata donor=GTEX-RUSQ age=50 sex=M hardyScore=0 sample=GTEX-RUSQ-1826-SM-2TF6E \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.6 batch=BP-21951 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/30/2012
+
+    track gtexRnaSignalSRR613615
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613615.hg19.bigWig
+    shortLabel nerveTibi M QDVJ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QDVJ-2026-SM-2S1PD)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXQDVJ
+    color 255,215,0
+
+    track gtexRnaSignalSRR613831
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613831.hg19.bigWig
+    shortLabel nerveTibi M QDVN
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QDVN-2226-SM-2S1PM)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXQDVN
+    color 255,215,0
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-2226-SM-2S1PM \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-20294 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/22/2011
+
+    track gtexRnaSignalSRR655325
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR655325.hg19.bigWig
+    shortLabel nerveTibi M T6MN
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-T6MN-0326-SM-32PMK)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXT6MN
+    color 255,215,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0326-SM-32PMK \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-24678 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalSRR655519
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR655519.hg19.bigWig
+    shortLabel nerveTibi M S3XE
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-S3XE-1926-SM-3K2B3)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXS3XE
+    color 255,215,0
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-1926-SM-3K2B3 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-22893 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR656313
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR656313.hg19.bigWig
+    shortLabel nerveTibi M UJMC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-UJMC-1926-SM-3GADS)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXUJMC
+    color 255,215,0
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-1926-SM-3GADS \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-26354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/18/2012
+
+    track gtexRnaSignalSRR656397
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR656397.hg19.bigWig
+    shortLabel nerveTibi M SIU8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-SIU8-0326-SM-2XCDR)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXSIU8
+    color 255,215,0
+    metadata donor=GTEX-SIU8 age=50 sex=M hardyScore=2 sample=GTEX-SIU8-0326-SM-2XCDR \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-23696 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalSRR807613
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR807613.hg19.bigWig
+    shortLabel nerveTibi M WYJK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WYJK-0326-SM-3NMA8)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWYJK
+    color 255,215,0
+    metadata donor=GTEX-WYJK age=50 sex=M hardyScore=0 sample=GTEX-WYJK-0326-SM-3NMA8 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-29433 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalSRR808086
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR808086.hg19.bigWig
+    shortLabel nerveTibi M OXRN
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-OXRN-1426-SM-3LK5U)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXOXRN
+    color 255,215,0
+    metadata donor=GTEX-OXRN age=50 sex=M hardyScore=0 sample=GTEX-OXRN-1426-SM-3LK5U \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-18408 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR809643
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR809643.hg19.bigWig
+    shortLabel nerveTibi M WHPG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WHPG-2426-SM-3NMBQ)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWHPG
+    color 255,215,0
+
+    track gtexRnaSignalSRR811213
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR811213.hg19.bigWig
+    shortLabel nerveTibi M WY7C
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WY7C-2626-SM-3NB2P)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWY7C
+    color 255,215,0
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-2626-SM-3NB2P \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=8.2 batch=BP-29482 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalSRR817026
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR817026.hg19.bigWig
+    shortLabel nerveTibi M WHWD
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WHWD-2326-SM-3LK6Q)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWHWD
+    color 255,215,0
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-2326-SM-3LK6Q \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-27626 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR818961
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR818961.hg19.bigWig
+    shortLabel nerveTibi M WL46
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WL46-0426-SM-3TW8J)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWL46
+    color 255,215,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0426-SM-3TW8J \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=8.1 batch=BP-27853 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR820402
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR820402.hg19.bigWig
+    shortLabel nerveTibi M PLZ5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-PLZ5-1626-SM-3NB21)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXPLZ5
+    color 255,215,0
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-1626-SM-3NB21 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-19182 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/03/2011
+
+    track gtexRnaSignalSRR821096
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR821096.hg19.bigWig
+    shortLabel nerveTibi M WHSB
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-WHSB-2026-SM-3LK6H)
+    subGroups age=a50 tissue=nerveTibial donor=GTEXWHSB
+    color 255,215,0
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-2026-SM-3LK6H \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.2 batch=BP-27516 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1070086
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1070086.hg19.bigWig
+    shortLabel nerveTibi M N7MS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-N7MS-0526-SM-4E3JP)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXN7MS
+    color 255,215,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0526-SM-4E3JP \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-36182 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2013
+
+    track gtexRnaSignalSRR1079636
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1079636.hg19.bigWig
+    shortLabel nerveTibi M V955
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-V955-2526-SM-4JBJG)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXV955
+    color 255,215,0
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-2526-SM-4JBJG \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-26938 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1082059
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1082059.hg19.bigWig
+    shortLabel nerveTibi M XMD1
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XMD1-0526-SM-4AT4Z)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXXMD1
+    color 255,215,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0526-SM-4AT4Z \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-32483 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1087079
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1087079.hg19.bigWig
+    shortLabel nerveTibi M XBED
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-XBED-2526-SM-47JYD)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXXBED
+    color 255,215,0
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-2526-SM-47JYD \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-31551 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1310455
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1310455.hg19.bigWig
+    shortLabel nerveTibi M 11OC5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11OC5-0526-SM-5N9EE)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11OC5
+    color 255,215,0
+    metadata donor=GTEX-11OC5 age=60 sex=M hardyScore=2 sample=GTEX-11OC5-0526-SM-5N9EE \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.7 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1311131
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1311131.hg19.bigWig
+    shortLabel nerveTibi M 111VG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-111VG-2526-SM-5GZXP)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX111VG
+    color 255,215,0
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-2526-SM-5GZXP \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1318753
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1318753.hg19.bigWig
+    shortLabel nerveTibi M 13CF2
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13CF2-2826-SM-5LZX9)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13CF2
+    color 255,215,0
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-2826-SM-5LZX9 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.4 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1319395
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1319395.hg19.bigWig
+    shortLabel nerveTibi M Y8DK
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Y8DK-0426-SM-4TT3Q)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXY8DK
+    color 255,215,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0426-SM-4TT3Q \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1321401
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1321401.hg19.bigWig
+    shortLabel nerveTibi M 111YS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-111YS-2126-SM-5EGGM)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX111YS
+    color 255,215,0
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-2126-SM-5EGGM \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1326078
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1326078.hg19.bigWig
+    shortLabel nerveTibi M 111FC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-111FC-0526-SM-5GZZ8)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX111FC
+    color 255,215,0
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-0526-SM-5GZZ8 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1331620
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1331620.hg19.bigWig
+    shortLabel nerveTibi M 13NZA
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13NZA-0326-SM-5J1MK)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13NZA
+    color 255,215,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0326-SM-5J1MK \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1332381
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1332381.hg19.bigWig
+    shortLabel nerveTibi M 11ZU8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11ZU8-2626-SM-5EQLL)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11ZU8
+    color 255,215,0
+    metadata donor=GTEX-11ZU8 age=60 sex=M hardyScore=4 sample=GTEX-11ZU8-2626-SM-5EQLL \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1332508
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1332508.hg19.bigWig
+    shortLabel nerveTibi M 13OVG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13OVG-2226-SM-5K7V8)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13OVG
+    color 255,215,0
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-2226-SM-5K7V8 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.2 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1334396
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1334396.hg19.bigWig
+    shortLabel nerveTibi M Y8E5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Y8E5-0526-SM-57WBY)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXY8E5
+    color 255,215,0
+    metadata donor=GTEX-Y8E5 age=60 sex=M hardyScore=-1 sample=GTEX-Y8E5-0526-SM-57WBY \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1335278
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1335278.hg19.bigWig
+    shortLabel nerveTibi M 12ZZY
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12ZZY-0426-SM-5LZW3)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX12ZZY
+    color 255,215,0
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0426-SM-5LZW3 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1347750
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1347750.hg19.bigWig
+    shortLabel nerveTibi M 131XF
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-131XF-2426-SM-5BC6C)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX131XF
+    color 255,215,0
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-2426-SM-5BC6C \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1354423
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1354423.hg19.bigWig
+    shortLabel nerveTibi M ZDXO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZDXO-1926-SM-5E45Q)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXZDXO
+    color 255,215,0
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-1926-SM-5E45Q \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.3 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1355284
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1355284.hg19.bigWig
+    shortLabel nerveTibi M 11ONC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11ONC-2326-SM-5HL6P)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11ONC
+    color 255,215,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2326-SM-5HL6P \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1359005
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1359005.hg19.bigWig
+    shortLabel nerveTibi M 12BJ1
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-12BJ1-2626-SM-5FQUF)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX12BJ1
+    color 255,215,0
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-2626-SM-5FQUF \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.5 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1359328
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1359328.hg19.bigWig
+    shortLabel nerveTibi M 13O1R
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13O1R-0426-SM-5K7WG)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13O1R
+    color 255,215,0
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0426-SM-5K7WG \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1360502
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1360502.hg19.bigWig
+    shortLabel nerveTibi M 13JVG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13JVG-0526-SM-5IJBN)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13JVG
+    color 255,215,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0526-SM-5IJBN \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.9 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1368006
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1368006.hg19.bigWig
+    shortLabel nerveTibi M Y5V6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-Y5V6-2726-SM-4VDSC)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXY5V6
+    color 255,215,0
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2726-SM-4VDSC \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1370285
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1370285.hg19.bigWig
+    shortLabel nerveTibi M 11WQC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11WQC-2826-SM-5GU7A)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11WQC
+    color 255,215,0
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-2826-SM-5GU7A \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1376356
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1376356.hg19.bigWig
+    shortLabel nerveTibi M 14753
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14753-0126-SM-5S2TX)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX14753
+    color 255,215,0
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0126-SM-5S2TX \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.4 batch=BP-48818 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1380636
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1380636.hg19.bigWig
+    shortLabel nerveTibi M 1212Z
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-1212Z-2726-SM-5EQ59)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX1212Z
+    color 255,215,0
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-2726-SM-5EQ59 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1380829
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1380829.hg19.bigWig
+    shortLabel nerveTibi M 13NYS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13NYS-0426-SM-5MR4X)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13NYS
+    color 255,215,0
+
+    track gtexRnaSignalSRR1384073
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1384073.hg19.bigWig
+    shortLabel nerveTibi M 13N1W
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13N1W-0426-SM-5MR46)
+    subGroups age=a70 tissue=nerveTibial donor=GTEX13N1W
+    color 255,215,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0426-SM-5MR46 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1386797
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1386797.hg19.bigWig
+    shortLabel nerveTibi M 13IVO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13IVO-0426-SM-5LZY7)
+    subGroups age=a70 tissue=nerveTibial donor=GTEX13IVO
+    color 255,215,0
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0426-SM-5LZY7 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1395891
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1395891.hg19.bigWig
+    shortLabel nerveTibi M 139TT
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-139TT-0326-SM-5IJC3)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX139TT
+    color 255,215,0
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0326-SM-5IJC3 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1395975
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1395975.hg19.bigWig
+    shortLabel nerveTibi M 145MO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-145MO-0526-SM-5Q5F7)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX145MO
+    color 255,215,0
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-0526-SM-5Q5F7 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1399950
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1399950.hg19.bigWig
+    shortLabel nerveTibi M 11EI6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11EI6-0426-SM-5EQ43)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11EI6
+    color 255,215,0
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0426-SM-5EQ43 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1402350
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1402350.hg19.bigWig
+    shortLabel nerveTibi M 13FHO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13FHO-0526-SM-5K7VS)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13FHO
+    color 255,215,0
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0526-SM-5K7VS \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1404084
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1404084.hg19.bigWig
+    shortLabel nerveTibi M 139T8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-139T8-0326-SM-5IJCM)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX139T8
+    color 255,215,0
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0326-SM-5IJCM \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1408615
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1408615.hg19.bigWig
+    shortLabel nerveTibi M 13NYC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13NYC-0626-SM-5K7U8)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13NYC
+    color 255,215,0
+    metadata donor=GTEX-13NYC age=60 sex=M hardyScore=2 sample=GTEX-13NYC-0626-SM-5K7U8 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1410427
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1410427.hg19.bigWig
+    shortLabel nerveTibi M 11GSO
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11GSO-2626-SM-5Q5AK)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11GSO
+    color 255,215,0
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-2626-SM-5Q5AK \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1413055
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1413055.hg19.bigWig
+    shortLabel nerveTibi M 113IC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-113IC-0526-SM-5HL76)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX113IC
+    color 255,215,0
+    metadata donor=GTEX-113IC age=60 sex=M hardyScore=-1 sample=GTEX-113IC-0526-SM-5HL76 \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1416911
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1416911.hg19.bigWig
+    shortLabel nerveTibi M 11DYG
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-11DYG-0426-SM-5987J)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX11DYG
+    color 255,215,0
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-0426-SM-5987J \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1419408
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1419408.hg19.bigWig
+    shortLabel nerveTibi M 132NY
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-132NY-0526-SM-5EQ4V)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX132NY
+    color 255,215,0
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-0526-SM-5EQ4V \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1432802
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1432802.hg19.bigWig
+    shortLabel nerveTibi M 13RTJ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13RTJ-2826-SM-5QGQH)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13RTJ
+    color 255,215,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-2826-SM-5QGQH \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.1 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1441655
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1441655.hg19.bigWig
+    shortLabel nerveTibi M 1477Z
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-1477Z-1526-SM-5SI9V)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX1477Z
+    color 255,215,0
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-1526-SM-5SI9V \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.3 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1442840
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1442840.hg19.bigWig
+    shortLabel nerveTibi M ZDTS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZDTS-0326-SM-5HL83)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXZDTS
+    color 255,215,0
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0326-SM-5HL83 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1453639
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1453639.hg19.bigWig
+    shortLabel nerveTibi M ZYW4
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZYW4-0326-SM-5E44Y)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXZYW4
+    color 255,215,0
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-0326-SM-5E44Y \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=6.1 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1457015
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1457015.hg19.bigWig
+    shortLabel nerveTibi M 14ASI
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-14ASI-0326-SM-5S2VH)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX14ASI
+    color 255,215,0
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-0326-SM-5S2VH \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1476467
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1476467.hg19.bigWig
+    shortLabel nerveTibi M 13OW8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-13OW8-1526-SM-5K7V2)
+    subGroups age=a60 tissue=nerveTibial donor=GTEX13OW8
+    color 255,215,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1526-SM-5K7V2 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1479328
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR1479328.hg19.bigWig
+    shortLabel nerveTibi M ZXG5
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-ZXG5-0426-SM-5GICT)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXZXG5
+    color 255,215,0
+
+    track gtexRnaSignalSRR612923
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR612923.hg19.bigWig
+    shortLabel nerveTibi M QLQ7
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-QLQ7-1826-SM-2S1R5)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXQLQ7
+    color 255,215,0
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1826-SM-2S1R5 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.4 batch=BP-20571 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR613771
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR613771.hg19.bigWig
+    shortLabel nerveTibi M REY6
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-REY6-0626-SM-2TF4G)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXREY6
+    color 255,215,0
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0626-SM-2TF4G \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR614827
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR614827.hg19.bigWig
+    shortLabel nerveTibi M OHPJ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-OHPJ-0726-SM-2YUNM)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXOHPJ
+    color 255,215,0
+
+    track gtexRnaSignalSRR656770
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR656770.hg19.bigWig
+    shortLabel nerveTibi M U8T8
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-U8T8-0426-SM-3DB8X)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXU8T8
+    color 255,215,0
+    metadata donor=GTEX-U8T8 age=60 sex=M hardyScore=0 sample=GTEX-U8T8-0426-SM-3DB8X \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-25630 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2012
+
+    track gtexRnaSignalSRR658164
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR658164.hg19.bigWig
+    shortLabel nerveTibi M SJXC
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-SJXC-0326-SM-2XCFI)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXSJXC
+    color 255,215,0
+
+    track gtexRnaSignalSRR663657
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR663657.hg19.bigWig
+    shortLabel nerveTibi M POYW
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-POYW-0426-SM-2XCEV)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXPOYW
+    color 255,215,0
+    metadata donor=GTEX-POYW age=60 sex=M hardyScore=0 sample=GTEX-POYW-0426-SM-2XCEV \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-19380 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/13/2011
+
+    track gtexRnaSignalSRR811423
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR811423.hg19.bigWig
+    shortLabel nerveTibi M VJYA
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-VJYA-1726-SM-3NMDQ)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXVJYA
+    color 255,215,0
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-1726-SM-3NMDQ \
+            tissue=nerveTibial autolysisScore=0 rnaIntegrity=8 batch=BP-26938 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR815422
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR815422.hg19.bigWig
+    shortLabel nerveTibi M P4PQ
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-P4PQ-1726-SM-3NB15)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXP4PQ
+    color 255,215,0
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-1726-SM-3NB15 \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-18709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2011
+
+    track gtexRnaSignalSRR817397
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl nerveTibial/gtexRnaSignalSRR817397.hg19.bigWig
+    shortLabel nerveTibi M P4QS
+    longLabel GTEx RNA signal from male Nerve - Tibial (GTEX-P4QS-1726-SM-3NB1V)
+    subGroups age=a60 tissue=nerveTibial donor=GTEXP4QS
+    color 255,215,0
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-1726-SM-3NB1V \
+            tissue=nerveTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-18728 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+

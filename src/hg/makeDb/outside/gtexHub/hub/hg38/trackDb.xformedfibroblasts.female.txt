@@ -1,0 +1,1122 @@
+    track gtexRnaSignalSRR1069490
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1069490.hg38.bigWig
+    shortLabel xformFib F P78B
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-P78B-0008-SM-48TE1)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXP78B
+    color 131,203,228
+    metadata donor=GTEX-P78B age=40 sex=F hardyScore=-1 sample=GTEX-P78B-0008-SM-48TE1 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.4 batch=BP-32500 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1069564
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1069564.hg38.bigWig
+    shortLabel xformFib F T5JW
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-T5JW-0008-SM-4DM5X)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXT5JW
+    color 131,203,228
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-0008-SM-4DM5X \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-33651 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2012
+
+    track gtexRnaSignalSRR1070455
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1070455.hg38.bigWig
+    shortLabel xformFib F W5X1
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-W5X1-0008-SM-4LMKA)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXW5X1
+    color 131,203,228
+    metadata donor=GTEX-W5X1 age=40 sex=F hardyScore=0 sample=GTEX-W5X1-0008-SM-4LMKA \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-31959 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/09/2012
+
+    track gtexRnaSignalSRR1074263
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1074263.hg38.bigWig
+    shortLabel xformFib F XUZC
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XUZC-0008-SM-4BOQG)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEXXUZC
+    color 131,203,228
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0008-SM-4BOQG \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1074909
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1074909.hg38.bigWig
+    shortLabel xformFib F SE5C
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-SE5C-0008-SM-4B64J)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXSE5C
+    color 131,203,228
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-0008-SM-4B64J \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33651 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2012
+
+    track gtexRnaSignalSRR1074956
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1074956.hg38.bigWig
+    shortLabel xformFib F PWCY
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-PWCY-0008-SM-48TE9)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXPWCY
+    color 131,203,228
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-0008-SM-48TE9 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-32684 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1075923
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1075923.hg38.bigWig
+    shortLabel xformFib F PWN1
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-PWN1-0008-SM-48TEA)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXPWN1
+    color 131,203,228
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-0008-SM-48TEA \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32684 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1076657
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1076657.hg38.bigWig
+    shortLabel xformFib F P4PP
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-P4PP-0008-SM-48TDV)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEXP4PP
+    color 131,203,228
+    metadata donor=GTEX-P4PP age=30 sex=F hardyScore=0 sample=GTEX-P4PP-0008-SM-48TDV \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32500 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1076729
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1076729.hg38.bigWig
+    shortLabel xformFib F PWOO
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-PWOO-0008-SM-48TDU)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXPWOO
+    color 131,203,228
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-0008-SM-48TDU \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.2 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1080560
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1080560.hg38.bigWig
+    shortLabel xformFib F U3ZN
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-U3ZN-0008-SM-4DXTL)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEXU3ZN
+    color 131,203,228
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-0008-SM-4DXTL \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.7 batch=BP-33619 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1082011
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1082011.hg38.bigWig
+    shortLabel xformFib F XV7Q
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XV7Q-0008-SM-4BRWL)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXXV7Q
+    color 131,203,228
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0008-SM-4BRWL \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1082197
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1082197.hg38.bigWig
+    shortLabel xformFib F TML8
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-TML8-0008-SM-4DXUI)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXTML8
+    color 131,203,228
+    metadata donor=GTEX-TML8 age=40 sex=F hardyScore=0 sample=GTEX-TML8-0008-SM-4DXUI \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-33651 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2012
+
+    track gtexRnaSignalSRR1082640
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1082640.hg38.bigWig
+    shortLabel xformFib F PX3G
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-PX3G-0008-SM-48U2L)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXPX3G
+    color 131,203,228
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-0008-SM-48U2L \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1089595
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1089595.hg38.bigWig
+    shortLabel xformFib F Q734
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-Q734-0008-SM-48U2I)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXQ734
+    color 131,203,228
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0008-SM-48U2I \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.5 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1090952
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1090952.hg38.bigWig
+    shortLabel xformFib F S341
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-S341-0008-SM-4AD6D)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXS341
+    color 131,203,228
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0008-SM-4AD6D \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1091278
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1091278.hg38.bigWig
+    shortLabel xformFib F R3RS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-R3RS-0008-SM-48FF1)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXR3RS
+    color 131,203,228
+    metadata donor=GTEX-R3RS age=40 sex=F hardyScore=4 sample=GTEX-R3RS-0008-SM-48FF1 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33389 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1092305
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1092305.hg38.bigWig
+    shortLabel xformFib F T2IS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-T2IS-0008-SM-4DM75)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXT2IS
+    color 131,203,228
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0008-SM-4DM75 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33651 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2012
+
+    track gtexRnaSignalSRR1092773
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1092773.hg38.bigWig
+    shortLabel xformFib F WEY5
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WEY5-0008-SM-4LMKC)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXWEY5
+    color 131,203,228
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0008-SM-4LMKC \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-31959 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/09/2012
+
+    track gtexRnaSignalSRR1096033
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1096033.hg38.bigWig
+    shortLabel xformFib F R55G
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-R55G-0008-SM-48FEX)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXR55G
+    color 131,203,228
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0008-SM-48FEX \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33389 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1097221
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1097221.hg38.bigWig
+    shortLabel xformFib F QDT8
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-QDT8-0008-SM-48U2F)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEXQDT8
+    color 131,203,228
+    metadata donor=GTEX-QDT8 age=30 sex=F hardyScore=4 sample=GTEX-QDT8-0008-SM-48U2F \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-33214 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1318966
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1318966.hg38.bigWig
+    shortLabel xformFib F WI4N
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WI4N-0008-SM-4OOSV)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXWI4N
+    color 131,203,228
+    metadata donor=GTEX-WI4N age=40 sex=F hardyScore=0 sample=GTEX-WI4N-0008-SM-4OOSV \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-31959 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/09/2012
+
+    track gtexRnaSignalSRR1323675
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1323675.hg38.bigWig
+    shortLabel xformFib F WRHK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WRHK-0008-SM-4MVPA)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXWRHK
+    color 131,203,228
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-0008-SM-4MVPA \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.7 batch=BP-32500 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1326665
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1326665.hg38.bigWig
+    shortLabel xformFib F 11P81
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11P81-0008-SM-5S2OT)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEX11P81
+    color 131,203,228
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0008-SM-5S2OT \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45530 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1331083
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1331083.hg38.bigWig
+    shortLabel xformFib F YFC4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-YFC4-0008-SM-4RGM3)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXYFC4
+    color 131,203,228
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0008-SM-4RGM3 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.5 batch=BP-36932 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/14/2013
+
+    track gtexRnaSignalSRR1331793
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1331793.hg38.bigWig
+    shortLabel xformFib F ZP4G
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZP4G-0008-SM-4E3I4)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXZP4G
+    color 131,203,228
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0008-SM-4E3I4 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37539 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR1337471
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1337471.hg38.bigWig
+    shortLabel xformFib F YB5K
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-YB5K-0008-SM-4VDT8)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXYB5K
+    color 131,203,228
+    metadata donor=GTEX-YB5K age=40 sex=F hardyScore=0 sample=GTEX-YB5K-0008-SM-4VDT8 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-36932 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/14/2013
+
+    track gtexRnaSignalSRR1357256
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1357256.hg38.bigWig
+    shortLabel xformFib F 11UD1
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11UD1-0008-SM-5S2P6)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEX11UD1
+    color 131,203,228
+    metadata donor=GTEX-11UD1 age=40 sex=F hardyScore=3 sample=GTEX-11UD1-0008-SM-5S2P6 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45530 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1377647
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1377647.hg38.bigWig
+    shortLabel xformFib F ZPIC
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZPIC-0008-SM-4E3JF)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXZPIC
+    color 131,203,228
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-0008-SM-4E3JF \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37539 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR1380184
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1380184.hg38.bigWig
+    shortLabel xformFib F ZV6S
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZV6S-0008-SM-4YCF9)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXZV6S
+    color 131,203,228
+    metadata donor=GTEX-ZV6S age=40 sex=F hardyScore=0 sample=GTEX-ZV6S-0008-SM-4YCF9 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1395810
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1395810.hg38.bigWig
+    shortLabel xformFib F ZTPG
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZTPG-0008-SM-4YCEK)
+    subGroups age=a20 tissue=xformedfibroblasts donor=GTEXZTPG
+    color 131,203,228
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-0008-SM-4YCEK \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-38282 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/26/2013
+
+    track gtexRnaSignalSRR1400443
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1400443.hg38.bigWig
+    shortLabel xformFib F WYVS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WYVS-0008-SM-4ONDY)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXWYVS
+    color 131,203,228
+
+    track gtexRnaSignalSRR1416795
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1416795.hg38.bigWig
+    shortLabel xformFib F 11XUK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11XUK-0008-SM-5S2WD)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEX11XUK
+    color 131,203,228
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-0008-SM-5S2WD \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45532 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1436085
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1436085.hg38.bigWig
+    shortLabel xformFib F 11ILO
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11ILO-0008-SM-5QGR9)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEX11ILO
+    color 131,203,228
+
+    track gtexRnaSignalSRR1476142
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1476142.hg38.bigWig
+    shortLabel xformFib F ZXES
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZXES-0008-SM-57WCX)
+    subGroups age=a30 tissue=xformedfibroblasts donor=GTEXZXES
+    color 131,203,228
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-0008-SM-57WCX \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1498682
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1498682.hg38.bigWig
+    shortLabel xformFib F ZC5H
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZC5H-0008-SM-4WAX8)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXZC5H
+    color 131,203,228
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-0008-SM-4WAX8 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-37538 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR811261
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR811261.hg38.bigWig
+    shortLabel xformFib F S4UY
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-S4UY-0008-SM-3NM8H)
+    subGroups age=a40 tissue=xformedfibroblasts donor=GTEXS4UY
+    color 131,203,228
+    metadata donor=GTEX-S4UY age=40 sex=F hardyScore=0 sample=GTEX-S4UY-0008-SM-3NM8H \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=8.5 batch=BP-25393 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/16/2012
+
+    track gtexRnaSignalSRR1069590
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1069590.hg38.bigWig
+    shortLabel xformFib F QCQG
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-QCQG-0008-SM-48U2G)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXQCQG
+    color 131,203,228
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0008-SM-48U2G \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1070937
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1070937.hg38.bigWig
+    shortLabel xformFib F UJHI
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-UJHI-0008-SM-4IHL1)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXUJHI
+    color 131,203,228
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-0008-SM-4IHL1 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33619 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1072676
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1072676.hg38.bigWig
+    shortLabel xformFib F SN8G
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-SN8G-0008-SM-4DM4X)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXSN8G
+    color 131,203,228
+    metadata donor=GTEX-SN8G age=50 sex=F hardyScore=2 sample=GTEX-SN8G-0008-SM-4DM4X \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.5 batch=BP-33651 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2012
+
+    track gtexRnaSignalSRR1074017
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1074017.hg38.bigWig
+    shortLabel xformFib F RU72
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-RU72-0008-SM-46MV8)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXRU72
+    color 131,203,228
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0008-SM-46MV8 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33389 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1077826
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1077826.hg38.bigWig
+    shortLabel xformFib F X8HC
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-X8HC-0008-SM-46MU6)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXX8HC
+    color 131,203,228
+
+    track gtexRnaSignalSRR1078972
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1078972.hg38.bigWig
+    shortLabel xformFib F XUW1
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XUW1-0008-SM-4BOQH)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXXUW1
+    color 131,203,228
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-0008-SM-4BOQH \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-33716 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1080072
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1080072.hg38.bigWig
+    shortLabel xformFib F XMD3
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XMD3-0008-SM-4AT4V)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXXMD3
+    color 131,203,228
+    metadata donor=GTEX-XMD3 age=50 sex=F hardyScore=0 sample=GTEX-XMD3-0008-SM-4AT4V \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1080509
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1080509.hg38.bigWig
+    shortLabel xformFib F OHPK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-OHPK-0008-SM-4E3JL)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXOHPK
+    color 131,203,228
+    metadata donor=GTEX-OHPK age=50 sex=F hardyScore=0 sample=GTEX-OHPK-0008-SM-4E3JL \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37539 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR1085541
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1085541.hg38.bigWig
+    shortLabel xformFib F PLZ4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-PLZ4-0008-SM-48TE6)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXPLZ4
+    color 131,203,228
+    metadata donor=GTEX-PLZ4 age=50 sex=F hardyScore=-1 sample=GTEX-PLZ4-0008-SM-48TE6 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32500 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1088982
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1088982.hg38.bigWig
+    shortLabel xformFib F P4QT
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-P4QT-0008-SM-48TDZ)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXP4QT
+    color 131,203,228
+    metadata donor=GTEX-P4QT age=50 sex=F hardyScore=0 sample=GTEX-P4QT-0008-SM-48TDZ \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32500 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1094003
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1094003.hg38.bigWig
+    shortLabel xformFib F R53T
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-R53T-0008-SM-48FEW)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXR53T
+    color 131,203,228
+    metadata donor=GTEX-R53T age=50 sex=F hardyScore=0 sample=GTEX-R53T-0008-SM-48FEW \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1096782
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1096782.hg38.bigWig
+    shortLabel xformFib F RNOR
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-RNOR-0008-SM-48FEY)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXRNOR
+    color 131,203,228
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0008-SM-48FEY \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33389 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1099120
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1099120.hg38.bigWig
+    shortLabel xformFib F W5WG
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-W5WG-0008-SM-4KL25)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXW5WG
+    color 131,203,228
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-0008-SM-4KL25 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.2 batch=BP-31959 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/09/2012
+
+    track gtexRnaSignalSRR1312082
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1312082.hg38.bigWig
+    shortLabel xformFib F 113JC
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-113JC-0008-SM-5QGR6)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEX113JC
+    color 131,203,228
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-0008-SM-5QGR6 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR1321064
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1321064.hg38.bigWig
+    shortLabel xformFib F 1399U
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-1399U-0008-SM-5S2VE)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEX1399U
+    color 131,203,228
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-0008-SM-5S2VE \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-46000 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/20/2013
+
+    track gtexRnaSignalSRR1321088
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1321088.hg38.bigWig
+    shortLabel xformFib F 139T4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-139T4-0008-SM-5S2WF)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEX139T4
+    color 131,203,228
+    metadata donor=GTEX-139T4 age=50 sex=F hardyScore=3 sample=GTEX-139T4-0008-SM-5S2WF \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-46000 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/20/2013
+
+    track gtexRnaSignalSRR1322204
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1322204.hg38.bigWig
+    shortLabel xformFib F YBZK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-YBZK-0008-SM-59HL6)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXYBZK
+    color 131,203,228
+    metadata donor=GTEX-YBZK age=50 sex=F hardyScore=-1 sample=GTEX-YBZK-0008-SM-59HL6 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-36932 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/14/2013
+
+    track gtexRnaSignalSRR1355968
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1355968.hg38.bigWig
+    shortLabel xformFib F WXYG
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WXYG-0008-SM-4ONDU)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXWXYG
+    color 131,203,228
+
+    track gtexRnaSignalSRR1366747
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1366747.hg38.bigWig
+    shortLabel xformFib F ZF2S
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZF2S-0008-SM-4E3IK)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXZF2S
+    color 131,203,228
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-0008-SM-4E3IK \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-37581 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/04/2013
+
+    track gtexRnaSignalSRR1376983
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1376983.hg38.bigWig
+    shortLabel xformFib F Y3IK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-Y3IK-0008-SM-4WWDZ)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXY3IK
+    color 131,203,228
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0008-SM-4WWDZ \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.5 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR1391444
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1391444.hg38.bigWig
+    shortLabel xformFib F ZLWG
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZLWG-0008-SM-4E3J4)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXZLWG
+    color 131,203,228
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0008-SM-4E3J4 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37539 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR1391832
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1391832.hg38.bigWig
+    shortLabel xformFib F ZVE1
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZVE1-0008-SM-51MS9)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXZVE1
+    color 131,203,228
+    metadata donor=GTEX-ZVE1 age=50 sex=F hardyScore=0 sample=GTEX-ZVE1-0008-SM-51MS9 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-39146 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1421069
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1421069.hg38.bigWig
+    shortLabel xformFib F Y8LW
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-Y8LW-0008-SM-4V6G5)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXY8LW
+    color 131,203,228
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-0008-SM-4V6G5 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR1430444
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1430444.hg38.bigWig
+    shortLabel xformFib F 11I78
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11I78-0008-SM-5Q5DI)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEX11I78
+    color 131,203,228
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0008-SM-5Q5DI \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR1437095
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1437095.hg38.bigWig
+    shortLabel xformFib F WWYW
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WWYW-0008-SM-4MVPF)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXWWYW
+    color 131,203,228
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0008-SM-4MVPF \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32684 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1447458
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1447458.hg38.bigWig
+    shortLabel xformFib F ZVT4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZVT4-0008-SM-57WCA)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXZVT4
+    color 131,203,228
+    metadata donor=GTEX-ZVT4 age=50 sex=F hardyScore=3 sample=GTEX-ZVT4-0008-SM-57WCA \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1454671
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1454671.hg38.bigWig
+    shortLabel xformFib F ZV68
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZV68-0008-SM-4YCCV)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXZV68
+    color 131,203,228
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0008-SM-4YCCV \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1454971
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1454971.hg38.bigWig
+    shortLabel xformFib F WRHU
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WRHU-0008-SM-4MVPB)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXWRHU
+    color 131,203,228
+    metadata donor=GTEX-WRHU age=50 sex=F hardyScore=1 sample=GTEX-WRHU-0008-SM-4MVPB \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-32500 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1488067
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1488067.hg38.bigWig
+    shortLabel xformFib F Y114
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-Y114-0008-SM-4TT8X)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXY114
+    color 131,203,228
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-0008-SM-4TT8X \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR808220
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR808220.hg38.bigWig
+    shortLabel xformFib F OXRK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-OXRK-0008-SM-3NB28)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXOXRK
+    color 131,203,228
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0008-SM-3NB28 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.8 batch=BP-20433 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/01/2011
+
+    track gtexRnaSignalSRR818239
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR818239.hg38.bigWig
+    shortLabel xformFib F S4P3
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-S4P3-0008-SM-3NM8R)
+    subGroups age=a50 tissue=xformedfibroblasts donor=GTEXS4P3
+    color 131,203,228
+    metadata donor=GTEX-S4P3 age=50 sex=F hardyScore=0 sample=GTEX-S4P3-0008-SM-3NM8R \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.1 batch=BP-25393 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/16/2012
+
+    track gtexRnaSignalSRR1070525
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1070525.hg38.bigWig
+    shortLabel xformFib F QVJO
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-QVJO-0008-SM-447AU)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXQVJO
+    color 131,203,228
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0008-SM-447AU \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-33389 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1072895
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1072895.hg38.bigWig
+    shortLabel xformFib F XOT4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XOT4-0008-SM-4B664)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXXOT4
+    color 131,203,228
+    metadata donor=GTEX-XOT4 age=60 sex=F hardyScore=2 sample=GTEX-XOT4-0008-SM-4B664 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1075707
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1075707.hg38.bigWig
+    shortLabel xformFib F X638
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-X638-0008-SM-47JZ7)
+    subGroups age=a70 tissue=xformedfibroblasts donor=GTEXX638
+    color 131,203,228
+    metadata donor=GTEX-X638 age=70 sex=F hardyScore=-1 sample=GTEX-X638-0008-SM-47JZ7 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32684 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1075752
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1075752.hg38.bigWig
+    shortLabel xformFib F XUJ4
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XUJ4-0008-SM-4BOQI)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXXUJ4
+    color 131,203,228
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-0008-SM-4BOQI \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.7 batch=BP-33716 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1078998
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1078998.hg38.bigWig
+    shortLabel xformFib F NL3G
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-NL3G-0008-SM-4E3JX)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXNL3G
+    color 131,203,228
+    metadata donor=GTEX-NL3G age=60 sex=F hardyScore=2 sample=GTEX-NL3G-0008-SM-4E3JX \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37538 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/03/2013
+
+    track gtexRnaSignalSRR1079924
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1079924.hg38.bigWig
+    shortLabel xformFib F RTLS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-RTLS-0008-SM-48FET)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXRTLS
+    color 131,203,228
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-0008-SM-48FET \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.3 batch=BP-33214 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1080720
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1080720.hg38.bigWig
+    shortLabel xformFib F RWS6
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-RWS6-0008-SM-47JYV)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXRWS6
+    color 131,203,228
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0008-SM-47JYV \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33214 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/16/2012
+
+    track gtexRnaSignalSRR1082784
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1082784.hg38.bigWig
+    shortLabel xformFib F NPJ7
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-NPJ7-0008-SM-4E3JS)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXNPJ7
+    color 131,203,228
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0008-SM-4E3JS \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37581 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/04/2013
+
+    track gtexRnaSignalSRR1084103
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1084103.hg38.bigWig
+    shortLabel xformFib F OHPL
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-OHPL-0008-SM-4E3I9)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXOHPL
+    color 131,203,228
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-0008-SM-4E3I9 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-37581 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/04/2013
+
+    track gtexRnaSignalSRR1084180
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1084180.hg38.bigWig
+    shortLabel xformFib F XYKS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XYKS-0008-SM-4BRW6)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXXYKS
+    color 131,203,228
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-0008-SM-4BRW6 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.7 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR1090193
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1090193.hg38.bigWig
+    shortLabel xformFib F R45C
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-R45C-0008-SM-48FF2)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXR45C
+    color 131,203,228
+    metadata donor=GTEX-R45C age=60 sex=F hardyScore=0 sample=GTEX-R45C-0008-SM-48FF2 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-33389 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/19/2012
+
+    track gtexRnaSignalSRR1096363
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1096363.hg38.bigWig
+    shortLabel xformFib F TSE9
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-TSE9-0008-SM-4DXT8)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXTSE9
+    color 131,203,228
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0008-SM-4DXT8 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.6 batch=BP-33619 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1310210
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1310210.hg38.bigWig
+    shortLabel xformFib F 11DXX
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11DXX-0008-SM-5Q5B8)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11DXX
+    color 131,203,228
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0008-SM-5Q5B8 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR1332754
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1332754.hg38.bigWig
+    shortLabel xformFib F 1122O
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-1122O-0008-SM-5QGR2)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX1122O
+    color 131,203,228
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0008-SM-5QGR2 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR1345499
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1345499.hg38.bigWig
+    shortLabel xformFib F WYBS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-WYBS-0008-SM-4ONDX)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXWYBS
+    color 131,203,228
+
+    track gtexRnaSignalSRR1352659
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1352659.hg38.bigWig
+    shortLabel xformFib F ZQG8
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZQG8-0008-SM-4YCE7)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXZQG8
+    color 131,203,228
+
+    track gtexRnaSignalSRR1370192
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1370192.hg38.bigWig
+    shortLabel xformFib F 11EMC
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11EMC-0008-SM-5Q5DR)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11EMC
+    color 131,203,228
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-0008-SM-5Q5DR \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-39935 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1376406
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1376406.hg38.bigWig
+    shortLabel xformFib F 11TTK
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11TTK-0008-SM-5S2RU)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11TTK
+    color 131,203,228
+    metadata donor=GTEX-11TTK age=60 sex=F hardyScore=4 sample=GTEX-11TTK-0008-SM-5S2RU \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45530 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1393404
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1393404.hg38.bigWig
+    shortLabel xformFib F 11ZTS
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11ZTS-0008-SM-5S2VC)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11ZTS
+    color 131,203,228
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-0008-SM-5S2VC \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45532 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1413477
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1413477.hg38.bigWig
+    shortLabel xformFib F 1128S
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-1128S-0008-SM-5Q5DP)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX1128S
+    color 131,203,228
+    metadata donor=GTEX-1128S age=60 sex=F hardyScore=2 sample=GTEX-1128S-0008-SM-5Q5DP \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=8.9 batch=BP-39935 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1434376
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1434376.hg38.bigWig
+    shortLabel xformFib F XMD2
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-XMD2-0008-SM-4WWE7)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXXMD2
+    color 131,203,228
+    metadata donor=GTEX-XMD2 age=60 sex=F hardyScore=0 sample=GTEX-XMD2-0008-SM-4WWE7 \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32984 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1435602
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1435602.hg38.bigWig
+    shortLabel xformFib F ZVT3
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZVT3-0008-SM-51MRI)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXZVT3
+    color 131,203,228
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0008-SM-51MRI \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=9.9 batch=BP-39146 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1436370
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1436370.hg38.bigWig
+    shortLabel xformFib F 11ZTT
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11ZTT-0008-SM-5S2TZ)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11ZTT
+    color 131,203,228
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-0008-SM-5S2TZ \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-45532 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1441421
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1441421.hg38.bigWig
+    shortLabel xformFib F ZPCL
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZPCL-0008-SM-4WWAU)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXZPCL
+    color 131,203,228
+    metadata donor=GTEX-ZPCL age=60 sex=F hardyScore=0 sample=GTEX-ZPCL-0008-SM-4WWAU \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-38282 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/26/2013
+
+    track gtexRnaSignalSRR1443871
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1443871.hg38.bigWig
+    shortLabel xformFib F 11GSP
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-11GSP-0008-SM-5Q5DM)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEX11GSP
+    color 131,203,228
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0008-SM-5Q5DM \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR1455281
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1455281.hg38.bigWig
+    shortLabel xformFib F ZVZQ
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-ZVZQ-0008-SM-51MSK)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXZVZQ
+    color 131,203,228
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0008-SM-51MSK \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=8.2 batch=BP-39935 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1459352
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1459352.hg38.bigWig
+    shortLabel xformFib F X4EP
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-X4EP-0008-SM-4PQYO)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXX4EP
+    color 131,203,228
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-0008-SM-4PQYO \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32984 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1476547
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl xformedfibroblasts/gtexRnaSignalSRR1476547.hg38.bigWig
+    shortLabel xformFib F X4EO
+    longLabel GTEx RNA signal from female Cells - Transformed fibroblasts (GTEX-X4EO-0008-SM-4QASS)
+    subGroups age=a60 tissue=xformedfibroblasts donor=GTEXX4EO
+    color 131,203,228
+    metadata donor=GTEX-X4EO age=60 sex=F hardyScore=3 sample=GTEX-X4EO-0008-SM-4QASS \
+            tissue=xformedfibroblasts autolysisScore=-1 rnaIntegrity=10 batch=BP-32684 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+

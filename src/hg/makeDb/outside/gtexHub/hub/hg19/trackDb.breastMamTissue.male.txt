@@ -1,0 +1,1173 @@
+    track gtexRnaSignalSRR1068999
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1068999.hg19.bigWig
+    shortLabel breastMam M U8XE
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-U8XE-0826-SM-4E3J1)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXU8XE
+    color 0,205,205
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-0826-SM-4E3J1 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.2 batch=BP-25737 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSRR1071905
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1071905.hg19.bigWig
+    shortLabel breastMam M XQ3S
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XQ3S-1326-SM-4BOPQ)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEXXQ3S
+    color 0,205,205
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-1326-SM-4BOPQ \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.8 batch=BP-33940 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1077139
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1077139.hg19.bigWig
+    shortLabel breastMam M U3ZH
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-U3ZH-1426-SM-4DXSR)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXU3ZH
+    color 0,205,205
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-1426-SM-4DXSR \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.3 batch=BP-25324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalSRR1084674
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1084674.hg19.bigWig
+    shortLabel breastMam M S33H
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-S33H-0326-SM-4AD6N)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXS33H
+    color 0,205,205
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-0326-SM-4AD6N \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6 batch=BP-22611 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalSRR1086538
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1086538.hg19.bigWig
+    shortLabel breastMam M XMK1
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XMK1-1126-SM-4IHJ8)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEXXMK1
+    color 0,205,205
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-1126-SM-4IHJ8 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6 batch=BP-32848 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2012
+
+    track gtexRnaSignalSRR1322249
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1322249.hg19.bigWig
+    shortLabel breastMam M 11EQ9
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11EQ9-1826-SM-5Q5AJ)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX11EQ9
+    color 0,205,205
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1826-SM-5Q5AJ \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1335212
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1335212.hg19.bigWig
+    shortLabel breastMam M 145MN
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-145MN-1926-SM-5SIAI)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX145MN
+    color 0,205,205
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-1926-SM-5SIAI \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1335917
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1335917.hg19.bigWig
+    shortLabel breastMam M ZLFU
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZLFU-2126-SM-4WWEV)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEXZLFU
+    color 0,205,205
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-2126-SM-4WWEV \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.5 batch=BP-43072 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/04/2013
+
+    track gtexRnaSignalSRR1352457
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1352457.hg19.bigWig
+    shortLabel breastMam M 11P7K
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11P7K-0726-SM-5EGKX)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX11P7K
+    color 0,205,205
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0726-SM-5EGKX \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=8.4 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1357166
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1357166.hg19.bigWig
+    shortLabel breastMam M ZYT6
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZYT6-0126-SM-5E45J)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXZYT6
+    color 0,205,205
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0126-SM-5E45J \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1359262
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1359262.hg19.bigWig
+    shortLabel breastMam M 13NZB
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13NZB-2126-SM-5MR4Y)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX13NZB
+    color 0,205,205
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-2126-SM-5MR4Y \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.9 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1362972
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1362972.hg19.bigWig
+    shortLabel breastMam M 144GM
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-144GM-0926-SM-5O994)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEX144GM
+    color 0,205,205
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-0926-SM-5O994 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.9 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1365534
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1365534.hg19.bigWig
+    shortLabel breastMam M ZUA1
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZUA1-1526-SM-59HLS)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEXZUA1
+    color 0,205,205
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-1526-SM-59HLS \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.7 batch=BP-43441 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1370308
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1370308.hg19.bigWig
+    shortLabel breastMam M 12KS4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-12KS4-0126-SM-5Q5A5)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX12KS4
+    color 0,205,205
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-0126-SM-5Q5A5 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.2 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1394912
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1394912.hg19.bigWig
+    shortLabel breastMam M ZQUD
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZQUD-1926-SM-51MSA)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXZQUD
+    color 0,205,205
+    metadata donor=GTEX-ZQUD age=30 sex=M hardyScore=0 sample=GTEX-ZQUD-1926-SM-51MSA \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.2 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1406621
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1406621.hg19.bigWig
+    shortLabel breastMam M 11TT1
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11TT1-2126-SM-5GU5Y)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEX11TT1
+    color 0,205,205
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-2126-SM-5GU5Y \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.5 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1409421
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1409421.hg19.bigWig
+    shortLabel breastMam M 13S86
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13S86-1226-SM-5S2OA)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEX13S86
+    color 0,205,205
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-1226-SM-5S2OA \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.9 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1415257
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1415257.hg19.bigWig
+    shortLabel breastMam M QEG5
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-QEG5-0726-SM-4R1JQ)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEXQEG5
+    color 0,205,205
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-0726-SM-4R1JQ \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-20333 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/28/2011
+
+    track gtexRnaSignalSRR1415792
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1415792.hg19.bigWig
+    shortLabel breastMam M 11NSD
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11NSD-0926-SM-5N9DR)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEX11NSD
+    color 0,205,205
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0926-SM-5N9DR \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=5.9 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1420296
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1420296.hg19.bigWig
+    shortLabel breastMam M ZU9S
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZU9S-1926-SM-5NQBP)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXZU9S
+    color 0,205,205
+    metadata donor=GTEX-ZU9S age=30 sex=M hardyScore=2 sample=GTEX-ZU9S-1926-SM-5NQBP \
+            tissue=breastMamTissue autolysisScore=2 rnaIntegrity=6.7 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1434955
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1434955.hg19.bigWig
+    shortLabel breastMam M 11P82
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11P82-1326-SM-5HL62)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEX11P82
+    color 0,205,205
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-1326-SM-5HL62 \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.5 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1435946
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1435946.hg19.bigWig
+    shortLabel breastMam M YB5E
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-YB5E-1726-SM-5IFJ3)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEXYB5E
+    color 0,205,205
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-1726-SM-5IFJ3 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.9 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1436990
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1436990.hg19.bigWig
+    shortLabel breastMam M 14E6E
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-14E6E-1326-SM-5S2NR)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEX14E6E
+    color 0,205,205
+    metadata donor=GTEX-14E6E age=30 sex=M hardyScore=0 sample=GTEX-14E6E-1326-SM-5S2NR \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.4 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1456818
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1456818.hg19.bigWig
+    shortLabel breastMam M 12WSN
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-12WSN-1326-SM-5GCNT)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEX12WSN
+    color 0,205,205
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-1326-SM-5GCNT \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1459561
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1459561.hg19.bigWig
+    shortLabel breastMam M ZVTK
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZVTK-0326-SM-51MRR)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEXZVTK
+    color 0,205,205
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0326-SM-51MRR \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.9 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1459866
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1459866.hg19.bigWig
+    shortLabel breastMam M ZA64
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZA64-1526-SM-5CVMD)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEXZA64
+    color 0,205,205
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-1526-SM-5CVMD \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.6 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1472102
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1472102.hg19.bigWig
+    shortLabel breastMam M ZTX8
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZTX8-1226-SM-4YCE9)
+    subGroups age=a20 tissue=breastMamTissue donor=GTEXZTX8
+    color 0,205,205
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1226-SM-4YCE9 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.4 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1481128
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1481128.hg19.bigWig
+    shortLabel breastMam M Y9LG
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-Y9LG-1426-SM-5IFJZ)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXY9LG
+    color 0,205,205
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-1426-SM-5IFJZ \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.8 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1489589
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1489589.hg19.bigWig
+    shortLabel breastMam M 11DXW
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11DXW-0626-SM-5N9ER)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEX11DXW
+    color 0,205,205
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-0626-SM-5N9ER \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.7 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1498951
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1498951.hg19.bigWig
+    shortLabel breastMam M ZWKS
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZWKS-2826-SM-5NQ74)
+    subGroups age=a30 tissue=breastMamTissue donor=GTEXZWKS
+    color 0,205,205
+    metadata donor=GTEX-ZWKS age=30 sex=M hardyScore=4 sample=GTEX-ZWKS-2826-SM-5NQ74 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.8 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR818873
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR818873.hg19.bigWig
+    shortLabel breastMam M UPK5
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-UPK5-2326-SM-3P5Z8)
+    subGroups age=a40 tissue=breastMamTissue donor=GTEXUPK5
+    color 0,205,205
+    metadata donor=GTEX-UPK5 age=40 sex=M hardyScore=0 sample=GTEX-UPK5-2326-SM-3P5Z8 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-26660 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/26/2012
+
+    track gtexRnaSignalSRR1071084
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1071084.hg19.bigWig
+    shortLabel breastMam M S7SE
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-S7SE-0826-SM-4AT4D)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXS7SE
+    color 0,205,205
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0826-SM-4AT4D \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.9 batch=BP-23281 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR1081023
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1081023.hg19.bigWig
+    shortLabel breastMam M XGQ4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XGQ4-0926-SM-4AT4U)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXXGQ4
+    color 0,205,205
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0926-SM-4AT4U \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=8.1 batch=BP-32102 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2012
+
+    track gtexRnaSignalSRR1090674
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1090674.hg19.bigWig
+    shortLabel breastMam M R55D
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-R55D-0826-SM-48FEA)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXR55D
+    color 0,205,205
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0826-SM-48FEA \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.7 batch=BP-21290 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2012
+
+    track gtexRnaSignalSRR1090791
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1090791.hg19.bigWig
+    shortLabel breastMam M VUSG
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-VUSG-2226-SM-4KKZO)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXVUSG
+    color 0,205,205
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-2226-SM-4KKZO \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.9 batch=BP-27123 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1099981
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1099981.hg19.bigWig
+    shortLabel breastMam M QEL4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-QEL4-2126-SM-447AE)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXQEL4
+    color 0,205,205
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-2126-SM-447AE \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-20412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR1100472
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1100472.hg19.bigWig
+    shortLabel breastMam M SIU7
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-SIU7-1626-SM-4BRUK)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXSIU7
+    color 0,205,205
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-1626-SM-4BRUK \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-23467 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/27/2012
+
+    track gtexRnaSignalSRR1323829
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1323829.hg19.bigWig
+    shortLabel breastMam M 11PRG
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11PRG-0826-SM-5EQ6A)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX11PRG
+    color 0,205,205
+    metadata donor=GTEX-11PRG age=50 sex=M hardyScore=2 sample=GTEX-11PRG-0826-SM-5EQ6A \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7 batch=BP-45028 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1324206
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1324206.hg19.bigWig
+    shortLabel breastMam M XQ8I
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XQ8I-2426-SM-4WAXY)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXXQ8I
+    color 0,205,205
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-2426-SM-4WAXY \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.4 batch=BP-34240 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1356765
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1356765.hg19.bigWig
+    shortLabel breastMam M ZY6K
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZY6K-1626-SM-5GZWV)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZY6K
+    color 0,205,205
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-1626-SM-5GZWV \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1365622
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1365622.hg19.bigWig
+    shortLabel breastMam M ZV7C
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZV7C-1826-SM-5NQ83)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZV7C
+    color 0,205,205
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-1826-SM-5NQ83 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1369584
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1369584.hg19.bigWig
+    shortLabel breastMam M 14ABY
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-14ABY-2126-SM-5QGQZ)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX14ABY
+    color 0,205,205
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-2126-SM-5QGQZ \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1396682
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1396682.hg19.bigWig
+    shortLabel breastMam M YEC3
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-YEC3-1026-SM-5IFI5)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXYEC3
+    color 0,205,205
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-1026-SM-5IFI5 \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.5 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1401017
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1401017.hg19.bigWig
+    shortLabel breastMam M ZEX8
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZEX8-2226-SM-57WC6)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZEX8
+    color 0,205,205
+    metadata donor=GTEX-ZEX8 age=50 sex=M hardyScore=0 sample=GTEX-ZEX8-2226-SM-57WC6 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.6 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1408014
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1408014.hg19.bigWig
+    shortLabel breastMam M 13NZ9
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13NZ9-1026-SM-5MR5K)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX13NZ9
+    color 0,205,205
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-1026-SM-5MR5K \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.1 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1409397
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1409397.hg19.bigWig
+    shortLabel breastMam M Y111
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-Y111-2026-SM-4SOJA)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXY111
+    color 0,205,205
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-2026-SM-4SOJA \
+            tissue=breastMamTissue autolysisScore=2 rnaIntegrity=6.4 batch=BP-35206 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSRR1409620
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1409620.hg19.bigWig
+    shortLabel breastMam M 139T6
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-139T6-1626-SM-5PNYZ)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX139T6
+    color 0,205,205
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-1626-SM-5PNYZ \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.1 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1413392
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1413392.hg19.bigWig
+    shortLabel breastMam M 117YX
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-117YX-1426-SM-5H12H)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX117YX
+    color 0,205,205
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-1426-SM-5H12H \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.7 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1417894
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1417894.hg19.bigWig
+    shortLabel breastMam M 144GL
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-144GL-2026-SM-5LU3O)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX144GL
+    color 0,205,205
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-2026-SM-5LU3O \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=5.9 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1419656
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1419656.hg19.bigWig
+    shortLabel breastMam M 13PVQ
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13PVQ-1026-SM-5KM3M)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX13PVQ
+    color 0,205,205
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-1026-SM-5KM3M \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.1 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1420936
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1420936.hg19.bigWig
+    shortLabel breastMam M ZT9W
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZT9W-2026-SM-51MRA)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZT9W
+    color 0,205,205
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-2026-SM-51MRA \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=8.5 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1429181
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1429181.hg19.bigWig
+    shortLabel breastMam M 1192X
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-1192X-2326-SM-5987X)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX1192X
+    color 0,205,205
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-2326-SM-5987X \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.2 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1430615
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1430615.hg19.bigWig
+    shortLabel breastMam M 147F4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-147F4-2826-SM-5NQBN)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX147F4
+    color 0,205,205
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-2826-SM-5NQBN \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.3 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1454158
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1454158.hg19.bigWig
+    shortLabel breastMam M 13O3P
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13O3P-0826-SM-5L3DH)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX13O3P
+    color 0,205,205
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0826-SM-5L3DH \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.8 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1455391
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1455391.hg19.bigWig
+    shortLabel breastMam M 11DXZ
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11DXZ-1926-SM-5GZZL)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX11DXZ
+    color 0,205,205
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-1926-SM-5GZZL \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.7 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1455861
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1455861.hg19.bigWig
+    shortLabel breastMam M QMRM
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-QMRM-1626-SM-4R1KV)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXQMRM
+    color 0,205,205
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1626-SM-4R1KV \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1455902
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1455902.hg19.bigWig
+    shortLabel breastMam M ZYFC
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZYFC-0826-SM-5E44K)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZYFC
+    color 0,205,205
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0826-SM-5E44K \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.2 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1457245
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1457245.hg19.bigWig
+    shortLabel breastMam M ZVE2
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZVE2-1226-SM-5NQ8R)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZVE2
+    color 0,205,205
+    metadata donor=GTEX-ZVE2 age=50 sex=M hardyScore=0 sample=GTEX-ZVE2-1226-SM-5NQ8R \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1472907
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1472907.hg19.bigWig
+    shortLabel breastMam M 11WQK
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11WQK-2426-SM-5GU5C)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX11WQK
+    color 0,205,205
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-2426-SM-5GU5C \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1473124
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1473124.hg19.bigWig
+    shortLabel breastMam M 13W46
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13W46-0826-SM-5LU3H)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEX13W46
+    color 0,205,205
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-0826-SM-5LU3H \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.7 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1485398
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1485398.hg19.bigWig
+    shortLabel breastMam M ZDYS
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZDYS-1126-SM-5K7UB)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXZDYS
+    color 0,205,205
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-1126-SM-5K7UB \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR615910
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR615910.hg19.bigWig
+    shortLabel breastMam M R55F
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-R55F-1726-SM-2TF4R)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXR55F
+    color 0,205,205
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-1726-SM-2TF4R \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.9 batch=BP-21404 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/12/2012
+
+    track gtexRnaSignalSRR656970
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR656970.hg19.bigWig
+    shortLabel breastMam M T6MN
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-T6MN-0726-SM-32PML)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXT6MN
+    color 0,205,205
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0726-SM-32PML \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.4 batch=BP-24833 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR657528
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR657528.hg19.bigWig
+    shortLabel breastMam M T2YK
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-T2YK-2226-SM-32QPT)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXT2YK
+    color 0,205,205
+    metadata donor=GTEX-T2YK age=50 sex=M hardyScore=4 sample=GTEX-T2YK-2226-SM-32QPT \
+            tissue=breastMamTissue autolysisScore=2 rnaIntegrity=6 batch=BP-24618 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR812198
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR812198.hg19.bigWig
+    shortLabel breastMam M WY7C
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-WY7C-2726-SM-3NB3P)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXWY7C
+    color 0,205,205
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-2726-SM-3NB3P \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.7 batch=BP-29540 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalSRR820571
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR820571.hg19.bigWig
+    shortLabel breastMam M X261
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-X261-0626-SM-3NMD9)
+    subGroups age=a50 tissue=breastMamTissue donor=GTEXX261
+    color 0,205,205
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0626-SM-3NMD9 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.5 batch=BP-29826 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR1068977
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1068977.hg19.bigWig
+    shortLabel breastMam M XBED
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XBED-1626-SM-47JYN)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXXBED
+    color 0,205,205
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-1626-SM-47JYN \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=8 batch=BP-31585 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1075484
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1075484.hg19.bigWig
+    shortLabel breastMam M XMD1
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-XMD1-0826-SM-4AT52)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXXMD1
+    color 0,205,205
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0826-SM-4AT52 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.4 batch=BP-32501 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1076219
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1076219.hg19.bigWig
+    shortLabel breastMam M X4XY
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-X4XY-0926-SM-4E3JD)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXX4XY
+    color 0,205,205
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0926-SM-4E3JD \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.4 batch=BP-36096 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/13/2013
+
+    track gtexRnaSignalSRR1076441
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1076441.hg19.bigWig
+    shortLabel breastMam M REY6
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-REY6-2426-SM-48FF5)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXREY6
+    color 0,205,205
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-2426-SM-48FF5 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-21548 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1310158
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1310158.hg19.bigWig
+    shortLabel breastMam M 11OF3
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11OF3-1926-SM-59889)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11OF3
+    color 0,205,205
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-1926-SM-59889 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.4 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1310667
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1310667.hg19.bigWig
+    shortLabel breastMam M 11GS4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11GS4-2126-SM-5A5KR)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11GS4
+    color 0,205,205
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-2126-SM-5A5KR \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.4 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1317282
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1317282.hg19.bigWig
+    shortLabel breastMam M 11GSO
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11GSO-1926-SM-5A5K3)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11GSO
+    color 0,205,205
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-1926-SM-5A5K3 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.8 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1334587
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1334587.hg19.bigWig
+    shortLabel breastMam M 111YS
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-111YS-1926-SM-5GICC)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX111YS
+    color 0,205,205
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1926-SM-5GICC \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.2 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1368050
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1368050.hg19.bigWig
+    shortLabel breastMam M ZDTT
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZDTT-2126-SM-5S2OJ)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXZDTT
+    color 0,205,205
+    metadata donor=GTEX-ZDTT age=60 sex=M hardyScore=0 sample=GTEX-ZDTT-2126-SM-5S2OJ \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=7.2 batch=BP-42528 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/21/2013
+
+    track gtexRnaSignalSRR1369088
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1369088.hg19.bigWig
+    shortLabel breastMam M 139TU
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-139TU-0626-SM-5KM3X)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX139TU
+    color 0,205,205
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-0626-SM-5KM3X \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.2 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1378284
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1378284.hg19.bigWig
+    shortLabel breastMam M 145MO
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-145MO-0826-SM-5NQBL)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX145MO
+    color 0,205,205
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-0826-SM-5NQBL \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.2 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1386945
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1386945.hg19.bigWig
+    shortLabel breastMam M 117XS
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-117XS-1926-SM-5GICO)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX117XS
+    color 0,205,205
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-1926-SM-5GICO \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1388281
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1388281.hg19.bigWig
+    shortLabel breastMam M 132Q8
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-132Q8-1426-SM-5EGK7)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX132Q8
+    color 0,205,205
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-1426-SM-5EGK7 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.7 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1393026
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1393026.hg19.bigWig
+    shortLabel breastMam M 11ONC
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11ONC-2126-SM-5HL6E)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11ONC
+    color 0,205,205
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2126-SM-5HL6E \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1406224
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1406224.hg19.bigWig
+    shortLabel breastMam M 13FHO
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13FHO-0826-SM-5L3E8)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX13FHO
+    color 0,205,205
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0826-SM-5L3E8 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.3 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1408574
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1408574.hg19.bigWig
+    shortLabel breastMam M U412
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-U412-1826-SM-4DXTJ)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXU412
+    color 0,205,205
+    metadata donor=GTEX-U412 age=60 sex=M hardyScore=3 sample=GTEX-U412-1826-SM-4DXTJ \
+            tissue=breastMamTissue autolysisScore=2 rnaIntegrity=7.9 batch=BP-25601 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSRR1415420
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1415420.hg19.bigWig
+    shortLabel breastMam M 13O61
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13O61-1826-SM-5KM4I)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX13O61
+    color 0,205,205
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1826-SM-5KM4I \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.3 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1417422
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1417422.hg19.bigWig
+    shortLabel breastMam M 11WQC
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11WQC-1726-SM-5GU4W)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11WQC
+    color 0,205,205
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-1726-SM-5GU4W \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1418795
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1418795.hg19.bigWig
+    shortLabel breastMam M Y5V6
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-Y5V6-2126-SM-4WWFX)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXY5V6
+    color 0,205,205
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2126-SM-4WWFX \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.1 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1420517
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1420517.hg19.bigWig
+    shortLabel breastMam M ZYW4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZYW4-0826-SM-5GIDG)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXZYW4
+    color 0,205,205
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-0826-SM-5GIDG \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.5 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1439915
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1439915.hg19.bigWig
+    shortLabel breastMam M 11EI6
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11EI6-0626-SM-5985T)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11EI6
+    color 0,205,205
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0626-SM-5985T \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=6.5 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1442313
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1442313.hg19.bigWig
+    shortLabel breastMam M 139T8
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-139T8-0826-SM-5L3DE)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX139T8
+    color 0,205,205
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0826-SM-5L3DE \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.1 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1454009
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1454009.hg19.bigWig
+    shortLabel breastMam M ZDXO
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-ZDXO-0126-SM-5S2ND)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXZDXO
+    color 0,205,205
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-0126-SM-5S2ND \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.8 batch=BP-42588 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/22/2013
+
+    track gtexRnaSignalSRR1456010
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1456010.hg19.bigWig
+    shortLabel breastMam M 14753
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-14753-2426-SM-5LU8U)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX14753
+    color 0,205,205
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-2426-SM-5LU8U \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.9 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1457705
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1457705.hg19.bigWig
+    shortLabel breastMam M 12WSM
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-12WSM-1726-SM-5BC6J)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX12WSM
+    color 0,205,205
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-1726-SM-5BC6J \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1477273
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1477273.hg19.bigWig
+    shortLabel breastMam M 11NV4
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-11NV4-2026-SM-5N9DG)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX11NV4
+    color 0,205,205
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-2026-SM-5N9DG \
+            tissue=breastMamTissue autolysisScore=0 rnaIntegrity=5.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1481297
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1481297.hg19.bigWig
+    shortLabel breastMam M 13N1W
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13N1W-0626-SM-5MR4U)
+    subGroups age=a70 tissue=breastMamTissue donor=GTEX13N1W
+    color 0,205,205
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0626-SM-5MR4U \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.1 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1486457
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1486457.hg19.bigWig
+    shortLabel breastMam M 13OW8
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13OW8-0226-SM-5K7UP)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX13OW8
+    color 0,205,205
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0226-SM-5K7UP \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=5.8 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1489803
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR1489803.hg19.bigWig
+    shortLabel breastMam M 13CF2
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-13CF2-2026-SM-5K7VI)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEX13CF2
+    color 0,205,205
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-2026-SM-5K7VI \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR658105
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR658105.hg19.bigWig
+    shortLabel breastMam M V955
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-V955-2026-SM-3GAFA)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXV955
+    color 0,205,205
+
+    track gtexRnaSignalSRR662378
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR662378.hg19.bigWig
+    shortLabel breastMam M UTHO
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-UTHO-1026-SM-3GAF7)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXUTHO
+    color 0,205,205
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-1026-SM-3GAF7 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=7.2 batch=BP-26701 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalSRR816336
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl breastMamTissue/gtexRnaSignalSRR816336.hg19.bigWig
+    shortLabel breastMam M WOFL
+    longLabel GTEx RNA signal from male Breast - Mammary Tissue (GTEX-WOFL-0826-SM-3MJG1)
+    subGroups age=a60 tissue=breastMamTissue donor=GTEXWOFL
+    color 0,205,205
+    metadata donor=GTEX-WOFL age=60 sex=M hardyScore=0 sample=GTEX-WOFL-0826-SM-3MJG1 \
+            tissue=breastMamTissue autolysisScore=1 rnaIntegrity=6.1 batch=BP-28095 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+

@@ -1,0 +1,894 @@
+    track gtexRnaSignalSRR1069466
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1069466.hg38.bigWig
+    shortLabel uterus F T6MO
+    longLabel GTEx RNA signal from female Uterus (GTEX-T6MO-1526-SM-4DM57)
+    subGroups age=a40 tissue=uterus donor=GTEXT6MO
+    color 247,205,200
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-1526-SM-4DM57 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.1 batch=BP-24889 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1071737
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1071737.hg38.bigWig
+    shortLabel uterus F PWN1
+    longLabel GTEx RNA signal from female Uterus (GTEX-PWN1-2026-SM-48TD9)
+    subGroups age=a40 tissue=uterus donor=GTEXPWN1
+    color 247,205,200
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-2026-SM-48TD9 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.3 batch=BP-19818 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalSRR1073483
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1073483.hg38.bigWig
+    shortLabel uterus F S4UY
+    longLabel GTEx RNA signal from female Uterus (GTEX-S4UY-1226-SM-4AD51)
+    subGroups age=a40 tissue=uterus donor=GTEXS4UY
+    color 247,205,200
+    metadata donor=GTEX-S4UY age=40 sex=F hardyScore=0 sample=GTEX-S4UY-1226-SM-4AD51 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8 batch=BP-22899 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR1074430
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1074430.hg38.bigWig
+    shortLabel uterus F TMMY
+    longLabel GTEx RNA signal from female Uterus (GTEX-TMMY-2226-SM-4DXTN)
+    subGroups age=a40 tissue=uterus donor=GTEXTMMY
+    color 247,205,200
+    metadata donor=GTEX-TMMY age=40 sex=F hardyScore=0 sample=GTEX-TMMY-2226-SM-4DXTN \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.5 batch=BP-25192 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalSRR1075850
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1075850.hg38.bigWig
+    shortLabel uterus F T2IS
+    longLabel GTEx RNA signal from female Uterus (GTEX-T2IS-2226-SM-4DM65)
+    subGroups age=a20 tissue=uterus donor=GTEXT2IS
+    color 247,205,200
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-2226-SM-4DM65 \
+            tissue=uterus autolysisScore=2 rnaIntegrity=8.4 batch=BP-24519 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR1077159
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1077159.hg38.bigWig
+    shortLabel uterus F PX3G
+    longLabel GTEx RNA signal from female Uterus (GTEX-PX3G-2026-SM-48U1H)
+    subGroups age=a20 tissue=uterus donor=GTEXPX3G
+    color 247,205,200
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-2026-SM-48U1H \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.3 batch=BP-19883 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalSRR1077211
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1077211.hg38.bigWig
+    shortLabel uterus F XUZC
+    longLabel GTEx RNA signal from female Uterus (GTEX-XUZC-0926-SM-4BOQF)
+    subGroups age=a30 tissue=uterus donor=GTEXXUZC
+    color 247,205,200
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0926-SM-4BOQF \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.5 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalSRR1077996
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1077996.hg38.bigWig
+    shortLabel uterus F WEY5
+    longLabel GTEx RNA signal from female Uterus (GTEX-WEY5-0726-SM-4LMID)
+    subGroups age=a40 tissue=uterus donor=GTEXWEY5
+    color 247,205,200
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0726-SM-4LMID \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.4 batch=BP-27205 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalSRR1078188
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1078188.hg38.bigWig
+    shortLabel uterus F R55G
+    longLabel GTEx RNA signal from female Uterus (GTEX-R55G-1626-SM-48FF4)
+    subGroups age=a40 tissue=uterus donor=GTEXR55G
+    color 247,205,200
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-1626-SM-48FF4 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.8 batch=BP-22238 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/07/2012
+
+    track gtexRnaSignalSRR1079213
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1079213.hg38.bigWig
+    shortLabel uterus F XV7Q
+    longLabel GTEx RNA signal from female Uterus (GTEX-XV7Q-1526-SM-4BRWB)
+    subGroups age=a40 tissue=uterus donor=GTEXXV7Q
+    color 247,205,200
+
+    track gtexRnaSignalSRR1080342
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1080342.hg38.bigWig
+    shortLabel uterus F S341
+    longLabel GTEx RNA signal from female Uterus (GTEX-S341-1026-SM-4AD71)
+    subGroups age=a40 tissue=uterus donor=GTEXS341
+    color 247,205,200
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-1026-SM-4AD71 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.1 batch=BP-22768 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/29/2012
+
+    track gtexRnaSignalSRR1082128
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1082128.hg38.bigWig
+    shortLabel uterus F UPIC
+    longLabel GTEx RNA signal from female Uterus (GTEX-UPIC-1526-SM-4IHLU)
+    subGroups age=a20 tissue=uterus donor=GTEXUPIC
+    color 247,205,200
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-1526-SM-4IHLU \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.6 batch=BP-29989 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1084553
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1084553.hg38.bigWig
+    shortLabel uterus F T5JW
+    longLabel GTEx RNA signal from female Uterus (GTEX-T5JW-1526-SM-4DM5E)
+    subGroups age=a20 tissue=uterus donor=GTEXT5JW
+    color 247,205,200
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-1526-SM-4DM5E \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.1 batch=BP-26092 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/08/2012
+
+    track gtexRnaSignalSRR1085358
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1085358.hg38.bigWig
+    shortLabel uterus F U3ZN
+    longLabel GTEx RNA signal from female Uterus (GTEX-U3ZN-0726-SM-4DXT5)
+    subGroups age=a30 tissue=uterus donor=GTEXU3ZN
+    color 247,205,200
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-0726-SM-4DXT5 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.8 batch=BP-25490 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR1097929
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1097929.hg38.bigWig
+    shortLabel uterus F PWCY
+    longLabel GTEx RNA signal from female Uterus (GTEX-PWCY-1426-SM-48TCT)
+    subGroups age=a20 tissue=uterus donor=GTEXPWCY
+    color 247,205,200
+
+    track gtexRnaSignalSRR1099857
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1099857.hg38.bigWig
+    shortLabel uterus F Q734
+    longLabel GTEx RNA signal from female Uterus (GTEX-Q734-1626-SM-48U1B)
+    subGroups age=a40 tissue=uterus donor=GTEXQ734
+    color 247,205,200
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-1626-SM-48U1B \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.1 batch=BP-20047 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1309745
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1309745.hg38.bigWig
+    shortLabel uterus F 11EM3
+    longLabel GTEx RNA signal from female Uterus (GTEX-11EM3-1926-SM-5987U)
+    subGroups age=a20 tissue=uterus donor=GTEX11EM3
+    color 247,205,200
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-1926-SM-5987U \
+            tissue=uterus autolysisScore=0 rnaIntegrity=8.2 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1319242
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1319242.hg38.bigWig
+    shortLabel uterus F 14BMU
+    longLabel GTEx RNA signal from female Uterus (GTEX-14BMU-1826-SM-5RQII)
+    subGroups age=a20 tissue=uterus donor=GTEX14BMU
+    color 247,205,200
+    metadata donor=GTEX-14BMU age=20 sex=F hardyScore=0 sample=GTEX-14BMU-1826-SM-5RQII \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.7 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1319991
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1319991.hg38.bigWig
+    shortLabel uterus F 1399S
+    longLabel GTEx RNA signal from female Uterus (GTEX-1399S-2226-SM-5IFEW)
+    subGroups age=a30 tissue=uterus donor=GTEX1399S
+    color 247,205,200
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-2226-SM-5IFEW \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.4 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1321720
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1321720.hg38.bigWig
+    shortLabel uterus F WYVS
+    longLabel GTEx RNA signal from female Uterus (GTEX-WYVS-1226-SM-4ONCL)
+    subGroups age=a40 tissue=uterus donor=GTEXWYVS
+    color 247,205,200
+
+    track gtexRnaSignalSRR1323234
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1323234.hg38.bigWig
+    shortLabel uterus F 12ZZX
+    longLabel GTEx RNA signal from female Uterus (GTEX-12ZZX-2126-SM-5LZVL)
+    subGroups age=a40 tissue=uterus donor=GTEX12ZZX
+    color 247,205,200
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-2126-SM-5LZVL \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.4 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1338468
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1338468.hg38.bigWig
+    shortLabel uterus F 139D8
+    longLabel GTEx RNA signal from female Uterus (GTEX-139D8-2526-SM-5N9G3)
+    subGroups age=a30 tissue=uterus donor=GTEX139D8
+    color 247,205,200
+    metadata donor=GTEX-139D8 age=30 sex=F hardyScore=0 sample=GTEX-139D8-2526-SM-5N9G3 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.7 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1361138
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1361138.hg38.bigWig
+    shortLabel uterus F 13FTX
+    longLabel GTEx RNA signal from female Uterus (GTEX-13FTX-1026-SM-5J2O5)
+    subGroups age=a20 tissue=uterus donor=GTEX13FTX
+    color 247,205,200
+    metadata donor=GTEX-13FTX age=20 sex=F hardyScore=0 sample=GTEX-13FTX-1026-SM-5J2O5 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=7.5 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1381372
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1381372.hg38.bigWig
+    shortLabel uterus F WI4N
+    longLabel GTEx RNA signal from female Uterus (GTEX-WI4N-2426-SM-4OOSC)
+    subGroups age=a40 tissue=uterus donor=GTEXWI4N
+    color 247,205,200
+    metadata donor=GTEX-WI4N age=40 sex=F hardyScore=0 sample=GTEX-WI4N-2426-SM-4OOSC \
+            tissue=uterus autolysisScore=2 rnaIntegrity=6.7 batch=BP-27971 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR1383237
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1383237.hg38.bigWig
+    shortLabel uterus F ZV6S
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZV6S-1526-SM-5NQ7O)
+    subGroups age=a40 tissue=uterus donor=GTEXZV6S
+    color 247,205,200
+    metadata donor=GTEX-ZV6S age=40 sex=F hardyScore=0 sample=GTEX-ZV6S-1526-SM-5NQ7O \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.8 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1387132
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1387132.hg38.bigWig
+    shortLabel uterus F 12WSK
+    longLabel GTEx RNA signal from female Uterus (GTEX-12WSK-2026-SM-5CVNB)
+    subGroups age=a40 tissue=uterus donor=GTEX12WSK
+    color 247,205,200
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-2026-SM-5CVNB \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.5 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1388257
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1388257.hg38.bigWig
+    shortLabel uterus F ZTPG
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZTPG-2026-SM-5O999)
+    subGroups age=a20 tissue=uterus donor=GTEXZTPG
+    color 247,205,200
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-2026-SM-5O999 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.1 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1394428
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1394428.hg38.bigWig
+    shortLabel uterus F 11P81
+    longLabel GTEx RNA signal from female Uterus (GTEX-11P81-1626-SM-5BC52)
+    subGroups age=a30 tissue=uterus donor=GTEX11P81
+    color 247,205,200
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-1626-SM-5BC52 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=8.3 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1395874
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1395874.hg38.bigWig
+    shortLabel uterus F 13VXT
+    longLabel GTEx RNA signal from female Uterus (GTEX-13VXT-1626-SM-5IJES)
+    subGroups age=a20 tissue=uterus donor=GTEX13VXT
+    color 247,205,200
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-1626-SM-5IJES \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.5 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1458401
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1458401.hg38.bigWig
+    shortLabel uterus F YJ8O
+    longLabel GTEx RNA signal from female Uterus (GTEX-YJ8O-1126-SM-5P9IS)
+    subGroups age=a40 tissue=uterus donor=GTEXYJ8O
+    color 247,205,200
+    metadata donor=GTEX-YJ8O age=40 sex=F hardyScore=1 sample=GTEX-YJ8O-1126-SM-5P9IS \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.4 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1458828
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1458828.hg38.bigWig
+    shortLabel uterus F 145ME
+    longLabel GTEx RNA signal from female Uterus (GTEX-145ME-1326-SM-5O98Q)
+    subGroups age=a40 tissue=uterus donor=GTEX145ME
+    color 247,205,200
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-1326-SM-5O98Q \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.5 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1473482
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1473482.hg38.bigWig
+    shortLabel uterus F YFC4
+    longLabel GTEx RNA signal from female Uterus (GTEX-YFC4-2826-SM-5P9FR)
+    subGroups age=a40 tissue=uterus donor=GTEXYFC4
+    color 247,205,200
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-2826-SM-5P9FR \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.9 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1475086
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1475086.hg38.bigWig
+    shortLabel uterus F 13QBU
+    longLabel GTEx RNA signal from female Uterus (GTEX-13QBU-1626-SM-5LU4S)
+    subGroups age=a40 tissue=uterus donor=GTEX13QBU
+    color 247,205,200
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-1626-SM-5LU4S \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.5 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1489007
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1489007.hg38.bigWig
+    shortLabel uterus F ZXES
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZXES-0726-SM-5E451)
+    subGroups age=a30 tissue=uterus donor=GTEXZXES
+    color 247,205,200
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-0726-SM-5E451 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=8.1 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1498747
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1498747.hg38.bigWig
+    shortLabel uterus F 13U4I
+    longLabel GTEx RNA signal from female Uterus (GTEX-13U4I-1926-SM-5LU39)
+    subGroups age=a40 tissue=uterus donor=GTEX13U4I
+    color 247,205,200
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-1926-SM-5LU39 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.8 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1499584
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1499584.hg38.bigWig
+    shortLabel uterus F ZP4G
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZP4G-0726-SM-4WWF2)
+    subGroups age=a20 tissue=uterus donor=GTEXZP4G
+    color 247,205,200
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0726-SM-4WWF2 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.9 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR810105
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR810105.hg38.bigWig
+    shortLabel uterus F P78B
+    longLabel GTEx RNA signal from female Uterus (GTEX-P78B-2526-SM-3P5ZY)
+    subGroups age=a40 tissue=uterus donor=GTEXP78B
+    color 247,205,200
+    metadata donor=GTEX-P78B age=40 sex=F hardyScore=-1 sample=GTEX-P78B-2526-SM-3P5ZY \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8 batch=BP-19090 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2011
+
+    track gtexRnaSignalSRR815256
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR815256.hg38.bigWig
+    shortLabel uterus F POMQ
+    longLabel GTEx RNA signal from female Uterus (GTEX-POMQ-1226-SM-3P61F)
+    subGroups age=a20 tissue=uterus donor=GTEXPOMQ
+    color 247,205,200
+    metadata donor=GTEX-POMQ age=20 sex=F hardyScore=0 sample=GTEX-POMQ-1226-SM-3P61F \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.4 batch=BP-19351 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2011
+
+    track gtexRnaSignalSRR1078114
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1078114.hg38.bigWig
+    shortLabel uterus F XUW1
+    longLabel GTEx RNA signal from female Uterus (GTEX-XUW1-0226-SM-4BOOS)
+    subGroups age=a50 tissue=uterus donor=GTEXXUW1
+    color 247,205,200
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-0226-SM-4BOOS \
+            tissue=uterus autolysisScore=0 rnaIntegrity=8.8 batch=BP-34129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1096198
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1096198.hg38.bigWig
+    shortLabel uterus F W5WG
+    longLabel GTEx RNA signal from female Uterus (GTEX-W5WG-1326-SM-4LMI9)
+    subGroups age=a50 tissue=uterus donor=GTEXW5WG
+    color 247,205,200
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-1326-SM-4LMI9 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7 batch=BP-27175 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalSRR1096315
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1096315.hg38.bigWig
+    shortLabel uterus F QCQG
+    longLabel GTEx RNA signal from female Uterus (GTEX-QCQG-1326-SM-48U24)
+    subGroups age=a50 tissue=uterus donor=GTEXQCQG
+    color 247,205,200
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-1326-SM-48U24 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8 batch=BP-20113 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSRR1336682
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1336682.hg38.bigWig
+    shortLabel uterus F 113JC
+    longLabel GTEx RNA signal from female Uterus (GTEX-113JC-2226-SM-5EGJG)
+    subGroups age=a50 tissue=uterus donor=GTEX113JC
+    color 247,205,200
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-2226-SM-5EGJG \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.3 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1353686
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1353686.hg38.bigWig
+    shortLabel uterus F Y3IK
+    longLabel GTEx RNA signal from female Uterus (GTEX-Y3IK-2126-SM-4YCDS)
+    subGroups age=a50 tissue=uterus donor=GTEXY3IK
+    color 247,205,200
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-2126-SM-4YCDS \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSRR1358126
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1358126.hg38.bigWig
+    shortLabel uterus F 13OVJ
+    longLabel GTEx RNA signal from female Uterus (GTEX-13OVJ-2326-SM-5IJGA)
+    subGroups age=a50 tissue=uterus donor=GTEX13OVJ
+    color 247,205,200
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-2326-SM-5IJGA \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.5 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1360280
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1360280.hg38.bigWig
+    shortLabel uterus F 13N11
+    longLabel GTEx RNA signal from female Uterus (GTEX-13N11-1126-SM-5KM41)
+    subGroups age=a50 tissue=uterus donor=GTEX13N11
+    color 247,205,200
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-1126-SM-5KM41 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=7.6 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1361838
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1361838.hg38.bigWig
+    shortLabel uterus F ZLWG
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZLWG-1026-SM-4WWC4)
+    subGroups age=a50 tissue=uterus donor=GTEXZLWG
+    color 247,205,200
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-1026-SM-4WWC4 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=7.7 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1363718
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1363718.hg38.bigWig
+    shortLabel uterus F WXYG
+    longLabel GTEx RNA signal from female Uterus (GTEX-WXYG-1326-SM-4ONCN)
+    subGroups age=a50 tissue=uterus donor=GTEXWXYG
+    color 247,205,200
+
+    track gtexRnaSignalSRR1374543
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1374543.hg38.bigWig
+    shortLabel uterus F 12WSG
+    longLabel GTEx RNA signal from female Uterus (GTEX-12WSG-2126-SM-5EGJ7)
+    subGroups age=a50 tissue=uterus donor=GTEX12WSG
+    color 247,205,200
+    metadata donor=GTEX-12WSG age=50 sex=F hardyScore=0 sample=GTEX-12WSG-2126-SM-5EGJ7 \
+            tissue=uterus autolysisScore=0 rnaIntegrity=7.7 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1382780
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1382780.hg38.bigWig
+    shortLabel uterus F RU72
+    longLabel GTEx RNA signal from female Uterus (GTEX-RU72-2626-SM-4TT75)
+    subGroups age=a50 tissue=uterus donor=GTEXRU72
+    color 247,205,200
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-2626-SM-4TT75 \
+            tissue=uterus autolysisScore=2 rnaIntegrity=6.7 batch=BP-21951 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/30/2012
+
+    track gtexRnaSignalSRR1393004
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1393004.hg38.bigWig
+    shortLabel uterus F ZAK1
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZAK1-2526-SM-5S2N7)
+    subGroups age=a50 tissue=uterus donor=GTEXZAK1
+    color 247,205,200
+    metadata donor=GTEX-ZAK1 age=50 sex=F hardyScore=2 sample=GTEX-ZAK1-2526-SM-5S2N7 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.7 batch=BP-42024 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1419039
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1419039.hg38.bigWig
+    shortLabel uterus F ZYVF
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZYVF-0526-SM-5E43E)
+    subGroups age=a50 tissue=uterus donor=GTEXZYVF
+    color 247,205,200
+    metadata donor=GTEX-ZYVF age=50 sex=F hardyScore=0 sample=GTEX-ZYVF-0526-SM-5E43E \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.9 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1431104
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1431104.hg38.bigWig
+    shortLabel uterus F 1399U
+    longLabel GTEx RNA signal from female Uterus (GTEX-1399U-1326-SM-5IJET)
+    subGroups age=a50 tissue=uterus donor=GTEX1399U
+    color 247,205,200
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-1326-SM-5IJET \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.2 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1434070
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1434070.hg38.bigWig
+    shortLabel uterus F 131XG
+    longLabel GTEx RNA signal from female Uterus (GTEX-131XG-2026-SM-5GCN5)
+    subGroups age=a50 tissue=uterus donor=GTEX131XG
+    color 247,205,200
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-2026-SM-5GCN5 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.9 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1442213
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1442213.hg38.bigWig
+    shortLabel uterus F 132AR
+    longLabel GTEx RNA signal from female Uterus (GTEX-132AR-1526-SM-5KM1L)
+    subGroups age=a50 tissue=uterus donor=GTEX132AR
+    color 247,205,200
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-1526-SM-5KM1L \
+            tissue=uterus autolysisScore=0 rnaIntegrity=7 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1445550
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1445550.hg38.bigWig
+    shortLabel uterus F ZVT2
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZVT2-0426-SM-5E44S)
+    subGroups age=a50 tissue=uterus donor=GTEXZVT2
+    color 247,205,200
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-0426-SM-5E44S \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.9 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1447192
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1447192.hg38.bigWig
+    shortLabel uterus F 1313W
+    longLabel GTEx RNA signal from female Uterus (GTEX-1313W-2826-SM-5P9G1)
+    subGroups age=a50 tissue=uterus donor=GTEX1313W
+    color 247,205,200
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-2826-SM-5P9G1 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.4 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1459147
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1459147.hg38.bigWig
+    shortLabel uterus F ZAJG
+    longLabel GTEx RNA signal from female Uterus (GTEX-ZAJG-2826-SM-5HL8D)
+    subGroups age=a50 tissue=uterus donor=GTEXZAJG
+    color 247,205,200
+
+    track gtexRnaSignalSRR1474208
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1474208.hg38.bigWig
+    shortLabel uterus F 11I78
+    longLabel GTEx RNA signal from female Uterus (GTEX-11I78-2126-SM-5A5K8)
+    subGroups age=a50 tissue=uterus donor=GTEX11I78
+    color 247,205,200
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-2126-SM-5A5K8 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.3 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1486215
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1486215.hg38.bigWig
+    shortLabel uterus F WWYW
+    longLabel GTEx RNA signal from female Uterus (GTEX-WWYW-2826-SM-4MVOQ)
+    subGroups age=a50 tissue=uterus donor=GTEXWWYW
+    color 247,205,200
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-2826-SM-4MVOQ \
+            tissue=uterus autolysisScore=2 rnaIntegrity=6.1 batch=BP-30995 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/11/2012
+
+    track gtexRnaSignalSRR1498726
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1498726.hg38.bigWig
+    shortLabel uterus F 13D11
+    longLabel GTEx RNA signal from female Uterus (GTEX-13D11-1226-SM-5IFGA)
+    subGroups age=a50 tissue=uterus donor=GTEX13D11
+    color 247,205,200
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-1226-SM-5IFGA \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR818646
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR818646.hg38.bigWig
+    shortLabel uterus F P4QT
+    longLabel GTEx RNA signal from female Uterus (GTEX-P4QT-2026-SM-3NMCJ)
+    subGroups age=a50 tissue=uterus donor=GTEXP4QT
+    color 247,205,200
+    metadata donor=GTEX-P4QT age=50 sex=F hardyScore=0 sample=GTEX-P4QT-2026-SM-3NMCJ \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.8 batch=BP-18731 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalSRR820026
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR820026.hg38.bigWig
+    shortLabel uterus F OHPK
+    longLabel GTEx RNA signal from female Uterus (GTEX-OHPK-2026-SM-3MJH7)
+    subGroups age=a50 tissue=uterus donor=GTEXOHPK
+    color 247,205,200
+
+    track gtexRnaSignalSRR1078212
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1078212.hg38.bigWig
+    shortLabel uterus F RWS6
+    longLabel GTEx RNA signal from female Uterus (GTEX-RWS6-1326-SM-47JXB)
+    subGroups age=a60 tissue=uterus donor=GTEXRWS6
+    color 247,205,200
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-1326-SM-47JXB \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.5 batch=BP-22345 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/10/2012
+
+    track gtexRnaSignalSRR1079874
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1079874.hg38.bigWig
+    shortLabel uterus F XUJ4
+    longLabel GTEx RNA signal from female Uterus (GTEX-XUJ4-1526-SM-4BONU)
+    subGroups age=a60 tissue=uterus donor=GTEXXUJ4
+    color 247,205,200
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-1526-SM-4BONU \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.6 batch=BP-34262 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1095261
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1095261.hg38.bigWig
+    shortLabel uterus F XYKS
+    longLabel GTEx RNA signal from female Uterus (GTEX-XYKS-1626-SM-4BRUQ)
+    subGroups age=a60 tissue=uterus donor=GTEXXYKS
+    color 247,205,200
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-1626-SM-4BRUQ \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.2 batch=BP-34799 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/03/2013
+
+    track gtexRnaSignalSRR1329423
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1329423.hg38.bigWig
+    shortLabel uterus F 13OVI
+    longLabel GTEx RNA signal from female Uterus (GTEX-13OVI-1026-SM-5L3EM)
+    subGroups age=a60 tissue=uterus donor=GTEX13OVI
+    color 247,205,200
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-1026-SM-5L3EM \
+            tissue=uterus autolysisScore=1 rnaIntegrity=8.4 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1330082
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1330082.hg38.bigWig
+    shortLabel uterus F 14BIM
+    longLabel GTEx RNA signal from female Uterus (GTEX-14BIM-2226-SM-5SI8Y)
+    subGroups age=a60 tissue=uterus donor=GTEX14BIM
+    color 247,205,200
+    metadata donor=GTEX-14BIM age=60 sex=F hardyScore=3 sample=GTEX-14BIM-2226-SM-5SI8Y \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.9 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1433989
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1433989.hg38.bigWig
+    shortLabel uterus F 13S7M
+    longLabel GTEx RNA signal from female Uterus (GTEX-13S7M-1726-SM-5RQK3)
+    subGroups age=a60 tissue=uterus donor=GTEX13S7M
+    color 247,205,200
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-1726-SM-5RQK3 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.9 batch=BP-48564 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1447281
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1447281.hg38.bigWig
+    shortLabel uterus F 11ZTS
+    longLabel GTEx RNA signal from female Uterus (GTEX-11ZTS-2326-SM-5EQMY)
+    subGroups age=a60 tissue=uterus donor=GTEX11ZTS
+    color 247,205,200
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-2326-SM-5EQMY \
+            tissue=uterus autolysisScore=2 rnaIntegrity=5.8 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1452674
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1452674.hg38.bigWig
+    shortLabel uterus F 12WSD
+    longLabel GTEx RNA signal from female Uterus (GTEX-12WSD-2826-SM-59HKT)
+    subGroups age=a60 tissue=uterus donor=GTEX12WSD
+    color 247,205,200
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-2826-SM-59HKT \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1471395
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1471395.hg38.bigWig
+    shortLabel uterus F 11ZTT
+    longLabel GTEx RNA signal from female Uterus (GTEX-11ZTT-1726-SM-5EQL4)
+    subGroups age=a60 tissue=uterus donor=GTEX11ZTT
+    color 247,205,200
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-1726-SM-5EQL4 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.9 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1475466
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1475466.hg38.bigWig
+    shortLabel uterus F 131YS
+    longLabel GTEx RNA signal from female Uterus (GTEX-131YS-2326-SM-5IJFJ)
+    subGroups age=a60 tissue=uterus donor=GTEX131YS
+    color 247,205,200
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-2326-SM-5IJFJ \
+            tissue=uterus autolysisScore=1 rnaIntegrity=5.8 batch=BP-46453 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1479450
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1479450.hg38.bigWig
+    shortLabel uterus F 13PL7
+    longLabel GTEx RNA signal from female Uterus (GTEX-13PL7-2026-SM-5IFGK)
+    subGroups age=a60 tissue=uterus donor=GTEX13PL7
+    color 247,205,200
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-2026-SM-5IFGK \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.8 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1479826
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1479826.hg38.bigWig
+    shortLabel uterus F 1117F
+    longLabel GTEx RNA signal from female Uterus (GTEX-1117F-2426-SM-5EGGH)
+    subGroups age=a60 tissue=uterus donor=GTEX1117F
+    color 247,205,200
+    metadata donor=GTEX-1117F age=60 sex=F hardyScore=4 sample=GTEX-1117F-2426-SM-5EGGH \
+            tissue=uterus autolysisScore=1 rnaIntegrity=6.3 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1485848
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR1485848.hg38.bigWig
+    shortLabel uterus F 11DXX
+    longLabel GTEx RNA signal from female Uterus (GTEX-11DXX-1526-SM-5H115)
+    subGroups age=a60 tissue=uterus donor=GTEX11DXX
+    color 247,205,200
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-1526-SM-5H115 \
+            tissue=uterus autolysisScore=1 rnaIntegrity=7.7 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR818139
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl uterus/gtexRnaSignalSRR818139.hg38.bigWig
+    shortLabel uterus F N7MT
+    longLabel GTEx RNA signal from female Uterus (GTEX-N7MT-0726-SM-3TW8S)
+    subGroups age=a60 tissue=uterus donor=GTEXN7MT
+    color 247,205,200
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0726-SM-3TW8S \
+            tissue=uterus autolysisScore=0 rnaIntegrity=5.5 batch=BP-16829 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2011
+

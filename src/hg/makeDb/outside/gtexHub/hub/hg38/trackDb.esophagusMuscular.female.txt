@@ -1,0 +1,993 @@
+    track gtexRnaSignalSRR1068929
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1068929.hg38.bigWig
+    shortLabel esophMusc F PWN1
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-PWN1-0726-SM-48TDR)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXPWN1
+    color 232,173,98
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-0726-SM-48TDR \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.2 batch=BP-19817 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalSRR1069074
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1069074.hg38.bigWig
+    shortLabel esophMusc F UPIC
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-UPIC-0626-SM-4IHK2)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXUPIC
+    color 232,173,98
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-0626-SM-4IHK2 \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=7.7 batch=BP-26180 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/12/2012
+
+    track gtexRnaSignalSRR1069758
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1069758.hg38.bigWig
+    shortLabel esophMusc F TMMY
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-TMMY-1226-SM-4DXT6)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXTMMY
+    color 232,173,98
+    metadata donor=GTEX-TMMY age=40 sex=F hardyScore=0 sample=GTEX-TMMY-1226-SM-4DXT6 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.7 batch=BP-25188 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalSRR1071011
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1071011.hg38.bigWig
+    shortLabel esophMusc F RU1J
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-RU1J-0426-SM-46MUK)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXRU1J
+    color 232,173,98
+    metadata donor=GTEX-RU1J age=20 sex=F hardyScore=0 sample=GTEX-RU1J-0426-SM-46MUK \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.9 batch=BP-21803 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/25/2012
+
+    track gtexRnaSignalSRR1072432
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1072432.hg38.bigWig
+    shortLabel esophMusc F T6MO
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-T6MO-0626-SM-4DM6P)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXT6MO
+    color 232,173,98
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-0626-SM-4DM6P \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.7 batch=BP-24849 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1074602
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1074602.hg38.bigWig
+    shortLabel esophMusc F TML8
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-TML8-1426-SM-4DXUT)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXTML8
+    color 232,173,98
+    metadata donor=GTEX-TML8 age=40 sex=F hardyScore=0 sample=GTEX-TML8-1426-SM-4DXUT \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.3 batch=BP-25076 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/07/2012
+
+    track gtexRnaSignalSRR1074815
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1074815.hg38.bigWig
+    shortLabel esophMusc F S7SF
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-S7SF-1026-SM-4AD4I)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXS7SF
+    color 232,173,98
+    metadata donor=GTEX-S7SF age=20 sex=F hardyScore=0 sample=GTEX-S7SF-1026-SM-4AD4I \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.1 batch=BP-23169 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalSRR1078562
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1078562.hg38.bigWig
+    shortLabel esophMusc F PX3G
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-PX3G-0726-SM-48TZT)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXPX3G
+    color 232,173,98
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-0726-SM-48TZT \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.5 batch=BP-19882 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalSRR1079806
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1079806.hg38.bigWig
+    shortLabel esophMusc F WEY5
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-WEY5-1026-SM-4LMK9)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXWEY5
+    color 232,173,98
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-1026-SM-4LMK9 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.7 batch=BP-27205 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalSRR1081160
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1081160.hg38.bigWig
+    shortLabel esophMusc F R55G
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-R55G-0926-SM-48FDN)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXR55G
+    color 232,173,98
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0926-SM-48FDN \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.5 batch=BP-21547 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1081381
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1081381.hg38.bigWig
+    shortLabel esophMusc F U3ZN
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-U3ZN-1826-SM-4DXUY)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEXU3ZN
+    color 232,173,98
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-1826-SM-4DXUY \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=9 batch=BP-25495 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR1082592
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1082592.hg38.bigWig
+    shortLabel esophMusc F SE5C
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-SE5C-1326-SM-4BRUH)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXSE5C
+    color 232,173,98
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-1326-SM-4BRUH \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.3 batch=BP-23389 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1086490
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1086490.hg38.bigWig
+    shortLabel esophMusc F T2IS
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-T2IS-0926-SM-4DM5B)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXT2IS
+    color 232,173,98
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0926-SM-4DM5B \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.7 batch=BP-24457 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1089030
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1089030.hg38.bigWig
+    shortLabel esophMusc F S341
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-S341-0426-SM-4AD5L)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXS341
+    color 232,173,98
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0426-SM-4AD5L \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.9 batch=BP-22727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1095285
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1095285.hg38.bigWig
+    shortLabel esophMusc F Q734
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-Q734-0826-SM-48U1G)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXQ734
+    color 232,173,98
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0826-SM-48U1G \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.5 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1095961
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1095961.hg38.bigWig
+    shortLabel esophMusc F QDT8
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-QDT8-1326-SM-48TYY)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEXQDT8
+    color 232,173,98
+    metadata donor=GTEX-QDT8 age=30 sex=F hardyScore=4 sample=GTEX-QDT8-1326-SM-48TYY \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7 batch=BP-20206 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/18/2011
+
+    track gtexRnaSignalSRR1097100
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1097100.hg38.bigWig
+    shortLabel esophMusc F T5JW
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-T5JW-1426-SM-4DM5Q)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXT5JW
+    color 232,173,98
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-1426-SM-4DM5Q \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.3 batch=BP-26092 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/08/2012
+
+    track gtexRnaSignalSRR1098050
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1098050.hg38.bigWig
+    shortLabel esophMusc F PWOO
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-PWOO-1026-SM-48TCN)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXPWOO
+    color 232,173,98
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-1026-SM-48TCN \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.8 batch=BP-19857 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/02/2011
+
+    track gtexRnaSignalSRR1098831
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1098831.hg38.bigWig
+    shortLabel esophMusc F PWCY
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-PWCY-0826-SM-48TCR)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXPWCY
+    color 232,173,98
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-0826-SM-48TCR \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.3 batch=BP-19460 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1099330
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1099330.hg38.bigWig
+    shortLabel esophMusc F XV7Q
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-XV7Q-1026-SM-4BRVR)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXXV7Q
+    color 232,173,98
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-1026-SM-4BRVR \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.6 batch=BP-34430 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalSRR1309512
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1309512.hg38.bigWig
+    shortLabel esophMusc F 11P81
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11P81-0926-SM-59874)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEX11P81
+    color 232,173,98
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0926-SM-59874 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.2 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1326868
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1326868.hg38.bigWig
+    shortLabel esophMusc F 14AS3
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-14AS3-0726-SM-5S2NY)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX14AS3
+    color 232,173,98
+    metadata donor=GTEX-14AS3 age=40 sex=F hardyScore=0 sample=GTEX-14AS3-0726-SM-5S2NY \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.4 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1330427
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1330427.hg38.bigWig
+    shortLabel esophMusc F 12WSJ
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-12WSJ-0726-SM-5GCN6)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX12WSJ
+    color 232,173,98
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0726-SM-5GCN6 \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.4 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1347707
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1347707.hg38.bigWig
+    shortLabel esophMusc F 1399S
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-1399S-1226-SM-5J1O6)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEX1399S
+    color 232,173,98
+
+    track gtexRnaSignalSRR1351082
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1351082.hg38.bigWig
+    shortLabel esophMusc F ZXES
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZXES-1226-SM-5NQ8G)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEXZXES
+    color 232,173,98
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-1226-SM-5NQ8G \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=9.1 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1356351
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1356351.hg38.bigWig
+    shortLabel esophMusc F ZTPG
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZTPG-1526-SM-51MTF)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXZTPG
+    color 232,173,98
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-1526-SM-51MTF \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.8 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1386865
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1386865.hg38.bigWig
+    shortLabel esophMusc F ZGAY
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZGAY-1226-SM-4YCF4)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXZGAY
+    color 232,173,98
+
+    track gtexRnaSignalSRR1396822
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1396822.hg38.bigWig
+    shortLabel esophMusc F 13U4I
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13U4I-1226-SM-5LU5M)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX13U4I
+    color 232,173,98
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-1226-SM-5LU5M \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.3 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1397138
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1397138.hg38.bigWig
+    shortLabel esophMusc F 13QBU
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13QBU-0926-SM-5K7WQ)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX13QBU
+    color 232,173,98
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-0926-SM-5K7WQ \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.4 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1399178
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1399178.hg38.bigWig
+    shortLabel esophMusc F ZPIC
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZPIC-1626-SM-57WEB)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXZPIC
+    color 232,173,98
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-1626-SM-57WEB \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.5 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1405569
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1405569.hg38.bigWig
+    shortLabel esophMusc F Y5LM
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-Y5LM-1126-SM-4VDT5)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXY5LM
+    color 232,173,98
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-1126-SM-4VDT5 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.3 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1408449
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1408449.hg38.bigWig
+    shortLabel esophMusc F 11VI4
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11VI4-0626-SM-5EQLO)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX11VI4
+    color 232,173,98
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0626-SM-5EQLO \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1451876
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1451876.hg38.bigWig
+    shortLabel esophMusc F 133LE
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-133LE-0726-SM-5P9IZ)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEX133LE
+    color 232,173,98
+    metadata donor=GTEX-133LE age=20 sex=F hardyScore=0 sample=GTEX-133LE-0726-SM-5P9IZ \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.8 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1470356
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1470356.hg38.bigWig
+    shortLabel esophMusc F ZYWO
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZYWO-0926-SM-5E43J)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXZYWO
+    color 232,173,98
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-0926-SM-5E43J \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1475993
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1475993.hg38.bigWig
+    shortLabel esophMusc F 139D8
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-139D8-1426-SM-5IJEX)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEX139D8
+    color 232,173,98
+    metadata donor=GTEX-139D8 age=30 sex=F hardyScore=0 sample=GTEX-139D8-1426-SM-5IJEX \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=5.8 batch=BP-46589 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1488491
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1488491.hg38.bigWig
+    shortLabel esophMusc F ZP4G
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZP4G-0926-SM-4WWF4)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXZP4G
+    color 232,173,98
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0926-SM-4WWF4 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.4 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1490761
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1490761.hg38.bigWig
+    shortLabel esophMusc F WRHK
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-WRHK-0426-SM-4MVOG)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXWRHK
+    color 232,173,98
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-0426-SM-4MVOG \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=9 batch=BP-28355 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR1498973
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1498973.hg38.bigWig
+    shortLabel esophMusc F 145ME
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-145ME-0626-SM-5O99Q)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEX145ME
+    color 232,173,98
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-0626-SM-5O99Q \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.5 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR2135393
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR2135393.hg38.bigWig
+    shortLabel esophMusc F W5X1
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-W5X1-1026-SM-5CHSO_rep1)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXW5X1
+    color 232,173,98
+
+    track gtexRnaSignalSRR808299
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR808299.hg38.bigWig
+    shortLabel esophMusc F P4PP
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-P4PP-0726-SM-3NM9S)
+    subGroups age=a30 tissue=esophagusMuscular donor=GTEXP4PP
+    color 232,173,98
+    metadata donor=GTEX-P4PP age=30 sex=F hardyScore=0 sample=GTEX-P4PP-0726-SM-3NM9S \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.3 batch=BP-18662 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2011
+
+    track gtexRnaSignalSRR817142
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR817142.hg38.bigWig
+    shortLabel esophMusc F P78B
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-P78B-1126-SM-3P615)
+    subGroups age=a40 tissue=esophagusMuscular donor=GTEXP78B
+    color 232,173,98
+    metadata donor=GTEX-P78B age=40 sex=F hardyScore=-1 sample=GTEX-P78B-1126-SM-3P615 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.8 batch=BP-19089 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2011
+
+    track gtexRnaSignalSRR818622
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR818622.hg38.bigWig
+    shortLabel esophMusc F POMQ
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-POMQ-0626-SM-3P61E)
+    subGroups age=a20 tissue=esophagusMuscular donor=GTEXPOMQ
+    color 232,173,98
+    metadata donor=GTEX-POMQ age=20 sex=F hardyScore=0 sample=GTEX-POMQ-0626-SM-3P61E \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8 batch=BP-19350 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2011
+
+    track gtexRnaSignalSRR1069895
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1069895.hg38.bigWig
+    shortLabel esophMusc F R53T
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-R53T-1026-SM-48FCO)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXR53T
+    color 232,173,98
+    metadata donor=GTEX-R53T age=50 sex=F hardyScore=0 sample=GTEX-R53T-1026-SM-48FCO \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=7.6 batch=BP-21397 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2012
+
+    track gtexRnaSignalSRR1072269
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1072269.hg38.bigWig
+    shortLabel esophMusc F XUW1
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-XUW1-1526-SM-4BOOY)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXXUW1
+    color 232,173,98
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-1526-SM-4BOOY \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.6 batch=BP-34273 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1077992
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1077992.hg38.bigWig
+    shortLabel esophMusc F QCQG
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-QCQG-0726-SM-48U1Z)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXQCQG
+    color 232,173,98
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0726-SM-48U1Z \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.6 batch=BP-20113 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSRR1084032
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1084032.hg38.bigWig
+    shortLabel esophMusc F UJHI
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-UJHI-0926-SM-4IHKF)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXUJHI
+    color 232,173,98
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-0926-SM-4IHKF \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=7.2 batch=BP-25967 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalSRR1089853
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1089853.hg38.bigWig
+    shortLabel esophMusc F S4P3
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-S4P3-0526-SM-4AD58)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXS4P3
+    color 232,173,98
+    metadata donor=GTEX-S4P3 age=50 sex=F hardyScore=0 sample=GTEX-S4P3-0526-SM-4AD58 \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.2 batch=BP-22899 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR1090310
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1090310.hg38.bigWig
+    shortLabel esophMusc F RU72
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-RU72-0826-SM-46MUS)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXRU72
+    color 232,173,98
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0826-SM-46MUS \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.5 batch=BP-21837 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/26/2012
+
+    track gtexRnaSignalSRR1095237
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1095237.hg38.bigWig
+    shortLabel esophMusc F S32W
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-S32W-1026-SM-4AD5W)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXS32W
+    color 232,173,98
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1026-SM-4AD5W \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8 batch=BP-22611 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalSRR1095889
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1095889.hg38.bigWig
+    shortLabel esophMusc F RNOR
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-RNOR-1326-SM-48FDE)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXRNOR
+    color 232,173,98
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-1326-SM-48FDE \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=5.9 batch=BP-21627 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/20/2012
+
+    track gtexRnaSignalSRR1308734
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1308734.hg38.bigWig
+    shortLabel esophMusc F 113JC
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-113JC-0926-SM-5H114)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX113JC
+    color 232,173,98
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-0926-SM-5H114 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=5.8 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1320761
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1320761.hg38.bigWig
+    shortLabel esophMusc F 146FH
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-146FH-1626-SM-5NQ9H)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX146FH
+    color 232,173,98
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-1626-SM-5NQ9H \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.3 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1325578
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1325578.hg38.bigWig
+    shortLabel esophMusc F 13OVJ
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13OVJ-1326-SM-5K7Z9)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX13OVJ
+    color 232,173,98
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-1326-SM-5K7Z9 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.3 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1327769
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1327769.hg38.bigWig
+    shortLabel esophMusc F 13X6H
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13X6H-1426-SM-5SI91)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX13X6H
+    color 232,173,98
+    metadata donor=GTEX-13X6H age=50 sex=F hardyScore=0 sample=GTEX-13X6H-1426-SM-5SI91 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.1 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1348490
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1348490.hg38.bigWig
+    shortLabel esophMusc F 132AR
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-132AR-2326-SM-5IJDY)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX132AR
+    color 232,173,98
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-2326-SM-5IJDY \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=7.9 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1378220
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1378220.hg38.bigWig
+    shortLabel esophMusc F Y3IK
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-Y3IK-1226-SM-4WWEK)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXY3IK
+    color 232,173,98
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-1226-SM-4WWEK \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.7 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSRR1378684
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1378684.hg38.bigWig
+    shortLabel esophMusc F ZYVF
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZYVF-2326-SM-5E44Z)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXZYVF
+    color 232,173,98
+    metadata donor=GTEX-ZYVF age=50 sex=F hardyScore=0 sample=GTEX-ZYVF-2326-SM-5E44Z \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.8 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1379519
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1379519.hg38.bigWig
+    shortLabel esophMusc F 13FH7
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13FH7-0726-SM-5J2NK)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX13FH7
+    color 232,173,98
+
+    track gtexRnaSignalSRR1404316
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1404316.hg38.bigWig
+    shortLabel esophMusc F ZZPU
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZZPU-1826-SM-5E43L)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXZZPU
+    color 232,173,98
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-1826-SM-5E43L \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.7 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1419736
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1419736.hg38.bigWig
+    shortLabel esophMusc F Y8LW
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-Y8LW-0626-SM-4VDS8)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXY8LW
+    color 232,173,98
+
+    track gtexRnaSignalSRR1435394
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1435394.hg38.bigWig
+    shortLabel esophMusc F ZF2S
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZF2S-1126-SM-4WKHH)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXZF2S
+    color 232,173,98
+
+    track gtexRnaSignalSRR1444436
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1444436.hg38.bigWig
+    shortLabel esophMusc F X15G
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-X15G-0926-SM-4PQZE)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXX15G
+    color 232,173,98
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-0926-SM-4PQZE \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.8 batch=BP-30278 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR1448118
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1448118.hg38.bigWig
+    shortLabel esophMusc F 11I78
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11I78-1426-SM-5PNVY)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX11I78
+    color 232,173,98
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-1426-SM-5PNVY \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.5 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1454247
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1454247.hg38.bigWig
+    shortLabel esophMusc F 131XG
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-131XG-0926-SM-5LZW5)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEX131XG
+    color 232,173,98
+
+    track gtexRnaSignalSRR1459609
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1459609.hg38.bigWig
+    shortLabel esophMusc F ZVT2
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZVT2-1226-SM-5GU5H)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXZVT2
+    color 232,173,98
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-1226-SM-5GU5H \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1479175
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1479175.hg38.bigWig
+    shortLabel esophMusc F ZLWG
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZLWG-1226-SM-4WWFS)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXZLWG
+    color 232,173,98
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-1226-SM-4WWFS \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.8 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1500953
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1500953.hg38.bigWig
+    shortLabel esophMusc F WXYG
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-WXYG-1126-SM-4ONCH)
+    subGroups age=a50 tissue=esophagusMuscular donor=GTEXWXYG
+    color 232,173,98
+
+    track gtexRnaSignalSRR1073191
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1073191.hg38.bigWig
+    shortLabel esophMusc F XUJ4
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-XUJ4-0926-SM-4BOPA)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXXUJ4
+    color 232,173,98
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-0926-SM-4BOPA \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.2 batch=BP-34240 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1075947
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1075947.hg38.bigWig
+    shortLabel esophMusc F RTLS
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-RTLS-1226-SM-46MUP)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXRTLS
+    color 232,173,98
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-1226-SM-46MUP \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6 batch=BP-21804 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/25/2012
+
+    track gtexRnaSignalSRR1081639
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1081639.hg38.bigWig
+    shortLabel esophMusc F N7MT
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-N7MT-0226-SM-48TC3)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXN7MT
+    color 232,173,98
+
+    track gtexRnaSignalSRR1084698
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1084698.hg38.bigWig
+    shortLabel esophMusc F RWS6
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-RWS6-0726-SM-47JXI)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXRWS6
+    color 232,173,98
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0726-SM-47JXI \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.8 batch=BP-22345 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/10/2012
+
+    track gtexRnaSignalSRR1090746
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1090746.hg38.bigWig
+    shortLabel esophMusc F XYKS
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-XYKS-1126-SM-4BRWP)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXXYKS
+    color 232,173,98
+
+    track gtexRnaSignalSRR1308590
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1308590.hg38.bigWig
+    shortLabel esophMusc F 11DXX
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11DXX-1026-SM-5H11E)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX11DXX
+    color 232,173,98
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-1026-SM-5H11E \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8.5 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1321591
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1321591.hg38.bigWig
+    shortLabel esophMusc F 13PL7
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13PL7-0326-SM-5IJEK)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX13PL7
+    color 232,173,98
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-0326-SM-5IJEK \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=8.3 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1331879
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1331879.hg38.bigWig
+    shortLabel esophMusc F 1211K
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-1211K-1026-SM-5EQ4B)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX1211K
+    color 232,173,98
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-1026-SM-5EQ4B \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.6 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1345692
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1345692.hg38.bigWig
+    shortLabel esophMusc F ZLV1
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZLV1-0626-SM-4WWF6)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXZLV1
+    color 232,173,98
+    metadata donor=GTEX-ZLV1 age=60 sex=F hardyScore=0 sample=GTEX-ZLV1-0626-SM-4WWF6 \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.2 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1369241
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1369241.hg38.bigWig
+    shortLabel esophMusc F ZPCL
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZPCL-1226-SM-4WWFF)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXZPCL
+    color 232,173,98
+    metadata donor=GTEX-ZPCL age=60 sex=F hardyScore=0 sample=GTEX-ZPCL-1226-SM-4WWFF \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.9 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1378308
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1378308.hg38.bigWig
+    shortLabel esophMusc F 146FR
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-146FR-0526-SM-5Q5EX)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX146FR
+    color 232,173,98
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-0526-SM-5Q5EX \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.7 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1414251
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1414251.hg38.bigWig
+    shortLabel esophMusc F 13W3W
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13W3W-1726-SM-5LU4A)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX13W3W
+    color 232,173,98
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-1726-SM-5LU4A \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=7.7 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1419807
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1419807.hg38.bigWig
+    shortLabel esophMusc F 11ZTT
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11ZTT-0926-SM-5EQMS)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX11ZTT
+    color 232,173,98
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-0926-SM-5EQMS \
+            tissue=esophagusMuscular autolysisScore=0 rnaIntegrity=8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1419962
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1419962.hg38.bigWig
+    shortLabel esophMusc F 11GSP
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-11GSP-1726-SM-5A5LI)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX11GSP
+    color 232,173,98
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-1726-SM-5A5LI \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.2 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1441245
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1441245.hg38.bigWig
+    shortLabel esophMusc F 13113
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-13113-1026-SM-5LZWM)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEX13113
+    color 232,173,98
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-1026-SM-5LZWM \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=6.7 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1470774
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1470774.hg38.bigWig
+    shortLabel esophMusc F ZYY3
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZYY3-1626-SM-5EGJF)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXZYY3
+    color 232,173,98
+    metadata donor=GTEX-ZYY3 age=60 sex=F hardyScore=4 sample=GTEX-ZYY3-1626-SM-5EGJF \
+            tissue=esophagusMuscular autolysisScore=1 rnaIntegrity=5.9 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1471074
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR1471074.hg38.bigWig
+    shortLabel esophMusc F ZF29
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-ZF29-1226-SM-4WKH1)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXZF29
+    color 232,173,98
+
+    track gtexRnaSignalSRR2135368
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR2135368.hg38.bigWig
+    shortLabel esophMusc F TSE9
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-TSE9-1326-SM-5CHR5_rep1)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXTSE9
+    color 232,173,98
+
+    track gtexRnaSignalSRR814657
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl esophagusMuscular/gtexRnaSignalSRR814657.hg38.bigWig
+    shortLabel esophMusc F OHPL
+    longLabel GTEx RNA signal from female Esophagus - Muscularis (GTEX-OHPL-0626-SM-3MJGJ)
+    subGroups age=a60 tissue=esophagusMuscular donor=GTEXOHPL
+    color 232,173,98
+

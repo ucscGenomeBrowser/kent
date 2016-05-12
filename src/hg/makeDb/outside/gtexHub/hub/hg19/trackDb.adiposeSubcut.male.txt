@@ -1,0 +1,2247 @@
+    track gtexRnaSignalSRR1070503
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1070503.hg19.bigWig
+    shortLabel adiposeSu M XAJ8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XAJ8-0926-SM-47JXZ)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXXAJ8
+    color 255,165,79
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0926-SM-47JXZ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-31551 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1078489
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1078489.hg19.bigWig
+    shortLabel adiposeSu M NPJ8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-NPJ8-0226-SM-48TBN)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXNPJ8
+    color 255,165,79
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0226-SM-48TBN \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-17314 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR1079522
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1079522.hg19.bigWig
+    shortLabel adiposeSu M XK95
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XK95-0426-SM-4AT4R)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXXK95
+    color 255,165,79
+    metadata donor=GTEX-XK95 age=40 sex=M hardyScore=0 sample=GTEX-XK95-0426-SM-4AT4R \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-32102 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2012
+
+    track gtexRnaSignalSRR1082376
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1082376.hg19.bigWig
+    shortLabel adiposeSu M X5EB
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-X5EB-2426-SM-4E3HX)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXX5EB
+    color 255,165,79
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-2426-SM-4E3HX \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-36136 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/14/2013
+
+    track gtexRnaSignalSRR1090407
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1090407.hg19.bigWig
+    shortLabel adiposeSu M R55C
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-R55C-1626-SM-48FEG)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXR55C
+    color 255,165,79
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-1626-SM-48FEG \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-21338 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR1096383
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1096383.hg19.bigWig
+    shortLabel adiposeSu M XMK1
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XMK1-2226-SM-4B673)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXXMK1
+    color 255,165,79
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-2226-SM-4B673 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.5 batch=BP-33556 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/26/2012
+
+    track gtexRnaSignalSRR1311018
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1311018.hg19.bigWig
+    shortLabel adiposeSu M 11DXW
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11DXW-0326-SM-5H11W)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX11DXW
+    color 255,165,79
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-0326-SM-5H11W \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.3 batch=BP-43783 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1319204
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1319204.hg19.bigWig
+    shortLabel adiposeSu M 144GM
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-144GM-1926-SM-5LUAN)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEX144GM
+    color 255,165,79
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-1926-SM-5LUAN \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.3 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1326579
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1326579.hg19.bigWig
+    shortLabel adiposeSu M 146FQ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-146FQ-0226-SM-5NQAL)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX146FQ
+    color 255,165,79
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0226-SM-5NQAL \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.9 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1327834
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1327834.hg19.bigWig
+    shortLabel adiposeSu M 11P82
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11P82-1726-SM-5Q5AT)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEX11P82
+    color 255,165,79
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-1726-SM-5Q5AT \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.6 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1330920
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1330920.hg19.bigWig
+    shortLabel adiposeSu M YFCO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YFCO-2026-SM-4W21Q)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXYFCO
+    color 255,165,79
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-2026-SM-4W21Q \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.7 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1331708
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1331708.hg19.bigWig
+    shortLabel adiposeSu M 11O72
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11O72-0226-SM-59869)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX11O72
+    color 255,165,79
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-0226-SM-59869 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1332069
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1332069.hg19.bigWig
+    shortLabel adiposeSu M QEG4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QEG4-0326-SM-5S2UQ)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXQEG4
+    color 255,165,79
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-0326-SM-5S2UQ \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.7 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR1332969
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1332969.hg19.bigWig
+    shortLabel adiposeSu M XBEW
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XBEW-0726-SM-4QARX)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXXBEW
+    color 255,165,79
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0726-SM-4QARX \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-36391 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/22/2013
+
+    track gtexRnaSignalSRR1338147
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1338147.hg19.bigWig
+    shortLabel adiposeSu M 145MN
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-145MN-2626-SM-5NQAH)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX145MN
+    color 255,165,79
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-2626-SM-5NQAH \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.9 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1345146
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1345146.hg19.bigWig
+    shortLabel adiposeSu M 12584
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12584-0226-SM-5EQL5)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX12584
+    color 255,165,79
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-0226-SM-5EQL5 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1355172
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1355172.hg19.bigWig
+    shortLabel adiposeSu M ZVTK
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZVTK-0526-SM-5GZWT)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXZVTK
+    color 255,165,79
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0526-SM-5GZWT \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1359447
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1359447.hg19.bigWig
+    shortLabel adiposeSu M 11TT1
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11TT1-2426-SM-5EQMK)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEX11TT1
+    color 255,165,79
+
+    track gtexRnaSignalSRR1361652
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1361652.hg19.bigWig
+    shortLabel adiposeSu M 14E6C
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14E6C-0226-SM-5S2N3)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX14E6C
+    color 255,165,79
+    metadata donor=GTEX-14E6C age=40 sex=M hardyScore=4 sample=GTEX-14E6C-0226-SM-5S2N3 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.3 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1362310
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1362310.hg19.bigWig
+    shortLabel adiposeSu M 11ZUS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11ZUS-0726-SM-59886)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX11ZUS
+    color 255,165,79
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0726-SM-59886 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1384395
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1384395.hg19.bigWig
+    shortLabel adiposeSu M YB5E
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YB5E-2126-SM-5IFI7)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXYB5E
+    color 255,165,79
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-2126-SM-5IFI7 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.9 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1395554
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1395554.hg19.bigWig
+    shortLabel adiposeSu M 145LT
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-145LT-1826-SM-5QGP4)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX145LT
+    color 255,165,79
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-1826-SM-5QGP4 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1395575
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1395575.hg19.bigWig
+    shortLabel adiposeSu M 11EQ9
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11EQ9-2526-SM-5HL66)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX11EQ9
+    color 255,165,79
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-2526-SM-5HL66 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.9 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1399797
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1399797.hg19.bigWig
+    shortLabel adiposeSu M WFG8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WFG8-2326-SM-5S2UE)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXWFG8
+    color 255,165,79
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-2326-SM-5S2UE \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=8.4 batch=BP-27446 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1400974
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1400974.hg19.bigWig
+    shortLabel adiposeSu M ZZ64
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZZ64-1626-SM-5E43W)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXZZ64
+    color 255,165,79
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-1626-SM-5E43W \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.7 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1401211
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1401211.hg19.bigWig
+    shortLabel adiposeSu M ZUA1
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZUA1-0226-SM-5NQ9Q)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXZUA1
+    color 255,165,79
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0226-SM-5NQ9Q \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.2 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1404209
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1404209.hg19.bigWig
+    shortLabel adiposeSu M 13NZB
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13NZB-2426-SM-5K7UF)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX13NZB
+    color 255,165,79
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-2426-SM-5K7UF \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1408471
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1408471.hg19.bigWig
+    shortLabel adiposeSu M 11LCK
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11LCK-1126-SM-5A5KC)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX11LCK
+    color 255,165,79
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-1126-SM-5A5KC \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1420067
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1420067.hg19.bigWig
+    shortLabel adiposeSu M 1399R
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-1399R-2626-SM-5KLZ7)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX1399R
+    color 255,165,79
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-2626-SM-5KLZ7 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1429678
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1429678.hg19.bigWig
+    shortLabel adiposeSu M Y8E4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Y8E4-0726-SM-4WWFN)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXY8E4
+    color 255,165,79
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-0726-SM-4WWFN \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1429846
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1429846.hg19.bigWig
+    shortLabel adiposeSu M YEC4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YEC4-2426-SM-57WFO)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXYEC4
+    color 255,165,79
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-2426-SM-57WFO \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.1 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1432253
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1432253.hg19.bigWig
+    shortLabel adiposeSu M 12KS4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12KS4-0426-SM-5EQMC)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX12KS4
+    color 255,165,79
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-0426-SM-5EQMC \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.4 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1432518
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1432518.hg19.bigWig
+    shortLabel adiposeSu M 14C39
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14C39-2526-SM-5S2UH)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEX14C39
+    color 255,165,79
+    metadata donor=GTEX-14C39 age=40 sex=M hardyScore=2 sample=GTEX-14C39-2526-SM-5S2UH \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.7 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1442464
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1442464.hg19.bigWig
+    shortLabel adiposeSu M ZVZO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZVZO-0226-SM-5A5LA)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXZVZO
+    color 255,165,79
+    metadata donor=GTEX-ZVZO age=40 sex=M hardyScore=-1 sample=GTEX-ZVZO-0226-SM-5A5LA \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1446375
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1446375.hg19.bigWig
+    shortLabel adiposeSu M YJ8A
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YJ8A-0526-SM-5IFHT)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXYJ8A
+    color 255,165,79
+    metadata donor=GTEX-YJ8A age=20 sex=M hardyScore=0 sample=GTEX-YJ8A-0526-SM-5IFHT \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.8 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1452033
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1452033.hg19.bigWig
+    shortLabel adiposeSu M ZPU1
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZPU1-2426-SM-4WWFM)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXZPU1
+    color 255,165,79
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-2426-SM-4WWFM \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.1 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1452164
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1452164.hg19.bigWig
+    shortLabel adiposeSu M 1314G
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-1314G-1626-SM-5EQ67)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX1314G
+    color 255,165,79
+    metadata donor=GTEX-1314G age=30 sex=M hardyScore=0 sample=GTEX-1314G-1626-SM-5EQ67 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.4 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1479133
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1479133.hg19.bigWig
+    shortLabel adiposeSu M ZTSS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZTSS-2026-SM-5987K)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXZTSS
+    color 255,165,79
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-2026-SM-5987K \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.5 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1488449
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1488449.hg19.bigWig
+    shortLabel adiposeSu M ZTX8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZTX8-1526-SM-5N9GI)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXZTX8
+    color 255,165,79
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1526-SM-5N9GI \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1498931
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1498931.hg19.bigWig
+    shortLabel adiposeSu M XQ3S
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XQ3S-1626-SM-4WAYN)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXXQ3S
+    color 255,165,79
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-1626-SM-4WAYN \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-34117 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1499894
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1499894.hg19.bigWig
+    shortLabel adiposeSu M ZT9X
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZT9X-1926-SM-57WE7)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXZT9X
+    color 255,165,79
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-1926-SM-57WE7 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=8 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1501020
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1501020.hg19.bigWig
+    shortLabel adiposeSu M 11P7K
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11P7K-2026-SM-5GU74)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEX11P7K
+    color 255,165,79
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-2026-SM-5GU74 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.7 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR613150
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613150.hg19.bigWig
+    shortLabel adiposeSu M QLQW
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QLQW-1226-SM-2S1Q9)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXQLQW
+    color 255,165,79
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-1226-SM-2S1Q9 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-20693 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/09/2011
+
+    track gtexRnaSignalSRR613533
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613533.hg19.bigWig
+    shortLabel adiposeSu M Q2AH
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Q2AH-1726-SM-2S1OT)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXQ2AH
+    color 255,165,79
+
+    track gtexRnaSignalSRR613550
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613550.hg19.bigWig
+    shortLabel adiposeSu M Q2AI
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Q2AI-1426-SM-2S1P5)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXQ2AI
+    color 255,165,79
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-1426-SM-2S1P5 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR613896
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613896.hg19.bigWig
+    shortLabel adiposeSu M QEG5
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QEG5-0326-SM-2S1PB)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXQEG5
+    color 255,165,79
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-0326-SM-2S1PB \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.3 batch=BP-20333 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2011
+
+    track gtexRnaSignalSRR614191
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR614191.hg19.bigWig
+    shortLabel adiposeSu M QESD
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QESD-1526-SM-2S1QT)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXQESD
+    color 255,165,79
+    metadata donor=GTEX-QESD age=20 sex=M hardyScore=0 sample=GTEX-QESD-1526-SM-2S1QT \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.8 batch=BP-20480 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/02/2011
+
+    track gtexRnaSignalSRR615069
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR615069.hg19.bigWig
+    shortLabel adiposeSu M OOBK
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OOBK-0226-SM-2YUMF)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXOOBK
+    color 255,165,79
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-0226-SM-2YUMF \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-18256 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR615431
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR615431.hg19.bigWig
+    shortLabel adiposeSu M QV31
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QV31-1326-SM-2S1QE)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXQV31
+    color 255,165,79
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-1326-SM-2S1QE \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.6 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR654730
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR654730.hg19.bigWig
+    shortLabel adiposeSu M P44H
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-P44H-0326-SM-2XCES)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXP44H
+    color 255,165,79
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0326-SM-2XCES \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.1 batch=BP-18616 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/01/2011
+
+    track gtexRnaSignalSRR655768
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR655768.hg19.bigWig
+    shortLabel adiposeSu M RWSA
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-RWSA-0226-SM-2XCBA)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXRWSA
+    color 255,165,79
+    metadata donor=GTEX-RWSA age=40 sex=M hardyScore=1 sample=GTEX-RWSA-0226-SM-2XCBA \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.3 batch=BP-22523 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2012
+
+    track gtexRnaSignalSRR656946
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR656946.hg19.bigWig
+    shortLabel adiposeSu M T5JC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-T5JC-0526-SM-32PM7)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXT5JC
+    color 255,165,79
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0526-SM-32PM7 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.8 batch=BP-24623 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR660614
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR660614.hg19.bigWig
+    shortLabel adiposeSu M U8XE
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-U8XE-0426-SM-3DB91)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXU8XE
+    color 255,165,79
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-0426-SM-3DB91 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-25734 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSRR662114
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR662114.hg19.bigWig
+    shortLabel adiposeSu M S4Q7
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-S4Q7-1626-SM-3K2AE)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXS4Q7
+    color 255,165,79
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-1626-SM-3K2AE \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.1 batch=BP-23122 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/14/2012
+
+    track gtexRnaSignalSRR665274
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR665274.hg19.bigWig
+    shortLabel adiposeSu M P44G
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-P44G-2326-SM-2XCCZ)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXP44G
+    color 255,165,79
+
+    track gtexRnaSignalSRR665538
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR665538.hg19.bigWig
+    shortLabel adiposeSu M S33H
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-S33H-1126-SM-2XCB6)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXS33H
+    color 255,165,79
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-1126-SM-2XCB6 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-22720 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR809018
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR809018.hg19.bigWig
+    shortLabel adiposeSu M PLZ6
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-PLZ6-1326-SM-3NB24)
+    subGroups age=a30 tissue=adiposeSubcut donor=GTEXPLZ6
+    color 255,165,79
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-1326-SM-3NB24 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.5 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR809161
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR809161.hg19.bigWig
+    shortLabel adiposeSu M OIZI
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OIZI-0226-SM-2XCEE)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXOIZI
+    color 255,165,79
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-0226-SM-2XCEE \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.8 batch=BP-18178 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/11/2011
+
+    track gtexRnaSignalSRR812536
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR812536.hg19.bigWig
+    shortLabel adiposeSu M O5YT
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-O5YT-0226-SM-32PK5)
+    subGroups age=a20 tissue=adiposeSubcut donor=GTEXO5YT
+    color 255,165,79
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-0226-SM-32PK5 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.5 batch=BP-17532 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSRR813137
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR813137.hg19.bigWig
+    shortLabel adiposeSu M NFK9
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-NFK9-0326-SM-3MJGV)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXNFK9
+    color 255,165,79
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0326-SM-3MJGV \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=8.7 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR813824
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR813824.hg19.bigWig
+    shortLabel adiposeSu M WH7G
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WH7G-2226-SM-3NMBN)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXWH7G
+    color 255,165,79
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-2226-SM-3NMBN \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-27757 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalSRR818263
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR818263.hg19.bigWig
+    shortLabel adiposeSu M WFON
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WFON-2226-SM-3TW8W)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXWFON
+    color 255,165,79
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-2226-SM-3TW8W \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.2 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR818821
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR818821.hg19.bigWig
+    shortLabel adiposeSu M Q2AH
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Q2AH-1726-SM-3NB2B)
+    subGroups age=a40 tissue=adiposeSubcut donor=GTEXQ2AH
+    color 255,165,79
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-1726-SM-3NB2B \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.4 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR1071453
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1071453.hg19.bigWig
+    shortLabel adiposeSu M XUYS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XUYS-0226-SM-47JX1)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXUYS
+    color 255,165,79
+    metadata donor=GTEX-XUYS age=50 sex=M hardyScore=-1 sample=GTEX-XUYS-0226-SM-47JX1 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=8 batch=BP-34929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/09/2013
+
+    track gtexRnaSignalSRR1073581
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1073581.hg19.bigWig
+    shortLabel adiposeSu M QV44
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QV44-1825-SM-447CF)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXQV44
+    color 255,165,79
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-1825-SM-447CF \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-20865 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1075971
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1075971.hg19.bigWig
+    shortLabel adiposeSu M XBEC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XBEC-0326-SM-4AT4M)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXBEC
+    color 255,165,79
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-0326-SM-4AT4M \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-31713 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/02/2012
+
+    track gtexRnaSignalSRR1077038
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1077038.hg19.bigWig
+    shortLabel adiposeSu M XQ8I
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XQ8I-0526-SM-4BOPS)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXQ8I
+    color 255,165,79
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0526-SM-4BOPS \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-33940 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1082173
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1082173.hg19.bigWig
+    shortLabel adiposeSu M VUSG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-VUSG-2426-SM-4KKZG)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXVUSG
+    color 255,165,79
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-2426-SM-4KKZG \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.1 batch=BP-27126 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1085134
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1085134.hg19.bigWig
+    shortLabel adiposeSu M XOTO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XOTO-0226-SM-4B66H)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXOTO
+    color 255,165,79
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0226-SM-4B66H \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.5 batch=BP-33606 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1085285
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1085285.hg19.bigWig
+    shortLabel adiposeSu M XPVG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XPVG-2726-SM-4B66W)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXPVG
+    color 255,165,79
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-2726-SM-4B66W \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-34001 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2012
+
+    track gtexRnaSignalSRR1095575
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1095575.hg19.bigWig
+    shortLabel adiposeSu M XXEK
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XXEK-2426-SM-4BRUS)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXXEK
+    color 255,165,79
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-2426-SM-4BRUS \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.1 batch=BP-34929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/09/2013
+
+    track gtexRnaSignalSRR1099072
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1099072.hg19.bigWig
+    shortLabel adiposeSu M R55D
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-R55D-0326-SM-48FES)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXR55D
+    color 255,165,79
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0326-SM-48FES \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.9 batch=BP-21289 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2012
+
+    track gtexRnaSignalSRR1100419
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1100419.hg19.bigWig
+    shortLabel adiposeSu M XGQ4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XGQ4-2226-SM-4AT4Y)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXXGQ4
+    color 255,165,79
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-2226-SM-4AT4Y \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-32308 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalSRR1310275
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1310275.hg19.bigWig
+    shortLabel adiposeSu M 111CU
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-111CU-1826-SM-5GZYN)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX111CU
+    color 255,165,79
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-1826-SM-5GZYN \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.5 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1317410
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1317410.hg19.bigWig
+    shortLabel adiposeSu M 13OW7
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13OW7-0226-SM-5MR3N)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13OW7
+    color 255,165,79
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0226-SM-5MR3N \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-47656 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1317985
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1317985.hg19.bigWig
+    shortLabel adiposeSu M 13QJ3
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13QJ3-0426-SM-5RQHP)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13QJ3
+    color 255,165,79
+    metadata donor=GTEX-13QJ3 age=50 sex=M hardyScore=0 sample=GTEX-13QJ3-0426-SM-5RQHP \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1318879
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1318879.hg19.bigWig
+    shortLabel adiposeSu M 13O3P
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13O3P-0226-SM-5KM3Z)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13O3P
+    color 255,165,79
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0226-SM-5KM3Z \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1324025
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1324025.hg19.bigWig
+    shortLabel adiposeSu M YF7O
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YF7O-2426-SM-5IFJL)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXYF7O
+    color 255,165,79
+    metadata donor=GTEX-YF7O age=50 sex=M hardyScore=0 sample=GTEX-YF7O-2426-SM-5IFJL \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.8 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1332443
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1332443.hg19.bigWig
+    shortLabel adiposeSu M WVJS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WVJS-0226-SM-4MVOU)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXWVJS
+    color 255,165,79
+    metadata donor=GTEX-WVJS age=50 sex=M hardyScore=0 sample=GTEX-WVJS-0226-SM-4MVOU \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.4 batch=BP-36182 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2013
+
+    track gtexRnaSignalSRR1334098
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1334098.hg19.bigWig
+    shortLabel adiposeSu M 117YX
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-117YX-2226-SM-5EGJJ)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX117YX
+    color 255,165,79
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-2226-SM-5EGJJ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.4 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1345609
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1345609.hg19.bigWig
+    shortLabel adiposeSu M 13NZ9
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13NZ9-0526-SM-5J1OX)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13NZ9
+    color 255,165,79
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0526-SM-5J1OX \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.8 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1348402
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1348402.hg19.bigWig
+    shortLabel adiposeSu M ZEX8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZEX8-2326-SM-5S2MN)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZEX8
+    color 255,165,79
+    metadata donor=GTEX-ZEX8 age=50 sex=M hardyScore=0 sample=GTEX-ZEX8-2326-SM-5S2MN \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1351454
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1351454.hg19.bigWig
+    shortLabel adiposeSu M WHPG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WHPG-2126-SM-4M1ZM)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXWHPG
+    color 255,165,79
+
+    track gtexRnaSignalSRR1353199
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1353199.hg19.bigWig
+    shortLabel adiposeSu M ZDYS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZDYS-2126-SM-5S2OD)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZDYS
+    color 255,165,79
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-2126-SM-5S2OD \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=8 batch=BP-42662 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/23/2013
+
+    track gtexRnaSignalSRR1365291
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1365291.hg19.bigWig
+    shortLabel adiposeSu M ZVP2
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZVP2-1826-SM-5GU62)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZVP2
+    color 255,165,79
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-1826-SM-5GU62 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1378885
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1378885.hg19.bigWig
+    shortLabel adiposeSu M 13O21
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13O21-1526-SM-5K7W4)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13O21
+    color 255,165,79
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-1526-SM-5K7W4 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1380393
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1380393.hg19.bigWig
+    shortLabel adiposeSu M 13112
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13112-2726-SM-5DUW5)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13112
+    color 255,165,79
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-2726-SM-5DUW5 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1380657
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1380657.hg19.bigWig
+    shortLabel adiposeSu M ZVE2
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZVE2-0326-SM-57WFC)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZVE2
+    color 255,165,79
+    metadata donor=GTEX-ZVE2 age=50 sex=M hardyScore=0 sample=GTEX-ZVE2-0326-SM-57WFC \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-43441 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1383699
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1383699.hg19.bigWig
+    shortLabel adiposeSu M 14BIL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14BIL-0226-SM-5SI9E)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX14BIL
+    color 255,165,79
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-0226-SM-5SI9E \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=8.1 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1387921
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1387921.hg19.bigWig
+    shortLabel adiposeSu M Y111
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Y111-0226-SM-4SOIW)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXY111
+    color 255,165,79
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-0226-SM-4SOIW \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-34830 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/04/2013
+
+    track gtexRnaSignalSRR1398924
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1398924.hg19.bigWig
+    shortLabel adiposeSu M 12WSL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12WSL-2426-SM-5GCN7)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX12WSL
+    color 255,165,79
+
+    track gtexRnaSignalSRR1399971
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1399971.hg19.bigWig
+    shortLabel adiposeSu M 13OW6
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13OW6-0526-SM-5L3HY)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13OW6
+    color 255,165,79
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0526-SM-5L3HY \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1405525
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1405525.hg19.bigWig
+    shortLabel adiposeSu M 11UD2
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11UD2-0126-SM-5EQL2)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX11UD2
+    color 255,165,79
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0126-SM-5EQL2 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1415398
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1415398.hg19.bigWig
+    shortLabel adiposeSu M 14DAR
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14DAR-1926-SM-5S2NQ)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX14DAR
+    color 255,165,79
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-1926-SM-5S2NQ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1420873
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1420873.hg19.bigWig
+    shortLabel adiposeSu M 13FHP
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13FHP-0226-SM-5K7WD)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13FHP
+    color 255,165,79
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0226-SM-5K7WD \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.1 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1430333
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1430333.hg19.bigWig
+    shortLabel adiposeSu M 144FL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-144FL-0226-SM-5Q5D4)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX144FL
+    color 255,165,79
+    metadata donor=GTEX-144FL age=50 sex=M hardyScore=2 sample=GTEX-144FL-0226-SM-5Q5D4 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.5 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1433392
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1433392.hg19.bigWig
+    shortLabel adiposeSu M YEC3
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YEC3-1226-SM-5IFI8)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXYEC3
+    color 255,165,79
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-1226-SM-5IFI8 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.6 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1437390
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1437390.hg19.bigWig
+    shortLabel adiposeSu M Z93S
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Z93S-0226-SM-5HL7R)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZ93S
+    color 255,165,79
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0226-SM-5HL7R \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.9 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1452468
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1452468.hg19.bigWig
+    shortLabel adiposeSu M 11DZ1
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11DZ1-0226-SM-5A5KF)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX11DZ1
+    color 255,165,79
+    metadata donor=GTEX-11DZ1 age=50 sex=M hardyScore=4 sample=GTEX-11DZ1-0226-SM-5A5KF \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1452935
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1452935.hg19.bigWig
+    shortLabel adiposeSu M 11H98
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11H98-0226-SM-5NQ89)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX11H98
+    color 255,165,79
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0226-SM-5NQ89 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.7 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1455017
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1455017.hg19.bigWig
+    shortLabel adiposeSu M 12WSC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12WSC-0226-SM-5EQ52)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX12WSC
+    color 255,165,79
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0226-SM-5EQ52 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1456881
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1456881.hg19.bigWig
+    shortLabel adiposeSu M 11PRG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11PRG-0626-SM-5BC56)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX11PRG
+    color 255,165,79
+    metadata donor=GTEX-11PRG age=50 sex=M hardyScore=2 sample=GTEX-11PRG-0626-SM-5BC56 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-44512 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1458290
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1458290.hg19.bigWig
+    shortLabel adiposeSu M 13PVQ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13PVQ-0226-SM-5SIBG)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13PVQ
+    color 255,165,79
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0226-SM-5SIBG \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.1 batch=BP-47656 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1473632
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1473632.hg19.bigWig
+    shortLabel adiposeSu M ZYFD
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZYFD-0226-SM-5NQ86)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZYFD
+    color 255,165,79
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-0226-SM-5NQ86 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1473714
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1473714.hg19.bigWig
+    shortLabel adiposeSu M 11DXZ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11DXZ-2226-SM-5EGH2)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX11DXZ
+    color 255,165,79
+
+    track gtexRnaSignalSRR1474533
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1474533.hg19.bigWig
+    shortLabel adiposeSu M Z93T
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Z93T-0226-SM-5HL5Z)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXZ93T
+    color 255,165,79
+    metadata donor=GTEX-Z93T age=50 sex=M hardyScore=-1 sample=GTEX-Z93T-0226-SM-5HL5Z \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1475566
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1475566.hg19.bigWig
+    shortLabel adiposeSu M 13OVL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13OVL-0326-SM-5IJCS)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX13OVL
+    color 255,165,79
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0326-SM-5IJCS \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1489199
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1489199.hg19.bigWig
+    shortLabel adiposeSu M 131XE
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-131XE-2426-SM-5EQ5V)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX131XE
+    color 255,165,79
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-2426-SM-5EQ5V \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=8 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1499174
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1499174.hg19.bigWig
+    shortLabel adiposeSu M 139YR
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-139YR-2426-SM-5J1OB)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX139YR
+    color 255,165,79
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-2426-SM-5J1OB \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1500216
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1500216.hg19.bigWig
+    shortLabel adiposeSu M QDVN
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QDVN-2126-SM-5SI7X)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXQDVN
+    color 255,165,79
+
+    track gtexRnaSignalSRR1500240
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1500240.hg19.bigWig
+    shortLabel adiposeSu M 144GL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-144GL-0226-SM-5QGOX)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEX144GL
+    color 255,165,79
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0226-SM-5QGOX \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.6 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR613390
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613390.hg19.bigWig
+    shortLabel adiposeSu M RVPU
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-RVPU-2326-SM-2TF6R)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXRVPU
+    color 255,165,79
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-2326-SM-2TF6R \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-22345 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/10/2012
+
+    track gtexRnaSignalSRR613639
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613639.hg19.bigWig
+    shortLabel adiposeSu M QMRM
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QMRM-1726-SM-2S1QG)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXQMRM
+    color 255,165,79
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1726-SM-2S1QG \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.6 batch=BP-20785 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR613855
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613855.hg19.bigWig
+    shortLabel adiposeSu M OIZH
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OIZH-0226-SM-2YUMH)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXOIZH
+    color 255,165,79
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-0226-SM-2YUMH \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.6 batch=BP-18147 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR613915
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613915.hg19.bigWig
+    shortLabel adiposeSu M RM2N
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-RM2N-1726-SM-2TF55)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXRM2N
+    color 255,165,79
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1726-SM-2TF55 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-21576 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR614419
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR614419.hg19.bigWig
+    shortLabel adiposeSu M R55F
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-R55F-1426-SM-2TF53)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXR55F
+    color 255,165,79
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-1426-SM-2TF53 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-21404 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/12/2012
+
+    track gtexRnaSignalSRR657949
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR657949.hg19.bigWig
+    shortLabel adiposeSu M QEL4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QEL4-0326-SM-3GAE5)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXQEL4
+    color 255,165,79
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-0326-SM-3GAE5 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.6 batch=BP-20413 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR658081
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR658081.hg19.bigWig
+    shortLabel adiposeSu M SIU8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-SIU8-0226-SM-2XCDS)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXSIU8
+    color 255,165,79
+    metadata donor=GTEX-SIU8 age=50 sex=M hardyScore=2 sample=GTEX-SIU8-0226-SM-2XCDS \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-23696 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalSRR661735
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR661735.hg19.bigWig
+    shortLabel adiposeSu M QDVN
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QDVN-2126-SM-33HBS)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXQDVN
+    color 255,165,79
+
+    track gtexRnaSignalSRR807543
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR807543.hg19.bigWig
+    shortLabel adiposeSu M X4LF
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-X4LF-1726-SM-3NMBZ)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXX4LF
+    color 255,165,79
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-1726-SM-3NMBZ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.1 batch=BP-30751 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2012
+
+    track gtexRnaSignalSRR810643
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR810643.hg19.bigWig
+    shortLabel adiposeSu M WVLH
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WVLH-0226-SM-3MJG6)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXWVLH
+    color 255,165,79
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0226-SM-3MJG6 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.5 batch=BP-28777 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalSRR817329
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR817329.hg19.bigWig
+    shortLabel adiposeSu M X261
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-X261-0226-SM-3NMD2)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXX261
+    color 255,165,79
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0226-SM-3NMD2 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.2 batch=BP-29824 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR818797
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR818797.hg19.bigWig
+    shortLabel adiposeSu M OXRL
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OXRL-0226-SM-3NB18)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXOXRL
+    color 255,165,79
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-0226-SM-3NB18 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.5 batch=BP-18390 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR819459
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR819459.hg19.bigWig
+    shortLabel adiposeSu M WY7C
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-WY7C-2426-SM-3NB2V)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXWY7C
+    color 255,165,79
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-2426-SM-3NB2V \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-29482 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalSRR820448
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR820448.hg19.bigWig
+    shortLabel adiposeSu M OHPM
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OHPM-0226-SM-3LK61)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXOHPM
+    color 255,165,79
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-0226-SM-3LK61 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.9 batch=BP-17841 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2011
+
+    track gtexRnaSignalSRR820755
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR820755.hg19.bigWig
+    shortLabel adiposeSu M PLZ5
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-PLZ5-1826-SM-3NB22)
+    subGroups age=a50 tissue=adiposeSubcut donor=GTEXPLZ5
+    color 255,165,79
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-1826-SM-3NB22 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.9 batch=BP-19181 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/03/2011
+
+    track gtexRnaSignalSRR1081567
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1081567.hg19.bigWig
+    shortLabel adiposeSu M XBED
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XBED-2326-SM-47JYR)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXXBED
+    color 255,165,79
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-2326-SM-47JYR \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.4 batch=BP-31585 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1095455
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1095455.hg19.bigWig
+    shortLabel adiposeSu M X4XY
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-X4XY-0326-SM-46MVZ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXX4XY
+    color 255,165,79
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0326-SM-46MVZ \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.3 batch=BP-31059 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/12/2012
+
+    track gtexRnaSignalSRR1097013
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1097013.hg19.bigWig
+    shortLabel adiposeSu M XLM4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-XLM4-0226-SM-4AT4N)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXXLM4
+    color 255,165,79
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0226-SM-4AT4N \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.5 batch=BP-32244 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2012
+
+    track gtexRnaSignalSRR1309160
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1309160.hg19.bigWig
+    shortLabel adiposeSu M 111YS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-111YS-2426-SM-5GZZQ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX111YS
+    color 255,165,79
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-2426-SM-5GZZQ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.6 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1310584
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1310584.hg19.bigWig
+    shortLabel adiposeSu M 113IC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-113IC-0226-SM-5HL5C)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX113IC
+    color 255,165,79
+    metadata donor=GTEX-113IC age=60 sex=M hardyScore=-1 sample=GTEX-113IC-0226-SM-5HL5C \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.7 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1317771
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1317771.hg19.bigWig
+    shortLabel adiposeSu M 13N2G
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13N2G-2726-SM-5J1MG)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13N2G
+    color 255,165,79
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-2726-SM-5J1MG \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1318354
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1318354.hg19.bigWig
+    shortLabel adiposeSu M 13O1R
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13O1R-0226-SM-5K7U5)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13O1R
+    color 255,165,79
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0226-SM-5K7U5 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=8 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1318796
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1318796.hg19.bigWig
+    shortLabel adiposeSu M 13O61
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13O61-2426-SM-5J1NV)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13O61
+    color 255,165,79
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-2426-SM-5J1NV \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.2 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1319882
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1319882.hg19.bigWig
+    shortLabel adiposeSu M 13CF2
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13CF2-2626-SM-5LZZA)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13CF2
+    color 255,165,79
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-2626-SM-5LZZA \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1325906
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1325906.hg19.bigWig
+    shortLabel adiposeSu M 13G51
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13G51-2626-SM-5LZYW)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13G51
+    color 255,165,79
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-2626-SM-5LZYW \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.9 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1328620
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1328620.hg19.bigWig
+    shortLabel adiposeSu M 11TUW
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11TUW-2626-SM-5EQKZ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11TUW
+    color 255,165,79
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2626-SM-5EQKZ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1332424
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1332424.hg19.bigWig
+    shortLabel adiposeSu M 111VG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-111VG-2326-SM-5N9BK)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX111VG
+    color 255,165,79
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-2326-SM-5N9BK \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.7 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1337342
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1337342.hg19.bigWig
+    shortLabel adiposeSu M 13SLW
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13SLW-0226-SM-5S2NA)
+    subGroups age=a70 tissue=adiposeSubcut donor=GTEX13SLW
+    color 255,165,79
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0226-SM-5S2NA \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.2 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1337606
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1337606.hg19.bigWig
+    shortLabel adiposeSu M 13NYS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13NYS-0226-SM-5MR49)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13NYS
+    color 255,165,79
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0226-SM-5MR49 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.6 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1361522
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1361522.hg19.bigWig
+    shortLabel adiposeSu M UTHO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-UTHO-0426-SM-5SI7N)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXUTHO
+    color 255,165,79
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-0426-SM-5SI7N \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.8 batch=BP-26660 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/26/2012
+
+    track gtexRnaSignalSRR1368597
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1368597.hg19.bigWig
+    shortLabel adiposeSu M 139T8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-139T8-0226-SM-5L3EA)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX139T8
+    color 255,165,79
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0226-SM-5L3EA \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.4 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1370329
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1370329.hg19.bigWig
+    shortLabel adiposeSu M 139TT
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-139TT-0226-SM-5K7YH)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX139TT
+    color 255,165,79
+
+    track gtexRnaSignalSRR1373746
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1373746.hg19.bigWig
+    shortLabel adiposeSu M 1212Z
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-1212Z-2426-SM-5EQ5D)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX1212Z
+    color 255,165,79
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-2426-SM-5EQ5D \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.9 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1377423
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1377423.hg19.bigWig
+    shortLabel adiposeSu M 12696
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12696-2526-SM-5EQLN)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX12696
+    color 255,165,79
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-2526-SM-5EQLN \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1386689
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1386689.hg19.bigWig
+    shortLabel adiposeSu M 111FC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-111FC-1426-SM-5N9C7)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX111FC
+    color 255,165,79
+
+    track gtexRnaSignalSRR1396616
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1396616.hg19.bigWig
+    shortLabel adiposeSu M 1497J
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-1497J-2326-SM-5NQBK)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX1497J
+    color 255,165,79
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-2326-SM-5NQBK \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.3 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1400202
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1400202.hg19.bigWig
+    shortLabel adiposeSu M 111FC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-111FC-0226-SM-5N9B8)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX111FC
+    color 255,165,79
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-0226-SM-5N9B8 \
+            tissue=adiposeSubcut autolysisScore=2 rnaIntegrity=7.3 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1400847
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1400847.hg19.bigWig
+    shortLabel adiposeSu M ZDTS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZDTS-0226-SM-5HL7Q)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZDTS
+    color 255,165,79
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0226-SM-5HL7Q \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.8 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1401468
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1401468.hg19.bigWig
+    shortLabel adiposeSu M Y8E5
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Y8E5-0226-SM-57WCM)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXY8E5
+    color 255,165,79
+    metadata donor=GTEX-Y8E5 age=60 sex=M hardyScore=-1 sample=GTEX-Y8E5-0226-SM-57WCM \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-41808 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/02/2013
+
+    track gtexRnaSignalSRR1407250
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1407250.hg19.bigWig
+    shortLabel adiposeSu M 11GSO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11GSO-2326-SM-5A5LX)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11GSO
+    color 255,165,79
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-2326-SM-5A5LX \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.9 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1408393
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1408393.hg19.bigWig
+    shortLabel adiposeSu M ZF28
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZF28-0226-SM-5S2OE)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZF28
+    color 255,165,79
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0226-SM-5S2OE \
+            tissue=adiposeSubcut autolysisScore=2 rnaIntegrity=5.9 batch=BP-42662 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/23/2013
+
+    track gtexRnaSignalSRR1410678
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1410678.hg19.bigWig
+    shortLabel adiposeSu M 11EI6
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11EI6-0226-SM-5EQ64)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11EI6
+    color 255,165,79
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0226-SM-5EQ64 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.8 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1413436
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1413436.hg19.bigWig
+    shortLabel adiposeSu M 13PDP
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13PDP-0226-SM-5K7W9)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13PDP
+    color 255,165,79
+    metadata donor=GTEX-13PDP age=60 sex=M hardyScore=4 sample=GTEX-13PDP-0226-SM-5K7W9 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1413541
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1413541.hg19.bigWig
+    shortLabel adiposeSu M 14753
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14753-0326-SM-5QGQB)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX14753
+    color 255,165,79
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0326-SM-5QGQB \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.6 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1414229
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1414229.hg19.bigWig
+    shortLabel adiposeSu M 13YAN
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13YAN-0426-SM-5O9DR)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13YAN
+    color 255,165,79
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-0426-SM-5O9DR \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1415004
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1415004.hg19.bigWig
+    shortLabel adiposeSu M 147GR
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-147GR-0426-SM-5S2OL)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX147GR
+    color 255,165,79
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-0426-SM-5S2OL \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.8 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1416248
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1416248.hg19.bigWig
+    shortLabel adiposeSu M 1399T
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-1399T-2726-SM-5K7XK)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX1399T
+    color 255,165,79
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-2726-SM-5K7XK \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1417342
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1417342.hg19.bigWig
+    shortLabel adiposeSu M ZE9C
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZE9C-2826-SM-5S2MO)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZE9C
+    color 255,165,79
+    metadata donor=GTEX-ZE9C age=60 sex=M hardyScore=2 sample=GTEX-ZE9C-2826-SM-5S2MO \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-42662 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/23/2013
+
+    track gtexRnaSignalSRR1419917
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1419917.hg19.bigWig
+    shortLabel adiposeSu M 14C5O
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-14C5O-0226-SM-5SI6O)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX14C5O
+    color 255,165,79
+    metadata donor=GTEX-14C5O age=60 sex=M hardyScore=4 sample=GTEX-14C5O-0226-SM-5SI6O \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1420109
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1420109.hg19.bigWig
+    shortLabel adiposeSu M 13RTJ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13RTJ-2526-SM-5S2Q3)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13RTJ
+    color 255,165,79
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-2526-SM-5S2Q3 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.6 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1433004
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1433004.hg19.bigWig
+    shortLabel adiposeSu M ZYW4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZYW4-0226-SM-5E44M)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZYW4
+    color 255,165,79
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-0226-SM-5E44M \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.5 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1433410
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1433410.hg19.bigWig
+    shortLabel adiposeSu M 13FHO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13FHO-0326-SM-5IJBH)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13FHO
+    color 255,165,79
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0326-SM-5IJBH \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.6 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1437119
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1437119.hg19.bigWig
+    shortLabel adiposeSu M YECK
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-YECK-0226-SM-4W215)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXYECK
+    color 255,165,79
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-0226-SM-4W215 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.3 batch=BP-42087 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1444138
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1444138.hg19.bigWig
+    shortLabel adiposeSu M 13N1W
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13N1W-0226-SM-5K7W6)
+    subGroups age=a70 tissue=adiposeSubcut donor=GTEX13N1W
+    color 255,165,79
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0226-SM-5K7W6 \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1445637
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1445637.hg19.bigWig
+    shortLabel adiposeSu M 12WSM
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12WSM-0226-SM-5LZV6)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX12WSM
+    color 255,165,79
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0226-SM-5LZV6 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.1 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1446028
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1446028.hg19.bigWig
+    shortLabel adiposeSu M ZDXO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZDXO-2426-SM-5S2NJ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZDXO
+    color 255,165,79
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-2426-SM-5S2NJ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.7 batch=BP-42528 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/21/2013
+
+    track gtexRnaSignalSRR1454995
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1454995.hg19.bigWig
+    shortLabel adiposeSu M 12WSA
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12WSA-0326-SM-5BC6I)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX12WSA
+    color 255,165,79
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0326-SM-5BC6I \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6 batch=BP-43916 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1455195
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1455195.hg19.bigWig
+    shortLabel adiposeSu M 139TU
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-139TU-0226-SM-5J1NM)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX139TU
+    color 255,165,79
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-0226-SM-5J1NM \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.7 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1457854
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1457854.hg19.bigWig
+    shortLabel adiposeSu M 13OW8
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13OW8-1226-SM-5K7XD)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13OW8
+    color 255,165,79
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1226-SM-5K7XD \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.4 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1459190
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1459190.hg19.bigWig
+    shortLabel adiposeSu M 145MO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-145MO-0426-SM-5QGP6)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX145MO
+    color 255,165,79
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-0426-SM-5QGP6 \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.1 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1475192
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1475192.hg19.bigWig
+    shortLabel adiposeSu M Y5V6
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-Y5V6-2526-SM-5IFJV)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXY5V6
+    color 255,165,79
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2526-SM-5IFJV \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.2 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1478228
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1478228.hg19.bigWig
+    shortLabel adiposeSu M 11GS4
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11GS4-2626-SM-5A5LD)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11GS4
+    color 255,165,79
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-2626-SM-5A5LD \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1485521
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1485521.hg19.bigWig
+    shortLabel adiposeSu M 11OF3
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11OF3-2426-SM-5Q5AS)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11OF3
+    color 255,165,79
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-2426-SM-5Q5AS \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1485613
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1485613.hg19.bigWig
+    shortLabel adiposeSu M 12ZZY
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-12ZZY-0326-SM-5LZVQ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX12ZZY
+    color 255,165,79
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0326-SM-5LZVQ \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.6 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1485722
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1485722.hg19.bigWig
+    shortLabel adiposeSu M 13NZA
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13NZA-0126-SM-5K7UH)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13NZA
+    color 255,165,79
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0126-SM-5K7UH \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1486973
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1486973.hg19.bigWig
+    shortLabel adiposeSu M 131XF
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-131XF-2226-SM-5EQKG)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX131XF
+    color 255,165,79
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-2226-SM-5EQKG \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.8 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1487340
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1487340.hg19.bigWig
+    shortLabel adiposeSu M ZXG5
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-ZXG5-0226-SM-59HJI)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXZXG5
+    color 255,165,79
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0226-SM-59HJI \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.4 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1488899
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1488899.hg19.bigWig
+    shortLabel adiposeSu M 13JVG
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-13JVG-0226-SM-5J1MW)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX13JVG
+    color 255,165,79
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0226-SM-5J1MW \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=5.8 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1500450
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR1500450.hg19.bigWig
+    shortLabel adiposeSu M 11WQC
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-11WQC-2426-SM-5EQKQ)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEX11WQC
+    color 255,165,79
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-2426-SM-5EQKQ \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=5.8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR612263
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR612263.hg19.bigWig
+    shortLabel adiposeSu M P4QR
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-P4QR-0426-SM-2S1NV)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXP4QR
+    color 255,165,79
+    metadata donor=GTEX-P4QR age=60 sex=M hardyScore=-1 sample=GTEX-P4QR-0426-SM-2S1NV \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.2 batch=BP-18830 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/14/2011
+
+    track gtexRnaSignalSRR612935
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR612935.hg19.bigWig
+    shortLabel adiposeSu M REY6
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-REY6-0326-SM-2TF5A)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXREY6
+    color 255,165,79
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0326-SM-2TF5A \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.8 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR613234
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613234.hg19.bigWig
+    shortLabel adiposeSu M P4PQ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-P4PQ-0226-SM-2S1NK)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXP4PQ
+    color 255,165,79
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-0226-SM-2S1NK \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=7.8 batch=BP-18708 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/07/2011
+
+    track gtexRnaSignalSRR613927
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR613927.hg19.bigWig
+    shortLabel adiposeSu M QLQ7
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-QLQ7-1526-SM-2S1QA)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXQLQ7
+    color 255,165,79
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1526-SM-2S1QA \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.9 batch=BP-20570 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR615659
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR615659.hg19.bigWig
+    shortLabel adiposeSu M OOBJ
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-OOBJ-0226-SM-2YUMM)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXOOBJ
+    color 255,165,79
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0226-SM-2YUMM \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.2 batch=BP-18253 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR655182
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR655182.hg19.bigWig
+    shortLabel adiposeSu M U412
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-U412-0526-SM-3DB9I)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXU412
+    color 255,165,79
+    metadata donor=GTEX-U412 age=60 sex=M hardyScore=3 sample=GTEX-U412-0526-SM-3DB9I \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.3 batch=BP-25560 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR661313
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR661313.hg19.bigWig
+    shortLabel adiposeSu M S95S
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-S95S-1326-SM-2XCDK)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXS95S
+    color 255,165,79
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-1326-SM-2XCDK \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=6.2 batch=BP-23281 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR662103
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR662103.hg19.bigWig
+    shortLabel adiposeSu M UTHO
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-UTHO-0426-SM-3GAED)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXUTHO
+    color 255,165,79
+
+    track gtexRnaSignalSRR665551
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR665551.hg19.bigWig
+    shortLabel adiposeSu M SSA3
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-SSA3-0226-SM-32QPN)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXSSA3
+    color 255,165,79
+    metadata donor=GTEX-SSA3 age=60 sex=M hardyScore=-1 sample=GTEX-SSA3-0226-SM-32QPN \
+            tissue=adiposeSubcut autolysisScore=0 rnaIntegrity=7.7 batch=BP-24514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR813776
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl adiposeSubcut/gtexRnaSignalSRR813776.hg19.bigWig
+    shortLabel adiposeSu M P4QS
+    longLabel GTEx RNA signal from male Adipose - Subcutaneous (GTEX-P4QS-0226-SM-3NB1U)
+    subGroups age=a60 tissue=adiposeSubcut donor=GTEXP4QS
+    color 255,165,79
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-0226-SM-3NB1U \
+            tissue=adiposeSubcut autolysisScore=1 rnaIntegrity=6.4 batch=BP-18727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+

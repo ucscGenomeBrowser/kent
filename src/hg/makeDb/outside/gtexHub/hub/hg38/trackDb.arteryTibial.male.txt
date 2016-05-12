@@ -1,0 +1,2100 @@
+    track gtexRnaSignalSRR1086611
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1086611.hg38.bigWig
+    shortLabel arteryTib M S4Q7
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S4Q7-1326-SM-4AD74)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXS4Q7
+    color 255,0,0
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-1326-SM-4AD74 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-23077 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1086959
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1086959.hg38.bigWig
+    shortLabel arteryTib M R55E
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-R55E-0326-SM-48FD2)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXR55E
+    color 255,0,0
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0326-SM-48FD2 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-21443 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR1092727
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1092727.hg38.bigWig
+    shortLabel arteryTib M XAJ8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XAJ8-1226-SM-47JYS)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXXAJ8
+    color 255,0,0
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-1226-SM-47JYS \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.5 batch=BP-31651 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/01/2012
+
+    track gtexRnaSignalSRR1093053
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1093053.hg38.bigWig
+    shortLabel arteryTib M X88G
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-X88G-0426-SM-47JZ5)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXX88G
+    color 255,0,0
+    metadata donor=GTEX-X88G age=30 sex=M hardyScore=-1 sample=GTEX-X88G-0426-SM-47JZ5 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.8 batch=BP-32413 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2012
+
+    track gtexRnaSignalSRR1311666
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1311666.hg38.bigWig
+    shortLabel arteryTib M 11EQ9
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11EQ9-2226-SM-5987H)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX11EQ9
+    color 255,0,0
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-2226-SM-5987H \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1311833
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1311833.hg38.bigWig
+    shortLabel arteryTib M 11LCK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11LCK-1426-SM-5HL5R)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX11LCK
+    color 255,0,0
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-1426-SM-5HL5R \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1321011
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1321011.hg38.bigWig
+    shortLabel arteryTib M 13NZB
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13NZB-2226-SM-5MR5B)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX13NZB
+    color 255,0,0
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-2226-SM-5MR5B \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1323271
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1323271.hg38.bigWig
+    shortLabel arteryTib M 13NYB
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13NYB-2926-SM-5K7VH)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX13NYB
+    color 255,0,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-2926-SM-5K7VH \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1324349
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1324349.hg38.bigWig
+    shortLabel arteryTib M 12584
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12584-0426-SM-5FQTT)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX12584
+    color 255,0,0
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-0426-SM-5FQTT \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1325871
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1325871.hg38.bigWig
+    shortLabel arteryTib M 146FQ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-146FQ-0526-SM-5LU9I)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX146FQ
+    color 255,0,0
+
+    track gtexRnaSignalSRR1334291
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1334291.hg38.bigWig
+    shortLabel arteryTib M ZZ64
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZZ64-1326-SM-5E444)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXZZ64
+    color 255,0,0
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-1326-SM-5E444 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.4 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1351410
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1351410.hg38.bigWig
+    shortLabel arteryTib M 13RTK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13RTK-1826-SM-5S2P3)
+    subGroups age=a20 tissue=arteryTibial donor=GTEX13RTK
+    color 255,0,0
+    metadata donor=GTEX-13RTK age=20 sex=M hardyScore=0 sample=GTEX-13RTK-1826-SM-5S2P3 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1352870
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1352870.hg38.bigWig
+    shortLabel arteryTib M Y9LG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Y9LG-2326-SM-4VDS1)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXY9LG
+    color 255,0,0
+
+    track gtexRnaSignalSRR1358415
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1358415.hg38.bigWig
+    shortLabel arteryTib M 14C39
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14C39-2626-SM-5S2QD)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX14C39
+    color 255,0,0
+    metadata donor=GTEX-14C39 age=40 sex=M hardyScore=2 sample=GTEX-14C39-2626-SM-5S2QD \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=5.7 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1360235
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1360235.hg38.bigWig
+    shortLabel arteryTib M ZAB4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZAB4-1926-SM-57WD8)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZAB4
+    color 255,0,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-1926-SM-57WD8 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.3 batch=BP-42024 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1363926
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1363926.hg38.bigWig
+    shortLabel arteryTib M 1399R
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-1399R-2326-SM-5PNYT)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX1399R
+    color 255,0,0
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-2326-SM-5PNYT \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1365598
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1365598.hg38.bigWig
+    shortLabel arteryTib M 144GM
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-144GM-2226-SM-5O9B5)
+    subGroups age=a20 tissue=arteryTibial donor=GTEX144GM
+    color 255,0,0
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-2226-SM-5O9B5 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1375290
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1375290.hg38.bigWig
+    shortLabel arteryTib M YB5E
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-YB5E-2426-SM-5IFIV)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXYB5E
+    color 255,0,0
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-2426-SM-5IFIV \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.3 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1377844
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1377844.hg38.bigWig
+    shortLabel arteryTib M YEC4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-YEC4-2326-SM-5IFHV)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXYEC4
+    color 255,0,0
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-2326-SM-5IFHV \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1379175
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1379175.hg38.bigWig
+    shortLabel arteryTib M ZPU1
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZPU1-2726-SM-4WWFT)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZPU1
+    color 255,0,0
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-2726-SM-4WWFT \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1391619
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1391619.hg38.bigWig
+    shortLabel arteryTib M ZVZO
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZVZO-0426-SM-5HL4Z)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZVZO
+    color 255,0,0
+    metadata donor=GTEX-ZVZO age=40 sex=M hardyScore=-1 sample=GTEX-ZVZO-0426-SM-5HL4Z \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1400355
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1400355.hg38.bigWig
+    shortLabel arteryTib M 14ICL
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14ICL-1826-SM-5RQIY)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX14ICL
+    color 255,0,0
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-1826-SM-5RQIY \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1403502
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1403502.hg38.bigWig
+    shortLabel arteryTib M XBEW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XBEW-0826-SM-4QASQ)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXXBEW
+    color 255,0,0
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0826-SM-4QASQ \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-36349 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalSRR1416596
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1416596.hg38.bigWig
+    shortLabel arteryTib M 14A6H
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14A6H-2726-SM-5QGPL)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX14A6H
+    color 255,0,0
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-2726-SM-5QGPL \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1419318
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1419318.hg38.bigWig
+    shortLabel arteryTib M 11P7K
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11P7K-2326-SM-5EGKZ)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX11P7K
+    color 255,0,0
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-2326-SM-5EGKZ \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1435442
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1435442.hg38.bigWig
+    shortLabel arteryTib M 1339X
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-1339X-2626-SM-5K7YX)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX1339X
+    color 255,0,0
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-2626-SM-5K7YX \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1443376
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1443376.hg38.bigWig
+    shortLabel arteryTib M Z9EW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Z9EW-1926-SM-5CVMP)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZ9EW
+    color 255,0,0
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-1926-SM-5CVMP \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1448140
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1448140.hg38.bigWig
+    shortLabel arteryTib M 12C56
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12C56-2026-SM-5FQSI)
+    subGroups age=a20 tissue=arteryTibial donor=GTEX12C56
+    color 255,0,0
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-2026-SM-5FQSI \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.3 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1454868
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1454868.hg38.bigWig
+    shortLabel arteryTib M ZT9X
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZT9X-2026-SM-57WEJ)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZT9X
+    color 255,0,0
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-2026-SM-57WEJ \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1471222
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1471222.hg38.bigWig
+    shortLabel arteryTib M YJ8A
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-YJ8A-0826-SM-5Q5A7)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXYJ8A
+    color 255,0,0
+    metadata donor=GTEX-YJ8A age=20 sex=M hardyScore=0 sample=GTEX-YJ8A-0826-SM-5Q5A7 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=9 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1471548
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1471548.hg38.bigWig
+    shortLabel arteryTib M 12126
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12126-0726-SM-5FQTX)
+    subGroups age=a20 tissue=arteryTibial donor=GTEX12126
+    color 255,0,0
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0726-SM-5FQTX \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.3 batch=BP-43881 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1478744
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1478744.hg38.bigWig
+    shortLabel arteryTib M ZUA1
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZUA1-0626-SM-4YCCW)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXZUA1
+    color 255,0,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0626-SM-4YCCW \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1481333
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1481333.hg38.bigWig
+    shortLabel arteryTib M 12WSN
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12WSN-2726-SM-5LZUK)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX12WSN
+    color 255,0,0
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-2726-SM-5LZUK \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1485499
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1485499.hg38.bigWig
+    shortLabel arteryTib M 11ZUS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11ZUS-1326-SM-5FQUC)
+    subGroups age=a30 tissue=arteryTibial donor=GTEX11ZUS
+    color 255,0,0
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-1326-SM-5FQUC \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-43823 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1487278
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1487278.hg38.bigWig
+    shortLabel arteryTib M 11TT1
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11TT1-2726-SM-5LU8L)
+    subGroups age=a20 tissue=arteryTibial donor=GTEX11TT1
+    color 255,0,0
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-2726-SM-5LU8L \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.8 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1490270
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1490270.hg38.bigWig
+    shortLabel arteryTib M 13FTW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13FTW-2226-SM-5J1OH)
+    subGroups age=a40 tissue=arteryTibial donor=GTEX13FTW
+    color 255,0,0
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-2226-SM-5J1OH \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1498395
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1498395.hg38.bigWig
+    shortLabel arteryTib M ZA64
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZA64-2226-SM-5Q5A9)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXZA64
+    color 255,0,0
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-2226-SM-5Q5A9 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.4 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR612287
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR612287.hg38.bigWig
+    shortLabel arteryTib M QEG4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QEG4-1226-SM-2S1P6)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXQEG4
+    color 255,0,0
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-1226-SM-2S1P6 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.5 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR612299
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR612299.hg38.bigWig
+    shortLabel arteryTib M Q2AH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Q2AH-2026-SM-2S1PX)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXQ2AH
+    color 255,0,0
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-2026-SM-2S1PX \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.2 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR612431
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR612431.hg38.bigWig
+    shortLabel arteryTib M Q2AI
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Q2AI-1726-SM-2S1PZ)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXQ2AI
+    color 255,0,0
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-1726-SM-2S1PZ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.5 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR612971
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR612971.hg38.bigWig
+    shortLabel arteryTib M PW2O
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-PW2O-1926-SM-2S1OB)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXPW2O
+    color 255,0,0
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-1926-SM-2S1OB \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-19459 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR613006
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613006.hg38.bigWig
+    shortLabel arteryTib M QV31
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QV31-1626-SM-2S1QC)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXQV31
+    color 255,0,0
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-1626-SM-2S1QC \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.6 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR613903
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613903.hg38.bigWig
+    shortLabel arteryTib M QEG5
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QEG5-0626-SM-2S1PP)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXQEG5
+    color 255,0,0
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-0626-SM-2S1PP \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.9 batch=BP-20332 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/28/2011
+
+    track gtexRnaSignalSRR614491
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614491.hg38.bigWig
+    shortLabel arteryTib M QLQW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QLQW-1526-SM-2S1QV)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXQLQW
+    color 255,0,0
+
+    track gtexRnaSignalSRR614695
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614695.hg38.bigWig
+    shortLabel arteryTib M NPJ8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-NPJ8-1826-SM-2YUNC)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXNPJ8
+    color 255,0,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-1826-SM-2YUNC \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.9 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR615982
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR615982.hg38.bigWig
+    shortLabel arteryTib M NFK9
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-NFK9-0526-SM-2YUNL)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXNFK9
+    color 255,0,0
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0526-SM-2YUNL \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=9.7 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR656095
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR656095.hg38.bigWig
+    shortLabel arteryTib M R55C
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-R55C-1826-SM-3GADI)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXR55C
+    color 255,0,0
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-1826-SM-3GADI \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-21341 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR656325
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR656325.hg38.bigWig
+    shortLabel arteryTib M T8EM
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-T8EM-1626-SM-3DB7K)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXT8EM
+    color 255,0,0
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-1626-SM-3DB7K \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.6 batch=BP-24892 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR656758
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR656758.hg38.bigWig
+    shortLabel arteryTib M SNOS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-SNOS-1726-SM-32PLN)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXSNOS
+    color 255,0,0
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-1726-SM-32PLN \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.2 batch=BP-24514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR657444
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR657444.hg38.bigWig
+    shortLabel arteryTib M T5JC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-T5JC-0226-SM-32PMA)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXT5JC
+    color 255,0,0
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0226-SM-32PMA \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-24623 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR660907
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR660907.hg38.bigWig
+    shortLabel arteryTib M PVOW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-PVOW-0726-SM-2XCF5)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXPVOW
+    color 255,0,0
+    metadata donor=GTEX-PVOW age=40 sex=M hardyScore=2 sample=GTEX-PVOW-0726-SM-2XCF5 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.7 batch=BP-19441 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2011
+
+    track gtexRnaSignalSRR663185
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR663185.hg38.bigWig
+    shortLabel arteryTib M S33H
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S33H-2426-SM-2XCB2)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXS33H
+    color 255,0,0
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-2426-SM-2XCB2 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-22727 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR664025
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR664025.hg38.bigWig
+    shortLabel arteryTib M SNMC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-SNMC-1526-SM-2XCFN)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXSNMC
+    color 255,0,0
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-1526-SM-2XCFN \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-23823 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalSRR807567
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR807567.hg38.bigWig
+    shortLabel arteryTib M VUSH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-VUSH-0526-SM-3NB2J)
+    subGroups age=a30 tissue=arteryTibial donor=GTEXVUSH
+    color 255,0,0
+
+    track gtexRnaSignalSRR809755
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR809755.hg38.bigWig
+    shortLabel arteryTib M O5YT
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-O5YT-1826-SM-32PK9)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXO5YT
+    color 255,0,0
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-1826-SM-32PK9 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.4 batch=BP-17533 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSRR810413
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR810413.hg38.bigWig
+    shortLabel arteryTib M WZTO
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WZTO-1126-SM-3NM93)
+    subGroups age=a40 tissue=arteryTibial donor=GTEXWZTO
+    color 255,0,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-1126-SM-3NM93 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-29824 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR812366
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR812366.hg38.bigWig
+    shortLabel arteryTib M WHSE
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WHSE-1126-SM-3NMBU)
+    subGroups age=a20 tissue=arteryTibial donor=GTEXWHSE
+    color 255,0,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-1126-SM-3NMBU \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.8 batch=BP-27626 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR1071543
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1071543.hg38.bigWig
+    shortLabel arteryTib M XOTO
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XOTO-0426-SM-4B66A)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXOTO
+    color 255,0,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0426-SM-4B66A \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-33606 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1077183
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1077183.hg38.bigWig
+    shortLabel arteryTib M RVPU
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-RVPU-1526-SM-47JXQ)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXRVPU
+    color 255,0,0
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-1526-SM-47JXQ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-22263 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/08/2012
+
+    track gtexRnaSignalSRR1078323
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1078323.hg38.bigWig
+    shortLabel arteryTib M VUSG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-VUSG-2826-SM-4KKZM)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXVUSG
+    color 255,0,0
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-2826-SM-4KKZM \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-27126 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1078903
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1078903.hg38.bigWig
+    shortLabel arteryTib M XGQ4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XGQ4-2426-SM-4AT55)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXGQ4
+    color 255,0,0
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-2426-SM-4AT55 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-32474 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1082401
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1082401.hg38.bigWig
+    shortLabel arteryTib M XUYS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XUYS-0426-SM-47JX3)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXUYS
+    color 255,0,0
+    metadata donor=GTEX-XUYS age=50 sex=M hardyScore=-1 sample=GTEX-XUYS-0426-SM-47JX3 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-34830 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/04/2013
+
+    track gtexRnaSignalSRR1084816
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1084816.hg38.bigWig
+    shortLabel arteryTib M XQ8I
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XQ8I-0826-SM-4BOOE)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXQ8I
+    color 255,0,0
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0826-SM-4BOOE \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.6 batch=BP-34117 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1085712
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1085712.hg38.bigWig
+    shortLabel arteryTib M X62O
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-X62O-1626-SM-46MW9)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXX62O
+    color 255,0,0
+    metadata donor=GTEX-X62O age=50 sex=M hardyScore=0 sample=GTEX-X62O-1626-SM-46MW9 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.4 batch=BP-31298 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2012
+
+    track gtexRnaSignalSRR1088437
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1088437.hg38.bigWig
+    shortLabel arteryTib M QV44
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QV44-2226-SM-447A3)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXQV44
+    color 255,0,0
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-2226-SM-447A3 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-20869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1090217
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1090217.hg38.bigWig
+    shortLabel arteryTib M V1D1
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-V1D1-2626-SM-4JBJH)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXV1D1
+    color 255,0,0
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-2626-SM-4JBJH \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.5 batch=BP-26868 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1093100
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1093100.hg38.bigWig
+    shortLabel arteryTib M SIU8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-SIU8-0426-SM-4BRUE)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXSIU8
+    color 255,0,0
+    metadata donor=GTEX-SIU8 age=50 sex=M hardyScore=2 sample=GTEX-SIU8-0426-SM-4BRUE \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-23696 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalSRR1093458
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1093458.hg38.bigWig
+    shortLabel arteryTib M XPVG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XPVG-2926-SM-4B66G)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXPVG
+    color 255,0,0
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-2926-SM-4B66G \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-34031 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/07/2012
+
+    track gtexRnaSignalSRR1099189
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1099189.hg38.bigWig
+    shortLabel arteryTib M UPJH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-UPJH-0726-SM-4IHJW)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXUPJH
+    color 255,0,0
+    metadata donor=GTEX-UPJH age=50 sex=M hardyScore=2 sample=GTEX-UPJH-0726-SM-4IHJW \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.7 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1320424
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1320424.hg38.bigWig
+    shortLabel arteryTib M 13OVL
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13OVL-1326-SM-5IJCZ)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13OVL
+    color 255,0,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-1326-SM-5IJCZ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.8 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1321570
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1321570.hg38.bigWig
+    shortLabel arteryTib M 147F4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-147F4-0126-SM-5QGPV)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX147F4
+    color 255,0,0
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-0126-SM-5QGPV \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1327793
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1327793.hg38.bigWig
+    shortLabel arteryTib M 144GL
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-144GL-0526-SM-5LU41)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX144GL
+    color 255,0,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0526-SM-5LU41 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.3 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1331818
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1331818.hg38.bigWig
+    shortLabel arteryTib M ZYFC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZYFC-0726-SM-5E448)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZYFC
+    color 255,0,0
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0726-SM-5E448 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1334265
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1334265.hg38.bigWig
+    shortLabel arteryTib M 11DXZ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11DXZ-2626-SM-59882)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX11DXZ
+    color 255,0,0
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-2626-SM-59882 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.6 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1336463
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1336463.hg38.bigWig
+    shortLabel arteryTib M 139YR
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-139YR-2726-SM-5K7VV)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX139YR
+    color 255,0,0
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-2726-SM-5K7VV \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1336911
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1336911.hg38.bigWig
+    shortLabel arteryTib M 13NZ9
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13NZ9-0826-SM-5J1NI)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13NZ9
+    color 255,0,0
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0826-SM-5J1NI \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1337215
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1337215.hg38.bigWig
+    shortLabel arteryTib M ZY6K
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZY6K-1926-SM-5GZXW)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZY6K
+    color 255,0,0
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-1926-SM-5GZXW \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1337886
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1337886.hg38.bigWig
+    shortLabel arteryTib M 12WSH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12WSH-2826-SM-5GCP5)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX12WSH
+    color 255,0,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-2826-SM-5GCP5 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.3 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1345523
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1345523.hg38.bigWig
+    shortLabel arteryTib M 13W46
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13W46-0626-SM-5LU3N)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13W46
+    color 255,0,0
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-0626-SM-5LU3N \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1347002
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1347002.hg38.bigWig
+    shortLabel arteryTib M YEC3
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-YEC3-1126-SM-5IFIH)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXYEC3
+    color 255,0,0
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-1126-SM-5IFIH \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1350090
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1350090.hg38.bigWig
+    shortLabel arteryTib M 13PVQ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13PVQ-0526-SM-5LU8Q)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13PVQ
+    color 255,0,0
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0526-SM-5LU8Q \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1353262
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1353262.hg38.bigWig
+    shortLabel arteryTib M ZYFD
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZYFD-0526-SM-5E442)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZYFD
+    color 255,0,0
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-0526-SM-5E442 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1363886
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1363886.hg38.bigWig
+    shortLabel arteryTib M 12WSC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12WSC-0526-SM-5BC5X)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX12WSC
+    color 255,0,0
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0526-SM-5BC5X \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-43916 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1364761
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1364761.hg38.bigWig
+    shortLabel arteryTib M 13O21
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13O21-2526-SM-5J1OZ)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13O21
+    color 255,0,0
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-2526-SM-5J1OZ \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.3 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1374270
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1374270.hg38.bigWig
+    shortLabel arteryTib M 117YW
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-117YW-2726-SM-5GZZT)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX117YW
+    color 255,0,0
+
+    track gtexRnaSignalSRR1376000
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1376000.hg38.bigWig
+    shortLabel arteryTib M 12WSL
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12WSL-2626-SM-5GCNV)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX12WSL
+    color 255,0,0
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-2626-SM-5GCNV \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1386889
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1386889.hg38.bigWig
+    shortLabel arteryTib M 117YX
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-117YX-2626-SM-5EQ53)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX117YX
+    color 255,0,0
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-2626-SM-5EQ53 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1392571
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1392571.hg38.bigWig
+    shortLabel arteryTib M ZVP2
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZVP2-2226-SM-5GU6Q)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZVP2
+    color 255,0,0
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-2226-SM-5GU6Q \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1399861
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1399861.hg38.bigWig
+    shortLabel arteryTib M 13OW6
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13OW6-0326-SM-5L3H9)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13OW6
+    color 255,0,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0326-SM-5L3H9 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1401235
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1401235.hg38.bigWig
+    shortLabel arteryTib M 145MH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-145MH-1526-SM-5LUAU)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX145MH
+    color 255,0,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-1526-SM-5LUAU \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.7 batch=BP-47616 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1406026
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1406026.hg38.bigWig
+    shortLabel arteryTib M ZVE2
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZVE2-0526-SM-5GU7E)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZVE2
+    color 255,0,0
+    metadata donor=GTEX-ZVE2 age=50 sex=M hardyScore=0 sample=GTEX-ZVE2-0526-SM-5GU7E \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-43753 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1415547
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1415547.hg38.bigWig
+    shortLabel arteryTib M Z93T
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Z93T-0426-SM-5HL6G)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZ93T
+    color 255,0,0
+    metadata donor=GTEX-Z93T age=50 sex=M hardyScore=-1 sample=GTEX-Z93T-0426-SM-5HL6G \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1420832
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1420832.hg38.bigWig
+    shortLabel arteryTib M 13OW7
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13OW7-0626-SM-5K7UD)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13OW7
+    color 255,0,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0626-SM-5K7UD \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1429825
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1429825.hg38.bigWig
+    shortLabel arteryTib M 131XE
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-131XE-2626-SM-5PNYY)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX131XE
+    color 255,0,0
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-2626-SM-5PNYY \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1432106
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1432106.hg38.bigWig
+    shortLabel arteryTib M 145MF
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-145MF-0426-SM-5LU9T)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX145MF
+    color 255,0,0
+    metadata donor=GTEX-145MF age=50 sex=M hardyScore=2 sample=GTEX-145MF-0426-SM-5LU9T \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1442983
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1442983.hg38.bigWig
+    shortLabel arteryTib M 14DAR
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14DAR-2126-SM-5RQID)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX14DAR
+    color 255,0,0
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-2126-SM-5RQID \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1452356
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1452356.hg38.bigWig
+    shortLabel arteryTib M 11NUK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11NUK-0526-SM-5A5L5)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX11NUK
+    color 255,0,0
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-0526-SM-5A5L5 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1452580
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1452580.hg38.bigWig
+    shortLabel arteryTib M ZDYS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZDYS-1626-SM-4WKGB)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZDYS
+    color 255,0,0
+
+    track gtexRnaSignalSRR1454629
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1454629.hg38.bigWig
+    shortLabel arteryTib M ZVZP
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZVZP-2726-SM-5GZXZ)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZVZP
+    color 255,0,0
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-2726-SM-5GZXZ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1454761
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1454761.hg38.bigWig
+    shortLabel arteryTib M Y111
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Y111-0426-SM-4TT3K)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXY111
+    color 255,0,0
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-0426-SM-4TT3K \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1454842
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1454842.hg38.bigWig
+    shortLabel arteryTib M X261
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-X261-0526-SM-4PQYS)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXX261
+    color 255,0,0
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0526-SM-4PQYS \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-29826 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR1458267
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1458267.hg38.bigWig
+    shortLabel arteryTib M ZT9W
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZT9W-2726-SM-57WG8)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZT9W
+    color 255,0,0
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-2726-SM-57WG8 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1459542
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1459542.hg38.bigWig
+    shortLabel arteryTib M 13FHP
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13FHP-0426-SM-5J1O5)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13FHP
+    color 255,0,0
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0426-SM-5J1O5 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-46650 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1470947
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1470947.hg38.bigWig
+    shortLabel arteryTib M 14BMV
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14BMV-0526-SM-5S2NE)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX14BMV
+    color 255,0,0
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-0526-SM-5S2NE \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1474018
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1474018.hg38.bigWig
+    shortLabel arteryTib M Z93S
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Z93S-0926-SM-5HL8B)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXZ93S
+    color 255,0,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0926-SM-5HL8B \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.8 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1474113
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1474113.hg38.bigWig
+    shortLabel arteryTib M QDVJ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QDVJ-2126-SM-5S2U2)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXQDVJ
+    color 255,0,0
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-2126-SM-5S2U2 \
+            tissue=arteryTibial autolysisScore=2 rnaIntegrity=7.1 batch=BP-20260 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR1475044
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1475044.hg38.bigWig
+    shortLabel arteryTib M 13O3P
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13O3P-0526-SM-5K7UT)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13O3P
+    color 255,0,0
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0526-SM-5K7UT \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1475367
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1475367.hg38.bigWig
+    shortLabel arteryTib M 13VXU
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13VXU-0526-SM-5K7V1)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13VXU
+    color 255,0,0
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0526-SM-5K7V1 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1480431
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1480431.hg38.bigWig
+    shortLabel arteryTib M XBEC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XBEC-0526-SM-4QARU)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXXBEC
+    color 255,0,0
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-0526-SM-4QARU \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-36136 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/14/2013
+
+    track gtexRnaSignalSRR1486931
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1486931.hg38.bigWig
+    shortLabel arteryTib M 139T6
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-139T6-1826-SM-5KM2E)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX139T6
+    color 255,0,0
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-1826-SM-5KM2E \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.7 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1490447
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1490447.hg38.bigWig
+    shortLabel arteryTib M 13111
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13111-2126-SM-5LZU2)
+    subGroups age=a50 tissue=arteryTibial donor=GTEX13111
+    color 255,0,0
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-2126-SM-5LZU2 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR612947
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR612947.hg38.bigWig
+    shortLabel arteryTib M PSDG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-PSDG-0526-SM-2S1OH)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXPSDG
+    color 255,0,0
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-0526-SM-2S1OH \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-19411 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR613378
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613378.hg38.bigWig
+    shortLabel arteryTib M RM2N
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-RM2N-1826-SM-2TF5B)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXRM2N
+    color 255,0,0
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1826-SM-2TF5B \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-21576 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR613568
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613568.hg38.bigWig
+    shortLabel arteryTib M OIZH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-OIZH-1826-SM-2YUNP)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXOIZH
+    color 255,0,0
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-1826-SM-2YUNP \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR613819
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613819.hg38.bigWig
+    shortLabel arteryTib M QXCU
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QXCU-0226-SM-2TC5W)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXQXCU
+    color 255,0,0
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0226-SM-2TC5W \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-21102 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/29/2011
+
+    track gtexRnaSignalSRR614095
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614095.hg38.bigWig
+    shortLabel arteryTib M OIZG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-OIZG-1526-SM-2YUNG)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXOIZG
+    color 255,0,0
+
+    track gtexRnaSignalSRR614239
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614239.hg38.bigWig
+    shortLabel arteryTib M OHPM
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-OHPM-1826-SM-2YUNF)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXOHPM
+    color 255,0,0
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-1826-SM-2YUNF \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.4 batch=BP-17842 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/22/2011
+
+    track gtexRnaSignalSRR614335
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614335.hg38.bigWig
+    shortLabel arteryTib M RN64
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-RN64-0526-SM-2TC5P)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXRN64
+    color 255,0,0
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-0526-SM-2TC5P \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-21577 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR614707
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614707.hg38.bigWig
+    shortLabel arteryTib M QDVN
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QDVN-2326-SM-2S1PF)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXQDVN
+    color 255,0,0
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-2326-SM-2S1PF \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.1 batch=BP-20294 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/22/2011
+
+    track gtexRnaSignalSRR655720
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR655720.hg38.bigWig
+    shortLabel arteryTib M QEL4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QEL4-0526-SM-3GIJ4)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXQEL4
+    color 255,0,0
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-0526-SM-3GIJ4 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-20412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR657623
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR657623.hg38.bigWig
+    shortLabel arteryTib M S7SE
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S7SE-0526-SM-2XCD8)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXS7SE
+    color 255,0,0
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0526-SM-2XCD8 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-23169 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalSRR811964
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR811964.hg38.bigWig
+    shortLabel arteryTib M WYJK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WYJK-0426-SM-3NM9G)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXWYJK
+    color 255,0,0
+    metadata donor=GTEX-WYJK age=50 sex=M hardyScore=0 sample=GTEX-WYJK-0426-SM-3NM9G \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.5 batch=BP-29435 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalSRR814165
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR814165.hg38.bigWig
+    shortLabel arteryTib M WHPG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WHPG-2326-SM-3NMBP)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXWHPG
+    color 255,0,0
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-2326-SM-3NMBP \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.9 batch=BP-27941 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR814747
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR814747.hg38.bigWig
+    shortLabel arteryTib M WL46
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WL46-0526-SM-3LK7W)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXWL46
+    color 255,0,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0526-SM-3LK7W \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-27853 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR818670
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR818670.hg38.bigWig
+    shortLabel arteryTib M WY7C
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-WY7C-2826-SM-3NB3Q)
+    subGroups age=a50 tissue=arteryTibial donor=GTEXWY7C
+    color 255,0,0
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-2826-SM-3NB3Q \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.1 batch=BP-29540 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalSRR1078834
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1078834.hg38.bigWig
+    shortLabel arteryTib M XBED
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XBED-2426-SM-4AT4O)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXXBED
+    color 255,0,0
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-2426-SM-4AT4O \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8 batch=BP-31585 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1089974
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1089974.hg38.bigWig
+    shortLabel arteryTib M X4XY
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-X4XY-0526-SM-46MW1)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXX4XY
+    color 255,0,0
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0526-SM-46MW1 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.1 batch=BP-31059 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/12/2012
+
+    track gtexRnaSignalSRR1094241
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1094241.hg38.bigWig
+    shortLabel arteryTib M VJYA
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-VJYA-1826-SM-4KL1W)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXVJYA
+    color 255,0,0
+
+    track gtexRnaSignalSRR1094336
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1094336.hg38.bigWig
+    shortLabel arteryTib M XLM4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-XLM4-0426-SM-4AT54)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXXLM4
+    color 255,0,0
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0426-SM-4AT54 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-32474 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1307997
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1307997.hg38.bigWig
+    shortLabel arteryTib M 111YS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-111YS-2226-SM-5987P)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX111YS
+    color 255,0,0
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-2226-SM-5987P \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.8 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1310094
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1310094.hg38.bigWig
+    shortLabel arteryTib M 111FC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-111FC-0426-SM-5N9CV)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX111FC
+    color 255,0,0
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-0426-SM-5N9CV \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.8 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1325310
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1325310.hg38.bigWig
+    shortLabel arteryTib M 12696
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12696-2726-SM-5FQUL)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX12696
+    color 255,0,0
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-2726-SM-5FQUL \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1329353
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1329353.hg38.bigWig
+    shortLabel arteryTib M 148VJ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-148VJ-0426-SM-5S2V8)
+    subGroups age=a70 tissue=arteryTibial donor=GTEX148VJ
+    color 255,0,0
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0426-SM-5S2V8 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.1 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1336091
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1336091.hg38.bigWig
+    shortLabel arteryTib M 1212Z
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-1212Z-2826-SM-59HJ5)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX1212Z
+    color 255,0,0
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-2826-SM-59HJ5 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1350813
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1350813.hg38.bigWig
+    shortLabel arteryTib M 13O61
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13O61-2526-SM-5J1O8)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX13O61
+    color 255,0,0
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-2526-SM-5J1O8 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1353480
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1353480.hg38.bigWig
+    shortLabel arteryTib M 132NY
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-132NY-0626-SM-5L3D9)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX132NY
+    color 255,0,0
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-0626-SM-5L3D9 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.9 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1356787
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1356787.hg38.bigWig
+    shortLabel arteryTib M 13JVG
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13JVG-0426-SM-5MR59)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX13JVG
+    color 255,0,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0426-SM-5MR59 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.5 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1358520
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1358520.hg38.bigWig
+    shortLabel arteryTib M 1399T
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-1399T-2626-SM-5L3E4)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX1399T
+    color 255,0,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-2626-SM-5L3E4 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1359214
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1359214.hg38.bigWig
+    shortLabel arteryTib M Y8DK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Y8DK-0526-SM-4TT3R)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXY8DK
+    color 255,0,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0526-SM-4TT3R \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1368030
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1368030.hg38.bigWig
+    shortLabel arteryTib M ZDTS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZDTS-0426-SM-4WAYH)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXZDTS
+    color 255,0,0
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0426-SM-4WAYH \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-42528 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/21/2013
+
+    track gtexRnaSignalSRR1376640
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1376640.hg38.bigWig
+    shortLabel arteryTib M 13OVH
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13OVH-0426-SM-5K7UC)
+    subGroups age=a70 tissue=arteryTibial donor=GTEX13OVH
+    color 255,0,0
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-0426-SM-5K7UC \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.7 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1380317
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1380317.hg38.bigWig
+    shortLabel arteryTib M 13OW8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13OW8-1626-SM-5L3HW)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX13OW8
+    color 255,0,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1626-SM-5L3HW \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.9 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1387379
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1387379.hg38.bigWig
+    shortLabel arteryTib M 139T8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-139T8-0426-SM-5K7VC)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX139T8
+    color 255,0,0
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0426-SM-5K7VC \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1400530
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1400530.hg38.bigWig
+    shortLabel arteryTib M 11OC5
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11OC5-0426-SM-5Q5AR)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11OC5
+    color 255,0,0
+    metadata donor=GTEX-11OC5 age=60 sex=M hardyScore=2 sample=GTEX-11OC5-0426-SM-5Q5AR \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1401164
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1401164.hg38.bigWig
+    shortLabel arteryTib M 13NYC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13NYC-0826-SM-5N9FP)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX13NYC
+    color 255,0,0
+    metadata donor=GTEX-13NYC age=60 sex=M hardyScore=2 sample=GTEX-13NYC-0826-SM-5N9FP \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.7 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1406457
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1406457.hg38.bigWig
+    shortLabel arteryTib M 13N1W
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13N1W-0326-SM-5IJDJ)
+    subGroups age=a70 tissue=arteryTibial donor=GTEX13N1W
+    color 255,0,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0326-SM-5IJDJ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.2 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1414379
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1414379.hg38.bigWig
+    shortLabel arteryTib M 12ZZY
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12ZZY-0526-SM-5EQ5H)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX12ZZY
+    color 255,0,0
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0526-SM-5EQ5H \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1418001
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1418001.hg38.bigWig
+    shortLabel arteryTib M 14753
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14753-0226-SM-5Q5CH)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX14753
+    color 255,0,0
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0226-SM-5Q5CH \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1419760
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1419760.hg38.bigWig
+    shortLabel arteryTib M ZDTT
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZDTT-2426-SM-4WKFX)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXZDTT
+    color 255,0,0
+
+    track gtexRnaSignalSRR1420469
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1420469.hg38.bigWig
+    shortLabel arteryTib M 14A5H
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14A5H-0226-SM-5S2VK)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX14A5H
+    color 255,0,0
+
+    track gtexRnaSignalSRR1433452
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1433452.hg38.bigWig
+    shortLabel arteryTib M Y5V6
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-Y5V6-2826-SM-4VDSF)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXY5V6
+    color 255,0,0
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2826-SM-4VDSF \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.1 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1436207
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1436207.hg38.bigWig
+    shortLabel arteryTib M 131XF
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-131XF-2526-SM-5EQ68)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX131XF
+    color 255,0,0
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-2526-SM-5EQ68 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.9 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1443026
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1443026.hg38.bigWig
+    shortLabel arteryTib M 12WSM
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-12WSM-0526-SM-5GCO8)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX12WSM
+    color 255,0,0
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0526-SM-5GCO8 \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.4 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1443161
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1443161.hg38.bigWig
+    shortLabel arteryTib M 11ONC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11ONC-2726-SM-5N9DZ)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11ONC
+    color 255,0,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2726-SM-5N9DZ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.7 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1446649
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1446649.hg38.bigWig
+    shortLabel arteryTib M 14E7W
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-14E7W-0526-SM-5S2W8)
+    subGroups age=a70 tissue=arteryTibial donor=GTEX14E7W
+    color 255,0,0
+    metadata donor=GTEX-14E7W age=70 sex=M hardyScore=2 sample=GTEX-14E7W-0526-SM-5S2W8 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.6 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1447215
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1447215.hg38.bigWig
+    shortLabel arteryTib M 11GS4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11GS4-2926-SM-5A5LF)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11GS4
+    color 255,0,0
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-2926-SM-5A5LF \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.6 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1447871
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1447871.hg38.bigWig
+    shortLabel arteryTib M 11EI6
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11EI6-0526-SM-5985S)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11EI6
+    color 255,0,0
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0526-SM-5985S \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=5.8 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1455082
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1455082.hg38.bigWig
+    shortLabel arteryTib M ZYW4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZYW4-0426-SM-5GZYS)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXZYW4
+    color 255,0,0
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-0426-SM-5GZYS \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-43693 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1457814
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1457814.hg38.bigWig
+    shortLabel arteryTib M 13G51
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-13G51-2926-SM-5IJDL)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX13G51
+    color 255,0,0
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-2926-SM-5IJDL \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.7 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1476365
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1476365.hg38.bigWig
+    shortLabel arteryTib M ZAKK
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-ZAKK-0426-SM-5EGHB)
+    subGroups age=a70 tissue=arteryTibial donor=GTEXZAKK
+    color 255,0,0
+
+    track gtexRnaSignalSRR1479014
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1479014.hg38.bigWig
+    shortLabel arteryTib M 147JS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-147JS-0726-SM-5S2UL)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX147JS
+    color 255,0,0
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-0726-SM-5S2UL \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.1 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1486698
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1486698.hg38.bigWig
+    shortLabel arteryTib M 132Q8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-132Q8-0526-SM-5IJBQ)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX132Q8
+    color 255,0,0
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-0526-SM-5IJBQ \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.2 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1489438
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1489438.hg38.bigWig
+    shortLabel arteryTib M 11WQC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11WQC-2726-SM-5CVLG)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11WQC
+    color 255,0,0
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-2726-SM-5CVLG \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=5.9 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1490427
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1490427.hg38.bigWig
+    shortLabel arteryTib M 113IC
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-113IC-0426-SM-5HL5O)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX113IC
+    color 255,0,0
+    metadata donor=GTEX-113IC age=60 sex=M hardyScore=-1 sample=GTEX-113IC-0426-SM-5HL5O \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=8.3 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1500598
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR1500598.hg38.bigWig
+    shortLabel arteryTib M 11NV4
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-11NV4-0526-SM-5N9BF)
+    subGroups age=a60 tissue=arteryTibial donor=GTEX11NV4
+    color 255,0,0
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-0526-SM-5N9BF \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR613557
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613557.hg38.bigWig
+    shortLabel arteryTib M QLQ7
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-QLQ7-1926-SM-2S1R6)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXQLQ7
+    color 255,0,0
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1926-SM-2S1R6 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7 batch=BP-20571 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR613843
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR613843.hg38.bigWig
+    shortLabel arteryTib M REY6
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-REY6-0726-SM-2TF4M)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXREY6
+    color 255,0,0
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0726-SM-2TF4M \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.2 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR614407
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614407.hg38.bigWig
+    shortLabel arteryTib M OHPJ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-OHPJ-0626-SM-2YUMY)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXOHPJ
+    color 255,0,0
+
+    track gtexRnaSignalSRR614984
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR614984.hg38.bigWig
+    shortLabel arteryTib M P4QS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-P4QS-1826-SM-2S1NI)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXP4QS
+    color 255,0,0
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-1826-SM-2S1NI \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.7 batch=BP-18728 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/08/2011
+
+    track gtexRnaSignalSRR615056
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR615056.hg38.bigWig
+    shortLabel arteryTib M RVPV
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-RVPV-0226-SM-2TF6W)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXRVPV
+    color 255,0,0
+    metadata donor=GTEX-RVPV age=60 sex=M hardyScore=3 sample=GTEX-RVPV-0226-SM-2TF6W \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.3 batch=BP-21954 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalSRR615261
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR615261.hg38.bigWig
+    shortLabel arteryTib M N7MS
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-N7MS-0626-SM-2YUN7)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXN7MS
+    color 255,0,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0626-SM-2YUN7 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.8 batch=BP-16740 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/19/2011
+
+    track gtexRnaSignalSRR655672
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR655672.hg38.bigWig
+    shortLabel arteryTib M S95S
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S95S-1626-SM-2XCDJ)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXS95S
+    color 255,0,0
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-1626-SM-2XCDJ \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=7.2 batch=BP-23283 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR655804
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR655804.hg38.bigWig
+    shortLabel arteryTib M U8T8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-U8T8-0326-SM-3DB93)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXU8T8
+    color 255,0,0
+    metadata donor=GTEX-U8T8 age=60 sex=M hardyScore=0 sample=GTEX-U8T8-0326-SM-3DB93 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6 batch=BP-25630 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2012
+
+    track gtexRnaSignalSRR657833
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR657833.hg38.bigWig
+    shortLabel arteryTib M S4Z8
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S4Z8-2026-SM-3K2A9)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXS4Z8
+    color 255,0,0
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-2026-SM-3K2A9 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=8.3 batch=BP-23077 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR808496
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR808496.hg38.bigWig
+    shortLabel arteryTib M S7PM
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-S7PM-0426-SM-3NM91)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXS7PM
+    color 255,0,0
+    metadata donor=GTEX-S7PM age=60 sex=M hardyScore=0 sample=GTEX-S7PM-0426-SM-3NM91 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=6.8 batch=BP-23122 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/14/2012
+
+    track gtexRnaSignalSRR811005
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR811005.hg38.bigWig
+    shortLabel arteryTib M V955
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-V955-2626-SM-3NM9F)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXV955
+    color 255,0,0
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-2626-SM-3NM9F \
+            tissue=arteryTibial autolysisScore=0 rnaIntegrity=6.9 batch=BP-26938 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR813315
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR813315.hg38.bigWig
+    shortLabel arteryTib M U412
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-U412-0226-SM-3NMC8)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXU412
+    color 255,0,0
+    metadata donor=GTEX-U412 age=60 sex=M hardyScore=3 sample=GTEX-U412-0226-SM-3NMC8 \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.4 batch=BP-25560 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR817118
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryTibial/gtexRnaSignalSRR817118.hg38.bigWig
+    shortLabel arteryTib M OOBJ
+    longLabel GTEx RNA signal from male Artery - Tibial (GTEX-OOBJ-1826-SM-3NB1C)
+    subGroups age=a60 tissue=arteryTibial donor=GTEXOOBJ
+    color 255,0,0
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-1826-SM-3NB1C \
+            tissue=arteryTibial autolysisScore=1 rnaIntegrity=7.5 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
