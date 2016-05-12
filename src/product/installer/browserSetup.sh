@@ -1520,12 +1520,6 @@ if [[ $# -eq 0 ]] ; then
    exit 0
 fi
 
-if [[ "$EUID" != "0" ]]; then
-  echo "This script must be run as root or with sudo like this:"
-  echo "sudo -H $0"
-  exit 1
-fi
-
 while getopts ":baut:hof" opt; do
   case $opt in
     h)
@@ -1649,6 +1643,21 @@ if [ "$DIST" == "none" ]; then
     echo Sorry, unable to detect your linux distribution. 
     echo Currently only Debian and Redhat-style distributions are supported.
     exit 3
+fi
+
+echo $#
+echo $2
+if [[ "$#" -gt "1" && "${2:0:1}" == "-"  ]]; then
+  echo "Error: The options have to be specfied before the command, not after it."
+  echo
+  echo "$HELP_STR"
+  exit 1
+fi
+
+if [[ "$EUID" != "0" ]]; then
+  echo "This script must be run as root or with sudo like this:"
+  echo "sudo -H $0"
+  exit 1
 fi
 
 if [ "${1:-}" == "install" ]; then
