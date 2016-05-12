@@ -263,6 +263,7 @@ boolean getNR = optionExists("getNR");
 if (!(getNM || getNR))
     getNM = getNR = TRUE;
 
+initGenbankTableNames("hgFixed");
 refSeqGet(argv[1],
           optionVal("aligns", NULL),
           optionVal("geneAnns", NULL),

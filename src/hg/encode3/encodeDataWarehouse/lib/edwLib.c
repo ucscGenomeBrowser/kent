@@ -1310,7 +1310,7 @@ remove(saiName);
 /* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
  * and also to produce little bed file for enrichment step. */
 struct genomeRangeTree *grt = genomeRangeTreeNew();
-long long hitCount=0, missCount=0, uniqueHitCount, totalBasesInHits=0;
+long long hitCount=0, missCount=0, uniqueHitCount=0, totalBasesInHits=0;
 scanSam(samName, bedF, grt, &hitCount, &missCount, &totalBasesInHits, &uniqueHitCount);
 verbose(1, "hitCount=%lld, missCount=%lld, totalBasesInHits=%lld, grt=%p\n", 
     hitCount, missCount, totalBasesInHits, grt);

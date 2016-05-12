@@ -3090,17 +3090,6 @@ dataVersion Mar 2007
 track rgdQtl override
 shortLabel RGD Human QTL
 
-track snpedia
-shortLabel SNPedia
-longLabel SNPedia: dbSNPs with a SNPedia article
-group phenDis
-visibility hide
-color 50,0,100
-type bigBed 4 
-bigDataUrl /gbdb/hg19/bbi/snpedia.bb
-url https://www.snpedia.com/index.php/$$
-release alpha
-
 track nibbImageProbes override
 group expression
 
@@ -4145,7 +4134,6 @@ type bed 3
         subGroups view=atot phen=path level=det
 
 	track iscaBenignGainCum
-  release alpha
 	parent iscaViewTotal
 	shortLabel Benign Gain
 	longLabel ClinGen CNVs: Benign Gain Total
@@ -4153,7 +4141,6 @@ type bed 3
         subGroups view=atot phen=ben level=det
 
 	track iscaBenignLossCum
-  release alpha
 	parent iscaViewTotal
 	shortLabel Benign Loss
 	longLabel ClinGen CNVs: Benign Loss Total

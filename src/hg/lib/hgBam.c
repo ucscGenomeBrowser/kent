@@ -273,6 +273,15 @@ errAbort(COMPILE_WITH_SAMTOOLS, "bamFileNameFromTable");
 return NULL;
 }
 
+struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int start, int end,
+	struct lm *lm,  char *refUrl, char *cacheDir)
+/* Fetch region as a list of samAlignments - which is more or less an unpacked
+ * bam record.  Results is allocated out of lm, since it tends to be large... */
+{
+errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignmentPlus");
+return NULL;
+}
+
 struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
 	struct lm *lm)
 /* Fetch region as a list of samAlignments - which is more or less an unpacked
@@ -282,7 +291,11 @@ errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignment");
 return NULL;
 }
 
+#ifdef USE_HTS
+struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm)
+#else
 struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
+#endif
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */
 {

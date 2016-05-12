@@ -1,0 +1,135 @@
+#########################################################################
+# LASTZ rat/rn6 vs. chicken/galGal5 - (DONE - 2016-05-03 - Hiram)
+    mkdir /hive/data/genomes/rn6/bed/lastzGalGal5.2016-05-03
+    cd /hive/data/genomes/rn6/bed/lastzGalGal5.2016-05-03
+
+    printf '# Rat vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: Rat Rn6
+SEQ1_DIR=/hive/data/genomes/rn6/rn6.2bit
+SEQ1_LEN=/hive/data/genomes/rn6/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: chicken galGal5
+SEQ2_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ2_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/rn6/bed/lastzGalGal5.2016-05-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    284m1.002s
+
+    cat fb.rn6.chainGalGal5Link.txt
+    # 108740749 bases of 2729860805 (3.983%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` rn6 galGal5) > rbest.log 2>&1 &
+    # real    206m46.355s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal5/bed/blastz.rn6.swap
+    cd /hive/data/genomes/galGal5/bed/blastz.rn6.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/rn6/bed/lastzGalGal5.2016-05-03/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    16m43.312s
+
+    cat fb.galGal5.chainRn6Link.txt
+    # 95694615 bases of 1218501075 (7.853%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` galGal5 rn6) > rbest.log 2>&1
+    # real    171m15.342s
+
+#########################################################################
+# LASTZ zebrafish/danRer10 vs. chicken/galGal5 - (DONE - 2016-05-03 - Hiram)
+    mkdir /hive/data/genomes/danRer10/bed/lastzGalGal5.2016-05-03
+    cd /hive/data/genomes/danRer10/bed/lastzGalGal5.2016-05-03
+
+    printf '# zebrafish vs. chicken
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_O=400
+BLASTZ_E=30
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET: Rat DanRer10
+SEQ1_DIR=/hive/data/genomes/danRer10/danRer10.2bit
+SEQ1_LEN=/hive/data/genomes/danRer10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=15
+
+# QUERY: chicken galGal5
+SEQ2_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ2_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/danRer10/bed/lastzGalGal5.2016-05-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    222m22.795s
+
+    cat fb.danRer10.chainGalGal5Link.txt
+    # 58108752 bases of 1369683683 (4.242%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` danRer10 galGal5) > rbest.log 2>&1 &
+    # real    92m11.817s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/galGal5/bed/blastz.danRer10.swap
+    cd /hive/data/genomes/galGal5/bed/blastz.danRer10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/danRer10/bed/lastzGalGal5.2016-05-03/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    8m52.412s
+
+    cat fb.galGal5.chainDanRer10Link.txt
+    # 49128539 bases of 1218501075 (4.032%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` galGal5 danRer10) > rbest.log 2>&1
+    # real    83m20.585s
+
+#########################################################################

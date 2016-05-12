@@ -35,7 +35,7 @@ struct bigPsl
     int *oChromStarts;	/* Start positions relative to oChromStart */
     char *oSequence;	/* Sequence on other chrom (or edit list, or empty) */
     char *oCDS;	/* CDS in NCBI format */
-    unsigned oBlock;	/* Block number on other sequence */
+    unsigned chromSize;	/* Size of target chromosome */
     unsigned match;	/* Number of bases matched. */
     unsigned misMatch;	/*  Number of bases that don't match  */
     unsigned repMatch;	/*  Number of bases that match but are part of repeats  */
@@ -81,7 +81,7 @@ void bigPslOutput(struct bigPsl *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb, unsigned chromSize, char **seq, char **cds);
+struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  char **seq, char **cds);
 /* build a psl from a bigPsl */
 #endif /* BIGPSL_H */
 

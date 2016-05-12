@@ -24,7 +24,7 @@
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 		    <P>
 The bigPsl format stores alignments between two sequences, as
-<A HREF="../../FAQ/FAQformat.html#format2">PSL</A> files do, but they are indexed as bigBeds.
+<A HREF="../../FAQ/FAQformat.html#format2">PSL</A> files do, but they are compressed and indexed as bigBeds.
 </p>
 <p>
 bigPsl files are created using the program <TT>bedToBigBed</TT> with a
@@ -45,10 +45,9 @@ file defined by the <tt>-as=</tt> option when using <tt>bedToBigBed</tt>.
 Click this <A HREF="examples/bigPsl.txt"><tt>bigPsl.txt</tt></A> file for
 an example of bigPsl input. 
 <PRE>
-
 table bigPsl
-"bigPsl pairwise alignment"
-    (
+"bigPsl pairwise alignment"  
+    ( 
     string chrom;       "Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chromosome"
     uint   chromEnd;    "End position in chromosome"
@@ -61,7 +60,7 @@ table bigPsl
     int blockCount;     "Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-  
+
     uint    oChromStart;"Start position in other chromosome"
     uint    oChromEnd;  "End position in other chromosome"
     char[1] oStrand;    "+ or - for other strand"
@@ -70,14 +69,14 @@ table bigPsl
   
     lstring  oSequence;  "Sequence on other chrom (or edit list, or empty)"
     string   oCDS;       "CDS in NCBI format"
-    uint    oBlock;     "Block number on other sequence"
-  
+
+    uint    chromSize;"Size of target chromosome"
+
     uint match;        "Number of bases matched."
     uint misMatch; " Number of bases that don't match "
     uint repMatch; " Number of bases that match but are part of repeats "
     uint nCount;   " Number of 'N' bases "
     )
-  
 </PRE>
 
 <P>Note that the <TT>bedToBigBed</TT> utility uses a substantial amount of 
@@ -87,13 +86,19 @@ uncompressed BED input file.</P>
 <P>
 To create a bigPsl track, follow these steps:<BR>
 
+<pre>
+This needs to be incorporated into the text below
+
+pslToBigPsl  bigPsl.psl stdout -cds=bigPsl.cds -fa=bigPsl.fa  | sort -k1,1 -k2,2n > bigPsl.txt
+</pre>
+
 <OL>
  <LI> Create a <tt>bed12+12</tt> bigPsl format file that has the first twelve fields
   described by a normal BED file as described <A HREF="../../FAQ/FAQformat.html#format1">here</A>.
   (You can also read about PSL <A HREF="../../FAQ/FAQformat.html#format2">here</A>.)  
    <UL>
-    <LI> Your bigPsl file must have the extra eight fields described in the AutoSQL file above:
-    <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, oBlock, match, misMatch, repMatch, nCount </tt> 
+    <LI> Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
+    <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, match, misMatch, repMatch, nCount </tt> 
     <LI> Your bigPsl file must be sorted by chrom then chromStart. You can use
     the UNIX sort command to do this: 
     <TT>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</TT>
@@ -171,7 +176,7 @@ numbering.</p>
 You can also add a parameter in the custom track line,
 <tt>baseColorDefault=genomicCodons</tt>, to set the display of codons:
 <p>
-<tt>browser position chr10:67,884,600-67,884,900<br>
+<tt>browser position chr1:11,874-14,361 <br>
 track type=bigPsl baseColorDefault=genomicCodons name="bigPsl Example Two" description="A bigPsl file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb
 </tt>
 <p>
@@ -185,7 +190,7 @@ on chromosome 10.</p>
 bigPsl input file.
 
 <UL>
- <LI> Save this <tt>bed12+8</tt> <A HREF="examples/bigPsl.txt">bigPsl.txt</A>
+ <LI> Save this <tt>bed12+12</tt> <A HREF="examples/bigPsl.txt">bigPsl.txt</A>
   example input file to your machine (<EM>satisfies above step 1</EM>).
  <LI> Download the <TT>bedToBigBed</TT> <A HREF="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</A>
  (<EM>step 2</EM>).

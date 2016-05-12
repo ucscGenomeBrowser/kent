@@ -26,7 +26,7 @@
 
  	
     The bigChain format describes a pairwise alignment that allow gaps in both sequences simultaneously.  bigChain files are
-<A HREF="chain.html">Chain</A> files indexed as bigBeds are.
+<A HREF="chain.html">Chain</A> files compressed and indexed as a bigBed.
 <p>
 bigChain files are created using the program <TT>bedToBigBed</TT> with a
 special AutoSQL file that defines the fields of the bigChain.   The
@@ -70,6 +70,8 @@ uncompressed BED input file.</P>
 
 <P>
 To create a bigChain track, follow these steps:<BR>
+<pre>
+this commands need to be included in the below text
 
 hgLoadChain -noBin -test hg38 bigChain chr22_KI270731v1_random.hg38.mm10.rbest.chain
  sed 's/.000000//' chain.tab | awk 'BEGIN {OFS="\t"} {print $2, $4, $5, $11, 1000, $8, $3, $6, $7,$9,$10,$1}' > chr22_KI270731v1_random.hg38.mm10.rbest.bigChain

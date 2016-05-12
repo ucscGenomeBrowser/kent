@@ -45,6 +45,8 @@ boolean canIntersect(char *db, char *table)
 {
 if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
+if (! hTableOrSplitExists(db, table))
+    return FALSE;
 if (isBamTable(table))
     return TRUE;
 if (isBigWigTable(table))
@@ -57,9 +59,7 @@ if (isHubTrack(table))
     return TRUE;
 if (sameWord(table, WIKI_TRACK_TABLE))
     return TRUE;
-if (hTableOrSplitExists(db, table))
-    return isPositional(db, table);
-return FALSE;
+return isPositional(db, table);
 }
 
 boolean anyIntersection()

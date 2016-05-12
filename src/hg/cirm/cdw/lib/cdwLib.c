@@ -1390,15 +1390,25 @@ return ret;
 void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *tags)
 /* Fill in many of vf's fields from tags. */
 {
+// Most fields are just taken directly from tags, converted from underbar to camelCased
+// separation conventions.
 vf->format = cloneString(cdwLookupTag(tags, "format"));
 vf->outputType = cloneString(cdwLookupTag(tags, "output_type"));
-vf->experiment = cloneString(cdwLookupTag(tags, "meta"));
 vf->replicate = cloneString(cdwLookupTag(tags, "replicate"));
 vf->enrichedIn = cloneString(cdwLookupTag(tags, "enriched_in"));
 vf->ucscDb = cloneString(cdwLookupTag(tags, "ucsc_db"));
 vf->part = cloneString(cdwLookupTag(tags, "file_part"));
 vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
 vf->lane = cloneString(cdwLookupTag(tags, "lane"));
+
+// Experiment field defaults to same as meta, but sometimes needs to be different.
+// Experiment field drives replicate comparisons.
+char *experiment = cdwLookupTag(tags, "experiment");
+if (isEmpty(experiment))
+    experiment = cdwLookupTag(tags, "meta");
+vf->experiment = cloneString(experiment);
+
+// Make sure we update this routine if we add fields to cdwValidFile
 #if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
