@@ -5665,6 +5665,7 @@ if (!bigBed)
             printf("&nbsp; (range: 1 to 100,000)\n");
         }
     }
+wigOption(cart, name, title, tdb);
 cfgEndBox(boxed);
 }
 
