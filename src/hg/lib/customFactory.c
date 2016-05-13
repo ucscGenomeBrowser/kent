@@ -2190,7 +2190,7 @@ static struct customFactory bigMafFactory =
 /* Factory for bigMaf tracks */
     {
     NULL,
-    "bigPsl",
+    "bigMaf",
     bigMafRecognizer,
     bigBedLoader,
     };
