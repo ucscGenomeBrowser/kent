@@ -1287,7 +1287,7 @@ function installBrowser ()
     echo2
     echo2 To speed up the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
-    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm10 hg19'"'
+    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm9 hg19'"'
     echo2 
     showMyAddress
 }
@@ -1377,7 +1377,7 @@ function downloadGenomes
     echo2 If the assembly is not the default for this organism, you also have to change 
     echo2 the mysql table hgcentral.defaultDb to the correct database for your organism, 
     echo2 e.g. '"mm9"' for Mouse, with a command like
-    echo2 mysql hgcentral -e \''update defaultDb set name="mm10" where genome="Mouse"'\'
+    echo2 mysql hgcentral -e \''update defaultDb set name="mm9" where genome="Mouse"'\'
     echo2 
     echo2 Note that the installation assumes that emails cannot be sent from
     echo2 this machine. New Genome Browser user accounts will not receive confirmation emails.
@@ -1392,7 +1392,7 @@ function downloadGenomes
 function stopMysql
 {
     if [ -f /etc/init.d/mysql ]; then 
-            service mysqld stop
+            service mysql stop
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld stop
     else
@@ -1404,7 +1404,7 @@ function stopMysql
 function startMysql
 {
     if [ -f /etc/init.d/mysql ]; then 
-            service mysqld start
+            service mysql start
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld start
     else
@@ -1544,7 +1544,8 @@ while getopts ":baut:hof" opt; do
           ONLYGENOMES=0
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
-          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene.* --include=refLink.* --include=wgEncodeGencode*V19*.* --include=snp142Common.* --include=rmsk.* --exclude=*"
+          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
+          #RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
