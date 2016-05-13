@@ -1287,7 +1287,7 @@ function installBrowser ()
     echo2
     echo2 To speed up the installation, you need to download genome data to the local
     echo2 disk. To download a genome assembly and all its files now, call this script again with
-    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm9 hg19'"'
+    echo2 the parameters 'download "<assemblyName1> <assemblyName2> ..."', e.g. '"'bash $0 download mm10 hg19'"'
     echo2 
     showMyAddress
 }
@@ -1295,9 +1295,13 @@ function installBrowser ()
 # GENOME DOWNLOAD: mysql and /gbdb
 function downloadGenomes
 {
-    clear
     DBS=$*
+    if [ "$DBS" -eq "" ] ; then
+        echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
+    clear
     echo2
     echo2 Downloading databases $DBS plus hgFixed/proteome/go from the UCSC download server
     echo2
@@ -1377,7 +1381,7 @@ function downloadGenomes
     echo2 If the assembly is not the default for this organism, you also have to change 
     echo2 the mysql table hgcentral.defaultDb to the correct database for your organism, 
     echo2 e.g. '"mm9"' for Mouse, with a command like
-    echo2 mysql hgcentral -e \''update defaultDb set name="mm9" where genome="Mouse"'\'
+    echo2 mysql hgcentral -e \''update defaultDb set name="mm10" where genome="Mouse"'\'
     echo2 
     echo2 Note that the installation assumes that emails cannot be sent from
     echo2 this machine. New Genome Browser user accounts will not receive confirmation emails.
@@ -1416,9 +1420,13 @@ function startMysql
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
 {
-    clear
     DBS=$*
+    if [ "$DBS" -eq "" ] ; then
+        echo2 Argument error: the '"minimal"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
+    clear
     echo2
     echo2 Downloading minimal tables for databases $DBS 
 
@@ -1545,7 +1553,6 @@ while getopts ":baut:hof" opt; do
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
           RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
-          #RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
