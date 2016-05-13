@@ -137,7 +137,7 @@ set ensGeneWgs choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,g
 set ensGeneScaffold choHof1,dasNov2,dipOrd1,echTel1,echTel2,eriEur1,eriEur2,felCat3,gadMor1,micMur1,ochPri2,ochPri3,otoGar1,proCap1,pteVam1,sorAra1,sorAra2,speTri1,tarSyr1,tupBel1,turTru1,vicPac1,vicPac2
 
 # Define organism databases for which we host the ncbiRefSeq genes
-set ncbiRefSeq galVar1,hg38,micMur2,mm10,panPan2,panManBai1,rouAeg1
+set ncbiRefSeq galGal5,galVar1,hg38,micMur2,mm10,panPan2,panManBai1,rouAeg1
 
 # Define organism databases for which we host the vegaGenes
 set vegaGeneDbs hg18,hg19,hg38,mm9,mm10
