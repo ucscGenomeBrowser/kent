@@ -18,13 +18,13 @@ exceeds the current maximum size of a single Amazon EBS volume.
 Run this script as root, like this:
 
     sudo -i
-    wget https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserSetup.sh
+    wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
     bash browserSetup.sh install
 
 If you do not have wget installed, use curl instead:
 
     sudo -i
-    curl https://raw.githubusercontent.com/maximilianh/browserInstall/master/browserSetup.sh > browserSetup.sh
+    curl https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
     bash browserSetup.sh install
 
 The script then downloads the CGIs and sets up the central Mysql database. All
@@ -33,7 +33,7 @@ batch mode option is specified).
 
 In particular, Mysql and Apache are installed and setup with the right package
 manager (yum or apt-get or port). A default random password is set for the
-Mysql root user and added to the ~/.my.cnf file of the Unix root account.  1.
+Mysql root user and added to the ~/.my.cnf file of the Unix root account. 
 If you already have setup Mysql, you would need to create to create the file
 ~/.my.cnf, the script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
