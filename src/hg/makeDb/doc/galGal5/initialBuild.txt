@@ -7,7 +7,7 @@
 #  Can use existing photograph (otherwise find one before starting here)
 
 #########################################################################
-#  Initial steps, find photograph (TBD - 2016-04-12 - Hiram)
+#  Initial steps, find photograph (DONE - 2016-04-12 - Hiram)
 
 # To start this initialBuild.txt document, from a previous assembly document:
 
@@ -424,31 +424,43 @@ searchPriority 8
     # 1061810183 bases of 3236224332 (32.810%) in intersection
 
 ##########################################################################
-# cpgIslands - (TBD - 2016-02-04 - Hiram)
+# cpgIslands - (DONE - 2016-04-14 - Hiram)
     mkdir /hive/data/genomes/galGal5/bed/cpgIslands
     cd /hive/data/genomes/galGal5/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku galGal5) > do.log 2>&1
-XXX - running - Thu Apr 14 16:04:40 PDT 2016
-    # real    45m39.560s
+    # real    8m27.957s
 
     cat fb.galGal5.cpgIslandExt.txt
-    # 21989740 bases of 3142093174 (0.700%) in intersection
+    # 18599973 bases of 1218501075 (1.526%) in intersection
 
 ##############################################################################
-# genscan - (TBD - 2016-02-04 - Hiram)
+# genscan - (DONE - 2016-04-14,05-13 - Hiram)
     mkdir /hive/data/genomes/galGal5/bed/genscan
     cd /hive/data/genomes/galGal5/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku galGal5) > do.log 2>&1
-XXX - running - Thu Apr 14 16:04:40 PDT 2016
-    # real    65m53.319s
+    # real    84m26.041s
+# Completed: 23472 of 23475 jobs
+# Crashed: 3 jobs
+# CPU time in finished jobs:      42682s     711.36m    11.86h    0.49d  0.001 y
+# IO & Wait Time:                 60750s    1012.50m    16.88h    0.70d  0.002 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:            6418s     106.97m     1.78h    0.07d
+# Submission to last job:          7582s     126.37m     2.11h    0.09d
+    # three jobs needed to be completed with window=2000000
+    #  real    28m9.007s
+
+    # continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku galGal5) > makeBed.log 2>&1
+    # real    3m28.728s
 
     cat fb.galGal5.genscan.txt
-    # 54559229 bases of 3142093174 (1.736%) in intersection
+    # 27936393 bases of 1218501075 (2.293%) in intersection
 
     cat fb.galGal5.genscanSubopt.txt
-    # 52580737 bases of 3142093174 (1.673%) in intersection
+    # 28748140 bases of 1218501075 (2.359%) in intersection
 
 #########################################################################
 # Create kluster run files (DONE - 2016-04-14 - Hiram)
@@ -482,7 +494,7 @@ XXX - running - Thu Apr 14 16:04:40 PDT 2016
         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-04-15,19 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2016-04-15,19 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -560,6 +572,40 @@ galGal5.downloadDir = galGal5
     # 25248650 bases of 100286401 (25.177%) in intersection
 
 #########################################################################
+# ncbiRefSeq (DONE - 2016-05-13 - Hiram)
+
+    mkdir /hive/data/genomes/galGal5/bed/ncbiRefSeq
+    cd /hive/data/genomes/galGal5/bed/ncbiRefSeq
+    # running step wise as this script is still under development
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=download -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 galGal5) > download.log 2>&1
+    # real    16m29.536s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=process -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=process -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 galGal5) > process.log 2>&1
+    # real    3m58.858s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl -buildDir=`pwd` \
+      -continue=load -bigClusterHub=ku -dbHost=hgwdev \
+      -stop=load -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+      refseq vertebrate_other Gallus_gallus \
+      GCF_000002315.4_Gallus_gallus-5.0 galGal5) > load.log 2>&1
+    # real    0m33.205s
+
+    cat fb.ncbiRefSeq.galGal5.txt
+    #  82563006 bases of 1218501075 (6.776%) in intersection
+
+    featureBits -enrichment galGal5 refGene ncbiRefSeq 
+    # refGene 1.181%, ncbiRefSeq 6.776%, both 1.175%, cover 99.49%,
+    #    enrich 14.68x
+
+#########################################################################
 # LIFTOVER TO galGal4 (DONE - 2016-04-15 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/galGal5/bed/blat.galGal4.2016-04-15
@@ -589,13 +635,15 @@ galGal5.downloadDir = galGal5
     #	test it with some sequence
 
 ############################################################################
-## reset default position to galGal4 position (TBD - 2016-02-09 - Hiram)
+## reset default position to MEPE gene (egg shell protein)
+##  (DONE - 2016-05-13 - Hiram)
+
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="chr14:63580522-63594072"
+    hgsql -e 'update dbDb set defaultPos="chr4:45985744-45991655"
 	where name="galGal5";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2016-05-13 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=galGal5 -tableCoverage all.joiner
@@ -609,7 +657,13 @@ galGal5.downloadDir = galGal5
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/galGal5/pushQ
     cd /hive/data/genomes/galGal5/pushQ
-    time makePushQSql.pl galGal5 > galGal5.pushQ.sql 2> stderr.out
+    time (makePushQSql.pl galGal5) > galGal5.pushQ.sql 2> stderr.out
+    #  real    7m21.629s
+
+   71 galGal5.pushQ.sql
+   43 stderr.out
+  114 total
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/galGal5/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/galGal5/wib/quality.wib
@@ -623,5 +677,47 @@ galGal5.downloadDir = galGal5
 
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
+
+#########################################################################
+# UCSC to RefSeq name correspondence (DONE - 2016-05-12 - Hiram)
+
+    mkdir /hive/data/genomes/galGal5/bed/ucscToRefSeq
+    cd /hive/data/genomes/galGal5/bed/ucscToRefSeq
+
+    ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_other/Gallus_gallus/all_assembly_versions/GCF_000002315.4_Gallus_gallus-5.0/GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt .
+
+    # this assembly_report has "UCSC-style-name" in column 10
+    # but it does not name anything, they are all "na"
+
+    # columns 5 and 7 are the INSDC and RefSeq names
+    # chrMT fixup in the sed
+    grep -v "^#" GCF_000002315.4_Gallus_gallus-5.0_assembly_report.txt \
+      | awk -F'\t' '{printf "%s\t%s\n", $5,$7}' |
+        sed -e 's/^na/NC_001323.1/;' | sort > insdc.refSeq.tab
+
+    # the sed fixes chrM since it doesn't have an INSDC name
+    hgsql -N -e 'select name,chrom,chromStart,chromEnd from ucscToINSDC;' \
+      galGal5 | sed -e 's/notAvailable/NC_001323.1/;' | sort  > insdc.ucsc.tab
+
+    join insdc.ucsc.tab insdc.refSeq.tab | tr '[ ]' '[\t]' \
+       | cut -f2- > ucsc.refSeq.tab
+
+    # when working perfectly, all these tab files have the same line count:
+    wc -l *.tab
+#   23475 insdc.refSeq.tab
+#   23475 insdc.ucsc.tab
+#   23474 ucsc.refSeq.tab
+
+    export chrSize=`cut -f1 ucsc.refSeq.tab | awk '{print length($0)}' | sort -n | tail -1`
+    echo $chrSize
+    #  27
+    sed -e "s/21/$chrSize/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab galGal5 ucscToRefSeq ./ucscToRefSeq.sql ucsc.refSeq.tab
+
+    checkTableCoords  galGal5 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps galGal5 ucscToRefSeq
+    # 1230258557 bases of 1230258557 (100.000%) in intersection
 
 #########################################################################
