@@ -4824,6 +4824,11 @@ if (boxed)
 void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb)
 /* let the user choose to see the track in wiggle mode */
 {
+char *canDoCoverage = cfgOptionEnvDefault("HGDB_CAN_DO_COVERAGE",
+                CanDoCoverageConfVariable, "off");
+if (differentString(canDoCoverage, "on"))
+    return;
+
 printf("<BR><BR><B>Display data as a density graph:</B> ");
 char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
