@@ -589,3 +589,20 @@ done
     #	31064 gene predictions
 
 ###############################################################################
+# LIFTOVER TO ce11 (DONE - 2016-05-04 - Hiram )
+    mkdir /hive/data/genomes/ce8/bed/blat.ce11.2016-05-04
+    cd /hive/data/genomes/ce8/bed/blat.ce11.2016-05-04
+    # -debug run to create run dir, preview scripts...
+    $HOME/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce8/jkStuff/ce8.11.ooc -debug ce8 ce11
+    # Real run:
+    time ($HOME/kent/src/hg/utils/automation/doSameSpeciesLiftOver.pl \
+	-buildDir=`pwd` \
+	-bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+	-ooc=/hive/data/genomes/ce8/jkStuff/ce8.11.ooc ce8 ce11) > do.log 2>&1
+    #  real    17m23.343s
+    # verify it works on genome-test
+
+#############################################################################
