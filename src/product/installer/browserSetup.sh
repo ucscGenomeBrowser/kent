@@ -1329,9 +1329,11 @@ function downloadGenomes
     echo2
     df -h  | awk '{print "| "$0}'
     echo2 
-    echo2 If your current disk space is not sufficient, you can mount
-    echo2 'network storage servers (e.g. NFS) or add cloud provider storage'
+    echo2 If your current disk space is not sufficient, you can press ctrl-c now and 
+    echo2 use a 'network storage server volume (e.g. NFS) or add cloud provider storage'
     echo2 '(e.g. Openstack Cinder Volumes, Amazon EBS, Azure Storage)'
+    echo2 Please refer to the documentation of your cloud provider or storage
+    echo2 system on how to add more storage to this machine.
     echo2
     echo2 When you are done with the mount:
     echo2 Move the contents of $GBDBDIR and $MYSQLDIR onto these volumes and
@@ -1342,7 +1344,7 @@ function downloadGenomes
     echo2 "    mv /var/lib/mysql /bigData/mysql && ln -s /bigData/mysql /var/lib/mysql"
     echo2
     echo2 You can interrupt this script with CTRL-C now, add more space and rerun the 
-    echo2 script later with the same parameters.
+    echo2 script later with the same parameters to start the download.
     echo2
     waitKey
 
