@@ -284,18 +284,19 @@ return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
-// Show downloads, schema and metadata links where appropriate
+// Show metadata, and downloads, schema links where appropriate
 {
+boolean hasMetadata = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
+                  && metadataForTable(db, tdb, NULL) != NULL);
+if (hasMetadata)
+    printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
+
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
-boolean metadataLink = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
-                  && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 int links = 0;
 if (schemaLink)
-    links++;
-if (metadataLink)
     links++;
 if (downloadLink)
     links++;
@@ -308,7 +309,7 @@ if (links > 1)
 if (schemaLink)
     {
     makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
-    if (downloadLink || metadataLink)
+    if (downloadLink)
         printf(", ");
     }
 if (downloadLink)
@@ -326,11 +327,7 @@ if (downloadLink)
 
     makeNamedDownloadsLink(targetDb, tdb, (links > 1 ? "downloads":"Downloads"));
     freez(&targetDb);
-    if (metadataLink)
-        printf(",");
     }
-if (metadataLink)
-    printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
 
 if (links > 1)
     printf("</td></tr></table>");
