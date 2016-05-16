@@ -1556,6 +1556,13 @@ if (geoMirrorEnabled())
         printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
         }
     }
+/* Validate login cookies if login is enabled */
+if (loginSystemEnabled())
+    {
+    char *loginCookieString = loginSystemValidateCookies();
+    if (loginCookieString)
+        printf("Set-Cookie: %s", loginCookieString);
+    }
 }
 
 struct cart *cartForSession(char *cookieName, char **exclude,
