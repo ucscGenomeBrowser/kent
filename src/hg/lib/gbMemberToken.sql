@@ -8,6 +8,7 @@ CREATE TABLE gbMemberToken (
     token int unsigned not null,	# Random nonzero number
     userName varchar(255) not null,	# Name used to login in hgLogin
     createTime varchar(255) not null,	# Date and time at which token was created
+    validUntil varchar(255) not null,	# Date and time until which token will be removed from table, NULL: do not remove
               #Indices
     PRIMARY KEY(token)
 );
