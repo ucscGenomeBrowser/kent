@@ -1,0 +1,414 @@
+    track gtexRnaSignalSRR1090022
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1090022.hg38.bigWig
+    shortLabel smallInte F WEY5
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-WEY5-1526-SM-4LMJF)
+    subGroups age=a40 tissue=smallIntestine donor=GTEXWEY5
+    color 227,184,136
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-1526-SM-4LMJF \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.1 batch=BP-27495 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1099881
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1099881.hg38.bigWig
+    shortLabel smallInte F XUZC
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-XUZC-1426-SM-4BRV3)
+    subGroups age=a30 tissue=smallIntestine donor=GTEXXUZC
+    color 227,184,136
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-1426-SM-4BRV3 \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.7 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalSRR1319059
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1319059.hg38.bigWig
+    shortLabel smallInte F 1399S
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-1399S-2026-SM-5KM4B)
+    subGroups age=a30 tissue=smallIntestine donor=GTEX1399S
+    color 227,184,136
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-2026-SM-5KM4B \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1330371
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1330371.hg38.bigWig
+    shortLabel smallInte F 145ME
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-145ME-0926-SM-5O9AR)
+    subGroups age=a40 tissue=smallIntestine donor=GTEX145ME
+    color 227,184,136
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-0926-SM-5O9AR \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.4 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1338402
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1338402.hg38.bigWig
+    shortLabel smallInte F WRHK
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-WRHK-1026-SM-4MVOD)
+    subGroups age=a20 tissue=smallIntestine donor=GTEXWRHK
+    color 227,184,136
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-1026-SM-4MVOD \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7 batch=BP-28357 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR1358803
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1358803.hg38.bigWig
+    shortLabel smallInte F ZTPG
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZTPG-2626-SM-57WFX)
+    subGroups age=a20 tissue=smallIntestine donor=GTEXZTPG
+    color 227,184,136
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-2626-SM-57WFX \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1359587
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1359587.hg38.bigWig
+    shortLabel smallInte F 11VI4
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-11VI4-1626-SM-5EQKO)
+    subGroups age=a40 tissue=smallIntestine donor=GTEX11VI4
+    color 227,184,136
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-1626-SM-5EQKO \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1378199
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1378199.hg38.bigWig
+    shortLabel smallInte F 133LE
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-133LE-1426-SM-5IFH1)
+    subGroups age=a20 tissue=smallIntestine donor=GTEX133LE
+    color 227,184,136
+    metadata donor=GTEX-133LE age=20 sex=F hardyScore=0 sample=GTEX-133LE-1426-SM-5IFH1 \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=6.6 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1418105
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1418105.hg38.bigWig
+    shortLabel smallInte F 11XUK
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-11XUK-1426-SM-5EQMG)
+    subGroups age=a40 tissue=smallIntestine donor=GTEX11XUK
+    color 227,184,136
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-1426-SM-5EQMG \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.7 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1435460
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1435460.hg38.bigWig
+    shortLabel smallInte F ZP4G
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZP4G-1626-SM-57WGD)
+    subGroups age=a20 tissue=smallIntestine donor=GTEXZP4G
+    color 227,184,136
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-1626-SM-57WGD \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.4 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1440832
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1440832.hg38.bigWig
+    shortLabel smallInte F ZC5H
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZC5H-2326-SM-4WAYT)
+    subGroups age=a40 tissue=smallIntestine donor=GTEXZC5H
+    color 227,184,136
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-2326-SM-4WAYT \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=7.2 batch=BP-42024 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1442966
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1442966.hg38.bigWig
+    shortLabel smallInte F 13QBU
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13QBU-1926-SM-5IJEW)
+    subGroups age=a40 tissue=smallIntestine donor=GTEX13QBU
+    color 227,184,136
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-1926-SM-5IJEW \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=6.9 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1445170
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1445170.hg38.bigWig
+    shortLabel smallInte F Y5LM
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-Y5LM-1626-SM-4VDTB)
+    subGroups age=a40 tissue=smallIntestine donor=GTEXY5LM
+    color 227,184,136
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-1626-SM-4VDTB \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=8.6 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1455346
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1455346.hg38.bigWig
+    shortLabel smallInte F ZPIC
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZPIC-2326-SM-57WDW)
+    subGroups age=a40 tissue=smallIntestine donor=GTEXZPIC
+    color 227,184,136
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-2326-SM-57WDW \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=7.5 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1489670
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1489670.hg38.bigWig
+    shortLabel smallInte F 12WSK
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-12WSK-1526-SM-5CVNO)
+    subGroups age=a40 tissue=smallIntestine donor=GTEX12WSK
+    color 227,184,136
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-1526-SM-5CVNO \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=6 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1319301
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1319301.hg38.bigWig
+    shortLabel smallInte F 13D11
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13D11-0726-SM-5LZZB)
+    subGroups age=a50 tissue=smallIntestine donor=GTEX13D11
+    color 227,184,136
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-0726-SM-5LZZB \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.7 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1351907
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1351907.hg38.bigWig
+    shortLabel smallInte F Y3IK
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-Y3IK-1726-SM-4YCCR)
+    subGroups age=a50 tissue=smallIntestine donor=GTEXY3IK
+    color 227,184,136
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-1726-SM-4YCCR \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=6.4 batch=BP-35803 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSRR1360321
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1360321.hg38.bigWig
+    shortLabel smallInte F 13FH7
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13FH7-1226-SM-5IJFK)
+    subGroups age=a50 tissue=smallIntestine donor=GTEX13FH7
+    color 227,184,136
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-1226-SM-5IJFK \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.1 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1361391
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1361391.hg38.bigWig
+    shortLabel smallInte F X15G
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-X15G-1426-SM-4PQZK)
+    subGroups age=a50 tissue=smallIntestine donor=GTEXX15G
+    color 227,184,136
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-1426-SM-4PQZK \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.6 batch=BP-30509 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1398430
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1398430.hg38.bigWig
+    shortLabel smallInte F Y114
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-Y114-1426-SM-4TT6W)
+    subGroups age=a50 tissue=smallIntestine donor=GTEXY114
+    color 227,184,136
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-1426-SM-4TT6W \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.4 batch=BP-35206 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSRR1413119
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1413119.hg38.bigWig
+    shortLabel smallInte F 131XG
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-131XG-1726-SM-5LZUR)
+    subGroups age=a50 tissue=smallIntestine donor=GTEX131XG
+    color 227,184,136
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-1726-SM-5LZUR \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=7.5 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1416819
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1416819.hg38.bigWig
+    shortLabel smallInte F ZVT2
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZVT2-2126-SM-5NQ93)
+    subGroups age=a50 tissue=smallIntestine donor=GTEXZVT2
+    color 227,184,136
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-2126-SM-5NQ93 \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.4 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1436904
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1436904.hg38.bigWig
+    shortLabel smallInte F 1399U
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-1399U-2126-SM-5IFEZ)
+    subGroups age=a50 tissue=smallIntestine donor=GTEX1399U
+    color 227,184,136
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-2126-SM-5IFEZ \
+            tissue=smallIntestine autolysisScore=2 rnaIntegrity=7.1 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1456469
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1456469.hg38.bigWig
+    shortLabel smallInte F ZF2S
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZF2S-1726-SM-57WFT)
+    subGroups age=a50 tissue=smallIntestine donor=GTEXZF2S
+    color 227,184,136
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-1726-SM-57WFT \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.3 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1489839
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1489839.hg38.bigWig
+    shortLabel smallInte F 11I78
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-11I78-1126-SM-5A5K5)
+    subGroups age=a50 tissue=smallIntestine donor=GTEX11I78
+    color 227,184,136
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-1126-SM-5A5K5 \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=6.6 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1337749
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1337749.hg38.bigWig
+    shortLabel smallInte F 13PL7
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13PL7-2626-SM-5IFH4)
+    subGroups age=a60 tissue=smallIntestine donor=GTEX13PL7
+    color 227,184,136
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-2626-SM-5IFH4 \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.1 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1337930
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1337930.hg38.bigWig
+    shortLabel smallInte F ZPCL
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZPCL-1726-SM-57WEO)
+    subGroups age=a60 tissue=smallIntestine donor=GTEXZPCL
+    color 227,184,136
+    metadata donor=GTEX-ZPCL age=60 sex=F hardyScore=0 sample=GTEX-ZPCL-1726-SM-57WEO \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.4 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1365655
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1365655.hg38.bigWig
+    shortLabel smallInte F ZF29
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZF29-1626-SM-4WKFJ)
+    subGroups age=a60 tissue=smallIntestine donor=GTEXZF29
+    color 227,184,136
+
+    track gtexRnaSignalSRR1366412
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1366412.hg38.bigWig
+    shortLabel smallInte F 13OVI
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13OVI-1926-SM-5IJCG)
+    subGroups age=a60 tissue=smallIntestine donor=GTEX13OVI
+    color 227,184,136
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-1926-SM-5IJCG \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=6.6 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1387745
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1387745.hg38.bigWig
+    shortLabel smallInte F Y5V5
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-Y5V5-1826-SM-4VDS5)
+    subGroups age=a60 tissue=smallIntestine donor=GTEXY5V5
+    color 227,184,136
+
+    track gtexRnaSignalSRR1387787
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1387787.hg38.bigWig
+    shortLabel smallInte F 13113
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13113-1226-SM-5EGHT)
+    subGroups age=a60 tissue=smallIntestine donor=GTEX13113
+    color 227,184,136
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-1226-SM-5EGHT \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=8.1 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1416538
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1416538.hg38.bigWig
+    shortLabel smallInte F 11DXX
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-11DXX-1626-SM-5H11H)
+    subGroups age=a60 tissue=smallIntestine donor=GTEX11DXX
+    color 227,184,136
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-1626-SM-5H11H \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.3 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1448203
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1448203.hg38.bigWig
+    shortLabel smallInte F ZYFG
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZYFG-2026-SM-5E43Y)
+    subGroups age=a60 tissue=smallIntestine donor=GTEXZYFG
+    color 227,184,136
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-2026-SM-5E43Y \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.9 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1454225
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1454225.hg38.bigWig
+    shortLabel smallInte F ZLV1
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-ZLV1-1126-SM-4WWBW)
+    subGroups age=a60 tissue=smallIntestine donor=GTEXZLV1
+    color 227,184,136
+    metadata donor=GTEX-ZLV1 age=60 sex=F hardyScore=0 sample=GTEX-ZLV1-1126-SM-4WWBW \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=7.1 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1470834
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl smallIntestine/gtexRnaSignalSRR1470834.hg38.bigWig
+    shortLabel smallInte F 13CF3
+    longLabel GTEx RNA signal from female Small Intestine - Terminal Ileum (GTEX-13CF3-1226-SM-5LZXN)
+    subGroups age=a60 tissue=smallIntestine donor=GTEX13CF3
+    color 227,184,136
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-1226-SM-5LZXN \
+            tissue=smallIntestine autolysisScore=1 rnaIntegrity=6.6 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+

@@ -1030,7 +1030,7 @@ TMPDIR=/dev/shm' > DEF
     # real    7m59.071s
 
 #########################################################################
-# cloneEnds (WORKING - 2016-05-26 - Hiram)
+# cloneEnds (DONE - 2016-05-26 - Hiram)
 
     mkdir /hive/data/genomes/rn6/bed/cloneEnds
     cd /hive/data/genomes/rn6/bed/cloneEnds

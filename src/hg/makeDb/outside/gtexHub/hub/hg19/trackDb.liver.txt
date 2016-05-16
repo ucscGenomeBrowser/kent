@@ -1,0 +1,1239 @@
+    track gtexRnaSignalLiverSRR1089446
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1089446.hg19.bigWig
+    shortLabel liver F UPIC
+    longLabel GTEx RNA signal from female Liver (GTEX-UPIC-0926-SM-4IHLV)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-0926-SM-4IHLV \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-26354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/18/2012
+
+    track gtexRnaSignalLiverSRR1098737
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1098737.hg19.bigWig
+    shortLabel liver F Q2AG
+    longLabel GTEx RNA signal from female Liver (GTEX-Q2AG-1126-SM-48U1P)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-1126-SM-48U1P \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-19901 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2011
+
+    track gtexRnaSignalLiverSRR1350239
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1350239.hg19.bigWig
+    shortLabel liver F WYVS
+    longLabel GTEx RNA signal from female Liver (GTEX-WYVS-1926-SM-4SOIC)
+    subGroups sex=F age=a40 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1436228
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1436228.hg19.bigWig
+    shortLabel liver F YFC4
+    longLabel GTEx RNA signal from female Liver (GTEX-YFC4-1526-SM-5IFJS)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-1526-SM-5IFJS \
+            tissue=liver autolysisScore=2 rnaIntegrity=6 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLiverSRR1440467
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1440467.hg19.bigWig
+    shortLabel liver F Y5LM
+    longLabel GTEx RNA signal from female Liver (GTEX-Y5LM-0426-SM-4VBRO)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0426-SM-4VBRO \
+            tissue=liver autolysisScore=1 rnaIntegrity=9.8 batch=BP-35803 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalLiverSRR1455653
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1455653.hg19.bigWig
+    shortLabel liver F ZTPG
+    longLabel GTEx RNA signal from female Liver (GTEX-ZTPG-1426-SM-51MT3)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-1426-SM-51MT3 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.8 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalLiverSRR815711
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR815711.hg19.bigWig
+    shortLabel liver F P78B
+    longLabel GTEx RNA signal from female Liver (GTEX-P78B-1326-SM-3P611)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-P78B age=40 sex=F hardyScore=-1 sample=GTEX-P78B-1326-SM-3P611 \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.8 batch=BP-19089 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2011
+
+    track gtexRnaSignalLiverSRR1080294
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1080294.hg19.bigWig
+    shortLabel liver F S32W
+    longLabel GTEx RNA signal from female Liver (GTEX-S32W-1926-SM-4AD63)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1926-SM-4AD63 \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.3 batch=BP-22720 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalLiverSRR1090095
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1090095.hg19.bigWig
+    shortLabel liver F RNOR
+    longLabel GTEx RNA signal from female Liver (GTEX-RNOR-1426-SM-48FDJ)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-1426-SM-48FDJ \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-21627 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/20/2012
+
+    track gtexRnaSignalLiverSRR1090556
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1090556.hg19.bigWig
+    shortLabel liver F RU72
+    longLabel GTEx RNA signal from female Liver (GTEX-RU72-1426-SM-46MUF)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-1426-SM-46MUF \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-21838 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/26/2012
+
+    track gtexRnaSignalLiverSRR1317554
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1317554.hg19.bigWig
+    shortLabel liver F 132AR
+    longLabel GTEx RNA signal from female Liver (GTEX-132AR-0426-SM-5IFH8)
+    subGroups sex=F age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1346734
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1346734.hg19.bigWig
+    shortLabel liver F 13OVJ
+    longLabel GTEx RNA signal from female Liver (GTEX-13OVJ-1026-SM-5IFGI)
+    subGroups sex=F age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1376852
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1376852.hg19.bigWig
+    shortLabel liver F 11ZVC
+    longLabel GTEx RNA signal from female Liver (GTEX-11ZVC-0726-SM-5FQT9)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-11ZVC age=50 sex=F hardyScore=2 sample=GTEX-11ZVC-0726-SM-5FQT9 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLiverSRR1388214
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1388214.hg19.bigWig
+    shortLabel liver F 13SLX
+    longLabel GTEx RNA signal from female Liver (GTEX-13SLX-1226-SM-5S2Q6)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-1226-SM-5S2Q6 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.1 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalLiverSRR1433476
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1433476.hg19.bigWig
+    shortLabel liver F 13N11
+    longLabel GTEx RNA signal from female Liver (GTEX-13N11-0926-SM-5IJG2)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-0926-SM-5IJG2 \
+            tissue=liver autolysisScore=0 rnaIntegrity=8.8 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLiverSRR1470751
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1470751.hg19.bigWig
+    shortLabel liver F ZVT4
+    longLabel GTEx RNA signal from female Liver (GTEX-ZVT4-0626-SM-5E45T)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZVT4 age=50 sex=F hardyScore=3 sample=GTEX-ZVT4-0626-SM-5E45T \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.9 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLiverSRR1472012
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1472012.hg19.bigWig
+    shortLabel liver F 14A5I
+    longLabel GTEx RNA signal from female Liver (GTEX-14A5I-1726-SM-5QGQ5)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-14A5I age=50 sex=F hardyScore=4 sample=GTEX-14A5I-1726-SM-5QGQ5 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalLiverSRR1489757
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1489757.hg19.bigWig
+    shortLabel liver F ZF2S
+    longLabel GTEx RNA signal from female Liver (GTEX-ZF2S-3026-SM-4WWCH)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-3026-SM-4WWCH \
+            tissue=liver autolysisScore=1 rnaIntegrity=9.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalLiverSRR1499395
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1499395.hg19.bigWig
+    shortLabel liver F ZZPU
+    longLabel GTEx RNA signal from female Liver (GTEX-ZZPU-0426-SM-5GZYH)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-0426-SM-5GZYH \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.8 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalLiverSRR1083983
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1083983.hg19.bigWig
+    shortLabel liver F RTLS
+    longLabel GTEx RNA signal from female Liver (GTEX-RTLS-1326-SM-46MUN)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-1326-SM-46MUN \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.6 batch=BP-21804 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/25/2012
+
+    track gtexRnaSignalLiverSRR1321877
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1321877.hg19.bigWig
+    shortLabel liver F 13PVR
+    longLabel GTEx RNA signal from female Liver (GTEX-13PVR-0126-SM-5S2PY)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-0126-SM-5S2PY \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.7 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalLiverSRR1325290
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1325290.hg19.bigWig
+    shortLabel liver F 13QJC
+    longLabel GTEx RNA signal from female Liver (GTEX-13QJC-0726-SM-5RQJK)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0726-SM-5RQJK \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLiverSRR1334866
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1334866.hg19.bigWig
+    shortLabel liver F 13113
+    longLabel GTEx RNA signal from female Liver (GTEX-13113-1326-SM-5GCOI)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-1326-SM-5GCOI \
+            tissue=liver autolysisScore=1 rnaIntegrity=7 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLiverSRR1345244
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1345244.hg19.bigWig
+    shortLabel liver F ZF29
+    longLabel GTEx RNA signal from female Liver (GTEX-ZF29-2026-SM-4WWB7)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-ZF29 age=60 sex=F hardyScore=0 sample=GTEX-ZF29-2026-SM-4WWB7 \
+            tissue=liver autolysisScore=0 rnaIntegrity=9.1 batch=BP-43072 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/04/2013
+
+    track gtexRnaSignalLiverSRR1349320
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1349320.hg19.bigWig
+    shortLabel liver F ZYY3
+    longLabel GTEx RNA signal from female Liver (GTEX-ZYY3-0626-SM-5NQ6W)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-ZYY3 age=60 sex=F hardyScore=4 sample=GTEX-ZYY3-0626-SM-5NQ6W \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.7 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalLiverSRR1376830
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1376830.hg19.bigWig
+    shortLabel liver F 11ZTS
+    longLabel GTEx RNA signal from female Liver (GTEX-11ZTS-1426-SM-5EQMM)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-1426-SM-5EQMM \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.1 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalLiverSRR1414637
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1414637.hg19.bigWig
+    shortLabel liver F X4EP
+    longLabel GTEx RNA signal from female Liver (GTEX-X4EP-1026-SM-4QAS5)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-1026-SM-4QAS5 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.7 batch=BP-30509 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalLiverSRR1414792
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1414792.hg19.bigWig
+    shortLabel liver F 131YS
+    longLabel GTEx RNA signal from female Liver (GTEX-131YS-1626-SM-5HL6C)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-1626-SM-5HL6C \
+            tissue=liver autolysisScore=1 rnaIntegrity=6 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLiverSRR1431248
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1431248.hg19.bigWig
+    shortLabel liver F 1269C
+    longLabel GTEx RNA signal from female Liver (GTEX-1269C-0626-SM-5FQSS)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1269C age=60 sex=F hardyScore=2 sample=GTEX-1269C-0626-SM-5FQSS \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.2 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalLiverSRR1455878
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1455878.hg19.bigWig
+    shortLabel liver F Y5V5
+    longLabel GTEx RNA signal from female Liver (GTEX-Y5V5-0926-SM-4VBPZ)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-0926-SM-4VBPZ \
+            tissue=liver autolysisScore=1 rnaIntegrity=7 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalLiverSRR1485438
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1485438.hg19.bigWig
+    shortLabel liver F 13O3O
+    longLabel GTEx RNA signal from female Liver (GTEX-13O3O-1826-SM-5IFGW)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-1826-SM-5IFGW \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.5 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalLiverSRR1490546
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1490546.hg19.bigWig
+    shortLabel liver F ZVT3
+    longLabel GTEx RNA signal from female Liver (GTEX-ZVT3-1626-SM-5GU66)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-1626-SM-5GU66 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6 batch=BP-43823 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalLiverSRR1069141
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1069141.hg19.bigWig
+    shortLabel liver M U8XE
+    longLabel GTEx RNA signal from male Liver (GTEX-U8XE-1526-SM-4E3HT)
+    subGroups sex=M age=a30 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1073435
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1073435.hg19.bigWig
+    shortLabel liver M S33H
+    longLabel GTEx RNA signal from male Liver (GTEX-S33H-1626-SM-4AD68)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-1626-SM-4AD68 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.6 batch=BP-22722 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalLiverSRR1080117
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1080117.hg19.bigWig
+    shortLabel liver M WFON
+    longLabel GTEx RNA signal from male Liver (GTEX-WFON-1726-SM-4LVMQ)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-1726-SM-4LVMQ \
+            tissue=liver autolysisScore=1 rnaIntegrity=8 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalLiverSRR1082151
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1082151.hg19.bigWig
+    shortLabel liver M RWSA
+    longLabel GTEx RNA signal from male Liver (GTEX-RWSA-1426-SM-47JXA)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-RWSA age=40 sex=M hardyScore=1 sample=GTEX-RWSA-1426-SM-47JXA \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.4 batch=BP-22527 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2012
+
+    track gtexRnaSignalLiverSRR1310433
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1310433.hg19.bigWig
+    shortLabel liver M 11TT1
+    longLabel GTEx RNA signal from male Liver (GTEX-11TT1-1726-SM-5EQLJ)
+    subGroups sex=M age=a20 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1322312
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1322312.hg19.bigWig
+    shortLabel liver M 11ZUS
+    longLabel GTEx RNA signal from male Liver (GTEX-11ZUS-2526-SM-59872)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-2526-SM-59872 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.7 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalLiverSRR1335236
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1335236.hg19.bigWig
+    shortLabel liver M 144GM
+    longLabel GTEx RNA signal from male Liver (GTEX-144GM-1326-SM-5LU5E)
+    subGroups sex=M age=a20 
+    color 227,184,136
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-1326-SM-5LU5E \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.3 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLiverSRR1338103
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1338103.hg19.bigWig
+    shortLabel liver M 13NZB
+    longLabel GTEx RNA signal from male Liver (GTEX-13NZB-0626-SM-5IFH6)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-0626-SM-5IFH6 \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.9 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLiverSRR1349409
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1349409.hg19.bigWig
+    shortLabel liver M WZTO
+    longLabel GTEx RNA signal from male Liver (GTEX-WZTO-0626-SM-4PQYY)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0626-SM-4PQYY \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.4 batch=BP-29831 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalLiverSRR1349479
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1349479.hg19.bigWig
+    shortLabel liver M YB5E
+    longLabel GTEx RNA signal from male Liver (GTEX-YB5E-0326-SM-5IFHU)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0326-SM-5IFHU \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.3 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLiverSRR1375721
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1375721.hg19.bigWig
+    shortLabel liver M QEG4
+    longLabel GTEx RNA signal from male Liver (GTEX-QEG4-1826-SM-4R1JN)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-1826-SM-4R1JN \
+            tissue=liver autolysisScore=2 rnaIntegrity=7.4 batch=BP-20320 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalLiverSRR1380806
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1380806.hg19.bigWig
+    shortLabel liver M ZYT6
+    longLabel GTEx RNA signal from male Liver (GTEX-ZYT6-0626-SM-5E45V)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0626-SM-5E45V \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.6 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalLiverSRR1390540
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1390540.hg19.bigWig
+    shortLabel liver M 13NYB
+    longLabel GTEx RNA signal from male Liver (GTEX-13NYB-1026-SM-5IFH3)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-1026-SM-5IFH3 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.1 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLiverSRR1409790
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1409790.hg19.bigWig
+    shortLabel liver M 1399R
+    longLabel GTEx RNA signal from male Liver (GTEX-1399R-1226-SM-5P9GF)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-1226-SM-5P9GF \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.6 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalLiverSRR1412969
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1412969.hg19.bigWig
+    shortLabel liver M 13FTW
+    longLabel GTEx RNA signal from male Liver (GTEX-13FTW-1126-SM-5J2NV)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-1126-SM-5J2NV \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.7 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalLiverSRR1414185
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1414185.hg19.bigWig
+    shortLabel liver M 11EQ9
+    longLabel GTEx RNA signal from male Liver (GTEX-11EQ9-0526-SM-5A5JZ)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0526-SM-5A5JZ \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.1 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLiverSRR1443776
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1443776.hg19.bigWig
+    shortLabel liver M Z9EW
+    longLabel GTEx RNA signal from male Liver (GTEX-Z9EW-0426-SM-5CVM9)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-0426-SM-5CVM9 \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.2 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalLiverSRR1446203
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1446203.hg19.bigWig
+    shortLabel liver M ZPU1
+    longLabel GTEx RNA signal from male Liver (GTEX-ZPU1-0826-SM-57WG2)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0826-SM-57WG2 \
+            tissue=liver autolysisScore=0 rnaIntegrity=9.6 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalLiverSRR1447547
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1447547.hg19.bigWig
+    shortLabel liver M 12KS4
+    longLabel GTEx RNA signal from male Liver (GTEX-12KS4-1326-SM-5LUB3)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-1326-SM-5LUB3 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalLiverSRR1478113
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1478113.hg19.bigWig
+    shortLabel liver M ZAB4
+    longLabel GTEx RNA signal from male Liver (GTEX-ZAB4-0826-SM-5LU9D)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0826-SM-5LU9D \
+            tissue=liver autolysisScore=2 rnaIntegrity=5.7 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLiverSRR807995
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR807995.hg19.bigWig
+    shortLabel liver M P44G
+    longLabel GTEx RNA signal from male Liver (GTEX-P44G-1126-SM-3NM9D)
+    subGroups sex=M age=a30 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR821043
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR821043.hg19.bigWig
+    shortLabel liver M O5YT
+    longLabel GTEx RNA signal from male Liver (GTEX-O5YT-0826-SM-3TW8N)
+    subGroups sex=M age=a20 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1070689
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1070689.hg19.bigWig
+    shortLabel liver M RN64
+    longLabel GTEx RNA signal from male Liver (GTEX-RN64-1826-SM-48FDV)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-1826-SM-48FDV \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.4 batch=BP-21627 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/20/2012
+
+    track gtexRnaSignalLiverSRR1075804
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1075804.hg19.bigWig
+    shortLabel liver M XBEC
+    longLabel GTEx RNA signal from male Liver (GTEX-XBEC-1526-SM-4AT68)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-1526-SM-4AT68 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.3 batch=BP-31783 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalLiverSRR1087321
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1087321.hg19.bigWig
+    shortLabel liver M RM2N
+    longLabel GTEx RNA signal from male Liver (GTEX-RM2N-1926-SM-48FCU)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1926-SM-48FCU \
+            tissue=liver autolysisScore=0 rnaIntegrity=8.9 batch=BP-21576 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalLiverSRR1091865
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1091865.hg19.bigWig
+    shortLabel liver M XOTO
+    longLabel GTEx RNA signal from male Liver (GTEX-XOTO-0826-SM-4B65O)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0826-SM-4B65O \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.3 batch=BP-33639 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalLiverSRR1093861
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1093861.hg19.bigWig
+    shortLabel liver M XXEK
+    longLabel GTEx RNA signal from male Liver (GTEX-XXEK-1126-SM-4BRUX)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1095383
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1095383.hg19.bigWig
+    shortLabel liver M QDVN
+    longLabel GTEx RNA signal from male Liver (GTEX-QDVN-0826-SM-48TZ2)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-0826-SM-48TZ2 \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.8 batch=BP-20293 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalLiverSRR1095913
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1095913.hg19.bigWig
+    shortLabel liver M VUSG
+    longLabel GTEx RNA signal from male Liver (GTEX-VUSG-0126-SM-4KL1X)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0126-SM-4KL1X \
+            tissue=liver autolysisScore=1 rnaIntegrity=8.2 batch=BP-26940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalLiverSRR1322477
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1322477.hg19.bigWig
+    shortLabel liver M 147F4
+    longLabel GTEx RNA signal from male Liver (GTEX-147F4-1426-SM-5LUA8)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-1426-SM-5LUA8 \
+            tissue=liver autolysisScore=1 rnaIntegrity=7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLiverSRR1323491
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1323491.hg19.bigWig
+    shortLabel liver M 13OW6
+    longLabel GTEx RNA signal from male Liver (GTEX-13OW6-2626-SM-5IFF2)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-2626-SM-5IFF2 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6.8 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLiverSRR1324295
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1324295.hg19.bigWig
+    shortLabel liver M 13112
+    longLabel GTEx RNA signal from male Liver (GTEX-13112-1426-SM-5EGH8)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-1426-SM-5EGH8 \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.7 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalLiverSRR1324412
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1324412.hg19.bigWig
+    shortLabel liver M 11DXZ
+    longLabel GTEx RNA signal from male Liver (GTEX-11DXZ-0126-SM-5EGGY)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0126-SM-5EGGY \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.9 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLiverSRR1331488
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1331488.hg19.bigWig
+    shortLabel liver M 12WSI
+    longLabel GTEx RNA signal from male Liver (GTEX-12WSI-0226-SM-5GCNA)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-12WSI age=50 sex=M hardyScore=2 sample=GTEX-12WSI-0226-SM-5GCNA \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.8 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalLiverSRR1336314
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1336314.hg19.bigWig
+    shortLabel liver M 11UD2
+    longLabel GTEx RNA signal from male Liver (GTEX-11UD2-1626-SM-5EQM3)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1349456
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1349456.hg19.bigWig
+    shortLabel liver M 12WSL
+    longLabel GTEx RNA signal from male Liver (GTEX-12WSL-0226-SM-5CVMJ)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-0226-SM-5CVMJ \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalLiverSRR1349562
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1349562.hg19.bigWig
+    shortLabel liver M 11NUK
+    longLabel GTEx RNA signal from male Liver (GTEX-11NUK-1226-SM-5P9GM)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-1226-SM-5P9GM \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.1 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalLiverSRR1350002
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1350002.hg19.bigWig
+    shortLabel liver M 13PVQ
+    longLabel GTEx RNA signal from male Liver (GTEX-13PVQ-1526-SM-5IFEQ)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1352507
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1352507.hg19.bigWig
+    shortLabel liver M ZAB5
+    longLabel GTEx RNA signal from male Liver (GTEX-ZAB5-0426-SM-5CVMI)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0426-SM-5CVMI \
+            tissue=liver autolysisScore=0 rnaIntegrity=7.8 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalLiverSRR1354053
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1354053.hg19.bigWig
+    shortLabel liver M 131XE
+    longLabel GTEx RNA signal from male Liver (GTEX-131XE-0326-SM-5LZVO)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0326-SM-5LZVO \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.3 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalLiverSRR1357389
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1357389.hg19.bigWig
+    shortLabel liver M ZEX8
+    longLabel GTEx RNA signal from male Liver (GTEX-ZEX8-0826-SM-4WKHK)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1358143
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1358143.hg19.bigWig
+    shortLabel liver M 131XH
+    longLabel GTEx RNA signal from male Liver (GTEX-131XH-0626-SM-5LZWH)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0626-SM-5LZWH \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.5 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalLiverSRR1379426
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1379426.hg19.bigWig
+    shortLabel liver M ZVP2
+    longLabel GTEx RNA signal from male Liver (GTEX-ZVP2-0626-SM-51MSO)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-0626-SM-51MSO \
+            tissue=liver autolysisScore=0 rnaIntegrity=7.7 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalLiverSRR1383283
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1383283.hg19.bigWig
+    shortLabel liver M 13NZ9
+    longLabel GTEx RNA signal from male Liver (GTEX-13NZ9-1326-SM-5MR3V)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-1326-SM-5MR3V \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.7 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLiverSRR1390499
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1390499.hg19.bigWig
+    shortLabel liver M 145LU
+    longLabel GTEx RNA signal from male Liver (GTEX-145LU-1326-SM-5LU9N)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-1326-SM-5LU9N \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.8 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLiverSRR1403434
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1403434.hg19.bigWig
+    shortLabel liver M WY7C
+    longLabel GTEx RNA signal from male Liver (GTEX-WY7C-0726-SM-4ONCB)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1403544
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1403544.hg19.bigWig
+    shortLabel liver M 13VXU
+    longLabel GTEx RNA signal from male Liver (GTEX-13VXU-0926-SM-5IFFH)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0926-SM-5IFFH \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.1 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalLiverSRR1433729
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1433729.hg19.bigWig
+    shortLabel liver M 139YR
+    longLabel GTEx RNA signal from male Liver (GTEX-139YR-0226-SM-5IFEM)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-0226-SM-5IFEM \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.9 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLiverSRR1445218
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1445218.hg19.bigWig
+    shortLabel liver M 14C38
+    longLabel GTEx RNA signal from male Liver (GTEX-14C38-1526-SM-5RQJ7)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-14C38 age=50 sex=M hardyScore=0 sample=GTEX-14C38-1526-SM-5RQJ7 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.3 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLiverSRR1473275
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1473275.hg19.bigWig
+    shortLabel liver M 14E1K
+    longLabel GTEx RNA signal from male Liver (GTEX-14E1K-0326-SM-5S2PE)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-14E1K age=50 sex=M hardyScore=0 sample=GTEX-14E1K-0326-SM-5S2PE \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.8 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalLiverSRR1476485
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1476485.hg19.bigWig
+    shortLabel liver M 1192X
+    longLabel GTEx RNA signal from male Liver (GTEX-1192X-1026-SM-5H12P)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1499675
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1499675.hg19.bigWig
+    shortLabel liver M X261
+    longLabel GTEx RNA signal from male Liver (GTEX-X261-1726-SM-4PQYT)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-1726-SM-4PQYT \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.8 batch=BP-29931 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2012
+
+    track gtexRnaSignalLiverSRR815140
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR815140.hg19.bigWig
+    shortLabel liver M T6MN
+    longLabel GTEx RNA signal from male Liver (GTEX-T6MN-1226-SM-3NMA5)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-1226-SM-3NMA5 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-24680 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalLiverSRR1075102
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1075102.hg19.bigWig
+    shortLabel liver M UTHO
+    longLabel GTEx RNA signal from male Liver (GTEX-UTHO-2426-SM-4JBHD)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-2426-SM-4JBHD \
+            tissue=liver autolysisScore=2 rnaIntegrity=9.3 batch=BP-26701 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalLiverSRR1076022
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1076022.hg19.bigWig
+    shortLabel liver M X4XY
+    longLabel GTEx RNA signal from male Liver (GTEX-X4XY-1626-SM-46MVN)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-1626-SM-46MVN \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-31131 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalLiverSRR1081184
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1081184.hg19.bigWig
+    shortLabel liver M SJXC
+    longLabel GTEx RNA signal from male Liver (GTEX-SJXC-1226-SM-4DM78)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-SJXC age=60 sex=M hardyScore=2 sample=GTEX-SJXC-1226-SM-4DM78 \
+            tissue=liver autolysisScore=2 rnaIntegrity=6 batch=BP-23766 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/03/2012
+
+    track gtexRnaSignalLiverSRR1317532
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1317532.hg19.bigWig
+    shortLabel liver M 11WQC
+    longLabel GTEx RNA signal from male Liver (GTEX-11WQC-0726-SM-5EQMR)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0726-SM-5EQMR \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.6 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLiverSRR1328760
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1328760.hg19.bigWig
+    shortLabel liver M 147JS
+    longLabel GTEx RNA signal from male Liver (GTEX-147JS-1126-SM-5RQIW)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-1126-SM-5RQIW \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLiverSRR1353376
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1353376.hg19.bigWig
+    shortLabel liver M 1497J
+    longLabel GTEx RNA signal from male Liver (GTEX-1497J-0726-SM-5Q5D1)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-0726-SM-5Q5D1 \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.3 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalLiverSRR1353878
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1353878.hg19.bigWig
+    shortLabel liver M 1212Z
+    longLabel GTEx RNA signal from male Liver (GTEX-1212Z-0226-SM-59HLF)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0226-SM-59HLF \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.4 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalLiverSRR1361072
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1361072.hg19.bigWig
+    shortLabel liver M 1399T
+    longLabel GTEx RNA signal from male Liver (GTEX-1399T-0826-SM-5IFES)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0826-SM-5IFES \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLiverSRR1365313
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1365313.hg19.bigWig
+    shortLabel liver M 12696
+    longLabel GTEx RNA signal from male Liver (GTEX-12696-0826-SM-5EGGE)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0826-SM-5EGGE \
+            tissue=liver autolysisScore=1 rnaIntegrity=7 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalLiverSRR1383763
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1383763.hg19.bigWig
+    shortLabel liver M 12ZZZ
+    longLabel GTEx RNA signal from male Liver (GTEX-12ZZZ-1326-SM-59HKW)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-1326-SM-59HKW \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.8 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalLiverSRR1387397
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1387397.hg19.bigWig
+    shortLabel liver M 139TS
+    longLabel GTEx RNA signal from male Liver (GTEX-139TS-1426-SM-5IFJD)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-1426-SM-5IFJD \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLiverSRR1395999
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1395999.hg19.bigWig
+    shortLabel liver M 139UC
+    longLabel GTEx RNA signal from male Liver (GTEX-139UC-1426-SM-5IJGH)
+    subGroups sex=M age=a60 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1402590
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1402590.hg19.bigWig
+    shortLabel liver M 11NV4
+    longLabel GTEx RNA signal from male Liver (GTEX-11NV4-1326-SM-5HL6V)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-1326-SM-5HL6V \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.9 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalLiverSRR1404227
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1404227.hg19.bigWig
+    shortLabel liver M WQUQ
+    longLabel GTEx RNA signal from male Liver (GTEX-WQUQ-1926-SM-4OOSA)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-1926-SM-4OOSA \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.7 batch=BP-28353 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalLiverSRR1408512
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1408512.hg19.bigWig
+    shortLabel liver M 139TU
+    longLabel GTEx RNA signal from male Liver (GTEX-139TU-0826-SM-5IJFG)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-0826-SM-5IJFG \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.2 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLiverSRR1414515
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1414515.hg19.bigWig
+    shortLabel liver M 13FTZ
+    longLabel GTEx RNA signal from male Liver (GTEX-13FTZ-0726-SM-5IFFY)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13FTZ age=60 sex=M hardyScore=2 sample=GTEX-13FTZ-0726-SM-5IFFY \
+            tissue=liver autolysisScore=2 rnaIntegrity=5.8 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLiverSRR1473674
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1473674.hg19.bigWig
+    shortLabel liver M 11TUW
+    longLabel GTEx RNA signal from male Liver (GTEX-11TUW-1726-SM-5BC5C)
+    subGroups sex=M age=a60 
+    color 227,184,136
+
+    track gtexRnaSignalLiverSRR1487890
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1487890.hg19.bigWig
+    shortLabel liver M 11DXY
+    longLabel GTEx RNA signal from male Liver (GTEX-11DXY-0526-SM-5EGGQ)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-0526-SM-5EGGQ \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLiverSRR1488790
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1488790.hg19.bigWig
+    shortLabel liver M 11OF3
+    longLabel GTEx RNA signal from male Liver (GTEX-11OF3-0726-SM-5BC4Z)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-0726-SM-5BC4Z \
+            tissue=liver autolysisScore=2 rnaIntegrity=6 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalLiverSRR1499040
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1499040.hg19.bigWig
+    shortLabel liver M 14753
+    longLabel GTEx RNA signal from male Liver (GTEX-14753-1626-SM-5NQ9L)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-1626-SM-5NQ9L \
+            tissue=liver autolysisScore=1 rnaIntegrity=6.6 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLiverSRR1500661
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR1500661.hg19.bigWig
+    shortLabel liver M 12WSM
+    longLabel GTEx RNA signal from male Liver (GTEX-12WSM-0726-SM-5GCOW)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0726-SM-5GCOW \
+            tissue=liver autolysisScore=1 rnaIntegrity=5.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLiverSRR807971
+    parent gtexRnaSignalLiver off
+    type bigWig
+    bigDataUrl liver/gtexRnaSignalSRR807971.hg19.bigWig
+    shortLabel liver M OOBJ
+    longLabel GTEx RNA signal from male Liver (GTEX-OOBJ-0826-SM-3NB2K)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0826-SM-3NB2K \
+            tissue=liver autolysisScore=1 rnaIntegrity=7.2 batch=BP-18253 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+

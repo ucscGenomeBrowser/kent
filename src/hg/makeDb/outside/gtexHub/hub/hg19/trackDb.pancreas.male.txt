@@ -1,0 +1,1065 @@
+    track gtexRnaSignalSRR1070403
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1070403.hg19.bigWig
+    shortLabel pancreas M WFON
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WFON-0626-SM-4LVLX)
+    subGroups age=a40 tissue=pancreas donor=GTEXWFON
+    color 234,168,0
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0626-SM-4LVLX \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.6 batch=BP-27449 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1071519
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1071519.hg19.bigWig
+    shortLabel pancreas M Q2AH
+    longLabel GTEx RNA signal from male Pancreas (GTEX-Q2AH-0926-SM-48TZK)
+    subGroups age=a40 tissue=pancreas donor=GTEXQ2AH
+    color 234,168,0
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0926-SM-48TZK \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-19999 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR1072007
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1072007.hg19.bigWig
+    shortLabel pancreas M QLQW
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QLQW-0326-SM-447A8)
+    subGroups age=a30 tissue=pancreas donor=GTEXQLQW
+    color 234,168,0
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-0326-SM-447A8 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.9 batch=BP-20691 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/09/2011
+
+    track gtexRnaSignalSRR1072104
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1072104.hg19.bigWig
+    shortLabel pancreas M XMK1
+    longLabel GTEx RNA signal from male Pancreas (GTEX-XMK1-0326-SM-4B652)
+    subGroups age=a40 tissue=pancreas donor=GTEXXMK1
+    color 234,168,0
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-0326-SM-4B652 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.9 batch=BP-32735 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2012
+
+    track gtexRnaSignalSRR1072972
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1072972.hg19.bigWig
+    shortLabel pancreas M WFJO
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WFJO-0626-SM-4LVMC)
+    subGroups age=a30 tissue=pancreas donor=GTEXWFJO
+    color 234,168,0
+    metadata donor=GTEX-WFJO age=30 sex=M hardyScore=0 sample=GTEX-WFJO-0626-SM-4LVMC \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.9 batch=BP-27446 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1073021
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1073021.hg19.bigWig
+    shortLabel pancreas M T8EM
+    longLabel GTEx RNA signal from male Pancreas (GTEX-T8EM-0826-SM-4DM76)
+    subGroups age=a40 tissue=pancreas donor=GTEXT8EM
+    color 234,168,0
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-0826-SM-4DM76 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-24889 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1073991
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1073991.hg19.bigWig
+    shortLabel pancreas M WFG8
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WFG8-0326-SM-4LVN4)
+    subGroups age=a20 tissue=pancreas donor=GTEXWFG8
+    color 234,168,0
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0326-SM-4LVN4 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-27324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR1074090
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1074090.hg19.bigWig
+    shortLabel pancreas M WH7G
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WH7G-0826-SM-4LVMR)
+    subGroups age=a40 tissue=pancreas donor=GTEXWH7G
+    color 234,168,0
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-0826-SM-4LVMR \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.6 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1078066
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1078066.hg19.bigWig
+    shortLabel pancreas M OOBK
+    longLabel GTEx RNA signal from male Pancreas (GTEX-OOBK-1026-SM-48TC2)
+    subGroups age=a40 tissue=pancreas donor=GTEXOOBK
+    color 234,168,0
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-1026-SM-48TC2 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=5.9 batch=BP-18256 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR1080624
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1080624.hg19.bigWig
+    shortLabel pancreas M Q2AI
+    longLabel GTEx RNA signal from male Pancreas (GTEX-Q2AI-0426-SM-48U13)
+    subGroups age=a40 tissue=pancreas donor=GTEXQ2AI
+    color 234,168,0
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-0426-SM-48U13 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1081259
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1081259.hg19.bigWig
+    shortLabel pancreas M SNOS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-SNOS-0926-SM-4DM7A)
+    subGroups age=a40 tissue=pancreas donor=GTEXSNOS
+    color 234,168,0
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0926-SM-4DM7A \
+            tissue=pancreas autolysisScore=0 rnaIntegrity=7 batch=BP-24457 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1082080
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1082080.hg19.bigWig
+    shortLabel pancreas M QV31
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QV31-0226-SM-447BO)
+    subGroups age=a30 tissue=pancreas donor=GTEXQV31
+    color 234,168,0
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-0226-SM-447BO \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.2 batch=BP-20785 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1084323
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1084323.hg19.bigWig
+    shortLabel pancreas M X5EB
+    longLabel GTEx RNA signal from male Pancreas (GTEX-X5EB-0526-SM-46MVP)
+    subGroups age=a40 tissue=pancreas donor=GTEXX5EB
+    color 234,168,0
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0526-SM-46MVP \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.6 batch=BP-31131 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalSRR1085187
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1085187.hg19.bigWig
+    shortLabel pancreas M QESD
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QESD-0226-SM-447BH)
+    subGroups age=a20 tissue=pancreas donor=GTEXQESD
+    color 234,168,0
+
+    track gtexRnaSignalSRR1089537
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1089537.hg19.bigWig
+    shortLabel pancreas M S33H
+    longLabel GTEx RNA signal from male Pancreas (GTEX-S33H-1226-SM-4AD69)
+    subGroups age=a30 tissue=pancreas donor=GTEXS33H
+    color 234,168,0
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-1226-SM-4AD69 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.4 batch=BP-22720 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1099833
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1099833.hg19.bigWig
+    shortLabel pancreas M PW2O
+    longLabel GTEx RNA signal from male Pancreas (GTEX-PW2O-0826-SM-48TC5)
+    subGroups age=a20 tissue=pancreas donor=GTEXPW2O
+    color 234,168,0
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-0826-SM-48TC5 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6 batch=BP-19458 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1310690
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1310690.hg19.bigWig
+    shortLabel pancreas M 11EQ9
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11EQ9-1026-SM-5H134)
+    subGroups age=a30 tissue=pancreas donor=GTEX11EQ9
+    color 234,168,0
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1026-SM-5H134 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.3 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1318503
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1318503.hg19.bigWig
+    shortLabel pancreas M 11LCK
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11LCK-0226-SM-5A5M6)
+    subGroups age=a30 tissue=pancreas donor=GTEX11LCK
+    color 234,168,0
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0226-SM-5A5M6 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1321765
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1321765.hg19.bigWig
+    shortLabel pancreas M 1339X
+    longLabel GTEx RNA signal from male Pancreas (GTEX-1339X-1026-SM-5IFH5)
+    subGroups age=a40 tissue=pancreas donor=GTEX1339X
+    color 234,168,0
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-1026-SM-5IFH5 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1322028
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1322028.hg19.bigWig
+    shortLabel pancreas M 13FTW
+    longLabel GTEx RNA signal from male Pancreas (GTEX-13FTW-0526-SM-5IFIP)
+    subGroups age=a40 tissue=pancreas donor=GTEX13FTW
+    color 234,168,0
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-0526-SM-5IFIP \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.3 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1327872
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1327872.hg19.bigWig
+    shortLabel pancreas M 146FQ
+    longLabel GTEx RNA signal from male Pancreas (GTEX-146FQ-1526-SM-5Q5CX)
+    subGroups age=a30 tissue=pancreas donor=GTEX146FQ
+    color 234,168,0
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-1526-SM-5Q5CX \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.9 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1330746
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1330746.hg19.bigWig
+    shortLabel pancreas M Y9LG
+    longLabel GTEx RNA signal from male Pancreas (GTEX-Y9LG-0726-SM-4VDS3)
+    subGroups age=a30 tissue=pancreas donor=GTEXY9LG
+    color 234,168,0
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0726-SM-4VDS3 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1331037
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1331037.hg19.bigWig
+    shortLabel pancreas M ZLFU
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZLFU-0726-SM-57WF6)
+    subGroups age=a40 tissue=pancreas donor=GTEXZLFU
+    color 234,168,0
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-0726-SM-57WF6 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1334314
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1334314.hg19.bigWig
+    shortLabel pancreas M 12WSN
+    longLabel GTEx RNA signal from male Pancreas (GTEX-12WSN-0826-SM-5GCOF)
+    subGroups age=a40 tissue=pancreas donor=GTEX12WSN
+    color 234,168,0
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-0826-SM-5GCOF \
+            tissue=pancreas autolysisScore=0 rnaIntegrity=6.8 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1357541
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1357541.hg19.bigWig
+    shortLabel pancreas M 11TT1
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11TT1-0326-SM-5LUAY)
+    subGroups age=a20 tissue=pancreas donor=GTEX11TT1
+    color 234,168,0
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0326-SM-5LUAY \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.7 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1374585
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1374585.hg19.bigWig
+    shortLabel pancreas M 11NSD
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11NSD-0526-SM-5A5LT)
+    subGroups age=a20 tissue=pancreas donor=GTEX11NSD
+    color 234,168,0
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0526-SM-5A5LT \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.9 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1380886
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1380886.hg19.bigWig
+    shortLabel pancreas M YB5E
+    longLabel GTEx RNA signal from male Pancreas (GTEX-YB5E-0526-SM-4VDSD)
+    subGroups age=a40 tissue=pancreas donor=GTEXYB5E
+    color 234,168,0
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0526-SM-4VDSD \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.4 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1381953
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1381953.hg19.bigWig
+    shortLabel pancreas M 14ICL
+    longLabel GTEx RNA signal from male Pancreas (GTEX-14ICL-1126-SM-5S2RE)
+    subGroups age=a30 tissue=pancreas donor=GTEX14ICL
+    color 234,168,0
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-1126-SM-5S2RE \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.3 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1403611
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1403611.hg19.bigWig
+    shortLabel pancreas M ZYT6
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZYT6-1326-SM-5E453)
+    subGroups age=a30 tissue=pancreas donor=GTEXZYT6
+    color 234,168,0
+
+    track gtexRnaSignalSRR1418433
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1418433.hg19.bigWig
+    shortLabel pancreas M 1399R
+    longLabel GTEx RNA signal from male Pancreas (GTEX-1399R-0426-SM-5IJE3)
+    subGroups age=a30 tissue=pancreas donor=GTEX1399R
+    color 234,168,0
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0426-SM-5IJE3 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1430202
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1430202.hg19.bigWig
+    shortLabel pancreas M 145MN
+    longLabel GTEx RNA signal from male Pancreas (GTEX-145MN-1426-SM-5SI9H)
+    subGroups age=a30 tissue=pancreas donor=GTEX145MN
+    color 234,168,0
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-1426-SM-5SI9H \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.8 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1446806
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1446806.hg19.bigWig
+    shortLabel pancreas M 11P7K
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11P7K-0526-SM-5BC5I)
+    subGroups age=a30 tissue=pancreas donor=GTEX11P7K
+    color 234,168,0
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0526-SM-5BC5I \
+            tissue=pancreas autolysisScore=0 rnaIntegrity=6.9 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1453893
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1453893.hg19.bigWig
+    shortLabel pancreas M Y8E4
+    longLabel GTEx RNA signal from male Pancreas (GTEX-Y8E4-1326-SM-5IFIY)
+    subGroups age=a40 tissue=pancreas donor=GTEXY8E4
+    color 234,168,0
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-1326-SM-5IFIY \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.3 batch=BP-45268 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1455631
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1455631.hg19.bigWig
+    shortLabel pancreas M ZAB4
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZAB4-1726-SM-5HL8C)
+    subGroups age=a40 tissue=pancreas donor=GTEXZAB4
+    color 234,168,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-1726-SM-5HL8C \
+            tissue=pancreas autolysisScore=2 rnaIntegrity=7 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1480347
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1480347.hg19.bigWig
+    shortLabel pancreas M YEC4
+    longLabel GTEx RNA signal from male Pancreas (GTEX-YEC4-1326-SM-5IFHG)
+    subGroups age=a40 tissue=pancreas donor=GTEXYEC4
+    color 234,168,0
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-1326-SM-5IFHG \
+            tissue=pancreas autolysisScore=2 rnaIntegrity=5.9 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR2135383
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR2135383.hg19.bigWig
+    shortLabel pancreas M U8XE
+    longLabel GTEx RNA signal from male Pancreas (GTEX-U8XE-2026-SM-5CHQF_rep1)
+    subGroups age=a30 tissue=pancreas donor=GTEXU8XE
+    color 234,168,0
+
+    track gtexRnaSignalSRR656457
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR656457.hg19.bigWig
+    shortLabel pancreas M U8XE
+    longLabel GTEx RNA signal from male Pancreas (GTEX-U8XE-2026-SM-3DB8S)
+    subGroups age=a30 tissue=pancreas donor=GTEXU8XE
+    color 234,168,0
+
+    track gtexRnaSignalSRR812598
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR812598.hg19.bigWig
+    shortLabel pancreas M X3Y1
+    longLabel GTEx RNA signal from male Pancreas (GTEX-X3Y1-0726-SM-3P5YU)
+    subGroups age=a40 tissue=pancreas donor=GTEXX3Y1
+    color 234,168,0
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-0726-SM-3P5YU \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.2 batch=BP-30276 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR816541
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR816541.hg19.bigWig
+    shortLabel pancreas M PLZ6
+    longLabel GTEx RNA signal from male Pancreas (GTEX-PLZ6-0726-SM-3P619)
+    subGroups age=a30 tissue=pancreas donor=GTEXPLZ6
+    color 234,168,0
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0726-SM-3P619 \
+            tissue=pancreas autolysisScore=0 rnaIntegrity=6.8 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR819771
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR819771.hg19.bigWig
+    shortLabel pancreas M NPJ8
+    longLabel GTEx RNA signal from male Pancreas (GTEX-NPJ8-2126-SM-3MJGK)
+    subGroups age=a40 tissue=pancreas donor=GTEXNPJ8
+    color 234,168,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-2126-SM-3MJGK \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=8.7 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR1073167
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1073167.hg19.bigWig
+    shortLabel pancreas M RM2N
+    longLabel GTEx RNA signal from male Pancreas (GTEX-RM2N-0326-SM-48FD8)
+    subGroups age=a50 tissue=pancreas donor=GTEXRM2N
+    color 234,168,0
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0326-SM-48FD8 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.4 batch=BP-21548 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1074385
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1074385.hg19.bigWig
+    shortLabel pancreas M XPVG
+    longLabel GTEx RNA signal from male Pancreas (GTEX-XPVG-0326-SM-4B653)
+    subGroups age=a50 tissue=pancreas donor=GTEXXPVG
+    color 234,168,0
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-0326-SM-4B653 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.5 batch=BP-33723 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1076868
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1076868.hg19.bigWig
+    shortLabel pancreas M S3XE
+    longLabel GTEx RNA signal from male Pancreas (GTEX-S3XE-0526-SM-4AD4G)
+    subGroups age=a50 tissue=pancreas donor=GTEXS3XE
+    color 234,168,0
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-0526-SM-4AD4G \
+            tissue=pancreas autolysisScore=0 rnaIntegrity=7.1 batch=BP-22873 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/05/2012
+
+    track gtexRnaSignalSRR1079754
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1079754.hg19.bigWig
+    shortLabel pancreas M XQ8I
+    longLabel GTEx RNA signal from male Pancreas (GTEX-XQ8I-1926-SM-4BOOK)
+    subGroups age=a50 tissue=pancreas donor=GTEXXQ8I
+    color 234,168,0
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-1926-SM-4BOOK \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-34031 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/07/2012
+
+    track gtexRnaSignalSRR1082544
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1082544.hg19.bigWig
+    shortLabel pancreas M QEL4
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QEL4-1326-SM-447AD)
+    subGroups age=a50 tissue=pancreas donor=GTEXQEL4
+    color 234,168,0
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-1326-SM-447AD \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.9 batch=BP-20413 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR1091144
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1091144.hg19.bigWig
+    shortLabel pancreas M TKQ2
+    longLabel GTEx RNA signal from male Pancreas (GTEX-TKQ2-0426-SM-4DXUO)
+    subGroups age=a50 tissue=pancreas donor=GTEXTKQ2
+    color 234,168,0
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-0426-SM-4DXUO \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.6 batch=BP-24927 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR1093434
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1093434.hg19.bigWig
+    shortLabel pancreas M QDVJ
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QDVJ-1226-SM-48U1V)
+    subGroups age=a50 tissue=pancreas donor=GTEXQDVJ
+    color 234,168,0
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-1226-SM-48U1V \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-20259 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR1093577
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1093577.hg19.bigWig
+    shortLabel pancreas M PSDG
+    longLabel GTEx RNA signal from male Pancreas (GTEX-PSDG-1526-SM-48TCY)
+    subGroups age=a50 tissue=pancreas donor=GTEXPSDG
+    color 234,168,0
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-1526-SM-48TCY \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.1 batch=BP-19412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR1095407
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1095407.hg19.bigWig
+    shortLabel pancreas M XXEK
+    longLabel GTEx RNA signal from male Pancreas (GTEX-XXEK-1726-SM-4BRVB)
+    subGroups age=a50 tissue=pancreas donor=GTEXXXEK
+    color 234,168,0
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-1726-SM-4BRVB \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1098192
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1098192.hg19.bigWig
+    shortLabel pancreas M R55D
+    longLabel GTEx RNA signal from male Pancreas (GTEX-R55D-1426-SM-48FEN)
+    subGroups age=a50 tissue=pancreas donor=GTEXR55D
+    color 234,168,0
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-1426-SM-48FEN \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.2 batch=BP-21337 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR1098543
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1098543.hg19.bigWig
+    shortLabel pancreas M SIU7
+    longLabel GTEx RNA signal from male Pancreas (GTEX-SIU7-0926-SM-4BRX1)
+    subGroups age=a50 tissue=pancreas donor=GTEXSIU7
+    color 234,168,0
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-0926-SM-4BRX1 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-23389 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1098928
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1098928.hg19.bigWig
+    shortLabel pancreas M V1D1
+    longLabel GTEx RNA signal from male Pancreas (GTEX-V1D1-0726-SM-4JBH7)
+    subGroups age=a50 tissue=pancreas donor=GTEXV1D1
+    color 234,168,0
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0726-SM-4JBH7 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.5 batch=BP-26699 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalSRR1307808
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1307808.hg19.bigWig
+    shortLabel pancreas M 111CU
+    longLabel GTEx RNA signal from male Pancreas (GTEX-111CU-0526-SM-5EGHK)
+    subGroups age=a50 tissue=pancreas donor=GTEX111CU
+    color 234,168,0
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-0526-SM-5EGHK \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.2 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1322730
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1322730.hg19.bigWig
+    shortLabel pancreas M QV44
+    longLabel GTEx RNA signal from male Pancreas (GTEX-QV44-0426-SM-4R1KF)
+    subGroups age=a50 tissue=pancreas donor=GTEXQV44
+    color 234,168,0
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-0426-SM-4R1KF \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.5 batch=BP-20865 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1327303
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1327303.hg19.bigWig
+    shortLabel pancreas M YEC3
+    longLabel GTEx RNA signal from male Pancreas (GTEX-YEC3-0626-SM-4YCFE)
+    subGroups age=a50 tissue=pancreas donor=GTEXYEC3
+    color 234,168,0
+
+    track gtexRnaSignalSRR1328738
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1328738.hg19.bigWig
+    shortLabel pancreas M ZV7C
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZV7C-0726-SM-59HKH)
+    subGroups age=a50 tissue=pancreas donor=GTEXZV7C
+    color 234,168,0
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-0726-SM-59HKH \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=8.6 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1338513
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1338513.hg19.bigWig
+    shortLabel pancreas M ZAB5
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZAB5-0826-SM-5P9FU)
+    subGroups age=a50 tissue=pancreas donor=GTEXZAB5
+    color 234,168,0
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0826-SM-5P9FU \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.7 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1360766
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1360766.hg19.bigWig
+    shortLabel pancreas M 117YX
+    longLabel GTEx RNA signal from male Pancreas (GTEX-117YX-0226-SM-5EGH6)
+    subGroups age=a50 tissue=pancreas donor=GTEX117YX
+    color 234,168,0
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-0226-SM-5EGH6 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1374373
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1374373.hg19.bigWig
+    shortLabel pancreas M ZG7Y
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZG7Y-0326-SM-4WWEY)
+    subGroups age=a50 tissue=pancreas donor=GTEXZG7Y
+    color 234,168,0
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-0326-SM-4WWEY \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=5.7 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1374739
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1374739.hg19.bigWig
+    shortLabel pancreas M 139YR
+    longLabel GTEx RNA signal from male Pancreas (GTEX-139YR-1526-SM-5IFJ1)
+    subGroups age=a50 tissue=pancreas donor=GTEX139YR
+    color 234,168,0
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-1526-SM-5IFJ1 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1382440
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1382440.hg19.bigWig
+    shortLabel pancreas M 144FL
+    longLabel GTEx RNA signal from male Pancreas (GTEX-144FL-1526-SM-5Q5CA)
+    subGroups age=a50 tissue=pancreas donor=GTEX144FL
+    color 234,168,0
+    metadata donor=GTEX-144FL age=50 sex=M hardyScore=2 sample=GTEX-144FL-1526-SM-5Q5CA \
+            tissue=pancreas autolysisScore=2 rnaIntegrity=6.1 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1398863
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1398863.hg19.bigWig
+    shortLabel pancreas M X4LF
+    longLabel GTEx RNA signal from male Pancreas (GTEX-X4LF-0326-SM-4QAS9)
+    subGroups age=a50 tissue=pancreas donor=GTEXX4LF
+    color 234,168,0
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0326-SM-4QAS9 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.4 batch=BP-30712 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalSRR1401528
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1401528.hg19.bigWig
+    shortLabel pancreas M WYJK
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WYJK-2426-SM-4ONDQ)
+    subGroups age=a50 tissue=pancreas donor=GTEXWYJK
+    color 234,168,0
+
+    track gtexRnaSignalSRR1402091
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1402091.hg19.bigWig
+    shortLabel pancreas M YEC3
+    longLabel GTEx RNA signal from male Pancreas (GTEX-YEC3-0626-SM-5IFHZ)
+    subGroups age=a50 tissue=pancreas donor=GTEXYEC3
+    color 234,168,0
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-0626-SM-5IFHZ \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1404856
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1404856.hg19.bigWig
+    shortLabel pancreas M WHPG
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WHPG-0326-SM-4M1XV)
+    subGroups age=a50 tissue=pancreas donor=GTEXWHPG
+    color 234,168,0
+
+    track gtexRnaSignalSRR1409084
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1409084.hg19.bigWig
+    shortLabel pancreas M WHWD
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WHWD-0726-SM-4OORX)
+    subGroups age=a50 tissue=pancreas donor=GTEXWHWD
+    color 234,168,0
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0726-SM-4OORX \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.5 batch=BP-27516 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1415938
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1415938.hg19.bigWig
+    shortLabel pancreas M 144GN
+    longLabel GTEx RNA signal from male Pancreas (GTEX-144GN-0826-SM-5LU5G)
+    subGroups age=a50 tissue=pancreas donor=GTEX144GN
+    color 234,168,0
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-0826-SM-5LU5G \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=8.1 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1434999
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1434999.hg19.bigWig
+    shortLabel pancreas M 131XE
+    longLabel GTEx RNA signal from male Pancreas (GTEX-131XE-1926-SM-5IFER)
+    subGroups age=a50 tissue=pancreas donor=GTEX131XE
+    color 234,168,0
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-1926-SM-5IFER \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1435857
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1435857.hg19.bigWig
+    shortLabel pancreas M WHSB
+    longLabel GTEx RNA signal from male Pancreas (GTEX-WHSB-0726-SM-4M1XQ)
+    subGroups age=a50 tissue=pancreas donor=GTEXWHSB
+    color 234,168,0
+
+    track gtexRnaSignalSRR1452556
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1452556.hg19.bigWig
+    shortLabel pancreas M ZEX8
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZEX8-1026-SM-4WKHE)
+    subGroups age=a50 tissue=pancreas donor=GTEXZEX8
+    color 234,168,0
+
+    track gtexRnaSignalSRR1453047
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1453047.hg19.bigWig
+    shortLabel pancreas M ZDYS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZDYS-2526-SM-4WKGU)
+    subGroups age=a50 tissue=pancreas donor=GTEXZDYS
+    color 234,168,0
+
+    track gtexRnaSignalSRR1453277
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1453277.hg19.bigWig
+    shortLabel pancreas M ZVZP
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZVZP-0626-SM-59HL5)
+    subGroups age=a50 tissue=pancreas donor=GTEXZVZP
+    color 234,168,0
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-0626-SM-59HL5 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.1 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1457682
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1457682.hg19.bigWig
+    shortLabel pancreas M 12WSL
+    longLabel GTEx RNA signal from male Pancreas (GTEX-12WSL-0426-SM-5GCNX)
+    subGroups age=a50 tissue=pancreas donor=GTEX12WSL
+    color 234,168,0
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-0426-SM-5GCNX \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1487784
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1487784.hg19.bigWig
+    shortLabel pancreas M ZT9W
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZT9W-0926-SM-57WFS)
+    subGroups age=a50 tissue=pancreas donor=GTEXZT9W
+    color 234,168,0
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0926-SM-57WFS \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.5 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR665405
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR665405.hg19.bigWig
+    shortLabel pancreas M VUSG
+    longLabel GTEx RNA signal from male Pancreas (GTEX-VUSG-0326-SM-3GIJ7)
+    subGroups age=a50 tissue=pancreas donor=GTEXVUSG
+    color 234,168,0
+
+    track gtexRnaSignalSRR812745
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR812745.hg19.bigWig
+    shortLabel pancreas M OHPM
+    longLabel GTEx RNA signal from male Pancreas (GTEX-OHPM-1026-SM-3LK74)
+    subGroups age=a50 tissue=pancreas donor=GTEXOHPM
+    color 234,168,0
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-1026-SM-3LK74 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7 batch=BP-17841 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2011
+
+    track gtexRnaSignalSRR1085310
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1085310.hg19.bigWig
+    shortLabel pancreas M V955
+    longLabel GTEx RNA signal from male Pancreas (GTEX-V955-0326-SM-4JBGV)
+    subGroups age=a60 tissue=pancreas donor=GTEXV955
+    color 234,168,0
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-0326-SM-4JBGV \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.2 batch=BP-26862 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1088291
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1088291.hg19.bigWig
+    shortLabel pancreas M S95S
+    longLabel GTEx RNA signal from male Pancreas (GTEX-S95S-0726-SM-4B64H)
+    subGroups age=a60 tissue=pancreas donor=GTEXS95S
+    color 234,168,0
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-0726-SM-4B64H \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.1 batch=BP-23281 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR1092937
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1092937.hg19.bigWig
+    shortLabel pancreas M SUCS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-SUCS-1426-SM-4DM5W)
+    subGroups age=a70 tissue=pancreas donor=GTEXSUCS
+    color 234,168,0
+    metadata donor=GTEX-SUCS age=70 sex=M hardyScore=0 sample=GTEX-SUCS-1426-SM-4DM5W \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-24618 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR1095651
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1095651.hg19.bigWig
+    shortLabel pancreas M VJYA
+    longLabel GTEx RNA signal from male Pancreas (GTEX-VJYA-0826-SM-4KL1M)
+    subGroups age=a60 tissue=pancreas donor=GTEXVJYA
+    color 234,168,0
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-0826-SM-4KL1M \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=5.9 batch=BP-26874 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1097883
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1097883.hg19.bigWig
+    shortLabel pancreas M XBED
+    longLabel GTEx RNA signal from male Pancreas (GTEX-XBED-0226-SM-47JY8)
+    subGroups age=a60 tissue=pancreas donor=GTEXXBED
+    color 234,168,0
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-0226-SM-47JY8 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.2 batch=BP-31549 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1311752
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1311752.hg19.bigWig
+    shortLabel pancreas M 111YS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-111YS-1226-SM-5EGGJ)
+    subGroups age=a60 tissue=pancreas donor=GTEX111YS
+    color 234,168,0
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1226-SM-5EGGJ \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1324102
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1324102.hg19.bigWig
+    shortLabel pancreas M 13O61
+    longLabel GTEx RNA signal from male Pancreas (GTEX-13O61-2126-SM-5IJEO)
+    subGroups age=a60 tissue=pancreas donor=GTEX13O61
+    color 234,168,0
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-2126-SM-5IJEO \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.3 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1354338
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1354338.hg19.bigWig
+    shortLabel pancreas M 145MO
+    longLabel GTEx RNA signal from male Pancreas (GTEX-145MO-2126-SM-5Q5CZ)
+    subGroups age=a60 tissue=pancreas donor=GTEX145MO
+    color 234,168,0
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-2126-SM-5Q5CZ \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.5 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1361692
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1361692.hg19.bigWig
+    shortLabel pancreas M ZYW4
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZYW4-2126-SM-59HJ9)
+    subGroups age=a60 tissue=pancreas donor=GTEXZYW4
+    color 234,168,0
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-2126-SM-59HJ9 \
+            tissue=pancreas autolysisScore=2 rnaIntegrity=6.3 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1415919
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1415919.hg19.bigWig
+    shortLabel pancreas M 13NZA
+    longLabel GTEx RNA signal from male Pancreas (GTEX-13NZA-1726-SM-5J1NA)
+    subGroups age=a60 tissue=pancreas donor=GTEX13NZA
+    color 234,168,0
+
+    track gtexRnaSignalSRR1431493
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1431493.hg19.bigWig
+    shortLabel pancreas M 13YAN
+    longLabel GTEx RNA signal from male Pancreas (GTEX-13YAN-2126-SM-5Q5C4)
+    subGroups age=a60 tissue=pancreas donor=GTEX13YAN
+    color 234,168,0
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-2126-SM-5Q5C4 \
+            tissue=pancreas autolysisScore=2 rnaIntegrity=6.3 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1440787
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1440787.hg19.bigWig
+    shortLabel pancreas M 11ONC
+    longLabel GTEx RNA signal from male Pancreas (GTEX-11ONC-0526-SM-5BC57)
+    subGroups age=a60 tissue=pancreas donor=GTEX11ONC
+    color 234,168,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-0526-SM-5BC57 \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.8 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1445960
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1445960.hg19.bigWig
+    shortLabel pancreas M ZDTT
+    longLabel GTEx RNA signal from male Pancreas (GTEX-ZDTT-1126-SM-4WKFW)
+    subGroups age=a60 tissue=pancreas donor=GTEXZDTT
+    color 234,168,0
+
+    track gtexRnaSignalSRR1457727
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR1457727.hg19.bigWig
+    shortLabel pancreas M 132QS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-132QS-0926-SM-5P9GB)
+    subGroups age=a60 tissue=pancreas donor=GTEX132QS
+    color 234,168,0
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0926-SM-5P9GB \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=7.4 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR808590
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR808590.hg19.bigWig
+    shortLabel pancreas M OOBJ
+    longLabel GTEx RNA signal from male Pancreas (GTEX-OOBJ-1026-SM-3NB2L)
+    subGroups age=a60 tissue=pancreas donor=GTEXOOBJ
+    color 234,168,0
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-1026-SM-3NB2L \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6.3 batch=BP-18253 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR821231
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pancreas/gtexRnaSignalSRR821231.hg19.bigWig
+    shortLabel pancreas M P4QS
+    longLabel GTEx RNA signal from male Pancreas (GTEX-P4QS-1026-SM-3NMCW)
+    subGroups age=a60 tissue=pancreas donor=GTEXP4QS
+    color 234,168,0
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-1026-SM-3NMCW \
+            tissue=pancreas autolysisScore=1 rnaIntegrity=6 batch=BP-18727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+

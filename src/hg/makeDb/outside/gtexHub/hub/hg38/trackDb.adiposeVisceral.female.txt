@@ -1,0 +1,870 @@
+    track gtexRnaSignalSRR1069638
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1069638.hg38.bigWig
+    shortLabel adiposeVi F XUZC
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-XUZC-1126-SM-4BOPZ)
+    subGroups age=a30 tissue=adiposeVisceral donor=GTEXXUZC
+    color 238,154,0
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-1126-SM-4BOPZ \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalSRR1089619
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1089619.hg38.bigWig
+    shortLabel adiposeVi F XV7Q
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-XV7Q-1726-SM-4BRUU)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXXV7Q
+    color 238,154,0
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-1726-SM-4BRUU \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.8 batch=BP-34479 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2012
+
+    track gtexRnaSignalSRR1317631
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1317631.hg38.bigWig
+    shortLabel adiposeVi F 12ZZX
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-12ZZX-1726-SM-5BC63)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX12ZZX
+    color 238,154,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-1726-SM-5BC63 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.7 batch=BP-43916 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1320517
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1320517.hg38.bigWig
+    shortLabel adiposeVi F 13PL6
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13PL6-0926-SM-5KLYY)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX13PL6
+    color 238,154,0
+    metadata donor=GTEX-13PL6 age=40 sex=F hardyScore=3 sample=GTEX-13PL6-0926-SM-5KLYY \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=6.1 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1324085
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1324085.hg38.bigWig
+    shortLabel adiposeVi F 139D8
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-139D8-1626-SM-5IJFZ)
+    subGroups age=a30 tissue=adiposeVisceral donor=GTEX139D8
+    color 238,154,0
+    metadata donor=GTEX-139D8 age=30 sex=F hardyScore=0 sample=GTEX-139D8-1626-SM-5IJFZ \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.1 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1333308
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1333308.hg38.bigWig
+    shortLabel adiposeVi F ZC5H
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZC5H-1626-SM-5HL7L)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXZC5H
+    color 238,154,0
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-1626-SM-5HL7L \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.1 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1333395
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1333395.hg38.bigWig
+    shortLabel adiposeVi F 13JUV
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13JUV-0626-SM-5J1MQ)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX13JUV
+    color 238,154,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0626-SM-5J1MQ \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=6.2 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1337010
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1337010.hg38.bigWig
+    shortLabel adiposeVi F 1399S
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-1399S-1426-SM-5PNYQ)
+    subGroups age=a30 tissue=adiposeVisceral donor=GTEX1399S
+    color 238,154,0
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-1426-SM-5PNYQ \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.1 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1346909
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1346909.hg38.bigWig
+    shortLabel adiposeVi F WYVS
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-WYVS-0626-SM-4SOJY)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXWYVS
+    color 238,154,0
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-0626-SM-4SOJY \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.8 batch=BP-40888 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalSRR1347772
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1347772.hg38.bigWig
+    shortLabel adiposeVi F ZXES
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZXES-0926-SM-5E43O)
+    subGroups age=a30 tissue=adiposeVisceral donor=GTEXZXES
+    color 238,154,0
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-0926-SM-5E43O \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.5 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1350069
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1350069.hg38.bigWig
+    shortLabel adiposeVi F 14AS3
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-14AS3-0426-SM-5QGQK)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX14AS3
+    color 238,154,0
+    metadata donor=GTEX-14AS3 age=40 sex=F hardyScore=0 sample=GTEX-14AS3-0426-SM-5QGQK \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=6.7 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1350153
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1350153.hg38.bigWig
+    shortLabel adiposeVi F 11XUK
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11XUK-1726-SM-5GU61)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX11XUK
+    color 238,154,0
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-1726-SM-5GU61 \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.9 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1356101
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1356101.hg38.bigWig
+    shortLabel adiposeVi F ZP4G
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZP4G-1326-SM-5EGIW)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEXZP4G
+    color 238,154,0
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-1326-SM-5EGIW \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.8 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1369070
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1369070.hg38.bigWig
+    shortLabel adiposeVi F 13QBU
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13QBU-1326-SM-5LU4K)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX13QBU
+    color 238,154,0
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-1326-SM-5LU4K \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.2 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1375699
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1375699.hg38.bigWig
+    shortLabel adiposeVi F 11VI4
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11VI4-1226-SM-5EQMP)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX11VI4
+    color 238,154,0
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-1226-SM-5EQMP \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1377777
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1377777.hg38.bigWig
+    shortLabel adiposeVi F 11EM3
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11EM3-1126-SM-5A5KM)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEX11EM3
+    color 238,154,0
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-1126-SM-5A5KM \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.5 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1380208
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1380208.hg38.bigWig
+    shortLabel adiposeVi F ZTPG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZTPG-2326-SM-57WFL)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEXZTPG
+    color 238,154,0
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-2326-SM-57WFL \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.2 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1383907
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1383907.hg38.bigWig
+    shortLabel adiposeVi F 145ME
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-145ME-0726-SM-5O9A3)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX145ME
+    color 238,154,0
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-0726-SM-5O9A3 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1391856
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1391856.hg38.bigWig
+    shortLabel adiposeVi F ZYWO
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZYWO-1726-SM-5E44T)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXZYWO
+    color 238,154,0
+
+    track gtexRnaSignalSRR1429408
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1429408.hg38.bigWig
+    shortLabel adiposeVi F 11P81
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11P81-0726-SM-5PNYH)
+    subGroups age=a30 tissue=adiposeVisceral donor=GTEX11P81
+    color 238,154,0
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0726-SM-5PNYH \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.9 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1444324
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1444324.hg38.bigWig
+    shortLabel adiposeVi F Y5LM
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-Y5LM-0826-SM-4VDSW)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXY5LM
+    color 238,154,0
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0826-SM-4VDSW \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.7 batch=BP-35836 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/06/2013
+
+    track gtexRnaSignalSRR1456138
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1456138.hg38.bigWig
+    shortLabel adiposeVi F 12WSK
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-12WSK-1026-SM-5CVNR)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEX12WSK
+    color 238,154,0
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-1026-SM-5CVNR \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1471755
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1471755.hg38.bigWig
+    shortLabel adiposeVi F 13VXT
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13VXT-0926-SM-5LU5K)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEX13VXT
+    color 238,154,0
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-0926-SM-5LU5K \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1472576
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1472576.hg38.bigWig
+    shortLabel adiposeVi F ZGAY
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZGAY-1326-SM-5S2NS)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXZGAY
+    color 238,154,0
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-1326-SM-5S2NS \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.6 batch=BP-42869 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1476525
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1476525.hg38.bigWig
+    shortLabel adiposeVi F ZV6S
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZV6S-1626-SM-5NQ81)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXZV6S
+    color 238,154,0
+    metadata donor=GTEX-ZV6S age=40 sex=F hardyScore=0 sample=GTEX-ZV6S-1626-SM-5NQ81 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.3 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1480813
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1480813.hg38.bigWig
+    shortLabel adiposeVi F 13FTX
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13FTX-0626-SM-5J2NS)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEX13FTX
+    color 238,154,0
+    metadata donor=GTEX-13FTX age=20 sex=F hardyScore=0 sample=GTEX-13FTX-0626-SM-5J2NS \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.5 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR655265
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR655265.hg38.bigWig
+    shortLabel adiposeVi F W5X1
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-W5X1-1426-SM-3GIKH)
+    subGroups age=a40 tissue=adiposeVisceral donor=GTEXW5X1
+    color 238,154,0
+    metadata donor=GTEX-W5X1 age=40 sex=F hardyScore=0 sample=GTEX-W5X1-1426-SM-3GIKH \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.7 batch=BP-27181 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalSRR811697
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR811697.hg38.bigWig
+    shortLabel adiposeVi F WRHK
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-WRHK-0826-SM-3MJFG)
+    subGroups age=a20 tissue=adiposeVisceral donor=GTEXWRHK
+    color 238,154,0
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-0826-SM-3MJFG \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.2 batch=BP-28355 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR1332648
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1332648.hg38.bigWig
+    shortLabel adiposeVi F 14BIN
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-14BIN-1226-SM-5S2OM)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX14BIN
+    color 238,154,0
+    metadata donor=GTEX-14BIN age=50 sex=F hardyScore=2 sample=GTEX-14BIN-1226-SM-5S2OM \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.9 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1333953
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1333953.hg38.bigWig
+    shortLabel adiposeVi F 131XG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-131XG-0126-SM-5K7UJ)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX131XG
+    color 238,154,0
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-0126-SM-5K7UJ \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1362081
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1362081.hg38.bigWig
+    shortLabel adiposeVi F ZLWG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZLWG-0726-SM-5S2NG)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZLWG
+    color 238,154,0
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0726-SM-5S2NG \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.4 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1382851
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1382851.hg38.bigWig
+    shortLabel adiposeVi F 132AR
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-132AR-0526-SM-5J2MJ)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX132AR
+    color 238,154,0
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-0526-SM-5J2MJ \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.4 batch=BP-46453 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1387013
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1387013.hg38.bigWig
+    shortLabel adiposeVi F ZZPU
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZZPU-0326-SM-5N9BJ)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZZPU
+    color 238,154,0
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-0326-SM-5N9BJ \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=8.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1392774
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1392774.hg38.bigWig
+    shortLabel adiposeVi F 13N11
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13N11-1826-SM-5IJDS)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX13N11
+    color 238,154,0
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-1826-SM-5IJDS \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.8 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1392943
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1392943.hg38.bigWig
+    shortLabel adiposeVi F 12WSG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-12WSG-0426-SM-5FQSE)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX12WSG
+    color 238,154,0
+    metadata donor=GTEX-12WSG age=50 sex=F hardyScore=0 sample=GTEX-12WSG-0426-SM-5FQSE \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=6.8 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1394734
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1394734.hg38.bigWig
+    shortLabel adiposeVi F 13D11
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13D11-0526-SM-5LZYM)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX13D11
+    color 238,154,0
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-0526-SM-5LZYM \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.4 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1401990
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1401990.hg38.bigWig
+    shortLabel adiposeVi F 1313W
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-1313W-1626-SM-5J1OE)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX1313W
+    color 238,154,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-1626-SM-5J1OE \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=5.9 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1404909
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1404909.hg38.bigWig
+    shortLabel adiposeVi F ZAJG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZAJG-1626-SM-5HL7I)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZAJG
+    color 238,154,0
+    metadata donor=GTEX-ZAJG age=50 sex=F hardyScore=3 sample=GTEX-ZAJG-1626-SM-5HL7I \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.5 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1415379
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1415379.hg38.bigWig
+    shortLabel adiposeVi F ZE7O
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZE7O-1526-SM-5J1NH)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZE7O
+    color 238,154,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-1526-SM-5J1NH \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=5.8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1417632
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1417632.hg38.bigWig
+    shortLabel adiposeVi F X8HC
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-X8HC-2326-SM-4QAS4)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXX8HC
+    color 238,154,0
+    metadata donor=GTEX-X8HC age=50 sex=F hardyScore=0 sample=GTEX-X8HC-2326-SM-4QAS4 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-31551 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1419539
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1419539.hg38.bigWig
+    shortLabel adiposeVi F ZF2S
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZF2S-1526-SM-5S2OO)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZF2S
+    color 238,154,0
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-1526-SM-5S2OO \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.2 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1430910
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1430910.hg38.bigWig
+    shortLabel adiposeVi F 13OVJ
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13OVJ-0926-SM-5K7U1)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX13OVJ
+    color 238,154,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0926-SM-5K7U1 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.1 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1432085
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1432085.hg38.bigWig
+    shortLabel adiposeVi F ZVT2
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZVT2-0226-SM-5GIE3)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZVT2
+    color 238,154,0
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-0226-SM-5GIE3 \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.5 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1433232
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1433232.hg38.bigWig
+    shortLabel adiposeVi F Y114
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-Y114-1326-SM-4TT9A)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXY114
+    color 238,154,0
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-1326-SM-4TT9A \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.5 batch=BP-35206 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSRR1440161
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1440161.hg38.bigWig
+    shortLabel adiposeVi F 13FH7
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13FH7-1926-SM-5J2OL)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX13FH7
+    color 238,154,0
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-1926-SM-5J2OL \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.8 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1446738
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1446738.hg38.bigWig
+    shortLabel adiposeVi F 146FH
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-146FH-2026-SM-5SI9I)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX146FH
+    color 238,154,0
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-2026-SM-5SI9I \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8 batch=BP-47616 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1447962
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1447962.hg38.bigWig
+    shortLabel adiposeVi F Y8LW
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-Y8LW-0926-SM-4VBQ8)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXY8LW
+    color 238,154,0
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-0926-SM-4VBQ8 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.6 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1452246
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1452246.hg38.bigWig
+    shortLabel adiposeVi F 13X6H
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13X6H-1726-SM-5Q5EH)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX13X6H
+    color 238,154,0
+    metadata donor=GTEX-13X6H age=50 sex=F hardyScore=0 sample=GTEX-13X6H-1726-SM-5Q5EH \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.5 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1466792
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1466792.hg38.bigWig
+    shortLabel adiposeVi F 11I78
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11I78-0226-SM-5HL6R)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX11I78
+    color 238,154,0
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0226-SM-5HL6R \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1486538
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1486538.hg38.bigWig
+    shortLabel adiposeVi F 113JC
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-113JC-0726-SM-5GZZR)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEX113JC
+    color 238,154,0
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-0726-SM-5GZZR \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1499303
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1499303.hg38.bigWig
+    shortLabel adiposeVi F ZF3C
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZF3C-1026-SM-5S2OC)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXZF3C
+    color 238,154,0
+    metadata donor=GTEX-ZF3C age=50 sex=F hardyScore=0 sample=GTEX-ZF3C-1026-SM-5S2OC \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.1 batch=BP-42743 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR819610
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR819610.hg38.bigWig
+    shortLabel adiposeVi F WXYG
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-WXYG-0926-SM-3NB2O)
+    subGroups age=a50 tissue=adiposeVisceral donor=GTEXWXYG
+    color 238,154,0
+    metadata donor=GTEX-WXYG age=50 sex=F hardyScore=0 sample=GTEX-WXYG-0926-SM-3NB2O \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.2 batch=BP-28992 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/08/2012
+
+    track gtexRnaSignalSRR1070713
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1070713.hg38.bigWig
+    shortLabel adiposeVi F XYKS
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-XYKS-1826-SM-4E3JV)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXXYKS
+    color 238,154,0
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-1826-SM-4E3JV \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=8 batch=BP-34929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/09/2013
+
+    track gtexRnaSignalSRR1081209
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1081209.hg38.bigWig
+    shortLabel adiposeVi F XUJ4
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-XUJ4-1726-SM-4BONW)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXXUJ4
+    color 238,154,0
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-1726-SM-4BONW \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.8 batch=BP-34262 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalSRR1094457
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1094457.hg38.bigWig
+    shortLabel adiposeVi F XOT4
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-XOT4-0826-SM-4B66Y)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXXOT4
+    color 238,154,0
+    metadata donor=GTEX-XOT4 age=60 sex=F hardyScore=2 sample=GTEX-XOT4-0826-SM-4B66Y \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.4 batch=BP-33606 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1308650
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1308650.hg38.bigWig
+    shortLabel adiposeVi F 11DXX
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11DXX-2026-SM-5EGJL)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX11DXX
+    color 238,154,0
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-2026-SM-5EGJL \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.7 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1309248
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1309248.hg38.bigWig
+    shortLabel adiposeVi F 1117F
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-1117F-1326-SM-5EGHH)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX1117F
+    color 238,154,0
+    metadata donor=GTEX-1117F age=60 sex=F hardyScore=4 sample=GTEX-1117F-1326-SM-5EGHH \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=5.9 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1316982
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1316982.hg38.bigWig
+    shortLabel adiposeVi F 1122O
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-1122O-0926-SM-5N9C9)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX1122O
+    color 238,154,0
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0926-SM-5N9C9 \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=5.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1360478
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1360478.hg38.bigWig
+    shortLabel adiposeVi F 13CF3
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13CF3-1126-SM-5LZXB)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX13CF3
+    color 238,154,0
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-1126-SM-5LZXB \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.9 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1361326
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1361326.hg38.bigWig
+    shortLabel adiposeVi F 13W3W
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13W3W-1126-SM-5L3DO)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX13W3W
+    color 238,154,0
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-1126-SM-5L3DO \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.5 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1370551
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1370551.hg38.bigWig
+    shortLabel adiposeVi F 1211K
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-1211K-1226-SM-5EQ4N)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX1211K
+    color 238,154,0
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-1226-SM-5EQ4N \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=8.1 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1370850
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1370850.hg38.bigWig
+    shortLabel adiposeVi F 146FR
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-146FR-0226-SM-5Q5F6)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX146FR
+    color 238,154,0
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-0226-SM-5Q5F6 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.9 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1374608
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1374608.hg38.bigWig
+    shortLabel adiposeVi F Y5V5
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-Y5V5-0226-SM-5S2N8)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXY5V5
+    color 238,154,0
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-0226-SM-5S2N8 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.4 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1379065
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1379065.hg38.bigWig
+    shortLabel adiposeVi F WYBS
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-WYBS-1026-SM-4ONCY)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXWYBS
+    color 238,154,0
+
+    track gtexRnaSignalSRR1392676
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1392676.hg38.bigWig
+    shortLabel adiposeVi F 13PL7
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13PL7-1226-SM-5SIAR)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX13PL7
+    color 238,154,0
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-1226-SM-5SIAR \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=7.4 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1401252
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1401252.hg38.bigWig
+    shortLabel adiposeVi F 145MI
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-145MI-0826-SM-5SI95)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX145MI
+    color 238,154,0
+    metadata donor=GTEX-145MI age=60 sex=F hardyScore=2 sample=GTEX-145MI-0826-SM-5SI95 \
+            tissue=adiposeVisceral autolysisScore=0 rnaIntegrity=6.1 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1409465
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1409465.hg38.bigWig
+    shortLabel adiposeVi F ZLV1
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZLV1-0926-SM-5S2MR)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXZLV1
+    color 238,154,0
+    metadata donor=GTEX-ZLV1 age=60 sex=F hardyScore=0 sample=GTEX-ZLV1-0926-SM-5S2MR \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.8 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1414139
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1414139.hg38.bigWig
+    shortLabel adiposeVi F ZF29
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZF29-0826-SM-5S2NP)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXZF29
+    color 238,154,0
+    metadata donor=GTEX-ZF29 age=60 sex=F hardyScore=0 sample=GTEX-ZF29-0826-SM-5S2NP \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.6 batch=BP-42662 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/23/2013
+
+    track gtexRnaSignalSRR1417809
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1417809.hg38.bigWig
+    shortLabel adiposeVi F 13X6K
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13X6K-0726-SM-5LU2Z)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX13X6K
+    color 238,154,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0726-SM-5LU2Z \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.6 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1418085
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1418085.hg38.bigWig
+    shortLabel adiposeVi F 14DAQ
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-14DAQ-2526-SM-5RQIO)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX14DAQ
+    color 238,154,0
+    metadata donor=GTEX-14DAQ age=60 sex=F hardyScore=4 sample=GTEX-14DAQ-2526-SM-5RQIO \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.2 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1471795
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1471795.hg38.bigWig
+    shortLabel adiposeVi F 13PVR
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-13PVR-0526-SM-5S2OB)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX13PVR
+    color 238,154,0
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-0526-SM-5S2OB \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=7.6 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1479616
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1479616.hg38.bigWig
+    shortLabel adiposeVi F ZQG8
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-ZQG8-1026-SM-51MR9)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEXZQG8
+    color 238,154,0
+    metadata donor=GTEX-ZQG8 age=60 sex=F hardyScore=0 sample=GTEX-ZQG8-1026-SM-51MR9 \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=6.3 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1490138
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adiposeVisceral/gtexRnaSignalSRR1490138.hg38.bigWig
+    shortLabel adiposeVi F 11ZTS
+    longLabel GTEx RNA signal from female Adipose - Visceral (Omentum) (GTEX-11ZTS-1326-SM-5EQMA)
+    subGroups age=a60 tissue=adiposeVisceral donor=GTEX11ZTS
+    color 238,154,0
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-1326-SM-5EQMA \
+            tissue=adiposeVisceral autolysisScore=1 rnaIntegrity=5.8 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+

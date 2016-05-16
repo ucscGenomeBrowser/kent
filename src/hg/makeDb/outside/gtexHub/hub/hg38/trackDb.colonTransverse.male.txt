@@ -1,0 +1,1155 @@
+    track gtexRnaSignalSRR1073217
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1073217.hg38.bigWig
+    shortLabel colonTran M XMK1
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XMK1-1726-SM-4B64Z)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXXMK1
+    color 255,199,128
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-1726-SM-4B64Z \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.3 batch=BP-32697 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1073899
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1073899.hg38.bigWig
+    shortLabel colonTran M SNOS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-SNOS-1226-SM-4DM5H)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXSNOS
+    color 255,199,128
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-1226-SM-4DM5H \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=5.8 batch=BP-24457 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1073971
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1073971.hg38.bigWig
+    shortLabel colonTran M TKQ1
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-TKQ1-0626-SM-4DXTS)
+    subGroups age=a30 tissue=colonTransverse donor=GTEXTKQ1
+    color 255,199,128
+    metadata donor=GTEX-TKQ1 age=30 sex=M hardyScore=0 sample=GTEX-TKQ1-0626-SM-4DXTS \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.2 batch=BP-24929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR1081493
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1081493.hg38.bigWig
+    shortLabel colonTran M WFG7
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WFG7-1526-SM-4LVMG)
+    subGroups age=a20 tissue=colonTransverse donor=GTEXWFG7
+    color 255,199,128
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-1526-SM-4LVMG \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.3 batch=BP-27322 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR1083125
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1083125.hg38.bigWig
+    shortLabel colonTran M Q2AH
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-Q2AH-1226-SM-48TZL)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXQ2AH
+    color 255,199,128
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-1226-SM-48TZL \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR1085259
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1085259.hg38.bigWig
+    shortLabel colonTran M WH7G
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WH7G-1326-SM-4LVMS)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXWH7G
+    color 255,199,128
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-1326-SM-4LVMS \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.5 batch=BP-27493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1087704
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1087704.hg38.bigWig
+    shortLabel colonTran M S4Q7
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-S4Q7-0826-SM-4AD5E)
+    subGroups age=a20 tissue=colonTransverse donor=GTEXS4Q7
+    color 255,199,128
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0826-SM-4AD5E \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.1 batch=BP-23051 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1091054
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1091054.hg38.bigWig
+    shortLabel colonTran M QLQW
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QLQW-0426-SM-447A7)
+    subGroups age=a30 tissue=colonTransverse donor=GTEXQLQW
+    color 255,199,128
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-0426-SM-447A7 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.2 batch=BP-20691 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/09/2011
+
+    track gtexRnaSignalSRR1095675
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1095675.hg38.bigWig
+    shortLabel colonTran M U3ZM
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-U3ZM-1126-SM-4DXUB)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXU3ZM
+    color 255,199,128
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-1126-SM-4DXUB \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.7 batch=BP-25560 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR1096924
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1096924.hg38.bigWig
+    shortLabel colonTran M XAJ8
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XAJ8-0426-SM-47JYJ)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXXAJ8
+    color 255,199,128
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0426-SM-47JYJ \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=9 batch=BP-31440 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR1098660
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1098660.hg38.bigWig
+    shortLabel colonTran M WFON
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WFON-1426-SM-4LVMT)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXWFON
+    color 255,199,128
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-1426-SM-4LVMT \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=7.1 batch=BP-27751 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalSRR1099354
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1099354.hg38.bigWig
+    shortLabel colonTran M Q2AI
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-Q2AI-0926-SM-48U1F)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXQ2AI
+    color 255,199,128
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-0926-SM-48U1F \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.2 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1318208
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1318208.hg38.bigWig
+    shortLabel colonTran M WOFM
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WOFM-2026-SM-4OOSQ)
+    subGroups age=a20 tissue=colonTransverse donor=GTEXWOFM
+    color 255,199,128
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-2026-SM-4OOSQ \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.3 batch=BP-28511 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalSRR1323873
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1323873.hg38.bigWig
+    shortLabel colonTran M Y8E4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-Y8E4-2426-SM-4WWDN)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXY8E4
+    color 255,199,128
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-2426-SM-4WWDN \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=7.6 batch=BP-42087 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1329687
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1329687.hg38.bigWig
+    shortLabel colonTran M QV31
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QV31-0826-SM-4R1KR)
+    subGroups age=a30 tissue=colonTransverse donor=GTEXQV31
+    color 255,199,128
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-0826-SM-4R1KR \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.1 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1331405
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1331405.hg38.bigWig
+    shortLabel colonTran M YB5E
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-YB5E-1626-SM-5IFIQ)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXYB5E
+    color 255,199,128
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-1626-SM-5IFIQ \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.6 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1357692
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1357692.hg38.bigWig
+    shortLabel colonTran M 12KS4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-12KS4-2426-SM-5LU8P)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX12KS4
+    color 255,199,128
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-2426-SM-5LU8P \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.1 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1364975
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1364975.hg38.bigWig
+    shortLabel colonTran M ZZ64
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZZ64-0726-SM-5GZX4)
+    subGroups age=a20 tissue=colonTransverse donor=GTEXZZ64
+    color 255,199,128
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-0726-SM-5GZX4 \
+            tissue=colonTransverse autolysisScore=0 rnaIntegrity=8 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1367172
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1367172.hg38.bigWig
+    shortLabel colonTran M XBEW
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XBEW-1926-SM-4SOJO)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXXBEW
+    color 255,199,128
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-1926-SM-4SOJO \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=5.7 batch=BP-31829 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2012
+
+    track gtexRnaSignalSRR1367544
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1367544.hg38.bigWig
+    shortLabel colonTran M 11EQ9
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11EQ9-1426-SM-5987G)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX11EQ9
+    color 255,199,128
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1426-SM-5987G \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1370701
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1370701.hg38.bigWig
+    shortLabel colonTran M 11P7K
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11P7K-1526-SM-5EGI7)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX11P7K
+    color 255,199,128
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-1526-SM-5EGI7 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=9 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1376807
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1376807.hg38.bigWig
+    shortLabel colonTran M ZPU1
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZPU1-1926-SM-57WDT)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXZPU1
+    color 255,199,128
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-1926-SM-57WDT \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=7.8 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1378262
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1378262.hg38.bigWig
+    shortLabel colonTran M 11P82
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11P82-1026-SM-5BC5J)
+    subGroups age=a20 tissue=colonTransverse donor=GTEX11P82
+    color 255,199,128
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-1026-SM-5BC5J \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.2 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1379157
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1379157.hg38.bigWig
+    shortLabel colonTran M YEC4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-YEC4-1926-SM-5IFHJ)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXYEC4
+    color 255,199,128
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-1926-SM-5IFHJ \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.9 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1396146
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1396146.hg38.bigWig
+    shortLabel colonTran M 14E6E
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-14E6E-1526-SM-5RQIG)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX14E6E
+    color 255,199,128
+    metadata donor=GTEX-14E6E age=30 sex=M hardyScore=0 sample=GTEX-14E6E-1526-SM-5RQIG \
+            tissue=colonTransverse autolysisScore=0 rnaIntegrity=6.9 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1402027
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1402027.hg38.bigWig
+    shortLabel colonTran M X3Y1
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-X3Y1-1726-SM-4PQZL)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXX3Y1
+    color 255,199,128
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-1726-SM-4PQZL \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.6 batch=BP-30509 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1403853
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1403853.hg38.bigWig
+    shortLabel colonTran M 11O72
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11O72-2226-SM-5PNW2)
+    subGroups age=a40 tissue=colonTransverse donor=GTEX11O72
+    color 255,199,128
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-2226-SM-5PNW2 \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=6.3 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1415173
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1415173.hg38.bigWig
+    shortLabel colonTran M ZTSS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZTSS-1126-SM-5985O)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXZTSS
+    color 255,199,128
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-1126-SM-5985O \
+            tissue=colonTransverse autolysisScore=0 rnaIntegrity=7.3 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1415854
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1415854.hg38.bigWig
+    shortLabel colonTran M 144GM
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-144GM-1226-SM-5LU52)
+    subGroups age=a20 tissue=colonTransverse donor=GTEX144GM
+    color 255,199,128
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-1226-SM-5LU52 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.9 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1433902
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1433902.hg38.bigWig
+    shortLabel colonTran M 145MN
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-145MN-1726-SM-5SIA6)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX145MN
+    color 255,199,128
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-1726-SM-5SIA6 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1441768
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1441768.hg38.bigWig
+    shortLabel colonTran M 145LT
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-145LT-0926-SM-5LU9C)
+    subGroups age=a40 tissue=colonTransverse donor=GTEX145LT
+    color 255,199,128
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-0926-SM-5LU9C \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.3 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1466597
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1466597.hg38.bigWig
+    shortLabel colonTran M ZAB4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZAB4-2226-SM-5HL97)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXZAB4
+    color 255,199,128
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-2226-SM-5HL97 \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=6 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1472259
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1472259.hg38.bigWig
+    shortLabel colonTran M 11NSD
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11NSD-1626-SM-5986U)
+    subGroups age=a20 tissue=colonTransverse donor=GTEX11NSD
+    color 255,199,128
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-1626-SM-5986U \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.1 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1473100
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1473100.hg38.bigWig
+    shortLabel colonTran M 146FQ
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-146FQ-1926-SM-5NQBY)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX146FQ
+    color 255,199,128
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-1926-SM-5NQBY \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.2 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1479721
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1479721.hg38.bigWig
+    shortLabel colonTran M 12C56
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-12C56-0626-SM-5EGGC)
+    subGroups age=a20 tissue=colonTransverse donor=GTEX12C56
+    color 255,199,128
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-0626-SM-5EGGC \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=7.2 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1488307
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1488307.hg38.bigWig
+    shortLabel colonTran M 13S86
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13S86-1626-SM-5Q5C5)
+    subGroups age=a40 tissue=colonTransverse donor=GTEX13S86
+    color 255,199,128
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-1626-SM-5Q5C5 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.6 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1498661
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1498661.hg38.bigWig
+    shortLabel colonTran M 1399R
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-1399R-2226-SM-5P9JB)
+    subGroups age=a30 tissue=colonTransverse donor=GTEX1399R
+    color 255,199,128
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-2226-SM-5P9JB \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.1 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR2135297
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR2135297.hg38.bigWig
+    shortLabel colonTran M WFG8
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WFG8-1526-SM-5CHSI_rep1)
+    subGroups age=a20 tissue=colonTransverse donor=GTEXWFG8
+    color 255,199,128
+
+    track gtexRnaSignalSRR2135315
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR2135315.hg38.bigWig
+    shortLabel colonTran M WFON
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WFON-1426-SM-5CHT1_rep1)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXWFON
+    color 255,199,128
+
+    track gtexRnaSignalSRR808638
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR808638.hg38.bigWig
+    shortLabel colonTran M NFK9
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-NFK9-2026-SM-3LK5K)
+    subGroups age=a40 tissue=colonTransverse donor=GTEXNFK9
+    color 255,199,128
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-2026-SM-3LK5K \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.3 batch=BP-16994 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR1069850
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1069850.hg38.bigWig
+    shortLabel colonTran M XGQ4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XGQ4-1226-SM-4AT67)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXXGQ4
+    color 255,199,128
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-1226-SM-4AT67 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.1 batch=BP-32244 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2012
+
+    track gtexRnaSignalSRR1077066
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1077066.hg38.bigWig
+    shortLabel colonTran M XXEK
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XXEK-1926-SM-4BRVD)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXXXEK
+    color 255,199,128
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-1926-SM-4BRVD \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.3 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1078948
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1078948.hg38.bigWig
+    shortLabel colonTran M QDVJ
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QDVJ-1326-SM-48U1X)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXQDVJ
+    color 255,199,128
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-1326-SM-48U1X \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.3 batch=BP-20259 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR1085235
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1085235.hg38.bigWig
+    shortLabel colonTran M QDVN
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QDVN-1326-SM-48TZ3)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXQDVN
+    color 255,199,128
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-1326-SM-48TZ3 \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=8.3 batch=BP-20294 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalSRR1086164
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1086164.hg38.bigWig
+    shortLabel colonTran M RM2N
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-RM2N-0926-SM-48FD1)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXRM2N
+    color 255,199,128
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0926-SM-48FD1 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8 batch=BP-21575 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR1089207
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1089207.hg38.bigWig
+    shortLabel colonTran M UJMC
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-UJMC-1326-SM-4IHLS)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXUJMC
+    color 255,199,128
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-1326-SM-4IHLS \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.8 batch=BP-26180 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/12/2012
+
+    track gtexRnaSignalSRR1097708
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1097708.hg38.bigWig
+    shortLabel colonTran M TKQ2
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-TKQ2-1326-SM-4DXT9)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXTKQ2
+    color 255,199,128
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-1326-SM-4DXT9 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.6 batch=BP-24929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR1097811
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1097811.hg38.bigWig
+    shortLabel colonTran M QMRM
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QMRM-1226-SM-447C6)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXQMRM
+    color 255,199,128
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1226-SM-447C6 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1099765
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1099765.hg38.bigWig
+    shortLabel colonTran M R55D
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-R55D-1826-SM-48FEF)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXR55D
+    color 255,199,128
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-1826-SM-48FEF \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-21338 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR1099931
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1099931.hg38.bigWig
+    shortLabel colonTran M XQ8I
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XQ8I-2126-SM-4BOOM)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXXQ8I
+    color 255,199,128
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-2126-SM-4BOOM \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.6 batch=BP-34129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1311464
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1311464.hg38.bigWig
+    shortLabel colonTran M 117YX
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-117YX-0826-SM-5H11J)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX117YX
+    color 255,199,128
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-0826-SM-5H11J \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.5 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1323446
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1323446.hg38.bigWig
+    shortLabel colonTran M WHWD
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WHWD-1226-SM-4OOS1)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXWHWD
+    color 255,199,128
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-1226-SM-4OOS1 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.3 batch=BP-27620 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR1325620
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1325620.hg38.bigWig
+    shortLabel colonTran M 11DXZ
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11DXZ-1726-SM-5H12M)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX11DXZ
+    color 255,199,128
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-1726-SM-5H12M \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.8 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1329131
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1329131.hg38.bigWig
+    shortLabel colonTran M 12WSL
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-12WSL-1626-SM-5GCMU)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX12WSL
+    color 255,199,128
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-1626-SM-5GCMU \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=7.6 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1329530
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1329530.hg38.bigWig
+    shortLabel colonTran M 139T6
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-139T6-1326-SM-5IFFO)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX139T6
+    color 255,199,128
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-1326-SM-5IFFO \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1336988
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1336988.hg38.bigWig
+    shortLabel colonTran M ZYFC
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZYFC-2626-SM-5NQ6S)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZYFC
+    color 255,199,128
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-2626-SM-5NQ6S \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.4 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1337816
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1337816.hg38.bigWig
+    shortLabel colonTran M Y3I4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-Y3I4-1426-SM-4TT9C)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXY3I4
+    color 255,199,128
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-1426-SM-4TT9C \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.5 batch=BP-35836 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/06/2013
+
+    track gtexRnaSignalSRR1352322
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1352322.hg38.bigWig
+    shortLabel colonTran M ZDYS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZDYS-2326-SM-4WKG6)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZDYS
+    color 255,199,128
+
+    track gtexRnaSignalSRR1353118
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1353118.hg38.bigWig
+    shortLabel colonTran M 13O21
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13O21-2426-SM-5MR4A)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX13O21
+    color 255,199,128
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-2426-SM-5MR4A \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.4 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1353948
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1353948.hg38.bigWig
+    shortLabel colonTran M ZV7C
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZV7C-1526-SM-5NQ72)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZV7C
+    color 255,199,128
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-1526-SM-5NQ72 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.2 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1354035
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1354035.hg38.bigWig
+    shortLabel colonTran M YF7O
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-YF7O-1726-SM-5IFJ9)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXYF7O
+    color 255,199,128
+    metadata donor=GTEX-YF7O age=50 sex=M hardyScore=0 sample=GTEX-YF7O-1726-SM-5IFJ9 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.8 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1356643
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1356643.hg38.bigWig
+    shortLabel colonTran M QEL4
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QEL4-1926-SM-4R1JI)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXQEL4
+    color 255,199,128
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-1926-SM-4R1JI \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=8 batch=BP-20413 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR1357456
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1357456.hg38.bigWig
+    shortLabel colonTran M 131XE
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-131XE-0826-SM-5HL9W)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX131XE
+    color 255,199,128
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0826-SM-5HL9W \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.8 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1367410
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1367410.hg38.bigWig
+    shortLabel colonTran M ZY6K
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZY6K-1226-SM-5GZYL)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZY6K
+    color 255,199,128
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-1226-SM-5GZYL \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.7 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1397292
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1397292.hg38.bigWig
+    shortLabel colonTran M 14C38
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-14C38-2626-SM-5RQI4)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX14C38
+    color 255,199,128
+    metadata donor=GTEX-14C38 age=50 sex=M hardyScore=0 sample=GTEX-14C38-2626-SM-5RQI4 \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=5.7 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1407018
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1407018.hg38.bigWig
+    shortLabel colonTran M WHSB
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WHSB-0926-SM-4M1XJ)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXWHSB
+    color 255,199,128
+
+    track gtexRnaSignalSRR1409046
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1409046.hg38.bigWig
+    shortLabel colonTran M YEC3
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-YEC3-2426-SM-5IFJR)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXYEC3
+    color 255,199,128
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-2426-SM-5IFJR \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=5.8 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1444523
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1444523.hg38.bigWig
+    shortLabel colonTran M 139YR
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-139YR-2126-SM-5KM11)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX139YR
+    color 255,199,128
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-2126-SM-5KM11 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.2 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1466687
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1466687.hg38.bigWig
+    shortLabel colonTran M Z93S
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-Z93S-2426-SM-5HL8N)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZ93S
+    color 255,199,128
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-2426-SM-5HL8N \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=5.9 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1470513
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1470513.hg38.bigWig
+    shortLabel colonTran M 117YW
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-117YW-1826-SM-5PNY5)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX117YW
+    color 255,199,128
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-1826-SM-5PNY5 \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.2 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1476974
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1476974.hg38.bigWig
+    shortLabel colonTran M ZEX8
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZEX8-1926-SM-4WKFR)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZEX8
+    color 255,199,128
+
+    track gtexRnaSignalSRR1477339
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1477339.hg38.bigWig
+    shortLabel colonTran M WY7C
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WY7C-1626-SM-4ONC8)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXWY7C
+    color 255,199,128
+
+    track gtexRnaSignalSRR1477732
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1477732.hg38.bigWig
+    shortLabel colonTran M 13111
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13111-0726-SM-5DUVE)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX13111
+    color 255,199,128
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0726-SM-5DUVE \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.9 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1478571
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1478571.hg38.bigWig
+    shortLabel colonTran M ZVP2
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-ZVP2-1526-SM-5NQ82)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXZVP2
+    color 255,199,128
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-1526-SM-5NQ82 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1479306
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1479306.hg38.bigWig
+    shortLabel colonTran M 111CU
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-111CU-1426-SM-5GZYP)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX111CU
+    color 255,199,128
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-1426-SM-5GZYP \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1500131
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1500131.hg38.bigWig
+    shortLabel colonTran M 13FHP
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13FHP-2426-SM-5KLZ5)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX13FHP
+    color 255,199,128
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-2426-SM-5KLZ5 \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.2 batch=BP-46734 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1500516
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1500516.hg38.bigWig
+    shortLabel colonTran M 14DAR
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-14DAR-1526-SM-5RQIX)
+    subGroups age=a50 tissue=colonTransverse donor=GTEX14DAR
+    color 255,199,128
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-1526-SM-5RQIX \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.4 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR812721
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR812721.hg38.bigWig
+    shortLabel colonTran M OIZH
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-OIZH-1426-SM-3NB1O)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXOIZH
+    color 255,199,128
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-1426-SM-3NB1O \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.8 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR816096
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR816096.hg38.bigWig
+    shortLabel colonTran M OXRL
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-OXRL-1426-SM-3NM9E)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXOXRL
+    color 255,199,128
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-1426-SM-3NM9E \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.7 batch=BP-18391 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR816794
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR816794.hg38.bigWig
+    shortLabel colonTran M PLZ5
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-PLZ5-1126-SM-3P613)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXPLZ5
+    color 255,199,128
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-1126-SM-3P613 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-19182 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/03/2011
+
+    track gtexRnaSignalSRR818523
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR818523.hg38.bigWig
+    shortLabel colonTran M OHPM
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-OHPM-1426-SM-3TW8Y)
+    subGroups age=a50 tissue=colonTransverse donor=GTEXOHPM
+    color 255,199,128
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-1426-SM-3TW8Y \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.4 batch=BP-17842 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2011
+
+    track gtexRnaSignalSRR1075078
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1075078.hg38.bigWig
+    shortLabel colonTran M VJYA
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-VJYA-2026-SM-4KL1K)
+    subGroups age=a60 tissue=colonTransverse donor=GTEXVJYA
+    color 255,199,128
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-2026-SM-4KL1K \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.4 batch=BP-26938 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1081116
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1081116.hg38.bigWig
+    shortLabel colonTran M XBED
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-XBED-1526-SM-4AT5W)
+    subGroups age=a60 tissue=colonTransverse donor=GTEXXBED
+    color 255,199,128
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-1526-SM-4AT5W \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.6 batch=BP-31651 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/01/2012
+
+    track gtexRnaSignalSRR1099451
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1099451.hg38.bigWig
+    shortLabel colonTran M V955
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-V955-1626-SM-4JBHJ)
+    subGroups age=a60 tissue=colonTransverse donor=GTEXV955
+    color 255,199,128
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-1626-SM-4JBHJ \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7 batch=BP-26934 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1310898
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1310898.hg38.bigWig
+    shortLabel colonTran M 111YS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-111YS-1626-SM-5GZZ9)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX111YS
+    color 255,199,128
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1626-SM-5GZZ9 \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=7.8 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1336227
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1336227.hg38.bigWig
+    shortLabel colonTran M QLQ7
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-QLQ7-1126-SM-4R1KN)
+    subGroups age=a60 tissue=colonTransverse donor=GTEXQLQ7
+    color 255,199,128
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1126-SM-4R1KN \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=8.1 batch=BP-20571 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR1367785
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1367785.hg38.bigWig
+    shortLabel colonTran M 11TUW
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11TUW-2026-SM-5EQL8)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX11TUW
+    color 255,199,128
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2026-SM-5EQL8 \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=6.7 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1376476
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1376476.hg38.bigWig
+    shortLabel colonTran M 148VJ
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-148VJ-2626-SM-5QGPI)
+    subGroups age=a70 tissue=colonTransverse donor=GTEX148VJ
+    color 255,199,128
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-2626-SM-5QGPI \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=6 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1383674
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1383674.hg38.bigWig
+    shortLabel colonTran M WQUQ
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-WQUQ-2526-SM-4MVNO)
+    subGroups age=a60 tissue=colonTransverse donor=GTEXWQUQ
+    color 255,199,128
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-2526-SM-4MVNO \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=5.7 batch=BP-28884 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2012
+
+    track gtexRnaSignalSRR1385672
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1385672.hg38.bigWig
+    shortLabel colonTran M 13OVG
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13OVG-1426-SM-5K7VP)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX13OVG
+    color 255,199,128
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-1426-SM-5K7VP \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.1 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1405311
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1405311.hg38.bigWig
+    shortLabel colonTran M 11ONC
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-11ONC-2026-SM-5HL61)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX11ONC
+    color 255,199,128
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2026-SM-5HL61 \
+            tissue=colonTransverse autolysisScore=2 rnaIntegrity=6.3 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1407000
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1407000.hg38.bigWig
+    shortLabel colonTran M 13OW5
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13OW5-2626-SM-5MR3M)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX13OW5
+    color 255,199,128
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-2626-SM-5MR3M \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=5.8 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1434631
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1434631.hg38.bigWig
+    shortLabel colonTran M 111VG
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-111VG-2226-SM-5N9DU)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX111VG
+    color 255,199,128
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-2226-SM-5N9DU \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=5.7 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1444043
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1444043.hg38.bigWig
+    shortLabel colonTran M 147JS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-147JS-2526-SM-5S2Q8)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX147JS
+    color 255,199,128
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-2526-SM-5S2Q8 \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=6.2 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1444978
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1444978.hg38.bigWig
+    shortLabel colonTran M 145MO
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-145MO-2426-SM-5NQ9W)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX145MO
+    color 255,199,128
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-2426-SM-5NQ9W \
+            tissue=colonTransverse autolysisScore=3 rnaIntegrity=5.7 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1457080
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1457080.hg38.bigWig
+    shortLabel colonTran M 12BJ1
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-12BJ1-2126-SM-5BC5O)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX12BJ1
+    color 255,199,128
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-2126-SM-5BC5O \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=5.9 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1470624
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR1470624.hg38.bigWig
+    shortLabel colonTran M 13O61
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-13O61-1626-SM-5KM3T)
+    subGroups age=a60 tissue=colonTransverse donor=GTEX13O61
+    color 255,199,128
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1626-SM-5KM3T \
+            tissue=colonTransverse autolysisScore=1 rnaIntegrity=6.6 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR2135395
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonTransverse/gtexRnaSignalSRR2135395.hg38.bigWig
+    shortLabel colonTran M SUCS
+    longLabel GTEx RNA signal from male Colon - Transverse (GTEX-SUCS-1026-SM-5CHTC_rep1)
+    subGroups age=a70 tissue=colonTransverse donor=GTEXSUCS
+    color 255,199,128
+

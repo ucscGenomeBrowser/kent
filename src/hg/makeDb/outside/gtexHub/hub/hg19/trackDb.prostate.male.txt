@@ -1,0 +1,1146 @@
+    track gtexRnaSignalSRR1069209
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1069209.hg19.bigWig
+    shortLabel prostate M RWSA
+    longLabel GTEx RNA signal from male Prostate (GTEX-RWSA-2026-SM-47JX8)
+    subGroups age=a40 tissue=prostate donor=GTEXRWSA
+    color 228,206,206
+    metadata donor=GTEX-RWSA age=40 sex=M hardyScore=1 sample=GTEX-RWSA-2026-SM-47JX8 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.1 batch=BP-22527 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2012
+
+    track gtexRnaSignalSRR1073069
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1073069.hg19.bigWig
+    shortLabel prostate M XQ3S
+    longLabel GTEx RNA signal from male Prostate (GTEX-XQ3S-2526-SM-4BOOG)
+    subGroups age=a20 tissue=prostate donor=GTEXXQ3S
+    color 228,206,206
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-2526-SM-4BOOG \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.9 batch=BP-34031 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/07/2012
+
+    track gtexRnaSignalSRR1074410
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1074410.hg19.bigWig
+    shortLabel prostate M U3ZM
+    longLabel GTEx RNA signal from male Prostate (GTEX-U3ZM-0926-SM-4DXSW)
+    subGroups age=a40 tissue=prostate donor=GTEXU3ZM
+    color 228,206,206
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-0926-SM-4DXSW \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.5 batch=BP-25560 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR1076120
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1076120.hg19.bigWig
+    shortLabel prostate M S33H
+    longLabel GTEx RNA signal from male Prostate (GTEX-S33H-1826-SM-4AD65)
+    subGroups age=a30 tissue=prostate donor=GTEXS33H
+    color 228,206,206
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-1826-SM-4AD65 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.1 batch=BP-22727 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1077429
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1077429.hg19.bigWig
+    shortLabel prostate M WFG8
+    longLabel GTEx RNA signal from male Prostate (GTEX-WFG8-1826-SM-4LVM4)
+    subGroups age=a20 tissue=prostate donor=GTEXWFG8
+    color 228,206,206
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-1826-SM-4LVM4 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.7 batch=BP-27442 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1078684
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1078684.hg19.bigWig
+    shortLabel prostate M T8EM
+    longLabel GTEx RNA signal from male Prostate (GTEX-T8EM-1826-SM-4DM7F)
+    subGroups age=a40 tissue=prostate donor=GTEXT8EM
+    color 228,206,206
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-1826-SM-4DM7F \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.7 batch=BP-24892 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1080318
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1080318.hg19.bigWig
+    shortLabel prostate M S4Q7
+    longLabel GTEx RNA signal from male Prostate (GTEX-S4Q7-1026-SM-4AD75)
+    subGroups age=a20 tissue=prostate donor=GTEXS4Q7
+    color 228,206,206
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-1026-SM-4AD75 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8.1 batch=BP-23051 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1083732
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1083732.hg19.bigWig
+    shortLabel prostate M U4B1
+    longLabel GTEx RNA signal from male Prostate (GTEX-U4B1-1426-SM-4DXTX)
+    subGroups age=a40 tissue=prostate donor=GTEXU4B1
+    color 228,206,206
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-1426-SM-4DXTX \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8 batch=BP-25601 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSRR1086441
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1086441.hg19.bigWig
+    shortLabel prostate M X5EB
+    longLabel GTEx RNA signal from male Prostate (GTEX-X5EB-1826-SM-4E3K8)
+    subGroups age=a40 tissue=prostate donor=GTEXX5EB
+    color 228,206,206
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-1826-SM-4E3K8 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8.3 batch=BP-36349 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalSRR1086869
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1086869.hg19.bigWig
+    shortLabel prostate M U3ZH
+    longLabel GTEx RNA signal from male Prostate (GTEX-U3ZH-0926-SM-4DXU4)
+    subGroups age=a30 tissue=prostate donor=GTEXU3ZH
+    color 228,206,206
+
+    track gtexRnaSignalSRR1091645
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1091645.hg19.bigWig
+    shortLabel prostate M U8XE
+    longLabel GTEx RNA signal from male Prostate (GTEX-U8XE-2526-SM-4E3IT)
+    subGroups age=a30 tissue=prostate donor=GTEXU8XE
+    color 228,206,206
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-2526-SM-4E3IT \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-25967 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalSRR1091990
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1091990.hg19.bigWig
+    shortLabel prostate M SNMC
+    longLabel GTEx RNA signal from male Prostate (GTEX-SNMC-0926-SM-4DM5U)
+    subGroups age=a20 tissue=prostate donor=GTEXSNMC
+    color 228,206,206
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-0926-SM-4DM5U \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.1 batch=BP-23820 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalSRR1092444
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1092444.hg19.bigWig
+    shortLabel prostate M Q2AI
+    longLabel GTEx RNA signal from male Prostate (GTEX-Q2AI-1126-SM-48U19)
+    subGroups age=a40 tissue=prostate donor=GTEXQ2AI
+    color 228,206,206
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-1126-SM-48U19 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.3 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1092636
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1092636.hg19.bigWig
+    shortLabel prostate M WFON
+    longLabel GTEx RNA signal from male Prostate (GTEX-WFON-1626-SM-4LVMV)
+    subGroups age=a40 tissue=prostate donor=GTEXWFON
+    color 228,206,206
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-1626-SM-4LVMV \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.1 batch=BP-27751 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalSRR1093697
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1093697.hg19.bigWig
+    shortLabel prostate M T5JC
+    longLabel GTEx RNA signal from male Prostate (GTEX-T5JC-1226-SM-4DM7C)
+    subGroups age=a20 tissue=prostate donor=GTEXT5JC
+    color 228,206,206
+
+    track gtexRnaSignalSRR1097905
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1097905.hg19.bigWig
+    shortLabel prostate M SNOS
+    longLabel GTEx RNA signal from male Prostate (GTEX-SNOS-1026-SM-4DM4Y)
+    subGroups age=a40 tissue=prostate donor=GTEXSNOS
+    color 228,206,206
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-1026-SM-4DM4Y \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8 batch=BP-24457 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1098686
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1098686.hg19.bigWig
+    shortLabel prostate M WH7G
+    longLabel GTEx RNA signal from male Prostate (GTEX-WH7G-1726-SM-4LVKY)
+    subGroups age=a40 tissue=prostate donor=GTEXWH7G
+    color 228,206,206
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-1726-SM-4LVKY \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.4 batch=BP-27853 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR1099402
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1099402.hg19.bigWig
+    shortLabel prostate M XMK1
+    longLabel GTEx RNA signal from male Prostate (GTEX-XMK1-1026-SM-4B65H)
+    subGroups age=a40 tissue=prostate donor=GTEXXMK1
+    color 228,206,206
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-1026-SM-4B65H \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-32848 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2012
+
+    track gtexRnaSignalSRR1310939
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1310939.hg19.bigWig
+    shortLabel prostate M 11O72
+    longLabel GTEx RNA signal from male Prostate (GTEX-11O72-2726-SM-5HL6K)
+    subGroups age=a40 tissue=prostate donor=GTEX11O72
+    color 228,206,206
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-2726-SM-5HL6K \
+            tissue=prostate autolysisScore=3 rnaIntegrity=6.1 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1312002
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1312002.hg19.bigWig
+    shortLabel prostate M 11NSD
+    longLabel GTEx RNA signal from male Prostate (GTEX-11NSD-0826-SM-5986S)
+    subGroups age=a20 tissue=prostate donor=GTEX11NSD
+    color 228,206,206
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0826-SM-5986S \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.5 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1324314
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1324314.hg19.bigWig
+    shortLabel prostate M 1399R
+    longLabel GTEx RNA signal from male Prostate (GTEX-1399R-0526-SM-5IJEF)
+    subGroups age=a30 tissue=prostate donor=GTEX1399R
+    color 228,206,206
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0526-SM-5IJEF \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.9 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1332360
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1332360.hg19.bigWig
+    shortLabel prostate M 146FQ
+    longLabel GTEx RNA signal from male Prostate (GTEX-146FQ-1726-SM-5QGPX)
+    subGroups age=a30 tissue=prostate donor=GTEX146FQ
+    color 228,206,206
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-1726-SM-5QGPX \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1335605
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1335605.hg19.bigWig
+    shortLabel prostate M ZLFU
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZLFU-1726-SM-4WWBU)
+    subGroups age=a40 tissue=prostate donor=GTEXZLFU
+    color 228,206,206
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-1726-SM-4WWBU \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.9 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1349809
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1349809.hg19.bigWig
+    shortLabel prostate M 11EQ9
+    longLabel GTEx RNA signal from male Prostate (GTEX-11EQ9-1726-SM-5HL6U)
+    subGroups age=a30 tissue=prostate donor=GTEX11EQ9
+    color 228,206,206
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1726-SM-5HL6U \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1375866
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1375866.hg19.bigWig
+    shortLabel prostate M QV31
+    longLabel GTEx RNA signal from male Prostate (GTEX-QV31-1026-SM-4R1K3)
+    subGroups age=a30 tissue=prostate donor=GTEXQV31
+    color 228,206,206
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-1026-SM-4R1K3 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8.3 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1381396
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1381396.hg19.bigWig
+    shortLabel prostate M YB5E
+    longLabel GTEx RNA signal from male Prostate (GTEX-YB5E-1826-SM-5IFI4)
+    subGroups age=a40 tissue=prostate donor=GTEXYB5E
+    color 228,206,206
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-1826-SM-5IFI4 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.7 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1382553
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1382553.hg19.bigWig
+    shortLabel prostate M QEG4
+    longLabel GTEx RNA signal from male Prostate (GTEX-QEG4-2226-SM-4R1JM)
+    subGroups age=a30 tissue=prostate donor=GTEXQEG4
+    color 228,206,206
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-2226-SM-4R1JM \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.1 batch=BP-20320 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR1398815
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1398815.hg19.bigWig
+    shortLabel prostate M Y9LG
+    longLabel GTEx RNA signal from male Prostate (GTEX-Y9LG-1826-SM-4VBQC)
+    subGroups age=a30 tissue=prostate donor=GTEXY9LG
+    color 228,206,206
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-1826-SM-4VBQC \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.1 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1402261
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1402261.hg19.bigWig
+    shortLabel prostate M 144GM
+    longLabel GTEx RNA signal from male Prostate (GTEX-144GM-0826-SM-5O98R)
+    subGroups age=a20 tissue=prostate donor=GTEX144GM
+    color 228,206,206
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-0826-SM-5O98R \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.9 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1414332
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1414332.hg19.bigWig
+    shortLabel prostate M WOFM
+    longLabel GTEx RNA signal from male Prostate (GTEX-WOFM-0326-SM-4OOSL)
+    subGroups age=a20 tissue=prostate donor=GTEXWOFM
+    color 228,206,206
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-0326-SM-4OOSL \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7 batch=BP-28355 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR1430928
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1430928.hg19.bigWig
+    shortLabel prostate M ZZ64
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZZ64-0926-SM-5E44L)
+    subGroups age=a20 tissue=prostate donor=GTEXZZ64
+    color 228,206,206
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-0926-SM-5E44L \
+            tissue=prostate autolysisScore=0 rnaIntegrity=6.2 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1441178
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1441178.hg19.bigWig
+    shortLabel prostate M ZUA1
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZUA1-2826-SM-59HLE)
+    subGroups age=a40 tissue=prostate donor=GTEXZUA1
+    color 228,206,206
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-2826-SM-59HLE \
+            tissue=prostate autolysisScore=3 rnaIntegrity=6.5 batch=BP-43231 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1441804
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1441804.hg19.bigWig
+    shortLabel prostate M 13FTW
+    longLabel GTEx RNA signal from male Prostate (GTEX-13FTW-1226-SM-5LZZ1)
+    subGroups age=a40 tissue=prostate donor=GTEX13FTW
+    color 228,206,206
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-1226-SM-5LZZ1 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.6 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1456548
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1456548.hg19.bigWig
+    shortLabel prostate M ZTX8
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZTX8-1026-SM-5EGHD)
+    subGroups age=a20 tissue=prostate donor=GTEXZTX8
+    color 228,206,206
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1026-SM-5EGHD \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1459465
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1459465.hg19.bigWig
+    shortLabel prostate M YFCO
+    longLabel GTEx RNA signal from male Prostate (GTEX-YFCO-1626-SM-4W1Z3)
+    subGroups age=a40 tissue=prostate donor=GTEXYFCO
+    color 228,206,206
+
+    track gtexRnaSignalSRR1471178
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1471178.hg19.bigWig
+    shortLabel prostate M 12C56
+    longLabel GTEx RNA signal from male Prostate (GTEX-12C56-1326-SM-5FQSV)
+    subGroups age=a20 tissue=prostate donor=GTEX12C56
+    color 228,206,206
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-1326-SM-5FQSV \
+            tissue=prostate autolysisScore=0 rnaIntegrity=6.9 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1472863
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1472863.hg19.bigWig
+    shortLabel prostate M 11P7K
+    longLabel GTEx RNA signal from male Prostate (GTEX-11P7K-0626-SM-5985Z)
+    subGroups age=a30 tissue=prostate donor=GTEX11P7K
+    color 228,206,206
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0626-SM-5985Z \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1476507
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1476507.hg19.bigWig
+    shortLabel prostate M YJ8A
+    longLabel GTEx RNA signal from male Prostate (GTEX-YJ8A-1126-SM-5IFJU)
+    subGroups age=a20 tissue=prostate donor=GTEXYJ8A
+    color 228,206,206
+    metadata donor=GTEX-YJ8A age=20 sex=M hardyScore=0 sample=GTEX-YJ8A-1126-SM-5IFJU \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.9 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1486348
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1486348.hg19.bigWig
+    shortLabel prostate M 11P82
+    longLabel GTEx RNA signal from male Prostate (GTEX-11P82-1126-SM-5BC5K)
+    subGroups age=a20 tissue=prostate donor=GTEX11P82
+    color 228,206,206
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-1126-SM-5BC5K \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1499215
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1499215.hg19.bigWig
+    shortLabel prostate M 11ZUS
+    longLabel GTEx RNA signal from male Prostate (GTEX-11ZUS-2126-SM-5N9E6)
+    subGroups age=a30 tissue=prostate donor=GTEX11ZUS
+    color 228,206,206
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-2126-SM-5N9E6 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.7 batch=BP-43823 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR661052
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR661052.hg19.bigWig
+    shortLabel prostate M WFG7
+    longLabel GTEx RNA signal from male Prostate (GTEX-WFG7-1826-SM-3GIL1)
+    subGroups age=a20 tissue=prostate donor=GTEXWFG7
+    color 228,206,206
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-1826-SM-3GIL1 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8.2 batch=BP-27324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR816818
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR816818.hg19.bigWig
+    shortLabel prostate M OOBK
+    longLabel GTEx RNA signal from male Prostate (GTEX-OOBK-2025-SM-3LK5S)
+    subGroups age=a40 tissue=prostate donor=GTEXOOBK
+    color 228,206,206
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-2025-SM-3LK5S \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.1 batch=BP-18257 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR816969
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR816969.hg19.bigWig
+    shortLabel prostate M PLZ6
+    longLabel GTEx RNA signal from male Prostate (GTEX-PLZ6-1126-SM-3P5ZR)
+    subGroups age=a30 tissue=prostate donor=GTEXPLZ6
+    color 228,206,206
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-1126-SM-3P5ZR \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.3 batch=BP-19256 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR820234
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR820234.hg19.bigWig
+    shortLabel prostate M NPJ8
+    longLabel GTEx RNA signal from male Prostate (GTEX-NPJ8-2426-SM-3MJHL)
+    subGroups age=a40 tissue=prostate donor=GTEXNPJ8
+    color 228,206,206
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-2426-SM-3MJHL \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.7 batch=BP-17316 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR1069514
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1069514.hg19.bigWig
+    shortLabel prostate M XGQ4
+    longLabel GTEx RNA signal from male Prostate (GTEX-XGQ4-1826-SM-4AT6F)
+    subGroups age=a50 tissue=prostate donor=GTEXXGQ4
+    color 228,206,206
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-1826-SM-4AT6F \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-32308 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalSRR1075530
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1075530.hg19.bigWig
+    shortLabel prostate M XPVG
+    longLabel GTEx RNA signal from male Prostate (GTEX-XPVG-2026-SM-4B65E)
+    subGroups age=a50 tissue=prostate donor=GTEXXPVG
+    color 228,206,206
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-2026-SM-4B65E \
+            tissue=prostate autolysisScore=1 rnaIntegrity=8.3 batch=BP-33940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1078164
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1078164.hg19.bigWig
+    shortLabel prostate M V1D1
+    longLabel GTEx RNA signal from male Prostate (GTEX-V1D1-1926-SM-4JBGX)
+    subGroups age=a50 tissue=prostate donor=GTEXV1D1
+    color 228,206,206
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-1926-SM-4JBGX \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.7 batch=BP-26868 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1086514
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1086514.hg19.bigWig
+    shortLabel prostate M RM2N
+    longLabel GTEx RNA signal from male Prostate (GTEX-RM2N-1126-SM-48FCY)
+    subGroups age=a50 tissue=prostate donor=GTEXRM2N
+    color 228,206,206
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1126-SM-48FCY \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.2 batch=BP-21575 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR1092913
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1092913.hg19.bigWig
+    shortLabel prostate M S3XE
+    longLabel GTEx RNA signal from male Prostate (GTEX-S3XE-1326-SM-4AD4H)
+    subGroups age=a50 tissue=prostate donor=GTEXS3XE
+    color 228,206,206
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-1326-SM-4AD4H \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.8 batch=BP-22873 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/05/2012
+
+    track gtexRnaSignalSRR1093075
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1093075.hg19.bigWig
+    shortLabel prostate M XOTO
+    longLabel GTEx RNA signal from male Prostate (GTEX-XOTO-2826-SM-4B65I)
+    subGroups age=a50 tissue=prostate donor=GTEXXOTO
+    color 228,206,206
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-2826-SM-4B65I \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.8 batch=BP-33777 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSRR1308860
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1308860.hg19.bigWig
+    shortLabel prostate M 117YX
+    longLabel GTEx RNA signal from male Prostate (GTEX-117YX-1526-SM-5H12T)
+    subGroups age=a50 tissue=prostate donor=GTEX117YX
+    color 228,206,206
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-1526-SM-5H12T \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.1 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1317751
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1317751.hg19.bigWig
+    shortLabel prostate M 145LV
+    longLabel GTEx RNA signal from male Prostate (GTEX-145LV-1226-SM-5S2QH)
+    subGroups age=a50 tissue=prostate donor=GTEX145LV
+    color 228,206,206
+    metadata donor=GTEX-145LV age=50 sex=M hardyScore=0 sample=GTEX-145LV-1226-SM-5S2QH \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.3 batch=BP-48818 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1323699
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1323699.hg19.bigWig
+    shortLabel prostate M 14ABY
+    longLabel GTEx RNA signal from male Prostate (GTEX-14ABY-0726-SM-5Q5DF)
+    subGroups age=a50 tissue=prostate donor=GTEX14ABY
+    color 228,206,206
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0726-SM-5Q5DF \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.7 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1338079
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1338079.hg19.bigWig
+    shortLabel prostate M ZT9W
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZT9W-1626-SM-4YCDQ)
+    subGroups age=a50 tissue=prostate donor=GTEXZT9W
+    color 228,206,206
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-1626-SM-4YCDQ \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.8 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1360056
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1360056.hg19.bigWig
+    shortLabel prostate M 117YW
+    longLabel GTEx RNA signal from male Prostate (GTEX-117YW-1426-SM-5EGGO)
+    subGroups age=a50 tissue=prostate donor=GTEX117YW
+    color 228,206,206
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-1426-SM-5EGGO \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.9 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1366985
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1366985.hg19.bigWig
+    shortLabel prostate M 14BMV
+    longLabel GTEx RNA signal from male Prostate (GTEX-14BMV-2326-SM-5RQJ4)
+    subGroups age=a50 tissue=prostate donor=GTEX14BMV
+    color 228,206,206
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-2326-SM-5RQJ4 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.7 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1373964
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1373964.hg19.bigWig
+    shortLabel prostate M QV44
+    longLabel GTEx RNA signal from male Prostate (GTEX-QV44-1526-SM-4R1KI)
+    subGroups age=a50 tissue=prostate donor=GTEXQV44
+    color 228,206,206
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-1526-SM-4R1KI \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.8 batch=BP-20869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1398251
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1398251.hg19.bigWig
+    shortLabel prostate M 13FXS
+    longLabel GTEx RNA signal from male Prostate (GTEX-13FXS-2826-SM-5LZYC)
+    subGroups age=a50 tissue=prostate donor=GTEX13FXS
+    color 228,206,206
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-2826-SM-5LZYC \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.2 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1399113
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1399113.hg19.bigWig
+    shortLabel prostate M 11DXZ
+    longLabel GTEx RNA signal from male Prostate (GTEX-11DXZ-1826-SM-5H12Y)
+    subGroups age=a50 tissue=prostate donor=GTEX11DXZ
+    color 228,206,206
+
+    track gtexRnaSignalSRR1400100
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1400100.hg19.bigWig
+    shortLabel prostate M 13O21
+    longLabel GTEx RNA signal from male Prostate (GTEX-13O21-1126-SM-5N9EV)
+    subGroups age=a50 tissue=prostate donor=GTEX13O21
+    color 228,206,206
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-1126-SM-5N9EV \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.7 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1408703
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1408703.hg19.bigWig
+    shortLabel prostate M WY7C
+    longLabel GTEx RNA signal from male Prostate (GTEX-WY7C-2026-SM-4ONCM)
+    subGroups age=a50 tissue=prostate donor=GTEXWY7C
+    color 228,206,206
+
+    track gtexRnaSignalSRR1431139
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1431139.hg19.bigWig
+    shortLabel prostate M QMRM
+    longLabel GTEx RNA signal from male Prostate (GTEX-QMRM-1426-SM-4R1K8)
+    subGroups age=a50 tissue=prostate donor=GTEXQMRM
+    color 228,206,206
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1426-SM-4R1K8 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.7 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1434545
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1434545.hg19.bigWig
+    shortLabel prostate M ZYFD
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZYFD-2526-SM-5E45L)
+    subGroups age=a50 tissue=prostate donor=GTEXZYFD
+    color 228,206,206
+
+    track gtexRnaSignalSRR1436021
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1436021.hg19.bigWig
+    shortLabel prostate M 111CU
+    longLabel GTEx RNA signal from male Prostate (GTEX-111CU-1526-SM-5N9FS)
+    subGroups age=a50 tissue=prostate donor=GTEX111CU
+    color 228,206,206
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-1526-SM-5N9FS \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.7 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1455413
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1455413.hg19.bigWig
+    shortLabel prostate M 139T6
+    longLabel GTEx RNA signal from male Prostate (GTEX-139T6-1526-SM-5P9G6)
+    subGroups age=a50 tissue=prostate donor=GTEX139T6
+    color 228,206,206
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-1526-SM-5P9G6 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.7 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1456611
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1456611.hg19.bigWig
+    shortLabel prostate M 13111
+    longLabel GTEx RNA signal from male Prostate (GTEX-13111-1326-SM-5GCNO)
+    subGroups age=a50 tissue=prostate donor=GTEX13111
+    color 228,206,206
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-1326-SM-5GCNO \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1458198
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1458198.hg19.bigWig
+    shortLabel prostate M ZY6K
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZY6K-1526-SM-5GZXE)
+    subGroups age=a50 tissue=prostate donor=GTEXZY6K
+    color 228,206,206
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-1526-SM-5GZXE \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.5 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1489631
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1489631.hg19.bigWig
+    shortLabel prostate M ZDYS
+    longLabel GTEx RNA signal from male Prostate (GTEX-ZDYS-1226-SM-5IJF3)
+    subGroups age=a50 tissue=prostate donor=GTEXZDYS
+    color 228,206,206
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-1226-SM-5IJF3 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.5 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1500089
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1500089.hg19.bigWig
+    shortLabel prostate M WYJK
+    longLabel GTEx RNA signal from male Prostate (GTEX-WYJK-0626-SM-4ONCZ)
+    subGroups age=a50 tissue=prostate donor=GTEXWYJK
+    color 228,206,206
+
+    track gtexRnaSignalSRR1075126
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1075126.hg19.bigWig
+    shortLabel prostate M REY6
+    longLabel GTEx RNA signal from male Prostate (GTEX-REY6-2126-SM-48FD9)
+    subGroups age=a60 tissue=prostate donor=GTEXREY6
+    color 228,206,206
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-2126-SM-48FD9 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=7.1 batch=BP-21549 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1078855
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1078855.hg19.bigWig
+    shortLabel prostate M SJXC
+    longLabel GTEx RNA signal from male Prostate (GTEX-SJXC-2026-SM-4DM6N)
+    subGroups age=a60 tissue=prostate donor=GTEXSJXC
+    color 228,206,206
+    metadata donor=GTEX-SJXC age=60 sex=M hardyScore=2 sample=GTEX-SJXC-2026-SM-4DM6N \
+            tissue=prostate autolysisScore=3 rnaIntegrity=5.8 batch=BP-23768 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/03/2012
+
+    track gtexRnaSignalSRR1080696
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1080696.hg19.bigWig
+    shortLabel prostate M UTHO
+    longLabel GTEx RNA signal from male Prostate (GTEX-UTHO-2726-SM-4JBH9)
+    subGroups age=a60 tissue=prostate donor=GTEXUTHO
+    color 228,206,206
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-2726-SM-4JBH9 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=7.5 batch=BP-26701 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalSRR1081789
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1081789.hg19.bigWig
+    shortLabel prostate M V955
+    longLabel GTEx RNA signal from male Prostate (GTEX-V955-1826-SM-4JBIL)
+    subGroups age=a60 tissue=prostate donor=GTEXV955
+    color 228,206,206
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-1826-SM-4JBIL \
+            tissue=prostate autolysisScore=1 rnaIntegrity=5.8 batch=BP-26934 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1082496
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1082496.hg19.bigWig
+    shortLabel prostate M SUCS
+    longLabel GTEx RNA signal from male Prostate (GTEX-SUCS-1126-SM-4DM61)
+    subGroups age=a70 tissue=prostate donor=GTEXSUCS
+    color 228,206,206
+
+    track gtexRnaSignalSRR1092468
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1092468.hg19.bigWig
+    shortLabel prostate M S95S
+    longLabel GTEx RNA signal from male Prostate (GTEX-S95S-1026-SM-4B64M)
+    subGroups age=a60 tissue=prostate donor=GTEXS95S
+    color 228,206,206
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-1026-SM-4B64M \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.1 batch=BP-23283 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR1096081
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1096081.hg19.bigWig
+    shortLabel prostate M U412
+    longLabel GTEx RNA signal from male Prostate (GTEX-U412-2026-SM-4DXSI)
+    subGroups age=a60 tissue=prostate donor=GTEXU412
+    color 228,206,206
+    metadata donor=GTEX-U412 age=60 sex=M hardyScore=3 sample=GTEX-U412-2026-SM-4DXSI \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.2 batch=BP-25599 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSRR1326100
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1326100.hg19.bigWig
+    shortLabel prostate M 131XF
+    longLabel GTEx RNA signal from male Prostate (GTEX-131XF-1926-SM-5DUW4)
+    subGroups age=a60 tissue=prostate donor=GTEX131XF
+    color 228,206,206
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-1926-SM-5DUW4 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1335964
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1335964.hg19.bigWig
+    shortLabel prostate M 13O61
+    longLabel GTEx RNA signal from male Prostate (GTEX-13O61-1726-SM-5KM46)
+    subGroups age=a60 tissue=prostate donor=GTEX13O61
+    color 228,206,206
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1726-SM-5KM46 \
+            tissue=prostate autolysisScore=0 rnaIntegrity=6.8 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1347343
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1347343.hg19.bigWig
+    shortLabel prostate M 11OF3
+    longLabel GTEx RNA signal from male Prostate (GTEX-11OF3-1726-SM-5GU5Q)
+    subGroups age=a60 tissue=prostate donor=GTEX11OF3
+    color 228,206,206
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-1726-SM-5GU5Q \
+            tissue=prostate autolysisScore=3 rnaIntegrity=5.9 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1350979
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1350979.hg19.bigWig
+    shortLabel prostate M 13OW8
+    longLabel GTEx RNA signal from male Prostate (GTEX-13OW8-0426-SM-5J2NR)
+    subGroups age=a60 tissue=prostate donor=GTEX13OW8
+    color 228,206,206
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0426-SM-5J2NR \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1353418
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1353418.hg19.bigWig
+    shortLabel prostate M 11DYG
+    longLabel GTEx RNA signal from male Prostate (GTEX-11DYG-2526-SM-5N9BB)
+    subGroups age=a60 tissue=prostate donor=GTEX11DYG
+    color 228,206,206
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-2526-SM-5N9BB \
+            tissue=prostate autolysisScore=3 rnaIntegrity=5.7 batch=BP-43989 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1365013
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1365013.hg19.bigWig
+    shortLabel prostate M 111YS
+    longLabel GTEx RNA signal from male Prostate (GTEX-111YS-1726-SM-5GIED)
+    subGroups age=a60 tissue=prostate donor=GTEX111YS
+    color 228,206,206
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1726-SM-5GIED \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.3 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1416636
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1416636.hg19.bigWig
+    shortLabel prostate M 13FHO
+    longLabel GTEx RNA signal from male Prostate (GTEX-13FHO-2826-SM-5K7ZA)
+    subGroups age=a60 tissue=prostate donor=GTEX13FHO
+    color 228,206,206
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-2826-SM-5K7ZA \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1421159
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1421159.hg19.bigWig
+    shortLabel prostate M QLQ7
+    longLabel GTEx RNA signal from male Prostate (GTEX-QLQ7-1326-SM-4R1JY)
+    subGroups age=a60 tissue=prostate donor=GTEXQLQ7
+    color 228,206,206
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1326-SM-4R1JY \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.8 batch=BP-20571 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR1432014
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1432014.hg19.bigWig
+    shortLabel prostate M 12ZZZ
+    longLabel GTEx RNA signal from male Prostate (GTEX-12ZZZ-2026-SM-5LZWJ)
+    subGroups age=a60 tissue=prostate donor=GTEX12ZZZ
+    color 228,206,206
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-2026-SM-5LZWJ \
+            tissue=prostate autolysisScore=3 rnaIntegrity=6 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1433329
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1433329.hg19.bigWig
+    shortLabel prostate M 132NY
+    longLabel GTEx RNA signal from male Prostate (GTEX-132NY-2826-SM-5P9G2)
+    subGroups age=a60 tissue=prostate donor=GTEX132NY
+    color 228,206,206
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-2826-SM-5P9G2 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.6 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1434228
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1434228.hg19.bigWig
+    shortLabel prostate M 111FC
+    longLabel GTEx RNA signal from male Prostate (GTEX-111FC-2026-SM-5GZYO)
+    subGroups age=a60 tissue=prostate donor=GTEX111FC
+    color 228,206,206
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-2026-SM-5GZYO \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.8 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1435667
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1435667.hg19.bigWig
+    shortLabel prostate M 13G51
+    longLabel GTEx RNA signal from male Prostate (GTEX-13G51-2326-SM-5LZXV)
+    subGroups age=a60 tissue=prostate donor=GTEX13G51
+    color 228,206,206
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-2326-SM-5LZXV \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.8 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1437143
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1437143.hg19.bigWig
+    shortLabel prostate M 14C5O
+    longLabel GTEx RNA signal from male Prostate (GTEX-14C5O-2826-SM-5RQI6)
+    subGroups age=a60 tissue=prostate donor=GTEX14C5O
+    color 228,206,206
+    metadata donor=GTEX-14C5O age=60 sex=M hardyScore=4 sample=GTEX-14C5O-2826-SM-5RQI6 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1437163
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1437163.hg19.bigWig
+    shortLabel prostate M 132QS
+    longLabel GTEx RNA signal from male Prostate (GTEX-132QS-1126-SM-5P9GC)
+    subGroups age=a60 tissue=prostate donor=GTEX132QS
+    color 228,206,206
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-1126-SM-5P9GC \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.6 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1442612
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1442612.hg19.bigWig
+    shortLabel prostate M 13N2G
+    longLabel GTEx RNA signal from male Prostate (GTEX-13N2G-1826-SM-5KM1I)
+    subGroups age=a60 tissue=prostate donor=GTEX13N2G
+    color 228,206,206
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-1826-SM-5KM1I \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.2 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1453005
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1453005.hg19.bigWig
+    shortLabel prostate M 1477Z
+    longLabel GTEx RNA signal from male Prostate (GTEX-1477Z-2226-SM-5QGPG)
+    subGroups age=a60 tissue=prostate donor=GTEX1477Z
+    color 228,206,206
+
+    track gtexRnaSignalSRR1453434
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1453434.hg19.bigWig
+    shortLabel prostate M 11TUW
+    longLabel GTEx RNA signal from male Prostate (GTEX-11TUW-2126-SM-5GU7B)
+    subGroups age=a60 tissue=prostate donor=GTEX11TUW
+    color 228,206,206
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2126-SM-5GU7B \
+            tissue=prostate autolysisScore=2 rnaIntegrity=5.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1478679
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1478679.hg19.bigWig
+    shortLabel prostate M 1399T
+    longLabel GTEx RNA signal from male Prostate (GTEX-1399T-1226-SM-5P9J5)
+    subGroups age=a60 tissue=prostate donor=GTEX1399T
+    color 228,206,206
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-1226-SM-5P9J5 \
+            tissue=prostate autolysisScore=2 rnaIntegrity=6.3 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1488770
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR1488770.hg19.bigWig
+    shortLabel prostate M 13RTJ
+    longLabel GTEx RNA signal from male Prostate (GTEX-13RTJ-2126-SM-5S2PZ)
+    subGroups age=a60 tissue=prostate donor=GTEX13RTJ
+    color 228,206,206
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-2126-SM-5S2PZ \
+            tissue=prostate autolysisScore=1 rnaIntegrity=6.3 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR657809
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR657809.hg19.bigWig
+    shortLabel prostate M VJYA
+    longLabel GTEx RNA signal from male Prostate (GTEX-VJYA-1226-SM-3GIJ6)
+    subGroups age=a60 tissue=prostate donor=GTEXVJYA
+    color 228,206,206
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-1226-SM-3GIJ6 \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-26934 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR813108
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR813108.hg19.bigWig
+    shortLabel prostate M P4QS
+    longLabel GTEx RNA signal from male Prostate (GTEX-P4QS-2026-SM-3NMCG)
+    subGroups age=a60 tissue=prostate donor=GTEXP4QS
+    color 228,206,206
+
+    track gtexRnaSignalSRR815845
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl prostate/gtexRnaSignalSRR815845.hg19.bigWig
+    shortLabel prostate M OOBJ
+    longLabel GTEx RNA signal from male Prostate (GTEX-OOBJ-2026-SM-3NB1R)
+    subGroups age=a60 tissue=prostate donor=GTEXOOBJ
+    color 228,206,206
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-2026-SM-3NB1R \
+            tissue=prostate autolysisScore=1 rnaIntegrity=7.2 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+

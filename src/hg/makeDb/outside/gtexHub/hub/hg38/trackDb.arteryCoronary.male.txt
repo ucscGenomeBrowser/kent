@@ -1,0 +1,768 @@
+    track gtexRnaSignalSRR1071856
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1071856.hg38.bigWig
+    shortLabel arteryCor M Q2AH
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-Q2AH-0626-SM-48TZJ)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXQ2AH
+    color 255,95,63
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0626-SM-48TZJ \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.6 batch=BP-19999 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR1078465
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1078465.hg38.bigWig
+    shortLabel arteryCor M WFG7
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WFG7-0626-SM-4LMK6)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEXWFG7
+    color 255,95,63
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-0626-SM-4LMK6 \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=7.1 batch=BP-27213 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalSRR1079502
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1079502.hg38.bigWig
+    shortLabel arteryCor M U3ZH
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-U3ZH-0426-SM-4DXSE)
+    subGroups age=a30 tissue=arteryCoronary donor=GTEXU3ZH
+    color 255,95,63
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-0426-SM-4DXSE \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.8 batch=BP-25328 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalSRR1089375
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1089375.hg38.bigWig
+    shortLabel arteryCor M SNMC
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-SNMC-0226-SM-4DM6F)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEXSNMC
+    color 255,95,63
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-0226-SM-4DM6F \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=8.5 batch=BP-23791 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/04/2012
+
+    track gtexRnaSignalSRR1360299
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1360299.hg38.bigWig
+    shortLabel arteryCor M ZAB4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZAB4-0726-SM-5HL8I)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXZAB4
+    color 255,95,63
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0726-SM-5HL8I \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.2 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1365791
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1365791.hg38.bigWig
+    shortLabel arteryCor M QEG5
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-QEG5-1026-SM-4R1KT)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEXQEG5
+    color 255,95,63
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-1026-SM-4R1KT \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.8 batch=BP-20332 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/28/2011
+
+    track gtexRnaSignalSRR1380231
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1380231.hg38.bigWig
+    shortLabel arteryCor M 13FTW
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13FTW-0926-SM-5J2NJ)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEX13FTW
+    color 255,95,63
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-0926-SM-5J2NJ \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=6.4 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1404555
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1404555.hg38.bigWig
+    shortLabel arteryCor M WHSE
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WHSE-0726-SM-4RTXA)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEXWHSE
+    color 255,95,63
+
+    track gtexRnaSignalSRR1421420
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1421420.hg38.bigWig
+    shortLabel arteryCor M Y8E4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-Y8E4-0226-SM-4VBQ3)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXY8E4
+    color 255,95,63
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-0226-SM-4VBQ3 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.8 batch=BP-42087 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1442800
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1442800.hg38.bigWig
+    shortLabel arteryCor M 11TT1
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11TT1-1526-SM-5EQKU)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEX11TT1
+    color 255,95,63
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-1526-SM-5EQKU \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.2 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1472214
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1472214.hg38.bigWig
+    shortLabel arteryCor M ZYT6
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZYT6-0826-SM-5E43I)
+    subGroups age=a30 tissue=arteryCoronary donor=GTEXZYT6
+    color 255,95,63
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0826-SM-5E43I \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.6 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1472370
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1472370.hg38.bigWig
+    shortLabel arteryCor M ZPU1
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZPU1-0526-SM-4YCDA)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXZPU1
+    color 255,95,63
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0526-SM-4YCDA \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=9 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1476736
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1476736.hg38.bigWig
+    shortLabel arteryCor M X5EB
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-X5EB-0326-SM-4QASF)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXX5EB
+    color 255,95,63
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0326-SM-4QASF \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.4 batch=BP-31052 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/12/2012
+
+    track gtexRnaSignalSRR1487993
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1487993.hg38.bigWig
+    shortLabel arteryCor M ZUA1
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZUA1-0426-SM-5NQAF)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXZUA1
+    color 255,95,63
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0426-SM-5NQAF \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=5.8 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1489092
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1489092.hg38.bigWig
+    shortLabel arteryCor M QESD
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-QESD-0326-SM-47J4F)
+    subGroups age=a20 tissue=arteryCoronary donor=GTEXQESD
+    color 255,95,63
+    metadata donor=GTEX-QESD age=20 sex=M hardyScore=0 sample=GTEX-QESD-0326-SM-47J4F \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.9 batch=BP-36881 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/12/2013
+
+    track gtexRnaSignalSRR1500030
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1500030.hg38.bigWig
+    shortLabel arteryCor M 11ZUS
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11ZUS-0526-SM-59884)
+    subGroups age=a30 tissue=arteryCoronary donor=GTEX11ZUS
+    color 255,95,63
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0526-SM-59884 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.8 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1500931
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1500931.hg38.bigWig
+    shortLabel arteryCor M ZLFU
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZLFU-0126-SM-5EQMN)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXZLFU
+    color 255,95,63
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-0126-SM-5EQMN \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR820492
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR820492.hg38.bigWig
+    shortLabel arteryCor M NPJ8
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-NPJ8-1326-SM-3LK6B)
+    subGroups age=a40 tissue=arteryCoronary donor=GTEXNPJ8
+    color 255,95,63
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-1326-SM-3LK6B \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.1 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR1068832
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1068832.hg38.bigWig
+    shortLabel arteryCor M UJMC
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-UJMC-0426-SM-4IHJF)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXUJMC
+    color 255,95,63
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-0426-SM-4IHJF \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.2 batch=BP-26092 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/08/2012
+
+    track gtexRnaSignalSRR1071313
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1071313.hg38.bigWig
+    shortLabel arteryCor M VUSG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-VUSG-0626-SM-4KL1Z)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXVUSG
+    color 255,95,63
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0626-SM-4KL1Z \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.9 batch=BP-26940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1074116
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1074116.hg38.bigWig
+    shortLabel arteryCor M SIU7
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-SIU7-0226-SM-4BRX2)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXSIU7
+    color 255,95,63
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-0226-SM-4BRX2 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6 batch=BP-23387 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1074790
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1074790.hg38.bigWig
+    shortLabel arteryCor M XPVG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-XPVG-0926-SM-4B651)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXXPVG
+    color 255,95,63
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-0926-SM-4B651 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8 batch=BP-33866 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalSRR1089713
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1089713.hg38.bigWig
+    shortLabel arteryCor M S3XE
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-S3XE-0226-SM-4AD6I)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXS3XE
+    color 255,95,63
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-0226-SM-4AD6I \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.1 batch=BP-22845 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/02/2012
+
+    track gtexRnaSignalSRR1091890
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1091890.hg38.bigWig
+    shortLabel arteryCor M XQ8I
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-XQ8I-0326-SM-4BOPN)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXXQ8I
+    color 255,95,63
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0326-SM-4BOPN \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.1 batch=BP-33923 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1095985
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1095985.hg38.bigWig
+    shortLabel arteryCor M RUSQ
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-RUSQ-0426-SM-47JWR)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXRUSQ
+    color 255,95,63
+    metadata donor=GTEX-RUSQ age=50 sex=M hardyScore=0 sample=GTEX-RUSQ-0426-SM-47JWR \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.4 batch=BP-21930 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/30/2012
+
+    track gtexRnaSignalSRR1096736
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1096736.hg38.bigWig
+    shortLabel arteryCor M RN64
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-RN64-0726-SM-48FCV)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXRN64
+    color 255,95,63
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-0726-SM-48FCV \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6 batch=BP-21577 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR1098312
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1098312.hg38.bigWig
+    shortLabel arteryCor M PSDG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-PSDG-0826-SM-48TCZ)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXPSDG
+    color 255,95,63
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-0826-SM-48TCZ \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7 batch=BP-19411 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR1098405
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1098405.hg38.bigWig
+    shortLabel arteryCor M XGQ4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-XGQ4-0626-SM-4AT56)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXXGQ4
+    color 255,95,63
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0626-SM-4AT56 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.5 batch=BP-32413 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2012
+
+    track gtexRnaSignalSRR1320712
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1320712.hg38.bigWig
+    shortLabel arteryCor M 12WSC
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-12WSC-0926-SM-5EQ63)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX12WSC
+    color 255,95,63
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0926-SM-5EQ63 \
+            tissue=arteryCoronary autolysisScore=2 rnaIntegrity=7.2 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1327473
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1327473.hg38.bigWig
+    shortLabel arteryCor M WHWD
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WHWD-0226-SM-4OORT)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXWHWD
+    color 255,95,63
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0226-SM-4OORT \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.9 batch=BP-27512 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1327933
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1327933.hg38.bigWig
+    shortLabel arteryCor M YEC3
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-YEC3-0326-SM-5IFJJ)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXYEC3
+    color 255,95,63
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-0326-SM-5IFJJ \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.6 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1328073
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1328073.hg38.bigWig
+    shortLabel arteryCor M WYJK
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WYJK-0926-SM-4ONCF)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXWYJK
+    color 255,95,63
+
+    track gtexRnaSignalSRR1338195
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1338195.hg38.bigWig
+    shortLabel arteryCor M 14E1K
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-14E1K-0926-SM-5S2U4)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX14E1K
+    color 255,95,63
+    metadata donor=GTEX-14E1K age=50 sex=M hardyScore=0 sample=GTEX-14E1K-0926-SM-5S2U4 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.3 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1338346
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1338346.hg38.bigWig
+    shortLabel arteryCor M 147F4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-147F4-1326-SM-5LU9V)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX147F4
+    color 255,95,63
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-1326-SM-5LU9V \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1347042
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1347042.hg38.bigWig
+    shortLabel arteryCor M YF7O
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-YF7O-0226-SM-5IFJ4)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXYF7O
+    color 255,95,63
+    metadata donor=GTEX-YF7O age=50 sex=M hardyScore=0 sample=GTEX-YF7O-0226-SM-5IFJ4 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.6 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1349099
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1349099.hg38.bigWig
+    shortLabel arteryCor M 11UD2
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11UD2-1126-SM-5EQM6)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX11UD2
+    color 255,95,63
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-1126-SM-5EQM6 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.3 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1354553
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1354553.hg38.bigWig
+    shortLabel arteryCor M 14C38
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-14C38-1226-SM-5S2UK)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX14C38
+    color 255,95,63
+    metadata donor=GTEX-14C38 age=50 sex=M hardyScore=0 sample=GTEX-14C38-1226-SM-5S2UK \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.1 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1360420
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1360420.hg38.bigWig
+    shortLabel arteryCor M 117YX
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-117YX-1726-SM-5GZZS)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX117YX
+    color 255,95,63
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-1726-SM-5GZZS \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=7.9 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1362906
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1362906.hg38.bigWig
+    shortLabel arteryCor M 13X6J
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13X6J-1326-SM-5QGOV)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX13X6J
+    color 255,95,63
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-1326-SM-5QGOV \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.8 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1367761
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1367761.hg38.bigWig
+    shortLabel arteryCor M WY7C
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WY7C-1526-SM-4OND2)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXWY7C
+    color 255,95,63
+
+    track gtexRnaSignalSRR1376228
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1376228.hg38.bigWig
+    shortLabel arteryCor M 13O21
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13O21-2926-SM-5J1OU)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX13O21
+    color 255,95,63
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-2926-SM-5J1OU \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1392835
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1392835.hg38.bigWig
+    shortLabel arteryCor M WHPG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-WHPG-0726-SM-4M1XX)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXWHPG
+    color 255,95,63
+
+    track gtexRnaSignalSRR1395857
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1395857.hg38.bigWig
+    shortLabel arteryCor M QEL4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-QEL4-1026-SM-4R1JK)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXQEL4
+    color 255,95,63
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-1026-SM-4R1JK \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.1 batch=BP-20412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR1403980
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1403980.hg38.bigWig
+    shortLabel arteryCor M ZT9W
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZT9W-0426-SM-57WF4)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXZT9W
+    color 255,95,63
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0426-SM-57WF4 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.1 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1417154
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1417154.hg38.bigWig
+    shortLabel arteryCor M ZV7C
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZV7C-0426-SM-51MQY)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXZV7C
+    color 255,95,63
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-0426-SM-51MQY \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.2 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1420006
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1420006.hg38.bigWig
+    shortLabel arteryCor M ZDYS
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-ZDYS-0126-SM-5HL6X)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXZDYS
+    color 255,95,63
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-0126-SM-5HL6X \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=8 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1446050
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1446050.hg38.bigWig
+    shortLabel arteryCor M 13FXS
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13FXS-1126-SM-5IJBB)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX13FXS
+    color 255,95,63
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-1126-SM-5IJBB \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.3 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1456075
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1456075.hg38.bigWig
+    shortLabel arteryCor M 13VXU
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13VXU-1926-SM-5LU5J)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX13VXU
+    color 255,95,63
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-1926-SM-5LU5J \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.1 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1472057
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1472057.hg38.bigWig
+    shortLabel arteryCor M 11DXZ
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11DXZ-0526-SM-5GU7J)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEX11DXZ
+    color 255,95,63
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0526-SM-5GU7J \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.4 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR808172
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR808172.hg38.bigWig
+    shortLabel arteryCor M OIZH
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-OIZH-3026-SM-3NB1G)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXOIZH
+    color 255,95,63
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-3026-SM-3NB1G \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=8.9 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR819583
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR819583.hg38.bigWig
+    shortLabel arteryCor M O5YW
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-O5YW-3026-SM-3MJHI)
+    subGroups age=a50 tissue=arteryCoronary donor=GTEXO5YW
+    color 255,95,63
+    metadata donor=GTEX-O5YW age=50 sex=M hardyScore=0 sample=GTEX-O5YW-3026-SM-3MJHI \
+            tissue=arteryCoronary autolysisScore=0 rnaIntegrity=7.9 batch=BP-17669 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2011
+
+    track gtexRnaSignalSRR1098450
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1098450.hg38.bigWig
+    shortLabel arteryCor M REY6
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-REY6-0926-SM-48FDA)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEXREY6
+    color 255,95,63
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0926-SM-48FDA \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=5.8 batch=BP-21548 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1308086
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1308086.hg38.bigWig
+    shortLabel arteryCor M 11DYG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11DYG-0926-SM-5EGGW)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX11DYG
+    color 255,95,63
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-0926-SM-5EGGW \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=5.8 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1311622
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1311622.hg38.bigWig
+    shortLabel arteryCor M 11ONC
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11ONC-1126-SM-5GU6G)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX11ONC
+    color 255,95,63
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-1126-SM-5GU6G \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.1 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1327855
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1327855.hg38.bigWig
+    shortLabel arteryCor M QLQ7
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-QLQ7-0326-SM-4R1JV)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEXQLQ7
+    color 255,95,63
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-0326-SM-4R1JV \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.5 batch=BP-20570 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR1416617
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1416617.hg38.bigWig
+    shortLabel arteryCor M 13O61
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13O61-0626-SM-5L3D1)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX13O61
+    color 255,95,63
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-0626-SM-5L3D1 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1419062
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1419062.hg38.bigWig
+    shortLabel arteryCor M Y5V6
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-Y5V6-0326-SM-4VBRW)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEXY5V6
+    color 255,95,63
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0326-SM-4VBRW \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.4 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1420169
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1420169.hg38.bigWig
+    shortLabel arteryCor M 11DXY
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11DXY-1126-SM-5987W)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX11DXY
+    color 255,95,63
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-1126-SM-5987W \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.5 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1435206
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1435206.hg38.bigWig
+    shortLabel arteryCor M 11GS4
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-11GS4-0626-SM-5A5LC)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX11GS4
+    color 255,95,63
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-0626-SM-5A5LC \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1437035
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1437035.hg38.bigWig
+    shortLabel arteryCor M 12696
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-12696-0526-SM-5EQ3Z)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX12696
+    color 255,95,63
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0526-SM-5EQ3Z \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.2 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1456274
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1456274.hg38.bigWig
+    shortLabel arteryCor M 14C5O
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-14C5O-1426-SM-5RQI8)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX14C5O
+    color 255,95,63
+    metadata donor=GTEX-14C5O age=60 sex=M hardyScore=4 sample=GTEX-14C5O-1426-SM-5RQI8 \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6.9 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1472749
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1472749.hg38.bigWig
+    shortLabel arteryCor M 1445S
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-1445S-1126-SM-5QGOW)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX1445S
+    color 255,95,63
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-1126-SM-5QGOW \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=5.8 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1479699
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1479699.hg38.bigWig
+    shortLabel arteryCor M 13RTJ
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13RTJ-0626-SM-5S2NB)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX13RTJ
+    color 255,95,63
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0626-SM-5S2NB \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=3.2 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1500732
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR1500732.hg38.bigWig
+    shortLabel arteryCor M 13OVG
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-13OVG-0726-SM-5IJBY)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEX13OVG
+    color 255,95,63
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-0726-SM-5IJBY \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR812036
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryCoronary/gtexRnaSignalSRR812036.hg38.bigWig
+    shortLabel arteryCor M OOBJ
+    longLabel GTEx RNA signal from male Artery - Coronary (GTEX-OOBJ-3026-SM-3NB1D)
+    subGroups age=a60 tissue=arteryCoronary donor=GTEXOOBJ
+    color 255,95,63
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-3026-SM-3NB1D \
+            tissue=arteryCoronary autolysisScore=1 rnaIntegrity=7.3 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
