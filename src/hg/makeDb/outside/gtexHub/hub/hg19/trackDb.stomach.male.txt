@@ -1,0 +1,954 @@
+    track gtexRnaSignalSRR1069166
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1069166.hg19.bigWig
+    shortLabel stomach M XAJ8
+    longLabel GTEx RNA signal from male Stomach (GTEX-XAJ8-0326-SM-47JYI)
+    subGroups age=a40 tissue=stomach donor=GTEXXAJ8
+    color 255,211,155
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0326-SM-47JYI \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.2 batch=BP-31440 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR1069778
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1069778.hg19.bigWig
+    shortLabel stomach M QLQW
+    longLabel GTEx RNA signal from male Stomach (GTEX-QLQW-0726-SM-447AA)
+    subGroups age=a30 tissue=stomach donor=GTEXQLQW
+    color 255,211,155
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-0726-SM-447AA \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.9 batch=BP-20693 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/09/2011
+
+    track gtexRnaSignalSRR1072920
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1072920.hg19.bigWig
+    shortLabel stomach M WFON
+    longLabel GTEx RNA signal from male Stomach (GTEX-WFON-1126-SM-4LVMA)
+    subGroups age=a40 tissue=stomach donor=GTEXWFON
+    color 255,211,155
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-1126-SM-4LVMA \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.4 batch=BP-27451 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1076417
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1076417.hg19.bigWig
+    shortLabel stomach M SNMC
+    longLabel GTEx RNA signal from male Stomach (GTEX-SNMC-0626-SM-4DM6H)
+    subGroups age=a20 tissue=stomach donor=GTEXSNMC
+    color 255,211,155
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-0626-SM-4DM6H \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.6 batch=BP-23794 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/04/2012
+
+    track gtexRnaSignalSRR1079900
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1079900.hg19.bigWig
+    shortLabel stomach M QV31
+    longLabel GTEx RNA signal from male Stomach (GTEX-QV31-0626-SM-447C5)
+    subGroups age=a30 tissue=stomach donor=GTEXQV31
+    color 255,211,155
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-0626-SM-447C5 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.5 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1081092
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1081092.hg19.bigWig
+    shortLabel stomach M WFG7
+    longLabel GTEx RNA signal from male Stomach (GTEX-WFG7-1326-SM-4LMK1)
+    subGroups age=a20 tissue=stomach donor=GTEXWFG7
+    color 255,211,155
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-1326-SM-4LMK1 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7 batch=BP-27322 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR1081935
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1081935.hg19.bigWig
+    shortLabel stomach M WFG8
+    longLabel GTEx RNA signal from male Stomach (GTEX-WFG8-1326-SM-4LVN3)
+    subGroups age=a20 tissue=stomach donor=GTEXWFG8
+    color 255,211,155
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-1326-SM-4LVN3 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.3 batch=BP-27326 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR1082933
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1082933.hg19.bigWig
+    shortLabel stomach M PW2O
+    longLabel GTEx RNA signal from male Stomach (GTEX-PW2O-1226-SM-48TCH)
+    subGroups age=a20 tissue=stomach donor=GTEXPW2O
+    color 255,211,155
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-1226-SM-48TCH \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.3 batch=BP-19459 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1083191
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1083191.hg19.bigWig
+    shortLabel stomach M T8EM
+    longLabel GTEx RNA signal from male Stomach (GTEX-T8EM-1226-SM-4DM5J)
+    subGroups age=a40 tissue=stomach donor=GTEXT8EM
+    color 255,211,155
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-1226-SM-4DM5J \
+            tissue=stomach autolysisScore=2 rnaIntegrity=7.7 batch=BP-24892 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1083262
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1083262.hg19.bigWig
+    shortLabel stomach M Q2AI
+    longLabel GTEx RNA signal from male Stomach (GTEX-Q2AI-0826-SM-48TZO)
+    subGroups age=a40 tissue=stomach donor=GTEXQ2AI
+    color 255,211,155
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-0826-SM-48TZO \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.2 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1088680
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1088680.hg19.bigWig
+    shortLabel stomach M WH7G
+    longLabel GTEx RNA signal from male Stomach (GTEX-WH7G-1526-SM-4LVMX)
+    subGroups age=a40 tissue=stomach donor=GTEXWH7G
+    color 255,211,155
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-1526-SM-4LVMX \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.4 batch=BP-27493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1092136
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1092136.hg19.bigWig
+    shortLabel stomach M SNOS
+    longLabel GTEx RNA signal from male Stomach (GTEX-SNOS-0826-SM-4DM5N)
+    subGroups age=a40 tissue=stomach donor=GTEXSNOS
+    color 255,211,155
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0826-SM-4DM5N \
+            tissue=stomach autolysisScore=0 rnaIntegrity=7.6 batch=BP-24457 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1092184
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1092184.hg19.bigWig
+    shortLabel stomach M T5JC
+    longLabel GTEx RNA signal from male Stomach (GTEX-T5JC-1926-SM-4DM6Q)
+    subGroups age=a20 tissue=stomach donor=GTEXT5JC
+    color 255,211,155
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-1926-SM-4DM6Q \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6.6 batch=BP-24849 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1093390
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1093390.hg19.bigWig
+    shortLabel stomach M TKQ1
+    longLabel GTEx RNA signal from male Stomach (GTEX-TKQ1-0526-SM-4DXTG)
+    subGroups age=a30 tissue=stomach donor=GTEXTKQ1
+    color 255,211,155
+    metadata donor=GTEX-TKQ1 age=30 sex=M hardyScore=0 sample=GTEX-TKQ1-0526-SM-4DXTG \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.8 batch=BP-24927 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR1094555
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1094555.hg19.bigWig
+    shortLabel stomach M UPK5
+    longLabel GTEx RNA signal from male Stomach (GTEX-UPK5-2126-SM-4JBJK)
+    subGroups age=a40 tissue=stomach donor=GTEXUPK5
+    color 255,211,155
+    metadata donor=GTEX-UPK5 age=40 sex=M hardyScore=0 sample=GTEX-UPK5-2126-SM-4JBJK \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6 batch=BP-30218 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2012
+
+    track gtexRnaSignalSRR1098588
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1098588.hg19.bigWig
+    shortLabel stomach M S4Q7
+    longLabel GTEx RNA signal from male Stomach (GTEX-S4Q7-0726-SM-4AD5F)
+    subGroups age=a20 tissue=stomach donor=GTEXS4Q7
+    color 255,211,155
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0726-SM-4AD5F \
+            tissue=stomach autolysisScore=0 rnaIntegrity=7.3 batch=BP-23051 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1099905
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1099905.hg19.bigWig
+    shortLabel stomach M WFJO
+    longLabel GTEx RNA signal from male Stomach (GTEX-WFJO-1126-SM-4LVLZ)
+    subGroups age=a30 tissue=stomach donor=GTEXWFJO
+    color 255,211,155
+    metadata donor=GTEX-WFJO age=30 sex=M hardyScore=0 sample=GTEX-WFJO-1126-SM-4LVLZ \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.4 batch=BP-27446 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1309723
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1309723.hg19.bigWig
+    shortLabel stomach M 11EQ9
+    longLabel GTEx RNA signal from male Stomach (GTEX-11EQ9-1226-SM-5987E)
+    subGroups age=a30 tissue=stomach donor=GTEX11EQ9
+    color 255,211,155
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1226-SM-5987E \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.4 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1320203
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1320203.hg19.bigWig
+    shortLabel stomach M 12C56
+    longLabel GTEx RNA signal from male Stomach (GTEX-12C56-0526-SM-5FQST)
+    subGroups age=a20 tissue=stomach donor=GTEX12C56
+    color 255,211,155
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-0526-SM-5FQST \
+            tissue=stomach autolysisScore=2 rnaIntegrity=7.3 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1328360
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1328360.hg19.bigWig
+    shortLabel stomach M Y8E4
+    longLabel GTEx RNA signal from male Stomach (GTEX-Y8E4-1526-SM-4WWDI)
+    subGroups age=a40 tissue=stomach donor=GTEXY8E4
+    color 255,211,155
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-1526-SM-4WWDI \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.4 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1329726
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1329726.hg19.bigWig
+    shortLabel stomach M 13FTW
+    longLabel GTEx RNA signal from male Stomach (GTEX-13FTW-1726-SM-5KM2B)
+    subGroups age=a40 tissue=stomach donor=GTEX13FTW
+    color 255,211,155
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-1726-SM-5KM2B \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.7 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1354532
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1354532.hg19.bigWig
+    shortLabel stomach M 11P82
+    longLabel GTEx RNA signal from male Stomach (GTEX-11P82-0726-SM-5PNYL)
+    subGroups age=a20 tissue=stomach donor=GTEX11P82
+    color 255,211,155
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-0726-SM-5PNYL \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.5 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1360545
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1360545.hg19.bigWig
+    shortLabel stomach M 1339X
+    longLabel GTEx RNA signal from male Stomach (GTEX-1339X-1426-SM-5K7YO)
+    subGroups age=a40 tissue=stomach donor=GTEX1339X
+    color 255,211,155
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-1426-SM-5K7YO \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.6 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1362688
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1362688.hg19.bigWig
+    shortLabel stomach M ZQUD
+    longLabel GTEx RNA signal from male Stomach (GTEX-ZQUD-0826-SM-57WDQ)
+    subGroups age=a30 tissue=stomach donor=GTEXZQUD
+    color 255,211,155
+    metadata donor=GTEX-ZQUD age=30 sex=M hardyScore=0 sample=GTEX-ZQUD-0826-SM-57WDQ \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.3 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1394544
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1394544.hg19.bigWig
+    shortLabel stomach M 11TT1
+    longLabel GTEx RNA signal from male Stomach (GTEX-11TT1-0726-SM-5GU5A)
+    subGroups age=a20 tissue=stomach donor=GTEX11TT1
+    color 255,211,155
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0726-SM-5GU5A \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1396724
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1396724.hg19.bigWig
+    shortLabel stomach M YEC4
+    longLabel GTEx RNA signal from male Stomach (GTEX-YEC4-1426-SM-5IFHS)
+    subGroups age=a40 tissue=stomach donor=GTEXYEC4
+    color 255,211,155
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-1426-SM-5IFHS \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.6 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1405289
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1405289.hg19.bigWig
+    shortLabel stomach M ZTX8
+    longLabel GTEx RNA signal from male Stomach (GTEX-ZTX8-0426-SM-59HLG)
+    subGroups age=a20 tissue=stomach donor=GTEXZTX8
+    color 255,211,155
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-0426-SM-59HLG \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.2 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1414209
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1414209.hg19.bigWig
+    shortLabel stomach M 13RTK
+    longLabel GTEx RNA signal from male Stomach (GTEX-13RTK-0226-SM-5RQHR)
+    subGroups age=a20 tissue=stomach donor=GTEX13RTK
+    color 255,211,155
+    metadata donor=GTEX-13RTK age=20 sex=M hardyScore=0 sample=GTEX-13RTK-0226-SM-5RQHR \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.7 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1446979
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1446979.hg19.bigWig
+    shortLabel stomach M YFCO
+    longLabel GTEx RNA signal from male Stomach (GTEX-YFCO-0826-SM-5LUAG)
+    subGroups age=a40 tissue=stomach donor=GTEXYFCO
+    color 255,211,155
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-0826-SM-5LUAG \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.5 batch=BP-41808 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/02/2013
+
+    track gtexRnaSignalSRR1473385
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1473385.hg19.bigWig
+    shortLabel stomach M Y9LG
+    longLabel GTEx RNA signal from male Stomach (GTEX-Y9LG-1026-SM-5IFJN)
+    subGroups age=a30 tissue=stomach donor=GTEXY9LG
+    color 255,211,155
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-1026-SM-5IFJN \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1474440
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1474440.hg19.bigWig
+    shortLabel stomach M WZTO
+    longLabel GTEx RNA signal from male Stomach (GTEX-WZTO-2126-SM-4PQYW)
+    subGroups age=a40 tissue=stomach donor=GTEXWZTO
+    color 255,211,155
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-2126-SM-4PQYW \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6.4 batch=BP-29929 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2012
+
+    track gtexRnaSignalSRR2135314
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR2135314.hg19.bigWig
+    shortLabel stomach M WFON
+    longLabel GTEx RNA signal from male Stomach (GTEX-WFON-1126-SM-5CHTG_rep1)
+    subGroups age=a40 tissue=stomach donor=GTEXWFON
+    color 255,211,155
+
+    track gtexRnaSignalSRR2135385
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR2135385.hg19.bigWig
+    shortLabel stomach M U8XE
+    longLabel GTEx RNA signal from male Stomach (GTEX-U8XE-2126-SM-5CHRC_rep1)
+    subGroups age=a30 tissue=stomach donor=GTEXU8XE
+    color 255,211,155
+
+    track gtexRnaSignalSRR814820
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR814820.hg19.bigWig
+    shortLabel stomach M PLZ6
+    longLabel GTEx RNA signal from male Stomach (GTEX-PLZ6-0826-SM-3P61K)
+    subGroups age=a30 tissue=stomach donor=GTEXPLZ6
+    color 255,211,155
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0826-SM-3P61K \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.1 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR1069714
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1069714.hg19.bigWig
+    shortLabel stomach M TKQ2
+    longLabel GTEx RNA signal from male Stomach (GTEX-TKQ2-0926-SM-4DXU5)
+    subGroups age=a50 tissue=stomach donor=GTEXTKQ2
+    color 255,211,155
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-0926-SM-4DXU5 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.4 batch=BP-24927 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR1072821
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1072821.hg19.bigWig
+    shortLabel stomach M QMRM
+    longLabel GTEx RNA signal from male Stomach (GTEX-QMRM-1126-SM-447BN)
+    subGroups age=a50 tissue=stomach donor=GTEXQMRM
+    color 255,211,155
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1126-SM-447BN \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.1 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1073459
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1073459.hg19.bigWig
+    shortLabel stomach M RM2N
+    longLabel GTEx RNA signal from male Stomach (GTEX-RM2N-0826-SM-48FD3)
+    subGroups age=a50 tissue=stomach donor=GTEXRM2N
+    color 255,211,155
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0826-SM-48FD3 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.4 batch=BP-21575 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR1076268
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1076268.hg19.bigWig
+    shortLabel stomach M SIU7
+    longLabel GTEx RNA signal from male Stomach (GTEX-SIU7-1426-SM-4BRWT)
+    subGroups age=a50 tissue=stomach donor=GTEXSIU7
+    color 255,211,155
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-1426-SM-4BRWT \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.4 batch=BP-23390 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalSRR1078759
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1078759.hg19.bigWig
+    shortLabel stomach M QDVJ
+    longLabel GTEx RNA signal from male Stomach (GTEX-QDVJ-1426-SM-48U1Y)
+    subGroups age=a50 tissue=stomach donor=GTEXQDVJ
+    color 255,211,155
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-1426-SM-48U1Y \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.2 batch=BP-20259 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR1081717
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1081717.hg19.bigWig
+    shortLabel stomach M QDVN
+    longLabel GTEx RNA signal from male Stomach (GTEX-QDVN-1226-SM-48TZ5)
+    subGroups age=a50 tissue=stomach donor=GTEXQDVN
+    color 255,211,155
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-1226-SM-48TZ5 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.9 batch=BP-20294 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalSRR1087101
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1087101.hg19.bigWig
+    shortLabel stomach M XQ8I
+    longLabel GTEx RNA signal from male Stomach (GTEX-XQ8I-2026-SM-4BOOL)
+    subGroups age=a50 tissue=stomach donor=GTEXXQ8I
+    color 255,211,155
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-2026-SM-4BOOL \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.9 batch=BP-34129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1091548
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1091548.hg19.bigWig
+    shortLabel stomach M S3XE
+    longLabel GTEx RNA signal from male Stomach (GTEX-S3XE-1026-SM-4AD4O)
+    subGroups age=a50 tissue=stomach donor=GTEXS3XE
+    color 255,211,155
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-1026-SM-4AD4O \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.4 batch=BP-22873 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/05/2012
+
+    track gtexRnaSignalSRR1098122
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1098122.hg19.bigWig
+    shortLabel stomach M R55D
+    longLabel GTEx RNA signal from male Stomach (GTEX-R55D-1526-SM-48FEJ)
+    subGroups age=a50 tissue=stomach donor=GTEXR55D
+    color 255,211,155
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-1526-SM-48FEJ \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8 batch=BP-21337 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR1098495
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1098495.hg19.bigWig
+    shortLabel stomach M QXCU
+    longLabel GTEx RNA signal from male Stomach (GTEX-QXCU-1926-SM-48FE4)
+    subGroups age=a50 tissue=stomach donor=GTEXQXCU
+    color 255,211,155
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-1926-SM-48FE4 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.7 batch=BP-21104 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/29/2011
+
+    track gtexRnaSignalSRR1100632
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1100632.hg19.bigWig
+    shortLabel stomach M V1D1
+    longLabel GTEx RNA signal from male Stomach (GTEX-V1D1-1726-SM-4JBHB)
+    subGroups age=a50 tissue=stomach donor=GTEXV1D1
+    color 255,211,155
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-1726-SM-4JBHB \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.6 batch=BP-26864 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1310253
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1310253.hg19.bigWig
+    shortLabel stomach M 11NUK
+    longLabel GTEx RNA signal from male Stomach (GTEX-11NUK-2426-SM-5BC4U)
+    subGroups age=a50 tissue=stomach donor=GTEX11NUK
+    color 255,211,155
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-2426-SM-5BC4U \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6.1 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1325690
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1325690.hg19.bigWig
+    shortLabel stomach M YEC3
+    longLabel GTEx RNA signal from male Stomach (GTEX-YEC3-1426-101806-SM-5PNXX)
+    subGroups age=a50 tissue=stomach donor=GTEXYEC3
+    color 255,211,155
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-1426-101806-SM-5PNXX \
+            tissue=stomach autolysisScore=-1 rnaIntegrity=8 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1330609
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1330609.hg19.bigWig
+    shortLabel stomach M WY7C
+    longLabel GTEx RNA signal from male Stomach (GTEX-WY7C-1726-SM-4ONCC)
+    subGroups age=a50 tissue=stomach donor=GTEXWY7C
+    color 255,211,155
+
+    track gtexRnaSignalSRR1355997
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1355997.hg19.bigWig
+    shortLabel stomach M 13O3Q
+    longLabel GTEx RNA signal from male Stomach (GTEX-13O3Q-2126-SM-5KM4C)
+    subGroups age=a50 tissue=stomach donor=GTEX13O3Q
+    color 255,211,155
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-2126-SM-5KM4C \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1368815
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1368815.hg19.bigWig
+    shortLabel stomach M ZDYS
+    longLabel GTEx RNA signal from male Stomach (GTEX-ZDYS-1926-SM-5HL59)
+    subGroups age=a50 tissue=stomach donor=GTEXZDYS
+    color 255,211,155
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-1926-SM-5HL59 \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6.7 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1379384
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1379384.hg19.bigWig
+    shortLabel stomach M 111CU
+    longLabel GTEx RNA signal from male Stomach (GTEX-111CU-0926-SM-5EGIK)
+    subGroups age=a50 tissue=stomach donor=GTEX111CU
+    color 255,211,155
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-0926-SM-5EGIK \
+            tissue=stomach autolysisScore=0 rnaIntegrity=7.8 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1383213
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1383213.hg19.bigWig
+    shortLabel stomach M WYJK
+    longLabel GTEx RNA signal from male Stomach (GTEX-WYJK-2526-SM-4ONDF)
+    subGroups age=a50 tissue=stomach donor=GTEXWYJK
+    color 255,211,155
+
+    track gtexRnaSignalSRR1404147
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1404147.hg19.bigWig
+    shortLabel stomach M YEC3
+    longLabel GTEx RNA signal from male Stomach (GTEX-YEC3-1426-SM-5PNXW)
+    subGroups age=a50 tissue=stomach donor=GTEXYEC3
+    color 255,211,155
+
+    track gtexRnaSignalSRR1432587
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1432587.hg19.bigWig
+    shortLabel stomach M WHWD
+    longLabel GTEx RNA signal from male Stomach (GTEX-WHWD-1426-SM-4OORU)
+    subGroups age=a50 tissue=stomach donor=GTEXWHWD
+    color 255,211,155
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-1426-SM-4OORU \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.1 batch=BP-27620 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR1440179
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1440179.hg19.bigWig
+    shortLabel stomach M 131XE
+    longLabel GTEx RNA signal from male Stomach (GTEX-131XE-2226-SM-5PNYX)
+    subGroups age=a50 tissue=stomach donor=GTEX131XE
+    color 255,211,155
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-2226-SM-5PNYX \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.2 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1443755
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1443755.hg19.bigWig
+    shortLabel stomach M 11WQK
+    longLabel GTEx RNA signal from male Stomach (GTEX-11WQK-2626-SM-5EQ4K)
+    subGroups age=a50 tissue=stomach donor=GTEX11WQK
+    color 255,211,155
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-2626-SM-5EQ4K \
+            tissue=stomach autolysisScore=3 rnaIntegrity=7.1 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1445468
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1445468.hg19.bigWig
+    shortLabel stomach M ZV7C
+    longLabel GTEx RNA signal from male Stomach (GTEX-ZV7C-1626-SM-5NQ7E)
+    subGroups age=a50 tissue=stomach donor=GTEXZV7C
+    color 255,211,155
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-1626-SM-5NQ7E \
+            tissue=stomach autolysisScore=1 rnaIntegrity=5.8 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1447416
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1447416.hg19.bigWig
+    shortLabel stomach M 139YR
+    longLabel GTEx RNA signal from male Stomach (GTEX-139YR-1926-SM-5LZXM)
+    subGroups age=a50 tissue=stomach donor=GTEX139YR
+    color 255,211,155
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-1926-SM-5LZXM \
+            tissue=stomach autolysisScore=2 rnaIntegrity=5.7 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1457437
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1457437.hg19.bigWig
+    shortLabel stomach M ZVP2
+    longLabel GTEx RNA signal from male Stomach (GTEX-ZVP2-1626-SM-5GU5D)
+    subGroups age=a50 tissue=stomach donor=GTEXZVP2
+    color 255,211,155
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-1626-SM-5GU5D \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.3 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1466728
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1466728.hg19.bigWig
+    shortLabel stomach M 144GN
+    longLabel GTEx RNA signal from male Stomach (GTEX-144GN-1226-SM-5O991)
+    subGroups age=a50 tissue=stomach donor=GTEX144GN
+    color 255,211,155
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-1226-SM-5O991 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1470665
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1470665.hg19.bigWig
+    shortLabel stomach M QV44
+    longLabel GTEx RNA signal from male Stomach (GTEX-QV44-1226-SM-4R1KE)
+    subGroups age=a50 tissue=stomach donor=GTEXQV44
+    color 255,211,155
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-1226-SM-4R1KE \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.2 batch=BP-20868 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1475633
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1475633.hg19.bigWig
+    shortLabel stomach M 14BMV
+    longLabel GTEx RNA signal from male Stomach (GTEX-14BMV-2226-SM-5RQHX)
+    subGroups age=a50 tissue=stomach donor=GTEX14BMV
+    color 255,211,155
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-2226-SM-5RQHX \
+            tissue=stomach autolysisScore=3 rnaIntegrity=5.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1479431
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1479431.hg19.bigWig
+    shortLabel stomach M 13PVQ
+    longLabel GTEx RNA signal from male Stomach (GTEX-13PVQ-2126-SM-5L3FW)
+    subGroups age=a50 tissue=stomach donor=GTEX13PVQ
+    color 255,211,155
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-2126-SM-5L3FW \
+            tissue=stomach autolysisScore=2 rnaIntegrity=7.2 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1487867
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1487867.hg19.bigWig
+    shortLabel stomach M 13111
+    longLabel GTEx RNA signal from male Stomach (GTEX-13111-1226-SM-5GCNC)
+    subGroups age=a50 tissue=stomach donor=GTEX13111
+    color 255,211,155
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-1226-SM-5GCNC \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.3 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1498249
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1498249.hg19.bigWig
+    shortLabel stomach M YEC3
+    longLabel GTEx RNA signal from male Stomach (GTEX-YEC3-1426-SM-4WWEM)
+    subGroups age=a50 tissue=stomach donor=GTEXYEC3
+    color 255,211,155
+
+    track gtexRnaSignalSRR815326
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR815326.hg19.bigWig
+    shortLabel stomach M OIZH
+    longLabel GTEx RNA signal from male Stomach (GTEX-OIZH-1526-SM-3NB1J)
+    subGroups age=a50 tissue=stomach donor=GTEXOIZH
+    color 255,211,155
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-1526-SM-3NB1J \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.3 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR1070382
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1070382.hg19.bigWig
+    shortLabel stomach M XBED
+    longLabel GTEx RNA signal from male Stomach (GTEX-XBED-1226-SM-4AT5V)
+    subGroups age=a60 tissue=stomach donor=GTEXXBED
+    color 255,211,155
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-1226-SM-4AT5V \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7 batch=BP-31651 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/01/2012
+
+    track gtexRnaSignalSRR1074066
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1074066.hg19.bigWig
+    shortLabel stomach M SUCS
+    longLabel GTEx RNA signal from male Stomach (GTEX-SUCS-0926-SM-4DM4Z)
+    subGroups age=a70 tissue=stomach donor=GTEXSUCS
+    color 255,211,155
+    metadata donor=GTEX-SUCS age=70 sex=M hardyScore=0 sample=GTEX-SUCS-0926-SM-4DM4Z \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.4 batch=BP-24530 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR1078090
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1078090.hg19.bigWig
+    shortLabel stomach M QLQ7
+    longLabel GTEx RNA signal from male Stomach (GTEX-QLQ7-0826-SM-447B3)
+    subGroups age=a60 tissue=stomach donor=GTEXQLQ7
+    color 255,211,155
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-0826-SM-447B3 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.1 batch=BP-20570 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR1081235
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1081235.hg19.bigWig
+    shortLabel stomach M S4Z8
+    longLabel GTEx RNA signal from male Stomach (GTEX-S4Z8-1226-SM-4AD6W)
+    subGroups age=a60 tissue=stomach donor=GTEXS4Z8
+    color 255,211,155
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-1226-SM-4AD6W \
+            tissue=stomach autolysisScore=2 rnaIntegrity=7.8 batch=BP-23051 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1088068
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1088068.hg19.bigWig
+    shortLabel stomach M U8T8
+    longLabel GTEx RNA signal from male Stomach (GTEX-U8T8-1226-SM-4E3IH)
+    subGroups age=a60 tissue=stomach donor=GTEXU8T8
+    color 255,211,155
+    metadata donor=GTEX-U8T8 age=60 sex=M hardyScore=0 sample=GTEX-U8T8-1226-SM-4E3IH \
+            tissue=stomach autolysisScore=2 rnaIntegrity=6.2 batch=BP-25632 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2012
+
+    track gtexRnaSignalSRR1091356
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1091356.hg19.bigWig
+    shortLabel stomach M VJYA
+    longLabel GTEx RNA signal from male Stomach (GTEX-VJYA-1026-SM-4KL21)
+    subGroups age=a60 tissue=stomach donor=GTEXVJYA
+    color 255,211,155
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-1026-SM-4KL21 \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.1 batch=BP-26934 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1356725
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1356725.hg19.bigWig
+    shortLabel stomach M 145MO
+    longLabel GTEx RNA signal from male Stomach (GTEX-145MO-2226-SM-5Q5BN)
+    subGroups age=a60 tissue=stomach donor=GTEX145MO
+    color 255,211,155
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-2226-SM-5Q5BN \
+            tissue=stomach autolysisScore=3 rnaIntegrity=5.7 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1365679
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1365679.hg19.bigWig
+    shortLabel stomach M 132QS
+    longLabel GTEx RNA signal from male Stomach (GTEX-132QS-1826-SM-5IFFN)
+    subGroups age=a60 tissue=stomach donor=GTEX132QS
+    color 255,211,155
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-1826-SM-5IFFN \
+            tissue=stomach autolysisScore=0 rnaIntegrity=6.8 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1388891
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1388891.hg19.bigWig
+    shortLabel stomach M 111YS
+    longLabel GTEx RNA signal from male Stomach (GTEX-111YS-1126-SM-5GZYQ)
+    subGroups age=a60 tissue=stomach donor=GTEX111YS
+    color 255,211,155
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1126-SM-5GZYQ \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.4 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1399156
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1399156.hg19.bigWig
+    shortLabel stomach M 131XF
+    longLabel GTEx RNA signal from male Stomach (GTEX-131XF-1226-SM-5HL8V)
+    subGroups age=a60 tissue=stomach donor=GTEX131XF
+    color 255,211,155
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-1226-SM-5HL8V \
+            tissue=stomach autolysisScore=1 rnaIntegrity=6.9 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1402772
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1402772.hg19.bigWig
+    shortLabel stomach M 12BJ1
+    longLabel GTEx RNA signal from male Stomach (GTEX-12BJ1-1726-SM-5HL9B)
+    subGroups age=a60 tissue=stomach donor=GTEX12BJ1
+    color 255,211,155
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-1726-SM-5HL9B \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.3 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1433152
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1433152.hg19.bigWig
+    shortLabel stomach M 13O61
+    longLabel GTEx RNA signal from male Stomach (GTEX-13O61-1126-SM-5L3FI)
+    subGroups age=a60 tissue=stomach donor=GTEX13O61
+    color 255,211,155
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1126-SM-5L3FI \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.9 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1474396
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR1474396.hg19.bigWig
+    shortLabel stomach M 11EI6
+    longLabel GTEx RNA signal from male Stomach (GTEX-11EI6-2426-SM-5PNVS)
+    subGroups age=a60 tissue=stomach donor=GTEX11EI6
+    color 255,211,155
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-2426-SM-5PNVS \
+            tissue=stomach autolysisScore=2 rnaIntegrity=5.8 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR808542
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR808542.hg19.bigWig
+    shortLabel stomach M P4PQ
+    longLabel GTEx RNA signal from male Stomach (GTEX-P4PQ-1526-SM-3NMCK)
+    subGroups age=a60 tissue=stomach donor=GTEXP4PQ
+    color 255,211,155
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-1526-SM-3NMCK \
+            tissue=stomach autolysisScore=1 rnaIntegrity=8.2 batch=BP-18709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2011
+
+    track gtexRnaSignalSRR810829
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl stomach/gtexRnaSignalSRR810829.hg19.bigWig
+    shortLabel stomach M OOBJ
+    longLabel GTEx RNA signal from male Stomach (GTEX-OOBJ-1526-SM-3NB1Q)
+    subGroups age=a60 tissue=stomach donor=GTEXOOBJ
+    color 255,211,155
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-1526-SM-3NB1Q \
+            tissue=stomach autolysisScore=1 rnaIntegrity=7.1 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+

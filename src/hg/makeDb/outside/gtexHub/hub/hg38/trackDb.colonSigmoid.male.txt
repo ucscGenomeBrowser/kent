@@ -1,0 +1,978 @@
+    track gtexRnaSignalSRR1074337
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1074337.hg38.bigWig
+    shortLabel colonSigm M XAJ8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-XAJ8-0726-SM-47JY5)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXXAJ8
+    color 227,184,136
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0726-SM-47JY5 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.3 batch=BP-31549 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalSRR1083504
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1083504.hg38.bigWig
+    shortLabel colonSigm M WFG8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WFG8-1726-SM-4LVM6)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXWFG8
+    color 227,184,136
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-1726-SM-4LVM6 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=8.3 batch=BP-27442 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1091524
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1091524.hg38.bigWig
+    shortLabel colonSigm M X5EB
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-X5EB-1126-SM-46MVV)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXX5EB
+    color 227,184,136
+
+    track gtexRnaSignalSRR1318624
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1318624.hg38.bigWig
+    shortLabel colonSigm M 11P7K
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11P7K-1826-SM-5HL5A)
+    subGroups age=a30 tissue=colonSigmoid donor=GTEX11P7K
+    color 227,184,136
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-1826-SM-5HL5A \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1320490
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1320490.hg38.bigWig
+    shortLabel colonSigm M WH7G
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WH7G-1426-SM-4LVMU)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXWH7G
+    color 227,184,136
+
+    track gtexRnaSignalSRR1324473
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1324473.hg38.bigWig
+    shortLabel colonSigm M ZA64
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZA64-1426-SM-5CVMC)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXZA64
+    color 227,184,136
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-1426-SM-5CVMC \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.3 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1333287
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1333287.hg38.bigWig
+    shortLabel colonSigm M 11EQ9
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11EQ9-1526-SM-5PNY7)
+    subGroups age=a30 tissue=colonSigmoid donor=GTEX11EQ9
+    color 227,184,136
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1526-SM-5PNY7 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.3 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1334011
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1334011.hg38.bigWig
+    shortLabel colonSigm M 14C39
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-14C39-1626-SM-5S2P4)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEX14C39
+    color 227,184,136
+    metadata donor=GTEX-14C39 age=40 sex=M hardyScore=2 sample=GTEX-14C39-1626-SM-5S2P4 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1337516
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1337516.hg38.bigWig
+    shortLabel colonSigm M ZTSS
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZTSS-1226-SM-51MSZ)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXZTSS
+    color 227,184,136
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-1226-SM-51MSZ \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.8 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1347916
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1347916.hg38.bigWig
+    shortLabel colonSigm M 1339X
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-1339X-1726-SM-5P9J9)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEX1339X
+    color 227,184,136
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-1726-SM-5P9J9 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.1 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1356976
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1356976.hg38.bigWig
+    shortLabel colonSigm M ZYT6
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZYT6-2826-SM-5GICX)
+    subGroups age=a30 tissue=colonSigmoid donor=GTEXZYT6
+    color 227,184,136
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-2826-SM-5GICX \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.9 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1361777
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1361777.hg38.bigWig
+    shortLabel colonSigm M 1399R
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-1399R-2126-SM-5K7WZ)
+    subGroups age=a30 tissue=colonSigmoid donor=GTEX1399R
+    color 227,184,136
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-2126-SM-5K7WZ \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.7 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1378924
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1378924.hg38.bigWig
+    shortLabel colonSigm M ZQUD
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZQUD-1026-SM-4YCEZ)
+    subGroups age=a30 tissue=colonSigmoid donor=GTEXZQUD
+    color 227,184,136
+
+    track gtexRnaSignalSRR1387286
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1387286.hg38.bigWig
+    shortLabel colonSigm M ZAB4
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZAB4-2426-SM-5HL8A)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXZAB4
+    color 227,184,136
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-2426-SM-5HL8A \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.3 batch=BP-45268 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1397781
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1397781.hg38.bigWig
+    shortLabel colonSigm M WOFM
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WOFM-1926-SM-4OOSP)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXWOFM
+    color 227,184,136
+
+    track gtexRnaSignalSRR1399291
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1399291.hg38.bigWig
+    shortLabel colonSigm M ZPU1
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZPU1-1726-SM-4WWFV)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXZPU1
+    color 227,184,136
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-1726-SM-4WWFV \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.8 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1413262
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1413262.hg38.bigWig
+    shortLabel colonSigm M 11TT1
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11TT1-0926-SM-5GU5M)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEX11TT1
+    color 227,184,136
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0926-SM-5GU5M \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=8.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1419495
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1419495.hg38.bigWig
+    shortLabel colonSigm M ZLFU
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZLFU-1426-SM-4WWEU)
+    subGroups age=a40 tissue=colonSigmoid donor=GTEXZLFU
+    color 227,184,136
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-1426-SM-4WWEU \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.2 batch=BP-43072 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/04/2013
+
+    track gtexRnaSignalSRR1419941
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1419941.hg38.bigWig
+    shortLabel colonSigm M YJ8A
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-YJ8A-1726-SM-5P9IQ)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXYJ8A
+    color 227,184,136
+    metadata donor=GTEX-YJ8A age=20 sex=M hardyScore=0 sample=GTEX-YJ8A-1726-SM-5P9IQ \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.7 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1436280
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1436280.hg38.bigWig
+    shortLabel colonSigm M 11P82
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11P82-1226-SM-5HL5P)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEX11P82
+    color 227,184,136
+
+    track gtexRnaSignalSRR1490635
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1490635.hg38.bigWig
+    shortLabel colonSigm M ZZ64
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZZ64-0826-SM-5E449)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXZZ64
+    color 227,184,136
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-0826-SM-5E449 \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.8 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR2135299
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR2135299.hg38.bigWig
+    shortLabel colonSigm M WFG8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WFG8-1726-SM-5CHTE_rep1)
+    subGroups age=a20 tissue=colonSigmoid donor=GTEXWFG8
+    color 227,184,136
+
+    track gtexRnaSignalSRR1081068
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1081068.hg38.bigWig
+    shortLabel colonSigm M XXEK
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-XXEK-1826-SM-4BRVC)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXXXEK
+    color 227,184,136
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-1826-SM-4BRVC \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.4 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1308269
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1308269.hg38.bigWig
+    shortLabel colonSigm M 111CU
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-111CU-1226-SM-5EGIN)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX111CU
+    color 227,184,136
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-1226-SM-5EGIN \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.3 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1317653
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1317653.hg38.bigWig
+    shortLabel colonSigm M WHWD
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WHWD-1526-SM-4OORV)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXWHWD
+    color 227,184,136
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-1526-SM-4OORV \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.8 batch=BP-27620 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR1319038
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1319038.hg38.bigWig
+    shortLabel colonSigm M 13OW6
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13OW6-2226-SM-5N9FL)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX13OW6
+    color 227,184,136
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-2226-SM-5N9FL \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=5.7 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1320445
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1320445.hg38.bigWig
+    shortLabel colonSigm M WYJK
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WYJK-2326-SM-4ONDN)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXWYJK
+    color 227,184,136
+
+    track gtexRnaSignalSRR1322070
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1322070.hg38.bigWig
+    shortLabel colonSigm M Z93S
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-Z93S-2626-SM-57WBX)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZ93S
+    color 227,184,136
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-2626-SM-57WBX \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6 batch=BP-42128 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/09/2013
+
+    track gtexRnaSignalSRR1328980
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1328980.hg38.bigWig
+    shortLabel colonSigm M 13111
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13111-1926-SM-5GCOL)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX13111
+    color 227,184,136
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-1926-SM-5GCOL \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.4 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1334055
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1334055.hg38.bigWig
+    shortLabel colonSigm M YF7O
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-YF7O-1626-SM-5IFII)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXYF7O
+    color 227,184,136
+    metadata donor=GTEX-YF7O age=50 sex=M hardyScore=0 sample=GTEX-YF7O-1626-SM-5IFII \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.9 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1334181
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1334181.hg38.bigWig
+    shortLabel colonSigm M 13PVQ
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13PVQ-2726-SM-5L3H7)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX13PVQ
+    color 227,184,136
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-2726-SM-5L3H7 \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.1 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1348507
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1348507.hg38.bigWig
+    shortLabel colonSigm M ZT9W
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZT9W-1726-SM-51MS3)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZT9W
+    color 227,184,136
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-1726-SM-51MS3 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.8 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1353577
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1353577.hg38.bigWig
+    shortLabel colonSigm M YEC3
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-YEC3-2026-SM-4WWFL)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXYEC3
+    color 227,184,136
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-2026-SM-4WWFL \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.8 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1362514
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1362514.hg38.bigWig
+    shortLabel colonSigm M 12WSL
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-12WSL-1826-SM-5LZW9)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX12WSL
+    color 227,184,136
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-1826-SM-5LZW9 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.2 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1378707
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1378707.hg38.bigWig
+    shortLabel colonSigm M 117YX
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-117YX-0526-SM-5EGJH)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX117YX
+    color 227,184,136
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-0526-SM-5EGJH \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.3 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1392456
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1392456.hg38.bigWig
+    shortLabel colonSigm M 11PRG
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11PRG-2026-SM-5GU5F)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX11PRG
+    color 227,184,136
+    metadata donor=GTEX-11PRG age=50 sex=M hardyScore=2 sample=GTEX-11PRG-2026-SM-5GU5F \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-44312 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1394384
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1394384.hg38.bigWig
+    shortLabel colonSigm M ZG7Y
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZG7Y-1826-SM-4WWD3)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZG7Y
+    color 227,184,136
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-1826-SM-4WWD3 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.6 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1404186
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1404186.hg38.bigWig
+    shortLabel colonSigm M ZTTD
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZTTD-2626-SM-57WEX)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZTTD
+    color 227,184,136
+    metadata donor=GTEX-ZTTD age=50 sex=M hardyScore=3 sample=GTEX-ZTTD-2626-SM-57WEX \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.6 batch=BP-43308 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1430703
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1430703.hg38.bigWig
+    shortLabel colonSigm M XGQ4
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-XGQ4-1726-SM-4RH4G)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXXGQ4
+    color 227,184,136
+
+    track gtexRnaSignalSRR1432231
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1432231.hg38.bigWig
+    shortLabel colonSigm M ZY6K
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZY6K-1326-SM-5GZWP)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZY6K
+    color 227,184,136
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-1326-SM-5GZWP \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.5 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1436583
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1436583.hg38.bigWig
+    shortLabel colonSigm M ZAB5
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZAB5-1426-SM-5HL9D)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZAB5
+    color 227,184,136
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-1426-SM-5HL9D \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=8 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1437598
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1437598.hg38.bigWig
+    shortLabel colonSigm M Y3I4
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-Y3I4-1126-SM-4TT7Y)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXY3I4
+    color 227,184,136
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-1126-SM-4TT7Y \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=8.2 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSRR1440809
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1440809.hg38.bigWig
+    shortLabel colonSigm M ZVZP
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZVZP-2026-SM-57WB3)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZVZP
+    color 227,184,136
+
+    track gtexRnaSignalSRR1456093
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1456093.hg38.bigWig
+    shortLabel colonSigm M 145MH
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-145MH-2726-SM-5QGQ6)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX145MH
+    color 227,184,136
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-2726-SM-5QGQ6 \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.7 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1458529
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1458529.hg38.bigWig
+    shortLabel colonSigm M ZYFD
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZYFD-2226-SM-5E43P)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXZYFD
+    color 227,184,136
+
+    track gtexRnaSignalSRR1459324
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1459324.hg38.bigWig
+    shortLabel colonSigm M WHPG
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WHPG-1626-SM-4M1ZL)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXWHPG
+    color 227,184,136
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-1626-SM-4M1ZL \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.6 batch=BP-27938 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR1473915
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1473915.hg38.bigWig
+    shortLabel colonSigm M 11DXZ
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11DXZ-1626-SM-5GIDI)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX11DXZ
+    color 227,184,136
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-1626-SM-5GIDI \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.5 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1475233
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1475233.hg38.bigWig
+    shortLabel colonSigm M 131XE
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-131XE-1026-SM-5EGKE)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEX131XE
+    color 227,184,136
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-1026-SM-5EGKE \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.3 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1499260
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1499260.hg38.bigWig
+    shortLabel colonSigm M WY7C
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WY7C-1926-SM-4ONCI)
+    subGroups age=a50 tissue=colonSigmoid donor=GTEXWY7C
+    color 227,184,136
+
+    track gtexRnaSignalSRR1317110
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1317110.hg38.bigWig
+    shortLabel colonSigm M 148VJ
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-148VJ-2426-SM-5NQ9Y)
+    subGroups age=a70 tissue=colonSigmoid donor=GTEX148VJ
+    color 227,184,136
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-2426-SM-5NQ9Y \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.4 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1323215
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1323215.hg38.bigWig
+    shortLabel colonSigm M 11DXY
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11DXY-2026-SM-5N9CZ)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11DXY
+    color 227,184,136
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-2026-SM-5N9CZ \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1327454
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1327454.hg38.bigWig
+    shortLabel colonSigm M 13OW8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13OW8-2726-SM-5L3FZ)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13OW8
+    color 227,184,136
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-2726-SM-5L3FZ \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=5.9 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1327527
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1327527.hg38.bigWig
+    shortLabel colonSigm M 13N2G
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13N2G-2226-SM-5IJCU)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13N2G
+    color 227,184,136
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-2226-SM-5IJCU \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.5 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1329642
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1329642.hg38.bigWig
+    shortLabel colonSigm M 111YS
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-111YS-1826-SM-5GIEP)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX111YS
+    color 227,184,136
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-1826-SM-5GIEP \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=7.8 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1330176
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1330176.hg38.bigWig
+    shortLabel colonSigm M Y5V6
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-Y5V6-1626-SM-4VDT2)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXY5V6
+    color 227,184,136
+
+    track gtexRnaSignalSRR1333167
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1333167.hg38.bigWig
+    shortLabel colonSigm M YECK
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-YECK-2826-SM-5IFHF)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXYECK
+    color 227,184,136
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-2826-SM-5IFHF \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.1 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1336617
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1336617.hg38.bigWig
+    shortLabel colonSigm M ZDTS
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZDTS-2726-SM-5L3E2)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXZDTS
+    color 227,184,136
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-2726-SM-5L3E2 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.5 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1337495
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1337495.hg38.bigWig
+    shortLabel colonSigm M 117XS
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-117XS-2226-SM-5GIE1)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX117XS
+    color 227,184,136
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-2226-SM-5GIE1 \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.2 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1358624
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1358624.hg38.bigWig
+    shortLabel colonSigm M 12ZZY
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-12ZZY-2726-SM-5EQ45)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX12ZZY
+    color 227,184,136
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-2726-SM-5EQ45 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.7 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1361814
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1361814.hg38.bigWig
+    shortLabel colonSigm M ZE9C
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZE9C-2126-SM-4WKGY)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXZE9C
+    color 227,184,136
+
+    track gtexRnaSignalSRR1362664
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1362664.hg38.bigWig
+    shortLabel colonSigm M 14A5H
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-14A5H-1626-SM-5SIAN)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX14A5H
+    color 227,184,136
+    metadata donor=GTEX-14A5H age=60 sex=M hardyScore=2 sample=GTEX-14A5H-1626-SM-5SIAN \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.7 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1362928
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1362928.hg38.bigWig
+    shortLabel colonSigm M 13G51
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13G51-2126-SM-5IJD9)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13G51
+    color 227,184,136
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-2126-SM-5IJD9 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.8 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1365377
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1365377.hg38.bigWig
+    shortLabel colonSigm M WQUQ
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-WQUQ-2626-SM-4MVNP)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXWQUQ
+    color 227,184,136
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-2626-SM-4MVNP \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-28884 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2012
+
+    track gtexRnaSignalSRR1369008
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1369008.hg38.bigWig
+    shortLabel colonSigm M 1212Z
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-1212Z-1826-SM-5FQSH)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX1212Z
+    color 227,184,136
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-1826-SM-5FQSH \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.2 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1386753
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1386753.hg38.bigWig
+    shortLabel colonSigm M 12BJ1
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-12BJ1-2026-SM-5FQUH)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX12BJ1
+    color 227,184,136
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-2026-SM-5FQUH \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=7.5 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1398272
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1398272.hg38.bigWig
+    shortLabel colonSigm M 11ZU8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11ZU8-1126-SM-5EQ5K)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11ZU8
+    color 227,184,136
+    metadata donor=GTEX-11ZU8 age=60 sex=M hardyScore=4 sample=GTEX-11ZU8-1126-SM-5EQ5K \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.3 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1401774
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1401774.hg38.bigWig
+    shortLabel colonSigm M 11EQ8
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11EQ8-2626-SM-5N9BO)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11EQ8
+    color 227,184,136
+
+    track gtexRnaSignalSRR1410550
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1410550.hg38.bigWig
+    shortLabel colonSigm M 12WSM
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-12WSM-1426-SM-5GCPA)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX12WSM
+    color 227,184,136
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-1426-SM-5GCPA \
+            tissue=colonSigmoid autolysisScore=3 rnaIntegrity=6.4 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1410634
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1410634.hg38.bigWig
+    shortLabel colonSigm M 11ONC
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11ONC-1926-SM-5GU75)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11ONC
+    color 227,184,136
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-1926-SM-5GU75 \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=5.8 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1416455
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1416455.hg38.bigWig
+    shortLabel colonSigm M 11TUW
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11TUW-2326-SM-5EQMO)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11TUW
+    color 227,184,136
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2326-SM-5EQMO \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=5.9 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1420538
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1420538.hg38.bigWig
+    shortLabel colonSigm M 14C5O
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-14C5O-2626-SM-5RQI5)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX14C5O
+    color 227,184,136
+    metadata donor=GTEX-14C5O age=60 sex=M hardyScore=4 sample=GTEX-14C5O-2626-SM-5RQI5 \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=5.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1432783
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1432783.hg38.bigWig
+    shortLabel colonSigm M 13O61
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13O61-1526-SM-5KM3P)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13O61
+    color 227,184,136
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1526-SM-5KM3P \
+            tissue=colonSigmoid autolysisScore=0 rnaIntegrity=8.2 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1441913
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1441913.hg38.bigWig
+    shortLabel colonSigm M 13CF2
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13CF2-1826-SM-5N9GK)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13CF2
+    color 227,184,136
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-1826-SM-5N9GK \
+            tissue=colonSigmoid autolysisScore=3 rnaIntegrity=5.7 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1442440
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1442440.hg38.bigWig
+    shortLabel colonSigm M 12696
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-12696-1926-SM-5EGJT)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX12696
+    color 227,184,136
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-1926-SM-5EGJT \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.4 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1443399
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1443399.hg38.bigWig
+    shortLabel colonSigm M 147GR
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-147GR-2826-SM-5RQK8)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX147GR
+    color 227,184,136
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-2826-SM-5RQK8 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1455741
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1455741.hg38.bigWig
+    shortLabel colonSigm M 11GS4
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11GS4-1826-SM-5HL4T)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11GS4
+    color 227,184,136
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-1826-SM-5HL4T \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1456250
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1456250.hg38.bigWig
+    shortLabel colonSigm M 13X6I
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13X6I-2726-SM-5Q5ET)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13X6I
+    color 227,184,136
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-2726-SM-5Q5ET \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=5.7 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1457336
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1457336.hg38.bigWig
+    shortLabel colonSigm M 13FHO
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13FHO-2726-SM-5K7VG)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13FHO
+    color 227,184,136
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-2726-SM-5K7VG \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.7 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1466770
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1466770.hg38.bigWig
+    shortLabel colonSigm M 11EI6
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-11EI6-2626-SM-5PNVT)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX11EI6
+    color 227,184,136
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-2626-SM-5PNVT \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.4 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1471291
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1471291.hg38.bigWig
+    shortLabel colonSigm M 145MO
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-145MO-2626-SM-5QGPD)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX145MO
+    color 227,184,136
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-2626-SM-5QGPD \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.5 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1473361
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1473361.hg38.bigWig
+    shortLabel colonSigm M 13SLW
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13SLW-2826-SM-5Q5ES)
+    subGroups age=a70 tissue=colonSigmoid donor=GTEX13SLW
+    color 227,184,136
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-2826-SM-5Q5ES \
+            tissue=colonSigmoid autolysisScore=2 rnaIntegrity=6.9 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1477292
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1477292.hg38.bigWig
+    shortLabel colonSigm M 147JS
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-147JS-2626-SM-5S2UX)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX147JS
+    color 227,184,136
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-2626-SM-5S2UX \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1487547
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1487547.hg38.bigWig
+    shortLabel colonSigm M ZF28
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-ZF28-2526-SM-57WFH)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEXZF28
+    color 227,184,136
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-2526-SM-57WFH \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=5.8 batch=BP-42743 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1489349
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1489349.hg38.bigWig
+    shortLabel colonSigm M 132NY
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-132NY-2726-SM-5PNY2)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX132NY
+    color 227,184,136
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-2726-SM-5PNY2 \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.6 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1500071
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl colonSigmoid/gtexRnaSignalSRR1500071.hg38.bigWig
+    shortLabel colonSigm M 13O1R
+    longLabel GTEx RNA signal from male Colon - Sigmoid (GTEX-13O1R-2426-SM-5KLZZ)
+    subGroups age=a60 tissue=colonSigmoid donor=GTEX13O1R
+    color 227,184,136
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-2426-SM-5KLZZ \
+            tissue=colonSigmoid autolysisScore=1 rnaIntegrity=6.4 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+

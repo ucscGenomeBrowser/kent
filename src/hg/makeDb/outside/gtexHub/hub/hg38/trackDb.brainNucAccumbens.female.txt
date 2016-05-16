@@ -1,0 +1,390 @@
+    track gtexRnaSignalSRR1329551
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1329551.hg38.bigWig
+    shortLabel brainNucA F YFC4
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-YFC4-0011-R6b-SM-4V6E1)
+    subGroups age=a40 tissue=brainNucAccumbens donor=GTEXYFC4
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R6b-SM-4V6E1 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.7 batch=BP-40981 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalSRR1357434
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1357434.hg38.bigWig
+    shortLabel brainNucA F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-12ZZX-0011-R6a-SM-5HL8L)
+    subGroups age=a40 tissue=brainNucAccumbens donor=GTEX12ZZX
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R6a-SM-5HL8L \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8.4 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalSRR1370473
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1370473.hg38.bigWig
+    shortLabel brainNucA F 13PL6
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13PL6-0011-R6a-SM-5O9C5)
+    subGroups age=a40 tissue=brainNucAccumbens donor=GTEX13PL6
+    color 238,238,0
+    metadata donor=GTEX-13PL6 age=40 sex=F hardyScore=3 sample=GTEX-13PL6-0011-R6a-SM-5O9C5 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.8 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1470902
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1470902.hg38.bigWig
+    shortLabel brainNucA F 13JUV
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13JUV-0011-R6b-SM-5LZYG)
+    subGroups age=a40 tissue=brainNucAccumbens donor=GTEX13JUV
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R6b-SM-5LZYG \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.1 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR598253
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR598253.hg38.bigWig
+    shortLabel brainNucA F Q2AG
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-Q2AG-0011-R6A-SM-2HML7)
+    subGroups age=a40 tissue=brainNucAccumbens donor=GTEXQ2AG
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R6A-SM-2HML7 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8.3 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalSRR657348
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR657348.hg38.bigWig
+    shortLabel brainNucA F T2IS
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-T2IS-0011-R6A-SM-32QP2)
+    subGroups age=a20 tissue=brainNucAccumbens donor=GTEXT2IS
+    color 238,238,0
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0011-R6A-SM-32QP2 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.4 batch=BP-24010 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/10/2012
+
+    track gtexRnaSignalSRR665334
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR665334.hg38.bigWig
+    shortLabel brainNucA F QDT8
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-QDT8-0011-R6A-SM-32PKI)
+    subGroups age=a30 tissue=brainNucAccumbens donor=GTEXQDT8
+    color 238,238,0
+    metadata donor=GTEX-QDT8 age=30 sex=F hardyScore=4 sample=GTEX-QDT8-0011-R6A-SM-32PKI \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7 batch=BP-20394 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/29/2011
+
+    track gtexRnaSignalSRR1370262
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1370262.hg38.bigWig
+    shortLabel brainNucA F 12WS9
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-12WS9-0011-R6a-SM-5P9EW)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX12WS9
+    color 238,238,0
+
+    track gtexRnaSignalSRR1370619
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1370619.hg38.bigWig
+    shortLabel brainNucA F 1313W
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-1313W-0011-R6a-SM-5K7XO)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX1313W
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R6a-SM-5K7XO \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8.7 batch=BP-45522 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1387945
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1387945.hg38.bigWig
+    shortLabel brainNucA F 13SLX
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13SLX-0011-R6a-SM-5PNX4)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX13SLX
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R6a-SM-5PNX4 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.8 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1432765
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1432765.hg38.bigWig
+    shortLabel brainNucA F 131XW
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-131XW-0011-R6b-SM-5K7XY)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX131XW
+    color 238,238,0
+    metadata donor=GTEX-131XW age=50 sex=F hardyScore=4 sample=GTEX-131XW-0011-R6b-SM-5K7XY \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=5.8 batch=BP-45522 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1443955
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1443955.hg38.bigWig
+    shortLabel brainNucA F ZV68
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-ZV68-0011-R6a-SM-51MSR)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEXZV68
+    color 238,238,0
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0011-R6a-SM-51MSR \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=5.9 batch=BP-42240 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalSRR1471903
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1471903.hg38.bigWig
+    shortLabel brainNucA F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13OVJ-0011-R6b-SM-5L3GH)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX13OVJ
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R6b-SM-5L3GH \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.8 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1485892
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1485892.hg38.bigWig
+    shortLabel brainNucA F 14BIN
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-14BIN-0011-R6a-SM-5S2RH)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEX14BIN
+    color 238,238,0
+    metadata donor=GTEX-14BIN age=50 sex=F hardyScore=2 sample=GTEX-14BIN-0011-R6a-SM-5S2RH \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=9.2 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalSRR1500405
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1500405.hg38.bigWig
+    shortLabel brainNucA F ZE7O
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-ZE7O-0011-R6a-SM-57WCI)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEXZE7O
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R6a-SM-57WCI \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.9 batch=BP-41299 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalSRR612731
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR612731.hg38.bigWig
+    shortLabel brainNucA F RU72
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-RU72-0011-R6A-SM-2TF71)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEXRU72
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R6A-SM-2TF71 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.4 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/22/2012
+
+    track gtexRnaSignalSRR820157
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR820157.hg38.bigWig
+    shortLabel brainNucA F WWYW
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-WWYW-0011-R6A-SM-3NB3G)
+    subGroups age=a50 tissue=brainNucAccumbens donor=GTEXWWYW
+    color 238,238,0
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0011-R6A-SM-3NB3G \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8.3 batch=BP-29430 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalSRR1320180
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1320180.hg38.bigWig
+    shortLabel brainNucA F 11GSP
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-11GSP-0011-R6b-SM-57WBQ)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX11GSP
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R6b-SM-57WBQ \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=5.9 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1321183
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1321183.hg38.bigWig
+    shortLabel brainNucA F 12WSD
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-12WSD-0011-R6b-SM-5P9JU)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX12WSD
+    color 238,238,0
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0011-R6b-SM-5P9JU \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=5.8 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1323130
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1323130.hg38.bigWig
+    shortLabel brainNucA F 13S7M
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13S7M-0011-R6b-SM-5O9D8)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX13S7M
+    color 238,238,0
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0011-R6b-SM-5O9D8 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.4 batch=BP-47873 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1351880
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1351880.hg38.bigWig
+    shortLabel brainNucA F 13QJC
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13QJC-0011-R6a-SM-5S2VI)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX13QJC
+    color 238,238,0
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0011-R6a-SM-5S2VI \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.6 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalSRR1376597
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1376597.hg38.bigWig
+    shortLabel brainNucA F 145LS
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-145LS-0011-R6b-SM-5PNWL)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX145LS
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R6b-SM-5PNWL \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8 batch=BP-48227 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1381566
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1381566.hg38.bigWig
+    shortLabel brainNucA F 14BIM
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-14BIM-0011-R6b-SM-5S2VB)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX14BIM
+    color 238,238,0
+    metadata donor=GTEX-14BIM age=60 sex=F hardyScore=3 sample=GTEX-14BIM-0011-R6b-SM-5S2VB \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.4 batch=BP-48831 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1396123
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1396123.hg38.bigWig
+    shortLabel brainNucA F 13O3O
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13O3O-0011-R6b-SM-5P9GY)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX13O3O
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R6b-SM-5P9GY \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.8 batch=BP-47984 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1397094
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1397094.hg38.bigWig
+    shortLabel brainNucA F 13X6K
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-13X6K-0011-R6a-SM-5P9K6)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX13X6K
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R6a-SM-5P9K6 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=8.3 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1410656
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1410656.hg38.bigWig
+    shortLabel brainNucA F 12WSB
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-12WSB-0011-R6b-SM-5GU6J)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEX12WSB
+    color 238,238,0
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0011-R6b-SM-5GU6J \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.7 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1443824
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1443824.hg38.bigWig
+    shortLabel brainNucA F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-ZVZQ-0011-R6b-SM-57WAY)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXZVZQ
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R6b-SM-57WAY \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.6 batch=BP-42319 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2013
+
+    track gtexRnaSignalSRR1455698
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR1455698.hg38.bigWig
+    shortLabel brainNucA F ZVT3
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-ZVT3-0011-R6a-SM-51MSU)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXZVT3
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R6a-SM-51MSU \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.5 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalSRR598196
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR598196.hg38.bigWig
+    shortLabel brainNucA F N7MT
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-N7MT-0011-R6a-SM-2I3G3)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXN7MT
+    color 238,238,0
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0011-R6a-SM-2I3G3 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.5 batch=BP-17394 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR600348
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR600348.hg38.bigWig
+    shortLabel brainNucA F NPJ7
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-NPJ7-0011-R6a-SM-2I3G7)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXNPJ7
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R6a-SM-2I3G7 \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.7 batch=BP-17410 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR613579
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR613579.hg38.bigWig
+    shortLabel brainNucA F QVJO
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-QVJO-0011-R6A-SM-2S1QN)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXQVJO
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R6A-SM-2S1QN \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=7.3 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalSRR656167
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR656167.hg38.bigWig
+    shortLabel brainNucA F QVUS
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-QVUS-0011-R6A-SM-3GACX)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXQVUS
+    color 238,238,0
+    metadata donor=GTEX-QVUS age=60 sex=F hardyScore=4 sample=GTEX-QVUS-0011-R6A-SM-3GACX \
+            tissue=brainNucAccumbens autolysisScore=-1 rnaIntegrity=6.4 batch=BP-22309 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=02/09/2012
+
+    track gtexRnaSignalSRR820209
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainNucAccumbens/gtexRnaSignalSRR820209.hg38.bigWig
+    shortLabel brainNucA F X4EP
+    longLabel GTEx RNA signal from female Brain - Nucleus accumbens (basal ganglia) (GTEX-X4EP-0011-R6A-SM-3P629)
+    subGroups age=a60 tissue=brainNucAccumbens donor=GTEXX4EP
+    color 238,238,0
+

@@ -1,0 +1,1503 @@
+    track gtexRnaSignalSRR1073705
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1073705.hg19.bigWig
+    shortLabel arteryAor M XQ3S
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-XQ3S-0126-SM-4BOO9)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXXQ3S
+    color 164,3,104
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-0126-SM-4BOO9 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-33866 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalSRR1074622
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1074622.hg19.bigWig
+    shortLabel arteryAor M UPK5
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-UPK5-1526-SM-4JBJA)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXUPK5
+    color 164,3,104
+    metadata donor=GTEX-UPK5 age=40 sex=M hardyScore=0 sample=GTEX-UPK5-1526-SM-4JBJA \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.4 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1078586
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1078586.hg19.bigWig
+    shortLabel arteryAor M WFON
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WFON-0526-SM-4LVLY)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXWFON
+    color 164,3,104
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0526-SM-4LVLY \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.4 batch=BP-27449 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR1081910
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1081910.hg19.bigWig
+    shortLabel arteryAor M XPT6
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-XPT6-0326-SM-4B66V)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXXPT6
+    color 164,3,104
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-0326-SM-4B66V \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-33639 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1084460
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1084460.hg19.bigWig
+    shortLabel arteryAor M T8EM
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-T8EM-0426-SM-4DM7E)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXT8EM
+    color 164,3,104
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-0426-SM-4DM7E \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-24887 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR1087173
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1087173.hg19.bigWig
+    shortLabel arteryAor M WFG7
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WFG7-0926-SM-4LMK7)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXWFG7
+    color 164,3,104
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-0926-SM-4LMK7 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-27213 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalSRR1087415
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1087415.hg19.bigWig
+    shortLabel arteryAor M QEG5
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QEG5-1226-SM-447AR)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXQEG5
+    color 164,3,104
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-1226-SM-447AR \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.6 batch=BP-20332 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/28/2011
+
+    track gtexRnaSignalSRR1087875
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1087875.hg19.bigWig
+    shortLabel arteryAor M R55E
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-R55E-1126-SM-48FDZ)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXR55E
+    color 164,3,104
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-1126-SM-48FDZ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.7 batch=BP-21406 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2012
+
+    track gtexRnaSignalSRR1088217
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1088217.hg19.bigWig
+    shortLabel arteryAor M Q2AH
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Q2AH-0326-SM-48U1K)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXQ2AH
+    color 164,3,104
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0326-SM-48U1K \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.4 batch=BP-19904 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2011
+
+    track gtexRnaSignalSRR1094430
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1094430.hg19.bigWig
+    shortLabel arteryAor M WH7G
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WH7G-0626-SM-4LVMO)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXWH7G
+    color 164,3,104
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-0626-SM-4LVMO \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1095840
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1095840.hg19.bigWig
+    shortLabel arteryAor M QV31
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QV31-0326-SM-447BM)
+    subGroups age=a30 tissue=arteryAorta donor=GTEXQV31
+    color 164,3,104
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-0326-SM-447BM \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=8.5 batch=BP-20785 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1100564
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1100564.hg19.bigWig
+    shortLabel arteryAor M SNOS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-SNOS-0326-SM-4DM6C)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXSNOS
+    color 164,3,104
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0326-SM-4DM6C \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-24455 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1319443
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1319443.hg19.bigWig
+    shortLabel arteryAor M 1339X
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-1339X-0526-SM-5KLYW)
+    subGroups age=a40 tissue=arteryAorta donor=GTEX1339X
+    color 164,3,104
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-0526-SM-5KLYW \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1332488
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1332488.hg19.bigWig
+    shortLabel arteryAor M 11P82
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11P82-0126-SM-5HL72)
+    subGroups age=a20 tissue=arteryAorta donor=GTEX11P82
+    color 164,3,104
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-0126-SM-5HL72 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1335113
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1335113.hg19.bigWig
+    shortLabel arteryAor M WFG8
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WFG8-0826-SM-4LVN5)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXWFG8
+    color 164,3,104
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0826-SM-4LVN5 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-27324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalSRR1345715
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1345715.hg19.bigWig
+    shortLabel arteryAor M 13NYB
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13NYB-0426-SM-5IJDD)
+    subGroups age=a40 tissue=arteryAorta donor=GTEX13NYB
+    color 164,3,104
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0426-SM-5IJDD \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1358755
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1358755.hg19.bigWig
+    shortLabel arteryAor M Y9LG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Y9LG-0226-SM-4VBS4)
+    subGroups age=a30 tissue=arteryAorta donor=GTEXY9LG
+    color 164,3,104
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0226-SM-4VBS4 \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=7.5 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1360338
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1360338.hg19.bigWig
+    shortLabel arteryAor M 12C56
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-12C56-0226-SM-5N9FB)
+    subGroups age=a20 tissue=arteryAorta donor=GTEX12C56
+    color 164,3,104
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-0226-SM-5N9FB \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=5.7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1365270
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1365270.hg19.bigWig
+    shortLabel arteryAor M 12KS4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-12KS4-0626-SM-5PNY4)
+    subGroups age=a30 tissue=arteryAorta donor=GTEX12KS4
+    color 164,3,104
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-0626-SM-5PNY4 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.7 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1383000
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1383000.hg19.bigWig
+    shortLabel arteryAor M Y8E4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Y8E4-1126-SM-5IFIA)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXY8E4
+    color 164,3,104
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-1126-SM-5IFIA \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-45268 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1389108
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1389108.hg19.bigWig
+    shortLabel arteryAor M WZTO
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WZTO-1626-SM-4PQYR)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXWZTO
+    color 164,3,104
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-1626-SM-4PQYR \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-29826 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR1399757
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1399757.hg19.bigWig
+    shortLabel arteryAor M 14ICL
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-14ICL-0326-SM-5S2OS)
+    subGroups age=a30 tissue=arteryAorta donor=GTEX14ICL
+    color 164,3,104
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-0326-SM-5S2OS \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1404105
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1404105.hg19.bigWig
+    shortLabel arteryAor M 1399R
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-1399R-0626-SM-5K7UZ)
+    subGroups age=a30 tissue=arteryAorta donor=GTEX1399R
+    color 164,3,104
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0626-SM-5K7UZ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1406582
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1406582.hg19.bigWig
+    shortLabel arteryAor M QEG4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QEG4-0926-SM-4R1JO)
+    subGroups age=a30 tissue=arteryAorta donor=GTEXQEG4
+    color 164,3,104
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-0926-SM-4R1JO \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.1 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR1417936
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1417936.hg19.bigWig
+    shortLabel arteryAor M XBEW
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-XBEW-0526-SM-4QASO)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXXBEW
+    color 164,3,104
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0526-SM-4QASO \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.3 batch=BP-36349 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalSRR1420728
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1420728.hg19.bigWig
+    shortLabel arteryAor M ZA64
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZA64-0126-SM-5HL8Z)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXZA64
+    color 164,3,104
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-0126-SM-5HL8Z \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.9 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1447715
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1447715.hg19.bigWig
+    shortLabel arteryAor M 11LCK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11LCK-0726-SM-5PNYC)
+    subGroups age=a30 tissue=arteryAorta donor=GTEX11LCK
+    color 164,3,104
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0726-SM-5PNYC \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.9 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1474351
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1474351.hg19.bigWig
+    shortLabel arteryAor M YEC4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-YEC4-0726-SM-5CVLV)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXYEC4
+    color 164,3,104
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-0726-SM-5CVLV \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.2 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1476231
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1476231.hg19.bigWig
+    shortLabel arteryAor M X3Y1
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-X3Y1-0326-SM-4PQZ7)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXX3Y1
+    color 164,3,104
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-0326-SM-4PQZ7 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-30273 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR1480176
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1480176.hg19.bigWig
+    shortLabel arteryAor M ZQUD
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZQUD-0226-SM-4YCEB)
+    subGroups age=a30 tissue=arteryAorta donor=GTEXZQUD
+    color 164,3,104
+    metadata donor=GTEX-ZQUD age=30 sex=M hardyScore=0 sample=GTEX-ZQUD-0226-SM-4YCEB \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1480240
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1480240.hg19.bigWig
+    shortLabel arteryAor M Z9EW
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Z9EW-0126-SM-5CVM6)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXZ9EW
+    color 164,3,104
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-0126-SM-5CVM6 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1480635
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1480635.hg19.bigWig
+    shortLabel arteryAor M 146FQ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-146FQ-0826-SM-5LUAJ)
+    subGroups age=a30 tissue=arteryAorta donor=GTEX146FQ
+    color 164,3,104
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0826-SM-5LUAJ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR2135291
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR2135291.hg19.bigWig
+    shortLabel arteryAor M WFG8
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WFG8-0826-SM-5CHQY_rep2)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXWFG8
+    color 164,3,104
+
+    track gtexRnaSignalSRR808836
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR808836.hg19.bigWig
+    shortLabel arteryAor M NPJ8
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-NPJ8-0526-SM-3MJHN)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXNPJ8
+    color 164,3,104
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0526-SM-3MJHN \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=9.5 batch=BP-17314 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR809470
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR809470.hg19.bigWig
+    shortLabel arteryAor M OOBK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-OOBK-0425-SM-3LK5O)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXOOBK
+    color 164,3,104
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-0425-SM-3LK5O \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.9 batch=BP-18256 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR809785
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR809785.hg19.bigWig
+    shortLabel arteryAor M O5YT
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-O5YT-0426-SM-3MJHD)
+    subGroups age=a20 tissue=arteryAorta donor=GTEXO5YT
+    color 164,3,104
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-0426-SM-3MJHD \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=8.2 batch=BP-17532 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSRR811819
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR811819.hg19.bigWig
+    shortLabel arteryAor M NFK9
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-NFK9-1326-SM-3LK5I)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXNFK9
+    color 164,3,104
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-1326-SM-3LK5I \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=9.3 batch=BP-16994 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR812673
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR812673.hg19.bigWig
+    shortLabel arteryAor M P44H
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-P44H-1026-SM-3NM96)
+    subGroups age=a40 tissue=arteryAorta donor=GTEXP44H
+    color 164,3,104
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-1026-SM-3NM96 \
+            tissue=arteryAorta autolysisScore=2 rnaIntegrity=7.6 batch=BP-18616 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/01/2011
+
+    track gtexRnaSignalSRR816565
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR816565.hg19.bigWig
+    shortLabel arteryAor M PLZ6
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-PLZ6-0326-SM-3P61J)
+    subGroups age=a30 tissue=arteryAorta donor=GTEXPLZ6
+    color 164,3,104
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0326-SM-3P61J \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR1070111
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1070111.hg19.bigWig
+    shortLabel arteryAor M RUSQ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-RUSQ-0326-SM-47JWS)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXRUSQ
+    color 164,3,104
+    metadata donor=GTEX-RUSQ age=50 sex=M hardyScore=0 sample=GTEX-RUSQ-0326-SM-47JWS \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.9 batch=BP-21930 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/30/2012
+
+    track gtexRnaSignalSRR1070641
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1070641.hg19.bigWig
+    shortLabel arteryAor M T6MN
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-T6MN-1126-SM-4DM71)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXT6MN
+    color 164,3,104
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-1126-SM-4DM71 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-24680 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalSRR1074478
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1074478.hg19.bigWig
+    shortLabel arteryAor M QDVJ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QDVJ-0626-SM-48U1T)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXQDVJ
+    color 164,3,104
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-0626-SM-48U1T \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.8 batch=BP-20260 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR1079998
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1079998.hg19.bigWig
+    shortLabel arteryAor M V1D1
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-V1D1-0326-SM-4JBIY)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXV1D1
+    color 164,3,104
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0326-SM-4JBIY \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-26673 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalSRR1081137
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1081137.hg19.bigWig
+    shortLabel arteryAor M UPJH
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-UPJH-0926-SM-4IHKA)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXUPJH
+    color 164,3,104
+    metadata donor=GTEX-UPJH age=50 sex=M hardyScore=2 sample=GTEX-UPJH-0926-SM-4IHKA \
+            tissue=arteryAorta autolysisScore=2 rnaIntegrity=6.1 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1083076
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1083076.hg19.bigWig
+    shortLabel arteryAor M PSDG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-PSDG-1026-SM-48TCV)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXPSDG
+    color 164,3,104
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-1026-SM-48TCV \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.7 batch=BP-19411 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR1083604
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1083604.hg19.bigWig
+    shortLabel arteryAor M XQ8I
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-XQ8I-1326-SM-4BOPV)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXXQ8I
+    color 164,3,104
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-1326-SM-4BOPV \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.9 batch=BP-34001 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2012
+
+    track gtexRnaSignalSRR1084276
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1084276.hg19.bigWig
+    shortLabel arteryAor M UJMC
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-UJMC-0626-SM-4IHJQ)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXUJMC
+    color 164,3,104
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-0626-SM-4IHJQ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-26178 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/12/2012
+
+    track gtexRnaSignalSRR1086393
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1086393.hg19.bigWig
+    shortLabel arteryAor M QXCU
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QXCU-0926-SM-48FEP)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXQXCU
+    color 164,3,104
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0926-SM-48FEP \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=7.8 batch=BP-21103 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/29/2011
+
+    track gtexRnaSignalSRR1091254
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1091254.hg19.bigWig
+    shortLabel arteryAor M XXEK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-XXEK-0726-SM-4BRWF)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXXXEK
+    color 164,3,104
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-0726-SM-4BRWF \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-34437 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalSRR1093673
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1093673.hg19.bigWig
+    shortLabel arteryAor M S3XE
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-S3XE-0326-SM-4AD6L)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXS3XE
+    color 164,3,104
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-0326-SM-4AD6L \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7 batch=BP-22845 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/02/2012
+
+    track gtexRnaSignalSRR1096638
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1096638.hg19.bigWig
+    shortLabel arteryAor M VUSG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-VUSG-0526-SM-4KL22)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXVUSG
+    color 164,3,104
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0526-SM-4KL22 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.6 batch=BP-26940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalSRR1097501
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1097501.hg19.bigWig
+    shortLabel arteryAor M QMRM
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QMRM-0626-SM-447BQ)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXQMRM
+    color 164,3,104
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-0626-SM-447BQ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.8 batch=BP-20786 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR1311935
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1311935.hg19.bigWig
+    shortLabel arteryAor M 11NUK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11NUK-0726-SM-5A5ME)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX11NUK
+    color 164,3,104
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-0726-SM-5A5ME \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=7.8 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1318920
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1318920.hg19.bigWig
+    shortLabel arteryAor M 11WQK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11WQK-0326-SM-5EQL1)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX11WQK
+    color 164,3,104
+
+    track gtexRnaSignalSRR1322643
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1322643.hg19.bigWig
+    shortLabel arteryAor M 117YW
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-117YW-0226-SM-5N9CM)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX117YW
+    color 164,3,104
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-0226-SM-5N9CM \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1324269
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1324269.hg19.bigWig
+    shortLabel arteryAor M WHSB
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WHSB-0226-SM-4M1XE)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXWHSB
+    color 164,3,104
+
+    track gtexRnaSignalSRR1332208
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1332208.hg19.bigWig
+    shortLabel arteryAor M YEC3
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-YEC3-0526-SM-4YCF2)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXYEC3
+    color 164,3,104
+
+    track gtexRnaSignalSRR1345390
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1345390.hg19.bigWig
+    shortLabel arteryAor M 11DXZ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11DXZ-0426-SM-5987Y)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX11DXZ
+    color 164,3,104
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0426-SM-5987Y \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.1 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1345454
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1345454.hg19.bigWig
+    shortLabel arteryAor M 147F4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-147F4-1026-SM-5Q5F9)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX147F4
+    color 164,3,104
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-1026-SM-5Q5F9 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.2 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1353028
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1353028.hg19.bigWig
+    shortLabel arteryAor M WHWD
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WHWD-0526-SM-4OORW)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXWHWD
+    color 164,3,104
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0526-SM-4OORW \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-27514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1367005
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1367005.hg19.bigWig
+    shortLabel arteryAor M 13OW6
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13OW6-1526-SM-5L3HX)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13OW6
+    color 164,3,104
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-1526-SM-5L3HX \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.7 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1379324
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1379324.hg19.bigWig
+    shortLabel arteryAor M 13O3P
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13O3P-1126-SM-5L3FG)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13O3P
+    color 164,3,104
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-1126-SM-5L3FG \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1380952
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1380952.hg19.bigWig
+    shortLabel arteryAor M QV44
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QV44-0626-SM-4R1KJ)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXQV44
+    color 164,3,104
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-0626-SM-4R1KJ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-20868 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR1395914
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1395914.hg19.bigWig
+    shortLabel arteryAor M 145MH
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-145MH-1026-SM-5Q5CI)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX145MH
+    color 164,3,104
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-1026-SM-5Q5CI \
+            tissue=arteryAorta autolysisScore=2 rnaIntegrity=6.5 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1396877
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1396877.hg19.bigWig
+    shortLabel arteryAor M Y3I4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Y3I4-0326-SM-4TT28)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXY3I4
+    color 164,3,104
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0326-SM-4TT28 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.4 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSRR1397971
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1397971.hg19.bigWig
+    shortLabel arteryAor M ZDYS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZDYS-0526-SM-5L3EE)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXZDYS
+    color 164,3,104
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-0526-SM-5L3EE \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1398207
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1398207.hg19.bigWig
+    shortLabel arteryAor M ZG7Y
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZG7Y-0126-SM-4WWEX)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXZG7Y
+    color 164,3,104
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-0126-SM-4WWEX \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.4 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1398947
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1398947.hg19.bigWig
+    shortLabel arteryAor M 144GN
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-144GN-0326-SM-5O9AD)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX144GN
+    color 164,3,104
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-0326-SM-5O9AD \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.3 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1399135
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1399135.hg19.bigWig
+    shortLabel arteryAor M 139YR
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-139YR-0626-SM-5IJBT)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX139YR
+    color 164,3,104
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-0626-SM-5IJBT \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.8 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1399821
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1399821.hg19.bigWig
+    shortLabel arteryAor M 11UD2
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11UD2-0826-SM-5EQKS)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX11UD2
+    color 164,3,104
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0826-SM-5EQKS \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.5 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1408055
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1408055.hg19.bigWig
+    shortLabel arteryAor M QEL4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QEL4-1126-SM-4R1JJ)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXQEL4
+    color 164,3,104
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-1126-SM-4R1JJ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-20412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR1418856
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1418856.hg19.bigWig
+    shortLabel arteryAor M WYJK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WYJK-1226-SM-4ONCP)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXWYJK
+    color 164,3,104
+
+    track gtexRnaSignalSRR1419279
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1419279.hg19.bigWig
+    shortLabel arteryAor M YEC3
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-YEC3-0526-SM-5IFHN)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXYEC3
+    color 164,3,104
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-0526-SM-5IFHN \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.4 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1431326
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1431326.hg19.bigWig
+    shortLabel arteryAor M 13FLV
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13FLV-1426-SM-5J1N4)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13FLV
+    color 164,3,104
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-1426-SM-5J1N4 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1443268
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1443268.hg19.bigWig
+    shortLabel arteryAor M 13NZ9
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13NZ9-1226-SM-5MR3J)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13NZ9
+    color 164,3,104
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-1226-SM-5MR3J \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.4 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1444541
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1444541.hg19.bigWig
+    shortLabel arteryAor M 13O21
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13O21-0426-SM-5K7VR)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13O21
+    color 164,3,104
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-0426-SM-5K7VR \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.5 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1444763
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1444763.hg19.bigWig
+    shortLabel arteryAor M ZYFD
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZYFD-2126-SM-5E43D)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXZYFD
+    color 164,3,104
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-2126-SM-5E43D \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1456375
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1456375.hg19.bigWig
+    shortLabel arteryAor M WHPG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WHPG-0926-SM-4M1XY)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXWHPG
+    color 164,3,104
+
+    track gtexRnaSignalSRR1456862
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1456862.hg19.bigWig
+    shortLabel arteryAor M 13PVQ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13PVQ-1426-SM-5J1O4)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13PVQ
+    color 164,3,104
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-1426-SM-5J1O4 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1471672
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1471672.hg19.bigWig
+    shortLabel arteryAor M 13W46
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13W46-1826-SM-5K7VA)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13W46
+    color 164,3,104
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-1826-SM-5K7VA \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.9 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1472998
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1472998.hg19.bigWig
+    shortLabel arteryAor M 13111
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13111-0526-SM-5LZVF)
+    subGroups age=a50 tissue=arteryAorta donor=GTEX13111
+    color 164,3,104
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0526-SM-5LZVF \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1480131
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1480131.hg19.bigWig
+    shortLabel arteryAor M ZVZP
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZVZP-0126-SM-5NQ6Q)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXZVZP
+    color 164,3,104
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-0126-SM-5NQ6Q \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.5 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1499849
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1499849.hg19.bigWig
+    shortLabel arteryAor M WY7C
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WY7C-0626-SM-4ONCT)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXWY7C
+    color 164,3,104
+
+    track gtexRnaSignalSRR654850
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR654850.hg19.bigWig
+    shortLabel arteryAor M R55D
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-R55D-1026-SM-3GAEQ)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXR55D
+    color 164,3,104
+
+    track gtexRnaSignalSRR808152
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR808152.hg19.bigWig
+    shortLabel arteryAor M OIZG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-OIZG-0426-SM-3LK5W)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXOIZG
+    color 164,3,104
+    metadata donor=GTEX-OIZG age=50 sex=M hardyScore=0 sample=GTEX-OIZG-0426-SM-3LK5W \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.6 batch=BP-18122 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/09/2011
+
+    track gtexRnaSignalSRR813632
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR813632.hg19.bigWig
+    shortLabel arteryAor M PLZ5
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-PLZ5-0426-SM-3P612)
+    subGroups age=a50 tissue=arteryAorta donor=GTEXPLZ5
+    color 164,3,104
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-0426-SM-3P612 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8 batch=BP-19181 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/03/2011
+
+    track gtexRnaSignalSRR1071644
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1071644.hg19.bigWig
+    shortLabel arteryAor M V955
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-V955-0926-SM-4JBJ8)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXV955
+    color 164,3,104
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-0926-SM-4JBJ8 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.8 batch=BP-26864 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1077090
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1077090.hg19.bigWig
+    shortLabel arteryAor M SJXC
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-SJXC-1126-SM-4DM6Y)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXSJXC
+    color 164,3,104
+
+    track gtexRnaSignalSRR1080148
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1080148.hg19.bigWig
+    shortLabel arteryAor M S4Z8
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-S4Z8-0626-SM-4AD6J)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXS4Z8
+    color 164,3,104
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-0626-SM-4AD6J \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-23119 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/14/2012
+
+    track gtexRnaSignalSRR1082283
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1082283.hg19.bigWig
+    shortLabel arteryAor M REY6
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-REY6-1126-SM-48FDU)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXREY6
+    color 164,3,104
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-1126-SM-48FDU \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.5 batch=BP-21548 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1083286
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1083286.hg19.bigWig
+    shortLabel arteryAor M S95S
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-S95S-0226-SM-4B656)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXS95S
+    color 164,3,104
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-0226-SM-4B656 \
+            tissue=arteryAorta autolysisScore=0 rnaIntegrity=6.4 batch=BP-23279 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR1090580
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1090580.hg19.bigWig
+    shortLabel arteryAor M VJYA
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-VJYA-0226-SM-4KL1Q)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXVJYA
+    color 164,3,104
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-0226-SM-4KL1Q \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6 batch=BP-26874 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1309898
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1309898.hg19.bigWig
+    shortLabel arteryAor M 117XS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-117XS-0426-SM-5GZZN)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX117XS
+    color 164,3,104
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-0426-SM-5GZZN \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.6 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1317513
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1317513.hg19.bigWig
+    shortLabel arteryAor M 13OVG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13OVG-0826-SM-5L3D8)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13OVG
+    color 164,3,104
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-0826-SM-5L3D8 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.9 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1318541
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1318541.hg19.bigWig
+    shortLabel arteryAor M 11DYG
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11DYG-1226-SM-5N9DC)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX11DYG
+    color 164,3,104
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-1226-SM-5N9DC \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.7 batch=BP-43989 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1319520
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1319520.hg19.bigWig
+    shortLabel arteryAor M 13OW8
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13OW8-1826-SM-5L3H1)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13OW8
+    color 164,3,104
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1826-SM-5L3H1 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.7 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1321165
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1321165.hg19.bigWig
+    shortLabel arteryAor M 13N2G
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13N2G-0526-SM-5MR5L)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13N2G
+    color 164,3,104
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0526-SM-5MR5L \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.1 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1325733
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1325733.hg19.bigWig
+    shortLabel arteryAor M 1399T
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-1399T-0526-SM-5J1NC)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX1399T
+    color 164,3,104
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0526-SM-5J1NC \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1328780
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1328780.hg19.bigWig
+    shortLabel arteryAor M 13FHO
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13FHO-1626-SM-5IJGB)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13FHO
+    color 164,3,104
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-1626-SM-5IJGB \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-46589 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1332694
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1332694.hg19.bigWig
+    shortLabel arteryAor M 13O61
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13O61-0326-SM-5KM2O)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13O61
+    color 164,3,104
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-0326-SM-5KM2O \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.7 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1354363
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1354363.hg19.bigWig
+    shortLabel arteryAor M 11GS4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11GS4-0326-SM-5N9F7)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX11GS4
+    color 164,3,104
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-0326-SM-5N9F7 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.7 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1355415
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1355415.hg19.bigWig
+    shortLabel arteryAor M 12BJ1
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-12BJ1-0126-SM-5LU9P)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX12BJ1
+    color 164,3,104
+
+    track gtexRnaSignalSRR1356266
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1356266.hg19.bigWig
+    shortLabel arteryAor M 12696
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-12696-0426-SM-5EGL5)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX12696
+    color 164,3,104
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0426-SM-5EGL5 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1365963
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1365963.hg19.bigWig
+    shortLabel arteryAor M ZDXO
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZDXO-2726-SM-4WKFA)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXZDXO
+    color 164,3,104
+
+    track gtexRnaSignalSRR1374198
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1374198.hg19.bigWig
+    shortLabel arteryAor M 11TUW
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11TUW-0926-SM-5EQMW)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX11TUW
+    color 164,3,104
+
+    track gtexRnaSignalSRR1384258
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1384258.hg19.bigWig
+    shortLabel arteryAor M 13FTZ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13FTZ-0126-SM-5K7V3)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13FTZ
+    color 164,3,104
+    metadata donor=GTEX-13FTZ age=60 sex=M hardyScore=2 sample=GTEX-13FTZ-0126-SM-5K7V3 \
+            tissue=arteryAorta autolysisScore=2 rnaIntegrity=6.5 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1386730
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1386730.hg19.bigWig
+    shortLabel arteryAor M ZYW4
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZYW4-1226-SM-5E45B)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXZYW4
+    color 164,3,104
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-1226-SM-5E45B \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1396840
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1396840.hg19.bigWig
+    shortLabel arteryAor M 13O1R
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13O1R-1026-SM-5KM2L)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13O1R
+    color 164,3,104
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-1026-SM-5KM2L \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1397837
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1397837.hg19.bigWig
+    shortLabel arteryAor M WQUQ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-WQUQ-1526-SM-4OOSM)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXWQUQ
+    color 164,3,104
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-1526-SM-4OOSM \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.4 batch=BP-28353 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR1398352
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1398352.hg19.bigWig
+    shortLabel arteryAor M 13OW5
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13OW5-0826-SM-5J1NE)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13OW5
+    color 164,3,104
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0826-SM-5J1NE \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.9 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1401909
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1401909.hg19.bigWig
+    shortLabel arteryAor M Y5V6
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-Y5V6-0426-SM-4VBRZ)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXY5V6
+    color 164,3,104
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0426-SM-4VBRZ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1413223
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1413223.hg19.bigWig
+    shortLabel arteryAor M 139UW
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-139UW-0426-SM-5K7V4)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX139UW
+    color 164,3,104
+    metadata donor=GTEX-139UW age=60 sex=M hardyScore=2 sample=GTEX-139UW-0426-SM-5K7V4 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1415439
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1415439.hg19.bigWig
+    shortLabel arteryAor M ZDTT
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZDTT-0226-SM-4WKHM)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXZDTT
+    color 164,3,104
+
+    track gtexRnaSignalSRR1420432
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1420432.hg19.bigWig
+    shortLabel arteryAor M 13YAN
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13YAN-1526-SM-5LU3E)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13YAN
+    color 164,3,104
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-1526-SM-5LU3E \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.8 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1436804
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1436804.hg19.bigWig
+    shortLabel arteryAor M ZDTS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZDTS-1426-SM-5K7WC)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXZDTS
+    color 164,3,104
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-1426-SM-5K7WC \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.7 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1439994
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1439994.hg19.bigWig
+    shortLabel arteryAor M 139TU
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-139TU-1126-SM-5J1NY)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX139TU
+    color 164,3,104
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-1126-SM-5J1NY \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1441868
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1441868.hg19.bigWig
+    shortLabel arteryAor M 1212Z
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-1212Z-0826-SM-5EQ51)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX1212Z
+    color 164,3,104
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0826-SM-5EQ51 \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.4 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1441998
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1441998.hg19.bigWig
+    shortLabel arteryAor M YECK
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-YECK-1326-SM-4W1ZF)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXYECK
+    color 164,3,104
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-1326-SM-4W1ZF \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1445856
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1445856.hg19.bigWig
+    shortLabel arteryAor M 13X6I
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-13X6I-0926-SM-5LUAB)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX13X6I
+    color 164,3,104
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0926-SM-5LUAB \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.7 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1456161
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1456161.hg19.bigWig
+    shortLabel arteryAor M ZE9C
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-ZE9C-0726-SM-4WKGA)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXZE9C
+    color 164,3,104
+
+    track gtexRnaSignalSRR1458243
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1458243.hg19.bigWig
+    shortLabel arteryAor M X4XY
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-X4XY-1526-SM-4QASE)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXX4XY
+    color 164,3,104
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-1526-SM-4QASE \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=5.9 batch=BP-31131 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalSRR1474577
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1474577.hg19.bigWig
+    shortLabel arteryAor M 12ZZY
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-12ZZY-1326-SM-5GCNW)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX12ZZY
+    color 164,3,104
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-1326-SM-5GCNW \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.3 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1474600
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1474600.hg19.bigWig
+    shortLabel arteryAor M QLQ7
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-QLQ7-0426-SM-4R1JU)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXQLQ7
+    color 164,3,104
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-0426-SM-4R1JU \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.8 batch=BP-20570 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR1477711
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1477711.hg19.bigWig
+    shortLabel arteryAor M 131XF
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-131XF-0626-SM-5GIDS)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX131XF
+    color 164,3,104
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-0626-SM-5GIDS \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=7.2 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1500846
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR1500846.hg19.bigWig
+    shortLabel arteryAor M 11ONC
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-11ONC-0926-SM-5BC5E)
+    subGroups age=a60 tissue=arteryAorta donor=GTEX11ONC
+    color 164,3,104
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-0926-SM-5BC5E \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.3 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR2135328
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR2135328.hg19.bigWig
+    shortLabel arteryAor M SUCS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-SUCS-0426-SM-5CHT6_rep1)
+    subGroups age=a70 tissue=arteryAorta donor=GTEXSUCS
+    color 164,3,104
+
+    track gtexRnaSignalSRR808351
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR808351.hg19.bigWig
+    shortLabel arteryAor M OOBJ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-OOBJ-0426-SM-3NB1S)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXOOBJ
+    color 164,3,104
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0426-SM-3NB1S \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=6.8 batch=BP-18253 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR815092
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR815092.hg19.bigWig
+    shortLabel arteryAor M P4PQ
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-P4PQ-0426-SM-3NMCI)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXP4PQ
+    color 164,3,104
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-0426-SM-3NMCI \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-18708 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2011
+
+    track gtexRnaSignalSRR818999
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl arteryAorta/gtexRnaSignalSRR818999.hg19.bigWig
+    shortLabel arteryAor M P4QS
+    longLabel GTEx RNA signal from male Artery - Aorta (GTEX-P4QS-0426-SM-3NMCQ)
+    subGroups age=a60 tissue=arteryAorta donor=GTEXP4QS
+    color 164,3,104
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-0426-SM-3NMCQ \
+            tissue=arteryAorta autolysisScore=1 rnaIntegrity=8.1 batch=BP-18727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+

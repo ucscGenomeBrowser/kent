@@ -1,0 +1,1329 @@
+    track gtexRnaSignalSRR1078234
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1078234.hg38.bigWig
+    shortLabel skinExpos F QDT8
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-QDT8-0126-SM-48TZ1)
+    subGroups age=a30 tissue=skinExposed donor=GTEXQDT8
+    color 30,144,255
+    metadata donor=GTEX-QDT8 age=30 sex=F hardyScore=4 sample=GTEX-QDT8-0126-SM-48TZ1 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=5.9 batch=BP-20205 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/18/2011
+
+    track gtexRnaSignalSRR1081425
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1081425.hg38.bigWig
+    shortLabel skinExpos F XUZC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-XUZC-1726-SM-4BRWS)
+    subGroups age=a30 tissue=skinExposed donor=GTEXXUZC
+    color 30,144,255
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-1726-SM-4BRWS \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.3 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalSRR1081886
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1081886.hg38.bigWig
+    shortLabel skinExpos F XV7Q
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-XV7Q-2526-SM-4BRV9)
+    subGroups age=a40 tissue=skinExposed donor=GTEXXV7Q
+    color 30,144,255
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-2526-SM-4BRV9 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.7 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1099236
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1099236.hg38.bigWig
+    shortLabel skinExpos F T2IS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-T2IS-0126-SM-4DM6O)
+    subGroups age=a20 tissue=skinExposed donor=GTEXT2IS
+    color 30,144,255
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0126-SM-4DM6O \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.8 batch=BP-24455 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1325138
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1325138.hg38.bigWig
+    shortLabel skinExpos F YFC4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-YFC4-0126-101855-SM-5CVLZ)
+    subGroups age=a40 tissue=skinExposed donor=GTEXYFC4
+    color 30,144,255
+
+    track gtexRnaSignalSRR1329400
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1329400.hg38.bigWig
+    shortLabel skinExpos F 12WSJ
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12WSJ-1826-SM-5GCNY)
+    subGroups age=a40 tissue=skinExposed donor=GTEX12WSJ
+    color 30,144,255
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-1826-SM-5GCNY \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.3 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1331661
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1331661.hg38.bigWig
+    shortLabel skinExpos F YB5K
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-YB5K-2126-SM-4WWDJ)
+    subGroups age=a40 tissue=skinExposed donor=GTEXYB5K
+    color 30,144,255
+    metadata donor=GTEX-YB5K age=40 sex=F hardyScore=0 sample=GTEX-YB5K-2126-SM-4WWDJ \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1332879
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1332879.hg38.bigWig
+    shortLabel skinExpos F 133LE
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-133LE-1826-SM-5J1MV)
+    subGroups age=a20 tissue=skinExposed donor=GTEX133LE
+    color 30,144,255
+    metadata donor=GTEX-133LE age=20 sex=F hardyScore=0 sample=GTEX-133LE-1826-SM-5J1MV \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.7 batch=BP-46482 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1333145
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1333145.hg38.bigWig
+    shortLabel skinExpos F ZGAY
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZGAY-0526-SM-4WWBB)
+    subGroups age=a40 tissue=skinExposed donor=GTEXZGAY
+    color 30,144,255
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-0526-SM-4WWBB \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8 batch=BP-43072 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/04/2013
+
+    track gtexRnaSignalSRR1333789
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1333789.hg38.bigWig
+    shortLabel skinExpos F 11XUK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11XUK-2026-SM-5EQLF)
+    subGroups age=a40 tissue=skinExposed donor=GTEX11XUK
+    color 30,144,255
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-2026-SM-5EQLF \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1357709
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1357709.hg38.bigWig
+    shortLabel skinExpos F 12ZZX
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12ZZX-0126-SM-5EGK9)
+    subGroups age=a40 tissue=skinExposed donor=GTEX12ZZX
+    color 30,144,255
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0126-SM-5EGK9 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.9 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1359546
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1359546.hg38.bigWig
+    shortLabel skinExpos F 13FTY
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13FTY-0526-SM-5L3EV)
+    subGroups age=a40 tissue=skinExposed donor=GTEX13FTY
+    color 30,144,255
+    metadata donor=GTEX-13FTY age=40 sex=F hardyScore=2 sample=GTEX-13FTY-0526-SM-5L3EV \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1362438
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1362438.hg38.bigWig
+    shortLabel skinExpos F 145ME
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-145ME-1826-SM-5SI9G)
+    subGroups age=a40 tissue=skinExposed donor=GTEX145ME
+    color 30,144,255
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-1826-SM-5SI9G \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1364848
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1364848.hg38.bigWig
+    shortLabel skinExpos F 11EM3
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11EM3-2426-SM-59861)
+    subGroups age=a20 tissue=skinExposed donor=GTEX11EM3
+    color 30,144,255
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-2426-SM-59861 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1366450
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1366450.hg38.bigWig
+    shortLabel skinExpos F ZPIC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZPIC-1726-SM-57WF2)
+    subGroups age=a40 tissue=skinExposed donor=GTEXZPIC
+    color 30,144,255
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-1726-SM-57WF2 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1383808
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1383808.hg38.bigWig
+    shortLabel skinExpos F ZP4G
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZP4G-2426-SM-57WEY)
+    subGroups age=a20 tissue=skinExposed donor=GTEXZP4G
+    color 30,144,255
+
+    track gtexRnaSignalSRR1416337
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1416337.hg38.bigWig
+    shortLabel skinExpos F PWCY
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PWCY-1826-SM-5SI7U)
+    subGroups age=a20 tissue=skinExposed donor=GTEXPWCY
+    color 30,144,255
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-1826-SM-5SI7U \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.2 batch=BP-19461 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1431406
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1431406.hg38.bigWig
+    shortLabel skinExpos F 11VI4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11VI4-1726-SM-5CVLH)
+    subGroups age=a40 tissue=skinExposed donor=GTEX11VI4
+    color 30,144,255
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-1726-SM-5CVLH \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.7 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1434889
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1434889.hg38.bigWig
+    shortLabel skinExpos F 11UD1
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11UD1-0126-SM-5PNYG)
+    subGroups age=a40 tissue=skinExposed donor=GTEX11UD1
+    color 30,144,255
+    metadata donor=GTEX-11UD1 age=40 sex=F hardyScore=3 sample=GTEX-11UD1-0126-SM-5PNYG \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=5.7 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1436347
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1436347.hg38.bigWig
+    shortLabel skinExpos F 12WSK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12WSK-2326-SM-5GCOH)
+    subGroups age=a40 tissue=skinExposed donor=GTEX12WSK
+    color 30,144,255
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-2326-SM-5GCOH \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.7 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1443507
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1443507.hg38.bigWig
+    shortLabel skinExpos F 139D8
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-139D8-0226-SM-5KLZO)
+    subGroups age=a30 tissue=skinExposed donor=GTEX139D8
+    color 30,144,255
+    metadata donor=GTEX-139D8 age=30 sex=F hardyScore=0 sample=GTEX-139D8-0226-SM-5KLZO \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-46589 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1445064
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1445064.hg38.bigWig
+    shortLabel skinExpos F 11ILO
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11ILO-0126-SM-5A5LN)
+    subGroups age=a40 tissue=skinExposed donor=GTEX11ILO
+    color 30,144,255
+
+    track gtexRnaSignalSRR1445087
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1445087.hg38.bigWig
+    shortLabel skinExpos F ZTPG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZTPG-0326-SM-5O9AX)
+    subGroups age=a20 tissue=skinExposed donor=GTEXZTPG
+    color 30,144,255
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-0326-SM-5O9AX \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.3 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1452765
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1452765.hg38.bigWig
+    shortLabel skinExpos F Y5LM
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-Y5LM-1926-SM-5RQJH)
+    subGroups age=a40 tissue=skinExposed donor=GTEXY5LM
+    color 30,144,255
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-1926-SM-5RQJH \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1471713
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1471713.hg38.bigWig
+    shortLabel skinExpos F 13VXT
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13VXT-0126-SM-5LU4I)
+    subGroups age=a20 tissue=skinExposed donor=GTEX13VXT
+    color 30,144,255
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-0126-SM-5LU4I \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.5 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1473959
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1473959.hg38.bigWig
+    shortLabel skinExpos F ZC5H
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZC5H-0226-SM-4WAY9)
+    subGroups age=a40 tissue=skinExposed donor=GTEXZC5H
+    color 30,144,255
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-0226-SM-4WAY9 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.6 batch=BP-42024 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1480408
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1480408.hg38.bigWig
+    shortLabel skinExpos F YFC4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-YFC4-0126-SM-5CVLY)
+    subGroups age=a40 tissue=skinExposed donor=GTEXYFC4
+    color 30,144,255
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0126-SM-5CVLY \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.8 batch=BP-45390 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1485678
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1485678.hg38.bigWig
+    shortLabel skinExpos F 11P81
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11P81-2326-SM-59875)
+    subGroups age=a30 tissue=skinExposed donor=GTEX11P81
+    color 30,144,255
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-2326-SM-59875 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8.4 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1499917
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1499917.hg38.bigWig
+    shortLabel skinExpos F 13U4I
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13U4I-0126-SM-5LU38)
+    subGroups age=a40 tissue=skinExposed donor=GTEX13U4I
+    color 30,144,255
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-0126-SM-5LU38 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.1 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR604414
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR604414.hg38.bigWig
+    shortLabel skinExpos F PWN1
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PWN1-0126-SM-2I3FK)
+    subGroups age=a40 tissue=skinExposed donor=GTEXPWN1
+    color 30,144,255
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-0126-SM-2I3FK \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.3 batch=BP-19817 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalSRR614779
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR614779.hg38.bigWig
+    shortLabel skinExpos F PWCY
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PWCY-1826-SM-2S1OK)
+    subGroups age=a20 tissue=skinExposed donor=GTEXPWCY
+    color 30,144,255
+
+    track gtexRnaSignalSRR615958
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR615958.hg38.bigWig
+    shortLabel skinExpos F R55G
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-R55G-2526-SM-2TC6D)
+    subGroups age=a40 tissue=skinExposed donor=GTEXR55G
+    color 30,144,255
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-2526-SM-2TC6D \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-21547 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR654945
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR654945.hg38.bigWig
+    shortLabel skinExpos F TMMY
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-TMMY-0226-SM-33HBA)
+    subGroups age=a40 tissue=skinExposed donor=GTEXTMMY
+    color 30,144,255
+    metadata donor=GTEX-TMMY age=40 sex=F hardyScore=0 sample=GTEX-TMMY-0226-SM-33HBA \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.8 batch=BP-25072 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/07/2012
+
+    track gtexRnaSignalSRR655194
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR655194.hg38.bigWig
+    shortLabel skinExpos F R3RS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-R3RS-0126-SM-3GIJL)
+    subGroups age=a40 tissue=skinExposed donor=GTEXR3RS
+    color 30,144,255
+    metadata donor=GTEX-R3RS age=40 sex=F hardyScore=4 sample=GTEX-R3RS-0126-SM-3GIJL \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.6 batch=BP-21198 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2012
+
+    track gtexRnaSignalSRR655471
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR655471.hg38.bigWig
+    shortLabel skinExpos F TML8
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-TML8-1926-SM-32QOS)
+    subGroups age=a40 tissue=skinExposed donor=GTEXTML8
+    color 30,144,255
+    metadata donor=GTEX-TML8 age=40 sex=F hardyScore=0 sample=GTEX-TML8-1926-SM-32QOS \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-25076 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/07/2012
+
+    track gtexRnaSignalSRR655613
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR655613.hg38.bigWig
+    shortLabel skinExpos F S7SF
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-S7SF-1626-SM-3K2AY)
+    subGroups age=a20 tissue=skinExposed donor=GTEXS7SF
+    color 30,144,255
+    metadata donor=GTEX-S7SF age=20 sex=F hardyScore=0 sample=GTEX-S7SF-1626-SM-3K2AY \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.8 batch=BP-23171 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalSRR657575
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR657575.hg38.bigWig
+    shortLabel skinExpos F T6MO
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-T6MO-1626-SM-32QOM)
+    subGroups age=a40 tissue=skinExposed donor=GTEXT6MO
+    color 30,144,255
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-1626-SM-32QOM \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-24889 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalSRR813371
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR813371.hg38.bigWig
+    shortLabel skinExpos F P4PP
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-P4PP-0126-SM-3LK69)
+    subGroups age=a30 tissue=skinExposed donor=GTEXP4PP
+    color 30,144,255
+    metadata donor=GTEX-P4PP age=30 sex=F hardyScore=0 sample=GTEX-P4PP-0126-SM-3LK69 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.1 batch=BP-18662 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2011
+
+    track gtexRnaSignalSRR814727
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR814727.hg38.bigWig
+    shortLabel skinExpos F WI4N
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-WI4N-1026-SM-3LK7N)
+    subGroups age=a40 tissue=skinExposed donor=GTEXWI4N
+    color 30,144,255
+    metadata donor=GTEX-WI4N age=40 sex=F hardyScore=0 sample=GTEX-WI4N-1026-SM-3LK7N \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-27941 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR815374
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR815374.hg38.bigWig
+    shortLabel skinExpos F WYVS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-WYVS-2126-SM-3NMA3)
+    subGroups age=a40 tissue=skinExposed donor=GTEXWYVS
+    color 30,144,255
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-2126-SM-3NMA3 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.7 batch=BP-29831 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR816699
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR816699.hg38.bigWig
+    shortLabel skinExpos F WRHK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-WRHK-1426-SM-3MJF9)
+    subGroups age=a20 tissue=skinExposed donor=GTEXWRHK
+    color 30,144,255
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-1426-SM-3MJF9 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-28509 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalSRR1073291
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1073291.hg38.bigWig
+    shortLabel skinExpos F XUW1
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-XUW1-0426-SM-4BOOT)
+    subGroups age=a50 tissue=skinExposed donor=GTEXXUW1
+    color 30,144,255
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-0426-SM-4BOOT \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.6 batch=BP-34129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalSRR1074041
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1074041.hg38.bigWig
+    shortLabel skinExpos F WXYG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-WXYG-2326-SM-4E3I6)
+    subGroups age=a50 tissue=skinExposed donor=GTEXWXYG
+    color 30,144,255
+    metadata donor=GTEX-WXYG age=50 sex=F hardyScore=0 sample=GTEX-WXYG-2326-SM-4E3I6 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.8 batch=BP-36063 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/12/2013
+
+    track gtexRnaSignalSRR1087850
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1087850.hg38.bigWig
+    shortLabel skinExpos F X8HC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-X8HC-0126-SM-4E3JW)
+    subGroups age=a50 tissue=skinExposed donor=GTEXX8HC
+    color 30,144,255
+    metadata donor=GTEX-X8HC age=50 sex=F hardyScore=0 sample=GTEX-X8HC-0126-SM-4E3JW \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.6 batch=BP-36259 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/20/2013
+
+    track gtexRnaSignalSRR1091719
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1091719.hg38.bigWig
+    shortLabel skinExpos F W5WG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-W5WG-1826-SM-4KL2Y)
+    subGroups age=a50 tissue=skinExposed donor=GTEXW5WG
+    color 30,144,255
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-1826-SM-4KL2Y \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.6 batch=BP-27175 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalSRR1317470
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1317470.hg38.bigWig
+    shortLabel skinExpos F 147F3
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-147F3-0526-SM-5SI98)
+    subGroups age=a50 tissue=skinExposed donor=GTEX147F3
+    color 30,144,255
+    metadata donor=GTEX-147F3 age=50 sex=F hardyScore=0 sample=GTEX-147F3-0526-SM-5SI98 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1321630
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1321630.hg38.bigWig
+    shortLabel skinExpos F 139T4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-139T4-0226-SM-5HL5S)
+    subGroups age=a50 tissue=skinExposed donor=GTEX139T4
+    color 30,144,255
+    metadata donor=GTEX-139T4 age=50 sex=F hardyScore=3 sample=GTEX-139T4-0226-SM-5HL5S \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.4 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1330106
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1330106.hg38.bigWig
+    shortLabel skinExpos F ZE7O
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZE7O-0126-SM-57WC1)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZE7O
+    color 30,144,255
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0126-SM-57WC1 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSRR1332526
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1332526.hg38.bigWig
+    shortLabel skinExpos F 1313W
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-1313W-0126-SM-5LZUN)
+    subGroups age=a50 tissue=skinExposed donor=GTEX1313W
+    color 30,144,255
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0126-SM-5LZUN \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-45782 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1335355
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1335355.hg38.bigWig
+    shortLabel skinExpos F ZV68
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZV68-0126-SM-59HKS)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZV68
+    color 30,144,255
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0126-SM-59HKS \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1337770
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1337770.hg38.bigWig
+    shortLabel skinExpos F ZVT4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZVT4-0126-SM-51MS1)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZVT4
+    color 30,144,255
+    metadata donor=GTEX-ZVT4 age=50 sex=F hardyScore=3 sample=GTEX-ZVT4-0126-SM-51MS1 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1347980
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1347980.hg38.bigWig
+    shortLabel skinExpos F 13N11
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13N11-2526-SM-5K7UE)
+    subGroups age=a50 tissue=skinExposed donor=GTEX13N11
+    color 30,144,255
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-2526-SM-5K7UE \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1352369
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1352369.hg38.bigWig
+    shortLabel skinExpos F ZAJG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZAJG-0126-SM-5HL94)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZAJG
+    color 30,144,255
+    metadata donor=GTEX-ZAJG age=50 sex=F hardyScore=3 sample=GTEX-ZAJG-0126-SM-5HL94 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.5 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1354247
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1354247.hg38.bigWig
+    shortLabel skinExpos F Y3IK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-Y3IK-2426-SM-4WWDU)
+    subGroups age=a50 tissue=skinExposed donor=GTEXY3IK
+    color 30,144,255
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-2426-SM-4WWDU \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8.3 batch=BP-35836 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/06/2013
+
+    track gtexRnaSignalSRR1366895
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1366895.hg38.bigWig
+    shortLabel skinExpos F PLZ4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PLZ4-0126-SM-5SI8O)
+    subGroups age=a50 tissue=skinExposed donor=GTEXPLZ4
+    color 30,144,255
+    metadata donor=GTEX-PLZ4 age=50 sex=F hardyScore=-1 sample=GTEX-PLZ4-0126-SM-5SI8O \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.1 batch=BP-19215 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2011
+
+    track gtexRnaSignalSRR1403259
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1403259.hg38.bigWig
+    shortLabel skinExpos F 146FH
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-146FH-0126-SM-5QGPP)
+    subGroups age=a50 tissue=skinExposed donor=GTEX146FH
+    color 30,144,255
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-0126-SM-5QGPP \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8.1 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1404531
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1404531.hg38.bigWig
+    shortLabel skinExpos F 12WS9
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12WS9-0126-SM-5EGL7)
+    subGroups age=a50 tissue=skinExposed donor=GTEX12WS9
+    color 30,144,255
+
+    track gtexRnaSignalSRR1407157
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1407157.hg38.bigWig
+    shortLabel skinExpos F ZF2S
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZF2S-2326-SM-4WWCE)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZF2S
+    color 30,144,255
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-2326-SM-4WWCE \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1410356
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1410356.hg38.bigWig
+    shortLabel skinExpos F ZVT2
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZVT2-2526-SM-51MT1)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZVT2
+    color 30,144,255
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-2526-SM-51MT1 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.8 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1413686
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1413686.hg38.bigWig
+    shortLabel skinExpos F 13OVJ
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13OVJ-0126-SM-5KM36)
+    subGroups age=a50 tissue=skinExposed donor=GTEX13OVJ
+    color 30,144,255
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0126-SM-5KM36 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.7 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1415113
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1415113.hg38.bigWig
+    shortLabel skinExpos F Y114
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-Y114-2426-SM-4TT8A)
+    subGroups age=a50 tissue=skinExposed donor=GTEXY114
+    color 30,144,255
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-2426-SM-4TT8A \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.6 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSRR1416003
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1416003.hg38.bigWig
+    shortLabel skinExpos F 11ZVC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11ZVC-2526-SM-5FQTE)
+    subGroups age=a50 tissue=skinExposed donor=GTEX11ZVC
+    color 30,144,255
+    metadata donor=GTEX-11ZVC age=50 sex=F hardyScore=2 sample=GTEX-11ZVC-2526-SM-5FQTE \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8.2 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1416291
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1416291.hg38.bigWig
+    shortLabel skinExpos F 13SLX
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13SLX-0526-SM-5S2ON)
+    subGroups age=a50 tissue=skinExposed donor=GTEX13SLX
+    color 30,144,255
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0526-SM-5S2ON \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1479595
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1479595.hg38.bigWig
+    shortLabel skinExpos F 113JC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-113JC-2326-SM-5EQ4E)
+    subGroups age=a50 tissue=skinExposed donor=GTEX113JC
+    color 30,144,255
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-2326-SM-5EQ4E \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.5 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1489904
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1489904.hg38.bigWig
+    shortLabel skinExpos F Y8LW
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-Y8LW-1826-SM-5S2MV)
+    subGroups age=a50 tissue=skinExposed donor=GTEXY8LW
+    color 30,144,255
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-1826-SM-5S2MV \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.3 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1498529
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1498529.hg38.bigWig
+    shortLabel skinExpos F ZAK1
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZAK1-0126-SM-5IJD3)
+    subGroups age=a50 tissue=skinExposed donor=GTEXZAK1
+    color 30,144,255
+    metadata donor=GTEX-ZAK1 age=50 sex=F hardyScore=2 sample=GTEX-ZAK1-0126-SM-5IJD3 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1502143
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1502143.hg38.bigWig
+    shortLabel skinExpos F 13FH7
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13FH7-2026-SM-5IJCR)
+    subGroups age=a50 tissue=skinExposed donor=GTEX13FH7
+    color 30,144,255
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-2026-SM-5IJCR \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.3 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR604653
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR604653.hg38.bigWig
+    shortLabel skinExpos F P4QT
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-P4QT-0126-SM-2I3FL)
+    subGroups age=a50 tissue=skinExposed donor=GTEXP4QT
+    color 30,144,255
+    metadata donor=GTEX-P4QT age=50 sex=F hardyScore=0 sample=GTEX-P4QT-0126-SM-2I3FL \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.3 batch=BP-18729 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalSRR612275
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR612275.hg38.bigWig
+    shortLabel skinExpos F RU72
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-RU72-0926-SM-2TF6B)
+    subGroups age=a50 tissue=skinExposed donor=GTEXRU72
+    color 30,144,255
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0926-SM-2TF6B \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.8 batch=BP-21837 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/26/2012
+
+    track gtexRnaSignalSRR612959
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR612959.hg38.bigWig
+    shortLabel skinExpos F RNOR
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-RNOR-0126-SM-2TF57)
+    subGroups age=a50 tissue=skinExposed donor=GTEXRNOR
+    color 30,144,255
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0126-SM-2TF57 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.4 batch=BP-21668 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/23/2012
+
+    track gtexRnaSignalSRR613663
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR613663.hg38.bigWig
+    shortLabel skinExpos F OXRK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OXRK-0226-SM-2YUN1)
+    subGroups age=a50 tissue=skinExposed donor=GTEXOXRK
+    color 30,144,255
+
+    track gtexRnaSignalSRR615587
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR615587.hg38.bigWig
+    shortLabel skinExpos F PLZ4
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PLZ4-0126-SM-2S1OG)
+    subGroups age=a50 tissue=skinExposed donor=GTEXPLZ4
+    color 30,144,255
+
+    track gtexRnaSignalSRR654981
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR654981.hg38.bigWig
+    shortLabel skinExpos F UJHI
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-UJHI-1526-SM-3DB99)
+    subGroups age=a50 tissue=skinExposed donor=GTEXUJHI
+    color 30,144,255
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-1526-SM-3DB99 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.6 batch=BP-25965 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalSRR657985
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR657985.hg38.bigWig
+    shortLabel skinExpos F QCQG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-QCQG-1726-SM-3GIJ9)
+    subGroups age=a50 tissue=skinExposed donor=GTEXQCQG
+    color 30,144,255
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-1726-SM-3GIJ9 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.7 batch=BP-20114 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSRR808272
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR808272.hg38.bigWig
+    shortLabel skinExpos F OXRK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OXRK-0226-SM-3NB2G)
+    subGroups age=a50 tissue=skinExposed donor=GTEXOXRK
+    color 30,144,255
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0226-SM-3NB2G \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.7 batch=BP-20384 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/29/2011
+
+    track gtexRnaSignalSRR1071035
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1071035.hg38.bigWig
+    shortLabel skinExpos F XYKS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-XYKS-2126-SM-4E3IB)
+    subGroups age=a60 tissue=skinExposed donor=GTEXXYKS
+    color 30,144,255
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-2126-SM-4E3IB \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8.4 batch=BP-34929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/09/2013
+
+    track gtexRnaSignalSRR1071785
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1071785.hg38.bigWig
+    shortLabel skinExpos F X638
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-X638-0126-SM-47JZ8)
+    subGroups age=a70 tissue=skinExposed donor=GTEXX638
+    color 30,144,255
+    metadata donor=GTEX-X638 age=70 sex=F hardyScore=-1 sample=GTEX-X638-0126-SM-47JZ8 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.4 batch=BP-36063 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/12/2013
+
+    track gtexRnaSignalSRR1088316
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1088316.hg38.bigWig
+    shortLabel skinExpos F OXRP
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OXRP-0126-SM-48TDI)
+    subGroups age=a60 tissue=skinExposed donor=GTEXOXRP
+    color 30,144,255
+
+    track gtexRnaSignalSRR1090359
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1090359.hg38.bigWig
+    shortLabel skinExpos F PWO3
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-PWO3-1526-SM-48TCM)
+    subGroups age=a60 tissue=skinExposed donor=GTEXPWO3
+    color 30,144,255
+    metadata donor=GTEX-PWO3 age=60 sex=F hardyScore=4 sample=GTEX-PWO3-1526-SM-48TCM \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=5.9 batch=BP-19825 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalSRR1308612
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1308612.hg38.bigWig
+    shortLabel skinExpos F 11DXX
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11DXX-2426-SM-5GZZW)
+    subGroups age=a60 tissue=skinExposed donor=GTEX11DXX
+    color 30,144,255
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-2426-SM-5GZZW \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.8 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1308800
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1308800.hg38.bigWig
+    shortLabel skinExpos F 1128S
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-1128S-2326-SM-5GZZY)
+    subGroups age=a60 tissue=skinExposed donor=GTEX1128S
+    color 30,144,255
+    metadata donor=GTEX-1128S age=60 sex=F hardyScore=2 sample=GTEX-1128S-2326-SM-5GZZY \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1309051
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1309051.hg38.bigWig
+    shortLabel skinExpos F 1122O
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-1122O-2126-SM-5EGIR)
+    subGroups age=a60 tissue=skinExposed donor=GTEX1122O
+    color 30,144,255
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-2126-SM-5EGIR \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.1 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1310855
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1310855.hg38.bigWig
+    shortLabel skinExpos F 11EMC
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11EMC-2926-SM-5EQ4F)
+    subGroups age=a60 tissue=skinExposed donor=GTEX11EMC
+    color 30,144,255
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-2926-SM-5EQ4F \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.4 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1323558
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1323558.hg38.bigWig
+    shortLabel skinExpos F 13W3W
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13W3W-2426-SM-5LU5B)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13W3W
+    color 30,144,255
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-2426-SM-5LU5B \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.5 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1332164
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1332164.hg38.bigWig
+    shortLabel skinExpos F ZYFG
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZYFG-2326-SM-5E44B)
+    subGroups age=a60 tissue=skinExposed donor=GTEXZYFG
+    color 30,144,255
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-2326-SM-5E44B \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=5.9 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1333528
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1333528.hg38.bigWig
+    shortLabel skinExpos F 12WSB
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12WSB-0126-SM-59HJN)
+    subGroups age=a60 tissue=skinExposed donor=GTEX12WSB
+    color 30,144,255
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0126-SM-59HJN \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.8 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1349875
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1349875.hg38.bigWig
+    shortLabel skinExpos F 13113
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13113-1926-SM-5LZWG)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13113
+    color 30,144,255
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-1926-SM-5LZWG \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1353642
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1353642.hg38.bigWig
+    shortLabel skinExpos F 13CF3
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13CF3-2426-SM-5IFGX)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13CF3
+    color 30,144,255
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-2426-SM-5IFGX \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.5 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1355328
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1355328.hg38.bigWig
+    shortLabel skinExpos F 148VI
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-148VI-1626-SM-5SI6E)
+    subGroups age=a60 tissue=skinExposed donor=GTEX148VI
+    color 30,144,255
+    metadata donor=GTEX-148VI age=60 sex=F hardyScore=0 sample=GTEX-148VI-1626-SM-5SI6E \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1357672
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1357672.hg38.bigWig
+    shortLabel skinExpos F ZQG8
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZQG8-1626-SM-5HL6H)
+    subGroups age=a60 tissue=skinExposed donor=GTEXZQG8
+    color 30,144,255
+    metadata donor=GTEX-ZQG8 age=60 sex=F hardyScore=0 sample=GTEX-ZQG8-1626-SM-5HL6H \
+            tissue=skinExposed autolysisScore=2 rnaIntegrity=7.7 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1360630
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1360630.hg38.bigWig
+    shortLabel skinExpos F 14DAQ
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-14DAQ-0126-SM-5S2MQ)
+    subGroups age=a60 tissue=skinExposed donor=GTEX14DAQ
+    color 30,144,255
+    metadata donor=GTEX-14DAQ age=60 sex=F hardyScore=4 sample=GTEX-14DAQ-0126-SM-5S2MQ \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1369052
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1369052.hg38.bigWig
+    shortLabel skinExpos F 131YS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-131YS-0126-SM-5KM1M)
+    subGroups age=a60 tissue=skinExposed donor=GTEX131YS
+    color 30,144,255
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0126-SM-5KM1M \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.2 batch=BP-46482 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1375485
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1375485.hg38.bigWig
+    shortLabel skinExpos F 145MI
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-145MI-0526-SM-5O9A8)
+    subGroups age=a60 tissue=skinExposed donor=GTEX145MI
+    color 30,144,255
+    metadata donor=GTEX-145MI age=60 sex=F hardyScore=2 sample=GTEX-145MI-0526-SM-5O9A8 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.8 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1376786
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1376786.hg38.bigWig
+    shortLabel skinExpos F 13PVR
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13PVR-2326-SM-5QGR1)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13PVR
+    color 30,144,255
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-2326-SM-5QGR1 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.6 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1382934
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1382934.hg38.bigWig
+    shortLabel skinExpos F 11TTK
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11TTK-0126-SM-5987B)
+    subGroups age=a60 tissue=skinExposed donor=GTEX11TTK
+    color 30,144,255
+    metadata donor=GTEX-11TTK age=60 sex=F hardyScore=4 sample=GTEX-11TTK-0126-SM-5987B \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.8 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1403177
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1403177.hg38.bigWig
+    shortLabel skinExpos F ZVZQ
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZVZQ-0326-SM-59HLL)
+    subGroups age=a60 tissue=skinExposed donor=GTEXZVZQ
+    color 30,144,255
+
+    track gtexRnaSignalSRR1410380
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1410380.hg38.bigWig
+    shortLabel skinExpos F 146FR
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-146FR-1326-SM-5SIAJ)
+    subGroups age=a60 tissue=skinExposed donor=GTEX146FR
+    color 30,144,255
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-1326-SM-5SIAJ \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1415811
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1415811.hg38.bigWig
+    shortLabel skinExpos F 145LS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-145LS-0126-SM-5QGP1)
+    subGroups age=a60 tissue=skinExposed donor=GTEX145LS
+    color 30,144,255
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0126-SM-5QGP1 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.6 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1418162
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1418162.hg38.bigWig
+    shortLabel skinExpos F 11ZTS
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11ZTS-0126-SM-5EQ6M)
+    subGroups age=a60 tissue=skinExposed donor=GTEX11ZTS
+    color 30,144,255
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-0126-SM-5EQ6M \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.4 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1418902
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1418902.hg38.bigWig
+    shortLabel skinExpos F 1211K
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-1211K-2026-SM-5EQ4Z)
+    subGroups age=a60 tissue=skinExposed donor=GTEX1211K
+    color 30,144,255
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-2026-SM-5EQ4Z \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.5 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1431969
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1431969.hg38.bigWig
+    shortLabel skinExpos F 11ZTT
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-11ZTT-2426-SM-5EQLS)
+    subGroups age=a60 tissue=skinExposed donor=GTEX11ZTT
+    color 30,144,255
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-2426-SM-5EQLS \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.3 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1436925
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1436925.hg38.bigWig
+    shortLabel skinExpos F 1269C
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-1269C-2526-SM-5EGJ3)
+    subGroups age=a60 tissue=skinExposed donor=GTEX1269C
+    color 30,144,255
+    metadata donor=GTEX-1269C age=60 sex=F hardyScore=2 sample=GTEX-1269C-2526-SM-5EGJ3 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.5 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1440940
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1440940.hg38.bigWig
+    shortLabel skinExpos F ZVT3
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-ZVT3-0126-SM-5GU6I)
+    subGroups age=a60 tissue=skinExposed donor=GTEXZVT3
+    color 30,144,255
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0126-SM-5GU6I \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7 batch=BP-43823 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1447612
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1447612.hg38.bigWig
+    shortLabel skinExpos F 13OVI
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13OVI-1426-SM-5L3EY)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13OVI
+    color 30,144,255
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-1426-SM-5L3EY \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8.7 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1478661
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1478661.hg38.bigWig
+    shortLabel skinExpos F 13NZ8
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-13NZ8-0826-SM-5MR3I)
+    subGroups age=a60 tissue=skinExposed donor=GTEX13NZ8
+    color 30,144,255
+    metadata donor=GTEX-13NZ8 age=60 sex=F hardyScore=4 sample=GTEX-13NZ8-0826-SM-5MR3I \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7.3 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1498183
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1498183.hg38.bigWig
+    shortLabel skinExpos F Y5V5
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-Y5V5-2326-SM-4V6GA)
+    subGroups age=a60 tissue=skinExposed donor=GTEXY5V5
+    color 30,144,255
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-2326-SM-4V6GA \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=8.4 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1498909
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR1498909.hg38.bigWig
+    shortLabel skinExpos F 12WSD
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-12WSD-0126-SM-59HKN)
+    subGroups age=a60 tissue=skinExposed donor=GTEX12WSD
+    color 30,144,255
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0126-SM-59HKN \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=6.2 batch=BP-44577 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR603212
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR603212.hg38.bigWig
+    shortLabel skinExpos F OHPL
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OHPL-0126-SM-2HMJ7)
+    subGroups age=a60 tissue=skinExposed donor=GTEXOHPL
+    color 30,144,255
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-0126-SM-2HMJ7 \
+            tissue=skinExposed autolysisScore=0 rnaIntegrity=7.1 batch=BP-17822 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/21/2011
+
+    track gtexRnaSignalSRR614659
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR614659.hg38.bigWig
+    shortLabel skinExpos F QVJO
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-QVJO-1626-SM-2S1QW)
+    subGroups age=a60 tissue=skinExposed donor=GTEXQVJO
+    color 30,144,255
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-1626-SM-2S1QW \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=6.5 batch=BP-20981 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/20/2011
+
+    track gtexRnaSignalSRR614755
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR614755.hg38.bigWig
+    shortLabel skinExpos F OXRO
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OXRO-0126-SM-2YUN4)
+    subGroups age=a60 tissue=skinExposed donor=GTEXOXRO
+    color 30,144,255
+    metadata donor=GTEX-OXRO age=60 sex=F hardyScore=4 sample=GTEX-OXRO-0126-SM-2YUN4 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=7 batch=BP-18448 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/23/2011
+
+    track gtexRnaSignalSRR658338
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR658338.hg38.bigWig
+    shortLabel skinExpos F TSE9
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-TSE9-0126-SM-3DB83)
+    subGroups age=a60 tissue=skinExposed donor=GTEXTSE9
+    color 30,144,255
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0126-SM-3DB83 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8 batch=BP-25188 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalSRR810437
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR810437.hg38.bigWig
+    shortLabel skinExpos F OXRP
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-OXRP-0126-SM-3NB32)
+    subGroups age=a60 tissue=skinExposed donor=GTEXOXRP
+    color 30,144,255
+    metadata donor=GTEX-OXRP age=60 sex=F hardyScore=3 sample=GTEX-OXRP-0126-SM-3NB32 \
+            tissue=skinExposed autolysisScore=1 rnaIntegrity=8.4 batch=BP-29826 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR816201
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl skinExposed/gtexRnaSignalSRR816201.hg38.bigWig
+    shortLabel skinExpos F X4EO
+    longLabel GTEx RNA signal from female Skin - Sun Exposed (Lower leg) (GTEX-X4EO-0326-SM-3P5YO)
+    subGroups age=a60 tissue=skinExposed donor=GTEXX4EO
+    color 30,144,255
+    metadata donor=GTEX-X4EO age=60 sex=F hardyScore=3 sample=GTEX-X4EO-0326-SM-3P5YO \
+            tissue=skinExposed autolysisScore=2 rnaIntegrity=7.8 batch=BP-30679 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/05/2012
+

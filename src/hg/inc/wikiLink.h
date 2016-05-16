@@ -21,6 +21,16 @@ char *loginSystemName();
 boolean loginSystemEnabled();
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
 
+uint loginSystemLoginUser(char *userName);
+/* Return a nonzero token which caller must set as the value of CFG_WIKI_LOGGED_IN_COOKIE.
+ * Call this when userName's password has been validated. */
+
+char *loginSystemValidateCookies();
+/* Return a cookie string or NULL.  If login cookies are present and valid, but the current
+ * token has aged out, the returned cookie string sets a cookie to a new token value.
+ * If login cookies are present but invalid, the cookie string deletes/expires the cookies.
+ * Otherwise returns NULL. */
+
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
 

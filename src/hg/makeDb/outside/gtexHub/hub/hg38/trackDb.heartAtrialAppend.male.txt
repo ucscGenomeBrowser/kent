@@ -1,0 +1,1335 @@
+    track gtexRnaSignalSRR1077115
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1077115.hg38.bigWig
+    shortLabel heartAtri M X5EB
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-X5EB-0626-SM-46MVQ)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXX5EB
+    color 200,49,238
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0626-SM-46MVQ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.6 batch=BP-31131 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalSRR1086889
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1086889.hg38.bigWig
+    shortLabel heartAtri M XQ3S
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XQ3S-0526-SM-4BOQA)
+    subGroups age=a20 tissue=heartAtrialAppend donor=GTEXXQ3S
+    color 200,49,238
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-0526-SM-4BOQA \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=7.5 batch=BP-33866 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalSRR1088340
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1088340.hg38.bigWig
+    shortLabel heartAtri M XPT6
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XPT6-0226-SM-4B65L)
+    subGroups age=a20 tissue=heartAtrialAppend donor=GTEXXPT6
+    color 200,49,238
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-0226-SM-4B65L \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.4 batch=BP-33639 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1317707
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1317707.hg38.bigWig
+    shortLabel heartAtri M 14A6H
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-14A6H-0326-SM-5NQAN)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEX14A6H
+    color 200,49,238
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-0326-SM-5NQAN \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=8 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1321420
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1321420.hg38.bigWig
+    shortLabel heartAtri M 145MN
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-145MN-0726-SM-5NQBH)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEX145MN
+    color 200,49,238
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-0726-SM-5NQBH \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.6 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1335627
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1335627.hg38.bigWig
+    shortLabel heartAtri M WHSE
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WHSE-0826-SM-4SOJU)
+    subGroups age=a20 tissue=heartAtrialAppend donor=GTEXWHSE
+    color 200,49,238
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0826-SM-4SOJU \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.1 batch=BP-40888 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalSRR1337388
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1337388.hg38.bigWig
+    shortLabel heartAtri M YEC4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-YEC4-0226-SM-4W1YG)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXYEC4
+    color 200,49,238
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-0226-SM-4W1YG \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.7 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1356487
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1356487.hg38.bigWig
+    shortLabel heartAtri M 12584
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12584-1026-SM-59HK3)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX12584
+    color 200,49,238
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-1026-SM-59HK3 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.3 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1378243
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1378243.hg38.bigWig
+    shortLabel heartAtri M 11TT1
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11TT1-1426-SM-5EGIA)
+    subGroups age=a20 tissue=heartAtrialAppend donor=GTEX11TT1
+    color 200,49,238
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-1426-SM-5EGIA \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=9 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1384413
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1384413.hg38.bigWig
+    shortLabel heartAtri M 1339X
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1339X-0326-SM-5K7Z8)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX1339X
+    color 200,49,238
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-0326-SM-5K7Z8 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.5 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1384805
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1384805.hg38.bigWig
+    shortLabel heartAtri M 11LCK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11LCK-0826-SM-5PNYD)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEX11LCK
+    color 200,49,238
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0826-SM-5PNYD \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.3 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1384852
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1384852.hg38.bigWig
+    shortLabel heartAtri M 11ZUS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11ZUS-0326-SM-5EQ4W)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEX11ZUS
+    color 200,49,238
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0326-SM-5EQ4W \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-45028 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1384917
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1384917.hg38.bigWig
+    shortLabel heartAtri M 14E6C
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-14E6C-0326-SM-5Q5EE)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX14E6C
+    color 200,49,238
+    metadata donor=GTEX-14E6C age=40 sex=M hardyScore=4 sample=GTEX-14E6C-0326-SM-5Q5EE \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.2 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1392749
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1392749.hg38.bigWig
+    shortLabel heartAtri M 12WSN
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12WSN-0226-SM-5DUXH)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX12WSN
+    color 200,49,238
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-0226-SM-5DUXH \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=8.5 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1392813
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1392813.hg38.bigWig
+    shortLabel heartAtri M 13NYB
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13NYB-0326-SM-5IJDP)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX13NYB
+    color 200,49,238
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0326-SM-5IJDP \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1398311
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1398311.hg38.bigWig
+    shortLabel heartAtri M 13S86
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13S86-0326-SM-5SI6K)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX13S86
+    color 200,49,238
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-0326-SM-5SI6K \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=9.6 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1398706
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1398706.hg38.bigWig
+    shortLabel heartAtri M 11O72
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11O72-1026-SM-5986B)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX11O72
+    color 200,49,238
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-1026-SM-5986B \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.2 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1420811
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1420811.hg38.bigWig
+    shortLabel heartAtri M ZYT6
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZYT6-0926-SM-5GIEM)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEXZYT6
+    color 200,49,238
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0926-SM-5GIEM \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.2 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1430133
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1430133.hg38.bigWig
+    shortLabel heartAtri M ZUA1
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZUA1-0726-SM-4YCD9)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXZUA1
+    color 200,49,238
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0726-SM-4YCD9 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=7.5 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1430679
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1430679.hg38.bigWig
+    shortLabel heartAtri M 12WSE
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12WSE-0926-SM-5S2VX)
+    subGroups age=a20 tissue=heartAtrialAppend donor=GTEX12WSE
+    color 200,49,238
+    metadata donor=GTEX-12WSE age=20 sex=M hardyScore=2 sample=GTEX-12WSE-0926-SM-5S2VX \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.4 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1431602
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1431602.hg38.bigWig
+    shortLabel heartAtri M ZAB4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZAB4-0926-SM-5CVN4)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXZAB4
+    color 200,49,238
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0926-SM-5CVN4 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.5 batch=BP-45390 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1441850
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1441850.hg38.bigWig
+    shortLabel heartAtri M 13FTW
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13FTW-0826-SM-5K7XR)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEX13FTW
+    color 200,49,238
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-0826-SM-5K7XR \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.8 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1472281
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1472281.hg38.bigWig
+    shortLabel heartAtri M ZPU1
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZPU1-0726-SM-5HL6O)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXZPU1
+    color 200,49,238
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0726-SM-5HL6O \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.3 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1487807
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1487807.hg38.bigWig
+    shortLabel heartAtri M 1399R
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1399R-1726-SM-5K7YJ)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEX1399R
+    color 200,49,238
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-1726-SM-5K7YJ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.2 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR657695
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR657695.hg38.bigWig
+    shortLabel heartAtri M U8XE
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-U8XE-0926-SM-3DB8V)
+    subGroups age=a30 tissue=heartAtrialAppend donor=GTEXU8XE
+    color 200,49,238
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-0926-SM-3DB8V \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.9 batch=BP-25734 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSRR658481
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR658481.hg38.bigWig
+    shortLabel heartAtri M WFON
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WFON-0226-SM-3GIKR)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXWFON
+    color 200,49,238
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0226-SM-3GIKR \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.4 batch=BP-27449 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR815893
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR815893.hg38.bigWig
+    shortLabel heartAtri M X3Y1
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-X3Y1-0226-SM-3P5Z5)
+    subGroups age=a40 tissue=heartAtrialAppend donor=GTEXX3Y1
+    color 200,49,238
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-0226-SM-3P5Z5 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=7.1 batch=BP-30273 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR1069690
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1069690.hg38.bigWig
+    shortLabel heartAtri M XXEK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XXEK-2026-SM-4BRVE)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXXXEK
+    color 200,49,238
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-2026-SM-4BRVE \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=9 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1075631
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1075631.hg38.bigWig
+    shortLabel heartAtri M XQ8I
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XQ8I-0226-SM-4BOPM)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXXQ8I
+    color 200,49,238
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0226-SM-4BOPM \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.5 batch=BP-33923 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1077528
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1077528.hg38.bigWig
+    shortLabel heartAtri M XGQ4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XGQ4-0526-SM-4AT6C)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXXGQ4
+    color 200,49,238
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0526-SM-4AT6C \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.6 batch=BP-32413 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2012
+
+    track gtexRnaSignalSRR1090483
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1090483.hg38.bigWig
+    shortLabel heartAtri M XPVG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XPVG-0726-SM-4B658)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXXPVG
+    color 200,49,238
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-0726-SM-4B658 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8 batch=BP-33866 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalSRR1093269
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1093269.hg38.bigWig
+    shortLabel heartAtri M XBEC
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XBEC-1226-SM-4AT65)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXXBEC
+    color 200,49,238
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-1226-SM-4AT65 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.7 batch=BP-31783 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalSRR1098288
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1098288.hg38.bigWig
+    shortLabel heartAtri M X62O
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-X62O-0826-SM-46MW8)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXX62O
+    color 200,49,238
+    metadata donor=GTEX-X62O age=50 sex=M hardyScore=0 sample=GTEX-X62O-0826-SM-46MW8 \
+            tissue=heartAtrialAppend autolysisScore=2 rnaIntegrity=8.5 batch=BP-31241 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/18/2012
+
+    track gtexRnaSignalSRR1324545
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1324545.hg38.bigWig
+    shortLabel heartAtri M 13O3P
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13O3P-1426-SM-5L3DT)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13O3P
+    color 200,49,238
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-1426-SM-5L3DT \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.4 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1325247
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1325247.hg38.bigWig
+    shortLabel heartAtri M YEC3
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-YEC3-0426-SM-4YCEP)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXYEC3
+    color 200,49,238
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-0426-SM-4YCEP \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.6 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1331013
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1331013.hg38.bigWig
+    shortLabel heartAtri M 14BMV
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-14BMV-1026-SM-5SI6B)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX14BMV
+    color 200,49,238
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-1026-SM-5SI6B \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.6 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1332835
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1332835.hg38.bigWig
+    shortLabel heartAtri M 13112
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13112-0526-SM-5EQ4S)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13112
+    color 200,49,238
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0526-SM-5EQ4S \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=5.9 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1345827
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1345827.hg38.bigWig
+    shortLabel heartAtri M 11NUK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11NUK-0926-SM-5HL57)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX11NUK
+    color 200,49,238
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-0926-SM-5HL57 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.3 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1351583
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1351583.hg38.bigWig
+    shortLabel heartAtri M 117YW
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-117YW-0426-SM-5GZZZ)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX117YW
+    color 200,49,238
+
+    track gtexRnaSignalSRR1357650
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1357650.hg38.bigWig
+    shortLabel heartAtri M 1192X
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1192X-0726-SM-5987R)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX1192X
+    color 200,49,238
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-0726-SM-5987R \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.5 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1358482
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1358482.hg38.bigWig
+    shortLabel heartAtri M 13O3Q
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13O3Q-0326-SM-5L3FE)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13O3Q
+    color 200,49,238
+
+    track gtexRnaSignalSRR1361156
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1361156.hg38.bigWig
+    shortLabel heartAtri M YEC3
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-YEC3-0426-SM-5IFK1)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXYEC3
+    color 200,49,238
+
+    track gtexRnaSignalSRR1385364
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1385364.hg38.bigWig
+    shortLabel heartAtri M 12WSI
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12WSI-0426-SM-5EQ5J)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX12WSI
+    color 200,49,238
+    metadata donor=GTEX-12WSI age=50 sex=M hardyScore=2 sample=GTEX-12WSI-0426-SM-5EQ5J \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=5.8 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1392434
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1392434.hg38.bigWig
+    shortLabel heartAtri M ZZPT
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZZPT-0926-SM-5GICZ)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZZPT
+    color 200,49,238
+    metadata donor=GTEX-ZZPT age=50 sex=M hardyScore=4 sample=GTEX-ZZPT-0926-SM-5GICZ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=5.8 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1395659
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1395659.hg38.bigWig
+    shortLabel heartAtri M ZYFD
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZYFD-2026-SM-5E459)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZYFD
+    color 200,49,238
+
+    track gtexRnaSignalSRR1397180
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1397180.hg38.bigWig
+    shortLabel heartAtri M 11DXZ
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11DXZ-0326-SM-5EGH1)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX11DXZ
+    color 200,49,238
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0326-SM-5EGH1 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=8.3 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1402414
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1402414.hg38.bigWig
+    shortLabel heartAtri M 11UD2
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11UD2-0926-SM-5CVL6)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX11UD2
+    color 200,49,238
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0926-SM-5CVL6 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.1 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1414857
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1414857.hg38.bigWig
+    shortLabel heartAtri M 13O21
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13O21-0326-SM-5J1N9)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13O21
+    color 200,49,238
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-0326-SM-5J1N9 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1419615
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1419615.hg38.bigWig
+    shortLabel heartAtri M ZT9W
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZT9W-0526-SM-57WFG)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZT9W
+    color 200,49,238
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0526-SM-57WFG \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=8.1 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1429516
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1429516.hg38.bigWig
+    shortLabel heartAtri M 117YX
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-117YX-0626-SM-5EGJI)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX117YX
+    color 200,49,238
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-0626-SM-5EGJI \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.9 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1435182
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1435182.hg38.bigWig
+    shortLabel heartAtri M 144GL
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-144GL-1026-SM-5O99R)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX144GL
+    color 200,49,238
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-1026-SM-5O99R \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=5.7 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1435584
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1435584.hg38.bigWig
+    shortLabel heartAtri M 13NZ9
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13NZ9-0126-SM-5K7XV)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13NZ9
+    color 200,49,238
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0126-SM-5K7XV \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.4 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1439958
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1439958.hg38.bigWig
+    shortLabel heartAtri M 13FHP
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13FHP-0826-SM-5K7V5)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13FHP
+    color 200,49,238
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0826-SM-5K7V5 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.3 batch=BP-46925 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1442149
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1442149.hg38.bigWig
+    shortLabel heartAtri M Y3I4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-Y3I4-0526-SM-4TT6X)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXY3I4
+    color 200,49,238
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0526-SM-4TT6X \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.1 batch=BP-35803 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSRR1443182
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1443182.hg38.bigWig
+    shortLabel heartAtri M 139YR
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-139YR-0526-SM-5L3DG)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX139YR
+    color 200,49,238
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-0526-SM-5L3DG \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.8 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1444390
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1444390.hg38.bigWig
+    shortLabel heartAtri M ZG7Y
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZG7Y-1426-SM-4WWBM)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZG7Y
+    color 200,49,238
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-1426-SM-4WWBM \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.5 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1447673
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1447673.hg38.bigWig
+    shortLabel heartAtri M 145LV
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-145LV-0226-SM-5S2QG)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX145LV
+    color 200,49,238
+    metadata donor=GTEX-145LV age=50 sex=M hardyScore=0 sample=GTEX-145LV-0226-SM-5S2QG \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.2 batch=BP-48818 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1456567
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1456567.hg38.bigWig
+    shortLabel heartAtri M ZEX8
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZEX8-0326-SM-4WKGS)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZEX8
+    color 200,49,238
+
+    track gtexRnaSignalSRR1456693
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1456693.hg38.bigWig
+    shortLabel heartAtri M 131XE
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-131XE-0526-SM-5K7YT)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX131XE
+    color 200,49,238
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0526-SM-5K7YT \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.4 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1457872
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1457872.hg38.bigWig
+    shortLabel heartAtri M ZAB5
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZAB5-0126-SM-5CVMT)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZAB5
+    color 200,49,238
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0126-SM-5CVMT \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=8.4 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1470816
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1470816.hg38.bigWig
+    shortLabel heartAtri M 13PVQ
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13PVQ-1326-SM-5LU4J)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX13PVQ
+    color 200,49,238
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-1326-SM-5LU4J \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.7 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1472237
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1472237.hg38.bigWig
+    shortLabel heartAtri M ZYFC
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZYFC-1026-SM-5GZX9)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZYFC
+    color 200,49,238
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-1026-SM-5GZX9 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.5 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1473505
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1473505.hg38.bigWig
+    shortLabel heartAtri M ZTTD
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZTTD-0626-SM-4YCCY)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZTTD
+    color 200,49,238
+    metadata donor=GTEX-ZTTD age=50 sex=M hardyScore=3 sample=GTEX-ZTTD-0626-SM-4YCCY \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-43141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1487233
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1487233.hg38.bigWig
+    shortLabel heartAtri M 11WQK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11WQK-0226-SM-5EQLI)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEX11WQK
+    color 200,49,238
+
+    track gtexRnaSignalSRR1490289
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1490289.hg38.bigWig
+    shortLabel heartAtri M ZV7C
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZV7C-0526-SM-51MRB)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXZV7C
+    color 200,49,238
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-0526-SM-51MRB \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR807727
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR807727.hg38.bigWig
+    shortLabel heartAtri M WYJK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WYJK-1126-SM-3NM9Z)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWYJK
+    color 200,49,238
+    metadata donor=GTEX-WYJK age=50 sex=M hardyScore=0 sample=GTEX-WYJK-1126-SM-3NM9Z \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.5 batch=BP-29478 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalSRR808327
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR808327.hg38.bigWig
+    shortLabel heartAtri M WL46
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WL46-0726-SM-3LK5Z)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWL46
+    color 200,49,238
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0726-SM-3LK5Z \
+            tissue=heartAtrialAppend autolysisScore=2 rnaIntegrity=7.4 batch=BP-27853 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR812222
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR812222.hg38.bigWig
+    shortLabel heartAtri M WK11
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WK11-0626-SM-3NMAV)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWK11
+    color 200,49,238
+    metadata donor=GTEX-WK11 age=50 sex=M hardyScore=1 sample=GTEX-WK11-0626-SM-3NMAV \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.7 batch=BP-28091 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+
+    track gtexRnaSignalSRR813728
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR813728.hg38.bigWig
+    shortLabel heartAtri M X261
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-X261-0926-SM-3NMCY)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXX261
+    color 200,49,238
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0926-SM-3NMCY \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.7 batch=BP-29929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2012
+
+    track gtexRnaSignalSRR813915
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR813915.hg38.bigWig
+    shortLabel heartAtri M WHWD
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WHWD-0326-SM-3LK6L)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWHWD
+    color 200,49,238
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0326-SM-3LK6L \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8 batch=BP-27512 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR814587
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR814587.hg38.bigWig
+    shortLabel heartAtri M WY7C
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WY7C-1126-SM-3NB3A)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWY7C
+    color 200,49,238
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-1126-SM-3NB3A \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=9.1 batch=BP-29433 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalSRR817563
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR817563.hg38.bigWig
+    shortLabel heartAtri M WHPG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WHPG-1026-SM-3NMBA)
+    subGroups age=a50 tissue=heartAtrialAppend donor=GTEXWHPG
+    color 200,49,238
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-1026-SM-3NMBA \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=7.8 batch=BP-27871 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR1080438
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1080438.hg38.bigWig
+    shortLabel heartAtri M XLM4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-XLM4-2026-SM-4AT4X)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXXLM4
+    color 200,49,238
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-2026-SM-4AT4X \
+            tissue=heartAtrialAppend autolysisScore=2 rnaIntegrity=6.9 batch=BP-32483 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1308200
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1308200.hg38.bigWig
+    shortLabel heartAtri M 11DYG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11DYG-1026-SM-5A5JQ)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11DYG
+    color 200,49,238
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-1026-SM-5A5JQ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.2 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1308674
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1308674.hg38.bigWig
+    shortLabel heartAtri M 117XS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-117XS-0726-SM-5H131)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX117XS
+    color 200,49,238
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-0726-SM-5H131 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.9 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1309856
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1309856.hg38.bigWig
+    shortLabel heartAtri M 1192W
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1192W-0226-SM-5EGGT)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX1192W
+    color 200,49,238
+    metadata donor=GTEX-1192W age=60 sex=M hardyScore=2 sample=GTEX-1192W-0226-SM-5EGGT \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1311109
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1311109.hg38.bigWig
+    shortLabel heartAtri M 111YS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-111YS-0326-SM-5GZZ3)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX111YS
+    color 200,49,238
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-0326-SM-5GZZ3 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.5 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1318484
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1318484.hg38.bigWig
+    shortLabel heartAtri M 13OVG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13OVG-0426-SM-5KM2T)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13OVG
+    color 200,49,238
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-0426-SM-5KM2T \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.5 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1318662
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1318662.hg38.bigWig
+    shortLabel heartAtri M 147JS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-147JS-1326-SM-5SI6D)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX147JS
+    color 200,49,238
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-1326-SM-5SI6D \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1330633
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1330633.hg38.bigWig
+    shortLabel heartAtri M 1477Z
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1477Z-1126-SM-5P9GK)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX1477Z
+    color 200,49,238
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-1126-SM-5P9GK \
+            tissue=heartAtrialAppend autolysisScore=2 rnaIntegrity=7.1 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1335164
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1335164.hg38.bigWig
+    shortLabel heartAtri M 14ASI
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-14ASI-0826-SM-5Q5EB)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX14ASI
+    color 200,49,238
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-0826-SM-5Q5EB \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.4 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1336134
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1336134.hg38.bigWig
+    shortLabel heartAtri M 12WSA
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12WSA-1126-SM-5EGKU)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX12WSA
+    color 200,49,238
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-1126-SM-5EGKU \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.2 batch=BP-45028 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1362824
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1362824.hg38.bigWig
+    shortLabel heartAtri M 11EQ8
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11EQ8-1326-SM-5EGJQ)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11EQ8
+    color 200,49,238
+    metadata donor=GTEX-11EQ8 age=60 sex=M hardyScore=4 sample=GTEX-11EQ8-1326-SM-5EGJQ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.2 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1365700
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1365700.hg38.bigWig
+    shortLabel heartAtri M 11NV4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11NV4-0826-SM-5BC4S)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11NV4
+    color 200,49,238
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-0826-SM-5BC4S \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.7 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1366519
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1366519.hg38.bigWig
+    shortLabel heartAtri M ZDXO
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZDXO-0426-SM-4WKF6)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXZDXO
+    color 200,49,238
+
+    track gtexRnaSignalSRR1368616
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1368616.hg38.bigWig
+    shortLabel heartAtri M 1445S
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1445S-1226-SM-5O9BF)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX1445S
+    color 200,49,238
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-1226-SM-5O9BF \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.4 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1374028
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1374028.hg38.bigWig
+    shortLabel heartAtri M 12BJ1
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12BJ1-0326-SM-5FQUB)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX12BJ1
+    color 200,49,238
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-0326-SM-5FQUB \
+            tissue=heartAtrialAppend autolysisScore=2 rnaIntegrity=7.6 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1379365
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1379365.hg38.bigWig
+    shortLabel heartAtri M 13FHO
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13FHO-1226-SM-5L3EF)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13FHO
+    color 200,49,238
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-1226-SM-5L3EF \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.4 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1380501
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1380501.hg38.bigWig
+    shortLabel heartAtri M 11DXY
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11DXY-1026-SM-5987V)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11DXY
+    color 200,49,238
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-1026-SM-5987V \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.6 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1381211
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1381211.hg38.bigWig
+    shortLabel heartAtri M 13NZA
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13NZA-0826-SM-5K7WS)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13NZA
+    color 200,49,238
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0826-SM-5K7WS \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=5.8 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1381269
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1381269.hg38.bigWig
+    shortLabel heartAtri M 132NY
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-132NY-1426-SM-5J1MJ)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX132NY
+    color 200,49,238
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-1426-SM-5J1MJ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-46482 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1384827
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1384827.hg38.bigWig
+    shortLabel heartAtri M YECK
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-YECK-1226-SM-4W21G)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXYECK
+    color 200,49,238
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-1226-SM-4W21G \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.2 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1392795
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1392795.hg38.bigWig
+    shortLabel heartAtri M 132Q8
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-132Q8-1126-SM-5K7XS)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX132Q8
+    color 200,49,238
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-1126-SM-5K7XS \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1398371
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1398371.hg38.bigWig
+    shortLabel heartAtri M 12696
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-12696-1226-SM-5FQSM)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX12696
+    color 200,49,238
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-1226-SM-5FQSM \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1405206
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1405206.hg38.bigWig
+    shortLabel heartAtri M 139TU
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-139TU-1926-SM-5J2OC)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX139TU
+    color 200,49,238
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-1926-SM-5J2OC \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.2 batch=BP-46589 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1410334
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1410334.hg38.bigWig
+    shortLabel heartAtri M 11TUW
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11TUW-1126-SM-5EQKJ)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11TUW
+    color 200,49,238
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-1126-SM-5EQKJ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1417960
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1417960.hg38.bigWig
+    shortLabel heartAtri M 132QS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-132QS-0526-SM-5IJC7)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX132QS
+    color 200,49,238
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0526-SM-5IJC7 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.2 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1418390
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1418390.hg38.bigWig
+    shortLabel heartAtri M 11ONC
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11ONC-1026-SM-5GU64)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11ONC
+    color 200,49,238
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-1026-SM-5GU64 \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.9 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1419829
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1419829.hg38.bigWig
+    shortLabel heartAtri M 13OW5
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13OW5-0926-SM-5L3GZ)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13OW5
+    color 200,49,238
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0926-SM-5L3GZ \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.6 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1420606
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1420606.hg38.bigWig
+    shortLabel heartAtri M 1212Z
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-1212Z-0726-SM-5EGI5)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX1212Z
+    color 200,49,238
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0726-SM-5EGI5 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.9 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1432366
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1432366.hg38.bigWig
+    shortLabel heartAtri M V955
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-V955-0826-SM-5SI82)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXV955
+    color 200,49,238
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-0826-SM-5SI82 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=8.8 batch=BP-26864 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSRR1441464
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1441464.hg38.bigWig
+    shortLabel heartAtri M 111FC
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-111FC-0626-SM-5N9CU)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX111FC
+    color 200,49,238
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-0626-SM-5N9CU \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.3 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1442273
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1442273.hg38.bigWig
+    shortLabel heartAtri M 13JVG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13JVG-1126-SM-5KM2M)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13JVG
+    color 200,49,238
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-1126-SM-5KM2M \
+            tissue=heartAtrialAppend autolysisScore=0 rnaIntegrity=6.9 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1442487
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1442487.hg38.bigWig
+    shortLabel heartAtri M 111VG
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-111VG-0326-SM-5GZX7)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX111VG
+    color 200,49,238
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-0326-SM-5GZX7 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.4 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1442648
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1442648.hg38.bigWig
+    shortLabel heartAtri M 13N1W
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13N1W-0926-SM-5MR36)
+    subGroups age=a70 tissue=heartAtrialAppend donor=GTEX13N1W
+    color 200,49,238
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0926-SM-5MR36 \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.1 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1444954
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1444954.hg38.bigWig
+    shortLabel heartAtri M ZYW4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZYW4-1026-SM-5SI8W)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXZYW4
+    color 200,49,238
+
+    track gtexRnaSignalSRR1452491
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1452491.hg38.bigWig
+    shortLabel heartAtri M ZDTS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZDTS-1226-SM-4WKGL)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXZDTS
+    color 200,49,238
+
+    track gtexRnaSignalSRR1478434
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1478434.hg38.bigWig
+    shortLabel heartAtri M 131XF
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-131XF-0426-SM-5HL7U)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX131XF
+    color 200,49,238
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-0426-SM-5HL7U \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7.7 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1478990
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1478990.hg38.bigWig
+    shortLabel heartAtri M ZDTT
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-ZDTT-0326-SM-4WKF9)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXZDTT
+    color 200,49,238
+
+    track gtexRnaSignalSRR1487425
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1487425.hg38.bigWig
+    shortLabel heartAtri M 13NYS
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-13NYS-1926-SM-5IJCB)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX13NYS
+    color 200,49,238
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-1926-SM-5IJCB \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1489715
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR1489715.hg38.bigWig
+    shortLabel heartAtri M 11GS4
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-11GS4-0426-SM-5N9CD)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEX11GS4
+    color 200,49,238
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-0426-SM-5N9CD \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR654940
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR654940.hg38.bigWig
+    shortLabel heartAtri M UTHO
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-UTHO-1226-SM-3GAEE)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXUTHO
+    color 200,49,238
+
+    track gtexRnaSignalSRR810051
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR810051.hg38.bigWig
+    shortLabel heartAtri M WQUQ
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-WQUQ-1326-SM-3MJFF)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXWQUQ
+    color 200,49,238
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-1326-SM-3MJFF \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=7 batch=BP-28353 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalSRR815184
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl heartAtrialAppend/gtexRnaSignalSRR815184.hg38.bigWig
+    shortLabel heartAtri M X4XX
+    longLabel GTEx RNA signal from male Heart - Atrial Appendage (GTEX-X4XX-1126-SM-3NMBY)
+    subGroups age=a60 tissue=heartAtrialAppend donor=GTEXX4XX
+    color 200,49,238
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-1126-SM-3NMBY \
+            tissue=heartAtrialAppend autolysisScore=1 rnaIntegrity=6.8 batch=BP-30732 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+

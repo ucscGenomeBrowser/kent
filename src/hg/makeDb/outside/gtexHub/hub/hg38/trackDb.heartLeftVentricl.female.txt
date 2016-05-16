@@ -1,0 +1,789 @@
+    track gtexRnaSignalSRR1077643
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1077643.hg38.bigWig
+    shortLabel heartLeft F XV7Q
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-XV7Q-0826-SM-4BRV7)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXXV7Q
+    color 139,26,168
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0826-SM-4BRV7 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.2 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalSRR1080415
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1080415.hg38.bigWig
+    shortLabel heartLeft F SE5C
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-SE5C-0626-SM-4IHLJ)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXSE5C
+    color 139,26,168
+
+    track gtexRnaSignalSRR1311509
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1311509.hg38.bigWig
+    shortLabel heartLeft F 11EM3
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11EM3-0626-SM-5H12Z)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEX11EM3
+    color 139,26,168
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-0626-SM-5H12Z \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=8.5 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1330153
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1330153.hg38.bigWig
+    shortLabel heartLeft F ZPIC
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZPIC-0826-SM-4WWFJ)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXZPIC
+    color 139,26,168
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-0826-SM-4WWFJ \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1349893
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1349893.hg38.bigWig
+    shortLabel heartLeft F 13QBU
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13QBU-0426-SM-5J2O4)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEX13QBU
+    color 139,26,168
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-0426-SM-5J2O4 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=9.2 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1370659
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1370659.hg38.bigWig
+    shortLabel heartLeft F ZGAY
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZGAY-0326-SM-57WF5)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXZGAY
+    color 139,26,168
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-0326-SM-57WF5 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.6 batch=BP-42743 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1381693
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1381693.hg38.bigWig
+    shortLabel heartLeft F 13VXT
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13VXT-1126-SM-5LU3A)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEX13VXT
+    color 139,26,168
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-1126-SM-5LU3A \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.6 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1387702
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1387702.hg38.bigWig
+    shortLabel heartLeft F PWCY
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-PWCY-0526-SM-5PNU8)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXPWCY
+    color 139,26,168
+
+    track gtexRnaSignalSRR1407202
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1407202.hg38.bigWig
+    shortLabel heartLeft F ZTPG
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZTPG-1226-SM-4YCDO)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXZTPG
+    color 139,26,168
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-1226-SM-4YCDO \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=7.9 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1409487
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1409487.hg38.bigWig
+    shortLabel heartLeft F ZYWO
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZYWO-0626-SM-5E45K)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXZYWO
+    color 139,26,168
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-0626-SM-5E45K \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=8.6 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1434399
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1434399.hg38.bigWig
+    shortLabel heartLeft F 12WSK
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-12WSK-0626-SM-5LZUJ)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEX12WSK
+    color 139,26,168
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-0626-SM-5LZUJ \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=9 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1451778
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1451778.hg38.bigWig
+    shortLabel heartLeft F YB5K
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-YB5K-0126-SM-5IFJ2)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXYB5K
+    color 139,26,168
+    metadata donor=GTEX-YB5K age=40 sex=F hardyScore=0 sample=GTEX-YB5K-0126-SM-5IFJ2 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.2 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1477033
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1477033.hg38.bigWig
+    shortLabel heartLeft F P4PP
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-P4PP-0326-SM-5S2TQ)
+    subGroups age=a30 tissue=heartLeftVentricl donor=GTEXP4PP
+    color 139,26,168
+
+    track gtexRnaSignalSRR600474
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR600474.hg38.bigWig
+    shortLabel heartLeft F PX3G
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-PX3G-0326-SM-2I3EO)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXPX3G
+    color 139,26,168
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-0326-SM-2I3EO \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-19882 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalSRR607252
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR607252.hg38.bigWig
+    shortLabel heartLeft F PWCY
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-PWCY-0526-SM-2I3ER)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXPWCY
+    color 139,26,168
+
+    track gtexRnaSignalSRR612335
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR612335.hg38.bigWig
+    shortLabel heartLeft F R55G
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-R55G-0526-SM-2TC5O)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXR55G
+    color 139,26,168
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0526-SM-2TC5O \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=9.1 batch=BP-21546 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR614215
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR614215.hg38.bigWig
+    shortLabel heartLeft F PWOO
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-PWOO-0526-SM-2S1Q3)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXPWOO
+    color 139,26,168
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-0526-SM-2S1Q3 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.3 batch=BP-19857 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/02/2011
+
+    track gtexRnaSignalSRR657456
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR657456.hg38.bigWig
+    shortLabel heartLeft F T2IS
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-T2IS-0426-SM-32QPE)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXT2IS
+    color 139,26,168
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0426-SM-32QPE \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.2 batch=BP-24455 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR658457
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR658457.hg38.bigWig
+    shortLabel heartLeft F S7SF
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-S7SF-0526-SM-3K2BC)
+    subGroups age=a20 tissue=heartLeftVentricl donor=GTEXS7SF
+    color 139,26,168
+    metadata donor=GTEX-S7SF age=20 sex=F hardyScore=0 sample=GTEX-S7SF-0526-SM-3K2BC \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-23149 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/15/2012
+
+    track gtexRnaSignalSRR662749
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR662749.hg38.bigWig
+    shortLabel heartLeft F WEY5
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-WEY5-0426-SM-3GIKT)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXWEY5
+    color 139,26,168
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0426-SM-3GIKT \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-27183 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalSRR817825
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR817825.hg38.bigWig
+    shortLabel heartLeft F WI4N
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-WI4N-0626-SM-3TW8Z)
+    subGroups age=a40 tissue=heartLeftVentricl donor=GTEXWI4N
+    color 139,26,168
+    metadata donor=GTEX-WI4N age=40 sex=F hardyScore=0 sample=GTEX-WI4N-0626-SM-3TW8Z \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.6 batch=BP-27941 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR1086304
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1086304.hg38.bigWig
+    shortLabel heartLeft F X8HC
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-X8HC-1626-SM-46MWE)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXX8HC
+    color 139,26,168
+    metadata donor=GTEX-X8HC age=50 sex=F hardyScore=0 sample=GTEX-X8HC-1626-SM-46MWE \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=7 batch=BP-31440 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR1094506
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1094506.hg38.bigWig
+    shortLabel heartLeft F WRHU
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-WRHU-1226-SM-4E3IJ)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXWRHU
+    color 139,26,168
+    metadata donor=GTEX-WRHU age=50 sex=F hardyScore=1 sample=GTEX-WRHU-1226-SM-4E3IJ \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.7 batch=BP-36182 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/15/2013
+
+    track gtexRnaSignalSRR1320939
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1320939.hg38.bigWig
+    shortLabel heartLeft F X15G
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-X15G-0426-SM-4PQZ6)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXX15G
+    color 139,26,168
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-0426-SM-4PQZ6 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=5.9 batch=BP-30276 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR1323628
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1323628.hg38.bigWig
+    shortLabel heartLeft F 11I78
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11I78-0826-SM-5A5K4)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX11I78
+    color 139,26,168
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0826-SM-5A5K4 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.4 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1325464
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1325464.hg38.bigWig
+    shortLabel heartLeft F 13N11
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13N11-0426-SM-5KM3O)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX13N11
+    color 139,26,168
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-0426-SM-5KM3O \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=6.8 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1347500
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1347500.hg38.bigWig
+    shortLabel heartLeft F 13FH7
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13FH7-0926-SM-5J2MR)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX13FH7
+    color 139,26,168
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-0926-SM-5J2MR \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.1 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1353970
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1353970.hg38.bigWig
+    shortLabel heartLeft F Y114
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-Y114-0226-SM-4TT8W)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXY114
+    color 139,26,168
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-0226-SM-4TT8W \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.4 batch=BP-34830 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/04/2013
+
+    track gtexRnaSignalSRR1354599
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1354599.hg38.bigWig
+    shortLabel heartLeft F 13D11
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13D11-1726-SM-5IFGQ)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX13D11
+    color 139,26,168
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-1726-SM-5IFGQ \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1366690
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1366690.hg38.bigWig
+    shortLabel heartLeft F 132AR
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-132AR-2026-SM-5IJG4)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX132AR
+    color 139,26,168
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-2026-SM-5IJG4 \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1367456
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1367456.hg38.bigWig
+    shortLabel heartLeft F ZAJG
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZAJG-0826-SM-5PNVA)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXZAJG
+    color 139,26,168
+    metadata donor=GTEX-ZAJG age=50 sex=F hardyScore=3 sample=GTEX-ZAJG-0826-SM-5PNVA \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.4 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1375677
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1375677.hg38.bigWig
+    shortLabel heartLeft F ZF2S
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZF2S-1026-SM-4WWB1)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXZF2S
+    color 139,26,168
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-1026-SM-4WWB1 \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=9.2 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1385716
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1385716.hg38.bigWig
+    shortLabel heartLeft F 11ZVC
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11ZVC-0426-SM-5CVLD)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX11ZVC
+    color 139,26,168
+    metadata donor=GTEX-11ZVC age=50 sex=F hardyScore=2 sample=GTEX-11ZVC-0426-SM-5CVLD \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=5.9 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1399990
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1399990.hg38.bigWig
+    shortLabel heartLeft F 1313W
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-1313W-1426-SM-5KLZU)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX1313W
+    color 139,26,168
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-1426-SM-5KLZU \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=6.3 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1430420
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1430420.hg38.bigWig
+    shortLabel heartLeft F 14A5I
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-14A5I-1226-SM-5NQBW)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX14A5I
+    color 139,26,168
+
+    track gtexRnaSignalSRR1435501
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1435501.hg38.bigWig
+    shortLabel heartLeft F Y3IK
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-Y3IK-0826-SM-51MT8)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXY3IK
+    color 139,26,168
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0826-SM-51MT8 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.9 batch=BP-35709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSRR1441725
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1441725.hg38.bigWig
+    shortLabel heartLeft F 146FH
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-146FH-1026-SM-5RQIF)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX146FH
+    color 139,26,168
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-1026-SM-5RQIF \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=7.6 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1442686
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1442686.hg38.bigWig
+    shortLabel heartLeft F ZZPU
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZZPU-0926-SM-5GZYT)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXZZPU
+    color 139,26,168
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-0926-SM-5GZYT \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1444914
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1444914.hg38.bigWig
+    shortLabel heartLeft F 1399U
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-1399U-0526-SM-5K7YM)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEX1399U
+    color 139,26,168
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-0526-SM-5K7YM \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR603449
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR603449.hg38.bigWig
+    shortLabel heartLeft F OHPK
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-OHPK-0326-SM-2HMJO)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXOHPK
+    color 139,26,168
+    metadata donor=GTEX-OHPK age=50 sex=F hardyScore=0 sample=GTEX-OHPK-0326-SM-2HMJO \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=7.3 batch=BP-17780 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/20/2011
+
+    track gtexRnaSignalSRR607313
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR607313.hg38.bigWig
+    shortLabel heartLeft F OXRK
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-OXRK-0826-SM-2HMK7)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXOXRK
+    color 139,26,168
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0826-SM-2HMK7 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.6 batch=BP-18261 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR612875
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR612875.hg38.bigWig
+    shortLabel heartLeft F RU72
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-RU72-0326-SM-2TF5T)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXRU72
+    color 139,26,168
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0326-SM-2TF5T \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=7.8 batch=BP-21930 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/30/2012
+
+    track gtexRnaSignalSRR614996
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR614996.hg38.bigWig
+    shortLabel heartLeft F RNOR
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-RNOR-0826-SM-2TF5C)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXRNOR
+    color 139,26,168
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0826-SM-2TF5C \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.6 batch=BP-21628 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/20/2012
+
+    track gtexRnaSignalSRR655423
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR655423.hg38.bigWig
+    shortLabel heartLeft F S32W
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-S32W-0626-SM-2XCBG)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXS32W
+    color 139,26,168
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-0626-SM-2XCBG \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.6 batch=BP-22609 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalSRR656288
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR656288.hg38.bigWig
+    shortLabel heartLeft F UJHI
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-UJHI-0426-SM-3DB8Y)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXUJHI
+    color 139,26,168
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-0426-SM-3DB8Y \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-25734 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSRR815517
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR815517.hg38.bigWig
+    shortLabel heartLeft F WWYW
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-WWYW-1326-SM-3NB2S)
+    subGroups age=a50 tissue=heartLeftVentricl donor=GTEXWWYW
+    color 139,26,168
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-1326-SM-3NB2S \
+            tissue=heartLeftVentricl autolysisScore=2 rnaIntegrity=6.6 batch=BP-28992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/08/2012
+
+    track gtexRnaSignalSRR1310373
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1310373.hg38.bigWig
+    shortLabel heartLeft F 11GSP
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11GSP-1326-SM-5A5KY)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX11GSP
+    color 139,26,168
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-1326-SM-5A5KY \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1326687
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1326687.hg38.bigWig
+    shortLabel heartLeft F 1122O
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-1122O-0826-SM-5GICV)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX1122O
+    color 139,26,168
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0826-SM-5GICV \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=8 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1334919
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1334919.hg38.bigWig
+    shortLabel heartLeft F 148VI
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-148VI-0326-SM-5RQK7)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX148VI
+    color 139,26,168
+    metadata donor=GTEX-148VI age=60 sex=F hardyScore=0 sample=GTEX-148VI-0326-SM-5RQK7 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1347667
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1347667.hg38.bigWig
+    shortLabel heartLeft F 1269C
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-1269C-0826-SM-5N9EM)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX1269C
+    color 139,26,168
+    metadata donor=GTEX-1269C age=60 sex=F hardyScore=2 sample=GTEX-1269C-0826-SM-5N9EM \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=5.7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1357558
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1357558.hg38.bigWig
+    shortLabel heartLeft F 13PVR
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13PVR-1026-SM-5QGQW)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX13PVR
+    color 139,26,168
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-1026-SM-5QGQW \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.6 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1360442
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1360442.hg38.bigWig
+    shortLabel heartLeft F 13CF3
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13CF3-0726-SM-5J2MY)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX13CF3
+    color 139,26,168
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-0726-SM-5J2MY \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=7.6 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1382508
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1382508.hg38.bigWig
+    shortLabel heartLeft F 11EMC
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11EMC-0726-SM-5EGJO)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX11EMC
+    color 139,26,168
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-0726-SM-5EGJO \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.5 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1401446
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1401446.hg38.bigWig
+    shortLabel heartLeft F 13X6K
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13X6K-1826-SM-5O9CR)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX13X6K
+    color 139,26,168
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-1826-SM-5O9CR \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.9 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1402195
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1402195.hg38.bigWig
+    shortLabel heartLeft F 13W3W
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13W3W-0426-SM-5SI9D)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX13W3W
+    color 139,26,168
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-0426-SM-5SI9D \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.4 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1409641
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1409641.hg38.bigWig
+    shortLabel heartLeft F ZF29
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZF29-0226-SM-4WKHO)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXZF29
+    color 139,26,168
+
+    track gtexRnaSignalSRR1434093
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1434093.hg38.bigWig
+    shortLabel heartLeft F Y5V5
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-Y5V5-0626-SM-4VBPX)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXY5V5
+    color 139,26,168
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-0626-SM-4VBPX \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=7.1 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1454374
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1454374.hg38.bigWig
+    shortLabel heartLeft F ZYFG
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-ZYFG-0426-SM-5E43M)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXZYFG
+    color 139,26,168
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-0426-SM-5E43M \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8.7 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1455326
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1455326.hg38.bigWig
+    shortLabel heartLeft F 146FR
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-146FR-0626-SM-5RQJ1)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX146FR
+    color 139,26,168
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-0626-SM-5RQJ1 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=8 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1458358
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1458358.hg38.bigWig
+    shortLabel heartLeft F 11DXX
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-11DXX-0326-SM-5PNWC)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX11DXX
+    color 139,26,168
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0326-SM-5PNWC \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=7.8 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1477015
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR1477015.hg38.bigWig
+    shortLabel heartLeft F 13O3O
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-13O3O-1526-SM-5KM1C)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEX13O3O
+    color 139,26,168
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-1526-SM-5KM1C \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.9 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR598509
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR598509.hg38.bigWig
+    shortLabel heartLeft F N7MT
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-N7MT-1326-SM-2I3FV)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXN7MT
+    color 139,26,168
+
+    track gtexRnaSignalSRR613186
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR613186.hg38.bigWig
+    shortLabel heartLeft F OXRO
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-OXRO-2026-SM-2YUMZ)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXOXRO
+    color 139,26,168
+
+    track gtexRnaSignalSRR613510
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR613510.hg38.bigWig
+    shortLabel heartLeft F RTLS
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-RTLS-0826-SM-2TF5Q)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXRTLS
+    color 139,26,168
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-0826-SM-2TF5Q \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6.4 batch=BP-21669 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/23/2012
+
+    track gtexRnaSignalSRR615898
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR615898.hg38.bigWig
+    shortLabel heartLeft F QVJO
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-QVJO-1926-SM-2S1QZ)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXQVJO
+    color 139,26,168
+
+    track gtexRnaSignalSRR655792
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR655792.hg38.bigWig
+    shortLabel heartLeft F RWS6
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-RWS6-0326-SM-2XCAP)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXRWS6
+    color 139,26,168
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0326-SM-2XCAP \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=8 batch=BP-22343 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/10/2012
+
+    track gtexRnaSignalSRR657089
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR657089.hg38.bigWig
+    shortLabel heartLeft F R45C
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-R45C-0926-SM-3GAD4)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXR45C
+    color 139,26,168
+    metadata donor=GTEX-R45C age=60 sex=F hardyScore=0 sample=GTEX-R45C-0926-SM-3GAD4 \
+            tissue=heartLeftVentricl autolysisScore=1 rnaIntegrity=6 batch=BP-21337 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR808772
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl heartLeftVentricl/gtexRnaSignalSRR808772.hg38.bigWig
+    shortLabel heartLeft F OHPL
+    longLabel GTEx RNA signal from female Heart - Left Ventricle (GTEX-OHPL-0326-SM-33HC8)
+    subGroups age=a60 tissue=heartLeftVentricl donor=GTEXOHPL
+    color 139,26,168
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-0326-SM-33HC8 \
+            tissue=heartLeftVentricl autolysisScore=0 rnaIntegrity=8.5 batch=BP-17822 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/21/2011
+

@@ -1,0 +1,1878 @@
+    track gtexRnaSignalTestisSRR1068905
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1068905.hg19.bigWig
+    shortLabel testis M R55E
+    longLabel GTEx RNA signal from male Testis (GTEX-R55E-0726-SM-48FCZ)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0726-SM-48FCZ \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.9 batch=BP-21443 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/13/2012
+
+    track gtexRnaSignalTestisSRR1069734
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1069734.hg19.bigWig
+    shortLabel testis M S4Q7
+    longLabel GTEx RNA signal from male Testis (GTEX-S4Q7-1226-SM-4AD5I)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-1226-SM-4AD5I \
+            tissue=testis autolysisScore=1 rnaIntegrity=8 batch=BP-23077 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalTestisSRR1070479
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1070479.hg19.bigWig
+    shortLabel testis M R55C
+    longLabel GTEx RNA signal from male Testis (GTEX-R55C-1426-SM-48FED)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-1426-SM-48FED \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-21341 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalTestisSRR1072845
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1072845.hg19.bigWig
+    shortLabel testis M WFG8
+    longLabel GTEx RNA signal from male Testis (GTEX-WFG8-1926-SM-4LVM1)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-1926-SM-4LVM1 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.6 batch=BP-27442 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalTestisSRR1073531
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1073531.hg19.bigWig
+    shortLabel testis M XAJ8
+    longLabel GTEx RNA signal from male Testis (GTEX-XAJ8-1326-SM-47JYT)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-1326-SM-47JYT \
+            tissue=testis autolysisScore=0 rnaIntegrity=7.3 batch=BP-31651 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/01/2012
+
+    track gtexRnaSignalTestisSRR1077753
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1077753.hg19.bigWig
+    shortLabel testis M XQ3S
+    longLabel GTEx RNA signal from male Testis (GTEX-XQ3S-2726-SM-4BOP2)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-2726-SM-4BOP2 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.6 batch=BP-34205 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2012
+
+    track gtexRnaSignalTestisSRR1078299
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1078299.hg19.bigWig
+    shortLabel testis M Q2AI
+    longLabel GTEx RNA signal from male Testis (GTEX-Q2AI-1226-SM-48U14)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-1226-SM-48U14 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.8 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalTestisSRR1079455
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1079455.hg19.bigWig
+    shortLabel testis M XPT6
+    longLabel GTEx RNA signal from male Testis (GTEX-XPT6-1626-SM-4B655)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-1626-SM-4B655 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.2 batch=BP-33723 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/29/2012
+
+    track gtexRnaSignalTestisSRR1079612
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1079612.hg19.bigWig
+    shortLabel testis M SNMC
+    longLabel GTEx RNA signal from male Testis (GTEX-SNMC-1026-SM-4DM7K)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-1026-SM-4DM7K \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.3 batch=BP-23820 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalTestisSRR1080811
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1080811.hg19.bigWig
+    shortLabel testis M Q2AH
+    longLabel GTEx RNA signal from male Testis (GTEX-Q2AH-1526-SM-48TZG)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-1526-SM-48TZG \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.1 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalTestisSRR1080859
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1080859.hg19.bigWig
+    shortLabel testis M U3ZH
+    longLabel GTEx RNA signal from male Testis (GTEX-U3ZH-1526-SM-4DXV1)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-1526-SM-4DXV1 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-25326 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalTestisSRR1081357
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1081357.hg19.bigWig
+    shortLabel testis M T5JC
+    longLabel GTEx RNA signal from male Testis (GTEX-T5JC-0726-SM-4DM55)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0726-SM-4DM55 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.2 batch=BP-24678 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalTestisSRR1081614
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1081614.hg19.bigWig
+    shortLabel testis M X5EB
+    longLabel GTEx RNA signal from male Testis (GTEX-X5EB-2026-SM-4E3KA)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-2026-SM-4E3KA \
+            tissue=testis autolysisScore=2 rnaIntegrity=7.7 batch=BP-36349 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalTestisSRR1081688
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1081688.hg19.bigWig
+    shortLabel testis M PW2O
+    longLabel GTEx RNA signal from male Testis (GTEX-PW2O-1426-SM-48TCD)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-1426-SM-48TCD \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-19459 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalTestisSRR1084347
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1084347.hg19.bigWig
+    shortLabel testis M RWSA
+    longLabel GTEx RNA signal from male Testis (GTEX-RWSA-2426-SM-47JXR)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-RWSA age=40 sex=M hardyScore=1 sample=GTEX-RWSA-2426-SM-47JXR \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.9 batch=BP-22609 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalTestisSRR1087535
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1087535.hg19.bigWig
+    shortLabel testis M T8EM
+    longLabel GTEx RNA signal from male Testis (GTEX-T8EM-0126-SM-4DM5R)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-T8EM age=40 sex=M hardyScore=0 sample=GTEX-T8EM-0126-SM-4DM5R \
+            tissue=testis autolysisScore=2 rnaIntegrity=7.2 batch=BP-24887 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalTestisSRR1088241
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1088241.hg19.bigWig
+    shortLabel testis M WH7G
+    longLabel GTEx RNA signal from male Testis (GTEX-WH7G-1926-SM-4LVMM)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-1926-SM-4LVMM \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-27757 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalTestisSRR1093290
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1093290.hg19.bigWig
+    shortLabel testis M SNOS
+    longLabel GTEx RNA signal from male Testis (GTEX-SNOS-1126-SM-4DM67)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-1126-SM-4DM67 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.1 batch=BP-24457 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalTestisSRR1096900
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1096900.hg19.bigWig
+    shortLabel testis M QEG4
+    longLabel GTEx RNA signal from male Testis (GTEX-QEG4-0126-SM-48TZE)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-0126-SM-48TZE \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.4 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalTestisSRR1096946
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1096946.hg19.bigWig
+    shortLabel testis M U3ZM
+    longLabel GTEx RNA signal from male Testis (GTEX-U3ZM-1626-SM-4DXSK)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-1626-SM-4DXSK \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.9 batch=BP-25562 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalTestisSRR1097549
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1097549.hg19.bigWig
+    shortLabel testis M U8XE
+    longLabel GTEx RNA signal from male Testis (GTEX-U8XE-0126-SM-4E3I3)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-0126-SM-4E3I3 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.7 batch=BP-25632 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2012
+
+    track gtexRnaSignalTestisSRR1100440
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1100440.hg19.bigWig
+    shortLabel testis M QLQW
+    longLabel GTEx RNA signal from male Testis (GTEX-QLQW-1026-SM-447A9)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-1026-SM-447A9 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-20691 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/09/2011
+
+    track gtexRnaSignalTestisSRR1321112
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1321112.hg19.bigWig
+    shortLabel testis M Y9LG
+    longLabel GTEx RNA signal from male Testis (GTEX-Y9LG-1726-SM-4VBQE)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-1726-SM-4VBQE \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalTestisSRR1335536
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1335536.hg19.bigWig
+    shortLabel testis M WZTO
+    longLabel GTEx RNA signal from male Testis (GTEX-WZTO-0326-SM-4PQYZ)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0326-SM-4PQYZ \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.6 batch=BP-29770 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/20/2012
+
+    track gtexRnaSignalTestisSRR1346957
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1346957.hg19.bigWig
+    shortLabel testis M 14A6H
+    longLabel GTEx RNA signal from male Testis (GTEX-14A6H-2326-SM-5Q5B5)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-2326-SM-5Q5B5 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.2 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalTestisSRR1347100
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1347100.hg19.bigWig
+    shortLabel testis M ZPU1
+    longLabel GTEx RNA signal from male Testis (GTEX-ZPU1-2126-SM-57WED)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-2126-SM-57WED \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.1 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalTestisSRR1352256
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1352256.hg19.bigWig
+    shortLabel testis M 12C56
+    longLabel GTEx RNA signal from male Testis (GTEX-12C56-1426-SM-5FQSW)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-1426-SM-5FQSW \
+            tissue=testis autolysisScore=2 rnaIntegrity=7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalTestisSRR1356421
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1356421.hg19.bigWig
+    shortLabel testis M ZA64
+    longLabel GTEx RNA signal from male Testis (GTEX-ZA64-1626-SM-5CVME)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-1626-SM-5CVME \
+            tissue=testis autolysisScore=0 rnaIntegrity=5.9 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalTestisSRR1357367
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1357367.hg19.bigWig
+    shortLabel testis M 11EQ9
+    longLabel GTEx RNA signal from male Testis (GTEX-11EQ9-1926-SM-5PNVV)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-1926-SM-5PNVV \
+            tissue=testis autolysisScore=0 rnaIntegrity=7.9 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalTestisSRR1361264
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1361264.hg19.bigWig
+    shortLabel testis M 11ZUS
+    longLabel GTEx RNA signal from male Testis (GTEX-11ZUS-2726-SM-5FQUA)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-2726-SM-5FQUA \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-44312 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalTestisSRR1375658
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1375658.hg19.bigWig
+    shortLabel testis M 11NSD
+    longLabel GTEx RNA signal from male Testis (GTEX-11NSD-1026-SM-5N9BE)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-1026-SM-5N9BE \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalTestisSRR1380139
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1380139.hg19.bigWig
+    shortLabel testis M YEC4
+    longLabel GTEx RNA signal from male Testis (GTEX-YEC4-1526-SM-4W1YU)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-1526-SM-4W1YU \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.4 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalTestisSRR1380569
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1380569.hg19.bigWig
+    shortLabel testis M ZUA1
+    longLabel GTEx RNA signal from male Testis (GTEX-ZUA1-2726-SM-59HLJ)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-2726-SM-59HLJ \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.8 batch=BP-43231 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalTestisSRR1384668
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1384668.hg19.bigWig
+    shortLabel testis M 11P7K
+    longLabel GTEx RNA signal from male Testis (GTEX-11P7K-1026-SM-5HL6Y)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-1026-SM-5HL6Y \
+            tissue=testis autolysisScore=0 rnaIntegrity=6.9 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalTestisSRR1387308
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1387308.hg19.bigWig
+    shortLabel testis M ZVTK
+    longLabel GTEx RNA signal from male Testis (GTEX-ZVTK-0126-SM-57WDG)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0126-SM-57WDG \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.2 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalTestisSRR1394855
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1394855.hg19.bigWig
+    shortLabel testis M 145LT
+    longLabel GTEx RNA signal from male Testis (GTEX-145LT-0426-SM-5LUAP)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-0426-SM-5LUAP \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalTestisSRR1398775
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1398775.hg19.bigWig
+    shortLabel testis M 13NZB
+    longLabel GTEx RNA signal from male Testis (GTEX-13NZB-2026-SM-5MR4M)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-2026-SM-5MR4M \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.4 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalTestisSRR1400419
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1400419.hg19.bigWig
+    shortLabel testis M ZTX8
+    longLabel GTEx RNA signal from male Testis (GTEX-ZTX8-1126-SM-51MRM)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1126-SM-51MRM \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.7 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalTestisSRR1409153
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1409153.hg19.bigWig
+    shortLabel testis M QEG5
+    longLabel GTEx RNA signal from male Testis (GTEX-QEG5-0126-SM-4R1JR)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-QEG5 age=20 sex=M hardyScore=0 sample=GTEX-QEG5-0126-SM-4R1JR \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-20333 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/28/2011
+
+    track gtexRnaSignalTestisSRR1417248
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1417248.hg19.bigWig
+    shortLabel testis M WOFM
+    longLabel GTEx RNA signal from male Testis (GTEX-WOFM-1126-SM-4OOSB)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-1126-SM-4OOSB \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-28357 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalTestisSRR1419166
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1419166.hg19.bigWig
+    shortLabel testis M ZT9X
+    longLabel GTEx RNA signal from male Testis (GTEX-ZT9X-1426-SM-5DUX1)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-1426-SM-5DUX1 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalTestisSRR1419518
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1419518.hg19.bigWig
+    shortLabel testis M 13FTW
+    longLabel GTEx RNA signal from male Testis (GTEX-13FTW-1326-SM-5LZZD)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-1326-SM-5LZZD \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.7 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalTestisSRR1430468
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1430468.hg19.bigWig
+    shortLabel testis M 144GM
+    longLabel GTEx RNA signal from male Testis (GTEX-144GM-0426-SM-5Q5C8)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-0426-SM-5Q5C8 \
+            tissue=testis autolysisScore=1 rnaIntegrity=9.3 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalTestisSRR1431535
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1431535.hg19.bigWig
+    shortLabel testis M QV31
+    longLabel GTEx RNA signal from male Testis (GTEX-QV31-1126-SM-4R1K4)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-1126-SM-4R1K4 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.7 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalTestisSRR1432145
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1432145.hg19.bigWig
+    shortLabel testis M 11LCK
+    longLabel GTEx RNA signal from male Testis (GTEX-11LCK-2326-SM-5HL53)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-2326-SM-5HL53 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalTestisSRR1437012
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1437012.hg19.bigWig
+    shortLabel testis M ZLFU
+    longLabel GTEx RNA signal from male Testis (GTEX-ZLFU-2026-SM-4WWG2)
+    subGroups sex=M age=a40 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1441614
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1441614.hg19.bigWig
+    shortLabel testis M Y8E4
+    longLabel GTEx RNA signal from male Testis (GTEX-Y8E4-2226-SM-5LU94)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-2226-SM-5LU94 \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.7 batch=BP-41808 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/02/2013
+
+    track gtexRnaSignalTestisSRR1442509
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1442509.hg19.bigWig
+    shortLabel testis M X3Y1
+    longLabel GTEx RNA signal from male Testis (GTEX-X3Y1-2626-SM-4PQZI)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-2626-SM-4PQZI \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-30589 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalTestisSRR1446911
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1446911.hg19.bigWig
+    shortLabel testis M WHSE
+    longLabel GTEx RNA signal from male Testis (GTEX-WHSE-0426-SM-4M1XO)
+    subGroups sex=M age=a20 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1447437
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1447437.hg19.bigWig
+    shortLabel testis M ZYT6
+    longLabel GTEx RNA signal from male Testis (GTEX-ZYT6-2726-SM-5GICP)
+    subGroups sex=M age=a30 
+    color 193,139,139
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-2726-SM-5GICP \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.5 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalTestisSRR1455236
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1455236.hg19.bigWig
+    shortLabel testis M 11TT1
+    longLabel GTEx RNA signal from male Testis (GTEX-11TT1-2226-SM-5GU6B)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-2226-SM-5GU6B \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalTestisSRR1455946
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1455946.hg19.bigWig
+    shortLabel testis M ZAB4
+    longLabel GTEx RNA signal from male Testis (GTEX-ZAB4-0126-SM-5CVMG)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0126-SM-5CVMG \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.9 batch=BP-45390 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalTestisSRR1458955
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1458955.hg19.bigWig
+    shortLabel testis M 1399Q
+    longLabel GTEx RNA signal from male Testis (GTEX-1399Q-2826-SM-5IJEZ)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-1399Q age=40 sex=M hardyScore=0 sample=GTEX-1399Q-2826-SM-5IJEZ \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-46482 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalTestisSRR1486439
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1486439.hg19.bigWig
+    shortLabel testis M YB5E
+    longLabel GTEx RNA signal from male Testis (GTEX-YB5E-1926-SM-5IFIG)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-1926-SM-5IFIG \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.4 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalTestisSRR1499156
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1499156.hg19.bigWig
+    shortLabel testis M 13NYB
+    longLabel GTEx RNA signal from male Testis (GTEX-13NYB-2226-SM-5MR58)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-2226-SM-5MR58 \
+            tissue=testis autolysisScore=3 rnaIntegrity=6.4 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalTestisSRR808065
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR808065.hg19.bigWig
+    shortLabel testis M OOBK
+    longLabel GTEx RNA signal from male Testis (GTEX-OOBK-2126-SM-3LK5T)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-2126-SM-3LK5T \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.4 batch=BP-18257 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalTestisSRR810899
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR810899.hg19.bigWig
+    shortLabel testis M NPJ8
+    longLabel GTEx RNA signal from male Testis (GTEX-NPJ8-1226-SM-3MJHM)
+    subGroups sex=M age=a40 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR812912
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR812912.hg19.bigWig
+    shortLabel testis M PLZ6
+    longLabel GTEx RNA signal from male Testis (GTEX-PLZ6-1226-SM-3P5ZS)
+    subGroups sex=M age=a30 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR818850
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR818850.hg19.bigWig
+    shortLabel testis M O5YT
+    longLabel GTEx RNA signal from male Testis (GTEX-O5YT-2126-SM-3MJGD)
+    subGroups sex=M age=a20 
+    color 193,139,139
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-2126-SM-3MJGD \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-17533 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalTestisSRR820839
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR820839.hg19.bigWig
+    shortLabel testis M NFK9
+    longLabel GTEx RNA signal from male Testis (GTEX-NFK9-0126-SM-3LK5H)
+    subGroups sex=M age=a40 
+    color 193,139,139
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0126-SM-3LK5H \
+            tissue=testis autolysisScore=1 rnaIntegrity=8.7 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalTestisSRR1068788
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1068788.hg19.bigWig
+    shortLabel testis M TKQ2
+    longLabel GTEx RNA signal from male Testis (GTEX-TKQ2-1526-SM-4DXUN)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-1526-SM-4DXUN \
+            tissue=testis autolysisScore=2 rnaIntegrity=7.4 batch=BP-24929 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalTestisSRR1071379
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1071379.hg19.bigWig
+    shortLabel testis M SIU7
+    longLabel GTEx RNA signal from male Testis (GTEX-SIU7-1526-SM-4BRWQ)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1071429
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1071429.hg19.bigWig
+    shortLabel testis M T6MN
+    longLabel GTEx RNA signal from male Testis (GTEX-T6MN-2026-SM-4DM7L)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-2026-SM-4DM7L \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.5 batch=BP-24849 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalTestisSRR1076490
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1076490.hg19.bigWig
+    shortLabel testis M XGQ4
+    longLabel GTEx RNA signal from male Testis (GTEX-XGQ4-2026-SM-4AT6G)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-2026-SM-4AT6G \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-32308 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalTestisSRR1078612
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1078612.hg19.bigWig
+    shortLabel testis M V1D1
+    longLabel GTEx RNA signal from male Testis (GTEX-V1D1-2126-SM-4JBH4)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-2126-SM-4JBH4 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.7 batch=BP-26868 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalTestisSRR1081401
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1081401.hg19.bigWig
+    shortLabel testis M R55D
+    longLabel GTEx RNA signal from male Testis (GTEX-R55D-0126-SM-48FEL)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0126-SM-48FEL \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-21287 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2012
+
+    track gtexRnaSignalTestisSRR1082307
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1082307.hg19.bigWig
+    shortLabel testis M S7SE
+    longLabel GTEx RNA signal from male Testis (GTEX-S7SE-0326-SM-4AT5Q)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0326-SM-4AT5Q \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.4 batch=BP-23169 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalTestisSRR1087055
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1087055.hg19.bigWig
+    shortLabel testis M RN64
+    longLabel GTEx RNA signal from male Testis (GTEX-RN64-2326-SM-48FDW)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-2326-SM-48FDW \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.4 batch=BP-21628 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/20/2012
+
+    track gtexRnaSignalTestisSRR1090604
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1090604.hg19.bigWig
+    shortLabel testis M RUSQ
+    longLabel GTEx RNA signal from male Testis (GTEX-RUSQ-2126-SM-47JXK)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-RUSQ age=50 sex=M hardyScore=0 sample=GTEX-RUSQ-2126-SM-47JXK \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.5 batch=BP-21954 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/31/2012
+
+    track gtexRnaSignalTestisSRR1090650
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1090650.hg19.bigWig
+    shortLabel testis M QDVN
+    longLabel GTEx RNA signal from male Testis (GTEX-QDVN-1926-SM-48TZ8)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1094287
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1094287.hg19.bigWig
+    shortLabel testis M S3XE
+    longLabel GTEx RNA signal from male Testis (GTEX-S3XE-1526-SM-4AD5A)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-1526-SM-4AD5A \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.7 batch=BP-22893 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalTestisSRR1098026
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1098026.hg19.bigWig
+    shortLabel testis M RM2N
+    longLabel GTEx RNA signal from male Testis (GTEX-RM2N-1326-SM-48FCW)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1326-SM-48FCW \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.1 batch=BP-21575 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/19/2012
+
+    track gtexRnaSignalTestisSRR1308288
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1308288.hg19.bigWig
+    shortLabel testis M 11DXZ
+    longLabel GTEx RNA signal from male Testis (GTEX-11DXZ-2126-SM-59881)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-2126-SM-59881 \
+            tissue=testis autolysisScore=0 rnaIntegrity=8 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalTestisSRR1322334
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1322334.hg19.bigWig
+    shortLabel testis M 14ABY
+    longLabel GTEx RNA signal from male Testis (GTEX-14ABY-0626-SM-5Q5C9)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0626-SM-5Q5C9 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalTestisSRR1322355
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1322355.hg19.bigWig
+    shortLabel testis M 144GL
+    longLabel GTEx RNA signal from male Testis (GTEX-144GL-0726-SM-5LU4P)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0726-SM-5LU4P \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalTestisSRR1333370
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1333370.hg19.bigWig
+    shortLabel testis M ZAB5
+    longLabel GTEx RNA signal from male Testis (GTEX-ZAB5-2426-SM-5CVMW)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-2426-SM-5CVMW \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalTestisSRR1334762
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1334762.hg19.bigWig
+    shortLabel testis M ZV7C
+    longLabel GTEx RNA signal from male Testis (GTEX-ZV7C-2026-SM-5NQ8F)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-2026-SM-5NQ8F \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.9 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalTestisSRR1337052
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1337052.hg19.bigWig
+    shortLabel testis M 11UD2
+    longLabel GTEx RNA signal from male Testis (GTEX-11UD2-2826-SM-5GU6X)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1345347
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1345347.hg19.bigWig
+    shortLabel testis M ZY6K
+    longLabel GTEx RNA signal from male Testis (GTEX-ZY6K-1726-SM-5GZX8)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1347998
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1347998.hg19.bigWig
+    shortLabel testis M 12WSI
+    longLabel GTEx RNA signal from male Testis (GTEX-12WSI-2126-SM-5GCMV)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-12WSI age=50 sex=M hardyScore=2 sample=GTEX-12WSI-2126-SM-5GCMV \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.2 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalTestisSRR1351033
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1351033.hg19.bigWig
+    shortLabel testis M 145MH
+    longLabel GTEx RNA signal from male Testis (GTEX-145MH-2326-SM-5O9AW)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-2326-SM-5O9AW \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.9 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalTestisSRR1352069
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1352069.hg19.bigWig
+    shortLabel testis M 13QJ3
+    longLabel GTEx RNA signal from male Testis (GTEX-13QJ3-0226-SM-5S2PU)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1352597
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1352597.hg19.bigWig
+    shortLabel testis M Z93S
+    longLabel GTEx RNA signal from male Testis (GTEX-Z93S-1726-SM-5HL8G)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-1726-SM-5HL8G \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-45247 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalTestisSRR1355304
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1355304.hg19.bigWig
+    shortLabel testis M WVJS
+    longLabel GTEx RNA signal from male Testis (GTEX-WVJS-2726-SM-4MVNU)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1360218
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1360218.hg19.bigWig
+    shortLabel testis M 131XE
+    longLabel GTEx RNA signal from male Testis (GTEX-131XE-0426-SM-5IJF4)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0426-SM-5IJF4 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.3 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalTestisSRR1370528
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1370528.hg19.bigWig
+    shortLabel testis M 12WSH
+    longLabel GTEx RNA signal from male Testis (GTEX-12WSH-0326-SM-5GCNH)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0326-SM-5GCNH \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalTestisSRR1378971
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1378971.hg19.bigWig
+    shortLabel testis M ZYFC
+    longLabel GTEx RNA signal from male Testis (GTEX-ZYFC-0126-SM-5GIEH)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0126-SM-5GIEH \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalTestisSRR1380699
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1380699.hg19.bigWig
+    shortLabel testis M QV44
+    longLabel GTEx RNA signal from male Testis (GTEX-QV44-1726-SM-4R1KG)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-1726-SM-4R1KG \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.3 batch=BP-20869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalTestisSRR1381327
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1381327.hg19.bigWig
+    shortLabel testis M 13112
+    longLabel GTEx RNA signal from male Testis (GTEX-13112-0226-SM-5P9IV)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0226-SM-5P9IV \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalTestisSRR1387685
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1387685.hg19.bigWig
+    shortLabel testis M 145MF
+    longLabel GTEx RNA signal from male Testis (GTEX-145MF-1726-SM-5LU9H)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1399009
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1399009.hg19.bigWig
+    shortLabel testis M 117YW
+    longLabel GTEx RNA signal from male Testis (GTEX-117YW-1526-SM-5EGGP)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-1526-SM-5EGGP \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalTestisSRR1408494
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1408494.hg19.bigWig
+    shortLabel testis M YEC3
+    longLabel GTEx RNA signal from male Testis (GTEX-YEC3-1726-SM-5IFIK)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-1726-SM-5IFIK \
+            tissue=testis autolysisScore=0 rnaIntegrity=6.6 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalTestisSRR1409022
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1409022.hg19.bigWig
+    shortLabel testis M WY7C
+    longLabel GTEx RNA signal from male Testis (GTEX-WY7C-2226-SM-4ONCS)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1420368
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1420368.hg19.bigWig
+    shortLabel testis M 11NUK
+    longLabel GTEx RNA signal from male Testis (GTEX-11NUK-2626-SM-5A5MB)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-2626-SM-5A5MB \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.3 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalTestisSRR1429579
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1429579.hg19.bigWig
+    shortLabel testis M Y111
+    longLabel GTEx RNA signal from male Testis (GTEX-Y111-2426-SM-4TT23)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-2426-SM-4TT23 \
+            tissue=testis autolysisScore=2 rnaIntegrity=7.4 batch=BP-35709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalTestisSRR1432980
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1432980.hg19.bigWig
+    shortLabel testis M X261
+    longLabel GTEx RNA signal from male Testis (GTEX-X261-2326-SM-4PQYU)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-2326-SM-4PQYU \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.2 batch=BP-29989 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalTestisSRR1441505
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1441505.hg19.bigWig
+    shortLabel testis M ZVZP
+    longLabel GTEx RNA signal from male Testis (GTEX-ZVZP-2226-SM-57WBF)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-2226-SM-57WBF \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalTestisSRR1444264
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1444264.hg19.bigWig
+    shortLabel testis M 111CU
+    longLabel GTEx RNA signal from male Testis (GTEX-111CU-1726-SM-5EGHM)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-1726-SM-5EGHM \
+            tissue=testis autolysisScore=0 rnaIntegrity=6.9 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalTestisSRR1454568
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1454568.hg19.bigWig
+    shortLabel testis M 144GN
+    longLabel GTEx RNA signal from male Testis (GTEX-144GN-1626-SM-5Q5BU)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-1626-SM-5Q5BU \
+            tissue=testis autolysisScore=1 rnaIntegrity=6 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalTestisSRR1457148
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1457148.hg19.bigWig
+    shortLabel testis M WHSB
+    longLabel GTEx RNA signal from male Testis (GTEX-WHSB-2126-SM-4M1XF)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-2126-SM-4M1XF \
+            tissue=testis autolysisScore=0 rnaIntegrity=7 batch=BP-27516 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalTestisSRR1457637
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1457637.hg19.bigWig
+    shortLabel testis M WK11
+    longLabel GTEx RNA signal from male Testis (GTEX-WK11-0326-SM-4OOS6)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-WK11 age=50 sex=M hardyScore=1 sample=GTEX-WK11-0326-SM-4OOS6 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.6 batch=BP-27971 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalTestisSRR1457661
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1457661.hg19.bigWig
+    shortLabel testis M 13FLW
+    longLabel GTEx RNA signal from male Testis (GTEX-13FLW-2126-SM-5N9FD)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-13FLW age=50 sex=M hardyScore=2 sample=GTEX-13FLW-2126-SM-5N9FD \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.7 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalTestisSRR1459232
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1459232.hg19.bigWig
+    shortLabel testis M WVLH
+    longLabel GTEx RNA signal from male Testis (GTEX-WVLH-2626-SM-4MVNV)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-2626-SM-4MVNV \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-28813 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalTestisSRR1470379
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1470379.hg19.bigWig
+    shortLabel testis M 13O21
+    longLabel GTEx RNA signal from male Testis (GTEX-13O21-1226-SM-5J2MK)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-1226-SM-5J2MK \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.5 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalTestisSRR1471029
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1471029.hg19.bigWig
+    shortLabel testis M 12WSL
+    longLabel GTEx RNA signal from male Testis (GTEX-12WSL-2326-SM-5DUXQ)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-2326-SM-5DUXQ \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.2 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalTestisSRR1474159
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1474159.hg19.bigWig
+    shortLabel testis M ZT9W
+    longLabel GTEx RNA signal from male Testis (GTEX-ZT9W-2226-SM-57WFU)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-2226-SM-57WFU \
+            tissue=testis autolysisScore=0 rnaIntegrity=7.4 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalTestisSRR1477820
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1477820.hg19.bigWig
+    shortLabel testis M 147F4
+    longLabel GTEx RNA signal from male Testis (GTEX-147F4-0626-SM-5LUAK)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-0626-SM-5LUAK \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalTestisSRR1478593
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1478593.hg19.bigWig
+    shortLabel testis M 13OVL
+    longLabel GTEx RNA signal from male Testis (GTEX-13OVL-0426-SM-5IFG6)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0426-SM-5IFG6 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.7 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalTestisSRR1480675
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1480675.hg19.bigWig
+    shortLabel testis M 11WQK
+    longLabel GTEx RNA signal from male Testis (GTEX-11WQK-2826-SM-5EQKH)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-2826-SM-5EQKH \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.8 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalTestisSRR1486907
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1486907.hg19.bigWig
+    shortLabel testis M Y3I4
+    longLabel GTEx RNA signal from male Testis (GTEX-Y3I4-2026-SM-4TT6Z)
+    subGroups sex=M age=a50 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1489075
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1489075.hg19.bigWig
+    shortLabel testis M QMRM
+    longLabel GTEx RNA signal from male Testis (GTEX-QMRM-1526-SM-4R1K6)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-1526-SM-4R1K6 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalTestisSRR810531
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR810531.hg19.bigWig
+    shortLabel testis M OHPM
+    longLabel GTEx RNA signal from male Testis (GTEX-OHPM-2126-SM-3LK75)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-2126-SM-3LK75 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.5 batch=BP-17842 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2011
+
+    track gtexRnaSignalTestisSRR811447
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR811447.hg19.bigWig
+    shortLabel testis M PLZ5
+    longLabel GTEx RNA signal from male Testis (GTEX-PLZ5-1526-SM-3P5ZX)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-1526-SM-3P5ZX \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-19182 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/03/2011
+
+    track gtexRnaSignalTestisSRR814943
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR814943.hg19.bigWig
+    shortLabel testis M OXRL
+    longLabel GTEx RNA signal from male Testis (GTEX-OXRL-2126-SM-3NM98)
+    subGroups sex=M age=a50 
+    color 193,139,139
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-2126-SM-3NM98 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-18391 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalTestisSRR1075607
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1075607.hg19.bigWig
+    shortLabel testis M V955
+    longLabel GTEx RNA signal from male Testis (GTEX-V955-1926-SM-4KL1L)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-1926-SM-4KL1L \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.4 batch=BP-26934 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalTestisSRR1080022
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1080022.hg19.bigWig
+    shortLabel testis M U8T8
+    longLabel GTEx RNA signal from male Testis (GTEX-U8T8-1126-SM-4DXUE)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-U8T8 age=60 sex=M hardyScore=0 sample=GTEX-U8T8-1126-SM-4DXUE \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.7 batch=BP-25632 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2012
+
+    track gtexRnaSignalTestisSRR1081449
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1081449.hg19.bigWig
+    shortLabel testis M S4Z8
+    longLabel GTEx RNA signal from male Testis (GTEX-S4Z8-2126-SM-4AD5H)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1083554
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1083554.hg19.bigWig
+    shortLabel testis M S95S
+    longLabel GTEx RNA signal from male Testis (GTEX-S95S-1126-SM-4B64E)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-1126-SM-4B64E \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.2 batch=BP-23283 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalTestisSRR1089643
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1089643.hg19.bigWig
+    shortLabel testis M XBED
+    longLabel GTEx RNA signal from male Testis (GTEX-XBED-2026-SM-4AT5D)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-2026-SM-4AT5D \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.6 batch=BP-31713 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/02/2012
+
+    track gtexRnaSignalTestisSRR1090722
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1090722.hg19.bigWig
+    shortLabel testis M REY6
+    longLabel GTEx RNA signal from male Testis (GTEX-REY6-0126-SM-48FDT)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0126-SM-48FDT \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.1 batch=BP-21546 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalTestisSRR1092612
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1092612.hg19.bigWig
+    shortLabel testis M SUCS
+    longLabel GTEx RNA signal from male Testis (GTEX-SUCS-1326-SM-4DM5T)
+    subGroups sex=M age=a70 
+    color 193,139,139
+    metadata donor=GTEX-SUCS age=70 sex=M hardyScore=0 sample=GTEX-SUCS-1326-SM-4DM5T \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-24530 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalTestisSRR1093885
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1093885.hg19.bigWig
+    shortLabel testis M XLM4
+    longLabel GTEx RNA signal from male Testis (GTEX-XLM4-1526-SM-4AT6D)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-1526-SM-4AT6D \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-32501 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalTestisSRR1309425
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1309425.hg19.bigWig
+    shortLabel testis M 11DXY
+    longLabel GTEx RNA signal from male Testis (GTEX-11DXY-0226-SM-5H123)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1311329
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1311329.hg19.bigWig
+    shortLabel testis M 11GS4
+    longLabel GTEx RNA signal from male Testis (GTEX-11GS4-2026-SM-5N9CP)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-2026-SM-5N9CP \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalTestisSRR1317238
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1317238.hg19.bigWig
+    shortLabel testis M 111YS
+    longLabel GTEx RNA signal from male Testis (GTEX-111YS-2026-SM-5EGGL)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-2026-SM-5EGGL \
+            tissue=testis autolysisScore=0 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalTestisSRR1319322
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1319322.hg19.bigWig
+    shortLabel testis M 11TUW
+    longLabel GTEx RNA signal from male Testis (GTEX-11TUW-2226-SM-5EQL9)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2226-SM-5EQL9 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.4 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalTestisSRR1319608
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1319608.hg19.bigWig
+    shortLabel testis M 13G51
+    longLabel GTEx RNA signal from male Testis (GTEX-13G51-0826-SM-5K7VB)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1321204
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1321204.hg19.bigWig
+    shortLabel testis M 131XF
+    longLabel GTEx RNA signal from male Testis (GTEX-131XF-2026-SM-5DUWG)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1327327
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1327327.hg19.bigWig
+    shortLabel testis M 11WQC
+    longLabel GTEx RNA signal from male Testis (GTEX-11WQC-2326-SM-5EQKE)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-2326-SM-5EQKE \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.1 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalTestisSRR1328821
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1328821.hg19.bigWig
+    shortLabel testis M 14753
+    longLabel GTEx RNA signal from male Testis (GTEX-14753-0626-SM-5Q5CY)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0626-SM-5Q5CY \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.6 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalTestisSRR1332733
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1332733.hg19.bigWig
+    shortLabel testis M 111VG
+    longLabel GTEx RNA signal from male Testis (GTEX-111VG-1926-SM-5GIDO)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-1926-SM-5GIDO \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalTestisSRR1335338
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1335338.hg19.bigWig
+    shortLabel testis M 13O1R
+    longLabel GTEx RNA signal from male Testis (GTEX-13O1R-0726-SM-5IJEI)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0726-SM-5IJEI \
+            tissue=testis autolysisScore=1 rnaIntegrity=6 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalTestisSRR1337977
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1337977.hg19.bigWig
+    shortLabel testis M Y5V6
+    longLabel GTEx RNA signal from male Testis (GTEX-Y5V6-1726-SM-4VDSZ)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-1726-SM-4VDSZ \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalTestisSRR1345200
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1345200.hg19.bigWig
+    shortLabel testis M 117XS
+    longLabel GTEx RNA signal from male Testis (GTEX-117XS-2026-SM-5GID1)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-2026-SM-5GID1 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.8 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalTestisSRR1347481
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1347481.hg19.bigWig
+    shortLabel testis M 139T8
+    longLabel GTEx RNA signal from male Testis (GTEX-139T8-0726-SM-5L3D2)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1358260
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1358260.hg19.bigWig
+    shortLabel testis M 139TS
+    longLabel GTEx RNA signal from male Testis (GTEX-139TS-1726-SM-5IJG5)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-1726-SM-5IJG5 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.5 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalTestisSRR1364953
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1364953.hg19.bigWig
+    shortLabel testis M 11OF3
+    longLabel GTEx RNA signal from male Testis (GTEX-11OF3-1826-SM-5987N)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-1826-SM-5987N \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.1 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalTestisSRR1373921
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1373921.hg19.bigWig
+    shortLabel testis M 13N2G
+    longLabel GTEx RNA signal from male Testis (GTEX-13N2G-0126-SM-5N9DV)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0126-SM-5N9DV \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.7 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalTestisSRR1378660
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1378660.hg19.bigWig
+    shortLabel testis M 13NZA
+    longLabel GTEx RNA signal from male Testis (GTEX-13NZA-2526-SM-5IJFX)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-2526-SM-5IJFX \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.2 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalTestisSRR1379220
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1379220.hg19.bigWig
+    shortLabel testis M 12ZZY
+    longLabel GTEx RNA signal from male Testis (GTEX-12ZZY-0126-SM-5LZV2)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0126-SM-5LZV2 \
+            tissue=testis autolysisScore=2 rnaIntegrity=7.1 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalTestisSRR1380847
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1380847.hg19.bigWig
+    shortLabel testis M 111FC
+    longLabel GTEx RNA signal from male Testis (GTEX-111FC-1926-SM-5GZYC)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-1926-SM-5GZYC \
+            tissue=testis autolysisScore=2 rnaIntegrity=5.9 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalTestisSRR1381229
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1381229.hg19.bigWig
+    shortLabel testis M 13O61
+    longLabel GTEx RNA signal from male Testis (GTEX-13O61-2026-SM-5J2M6)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-2026-SM-5J2M6 \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.2 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalTestisSRR1381613
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1381613.hg19.bigWig
+    shortLabel testis M 1192W
+    longLabel GTEx RNA signal from male Testis (GTEX-1192W-2326-SM-5N9BS)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1398293
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1398293.hg19.bigWig
+    shortLabel testis M 139TT
+    longLabel GTEx RNA signal from male Testis (GTEX-139TT-2226-SM-5LZWO)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-2226-SM-5LZWO \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalTestisSRR1399271
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1399271.hg19.bigWig
+    shortLabel testis M 145MO
+    longLabel GTEx RNA signal from male Testis (GTEX-145MO-0126-SM-5S2QU)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-0126-SM-5S2QU \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-48818 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalTestisSRR1399501
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1399501.hg19.bigWig
+    shortLabel testis M 11EI6
+    longLabel GTEx RNA signal from male Testis (GTEX-11EI6-2226-SM-5EGJM)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-2226-SM-5EGJM \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.1 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalTestisSRR1404421
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1404421.hg19.bigWig
+    shortLabel testis M 1399T
+    longLabel GTEx RNA signal from male Testis (GTEX-1399T-1526-SM-5P9J6)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1407734
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1407734.hg19.bigWig
+    shortLabel testis M 12696
+    longLabel GTEx RNA signal from male Testis (GTEX-12696-0226-SM-5EGL3)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0226-SM-5EGL3 \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.6 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalTestisSRR1420791
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1420791.hg19.bigWig
+    shortLabel testis M 11ONC
+    longLabel GTEx RNA signal from male Testis (GTEX-11ONC-2226-SM-5HL6D)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2226-SM-5HL6D \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalTestisSRR1432476
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1432476.hg19.bigWig
+    shortLabel testis M 11EQ8
+    longLabel GTEx RNA signal from male Testis (GTEX-11EQ8-1426-SM-5EGJR)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11EQ8 age=60 sex=M hardyScore=4 sample=GTEX-11EQ8-1426-SM-5EGJR \
+            tissue=testis autolysisScore=1 rnaIntegrity=6 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalTestisSRR1435923
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1435923.hg19.bigWig
+    shortLabel testis M 12WSM
+    longLabel GTEx RNA signal from male Testis (GTEX-12WSM-1326-SM-5GCP9)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-1326-SM-5GCP9 \
+            tissue=testis autolysisScore=2 rnaIntegrity=6.1 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalTestisSRR1443070
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1443070.hg19.bigWig
+    shortLabel testis M 1212Z
+    longLabel GTEx RNA signal from male Testis (GTEX-1212Z-0326-SM-5FQSJ)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0326-SM-5FQSJ \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalTestisSRR1443847
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1443847.hg19.bigWig
+    shortLabel testis M X4XX
+    longLabel GTEx RNA signal from male Testis (GTEX-X4XX-0726-SM-4QARS)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR1456733
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1456733.hg19.bigWig
+    shortLabel testis M 11NV4
+    longLabel GTEx RNA signal from male Testis (GTEX-11NV4-1726-SM-5N9FC)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-1726-SM-5N9FC \
+            tissue=testis autolysisScore=2 rnaIntegrity=5.7 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalTestisSRR1458066
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1458066.hg19.bigWig
+    shortLabel testis M 147JS
+    longLabel GTEx RNA signal from male Testis (GTEX-147JS-0126-SM-5S2TW)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-0126-SM-5S2TW \
+            tissue=testis autolysisScore=1 rnaIntegrity=5.8 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalTestisSRR1476784
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1476784.hg19.bigWig
+    shortLabel testis M 132QS
+    longLabel GTEx RNA signal from male Testis (GTEX-132QS-1226-SM-5P9GD)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-1226-SM-5P9GD \
+            tissue=testis autolysisScore=1 rnaIntegrity=7.9 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalTestisSRR1500052
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR1500052.hg19.bigWig
+    shortLabel testis M 13OVH
+    longLabel GTEx RNA signal from male Testis (GTEX-13OVH-0726-SM-5N9BU)
+    subGroups sex=M age=a70 
+    color 193,139,139
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-0726-SM-5N9BU \
+            tissue=testis autolysisScore=2 rnaIntegrity=5.7 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalTestisSRR807517
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR807517.hg19.bigWig
+    shortLabel testis M P4PQ
+    longLabel GTEx RNA signal from male Testis (GTEX-P4PQ-2126-SM-3NMCV)
+    subGroups sex=M age=a60 
+    color 193,139,139
+
+    track gtexRnaSignalTestisSRR814082
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR814082.hg19.bigWig
+    shortLabel testis M P4QR
+    longLabel GTEx RNA signal from male Testis (GTEX-P4QR-0226-SM-3NMCH)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-P4QR age=60 sex=M hardyScore=-1 sample=GTEX-P4QR-0226-SM-3NMCH \
+            tissue=testis autolysisScore=2 rnaIntegrity=6 batch=BP-18830 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2011
+
+    track gtexRnaSignalTestisSRR815588
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR815588.hg19.bigWig
+    shortLabel testis M OOBJ
+    longLabel GTEx RNA signal from male Testis (GTEX-OOBJ-2126-SM-3NB1N)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-2126-SM-3NB1N \
+            tissue=testis autolysisScore=1 rnaIntegrity=6.7 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalTestisSRR817512
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR817512.hg19.bigWig
+    shortLabel testis M P4QS
+    longLabel GTEx RNA signal from male Testis (GTEX-P4QS-2126-SM-3NMCF)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-2126-SM-3NMCF \
+            tissue=testis autolysisScore=1 rnaIntegrity=7 batch=BP-18728 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalTestisSRR821518
+    parent gtexRnaSignalTestis off
+    type bigWig
+    bigDataUrl testis/gtexRnaSignalSRR821518.hg19.bigWig
+    shortLabel testis M N7MS
+    longLabel GTEx RNA signal from male Testis (GTEX-N7MS-0126-SM-3TW8O)
+    subGroups sex=M age=a60 
+    color 193,139,139
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0126-SM-3TW8O \
+            tissue=testis autolysisScore=3 rnaIntegrity=9.1 batch=BP-16740 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/19/2011
+

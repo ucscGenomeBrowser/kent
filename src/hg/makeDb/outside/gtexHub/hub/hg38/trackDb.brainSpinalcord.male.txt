@@ -1,0 +1,378 @@
+    track gtexRnaSignalSRR1320071
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1320071.hg38.bigWig
+    shortLabel brainSpin M 12126
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-12126-0011-R9b-SM-5BC6P)
+    subGroups age=a20 tissue=brainSpinalcord donor=GTEX12126
+    color 238,238,0
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0011-R9b-SM-5BC6P \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=8.5 batch=BP-43234 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1346813
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1346813.hg38.bigWig
+    shortLabel brainSpin M ZAB4
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-ZAB4-0011-R9a-SM-4SOKG)
+    subGroups age=a40 tissue=brainSpinalcord donor=GTEXZAB4
+    color 238,238,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0011-R9a-SM-4SOKG \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.7 batch=BP-41209 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2013
+
+    track gtexRnaSignalSRR1401295
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1401295.hg38.bigWig
+    shortLabel brainSpin M 11ZUS
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-11ZUS-0011-R9b-SM-5BC76)
+    subGroups age=a30 tissue=brainSpinalcord donor=GTEX11ZUS
+    color 238,238,0
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0011-R9b-SM-5BC76 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=8.3 batch=BP-43234 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1474795
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1474795.hg38.bigWig
+    shortLabel brainSpin M 13RTL
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13RTL-0011-R9a-SM-5Q5BR)
+    subGroups age=a40 tissue=brainSpinalcord donor=GTEX13RTL
+    color 238,238,0
+
+    track gtexRnaSignalSRR613807
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR613807.hg38.bigWig
+    shortLabel brainSpin M R55E
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-R55E-0011-R9A-SM-2TC6C)
+    subGroups age=a20 tissue=brainSpinalcord donor=GTEXR55E
+    color 238,238,0
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0011-R9A-SM-2TC6C \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.4 batch=BP-21968 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalSRR614071
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR614071.hg38.bigWig
+    shortLabel brainSpin M NPJ8
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-NPJ8-0011-R9a-SM-2YUN5)
+    subGroups age=a40 tissue=brainSpinalcord donor=GTEXNPJ8
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R9a-SM-2YUN5 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.5 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR1321966
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1321966.hg38.bigWig
+    shortLabel brainSpin M 14ABY
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-14ABY-0011-R9a-SM-5PNZK)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX14ABY
+    color 238,238,0
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0011-R9a-SM-5PNZK \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=8.2 batch=BP-48227 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1325401
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1325401.hg38.bigWig
+    shortLabel brainSpin M 11WQK
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-11WQK-0011-R9b-SM-5BC6N)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX11WQK
+    color 238,238,0
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-0011-R9b-SM-5BC6N \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1336481
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1336481.hg38.bigWig
+    shortLabel brainSpin M 145LU
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-145LU-0011-R9b-SM-5SI66)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX145LU
+    color 238,238,0
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0011-R9b-SM-5SI66 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.8 batch=BP-48370 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalSRR1336727
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1336727.hg38.bigWig
+    shortLabel brainSpin M 13OVL
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13OVL-0011-R9a-SM-5P9GX)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX13OVL
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R9a-SM-5P9GX \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.9 batch=BP-47984 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1370129
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1370129.hg38.bigWig
+    shortLabel brainSpin M 12WSC
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-12WSC-0011-R9a-SM-5GU4U)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX12WSC
+    color 238,238,0
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0011-R9a-SM-5GU4U \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.9 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1387989
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1387989.hg38.bigWig
+    shortLabel brainSpin M 13PVQ
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13PVQ-0011-R9b-SM-5LU3B)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX13PVQ
+    color 238,238,0
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0011-R9b-SM-5LU3B \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1402840
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1402840.hg38.bigWig
+    shortLabel brainSpin M 12WSH
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-12WSH-0011-R9b-SM-5LZUG)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX12WSH
+    color 238,238,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0011-R9b-SM-5LZUG \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.6 batch=BP-44020 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalSRR1453932
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1453932.hg38.bigWig
+    shortLabel brainSpin M 13CIG
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13CIG-0011-R9a-SM-5K7VU)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX13CIG
+    color 238,238,0
+    metadata donor=GTEX-13CIG age=50 sex=M hardyScore=2 sample=GTEX-13CIG-0011-R9a-SM-5K7VU \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-45509 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1458595
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1458595.hg38.bigWig
+    shortLabel brainSpin M 14BIL
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-14BIL-0011-R9a-SM-5SI7A)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX14BIL
+    color 238,238,0
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-0011-R9a-SM-5SI7A \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48815 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1486304
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1486304.hg38.bigWig
+    shortLabel brainSpin M 13FXS
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13FXS-0011-R9a-SM-5K7UI)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEX13FXS
+    color 238,238,0
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0011-R9a-SM-5K7UI \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=8.2 batch=BP-46364 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR602871
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR602871.hg38.bigWig
+    shortLabel brainSpin M NL4W
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-NL4W-0011-R9a-SM-2I3G1)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEXNL4W
+    color 238,238,0
+    metadata donor=GTEX-NL4W age=50 sex=M hardyScore=4 sample=GTEX-NL4W-0011-R9a-SM-2I3G1 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6 batch=BP-17409 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR820962
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR820962.hg38.bigWig
+    shortLabel brainSpin M RVPU
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-RVPU-0011-R9A-SM-3NM8E)
+    subGroups age=a50 tissue=brainSpinalcord donor=GTEXRVPU
+    color 238,238,0
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-0011-R9A-SM-3NM8E \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-22923 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/07/2012
+
+    track gtexRnaSignalSRR1079168
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1079168.hg38.bigWig
+    shortLabel brainSpin M XLM4
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-XLM4-0011-R9A-SM-4AT45)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEXXLM4
+    color 238,238,0
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0011-R9A-SM-4AT45 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7 batch=BP-34615 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2012
+
+    track gtexRnaSignalSRR1310623
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1310623.hg38.bigWig
+    shortLabel brainSpin M 11ONC
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-11ONC-0011-R9b-SM-5NQ8J)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX11ONC
+    color 238,238,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-0011-R9b-SM-5NQ8J \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.2 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalSRR1333694
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1333694.hg38.bigWig
+    shortLabel brainSpin M 147GR
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-147GR-0011-R9a-SM-5S2UY)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX147GR
+    color 238,238,0
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-0011-R9a-SM-5S2UY \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalSRR1363633
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1363633.hg38.bigWig
+    shortLabel brainSpin M 13CZV
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13CZV-0011-R9a-SM-5LZXT)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13CZV
+    color 238,238,0
+    metadata donor=GTEX-13CZV age=60 sex=M hardyScore=2 sample=GTEX-13CZV-0011-R9a-SM-5LZXT \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=5.9 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1368856
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1368856.hg38.bigWig
+    shortLabel brainSpin M 13NZA
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13NZA-0011-R9b-SM-5MR5I)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13NZA
+    color 238,238,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0011-R9b-SM-5MR5I \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.8 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1370173
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1370173.hg38.bigWig
+    shortLabel brainSpin M 13O1R
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13O1R-0011-R9b-SM-5KM33)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13O1R
+    color 238,238,0
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0011-R9b-SM-5KM33 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.4 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalSRR1388007
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1388007.hg38.bigWig
+    shortLabel brainSpin M 139UC
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-139UC-0011-R9a-SM-5K7W7)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX139UC
+    color 238,238,0
+
+    track gtexRnaSignalSRR1402882
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1402882.hg38.bigWig
+    shortLabel brainSpin M 13N1W
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13N1W-0011-R9b-SM-5MR4R)
+    subGroups age=a70 tissue=brainSpinalcord donor=GTEX13N1W
+    color 238,238,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0011-R9b-SM-5MR4R \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-47085 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1413768
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1413768.hg38.bigWig
+    shortLabel brainSpin M 13N2G
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13N2G-0011-R9b-SM-5MR4E)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13N2G
+    color 238,238,0
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0011-R9b-SM-5MR4E \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1421375
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1421375.hg38.bigWig
+    shortLabel brainSpin M 148VJ
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-148VJ-0011-R9b-SM-5SI77)
+    subGroups age=a70 tissue=brainSpinalcord donor=GTEX148VJ
+    color 238,238,0
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0011-R9b-SM-5SI77 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.5 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalSRR1443612
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1443612.hg38.bigWig
+    shortLabel brainSpin M 139UW
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-139UW-0011-R9b-SM-5LZYT)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX139UW
+    color 238,238,0
+    metadata donor=GTEX-139UW age=60 sex=M hardyScore=2 sample=GTEX-139UW-0011-R9b-SM-5LZYT \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1445514
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1445514.hg38.bigWig
+    shortLabel brainSpin M 13NYS
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13NYS-0011-R9b-SM-5MR44)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13NYS
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R9b-SM-5MR44 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.9 batch=BP-47085 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1475609
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1475609.hg38.bigWig
+    shortLabel brainSpin M YJ89
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-YJ89-0011-R9a-SM-4SOK7)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEXYJ89
+    color 238,238,0
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0011-R9a-SM-4SOK7 \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=6.8 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalSRR1491311
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainSpinalcord/gtexRnaSignalSRR1491311.hg38.bigWig
+    shortLabel brainSpin M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Spinal cord (cervical c-1) (GTEX-13RTJ-0011-R9a-SM-5Q5AY)
+    subGroups age=a60 tissue=brainSpinalcord donor=GTEX13RTJ
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R9a-SM-5Q5AY \
+            tissue=brainSpinalcord autolysisScore=-1 rnaIntegrity=7.6 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+

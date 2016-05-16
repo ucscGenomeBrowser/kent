@@ -1,0 +1,72 @@
+    track gtexRnaSignalSRR1075223
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1075223.hg38.bigWig
+    shortLabel ectocervi F T5JW
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-T5JW-0726-SM-4DM6D)
+    subGroups age=a20 tissue=ectocervix donor=GTEXT5JW
+    color 247,205,200
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-0726-SM-4DM6D \
+            tissue=ectocervix autolysisScore=1 rnaIntegrity=7.5 batch=BP-26022 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/06/2012
+
+    track gtexRnaSignalSRR1088832
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1088832.hg38.bigWig
+    shortLabel ectocervi F S341
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-S341-1126-SM-4AD6T)
+    subGroups age=a40 tissue=ectocervix donor=GTEXS341
+    color 247,205,200
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-1126-SM-4AD6T \
+            tissue=ectocervix autolysisScore=1 rnaIntegrity=7.4 batch=BP-22768 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/29/2012
+
+    track gtexRnaSignalSRR1089562
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1089562.hg38.bigWig
+    shortLabel ectocervi F S4UY
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-S4UY-1426-SM-4AD6Y)
+    subGroups age=a40 tissue=ectocervix donor=GTEXS4UY
+    color 247,205,200
+    metadata donor=GTEX-S4UY age=40 sex=F hardyScore=0 sample=GTEX-S4UY-1426-SM-4AD6Y \
+            tissue=ectocervix autolysisScore=1 rnaIntegrity=6.8 batch=BP-22893 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR1097574
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1097574.hg38.bigWig
+    shortLabel ectocervi F U3ZN
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-U3ZN-1626-SM-4DXTZ)
+    subGroups age=a30 tissue=ectocervix donor=GTEXU3ZN
+    color 247,205,200
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-1626-SM-4DXTZ \
+            tissue=ectocervix autolysisScore=0 rnaIntegrity=9.2 batch=BP-25493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR1096876
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1096876.hg38.bigWig
+    shortLabel ectocervi F S32W
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-S32W-1526-SM-4AD6Z)
+    subGroups age=a50 tissue=ectocervix donor=GTEXS32W
+    color 247,205,200
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1526-SM-4AD6Z \
+            tissue=ectocervix autolysisScore=1 rnaIntegrity=6.6 batch=BP-22720 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1097035
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl ectocervix/gtexRnaSignalSRR1097035.hg38.bigWig
+    shortLabel ectocervi F TSE9
+    longLabel GTEx RNA signal from female Cervix - Ectocervix (GTEX-TSE9-2826-SM-4DXTF)
+    subGroups age=a60 tissue=ectocervix donor=GTEXTSE9
+    color 247,205,200
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-2826-SM-4DXTF \
+            tissue=ectocervix autolysisScore=2 rnaIntegrity=6.4 batch=BP-25328 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
