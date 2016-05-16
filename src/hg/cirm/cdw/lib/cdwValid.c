@@ -378,6 +378,7 @@ char *disease[] =
 "LQT",
 "TNM stage IIA, grade 3, ductal carcinoma",
 "chronic myelogenous leukemia (CML)",
+"LQT",
 "acute promyelocytic leukemia",
 };
 char *enriched_in[] =
@@ -513,6 +514,7 @@ if (list == NULL)
 	"text	Unicode 8-bit formatted text file",
 	"vcf Variant call format",
 	"kallisto_abundance abundance.txt file output from Kallisto containing RNA abundance info",
+	"expression_matrix  Genes/transcripts are rows, samples are columns",
 	"unknown	File is in  format unknown to the data hub.  No validations are applied",
 	};
     int i;

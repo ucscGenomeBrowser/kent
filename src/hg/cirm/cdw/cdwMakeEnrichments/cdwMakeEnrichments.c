@@ -471,7 +471,9 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf-
 	    allSkip = FALSE;
 	}
 
-    /* Do a big dispatch based on format. */
+    /* Do a big dispatch based on format. 
+     * Current formats; fastq, bigWig, bed, bigBed, gtf, gff, bam, vcf, idat, curstomTrack, rcc. 
+     * formats cnt; kallisto_abundance, bam.bai, vcf.gz.tbi, expression_matrix, unknown.  */
     if (!allSkip)
 	{
 	if (sameString(format, "fastq"))
@@ -496,6 +498,10 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf-
 	    verbose(2, "Ignoring customTrack %s, in doEnrichments.", ef->cdwFileName);
 	else if (sameString(format, "rcc"))
 	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->cdwFileName);
+	else if (sameString(format, "kallisto_abundance"))
+	    verbose(2, "Ignoring kallisto_abundance %s, in doEnrichments.", ef->cdwFileName);
+	else if (sameString(format, "expression_matrix"))
+	    verbose(2, "Ignoring expression_matrix %s, in doEnrichments.", ef->cdwFileName);
 	else if (sameString(format, "bam.bai"))
 	    verbose(2, "Ignoring bam.bai %s, in doEnrichments - just and index file.", 
 		ef->cdwFileName);
