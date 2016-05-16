@@ -252,3 +252,9 @@ end
 # add includes from trackDb.male.txt to trackDb.txt
 
 # repeat  for hg19 female, hg38 male, hg38 female
+
+# create per tissue tracks, in hg38 and hg19
+
+../bin/trackAllTissues hg19
+
+

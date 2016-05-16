@@ -1,0 +1,48 @@
+    track gtexRnaSignalEndocervixSRR1077239
+    parent gtexRnaSignalEndocervix off
+    type bigWig
+    bigDataUrl endocervix/gtexRnaSignalSRR1077239.hg19.bigWig
+    shortLabel endocervi F T6MO
+    longLabel GTEx RNA signal from female Cervix - Endocervix (GTEX-T6MO-1426-SM-4DM73)
+    subGroups sex=F age=a40 
+    color 247,205,200
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-1426-SM-4DM73 \
+            tissue=endocervix autolysisScore=1 rnaIntegrity=7.2 batch=BP-24887 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalEndocervixSRR1098612
+    parent gtexRnaSignalEndocervix off
+    type bigWig
+    bigDataUrl endocervix/gtexRnaSignalSRR1098612.hg19.bigWig
+    shortLabel endocervi F S341
+    longLabel GTEx RNA signal from female Cervix - Endocervix (GTEX-S341-1326-SM-4AD72)
+    subGroups sex=F age=a40 
+    color 247,205,200
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-1326-SM-4AD72 \
+            tissue=endocervix autolysisScore=1 rnaIntegrity=7.5 batch=BP-22768 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/29/2012
+
+    track gtexRnaSignalEndocervixSRR1096057
+    parent gtexRnaSignalEndocervix off
+    type bigWig
+    bigDataUrl endocervix/gtexRnaSignalSRR1096057.hg19.bigWig
+    shortLabel endocervi F S32W
+    longLabel GTEx RNA signal from female Cervix - Endocervix (GTEX-S32W-1626-SM-4AD6G)
+    subGroups sex=F age=a50 
+    color 247,205,200
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1626-SM-4AD6G \
+            tissue=endocervix autolysisScore=2 rnaIntegrity=6.6 batch=BP-22720 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalEndocervixSRR1089833
+    parent gtexRnaSignalEndocervix off
+    type bigWig
+    bigDataUrl endocervix/gtexRnaSignalSRR1089833.hg19.bigWig
+    shortLabel endocervi F TSE9
+    longLabel GTEx RNA signal from female Cervix - Endocervix (GTEX-TSE9-2726-SM-4DXSQ)
+    subGroups sex=F age=a60 
+    color 247,205,200
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-2726-SM-4DXSQ \
+            tissue=endocervix autolysisScore=2 rnaIntegrity=6.1 batch=BP-25328 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+

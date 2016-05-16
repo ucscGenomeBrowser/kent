@@ -1,0 +1,957 @@
+    track gtexRnaSignalBrainHypothalamusSRR1356036
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1356036.hg19.bigWig
+    shortLabel brainHypo F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-12ZZX-0011-R8a-SM-5DUW8)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R8a-SM-5DUW8 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8.1 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR598862
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR598862.hg19.bigWig
+    shortLabel brainHypo F Q2AG
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-Q2AG-0011-R8A-SM-2HMK5)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R8A-SM-2HMK5 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalBrainHypothalamusSRR1319837
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1319837.hg19.bigWig
+    shortLabel brainHypo F 1313W
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-1313W-0011-R8a-SM-5DUVM)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R8a-SM-5DUVM \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1347688
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1347688.hg19.bigWig
+    shortLabel brainHypo F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13OVJ-0011-R8b-SM-5L3FS)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R8b-SM-5L3FS \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1475909
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1475909.hg19.bigWig
+    shortLabel brainHypo F 13SLX
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13SLX-0011-R8b-SM-5PNWZ)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R8b-SM-5PNWZ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR613354
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR613354.hg19.bigWig
+    shortLabel brainHypo F RU72
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-RU72-0011-R8A-SM-2TF61)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R8A-SM-2TF61 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.4 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/22/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1080172
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1080172.hg19.bigWig
+    shortLabel brainHypo F QVJO
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-QVJO-0011-R8A-SM-447C7)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R8A-SM-447C7 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1325927
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1325927.hg19.bigWig
+    shortLabel brainHypo F 13O3O
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13O3O-0011-R8b-SM-5LUAL)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R8b-SM-5LUAL \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=5.7 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1328599
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1328599.hg19.bigWig
+    shortLabel brainHypo F 145LS
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-145LS-0011-R8b-SM-5PNXA)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R8b-SM-5PNXA \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.9 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1330656
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1330656.hg19.bigWig
+    shortLabel brainHypo F 13NZ8
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13NZ8-0011-R8b-SM-5KM48)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NZ8 age=60 sex=F hardyScore=4 sample=GTEX-13NZ8-0011-R8b-SM-5KM48 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-47491 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1354013
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1354013.hg19.bigWig
+    shortLabel brainHypo F 13QIC
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13QIC-0011-R8b-SM-5O9CV)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13QIC age=60 sex=F hardyScore=2 sample=GTEX-13QIC-0011-R8b-SM-5O9CV \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1394566
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1394566.hg19.bigWig
+    shortLabel brainHypo F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-ZVZQ-0011-R8a-SM-51MR5)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R8a-SM-51MR5 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1416410
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1416410.hg19.bigWig
+    shortLabel brainHypo F 13QJC
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13QJC-0011-R8b-SM-5S2U6)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0011-R8b-SM-5S2U6 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1429725
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1429725.hg19.bigWig
+    shortLabel brainHypo F ZVT3
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-ZVT3-0011-R8b-SM-57WDJ)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R8b-SM-57WDJ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-42240 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1432823
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1432823.hg19.bigWig
+    shortLabel brainHypo F 13X6K
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-13X6K-0011-R8b-SM-5PNZ4)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R8b-SM-5PNZ4 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=9.2 batch=BP-48171 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1435901
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1435901.hg19.bigWig
+    shortLabel brainHypo F 11GSP
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-11GSP-0011-R8b-SM-5NQ79)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R8b-SM-5NQ79 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1445895
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1445895.hg19.bigWig
+    shortLabel brainHypo F X4EP
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-X4EP-0011-R8B-SM-4QASL)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHypothalamusSRR1455677
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1455677.hg19.bigWig
+    shortLabel brainHypo F 145MI
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-145MI-0011-R8b-SM-5PNZ9)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHypothalamusSRR608574
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR608574.hg19.bigWig
+    shortLabel brainHypo F NPJ7
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-NPJ7-0011-R8a-SM-2I3G2)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R8a-SM-2I3G2 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-17410 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHypothalamusSRR661995
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR661995.hg19.bigWig
+    shortLabel brainHypo F QVUS
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-QVUS-0011-R8A-SM-3GAD7)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVUS age=60 sex=F hardyScore=4 sample=GTEX-QVUS-0011-R8A-SM-3GAD7 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-22309 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=02/09/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR818270
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR818270.hg19.bigWig
+    shortLabel brainHypo F OHPN
+    longLabel GTEx RNA signal from female Brain - Hypothalamus (GTEX-OHPN-0011-R8A-SM-33HBT)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHypothalamusSRR1072504
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1072504.hg19.bigWig
+    shortLabel brainHypo M WZTO
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-WZTO-0011-R8A-SM-4E3II)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R8A-SM-4E3II \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.4 batch=BP-35959 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/11/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1355635
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1355635.hg19.bigWig
+    shortLabel brainHypo M ZAB4
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-ZAB4-0011-R8b-SM-4SOKF)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0011-R8b-SM-4SOKF \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-41209 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1401276
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1401276.hg19.bigWig
+    shortLabel brainHypo M 13NYB
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13NYB-0011-R8a-SM-5KM4R)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0011-R8a-SM-5KM4R \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1431183
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1431183.hg19.bigWig
+    shortLabel brainHypo M 11ZUS
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11ZUS-0011-R8a-SM-5BC73)
+    subGroups sex=M age=a30 
+    color 238,238,0
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0011-R8a-SM-5BC73 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8.8 batch=BP-43234 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1488562
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1488562.hg19.bigWig
+    shortLabel brainHypo M ZUA1
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-ZUA1-0011-R8b-SM-51MST)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0011-R8b-SM-51MST \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.8 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR604318
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR604318.hg19.bigWig
+    shortLabel brainHypo M NPJ8
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-NPJ8-0011-R8a-SM-2HMLG)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R8a-SM-2HMLG \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.9 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHypothalamusSRR614083
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR614083.hg19.bigWig
+    shortLabel brainHypo M R55E
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-R55E-0011-R8A-SM-2TC66)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0011-R8A-SM-2TC66 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-21968 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR818348
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR818348.hg19.bigWig
+    shortLabel brainHypo M WHSE
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-WHSE-0011-R8A-SM-3P5Z1)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0011-R8A-SM-3P5Z1 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-28281 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/30/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1071880
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1071880.hg19.bigWig
+    shortLabel brainHypo M X261
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-X261-0011-R8A-SM-4E3I5)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0011-R8A-SM-4E3I5 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.4 batch=BP-35959 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/11/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1072797
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1072797.hg19.bigWig
+    shortLabel brainHypo M X585
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-X585-0011-R8A-SM-46MUX)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0011-R8A-SM-46MUX \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-34513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1083100
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1083100.hg19.bigWig
+    shortLabel brainHypo M XOTO
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-XOTO-0011-R8A-SM-4B65J)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0011-R8A-SM-4B65J \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-34648 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/21/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1316921
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1316921.hg19.bigWig
+    shortLabel brainHypo M 13FXS
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13FXS-0011-R8a-SM-5J1MN)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0011-R8a-SM-5J1MN \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.8 batch=BP-46363 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1316963
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1316963.hg19.bigWig
+    shortLabel brainHypo M 13FLW
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13FLW-0011-R8b-SM-5J1MZ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLW age=50 sex=M hardyScore=2 sample=GTEX-13FLW-0011-R8b-SM-5J1MZ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-46364 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1317596
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1317596.hg19.bigWig
+    shortLabel brainHypo M 13O3Q
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13O3Q-0011-R8b-SM-5KM2J)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-0011-R8b-SM-5KM2J \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8.7 batch=BP-47491 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1320873
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1320873.hg19.bigWig
+    shortLabel brainHypo M 13OW6
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OW6-0011-R8a-SM-5L3GF)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0011-R8a-SM-5L3GF \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.7 batch=BP-47594 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1329334
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1329334.hg19.bigWig
+    shortLabel brainHypo M 13OW7
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OW7-0011-R8b-SM-5L3HR)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0011-R8b-SM-5L3HR \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1329835
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1329835.hg19.bigWig
+    shortLabel brainHypo M RVPU
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-RVPU-0011-R8A-SM-5SI8I)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-0011-R8A-SM-5SI8I \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-22923 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/07/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1332317
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1332317.hg19.bigWig
+    shortLabel brainHypo M 11WQK
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11WQK-0011-R8a-SM-5BC7C)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-0011-R8a-SM-5BC7C \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1334960
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1334960.hg19.bigWig
+    shortLabel brainHypo M 11H98
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11H98-0011-R8a-SM-5NQ8V)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0011-R8a-SM-5NQ8V \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.7 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1349829
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1349829.hg19.bigWig
+    shortLabel brainHypo M 13X6J
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13X6J-0011-R8b-SM-5PNUA)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0011-R8b-SM-5PNUA \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.4 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1359649
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1359649.hg19.bigWig
+    shortLabel brainHypo M 147F4
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-147F4-0011-R8b-SM-5S2UN)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-0011-R8b-SM-5S2UN \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-48815 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1394755
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1394755.hg19.bigWig
+    shortLabel brainHypo M 13FLV
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13FLV-0011-R8a-SM-5LZZE)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0011-R8a-SM-5LZZE \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1417111
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1417111.hg19.bigWig
+    shortLabel brainHypo M 13OVL
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OVL-0011-R8a-SM-5L3HH)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R8a-SM-5L3HH \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1433750
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1433750.hg19.bigWig
+    shortLabel brainHypo M 144GL
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-144GL-0011-R8a-SM-5Q5B1)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0011-R8a-SM-5Q5B1 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.2 batch=BP-48171 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1440517
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1440517.hg19.bigWig
+    shortLabel brainHypo M 131XH
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-131XH-0011-R8a-SM-5EGLL)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0011-R8a-SM-5EGLL \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-44999 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1442022
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1442022.hg19.bigWig
+    shortLabel brainHypo M 13CIG
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13CIG-0011-R8b-SM-5LZX5)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13CIG age=50 sex=M hardyScore=2 sample=GTEX-13CIG-0011-R8b-SM-5LZX5 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.7 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1471773
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1471773.hg19.bigWig
+    shortLabel brainHypo M 145MH
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-145MH-0011-R8a-SM-5PNUL)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0011-R8a-SM-5PNUL \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR602193
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR602193.hg19.bigWig
+    shortLabel brainHypo M NL4W
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-NL4W-0011-R8a-SM-2I3G4)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-NL4W age=50 sex=M hardyScore=4 sample=GTEX-NL4W-0011-R8a-SM-2I3G4 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-17409 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHypothalamusSRR613114
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR613114.hg19.bigWig
+    shortLabel brainHypo M RVPU
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-RVPU-0011-R8A-SM-2TF74)
+    subGroups sex=M age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHypothalamusSRR614539
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR614539.hg19.bigWig
+    shortLabel brainHypo M R55F
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-R55F-0011-R8A-SM-2TF4F)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-0011-R8A-SM-2TF4F \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-22466 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/14/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR655218
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR655218.hg19.bigWig
+    shortLabel brainHypo M QMR6
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-QMR6-0011-R8A-SM-32PKJ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-QMR6 age=50 sex=M hardyScore=4 sample=GTEX-QMR6-0011-R8A-SM-32PKJ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8.4 batch=BP-20819 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=12/14/2011
+
+    track gtexRnaSignalBrainHypothalamusSRR820379
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR820379.hg19.bigWig
+    shortLabel brainHypo M WVLH
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-WVLH-0011-R8A-SM-3MJFC)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0011-R8A-SM-3MJFC \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6 batch=BP-28513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1071289
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1071289.hg19.bigWig
+    shortLabel brainHypo M X4XY
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-X4XY-0011-R8A-SM-46MVC)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0011-R8A-SM-46MVC \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.1 batch=BP-32313 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1080835
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1080835.hg19.bigWig
+    shortLabel brainHypo M X4XX
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-X4XX-0011-R8B-SM-46MWM)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R8B-SM-46MWM \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-32212 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/16/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1086635
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1086635.hg19.bigWig
+    shortLabel brainHypo M XMD1
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-XMD1-0011-R8A-SM-4AT48)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0011-R8A-SM-4AT48 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-34648 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/21/2012
+
+    track gtexRnaSignalBrainHypothalamusSRR1092706
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1092706.hg19.bigWig
+    shortLabel brainHypo M XLM4
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-XLM4-0011-R8A-SM-4AT44)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHypothalamusSRR1311182
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1311182.hg19.bigWig
+    shortLabel brainHypo M 11OF3
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11OF3-0011-R8b-SM-57WCS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-0011-R8b-SM-57WCS \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1316535
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1316535.hg19.bigWig
+    shortLabel brainHypo M 13OVH
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OVH-0011-R8b-SM-5MR35)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-0011-R8b-SM-5MR35 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.1 batch=BP-47087 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1317494
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1317494.hg19.bigWig
+    shortLabel brainHypo M 13OW8
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OW8-0011-R8a-SM-5L3G5)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0011-R8a-SM-5L3G5 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1319970
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1319970.hg19.bigWig
+    shortLabel brainHypo M 1399T
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-1399T-0011-R8b-SM-5IJD8)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0011-R8b-SM-5IJD8 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-45525 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1320342
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1320342.hg19.bigWig
+    shortLabel brainHypo M 12WSM
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-12WSM-0011-R8a-SM-5DUWJ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0011-R8a-SM-5DUWJ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-44878 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1320916
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1320916.hg19.bigWig
+    shortLabel brainHypo M 11WQC
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11WQC-0011-R8b-SM-57WCH)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0011-R8b-SM-57WCH \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-43316 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/09/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1325332
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1325332.hg19.bigWig
+    shortLabel brainHypo M 13CF2
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13CF2-0011-R8b-SM-5IJCX)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-0011-R8b-SM-5IJCX \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8.2 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1333587
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1333587.hg19.bigWig
+    shortLabel brainHypo M 11ONC
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-11ONC-0011-R8b-SM-5NQ87)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-0011-R8b-SM-5NQ87 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1334717
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1334717.hg19.bigWig
+    shortLabel brainHypo M 14ASI
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-14ASI-0011-R8b-SM-5S2UB)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-0011-R8b-SM-5S2UB \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-48815 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1334847
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1334847.hg19.bigWig
+    shortLabel brainHypo M 13OW5
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13OW5-0011-R8a-SM-5L3GQ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0011-R8a-SM-5L3GQ \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-47526 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1336069
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1336069.hg19.bigWig
+    shortLabel brainHypo M ZDXO
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-ZDXO-0011-R8a-SM-4WWD7)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-0011-R8a-SM-4WWD7 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.8 batch=BP-41252 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1346670
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1346670.hg19.bigWig
+    shortLabel brainHypo M 13JVG
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13JVG-0011-R8a-SM-5KM3E)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0011-R8a-SM-5KM3E \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1382532
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1382532.hg19.bigWig
+    shortLabel brainHypo M 1445S
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-1445S-0011-R8a-SM-5PNWX)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0011-R8a-SM-5PNWX \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7 batch=BP-48302 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1394343
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1394343.hg19.bigWig
+    shortLabel brainHypo M ZF28
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-ZF28-0011-R8a-SM-4WWFW)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0011-R8a-SM-4WWFW \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.2 batch=BP-41239 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1421198
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1421198.hg19.bigWig
+    shortLabel brainHypo M YJ89
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-YJ89-0011-R8b-SM-4SOK8)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0011-R8b-SM-4SOK8 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1429162
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1429162.hg19.bigWig
+    shortLabel brainHypo M 13IVO
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13IVO-0011-R8a-SM-5L3DY)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0011-R8a-SM-5L3DY \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-46363 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1431345
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1431345.hg19.bigWig
+    shortLabel brainHypo M 13X6I
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13X6I-0011-R8a-SM-5PNZF)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R8a-SM-5PNZF \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1435536
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1435536.hg19.bigWig
+    shortLabel brainHypo M 13SLW
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13SLW-0011-R8b-SM-5SI64)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R8b-SM-5SI64 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=8 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1446092
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1446092.hg19.bigWig
+    shortLabel brainHypo M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13RTJ-0011-R8b-SM-5O9DL)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R8b-SM-5O9DL \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1446892
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1446892.hg19.bigWig
+    shortLabel brainHypo M 13NZA
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13NZA-0011-R8b-SM-5KM2Q)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0011-R8b-SM-5KM2Q \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1486496
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1486496.hg19.bigWig
+    shortLabel brainHypo M 14753
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-14753-0011-R8b-SM-5S2U1)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0011-R8b-SM-5S2U1 \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-48171 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHypothalamusSRR1488349
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1488349.hg19.bigWig
+    shortLabel brainHypo M 13NYS
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13NYS-0011-R8a-SM-5MR5H)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R8a-SM-5MR5H \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR1490613
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR1490613.hg19.bigWig
+    shortLabel brainHypo M 13PDP
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-13PDP-0011-R8b-SM-5O9CS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13PDP age=60 sex=M hardyScore=4 sample=GTEX-13PDP-0011-R8b-SM-5O9CS \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-47673 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalBrainHypothalamusSRR614443
+    parent gtexRnaSignalBrainHypothalamus off
+    type bigWig
+    bigDataUrl brainHypothalamus/gtexRnaSignalSRR614443.hg19.bigWig
+    shortLabel brainHypo M N7MS
+    longLabel GTEx RNA signal from male Brain - Hypothalamus (GTEX-N7MS-0011-R8a-SM-2YUMK)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0011-R8a-SM-2YUMK \
+            tissue=brainHypothalamus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-17395 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/05/2011
+
