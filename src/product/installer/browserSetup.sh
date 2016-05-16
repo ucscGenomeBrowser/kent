@@ -1295,9 +1295,13 @@ function installBrowser ()
 # GENOME DOWNLOAD: mysql and /gbdb
 function downloadGenomes
 {
-    clear
     DBS=$*
+    if [ "$DBS" -eq "" ] ; then
+        echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
+    clear
     echo2
     echo2 Downloading databases $DBS plus hgFixed/proteome/go from the UCSC download server
     echo2
@@ -1325,9 +1329,11 @@ function downloadGenomes
     echo2
     df -h  | awk '{print "| "$0}'
     echo2 
-    echo2 If your current disk space is not sufficient, you can mount
-    echo2 'network storage servers (e.g. NFS) or add cloud provider storage'
+    echo2 If your current disk space is not sufficient, you can press ctrl-c now and 
+    echo2 use a 'network storage server volume (e.g. NFS) or add cloud provider storage'
     echo2 '(e.g. Openstack Cinder Volumes, Amazon EBS, Azure Storage)'
+    echo2 Please refer to the documentation of your cloud provider or storage
+    echo2 system on how to add more storage to this machine.
     echo2
     echo2 When you are done with the mount:
     echo2 Move the contents of $GBDBDIR and $MYSQLDIR onto these volumes and
@@ -1338,7 +1344,7 @@ function downloadGenomes
     echo2 "    mv /var/lib/mysql /bigData/mysql && ln -s /bigData/mysql /var/lib/mysql"
     echo2
     echo2 You can interrupt this script with CTRL-C now, add more space and rerun the 
-    echo2 script later with the same parameters.
+    echo2 script later with the same parameters to start the download.
     echo2
     waitKey
 
@@ -1392,7 +1398,7 @@ function downloadGenomes
 function stopMysql
 {
     if [ -f /etc/init.d/mysql ]; then 
-            service mysqld stop
+            service mysql stop
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld stop
     else
@@ -1404,7 +1410,7 @@ function stopMysql
 function startMysql
 {
     if [ -f /etc/init.d/mysql ]; then 
-            service mysqld start
+            service mysql start
     elif [ -f /etc/init.d/mysqld ]; then 
             service mysqld start
     else
@@ -1416,9 +1422,13 @@ function startMysql
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
 {
-    clear
     DBS=$*
+    if [ "$DBS" -eq "" ] ; then
+        echo2 Argument error: the '"minimal"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
+    clear
     echo2
     echo2 Downloading minimal tables for databases $DBS 
 
@@ -1544,7 +1554,7 @@ while getopts ":baut:hof" opt; do
           ONLYGENOMES=0
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
-          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
+          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include snp142Common* --include=snp128* --include=gencode* --include rmsk* --include */ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"

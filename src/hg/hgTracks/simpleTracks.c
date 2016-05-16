@@ -141,6 +141,7 @@
 
 #include "trackVersion.h"
 #include "genbank.h"
+#include "bedTabix.h"
 
 #define CHROM_COLORS 26
 
@@ -13636,6 +13637,24 @@ else if (sameWord(type, "bedLogR"))
     //track->bedSize = 10;
     }
     */
+else if (sameWord(type, "bedTabix"))
+    {
+    tdb->canPack = TRUE;
+    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "longTabix"))
+    {
+    char *words[2];
+    words[0] = type;
+    words[1] = "5";
+    tdb->canPack = TRUE;
+    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    connectMethods(track, tdb);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);
