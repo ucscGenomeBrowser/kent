@@ -45,11 +45,11 @@ void sendFile(struct sqlConnection *conn, char* acc)
 {
 char *userName = wikiLinkUserName();
 if (userName==NULL)
-    errExit("You have to <a href='../cgi-bin/hgLogin'>log in</a>before you can download this file.");
+    errExit("Please <a href='../cgi-bin/hgLogin'>log in</a> before downloading files from this system.");
 
 user = cdwUserFromUserName(conn, userName);
 if (userName==NULL)
-    errExit("There is no CDW account for the genome browser user account that is currently logged in.");
+    errExit("There is no CDW account for the Genome Browser account that is currently logged in.");
 
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
@@ -64,6 +64,7 @@ if (fileName==NULL)
 
 if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
     {
+    // html files are shown directly in the internet browser, not downloaded
     if (sameWord(vf->format, "html"))
         printf("Content-Type: text/html\n");
     else
