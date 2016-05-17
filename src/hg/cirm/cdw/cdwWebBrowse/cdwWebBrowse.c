@@ -1351,6 +1351,7 @@ void doMiddle()
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
 char *userName = wikiLinkUserName();
 if (userName != NULL)
+    user = cdwUserFromUserName(userName);
     {
     /* Look up email vial hgCentral table */
     struct sqlConnection *cc = hConnectCentral();
