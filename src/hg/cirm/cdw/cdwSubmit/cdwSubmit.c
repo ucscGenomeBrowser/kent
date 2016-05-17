@@ -932,7 +932,8 @@ boolean dataSet = FALSE;
 FILE *f = mustOpen(manifestFile,"r");
 char header[2048]; 
 mustGetLine(f, header, 2048); 
-// Look for data_set_id
+// Look for data_set_id in the manifestFile, if it is there then override
+// the meta value for the rest of the submit pipeline
 struct slName *fields = charSepToSlNames(header, '\t'); 
 char *requiredFields[3];  
 
@@ -940,7 +941,7 @@ if (slNameInList(fields, "data_set_id"))
     {
     dataSet = TRUE; 
     if (slNameInList(fields,"meta"))
-	errAbort("Please provide either a meta or data_set_id in the manifest file"); 
+	errAbort("Please provide either a meta or data_set_id in the manifest file."); 
     requiredFields[0] = "file";
     requiredFields[1] = "format";
     requiredFields[2] = "data_set_id";
@@ -967,14 +968,19 @@ verbose(1, "Got %d fields and %d rows in %s\n",
     table->fieldCount, slCount(table->rowList), manifestFile);
 struct tagStorm *tagStorm = tagStormFromFile(metaFile);
 struct hash *metaHash; 
+/* Set the hash to key on the data_set_id, and point to a slPair that 
+ * holds all the tags from the top stanza */ 
 if (dataSet)
     {
-    metaHash = tagStormIndex(tagStorm, "data_set_id"); 
-    assert(metaHash->elCount = 1);
+    struct hash *hash = hashNew(0);
+    char *dataSetId = slPairFindVal(tagStorm->forest->tagList, "data_set_id");
+    hashAdd(hash, dataSetId, tagStorm->forest);
+    metaHash = hash;
     }
 else
     metaHash = tagStormUniqueIndex(tagStorm, "meta"); 
-verbose(1, "Got %d items in metaHash\n", metaHash->elCount); // Could assert that there is only 1 item as a sanity check
+verbose(1, "Got %d items in metaHash\n", metaHash->elCount);
+
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
 checkManifestAndMetadata(table, fileIx, formatIx, metaIx, enrichedInIx,

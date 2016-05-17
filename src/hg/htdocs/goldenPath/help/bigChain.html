@@ -78,6 +78,7 @@ hgLoadChain -noBin -test hg38 bigChain chr22_KI270731v1_random.hg38.mm10.rbest.c
 bedToBigBed -type=bed6+5 -tab -as=bigChain.as chr22_KI270731v1_random.hg38.mm10.rbest.bigChain chrom.sizes bigChain.bb
  awk 'BEGIN {OFS="\t"} {print $1, $2, $3, $5, $4}' link.tab | sort -k1,1 -k2,2n  > bigChain.bigLink
   bedToBigBed -type=bed4+1 -as=bigLink.as bigChain.bigLink chrom.sizes bigChain.link.bb
+</pre>
 <OL>
  <LI> Create a <tt>bed6+6</tt> bigChain format file that has the first twelve fields
   described by a normal BED file as described <A HREF="../../FAQ/FAQformat.html#format1">here</A>.
