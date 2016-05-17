@@ -4831,9 +4831,20 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
 boolean parentLevel = isNameAtParentLevel(tdb,varName);
 boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
+
+//char *optVal = "on";
+//if (! option)
+    //optVal = "off";
+//printf("<input type=\"CHECKBOX\" name=\"%s\" value=\"on\">\n", varName)
+
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
+printf("<DIV ID=\"densGraphOptions\" STYLE=\"display:none\">\n");
 wigCfgUi(cart,tdb,name,title,TRUE);
+printf("</DIV>\n\n");
+printf("<script>\n");
+printf("   $(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n", varName);
+printf("</script>\n\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)
