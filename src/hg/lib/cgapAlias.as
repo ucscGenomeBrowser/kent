@@ -1,6 +1,6 @@
 table cgapAlias
 "CGAP alias"
    (
-   string cgapID; 	"CGAP patheay ID"
+   string cgapID; 	"CGAP pathway ID"
    string alias; 	"Gene symbol or mRNA"
    )
