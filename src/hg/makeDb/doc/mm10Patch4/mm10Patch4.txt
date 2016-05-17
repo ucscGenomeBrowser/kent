@@ -545,6 +545,108 @@ VALUES ("GRCm38.p4", "haplotypes", 198);'
 
     ln -s `pwd`/mm10Patch4.2bit /gbdb/mm10Patch4
 
+#########################################################################
+# ucscToINSDC table/track (DONE - 2016-04-14 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/mm10Patch4/bed/ucscToINSDC
+    cd /hive/data/genomes/mm10Patch4/bed/ucscToINSDC
+
+    # special script to get the names directly out of the assembly report:
+    ./processReport.pl  | sort > ucscToINSDC.txt
+
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+    # there is no name for chrM/NC_001323.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" /hive/data/genomes/mm10/bed/mm10Patch4/genbank/GCA_000001635.6_GRCm38.p4_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $1, $2}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout (except for insdc.refseq.txt):
+    wc -l *
+    # 196 insdc.refseq.txt
+    # 130 insdcToUcsc.txt
+    # 130 name.coordinate.tab
+    # 130 ucscToINSDC.bed
+    # 130 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab mm10Patch4 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords mm10Patch4
+    # should cover %100 entirely:
+    featureBits -countGaps mm10Patch4 ucscToINSDC
+    # 72697066 bases of 72697066 (100.000%) in intersection
+
+    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
+      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
+        | cut -f1-4 > ucscToRefSeq.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab mm10Patch4 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    checkTableCoords  mm10Patch4 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps mm10Patch4 ucscToRefSeq
+    # 72697066 bases of 72697066 (100.000%) in intersection
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-05-17 - Hiram)
+
+    mkdir /hive/data/genomes/mm10Patch4/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/mm10Patch4/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/mm10Patch4/mm10Patch4.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku mm10Patch4) > do.log 2>&1
+    # real    1m16.641s
+
+    cat fb.mm10Patch4.cpgIslandExtUnmasked.txt
+    # 563715 bases of 71430661 (0.789%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-05-17 - Hiram)
+    mkdir /hive/data/genomes/mm10Patch4/bed/cpgIslands
+    cd /hive/data/genomes/mm10Patch4/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku mm10Patch4) > do.log 2>&1
+    # real    1m14.891s
+
+    cat fb.mm10Patch4.cpgIslandExt.txt
+    # 558038 bases of 71430661 (0.781%) in intersection
+
+##############################################################################
+# cytoBandIdeo - (DONE - 2016-05-17 - Hiram)
+    mkdir /hive/data/genomes/mm10Patch4/bed/cytoBand
+    cd /hive/data/genomes/mm10Patch4/bed/cytoBand
+    makeCytoBandIdeo.csh mm10Patch4
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-04-14 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/mm10Patch4/bed/microsat
+    cd /hive/data/genomes/mm10Patch4/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed mm10Patch4 microsat microsat.bed
+    # Read 2030 elements of size 4 from microsat.bed
+
 #############################################################################
 # lastz alignments to mm10 (DONE - 2016-05-17 - Hiram)
 #############################################################################
