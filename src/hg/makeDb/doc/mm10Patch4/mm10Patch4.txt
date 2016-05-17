@@ -1032,8 +1032,8 @@ hgLoadSeq -drop -seqTbl=seqMm10Patch4 -extFileTbl=extMm10Patch4 mm10 \
 # recent patch version.
 
 cd /hive/data/genomes/mm10/bed/mm10Patch4
-${HOME}/kent/src/hg/makeDb/doc/mm10/patchDescr.pl \
-    > ${HOME}/kent/src/hg/makeDb/trackDb/human/mm10/mm10Patch4.html
+  ${HOME}/kent/src/hg/makeDb/doc/mm10Patch4/patchDescr.pl \
+    > ${HOME}/kent/src/hg/makeDb/trackDb/mouse/mm10/mm10Patch4.html
 
 mkdir /hive/data/genomes/mm10/bed/mm10Patch4/downloads
 cd /hive/data/genomes/mm10/bed/mm10Patch4/downloads
@@ -1045,3 +1045,8 @@ md5sum * > md5sum.txt
 # copy README.txt from previous patch and edit as needed - replace the
 # patch description lines with the output of running
 # /hive/data/genomes/mm10/bed/mm10Patch4/readmeLines.pl
+
+/cluster/home/hiram/kent/src/hg/makeDb/doc/mm10Patch4/readmeLines.pl \
+    genbank/GCA_000001635.6_GRCm38.p4_assembly_report.txt \
+    genbank/GCA_000001635.6_GRCm38.p4_assembly_regions.txt \
+     patchLocations.bed new.sequences.list
