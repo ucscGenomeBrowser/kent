@@ -4,10 +4,10 @@ shortLabel 5-way Mammal
 longLabel Multiz Alignment & Conservation (5 Species)
 subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements 
 dragAndDrop subTracks
-visibility hide
+visibility full
 priority 1
 type bed 4
-group consGeno
+group compGeno
 
     track cons5wayViewalign
     shortLabel Multiz Alignments
@@ -30,7 +30,7 @@ group consGeno
         type wigMaf 0.0 1.0
         speciesCodonDefault galVar
         speciesGroups Mammal
-        sGroup_Mammal tupBel1 hg38 cavPor3 mm10
+        sGroup_Mammal tupBel1 hg38 mm10 cavPor3
         itemFirstCharCase noChange
         treeImage phylo/galVar1_5way.png
         priority 100
@@ -45,7 +45,7 @@ group consGeno
     viewLimitsMax -4.611:0.934
 
         track phyloP5way
-        subTrack cons5wayViewphyloP off
+        subTrack cons5wayViewphyloP on
         subGroups view=phyloP
         shortLabel 5 Mammals Cons
         longLabel 5 mammal Basewise Conservation by PhyloP
@@ -69,7 +69,7 @@ group consGeno
     subTrack cons5way
 
         track phastCons5way
-        subTrack cons5wayViewphastcons off
+        subTrack cons5wayViewphastcons on
         subGroups view=phastcons
         shortLabel 5 Mammals Cons
         longLabel 5 mammals conservation by PhastCons
