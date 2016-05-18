@@ -71,6 +71,9 @@ char *cdwTempDirForToday(char dir[PATH_LEN]);
 long long cdwNow();
 /* Return current time in seconds since Epoch. */
 
+struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName);
+/* Return user associated with that username or NULL if not found */
+
 struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with that email or NULL if not found */
 

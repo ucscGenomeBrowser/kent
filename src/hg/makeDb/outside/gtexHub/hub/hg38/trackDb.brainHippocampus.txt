@@ -1,0 +1,954 @@
+    track gtexRnaSignalBrainHippocampusSRR1318067
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1318067.hg38.bigWig
+    shortLabel brainHipp F 13JUV
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13JUV-0011-R1a-SM-5LZY4)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R1a-SM-5LZY4 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.5 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1473590
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1473590.hg38.bigWig
+    shortLabel brainHipp F 13FTY
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13FTY-0011-R1a-SM-5LZXE)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13FTY age=40 sex=F hardyScore=2 sample=GTEX-13FTY-0011-R1a-SM-5LZXE \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1475969
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1475969.hg38.bigWig
+    shortLabel brainHipp F YFC4
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-YFC4-0011-R1a-SM-4V6EH)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R1a-SM-4V6EH \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8.6 batch=BP-40981 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR602169
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR602169.hg38.bigWig
+    shortLabel brainHipp F Q2AG
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-Q2AG-0011-R1A-SM-2HMJI)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R1A-SM-2HMJI \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8.3 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalBrainHippocampusSRR1322768
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1322768.hg38.bigWig
+    shortLabel brainHipp F 11ZVC
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-11ZVC-0011-R1b-SM-5BC6M)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11ZVC age=50 sex=F hardyScore=2 sample=GTEX-11ZVC-0011-R1b-SM-5BC6M \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-43234 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1323196
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1323196.hg38.bigWig
+    shortLabel brainHipp F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13OVJ-0011-R1b-SM-5L3I6)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R1b-SM-5L3I6 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1348339
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1348339.hg38.bigWig
+    shortLabel brainHipp F 1313W
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-1313W-0011-R1b-SM-5EQ4A)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R1b-SM-5EQ4A \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-44999 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1443979
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1443979.hg38.bigWig
+    shortLabel brainHipp F ZE7O
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-ZE7O-0011-R1a-SM-57WDM)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R1a-SM-57WDM \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.7 batch=BP-41239 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1458134
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1458134.hg38.bigWig
+    shortLabel brainHipp F RNOR
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-RNOR-0011-R1A-SM-5SI8F)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0011-R1A-SM-5SI8F \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-22572 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1319539
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1319539.hg38.bigWig
+    shortLabel brainHipp F 131YS
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-131YS-0011-R1a-SM-5DUXC)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0011-R1a-SM-5DUXC \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1323536
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1323536.hg38.bigWig
+    shortLabel brainHipp F 145LS
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-145LS-0011-R1b-SM-5PNUP)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R1b-SM-5PNUP \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1329090
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1329090.hg38.bigWig
+    shortLabel brainHipp F 12WSD
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-12WSD-0011-R1b-SM-5LZVY)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0011-R1b-SM-5LZVY \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-44020 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1348424
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1348424.hg38.bigWig
+    shortLabel brainHipp F 13QIC
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13QIC-0011-R1a-SM-5O9CJ)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13QIC age=60 sex=F hardyScore=2 sample=GTEX-13QIC-0011-R1a-SM-5O9CJ \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1355373
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1355373.hg38.bigWig
+    shortLabel brainHipp F 12WSB
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-12WSB-0011-R1b-SM-5P9EY)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0011-R1b-SM-5P9EY \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.1 batch=BP-43965 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1368964
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1368964.hg38.bigWig
+    shortLabel brainHipp F 11ZTS
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-11ZTS-0011-R1a-SM-5BC71)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-0011-R1a-SM-5BC71 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.9 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1389218
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1389218.hg38.bigWig
+    shortLabel brainHipp F 13NZ8
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13NZ8-0011-R1b-SM-5KM3V)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR1398411
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1398411.hg38.bigWig
+    shortLabel brainHipp F 13O3O
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-13O3O-0011-R1b-SM-5KM2K)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R1b-SM-5KM2K \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1485167
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1485167.hg38.bigWig
+    shortLabel brainHipp F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-ZVZQ-0011-R1a-SM-57WBU)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R1a-SM-57WBU \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.2 batch=BP-42240 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1498616
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1498616.hg38.bigWig
+    shortLabel brainHipp F N7MT
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-N7MT-0011-R1a-SM-5SI7S)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0011-R1a-SM-5SI7S \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7 batch=BP-17394 center=D1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHippocampusSRR613735
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR613735.hg38.bigWig
+    shortLabel brainHipp F QVJO
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-QVJO-0011-R1A-SM-2S1QI)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R1A-SM-2S1QI \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainHippocampusSRR656564
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR656564.hg38.bigWig
+    shortLabel brainHipp F TSE9
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-TSE9-0011-R1A-SM-3DB7E)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0011-R1A-SM-3DB7E \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-25400 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=05/16/2012
+
+    track gtexRnaSignalBrainHippocampusSRR810571
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR810571.hg38.bigWig
+    shortLabel brainHipp F X4EP
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-X4EP-0011-R1A-SM-3P624)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR817758
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR817758.hg38.bigWig
+    shortLabel brainHipp F NPJ7
+    longLabel GTEx RNA signal from female Brain - Hippocampus (GTEX-NPJ7-0011-R1a-SM-3GACT)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R1a-SM-3GACT \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-17410 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHippocampusSRR1362643
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1362643.hg38.bigWig
+    shortLabel brainHipp M 13RTL
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13RTL-0011-R1a-SM-5PNZ8)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13RTL age=40 sex=M hardyScore=4 sample=GTEX-13RTL-0011-R1a-SM-5PNZ8 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6 batch=BP-48069 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1377927
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1377927.hg38.bigWig
+    shortLabel brainHipp M 12WSE
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-12WSE-0011-R1b-SM-5GU4V)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-12WSE age=20 sex=M hardyScore=2 sample=GTEX-12WSE-0011-R1b-SM-5GU4V \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.7 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1380680
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1380680.hg38.bigWig
+    shortLabel brainHipp M 13NYB
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13NYB-0011-R1b-SM-5KM4F)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0011-R1b-SM-5KM4F \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1446762
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1446762.hg38.bigWig
+    shortLabel brainHipp M ZUA1
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-ZUA1-0011-R1a-SM-4YCE2)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0011-R1a-SM-4YCE2 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.9 batch=BP-41252 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1472770
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1472770.hg38.bigWig
+    shortLabel brainHipp M NPJ8
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-NPJ8-0011-R1a-SM-5SI8B)
+    subGroups sex=M age=a40 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR598768
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR598768.hg38.bigWig
+    shortLabel brainHipp M P44G
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-P44G-0011-R1A-SM-2I3FE)
+    subGroups sex=M age=a30 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR600724
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR600724.hg38.bigWig
+    shortLabel brainHipp M NPJ8
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-NPJ8-0011-R1a-SM-2HMLC)
+    subGroups sex=M age=a40 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR661779
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR661779.hg38.bigWig
+    shortLabel brainHipp M PVOW
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-PVOW-0011-R1A-SM-32PL6)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-PVOW age=40 sex=M hardyScore=2 sample=GTEX-PVOW-0011-R1A-SM-32PL6 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-19400 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/14/2011
+
+    track gtexRnaSignalBrainHippocampusSRR662007
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR662007.hg38.bigWig
+    shortLabel brainHipp M T5JC
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-T5JC-0011-R1A-SM-32PM6)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0011-R1A-SM-32PM6 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8.3 batch=BP-24011 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/10/2012
+
+    track gtexRnaSignalBrainHippocampusSRR818086
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR818086.hg38.bigWig
+    shortLabel brainHipp M P44H
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-P44H-0011-R1A-SM-3NM8J)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0011-R1A-SM-3NM8J \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-19250 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainHippocampusSRR819370
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR819370.hg38.bigWig
+    shortLabel brainHipp M WZTO
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-WZTO-0011-R1B-SM-3NMAR)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R1B-SM-3NMAR \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-30585 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalBrainHippocampusSRR821690
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR821690.hg38.bigWig
+    shortLabel brainHipp M NPJ8
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-NPJ8-0011-R1a-SM-33HCB)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R1a-SM-33HCB \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHippocampusSRR1088389
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1088389.hg38.bigWig
+    shortLabel brainHipp M X585
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-X585-0011-R1B-SM-46MVE)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0011-R1B-SM-46MVE \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8 batch=BP-32313 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1096851
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1096851.hg38.bigWig
+    shortLabel brainHipp M XOTO
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-XOTO-0011-R1B-SM-4B65C)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0011-R1B-SM-4B65C \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-34615 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1337431
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1337431.hg38.bigWig
+    shortLabel brainHipp M 13FHP
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13FHP-0011-R1b-SM-5K7XL)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0011-R1b-SM-5K7XL \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-46364 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1354689
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1354689.hg38.bigWig
+    shortLabel brainHipp M 144GL
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-144GL-0011-R1a-SM-5PNZ5)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0011-R1a-SM-5PNZ5 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-48171 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1357021
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1357021.hg38.bigWig
+    shortLabel brainHipp M 13FLW
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13FLW-0011-R1b-SM-5LZX2)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLW age=50 sex=M hardyScore=2 sample=GTEX-13FLW-0011-R1b-SM-5LZX2 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1358501
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1358501.hg38.bigWig
+    shortLabel brainHipp M 13OW6
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13OW6-0011-R1a-SM-5L3HQ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0011-R1a-SM-5L3HQ \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-47491 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1362888
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1362888.hg38.bigWig
+    shortLabel brainHipp M 13FXS
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13FXS-0011-R1a-SM-5K7U6)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0011-R1a-SM-5K7U6 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-46363 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1375308
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1375308.hg38.bigWig
+    shortLabel brainHipp M 131XH
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-131XH-0011-R1a-SM-5DUWA)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0011-R1a-SM-5DUWA \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=9.2 batch=BP-44932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1378155
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1378155.hg38.bigWig
+    shortLabel brainHipp M WVLH
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-WVLH-0011-R1A-SM-4MVOK)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0011-R1A-SM-4MVOK \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-28281 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/30/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1408113
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1408113.hg38.bigWig
+    shortLabel brainHipp M 145LU
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-145LU-0011-R1a-SM-5Q5CE)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0011-R1a-SM-5Q5CE \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.8 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1430972
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1430972.hg38.bigWig
+    shortLabel brainHipp M 13OW7
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13OW7-0011-R1b-SM-5L3HF)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0011-R1b-SM-5L3HF \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1475386
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1475386.hg38.bigWig
+    shortLabel brainHipp M 13112
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13112-0011-R1b-SM-5HL7K)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0011-R1b-SM-5HL7K \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-45053 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1476407
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1476407.hg38.bigWig
+    shortLabel brainHipp M 13OVL
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13OVL-0011-R1a-SM-5L3H5)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R1a-SM-5L3H5 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1476676
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1476676.hg38.bigWig
+    shortLabel brainHipp M 145MH
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-145MH-0011-R1b-SM-5PNWY)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0011-R1b-SM-5PNWY \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1490524
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1490524.hg38.bigWig
+    shortLabel brainHipp M 12WSH
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-12WSH-0011-R1a-SM-5GU5V)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0011-R1a-SM-5GU5V \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6 batch=BP-43747 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainHippocampusSRR660969
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR660969.hg38.bigWig
+    shortLabel brainHipp M T6MN
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-T6MN-0011-R1A-SM-32QOY)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0011-R1A-SM-32QOY \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.4 batch=BP-24029 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/11/2012
+
+    track gtexRnaSignalBrainHippocampusSRR819134
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR819134.hg38.bigWig
+    shortLabel brainHipp M WL46
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-WL46-0011-R1A-SM-3LK6M)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0011-R1A-SM-3LK6M \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1093773
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1093773.hg38.bigWig
+    shortLabel brainHipp M XMD1
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-XMD1-0011-R1A-SM-4AT4C)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0011-R1A-SM-4AT4C \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-34513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1097978
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1097978.hg38.bigWig
+    shortLabel brainHipp M NL3H
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-NL3H-0011-R1a-SM-48TDJ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NL3H age=60 sex=M hardyScore=3 sample=GTEX-NL3H-0011-R1a-SM-48TDJ \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.7 batch=BP-29430 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalBrainHippocampusSRR1319158
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1319158.hg38.bigWig
+    shortLabel brainHipp M 14ASI
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-14ASI-0011-R1b-SM-5S2TY)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-0011-R1b-SM-5S2TY \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-48815 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1325964
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1325964.hg38.bigWig
+    shortLabel brainHipp M 1212Z
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-1212Z-0011-R1b-SM-5BC72)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0011-R1b-SM-5BC72 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-43234 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1328035
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1328035.hg38.bigWig
+    shortLabel brainHipp M 144GO
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-144GO-0011-R1a-SM-5PNWO)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-144GO age=60 sex=M hardyScore=4 sample=GTEX-144GO-0011-R1a-SM-5PNWO \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.1 batch=BP-48227 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1334440
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1334440.hg38.bigWig
+    shortLabel brainHipp M 139T8
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-139T8-0011-R1a-SM-5HL75)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0011-R1a-SM-5HL75 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.6 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1335047
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1335047.hg38.bigWig
+    shortLabel brainHipp M 13NZA
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13NZA-0011-R1b-SM-5LUAF)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0011-R1b-SM-5LUAF \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.7 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1338584
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1338584.hg38.bigWig
+    shortLabel brainHipp M 13OW5
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13OW5-0011-R1b-SM-5L3GE)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0011-R1b-SM-5L3GE \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-47526 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1358826
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1358826.hg38.bigWig
+    shortLabel brainHipp M 13FHO
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13FHO-0011-R1b-SM-5KLZG)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0011-R1b-SM-5KLZG \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.2 batch=BP-46364 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1362464
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1362464.hg38.bigWig
+    shortLabel brainHipp M 13SLW
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13SLW-0011-R1a-SM-5S2W7)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R1a-SM-5S2W7 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1366579
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1366579.hg38.bigWig
+    shortLabel brainHipp M Y8DK
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-Y8DK-0011-R1A-SM-4RGLO)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0011-R1A-SM-4RGLO \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-40979 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1370797
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1370797.hg38.bigWig
+    shortLabel brainHipp M 13X6I
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13X6I-0011-R1b-SM-5PNZC)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R1b-SM-5PNZC \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1383612
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1383612.hg38.bigWig
+    shortLabel brainHipp M 13PDP
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13PDP-0011-R1a-SM-5PNX5)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13PDP age=60 sex=M hardyScore=4 sample=GTEX-13PDP-0011-R1a-SM-5PNX5 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.1 batch=BP-48180 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1387032
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1387032.hg38.bigWig
+    shortLabel brainHipp M ZF28
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-ZF28-0011-R1a-SM-4WWD1)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0011-R1a-SM-4WWD1 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.1 batch=BP-41299 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1388305
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1388305.hg38.bigWig
+    shortLabel brainHipp M 139TT
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-139TT-0011-R1a-SM-5LZVD)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0011-R1a-SM-5LZVD \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.9 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1404601
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1404601.hg38.bigWig
+    shortLabel brainHipp M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13RTJ-0011-R1a-SM-5O9D9)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R1a-SM-5O9D9 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.6 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainHippocampusSRR1414424
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1414424.hg38.bigWig
+    shortLabel brainHipp M 11ONC
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-11ONC-0011-R1a-SM-57WD4)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-0011-R1a-SM-57WD4 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=5.9 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1432067
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1432067.hg38.bigWig
+    shortLabel brainHipp M 13N2G
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13N2G-0011-R1b-SM-5MR3G)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0011-R1b-SM-5MR3G \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1440082
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1440082.hg38.bigWig
+    shortLabel brainHipp M 13OW8
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13OW8-0011-R1a-SM-5L3HI)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0011-R1a-SM-5L3HI \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1440356
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1440356.hg38.bigWig
+    shortLabel brainHipp M 13NYS
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13NYS-0011-R1b-SM-5MR55)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R1b-SM-5MR55 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.8 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1442195
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1442195.hg38.bigWig
+    shortLabel brainHipp M 12WSM
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-12WSM-0011-R1a-SM-5LZW6)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0011-R1a-SM-5LZW6 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.3 batch=BP-44020 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1472323
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1472323.hg38.bigWig
+    shortLabel brainHipp M ZDXO
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-ZDXO-0011-R1a-SM-4WKF4)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainHippocampusSRR1473979
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1473979.hg38.bigWig
+    shortLabel brainHipp M 13G51
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13G51-0011-R1a-SM-5LZYR)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-0011-R1a-SM-5LZYR \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1475803
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1475803.hg38.bigWig
+    shortLabel brainHipp M 13CF2
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-13CF2-0011-R1a-SM-5LZY1)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-0011-R1a-SM-5LZY1 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=6.5 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1476186
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1476186.hg38.bigWig
+    shortLabel brainHipp M 1399T
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-1399T-0011-R1b-SM-5DUWN)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0011-R1b-SM-5DUWN \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.8 batch=BP-44932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1487295
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1487295.hg38.bigWig
+    shortLabel brainHipp M YJ89
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-YJ89-0011-R1a-SM-4RGLS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0011-R1a-SM-4RGLS \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8 batch=BP-40981 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainHippocampusSRR1488367
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR1488367.hg38.bigWig
+    shortLabel brainHipp M 12WSF
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-12WSF-0011-R1a-SM-5DUVI)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-12WSF age=70 sex=M hardyScore=4 sample=GTEX-12WSF-0011-R1a-SM-5DUVI \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=8.2 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalBrainHippocampusSRR608456
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR608456.hg38.bigWig
+    shortLabel brainHipp M N7MS
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-N7MS-0011-R1a-SM-2HMJG)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0011-R1a-SM-2HMJG \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.3 batch=BP-17395 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainHippocampusSRR817856
+    parent gtexRnaSignalBrainHippocampus off
+    type bigWig
+    bigDataUrl brainHippocampus/gtexRnaSignalSRR817856.hg38.bigWig
+    shortLabel brainHipp M X4XX
+    longLabel GTEx RNA signal from male Brain - Hippocampus (GTEX-X4XX-0011-R1B-SM-3P622)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R1B-SM-3P622 \
+            tissue=brainHippocampus autolysisScore=-1 rnaIntegrity=7.8 batch=BP-31773 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+

@@ -1,0 +1,2757 @@
+    track gtexRnaSignalWholeBloodSRR1076511
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1076511.hg19.bigWig
+    shortLabel wholBlood F XV7Q
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-XV7Q-0005-SM-4BRWI)
+    subGroups sex=F age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1083432
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1083432.hg19.bigWig
+    shortLabel wholBlood F SE5C
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-SE5C-0006-SM-4BRW5)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-0006-SM-4BRW5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-22634 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/24/2012
+
+    track gtexRnaSignalWholeBloodSRR1099260
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1099260.hg19.bigWig
+    shortLabel wholBlood F XUZC
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-XUZC-0005-SM-4BOQ8)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0005-SM-4BOQ8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-32482 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/24/2012
+
+    track gtexRnaSignalWholeBloodSRR1317898
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1317898.hg19.bigWig
+    shortLabel wholBlood F 1399S
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-1399S-0006-SM-5NQ7U)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-0006-SM-5NQ7U \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-43530 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/13/2013
+
+    track gtexRnaSignalWholeBloodSRR1320363
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1320363.hg19.bigWig
+    shortLabel wholBlood F 11P81
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11P81-0006-SM-5NQ7A)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0006-SM-5NQ7A \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-39959 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/17/2013
+
+    track gtexRnaSignalWholeBloodSRR1333570
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1333570.hg19.bigWig
+    shortLabel wholBlood F 12WSJ
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-12WSJ-0005-SM-5LU8S)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0005-SM-5LU8S \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.6 batch=BP-41859 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1333718
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1333718.hg19.bigWig
+    shortLabel wholBlood F ZPIC
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZPIC-0005-SM-4WWEB)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-0005-SM-4WWEB \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-36777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1351166
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1351166.hg19.bigWig
+    shortLabel wholBlood F Q2AG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Q2AG-0005-SM-5SI7F)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0005-SM-5SI7F \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-19649 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/26/2011
+
+    track gtexRnaSignalWholeBloodSRR1354138
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1354138.hg19.bigWig
+    shortLabel wholBlood F 14H4A
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-14H4A-0006-SM-5N9E3)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-14H4A age=40 sex=F hardyScore=0 sample=GTEX-14H4A-0006-SM-5N9E3 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-47123 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/13/2013
+
+    track gtexRnaSignalWholeBloodSRR1355102
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1355102.hg19.bigWig
+    shortLabel wholBlood F Y5LM
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Y5LM-0005-SM-4V6EJ)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0005-SM-4V6EJ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-33529 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/21/2012
+
+    track gtexRnaSignalWholeBloodSRR1366543
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1366543.hg19.bigWig
+    shortLabel wholBlood F 11XUK
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11XUK-0005-SM-5LU9F)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-0005-SM-5LU9F \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.4 batch=BP-40354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1367499
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1367499.hg19.bigWig
+    shortLabel wholBlood F 13VXT
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13VXT-0005-SM-5N9F3)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-0005-SM-5N9F3 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-45386 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1377714
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1377714.hg19.bigWig
+    shortLabel wholBlood F 13FTX
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13FTX-0005-SM-5N9F6)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-13FTX age=20 sex=F hardyScore=0 sample=GTEX-13FTX-0005-SM-5N9F6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-44115 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/30/2013
+
+    track gtexRnaSignalWholeBloodSRR1378026
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1378026.hg19.bigWig
+    shortLabel wholBlood F 11VI4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11VI4-0006-SM-5N9D8)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0006-SM-5N9D8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-40286 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/28/2013
+
+    track gtexRnaSignalWholeBloodSRR1402368
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1402368.hg19.bigWig
+    shortLabel wholBlood F ZP4G
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZP4G-0006-SM-4WWE6)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0006-SM-4WWE6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-36777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1407516
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1407516.hg19.bigWig
+    shortLabel wholBlood F 139D8
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-139D8-0006-SM-5LZX8)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-139D8 age=30 sex=F hardyScore=0 sample=GTEX-139D8-0006-SM-5LZX8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-43530 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/13/2013
+
+    track gtexRnaSignalWholeBloodSRR1414559
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1414559.hg19.bigWig
+    shortLabel wholBlood F 13U4I
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13U4I-0006-SM-5N9CI)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-0006-SM-5N9CI \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-45386 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1436763
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1436763.hg19.bigWig
+    shortLabel wholBlood F 11ILO
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11ILO-0006-SM-5LZWE)
+    subGroups sex=F age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1440491
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1440491.hg19.bigWig
+    shortLabel wholBlood F YFC4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-YFC4-0006-SM-4RGLV)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0006-SM-4RGLV \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-34881 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=01/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1457574
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1457574.hg19.bigWig
+    shortLabel wholBlood F ZXES
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZXES-0005-SM-57WCB)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-ZXES age=30 sex=F hardyScore=0 sample=GTEX-ZXES-0005-SM-57WCB \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-37903 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/17/2013
+
+    track gtexRnaSignalWholeBloodSRR1470798
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1470798.hg19.bigWig
+    shortLabel wholBlood F 14BMU
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-14BMU-0006-SM-5MR3T)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-14BMU age=20 sex=F hardyScore=0 sample=GTEX-14BMU-0006-SM-5MR3T \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-46725 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1471331
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1471331.hg19.bigWig
+    shortLabel wholBlood F 11EM3
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11EM3-0005-SM-5N9DK)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-0005-SM-5N9DK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-39302 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/23/2013
+
+    track gtexRnaSignalWholeBloodSRR1475930
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1475930.hg19.bigWig
+    shortLabel wholBlood F ZGAY
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZGAY-0006-SM-4WWAQ)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-0006-SM-4WWAQ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-36404 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1481351
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1481351.hg19.bigWig
+    shortLabel wholBlood F POMQ
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-POMQ-0006-SM-5SI7D)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-POMQ age=20 sex=F hardyScore=0 sample=GTEX-POMQ-0006-SM-5SI7D \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-19063 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/26/2011
+
+    track gtexRnaSignalWholeBloodSRR1488261
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1488261.hg19.bigWig
+    shortLabel wholBlood F PWN1
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PWN1-0006-SM-5SI7T)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-0006-SM-5SI7T \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.4 batch=BP-19462 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/19/2011
+
+    track gtexRnaSignalWholeBloodSRR598725
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR598725.hg19.bigWig
+    shortLabel wholBlood F PWOO
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PWOO-0006-SM-2I3E3)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-0006-SM-2I3E3 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-19557 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/22/2011
+
+    track gtexRnaSignalWholeBloodSRR601038
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR601038.hg19.bigWig
+    shortLabel wholBlood F PWCY
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PWCY-0005-SM-2I3E2)
+    subGroups sex=F age=a20 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR603140
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR603140.hg19.bigWig
+    shortLabel wholBlood F Q734
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Q734-0006-SM-2I3FJ)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0006-SM-2I3FJ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-19878 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/03/2011
+
+    track gtexRnaSignalWholeBloodSRR607042
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR607042.hg19.bigWig
+    shortLabel wholBlood F P4PP
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-P4PP-0005-SM-2HMKX)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-P4PP age=30 sex=F hardyScore=0 sample=GTEX-P4PP-0005-SM-2HMKX \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-18598 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/31/2011
+
+    track gtexRnaSignalWholeBloodSRR614059
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614059.hg19.bigWig
+    shortLabel wholBlood F PWN1
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PWN1-0006-SM-2S1NG)
+    subGroups sex=F age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR614179
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614179.hg19.bigWig
+    shortLabel wholBlood F R55G
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-R55G-0006-SM-2TC6O)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0006-SM-2TC6O \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-21229 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/09/2012
+
+    track gtexRnaSignalWholeBloodSRR656445
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR656445.hg19.bigWig
+    shortLabel wholBlood F T5JW
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-T5JW-0005-SM-3GADE)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-0005-SM-3GADE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-23374 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/26/2012
+
+    track gtexRnaSignalWholeBloodSRR657480
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR657480.hg19.bigWig
+    shortLabel wholBlood F TML8
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-TML8-0005-SM-32QPA)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-TML8 age=40 sex=F hardyScore=0 sample=GTEX-TML8-0005-SM-32QPA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-23889 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/07/2012
+
+    track gtexRnaSignalWholeBloodSRR661854
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR661854.hg19.bigWig
+    shortLabel wholBlood F POMQ
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-POMQ-0006-SM-33HBY)
+    subGroups sex=F age=a20 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR662847
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR662847.hg19.bigWig
+    shortLabel wholBlood F U3ZN
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-U3ZN-0006-SM-3DB7Y)
+    subGroups sex=F age=a30 
+    color 255,0,255
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-0006-SM-3DB7Y \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-24229 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/17/2012
+
+    track gtexRnaSignalWholeBloodSRR663609
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663609.hg19.bigWig
+    shortLabel wholBlood F WEY5
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WEY5-0006-SM-3GIKG)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0006-SM-3GIKG \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-26396 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/19/2012
+
+    track gtexRnaSignalWholeBloodSRR807637
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR807637.hg19.bigWig
+    shortLabel wholBlood F WI4N
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WI4N-0005-SM-3LK7E)
+    subGroups sex=F age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR810391
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR810391.hg19.bigWig
+    shortLabel wholBlood F WRHK
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WRHK-0005-SM-3MJF5)
+    subGroups sex=F age=a20 
+    color 255,0,255
+    metadata donor=GTEX-WRHK age=20 sex=F hardyScore=0 sample=GTEX-WRHK-0005-SM-3MJF5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-27277 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2012
+
+    track gtexRnaSignalWholeBloodSRR816920
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR816920.hg19.bigWig
+    shortLabel wholBlood F WYVS
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WYVS-0006-SM-3NMA7)
+    subGroups sex=F age=a40 
+    color 255,0,255
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-0006-SM-3NMA7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-28174 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/27/2012
+
+    track gtexRnaSignalWholeBloodSRR1079660
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1079660.hg19.bigWig
+    shortLabel wholBlood F XUW1
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-XUW1-0005-SM-4BOQ7)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-0005-SM-4BOQ7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-32247 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/17/2012
+
+    track gtexRnaSignalWholeBloodSRR1322619
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1322619.hg19.bigWig
+    shortLabel wholBlood F 1313W
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-1313W-0006-SM-5O9B1)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0006-SM-5O9B1 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-42705 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/26/2013
+
+    track gtexRnaSignalWholeBloodSRR1331311
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1331311.hg19.bigWig
+    shortLabel wholBlood F ZV68
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZV68-0006-SM-4YCEJ)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0006-SM-4YCEJ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-37496 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1334608
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1334608.hg19.bigWig
+    shortLabel wholBlood F ZVT2
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZVT2-0005-SM-57WBW)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-0005-SM-57WBW \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=6.4 batch=BP-37690 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1345541
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1345541.hg19.bigWig
+    shortLabel wholBlood F 132AR
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-132AR-0006-SM-5NQ7N)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-0006-SM-5NQ7N \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-42921 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/30/2013
+
+    track gtexRnaSignalWholeBloodSRR1352530
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1352530.hg19.bigWig
+    shortLabel wholBlood F QCQG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-QCQG-0006-SM-5SI8M)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0006-SM-5SI8M \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-20111 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/15/2011
+
+    track gtexRnaSignalWholeBloodSRR1363611
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1363611.hg19.bigWig
+    shortLabel wholBlood F ZF3C
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZF3C-0005-SM-4WWAR)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZF3C age=50 sex=F hardyScore=0 sample=GTEX-ZF3C-0005-SM-4WWAR \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-36200 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/19/2013
+
+    track gtexRnaSignalWholeBloodSRR1383855
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1383855.hg19.bigWig
+    shortLabel wholBlood F 11I78
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11I78-0005-SM-5N9GB)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0005-SM-5N9GB \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-39537 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/31/2013
+
+    track gtexRnaSignalWholeBloodSRR1391748
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1391748.hg19.bigWig
+    shortLabel wholBlood F 14BIN
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-14BIN-0005-SM-5N9FE)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-14BIN age=50 sex=F hardyScore=2 sample=GTEX-14BIN-0005-SM-5N9FE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-46330 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1399433
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1399433.hg19.bigWig
+    shortLabel wholBlood F PLZ4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PLZ4-0006-SM-5SI8L)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-PLZ4 age=50 sex=F hardyScore=-1 sample=GTEX-PLZ4-0006-SM-5SI8L \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-18940 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/19/2011
+
+    track gtexRnaSignalWholeBloodSRR1433860
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1433860.hg19.bigWig
+    shortLabel wholBlood F Y8LW
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Y8LW-0005-SM-4V6EV)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-0005-SM-4V6EV \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-33855 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/04/2012
+
+    track gtexRnaSignalWholeBloodSRR1447523
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1447523.hg19.bigWig
+    shortLabel wholBlood F Y114
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Y114-0006-SM-4TT76)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-0006-SM-4TT76 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.6 batch=BP-33168 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/15/2012
+
+    track gtexRnaSignalWholeBloodSRR1478722
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1478722.hg19.bigWig
+    shortLabel wholBlood F 131XG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-131XG-0006-SM-5O9CE)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-0006-SM-5O9CE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.2 batch=BP-42921 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/30/2013
+
+    track gtexRnaSignalWholeBloodSRR1485141
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1485141.hg19.bigWig
+    shortLabel wholBlood F 1399U
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-1399U-0005-SM-5NQ8K)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-0005-SM-5NQ8K \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-43227 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1486021
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1486021.hg19.bigWig
+    shortLabel wholBlood F ZVT4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZVT4-0006-SM-57WB8)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZVT4 age=50 sex=F hardyScore=3 sample=GTEX-ZVT4-0006-SM-57WB8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=6.9 batch=BP-37690 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1489926
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1489926.hg19.bigWig
+    shortLabel wholBlood F ZF2S
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZF2S-0006-SM-4WKHF)
+    subGroups sex=F age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1490115
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1490115.hg19.bigWig
+    shortLabel wholBlood F Y3IK
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-Y3IK-0005-SM-4WWDE)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0005-SM-4WWDE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-33451 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/20/2012
+
+    track gtexRnaSignalWholeBloodSRR614011
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614011.hg19.bigWig
+    shortLabel wholBlood F RU72
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-RU72-0006-SM-2TF65)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0006-SM-2TF65 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-21535 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalWholeBloodSRR614311
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614311.hg19.bigWig
+    shortLabel wholBlood F RNOR
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-RNOR-0005-SM-2TF4Z)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0005-SM-2TF4Z \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-21432 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/13/2012
+
+    track gtexRnaSignalWholeBloodSRR614527
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614527.hg19.bigWig
+    shortLabel wholBlood F PLZ4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-PLZ4-0006-SM-2S1NY)
+    subGroups sex=F age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR615647
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615647.hg19.bigWig
+    shortLabel wholBlood F QCQG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-QCQG-0006-SM-2S1OW)
+    subGroups sex=F age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR660871
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR660871.hg19.bigWig
+    shortLabel wholBlood F W5WG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-W5WG-0006-SM-3GIJT)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-0006-SM-3GIJT \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-26073 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/08/2012
+
+    track gtexRnaSignalWholeBloodSRR663513
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663513.hg19.bigWig
+    shortLabel wholBlood F R53T
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-R53T-0005-SM-3GADK)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-R53T age=50 sex=F hardyScore=0 sample=GTEX-R53T-0005-SM-3GADK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-21229 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=01/09/2012
+
+    track gtexRnaSignalWholeBloodSRR812461
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR812461.hg19.bigWig
+    shortLabel wholBlood F WXYG
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WXYG-0005-SM-3NB3M)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WXYG age=50 sex=F hardyScore=0 sample=GTEX-WXYG-0005-SM-3NB3M \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-27850 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/24/2012
+
+    track gtexRnaSignalWholeBloodSRR814363
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR814363.hg19.bigWig
+    shortLabel wholBlood F X15G
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-X15G-0005-SM-3NMDA)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-0005-SM-3NMDA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-28869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/07/2012
+
+    track gtexRnaSignalWholeBloodSRR814844
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR814844.hg19.bigWig
+    shortLabel wholBlood F WRHU
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-WRHU-0006-SM-3MJF6)
+    subGroups sex=F age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WRHU age=50 sex=F hardyScore=1 sample=GTEX-WRHU-0006-SM-3MJF6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-27277 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2012
+
+    track gtexRnaSignalWholeBloodSRR1072871
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1072871.hg19.bigWig
+    shortLabel wholBlood F XYKS
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-XYKS-0005-SM-4BRUD)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-0005-SM-4BRUD \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-32880 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/06/2012
+
+    track gtexRnaSignalWholeBloodSRR1079259
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1079259.hg19.bigWig
+    shortLabel wholBlood F X638
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-X638-0005-SM-47JX6)
+    subGroups sex=F age=a70 
+    color 255,0,255
+    metadata donor=GTEX-X638 age=70 sex=F hardyScore=-1 sample=GTEX-X638-0005-SM-47JX6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-29769 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/20/2012
+
+    track gtexRnaSignalWholeBloodSRR1081712
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1081712.hg19.bigWig
+    shortLabel wholBlood F TSE9
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-TSE9-0005-SM-4DXUF)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0005-SM-4DXUF \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-24229 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/17/2012
+
+    track gtexRnaSignalWholeBloodSRR1092541
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1092541.hg19.bigWig
+    shortLabel wholBlood F XUJ4
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-XUJ4-0005-SM-4BOQ6)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-0005-SM-4BOQ6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-32247 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/17/2012
+
+    track gtexRnaSignalWholeBloodSRR1311419
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1311419.hg19.bigWig
+    shortLabel wholBlood F 11DXX
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11DXX-0005-SM-5NQ8B)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0005-SM-5NQ8B \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-39145 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/20/2013
+
+    track gtexRnaSignalWholeBloodSRR1317064
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1317064.hg19.bigWig
+    shortLabel wholBlood F 13S7M
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13S7M-0005-SM-5NQ76)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0005-SM-5NQ76 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-45386 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1318857
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1318857.hg19.bigWig
+    shortLabel wholBlood F 11ZTS
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11ZTS-0005-SM-5NQ8A)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-0005-SM-5NQ8A \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-40461 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/08/2013
+
+    track gtexRnaSignalWholeBloodSRR1326773
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1326773.hg19.bigWig
+    shortLabel wholBlood F 14BIM
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-14BIM-0006-SM-5O9AA)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-14BIM age=60 sex=F hardyScore=3 sample=GTEX-14BIM-0006-SM-5O9AA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.3 batch=BP-46330 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1348468
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1348468.hg19.bigWig
+    shortLabel wholBlood F 14DAQ
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-14DAQ-0005-SM-5NQ7B)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-14DAQ age=60 sex=F hardyScore=4 sample=GTEX-14DAQ-0005-SM-5NQ7B \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-46725 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1356248
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1356248.hg19.bigWig
+    shortLabel wholBlood F 1211K
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-1211K-0006-SM-5MR53)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-0006-SM-5MR53 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-40739 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2013
+
+    track gtexRnaSignalWholeBloodSRR1356553
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1356553.hg19.bigWig
+    shortLabel wholBlood F 13W3W
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13W3W-0005-SM-5SI9Y)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-0005-SM-5SI9Y \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-45386 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1367693
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1367693.hg19.bigWig
+    shortLabel wholBlood F 13PLJ
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13PLJ-0005-SM-5NQ99)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-13PLJ age=60 sex=F hardyScore=2 sample=GTEX-13PLJ-0005-SM-5NQ99 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-44889 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/22/2013
+
+    track gtexRnaSignalWholeBloodSRR1395509
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1395509.hg19.bigWig
+    shortLabel wholBlood F 12WSB
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-12WSB-0006-SM-5O998)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0006-SM-5O998 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-41859 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1400032
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1400032.hg19.bigWig
+    shortLabel wholBlood F ZPCL
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZPCL-0006-SM-4WWAS)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-ZPCL age=60 sex=F hardyScore=0 sample=GTEX-ZPCL-0006-SM-4WWAS \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-36777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1440603
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1440603.hg19.bigWig
+    shortLabel wholBlood F 13113
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-13113-0006-SM-5NQ7X)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-0006-SM-5NQ7X \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-42668 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/23/2013
+
+    track gtexRnaSignalWholeBloodSRR1452631
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1452631.hg19.bigWig
+    shortLabel wholBlood F 12WSD
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-12WSD-0005-SM-5N9FZ)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0005-SM-5N9FZ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-41899 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/05/2013
+
+    track gtexRnaSignalWholeBloodSRR1489116
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1489116.hg19.bigWig
+    shortLabel wholBlood F 11ZTT
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-11ZTT-0006-SM-5N9FX)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-0006-SM-5N9FX \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-40461 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/08/2013
+
+    track gtexRnaSignalWholeBloodSRR1491332
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1491332.hg19.bigWig
+    shortLabel wholBlood F ZLV1
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-ZLV1-0005-SM-4WWAP)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-ZLV1 age=60 sex=F hardyScore=0 sample=GTEX-ZLV1-0005-SM-4WWAP \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-36595 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1498789
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1498789.hg19.bigWig
+    shortLabel wholBlood F NL3G
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-NL3G-0007-SM-4SOIF)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-NL3G age=60 sex=F hardyScore=2 sample=GTEX-NL3G-0007-SM-4SOIF \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-17084 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/10/2011
+
+    track gtexRnaSignalWholeBloodSRR614131
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614131.hg19.bigWig
+    shortLabel wholBlood F RTLS
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-RTLS-0006-SM-2TF58)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-0006-SM-2TF58 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-21535 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalWholeBloodSRR614503
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614503.hg19.bigWig
+    shortLabel wholBlood F OHPN
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-OHPN-0005-SM-2YUML)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-OHPN age=60 sex=F hardyScore=0 sample=GTEX-OHPN-0005-SM-2YUML \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.2 batch=BP-17872 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/25/2011
+
+    track gtexRnaSignalWholeBloodSRR615299
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615299.hg19.bigWig
+    shortLabel wholBlood F QVJO
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-QVJO-0006-SM-2S1RC)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0006-SM-2S1RC \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.1 batch=BP-20990 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/21/2011
+
+    track gtexRnaSignalWholeBloodSRR656203
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR656203.hg19.bigWig
+    shortLabel wholBlood F QVUS
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-QVUS-0006-SM-3GAE8)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-QVUS age=60 sex=F hardyScore=4 sample=GTEX-QVUS-0006-SM-3GAE8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.5 batch=BP-20990 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/21/2011
+
+    track gtexRnaSignalWholeBloodSRR658093
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR658093.hg19.bigWig
+    shortLabel wholBlood F RWS6
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-RWS6-0005-SM-2XCAN)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0005-SM-2XCAN \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-21792 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=01/25/2012
+
+    track gtexRnaSignalWholeBloodSRR809283
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR809283.hg19.bigWig
+    shortLabel wholBlood F N7MT
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-N7MT-0007-SM-3GACQ)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0007-SM-3GACQ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-16697 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/18/2011
+
+    track gtexRnaSignalWholeBloodSRR809427
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR809427.hg19.bigWig
+    shortLabel wholBlood F NPJ7
+    longLabel GTEx RNA signal from female Whole Blood (GTEX-NPJ7-0006-SM-3GACR)
+    subGroups sex=F age=a60 
+    color 255,0,255
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0006-SM-3GACR \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=5.7 batch=BP-17261 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/23/2011
+
+    track gtexRnaSignalWholeBloodSRR1070813
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1070813.hg19.bigWig
+    shortLabel wholBlood M XQ3S
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XQ3S-0006-SM-4BOQ4)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-0006-SM-4BOQ4 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=6.7 batch=BP-32111 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/12/2012
+
+    track gtexRnaSignalWholeBloodSRR1072345
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1072345.hg19.bigWig
+    shortLabel wholBlood M X88G
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X88G-0006-SM-47JX5)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-X88G age=30 sex=M hardyScore=-1 sample=GTEX-X88G-0006-SM-47JX5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-30089 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/24/2012
+
+    track gtexRnaSignalWholeBloodSRR1076847
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1076847.hg19.bigWig
+    shortLabel wholBlood M XK95
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XK95-0005-SM-4AT4S)
+    subGroups sex=M age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1080998
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1080998.hg19.bigWig
+    shortLabel wholBlood M XMK1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XMK1-0005-SM-4B665)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-0005-SM-4B665 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-31508 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/26/2012
+
+    track gtexRnaSignalWholeBloodSRR1084577
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1084577.hg19.bigWig
+    shortLabel wholBlood M XPT6
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XPT6-0006-SM-4B66Q)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-0006-SM-4B66Q \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-31810 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/04/2012
+
+    track gtexRnaSignalWholeBloodSRR1088168
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1088168.hg19.bigWig
+    shortLabel wholBlood M XAJ8
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XAJ8-0006-SM-46MVM)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0006-SM-46MVM \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.3 batch=BP-30451 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/31/2012
+
+    track gtexRnaSignalWholeBloodSRR1091817
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1091817.hg19.bigWig
+    shortLabel wholBlood M T5JC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-T5JC-0005-SM-4DM7B)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0005-SM-4DM7B \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-23374 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/26/2012
+
+    track gtexRnaSignalWholeBloodSRR1318241
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1318241.hg19.bigWig
+    shortLabel wholBlood M 13S86
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13S86-0005-SM-5NQ7I)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-0005-SM-5NQ7I \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-45386 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/01/2013
+
+    track gtexRnaSignalWholeBloodSRR1318815
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1318815.hg19.bigWig
+    shortLabel wholBlood M 11ZUS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11ZUS-0006-SM-5O9AJ)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0006-SM-5O9AJ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-40461 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/08/2013
+
+    track gtexRnaSignalWholeBloodSRR1319772
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1319772.hg19.bigWig
+    shortLabel wholBlood M 11P82
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11P82-0006-SM-5N9FY)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-0006-SM-5N9FY \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-39959 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/17/2013
+
+    track gtexRnaSignalWholeBloodSRR1328407
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1328407.hg19.bigWig
+    shortLabel wholBlood M ZPU1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZPU1-0006-SM-4WWAT)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0006-SM-4WWAT \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.2 batch=BP-36777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1331684
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1331684.hg19.bigWig
+    shortLabel wholBlood M YB5E
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-YB5E-0005-SM-4VDSO)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0005-SM-4VDSO \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-34096 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/07/2012
+
+    track gtexRnaSignalWholeBloodSRR1337540
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1337540.hg19.bigWig
+    shortLabel wholBlood M 1399Q
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-1399Q-0005-SM-5NQAG)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-1399Q age=40 sex=M hardyScore=0 sample=GTEX-1399Q-0005-SM-5NQAG \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-43227 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1348114
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1348114.hg19.bigWig
+    shortLabel wholBlood M ZUA1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZUA1-0005-SM-4YCEV)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0005-SM-4YCEV \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-37360 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/28/2013
+
+    track gtexRnaSignalWholeBloodSRR1363742
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1363742.hg19.bigWig
+    shortLabel wholBlood M 14B4R
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14B4R-0006-SM-5O9A7)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-14B4R age=30 sex=M hardyScore=0 sample=GTEX-14B4R-0006-SM-5O9A7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.6 batch=BP-46281 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/27/2013
+
+    track gtexRnaSignalWholeBloodSRR1370742
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1370742.hg19.bigWig
+    shortLabel wholBlood M 11TT1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11TT1-0005-SM-5NQ8Y)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0005-SM-5NQ8Y \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-40138 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1382615
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1382615.hg19.bigWig
+    shortLabel wholBlood M Y9LG
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Y9LG-0006-SM-4VBRK)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0006-SM-4VBRK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.6 batch=BP-33855 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/04/2012
+
+    track gtexRnaSignalWholeBloodSRR1386967
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1386967.hg19.bigWig
+    shortLabel wholBlood M YEC4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-YEC4-0001-SM-4W1Y6)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-0001-SM-4W1Y6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-34671 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/21/2012
+
+    track gtexRnaSignalWholeBloodSRR1392547
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1392547.hg19.bigWig
+    shortLabel wholBlood M Q2AH
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Q2AH-0005-SM-5SI7G)
+    subGroups sex=M age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1396191
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1396191.hg19.bigWig
+    shortLabel wholBlood M 13CZU
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13CZU-0005-SM-5LU8K)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-13CZU age=20 sex=M hardyScore=0 sample=GTEX-13CZU-0005-SM-5LU8K \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.6 batch=BP-43801 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/20/2013
+
+    track gtexRnaSignalWholeBloodSRR1413892
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1413892.hg19.bigWig
+    shortLabel wholBlood M ZTSS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZTSS-0005-SM-4YCDR)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-0005-SM-4YCDR \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-37289 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/26/2013
+
+    track gtexRnaSignalWholeBloodSRR1415684
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1415684.hg19.bigWig
+    shortLabel wholBlood M 14E6C
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14E6C-0005-SM-5O98N)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-14E6C age=40 sex=M hardyScore=4 sample=GTEX-14E6C-0005-SM-5O98N \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-46767 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1416560
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1416560.hg19.bigWig
+    shortLabel wholBlood M 13FTW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13FTW-0005-SM-5LZVZ)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-0005-SM-5LZVZ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-44115 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/30/2013
+
+    track gtexRnaSignalWholeBloodSRR1420558
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1420558.hg19.bigWig
+    shortLabel wholBlood M 14ICL
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14ICL-0006-SM-5SIAB)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-0006-SM-5SIAB \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-47123 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/13/2013
+
+    track gtexRnaSignalWholeBloodSRR1434610
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1434610.hg19.bigWig
+    shortLabel wholBlood M 1399R
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-1399R-0006-SM-5N9FR)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0006-SM-5N9FR \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-43309 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1435560
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1435560.hg19.bigWig
+    shortLabel wholBlood M Y8E4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Y8E4-0006-SM-4V6EW)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-0006-SM-4V6EW \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-33855 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/04/2012
+
+    track gtexRnaSignalWholeBloodSRR1435833
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1435833.hg19.bigWig
+    shortLabel wholBlood M 12KS4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12KS4-0005-SM-5SI94)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-0005-SM-5SI94 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-41341 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1443459
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1443459.hg19.bigWig
+    shortLabel wholBlood M 12126
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12126-0006-SM-5O9B8)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0006-SM-5O9B8 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.2 batch=BP-40739 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2013
+
+    track gtexRnaSignalWholeBloodSRR1444852
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1444852.hg19.bigWig
+    shortLabel wholBlood M 11LCK
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11LCK-0005-SM-5O98U)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0005-SM-5O98U \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.2 batch=BP-39727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1459913
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1459913.hg19.bigWig
+    shortLabel wholBlood M 12WSN
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12WSN-0006-SM-5NQAP)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-0006-SM-5NQAP \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-42129 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1472976
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1472976.hg19.bigWig
+    shortLabel wholBlood M 14A6H
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14A6H-0006-SM-5NQ7W)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-0006-SM-5NQ7W \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-46147 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1474999
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1474999.hg19.bigWig
+    shortLabel wholBlood M ZVTK
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZVTK-0006-SM-57WBK)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0006-SM-57WBK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-37690 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1479845
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1479845.hg19.bigWig
+    shortLabel wholBlood M 11NSD
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11NSD-0005-SM-5LZZ5)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0005-SM-5LZZ5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-39727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/07/2013
+
+    track gtexRnaSignalWholeBloodSRR602034
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR602034.hg19.bigWig
+    shortLabel wholBlood M Q2AI
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Q2AI-0006-SM-2I3FG)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-0006-SM-2I3FG \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-19649 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/26/2011
+
+    track gtexRnaSignalWholeBloodSRR614143
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614143.hg19.bigWig
+    shortLabel wholBlood M QLQW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QLQW-0005-SM-2S1RA)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-0005-SM-2S1RA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-20565 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/06/2011
+
+    track gtexRnaSignalWholeBloodSRR614635
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614635.hg19.bigWig
+    shortLabel wholBlood M OOBK
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OOBK-0005-SM-2YUMG)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-0005-SM-2YUMG \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-18235 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/15/2011
+
+    track gtexRnaSignalWholeBloodSRR615563
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615563.hg19.bigWig
+    shortLabel wholBlood M R55E
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-R55E-0006-SM-2TC5G)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0006-SM-2TC5G \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.1 batch=BP-21229 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/09/2012
+
+    track gtexRnaSignalWholeBloodSRR627435
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR627435.hg19.bigWig
+    shortLabel wholBlood M NPJ8
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-NPJ8-0007-SM-26GMW)
+    subGroups sex=M age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR627441
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR627441.hg19.bigWig
+    shortLabel wholBlood M NPJ8
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-NPJ8-0007-SM-26GMF)
+    subGroups sex=M age=a40 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR656071
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR656071.hg19.bigWig
+    shortLabel wholBlood M U4B1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-U4B1-0006-SM-3DB8E)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-0006-SM-3DB8E \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-24412 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/20/2012
+
+    track gtexRnaSignalWholeBloodSRR656958
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR656958.hg19.bigWig
+    shortLabel wholBlood M WFJO
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WFJO-0005-SM-3GIKY)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-WFJO age=30 sex=M hardyScore=0 sample=GTEX-WFJO-0005-SM-3GIKY \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-26514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/21/2012
+
+    track gtexRnaSignalWholeBloodSRR657115
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR657115.hg19.bigWig
+    shortLabel wholBlood M S4Q7
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-S4Q7-0006-SM-3K2AT)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0006-SM-3K2AT \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-22094 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/03/2012
+
+    track gtexRnaSignalWholeBloodSRR658033
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR658033.hg19.bigWig
+    shortLabel wholBlood M P44G
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-P44G-0006-SM-2TC6A)
+    subGroups sex=M age=a30 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR660957
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR660957.hg19.bigWig
+    shortLabel wholBlood M SNOS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-SNOS-0006-SM-32PLH)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0006-SM-32PLH \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-22912 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=03/07/2012
+
+    track gtexRnaSignalWholeBloodSRR661913
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR661913.hg19.bigWig
+    shortLabel wholBlood M WFG8
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WFG8-0006-SM-3GIKS)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0006-SM-3GIKS \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-26514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/21/2012
+
+    track gtexRnaSignalWholeBloodSRR662990
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR662990.hg19.bigWig
+    shortLabel wholBlood M WFG7
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WFG7-0005-SM-3GIKM)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-0005-SM-3GIKM \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-26514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/21/2012
+
+    track gtexRnaSignalWholeBloodSRR663585
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663585.hg19.bigWig
+    shortLabel wholBlood M PLZ6
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-PLZ6-0006-SM-33HBZ)
+    subGroups sex=M age=a30 
+    color 255,0,255
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0006-SM-33HBZ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.6 batch=BP-18940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/19/2011
+
+    track gtexRnaSignalWholeBloodSRR815494
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR815494.hg19.bigWig
+    shortLabel wholBlood M O5YT
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-O5YT-0007-SM-32PK7)
+    subGroups sex=M age=a20 
+    color 255,0,255
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-0007-SM-32PK7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.8 batch=BP-17470 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/08/2011
+
+    track gtexRnaSignalWholeBloodSRR816745
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR816745.hg19.bigWig
+    shortLabel wholBlood M WFON
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WFON-0005-SM-3NMC9)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0005-SM-3NMC9 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-26649 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/26/2012
+
+    track gtexRnaSignalWholeBloodSRR817464
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR817464.hg19.bigWig
+    shortLabel wholBlood M OIZI
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OIZI-0005-SM-2XCED)
+    subGroups sex=M age=a40 
+    color 255,0,255
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-0005-SM-2XCED \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-18095 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/08/2011
+
+    track gtexRnaSignalWholeBloodSRR1074646
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1074646.hg19.bigWig
+    shortLabel wholBlood M X585
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X585-0005-SM-46MV3)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0005-SM-46MV3 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-29481 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/15/2012
+
+    track gtexRnaSignalWholeBloodSRR1087654
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1087654.hg19.bigWig
+    shortLabel wholBlood M XQ8I
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XQ8I-0006-SM-4BOQ5)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0006-SM-4BOQ5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-32111 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/12/2012
+
+    track gtexRnaSignalWholeBloodSRR1091452
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1091452.hg19.bigWig
+    shortLabel wholBlood M X62O
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X62O-0005-SM-46MV1)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-X62O age=50 sex=M hardyScore=0 sample=GTEX-X62O-0005-SM-46MV1 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-29769 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/20/2012
+
+    track gtexRnaSignalWholeBloodSRR1096571
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1096571.hg19.bigWig
+    shortLabel wholBlood M QDVN
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QDVN-0006-SM-48U1R)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1099648
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1099648.hg19.bigWig
+    shortLabel wholBlood M XGQ4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XGQ4-0005-SM-4AT5U)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0005-SM-4AT5U \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.6 batch=BP-30967 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/11/2012
+
+    track gtexRnaSignalWholeBloodSRR1099744
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1099744.hg19.bigWig
+    shortLabel wholBlood M XBEC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XBEC-0006-SM-4AT5T)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-0006-SM-4AT5T \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-30669 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/05/2012
+
+    track gtexRnaSignalWholeBloodSRR1310412
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1310412.hg19.bigWig
+    shortLabel wholBlood M 11DXZ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11DXZ-0006-SM-5LZZH)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0006-SM-5LZZH \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-39145 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/20/2013
+
+    track gtexRnaSignalWholeBloodSRR1320785
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1320785.hg19.bigWig
+    shortLabel wholBlood M 14E1K
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14E1K-0006-SM-5N9DY)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-14E1K age=50 sex=M hardyScore=0 sample=GTEX-14E1K-0006-SM-5N9DY \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-46725 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1333209
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1333209.hg19.bigWig
+    shortLabel wholBlood M Y111
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Y111-0006-SM-4SOIO)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-0006-SM-4SOIO \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-33168 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/15/2012
+
+    track gtexRnaSignalWholeBloodSRR1350855
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1350855.hg19.bigWig
+    shortLabel wholBlood M 12WSC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12WSC-0005-SM-5MR3H)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0005-SM-5MR3H \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-41859 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1361590
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1361590.hg19.bigWig
+    shortLabel wholBlood M 14BMV
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14BMV-0005-SM-5NQ6Y)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-0005-SM-5NQ6Y \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-46725 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/06/2013
+
+    track gtexRnaSignalWholeBloodSRR1368529
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1368529.hg19.bigWig
+    shortLabel wholBlood M 117YW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-117YW-0005-SM-5NQ8Z)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-0005-SM-5NQ8Z \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-38943 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/14/2013
+
+    track gtexRnaSignalWholeBloodSRR1379538
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1379538.hg19.bigWig
+    shortLabel wholBlood M 14ABY
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14ABY-0005-SM-5O99U)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1381435
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1381435.hg19.bigWig
+    shortLabel wholBlood M 12WSL
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12WSL-0005-SM-5NQAD)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-0005-SM-5NQAD \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-42129 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1381481
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1381481.hg19.bigWig
+    shortLabel wholBlood M ZVZP
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZVZP-0006-SM-51MSW)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-0006-SM-51MSW \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-37789 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/11/2013
+
+    track gtexRnaSignalWholeBloodSRR1388081
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1388081.hg19.bigWig
+    shortLabel wholBlood M 12WSH
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12WSH-0005-SM-5NQ9P)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0005-SM-5NQ9P \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-41899 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/05/2013
+
+    track gtexRnaSignalWholeBloodSRR1400054
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1400054.hg19.bigWig
+    shortLabel wholBlood M ZDYS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZDYS-0002-SM-4WKGR)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1412947
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1412947.hg19.bigWig
+    shortLabel wholBlood M 11UD2
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11UD2-0005-SM-5NQ9B)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0005-SM-5NQ9B \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-40138 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1430157
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1430157.hg19.bigWig
+    shortLabel wholBlood M 13FXS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13FXS-0006-SM-5O99X)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0006-SM-5O99X \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.9 batch=BP-44279 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/04/2013
+
+    track gtexRnaSignalWholeBloodSRR1431205
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1431205.hg19.bigWig
+    shortLabel wholBlood M X261
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X261-0005-SM-4PQYX)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0005-SM-4PQYX \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-29189 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/10/2012
+
+    track gtexRnaSignalWholeBloodSRR1436065
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1436065.hg19.bigWig
+    shortLabel wholBlood M 14E6D
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-14E6D-0005-SM-5N9D7)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-14E6D age=50 sex=M hardyScore=2 sample=GTEX-14E6D-0005-SM-5N9D7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-46767 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/09/2013
+
+    track gtexRnaSignalWholeBloodSRR1439785
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1439785.hg19.bigWig
+    shortLabel wholBlood M 13111
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13111-0005-SM-5NQ7Z)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0005-SM-5NQ7Z \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-42484 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/20/2013
+
+    track gtexRnaSignalWholeBloodSRR1451740
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1451740.hg19.bigWig
+    shortLabel wholBlood M 139T6
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-139T6-0006-SM-5LU92)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-0006-SM-5LU92 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.6 batch=BP-43645 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/16/2013
+
+    track gtexRnaSignalWholeBloodSRR1474839
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1474839.hg19.bigWig
+    shortLabel wholBlood M Y3I4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Y3I4-0006-SM-4TT1E)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0006-SM-4TT1E \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.8 batch=BP-33451 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/20/2012
+
+    track gtexRnaSignalWholeBloodSRR1476207
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1476207.hg19.bigWig
+    shortLabel wholBlood M PLZ5
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-PLZ5-0006-SM-5S2W5)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-PLZ5 age=50 sex=M hardyScore=0 sample=GTEX-PLZ5-0006-SM-5S2W5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-18940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/19/2011
+
+    track gtexRnaSignalWholeBloodSRR1481060
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1481060.hg19.bigWig
+    shortLabel wholBlood M ZG7Y
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZG7Y-0006-SM-4WWEA)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-0006-SM-4WWEA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=5.7 batch=BP-36404 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1490589
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1490589.hg19.bigWig
+    shortLabel wholBlood M ZVP2
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZVP2-0005-SM-51MRK)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-0005-SM-51MRK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=6.9 batch=BP-37690 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/09/2013
+
+    track gtexRnaSignalWholeBloodSRR608344
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR608344.hg19.bigWig
+    shortLabel wholBlood M OIZH
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OIZH-0005-SM-2HMJN)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-0005-SM-2HMJN \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-18095 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/08/2011
+
+    track gtexRnaSignalWholeBloodSRR613603
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR613603.hg19.bigWig
+    shortLabel wholBlood M PLZ5
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-PLZ5-0006-SM-2S1NZ)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR613723
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR613723.hg19.bigWig
+    shortLabel wholBlood M R55F
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-R55F-0005-SM-2TF4W)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR613963
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR613963.hg19.bigWig
+    shortLabel wholBlood M QXCU
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QXCU-0006-SM-2TC5K)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0006-SM-2TC5K \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.4 batch=BP-21039 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/23/2011
+
+    track gtexRnaSignalWholeBloodSRR614167
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614167.hg19.bigWig
+    shortLabel wholBlood M RM2N
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-RM2N-0006-SM-2TF5H)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0006-SM-2TF5H \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.8 batch=BP-21312 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/11/2012
+
+    track gtexRnaSignalWholeBloodSRR615117
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615117.hg19.bigWig
+    shortLabel wholBlood M RUSQ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-RUSQ-0006-SM-2TF6P)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR615177
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615177.hg19.bigWig
+    shortLabel wholBlood M QDVJ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QDVJ-0005-SM-2TC5X)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-0005-SM-2TC5X \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-20176 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/17/2011
+
+    track gtexRnaSignalWholeBloodSRR615407
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR615407.hg19.bigWig
+    shortLabel wholBlood M RVPU
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-RVPU-0005-SM-2TF6L)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-0005-SM-2TF6L \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-21696 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/24/2012
+
+    track gtexRnaSignalWholeBloodSRR654921
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR654921.hg19.bigWig
+    shortLabel wholBlood M S7SE
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-S7SE-0005-SM-2XCEA)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0005-SM-2XCEA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.5 batch=BP-22532 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/16/2012
+
+    track gtexRnaSignalWholeBloodSRR655483
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR655483.hg19.bigWig
+    shortLabel wholBlood M VUSG
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-VUSG-0006-SM-3GIK9)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0006-SM-3GIK9 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-25537 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/21/2012
+
+    track gtexRnaSignalWholeBloodSRR657707
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR657707.hg19.bigWig
+    shortLabel wholBlood M TKQ2
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-TKQ2-0006-SM-33HBH)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-0006-SM-33HBH \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-23818 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/05/2012
+
+    track gtexRnaSignalWholeBloodSRR661084
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR661084.hg19.bigWig
+    shortLabel wholBlood M R55D
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-R55D-0006-SM-3GIJS)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0006-SM-3GIJS \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-21229 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=01/09/2012
+
+    track gtexRnaSignalWholeBloodSRR662594
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR662594.hg19.bigWig
+    shortLabel wholBlood M TMKS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-TMKS-0005-SM-33OV7)
+    subGroups sex=M age=a50 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR663236
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663236.hg19.bigWig
+    shortLabel wholBlood M PSDG
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-PSDG-0005-SM-3GADC)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-0005-SM-3GADC \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-19187 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/03/2011
+
+    track gtexRnaSignalWholeBloodSRR812177
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR812177.hg19.bigWig
+    shortLabel wholBlood M OXRL
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OXRL-0005-SM-3LK6A)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-0005-SM-3LK6A \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-18292 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/17/2011
+
+    track gtexRnaSignalWholeBloodSRR812970
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR812970.hg19.bigWig
+    shortLabel wholBlood M WK11
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WK11-0006-SM-3NB3J)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WK11 age=50 sex=M hardyScore=1 sample=GTEX-WK11-0006-SM-3NB3J \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-27115 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/09/2012
+
+    track gtexRnaSignalWholeBloodSRR813339
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR813339.hg19.bigWig
+    shortLabel wholBlood M WHWD
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WHWD-0005-SM-3LK7D)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0005-SM-3LK7D \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-26980 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/05/2012
+
+    track gtexRnaSignalWholeBloodSRR814868
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR814868.hg19.bigWig
+    shortLabel wholBlood M V1D1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-V1D1-0006-SM-3NMCE)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0006-SM-3NMCE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-25034 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/07/2012
+
+    track gtexRnaSignalWholeBloodSRR816589
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR816589.hg19.bigWig
+    shortLabel wholBlood M WHSB
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WHSB-0005-SM-3LK7C)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-0005-SM-3LK7C \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-26980 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/05/2012
+
+    track gtexRnaSignalWholeBloodSRR817046
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR817046.hg19.bigWig
+    shortLabel wholBlood M WHPG
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WHPG-0006-SM-3NMBV)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-0006-SM-3NMBV \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-26980 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/05/2012
+
+    track gtexRnaSignalWholeBloodSRR817444
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR817444.hg19.bigWig
+    shortLabel wholBlood M O5YW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-O5YW-0006-SM-3LK6E)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-O5YW age=50 sex=M hardyScore=0 sample=GTEX-O5YW-0006-SM-3LK6E \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.4 batch=BP-17612 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/14/2011
+
+    track gtexRnaSignalWholeBloodSRR819024
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR819024.hg19.bigWig
+    shortLabel wholBlood M QMRM
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QMRM-0005-SM-3NB2A)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-0005-SM-3NB2A \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.5 batch=BP-20678 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=12/09/2011
+
+    track gtexRnaSignalWholeBloodSRR820779
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR820779.hg19.bigWig
+    shortLabel wholBlood M X4LF
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X4LF-0006-SM-3NMCO)
+    subGroups sex=M age=a50 
+    color 255,0,255
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0006-SM-3NMCO \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-29481 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/15/2012
+
+    track gtexRnaSignalWholeBloodSRR1071931
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1071931.hg19.bigWig
+    shortLabel wholBlood M X4XY
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X4XY-0006-SM-46MV2)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0006-SM-46MV2 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-29481 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/15/2012
+
+    track gtexRnaSignalWholeBloodSRR1083657
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1083657.hg19.bigWig
+    shortLabel wholBlood M XMD1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XMD1-0006-SM-4AT4Q)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1084720
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1084720.hg19.bigWig
+    shortLabel wholBlood M XBED
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XBED-0006-SM-47JXO)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-0006-SM-47JXO \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-30669 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/05/2012
+
+    track gtexRnaSignalWholeBloodSRR1090907
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1090907.hg19.bigWig
+    shortLabel wholBlood M XLM4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-XLM4-0005-SM-4AT4P)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0005-SM-4AT4P \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-31323 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/20/2012
+
+    track gtexRnaSignalWholeBloodSRR1311644
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1311644.hg19.bigWig
+    shortLabel wholBlood M 113IC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-113IC-0006-SM-5NQ9C)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-113IC age=60 sex=M hardyScore=-1 sample=GTEX-113IC-0006-SM-5NQ9C \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-38883 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/10/2013
+
+    track gtexRnaSignalWholeBloodSRR1326536
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1326536.hg19.bigWig
+    shortLabel wholBlood M ZDTT
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZDTT-0006-SM-4WKFP)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1328383
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1328383.hg19.bigWig
+    shortLabel wholBlood M 148VJ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-148VJ-0006-SM-5NQB1)
+    subGroups sex=M age=a70 
+    color 255,0,255
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0006-SM-5NQB1 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-46147 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1336263
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1336263.hg19.bigWig
+    shortLabel wholBlood M ZDTS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZDTS-0006-SM-4WAYZ)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0006-SM-4WAYZ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.5 batch=BP-35729 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/04/2013
+
+    track gtexRnaSignalWholeBloodSRR1345847
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1345847.hg19.bigWig
+    shortLabel wholBlood M 132NY
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-132NY-0005-SM-5O9AC)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-0005-SM-5O9AC \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.8 batch=BP-42988 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/03/2013
+
+    track gtexRnaSignalWholeBloodSRR1348181
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1348181.hg19.bigWig
+    shortLabel wholBlood M 132QS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-132QS-0005-SM-5LZXK)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0005-SM-5LZXK \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-42988 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/03/2013
+
+    track gtexRnaSignalWholeBloodSRR1360460
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1360460.hg19.bigWig
+    shortLabel wholBlood M 11WQC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11WQC-0006-SM-5LZVP)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0006-SM-5LZVP \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-40354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/02/2013
+
+    track gtexRnaSignalWholeBloodSRR1367432
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1367432.hg19.bigWig
+    shortLabel wholBlood M ZE9C
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZE9C-0006-SM-4WKG2)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1382485
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1382485.hg19.bigWig
+    shortLabel wholBlood M ZXG5
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-ZXG5-0005-SM-57WCN)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0005-SM-57WCN \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-37903 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/17/2013
+
+    track gtexRnaSignalWholeBloodSRR1397673
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1397673.hg19.bigWig
+    shortLabel wholBlood M 111YS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-111YS-0006-SM-5NQBE)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-0006-SM-5NQBE \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-38780 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/08/2013
+
+    track gtexRnaSignalWholeBloodSRR1407758
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1407758.hg19.bigWig
+    shortLabel wholBlood M Y5V6
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-Y5V6-0005-SM-4V6FD)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0005-SM-4V6FD \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.5 batch=BP-33568 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/26/2012
+
+    track gtexRnaSignalWholeBloodSRR1410890
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1410890.hg19.bigWig
+    shortLabel wholBlood M 139UC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-139UC-0005-SM-5PNU7)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR1412987
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1412987.hg19.bigWig
+    shortLabel wholBlood M 11NV4
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11NV4-0005-SM-5N9EX)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-0005-SM-5N9EX \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-39727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/07/2013
+
+    track gtexRnaSignalWholeBloodSRR1420669
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1420669.hg19.bigWig
+    shortLabel wholBlood M 11TUW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11TUW-0006-SM-5LZW2)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-0006-SM-5LZW2 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-40138 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1420960
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1420960.hg19.bigWig
+    shortLabel wholBlood M 12BJ1
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12BJ1-0006-SM-5SIB5)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-0006-SM-5SIB5 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9 batch=BP-41053 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/19/2013
+
+    track gtexRnaSignalWholeBloodSRR1433576
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1433576.hg19.bigWig
+    shortLabel wholBlood M 1497J
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-1497J-0005-SM-5NQBD)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-0005-SM-5NQBD \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-46147 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=11/25/2013
+
+    track gtexRnaSignalWholeBloodSRR1440224
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1440224.hg19.bigWig
+    shortLabel wholBlood M 1212Z
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-1212Z-0006-SM-5NQ8M)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0006-SM-5NQ8M \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-40739 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2013
+
+    track gtexRnaSignalWholeBloodSRR1442066
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1442066.hg19.bigWig
+    shortLabel wholBlood M 11OC5
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11OC5-0006-SM-5N9FA)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11OC5 age=60 sex=M hardyScore=2 sample=GTEX-11OC5-0006-SM-5N9FA \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-39787 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=06/11/2013
+
+    track gtexRnaSignalWholeBloodSRR1444348
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1444348.hg19.bigWig
+    shortLabel wholBlood M 11DXY
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-11DXY-0006-SM-5NQ8N)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-0006-SM-5NQ8N \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.4 batch=BP-39145 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/20/2013
+
+    track gtexRnaSignalWholeBloodSRR1457291
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1457291.hg19.bigWig
+    shortLabel wholBlood M 139TS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-139TS-0005-SM-5NQC1)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-0005-SM-5NQC1 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-43645 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/16/2013
+
+    track gtexRnaSignalWholeBloodSRR1457315
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1457315.hg19.bigWig
+    shortLabel wholBlood M 12696
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12696-0005-SM-5LZYS)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0005-SM-5LZYS \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-40739 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2013
+
+    track gtexRnaSignalWholeBloodSRR1459739
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1459739.hg19.bigWig
+    shortLabel wholBlood M 12WSA
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-12WSA-0005-SM-5O9BM)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0005-SM-5O9BM \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7 batch=BP-41459 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/29/2013
+
+    track gtexRnaSignalWholeBloodSRR1476300
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1476300.hg19.bigWig
+    shortLabel wholBlood M 13O61
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-13O61-0005-SM-5O9AU)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-0005-SM-5O9AU \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-44602 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=10/15/2013
+
+    track gtexRnaSignalWholeBloodSRR1486719
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1486719.hg19.bigWig
+    shortLabel wholBlood M 117XS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-117XS-0005-SM-5PNU6)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-0005-SM-5PNU6 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=6.4 batch=BP-38943 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/14/2013
+
+    track gtexRnaSignalWholeBloodSRR1487089
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR1487089.hg19.bigWig
+    shortLabel wholBlood M 139TU
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-139TU-0006-SM-5LZVN)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-0006-SM-5LZVN \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.2 batch=BP-43645 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/16/2013
+
+    track gtexRnaSignalWholeBloodSRR601263
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR601263.hg19.bigWig
+    shortLabel wholBlood M OOBJ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OOBJ-0006-SM-2I3F4)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0006-SM-2I3F4 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.6 batch=BP-18161 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/11/2011
+
+    track gtexRnaSignalWholeBloodSRR601335
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR601335.hg19.bigWig
+    shortLabel wholBlood M P4PQ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-P4PQ-0005-SM-2HMKJ)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-0005-SM-2HMKJ \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-18598 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/31/2011
+
+    track gtexRnaSignalWholeBloodSRR607214
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR607214.hg19.bigWig
+    shortLabel wholBlood M N7MS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-N7MS-0007-SM-2D7W1)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0007-SM-2D7W1 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.2 batch=BP-16653 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/17/2011
+
+    track gtexRnaSignalWholeBloodSRR612190
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR612190.hg19.bigWig
+    shortLabel wholBlood M REY6
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-REY6-0005-SM-2TF54)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0005-SM-2TF54 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=9.1 batch=BP-21312 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/11/2012
+
+    track gtexRnaSignalWholeBloodSRR612827
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR612827.hg19.bigWig
+    shortLabel wholBlood M QLQ7
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-QLQ7-0005-SM-2S1QP)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-0005-SM-2S1QP \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-20521 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/05/2011
+
+    track gtexRnaSignalWholeBloodSRR614767
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR614767.hg19.bigWig
+    shortLabel wholBlood M RVPV
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-RVPV-0006-SM-2TF6Q)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-RVPV age=60 sex=M hardyScore=3 sample=GTEX-RVPV-0006-SM-2TF6Q \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8 batch=BP-21696 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/24/2012
+
+    track gtexRnaSignalWholeBloodSRR627419
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR627419.hg19.bigWig
+    shortLabel wholBlood M N7MS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-N7MS-0007-SM-26GME)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR627423
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR627423.hg19.bigWig
+    shortLabel wholBlood M N7MS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-N7MS-0007-SM-26GMV)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR656782
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR656782.hg19.bigWig
+    shortLabel wholBlood M TMZS
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-TMZS-0006-SM-3DB8G)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-TMZS age=60 sex=M hardyScore=-1 sample=GTEX-TMZS-0006-SM-3DB8G \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.7 batch=BP-23992 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=04/10/2012
+
+    track gtexRnaSignalWholeBloodSRR662211
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR662211.hg19.bigWig
+    shortLabel wholBlood M U412
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-U412-0006-SM-3DB8J)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR663161
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663161.hg19.bigWig
+    shortLabel wholBlood M POYW
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-POYW-0006-SM-2XCF4)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-POYW age=60 sex=M hardyScore=0 sample=GTEX-POYW-0006-SM-2XCF4 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.1 batch=BP-19132 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=09/29/2011
+
+    track gtexRnaSignalWholeBloodSRR663249
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR663249.hg19.bigWig
+    shortLabel wholBlood M SJXC
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-SJXC-0005-SM-2XCE7)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-SJXC age=60 sex=M hardyScore=2 sample=GTEX-SJXC-0005-SM-2XCE7 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-22705 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=02/28/2012
+
+    track gtexRnaSignalWholeBloodSRR809619
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR809619.hg19.bigWig
+    shortLabel wholBlood M X4XX
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-X4XX-0005-SM-3NMCS)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0005-SM-3NMCS \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.3 batch=BP-29481 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=08/15/2012
+
+    track gtexRnaSignalWholeBloodSRR813019
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR813019.hg19.bigWig
+    shortLabel wholBlood M VJYA
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-VJYA-0005-SM-3P5ZD)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-0005-SM-3P5ZD \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=7.7 batch=BP-25314 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/14/2012
+
+    track gtexRnaSignalWholeBloodSRR817373
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR817373.hg19.bigWig
+    shortLabel wholBlood M UTHO
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-UTHO-0006-SM-3NMCC)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-0006-SM-3NMCC \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.9 batch=BP-25034 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=05/07/2012
+
+    track gtexRnaSignalWholeBloodSRR819210
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR819210.hg19.bigWig
+    shortLabel wholBlood M OHPJ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-OHPJ-0006-SM-3LK6G)
+    subGroups sex=M age=a60 
+    color 255,0,255
+
+    track gtexRnaSignalWholeBloodSRR820733
+    parent gtexRnaSignalWholeBlood off
+    type bigWig
+    bigDataUrl wholeBlood/gtexRnaSignalSRR820733.hg19.bigWig
+    shortLabel wholBlood M WQUQ
+    longLabel GTEx RNA signal from male Whole Blood (GTEX-WQUQ-0006-SM-3MJF4)
+    subGroups sex=M age=a60 
+    color 255,0,255
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-0006-SM-3MJF4 \
+            tissue=wholeBlood autolysisScore=-1 rnaIntegrity=8.8 batch=BP-27277 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Blood_RNA_(Manual) isolationDate=07/12/2012
+

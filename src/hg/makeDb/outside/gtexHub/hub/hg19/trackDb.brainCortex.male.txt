@@ -1,0 +1,846 @@
+    track gtexRnaSignalSRR1310136
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1310136.hg19.bigWig
+    shortLabel brainCort M 11O72
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11O72-2926-SM-5BC4V)
+    subGroups age=a40 tissue=brainCortex donor=GTEX11O72
+    color 238,238,0
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-2926-SM-5BC4V \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.3 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1327593
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1327593.hg19.bigWig
+    shortLabel brainCort M 12126
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12126-1026-SM-5P9JJ)
+    subGroups age=a20 tissue=brainCortex donor=GTEX12126
+    color 238,238,0
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-1026-SM-5P9JJ \
+            tissue=brainCortex autolysisScore=0 rnaIntegrity=6.9 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1334564
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1334564.hg19.bigWig
+    shortLabel brainCort M ZUA1
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-ZUA1-3026-SM-59HJC)
+    subGroups age=a40 tissue=brainCortex donor=GTEXZUA1
+    color 238,238,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-3026-SM-59HJC \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.5 batch=BP-43231 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1335400
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1335400.hg19.bigWig
+    shortLabel brainCort M 11ZUS
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11ZUS-2926-SM-5FQSL)
+    subGroups age=a30 tissue=brainCortex donor=GTEX11ZUS
+    color 238,238,0
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-2926-SM-5FQSL \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.3 batch=BP-44114 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1337564
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1337564.hg19.bigWig
+    shortLabel brainCort M 13NYB
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13NYB-3026-SM-5IJD7)
+    subGroups age=a40 tissue=brainCortex donor=GTEX13NYB
+    color 238,238,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-3026-SM-5IJD7 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.1 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1362532
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1362532.hg19.bigWig
+    shortLabel brainCort M 11DXW
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11DXW-1126-SM-5H12Q)
+    subGroups age=a40 tissue=brainCortex donor=GTEX11DXW
+    color 238,238,0
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-1126-SM-5H12Q \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.6 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR601669
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR601669.hg19.bigWig
+    shortLabel brainCort M NPJ8
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-NPJ8-1526-SM-2D7VU)
+    subGroups age=a40 tissue=brainCortex donor=GTEXNPJ8
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-1526-SM-2D7VU \
+            tissue=brainCortex autolysisScore=0 rnaIntegrity=9.4 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR627421
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR627421.hg19.bigWig
+    shortLabel brainCort M NPJ8
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-NPJ8-1526-SM-26GMH)
+    subGroups age=a40 tissue=brainCortex donor=GTEXNPJ8
+    color 238,238,0
+
+    track gtexRnaSignalSRR627449
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR627449.hg19.bigWig
+    shortLabel brainCort M NPJ8
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-NPJ8-1526-SM-26GMY)
+    subGroups age=a40 tissue=brainCortex donor=GTEXNPJ8
+    color 238,238,0
+
+    track gtexRnaSignalSRR663753
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR663753.hg19.bigWig
+    shortLabel brainCort M PVOW
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-PVOW-2526-SM-2XCF7)
+    subGroups age=a40 tissue=brainCortex donor=GTEXPVOW
+    color 238,238,0
+    metadata donor=GTEX-PVOW age=40 sex=M hardyScore=2 sample=GTEX-PVOW-2526-SM-2XCF7 \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7.1 batch=BP-19443 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2011
+
+    track gtexRnaSignalSRR812012
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR812012.hg19.bigWig
+    shortLabel brainCort M T5JC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-T5JC-2426-SM-3NMDB)
+    subGroups age=a20 tissue=brainCortex donor=GTEXT5JC
+    color 238,238,0
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-2426-SM-3NMDB \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7 batch=BP-24833 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR816770
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR816770.hg19.bigWig
+    shortLabel brainCort M WHSE
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-WHSE-3026-SM-3P5ZH)
+    subGroups age=a20 tissue=brainCortex donor=GTEXWHSE
+    color 238,238,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-3026-SM-3P5ZH \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-27757 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalSRR820078
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR820078.hg19.bigWig
+    shortLabel brainCort M WZTO
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-WZTO-2926-SM-3NM9I)
+    subGroups age=a40 tissue=brainCortex donor=GTEXWZTO
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-2926-SM-3NM9I \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.9 batch=BP-29931 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2012
+
+    track gtexRnaSignalSRR1081741
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1081741.hg19.bigWig
+    shortLabel brainCort M X585
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-X585-3026-SM-46MWF)
+    subGroups age=a50 tissue=brainCortex donor=GTEXX585
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-3026-SM-46MWF \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.5 batch=BP-31492 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2012
+
+    track gtexRnaSignalSRR1083632
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1083632.hg19.bigWig
+    shortLabel brainCort M XOTO
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-XOTO-3026-SM-4B65M)
+    subGroups age=a50 tissue=brainCortex donor=GTEXXOTO
+    color 238,238,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-3026-SM-4B65M \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.1 batch=BP-33777 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSRR1310008
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1310008.hg19.bigWig
+    shortLabel brainCort M 11NUK
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11NUK-2926-SM-5A5MD)
+    subGroups age=a50 tissue=brainCortex donor=GTEX11NUK
+    color 238,238,0
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-2926-SM-5A5MD \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.1 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1324371
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1324371.hg19.bigWig
+    shortLabel brainCort M 13O3Q
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13O3Q-2926-SM-5KM45)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13O3Q
+    color 238,238,0
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-2926-SM-5KM45 \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.1 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1354734
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1354734.hg19.bigWig
+    shortLabel brainCort M 12ZZW
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12ZZW-2926-SM-5LZUP)
+    subGroups age=a50 tissue=brainCortex donor=GTEX12ZZW
+    color 238,238,0
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-2926-SM-5LZUP \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1355150
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1355150.hg19.bigWig
+    shortLabel brainCort M 11WQK
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11WQK-3026-SM-5EQL6)
+    subGroups age=a50 tissue=brainCortex donor=GTEX11WQK
+    color 238,238,0
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-3026-SM-5EQL6 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.6 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1357523
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1357523.hg19.bigWig
+    shortLabel brainCort M 13VXU
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13VXU-2926-SM-5LU5C)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13VXU
+    color 238,238,0
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-2926-SM-5LU5C \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1358102
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1358102.hg19.bigWig
+    shortLabel brainCort M 144FL
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-144FL-3026-SM-5O99C)
+    subGroups age=a50 tissue=brainCortex donor=GTEX144FL
+    color 238,238,0
+    metadata donor=GTEX-144FL age=50 sex=M hardyScore=2 sample=GTEX-144FL-3026-SM-5O99C \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.5 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1359630
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1359630.hg19.bigWig
+    shortLabel brainCort M 1192X
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-1192X-3126-SM-5N9BY)
+    subGroups age=a50 tissue=brainCortex donor=GTEX1192X
+    color 238,238,0
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-3126-SM-5N9BY \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.1 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1375976
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1375976.hg19.bigWig
+    shortLabel brainCort M 13X6J
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13X6J-3026-SM-5Q5CU)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13X6J
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-3026-SM-5Q5CU \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1391769
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1391769.hg19.bigWig
+    shortLabel brainCort M 14BMV
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-14BMV-3026-SM-5S2PQ)
+    subGroups age=a50 tissue=brainCortex donor=GTEX14BMV
+    color 238,238,0
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-3026-SM-5S2PQ \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.5 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1396640
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1396640.hg19.bigWig
+    shortLabel brainCort M 13OW7
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13OW7-3026-SM-5L3GY)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13OW7
+    color 238,238,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-3026-SM-5L3GY \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1399028
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1399028.hg19.bigWig
+    shortLabel brainCort M 12WSC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12WSC-3026-SM-5GCNF)
+    subGroups age=a50 tissue=brainCortex donor=GTEX12WSC
+    color 238,238,0
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-3026-SM-5GCNF \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-44157 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1417047
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1417047.hg19.bigWig
+    shortLabel brainCort M Z93S
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-Z93S-2926-SM-57WB9)
+    subGroups age=a50 tissue=brainCortex donor=GTEXZ93S
+    color 238,238,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-2926-SM-57WB9 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.6 batch=BP-42128 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/09/2013
+
+    track gtexRnaSignalSRR1417912
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1417912.hg19.bigWig
+    shortLabel brainCort M R55F
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-R55F-1326-SM-5S2V4)
+    subGroups age=a50 tissue=brainCortex donor=GTEXR55F
+    color 238,238,0
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-1326-SM-5S2V4 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-21443 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR1418992
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1418992.hg19.bigWig
+    shortLabel brainCort M ZYFD
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-ZYFD-3026-SM-5E44C)
+    subGroups age=a50 tissue=brainCortex donor=GTEXZYFD
+    color 238,238,0
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-3026-SM-5E44C \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1432275
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1432275.hg19.bigWig
+    shortLabel brainCort M ZZPT
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-ZZPT-3026-SM-5GZXH)
+    subGroups age=a50 tissue=brainCortex donor=GTEXZZPT
+    color 238,238,0
+    metadata donor=GTEX-ZZPT age=50 sex=M hardyScore=4 sample=GTEX-ZZPT-3026-SM-5GZXH \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-43693 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1444580
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1444580.hg19.bigWig
+    shortLabel brainCort M 13OW6
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13OW6-3026-SM-5J2MI)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13OW6
+    color 238,238,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-3026-SM-5J2MI \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.5 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1445149
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1445149.hg19.bigWig
+    shortLabel brainCort M 13FHP
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13FHP-3026-SM-5IJBS)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13FHP
+    color 238,238,0
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-3026-SM-5IJBS \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.1 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1452292
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1452292.hg19.bigWig
+    shortLabel brainCort M 13FLW
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13FLW-1426-SM-5K7YE)
+    subGroups age=a50 tissue=brainCortex donor=GTEX13FLW
+    color 238,238,0
+    metadata donor=GTEX-13FLW age=50 sex=M hardyScore=2 sample=GTEX-13FLW-1426-SM-5K7YE \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.8 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1453702
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1453702.hg19.bigWig
+    shortLabel brainCort M 12WSH
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12WSH-3026-SM-5CVNI)
+    subGroups age=a50 tissue=brainCortex donor=GTEX12WSH
+    color 238,238,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-3026-SM-5CVNI \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.4 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1459441
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1459441.hg19.bigWig
+    shortLabel brainCort M 145MH
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-145MH-3026-SM-5Q5DZ)
+    subGroups age=a50 tissue=brainCortex donor=GTEX145MH
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-3026-SM-5Q5DZ \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.8 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1474951
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1474951.hg19.bigWig
+    shortLabel brainCort M 144GL
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-144GL-3026-SM-5Q5CW)
+    subGroups age=a50 tissue=brainCortex donor=GTEX144GL
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-3026-SM-5Q5CW \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1480988
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1480988.hg19.bigWig
+    shortLabel brainCort M 145MF
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-145MF-2726-SM-5O995)
+    subGroups age=a50 tissue=brainCortex donor=GTEX145MF
+    color 238,238,0
+    metadata donor=GTEX-145MF age=50 sex=M hardyScore=2 sample=GTEX-145MF-2726-SM-5O995 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.5 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1486097
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1486097.hg19.bigWig
+    shortLabel brainCort M 145MG
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-145MG-3026-SM-5RQJA)
+    subGroups age=a50 tissue=brainCortex donor=GTEX145MG
+    color 238,238,0
+    metadata donor=GTEX-145MG age=50 sex=M hardyScore=2 sample=GTEX-145MG-3026-SM-5RQJA \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7.1 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR615213
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR615213.hg19.bigWig
+    shortLabel brainCort M R55F
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-R55F-1326-SM-2TF5F)
+    subGroups age=a50 tissue=brainCortex donor=GTEXR55F
+    color 238,238,0
+
+    track gtexRnaSignalSRR660933
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR660933.hg19.bigWig
+    shortLabel brainCort M T6MN
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-T6MN-2626-SM-32PMQ)
+    subGroups age=a50 tissue=brainCortex donor=GTEXT6MN
+    color 238,238,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-2626-SM-32PMQ \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7 batch=BP-24837 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR810877
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR810877.hg19.bigWig
+    shortLabel brainCort M WVLH
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-WVLH-3026-SM-3MJG9)
+    subGroups age=a50 tissue=brainCortex donor=GTEXWVLH
+    color 238,238,0
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-3026-SM-3MJG9 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.8 batch=BP-28815 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalSRR812436
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR812436.hg19.bigWig
+    shortLabel brainCort M WL46
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-WL46-2926-SM-3LK82)
+    subGroups age=a50 tissue=brainCortex donor=GTEXWL46
+    color 238,238,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-2926-SM-3LK82 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7 batch=BP-30218 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2012
+
+    track gtexRnaSignalSRR1082262
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1082262.hg19.bigWig
+    shortLabel brainCort M XLM4
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-XLM4-3026-SM-4AT6L)
+    subGroups age=a60 tissue=brainCortex donor=GTEXXLM4
+    color 238,238,0
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-3026-SM-4AT6L \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.1 batch=BP-32521 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1085975
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1085975.hg19.bigWig
+    shortLabel brainCort M XMD1
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-XMD1-2926-SM-4AT42)
+    subGroups age=a60 tissue=brainCortex donor=GTEXXMD1
+    color 238,238,0
+
+    track gtexRnaSignalSRR1311400
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1311400.hg19.bigWig
+    shortLabel brainCort M 117XS
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-117XS-3026-SM-5N9CA)
+    subGroups age=a60 tissue=brainCortex donor=GTEX117XS
+    color 238,238,0
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-3026-SM-5N9CA \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.4 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1311794
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1311794.hg19.bigWig
+    shortLabel brainCort M 11GS4
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11GS4-3126-SM-5A5LH)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11GS4
+    color 238,238,0
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-3126-SM-5A5LH \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1316815
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1316815.hg19.bigWig
+    shortLabel brainCort M 1399T
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-1399T-3026-SM-5KLZC)
+    subGroups age=a60 tissue=brainCortex donor=GTEX1399T
+    color 238,238,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-3026-SM-5KLZC \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1323746
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1323746.hg19.bigWig
+    shortLabel brainCort M 13OVH
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13OVH-3026-SM-5MR4N)
+    subGroups age=a70 tissue=brainCortex donor=GTEX13OVH
+    color 238,238,0
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-3026-SM-5MR4N \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.3 batch=BP-47656 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1332796
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1332796.hg19.bigWig
+    shortLabel brainCort M 11GSO
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11GSO-2926-SM-5HL73)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11GSO
+    color 238,238,0
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-2926-SM-5HL73 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1333930
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1333930.hg19.bigWig
+    shortLabel brainCort M 12ZZY
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12ZZY-3026-SM-5GCOU)
+    subGroups age=a60 tissue=brainCortex donor=GTEX12ZZY
+    color 238,238,0
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-3026-SM-5GCOU \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1338219
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1338219.hg19.bigWig
+    shortLabel brainCort M 132Q8
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-132Q8-3026-SM-5PNVG)
+    subGroups age=a60 tissue=brainCortex donor=GTEX132Q8
+    color 238,238,0
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-3026-SM-5PNVG \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.9 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1364676
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1364676.hg19.bigWig
+    shortLabel brainCort M 13FHO
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13FHO-3026-SM-5J1O9)
+    subGroups age=a60 tissue=brainCortex donor=GTEX13FHO
+    color 238,238,0
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-3026-SM-5J1O9 \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.8 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1373858
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1373858.hg19.bigWig
+    shortLabel brainCort M 11DXY
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11DXY-3226-SM-5GIDE)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11DXY
+    color 238,238,0
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-3226-SM-5GIDE \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7.7 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1379238
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1379238.hg19.bigWig
+    shortLabel brainCort M 11EI6
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11EI6-3026-SM-5GZZO)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11EI6
+    color 238,238,0
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-3026-SM-5GZZO \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.4 batch=BP-43783 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1392985
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1392985.hg19.bigWig
+    shortLabel brainCort M 139UC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-139UC-3126-SM-5J1OY)
+    subGroups age=a60 tissue=brainCortex donor=GTEX139UC
+    color 238,238,0
+
+    track gtexRnaSignalSRR1396078
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1396078.hg19.bigWig
+    shortLabel brainCort M 12WSA
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12WSA-2926-SM-5EQ4D)
+    subGroups age=a60 tissue=brainCortex donor=GTEX12WSA
+    color 238,238,0
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-2926-SM-5EQ4D \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=5.8 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1397008
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1397008.hg19.bigWig
+    shortLabel brainCort M 1445S
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-1445S-3026-SM-5O9BR)
+    subGroups age=a60 tissue=brainCortex donor=GTEX1445S
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-3026-SM-5O9BR \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.1 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1399201
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1399201.hg19.bigWig
+    shortLabel brainCort M 12696
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12696-2926-SM-5FQTG)
+    subGroups age=a60 tissue=brainCortex donor=GTEX12696
+    color 238,238,0
+
+    track gtexRnaSignalSRR1404640
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1404640.hg19.bigWig
+    shortLabel brainCort M 111FC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-111FC-3126-SM-5GZZ2)
+    subGroups age=a60 tissue=brainCortex donor=GTEX111FC
+    color 238,238,0
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-3126-SM-5GZZ2 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.1 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1413522
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1413522.hg19.bigWig
+    shortLabel brainCort M 13IVO
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13IVO-2926-SM-5L3CZ)
+    subGroups age=a70 tissue=brainCortex donor=GTEX13IVO
+    color 238,238,0
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-2926-SM-5L3CZ \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.1 batch=BP-46734 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1414595
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1414595.hg19.bigWig
+    shortLabel brainCort M 13NYS
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13NYS-3126-SM-5KLYV)
+    subGroups age=a60 tissue=brainCortex donor=GTEX13NYS
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-3126-SM-5KLYV \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.9 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1416434
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1416434.hg19.bigWig
+    shortLabel brainCort M 14ASI
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-14ASI-3026-SM-5S2PN)
+    subGroups age=a60 tissue=brainCortex donor=GTEX14ASI
+    color 238,238,0
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-3026-SM-5S2PN \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=6.7 batch=BP-48647 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1417827
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1417827.hg19.bigWig
+    shortLabel brainCort M ZF28
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-ZF28-3026-SM-4WKHP)
+    subGroups age=a60 tissue=brainCortex donor=GTEXZF28
+    color 238,238,0
+
+    track gtexRnaSignalSRR1419187
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1419187.hg19.bigWig
+    shortLabel brainCort M ZE9C
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-ZE9C-3026-SM-4WKHB)
+    subGroups age=a60 tissue=brainCortex donor=GTEXZE9C
+    color 238,238,0
+
+    track gtexRnaSignalSRR1433088
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1433088.hg19.bigWig
+    shortLabel brainCort M 11NV4
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11NV4-2126-SM-5N9DS)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11NV4
+    color 238,238,0
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-2126-SM-5N9DS \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=5.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1437555
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1437555.hg19.bigWig
+    shortLabel brainCort M 11ONC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11ONC-2926-SM-5P9JM)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11ONC
+    color 238,238,0
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2926-SM-5P9JM \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.7 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1455369
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1455369.hg19.bigWig
+    shortLabel brainCort M 11TUW
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-11TUW-3126-SM-5GU4Y)
+    subGroups age=a60 tissue=brainCortex donor=GTEX11TUW
+    color 238,238,0
+
+    track gtexRnaSignalSRR1478768
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1478768.hg19.bigWig
+    shortLabel brainCort M 13G51
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13G51-3026-SM-5IJB8)
+    subGroups age=a60 tissue=brainCortex donor=GTEX13G51
+    color 238,238,0
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-3026-SM-5IJB8 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=5.9 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1480059
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1480059.hg19.bigWig
+    shortLabel brainCort M Y8DK
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-Y8DK-0826-SM-4TT3T)
+    subGroups age=a60 tissue=brainCortex donor=GTEXY8DK
+    color 238,238,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0826-SM-4TT3T \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7.1 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalSRR1488672
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1488672.hg19.bigWig
+    shortLabel brainCort M 12ZZZ
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-12ZZZ-3026-SM-5BC67)
+    subGroups age=a60 tissue=brainCortex donor=GTEX12ZZZ
+    color 238,238,0
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-3026-SM-5BC67 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=6.2 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1489137
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR1489137.hg19.bigWig
+    shortLabel brainCort M 13NYC
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-13NYC-2826-SM-5K7WR)
+    subGroups age=a60 tissue=brainCortex donor=GTEX13NYC
+    color 238,238,0
+    metadata donor=GTEX-13NYC age=60 sex=M hardyScore=2 sample=GTEX-13NYC-2826-SM-5K7WR \
+            tissue=brainCortex autolysisScore=2 rnaIntegrity=7.1 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR627425
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR627425.hg19.bigWig
+    shortLabel brainCort M N7MS
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-N7MS-2425-SM-26GMD)
+    subGroups age=a60 tissue=brainCortex donor=GTEXN7MS
+    color 238,238,0
+
+    track gtexRnaSignalSRR808614
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainCortex/gtexRnaSignalSRR808614.hg19.bigWig
+    shortLabel brainCort M X4XX
+    longLabel GTEx RNA signal from male Brain - Cortex (GTEX-X4XX-3026-SM-3NMB2)
+    subGroups age=a60 tissue=brainCortex donor=GTEXX4XX
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-3026-SM-3NMB2 \
+            tissue=brainCortex autolysisScore=1 rnaIntegrity=7 batch=BP-31129 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+

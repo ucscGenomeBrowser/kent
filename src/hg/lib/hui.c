@@ -44,6 +44,7 @@
 #include "trackHub.h"
 #include "gtexUi.h"
 #include "genbank.h"
+#include "htmlPage.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -283,18 +284,19 @@ return TRUE;
 }
 
 void extraUiLinks(char *db,struct trackDb *tdb)
-// Show downloads, schema and metadata links where appropriate
+// Show metadata, and downloads, schema links where appropriate
 {
+boolean hasMetadata = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
+                  && metadataForTable(db, tdb, NULL) != NULL);
+if (hasMetadata)
+    printf("<b>Metadata:</b><br>%s\n", metadataAsHtmlTable(db, tdb, FALSE, FALSE));
+
 boolean schemaLink = (!tdbIsDownloadsOnly(tdb) && !trackHubDatabase(db)
                   && isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
-boolean metadataLink = (!tdbIsComposite(tdb) && !trackHubDatabase(db)
-                  && metadataForTable(db, tdb, NULL) != NULL);
 boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 int links = 0;
 if (schemaLink)
-    links++;
-if (metadataLink)
     links++;
 if (downloadLink)
     links++;
@@ -307,7 +309,7 @@ if (links > 1)
 if (schemaLink)
     {
     makeSchemaLink(db,tdb,(links > 1 ? "schema":"View table schema"));
-    if (downloadLink || metadataLink)
+    if (downloadLink)
         printf(", ");
     }
 if (downloadLink)
@@ -325,11 +327,7 @@ if (downloadLink)
 
     makeNamedDownloadsLink(targetDb, tdb, (links > 1 ? "downloads":"Downloads"));
     freez(&targetDb);
-    if (metadataLink)
-        printf(",");
     }
-if (metadataLink)
-    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE);
 
 if (links > 1)
     printf("</td></tr></table>");
@@ -4833,9 +4831,25 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
 boolean parentLevel = isNameAtParentLevel(tdb,varName);
 boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
+
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
+char *style = option ? "display:block" : "display:none";
+printf("<DIV ID=\"densGraphOptions\" STYLE=\"%s\">\n", style);
+
+// we need to fool the wiggle dialog into defaulting to autoscale and maximum
+char *origType = tdb->type;
+tdb->type = "bedGraph";
+if (hashFindVal(tdb->settingsHash, AUTOSCALE) == NULL)
+    hashAdd(tdb->settingsHash, AUTOSCALE, "on");
+if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
+    hashAdd(tdb->settingsHash, WINDOWINGFUNCTION, wiggleWindowingEnumToString( wiggleWindowingMax));
 wigCfgUi(cart,tdb,name,title,TRUE);
+tdb->type = origType;
+printf("</DIV>\n\n");
+printf("<script>\n");
+printf("   $(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n", varName);
+printf("</script>\n\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)

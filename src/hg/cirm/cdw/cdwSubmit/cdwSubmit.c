@@ -516,7 +516,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
     "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
     "rcc", "idat", "fasta", "customTrack", "pdf", "vcf", "cram", "jpg", "text", "html",
-    "kallisto_abundance",
+    "kallisto_abundance", "expression_matrix",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
 if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
@@ -940,21 +940,64 @@ void cdwSubmit(char *email, char *manifestFile, char *metaFile)
 {
 char query[4*1024];
 char *submitDir = getCurrentDir();
+boolean dataSet = FALSE; 
 
 /* Get table with the required fields and calculate field positions */
-char *requiredFields[] = {"file", "format", "meta", };
+
+/* Look at the header line of the manifest file. If there is a data_set_id field use it as
+ * the linker for meta data. Otherwise use the meta field. */
+FILE *f = mustOpen(manifestFile,"r");
+char header[2048]; 
+mustGetLine(f, header, 2048); 
+// Look for data_set_id in the manifestFile, if it is there then override
+// the meta value for the rest of the submit pipeline
+struct slName *fields = charSepToSlNames(header, '\t'); 
+char *requiredFields[3];  
+
+if (slNameInList(fields, "data_set_id"))
+    {
+    dataSet = TRUE; 
+    if (slNameInList(fields,"meta"))
+	errAbort("Please provide either a meta or data_set_id in the manifest file."); 
+    requiredFields[0] = "file";
+    requiredFields[1] = "format";
+    requiredFields[2] = "data_set_id";
+    }
+else if (slNameInList(fields, "meta"))
+    {
+    requiredFields[0] = "file";
+    requiredFields[1] = "format";
+    requiredFields[2] = "meta";
+    }
+
 struct fieldedTable *table = fieldedTableFromTabFile(manifestFile, manifestFile,
     requiredFields, ArraySize(requiredFields));
 int fileIx = stringArrayIx("file", table->fields, table->fieldCount);
 int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
-int metaIx = stringArrayIx("meta", table->fields, table->fieldCount);
+int metaIx = 0; 
+if (dataSet)
+    metaIx = stringArrayIx("data_set_id", table->fields, table->fieldCount); 
+else
+    metaIx = stringArrayIx("meta", table->fields, table->fieldCount); 
 int enrichedInIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
 
 verbose(1, "Got %d fields and %d rows in %s\n", 
     table->fieldCount, slCount(table->rowList), manifestFile);
 struct tagStorm *tagStorm = tagStormFromFile(metaFile);
-struct hash *metaHash = tagStormUniqueIndex(tagStorm, "meta");
+struct hash *metaHash; 
+/* Set the hash to key on the data_set_id, and point to a slPair that 
+ * holds all the tags from the top stanza */ 
+if (dataSet)
+    {
+    struct hash *hash = hashNew(0);
+    char *dataSetId = slPairFindVal(tagStorm->forest->tagList, "data_set_id");
+    hashAdd(hash, dataSetId, tagStorm->forest);
+    metaHash = hash;
+    }
+else
+    metaHash = tagStormUniqueIndex(tagStorm, "meta"); 
 verbose(1, "Got %d items in metaHash\n", metaHash->elCount);
+
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
 checkManifestAndMetadata(table, fileIx, formatIx, metaIx, enrichedInIx,

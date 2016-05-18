@@ -1,0 +1,1185 @@
+    track gtexRnaSignalBrainFrontCortexSRR1317344
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1317344.hg19.bigWig
+    shortLabel brainFron F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-12ZZX-0011-R10b-SM-5DUWK)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R10b-SM-5DUWK \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.7 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1328895
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1328895.hg19.bigWig
+    shortLabel brainFron F YFC4
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-YFC4-0011-R10a-SM-4SOK5)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R10a-SM-4SOK5 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.4 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1457482
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1457482.hg19.bigWig
+    shortLabel brainFron F 13JUV
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13JUV-0011-R10b-SM-5LZXR)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R10b-SM-5LZXR \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.9 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR602704
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR602704.hg19.bigWig
+    shortLabel brainFron F Q2AG
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-Q2AG-0011-R10A-SM-2HMLA)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R10A-SM-2HMLA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.5 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR1354446
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1354446.hg19.bigWig
+    shortLabel brainFron F 1313W
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-1313W-0011-R10b-SM-5DUXA)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R10b-SM-5DUXA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.9 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1357478
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1357478.hg19.bigWig
+    shortLabel brainFron F 13SLX
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13SLX-0011-R10a-SM-5P9HV)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R10a-SM-5P9HV \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1360563
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1360563.hg19.bigWig
+    shortLabel brainFron F 14BIN
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-14BIN-0011-R10a-SM-5S2UA)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-14BIN age=50 sex=F hardyScore=2 sample=GTEX-14BIN-0011-R10a-SM-5S2UA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-48687 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1415234
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1415234.hg19.bigWig
+    shortLabel brainFron F ZE7O
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-ZE7O-0011-R10a-SM-57WAZ)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R10a-SM-57WAZ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.2 batch=BP-41252 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1433796
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1433796.hg19.bigWig
+    shortLabel brainFron F 12WS9
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-12WS9-0011-R10a-SM-57WBV)
+    subGroups sex=F age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR1476571
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1476571.hg19.bigWig
+    shortLabel brainFron F ZV68
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-ZV68-0011-R10a-SM-51MT7)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0011-R10a-SM-51MT7 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.7 batch=BP-41305 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1487685
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1487685.hg19.bigWig
+    shortLabel brainFron F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13OVJ-0011-R10b-SM-5L3HT)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R10b-SM-5L3HT \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1488651
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1488651.hg19.bigWig
+    shortLabel brainFron F 131XW
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-131XW-0011-R10a-SM-5DUVA)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-131XW age=50 sex=F hardyScore=4 sample=GTEX-131XW-0011-R10a-SM-5DUVA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.1 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR612563
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR612563.hg19.bigWig
+    shortLabel brainFron F RU72
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-RU72-0011-R10A-SM-2TF6D)
+    subGroups sex=F age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR818033
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR818033.hg19.bigWig
+    shortLabel brainFron F WWYW
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-WWYW-0011-R10A-SM-3NB35)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0011-R10A-SM-3NB35 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-29430 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1326179
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1326179.hg19.bigWig
+    shortLabel brainFron F 13X6K
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13X6K-0011-R10a-SM-5P9JR)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R10a-SM-5P9JR \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=9.1 batch=BP-48171 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1335446
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1335446.hg19.bigWig
+    shortLabel brainFron F OHPN
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-OHPN-0011-R10A-SM-5S2U3)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR1337098
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1337098.hg19.bigWig
+    shortLabel brainFron F 131YS
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-131YS-0011-R10b-SM-5EQ5N)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0011-R10b-SM-5EQ5N \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.5 batch=BP-44999 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1348159
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1348159.hg19.bigWig
+    shortLabel brainFron F 145LS
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-145LS-0011-R10a-SM-5PNUQ)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R10a-SM-5PNUQ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1361567
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1361567.hg19.bigWig
+    shortLabel brainFron F ZVT3
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-ZVT3-0011-R10b-SM-57WB6)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R10b-SM-57WB6 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-42240 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1413562
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1413562.hg19.bigWig
+    shortLabel brainFron F 11GSP
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-11GSP-0011-R10a-SM-5NQ7J)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R10a-SM-5NQ7J \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1432123
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1432123.hg19.bigWig
+    shortLabel brainFron F 13QIC
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13QIC-0011-R10a-SM-5O9C7)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13QIC age=60 sex=F hardyScore=2 sample=GTEX-13QIC-0011-R10a-SM-5O9C7 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.9 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1437538
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1437538.hg19.bigWig
+    shortLabel brainFron F 13O3O
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13O3O-0011-R10a-SM-5LUA9)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R10a-SM-5LUA9 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.7 batch=BP-47526 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1453851
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1453851.hg19.bigWig
+    shortLabel brainFron F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-ZVZQ-0011-R10b-SM-51MRT)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R10b-SM-51MRT \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.6 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1471817
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1471817.hg19.bigWig
+    shortLabel brainFron F 12WSD
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-12WSD-0011-R10b-SM-5GU79)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0011-R10b-SM-5GU79 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.5 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1487194
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1487194.hg19.bigWig
+    shortLabel brainFron F 13S7M
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-13S7M-0011-R10b-SM-5PNZB)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0011-R10b-SM-5PNZB \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.6 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1487362
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1487362.hg19.bigWig
+    shortLabel brainFron F X4EP
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-X4EP-0011-R10B-SM-4QASJ)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-0011-R10B-SM-4QASJ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-32212 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/16/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1498550
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1498550.hg19.bigWig
+    shortLabel brainFron F 145MI
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-145MI-0011-R10a-SM-5PNZD)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR600361
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR600361.hg19.bigWig
+    shortLabel brainFron F N7MT
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-N7MT-0011-R10A-SM-2I3E1)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0011-R10A-SM-2I3E1 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.8 batch=BP-19253 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR602314
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR602314.hg19.bigWig
+    shortLabel brainFron F NPJ7
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-NPJ7-0011-R10A-SM-2I3E5)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R10A-SM-2I3E5 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-19109 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=09/28/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR614802
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR614802.hg19.bigWig
+    shortLabel brainFron F QVJO
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-QVJO-0011-R10A-SM-2S1QJ)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R10A-SM-2S1QJ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.9 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR658307
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR658307.hg19.bigWig
+    shortLabel brainFron F QVUS
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-QVUS-0011-R10A-SM-3GIK3)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVUS age=60 sex=F hardyScore=4 sample=GTEX-QVUS-0011-R10A-SM-3GIK3 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.8 batch=BP-22309 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=02/09/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR821602
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR821602.hg19.bigWig
+    shortLabel brainFron F OHPN
+    longLabel GTEx RNA signal from female Brain - Frontal Cortex (BA9) (GTEX-OHPN-0011-R10A-SM-33HBU)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR1084842
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1084842.hg19.bigWig
+    shortLabel brainFron M WZTO
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-WZTO-0011-R10B-SM-4E3KB)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R10B-SM-4E3KB \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-35959 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/11/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1375571
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1375571.hg19.bigWig
+    shortLabel brainFron M 12126
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12126-0011-R10b-SM-5BC6T)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0011-R10b-SM-5BC6T \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8 batch=BP-43234 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1387809
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1387809.hg19.bigWig
+    shortLabel brainFron M ZAB4
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-ZAB4-0011-R10a-SM-4SOKH)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0011-R10a-SM-4SOKH \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-41239 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1414897
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1414897.hg19.bigWig
+    shortLabel brainFron M 13NYB
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13NYB-0011-R10a-SM-5KM43)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0011-R10a-SM-5KM43 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1455925
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1455925.hg19.bigWig
+    shortLabel brainFron M 12WSE
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12WSE-0011-R10b-SM-5P9JV)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-12WSE age=20 sex=M hardyScore=2 sample=GTEX-12WSE-0011-R10b-SM-5P9JV \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.5 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR601500
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR601500.hg19.bigWig
+    shortLabel brainFron M P44G
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-P44G-0011-R10A-SM-2I3FF)
+    subGroups sex=M age=a30 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR613627
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR613627.hg19.bigWig
+    shortLabel brainFron M NPJ8
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-NPJ8-0011-R10A-SM-2YUMO)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R10A-SM-2YUMO \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.8 batch=BP-19075 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/27/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR657777
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR657777.hg19.bigWig
+    shortLabel brainFron M P44H
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-P44H-0011-R10A-SM-2XCEK)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0011-R10A-SM-2XCEK \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-19253 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR662534
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR662534.hg19.bigWig
+    shortLabel brainFron M T5JC
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-T5JC-0011-R10A-SM-32PM2)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0011-R10A-SM-32PM2 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=9.4 batch=BP-24011 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/10/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1084649
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1084649.hg19.bigWig
+    shortLabel brainFron M X261
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-X261-0011-R10B-SM-4E3JT)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0011-R10B-SM-4E3JT \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-35959 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/11/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1320115
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1320115.hg19.bigWig
+    shortLabel brainFron M 145LU
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-145LU-0011-R10a-SM-5PNWJ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0011-R10a-SM-5PNWJ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1320963
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1320963.hg19.bigWig
+    shortLabel brainFron M 147F4
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-147F4-0011-R10b-SM-5S2WC)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-0011-R10b-SM-5S2WC \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.9 batch=BP-48815 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1333741
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1333741.hg19.bigWig
+    shortLabel brainFron M Z93S
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-Z93S-0011-R10a-SM-4RGNM)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0011-R10a-SM-4RGNM \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.2 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1348360
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1348360.hg19.bigWig
+    shortLabel brainFron M 12WSH
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12WSH-0011-R10a-SM-5LZUS)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0011-R10a-SM-5LZUS \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.8 batch=BP-44020 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1356619
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1356619.hg19.bigWig
+    shortLabel brainFron M 14BIL
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-14BIL-0011-R10a-SM-5SI75)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-0011-R10a-SM-5SI75 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.7 batch=BP-48687 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1360128
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1360128.hg19.bigWig
+    shortLabel brainFron M 11WQK
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-11WQK-0011-R10a-SM-5BC6R)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-0011-R10a-SM-5BC6R \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1367943
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1367943.hg19.bigWig
+    shortLabel brainFron M 13X6J
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13X6J-0011-R10b-SM-5PNWA)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0011-R10b-SM-5PNWA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.8 batch=BP-48171 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1390601
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1390601.hg19.bigWig
+    shortLabel brainFron M 131XH
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-131XH-0011-R10a-SM-5EGLJ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0011-R10a-SM-5EGLJ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.7 batch=BP-44999 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1402900
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1402900.hg19.bigWig
+    shortLabel brainFron M 11H98
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-11H98-0011-R10b-SM-5NQ98)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0011-R10b-SM-5NQ98 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1408208
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1408208.hg19.bigWig
+    shortLabel brainFron M 13O3Q
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13O3Q-0011-R10b-SM-5KM39)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-0011-R10b-SM-5KM39 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.4 batch=BP-47526 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1408368
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1408368.hg19.bigWig
+    shortLabel brainFron M 12ZZW
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12ZZW-0011-R10b-SM-5HL9X)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-0011-R10b-SM-5HL9X \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.2 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1434526
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1434526.hg19.bigWig
+    shortLabel brainFron M 13OVL
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13OVL-0011-R10a-SM-5L3GS)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R10a-SM-5L3GS \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1435775
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1435775.hg19.bigWig
+    shortLabel brainFron M 12WSC
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12WSC-0011-R10a-SM-5GU57)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0011-R10a-SM-5GU57 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.5 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1440986
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1440986.hg19.bigWig
+    shortLabel brainFron M 13OW6
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13OW6-0011-R10a-SM-5L3HE)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0011-R10a-SM-5L3HE \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47491 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1442571
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1442571.hg19.bigWig
+    shortLabel brainFron M 13FLV
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13FLV-0011-R10b-SM-5LZZ2)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0011-R10b-SM-5LZZ2 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.5 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1471943
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1471943.hg19.bigWig
+    shortLabel brainFron M 145MH
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-145MH-0011-R10b-SM-5PNUK)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0011-R10b-SM-5PNUK \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.2 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1474777
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1474777.hg19.bigWig
+    shortLabel brainFron M 13FXS
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13FXS-0011-R10a-SM-5J2MA)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0011-R10a-SM-5J2MA \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.2 batch=BP-46363 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR2135333
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR2135333.hg19.bigWig
+    shortLabel brainFron M T6MN
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-T6MN-0011-R10A-SM-5CHQC_rep1)
+    subGroups sex=M age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR604456
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR604456.hg19.bigWig
+    shortLabel brainFron M NL4W
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-NL4W-0011-R10A-SM-2I3DY)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-NL4W age=50 sex=M hardyScore=4 sample=GTEX-NL4W-0011-R10A-SM-2I3DY \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.1 batch=BP-19253 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR657754
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR657754.hg19.bigWig
+    shortLabel brainFron M QMR6
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-QMR6-0011-R10A-SM-32PKO)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-QMR6 age=50 sex=M hardyScore=4 sample=GTEX-QMR6-0011-R10A-SM-32PKO \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.8 batch=BP-20819 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=12/14/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR661349
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR661349.hg19.bigWig
+    shortLabel brainFron M S7SE
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-S7SE-0011-R10A-SM-2XCDF)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0011-R10A-SM-2XCDF \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.5 batch=BP-22979 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=03/08/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR662233
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR662233.hg19.bigWig
+    shortLabel brainFron M T6MN
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-T6MN-0011-R10A-SM-32QP7)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0011-R10A-SM-32QP7 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8 batch=BP-24029 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/11/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR814967
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR814967.hg19.bigWig
+    shortLabel brainFron M WVLH
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-WVLH-0011-R10A-SM-3MJFM)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0011-R10A-SM-3MJFM \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-28513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR818210
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR818210.hg19.bigWig
+    shortLabel brainFron M WL46
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-WL46-0011-R10A-SM-3MJFQ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0011-R10A-SM-3MJFQ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.6 batch=BP-28281 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/30/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1072367
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1072367.hg19.bigWig
+    shortLabel brainFron M XMD1
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-XMD1-0011-R10A-SM-4AT4A)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0011-R10A-SM-4AT4A \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-34648 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/21/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1077405
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1077405.hg19.bigWig
+    shortLabel brainFron M X4XY
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-X4XY-0011-R10B-SM-46MWS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainFrontCortexSRR1085495
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1085495.hg19.bigWig
+    shortLabel brainFron M X4XX
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-X4XX-0011-R10B-SM-46MWO)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R10B-SM-46MWO \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.9 batch=BP-32212 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/16/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1099499
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1099499.hg19.bigWig
+    shortLabel brainFron M XLM4
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-XLM4-0011-R10A-SM-4AT5P)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0011-R10A-SM-4AT5P \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8 batch=BP-34615 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2012
+
+    track gtexRnaSignalBrainFrontCortexSRR1316940
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1316940.hg19.bigWig
+    shortLabel brainFron M 12WSA
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12WSA-0011-R10b-SM-5P9ET)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0011-R10b-SM-5P9ET \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-43965 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1318163
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1318163.hg19.bigWig
+    shortLabel brainFron M 13G51
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13G51-0011-R10b-SM-5LZYF)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-0011-R10b-SM-5LZYF \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.9 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1331579
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1331579.hg19.bigWig
+    shortLabel brainFron M 13N2G
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13N2G-0011-R10a-SM-5MR34)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0011-R10a-SM-5MR34 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1336548
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1336548.hg19.bigWig
+    shortLabel brainFron M 13IVO
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13IVO-0011-R10a-SM-5LZY3)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0011-R10a-SM-5LZY3 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.8 batch=BP-46932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1337412
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1337412.hg19.bigWig
+    shortLabel brainFron M 13JVG
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13JVG-0011-R10b-SM-5KM2P)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0011-R10b-SM-5KM2P \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.9 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1356444
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1356444.hg19.bigWig
+    shortLabel brainFron M 13SLW
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13SLW-0011-R10a-SM-5S2UI)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R10a-SM-5S2UI \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1368772
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1368772.hg19.bigWig
+    shortLabel brainFron M 12ZZY
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12ZZY-0011-R10b-SM-5HL7W)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0011-R10b-SM-5HL7W \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.7 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1381673
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1381673.hg19.bigWig
+    shortLabel brainFron M 1477Z
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-1477Z-0011-R10b-SM-5S2RF)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-0011-R10b-SM-5S2RF \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1386708
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1386708.hg19.bigWig
+    shortLabel brainFron M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13RTJ-0011-R10b-SM-5O9CW)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R10b-SM-5O9CW \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.5 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1387264
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1387264.hg19.bigWig
+    shortLabel brainFron M 13X6I
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13X6I-0011-R10a-SM-5PNWI)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R10a-SM-5PNWI \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48069 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/08/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1399779
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1399779.hg19.bigWig
+    shortLabel brainFron M 13N1W
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13N1W-0011-R10b-SM-5MR4H)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0011-R10b-SM-5MR4H \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-47087 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1416477
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1416477.hg19.bigWig
+    shortLabel brainFron M 12WSF
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12WSF-0011-R10a-SM-5LZVH)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-12WSF age=70 sex=M hardyScore=4 sample=GTEX-12WSF-0011-R10a-SM-5LZVH \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-44020 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1416754
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1416754.hg19.bigWig
+    shortLabel brainFron M 13NZA
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13NZA-0011-R10b-SM-5KM54)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0011-R10b-SM-5KM54 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1418127
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1418127.hg19.bigWig
+    shortLabel brainFron M 13FTZ
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13FTZ-0011-R10b-SM-5KLZS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13FTZ age=60 sex=M hardyScore=2 sample=GTEX-13FTZ-0011-R10b-SM-5KLZS \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.2 batch=BP-46364 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1418837
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1418837.hg19.bigWig
+    shortLabel brainFron M 13OW8
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13OW8-0011-R10a-SM-5L3H6)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0011-R10a-SM-5L3H6 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1421177
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1421177.hg19.bigWig
+    shortLabel brainFron M 132Q8
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-132Q8-0011-R10b-SM-5DUWZ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-0011-R10b-SM-5DUWZ \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=9.1 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1435020
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1435020.hg19.bigWig
+    shortLabel brainFron M 147GR
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-147GR-0011-R10b-SM-5S2UM)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-0011-R10b-SM-5S2UM \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-48687 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1435293
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1435293.hg19.bigWig
+    shortLabel brainFron M 139TS
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-139TS-0011-R10a-SM-5K7TU)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-0011-R10a-SM-5K7TU \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1439873
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1439873.hg19.bigWig
+    shortLabel brainFron M 12ZZZ
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-12ZZZ-0011-R10a-SM-5P9HC)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-0011-R10a-SM-5P9HC \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-44878 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1444622
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1444622.hg19.bigWig
+    shortLabel brainFron M 1445S
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-1445S-0011-R10a-SM-5PNWB)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0011-R10a-SM-5PNWB \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.4 batch=BP-48171 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1444678
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1444678.hg19.bigWig
+    shortLabel brainFron M ZXG5
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-ZXG5-0011-R10a-SM-57WDD)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0011-R10a-SM-57WDD \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=6.3 batch=BP-41480 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1447693
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1447693.hg19.bigWig
+    shortLabel brainFron M ZDXO
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-ZDXO-0011-R10a-SM-4WWD8)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-0011-R10a-SM-4WWD8 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.7 batch=BP-41252 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1453341
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1453341.hg19.bigWig
+    shortLabel brainFron M 13CZV
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13CZV-0011-R10b-SM-5LZYD)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13CZV age=60 sex=M hardyScore=2 sample=GTEX-13CZV-0011-R10b-SM-5LZYD \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1454803
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1454803.hg19.bigWig
+    shortLabel brainFron M 13NYS
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-13NYS-0011-R10a-SM-5MR4S)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R10a-SM-5MR4S \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1457503
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1457503.hg19.bigWig
+    shortLabel brainFron M 14753
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-14753-0011-R10b-SM-5S2WE)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0011-R10b-SM-5S2WE \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48171 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainFrontCortexSRR1474553
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1474553.hg19.bigWig
+    shortLabel brainFron M Y8DK
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-Y8DK-0011-R10A-SM-4SOK1)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0011-R10A-SM-4SOK1 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.9 batch=BP-40981 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1485459
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1485459.hg19.bigWig
+    shortLabel brainFron M ZF28
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-ZF28-0011-R10a-SM-4WWEH)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0011-R10a-SM-4WWEH \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-41252 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR1500868
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR1500868.hg19.bigWig
+    shortLabel brainFron M 11WQC
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-11WQC-0011-R10a-SM-57WCT)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0011-R10a-SM-57WCT \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=5.9 batch=BP-43316 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/09/2013
+
+    track gtexRnaSignalBrainFrontCortexSRR595926
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR595926.hg19.bigWig
+    shortLabel brainFron M N7MS
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-N7MS-0011-R10A-SM-2HMJK)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0011-R10A-SM-2HMJK \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-19253 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR602516
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR602516.hg19.bigWig
+    shortLabel brainFron M NL3H
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-NL3H-0011-R10A-SM-2I3E9)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NL3H age=60 sex=M hardyScore=3 sample=GTEX-NL3H-0011-R10A-SM-2I3E9 \
+            tissue=brainFrontCortex autolysisScore=-1 rnaIntegrity=7.7 batch=BP-19109 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=09/28/2011
+
+    track gtexRnaSignalBrainFrontCortexSRR657127
+    parent gtexRnaSignalBrainFrontCortex off
+    type bigWig
+    bigDataUrl brainFrontCortex/gtexRnaSignalSRR657127.hg19.bigWig
+    shortLabel brainFron M UTHO
+    longLabel GTEx RNA signal from male Brain - Frontal Cortex (BA9) (GTEX-UTHO-0011-R10A-SM-3GIJQ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+

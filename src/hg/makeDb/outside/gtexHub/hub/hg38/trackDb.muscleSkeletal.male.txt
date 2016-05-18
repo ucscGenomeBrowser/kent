@@ -1,0 +1,2967 @@
+    track gtexRnaSignalSRR1071955
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1071955.hg38.bigWig
+    shortLabel muscleSke M XQ3S
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XQ3S-0426-SM-4BOOA)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXXQ3S
+    color 110,86,255
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-0426-SM-4BOOA \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.4 batch=BP-33866 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalSRR1085519
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1085519.hg38.bigWig
+    shortLabel muscleSke M X88G
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-X88G-0326-SM-47JZ4)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXX88G
+    color 110,86,255
+    metadata donor=GTEX-X88G age=30 sex=M hardyScore=-1 sample=GTEX-X88G-0326-SM-47JZ4 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.4 batch=BP-32413 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2012
+
+    track gtexRnaSignalSRR1089901
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1089901.hg38.bigWig
+    shortLabel muscleSke M XPT6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XPT6-2026-SM-4B64V)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXXPT6
+    color 110,86,255
+    metadata donor=GTEX-XPT6 age=20 sex=M hardyScore=0 sample=GTEX-XPT6-2026-SM-4B64V \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.9 batch=BP-33777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSRR1096174
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1096174.hg38.bigWig
+    shortLabel muscleSke M X5EB
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-X5EB-2326-SM-46MW5)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXX5EB
+    color 110,86,255
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-2326-SM-46MW5 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-31273 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2012
+
+    track gtexRnaSignalSRR1100588
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1100588.hg38.bigWig
+    shortLabel muscleSke M U3ZH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U3ZH-1926-SM-4DXTR)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXU3ZH
+    color 110,86,255
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-1926-SM-4DXTR \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-25326 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalSRR1320321
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1320321.hg38.bigWig
+    shortLabel muscleSke M 13RTK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13RTK-1626-SM-5QGQS)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX13RTK
+    color 110,86,255
+    metadata donor=GTEX-13RTK age=20 sex=M hardyScore=0 sample=GTEX-13RTK-1626-SM-5QGQS \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.5 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1322900
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1322900.hg38.bigWig
+    shortLabel muscleSke M 1314G
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1314G-1726-SM-5LZUX)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX1314G
+    color 110,86,255
+    metadata donor=GTEX-1314G age=30 sex=M hardyScore=0 sample=GTEX-1314G-1726-SM-5LZUX \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1323152
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1323152.hg38.bigWig
+    shortLabel muscleSke M 11O72
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11O72-0326-SM-5986D)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX11O72
+    color 110,86,255
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-0326-SM-5986D \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1324390
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1324390.hg38.bigWig
+    shortLabel muscleSke M 11EQ9
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11EQ9-2126-SM-5PNVW)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX11EQ9
+    color 110,86,255
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-2126-SM-5PNVW \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.7 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1325377
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1325377.hg38.bigWig
+    shortLabel muscleSke M YFCO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-YFCO-1926-SM-4W212)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXYFCO
+    color 110,86,255
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-1926-SM-4W212 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalSRR1326292
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1326292.hg38.bigWig
+    shortLabel muscleSke M WHSE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WHSE-0526-SM-5GZZD)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXWHSE
+    color 110,86,255
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0526-SM-5GZZD \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-40888 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalSRR1329003
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1329003.hg38.bigWig
+    shortLabel muscleSke M WHSE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WHSE-0526-SM-4SOJ6)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXWHSE
+    color 110,86,255
+
+    track gtexRnaSignalSRR1331639
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1331639.hg38.bigWig
+    shortLabel muscleSke M 11TT1
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11TT1-2326-SM-5GU6N)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX11TT1
+    color 110,86,255
+
+    track gtexRnaSignalSRR1331922
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1331922.hg38.bigWig
+    shortLabel muscleSke M 12KS4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12KS4-0826-SM-5BC5R)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX12KS4
+    color 110,86,255
+    metadata donor=GTEX-12KS4 age=30 sex=M hardyScore=0 sample=GTEX-12KS4-0826-SM-5BC5R \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=6.5 batch=BP-43916 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1336569
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1336569.hg38.bigWig
+    shortLabel muscleSke M ZUA1
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZUA1-0326-SM-5NQA3)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXZUA1
+    color 110,86,255
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0326-SM-5NQA3 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1345894
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1345894.hg38.bigWig
+    shortLabel muscleSke M 13S86
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13S86-2326-SM-5RQK1)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX13S86
+    color 110,86,255
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-2326-SM-5RQK1 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1353555
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1353555.hg38.bigWig
+    shortLabel muscleSke M 11ZUS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11ZUS-1426-SM-5FQSP)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX11ZUS
+    color 110,86,255
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-1426-SM-5FQSP \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-43823 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1355352
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1355352.hg38.bigWig
+    shortLabel muscleSke M 14A6H
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14A6H-2826-SM-5QGPM)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX14A6H
+    color 110,86,255
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-2826-SM-5QGPM \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.1 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1356705
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1356705.hg38.bigWig
+    shortLabel muscleSke M 11NSD
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11NSD-2026-SM-5HL5U)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX11NSD
+    color 110,86,255
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-2026-SM-5HL5U \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.5 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1360402
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1360402.hg38.bigWig
+    shortLabel muscleSke M 13FTW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13FTW-2326-SM-5K7YS)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX13FTW
+    color 110,86,255
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-2326-SM-5K7YS \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.1 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1365034
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1365034.hg38.bigWig
+    shortLabel muscleSke M 12WSN
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSN-2526-SM-5LZU8)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX12WSN
+    color 110,86,255
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-2526-SM-5LZU8 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1367715
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1367715.hg38.bigWig
+    shortLabel muscleSke M ZTX8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZTX8-1626-SM-51MRY)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXZTX8
+    color 110,86,255
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-1626-SM-51MRY \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1367988
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1367988.hg38.bigWig
+    shortLabel muscleSke M 144GM
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-144GM-2026-SM-5LU3D)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX144GM
+    color 110,86,255
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-2026-SM-5LU3D \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.4 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1368072
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1368072.hg38.bigWig
+    shortLabel muscleSke M 11P7K
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11P7K-1926-SM-5GU6R)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX11P7K
+    color 110,86,255
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-1926-SM-5GU6R \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=9 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1368264
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1368264.hg38.bigWig
+    shortLabel muscleSke M 13NZB
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13NZB-2626-SM-5J2M7)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX13NZB
+    color 110,86,255
+    metadata donor=GTEX-13NZB age=30 sex=M hardyScore=1 sample=GTEX-13NZB-2626-SM-5J2M7 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1376764
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1376764.hg38.bigWig
+    shortLabel muscleSke M ZWKS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZWKS-0326-SM-5NQ7G)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXZWKS
+    color 110,86,255
+    metadata donor=GTEX-ZWKS age=30 sex=M hardyScore=4 sample=GTEX-ZWKS-0326-SM-5NQ7G \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=6.2 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1377800
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1377800.hg38.bigWig
+    shortLabel muscleSke M ZVZO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZVZO-0326-SM-5HL4N)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXZVZO
+    color 110,86,255
+    metadata donor=GTEX-ZVZO age=40 sex=M hardyScore=-1 sample=GTEX-ZVZO-0326-SM-5HL4N \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1379110
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1379110.hg38.bigWig
+    shortLabel muscleSke M Z9EW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Z9EW-1726-SM-5CVMO)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXZ9EW
+    color 110,86,255
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-1726-SM-5CVMO \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1380716
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1380716.hg38.bigWig
+    shortLabel muscleSke M 145LT
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-145LT-1626-SM-5O992)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX145LT
+    color 110,86,255
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-1626-SM-5O992 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.7 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1384138
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1384138.hg38.bigWig
+    shortLabel muscleSke M ZZ64
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZZ64-1526-SM-5E43K)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXZZ64
+    color 110,86,255
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-1526-SM-5E43K \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.2 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1392186
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1392186.hg38.bigWig
+    shortLabel muscleSke M 12C56
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12C56-1926-SM-5FQUG)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX12C56
+    color 110,86,255
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-1926-SM-5FQUG \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1395742
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1395742.hg38.bigWig
+    shortLabel muscleSke M 11DXW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11DXW-0726-SM-5H12J)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX11DXW
+    color 110,86,255
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-0726-SM-5H12J \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1403133
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1403133.hg38.bigWig
+    shortLabel muscleSke M 11P82
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11P82-1826-SM-5PNYJ)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX11P82
+    color 110,86,255
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-1826-SM-5PNYJ \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1407950
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1407950.hg38.bigWig
+    shortLabel muscleSke M YB5E
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-YB5E-2226-SM-5IFJ5)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXYB5E
+    color 110,86,255
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-2226-SM-5IFJ5 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1417483
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1417483.hg38.bigWig
+    shortLabel muscleSke M 12126
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12126-0526-SM-5PNW4)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEX12126
+    color 110,86,255
+    metadata donor=GTEX-12126 age=20 sex=M hardyScore=1 sample=GTEX-12126-0526-SM-5PNW4 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-47888 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1430375
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1430375.hg38.bigWig
+    shortLabel muscleSke M ZT9X
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZT9X-1826-SM-57WDU)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXZT9X
+    color 110,86,255
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-1826-SM-57WDU \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.8 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalSRR1430729
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1430729.hg38.bigWig
+    shortLabel muscleSke M XBEW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XBEW-1026-SM-4QARV)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXXBEW
+    color 110,86,255
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-1026-SM-4QARV \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-36391 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/22/2013
+
+    track gtexRnaSignalSRR1432390
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1432390.hg38.bigWig
+    shortLabel muscleSke M 1339X
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1339X-2426-SM-5KLYU)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX1339X
+    color 110,86,255
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-2426-SM-5KLYU \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1435311
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1435311.hg38.bigWig
+    shortLabel muscleSke M Y9LG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Y9LG-1926-SM-5IFHY)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXY9LG
+    color 110,86,255
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-1926-SM-5IFHY \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.3 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1436651
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1436651.hg38.bigWig
+    shortLabel muscleSke M ZYT6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZYT6-1626-SM-5E45R)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXZYT6
+    color 110,86,255
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-1626-SM-5E45R \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1441590
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1441590.hg38.bigWig
+    shortLabel muscleSke M S33H
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-S33H-2226-SM-5S2UF)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXS33H
+    color 110,86,255
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-2226-SM-5S2UF \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-22727 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1442928
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1442928.hg38.bigWig
+    shortLabel muscleSke M 1399R
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1399R-2526-SM-5IFG2)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX1399R
+    color 110,86,255
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-2526-SM-5IFG2 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1444306
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1444306.hg38.bigWig
+    shortLabel muscleSke M 1399Q
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1399Q-2426-SM-5J2MO)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX1399Q
+    color 110,86,255
+    metadata donor=GTEX-1399Q age=40 sex=M hardyScore=0 sample=GTEX-1399Q-2426-SM-5J2MO \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.6 batch=BP-46482 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1454651
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1454651.hg38.bigWig
+    shortLabel muscleSke M WHSE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WHSE-0526-SM-5HL79)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXWHSE
+    color 110,86,255
+
+    track gtexRnaSignalSRR1473078
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1473078.hg38.bigWig
+    shortLabel muscleSke M ZAB4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZAB4-0426-SM-5HL7N)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXZAB4
+    color 110,86,255
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0426-SM-5HL7N \
+            tissue=muscleSkeletal autolysisScore=2 rnaIntegrity=8.1 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1475104
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1475104.hg38.bigWig
+    shortLabel muscleSke M 146FQ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-146FQ-0326-SM-5NQAX)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX146FQ
+    color 110,86,255
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0326-SM-5NQAX \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1475300
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1475300.hg38.bigWig
+    shortLabel muscleSke M ZQUD
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZQUD-1726-SM-51MRQ)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXZQUD
+    color 110,86,255
+    metadata donor=GTEX-ZQUD age=30 sex=M hardyScore=0 sample=GTEX-ZQUD-1726-SM-51MRQ \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSRR1478362
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1478362.hg38.bigWig
+    shortLabel muscleSke M 14C39
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14C39-2426-SM-5S2U5)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX14C39
+    color 110,86,255
+    metadata donor=GTEX-14C39 age=40 sex=M hardyScore=2 sample=GTEX-14C39-2426-SM-5S2U5 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.4 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1480038
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1480038.hg38.bigWig
+    shortLabel muscleSke M ZA64
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZA64-2026-SM-5PNXT)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXZA64
+    color 110,86,255
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-2026-SM-5PNXT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalSRR1480547
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1480547.hg38.bigWig
+    shortLabel muscleSke M YEC4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-YEC4-2226-SM-5IFJT)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXYEC4
+    color 110,86,255
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-2226-SM-5IFJT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.2 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1486156
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1486156.hg38.bigWig
+    shortLabel muscleSke M 13NYB
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13NYB-2726-SM-5J2MT)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEX13NYB
+    color 110,86,255
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-2726-SM-5J2MT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1486799
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1486799.hg38.bigWig
+    shortLabel muscleSke M ZVTK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZVTK-0626-SM-5GU6Y)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXZVTK
+    color 110,86,255
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0626-SM-5GU6Y \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR1488091
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1488091.hg38.bigWig
+    shortLabel muscleSke M 14ICL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14ICL-1926-SM-5RQIZ)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX14ICL
+    color 110,86,255
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-1926-SM-5RQIZ \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.4 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1488470
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1488470.hg38.bigWig
+    shortLabel muscleSke M 11LCK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11LCK-1226-SM-5Q5AM)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEX11LCK
+    color 110,86,255
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-1226-SM-5Q5AM \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR598044
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR598044.hg38.bigWig
+    shortLabel muscleSke M NFK9
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-NFK9-0626-SM-2HMIV)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXNFK9
+    color 110,86,255
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0626-SM-2HMIV \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=9.9 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalSRR601695
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR601695.hg38.bigWig
+    shortLabel muscleSke M NPJ8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-NPJ8-1626-SM-2HMIY)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXNPJ8
+    color 110,86,255
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-1626-SM-2HMIY \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=9.8 batch=BP-17315 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR607067
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR607067.hg38.bigWig
+    shortLabel muscleSke M OOBK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OOBK-1626-SM-2HMKG)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXOOBK
+    color 110,86,255
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-1626-SM-2HMKG \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-18257 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR612539
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR612539.hg38.bigWig
+    shortLabel muscleSke M QV31
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QV31-1426-SM-2S1QD)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXQV31
+    color 110,86,255
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-1426-SM-2S1QD \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-20787 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/13/2011
+
+    track gtexRnaSignalSRR613282
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613282.hg38.bigWig
+    shortLabel muscleSke M R55E
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-R55E-0526-SM-2TC6B)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXR55E
+    color 110,86,255
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0526-SM-2TC6B \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-21443 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR613999
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613999.hg38.bigWig
+    shortLabel muscleSke M QEG4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QEG4-0626-SM-2S1OY)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXQEG4
+    color 110,86,255
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-0626-SM-2S1OY \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/23/2011
+
+    track gtexRnaSignalSRR615225
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615225.hg38.bigWig
+    shortLabel muscleSke M Q2AH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Q2AH-1826-SM-2S1Q2)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXQ2AH
+    color 110,86,255
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-1826-SM-2S1Q2 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-20000 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/09/2011
+
+    track gtexRnaSignalSRR615311
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615311.hg38.bigWig
+    shortLabel muscleSke M QESD
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QESD-1626-SM-2S1RB)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXQESD
+    color 110,86,255
+    metadata donor=GTEX-QESD age=20 sex=M hardyScore=0 sample=GTEX-QESD-1626-SM-2S1RB \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-20481 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/02/2011
+
+    track gtexRnaSignalSRR615479
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615479.hg38.bigWig
+    shortLabel muscleSke M PW2O
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-PW2O-1726-SM-2S1OO)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXPW2O
+    color 110,86,255
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-1726-SM-2S1OO \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.7 batch=BP-19459 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR615611
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615611.hg38.bigWig
+    shortLabel muscleSke M QLQW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QLQW-1326-SM-2S1QS)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXQLQW
+    color 110,86,255
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-1326-SM-2S1QS \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-20740 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/12/2011
+
+    track gtexRnaSignalSRR615814
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615814.hg38.bigWig
+    shortLabel muscleSke M PLZ6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-PLZ6-1526-SM-2S1OC)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXPLZ6
+    color 110,86,255
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-1526-SM-2S1OC \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-19256 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR654766
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR654766.hg38.bigWig
+    shortLabel muscleSke M U8XE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U8XE-0726-SM-3DB8O)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXU8XE
+    color 110,86,255
+    metadata donor=GTEX-U8XE age=30 sex=M hardyScore=4 sample=GTEX-U8XE-0726-SM-3DB8O \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-25734 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSRR658259
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR658259.hg38.bigWig
+    shortLabel muscleSke M U4B1
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U4B1-1626-SM-3DB8N)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXU4B1
+    color 110,86,255
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-1626-SM-3DB8N \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-25601 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSRR661096
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR661096.hg38.bigWig
+    shortLabel muscleSke M R55C
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-R55C-1726-SM-3GADJ)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXR55C
+    color 110,86,255
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-1726-SM-3GADJ \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7 batch=BP-21341 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR661901
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR661901.hg38.bigWig
+    shortLabel muscleSke M P44G
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-P44G-0526-SM-2XCD1)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXP44G
+    color 110,86,255
+
+    track gtexRnaSignalSRR662918
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR662918.hg38.bigWig
+    shortLabel muscleSke M Q2AI
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Q2AI-1526-SM-3GIJ3)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXQ2AI
+    color 110,86,255
+
+    track gtexRnaSignalSRR663807
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR663807.hg38.bigWig
+    shortLabel muscleSke M U3ZM
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U3ZM-1226-SM-3DB9G)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXU3ZM
+    color 110,86,255
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-1226-SM-3DB9G \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-25562 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR663874
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR663874.hg38.bigWig
+    shortLabel muscleSke M SNMC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-SNMC-1426-SM-2XCFM)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXSNMC
+    color 110,86,255
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-1426-SM-2XCFM \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-23823 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalSRR665478
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR665478.hg38.bigWig
+    shortLabel muscleSke M WFG8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WFG8-2426-SM-3GILL)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXWFG8
+    color 110,86,255
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-2426-SM-3GILL \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-27446 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSRR808244
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR808244.hg38.bigWig
+    shortLabel muscleSke M VUSH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-VUSH-0326-SM-3NB2I)
+    subGroups age=a30 tissue=muscleSkeletal donor=GTEXVUSH
+    color 110,86,255
+
+    track gtexRnaSignalSRR811771
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR811771.hg38.bigWig
+    shortLabel muscleSke M T5JC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-T5JC-0626-SM-3NMA6)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXT5JC
+    color 110,86,255
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0626-SM-3NMA6 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-24678 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalSRR813656
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR813656.hg38.bigWig
+    shortLabel muscleSke M OIZI
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OIZI-0626-SM-2XCEH)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXOIZI
+    color 110,86,255
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-0626-SM-2XCEH \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-18178 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/11/2011
+
+    track gtexRnaSignalSRR815044
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR815044.hg38.bigWig
+    shortLabel muscleSke M O5YT
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-O5YT-1626-SM-32PK6)
+    subGroups age=a20 tissue=muscleSkeletal donor=GTEXO5YT
+    color 110,86,255
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-1626-SM-32PK6 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-17533 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSRR817282
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR817282.hg38.bigWig
+    shortLabel muscleSke M WZTO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WZTO-0826-SM-3NM8Q)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXWZTO
+    color 110,86,255
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0826-SM-3NM8Q \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-29831 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR819054
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR819054.hg38.bigWig
+    shortLabel muscleSke M WFON
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WFON-2326-SM-3LK7M)
+    subGroups age=a40 tissue=muscleSkeletal donor=GTEXWFON
+    color 110,86,255
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-2326-SM-3LK7M \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=6.3 batch=BP-27493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSRR1068855
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1068855.hg38.bigWig
+    shortLabel muscleSke M XOTO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XOTO-0526-SM-4B662)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXOTO
+    color 110,86,255
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0526-SM-4B662 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.6 batch=BP-33606 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalSRR1074359
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1074359.hg38.bigWig
+    shortLabel muscleSke M XQ8I
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XQ8I-0626-SM-4BOPT)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXQ8I
+    color 110,86,255
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-0626-SM-4BOPT \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-33940 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalSRR1074719
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1074719.hg38.bigWig
+    shortLabel muscleSke M XPVG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XPVG-2526-SM-4B66D)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXPVG
+    color 110,86,255
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-2526-SM-4B66D \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-34001 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/06/2012
+
+    track gtexRnaSignalSRR1084417
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1084417.hg38.bigWig
+    shortLabel muscleSke M U3ZG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U3ZG-0326-SM-47JXN)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXU3ZG
+    color 110,86,255
+    metadata donor=GTEX-U3ZG age=50 sex=M hardyScore=-1 sample=GTEX-U3ZG-0326-SM-47JXN \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=6.8 batch=BP-29546 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalSRR1092349
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1092349.hg38.bigWig
+    shortLabel muscleSke M UPJH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-UPJH-0526-SM-4IHK8)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXUPJH
+    color 110,86,255
+    metadata donor=GTEX-UPJH age=50 sex=M hardyScore=2 sample=GTEX-UPJH-0526-SM-4IHK8 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSRR1094051
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1094051.hg38.bigWig
+    shortLabel muscleSke M XUYS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XUYS-0326-SM-47JX2)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXUYS
+    color 110,86,255
+    metadata donor=GTEX-XUYS age=50 sex=M hardyScore=-1 sample=GTEX-XUYS-0326-SM-47JX2 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-34830 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/04/2013
+
+    track gtexRnaSignalSRR1095720
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1095720.hg38.bigWig
+    shortLabel muscleSke M VUSG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-VUSG-2626-SM-4KKZI)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXVUSG
+    color 110,86,255
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-2626-SM-4KKZI \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-27126 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalSRR1098474
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1098474.hg38.bigWig
+    shortLabel muscleSke M XGQ4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XGQ4-2326-SM-4AT53)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXGQ4
+    color 110,86,255
+
+    track gtexRnaSignalSRR1098879
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1098879.hg38.bigWig
+    shortLabel muscleSke M T2YK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-T2YK-0226-SM-4DM5O)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXT2YK
+    color 110,86,255
+
+    track gtexRnaSignalSRR1310476
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1310476.hg38.bigWig
+    shortLabel muscleSke M 117YW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-117YW-2426-SM-5Q5AE)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX117YW
+    color 110,86,255
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-2426-SM-5Q5AE \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.1 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1317134
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1317134.hg38.bigWig
+    shortLabel muscleSke M 144GL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-144GL-0326-SM-5QGOY)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX144GL
+    color 110,86,255
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0326-SM-5QGOY \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1321987
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1321987.hg38.bigWig
+    shortLabel muscleSke M 117YX
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-117YX-2526-SM-5EQ4Q)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX117YX
+    color 110,86,255
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-2526-SM-5EQ4Q \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1325225
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1325225.hg38.bigWig
+    shortLabel muscleSke M 11UD2
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11UD2-0326-SM-5EQLE)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11UD2
+    color 110,86,255
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0326-SM-5EQLE \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1326161
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1326161.hg38.bigWig
+    shortLabel muscleSke M 13O21
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13O21-1726-SM-5MR5A)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13O21
+    color 110,86,255
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-1726-SM-5MR5A \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1328797
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1328797.hg38.bigWig
+    shortLabel muscleSke M 144FL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-144FL-0326-SM-5O99O)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX144FL
+    color 110,86,255
+    metadata donor=GTEX-144FL age=50 sex=M hardyScore=2 sample=GTEX-144FL-0326-SM-5O99O \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1330327
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1330327.hg38.bigWig
+    shortLabel muscleSke M 13O3P
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13O3P-0626-SM-5L3D5)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13O3P
+    color 110,86,255
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0626-SM-5L3D5 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1334889
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1334889.hg38.bigWig
+    shortLabel muscleSke M ZDYS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZDYS-1726-SM-5HL4Y)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZDYS
+    color 110,86,255
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-1726-SM-5HL4Y \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1345284
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1345284.hg38.bigWig
+    shortLabel muscleSke M YEC3
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-YEC3-2126-SM-5CVLR)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXYEC3
+    color 110,86,255
+
+    track gtexRnaSignalSRR1345760
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1345760.hg38.bigWig
+    shortLabel muscleSke M 11WQK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11WQK-0726-SM-5GU71)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11WQK
+    color 110,86,255
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-0726-SM-5GU71 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1347937
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1347937.hg38.bigWig
+    shortLabel muscleSke M 13112
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13112-2626-SM-5BC66)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13112
+    color 110,86,255
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-2626-SM-5BC66 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=6.7 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1349231
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1349231.hg38.bigWig
+    shortLabel muscleSke M 11DXZ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11DXZ-2426-SM-5N9DT)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11DXZ
+    color 110,86,255
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-2426-SM-5N9DT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.7 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1349851
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1349851.hg38.bigWig
+    shortLabel muscleSke M 14BIL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14BIL-0326-SM-5SI9Q)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX14BIL
+    color 110,86,255
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-0326-SM-5SI9Q \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.4 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1351280
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1351280.hg38.bigWig
+    shortLabel muscleSke M 12WSL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSL-2726-SM-5CVNL)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX12WSL
+    color 110,86,255
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-2726-SM-5CVNL \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.7 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1351480
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1351480.hg38.bigWig
+    shortLabel muscleSke M 139T6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139T6-2026-SM-5IFFL)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX139T6
+    color 110,86,255
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-2026-SM-5IFFL \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.5 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1353663
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1353663.hg38.bigWig
+    shortLabel muscleSke M 131XH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-131XH-2726-SM-5GCO2)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX131XH
+    color 110,86,255
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-2726-SM-5GCO2 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1354644
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1354644.hg38.bigWig
+    shortLabel muscleSke M 12WSC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSC-0326-SM-5EQ5E)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX12WSC
+    color 110,86,255
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0326-SM-5EQ5E \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.4 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSRR1355396
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1355396.hg38.bigWig
+    shortLabel muscleSke M 13FHP
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13FHP-0526-SM-5K7UY)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13FHP
+    color 110,86,255
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0526-SM-5K7UY \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.9 batch=BP-46650 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1357148
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1357148.hg38.bigWig
+    shortLabel muscleSke M 13W46
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13W46-0726-SM-5LU3Z)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13W46
+    color 110,86,255
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-0726-SM-5LU3Z \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1359780
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1359780.hg38.bigWig
+    shortLabel muscleSke M ZVZP
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZVZP-2526-SM-57WBR)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZVZP
+    color 110,86,255
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-2526-SM-57WBR \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.5 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalSRR1361546
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1361546.hg38.bigWig
+    shortLabel muscleSke M 13NZ9
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13NZ9-0626-SM-5IJCO)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13NZ9
+    color 110,86,255
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0626-SM-5IJCO \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-46734 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1370780
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1370780.hg38.bigWig
+    shortLabel muscleSke M 145MH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-145MH-0326-SM-5LU8H)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX145MH
+    color 110,86,255
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0326-SM-5LU8H \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.3 batch=BP-47616 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1375796
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1375796.hg38.bigWig
+    shortLabel muscleSke M PSDG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-PSDG-0426-SM-5SI86)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXPSDG
+    color 110,86,255
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-0426-SM-5SI86 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.6 batch=BP-19411 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2011
+
+    track gtexRnaSignalSRR1377006
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1377006.hg38.bigWig
+    shortLabel muscleSke M 11H98
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11H98-0326-SM-5HL4S)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11H98
+    color 110,86,255
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0326-SM-5HL4S \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1381775
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1381775.hg38.bigWig
+    shortLabel muscleSke M XBEC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XBEC-0626-SM-4QARY)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXXBEC
+    color 110,86,255
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-0626-SM-4QARY \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.2 batch=BP-36259 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/20/2013
+
+    track gtexRnaSignalSRR1383081
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1383081.hg38.bigWig
+    shortLabel muscleSke M ZVP2
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZVP2-2126-SM-5GU6E)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZVP2
+    color 110,86,255
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-2126-SM-5GU6E \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1385277
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1385277.hg38.bigWig
+    shortLabel muscleSke M 131XE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-131XE-2726-SM-5P9G7)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX131XE
+    color 110,86,255
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-2726-SM-5P9G7 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1392901
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1392901.hg38.bigWig
+    shortLabel muscleSke M 11DZ1
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11DZ1-0926-SM-5EQ5R)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11DZ1
+    color 110,86,255
+    metadata donor=GTEX-11DZ1 age=50 sex=M hardyScore=4 sample=GTEX-11DZ1-0926-SM-5EQ5R \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.6 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1394190
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1394190.hg38.bigWig
+    shortLabel muscleSke M 13OW7
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OW7-0326-SM-5J1MP)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13OW7
+    color 110,86,255
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0326-SM-5J1MP \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1394231
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1394231.hg38.bigWig
+    shortLabel muscleSke M ZV7C
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZV7C-2426-SM-5NQ7Q)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZV7C
+    color 110,86,255
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-2426-SM-5NQ7Q \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1403280
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1403280.hg38.bigWig
+    shortLabel muscleSke M 144GN
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-144GN-2426-SM-5LU4R)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX144GN
+    color 110,86,255
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-2426-SM-5LU4R \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1408682
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1408682.hg38.bigWig
+    shortLabel muscleSke M 139YR
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139YR-2526-SM-5IJC6)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX139YR
+    color 110,86,255
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-2526-SM-5IJC6 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1418022
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1418022.hg38.bigWig
+    shortLabel muscleSke M 13OW6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OW6-0626-SM-5L3IB)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13OW6
+    color 110,86,255
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0626-SM-5L3IB \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1418880
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1418880.hg38.bigWig
+    shortLabel muscleSke M 11PRG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11PRG-0326-SM-5GU53)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX11PRG
+    color 110,86,255
+    metadata donor=GTEX-11PRG age=50 sex=M hardyScore=2 sample=GTEX-11PRG-0326-SM-5GU53 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-44312 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1430489
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1430489.hg38.bigWig
+    shortLabel muscleSke M 13PVQ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13PVQ-0326-SM-5K7YF)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13PVQ
+    color 110,86,255
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0326-SM-5K7YF \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1430525
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1430525.hg38.bigWig
+    shortLabel muscleSke M WWTW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WWTW-0626-SM-4MVNS)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWWTW
+    color 110,86,255
+    metadata donor=GTEX-WWTW age=50 sex=M hardyScore=0 sample=GTEX-WWTW-0626-SM-4MVNS \
+            tissue=muscleSkeletal autolysisScore=2 rnaIntegrity=6.3 batch=BP-28884 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2012
+
+    track gtexRnaSignalSRR1431083
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1431083.hg38.bigWig
+    shortLabel muscleSke M ZYFC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZYFC-0526-SM-5GIDF)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZYFC
+    color 110,86,255
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0526-SM-5GIDF \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1431288
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1431288.hg38.bigWig
+    shortLabel muscleSke M 13O3Q
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13O3Q-2726-SM-5KM51)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13O3Q
+    color 110,86,255
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-2726-SM-5KM51 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1439742
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1439742.hg38.bigWig
+    shortLabel muscleSke M 13OVL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OVL-1426-SM-5IJC1)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13OVL
+    color 110,86,255
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-1426-SM-5IJC1 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1442104
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1442104.hg38.bigWig
+    shortLabel muscleSke M ZTTD
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZTTD-0326-SM-57WFW)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZTTD
+    color 110,86,255
+
+    track gtexRnaSignalSRR1444120
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1444120.hg38.bigWig
+    shortLabel muscleSke M ZAB5
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZAB5-2126-SM-5K7UN)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZAB5
+    color 110,86,255
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-2126-SM-5K7UN \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1444501
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1444501.hg38.bigWig
+    shortLabel muscleSke M ZZPT
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZZPT-0626-SM-5GZXT)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZZPT
+    color 110,86,255
+    metadata donor=GTEX-ZZPT age=50 sex=M hardyScore=4 sample=GTEX-ZZPT-0626-SM-5GZXT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7 batch=BP-43693 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1452423
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1452423.hg38.bigWig
+    shortLabel muscleSke M 145LU
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-145LU-2026-SM-5Q5E8)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX145LU
+    color 110,86,255
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-2026-SM-5Q5E8 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.3 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1452696
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1452696.hg38.bigWig
+    shortLabel muscleSke M 111CU
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-111CU-2026-SM-5GZZC)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX111CU
+    color 110,86,255
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-2026-SM-5GZZC \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1453416
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1453416.hg38.bigWig
+    shortLabel muscleSke M 13FXS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13FXS-0326-SM-5K7TV)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13FXS
+    color 110,86,255
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0326-SM-5K7TV \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1453911
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1453911.hg38.bigWig
+    shortLabel muscleSke M 1192X
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1192X-0426-SM-5GIEE)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX1192X
+    color 110,86,255
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-0426-SM-5GIEE \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.5 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1471965
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1471965.hg38.bigWig
+    shortLabel muscleSke M Y111
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Y111-0326-SM-4SOIX)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXY111
+    color 110,86,255
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-0326-SM-4SOIX \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-34830 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/04/2013
+
+    track gtexRnaSignalSRR1481083
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1481083.hg38.bigWig
+    shortLabel muscleSke M Z93S
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Z93S-1326-SM-5CVMR)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZ93S
+    color 110,86,255
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-1326-SM-5CVMR \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-45390 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1487570
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1487570.hg38.bigWig
+    shortLabel muscleSke M ZYFD
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZYFD-0326-SM-5NQ8I)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXZYFD
+    color 110,86,255
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-0326-SM-5NQ8I \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1488214
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1488214.hg38.bigWig
+    shortLabel muscleSke M 12WSH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSH-2526-SM-5CVNH)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX12WSH
+    color 110,86,255
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-2526-SM-5CVNH \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1490037
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1490037.hg38.bigWig
+    shortLabel muscleSke M 14BMV
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14BMV-0326-SM-5RQHW)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX14BMV
+    color 110,86,255
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-0326-SM-5RQHW \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1499566
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1499566.hg38.bigWig
+    shortLabel muscleSke M 13111
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13111-2226-SM-5LZUE)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13111
+    color 110,86,255
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-2226-SM-5LZUE \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalSRR1499740
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1499740.hg38.bigWig
+    shortLabel muscleSke M 13QJ3
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13QJ3-0726-SM-5SI68)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEX13QJ3
+    color 110,86,255
+    metadata donor=GTEX-13QJ3 age=50 sex=M hardyScore=0 sample=GTEX-13QJ3-0726-SM-5SI68 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR601671
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR601671.hg38.bigWig
+    shortLabel muscleSke M OIZH
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OIZH-1626-SM-2HMKI)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXOIZH
+    color 110,86,255
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-1626-SM-2HMKI \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalSRR602010
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR602010.hg38.bigWig
+    shortLabel muscleSke M OIZG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OIZG-1326-SM-2HMIQ)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXOIZG
+    color 110,86,255
+    metadata donor=GTEX-OIZG age=50 sex=M hardyScore=0 sample=GTEX-OIZG-1326-SM-2HMIQ \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-18123 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/09/2011
+
+    track gtexRnaSignalSRR612395
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR612395.hg38.bigWig
+    shortLabel muscleSke M QV44
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QV44-2026-SM-2S1RD)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXQV44
+    color 110,86,255
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-2026-SM-2S1RD \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.9 batch=BP-20869 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/15/2011
+
+    track gtexRnaSignalSRR612803
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR612803.hg38.bigWig
+    shortLabel muscleSke M QXCU
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QXCU-1726-SM-2TC6L)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXQXCU
+    color 110,86,255
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-1726-SM-2TC6L \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.3 batch=BP-21104 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/29/2011
+
+    track gtexRnaSignalSRR613126
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613126.hg38.bigWig
+    shortLabel muscleSke M QDVJ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QDVJ-1926-SM-2S1PJ)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXQDVJ
+    color 110,86,255
+    metadata donor=GTEX-QDVJ age=50 sex=M hardyScore=0 sample=GTEX-QDVJ-1926-SM-2S1PJ \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-20260 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/21/2011
+
+    track gtexRnaSignalSRR613330
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613330.hg38.bigWig
+    shortLabel muscleSke M RN64
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-RN64-0326-SM-2TC5J)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXRN64
+    color 110,86,255
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-0326-SM-2TC5J \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-21577 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR613699
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613699.hg38.bigWig
+    shortLabel muscleSke M RM2N
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-RM2N-1626-SM-2TF5N)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXRM2N
+    color 110,86,255
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-1626-SM-2TF5N \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-21576 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalSRR613951
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613951.hg38.bigWig
+    shortLabel muscleSke M R55F
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-R55F-1526-SM-2TF4X)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXR55F
+    color 110,86,255
+    metadata donor=GTEX-R55F age=50 sex=M hardyScore=4 sample=GTEX-R55F-1526-SM-2TF4X \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.5 batch=BP-21443 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR614251
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR614251.hg38.bigWig
+    shortLabel muscleSke M PSDG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-PSDG-0426-SM-2S1OF)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXPSDG
+    color 110,86,255
+
+    track gtexRnaSignalSRR614852
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR614852.hg38.bigWig
+    shortLabel muscleSke M RUSQ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-RUSQ-1726-SM-2TF68)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXRUSQ
+    color 110,86,255
+
+    track gtexRnaSignalSRR615635
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR615635.hg38.bigWig
+    shortLabel muscleSke M OXRL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OXRL-1626-SM-2YUMU)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXOXRL
+    color 110,86,255
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-1626-SM-2YUMU \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.9 batch=BP-18391 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR617829
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR617829.hg38.bigWig
+    shortLabel muscleSke M QDVN
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QDVN-2426-SM-2S1Q4)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXQDVN
+    color 110,86,255
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-2426-SM-2S1Q4 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-20294 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/22/2011
+
+    track gtexRnaSignalSRR654802
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR654802.hg38.bigWig
+    shortLabel muscleSke M SIU7
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-SIU7-1826-SM-2XCE2)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXSIU7
+    color 110,86,255
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-1826-SM-2XCE2 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-23467 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/27/2012
+
+    track gtexRnaSignalSRR655040
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR655040.hg38.bigWig
+    shortLabel muscleSke M RVPU
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-RVPU-2426-SM-2XCAR)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXRVPU
+    color 110,86,255
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-2426-SM-2XCAR \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-22345 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/10/2012
+
+    track gtexRnaSignalSRR656247
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR656247.hg38.bigWig
+    shortLabel muscleSke M TKQ2
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-TKQ2-0826-SM-33HB6)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXTKQ2
+    color 110,86,255
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-0826-SM-33HB6 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-24927 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/02/2012
+
+    track gtexRnaSignalSRR656860
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR656860.hg38.bigWig
+    shortLabel muscleSke M S3XE
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-S3XE-2026-SM-3K2B5)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXS3XE
+    color 110,86,255
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-2026-SM-3K2B5 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-22893 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/06/2012
+
+    track gtexRnaSignalSRR658057
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR658057.hg38.bigWig
+    shortLabel muscleSke M UJMC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-UJMC-1826-SM-3GADT)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXUJMC
+    color 110,86,255
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-1826-SM-3GADT \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-26354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/18/2012
+
+    track gtexRnaSignalSRR658433
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR658433.hg38.bigWig
+    shortLabel muscleSke M R55D
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-R55D-0626-SM-3GAD5)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXR55D
+    color 110,86,255
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0626-SM-3GAD5 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-21287 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2012
+
+    track gtexRnaSignalSRR662126
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR662126.hg38.bigWig
+    shortLabel muscleSke M QEL4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QEL4-0626-SM-3GIJM)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXQEL4
+    color 110,86,255
+    metadata donor=GTEX-QEL4 age=50 sex=M hardyScore=3 sample=GTEX-QEL4-0626-SM-3GIJM \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-20412 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2011
+
+    track gtexRnaSignalSRR809595
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR809595.hg38.bigWig
+    shortLabel muscleSke M WHPG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WHPG-2226-SM-3NMBO)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWHPG
+    color 110,86,255
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-2226-SM-3NMBO \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-27941 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/25/2012
+
+    track gtexRnaSignalSRR810225
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR810225.hg38.bigWig
+    shortLabel muscleSke M WYJK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WYJK-1726-SM-3NM9U)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWYJK
+    color 110,86,255
+    metadata donor=GTEX-WYJK age=50 sex=M hardyScore=0 sample=GTEX-WYJK-1726-SM-3NM9U \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-29540 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalSRR813983
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR813983.hg38.bigWig
+    shortLabel muscleSke M WL46
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WL46-0626-SM-3LK7R)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWL46
+    color 110,86,255
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0626-SM-3LK7R \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-27853 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalSRR815020
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR815020.hg38.bigWig
+    shortLabel muscleSke M WK11
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WK11-2526-SM-3NM9Y)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWK11
+    color 110,86,255
+    metadata donor=GTEX-WK11 age=50 sex=M hardyScore=1 sample=GTEX-WK11-2526-SM-3NM9Y \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.8 batch=BP-28097 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+
+    track gtexRnaSignalSRR815470
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR815470.hg38.bigWig
+    shortLabel muscleSke M X261
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-X261-0326-SM-3NMD4)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXX261
+    color 110,86,255
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0326-SM-3NMD4 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-29824 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR816015
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR816015.hg38.bigWig
+    shortLabel muscleSke M WY7C
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WY7C-2526-SM-3NB2N)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXWY7C
+    color 110,86,255
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-2526-SM-3NB2N \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.6 batch=BP-29482 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalSRR816382
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR816382.hg38.bigWig
+    shortLabel muscleSke M OXRN
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OXRN-1326-SM-3LK5V)
+    subGroups age=a50 tissue=muscleSkeletal donor=GTEXOXRN
+    color 110,86,255
+    metadata donor=GTEX-OXRN age=50 sex=M hardyScore=0 sample=GTEX-OXRN-1326-SM-3LK5V \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.3 batch=BP-18407 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR1077288
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1077288.hg38.bigWig
+    shortLabel muscleSke M SSA3
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-SSA3-0326-SM-47JWY)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXSSA3
+    color 110,86,255
+
+    track gtexRnaSignalSRR1087825
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1087825.hg38.bigWig
+    shortLabel muscleSke M X4XY
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-X4XY-0626-SM-4E3IN)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXX4XY
+    color 110,86,255
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0626-SM-4E3IN \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.6 batch=BP-36201 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/19/2013
+
+    track gtexRnaSignalSRR1092985
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1092985.hg38.bigWig
+    shortLabel muscleSke M RVPV
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-RVPV-0926-SM-47JXU)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXRVPV
+    color 110,86,255
+
+    track gtexRnaSignalSRR1096662
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1096662.hg38.bigWig
+    shortLabel muscleSke M XBED
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-XBED-2626-SM-4E3J5)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXXBED
+    color 110,86,255
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-2626-SM-4E3J5 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.7 batch=BP-36411 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/25/2013
+
+    track gtexRnaSignalSRR1307677
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1307677.hg38.bigWig
+    shortLabel muscleSke M 111YS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-111YS-2326-SM-5987L)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX111YS
+    color 110,86,255
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-2326-SM-5987L \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.1 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1310735
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1310735.hg38.bigWig
+    shortLabel muscleSke M 11GS4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11GS4-2526-SM-5A5KT)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11GS4
+    color 110,86,255
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-2526-SM-5A5KT \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1311553
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1311553.hg38.bigWig
+    shortLabel muscleSke M 111FC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-111FC-0326-SM-5GZZ1)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX111FC
+    color 110,86,255
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-0326-SM-5GZZ1 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalSRR1318444
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1318444.hg38.bigWig
+    shortLabel muscleSke M 148VJ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-148VJ-0326-SM-5QGQE)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEX148VJ
+    color 110,86,255
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0326-SM-5QGQE \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1318465
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1318465.hg38.bigWig
+    shortLabel muscleSke M 132Q8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-132Q8-0626-SM-5L3F3)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX132Q8
+    color 110,86,255
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-0626-SM-5L3F3 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.8 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1319626
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1319626.hg38.bigWig
+    shortLabel muscleSke M 12BJ1
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12BJ1-2526-SM-5FQUE)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX12BJ1
+    color 110,86,255
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-2526-SM-5FQUE \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1322662
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1322662.hg38.bigWig
+    shortLabel muscleSke M 11OF3
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11OF3-2526-SM-5P9JL)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11OF3
+    color 110,86,255
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-2526-SM-5P9JL \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1323087
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1323087.hg38.bigWig
+    shortLabel muscleSke M 139UC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139UC-2926-SM-5J1N6)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX139UC
+    color 110,86,255
+
+    track gtexRnaSignalSRR1326624
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1326624.hg38.bigWig
+    shortLabel muscleSke M U412
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U412-0326-SM-5BC7E)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXU412
+    color 110,86,255
+
+    track gtexRnaSignalSRR1331220
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1331220.hg38.bigWig
+    shortLabel muscleSke M 144GO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-144GO-1326-SM-5Q5EL)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX144GO
+    color 110,86,255
+    metadata donor=GTEX-144GO age=60 sex=M hardyScore=4 sample=GTEX-144GO-1326-SM-5Q5EL \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1332299
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1332299.hg38.bigWig
+    shortLabel muscleSke M 13PDP
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13PDP-0326-SM-5K7XP)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13PDP
+    color 110,86,255
+    metadata donor=GTEX-13PDP age=60 sex=M hardyScore=4 sample=GTEX-13PDP-0326-SM-5K7XP \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.9 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1334247
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1334247.hg38.bigWig
+    shortLabel muscleSke M 139T8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139T8-0526-SM-5KLZL)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX139T8
+    color 110,86,255
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0526-SM-5KLZL \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1348040
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1348040.hg38.bigWig
+    shortLabel muscleSke M 1445S
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1445S-0626-SM-5LU3C)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX1445S
+    color 110,86,255
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0626-SM-5LU3C \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1349209
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1349209.hg38.bigWig
+    shortLabel muscleSke M ZYW4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZYW4-0526-SM-5GZZ5)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZYW4
+    color 110,86,255
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-0526-SM-5GZZ5 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-43693 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1350435
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1350435.hg38.bigWig
+    shortLabel muscleSke M U412
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-U412-0326-SM-5DUVP)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXU412
+    color 110,86,255
+
+    track gtexRnaSignalSRR1351979
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1351979.hg38.bigWig
+    shortLabel muscleSke M 13YAN
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13YAN-0526-SM-5O9BE)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13YAN
+    color 110,86,255
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-0526-SM-5O9BE \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.3 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1354270
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1354270.hg38.bigWig
+    shortLabel muscleSke M 13FHO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13FHO-0726-SM-5IJDG)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13FHO
+    color 110,86,255
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0726-SM-5IJDG \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.5 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1354489
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1354489.hg38.bigWig
+    shortLabel muscleSke M 12WSA
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSA-0726-SM-5FQU2)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX12WSA
+    color 110,86,255
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0726-SM-5FQU2 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.4 batch=BP-44157 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1355217
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1355217.hg38.bigWig
+    shortLabel muscleSke M 11EQ8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11EQ8-0526-SM-5N9BC)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11EQ8
+    color 110,86,255
+    metadata donor=GTEX-11EQ8 age=60 sex=M hardyScore=4 sample=GTEX-11EQ8-0526-SM-5N9BC \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.6 batch=BP-43989 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1358220
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1358220.hg38.bigWig
+    shortLabel muscleSke M Y5V6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Y5V6-2626-SM-5IFIX)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXY5V6
+    color 110,86,255
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2626-SM-5IFIX \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.8 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1365448
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1365448.hg38.bigWig
+    shortLabel muscleSke M 11WQC
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11WQC-2626-SM-5CVLF)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11WQC
+    color 110,86,255
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-2626-SM-5CVLF \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1367109
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1367109.hg38.bigWig
+    shortLabel muscleSke M 13JVG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13JVG-0126-SM-5L3D3)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13JVG
+    color 110,86,255
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0126-SM-5L3D3 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1376249
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1376249.hg38.bigWig
+    shortLabel muscleSke M 14ASI
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14ASI-0526-SM-5QGQP)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX14ASI
+    color 110,86,255
+    metadata donor=GTEX-14ASI age=60 sex=M hardyScore=2 sample=GTEX-14ASI-0526-SM-5QGQP \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=5.7 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1377862
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1377862.hg38.bigWig
+    shortLabel muscleSke M 13NZA
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13NZA-0526-SM-5L3D7)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13NZA
+    color 110,86,255
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0526-SM-5L3D7 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.6 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1385101
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1385101.hg38.bigWig
+    shortLabel muscleSke M 11OC5
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11OC5-0326-SM-5PNW5)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11OC5
+    color 110,86,255
+    metadata donor=GTEX-11OC5 age=60 sex=M hardyScore=2 sample=GTEX-11OC5-0326-SM-5PNW5 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=9 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1387054
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1387054.hg38.bigWig
+    shortLabel muscleSke M POYW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-POYW-0526-SM-5KM2H)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXPOYW
+    color 110,86,255
+
+    track gtexRnaSignalSRR1387222
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1387222.hg38.bigWig
+    shortLabel muscleSke M 13NYS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13NYS-0326-SM-5MR4L)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13NYS
+    color 110,86,255
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0326-SM-5MR4L \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1388528
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1388528.hg38.bigWig
+    shortLabel muscleSke M ZE9C
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZE9C-2326-SM-5J1NT)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZE9C
+    color 110,86,255
+    metadata donor=GTEX-ZE9C age=60 sex=M hardyScore=2 sample=GTEX-ZE9C-2326-SM-5J1NT \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.6 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1390437
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1390437.hg38.bigWig
+    shortLabel muscleSke M 13OW5
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OW5-0326-SM-5L3HK)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13OW5
+    color 110,86,255
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0326-SM-5L3HK \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=5.9 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1391420
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1391420.hg38.bigWig
+    shortLabel muscleSke M ZDTS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZDTS-0526-SM-4WKH9)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZDTS
+    color 110,86,255
+
+    track gtexRnaSignalSRR1393449
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1393449.hg38.bigWig
+    shortLabel muscleSke M 13OW8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OW8-1426-SM-5IJDT)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13OW8
+    color 110,86,255
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1426-SM-5IJDT \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1396250
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1396250.hg38.bigWig
+    shortLabel muscleSke M 13SLW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13SLW-0326-SM-5RQK5)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEX13SLW
+    color 110,86,255
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0326-SM-5RQK5 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.4 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1397218
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1397218.hg38.bigWig
+    shortLabel muscleSke M 145MO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-145MO-0726-SM-5NQB9)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX145MO
+    color 110,86,255
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-0726-SM-5NQB9 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=9 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1398335
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1398335.hg38.bigWig
+    shortLabel muscleSke M 139TT
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139TT-0426-SM-5IJFA)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX139TT
+    color 110,86,255
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0426-SM-5IJFA \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1400180
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1400180.hg38.bigWig
+    shortLabel muscleSke M 11GSO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11GSO-2526-SM-5PNVX)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11GSO
+    color 110,86,255
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-2526-SM-5PNVX \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.6 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1400823
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1400823.hg38.bigWig
+    shortLabel muscleSke M Y8DK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Y8DK-0326-SM-4TT3P)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXY8DK
+    color 110,86,255
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0326-SM-4TT3P \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.6 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSRR1406418
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1406418.hg38.bigWig
+    shortLabel muscleSke M 139TS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139TS-2626-SM-5J1MT)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX139TS
+    color 110,86,255
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-2626-SM-5J1MT \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1408161
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1408161.hg38.bigWig
+    shortLabel muscleSke M 11DXY
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11DXY-2726-SM-5GID2)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11DXY
+    color 110,86,255
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-2726-SM-5GID2 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.1 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1408183
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1408183.hg38.bigWig
+    shortLabel muscleSke M 1477Z
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-1477Z-1626-SM-5SIA8)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX1477Z
+    color 110,86,255
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-1626-SM-5SIA8 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1408529
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1408529.hg38.bigWig
+    shortLabel muscleSke M ZF28
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZF28-0526-SM-4WKGW)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZF28
+    color 110,86,255
+
+    track gtexRnaSignalSRR1408595
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1408595.hg38.bigWig
+    shortLabel muscleSke M 139TU
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-139TU-0526-SM-5J2M8)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX139TU
+    color 110,86,255
+    metadata donor=GTEX-139TU age=60 sex=M hardyScore=3 sample=GTEX-139TU-0526-SM-5J2M8 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.1 batch=BP-46453 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1409263
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1409263.hg38.bigWig
+    shortLabel muscleSke M ZAKK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZAKK-0326-SM-5EGHA)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEXZAKK
+    color 110,86,255
+    metadata donor=GTEX-ZAKK age=70 sex=M hardyScore=-1 sample=GTEX-ZAKK-0326-SM-5EGHA \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSRR1416672
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1416672.hg38.bigWig
+    shortLabel muscleSke M 13CF2
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13CF2-2726-SM-5LZWW)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13CF2
+    color 110,86,255
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-2726-SM-5LZWW \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1419110
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1419110.hg38.bigWig
+    shortLabel muscleSke M ZXG5
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZXG5-0326-SM-5GICH)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZXG5
+    color 110,86,255
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0326-SM-5GICH \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.2 batch=BP-43823 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/20/2013
+
+    track gtexRnaSignalSRR1419258
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1419258.hg38.bigWig
+    shortLabel muscleSke M 13X6I
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13X6I-0526-SM-5QGP8)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13X6I
+    color 110,86,255
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0526-SM-5QGP8 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.1 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1431927
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1431927.hg38.bigWig
+    shortLabel muscleSke M 13FTZ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13FTZ-2226-SM-5LZXI)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13FTZ
+    color 110,86,255
+    metadata donor=GTEX-13FTZ age=60 sex=M hardyScore=2 sample=GTEX-13FTZ-2226-SM-5LZXI \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.7 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1433290
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1433290.hg38.bigWig
+    shortLabel muscleSke M 13IVO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13IVO-0626-SM-5LZYJ)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEX13IVO
+    color 110,86,255
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0626-SM-5LZYJ \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.1 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1435418
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1435418.hg38.bigWig
+    shortLabel muscleSke M YECK
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-YECK-0626-SM-4W1ZE)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXYECK
+    color 110,86,255
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-0626-SM-4W1ZE \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-42128 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/09/2013
+
+    track gtexRnaSignalSRR1436563
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1436563.hg38.bigWig
+    shortLabel muscleSke M 11NV4
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11NV4-0326-SM-5HL58)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11NV4
+    color 110,86,255
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-0326-SM-5HL58 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.5 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1440101
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1440101.hg38.bigWig
+    shortLabel muscleSke M 13O1R
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13O1R-0526-SM-5K7XU)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13O1R
+    color 110,86,255
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0526-SM-5K7XU \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1442754
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1442754.hg38.bigWig
+    shortLabel muscleSke M ZDXO
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-ZDXO-0326-SM-4WKHJ)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXZDXO
+    color 110,86,255
+
+    track gtexRnaSignalSRR1446564
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1446564.hg38.bigWig
+    shortLabel muscleSke M 12WSM
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12WSM-0326-SM-5LZVI)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX12WSM
+    color 110,86,255
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-0326-SM-5LZVI \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1447103
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1447103.hg38.bigWig
+    shortLabel muscleSke M 11EI6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11EI6-0326-SM-5EQ6G)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11EI6
+    color 110,86,255
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0326-SM-5EQ6G \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-44460 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1454117
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1454117.hg38.bigWig
+    shortLabel muscleSke M 13O61
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13O61-2326-SM-5J1NJ)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13O61
+    color 110,86,255
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-2326-SM-5J1NJ \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.5 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1454328
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1454328.hg38.bigWig
+    shortLabel muscleSke M 131XF
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-131XF-2326-SM-5BC6B)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX131XF
+    color 110,86,255
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-2326-SM-5BC6B \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.9 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalSRR1455525
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1455525.hg38.bigWig
+    shortLabel muscleSke M 14A5H
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14A5H-0326-SM-5RQIB)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX14A5H
+    color 110,86,255
+    metadata donor=GTEX-14A5H age=60 sex=M hardyScore=2 sample=GTEX-14A5H-0326-SM-5RQIB \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1471117
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1471117.hg38.bigWig
+    shortLabel muscleSke M 132NY
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-132NY-0726-SM-5KLZM)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX132NY
+    color 110,86,255
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-0726-SM-5KLZM \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7 batch=BP-46453 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSRR1471594
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1471594.hg38.bigWig
+    shortLabel muscleSke M 13N1W
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13N1W-0526-SM-5MR4I)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEX13N1W
+    color 110,86,255
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0526-SM-5MR4I \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1472794
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1472794.hg38.bigWig
+    shortLabel muscleSke M 13OVG
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13OVG-2126-SM-5KM1K)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13OVG
+    color 110,86,255
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-2126-SM-5KM1K \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1478968
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1478968.hg38.bigWig
+    shortLabel muscleSke M 11TUW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-11TUW-2526-SM-5EQKN)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX11TUW
+    color 110,86,255
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-2526-SM-5EQKN \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1481396
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1481396.hg38.bigWig
+    shortLabel muscleSke M Y8E5
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-Y8E5-0326-SM-57WBM)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXY8E5
+    color 110,86,255
+    metadata donor=GTEX-Y8E5 age=60 sex=M hardyScore=-1 sample=GTEX-Y8E5-0326-SM-57WBM \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.4 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1487947
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1487947.hg38.bigWig
+    shortLabel muscleSke M 12ZZZ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12ZZZ-0226-SM-59HKU)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX12ZZZ
+    color 110,86,255
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-0226-SM-59HKU \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.6 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1489286
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1489286.hg38.bigWig
+    shortLabel muscleSke M 13G51
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-13G51-2726-SM-5LZZ9)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX13G51
+    color 110,86,255
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-2726-SM-5LZZ9 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.1 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1489307
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1489307.hg38.bigWig
+    shortLabel muscleSke M 14753
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-14753-0526-SM-5QGPR)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX14753
+    color 110,86,255
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0526-SM-5QGPR \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1499764
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR1499764.hg38.bigWig
+    shortLabel muscleSke M 12ZZY
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-12ZZY-0626-SM-5EQ5T)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEX12ZZY
+    color 110,86,255
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0626-SM-5EQ5T \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.4 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR603116
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR603116.hg38.bigWig
+    shortLabel muscleSke M OOBJ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OOBJ-1626-SM-2I3F7)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXOOBJ
+    color 110,86,255
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-1626-SM-2I3F7 \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR603164
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR603164.hg38.bigWig
+    shortLabel muscleSke M P4PQ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-P4PQ-1626-SM-2HMKK)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXP4PQ
+    color 110,86,255
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-1626-SM-2HMKK \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.4 batch=BP-18709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2011
+
+    track gtexRnaSignalSRR607117
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR607117.hg38.bigWig
+    shortLabel muscleSke M OHPJ
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-OHPJ-1626-SM-2HMKO)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXOHPJ
+    color 110,86,255
+
+    track gtexRnaSignalSRR612683
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR612683.hg38.bigWig
+    shortLabel muscleSke M P4QS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-P4QS-1626-SM-2S1NH)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXP4QS
+    color 110,86,255
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-1626-SM-2S1NH \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.4 batch=BP-18728 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/08/2011
+
+    track gtexRnaSignalSRR612839
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR612839.hg38.bigWig
+    shortLabel muscleSke M N7MS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-N7MS-0426-SM-2YUN6)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXN7MS
+    color 110,86,255
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0426-SM-2YUN6 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=6.6 batch=BP-16740 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/19/2011
+
+    track gtexRnaSignalSRR613222
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613222.hg38.bigWig
+    shortLabel muscleSke M QLQ7
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-QLQ7-1726-SM-2S1QQ)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXQLQ7
+    color 110,86,255
+    metadata donor=GTEX-QLQ7 age=60 sex=M hardyScore=0 sample=GTEX-QLQ7-1726-SM-2S1QQ \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.2 batch=BP-20571 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/06/2011
+
+    track gtexRnaSignalSRR613426
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR613426.hg38.bigWig
+    shortLabel muscleSke M REY6
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-REY6-0826-SM-2TF4S)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXREY6
+    color 110,86,255
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0826-SM-2TF4S \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR655170
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR655170.hg38.bigWig
+    shortLabel muscleSke M SUCS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-SUCS-1626-SM-32PLS)
+    subGroups age=a70 tissue=muscleSkeletal donor=GTEXSUCS
+    color 110,86,255
+    metadata donor=GTEX-SUCS age=70 sex=M hardyScore=0 sample=GTEX-SUCS-1626-SM-32PLS \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.8 batch=BP-24624 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/25/2012
+
+    track gtexRnaSignalSRR655946
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR655946.hg38.bigWig
+    shortLabel muscleSke M POYW
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-POYW-0526-SM-2XCEY)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXPOYW
+    color 110,86,255
+    metadata donor=GTEX-POYW age=60 sex=M hardyScore=0 sample=GTEX-POYW-0526-SM-2XCEY \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=7.7 batch=BP-19380 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/13/2011
+
+    track gtexRnaSignalSRR656409
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR656409.hg38.bigWig
+    shortLabel muscleSke M S95S
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-S95S-1426-SM-2XCDM)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXS95S
+    color 110,86,255
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-1426-SM-2XCDM \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=7.5 batch=BP-23283 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/21/2012
+
+    track gtexRnaSignalSRR657139
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR657139.hg38.bigWig
+    shortLabel muscleSke M TMZS
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-TMZS-0326-SM-3DB9P)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXTMZS
+    color 110,86,255
+    metadata donor=GTEX-TMZS age=60 sex=M hardyScore=-1 sample=GTEX-TMZS-0326-SM-3DB9P \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.1 batch=BP-25495 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR658212
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR658212.hg38.bigWig
+    shortLabel muscleSke M S4Z8
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-S4Z8-1826-SM-3K2BH)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXS4Z8
+    color 110,86,255
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-1826-SM-3K2BH \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.5 batch=BP-23077 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR660260
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR660260.hg38.bigWig
+    shortLabel muscleSke M VJYA
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-VJYA-1926-SM-3GIJJ)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXVJYA
+    color 110,86,255
+
+    track gtexRnaSignalSRR661074
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR661074.hg38.bigWig
+    shortLabel muscleSke M SSA3
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-SSA3-0326-SM-32QPS)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXSSA3
+    color 110,86,255
+    metadata donor=GTEX-SSA3 age=60 sex=M hardyScore=-1 sample=GTEX-SSA3-0326-SM-32QPS \
+            tissue=muscleSkeletal autolysisScore=0 rnaIntegrity=8.2 batch=BP-24519 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalSRR809348
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR809348.hg38.bigWig
+    shortLabel muscleSke M S7PM
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-S7PM-0526-SM-3NM92)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXS7PM
+    color 110,86,255
+    metadata donor=GTEX-S7PM age=60 sex=M hardyScore=0 sample=GTEX-S7PM-0526-SM-3NM92 \
+            tissue=muscleSkeletal autolysisScore=2 rnaIntegrity=7.1 batch=BP-23122 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/14/2012
+
+    track gtexRnaSignalSRR817421
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR817421.hg38.bigWig
+    shortLabel muscleSke M WOFL
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-WOFL-0626-SM-3MJG3)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXWOFL
+    color 110,86,255
+    metadata donor=GTEX-WOFL age=60 sex=M hardyScore=0 sample=GTEX-WOFL-0626-SM-3MJG3 \
+            tissue=muscleSkeletal autolysisScore=2 rnaIntegrity=6.5 batch=BP-28095 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+
+    track gtexRnaSignalSRR818901
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl muscleSkeletal/gtexRnaSignalSRR818901.hg38.bigWig
+    shortLabel muscleSke M X4XX
+    longLabel GTEx RNA signal from male Muscle - Skeletal (GTEX-X4XX-0626-SM-3NMC1)
+    subGroups age=a60 tissue=muscleSkeletal donor=GTEXX4XX
+    color 110,86,255
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0626-SM-3NMC1 \
+            tissue=muscleSkeletal autolysisScore=1 rnaIntegrity=8.3 batch=BP-30751 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2012
+

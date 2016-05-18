@@ -29,7 +29,6 @@
 #include "tablesTables.h"
 #include "jsHelper.h"
 #include "wikiLink.h"
-#include "cdwDataset.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -307,6 +306,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    outRow[0] = el->name;
 	    outRow[1] = row[fieldIx];
+
+            // add a link to the accession row
+            if (sameWord(el->name, "accession"))
+                {
+                char link[1024];
+                safef(link, sizeof(link), "%s <a href='cdwGetFile?acc=%s'>download</a>", outRow[1], outRow[1]);
+                outRow[1] = cloneString(link);
+                }
 	    fieldedTableAdd(table, outRow, 2, fieldIx);
 	    }
 	++fieldIx;
@@ -1352,6 +1359,7 @@ struct sqlConnection *conn = sqlConnect(cdwDatabase);
 char *userName = wikiLinkUserName();
 if (userName != NULL)
     {
+    user = cdwUserFromUserName(conn, userName);
     /* Look up email vial hgCentral table */
     struct sqlConnection *cc = hConnectCentral();
     char query[512];

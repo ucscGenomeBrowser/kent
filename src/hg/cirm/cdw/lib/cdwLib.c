@@ -23,6 +23,7 @@
 #include "bamFile.h"
 #include "raToStruct.h"
 #include "web.h"
+#include "hdb.h"
 #include "cdwValid.h"
 #include "cdw.h"
 #include "cdwFastqFileFromRa.h"
@@ -244,6 +245,18 @@ if (email)
 return email;
 }
 
+struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
+/* Return user associated with that username or NULL if not found */
+{
+struct sqlConnection *cc = hConnectCentral();
+char query[512];
+sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+char *email = sqlQuickString(cc, query);
+hDisconnectCentral(&cc);
+
+struct cdwUser *user = cdwUserFromEmail(conn, email);
+return user;
+}
 
 struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */

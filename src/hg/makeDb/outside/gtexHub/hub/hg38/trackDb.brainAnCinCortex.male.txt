@@ -1,0 +1,687 @@
+    track gtexRnaSignalSRR1322456
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1322456.hg38.bigWig
+    shortLabel brainAnCi M 13RTL
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13RTL-0011-R3a-SM-5P9JP)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEX13RTL
+    color 238,238,0
+    metadata donor=GTEX-13RTL age=40 sex=M hardyScore=4 sample=GTEX-13RTL-0011-R3a-SM-5P9JP \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.2 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1381889
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1381889.hg38.bigWig
+    shortLabel brainAnCi M ZUA1
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-ZUA1-0011-R3a-SM-4YCEE)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXZUA1
+    color 238,238,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0011-R3a-SM-4YCEE \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-41252 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalSRR1420984
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1420984.hg38.bigWig
+    shortLabel brainAnCi M ZAB4
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-ZAB4-0011-R3a-SM-4RGNQ)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXZAB4
+    color 238,238,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0011-R3a-SM-4RGNQ \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.9 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalSRR1440058
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1440058.hg38.bigWig
+    shortLabel brainAnCi M P44H
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-P44H-0011-R3A-SM-5SI8A)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXP44H
+    color 238,238,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0011-R3A-SM-5SI8A \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.1 batch=BP-19253 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR607091
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR607091.hg38.bigWig
+    shortLabel brainAnCi M NPJ8
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-NPJ8-0011-R3a-SM-2HMIW)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXNPJ8
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R3a-SM-2HMIW \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR608002
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR608002.hg38.bigWig
+    shortLabel brainAnCi M P44G
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-P44G-0011-R3A-SM-2I3FC)
+    subGroups age=a30 tissue=brainAnCinCortex donor=GTEXP44G
+    color 238,238,0
+
+    track gtexRnaSignalSRR661133
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR661133.hg38.bigWig
+    shortLabel brainAnCi M P44H
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-P44H-0011-R3A-SM-2XCEQ)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXP44H
+    color 238,238,0
+
+    track gtexRnaSignalSRR817832
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR817832.hg38.bigWig
+    shortLabel brainAnCi M WHSE
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-WHSE-0011-R3A-SM-3P5ZM)
+    subGroups age=a20 tissue=brainAnCinCortex donor=GTEXWHSE
+    color 238,238,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0011-R3A-SM-3P5ZM \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR821626
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR821626.hg38.bigWig
+    shortLabel brainAnCi M WZTO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-WZTO-0011-R3B-SM-3NMC6)
+    subGroups age=a40 tissue=brainAnCinCortex donor=GTEXWZTO
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R3B-SM-3NMC6 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.7 batch=BP-30585 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1073143
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1073143.hg38.bigWig
+    shortLabel brainAnCi M X585
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-X585-0011-R3B-SM-46MVG)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEXX585
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0011-R3B-SM-46MVG \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.1 batch=BP-32313 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalSRR1085825
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1085825.hg38.bigWig
+    shortLabel brainAnCi M XOTO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-XOTO-0011-R3A-SM-4B64W)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEXXOTO
+    color 238,238,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0011-R3A-SM-4B64W \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-34615 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2012
+
+    track gtexRnaSignalSRR1316624
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1316624.hg38.bigWig
+    shortLabel brainAnCi M 12ZZW
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-12ZZW-0011-R3a-SM-5DUWW)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX12ZZW
+    color 238,238,0
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-0011-R3a-SM-5DUWW \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1317877
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1317877.hg38.bigWig
+    shortLabel brainAnCi M 13X6J
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13X6J-0011-R3b-SM-5P9K5)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13X6J
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0011-R3b-SM-5P9K5 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.4 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1323174
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1323174.hg38.bigWig
+    shortLabel brainAnCi M 13OW7
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13OW7-0011-R3a-SM-5O9DA)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13OW7
+    color 238,238,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0011-R3a-SM-5O9DA \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=5.7 batch=BP-47984 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1337648
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1337648.hg38.bigWig
+    shortLabel brainAnCi M 13CIG
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13CIG-0011-R3b-SM-5K7XF)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13CIG
+    color 238,238,0
+    metadata donor=GTEX-13CIG age=50 sex=M hardyScore=2 sample=GTEX-13CIG-0011-R3b-SM-5K7XF \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=5.8 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalSRR1337909
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1337909.hg38.bigWig
+    shortLabel brainAnCi M 144GL
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-144GL-0011-R3a-SM-5P9HP)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX144GL
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0011-R3a-SM-5P9HP \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1352975
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1352975.hg38.bigWig
+    shortLabel brainAnCi M 145LU
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-145LU-0011-R3a-SM-5P9K2)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX145LU
+    color 238,238,0
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0011-R3a-SM-5P9K2 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-48227 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1409305
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1409305.hg38.bigWig
+    shortLabel brainAnCi M 13FLV
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13FLV-0011-R3b-SM-5LZYP)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13FLV
+    color 238,238,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0011-R3b-SM-5LZYP \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.1 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1431307
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1431307.hg38.bigWig
+    shortLabel brainAnCi M 13OVL
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13OVL-0011-R3b-SM-5L3I8)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13OVL
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R3b-SM-5L3I8 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalSRR1436394
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1436394.hg38.bigWig
+    shortLabel brainAnCi M Z93S
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-Z93S-0011-R3b-SM-4RGNH)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEXZ93S
+    color 238,238,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0011-R3b-SM-4RGNH \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.7 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalSRR1459718
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1459718.hg38.bigWig
+    shortLabel brainAnCi M 131XH
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-131XH-0011-R3b-SM-5DUWM)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX131XH
+    color 238,238,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0011-R3b-SM-5DUWM \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.3 batch=BP-44932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalSRR1477080
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1477080.hg38.bigWig
+    shortLabel brainAnCi M 145MG
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-145MG-0011-R3b-SM-5SI67)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX145MG
+    color 238,238,0
+    metadata donor=GTEX-145MG age=50 sex=M hardyScore=2 sample=GTEX-145MG-0011-R3b-SM-5SI67 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.6 batch=BP-48370 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalSRR1481216
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1481216.hg38.bigWig
+    shortLabel brainAnCi M 13VXU
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13VXU-0011-R3b-SM-5O9CU)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX13VXU
+    color 238,238,0
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0011-R3b-SM-5O9CU \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1500753
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1500753.hg38.bigWig
+    shortLabel brainAnCi M 145MH
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-145MH-0011-R3b-SM-5P9JQ)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEX145MH
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0011-R3b-SM-5P9JQ \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.4 batch=BP-48345 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR662091
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR662091.hg38.bigWig
+    shortLabel brainAnCi M RVPU
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-RVPU-0011-R3A-SM-2XCAE)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEXRVPU
+    color 238,238,0
+    metadata donor=GTEX-RVPU age=50 sex=M hardyScore=2 sample=GTEX-RVPU-0011-R3A-SM-2XCAE \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.1 batch=BP-22923 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=03/07/2012
+
+    track gtexRnaSignalSRR814989
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR814989.hg38.bigWig
+    shortLabel brainAnCi M WL46
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-WL46-0011-R3A-SM-3TW8E)
+    subGroups age=a50 tissue=brainAnCinCortex donor=GTEXWL46
+    color 238,238,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0011-R3A-SM-3TW8E \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR1078347
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1078347.hg38.bigWig
+    shortLabel brainAnCi M XMD1
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-XMD1-0011-R3B-SM-4AT5R)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXXMD1
+    color 238,238,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0011-R3B-SM-4AT5R \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.7 batch=BP-34513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2012
+
+    track gtexRnaSignalSRR1085850
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1085850.hg38.bigWig
+    shortLabel brainAnCi M X4XX
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-X4XX-0011-R3B-SM-46MWK)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXX4XX
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R3B-SM-46MWK \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.4 batch=BP-31773 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalSRR1311086
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1311086.hg38.bigWig
+    shortLabel brainAnCi M 11GSO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-11GSO-0011-R3b-SM-57WB2)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX11GSO
+    color 238,238,0
+    metadata donor=GTEX-11GSO age=60 sex=M hardyScore=2 sample=GTEX-11GSO-0011-R3b-SM-57WB2 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1318426
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1318426.hg38.bigWig
+    shortLabel brainAnCi M 139UC
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-139UC-0011-R3b-SM-5K7VZ)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX139UC
+    color 238,238,0
+
+    track gtexRnaSignalSRR1323106
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1323106.hg38.bigWig
+    shortLabel brainAnCi M N7MS
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-N7MS-0011-R3a-SM-5SI8H)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXN7MS
+    color 238,238,0
+
+    track gtexRnaSignalSRR1336292
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1336292.hg38.bigWig
+    shortLabel brainAnCi M ZF28
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-ZF28-0011-R3a-SM-4WWDA)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXZF28
+    color 238,238,0
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0011-R3a-SM-4WWDA \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.3 batch=BP-41252 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalSRR1354910
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1354910.hg38.bigWig
+    shortLabel brainAnCi M 13CZV
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13CZV-0011-R3a-SM-5KM27)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13CZV
+    color 238,238,0
+    metadata donor=GTEX-13CZV age=60 sex=M hardyScore=2 sample=GTEX-13CZV-0011-R3a-SM-5KM27 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-45509 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1359171
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1359171.hg38.bigWig
+    shortLabel brainAnCi M 13JVG
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13JVG-0011-R3b-SM-5LZXF)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13JVG
+    color 238,238,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0011-R3b-SM-5LZXF \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1360104
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1360104.hg38.bigWig
+    shortLabel brainAnCi M 13SLW
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13SLW-0011-R3b-SM-5SI6Y)
+    subGroups age=a70 tissue=brainAnCinCortex donor=GTEX13SLW
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R3b-SM-5SI6Y \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.6 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1378841
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1378841.hg38.bigWig
+    shortLabel brainAnCi M 13IVO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13IVO-0011-R3b-SM-5IJBJ)
+    subGroups age=a70 tissue=brainAnCinCortex donor=GTEX13IVO
+    color 238,238,0
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0011-R3b-SM-5IJBJ \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=5.8 batch=BP-46364 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1387178
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1387178.hg38.bigWig
+    shortLabel brainAnCi M 13X6I
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13X6I-0011-R3b-SM-5P9HM)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13X6I
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R3b-SM-5P9HM \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1395834
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1395834.hg38.bigWig
+    shortLabel brainAnCi M Y8DK
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-Y8DK-0011-R3A-SM-4RTW5)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXY8DK
+    color 238,238,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0011-R3A-SM-4RTW5 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-40979 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalSRR1397906
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1397906.hg38.bigWig
+    shortLabel brainAnCi M 139T8
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-139T8-0011-R3b-SM-5HL4R)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX139T8
+    color 238,238,0
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0011-R3b-SM-5HL4R \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.3 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalSRR1399051
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1399051.hg38.bigWig
+    shortLabel brainAnCi M 13NYS
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13NYS-0011-R3b-SM-5MR41)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13NYS
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R3b-SM-5MR41 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.1 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1405007
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1405007.hg38.bigWig
+    shortLabel brainAnCi M 12ZZZ
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-12ZZZ-0011-R3b-SM-5DUXK)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX12ZZZ
+    color 238,238,0
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-0011-R3b-SM-5DUXK \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.5 batch=BP-43982 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1405485
+    parent gtexRnaSignalMaleOld on
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1405485.hg38.bigWig
+    shortLabel brainAnCi M 13OW8
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13OW8-0011-R3a-SM-5L3I4)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13OW8
+    color 238,238,0
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0011-R3a-SM-5L3I4 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47526 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1410912
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1410912.hg38.bigWig
+    shortLabel brainAnCi M 11ZU8
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-11ZU8-0011-R3a-SM-5BC6U)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX11ZU8
+    color 238,238,0
+
+    track gtexRnaSignalSRR1416999
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1416999.hg38.bigWig
+    shortLabel brainAnCi M ZDXO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-ZDXO-0011-R3a-SM-4WKFS)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXZDXO
+    color 238,238,0
+
+    track gtexRnaSignalSRR1434484
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1434484.hg38.bigWig
+    shortLabel brainAnCi M 13FHO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13FHO-0011-R3b-SM-5K7YA)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13FHO
+    color 238,238,0
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0011-R3b-SM-5K7YA \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.7 batch=BP-46364 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1437306
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1437306.hg38.bigWig
+    shortLabel brainAnCi M 139TT
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-139TT-0011-R3b-SM-5K7VL)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX139TT
+    color 238,238,0
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0011-R3b-SM-5K7VL \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalSRR1453145
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1453145.hg38.bigWig
+    shortLabel brainAnCi M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13RTJ-0011-R3a-SM-5PNX7)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13RTJ
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R3a-SM-5PNX7 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.5 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1466871
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1466871.hg38.bigWig
+    shortLabel brainAnCi M 13N2G
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13N2G-0011-R3b-SM-5MR5G)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13N2G
+    color 238,238,0
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0011-R3b-SM-5MR5G \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=5.7 batch=BP-47085 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1470703
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1470703.hg38.bigWig
+    shortLabel brainAnCi M YJ89
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-YJ89-0011-R3b-SM-4V6EF)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXYJ89
+    color 238,238,0
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0011-R3b-SM-4V6EF \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=8.5 batch=BP-40981 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalSRR1472150
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1472150.hg38.bigWig
+    shortLabel brainAnCi M 1445S
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-1445S-0011-R3a-SM-5P9HY)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX1445S
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0011-R3a-SM-5P9HY \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6 batch=BP-48229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1473733
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1473733.hg38.bigWig
+    shortLabel brainAnCi M 12WSF
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-12WSF-0011-R3a-SM-5DUW7)
+    subGroups age=a70 tissue=brainAnCinCortex donor=GTEX12WSF
+    color 238,238,0
+    metadata donor=GTEX-12WSF age=70 sex=M hardyScore=4 sample=GTEX-12WSF-0011-R3a-SM-5DUW7 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.9 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1485542
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1485542.hg38.bigWig
+    shortLabel brainAnCi M 13CF2
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13CF2-0011-R3b-SM-5LZZ6)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX13CF2
+    color 238,238,0
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-0011-R3b-SM-5LZZ6 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.5 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1486475
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1486475.hg38.bigWig
+    shortLabel brainAnCi M 1477Z
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-1477Z-0011-R3b-SM-5PNX9)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEX1477Z
+    color 238,238,0
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-0011-R3b-SM-5PNX9 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6 batch=BP-48229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1487321
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1487321.hg38.bigWig
+    shortLabel brainAnCi M 13OVH
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13OVH-0011-R3a-SM-5KM49)
+    subGroups age=a70 tissue=brainAnCinCortex donor=GTEX13OVH
+    color 238,238,0
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-0011-R3a-SM-5KM49 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47491 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1489779
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1489779.hg38.bigWig
+    shortLabel brainAnCi M ZE9C
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-ZE9C-0011-R3a-SM-4WKGT)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXZE9C
+    color 238,238,0
+
+    track gtexRnaSignalSRR1498272
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR1498272.hg38.bigWig
+    shortLabel brainAnCi M 13N1W
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-13N1W-0011-R3a-SM-5MR5E)
+    subGroups age=a70 tissue=brainAnCinCortex donor=GTEX13N1W
+    color 238,238,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0011-R3a-SM-5MR5E \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.2 batch=BP-46977 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR600608
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR600608.hg38.bigWig
+    shortLabel brainAnCi M NL3H
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-NL3H-0011-R3a-SM-2I3GL)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXNL3H
+    color 238,238,0
+    metadata donor=GTEX-NL3H age=60 sex=M hardyScore=3 sample=GTEX-NL3H-0011-R3a-SM-2I3GL \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=7.6 batch=BP-17413 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR614900
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR614900.hg38.bigWig
+    shortLabel brainAnCi M RVPV
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-RVPV-0011-R3A-SM-2TF63)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXRVPV
+    color 238,238,0
+    metadata donor=GTEX-RVPV age=60 sex=M hardyScore=3 sample=GTEX-RVPV-0011-R3A-SM-2TF63 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.3 batch=BP-22921 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/07/2012
+
+    track gtexRnaSignalSRR660945
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAnCinCortex/gtexRnaSignalSRR660945.hg38.bigWig
+    shortLabel brainAnCi M UTHO
+    longLabel GTEx RNA signal from male Brain - Anterior cingulate cortex (BA24) (GTEX-UTHO-0011-R3A-SM-3GIK8)
+    subGroups age=a60 tissue=brainAnCinCortex donor=GTEXUTHO
+    color 238,238,0
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-0011-R3A-SM-3GIK8 \
+            tissue=brainAnCinCortex autolysisScore=-1 rnaIntegrity=6.4 batch=BP-27008 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2012
+

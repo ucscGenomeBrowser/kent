@@ -2888,6 +2888,15 @@ url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel INSDC link:
 type bed 4
 
+track ucscToRefSeq
+shortLabel RefSeq Acc
+longLabel RefSeq Accession
+group map
+visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel RefSeq accession:
+type bed 4
+
 track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions

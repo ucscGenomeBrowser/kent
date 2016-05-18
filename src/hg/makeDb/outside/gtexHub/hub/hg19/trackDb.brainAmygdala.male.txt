@@ -1,0 +1,558 @@
+    track gtexRnaSignalSRR598124
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR598124.hg19.bigWig
+    shortLabel brainAmyg M NPJ8
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-NPJ8-0011-R4a-SM-2HML3)
+    subGroups age=a40 tissue=brainAmygdala donor=GTEXNPJ8
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R4a-SM-2HML3 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.5 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR604528
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR604528.hg19.bigWig
+    shortLabel brainAmyg M P44G
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-P44G-0011-R4A-SM-2I3FB)
+    subGroups age=a30 tissue=brainAmygdala donor=GTEXP44G
+    color 238,238,0
+
+    track gtexRnaSignalSRR661818
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR661818.hg19.bigWig
+    shortLabel brainAmyg M P44H
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-P44H-0011-R4A-SM-2XCEW)
+    subGroups age=a40 tissue=brainAmygdala donor=GTEXP44H
+    color 238,238,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0011-R4A-SM-2XCEW \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.5 batch=BP-19253 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalSRR820883
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR820883.hg19.bigWig
+    shortLabel brainAmyg M WHSE
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-WHSE-0011-R4A-SM-3P5ZN)
+    subGroups age=a20 tissue=brainAmygdala donor=GTEXWHSE
+    color 238,238,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0011-R4A-SM-3P5ZN \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.1 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalSRR821549
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR821549.hg19.bigWig
+    shortLabel brainAmyg M WZTO
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-WZTO-0011-R4A-SM-3NMC7)
+    subGroups age=a40 tissue=brainAmygdala donor=GTEXWZTO
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R4A-SM-3NMC7 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7 batch=BP-30585 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1085015
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1085015.hg19.bigWig
+    shortLabel brainAmyg M X585
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-X585-0011-R4B-SM-46MVH)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXX585
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0011-R4B-SM-46MVH \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.7 batch=BP-32313 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalSRR1330346
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1330346.hg19.bigWig
+    shortLabel brainAmyg M 13OW7
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13OW7-0011-R4b-SM-5O9CX)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13OW7
+    color 238,238,0
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0011-R4b-SM-5O9CX \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=5.8 batch=BP-47984 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1338301
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1338301.hg19.bigWig
+    shortLabel brainAmyg M 144GL
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-144GL-0011-R4a-SM-5PNUI)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX144GL
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0011-R4a-SM-5PNUI \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.1 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1358689
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1358689.hg19.bigWig
+    shortLabel brainAmyg M RVPU
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-RVPU-0011-R4A-SM-5SI8K)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXRVPU
+    color 238,238,0
+
+    track gtexRnaSignalSRR1359123
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1359123.hg19.bigWig
+    shortLabel brainAmyg M 14ABY
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-14ABY-0011-R4b-SM-5S2VN)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX14ABY
+    color 238,238,0
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0011-R4b-SM-5S2VN \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=5.8 batch=BP-48815 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1378004
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1378004.hg19.bigWig
+    shortLabel brainAmyg M 13VXU
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13VXU-0011-R4b-SM-5O9CI)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13VXU
+    color 238,238,0
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0011-R4b-SM-5O9CI \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.3 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1390582
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1390582.hg19.bigWig
+    shortLabel brainAmyg M 13OVL
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13OVL-0011-R4b-SM-5L3HV)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13OVL
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R4b-SM-5L3HV \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.1 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalSRR1409282
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1409282.hg19.bigWig
+    shortLabel brainAmyg M 13O3Q
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13O3Q-0011-R4a-SM-5P9H2)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13O3Q
+    color 238,238,0
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-0011-R4a-SM-5P9H2 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.7 batch=BP-47984 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1430288
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1430288.hg19.bigWig
+    shortLabel brainAmyg M 131XH
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-131XH-0011-R4b-SM-5DUWB)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX131XH
+    color 238,238,0
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0011-R4b-SM-5DUWB \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.7 batch=BP-44932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalSRR1446287
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1446287.hg19.bigWig
+    shortLabel brainAmyg M 12ZZW
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-12ZZW-0011-R4a-SM-5DUX9)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX12ZZW
+    color 238,238,0
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-0011-R4a-SM-5DUX9 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1448162
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1448162.hg19.bigWig
+    shortLabel brainAmyg M 13FLV
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13FLV-0011-R4a-SM-5LZYU)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13FLV
+    color 238,238,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0011-R4a-SM-5LZYU \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=5.9 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalSRR1473422
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1473422.hg19.bigWig
+    shortLabel brainAmyg M 13X6J
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13X6J-0011-R4b-SM-5P9K4)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13X6J
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0011-R4b-SM-5P9K4 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.5 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1487825
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1487825.hg19.bigWig
+    shortLabel brainAmyg M 13112
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13112-0011-R4b-SM-5DUXL)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13112
+    color 238,238,0
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0011-R4b-SM-5DUXL \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.1 batch=BP-44878 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1489155
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1489155.hg19.bigWig
+    shortLabel brainAmyg M 13OW6
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13OW6-0011-R4a-SM-5O9DX)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEX13OW6
+    color 238,238,0
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0011-R4a-SM-5O9DX \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=5.9 batch=BP-47984 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR2135338
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR2135338.hg19.bigWig
+    shortLabel brainAmyg M T6MN
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-T6MN-0011-R4A-SM-5CHSD_rep1)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXT6MN
+    color 238,238,0
+
+    track gtexRnaSignalSRR615515
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR615515.hg19.bigWig
+    shortLabel brainAmyg M RVPU
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-RVPU-0011-R4A-SM-2TF6X)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXRVPU
+    color 238,238,0
+
+    track gtexRnaSignalSRR656493
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR656493.hg19.bigWig
+    shortLabel brainAmyg M QMR6
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-QMR6-0011-R4A-SM-32PKU)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXQMR6
+    color 238,238,0
+    metadata donor=GTEX-QMR6 age=50 sex=M hardyScore=4 sample=GTEX-QMR6-0011-R4A-SM-32PKU \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.6 batch=BP-20819 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=12/14/2011
+
+    track gtexRnaSignalSRR656516
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR656516.hg19.bigWig
+    shortLabel brainAmyg M T6MN
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-T6MN-0011-R4A-SM-32QPG)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXT6MN
+    color 238,238,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0011-R4A-SM-32QPG \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.4 batch=BP-24029 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/11/2012
+
+    track gtexRnaSignalSRR657891
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR657891.hg19.bigWig
+    shortLabel brainAmyg M S7SE
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-S7SE-0011-R4A-SM-2XCDB)
+    subGroups age=a50 tissue=brainAmygdala donor=GTEXS7SE
+    color 238,238,0
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0011-R4A-SM-2XCDB \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.7 batch=BP-22979 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=03/08/2012
+
+    track gtexRnaSignalSRR1077687
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1077687.hg19.bigWig
+    shortLabel brainAmyg M XLM4
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-XLM4-0011-R4B-SM-4AT5C)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEXXLM4
+    color 238,238,0
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0011-R4B-SM-4AT5C \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.3 batch=BP-34513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2012
+
+    track gtexRnaSignalSRR1095865
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1095865.hg19.bigWig
+    shortLabel brainAmyg M X4XX
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-X4XX-0011-R4B-SM-46MWL)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEXX4XX
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R4B-SM-46MWL \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=5.9 batch=BP-31773 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalSRR1320892
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1320892.hg19.bigWig
+    shortLabel brainAmyg M 147GR
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-147GR-0011-R4a-SM-5S2V2)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX147GR
+    color 238,238,0
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-0011-R4a-SM-5S2V2 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.2 batch=BP-48171 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1321674
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1321674.hg19.bigWig
+    shortLabel brainAmyg M 12ZZZ
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-12ZZZ-0011-R4b-SM-5DUV7)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX12ZZZ
+    color 238,238,0
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-0011-R4b-SM-5DUV7 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.1 batch=BP-43982 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1322419
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1322419.hg19.bigWig
+    shortLabel brainAmyg M 139UC
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-139UC-0011-R4a-SM-5K7XM)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX139UC
+    color 238,238,0
+
+    track gtexRnaSignalSRR1326366
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1326366.hg19.bigWig
+    shortLabel brainAmyg M 13N2G
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13N2G-0011-R4b-SM-5MR54)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13N2G
+    color 238,238,0
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0011-R4b-SM-5MR54 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.3 batch=BP-47085 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1352706
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1352706.hg19.bigWig
+    shortLabel brainAmyg M 13JVG
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13JVG-0011-R4a-SM-5MR4C)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13JVG
+    color 238,238,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0011-R4a-SM-5MR4C \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1355595
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1355595.hg19.bigWig
+    shortLabel brainAmyg M 13NYS
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13NYS-0011-R4b-SM-5MR3O)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13NYS
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R4b-SM-5MR3O \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.3 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1360150
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1360150.hg19.bigWig
+    shortLabel brainAmyg M 11ZU8
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-11ZU8-0011-R4a-SM-5BC6Y)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX11ZU8
+    color 238,238,0
+    metadata donor=GTEX-11ZU8 age=60 sex=M hardyScore=4 sample=GTEX-11ZU8-0011-R4a-SM-5BC6Y \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.1 batch=BP-43234 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1360383
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1360383.hg19.bigWig
+    shortLabel brainAmyg M 13OW5
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13OW5-0011-R4b-SM-5L3HS)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13OW5
+    color 238,238,0
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0011-R4b-SM-5L3HS \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.9 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1394297
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1394297.hg19.bigWig
+    shortLabel brainAmyg M 13SLW
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13SLW-0011-R4b-SM-5S2W2)
+    subGroups age=a70 tissue=brainAmygdala donor=GTEX13SLW
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R4b-SM-5S2W2 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.8 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1397073
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1397073.hg19.bigWig
+    shortLabel brainAmyg M 1399T
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-1399T-0011-R4b-SM-5DUVX)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX1399T
+    color 238,238,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0011-R4b-SM-5DUVX \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.4 batch=BP-44932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalSRR1415832
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1415832.hg19.bigWig
+    shortLabel brainAmyg M 12WSF
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-12WSF-0011-R4b-SM-5HL88)
+    subGroups age=a70 tissue=brainAmygdala donor=GTEX12WSF
+    color 238,238,0
+    metadata donor=GTEX-12WSF age=70 sex=M hardyScore=4 sample=GTEX-12WSF-0011-R4b-SM-5HL88 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.3 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalSRR1421093
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1421093.hg19.bigWig
+    shortLabel brainAmyg M 12WSA
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-12WSA-0011-R4a-SM-57WB7)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX12WSA
+    color 238,238,0
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0011-R4a-SM-57WB7 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.5 batch=BP-43579 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1436966
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1436966.hg19.bigWig
+    shortLabel brainAmyg M ZE9C
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-ZE9C-0011-R4a-SM-4WKH6)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEXZE9C
+    color 238,238,0
+
+    track gtexRnaSignalSRR1442666
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1442666.hg19.bigWig
+    shortLabel brainAmyg M 139T8
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-139T8-0011-R4a-SM-5HL54)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX139T8
+    color 238,238,0
+    metadata donor=GTEX-139T8 age=60 sex=M hardyScore=4 sample=GTEX-139T8-0011-R4a-SM-5HL54 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.3 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalSRR1448226
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1448226.hg19.bigWig
+    shortLabel brainAmyg M 13OVH
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13OVH-0011-R4a-SM-5KM3W)
+    subGroups age=a70 tissue=brainAmygdala donor=GTEX13OVH
+    color 238,238,0
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-0011-R4a-SM-5KM3W \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.3 batch=BP-47491 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1459423
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1459423.hg19.bigWig
+    shortLabel brainAmyg M 13CZV
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13CZV-0011-R4b-SM-5J2NY)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13CZV
+    color 238,238,0
+    metadata donor=GTEX-13CZV age=60 sex=M hardyScore=2 sample=GTEX-13CZV-0011-R4b-SM-5J2NY \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.8 batch=BP-45509 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1489821
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1489821.hg19.bigWig
+    shortLabel brainAmyg M 13N1W
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13N1W-0011-R4a-SM-5MR52)
+    subGroups age=a70 tissue=brainAmygdala donor=GTEX13N1W
+    color 238,238,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0011-R4a-SM-5MR52 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.3 batch=BP-46977 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1500428
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1500428.hg19.bigWig
+    shortLabel brainAmyg M 13RTJ
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13RTJ-0011-R4b-SM-5PNX1)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13RTJ
+    color 238,238,0
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-0011-R4b-SM-5PNX1 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1500639
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1500639.hg19.bigWig
+    shortLabel brainAmyg M 13X6I
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-13X6I-0011-R4b-SM-5PNU9)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX13X6I
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R4b-SM-5PNU9 \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7.8 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1500800
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR1500800.hg19.bigWig
+    shortLabel brainAmyg M 1445S
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-1445S-0011-R4a-SM-5PNWN)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEX1445S
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0011-R4a-SM-5PNWN \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.5 batch=BP-48229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR599448
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR599448.hg19.bigWig
+    shortLabel brainAmyg M NL3H
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-NL3H-0011-R4a-SM-2I3GK)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEXNL3H
+    color 238,238,0
+    metadata donor=GTEX-NL3H age=60 sex=M hardyScore=3 sample=GTEX-NL3H-0011-R4a-SM-2I3GK \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=7 batch=BP-17413 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR603068
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl brainAmygdala/gtexRnaSignalSRR603068.hg19.bigWig
+    shortLabel brainAmyg M N7MS
+    longLabel GTEx RNA signal from male Brain - Amygdala (GTEX-N7MS-0011-R4a-SM-2HMKW)
+    subGroups age=a60 tissue=brainAmygdala donor=GTEXN7MS
+    color 238,238,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0011-R4a-SM-2HMKW \
+            tissue=brainAmygdala autolysisScore=-1 rnaIntegrity=6.2 batch=BP-17395 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+

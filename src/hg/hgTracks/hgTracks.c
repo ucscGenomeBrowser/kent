@@ -5989,6 +5989,13 @@ else if (sameString(type, "makeItems"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
+else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
+    {
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
+    tg->canPack = TRUE;
+    }
 else if (sameString(type, "bedDetail"))
     {
     tg = trackFromTrackDb(tdb);

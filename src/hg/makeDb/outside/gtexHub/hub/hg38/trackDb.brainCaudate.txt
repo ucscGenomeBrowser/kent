@@ -1,0 +1,1254 @@
+    track gtexRnaSignalBrainCaudateSRR1329761
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1329761.hg38.bigWig
+    shortLabel brainCaud F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-12ZZX-0011-R5a-SM-5HL89)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R5a-SM-5HL89 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.4 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainCaudateSRR1332856
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1332856.hg38.bigWig
+    shortLabel brainCaud F 11UD1
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-11UD1-0011-R5b-SM-5P9FP)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-11UD1 age=40 sex=F hardyScore=3 sample=GTEX-11UD1-0011-R5b-SM-5P9FP \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.2 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR1472394
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1472394.hg38.bigWig
+    shortLabel brainCaud F 13JUV
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13JUV-0011-R5a-SM-5LZY5)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R5a-SM-5LZY5 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-47085 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainCaudateSRR1486863
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1486863.hg38.bigWig
+    shortLabel brainCaud F YFC4
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-YFC4-0011-R5a-SM-4RGLR)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R5a-SM-4RGLR \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.3 batch=BP-40979 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainCaudateSRR1488285
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1488285.hg38.bigWig
+    shortLabel brainCaud F 13PL6
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13PL6-0011-R5b-SM-5O9BI)
+    subGroups sex=F age=a40 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR598428
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR598428.hg38.bigWig
+    shortLabel brainCaud F Q2AG
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-Q2AG-0011-R5A-SM-2HMJH)
+    subGroups sex=F age=a40 
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R5A-SM-2HMJH \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalBrainCaudateSRR657731
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR657731.hg38.bigWig
+    shortLabel brainCaud F QDT8
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-QDT8-0011-R5A-SM-32PKN)
+    subGroups sex=F age=a30 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1331597
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1331597.hg38.bigWig
+    shortLabel brainCaud F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13OVJ-0011-R5a-SM-5P9H7)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R5a-SM-5P9H7 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47984 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalBrainCaudateSRR1375635
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1375635.hg38.bigWig
+    shortLabel brainCaud F ZE7O
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-ZE7O-0011-R5a-SM-57WBO)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R5a-SM-57WBO \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8 batch=BP-41252 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalBrainCaudateSRR1381543
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1381543.hg38.bigWig
+    shortLabel brainCaud F 12WS9
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-12WS9-0011-R5b-SM-5P9EV)
+    subGroups sex=F age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1383723
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1383723.hg38.bigWig
+    shortLabel brainCaud F 13SLX
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13SLX-0011-R5a-SM-5O9BV)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R5a-SM-5O9BV \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.9 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalBrainCaudateSRR1392725
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1392725.hg38.bigWig
+    shortLabel brainCaud F ZV68
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-ZV68-0011-R5a-SM-4YCDW)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0011-R5a-SM-4YCDW \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7 batch=BP-41299 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalBrainCaudateSRR1413625
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1413625.hg38.bigWig
+    shortLabel brainCaud F 1313W
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-1313W-0011-R5b-SM-5L3EP)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R5b-SM-5L3EP \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-45522 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR613090
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR613090.hg38.bigWig
+    shortLabel brainCaud F RNOR
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-RNOR-0011-R5A-SM-2TF4J)
+    subGroups sex=F age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR614479
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR614479.hg38.bigWig
+    shortLabel brainCaud F RU72
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-RU72-0011-R5A-SM-2TF6U)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R5A-SM-2TF6U \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.3 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/22/2012
+
+    track gtexRnaSignalBrainCaudateSRR817927
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR817927.hg38.bigWig
+    shortLabel brainCaud F WWYW
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-WWYW-0011-R5A-SM-3NB3E)
+    subGroups sex=F age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0011-R5A-SM-3NB3E \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-29430 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalBrainCaudateSRR1330699
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1330699.hg38.bigWig
+    shortLabel brainCaud F ZVT3
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-ZVT3-0011-R5a-SM-51MSI)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R5a-SM-51MSI \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalBrainCaudateSRR1358183
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1358183.hg38.bigWig
+    shortLabel brainCaud F 13O3O
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13O3O-0011-R5b-SM-5KM44)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R5b-SM-5KM44 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.4 batch=BP-47251 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainCaudateSRR1361757
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1361757.hg38.bigWig
+    shortLabel brainCaud F 14BIM
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-14BIM-0011-R5b-SM-5S2RM)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-14BIM age=60 sex=F hardyScore=3 sample=GTEX-14BIM-0011-R5b-SM-5S2RM \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.3 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalBrainCaudateSRR1362417
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1362417.hg38.bigWig
+    shortLabel brainCaud F 13S7M
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13S7M-0011-R5b-SM-5P9HS)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0011-R5b-SM-5P9HS \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.3 batch=BP-48180 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalBrainCaudateSRR1365828
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1365828.hg38.bigWig
+    shortLabel brainCaud F 12WSB
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-12WSB-0011-R5b-SM-5GU67)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0011-R5b-SM-5GU67 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.9 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1373940
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1373940.hg38.bigWig
+    shortLabel brainCaud F 145LS
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-145LS-0011-R5a-SM-5SI65)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R5a-SM-5SI65 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.2 batch=BP-48370 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/15/2014
+
+    track gtexRnaSignalBrainCaudateSRR1410264
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1410264.hg38.bigWig
+    shortLabel brainCaud F 13X6K
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13X6K-0011-R5b-SM-5PNUE)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R5b-SM-5PNUE \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainCaudateSRR1429957
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1429957.hg38.bigWig
+    shortLabel brainCaud F 13PLJ
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-13PLJ-0011-R5a-SM-5O9BG)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13PLJ age=60 sex=F hardyScore=2 sample=GTEX-13PLJ-0011-R5a-SM-5O9BG \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1443201
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1443201.hg38.bigWig
+    shortLabel brainCaud F 11GSP
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-11GSP-0011-R5a-SM-57WBE)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R5a-SM-57WBE \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.4 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalBrainCaudateSRR1445238
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1445238.hg38.bigWig
+    shortLabel brainCaud F 145MI
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-145MI-0011-R5a-SM-5Q5B4)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1472079
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1472079.hg38.bigWig
+    shortLabel brainCaud F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-ZVZQ-0011-R5b-SM-57WDC)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R5b-SM-57WDC \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.9 batch=BP-42319 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2013
+
+    track gtexRnaSignalBrainCaudateSRR612380
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR612380.hg38.bigWig
+    shortLabel brainCaud F QVJO
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-QVJO-0011-R5A-SM-2S1QM)
+    subGroups sex=F age=a60 
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R5A-SM-2S1QM \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.4 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainCaudateSRR820133
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR820133.hg38.bigWig
+    shortLabel brainCaud F X4EP
+    longLabel GTEx RNA signal from female Brain - Caudate (basal ganglia) (GTEX-X4EP-0011-R5A-SM-3P628)
+    subGroups sex=F age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1403222
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1403222.hg38.bigWig
+    shortLabel brainCaud M 13NYB
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13NYB-0011-R5a-SM-5MR45)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0011-R5a-SM-5MR45 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47087 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalBrainCaudateSRR1440308
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1440308.hg38.bigWig
+    shortLabel brainCaud M ZUA1
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZUA1-0011-R5b-SM-51MTG)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0011-R5b-SM-51MTG \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.4 batch=BP-42240 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalBrainCaudateSRR1486626
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1486626.hg38.bigWig
+    shortLabel brainCaud M ZAB4
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZAB4-0011-R5a-SM-4SOKC)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0011-R5a-SM-4SOKC \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.2 batch=BP-41209 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/22/2013
+
+    track gtexRnaSignalBrainCaudateSRR603752
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR603752.hg38.bigWig
+    shortLabel brainCaud M P44G
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-P44G-0011-R5A-SM-2I3FA)
+    subGroups sex=M age=a30 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR604366
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR604366.hg38.bigWig
+    shortLabel brainCaud M NPJ8
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-NPJ8-0011-R5a-SM-2HMJY)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0011-R5a-SM-2HMJY \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.3 batch=BP-17411 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainCaudateSRR612899
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR612899.hg38.bigWig
+    shortLabel brainCaud M R55E
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-R55E-0011-R5A-SM-2TC5N)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0011-R5A-SM-2TC5N \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-21968 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalBrainCaudateSRR662689
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR662689.hg38.bigWig
+    shortLabel brainCaud M P44H
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-P44H-0011-R5A-SM-2XCEX)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-0011-R5A-SM-2XCEX \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-19253 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=10/05/2011
+
+    track gtexRnaSignalBrainCaudateSRR816721
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR816721.hg38.bigWig
+    shortLabel brainCaud M WZTO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-WZTO-0011-R5B-SM-3NMC5)
+    subGroups sex=M age=a40 
+    color 238,238,0
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0011-R5B-SM-3NMC5 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8 batch=BP-30585 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalBrainCaudateSRR818110
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR818110.hg38.bigWig
+    shortLabel brainCaud M WHSE
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-WHSE-0011-R5A-SM-3P5ZO)
+    subGroups sex=M age=a20 
+    color 238,238,0
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0011-R5A-SM-3P5ZO \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.8 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalBrainCaudateSRR1075433
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1075433.hg38.bigWig
+    shortLabel brainCaud M XOTO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-XOTO-0011-R5A-SM-4B657)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-XOTO age=50 sex=M hardyScore=2 sample=GTEX-XOTO-0011-R5A-SM-4B657 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.9 batch=BP-34648 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/21/2012
+
+    track gtexRnaSignalBrainCaudateSRR1082328
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1082328.hg38.bigWig
+    shortLabel brainCaud M X585
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-X585-0011-R5A-SM-46MVI)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0011-R5A-SM-46MVI \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-32313 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/18/2012
+
+    track gtexRnaSignalBrainCaudateSRR1319019
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1319019.hg38.bigWig
+    shortLabel brainCaud M 13CIG
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13CIG-0011-R5b-SM-5L3F2)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13CIG age=50 sex=M hardyScore=2 sample=GTEX-13CIG-0011-R5b-SM-5L3F2 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalBrainCaudateSRR1330061
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1330061.hg38.bigWig
+    shortLabel brainCaud M 13112
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13112-0011-R5b-SM-5DUV8)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0011-R5b-SM-5DUV8 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.2 batch=BP-44878 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalBrainCaudateSRR1331511
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1331511.hg38.bigWig
+    shortLabel brainCaud M 12WSH
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12WSH-0011-R5b-SM-5P9F3)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0011-R5b-SM-5P9F3 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.2 batch=BP-43965 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2013
+
+    track gtexRnaSignalBrainCaudateSRR1336357
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1336357.hg38.bigWig
+    shortLabel brainCaud M 13VXU
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13VXU-0011-R5a-SM-5O9D7)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0011-R5a-SM-5O9D7 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.8 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1355613
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1355613.hg38.bigWig
+    shortLabel brainCaud M 144GL
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-144GL-0011-R5b-SM-5PNUJ)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-144GL age=50 sex=M hardyScore=2 sample=GTEX-144GL-0011-R5b-SM-5PNUJ \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.4 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainCaudateSRR1360674
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1360674.hg38.bigWig
+    shortLabel brainCaud M 12ZZW
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12ZZW-0011-R5a-SM-5DUVN)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-0011-R5a-SM-5DUVN \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.3 batch=BP-44020 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainCaudateSRR1379450
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1379450.hg38.bigWig
+    shortLabel brainCaud M 13FLW
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13FLW-0011-R5a-SM-5LZX6)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLW age=50 sex=M hardyScore=2 sample=GTEX-13FLW-0011-R5a-SM-5LZX6 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainCaudateSRR1391639
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1391639.hg38.bigWig
+    shortLabel brainCaud M 13FLV
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13FLV-0011-R5a-SM-5LZWT)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0011-R5a-SM-5LZWT \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainCaudateSRR1398157
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1398157.hg38.bigWig
+    shortLabel brainCaud M Z93S
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-Z93S-0011-R5b-SM-4RGNI)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-Z93S age=50 sex=M hardyScore=2 sample=GTEX-Z93S-0011-R5b-SM-4RGNI \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1402454
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1402454.hg38.bigWig
+    shortLabel brainCaud M 13OVL
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13OVL-0011-R5b-SM-5L3FU)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0011-R5b-SM-5L3FU \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.9 batch=BP-47251 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalBrainCaudateSRR1403050
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1403050.hg38.bigWig
+    shortLabel brainCaud M 13X6J
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13X6J-0011-R5b-SM-5PNWT)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0011-R5b-SM-5PNWT \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainCaudateSRR1418923
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1418923.hg38.bigWig
+    shortLabel brainCaud M 12WSC
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12WSC-0011-R5b-SM-5CVNS)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0011-R5b-SM-5CVNS \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.4 batch=BP-44020 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalBrainCaudateSRR1444932
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1444932.hg38.bigWig
+    shortLabel brainCaud M 13PVQ
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13PVQ-0011-R5b-SM-5O9DI)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0011-R5b-SM-5O9DI \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7 batch=BP-47673 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1447393
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1447393.hg38.bigWig
+    shortLabel brainCaud M 11H98
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-11H98-0011-R5b-SM-57WCF)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-11H98 age=50 sex=M hardyScore=2 sample=GTEX-11H98-0011-R5b-SM-57WCF \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.4 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalBrainCaudateSRR1456333
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1456333.hg38.bigWig
+    shortLabel brainCaud M 13FHP
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13FHP-0011-R5b-SM-5LZY2)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0011-R5b-SM-5LZY2 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6 batch=BP-46332 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainCaudateSRR1466850
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1466850.hg38.bigWig
+    shortLabel brainCaud M 13FXS
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13FXS-0011-R5b-SM-5LZYE)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0011-R5b-SM-5LZYE \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-46332 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainCaudateSRR1475257
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1475257.hg38.bigWig
+    shortLabel brainCaud M 14ABY
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-14ABY-0011-R5b-SM-5SI7B)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0011-R5b-SM-5SI7B \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.9 batch=BP-48815 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalBrainCaudateSRR1487107
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1487107.hg38.bigWig
+    shortLabel brainCaud M 145MH
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-145MH-0011-R5a-SM-5P9JT)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0011-R5a-SM-5P9JT \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.3 batch=BP-48345 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainCaudateSRR602622
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR602622.hg38.bigWig
+    shortLabel brainCaud M NL4W
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-NL4W-0011-R5a-SM-2I3GD)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-NL4W age=50 sex=M hardyScore=4 sample=GTEX-NL4W-0011-R5a-SM-2I3GD \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.5 batch=BP-17409 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainCaudateSRR615141
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR615141.hg38.bigWig
+    shortLabel brainCaud M R55F
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-R55F-0011-R5A-SM-2TF5L)
+    subGroups sex=M age=a50 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR657587
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR657587.hg38.bigWig
+    shortLabel brainCaud M T6MN
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-T6MN-0011-R5A-SM-32QPD)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0011-R5A-SM-32QPD \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-24029 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/11/2012
+
+    track gtexRnaSignalBrainCaudateSRR663261
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR663261.hg38.bigWig
+    shortLabel brainCaud M QMR6
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-QMR6-0011-R5A-SM-32PKT)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-QMR6 age=50 sex=M hardyScore=4 sample=GTEX-QMR6-0011-R5A-SM-32PKT \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.8 batch=BP-20819 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=12/14/2011
+
+    track gtexRnaSignalBrainCaudateSRR665298
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR665298.hg38.bigWig
+    shortLabel brainCaud M S7SE
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-S7SE-0011-R5A-SM-2XCDA)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0011-R5A-SM-2XCDA \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.2 batch=BP-22979 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=03/08/2012
+
+    track gtexRnaSignalBrainCaudateSRR818057
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR818057.hg38.bigWig
+    shortLabel brainCaud M X261
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-X261-0011-R5A-SM-3NMB4)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-0011-R5A-SM-3NMB4 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.6 batch=BP-30585 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalBrainCaudateSRR818396
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR818396.hg38.bigWig
+    shortLabel brainCaud M WVLH
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-WVLH-0011-R5A-SM-3MJFW)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0011-R5A-SM-3MJFW \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-28513 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalBrainCaudateSRR821434
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR821434.hg38.bigWig
+    shortLabel brainCaud M WL46
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-WL46-0011-R5A-SM-3LK6V)
+    subGroups sex=M age=a50 
+    color 238,238,0
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0011-R5A-SM-3LK6V \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-27617 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalBrainCaudateSRR1072178
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1072178.hg38.bigWig
+    shortLabel brainCaud M XMD1
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-XMD1-0011-R5A-SM-4AT47)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-XMD1 age=60 sex=M hardyScore=4 sample=GTEX-XMD1-0011-R5A-SM-4AT47 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-34615 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/20/2012
+
+    track gtexRnaSignalBrainCaudateSRR1086561
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1086561.hg38.bigWig
+    shortLabel brainCaud M X4XX
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-X4XX-0011-R5A-SM-46MWN)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0011-R5A-SM-46MWN \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.1 batch=BP-31773 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalBrainCaudateSRR1319136
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1319136.hg38.bigWig
+    shortLabel brainCaud M 144GO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-144GO-0011-R5a-SM-5PNUR)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-144GO age=60 sex=M hardyScore=4 sample=GTEX-144GO-0011-R5a-SM-5PNUR \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.9 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainCaudateSRR1320560
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1320560.hg38.bigWig
+    shortLabel brainCaud M 13NYS
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13NYS-0011-R5a-SM-5MR4D)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-0011-R5a-SM-5MR4D \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.2 batch=BP-46977 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalBrainCaudateSRR1331289
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1331289.hg38.bigWig
+    shortLabel brainCaud M 1477Z
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-1477Z-0011-R5b-SM-5PNUO)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-0011-R5b-SM-5PNUO \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainCaudateSRR1334033
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1334033.hg38.bigWig
+    shortLabel brainCaud M 1445S
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-1445S-0011-R5a-SM-5PNUS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1445S age=60 sex=M hardyScore=3 sample=GTEX-1445S-0011-R5a-SM-5PNUS \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.1 batch=BP-48229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalBrainCaudateSRR1336006
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1336006.hg38.bigWig
+    shortLabel brainCaud M ZXG5
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZXG5-0011-R5b-SM-57WBN)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0011-R5b-SM-57WBN \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-42319 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2013
+
+    track gtexRnaSignalBrainCaudateSRR1355262
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1355262.hg38.bigWig
+    shortLabel brainCaud M 11NV4
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-11NV4-0011-R5a-SM-5NQ88)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-0011-R5a-SM-5NQ88 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainCaudateSRR1357189
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1357189.hg38.bigWig
+    shortLabel brainCaud M 1399T
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-1399T-0011-R5b-SM-5IJDK)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-1399T age=60 sex=M hardyScore=2 sample=GTEX-1399T-0011-R5b-SM-5IJDK \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.6 batch=BP-45525 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR1361795
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1361795.hg38.bigWig
+    shortLabel brainCaud M 139TU
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-139TU-0011-R5b-SM-5L3E1)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1365987
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1365987.hg38.bigWig
+    shortLabel brainCaud M 11OF3
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-11OF3-0011-R5a-SM-57WB4)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-0011-R5a-SM-57WB4 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalBrainCaudateSRR1368222
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1368222.hg38.bigWig
+    shortLabel brainCaud M 13CZV
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13CZV-0011-R5a-SM-5K7XA)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13CZV age=60 sex=M hardyScore=2 sample=GTEX-13CZV-0011-R5a-SM-5K7XA \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-45509 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2013
+
+    track gtexRnaSignalBrainCaudateSRR1370405
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1370405.hg38.bigWig
+    shortLabel brainCaud M 13N1W
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13N1W-0011-R5b-SM-5MR5Q)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0011-R5b-SM-5MR5Q \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-46977 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2013
+
+    track gtexRnaSignalBrainCaudateSRR1375616
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1375616.hg38.bigWig
+    shortLabel brainCaud M 13NZA
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13NZA-0011-R5b-SM-5KM4K)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-0011-R5b-SM-5KM4K \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47491 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalBrainCaudateSRR1375927
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1375927.hg38.bigWig
+    shortLabel brainCaud M ZE9C
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZE9C-0011-R5a-SM-5EGLO)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZE9C age=60 sex=M hardyScore=2 sample=GTEX-ZE9C-0011-R5a-SM-5EGLO \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8 batch=BP-41299 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalBrainCaudateSRR1381757
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1381757.hg38.bigWig
+    shortLabel brainCaud M 13JVG
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13JVG-0011-R5a-SM-5MR4O)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0011-R5a-SM-5MR4O \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.5 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainCaudateSRR1382570
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1382570.hg38.bigWig
+    shortLabel brainCaud M 12ZZZ
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12ZZZ-0011-R5a-SM-5EQ4M)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-0011-R5a-SM-5EQ4M \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=9 batch=BP-44999 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalBrainCaudateSRR1385015
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1385015.hg38.bigWig
+    shortLabel brainCaud M 13X6I
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13X6I-0011-R5a-SM-5PNWW)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13X6I age=60 sex=M hardyScore=4 sample=GTEX-13X6I-0011-R5a-SM-5PNWW \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainCaudateSRR1388168
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1388168.hg38.bigWig
+    shortLabel brainCaud M 12WSF
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12WSF-0011-R5a-SM-5HL8K)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-12WSF age=70 sex=M hardyScore=4 sample=GTEX-12WSF-0011-R5a-SM-5HL8K \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.3 batch=BP-45053 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/25/2013
+
+    track gtexRnaSignalBrainCaudateSRR1400245
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1400245.hg38.bigWig
+    shortLabel brainCaud M 13SLW
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13SLW-0011-R5b-SM-5SI6Z)
+    subGroups sex=M age=a70 
+    color 238,238,0
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-0011-R5b-SM-5SI6Z \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalBrainCaudateSRR1410783
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1410783.hg38.bigWig
+    shortLabel brainCaud M 13N2G
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13N2G-0011-R5a-SM-5MR33)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1415095
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1415095.hg38.bigWig
+    shortLabel brainCaud M 139TT
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-139TT-0011-R5b-SM-5K7W8)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0011-R5b-SM-5K7W8 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.6 batch=BP-45421 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2013
+
+    track gtexRnaSignalBrainCaudateSRR1417070
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1417070.hg38.bigWig
+    shortLabel brainCaud M 139TS
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-139TS-0011-R5b-SM-5J2MZ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-0011-R5b-SM-5J2MZ \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.1 batch=BP-45525 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR1418283
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1418283.hg38.bigWig
+    shortLabel brainCaud M 13OW5
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13OW5-0011-R5b-SM-5L3FR)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0011-R5b-SM-5L3FR \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-47594 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/18/2013
+
+    track gtexRnaSignalBrainCaudateSRR1418604
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1418604.hg38.bigWig
+    shortLabel brainCaud M 14753
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-14753-0011-R5a-SM-5S2VW)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1444479
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1444479.hg38.bigWig
+    shortLabel brainCaud M 11WQC
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-11WQC-0011-R5a-SM-5BC74)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0011-R5a-SM-5BC74 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.1 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR1444559
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1444559.hg38.bigWig
+    shortLabel brainCaud M 13CF2
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13CF2-0011-R5a-SM-5LZWS)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-0011-R5a-SM-5LZWS \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.8 batch=BP-46372 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/02/2013
+
+    track gtexRnaSignalBrainCaudateSRR1451964
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1451964.hg38.bigWig
+    shortLabel brainCaud M YJ89
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-YJ89-0011-R5a-SM-4V6GM)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0011-R5a-SM-4V6GM \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1452447
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1452447.hg38.bigWig
+    shortLabel brainCaud M 13FHO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13FHO-0011-R5b-SM-5LZZ3)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-0011-R5b-SM-5LZZ3 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.6 batch=BP-46932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalBrainCaudateSRR1453569
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1453569.hg38.bigWig
+    shortLabel brainCaud M 12WSA
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12WSA-0011-R5b-SM-5GU5I)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12WSA age=60 sex=M hardyScore=4 sample=GTEX-12WSA-0011-R5b-SM-5GU5I \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalBrainCaudateSRR1457221
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1457221.hg38.bigWig
+    shortLabel brainCaud M ZDXO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZDXO-0011-R5a-SM-4WKG5)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1466641
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1466641.hg38.bigWig
+    shortLabel brainCaud M Y8DK
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-Y8DK-0011-R5B-SM-4RTW6)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0011-R5B-SM-4RTW6 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=8.5 batch=BP-40979 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalBrainCaudateSRR1471922
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1471922.hg38.bigWig
+    shortLabel brainCaud M 132Q8
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-132Q8-0011-R5a-SM-5IJDM)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-132Q8 age=60 sex=M hardyScore=4 sample=GTEX-132Q8-0011-R5a-SM-5IJDM \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.7 batch=BP-45522 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalBrainCaudateSRR1474466
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1474466.hg38.bigWig
+    shortLabel brainCaud M 139UC
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-139UC-0011-R5b-SM-5K7VY)
+    subGroups sex=M age=a60 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1477615
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1477615.hg38.bigWig
+    shortLabel brainCaud M 13IVO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-13IVO-0011-R5a-SM-5L3CY)
+    subGroups sex=M age=a70 
+    color 238,238,0
+
+    track gtexRnaSignalBrainCaudateSRR1486560
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1486560.hg38.bigWig
+    shortLabel brainCaud M 12ZZY
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-12ZZY-0011-R5a-SM-5EGL9)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0011-R5a-SM-5EGL9 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalBrainCaudateSRR1500998
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR1500998.hg38.bigWig
+    shortLabel brainCaud M ZF28
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-ZF28-0011-R5a-SM-4WWCZ)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-ZF28 age=60 sex=M hardyScore=4 sample=GTEX-ZF28-0011-R5a-SM-4WWCZ \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.5 batch=BP-41299 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalBrainCaudateSRR598638
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR598638.hg38.bigWig
+    shortLabel brainCaud M NL3H
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-NL3H-0011-R5a-SM-2I3GB)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-NL3H age=60 sex=M hardyScore=3 sample=GTEX-NL3H-0011-R5a-SM-2I3GB \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-17413 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainCaudateSRR608174
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR608174.hg38.bigWig
+    shortLabel brainCaud M N7MS
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-N7MS-0011-R5a-SM-2HMK8)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-0011-R5a-SM-2HMK8 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.8 batch=BP-17395 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalBrainCaudateSRR615096
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR615096.hg38.bigWig
+    shortLabel brainCaud M RVPV
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-RVPV-0011-R5A-SM-2TF69)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-RVPV age=60 sex=M hardyScore=3 sample=GTEX-RVPV-0011-R5A-SM-2TF69 \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.9 batch=BP-22921 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/07/2012
+
+    track gtexRnaSignalBrainCaudateSRR656552
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR656552.hg38.bigWig
+    shortLabel brainCaud M UTHO
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-UTHO-0011-R5A-SM-3GIJD)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-0011-R5A-SM-3GIJD \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=7.5 batch=BP-27008 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2012
+
+    track gtexRnaSignalBrainCaudateSRR820292
+    parent gtexRnaSignalBrainCaudate off
+    type bigWig
+    bigDataUrl brainCaudate/gtexRnaSignalSRR820292.hg38.bigWig
+    shortLabel brainCaud M S7PM
+    longLabel GTEx RNA signal from male Brain - Caudate (basal ganglia) (GTEX-S7PM-0011-R5A-SM-3NM8G)
+    subGroups sex=M age=a60 
+    color 238,238,0
+    metadata donor=GTEX-S7PM age=60 sex=M hardyScore=0 sample=GTEX-S7PM-0011-R5A-SM-3NM8G \
+            tissue=brainCaudate autolysisScore=-1 rnaIntegrity=6.3 batch=BP-22978 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/08/2012
+

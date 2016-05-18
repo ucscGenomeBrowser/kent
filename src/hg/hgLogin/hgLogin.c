@@ -1291,11 +1291,10 @@ if (!sameString(m->accountActivated,"Y"))
     }
 if (checkPwd(password,m->password))
     {
-    unsigned int userID=m->idx;  
-    hPrintf("<h2>Login successful for user %s with id %d.\n</h2>\n"
-        ,userName,userID);
+    hPrintf("<h2>Login successful for user %s.\n</h2>\n", userName);
     clearNewPasswordFields(conn, userName);
-    displayLoginSuccess(userName,userID);
+    uint authToken = loginSystemLoginUser(userName);
+    displayLoginSuccess(userName, authToken);
     return;
     } 
 else if (usingNewPassword(conn, userName, password))
