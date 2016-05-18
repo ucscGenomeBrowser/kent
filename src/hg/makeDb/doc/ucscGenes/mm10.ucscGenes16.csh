@@ -1367,7 +1367,7 @@ hgLoadBed $tempDb ucscGenePfam domainToGenome.bed
     cd $dir/bioCyc
     grep -v '^#' $bioCycPathways > pathways.tab
     grep -v '^#' $bioCycGenes > genes.tab
-    kgBioCyc1 genes.tab pathways.tab $db bioCycPathway.tab bioCycMapDesc.tab
+    kgBioCyc1 genes.tab pathways.tab $tempDb bioCycPathway.tab bioCycMapDesc.tab
     hgLoadSqlTab -notOnServer $tempDb bioCycPathway $kent/src/hg/lib/bioCycPathway.sql ./bioCycPathway.tab
     hgLoadSqlTab -notOnServer $tempDb bioCycMapDesc $kent/src/hg/lib/bioCycMapDesc.sql ./bioCycMapDesc.tab
 
@@ -1540,6 +1540,9 @@ synBlastp.csh $ratDb $db ensGene knownGene
 
 # Clean up
 rm -r run.*/out
+
+# Add hgdownload directories on dev for proteinDB/$pbDb and uniProt/$spDb,
+# updating the README.txt files accordingly.
 
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  

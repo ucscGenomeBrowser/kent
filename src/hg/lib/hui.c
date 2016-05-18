@@ -4831,9 +4831,25 @@ char varName[1024];
 safef(varName, sizeof(varName), "%s.doWiggle", name);
 boolean parentLevel = isNameAtParentLevel(tdb,varName);
 boolean option = cartUsualBooleanClosestToHome(cart, tdb, parentLevel,"doWiggle", FALSE);
+
 cgiMakeCheckBox(varName, option);
 printf("<BR>\n");
+char *style = option ? "display:block" : "display:none";
+printf("<DIV ID=\"densGraphOptions\" STYLE=\"%s\">\n", style);
+
+// we need to fool the wiggle dialog into defaulting to autoscale and maximum
+char *origType = tdb->type;
+tdb->type = "bedGraph";
+if (hashFindVal(tdb->settingsHash, AUTOSCALE) == NULL)
+    hashAdd(tdb->settingsHash, AUTOSCALE, "on");
+if (hashFindVal(tdb->settingsHash, WINDOWINGFUNCTION) == NULL)
+    hashAdd(tdb->settingsHash, WINDOWINGFUNCTION, wiggleWindowingEnumToString( wiggleWindowingMax));
 wigCfgUi(cart,tdb,name,title,TRUE);
+tdb->type = origType;
+printf("</DIV>\n\n");
+printf("<script>\n");
+printf("   $(\"input[name='%s']\").click( function() { $('#densGraphOptions').toggle();} );\n", varName);
+printf("</script>\n\n");
 }
 
 void wiggleScaleDropDownJavascript(char *name)

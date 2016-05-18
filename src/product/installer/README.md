@@ -28,7 +28,7 @@ If you do not have wget installed, use curl instead:
     bash browserSetup.sh install
 
 The script then downloads the CGIs and sets up the central Mysql database. All
-potentially desctructive steps require confirmation by the user (unless the -b = 
+potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
 
 In particular, Mysql and Apache are installed and setup with the right package
@@ -52,7 +52,7 @@ and download a few essential pieces of hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
-If this is still too slow you have to download all tables of a genome assembly.
+If the genome browser is still too slow you have to download all tables of a genome assembly.
 By default rsync is used for the download.  Alternatively you can use
 UDR, a UDP-based fast transfer protocol (option: -u). 
 

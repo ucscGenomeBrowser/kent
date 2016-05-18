@@ -74,6 +74,7 @@ searchPriority 3.53
 
 
 include altSeqComposite1.ra
+include mm10Patch4.ra
 
 include mm10Strains1SuperTrack.ra
 
