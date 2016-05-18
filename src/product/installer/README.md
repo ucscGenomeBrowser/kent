@@ -52,13 +52,13 @@ and download a few essential pieces of hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
-If the genome browser is still too slow you have to download all tables of a genome assembly.
+If the genome browser is still too slow you have to mirror all tables of a genome assembly.
 By default rsync is used for the download.  Alternatively you can use
 UDR, a UDP-based fast transfer protocol (option: -u). 
 
-    sudo bash browserSetup.sh -u download hg38
+    sudo bash browserSetup.sh -u mirror hg38
 
-A successful run of "download" will also cut the connection to UCSC: no tables
+A successful run of "mirror" will also cut the connection to UCSC: no tables
 or files are downloaded anymore from the UCSC servers on-the-fly. To change
 the remote on-the-fly loading, specify the option -o (offline) or 
 -f (on-the-fly).
@@ -66,23 +66,31 @@ the remote on-the-fly loading, specify the option -o (offline) or
 In the case of hg19, the full assembly download is 7TB big. To cut this down to
 up to 2TB or even less, use the -t option, e.g.
 
-    sudo bash browserSetup.sh -t noEncode download hg19
+    sudo bash browserSetup.sh -t noEncode mirror hg19
 
-When you want to update all CGIs and fully downloaded assemblies, you can call the
+When you want to update all CGIs and fully mirrored assemblies, you can call the
 script with the "update" parameter like this: 
 
     sudo bash browserInstall.sh update
 
-Minimal mirrors, so those that have never downloaded a full assembly, should not 
+Minimal mirrors, so those that have never mirrored a full assembly, should not 
 use the update command, but rather just re-run the minimal command, as it will
 just update the minimal tables. You may want to add this command to your crontab,
 maybe run it every day, so your local tables stay in sync with UCSC:
 
     sudo bash browserInstall.sh minimal hg19 hg38
 
-You probably also want to add a command like this to your crontab to remove 
+To update only the CGI software parts of the browser and not the data, use the
+"cgiUpdate" command. This is a problematic update, functions may break if the
+data needed for them is not available. In most circumstances, we recommend you
+use the "mirror" or "update" commands instead.
+
+    sudo bash browserInstall.sh cgiUpdate
+
+You probably also want to add a cleaning command to your crontab to remove 
 the temporary files that are created during genome browser usage. They accumulate
-in /usr/local/apache/trash and can quickly take up a lot of space:
+in /usr/local/apache/trash and can quickly take up a lot of space. A command like
+this could be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
@@ -97,15 +105,17 @@ Thanks to Daniel Vera (bio.fsu.edu) for his RHEL install notes.
 Here is the full listing of commands and options supported by browserSetup.sh: 
 
 ```
-browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
+./browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
 
 command is one of:
-  install    - install the genome browser in this machine
+  install    - install the genome browser on this machine
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
-  download   - download a full assembly (also see the -t option below).
+  mirror     - download a full assembly (also see the -t option below).
                No data is downloaded on-the-fly from UCSC.
-  update     - update the genome browser binaries and data, mirrors
+  update     - update the genome browser binaries and data, downloads
+               all tables of an assembly
+  cgiUpdate  - update the genome browser binaries and data, downloads
                all tables of an assembly
   clean      - remove temporary files of the genome browser, do not delete
                any custom tracks
@@ -115,19 +125,18 @@ parameters for 'install' and 'minimal':
                        list of genomes
 
 examples:
-  bash browserSetup.sh install     - install Genome Browser, do not download any genome
+  bash ./browserSetup.sh install     - install Genome Browser, do not download any genome
                         assembly, switch to on-the-fly mode (see the -f option)
-  bash browserSetup.sh minimal hg19 - download only the minimal tables for the hg19 assembly
-  bash browserSetup.sh download hg19 mm9 - download hg19 and mm9, switch
+  bash ./browserSetup.sh minimal hg19 - download only the minimal tables for the hg19 assembly
+  bash ./browserSetup.sh mirror hg19 mm9 - download hg19 and mm9, switch
                         to offline mode (see the -o option)
-  bash browserSetup.sh download -t noEncode hg19  - install Genome Browser, download hg19 
+  bash ./browserSetup.sh mirror -t noEncode hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash browserSetup.sh update     -  update the Genome Browser CGI programs
-  bash browserSetup.sh clean      -  remove temporary files
+  bash ./browserSetup.sh update     -  update the Genome Browser CGI programs
+  bash ./browserSetup.sh clean      -  remove temporary files
 
-All options have to precede the command, e.g. "bash browserSetup.sh -a install".
-This order does not work: "bash browserSetup.sh install -a".
+All options have to precede the list of genome assemblies.
 
 options:
   -a   - use alternative download server at SDSC

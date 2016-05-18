@@ -313,17 +313,20 @@ read -r -d '' HELP_STR << EOF_HELP
 $0 [options] [command] [assemblyList] - UCSC genome browser install script
 
 command is one of:
-  install    - install the genome browser in this machine
+  install    - install the genome browser on this machine. This is usually 
+               required before any other commands are run.
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
-  download   - download a full assembly (also see the -t option below).
+  mirror     - download a full assembly (also see the -t option below).
                No data is downloaded on-the-fly from UCSC.
-  update     - update the genome browser binaries and data, mirrors
-               all tables of an assembly
+  update     - update the genome browser software and data, updates
+               all tables of an assembly, like "mirror"
+  cgiUpdate  - update only the genome browser software, not the data. Not 
+               recommended, see documentation.
   clean      - remove temporary files of the genome browser, do not delete
                any custom tracks
 
-parameters for 'install' and 'minimal':
+parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
                        list of genomes
 
@@ -331,9 +334,9 @@ examples:
   bash $0 install     - install Genome Browser, do not download any genome
                         assembly, switch to on-the-fly mode (see the -f option)
   bash $0 minimal hg19 - download only the minimal tables for the hg19 assembly
-  bash $0 download hg19 mm9 - download hg19 and mm9, switch
+  bash $0 mirror hg19 mm9 - download hg19 and mm9, switch
                         to offline mode (see the -o option)
-  bash $0 download -t noEncode hg19  - install Genome Browser, download hg19 
+  bash $0 mirror -t noEncode hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
   bash $0 update     -  update the Genome Browser CGI programs
@@ -355,6 +358,7 @@ options:
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)
+         This option will download a udr binary to /usr/local/bin
   -o   - switch to offline-mode. Remove all statements from hg.conf that allow
          loading data on-the-fly from the UCSC download server. Requires that
          you have downloaded at least one assembly, using the '"download"' 
@@ -1188,7 +1192,7 @@ function installBrowser ()
     disableSelinux
 
     # Download my own statically compiled udr binary
-    if [[ ! -f /usr/local/bin/udr && "$RSYNC" = *udr* ]]; then
+    if [[ ! -f /usr/local/bin/udr && "$RSYNC" = "*udr*" ]]; then
       echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
       waitKey
       downloadFile $UDRURL > /usr/local/bin/udr
@@ -1296,12 +1300,11 @@ function installBrowser ()
 function downloadGenomes
 {
     DBS=$*
-    if [ "$DBS" -eq "" ] ; then
+    if [ "$DBS" == "" ] ; then
         echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
         exit 1
     fi
 
-    clear
     echo2
     echo2 Downloading databases $DBS plus hgFixed/proteome/go from the UCSC download server
     echo2
@@ -1423,12 +1426,11 @@ function startMysql
 function downloadMinimal
 {
     DBS=$*
-    if [ "$DBS" -eq "" ] ; then
+    if [ "$DBS" == "" ] ; then
         echo2 Argument error: the '"minimal"' command requires at least one assembly name, like hg19 or mm10.
         exit 1
     fi
 
-    clear
     echo2
     echo2 Downloading minimal tables for databases $DBS 
 
@@ -1482,7 +1484,7 @@ function cleanTrash ()
     find $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
-function updateBrowser {
+function cgiUpdate () {
    # update the CGIs
    $RSYNC -avzP --exclude RNAplot --exclude hg.conf --exclude hg.conf.local $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ --exclude RNAplot
    # update the html docs
@@ -1490,6 +1492,10 @@ function updateBrowser {
    $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude ENCODE --exclude trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
    # assign all downloaded files to a valid user. 
    chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
+}
+
+function updateBrowser {
+   cgiUpdate
    echo
 
    # update gbdb
@@ -1546,6 +1552,8 @@ while getopts ":baut:hof" opt; do
       ;;
     t)
       val=${OPTARG}
+      # need to include all subdirectories for include to work
+      # need to exclude everything else for exclude to work
       if [[ "$val" == "bestEncode" ]]; then
           RSYNCOPTS="-m --include=wgEncodeGencode* --include=wgEncodeBroadHistone* --include=wgEncodeReg* --include=wgEncodeAwg* --include=wgEncode*Mapability* --include=*/ --exclude=wgEncode*"
           ONLYGENOMES=0
@@ -1554,7 +1562,8 @@ while getopts ":baut:hof" opt; do
           ONLYGENOMES=0
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
-          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include snp142Common* --include=snp128* --include=gencode* --include rmsk* --include */ --exclude=*"
+          # SNP table selection explained in #17335
+          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include snp146Common* --include snp130* --include snp142Common* --include=snp128* --include=gencode* --include rmsk* --include */ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
@@ -1671,11 +1680,14 @@ fi
 if [ "${1:-}" == "install" ]; then
    installBrowser
 
-elif [ "${1:-}" == "download" ]; then
-   downloadGenomes ${@:2} # all arguments after the second one
-
 elif [ "${1:-}" == "minimal" ]; then
    downloadMinimal ${@:2} # all arguments after the second one
+
+elif [ "${1:-}" == "mirror" ]; then
+   downloadGenomes ${@:2} # all arguments after the second one
+
+elif [ "${1:-}" == "cgiUpdate" ]; then
+   cgiUpdate
 
 elif [ "${1:-}" == "update" ]; then 
    updateBrowser
