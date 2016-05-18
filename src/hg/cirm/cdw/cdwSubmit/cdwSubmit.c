@@ -755,6 +755,23 @@ for (row = table->rowList; row != NULL; row = row->next)
 	if (enrichedIn == NULL)
 	    errAbort("Genomics file %s missing enriched_in tag", file);
 	}
+
+    if (justTest)
+        {
+	static char *otherForcedFields[] = {"body_part", "data_set_id", "assay", "lab", 
+	    "life_stage", "ucsc_db"};
+	int i;
+	for (i=0; i<ArraySize(otherForcedFields); ++i)
+	    {
+	    char *field = otherForcedFields[i];
+	    int tableIx = stringArrayIx(field, table->fields, table->fieldCount);  // In manifest
+	    if (tableIx < 0)
+	        {
+		if (tagFindVal(stanza, field) == NULL)
+		     errAbort("Missing %s field for %s", field, file);
+		}
+	    }
+	}
     }
 
 /* Check manifest.txt tags */
