@@ -52,7 +52,7 @@ GBDBDIR=/gbdb
 SEDINPLACE="sed -ri"
 
 # udr binary URL
-UDRURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/udr
+UDRURL=http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/udr
 
 # rsync is a variable so it can be be set to use udr
 RSYNC=rsync
@@ -1191,13 +1191,7 @@ function installBrowser ()
 
     disableSelinux
 
-    # Download my own statically compiled udr binary
-    if [[ ! -f /usr/local/bin/udr && "$RSYNC" = "*udr*" ]]; then
-      echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
-      waitKey
-      downloadFile $UDRURL > /usr/local/bin/udr
-      chmod a+x /usr/local/bin/udr
-    fi
+    checkDownloadUdr
 
     # CGI DOWNLOAD AND HGCENTRAL MYSQL DB SETUP
 
@@ -1263,7 +1257,7 @@ function installBrowser ()
     else
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
-        $RSYNC -avzP --exclude RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
+        $RSYNC -avzP --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
     fi
 
     # download the html docs, exclude some big files on OSX
@@ -1478,18 +1472,30 @@ function downloadMinimal
     goOnline
 }
 
+function checkDownloadUdr () 
+{
+    # Download my own statically compiled udr binary
+    if [[ ! -f /usr/local/bin/udr ]]; then
+      echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
+      waitKey
+      downloadFile $UDRURL > /usr/local/bin/udr
+      chmod a+x /usr/local/bin/udr
+    fi
+}
+
 function cleanTrash () 
 {
     echo2 Removing files older than one day in $TRASHDIR, not running on $TRASHDIR/ct
     find $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
-function cgiUpdate () {
+function cgiUpdate ()
+{
    # update the CGIs
-   $RSYNC -avzP --exclude RNAplot --exclude hg.conf --exclude hg.conf.local $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ --exclude RNAplot
+   $RSYNC -avzP --exclude=RNAplot --exclude=hg.conf --exclude=hg.conf.local --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ 
    # update the html docs
    echo2 Updating Apache htdocs
-   $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude ENCODE --exclude trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
+   $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
    # assign all downloaded files to a valid user. 
    chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
 }
@@ -1558,12 +1564,12 @@ while getopts ":baut:hof" opt; do
           RSYNCOPTS="-m --include=wgEncodeGencode* --include=wgEncodeBroadHistone* --include=wgEncodeReg* --include=wgEncodeAwg* --include=wgEncode*Mapability* --include=*/ --exclude=wgEncode*"
           ONLYGENOMES=0
       elif [[ "$val" == "noEncode" ]]; then
-          RSYNCOPTS="-m --include=wgEncodeGencode* --include */ --exclude=wgEncode*"
+          RSYNCOPTS="-m --include=wgEncodeGencode* --include=*/ --exclude=wgEncode*"
           ONLYGENOMES=0
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
           # SNP table selection explained in #17335
-          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include snp146Common* --include snp130* --include snp142Common* --include=snp128* --include=gencode* --include rmsk* --include */ --exclude=*"
+          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
@@ -1572,6 +1578,7 @@ while getopts ":baut:hof" opt; do
       ;;
     u)
       RSYNC="/usr/local/bin/udr rsync"
+      checkDownloadUdr
       ;;
     o)
       if [ ! -f $APACHEDIR/cgi-bin/hg.conf ]; then
@@ -1664,7 +1671,8 @@ if [ "$DIST" == "none" ]; then
     exit 3
 fi
 
-if [[ "$#" -gt "1" && "${2:0:1}" == "-"  ]]; then
+lastArg=${*: -1:1}
+if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; then
   echo "Error: The options have to be specfied before the command, not after it."
   echo
   echo "$HELP_STR"
