@@ -1,3 +1,5 @@
+% Genome-Browser-on-the-Cloud Installation Instructions
+
 # An install script for the UCSC Genome Browser
 
 This script installs Mysql, Apache, Ghostscript, configures them and copies the UCSC Genome
@@ -27,6 +29,8 @@ If you do not have wget installed, use curl instead:
     curl https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
     bash browserSetup.sh install
 
+# How does this work?
+
 The script then downloads the CGIs and sets up the central Mysql database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
@@ -44,6 +48,8 @@ This will leave you with a genome browser accessible on localhost that loads its
 through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
 enough to test if your setup is working.
+
+# The different commands
 
 To increase performance, the script accepts the command "minimal". It will download the
 minimal tables required for reasonable performance from places on the US continent and 
@@ -100,7 +106,7 @@ requests, open a github issue or contact genome-mirror@soe.ucsc.edu.
 More details about the Genome Browser installation are at
 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
 
-Thanks to Daniel Vera (bio.fsu.edu) for his RHEL install notes.
+# All options
 
 Here is the full listing of commands and options supported by browserSetup.sh: 
 
@@ -161,3 +167,8 @@ options:
          unless an assembly has been provided during install
   -h   - this help message
 ```
+
+# Credits
+* Daniel Vera (bio.fsu.edu) for his RHEL install notes.
+* Bruce O'Neill, Malcolm Cook for feedback
+
