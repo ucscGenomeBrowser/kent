@@ -191,6 +191,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *var,*val;
     while (cgiParseNext(&cgiVars, &var, &val))
 	tagStanzaAdd(tagStorm, stanza, var, val);
+
+    /* Compute fields based on other fields */
+    // TODO - calculate days_after_conception here
+    
     }
 sqlFreeResult(&sr);
 verbose(2, "cdwTagStorm: %d items in fileTree\n", fileTree->n);
