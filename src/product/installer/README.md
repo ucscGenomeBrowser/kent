@@ -111,36 +111,37 @@ http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
 Here is the full listing of commands and options supported by browserSetup.sh: 
 
 ```
-./browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
+browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
 
 command is one of:
-  install    - install the genome browser on this machine
+  install    - install the genome browser on this machine. This is usually 
+               required before any other commands are run.
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
   mirror     - download a full assembly (also see the -t option below).
                No data is downloaded on-the-fly from UCSC.
-  update     - update the genome browser binaries and data, downloads
-               all tables of an assembly
-  cgiUpdate  - update the genome browser binaries and data, downloads
-               all tables of an assembly
+  update     - update the genome browser software and data, updates
+               all tables of an assembly, like "mirror"
+  cgiUpdate  - update only the genome browser software, not the data. Not 
+               recommended, see documentation.
   clean      - remove temporary files of the genome browser, do not delete
                any custom tracks
 
-parameters for 'install' and 'minimal':
+parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
                        list of genomes
 
 examples:
-  bash ./browserSetup.sh install     - install Genome Browser, do not download any genome
+  bash browserSetup.sh install     - install Genome Browser, do not download any genome
                         assembly, switch to on-the-fly mode (see the -f option)
-  bash ./browserSetup.sh minimal hg19 - download only the minimal tables for the hg19 assembly
-  bash ./browserSetup.sh mirror hg19 mm9 - download hg19 and mm9, switch
+  bash browserSetup.sh minimal hg19 - download only the minimal tables for the hg19 assembly
+  bash browserSetup.sh mirror hg19 mm9 - download hg19 and mm9, switch
                         to offline mode (see the -o option)
-  bash ./browserSetup.sh mirror -t noEncode hg19  - install Genome Browser, download hg19 
+  bash browserSetup.sh mirror -t noEncode hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash ./browserSetup.sh update     -  update the Genome Browser CGI programs
-  bash ./browserSetup.sh clean      -  remove temporary files
+  bash browserSetup.sh update     -  update the Genome Browser CGI programs
+  bash browserSetup.sh clean      -  remove temporary files
 
 All options have to precede the list of genome assemblies.
 
@@ -154,10 +155,11 @@ options:
                     except Gencode genes, saves 4TB/6TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
-         main = only RefSeq/Gencode genes and SNPs, total 5GB for hg19
+         main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)
+         This option will download a udr binary to /usr/local/bin
   -o   - switch to offline-mode. Remove all statements from hg.conf that allow
          loading data on-the-fly from the UCSC download server. Requires that
          you have downloaded at least one assembly, using the '"download"' 
@@ -171,4 +173,3 @@ options:
 # Credits
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
 * Bruce O'Neill, Malcolm Cook for feedback
-
