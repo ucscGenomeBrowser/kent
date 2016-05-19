@@ -142,6 +142,7 @@
 #include "trackVersion.h"
 #include "genbank.h"
 #include "bedTabix.h"
+#include "knetUdc.h"
 
 #define CHROM_COLORS 26
 
@@ -13639,6 +13640,7 @@ else if (sameWord(type, "bedLogR"))
     */
 else if (sameWord(type, "bedTabix"))
     {
+    knetUdcInstall();
     tdb->canPack = TRUE;
     complexBedMethods(track, tdb, FALSE, wordCount, words);
     if (trackShouldUseAjaxRetrieval(tg))
@@ -13649,9 +13651,8 @@ else if (sameWord(type, "longTabix"))
     char *words[2];
     words[0] = type;
     words[1] = "5";
-    tdb->canPack = TRUE;
-    complexBedMethods(track, tdb, FALSE, wordCount, words);
-    connectMethods(track, tdb);
+    complexBedMethods(track, tdb, FALSE, 2, words);
+    longRangeMethods(track, tdb);
     if (trackShouldUseAjaxRetrieval(tg))
         track->loadItems = dontLoadItems;
     }

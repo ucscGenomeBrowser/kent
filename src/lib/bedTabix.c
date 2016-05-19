@@ -17,14 +17,15 @@ if (isNotEmpty(chrom) && start != end)
 return btf;
 }
 
-struct bed *bedTabixReadBeds(struct bedTabixFile *btf, char *chrom, int start, int end, struct bed * (*loadBed)(void *tg), int minScore)
+struct bed *bedTabixReadBeds(struct bedTabixFile *btf, char *chrom, int start, int end, struct bed * (*loadBed)(void *tg))
 {
 struct bed *bedList = NULL;
 
 int wordCount;
 char *words[100];
 
-lineFileSetTabixRegion(btf->lf, chrom, start, end);
+if (!lineFileSetTabixRegion(btf->lf, chrom, start, end))
+    return NULL;
 while ((wordCount = lineFileChopTab(btf->lf, words)) > 0)
     {
     struct bed *bed = loadBed(words);
