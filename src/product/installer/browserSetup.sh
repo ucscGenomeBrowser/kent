@@ -354,7 +354,7 @@ options:
                     except Gencode genes, saves 4TB/6TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
-         main = only RefSeq/Gencode genes and SNPs, total 5GB for hg19
+         main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)

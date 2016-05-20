@@ -45,6 +45,7 @@
 #include "gtexUi.h"
 #include "genbank.h"
 #include "htmlPage.h"
+#include "longRange.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -3988,6 +3989,8 @@ switch(cType)
                         break;
 #endif
     case cfgVcf:        vcfCfgUi(cart, tdb, prefix, title, boxed);
+                        break;
+    case cfgLong:       longRangeCfgUi(cart, tdb, prefix, title, boxed);
                         break;
     case cfgSnake:      snakeCfgUi(cart, tdb, prefix, title, boxed);
                         break;
