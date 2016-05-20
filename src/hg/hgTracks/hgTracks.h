@@ -955,7 +955,7 @@ void halSnakeMethods(struct track *track, struct trackDb *tdb,
 /* Make track group for hal-based snake alignment. */
 #endif
 
-void connectMethods(struct track *track, struct trackDb *tdb);
+void longRangeMethods(struct track *track, struct trackDb *tdb);
 /* Make track group for long range connections . */
 
 void snakeMethods(struct track *track, struct trackDb *tdb,
