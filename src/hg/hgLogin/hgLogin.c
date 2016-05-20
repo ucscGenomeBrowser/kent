@@ -1165,7 +1165,7 @@ else
     return FALSE;
 }
 
-void displayLoginSuccess(char *userName)
+void displayLoginSuccess(char *userName, uint idx)
 /* display login success msg, and set cookie */
 {
 hPrintf("<h2>%s</h2>", brwName);
@@ -1177,7 +1177,7 @@ hPrintf(
 /* Set cookies */
 hPrintf("<script language=\"JavaScript\">"
         " document.write(\"Login successful, setting cookies now...\");");
-struct slName *newCookies = loginLoginUser(userName), *sl;
+struct slName *newCookies = loginLoginUser(userName, idx), *sl;
 for (sl = newCookies;  sl != NULL;  sl = sl->next)
     hPrintf(" document.cookie = '%s';", sl->name);
 hPrintf(" </script>\n");
@@ -1233,7 +1233,7 @@ if (checkPwd(password,m->password))
     {
     hPrintf("<h2>Login successful for user %s.\n</h2>\n", userName);
     clearNewPasswordFields(conn, userName);
-    displayLoginSuccess(userName);
+    displayLoginSuccess(userName, m->idx);
     return;
     } 
 else if (usingNewPassword(conn, userName, password))
