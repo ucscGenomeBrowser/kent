@@ -642,7 +642,8 @@ end
 
 #############################################################################
 # run this same business with hg38 as target, Patch7 sequence as query
-#  (TBD - 2016-05-19 - Hiram)
+#  (DONE - 2016-05-19,20 - Hiram)
+
 mkdir /hive/data/genomes/hg38/bed/hg38Patch7/lastzHg38Patch7.2016-05-19
 cd /hive/data/genomes/hg38/bed/hg38Patch7/lastzHg38Patch7.2016-05-19
 
@@ -817,12 +818,13 @@ do
     netChainSubset -verbose=0 singleLiftOver/${B}.noClass.net \
         ${F} stdout \
     | chainStitchId stdin stdout > singleLiftOver/${C}
-    echo "${F} -> singleLiftOver/${C}"
+    printf "${F} -> singleLiftOver/${C}\n" 1>&2
 done
 
 # put the chains together into one file
 chainMergeSort singleLiftOver/chr*.chain | gzip -c \
         > hg38.hg38Patch7.single.over.chain.gz
+# -rw-rw-r-- 1  13444 May 20 10:40 hg38.hg38Patch7.single.over.chain.gz
 
  # construct psl files from those chains
 chainToPsl hg38.hg38Patch7.single.over.chain.gz \
@@ -833,11 +835,11 @@ chainToPsl hg38.hg38Patch7.single.over.chain.gz \
         hg38.hg38Patch7.over.psl
 # pslCheck reports no errors
 pslCheck -db=hg38 hg38.hg38Patch7.over.psl
-# checked: 111 failed: 0 errors: 0
+# checked: 124 failed: 0 errors: 0
 
 # load this PSL track
 #     this table name prefix altSeqLiftOverPsl is recognized in hgc clicks
-hgLoadPsl hg38 -table=altSeqLiftOverPslP6 hg38.hg38Patch7.over.psl
+hgLoadPsl hg38 -table=altSeqLiftOverPslP7 hg38.hg38Patch7.over.psl
 
 mkdir /hive/data/genomes/hg38/bed/hg38Patch7/seqExt
 cd /hive/data/genomes/hg38/bed/hg38Patch7/seqExt
@@ -850,12 +852,13 @@ hgLoadSeq -drop -seqTbl=seqHg38Patch7 -extFileTbl=extHg38Patch7 hg38 \
 
 #############################################################################
 # wrap up scripts and file editing (trackDb, hgdownload)
-#  (TBD - 2016-01-13 - Hiram)
+#  (DONE - 2016-05-20 - Hiram)
 
 # edit ${HOME}/kent/src/hg/makeDb/doc/hg38/patchDescr.pl to reflect this most
 # recent patch version.
 
 cd /hive/data/genomes/hg38/bed/hg38Patch7
+# edit patchDescr.pl to update to this patch level
 ${HOME}/kent/src/hg/makeDb/doc/hg38/patchDescr.pl \
     > ${HOME}/kent/src/hg/makeDb/trackDb/human/hg38/hg38Patch7.html
 
@@ -868,4 +871,9 @@ md5sum * > md5sum.txt
 
 # copy README.txt from previous patch and edit as needed - replace the
 # patch description lines with the output of running
-# /hive/data/genomes/hg38/bed/hg38Patch7/readmeLines.pl
+cd /hive/data/genomes/hg38/bed/hg38Patch7
+./readmeLines.pl genbank/GCA_000001405.22_GRCh38.p7_assembly_report.txt \
+    genbank/GCA_000001405.22_GRCh38.p7_assembly_regions.txt \
+      patchLocations.bed new.sequences.list
+
+#############################################################################

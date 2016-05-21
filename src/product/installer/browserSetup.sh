@@ -210,6 +210,14 @@ allowHgMirror=0
 # so the mirror does not need a copy of them
 hgEncodeVocabDocBaseUrl=http://genome.ucsc.edu
 
+# load genbank from hgFixed, this will be the default
+# after v333, so not necessary anymore after July 2016
+genbankDb=hgFixed
+
+# use 2bit files instead of nib, this is only relevant in failover mode
+# and for very old assemblies
+forceTwoBit=yes
+
 # if you want a different default species selection on the Gateway
 # page, change this default Human to one of the genomes from the
 # defaultDb table in hgcentral:
