@@ -253,6 +253,7 @@
 #include "bedTabix.h"
 #include "longRange.h"
 #include "hmmstats.h"
+#include "aveStats.h"
 
 static char *rootDir = "hgcData";
 
@@ -3932,32 +3933,25 @@ unsigned maxWidth;
 struct longRange *longRangeList = parseLongTabix(list, &maxWidth, 0);
 struct longRange *longRange, *ourLongRange = NULL;
 unsigned itemNum = sqlUnsigned(item);
-double min = DBL_MAX, max = -DBL_MAX;
-double total = 0, average;
-unsigned count = 0;
-double sumSquares = 0;
+unsigned count = slCount(longRangeList);
+double *doubleArray;
 
-for(longRange = longRangeList; longRange; longRange = longRange->next)
+AllocArray(doubleArray, count);
+
+int ii = 0;
+for(longRange = longRangeList; longRange; longRange = longRange->next, ii++)
     {
     if (longRange->id == itemNum)
         {
         ourLongRange = longRange;
         }
-    if (longRange->score < min)
-        min = longRange->score;
-    if (longRange->score > max)
-        max = longRange->score;
-    total += longRange->score;
-    sumSquares += longRange->score * longRange->score;
-
-    count++;
+    doubleArray[ii] = longRange->score;
     }
-average = total/count;
-double stdDev = calcStdFromSums(total, sumSquares, count);
-
 
 if (ourLongRange == NULL)
     errAbort("cannot find long range item with id %d\n", itemNum);
+
+struct aveStats *as = aveStatsCalc(doubleArray, count);
 
 printf("Item you clicked on:<BR>\n");
 printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
@@ -3965,8 +3959,16 @@ printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
 //printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to other block </A><BR>\n",  otherChrom, s, e);
 
 printf("<BR>All items in window:\n");
-printf("<BR><B>Min:</B> %g <BR><B>Max:</B> %g <BR><B>Average:</B> %g <BR><B>Count:</B> %d <BR><B>Total:</B> %g  <BR><B>StDev:</B> %g\n", min,max,average,count, total, stdDev);
 
+printf("<BR>Q1 %f\n", as->q1);
+printf("<BR>median %f\n", as->median);
+printf("<BR>Q3 %f\n", as->q3);
+printf("<BR>average %f\n", as->average);
+printf("<BR>min %f\n", as->minVal);
+printf("<BR>max %f\n", as->maxVal);
+printf("<BR>count %d\n", as->count);
+printf("<BR>total %f\n", as->total);
+printf("<BR>standard deviation %f\n", as->stdDev);
 }
 
 void genericClickHandlerPlus(
