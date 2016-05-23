@@ -1,4 +1,4 @@
-% Genome-Browser-on-the-Cloud Installation Instructions
+% Genome-Browser-in-the-Cloud Installation Instructions
 
 # An install script for the UCSC Genome Browser
 
