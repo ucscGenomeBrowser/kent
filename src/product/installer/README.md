@@ -14,7 +14,7 @@ It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu
 14) and Microsoft Azure (Ubuntu). If you do not want to download the full genome assembly,
 you need to select the data centers called "San Francisco" (Amazon) or "West
 Coast" (Microsoft) for best performance. Other data centers (e.g. East Coast) will require a local
-copy of the genome assembly, which can mean 2TB-6TB of storage for the hg19 assembly. Note that this
+copy of the genome assembly, which can mean 2TB-7TB of storage for the hg19 assembly. Note that this
 exceeds the current maximum size of a single Amazon EBS volume.
 
 Run this script as root, like this:
