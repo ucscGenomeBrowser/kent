@@ -1585,7 +1585,7 @@ while getopts ":baut:hof" opt; do
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
           # SNP table selection explained in #17335
-          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
+          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --include=cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
@@ -1689,7 +1689,7 @@ fi
 
 lastArg=${*: -1:1}
 if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; then
-  echo "Error: The options have to be specfied before the command, not after it."
+  echo "Error: The options have to be specified before the command, not after it."
   echo
   echo "$HELP_STR"
   exit 1
