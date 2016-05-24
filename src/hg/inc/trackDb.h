@@ -423,6 +423,7 @@ typedef enum _eCfgType
     cfgPsl      =10,
     cfgVcf      =11,
     cfgSnake    =12,
+    cfgLong     =13,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 

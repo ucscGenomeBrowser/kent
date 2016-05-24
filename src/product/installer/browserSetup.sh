@@ -210,6 +210,20 @@ allowHgMirror=0
 # so the mirror does not need a copy of them
 hgEncodeVocabDocBaseUrl=http://genome.ucsc.edu
 
+# enable local file access for custom tracks
+# By default you have to supply http:// URLs for custom track data, e.g. in bigDataUrls
+# With this statement, you can allow loading from local files, as long as the path
+# starts with a specific prefix
+#udc.localDir=/bamFiles
+
+# load genbank from hgFixed, this will be the default
+# after v333, so not necessary anymore after July 2016
+genbankDb=hgFixed
+
+# use 2bit files instead of nib, this is only relevant in failover mode
+# and for very old assemblies
+forceTwoBit=yes
+
 # if you want a different default species selection on the Gateway
 # page, change this default Human to one of the genomes from the
 # defaultDb table in hgcentral:
@@ -323,8 +337,8 @@ command is one of:
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
                recommended, see documentation.
-  clean      - remove temporary files of the genome browser, do not delete
-               any custom tracks
+  clean      - remove temporary files of the genome browser older than one 
+               day, but do not delete any uploaded custom tracks
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -336,13 +350,15 @@ examples:
   bash $0 minimal hg19 - download only the minimal tables for the hg19 assembly
   bash $0 mirror hg19 mm9 - download hg19 and mm9, switch
                         to offline mode (see the -o option)
-  bash $0 mirror -t noEncode hg19  - install Genome Browser, download hg19 
+  bash $0 -t noEncode mirror hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash $0 update     -  update the Genome Browser CGI programs
-  bash $0 clean      -  remove temporary files
+  bash $0 update hg19 -  update all data and all tables of the hg19 assembly
+                         (in total 7TB)
+  bash $0 cgiUpdate   -  update the Genome Browser CGI programs
+  bash $0 clean       -  remove temporary files older than one day
 
-All options have to precede the list of genome assemblies.
+All options have to precede the command.
 
 options:
   -a   - use alternative download server at SDSC
@@ -354,7 +370,7 @@ options:
                     except Gencode genes, saves 4TB/6TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
-         main = only RefSeq/Gencode genes and SNPs, total 5GB for hg19
+         main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)

@@ -5,6 +5,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include <float.h>
 #include "obscure.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -249,6 +250,10 @@
 #include "geneReviewsClick.h"
 #include "bigBed.h"
 #include "bigPsl.h"
+#include "bedTabix.h"
+#include "longRange.h"
+#include "hmmstats.h"
+#include "aveStats.h"
 
 static char *rootDir = "hgcData";
 
@@ -3916,6 +3921,56 @@ else
     }
 }
 
+
+static void doLongTabix(struct trackDb *tdb, char *item)
+{
+char *bigDataUrl = hashFindVal(tdb->settingsHash, "bigDataUrl");
+struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+char *chromName = cartString(cart, "c");
+struct bed *list = bedTabixReadBeds(btf, chromName, winStart, winEnd, bedLoad5);
+bedTabixFileClose(btf);
+unsigned maxWidth;
+struct longRange *longRangeList = parseLongTabix(list, &maxWidth, 0);
+struct longRange *longRange, *ourLongRange = NULL;
+unsigned itemNum = sqlUnsigned(item);
+unsigned count = slCount(longRangeList);
+double *doubleArray;
+
+AllocArray(doubleArray, count);
+
+int ii = 0;
+for(longRange = longRangeList; longRange; longRange = longRange->next, ii++)
+    {
+    if (longRange->id == itemNum)
+        {
+        ourLongRange = longRange;
+        }
+    doubleArray[ii] = longRange->score;
+    }
+
+if (ourLongRange == NULL)
+    errAbort("cannot find long range item with id %d\n", itemNum);
+
+struct aveStats *as = aveStatsCalc(doubleArray, count);
+
+printf("Item you clicked on:<BR>\n");
+printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
+printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
+//printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to other block </A><BR>\n",  otherChrom, s, e);
+
+printf("<BR>All items in window:\n");
+
+printf("<BR>Q1 %f\n", as->q1);
+printf("<BR>median %f\n", as->median);
+printf("<BR>Q3 %f\n", as->q3);
+printf("<BR>average %f\n", as->average);
+printf("<BR>min %f\n", as->minVal);
+printf("<BR>max %f\n", as->maxVal);
+printf("<BR>count %d\n", as->count);
+printf("<BR>total %f\n", as->total);
+printf("<BR>standard deviation %f\n", as->stdDev);
+}
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -4116,6 +4171,8 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
+    else if ( startsWith("longTabix", type))
+	doLongTabix(tdb, item);
     }
 if (imagePath)
     {
@@ -20738,6 +20795,8 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+else if ( startsWith( "longTabix", type))
+    doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))

@@ -3,18 +3,16 @@
 use strict;
 use warnings;
 
-my $patchLevel = 6;
-my $patchOrdinal = "sixth";
-# also need to update file paths below from GCA_000001405.21 to the current
-# version (e.g., GCA_000001405.22).
+# adjust values here for new patch level
+my $patchLevel = 7;
+my $asmId = "GCA_000001405.22_GRCh38.p${patchLevel}";
+my $patchOrdinal = "seventh";
+
 
 my $haploCount = `cat hg38Patch${patchLevel}Haplotypes.bed | wc -l`;
 chomp $haploCount;
 my $patchCount = `cat hg38Patch${patchLevel}Patches.bed | wc -l`;
 chomp $patchCount;
-
-#   6 hg38Patch3Haplotypes.bed
-#   33 hg38Patch3Patches.bed
 
 sub beginHtml() {
 
@@ -58,13 +56,13 @@ printf "<p>
 Data obtained from the
    <a href=\"http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/info/patches.shtml\" target=\"_blank\">
    Genome Reference Consortium:</a>&nbsp;&nbsp;
-   <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/GCA_000001405.21_GRCh38.p$patchLevel/\" target=\"_blank\">FTP</a>.
+   <a href=\"ftp://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Homo_sapiens/all_assembly_versions/${asmId}/\" target=\"_blank\">FTP</a>.
 </p>\n";
 }
 
 my %seqName;
 my %seqRole;
-open (FH, "<genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_report.txt") or die "can not read genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_report.txt";
+open (FH, "<genbank/${asmId}_assembly_report.txt") or die "can not read genbank/${asmId}_assembly_report.txt";
 while (my $line = <FH>) {
    next if ($line =~ m/^#/);
    chomp $line;
@@ -76,7 +74,7 @@ close (FH);
 
 my %region;
 
-open (FH, "<genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_regions.txt") or die "can not read genbank/GCA_000001405.21_GRCh38.p${patchLevel}_assembly_regions.txt";
+open (FH, "<genbank/${asmId}_assembly_regions.txt") or die "can not read genbank/${asmId}_assembly_regions.txt";
 while (my $line = <FH>) {
    next if ($line =~ m/^#/);
   chomp $line;

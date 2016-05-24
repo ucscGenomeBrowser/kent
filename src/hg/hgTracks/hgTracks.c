@@ -69,6 +69,7 @@
 #include "genbank.h"
 #include "bigWarn.h"
 #include "wigCommon.h"
+#include "knetUdc.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -5991,10 +5992,10 @@ else if (sameString(type, "makeItems"))
     }
 else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
     {
+    knetUdcInstall();
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
-    tg->canPack = TRUE;
     }
 else if (sameString(type, "bedDetail"))
     {

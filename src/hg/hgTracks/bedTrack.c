@@ -88,12 +88,8 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
     {
     struct hash *settings = tg->tdb->settingsHash;
     char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
-    char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
-    int minScore = 0;
-    if (scoreFilter)
-	minScore = atoi(scoreFilter);
     struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
-    list = bedTabixReadBeds(btf, chromName, winStart, winEnd, loader, minScore);
+    list = bedTabixReadBeds(btf, chromName, winStart, winEnd, loader);
     bedTabixFileClose(btf);
     }
 else if (tg->isBigBed)

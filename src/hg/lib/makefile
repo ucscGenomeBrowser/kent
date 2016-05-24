@@ -7,7 +7,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     altGraphX.o ancientRref.o \
     annoFormatVep.o annoGratorGpVar.o annoGrateWigDb.o \
     annoStreamDb.o annoStreamDbFactorSource.o annoStreamWig.o \
-    api.o atomDb.o  axtInfo.o \
+    api.o atomDb.o autoUpgrade.o axtInfo.o \
     axtLib.o bactigPos.o hgBam.o baseMaskCommon.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed5Pval.o bed6FloatScore.o  bed8Attrs.o bed12Source.o \
     bed12wSeq.o bedCart.o bgiGeneInfo.o bgiGeneSnp.o bgiSnp.o bigBedFind.o \
@@ -73,7 +73,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     jgiGene.o joinMixer.o \
     kgAlias.o kgColor.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
     lav.o ld.o ld2.o lfs.o liftOver.o liftOverChain.o liftUp.o \
-    llaInfo.o lrg.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o \
+    llaInfo.o longRange.o lrg.o lsSnpPdb.o lsSnpPdbChimera.o mafFrames.o mafGene.o mafSummary.o \
     makeItemsItem.o mammalPsg.o mapSts.o \
     mcnBreakpoints.o mdb.o metaChromGraph.o microarray.o \
     minChromSize.o minGeneInfo.o mrnaMisMatch.o \

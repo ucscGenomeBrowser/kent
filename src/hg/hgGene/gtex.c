@@ -16,21 +16,37 @@
 #include "gtexGeneBed.h"
 #include "gtexUi.h"
 
-static boolean gtexExists(struct section *section, struct sqlConnection *conn, char *geneId)
+static boolean gtexExists(struct section *section, struct sqlConnection *conn, char *ucscId)
 /* Return TRUE if GTEx data exists for this gene */
 {
-// Lookup geneId in knownToEnsembl to get ENST (w/ version), look that up (w/o version) 
-// in ensGene to get ENSG (w/o version), and save it for printer
 char query[512];
 if (!sqlTableExists(conn, "gtexGene"))
     return FALSE;
+
+#define NO_ENSGENE 1
+// NOTE: Can remove this ifdef when/if hg38 ensGene is pushed 
+#ifdef NO_ENSGENE
+if (sameString(database, "hg38"))
+    {
+    // Get ENSG (w/ version) from knownCanonical
+    sqlSafef(query, sizeof(query), 
+        "SELECT SUBSTRING_INDEX(knownCanonical.protein,'.',1) FROM "
+            "knownCanonical, knownIsoforms WHERE "
+            "knownIsoforms.transcript='%s' AND "
+            "knownCanonical.clusterId=knownIsoforms.clusterId", ucscId);
+    }
+else
+#endif
+
+// Lookup ucsc gene ID in knownToEnsembl to get ENST (w/ version), look that up (w/o version) 
+// in ensGene to get ENSG (w/o version), and save it for printer
 sqlSafef(query, sizeof(query), 
-        "SELECT ensGene.name2 FROM ensGene, knownToEnsembl WHERE "
-            "knownToEnsembl.name='%s' AND "
-            "ensGene.name=SUBSTRING_INDEX(knownToEnsembl.value,'.',1)", geneId);
+    "SELECT ensGene.name2 FROM ensGene, knownToEnsembl WHERE "
+        "knownToEnsembl.name='%s' AND "
+        "ensGene.name=SUBSTRING_INDEX(knownToEnsembl.value,'.',1)", ucscId);
 char *ensGene = sqlQuickString(conn, query);
 if (!ensGene)
-    return FALSE;
+return FALSE;
 
 // construct full accession (with version) in gtexGene table
 sqlSafef(query, sizeof(query), 
