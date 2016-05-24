@@ -1603,7 +1603,9 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    puts("<tr><td>");
+    printAddWbr(col->comment, 10);
+    puts("</td>"); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -24765,6 +24767,31 @@ va_start(args, a);
 bool res = vsameWords(a, args);
 va_end(args);
 return res;
+}
+
+void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
+
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
 }
 
 void doMiddle()
