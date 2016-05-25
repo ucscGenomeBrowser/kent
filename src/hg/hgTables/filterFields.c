@@ -337,6 +337,8 @@ showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" *
 struct slName *fieldList;
 if (isBigBed(database, rootTable, curTrack, ctLookupName))
     fieldList = bigBedGetFields(rootTable, conn);
+else if (isLongTabixTable(rootTable))
+    fieldList = getLongTabixFields();
 else if (isBamTable(rootTable))
     fieldList = bamGetFields();
 else if (isVcfTable(rootTable, NULL))
@@ -938,6 +940,7 @@ boolean isWig = isSmallWig || isBigWig;
 boolean isBedGr = tdb ? tdbIsBedGraph(tdb) : isBedGraph(rootTable);
 boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLookupName);
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
+boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
 
 if (isWig)
@@ -963,6 +966,8 @@ else
     struct sqlFieldType *ftList;
     if (isBb)
         ftList = bigBedListFieldsAndTypes(tdb, conn);
+    else if (isLongTabix)
+	ftList = longTabixListFieldsAndTypes();
     else if (isBam)
 	ftList = bamListFieldsAndTypes();
     else if (isVcf)
@@ -973,7 +978,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf))
+if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -989,7 +994,7 @@ if (!(isWig||isBedGr||isBam||isVcf))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr||isBam||isVcf)
+if (isWig||isBedGr||isBam||isVcf||isLongTabix)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1048,6 +1053,11 @@ else if (isBigBed(db, table, curTrack, ctLookupName))
     struct sqlFieldType *ftList = bigBedListFieldsAndTypes(ct->tdb, NULL);
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
+else if (isLongTabixTable(table))
+    {
+    struct sqlFieldType *ftList = longTabixListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
 else if (isBamTable(table))
     {
     struct sqlFieldType *ftList = bamListFieldsAndTypes();
@@ -1103,7 +1113,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL))
+if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");

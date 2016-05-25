@@ -47,6 +47,8 @@ if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
 if (! hTableOrSplitExists(db, table))
     return FALSE;
+if (isLongTabixTable(table))
+    return TRUE;
 if (isBamTable(table))
     return TRUE;
 if (isBigWigTable(table))

@@ -18,11 +18,14 @@ else
 struct aveStats *aveStatsCalc(double *array, int count)
 /* Compute stats on sorted array */
 {
-qsort(array, count, sizeof(array[0]), cmpDouble);
-
 struct aveStats *as;
 
 AllocVar(as);
+if (count == 0)
+    return as;
+
+qsort(array, count, sizeof(array[0]), cmpDouble);
+
 as->count = count;
 
 double val, minVal = DBL_MAX, maxVal = -DBL_MAX;
