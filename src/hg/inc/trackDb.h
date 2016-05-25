@@ -616,6 +616,12 @@ INLINE boolean tdbIsBigWig(struct trackDb *tdb)
 return startsWithWord("bigWig", tdb->type);
 }
 
+INLINE boolean tdbIsLongTabix(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a long tabix file.
+{
+return startsWithWord("longTabix", tdb->type);
+}
+
 INLINE boolean tdbIsBam(struct trackDb *tdb)
 // Return TRUE if tdb corresponds to a BAM file.
 {

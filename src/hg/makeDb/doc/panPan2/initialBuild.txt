@@ -561,7 +561,7 @@ panPan2.genbank.est.native.load = no
     git push
     make etc-update
 
-##########################################################################
+##############################################################################
 # LIFTOVER TO panPan1 (DONE - 2016-05-17 - Hiram)
     ssh hgwdev
     mkdir /hive/data/genomes/panPan2/bed/blat.panPan1.2016-05-17
@@ -576,11 +576,15 @@ panPan2.genbank.est.native.load = no
         -ooc=/hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc \
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
          panPan2 panPan1) > doLiftOverToPanPan1.log 2>&1
-XXX - running - Tue May 17 16:10:39 PDT 2016
+    # real    156m48.953s
 
-    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/panPan2/liftOver/
-    md5sum panPan2ToBosTau6.over.chain.gz >> md5sum.txt
-    popd
+    # verify this functions in the genome browser from panPan2 to panPan1
+
+##############################################################################
+# set default position to FOXP2 gene displays  (DONE - 2016-05-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr7:119036070-119363606" where name="panPan2";' \
+	hgcentraltest
 
 ##############################################################################
 # all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)

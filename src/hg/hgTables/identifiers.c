@@ -309,7 +309,7 @@ static struct hash *getAllPossibleIds(struct sqlConnection *conn,
  * make a hash of all identifiers in curTable (and alias tables if specified)
  * so that we can check the validity of pasted/uploaded identifiers. */
 {
-if (isCustomTrack(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
+if (isCustomTrack(curTable) || isLongTabixTable(curTable) || isBamTable(curTable) || isVcfTable(curTable, NULL) ||
     isBigBed(database, curTable, curTrack, ctLookupName))
     return NULL;
 

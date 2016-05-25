@@ -1603,7 +1603,9 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    puts("<tr><td>");
+    printAddWbr(col->comment, 10);
+    puts("</td>"); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -3923,6 +3925,7 @@ else
 
 
 static void doLongTabix(struct trackDb *tdb, char *item)
+/* Handle a click on a long range interaction */
 {
 char *bigDataUrl = hashFindVal(tdb->settingsHash, "bigDataUrl");
 struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
@@ -3956,19 +3959,30 @@ struct aveStats *as = aveStatsCalc(doubleArray, count);
 printf("Item you clicked on:<BR>\n");
 printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
 printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
-//printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to other block </A><BR>\n",  otherChrom, s, e);
+unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
+int s = ourLongRange->s - padding; 
+int e = ourLongRange->e + padding; 
+if (s < 0 ) 
+    s = 0;
+int chromSize = hChromSize(database, seqName);
+if (e > chromSize)
+    e = chromSize;
+printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
+    ourLongRange->sChrom, s, e);
 
-printf("<BR>All items in window:\n");
+printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
 
-printf("<BR>Q1 %f\n", as->q1);
-printf("<BR>median %f\n", as->median);
-printf("<BR>Q3 %f\n", as->q3);
-printf("<BR>average %f\n", as->average);
-printf("<BR>min %f\n", as->minVal);
-printf("<BR>max %f\n", as->maxVal);
-printf("<BR>count %d\n", as->count);
-printf("<BR>total %f\n", as->total);
-printf("<BR>standard deviation %f\n", as->stdDev);
+printf("<TABLE BORDER=1>\n");
+printf("<TR><TD><B>Q1</B></TD><TD>%f</TD></TR>\n", as->q1);
+printf("<TR><TD><B>median</B></TD><TD>%f</TD></TR>\n", as->median);
+printf("<TR><TD><B>Q3</B></TD><TD>%f</TD></TR>\n", as->q3);
+printf("<TR><TD><B>average</B></TD><TD>%f</TD></TR>\n", as->average);
+printf("<TR><TD><B>min</B></TD><TD>%f</TD></TR>\n", as->minVal);
+printf("<TR><TD><B>max</B></TD><TD>%f</TD></TR>\n", as->maxVal);
+printf("<TR><TD><B>count</B></TD><TD>%d</TD></TR>\n", as->count);
+printf("<TR><TD><B>total</B></TD><TD>%f</TD></TR>\n", as->total);
+printf("<TR><TD><B>standard deviation</B></TD><TD>%f</TD></TR>\n", as->stdDev);
+printf("</TABLE>\n");
 }
 
 void genericClickHandlerPlus(
@@ -24765,6 +24779,31 @@ va_start(args, a);
 bool res = vsameWords(a, args);
 va_end(args);
 return res;
+}
+
+void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
+
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
 }
 
 void doMiddle()

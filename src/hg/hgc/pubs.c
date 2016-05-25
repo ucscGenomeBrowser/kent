@@ -390,31 +390,6 @@ if (sqlNeedQuickNum(conn, query) > itemLimit)
     }
 }
 
-static void printAddWbr(char *text, int distance) 
-/* a crazy hack for firefox/mozilla that is unable to break long words in tables
- * We need to add a <wbr> tag every x characters in the text to make text breakable.
- */
-{
-int i;
-i = 0;
-char *c;
-c = text;
-bool doNotBreak = FALSE;
-while (*c != 0) 
-    {
-    if ((*c=='&') || (*c=='<'))
-       doNotBreak = TRUE;
-    if (*c==';' || (*c =='>'))
-       doNotBreak = FALSE;
-
-    printf("%c", *c);
-    if (i % distance == 0 && ! doNotBreak) 
-        printf("<wbr>");
-    c++;
-    i++;
-    }
-}
-
 /* keep only uppercase letters in string*/
 void eraseAllButUpper(char *s)
 {
