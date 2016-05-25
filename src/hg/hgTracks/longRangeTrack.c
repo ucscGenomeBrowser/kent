@@ -39,7 +39,7 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
         if (!(sOnScreen || eOnScreen))
             continue;
 
-        unsigned sx, ex;
+        unsigned sx = 0, ex = 0;
         if (sOnScreen)
             sx = (longRange->s - seqStart) * scale + xOff;
         if (eOnScreen)
