@@ -1822,7 +1822,7 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	errAbort("Doesn't start with <HTML> tag");
     tag = tag->next;
     if (tag == NULL || !sameWord(tag->name, "HEAD"))
-	warn("<HEAD> tag does not follow <HTML> tag");
+	warn("<HEAD> tag does not immediately follow <HTML> tag");
     else
 	{
 	for (;;)
