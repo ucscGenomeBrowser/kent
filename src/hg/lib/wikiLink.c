@@ -237,7 +237,7 @@ static struct slName *loginUserNameCookieString(char *userName)
 /* Return a cookie string that sets userName cookie to userName if non-empty and
  * deletes/invalidates the cookie if empty/NULL. */
 {
-return newCookieString(loginUserNameCookie(), userName);
+return newCookieString(loginUserNameCookie(), cgiEncodeFull(userName));
 }
 
 static struct slName *loginIdKeyCookieString(uint idx, char *key)
@@ -348,7 +348,11 @@ char *cookiePrefix = getRemoteCookiePrefix(wikiHost);
 char *userName = getRemoteCookieVal(CFG_LOGIN_USER_NAME_COOKIE, cookiePrefix, "hgLoginUserName");
 char *idKey = getRemoteCookieVal(CFG_LOGIN_IDKEY_COOKIE, cookiePrefix, "hgLoginToken");
 authenticated = (isNotEmpty(userName) && isNotEmpty(idKey));
-remoteUserName = userName;
+if (isNotEmpty(userName))
+    {
+    remoteUserName = cloneString(userName);
+    cgiDecodeFull(remoteUserName, remoteUserName, strlen(remoteUserName));
+    }
 // BEGIN TODO: remove in July 2016
 if (! authenticated && wikiLinkEnabled())
     {
@@ -364,6 +368,15 @@ if (! authenticated && wikiLinkEnabled())
 // END TODO: remove in July 2016
 }
 
+static char *getLoginUserName()
+/* Get the (CGI-decoded) value of the login userName cookie. */
+{
+char *userName = cloneString(findCookieData(loginUserNameCookie()));
+if (isNotEmpty(userName))
+    cgiDecodeFull(userName, userName, strlen(userName));
+return userName;
+}
+
 struct slName *loginValidateCookies()
 /* Return possibly empty list of cookie strings for the caller to set.
  * If login cookies are obsolete but (formerly) valid, the results sets updated cookies.
@@ -375,7 +388,7 @@ if (alreadyAuthenticated)
     return cookieStrings;
 alreadyAuthenticated = TRUE;
 authenticated = FALSE;
-char *userName = findCookieData(loginUserNameCookie());
+char *userName = getLoginUserName();
 
 // BEGIN TODO: remove in July 2016
 // If we're using values from old wiki cookies, replace the cookies.
@@ -467,7 +480,7 @@ if (loginSystemEnabled())
     {
     if (! alreadyAuthenticated)
         errAbort("wikiLinkUserName: loginValidateCookies must be called first.");
-    char *userName = findCookieData(loginUserNameCookie());
+    char *userName = getLoginUserName();
     if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
         userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
     if (isEmpty(userName) && isNotEmpty(remoteUserName))
