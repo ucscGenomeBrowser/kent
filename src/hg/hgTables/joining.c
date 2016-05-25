@@ -306,6 +306,16 @@ slFreeList(&fieldList);
 hFreeConn(&conn);
 }
 
+static void makeLongTabixOrderedCommaFieldList(struct joinerDtf *dtfList,
+	struct dyString *dy)
+/* Make comma-separated field list in same order as fields are in
+ * long tabix file. */
+{
+struct slName *fieldList = getLongTabixFields();
+makeOrderedCommaFieldList(fieldList, dtfList, dy);
+slFreeList(&fieldList);
+}
+
 static void makeBamOrderedCommaFieldList(struct joinerDtf *dtfList,
 	struct dyString *dy)
 /* Make comma-separated field list in same order as fields are in
@@ -1024,6 +1034,8 @@ if (! doJoin)
     
     if (isBigBed(database, dtfList->table, NULL, ctLookupName))
 	makeBigBedOrderedCommaFieldList(dtfList, dy);
+    else if (isLongTabixTable(dtfList->table))
+        makeLongTabixOrderedCommaFieldList(dtfList, dy);
     else if (isBamTable(dtfList->table))
         makeBamOrderedCommaFieldList(dtfList, dy);
     else if (isVcfTable(dtfList->table, NULL))

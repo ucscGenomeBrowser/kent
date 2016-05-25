@@ -295,6 +295,8 @@ region->next = NULL;
 
 if (isBigBed(database, table, curTrack, ctLookupName))
     bedList = bigBedGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
+else if (isLongTabixTable(table))
+    bedList = longTabixGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isBamTable(table))
     bedList = bamGetFilteredBedsOnRegions(conn, database, table, region, lm, retFieldCount);
 else if (isVcfTable(table, &isTabix))

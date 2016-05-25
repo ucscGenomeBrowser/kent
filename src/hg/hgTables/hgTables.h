@@ -797,6 +797,29 @@ struct slName *halGetFields(char *table);
 void halTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* BAM stuff from bam.c */
 
+boolean isLongTabixTable(char *table);
+/* Return TRUE if table corresponds to a longTabix file. */
+
+struct slName *getLongTabixFields();
+/* Get fields of bam as simple name list. */
+
+void longTabixTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from long tabix.  If fields is NULL, then print out all fields. */
+
+struct hTableInfo *longTabixToHti(char *table);
+/* Get standard fields of BAM into hti structure. */
+
+struct bed *longTabixGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
+	int *retFieldCount);
+/* Get list of beds from long tabix, in all regions, that pass filtering. */
+
+struct sqlFieldType *longTabixListFieldsAndTypes();
+/* Get fields of BAM as list of sqlFieldType. */
+
+void showSchemaLongTabix(char *table, struct trackDb *tdb);
+/* Show schema on long tabix. */
+
 boolean isBamTable(char *table);
 /* Return TRUE if table corresponds to a BAM file. */
 

@@ -33,35 +33,45 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
     {
     if (sameString(longRange->sChrom, longRange->eChrom))
         {
-        int sx = (longRange->s - seqStart) * scale + xOff;
-        int ex = (longRange->e - seqStart) * scale + xOff;
-        double longRangeWidth = longRange->e - longRange->s;
-        int height = (tg->height - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
-        int tsx = sx;
-        int tex = ex;
+        boolean sOnScreen = (longRange->s >= seqStart) && (longRange->s < seqEnd);
+        boolean eOnScreen = (longRange->e >= seqStart) && (longRange->e < seqEnd);
 
-        if (tsx > tex)
-            {
-            tsx = sx;
-            tex = ex;
-            }
+        if (!(sOnScreen || eOnScreen))
+            continue;
+
+        unsigned sx, ex;
+        if (sOnScreen)
+            sx = (longRange->s - seqStart) * scale + xOff;
+        if (eOnScreen)
+            ex = (longRange->e - seqStart) * scale + xOff;
+
+        double longRangeWidth = longRange->e - longRange->s;
+        int peak = (tg->height - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
         
-        hvGfxLine(hvg, sx, yOff, tsx, height, color);
-        hvGfxLine(hvg, ex, yOff, tex, height, color);
+        if (sOnScreen)
+            hvGfxLine(hvg, sx, yOff, sx, peak, color);
+        if (eOnScreen)
+            hvGfxLine(hvg, ex, yOff, ex, peak, color);
 
         if (tg->visibility == tvFull)
             {
-            hvGfxLine(hvg, tsx, height, tex, height, color);
+            unsigned sPeak = sOnScreen ? sx : xOff;
+            unsigned ePeak = eOnScreen ? ex : xOff + width;
+
+            hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
             char statusBuf[2048];
-            safef(statusBuf, sizeof statusBuf, "%g %s:%d", longRange->score, longRange->eChrom, longRange->e);
+            safef(statusBuf, sizeof statusBuf, "%g %s:%d %s:%d", longRange->score, longRange->sChrom, longRange->s, longRange->eChrom, longRange->e);
             char itemBuf[2048];
             safef(itemBuf, sizeof itemBuf, "%d", longRange->id);
 
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tsx, height-2, tex-tsx, 4,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tsx - 2, yOff, 4, height - yOff,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tex - 2, yOff, 4, height - yOff,
+            if (sOnScreen)
+                mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, sx - 2, yOff, 4, peak - yOff,
+                                       tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+            if (eOnScreen)
+                mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, ex - 2, yOff, 4, peak - yOff,
+                                       tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+
+            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, sPeak, peak-2, ePeak - sPeak, 4,
                                    tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
 
             }

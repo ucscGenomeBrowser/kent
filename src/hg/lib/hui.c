@@ -8399,6 +8399,8 @@ if (tdbIsBigBed(tdb))
 // TODO: standardize to a wig as
 //else if (tdbIsBigWig(tdb))
 //    asObj = asObjFrombigBed(conn,tdb);
+else if (tdbIsLongTabix(tdb))
+    asObj = longTabixAsObj();
 else if (tdbIsBam(tdb))
     asObj = bamAsObj();
 else if (tdbIsVcf(tdb))
