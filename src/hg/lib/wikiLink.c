@@ -481,10 +481,10 @@ if (loginSystemEnabled())
     if (! alreadyAuthenticated)
         errAbort("wikiLinkUserName: loginValidateCookies must be called first.");
     char *userName = getLoginUserName();
-    if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
-        userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
     if (isEmpty(userName) && isNotEmpty(remoteUserName))
         userName = remoteUserName;
+    if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
+        userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
     if (authenticated)
         return cloneString(userName);
     }
