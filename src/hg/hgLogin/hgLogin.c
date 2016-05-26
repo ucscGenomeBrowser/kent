@@ -1233,7 +1233,7 @@ if (checkPwd(password,m->password))
     {
     hPrintf("<h2>Login successful for user %s.\n</h2>\n", userName);
     clearNewPasswordFields(conn, userName);
-    displayLoginSuccess(userName, m->idx);
+    displayLoginSuccess(m->userName, m->idx);
     return;
     } 
 else if (usingNewPassword(conn, userName, password))
