@@ -1,6 +1,6 @@
-/* cdwSendFile - given a file ID and a security token, send the file using Apache */
+/* cdwGetFile - given a file ID and a security token, send the file using Apache */
 
-/* Copyright (C) 2014 The Regents of the University of California 
+/* Copyright (C) 2016 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
@@ -19,6 +19,7 @@
 #include "web.h"
 #include "cdwLib.h"
 #include "wikiLink.h"
+#include "filePath.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -33,83 +34,148 @@ errAbort(
   );
 }
 
-void errExit(char* msg) 
+void errExit(char *msg, char *field) 
+/* print http header + message and exit. msg can contain %s */
 {
 printf("Content-Type: text/html\n\n");
-puts(msg);
+if (!field)
+    puts(msg);
+else
+    printf(msg, field);
 exit(0);
 }
 
-void sendFile(struct sqlConnection *conn, char* acc)
-/* send file identified by acc */
+void mustHaveAccess(struct sqlConnection *conn, struct cdwFile *ef)
+/* exit with error message if user does not have access to file ef */
 {
-char *userName = wikiLinkUserName();
-if (userName==NULL)
-    errExit("Please <a href='../cgi-bin/hgLogin'>log in</a> before downloading files from this system.");
+if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
+    return;
+else
+    if (user==NULL)
+        errExit("Sorry, this file has access restrictions. Please <a href='/cgi-bin/hgLogin'>log in</a> first.", NULL);
+    else
+        errExit("Sorry, user %s does not have access to this file.", user->email);
+}
 
-user = cdwUserFromUserName(conn, userName);
-if (userName==NULL)
-    errExit("There is no CDW account for the Genome Browser account that is currently logged in.");
+void apacheSendX(char *format, char *filePath, char *suggestFileName)
+/* send pseudo-HTTP header to tell Apache to transfer filePath with suggestFileName on user's disk 
+ * format is one of "fastq", "fasta", defined in cdw.as. if format is NULL, use file extension. */
+{
+if (format==NULL)
+{
+    char ext[FILEEXT_LEN];
+    splitPath(filePath, NULL, NULL, ext);
+    if (strlen(ext)>1)
+        {
+        format = cloneString(ext); 
+        format++; // skip over . character
+        }
+}
+
+// html files are shown directly in the internet browser, not downloaded
+if (sameWord(format, "html"))
+    printf("Content-Type: text/html\n");
+else if (sameWord(format, "json"))
+    printf("Content-Type: application/json\n");
+else if (sameWord(format, "text"))
+    printf("Content-Type: application/json\n");
+else
+    {
+    printf("Content-Disposition: attachment;filename=%s\n", suggestFileName);
+    printf("Content-Type: application/octet-stream\n");
+    }
+printf("X-Sendfile: %s\n\n", filePath);
+}
+
+void sendFileByAcc(struct sqlConnection *conn, char* acc)
+/* send file identified by acc (=cdwValidFile.licensePlate), suggests a canonical filename of the format
+ * <licensePlate>.<originalExtension> 
+ * Example URL: http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile?acc=SCH000FSW */
+{
 
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
+if (vf==NULL)
+    errExit("%s is not a valid accession in the CDW.", acc);
+
 struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
 char* filePath = cdwPathForFileId(conn, vf->fileId);
 
-// we need the fileName from the tags table to get the file extension right (e.g. "fastq.gz")
-char query[1024];
-sqlSafef(query, sizeof(query), "SELECT file_name FROM cdwFileTags WHERE file_id='%d'", vf->fileId);
-char* fileName = sqlNeedQuickString(conn, query);
-if (fileName==NULL)
-    errExit("fileId not found in cdwTags. This is an internal error, please email us.");
+mustHaveAccess(conn, ef);
 
-if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
-    {
-    // html files are shown directly in the internet browser, not downloaded
-    if (sameWord(vf->format, "html"))
-        printf("Content-Type: text/html\n");
-    else
-        {
-        printf("Content-Disposition: attachment;filename=%s\n", fileName);
-        printf("Content-Type: plain/text\n");
-        }
-    printf("X-Sendfile: %s\n\n", filePath);
-    }
-else
-    printf("Content-Type: text/html\n\n");
-    printf("User '%s' does not have access to file with accession %s", user->email, vf->licensePlate);
+// use the license plate as the basename of the downloaded file.
+// Take the extension from the submitted filename, as cdwFile.format is not the same as the extension
+// e.g. format=fasta -> fa.gz
+char *submitExt = skipBeyondDelimit(basename(ef->submitFileName), '.');
+char* suggestName = catTwoStrings(vf->licensePlate, submitExt);
+
+apacheSendX(vf->format, filePath, suggestName);
+}
+
+void sendFileByPath(struct sqlConnection *conn, char *path) 
+/* send file identified by a submission pathname (cdwFile.submitFileName),
+ * suggests the original filename. */
+/* path can be a suffix that matches a filename, so the initial '/hive' or
+ * '/data' can be omitted. *
+ * Example URL for testing:
+ * http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile/hive/groups/cirm/pilot/labs/quake/130625_M00361_0080_000000000-A43D1/Sample_1_L13_C31_IL3541-701-506/1_L13_C31_IL3541-701-506_TAAGGCGA-ACTGCATA_L001_R1_001.fastq.gz */
+{
+
+char query[4096];
+// pick out the file with the highest id that has the suffix 'path'
+// the Mysql function RIGHT(string, x) returns the rightmost x characters of string
+int pathLen = strlen(path);
+sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
+    "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
+    "ORDER BY cdwFile.id DESC LIMIT 1;", pathLen, path);
+int fileId = sqlQuickNum(conn, query);
+
+if (fileId == 0)
+    errExit("A file with suffix %s does not exist in the database", path);
+    
+char *localPath = cdwPathForFileId(conn, fileId);
+
+if (localPath == NULL)
+    errExit("A local file with suffix %s was not found in the database. This is an internal error.", path);
+
+struct cdwFile *ef = cdwFileFromId(conn, fileId);
+
+if (ef == NULL)
+    errExit("Could not find cdwFile for path %s", path);
+
+mustHaveAccess(conn, ef);
+apacheSendX(NULL, localPath, basename(ef->submitFileName));
 }
 
 void dispatch(struct sqlConnection *conn)
 /* Dispatch page after to routine depending on cdwCommand variable */
 {
+char *userName = wikiLinkUserName();
+if (userName==NULL)
+    user = NULL;
+else
+    user = cdwUserFromUserName(conn, userName);
 
-char *acc = cartOptionalString(cart, "acc");
-if (acc == NULL)
-    {
-    printf("Content-Type: text/html\n\n");
-    printf("Need at least the parameter acc");
-    }
-else 
-    {
-    sendFile(conn, acc);
-    }
+char *acc = cgiOptionalString("acc");
+char *path = getenv("PATH_INFO"); // CGI gets trailing /x/y/z like path via this env. var.
+
+if (acc != NULL)
+    sendFileByAcc(conn, acc);
+else if (path != NULL)
+    sendFileByPath(conn, path);
+else
+    errExit("Need at least the HTTP GET parameter 'acc' with an accession ID " 
+    "or a file path directly after the CGI name, "
+    "separated by '/', e.g. cdwGetFile/valData/ce10/ce10.2bit';", NULL);
+
 }
-
-void doMiddle()
-/* Not really outputting html on this page, still keeping the basic structure of a cdw CGI. */
-{
-
-struct sqlConnection *conn = sqlConnect(cdwDatabase);
-dispatch(conn);
-sqlDisconnect(&conn);
-}
-
 
 void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart. */
 {
 cart = theCart;
-doMiddle();
+struct sqlConnection *conn = sqlConnect(cdwDatabase);
+dispatch(conn);
+sqlDisconnect(&conn);
 }
 
 char *excludeVars[] = {"submit", NULL};
