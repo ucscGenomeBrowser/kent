@@ -1,4 +1,5 @@
 track cons145way
+release alpha
 compositeTrack on
 shortLabel 145way
 longLabel Vertebrate Multiz Alignment & Conservation (145 Species)
@@ -7,7 +8,7 @@ subGroup1 view Views align=Multiz_Alignments  phyloP=Basewise_Conservation_(phyl
 subGroup2 clade Clade primate=Primate mammal=Mammal vert=Vertebrate all=All_species
 dragAndDrop subTracks
 dimensions dimensionX=clade
-visibility full
+visibility hide
 type bed 4
 group compGeno
 priority 1
@@ -27,7 +28,7 @@ priority 1
         noInherit on
         irows on
         summary multiz145waySummary
-        frames multiz145wayFrames
+#        frames multiz145wayFrames
         group compGeno
         color 0, 10, 100
         altColor 0,90,10
