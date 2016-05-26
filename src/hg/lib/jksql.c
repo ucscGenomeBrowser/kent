@@ -874,6 +874,7 @@ static bool sqlTableCacheTableExists(struct sqlConnection *conn, char* table)
 {
 char query[1024];
 char *tableListTable = cfgVal("showTableCache");
+table = cloneString(table);
 char *dot = strchr(table, '.');
 if (dot)
     {
