@@ -868,19 +868,19 @@ else
     }
 }
 
-static bool sqlTableCacheTableExists(struct sqlConnection *conn, char* table)
+static bool sqlTableCacheTableExists(struct sqlConnection *conn, char *maybeTable)
 /* check if table exists in table name cache */
 // (see redmine 3780 for some historical background on this caching)
 {
 char query[1024];
 char *tableListTable = cfgVal("showTableCache");
-table = cloneString(table);
+char table[2048];
+safecpy(table, sizeof table, maybeTable);
 char *dot = strchr(table, '.');
 if (dot)
     {
     *dot = 0;
     sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s.%s WHERE tableName='%s'", table, tableListTable, dot+1);
-    *dot = '.';
     }
 else
     sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
