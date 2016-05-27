@@ -1,13 +1,12 @@
-/*
+/* sessionThumbnail - get the filename, filesystem path, and web URI
+ * for the thumbnail image associated with a session.
  *
- */
+ * Copyright (C) 2016 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 
 #include "common.h"
-//#include "cheapcgi.h"
-//#include "jksql.h"
 #include "dystring.h"
 #include "hash.h"
-//#include "pipeline.h"
 #include "hgConfig.h"
 
 

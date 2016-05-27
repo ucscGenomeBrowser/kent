@@ -1,6 +1,9 @@
-/*
+/* sessionThumbnail - this header provides an interface for getting
+ * the filename, filesystem path, and web URI for the thumbnail image
+ * associated with a session.
  *
- */
+ * Copyright (C) 2016 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
 
 char *sessionThumbnailFileName(char *userIdx, char *encSessionName,
                                char *firstUse);
