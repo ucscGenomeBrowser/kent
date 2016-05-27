@@ -119,15 +119,8 @@ void sendFileByPath(struct sqlConnection *conn, char *path)
  * Example URL for testing:
  * http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile/hive/groups/cirm/pilot/labs/quake/130625_M00361_0080_000000000-A43D1/Sample_1_L13_C31_IL3541-701-506/1_L13_C31_IL3541-701-506_TAAGGCGA-ACTGCATA_L001_R1_001.fastq.gz */
 {
+int fileId = cdwFileIdFromPathSuffix(conn, path);
 
-char query[4096];
-// pick out the file with the highest id that has the suffix 'path'
-// the Mysql function RIGHT(string, x) returns the rightmost x characters of string
-int pathLen = strlen(path);
-sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
-    "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
-    "ORDER BY cdwFile.id DESC LIMIT 1;", pathLen, path);
-int fileId = sqlQuickNum(conn, query);
 
 if (fileId == 0)
     errExit("A file with suffix %s does not exist in the database", path);

@@ -230,6 +230,9 @@ struct cdwFile *cdwFileFromId(struct sqlConnection *conn, long long fileId);
 struct cdwFile *cdwFileFromIdOrDie(struct sqlConnection *conn, long long fileId);
 /* Return cdwFile given fileId - aborts if not found. */
 
+int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf);
+/* return most recent fileId for file where submitDir.url+submitFname ends with suf. 0 if not found. */
+
 struct genomeRangeTree *cdwMakeGrtFromBed3List(struct bed3 *bedList);
 /* Make up a genomeRangeTree around bed file. */
 

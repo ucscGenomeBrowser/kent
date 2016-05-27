@@ -940,6 +940,18 @@ if (ef == NULL)
 return ef;
 }
 
+int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
+/* return most recent fileId for file where submitDir.url+submitFname ends with suf. 0 if not found. */
+{
+char query[4096];
+int sufLen = strlen(suf);
+sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
+    "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
+    "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);
+int fileId = sqlQuickNum(conn, query);
+return fileId;
+}
+
 struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long long fileId)
 /* Return cdwValidFile give fileId - returns NULL if not validated. */
 {
