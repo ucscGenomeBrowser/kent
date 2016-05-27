@@ -197,6 +197,7 @@ if(all)
     slNameAddHead(&dbs, cloneString("go"));
     slNameAddHead(&dbs, cloneString("uniProt"));
     slNameAddHead(&dbs, cloneString("visiGene"));
+    slNameAddHead(&dbs, cloneString("proteome"));
 
     sqlFreeResult(&sr);
     hDisconnectCentral(&conn);
