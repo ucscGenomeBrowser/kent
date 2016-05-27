@@ -833,17 +833,10 @@ for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
 
     char *label;
     char *desc;
-    if (dataset != NULL)
-        {
-        label = dataset->label;
-        desc = dataset->description;
-        }
-    else
-        {
+    if (dataset == NULL)
         continue;
-        //label = hel->name;
-        //desc = "Missing description in table cdw.cdwDataset";
-        }
+    label = dataset->label;
+    desc = dataset->description;
 
     char *datasetId = hel->name;
 
