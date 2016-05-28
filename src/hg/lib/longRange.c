@@ -68,6 +68,7 @@ struct longRange *parseLongTabix(struct bed *beds, unsigned *maxWidth, double mi
 /* Parse longTabix format into longRange structures */
 {
 struct longRange *longRangeList = NULL;
+*maxWidth = 1;
 for(; beds; beds=beds->next)
     {
     double score;
@@ -92,7 +93,7 @@ for(; beds; beds=beds->next)
     longRange->score = score;
     longRange->name = beds->name;
     
-    if (otherCenter < center)
+    if (sameString(beds->chrom, otherChrom) && (otherCenter < center))
         {
         longRange->s = otherCenter;
         longRange->sw = otherWidth;
@@ -111,7 +112,7 @@ for(; beds; beds=beds->next)
         longRange->eChrom = otherChrom;
         }
     unsigned longRangeWidth = longRange->e - longRange->s;
-    if (longRangeWidth > *maxWidth)
+    if (sameString(longRange->eChrom,longRange->sChrom) && ( longRangeWidth > *maxWidth))
         *maxWidth = longRangeWidth;
     }
 return longRangeList;

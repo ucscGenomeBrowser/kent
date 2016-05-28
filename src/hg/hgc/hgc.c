@@ -3923,7 +3923,6 @@ else
     }
 }
 
-
 static void doLongTabix(struct trackDb *tdb, char *item)
 /* Handle a click on a long range interaction */
 {
@@ -3967,8 +3966,12 @@ if (s < 0 )
 int chromSize = hChromSize(database, seqName);
 if (e > chromSize)
     e = chromSize;
-printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
-    ourLongRange->sChrom, s, e);
+if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
+    printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
+        ourLongRange->sChrom, ourLongRange->s - 20, ourLongRange->s + 20);
+else
+    printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
+        ourLongRange->sChrom, s, e);
 
 printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
 
