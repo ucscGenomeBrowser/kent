@@ -775,6 +775,7 @@ else
           startsWithWord("vcfTabix", type) ||
           startsWithWord("bigPsl", type) ||
           startsWithWord("bigMaf", type) ||
+          startsWithWord("longTabix", type) ||
           startsWithWord("bigGenePred", type) ||
           startsWithWord("bigChain", type) ||
           startsWithWord("bam", type)))
