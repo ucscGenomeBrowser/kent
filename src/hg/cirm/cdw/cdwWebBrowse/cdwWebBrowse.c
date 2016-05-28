@@ -815,8 +815,8 @@ sqlFreeResult(&sr);
 return descs;
 }
 
-void doBrowsePopularTags(struct sqlConnection *conn, char *tag)
-/* Print list of most popular tags of type */
+void doBrowseDatasets(struct sqlConnection *conn, char *tag)
+/* show datasets and links to dataset summary pages. */
 {
 struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct hash *hash = tagStormCountTagVals(tags, tag);
@@ -829,24 +829,26 @@ struct hash *descs = loadDatasetDescs(conn);
 
 for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
     {
-    printf("<LI>\n");
     struct cdwDataset *dataset = hashFindVal(descs, hel->name);
 
     char *label;
     char *desc;
-    if (dataset != NULL)
-        {
-        label = dataset->label;
-        desc = dataset->description;
-        }
-    else
-        {
-        label = hel->name;
-        desc = "Missing description in table cdw.cdwDataset";
-        }
+    if (dataset == NULL)
+        continue;
+    label = dataset->label;
+    desc = dataset->description;
 
     char *datasetId = hel->name;
-    printf("<B><A href=\"../cdwDatasets/%s/\">%s</A></B><BR>", datasetId, label);
+
+    // check if we have a dataset summary page in the CDW
+    char summFname[8000];
+    safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
+    int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+    if (fileId == 0)
+        continue;
+
+    printf("<LI>\n");
+    printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>", datasetId, label);
     printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
     printf("</LI>\n");
     cdwDatasetFree(&dataset);
@@ -1324,7 +1326,7 @@ else if (sameString(command, "browseLabs"))
     }
 else if (sameString(command, "browseDataSets"))
     {
-    doBrowsePopularTags(conn, "data_set_id");
+    doBrowseDatasets(conn, "data_set_id");
     }
 else if (sameString(command, "browseFormats"))
     {
