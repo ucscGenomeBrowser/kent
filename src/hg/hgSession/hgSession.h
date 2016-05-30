@@ -18,6 +18,7 @@
 #define hgsDoNewSession hgSessionPrefix "doNewSession"
 
 #define hgsSharePrefix hgSessionPrefix "share_"
+#define hgsGalleryPrefix hgSessionPrefix "gallery_"
 #define hgsLoadPrefix hgSessionPrefix "load_"
 #define hgsDeletePrefix hgSessionPrefix "delete_"
 
