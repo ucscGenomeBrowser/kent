@@ -1502,7 +1502,9 @@ function checkDownloadUdr ()
 function cleanTrash () 
 {
     echo2 Removing files older than one day in $TRASHDIR, not running on $TRASHDIR/ct
-    find $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
+    # -L = follow symlinks
+    # -atime +1 = files older than one day
+    find -L $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
 function cgiUpdate ()
