@@ -26,7 +26,7 @@ Run this script as root, like this:
 If you do not have wget installed, use curl instead:
 
     sudo -i
-    curl https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
+    curl -O https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
     bash browserSetup.sh install
 
 # How does this work?
