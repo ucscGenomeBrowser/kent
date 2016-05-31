@@ -844,12 +844,13 @@ for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
     char summFname[8000];
     safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
     int fileId = cdwFileIdFromPathSuffix(conn, summFname);
-    if (fileId == 0)
-        continue;
 
     printf("<LI>\n");
-    printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>", datasetId, label);
-    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
+    if (fileId == 0)
+        printf("<B>%s</B><BR>\n", label);
+    else
+        printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
+    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)\n", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
     printf("</LI>\n");
     cdwDatasetFree(&dataset);
     }
