@@ -8,25 +8,6 @@
 
 #include "longRange.h"
 
-static char *longTabixAutoSqlString =
-"table longTabix\n"
-"\"Long Range Tabix file\"\n"
-"   (\n"
-"   string chrom;      \"Reference sequence chromosome or scaffold\"\n"
-"   uint   chromStart; \"Start position in chromosome\"\n"
-"   uint   chromEnd;   \"End position in chromosome\"\n"
-"   string interactingRegion;       \"(e.g. chrX:123-456,3.14, where chrX:123-456 is the coordinate of the mate, and 3.14 is the score of the interaction)\"\n"
-"   uint   id;      \"Unique Id\"\n"
-"   char[1] strand;    \"+ or -\"\n"
-"   )\n"
-;
-
-struct asObject *longTabixAsObj()
-// Return asObject describing fields of longTabix file
-{
-return asParseText(longTabixAutoSqlString);
-}
-
 void longRangeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Complete track controls for long range interaction. */
 {

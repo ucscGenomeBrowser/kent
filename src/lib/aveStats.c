@@ -55,7 +55,7 @@ as->maxVal = array[count-1];
 double *lastValue = &array[count];
 double *valuePtr;
 
-double total;
+double total = 0;
 for( valuePtr = array; valuePtr < lastValue; valuePtr++)
     total += *valuePtr;
 as->total = total;
