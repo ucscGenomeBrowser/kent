@@ -44,6 +44,7 @@
 #include "regexHelper.h"
 #include "chromInfo.h"
 #include "trackHub.h"
+#include "bedTabix.h"
 
 // placeholder when custom track uploaded file name is not known
 #define CT_NO_FILE_NAME         "custom track"
@@ -2124,6 +2125,22 @@ static boolean bigChainRecognizer(struct customFactory *fac,
 return (sameType(type, "bigChain"));
 }
 
+static boolean longTabixRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigPsl track */
+{
+return (sameType(type, "longTabix"));
+}
+
+static boolean bedTabixRecognizer(struct customFactory *fac,
+	struct customPp *cpp, char *type,
+    	struct customTrack *track)
+/* Return TRUE if looks like we're handling a bigPsl track */
+{
+return (sameType(type, "bedTabix"));
+}
+
 static boolean bigPslRecognizer(struct customFactory *fac,
 	struct customPp *cpp, char *type,
     	struct customTrack *track)
@@ -2186,11 +2203,74 @@ static struct customFactory bigChainFactory =
     bigBedLoader,
     };
 
+static struct customTrack *bedTabixLoader(struct customFactory *fac, struct hash *chromHash,
+					  struct customPp *cpp, struct customTrack *track,
+					  boolean dbRequested)
+/* Process the bedTabix track line. */
+{
+struct hash *settings = track->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+requireBigDataUrl(bigDataUrl, fac->name, track->tdb->shortLabel);
+struct dyString *dyErr = dyStringNew(0);
+checkAllowedBigDataUrlProtocols(bigDataUrl);
+if (doExtraChecking)
+    {
+    /* protect against temporary network error */
+    struct errCatch *errCatch = errCatchNew();
+    if (errCatchStart(errCatch))
+	{
+	struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+	if (btf == NULL)
+	    {
+            dyStringPrintf(dyErr, "Unable to open %s's bigDataUrl %s",
+			   track->tdb->shortLabel, bigDataUrl);
+	    }
+        else
+            bedTabixFileClose(btf);
+	}
+    errCatchEnd(errCatch);
+    if (isNotEmpty(errCatch->message->string))
+	dyStringPrintf(dyErr, ": %s", errCatch->message->string);
+    errCatchFree(&errCatch);
+    }
+if (isNotEmpty(dyErr->string))
+    track->networkErrMsg = dyStringCannibalize(&dyErr);
+track->dbTrackType = cloneString("bedTabix");
+return track;
+}
+
+static struct customTrack *longTabixLoader(struct customFactory *fac, struct hash *chromHash,
+					  struct customPp *cpp, struct customTrack *track,
+					  boolean dbRequested)
+{
+bedTabixLoader(fac, chromHash, cpp, track, dbRequested);
+track->dbTrackType = cloneString("longTabix");
+return track;
+}
+
+static struct customFactory longTabixFactory =
+/* Factory for bigMaf tracks */
+    {
+    NULL,
+    "longTabix",
+    longTabixRecognizer,
+    longTabixLoader,
+    };
+
+static struct customFactory bedTabixFactory =
+/* Factory for bigMaf tracks */
+    {
+    NULL,
+    "bedTabix",
+    bedTabixRecognizer,
+    bedTabixLoader,
+    };
+
 static struct customFactory bigMafFactory =
 /* Factory for bigMaf tracks */
     {
     NULL,
-    "bigPsl",
+    "bigMaf",
     bigMafRecognizer,
     bigBedLoader,
     };
@@ -2681,6 +2761,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigGenePredFactory);
     slAddTail(&factoryList, &bigPslFactory);
+    slAddTail(&factoryList, &bedTabixFactory);
+    slAddTail(&factoryList, &longTabixFactory);
     slAddTail(&factoryList, &bigChainFactory);
     slAddTail(&factoryList, &bigMafFactory);
     slAddTail(&factoryList, &bigBedFactory);

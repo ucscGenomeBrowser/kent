@@ -1,0 +1,1614 @@
+    track gtexRnaSignalEsophagusJunctionSRR1087942
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1087942.hg38.bigWig
+    shortLabel esophJunc F XUZC
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-XUZC-0526-SM-4BOPF)
+    subGroups sex=F age=a30 
+    color 172,119,52
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0526-SM-4BOPF \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.7 batch=BP-34240 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1318331
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1318331.hg38.bigWig
+    shortLabel esophJunc F 12WSK
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-12WSK-1326-SM-5CVNM)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-1326-SM-5CVNM \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.4 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1325642
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1325642.hg38.bigWig
+    shortLabel esophJunc F ZGAY
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZGAY-1526-SM-4WWEO)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-1526-SM-4WWEO \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.1 batch=BP-43072 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/04/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1354511
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1354511.hg38.bigWig
+    shortLabel esophJunc F 13QBU
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13QBU-0826-SM-5IJBU)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-0826-SM-5IJBU \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.7 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1355554
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1355554.hg38.bigWig
+    shortLabel esophJunc F WYVS
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-WYVS-1026-SM-4SOJW)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-1026-SM-4SOJW \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.9 batch=BP-40888 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1356184
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1356184.hg38.bigWig
+    shortLabel esophJunc F 14BMU
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-14BMU-1026-SM-5RQJ5)
+    subGroups sex=F age=a20 
+    color 172,119,52
+    metadata donor=GTEX-14BMU age=20 sex=F hardyScore=0 sample=GTEX-14BMU-1026-SM-5RQJ5 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.9 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1366034
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1366034.hg38.bigWig
+    shortLabel esophJunc F ZPIC
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZPIC-1926-SM-57WFQ)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-1926-SM-57WFQ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.9 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1375593
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1375593.hg38.bigWig
+    shortLabel esophJunc F 11EM3
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11EM3-0926-SM-5A5KK)
+    subGroups sex=F age=a20 
+    color 172,119,52
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-0926-SM-5A5KK \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=8.7 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1403934
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1403934.hg38.bigWig
+    shortLabel esophJunc F ZYWO
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZYWO-1126-SM-5U3SH)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-1126-SM-5U3SH \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.8 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1413075
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1413075.hg38.bigWig
+    shortLabel esophJunc F Y5LM
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-Y5LM-1226-SM-4VDT6)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-1226-SM-4VDT6 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1429348
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1429348.hg38.bigWig
+    shortLabel esophJunc F YJ8O
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-YJ8O-0326-SM-5RQJW)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-YJ8O age=40 sex=F hardyScore=1 sample=GTEX-YJ8O-0326-SM-5RQJW \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.8 batch=BP-48564 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1431015
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1431015.hg38.bigWig
+    shortLabel esophJunc F 11XUK
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11XUK-0926-SM-5EQL3)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-0926-SM-5EQL3 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1436949
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1436949.hg38.bigWig
+    shortLabel esophJunc F YB5K
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-YB5K-0626-SM-5LUB5)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-YB5K age=40 sex=F hardyScore=0 sample=GTEX-YB5K-0626-SM-5LUB5 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.2 batch=BP-41808 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/02/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1440290
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1440290.hg38.bigWig
+    shortLabel esophJunc F 13U4I
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13U4I-1326-SM-5KM25)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-1326-SM-5KM25 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.2 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1441443
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1441443.hg38.bigWig
+    shortLabel esophJunc F 1399S
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-1399S-1526-SM-5P9JC)
+    subGroups sex=F age=a30 
+    color 172,119,52
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-1526-SM-5P9JC \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.3 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1441934
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1441934.hg38.bigWig
+    shortLabel esophJunc F ZP4G
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZP4G-1126-SM-4WWCI)
+    subGroups sex=F age=a20 
+    color 172,119,52
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-1126-SM-4WWCI \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1444830
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1444830.hg38.bigWig
+    shortLabel esophJunc F 11P81
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11P81-1026-SM-5GU54)
+    subGroups sex=F age=a30 
+    color 172,119,52
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-1026-SM-5GU54 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.8 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1454073
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1454073.hg38.bigWig
+    shortLabel esophJunc F 11VI4
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11VI4-0826-SM-5GU5N)
+    subGroups sex=F age=a40 
+    color 172,119,52
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0826-SM-5GU5N \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.9 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1489884
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1489884.hg38.bigWig
+    shortLabel esophJunc F 145ME
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-145ME-0426-SM-5S2QP)
+    subGroups sex=F age=a40 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1079306
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1079306.hg38.bigWig
+    shortLabel esophJunc F X8HC
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-X8HC-1326-SM-46MWB)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-X8HC age=50 sex=F hardyScore=0 sample=GTEX-X8HC-1326-SM-46MWB \
+            tissue=esophagusJunction autolysisScore=2 rnaIntegrity=6.5 batch=BP-31440 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1099475
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1099475.hg38.bigWig
+    shortLabel esophJunc F W5WG
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-W5WG-2726-SM-4LMIC)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-2726-SM-4LMIC \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.5 batch=BP-27181 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1309833
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1309833.hg38.bigWig
+    shortLabel esophJunc F 11I78
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11I78-1626-SM-5A5M2)
+    subGroups sex=F age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1316852
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1316852.hg38.bigWig
+    shortLabel esophJunc F 132AR
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-132AR-2526-SM-5PNVM)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-2526-SM-5PNVM \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1320806
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1320806.hg38.bigWig
+    shortLabel esophJunc F 146FH
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-146FH-1926-SM-5Q5B2)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-1926-SM-5Q5B2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-48437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1323651
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1323651.hg38.bigWig
+    shortLabel esophJunc F Y3IK
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-Y3IK-1326-SM-4YCD8)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-1326-SM-4YCD8 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1326317
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1326317.hg38.bigWig
+    shortLabel esophJunc F X15G
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-X15G-1026-SM-4PQZF)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-1026-SM-4PQZF \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-30278 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1349608
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1349608.hg38.bigWig
+    shortLabel esophJunc F WXYG
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-WXYG-1026-SM-4ONCD)
+    subGroups sex=F age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1353400
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1353400.hg38.bigWig
+    shortLabel esophJunc F 13OVJ
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13OVJ-1426-SM-5K7Z2)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-1426-SM-5K7Z2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1359715
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1359715.hg38.bigWig
+    shortLabel esophJunc F ZYVF
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZYVF-2526-SM-5E45C)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZYVF age=50 sex=F hardyScore=0 sample=GTEX-ZYVF-2526-SM-5E45C \
+            tissue=esophagusJunction autolysisScore=2 rnaIntegrity=6.2 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1367088
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1367088.hg38.bigWig
+    shortLabel esophJunc F 13D11
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13D11-2026-SM-5IJBK)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-2026-SM-5IJBK \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.6 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1387899
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1387899.hg38.bigWig
+    shortLabel esophJunc F ZF2S
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZF2S-1326-SM-4WWAZ)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZF2S age=50 sex=F hardyScore=0 sample=GTEX-ZF2S-1326-SM-4WWAZ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.7 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1416025
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1416025.hg38.bigWig
+    shortLabel esophJunc F Y114
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-Y114-1126-SM-4TT7V)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-1126-SM-4TT7V \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.5 batch=BP-35073 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1444598
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1444598.hg38.bigWig
+    shortLabel esophJunc F ZVT2
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZVT2-1526-SM-51MQZ)
+    subGroups sex=F age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1453480
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1453480.hg38.bigWig
+    shortLabel esophJunc F 13X6H
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13X6H-1526-SM-5Q5E2)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13X6H age=50 sex=F hardyScore=0 sample=GTEX-13X6H-1526-SM-5Q5E2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=9 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1474374
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1474374.hg38.bigWig
+    shortLabel esophJunc F ZAK1
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZAK1-1826-SM-5HL93)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZAK1 age=50 sex=F hardyScore=2 sample=GTEX-ZAK1-1826-SM-5HL93 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.9 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1490097
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1490097.hg38.bigWig
+    shortLabel esophJunc F 13FH7
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13FH7-0626-SM-5KLZD)
+    subGroups sex=F age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-0626-SM-5KLZD \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.9 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1092865
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1092865.hg38.bigWig
+    shortLabel esophJunc F XYKS
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-XYKS-1026-SM-4BRVH)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-1026-SM-4BRVH \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1309333
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1309333.hg38.bigWig
+    shortLabel esophJunc F 1122O
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-1122O-1826-SM-5EGIP)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-1826-SM-5EGIP \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.1 batch=BP-43529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1310997
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1310997.hg38.bigWig
+    shortLabel esophJunc F 11DXX
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11DXX-1226-SM-5GICD)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-1226-SM-5GICD \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.1 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1359565
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1359565.hg38.bigWig
+    shortLabel esophJunc F 12WSD
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-12WSD-2026-SM-5HL7D)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-2026-SM-5HL7D \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1400121
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1400121.hg38.bigWig
+    shortLabel esophJunc F 14DAQ
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-14DAQ-1626-SM-5S2R1)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-14DAQ age=60 sex=F hardyScore=4 sample=GTEX-14DAQ-1626-SM-5S2R1 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.8 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1400799
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1400799.hg38.bigWig
+    shortLabel esophJunc F 148VI
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-148VI-1226-SM-5RQJR)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-148VI age=60 sex=F hardyScore=0 sample=GTEX-148VI-1226-SM-5RQJR \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1415591
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1415591.hg38.bigWig
+    shortLabel esophJunc F Y5V5
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-Y5V5-1526-SM-4VBQ1)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-1526-SM-4VBQ1 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.8 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1420770
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1420770.hg38.bigWig
+    shortLabel esophJunc F ZYFG
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-ZYFG-1226-SM-5GIC7)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-1226-SM-5GIC7 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.6 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1433661
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1433661.hg38.bigWig
+    shortLabel esophJunc F 13113
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13113-0626-SM-5GCP2)
+    subGroups sex=F age=a60 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1436840
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1436840.hg38.bigWig
+    shortLabel esophJunc F 13PL7
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13PL7-0526-SM-5J2MQ)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-0526-SM-5J2MQ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.2 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1447828
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1447828.hg38.bigWig
+    shortLabel esophJunc F 11ZTS
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-11ZTS-2726-SM-5EQLU)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-2726-SM-5EQLU \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.8 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1474930
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1474930.hg38.bigWig
+    shortLabel esophJunc F 13W3W
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-13W3W-1826-SM-5IJDE)
+    subGroups sex=F age=a60 
+    color 172,119,52
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-1826-SM-5IJDE \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.2 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1486821
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1486821.hg38.bigWig
+    shortLabel esophJunc F WYBS
+    longLabel GTEx RNA signal from female Esophagus - Gastroesophageal Junction (GTEX-WYBS-1626-SM-4ONCA)
+    subGroups sex=F age=a60 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1078660
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1078660.hg38.bigWig
+    shortLabel esophJunc M WFG7
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WFG7-1226-SM-4LMK2)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-1226-SM-4LMK2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.8 batch=BP-27322 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1078709
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1078709.hg38.bigWig
+    shortLabel esophJunc M WFG8
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WFG8-1126-SM-4LVN1)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-1126-SM-4LVN1 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8 batch=BP-27326 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1096432
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1096432.hg38.bigWig
+    shortLabel esophJunc M WFON
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WFON-1026-SM-4LVMD)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-1026-SM-4LVMD \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.6 batch=BP-27451 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1096595
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1096595.hg38.bigWig
+    shortLabel esophJunc M XBEW
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XBEW-1526-SM-4AT4K)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-1526-SM-4AT4K \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.1 batch=BP-31783 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/04/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1099570
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1099570.hg38.bigWig
+    shortLabel esophJunc M XQ3S
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XQ3S-1026-SM-4BOPJ)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-1026-SM-4BOPJ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.1 batch=BP-33923 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1100005
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1100005.hg38.bigWig
+    shortLabel esophJunc M X5EB
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-X5EB-1026-SM-46MVU)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-1026-SM-46MVU \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-31131 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1310777
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1310777.hg38.bigWig
+    shortLabel esophJunc M 11EQ9
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11EQ9-0926-SM-5HL6I)
+    subGroups sex=M age=a30 
+    color 172,119,52
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0926-SM-5HL6I \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1311853
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1311853.hg38.bigWig
+    shortLabel esophJunc M 11P7K
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11P7K-1426-SM-5EGKY)
+    subGroups sex=M age=a30 
+    color 172,119,52
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-1426-SM-5EGKY \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=8.4 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1321333
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1321333.hg38.bigWig
+    shortLabel esophJunc M 13NYB
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13NYB-1326-SM-5K7Y1)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-1326-SM-5K7Y1 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1321829
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1321829.hg38.bigWig
+    shortLabel esophJunc M Y8E4
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Y8E4-1926-SM-4VBPW)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-1926-SM-4VBPW \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.2 batch=BP-42185 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1323470
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1323470.hg38.bigWig
+    shortLabel esophJunc M 146FQ
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-146FQ-1226-SM-5QGQ4)
+    subGroups sex=M age=a30 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1328551
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1328551.hg38.bigWig
+    shortLabel esophJunc M X3Y1
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-X3Y1-1126-SM-4PQZ9)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-1126-SM-4PQZ9 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.6 batch=BP-30278 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1333507
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1333507.hg38.bigWig
+    shortLabel esophJunc M 11O72
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11O72-2026-SM-5N9G8)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-2026-SM-5N9G8 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.7 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1354999
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1354999.hg38.bigWig
+    shortLabel esophJunc M 1399R
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-1399R-0926-SM-5J2N8)
+    subGroups sex=M age=a30 
+    color 172,119,52
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0926-SM-5J2N8 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6 batch=BP-46453 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1357999
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1357999.hg38.bigWig
+    shortLabel esophJunc M 12WSN
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-12WSN-1826-SM-5LZUT)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-1826-SM-5LZUT \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1358296
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1358296.hg38.bigWig
+    shortLabel esophJunc M Z9EW
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Z9EW-0326-SM-5CVM8)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-Z9EW age=40 sex=M hardyScore=0 sample=GTEX-Z9EW-0326-SM-5CVM8 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.2 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1362802
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1362802.hg38.bigWig
+    shortLabel esophJunc M 12C56
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-12C56-0426-SM-5FQU1)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-12C56 age=20 sex=M hardyScore=0 sample=GTEX-12C56-0426-SM-5FQU1 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.3 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1368551
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1368551.hg38.bigWig
+    shortLabel esophJunc M YEC4
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-YEC4-1226-SM-5CVLX)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-1226-SM-5CVLX \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.6 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1370720
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1370720.hg38.bigWig
+    shortLabel esophJunc M 11TT1
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11TT1-0626-SM-5GU4X)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0626-SM-5GU4X \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=8.8 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1375394
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1375394.hg38.bigWig
+    shortLabel esophJunc M ZPU1
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZPU1-1526-SM-4YCFF)
+    subGroups sex=M age=a40 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1394101
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1394101.hg38.bigWig
+    shortLabel esophJunc M ZQUD
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZQUD-0626-SM-51MR2)
+    subGroups sex=M age=a30 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1397348
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1397348.hg38.bigWig
+    shortLabel esophJunc M 1339X
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-1339X-1126-SM-5J2OI)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-1126-SM-5J2OI \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.7 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1418201
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1418201.hg38.bigWig
+    shortLabel esophJunc M WZTO
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WZTO-1726-SM-4PQYV)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-1726-SM-4PQYV \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.6 batch=BP-29826 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1429770
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1429770.hg38.bigWig
+    shortLabel esophJunc M WOFM
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WOFM-0426-SM-4OOSG)
+    subGroups sex=M age=a20 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1443592
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1443592.hg38.bigWig
+    shortLabel esophJunc M 13RTK
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13RTK-0426-SM-5RQHT)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-13RTK age=20 sex=M hardyScore=0 sample=GTEX-13RTK-0426-SM-5RQHT \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.4 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1444222
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1444222.hg38.bigWig
+    shortLabel esophJunc M 11P82
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11P82-0426-SM-5HL5D)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-0426-SM-5HL5D \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.7 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1452399
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1452399.hg38.bigWig
+    shortLabel esophJunc M Y9LG
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Y9LG-0926-SM-4VDS6)
+    subGroups sex=M age=a30 
+    color 172,119,52
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0926-SM-4VDS6 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=6.7 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1453259
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1453259.hg38.bigWig
+    shortLabel esophJunc M 13FTW
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13FTW-1926-SM-5K7Y4)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-1926-SM-5K7Y4 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.1 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1453875
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1453875.hg38.bigWig
+    shortLabel esophJunc M YB5E
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-YB5E-1026-SM-5IFI2)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-1026-SM-5IFI2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.8 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1475842
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1475842.hg38.bigWig
+    shortLabel esophJunc M ZTSS
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZTSS-0826-SM-5985L)
+    subGroups sex=M age=a40 
+    color 172,119,52
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-0826-SM-5985L \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.7 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1480917
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1480917.hg38.bigWig
+    shortLabel esophJunc M 144GM
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-144GM-1626-SM-5O9AG)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-1626-SM-5O9AG \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.6 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1481238
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1481238.hg38.bigWig
+    shortLabel esophJunc M YJ8A
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-YJ8A-1426-SM-5PNV7)
+    subGroups sex=M age=a20 
+    color 172,119,52
+    metadata donor=GTEX-YJ8A age=20 sex=M hardyScore=0 sample=GTEX-YJ8A-1426-SM-5PNV7 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.4 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1068687
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1068687.hg38.bigWig
+    shortLabel esophJunc M XXEK
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XXEK-0526-SM-4BRWD)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-0526-SM-4BRWD \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.1 batch=BP-34437 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1071131
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1071131.hg38.bigWig
+    shortLabel esophJunc M XQ8I
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XQ8I-1826-SM-4BOOJ)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-1826-SM-4BOOJ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.9 batch=BP-34031 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/07/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1074214
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1074214.hg38.bigWig
+    shortLabel esophJunc M X585
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-X585-1426-SM-4E3JO)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1074839
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1074839.hg38.bigWig
+    shortLabel esophJunc M XGQ4
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XGQ4-1626-SM-4AT6J)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-1626-SM-4AT6J \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.2 batch=BP-32471 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1091008
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1091008.hg38.bigWig
+    shortLabel esophJunc M VUSG
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-VUSG-1026-SM-4KKZN)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-1026-SM-4KKZN \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.7 batch=BP-27118 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/09/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1318184
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1318184.hg38.bigWig
+    shortLabel esophJunc M 11NUK
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11NUK-1726-SM-5A5L2)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-1726-SM-5A5L2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.4 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1321144
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1321144.hg38.bigWig
+    shortLabel esophJunc M 13OW6
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13OW6-1626-SM-5IJD5)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-1626-SM-5IJD5 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.3 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1324004
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1324004.hg38.bigWig
+    shortLabel esophJunc M 139YR
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-139YR-1826-SM-5LZXA)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-1826-SM-5LZXA \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=5.9 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1325182
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1325182.hg38.bigWig
+    shortLabel esophJunc M 139T6
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-139T6-0826-SM-5J1O2)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-0826-SM-5J1O2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.3 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1333038
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1333038.hg38.bigWig
+    shortLabel esophJunc M 1192X
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-1192X-1826-SM-5GIE2)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-1826-SM-5GIE2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.2 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1335893
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1335893.hg38.bigWig
+    shortLabel esophJunc M Y111
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Y111-1826-SM-4SOIR)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-1826-SM-4SOIR \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6 batch=BP-34869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1345974
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1345974.hg38.bigWig
+    shortLabel esophJunc M 13QJ3
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13QJ3-1926-SM-5QGQM)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13QJ3 age=50 sex=M hardyScore=0 sample=GTEX-13QJ3-1926-SM-5QGQM \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1348885
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1348885.hg38.bigWig
+    shortLabel esophJunc M WHSB
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WHSB-0626-SM-4M1XP)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1353052
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1353052.hg38.bigWig
+    shortLabel esophJunc M ZT9W
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZT9W-1426-SM-4YCD2)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-1426-SM-4YCD2 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.1 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1366729
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1366729.hg38.bigWig
+    shortLabel esophJunc M 13VXU
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13VXU-1126-SM-5LU3U)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-1126-SM-5LU3U \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1370447
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1370447.hg38.bigWig
+    shortLabel esophJunc M WHPG
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WHPG-1326-SM-4M1ZJ)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1374165
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1374165.hg38.bigWig
+    shortLabel esophJunc M WL46
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WL46-1226-SM-4OOS4)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1376915
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1376915.hg38.bigWig
+    shortLabel esophJunc M X4LF
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-X4LF-0826-SM-4QASC)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0826-SM-4QASC \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.8 batch=BP-30683 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/05/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1378818
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1378818.hg38.bigWig
+    shortLabel esophJunc M 11WQK
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11WQK-2226-SM-5CVL7)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-2226-SM-5CVL7 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.9 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1380482
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1380482.hg38.bigWig
+    shortLabel esophJunc M 13O3P
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13O3P-2726-SM-5KM2R)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-2726-SM-5KM2R \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.7 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1384163
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1384163.hg38.bigWig
+    shortLabel esophJunc M 14DAR
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-14DAR-0726-SM-5RQIA)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-0726-SM-5RQIA \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.5 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1398138
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1398138.hg38.bigWig
+    shortLabel esophJunc M 13O21
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13O21-0726-SM-5L3EG)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-0726-SM-5L3EG \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.7 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1409171
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1409171.hg38.bigWig
+    shortLabel esophJunc M ZVP2
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZVP2-1426-SM-5NQ7P)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-1426-SM-5NQ7P \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.2 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1418183
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1418183.hg38.bigWig
+    shortLabel esophJunc M 131XE
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-131XE-1526-SM-5KM1A)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-1526-SM-5KM1A \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1420085
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1420085.hg38.bigWig
+    shortLabel esophJunc M Y3I4
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Y3I4-0926-SM-4TT2B)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0926-SM-4TT2B \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.2 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1433884
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1433884.hg38.bigWig
+    shortLabel esophJunc M YEC3
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-YEC3-2326-SM-5IFJF)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-2326-SM-5IFJF \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.3 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1443525
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1443525.hg38.bigWig
+    shortLabel esophJunc M 13FLV
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13FLV-1326-SM-5L3EJ)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-1326-SM-5L3EJ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.1 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1445023
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1445023.hg38.bigWig
+    shortLabel esophJunc M ZAB5
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZAB5-1226-SM-5P9FY)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1451942
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1451942.hg38.bigWig
+    shortLabel esophJunc M ZV7C
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZV7C-1326-SM-5BC7G)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-1326-SM-5BC7G \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1453680
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1453680.hg38.bigWig
+    shortLabel esophJunc M ZYFC
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZYFC-2226-SM-5NQ96)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-2226-SM-5NQ96 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.1 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1470969
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1470969.hg38.bigWig
+    shortLabel esophJunc M 13PVQ
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13PVQ-1926-SM-5L3GN)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-1926-SM-5L3GN \
+            tissue=esophagusJunction autolysisScore=2 rnaIntegrity=5.9 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1474661
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1474661.hg38.bigWig
+    shortLabel esophJunc M ZY6K
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZY6K-0826-SM-5A5L7)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-0826-SM-5A5L7 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=8.1 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1474975
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1474975.hg38.bigWig
+    shortLabel esophJunc M WY7C
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WY7C-0826-SM-4ONCG)
+    subGroups sex=M age=a50 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1475448
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1475448.hg38.bigWig
+    shortLabel esophJunc M 13OVL
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13OVL-2726-SM-5J2MP)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-2726-SM-5J2MP \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.7 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1485482
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1485482.hg38.bigWig
+    shortLabel esophJunc M 145MF
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-145MF-1526-SM-5LU95)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-145MF age=50 sex=M hardyScore=2 sample=GTEX-145MF-1526-SM-5LU95 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.4 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1487386
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1487386.hg38.bigWig
+    shortLabel esophJunc M 13OW7
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13OW7-1926-SM-5LUB4)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-1926-SM-5LUB4 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.7 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1489328
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1489328.hg38.bigWig
+    shortLabel esophJunc M ZVZP
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZVZP-1626-SM-5GIDJ)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-1626-SM-5GIDJ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.9 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1499325
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1499325.hg38.bigWig
+    shortLabel esophJunc M 11UD2
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11UD2-1526-SM-5EQLQ)
+    subGroups sex=M age=a50 
+    color 172,119,52
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-1526-SM-5EQLQ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.1 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1085110
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1085110.hg38.bigWig
+    shortLabel esophJunc M XBED
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-XBED-1126-SM-48TCF)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-1126-SM-48TCF \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-31651 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/01/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1091767
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1091767.hg38.bigWig
+    shortLabel esophJunc M V955
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-V955-1226-SM-4JBI9)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-V955 age=60 sex=M hardyScore=0 sample=GTEX-V955-1226-SM-4JBI9 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.1 batch=BP-26864 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1308357
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1308357.hg38.bigWig
+    shortLabel esophJunc M 11DXY
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11DXY-1326-SM-5987Z)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-1326-SM-5987Z \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=7.1 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1309314
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1309314.hg38.bigWig
+    shortLabel esophJunc M 1192W
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-1192W-0826-SM-5EGHE)
+    subGroups sex=M age=a60 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1322918
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1322918.hg38.bigWig
+    shortLabel esophJunc M 13O61
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13O61-1226-SM-5KM21)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-1226-SM-5KM21 \
+            tissue=esophagusJunction autolysisScore=0 rnaIntegrity=8 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1333811
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1333811.hg38.bigWig
+    shortLabel esophJunc M 13N1W
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13N1W-1926-SM-5IJCH)
+    subGroups sex=M age=a70 
+    color 172,119,52
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-1926-SM-5IJCH \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.4 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1346885
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1346885.hg38.bigWig
+    shortLabel esophJunc M 1497J
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-1497J-2126-SM-5NQB8)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-2126-SM-5NQB8 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.1 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1347870
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1347870.hg38.bigWig
+    shortLabel esophJunc M 111YS
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-111YS-0826-SM-5GZYK)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-0826-SM-5GZYK \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.9 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1359738
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1359738.hg38.bigWig
+    shortLabel esophJunc M 11DYG
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11DYG-1926-SM-5H12I)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-1926-SM-5H12I \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.9 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1375883
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1375883.hg38.bigWig
+    shortLabel esophJunc M Y5V6
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-Y5V6-1226-SM-4VDTE)
+    subGroups sex=M age=a60 
+    color 172,119,52
+
+    track gtexRnaSignalEsophagusJunctionSRR1394818
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1394818.hg38.bigWig
+    shortLabel esophJunc M 132QS
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-132QS-1626-SM-5K7YZ)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-1626-SM-5K7YZ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8.3 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1401040
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1401040.hg38.bigWig
+    shortLabel esophJunc M 11OF3
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-11OF3-2326-SM-5GU73)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-2326-SM-5GU73 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.2 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1420026
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1420026.hg38.bigWig
+    shortLabel esophJunc M 12BJ1
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-12BJ1-1526-SM-5LUAQ)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-1526-SM-5LUAQ \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=8 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1421241
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1421241.hg38.bigWig
+    shortLabel esophJunc M ZYW4
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-ZYW4-1626-SM-5GIE6)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-1626-SM-5GIE6 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.8 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1429621
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1429621.hg38.bigWig
+    shortLabel esophJunc M 14E7W
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-14E7W-1926-SM-5S2R9)
+    subGroups sex=M age=a70 
+    color 172,119,52
+    metadata donor=GTEX-14E7W age=70 sex=M hardyScore=2 sample=GTEX-14E7W-1926-SM-5S2R9 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=5.8 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalEsophagusJunctionSRR1430226
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1430226.hg38.bigWig
+    shortLabel esophJunc M 131XF
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-131XF-1126-SM-5HL8J)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-1126-SM-5HL8J \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.3 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1443568
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1443568.hg38.bigWig
+    shortLabel esophJunc M WQUQ
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-WQUQ-1826-SM-4OOSD)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-WQUQ age=60 sex=M hardyScore=0 sample=GTEX-WQUQ-1826-SM-4OOSD \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.4 batch=BP-28353 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalEsophagusJunctionSRR1456314
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1456314.hg38.bigWig
+    shortLabel esophJunc M 132NY
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-132NY-2026-SM-5L3FM)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-2026-SM-5L3FM \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.5 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1459785
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1459785.hg38.bigWig
+    shortLabel esophJunc M 13OW8
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-13OW8-2426-SM-5L3ID)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-2426-SM-5L3ID \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=6.4 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalEsophagusJunctionSRR1473846
+    parent gtexRnaSignalEsophagusJunction off
+    type bigWig
+    bigDataUrl esophagusJunction/gtexRnaSignalSRR1473846.hg38.bigWig
+    shortLabel esophJunc M 12696
+    longLabel GTEx RNA signal from male Esophagus - Gastroesophageal Junction (GTEX-12696-1526-SM-5EGL6)
+    subGroups sex=M age=a60 
+    color 172,119,52
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-1526-SM-5EGL6 \
+            tissue=esophagusJunction autolysisScore=1 rnaIntegrity=7.4 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+

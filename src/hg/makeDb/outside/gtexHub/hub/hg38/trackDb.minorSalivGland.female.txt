@@ -1,0 +1,207 @@
+    track gtexRnaSignalSRR1100608
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1100608.hg38.bigWig
+    shortLabel minorSali F XV7Q
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-XV7Q-2426-SM-4BRV8)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXXV7Q
+    color 227,184,136
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-2426-SM-4BRV8 \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.7 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalSRR1330723
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1330723.hg38.bigWig
+    shortLabel minorSali F ZP4G
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-ZP4G-1926-SM-57WDZ)
+    subGroups age=a20 tissue=minorSalivGland donor=GTEXZP4G
+    color 227,184,136
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-1926-SM-57WDZ \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=9.4 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1376380
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1376380.hg38.bigWig
+    shortLabel minorSali F WYVS
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-WYVS-2026-SM-4RGNS)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXWYVS
+    color 227,184,136
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-2026-SM-4RGNS \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.8 batch=BP-29831 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalSRR1397720
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1397720.hg38.bigWig
+    shortLabel minorSali F Y5LM
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-Y5LM-1826-SM-4VDT9)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXY5LM
+    color 227,184,136
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-1826-SM-4VDT9 \
+            tissue=minorSalivGland autolysisScore=0 rnaIntegrity=9.5 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalSRR1405147
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1405147.hg38.bigWig
+    shortLabel minorSali F YB5K
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-YB5K-1726-SM-5IFIZ)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXYB5K
+    color 227,184,136
+    metadata donor=GTEX-YB5K age=40 sex=F hardyScore=0 sample=GTEX-YB5K-1726-SM-5IFIZ \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.1 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR1429429
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1429429.hg38.bigWig
+    shortLabel minorSali F 13VXT
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-13VXT-1726-SM-5IFF5)
+    subGroups age=a20 tissue=minorSalivGland donor=GTEX13VXT
+    color 227,184,136
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-1726-SM-5IFF5 \
+            tissue=minorSalivGland autolysisScore=0 rnaIntegrity=8.1 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1429540
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1429540.hg38.bigWig
+    shortLabel minorSali F 11P81
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-11P81-2026-SM-5P9GT)
+    subGroups age=a30 tissue=minorSalivGland donor=GTEX11P81
+    color 227,184,136
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-2026-SM-5P9GT \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.2 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1431823
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1431823.hg38.bigWig
+    shortLabel minorSali F WYVS
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-WYVS-2026-SM-4PQZ4)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXWYVS
+    color 227,184,136
+
+    track gtexRnaSignalSRR1444370
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1444370.hg38.bigWig
+    shortLabel minorSali F 145ME
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-145ME-1626-SM-5RQI3)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEX145ME
+    color 227,184,136
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-1626-SM-5RQI3 \
+            tissue=minorSalivGland autolysisScore=0 rnaIntegrity=8.1 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1454480
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1454480.hg38.bigWig
+    shortLabel minorSali F ZC5H
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-ZC5H-2726-SM-5KLZW)
+    subGroups age=a40 tissue=minorSalivGland donor=GTEXZC5H
+    color 227,184,136
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-2726-SM-5KLZW \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=7.3 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1385690
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1385690.hg38.bigWig
+    shortLabel minorSali F X15G
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-X15G-2126-SM-4PQZR)
+    subGroups age=a50 tissue=minorSalivGland donor=GTEXX15G
+    color 227,184,136
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-2126-SM-4PQZR \
+            tissue=minorSalivGland autolysisScore=0 rnaIntegrity=8.1 batch=BP-30525 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/04/2012
+
+    track gtexRnaSignalSRR1443308
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1443308.hg38.bigWig
+    shortLabel minorSali F ZE7O
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-ZE7O-2926-SM-51MSG)
+    subGroups age=a50 tissue=minorSalivGland donor=GTEXZE7O
+    color 227,184,136
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-2926-SM-51MSG \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=7 batch=BP-42528 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/21/2013
+
+    track gtexRnaSignalSRR1081589
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1081589.hg38.bigWig
+    shortLabel minorSali F XYKS
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-XYKS-2926-SM-4E3IA)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEXXYKS
+    color 227,184,136
+
+    track gtexRnaSignalSRR1325201
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1325201.hg38.bigWig
+    shortLabel minorSali F ZQG8
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-ZQG8-2126-SM-4YCF1)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEXZQG8
+    color 227,184,136
+    metadata donor=GTEX-ZQG8 age=60 sex=F hardyScore=0 sample=GTEX-ZQG8-2126-SM-4YCF1 \
+            tissue=minorSalivGland autolysisScore=2 rnaIntegrity=8.4 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1348929
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1348929.hg38.bigWig
+    shortLabel minorSali F ZF29
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-ZF29-2126-SM-4WWB8)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEXZF29
+    color 227,184,136
+
+    track gtexRnaSignalSRR1406135
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1406135.hg38.bigWig
+    shortLabel minorSali F 1117F
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-1117F-3026-SM-5GZYU)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEX1117F
+    color 227,184,136
+    metadata donor=GTEX-1117F age=60 sex=F hardyScore=4 sample=GTEX-1117F-3026-SM-5GZYU \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.3 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1445618
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1445618.hg38.bigWig
+    shortLabel minorSali F 13OVI
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-13OVI-2326-SM-5KM47)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEX13OVI
+    color 227,184,136
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-2326-SM-5KM47 \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=7.2 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1447916
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl minorSalivGland/gtexRnaSignalSRR1447916.hg38.bigWig
+    shortLabel minorSali F 11ZTS
+    longLabel GTEx RNA signal from female Minor Salivary Gland (GTEX-11ZTS-3026-SM-5EQM7)
+    subGroups age=a60 tissue=minorSalivGland donor=GTEX11ZTS
+    color 227,184,136
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-3026-SM-5EQM7 \
+            tissue=minorSalivGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+

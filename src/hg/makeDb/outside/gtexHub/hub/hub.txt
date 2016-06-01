@@ -1,0 +1,6 @@
+hub GTEx
+shortLabel GTEx RNA-seq Signal Hub
+longLabel RNA-seq read coverage in 53 tissues from GTEx V6 (7572 samples)
+genomesFile genomes.txt
+email genome@soe.ucsc.edu
+descriptionUrl http://hgdownload.soe.ucsc.edu/hubs/gtex/gtexHub.html

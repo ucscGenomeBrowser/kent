@@ -1,0 +1,901 @@
+track gtexRnaSignalAdiposeSubcut
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Adipose - Subcutaneous
+longLabel GTEx RNA-seq read coverage from Adipose - Subcutaneous (315 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalAdiposeVisceral
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Adipose - Visceral (Omentum)
+longLabel GTEx RNA-seq read coverage from Adipose - Visceral (Omentum) (199 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalAdrenalGland
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Adrenal Gland
+longLabel GTEx RNA-seq read coverage from Adrenal Gland (127 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalArteryAorta
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Artery - Aorta
+longLabel GTEx RNA-seq read coverage from Artery - Aorta (207 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalArteryCoronary
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Artery - Coronary
+longLabel GTEx RNA-seq read coverage from Artery - Coronary (119 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalArteryTibial
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Artery - Tibial
+longLabel GTEx RNA-seq read coverage from Artery - Tibial (281 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBladder
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Bladder
+longLabel GTEx RNA-seq read coverage from Bladder (9 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainAmygdala
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Amygdala
+longLabel GTEx RNA-seq read coverage from Brain - Amygdala (68 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainAnCinCortex
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Anterior cingulate cortex (BA24)
+longLabel GTEx RNA-seq read coverage from Brain - Anterior cingulate cortex (BA24) (82 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainCaudate
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Caudate (basal ganglia)
+longLabel GTEx RNA-seq read coverage from Brain - Caudate (basal ganglia) (108 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainCerebelHemi
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Cerebellar Hemisphere
+longLabel GTEx RNA-seq read coverage from Brain - Cerebellar Hemisphere (95 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainCerebellum
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Cerebellum
+longLabel GTEx RNA-seq read coverage from Brain - Cerebellum (120 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainCortex
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Cortex
+longLabel GTEx RNA-seq read coverage from Brain - Cortex (105 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainFrontCortex
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Frontal Cortex (BA9)
+longLabel GTEx RNA-seq read coverage from Brain - Frontal Cortex (BA9) (101 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainHippocampus
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Hippocampus
+longLabel GTEx RNA-seq read coverage from Brain - Hippocampus (81 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainHypothalamus
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Hypothalamus
+longLabel GTEx RNA-seq read coverage from Brain - Hypothalamus (81 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainNucAccumbens
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Nucleus accumbens (basal ganglia)
+longLabel GTEx RNA-seq read coverage from Brain - Nucleus accumbens (basal ganglia) (103 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainPutamen
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Putamen (basal ganglia)
+longLabel GTEx RNA-seq read coverage from Brain - Putamen (basal ganglia) (79 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainSpinalcord
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Spinal cord (cervical c-1)
+longLabel GTEx RNA-seq read coverage from Brain - Spinal cord (cervical c-1) (57 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBrainSubstanNigra
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Brain - Substantia nigra
+longLabel GTEx RNA-seq read coverage from Brain - Substantia nigra (58 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalBreastMamTissue
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Breast - Mammary Tissue
+longLabel GTEx RNA-seq read coverage from Breast - Mammary Tissue (177 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalColonSigmoid
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Colon - Sigmoid
+longLabel GTEx RNA-seq read coverage from Colon - Sigmoid (142 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalColonTransverse
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Colon - Transverse
+longLabel GTEx RNA-seq read coverage from Colon - Transverse (166 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalEctocervix
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Cervix - Ectocervix
+longLabel GTEx RNA-seq read coverage from Cervix - Ectocervix (6 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalEndocervix
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Cervix - Endocervix
+longLabel GTEx RNA-seq read coverage from Cervix - Endocervix (4 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalEsophagusJunction
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Esophagus - Gastroesophageal Junction
+longLabel GTEx RNA-seq read coverage from Esophagus - Gastroesophageal Junction (139 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalEsophagusMucosa
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Esophagus - Mucosa
+longLabel GTEx RNA-seq read coverage from Esophagus - Mucosa (270 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalEsophagusMuscular
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Esophagus - Muscularis
+longLabel GTEx RNA-seq read coverage from Esophagus - Muscularis (243 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalFallopianTube
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Fallopian Tube
+longLabel GTEx RNA-seq read coverage from Fallopian Tube (5 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalHeartAtrialAppend
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Heart - Atrial Appendage
+longLabel GTEx RNA-seq read coverage from Heart - Atrial Appendage (177 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalHeartLeftVentricl
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Heart - Left Ventricle
+longLabel GTEx RNA-seq read coverage from Heart - Left Ventricle (198 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalKidneyCortex
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Kidney - Cortex
+longLabel GTEx RNA-seq read coverage from Kidney - Cortex (29 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalLiver
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Liver
+longLabel GTEx RNA-seq read coverage from Liver (107 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalLung
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Lung
+longLabel GTEx RNA-seq read coverage from Lung (277 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalMinorSalivGland
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Minor Salivary Gland
+longLabel GTEx RNA-seq read coverage from Minor Salivary Gland (56 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalMuscleSkeletal
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Muscle - Skeletal
+longLabel GTEx RNA-seq read coverage from Muscle - Skeletal (394 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalNerveTibial
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Nerve - Tibial
+longLabel GTEx RNA-seq read coverage from Nerve - Tibial (277 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalOvary
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Ovary
+longLabel GTEx RNA-seq read coverage from Ovary (84 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalPancreas
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Pancreas
+longLabel GTEx RNA-seq read coverage from Pancreas (166 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalPituitary
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Pituitary
+longLabel GTEx RNA-seq read coverage from Pituitary (106 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalProstate
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Prostate
+longLabel GTEx RNA-seq read coverage from Prostate (98 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalSkinExposed
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Skin - Sun Exposed (Lower leg)
+longLabel GTEx RNA-seq read coverage from Skin - Sun Exposed (Lower leg) (316 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalSkinNotExposed
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Skin - Not Sun Exposed (Suprapubic)
+longLabel GTEx RNA-seq read coverage from Skin - Not Sun Exposed (Suprapubic) (232 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalSmallIntestine
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Small Intestine - Terminal Ileum
+longLabel GTEx RNA-seq read coverage from Small Intestine - Terminal Ileum (91 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalSpleen
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Spleen
+longLabel GTEx RNA-seq read coverage from Spleen (98 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalStomach
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Stomach
+longLabel GTEx RNA-seq read coverage from Stomach (139 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalTestis
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Testis
+longLabel GTEx RNA-seq read coverage from Testis (162 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalThyroid
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Thyroid
+longLabel GTEx RNA-seq read coverage from Thyroid (276 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalUterus
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Uterus
+longLabel GTEx RNA-seq read coverage from Uterus (76 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalVagina
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Vagina
+longLabel GTEx RNA-seq read coverage from Vagina (88 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalWholeBlood
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Whole Blood
+longLabel GTEx RNA-seq read coverage from Whole Blood (237 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalXformedfibroblasts
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Cells - Transformed fibroblasts
+longLabel GTEx RNA-seq read coverage from Cells - Transformed fibroblasts (255 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+
+track gtexRnaSignalXformedlymphocytes
+parent gtexRnaSignalByTissue
+compositeTrack on
+html ../gtexHub.html
+shortLabel Cells - EBV-transformed lymphocytes
+longLabel GTEx RNA-seq read coverage from Cells - EBV-transformed lymphocytes (102 samples)
+type bigWig
+maxHeightPixels 64:12:8
+autoScale on
+subGroup1 sex Sex M=Male F=Female
+subGroup2 age Age a20=20-29 a30=30-39 a40=40-49 a50=50-59 a60=60-69 a70=70-79
+sortOrder sex=+ age=+
+dimensions dimX=age dimY=sex
+dragAndDrop subTracks
+hoverMetadata on
+darkerLabels on
+

@@ -1,4 +1,4 @@
-/* Code to support geographic mirrors (e.g. euronode) */
+/* Code to support geographic mirrors (e.g. euro and asia nodes) */
 
 /* Copyright (C) 2013 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */

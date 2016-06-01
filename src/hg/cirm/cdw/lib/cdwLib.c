@@ -23,6 +23,7 @@
 #include "bamFile.h"
 #include "raToStruct.h"
 #include "web.h"
+#include "hdb.h"
 #include "cdwValid.h"
 #include "cdw.h"
 #include "cdwFastqFileFromRa.h"
@@ -244,6 +245,18 @@ if (email)
 return email;
 }
 
+struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
+/* Return user associated with that username or NULL if not found */
+{
+struct sqlConnection *cc = hConnectCentral();
+char query[512];
+sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+char *email = sqlQuickString(cc, query);
+hDisconnectCentral(&cc);
+
+struct cdwUser *user = cdwUserFromEmail(conn, email);
+return user;
+}
 
 struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */
@@ -925,6 +938,18 @@ struct cdwFile *ef = cdwFileFromId(conn, fileId);
 if (ef == NULL)
     errAbort("Couldn't find file for id %lld\n", fileId);
 return ef;
+}
+
+int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
+/* return most recent fileId for file where submitDir.url+submitFname ends with suf. 0 if not found. */
+{
+char query[4096];
+int sufLen = strlen(suf);
+sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
+    "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
+    "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);
+int fileId = sqlQuickNum(conn, query);
+return fileId;
 }
 
 struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long long fileId)

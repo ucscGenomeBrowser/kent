@@ -52,7 +52,7 @@ GBDBDIR=/gbdb
 SEDINPLACE="sed -ri"
 
 # udr binary URL
-UDRURL=https://raw.githubusercontent.com/maximilianh/browserInstall/master/udr
+UDRURL=http://hgdownload.soe.ucsc.edu/admin/exe/linux.x86_64/udr
 
 # rsync is a variable so it can be be set to use udr
 RSYNC=rsync
@@ -210,6 +210,20 @@ allowHgMirror=0
 # so the mirror does not need a copy of them
 hgEncodeVocabDocBaseUrl=http://genome.ucsc.edu
 
+# enable local file access for custom tracks
+# By default you have to supply http:// URLs for custom track data, e.g. in bigDataUrls
+# With this statement, you can allow loading from local files, as long as the path
+# starts with a specific prefix
+#udc.localDir=/bamFiles
+
+# load genbank from hgFixed, this will be the default
+# after v333, so not necessary anymore after July 2016
+genbankDb=hgFixed
+
+# use 2bit files instead of nib, this is only relevant in failover mode
+# and for very old assemblies
+forceTwoBit=yes
+
 # if you want a different default species selection on the Gateway
 # page, change this default Human to one of the genomes from the
 # defaultDb table in hgcentral:
@@ -313,17 +327,20 @@ read -r -d '' HELP_STR << EOF_HELP
 $0 [options] [command] [assemblyList] - UCSC genome browser install script
 
 command is one of:
-  install    - install the genome browser in this machine
+  install    - install the genome browser on this machine. This is usually 
+               required before any other commands are run.
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
-  download   - download a full assembly (also see the -t option below).
+  mirror     - download a full assembly (also see the -t option below).
                No data is downloaded on-the-fly from UCSC.
-  update     - update the genome browser binaries and data, mirrors
-               all tables of an assembly
-  clean      - remove temporary files of the genome browser, do not delete
-               any custom tracks
+  update     - update the genome browser software and data, updates
+               all tables of an assembly, like "mirror"
+  cgiUpdate  - update only the genome browser software, not the data. Not 
+               recommended, see documentation.
+  clean      - remove temporary files of the genome browser older than one 
+               day, but do not delete any uploaded custom tracks
 
-parameters for 'install' and 'minimal':
+parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
                        list of genomes
 
@@ -331,15 +348,17 @@ examples:
   bash $0 install     - install Genome Browser, do not download any genome
                         assembly, switch to on-the-fly mode (see the -f option)
   bash $0 minimal hg19 - download only the minimal tables for the hg19 assembly
-  bash $0 download hg19 mm9 - download hg19 and mm9, switch
+  bash $0 mirror hg19 mm9 - download hg19 and mm9, switch
                         to offline mode (see the -o option)
-  bash $0 download -t noEncode hg19  - install Genome Browser, download hg19 
+  bash $0 -t noEncode mirror hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash $0 update     -  update the Genome Browser CGI programs
-  bash $0 clean      -  remove temporary files
+  bash $0 update hg19 -  update all data and all tables of the hg19 assembly
+                         (in total 7TB)
+  bash $0 cgiUpdate   -  update the Genome Browser CGI programs
+  bash $0 clean       -  remove temporary files older than one day
 
-All options have to precede the list of genome assemblies.
+All options have to precede the command.
 
 options:
   -a   - use alternative download server at SDSC
@@ -351,10 +370,11 @@ options:
                     except Gencode genes, saves 4TB/6TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
-         main = only RefSeq/Gencode genes and SNPs, total 5GB for hg19
+         main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)
+         This option will download a udr binary to /usr/local/bin
   -o   - switch to offline-mode. Remove all statements from hg.conf that allow
          loading data on-the-fly from the UCSC download server. Requires that
          you have downloaded at least one assembly, using the '"download"' 
@@ -1130,10 +1150,11 @@ function mysqlDbSetup ()
     $MYSQL -e "GRANT SELECT,INSERT,UPDATE,DELETE,CREATE,DROP,ALTER,INDEX "\
 "on customTrash.* TO ctdbuser@localhost IDENTIFIED by 'ctdbpassword';"
     
+    # removed these now for the new hgGateway page, Apr 2016
     # by default hgGateway needs an empty hg19 database, will crash otherwise
-    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
+    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg19'
     # mm9 needs an empty hg18 database
-    $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
+    # $MYSQL -e 'CREATE DATABASE IF NOT EXISTS hg18'
     
     $MYSQL -e "FLUSH PRIVILEGES;"
 }
@@ -1186,13 +1207,7 @@ function installBrowser ()
 
     disableSelinux
 
-    # Download my own statically compiled udr binary
-    if [[ ! -f /usr/local/bin/udr && "$RSYNC" = *udr* ]]; then
-      echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
-      waitKey
-      downloadFile $UDRURL > /usr/local/bin/udr
-      chmod a+x /usr/local/bin/udr
-    fi
+    checkDownloadUdr
 
     # CGI DOWNLOAD AND HGCENTRAL MYSQL DB SETUP
 
@@ -1258,7 +1273,7 @@ function installBrowser ()
     else
         # don't download RNAplot, it's a 32bit binary that won't work anywhere anymore but at UCSC
         # this means that hgGene cannot show RNA structures but that's not a big issue
-        $RSYNC -avzP --exclude RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
+        $RSYNC -avzP --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $CGIBINDIR/
     fi
 
     # download the html docs, exclude some big files on OSX
@@ -1294,8 +1309,11 @@ function installBrowser ()
 # GENOME DOWNLOAD: mysql and /gbdb
 function downloadGenomes
 {
-    clear
     DBS=$*
+    if [ "$DBS" == "" ] ; then
+        echo2 Argument error: the '"download"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
     echo2
     echo2 Downloading databases $DBS plus hgFixed/proteome/go from the UCSC download server
@@ -1324,9 +1342,11 @@ function downloadGenomes
     echo2
     df -h  | awk '{print "| "$0}'
     echo2 
-    echo2 If your current disk space is not sufficient, you can mount
-    echo2 'network storage servers (e.g. NFS) or add cloud provider storage'
+    echo2 If your current disk space is not sufficient, you can press ctrl-c now and 
+    echo2 use a 'network storage server volume (e.g. NFS) or add cloud provider storage'
     echo2 '(e.g. Openstack Cinder Volumes, Amazon EBS, Azure Storage)'
+    echo2 Please refer to the documentation of your cloud provider or storage
+    echo2 system on how to add more storage to this machine.
     echo2
     echo2 When you are done with the mount:
     echo2 Move the contents of $GBDBDIR and $MYSQLDIR onto these volumes and
@@ -1337,7 +1357,7 @@ function downloadGenomes
     echo2 "    mv /var/lib/mysql /bigData/mysql && ln -s /bigData/mysql /var/lib/mysql"
     echo2
     echo2 You can interrupt this script with CTRL-C now, add more space and rerun the 
-    echo2 script later with the same parameters.
+    echo2 script later with the same parameters to start the download.
     echo2
     waitKey
 
@@ -1390,21 +1410,36 @@ function downloadGenomes
 # stop the mysql database server, so we can write into its data directory
 function stopMysql
 {
-    service mysqld stop
+    if [ -f /etc/init.d/mysql ]; then 
+            service mysql stop
+    elif [ -f /etc/init.d/mysqld ]; then 
+            service mysqld stop
+    else
+        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+    fi
 }
 
 # start the mysql database server
 function startMysql
 {
-    service mysqld start
+    if [ -f /etc/init.d/mysql ]; then 
+            service mysql start
+    elif [ -f /etc/init.d/mysqld ]; then 
+            service mysqld start
+    else
+        echo2 Could not find mysql nor mysqld file in /etc/init.d. Please email genome-mirror@soe.ucsc.edu.
+    fi
 }
 
 # only download a set of minimal mysql tables, to make a genome browser that is using the mysql failover mechanism
 # faster. This should be fast enough in the US West Coast area and maybe even on the East Coast.
 function downloadMinimal
 {
-    clear
     DBS=$*
+    if [ "$DBS" == "" ] ; then
+        echo2 Argument error: the '"minimal"' command requires at least one assembly name, like hg19 or mm10.
+        exit 1
+    fi
 
     echo2
     echo2 Downloading minimal tables for databases $DBS 
@@ -1453,20 +1488,38 @@ function downloadMinimal
     goOnline
 }
 
+function checkDownloadUdr () 
+{
+    # Download my own statically compiled udr binary
+    if [[ ! -f /usr/local/bin/udr ]]; then
+      echo2 'Downloading download-tool udr (UDP-based rsync with multiple streams) to /usr/local/bin/udr'
+      waitKey
+      downloadFile $UDRURL > /usr/local/bin/udr
+      chmod a+x /usr/local/bin/udr
+    fi
+}
+
 function cleanTrash () 
 {
     echo2 Removing files older than one day in $TRASHDIR, not running on $TRASHDIR/ct
-    find $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
+    # -L = follow symlinks
+    # -atime +1 = files older than one day
+    find -L $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
+}
+
+function cgiUpdate ()
+{
+   # update the CGIs
+   $RSYNC -avzP --exclude=RNAplot --exclude=hg.conf --exclude=hg.conf.local --exclude=RNAplot $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ 
+   # update the html docs
+   echo2 Updating Apache htdocs
+   $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude=ENCODE --exclude=trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
+   # assign all downloaded files to a valid user. 
+   chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
 }
 
 function updateBrowser {
-   # update the CGIs
-   $RSYNC -avzP --exclude RNAplot --exclude hg.conf --exclude hg.conf.local $HGDOWNLOAD::cgi-bin/ $APACHEDIR/cgi-bin/ --exclude RNAplot
-   # update the html docs
-   echo2 Updating Apache htdocs
-   $RSYNC -avzP --exclude=*.{bb,bam,bai,bw,gz,2bit,bed} --exclude ENCODE --exclude trash $HGDOWNLOAD::htdocs/ $APACHEDIR/htdocs/ 
-   # assign all downloaded files to a valid user. 
-   chown -R $APACHEUSER:$APACHEUSER $APACHEDIR/*
+   cgiUpdate
    echo
 
    # update gbdb
@@ -1507,12 +1560,6 @@ if [[ $# -eq 0 ]] ; then
    exit 0
 fi
 
-if [[ "$EUID" != "0" ]]; then
-  echo "This script must be run as root or with sudo like this:"
-  echo "sudo -H $0"
-  exit 1
-fi
-
 while getopts ":baut:hof" opt; do
   case $opt in
     h)
@@ -1529,15 +1576,18 @@ while getopts ":baut:hof" opt; do
       ;;
     t)
       val=${OPTARG}
+      # need to include all subdirectories for include to work
+      # need to exclude everything else for exclude to work
       if [[ "$val" == "bestEncode" ]]; then
           RSYNCOPTS="-m --include=wgEncodeGencode* --include=wgEncodeBroadHistone* --include=wgEncodeReg* --include=wgEncodeAwg* --include=wgEncode*Mapability* --include=*/ --exclude=wgEncode*"
           ONLYGENOMES=0
       elif [[ "$val" == "noEncode" ]]; then
-          RSYNCOPTS="-m --include=wgEncodeGencode* --include */ --exclude=wgEncode*"
+          RSYNCOPTS="-m --include=wgEncodeGencode* --include=*/ --exclude=wgEncode*"
           ONLYGENOMES=0
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
-          RSYNCOPTS="-m --include=grp.* --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode*V19* --include snp142Common.* --include rmsk* --include */ --exclude=*"
+          # SNP table selection explained in #17335
+          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --include=cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
@@ -1546,6 +1596,7 @@ while getopts ":baut:hof" opt; do
       ;;
     u)
       RSYNC="/usr/local/bin/udr rsync"
+      checkDownloadUdr
       ;;
     o)
       if [ ! -f $APACHEDIR/cgi-bin/hg.conf ]; then
@@ -1638,14 +1689,31 @@ if [ "$DIST" == "none" ]; then
     exit 3
 fi
 
+lastArg=${*: -1:1}
+if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; then
+  echo "Error: The options have to be specified before the command, not after it."
+  echo
+  echo "$HELP_STR"
+  exit 1
+fi
+
+if [[ "$EUID" != "0" ]]; then
+  echo "This script must be run as root or with sudo like this:"
+  echo "sudo -H $0"
+  exit 1
+fi
+
 if [ "${1:-}" == "install" ]; then
    installBrowser
 
-elif [ "${1:-}" == "download" ]; then
-   downloadGenomes ${@:2} # all arguments after the second one
-
 elif [ "${1:-}" == "minimal" ]; then
    downloadMinimal ${@:2} # all arguments after the second one
+
+elif [ "${1:-}" == "mirror" ]; then
+   downloadGenomes ${@:2} # all arguments after the second one
+
+elif [ "${1:-}" == "cgiUpdate" ]; then
+   cgiUpdate
 
 elif [ "${1:-}" == "update" ]; then 
    updateBrowser

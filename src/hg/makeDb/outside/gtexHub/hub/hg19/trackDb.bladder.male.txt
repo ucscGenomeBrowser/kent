@@ -1,0 +1,72 @@
+    track gtexRnaSignalSRR1071717
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1071717.hg19.bigWig
+    shortLabel bladder M U3ZM
+    longLabel GTEx RNA signal from male Bladder (GTEX-U3ZM-0826-SM-4DXU6)
+    subGroups age=a40 tissue=bladder donor=GTEXU3ZM
+    color 227,184,136
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-0826-SM-4DXU6 \
+            tissue=bladder autolysisScore=2 rnaIntegrity=7.5 batch=BP-25560 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR1079830
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1079830.hg19.bigWig
+    shortLabel bladder M U4B1
+    longLabel GTEx RNA signal from male Bladder (GTEX-U4B1-1226-SM-4DXT7)
+    subGroups age=a40 tissue=bladder donor=GTEXU4B1
+    color 227,184,136
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-1226-SM-4DXT7 \
+            tissue=bladder autolysisScore=1 rnaIntegrity=7.8 batch=BP-25601 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSRR1081765
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1081765.hg19.bigWig
+    shortLabel bladder M S4Q7
+    longLabel GTEx RNA signal from male Bladder (GTEX-S4Q7-0926-SM-4AD5D)
+    subGroups age=a20 tissue=bladder donor=GTEXS4Q7
+    color 227,184,136
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0926-SM-4AD5D \
+            tissue=bladder autolysisScore=1 rnaIntegrity=7.7 batch=BP-23051 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSRR1084917
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1084917.hg19.bigWig
+    shortLabel bladder M SNOS
+    longLabel GTEx RNA signal from male Bladder (GTEX-SNOS-0526-SM-4DM54)
+    subGroups age=a40 tissue=bladder donor=GTEXSNOS
+    color 227,184,136
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0526-SM-4DM54 \
+            tissue=bladder autolysisScore=1 rnaIntegrity=9 batch=BP-24455 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalSRR1085402
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1085402.hg19.bigWig
+    shortLabel bladder M SNMC
+    longLabel GTEx RNA signal from male Bladder (GTEX-SNMC-0826-SM-4DM66)
+    subGroups age=a20 tissue=bladder donor=GTEXSNMC
+    color 227,184,136
+    metadata donor=GTEX-SNMC age=20 sex=M hardyScore=0 sample=GTEX-SNMC-0826-SM-4DM66 \
+            tissue=bladder autolysisScore=2 rnaIntegrity=8.6 batch=BP-23794 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/04/2012
+
+    track gtexRnaSignalSRR1099957
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl bladder/gtexRnaSignalSRR1099957.hg19.bigWig
+    shortLabel bladder M S3XE
+    longLabel GTEx RNA signal from male Bladder (GTEX-S3XE-1226-SM-4AD4L)
+    subGroups age=a50 tissue=bladder donor=GTEXS3XE
+    color 227,184,136
+    metadata donor=GTEX-S3XE age=50 sex=M hardyScore=0 sample=GTEX-S3XE-1226-SM-4AD4L \
+            tissue=bladder autolysisScore=1 rnaIntegrity=8.5 batch=BP-22873 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/05/2012
+

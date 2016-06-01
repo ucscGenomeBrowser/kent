@@ -1,0 +1,3201 @@
+    track gtexRnaSignalLungSRR1084602
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1084602.hg19.bigWig
+    shortLabel lung F XV7Q
+    longLabel GTEx RNA signal from female Lung (GTEX-XV7Q-0426-SM-4BRVN)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0426-SM-4BRVN \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.7 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalLungSRR1356577
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1356577.hg19.bigWig
+    shortLabel lung F 11ILO
+    longLabel GTEx RNA signal from female Lung (GTEX-11ILO-0726-SM-5HL5I)
+    subGroups sex=F age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1366837
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1366837.hg19.bigWig
+    shortLabel lung F 13JUV
+    longLabel GTEx RNA signal from female Lung (GTEX-13JUV-0526-SM-5K7XE)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0526-SM-5K7XE \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.8 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalLungSRR1367654
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1367654.hg19.bigWig
+    shortLabel lung F 13FTX
+    longLabel GTEx RNA signal from female Lung (GTEX-13FTX-0326-SM-5J2NG)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-13FTX age=20 sex=F hardyScore=0 sample=GTEX-13FTX-0326-SM-5J2NG \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.5 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1396967
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1396967.hg19.bigWig
+    shortLabel lung F 11P81
+    longLabel GTEx RNA signal from female Lung (GTEX-11P81-0226-SM-5HL5M)
+    subGroups sex=F age=a30 
+    color 167,243,12
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0226-SM-5HL5M \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalLungSRR1402986
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1402986.hg19.bigWig
+    shortLabel lung F 1399S
+    longLabel GTEx RNA signal from female Lung (GTEX-1399S-1726-SM-5L3DI)
+    subGroups sex=F age=a30 
+    color 167,243,12
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-1726-SM-5L3DI \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1403478
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1403478.hg19.bigWig
+    shortLabel lung F TMMY
+    longLabel GTEx RNA signal from female Lung (GTEX-TMMY-0926-SM-4WKH4)
+    subGroups sex=F age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1406330
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1406330.hg19.bigWig
+    shortLabel lung F 13FTY
+    longLabel GTEx RNA signal from female Lung (GTEX-13FTY-0126-SM-5J2NZ)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-13FTY age=40 sex=F hardyScore=2 sample=GTEX-13FTY-0126-SM-5J2NZ \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.5 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1416119
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1416119.hg19.bigWig
+    shortLabel lung F YJ8O
+    longLabel GTEx RNA signal from female Lung (GTEX-YJ8O-1826-SM-5HL82)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-YJ8O age=40 sex=F hardyScore=1 sample=GTEX-YJ8O-1826-SM-5HL82 \
+            tissue=lung autolysisScore=2 rnaIntegrity=7 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalLungSRR1417088
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1417088.hg19.bigWig
+    shortLabel lung F 12WSJ
+    longLabel GTEx RNA signal from female Lung (GTEX-12WSJ-0226-SM-5GCP7)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0226-SM-5GCP7 \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.1 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLungSRR1434009
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1434009.hg19.bigWig
+    shortLabel lung F 13VXT
+    longLabel GTEx RNA signal from female Lung (GTEX-13VXT-1426-SM-5LU4B)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-1426-SM-5LU4B \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalLungSRR1435066
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1435066.hg19.bigWig
+    shortLabel lung F TMMY
+    longLabel GTEx RNA signal from female Lung (GTEX-TMMY-0926-SM-4VBQZ)
+    subGroups sex=F age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1446546
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1446546.hg19.bigWig
+    shortLabel lung F 13U4I
+    longLabel GTEx RNA signal from female Lung (GTEX-13U4I-1426-SM-5J2M3)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-13U4I age=40 sex=F hardyScore=0 sample=GTEX-13U4I-1426-SM-5J2M3 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-47070 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalLungSRR1454415
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1454415.hg19.bigWig
+    shortLabel lung F Y5LM
+    longLabel GTEx RNA signal from female Lung (GTEX-Y5LM-0726-SM-4VBRP)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0726-SM-4VBRP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalLungSRR1470580
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1470580.hg19.bigWig
+    shortLabel lung F 12WSK
+    longLabel GTEx RNA signal from female Lung (GTEX-12WSK-0826-SM-5CVNP)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-0826-SM-5CVNP \
+            tissue=lung autolysisScore=1 rnaIntegrity=7 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLungSRR1479155
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1479155.hg19.bigWig
+    shortLabel lung F YFC4
+    longLabel GTEx RNA signal from female Lung (GTEX-YFC4-1126-SM-5RQJN)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-1126-SM-5RQJN \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-48564 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1479640
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1479640.hg19.bigWig
+    shortLabel lung F ZPIC
+    longLabel GTEx RNA signal from female Lung (GTEX-ZPIC-0626-SM-57WDY)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-ZPIC age=40 sex=F hardyScore=0 sample=GTEX-ZPIC-0626-SM-57WDY \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalLungSRR600900
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR600900.hg19.bigWig
+    shortLabel lung F PX3G
+    longLabel GTEx RNA signal from female Lung (GTEX-PX3G-0526-SM-2I3EM)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-0526-SM-2I3EM \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.9 batch=BP-19882 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalLungSRR601311
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR601311.hg19.bigWig
+    shortLabel lung F PWOO
+    longLabel GTEx RNA signal from female Lung (GTEX-PWOO-0726-SM-2I3EB)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-0726-SM-2I3EB \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-19857 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/02/2011
+
+    track gtexRnaSignalLungSRR604390
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR604390.hg19.bigWig
+    shortLabel lung F Q734
+    longLabel GTEx RNA signal from female Lung (GTEX-Q734-0626-SM-2I3EF)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0626-SM-2I3EF \
+            tissue=lung autolysisScore=1 rnaIntegrity=8 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalLungSRR612887
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR612887.hg19.bigWig
+    shortLabel lung F R55G
+    longLabel GTEx RNA signal from female Lung (GTEX-R55G-0826-SM-2TC5U)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0826-SM-2TC5U \
+            tissue=lung autolysisScore=1 rnaIntegrity=9 batch=BP-21546 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalLungSRR615539
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR615539.hg19.bigWig
+    shortLabel lung F RU1J
+    longLabel GTEx RNA signal from female Lung (GTEX-RU1J-0126-SM-2TF6Y)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-RU1J age=20 sex=F hardyScore=0 sample=GTEX-RU1J-0126-SM-2TF6Y \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-21803 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/25/2012
+
+    track gtexRnaSignalLungSRR655601
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR655601.hg19.bigWig
+    shortLabel lung F T6MO
+    longLabel GTEx RNA signal from female Lung (GTEX-T6MO-0426-SM-32QOI)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-0426-SM-32QOI \
+            tissue=lung autolysisScore=2 rnaIntegrity=8.2 batch=BP-24837 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalLungSRR656886
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR656886.hg19.bigWig
+    shortLabel lung F UPIC
+    longLabel GTEx RNA signal from female Lung (GTEX-UPIC-0826-SM-3GADQ)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-0826-SM-3GADQ \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-26354 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/18/2012
+
+    track gtexRnaSignalLungSRR657611
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR657611.hg19.bigWig
+    shortLabel lung F R3RS
+    longLabel GTEx RNA signal from female Lung (GTEX-R3RS-1026-SM-3GADF)
+    subGroups sex=F age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR658445
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR658445.hg19.bigWig
+    shortLabel lung F S341
+    longLabel GTEx RNA signal from female Lung (GTEX-S341-0326-SM-2XCAU)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0326-SM-2XCAU \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.4 batch=BP-22727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalLungSRR661842
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR661842.hg19.bigWig
+    shortLabel lung F S7SF
+    longLabel GTEx RNA signal from female Lung (GTEX-S7SF-0426-SM-3K2B7)
+    subGroups sex=F age=a20 
+    color 167,243,12
+    metadata donor=GTEX-S7SF age=20 sex=F hardyScore=0 sample=GTEX-S7SF-0426-SM-3K2B7 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7 batch=BP-23146 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/15/2012
+
+    track gtexRnaSignalLungSRR665658
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR665658.hg19.bigWig
+    shortLabel lung F SE5C
+    longLabel GTEx RNA signal from female Lung (GTEX-SE5C-0526-SM-2XCE1)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-0526-SM-2XCE1 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.6 batch=BP-23387 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalLungSRR812493
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR812493.hg19.bigWig
+    shortLabel lung F WYVS
+    longLabel GTEx RNA signal from female Lung (GTEX-WYVS-0526-SM-3NM9W)
+    subGroups sex=F age=a40 
+    color 167,243,12
+    metadata donor=GTEX-WYVS age=40 sex=F hardyScore=0 sample=GTEX-WYVS-0526-SM-3NM9W \
+            tissue=lung autolysisScore=1 rnaIntegrity=9.5 batch=BP-29542 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2012
+
+    track gtexRnaSignalLungSRR1073119
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1073119.hg19.bigWig
+    shortLabel lung F SN8G
+    longLabel GTEx RNA signal from female Lung (GTEX-SN8G-0926-SM-4DM5I)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-SN8G age=50 sex=F hardyScore=2 sample=GTEX-SN8G-0926-SM-4DM5I \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-23794 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/04/2012
+
+    track gtexRnaSignalLungSRR1310797
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1310797.hg19.bigWig
+    shortLabel lung F 11I78
+    longLabel GTEx RNA signal from female Lung (GTEX-11I78-0126-SM-5HL6F)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0126-SM-5HL6F \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalLungSRR1357233
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1357233.hg19.bigWig
+    shortLabel lung F Y3IK
+    longLabel GTEx RNA signal from female Lung (GTEX-Y3IK-0626-SM-4WWE4)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0626-SM-4WWE4 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.9 batch=BP-35169 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalLungSRR1370423
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1370423.hg19.bigWig
+    shortLabel lung F ZF2S
+    longLabel GTEx RNA signal from female Lung (GTEX-ZF2S-0626-SM-4WKH2)
+    subGroups sex=F age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1374092
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1374092.hg19.bigWig
+    shortLabel lung F 12WSG
+    longLabel GTEx RNA signal from female Lung (GTEX-12WSG-0326-SM-5FQU3)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-12WSG age=50 sex=F hardyScore=0 sample=GTEX-12WSG-0326-SM-5FQU3 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalLungSRR1398036
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1398036.hg19.bigWig
+    shortLabel lung F 13D11
+    longLabel GTEx RNA signal from female Lung (GTEX-13D11-0326-SM-5LZXX)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-0326-SM-5LZXX \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalLungSRR1414290
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1414290.hg19.bigWig
+    shortLabel lung F 147F3
+    longLabel GTEx RNA signal from female Lung (GTEX-147F3-0726-SM-5NQ9U)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-147F3 age=50 sex=F hardyScore=0 sample=GTEX-147F3-0726-SM-5NQ9U \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.3 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1415872
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1415872.hg19.bigWig
+    shortLabel lung F ZZPU
+    longLabel GTEx RNA signal from female Lung (GTEX-ZZPU-0526-SM-5E44U)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-0526-SM-5E44U \
+            tissue=lung autolysisScore=0 rnaIntegrity=8 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1417404
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1417404.hg19.bigWig
+    shortLabel lung F 13OVJ
+    longLabel GTEx RNA signal from female Lung (GTEX-13OVJ-0726-SM-5KM1W)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0726-SM-5KM1W \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.9 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1419784
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1419784.hg19.bigWig
+    shortLabel lung F ZYVF
+    longLabel GTEx RNA signal from female Lung (GTEX-ZYVF-1726-SM-5E443)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZYVF age=50 sex=F hardyScore=0 sample=GTEX-ZYVF-1726-SM-5E443 \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1421462
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1421462.hg19.bigWig
+    shortLabel lung F Y8LW
+    longLabel GTEx RNA signal from female Lung (GTEX-Y8LW-0326-SM-4VBQ9)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-0326-SM-4VBQ9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalLungSRR1429660
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1429660.hg19.bigWig
+    shortLabel lung F 1399U
+    longLabel GTEx RNA signal from female Lung (GTEX-1399U-0826-SM-5KM1P)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-0826-SM-5KM1P \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.3 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1441889
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1441889.hg19.bigWig
+    shortLabel lung F 131XW
+    longLabel GTEx RNA signal from female Lung (GTEX-131XW-1126-SM-5EGK4)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-131XW age=50 sex=F hardyScore=4 sample=GTEX-131XW-1126-SM-5EGK4 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1471989
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1471989.hg19.bigWig
+    shortLabel lung F ZE7O
+    longLabel GTEx RNA signal from female Lung (GTEX-ZE7O-0826-SM-57WCP)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0826-SM-57WCP \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.7 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalLungSRR1480766
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1480766.hg19.bigWig
+    shortLabel lung F ZLWG
+    longLabel GTEx RNA signal from female Lung (GTEX-ZLWG-0626-SM-4WWFR)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0626-SM-4WWFR \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.6 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalLungSRR1481036
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1481036.hg19.bigWig
+    shortLabel lung F 146FH
+    longLabel GTEx RNA signal from female Lung (GTEX-146FH-1226-SM-5NQB6)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-146FH age=50 sex=F hardyScore=0 sample=GTEX-146FH-1226-SM-5NQB6 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1490700
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1490700.hg19.bigWig
+    shortLabel lung F 1313W
+    longLabel GTEx RNA signal from female Lung (GTEX-1313W-0926-SM-5EQ56)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0926-SM-5EQ56 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR601477
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR601477.hg19.bigWig
+    shortLabel lung F P4QT
+    longLabel GTEx RNA signal from female Lung (GTEX-P4QT-0526-SM-2I3EX)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-P4QT age=50 sex=F hardyScore=0 sample=GTEX-P4QT-0526-SM-2I3EX \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-18729 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalLungSRR602680
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR602680.hg19.bigWig
+    shortLabel lung F QCQG
+    longLabel GTEx RNA signal from female Lung (GTEX-QCQG-0326-SM-2I3ES)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0326-SM-2I3ES \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-20114 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalLungSRR608288
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR608288.hg19.bigWig
+    shortLabel lung F OXRK
+    longLabel GTEx RNA signal from female Lung (GTEX-OXRK-0926-SM-2HMKP)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0926-SM-2HMKP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.6 batch=BP-18261 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalLungSRR612743
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR612743.hg19.bigWig
+    shortLabel lung F PLZ4
+    longLabel GTEx RNA signal from female Lung (GTEX-PLZ4-0726-SM-2TC6Q)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-PLZ4 age=50 sex=F hardyScore=-1 sample=GTEX-PLZ4-0726-SM-2TC6Q \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.3 batch=BP-19215 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/04/2011
+
+    track gtexRnaSignalLungSRR614948
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR614948.hg19.bigWig
+    shortLabel lung F RU72
+    longLabel GTEx RNA signal from female Lung (GTEX-RU72-0526-SM-2TF5Z)
+    subGroups sex=F age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR615695
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR615695.hg19.bigWig
+    shortLabel lung F RNOR
+    longLabel GTEx RNA signal from female Lung (GTEX-RNOR-0726-SM-2TF5I)
+    subGroups sex=F age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR654838
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR654838.hg19.bigWig
+    shortLabel lung F UJHI
+    longLabel GTEx RNA signal from female Lung (GTEX-UJHI-0726-SM-3DB92)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-0726-SM-3DB92 \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.1 batch=BP-25737 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalLungSRR655064
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR655064.hg19.bigWig
+    shortLabel lung F S32W
+    longLabel GTEx RNA signal from female Lung (GTEX-S32W-0326-SM-2XCBI)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-0326-SM-2XCBI \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-22609 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalLungSRR817004
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR817004.hg19.bigWig
+    shortLabel lung F WRHU
+    longLabel GTEx RNA signal from female Lung (GTEX-WRHU-0226-SM-3MJFV)
+    subGroups sex=F age=a50 
+    color 167,243,12
+    metadata donor=GTEX-WRHU age=50 sex=F hardyScore=1 sample=GTEX-WRHU-0226-SM-3MJFV \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.3 batch=BP-28511 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/01/2012
+
+    track gtexRnaSignalLungSRR1070358
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1070358.hg19.bigWig
+    shortLabel lung F XYKS
+    longLabel GTEx RNA signal from female Lung (GTEX-XYKS-0526-SM-4BRW2)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-0526-SM-4BRW2 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.1 batch=BP-34730 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalLungSRR1098998
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1098998.hg19.bigWig
+    shortLabel lung F XOT4
+    longLabel GTEx RNA signal from female Lung (GTEX-XOT4-1426-SM-4B65T)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-XOT4 age=60 sex=F hardyScore=2 sample=GTEX-XOT4-1426-SM-4B65T \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.5 batch=BP-33639 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/27/2012
+
+    track gtexRnaSignalLungSRR1321351
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1321351.hg19.bigWig
+    shortLabel lung F OHPL
+    longLabel GTEx RNA signal from female Lung (GTEX-OHPL-0526-SM-4M1XS)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1321808
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1321808.hg19.bigWig
+    shortLabel lung F 1122O
+    longLabel GTEx RNA signal from female Lung (GTEX-1122O-0126-SM-5GICA)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0126-SM-5GICA \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.6 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLungSRR1326249
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1326249.hg19.bigWig
+    shortLabel lung F 131YS
+    longLabel GTEx RNA signal from female Lung (GTEX-131YS-0926-SM-5IJB9)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0926-SM-5IJB9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.3 batch=BP-45499 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalLungSRR1337031
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1337031.hg19.bigWig
+    shortLabel lung F ZVZQ
+    longLabel GTEx RNA signal from female Lung (GTEX-ZVZQ-1526-SM-5N9G6)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-1526-SM-5N9G6 \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.7 batch=BP-44172 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLungSRR1345563
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1345563.hg19.bigWig
+    shortLabel lung F 1269C
+    longLabel GTEx RNA signal from female Lung (GTEX-1269C-0926-SM-5FQSR)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1346933
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1346933.hg19.bigWig
+    shortLabel lung F 145LS
+    longLabel GTEx RNA signal from female Lung (GTEX-145LS-1226-SM-5Q5D9)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-1226-SM-5Q5D9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.6 batch=BP-48057 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalLungSRR1365489
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1365489.hg19.bigWig
+    shortLabel lung F 13113
+    longLabel GTEx RNA signal from female Lung (GTEX-13113-0426-SM-5GCOD)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-0426-SM-5GCOD \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.8 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLungSRR1365938
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1365938.hg19.bigWig
+    shortLabel lung F 11EMC
+    longLabel GTEx RNA signal from female Lung (GTEX-11EMC-0126-SM-5EGKV)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-0126-SM-5EGKV \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.6 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalLungSRR1377026
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1377026.hg19.bigWig
+    shortLabel lung F 1211K
+    longLabel GTEx RNA signal from female Lung (GTEX-1211K-0826-SM-5FQUP)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-0826-SM-5FQUP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLungSRR1383785
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1383785.hg19.bigWig
+    shortLabel lung F XMD2
+    longLabel GTEx RNA signal from female Lung (GTEX-XMD2-1026-SM-4WWE8)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-XMD2 age=60 sex=F hardyScore=0 sample=GTEX-XMD2-1026-SM-4WWE8 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6 batch=BP-32697 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/31/2012
+
+    track gtexRnaSignalLungSRR1385300
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1385300.hg19.bigWig
+    shortLabel lung F 13NZ8
+    longLabel GTEx RNA signal from female Lung (GTEX-13NZ8-0326-SM-5L3DF)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1392502
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1392502.hg19.bigWig
+    shortLabel lung F 12WSD
+    longLabel GTEx RNA signal from female Lung (GTEX-12WSD-0826-SM-5GCNE)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0826-SM-5GCNE \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.1 batch=BP-43881 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalLungSRR1406176
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1406176.hg19.bigWig
+    shortLabel lung F Y5V5
+    longLabel GTEx RNA signal from female Lung (GTEX-Y5V5-0826-SM-4VBQD)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-0826-SM-4VBQD \
+            tissue=lung autolysisScore=1 rnaIntegrity=9.7 batch=BP-42087 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalLungSRR1413644
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1413644.hg19.bigWig
+    shortLabel lung F 13PL7
+    longLabel GTEx RNA signal from female Lung (GTEX-13PL7-1726-SM-5J2NX)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-1726-SM-5J2NX \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalLungSRR1413940
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1413940.hg19.bigWig
+    shortLabel lung F 13O3O
+    longLabel GTEx RNA signal from female Lung (GTEX-13O3O-0726-SM-5J1N7)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0726-SM-5J1N7 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.3 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalLungSRR1419131
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1419131.hg19.bigWig
+    shortLabel lung F 13CF3
+    longLabel GTEx RNA signal from female Lung (GTEX-13CF3-0426-SM-5IJEU)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-0426-SM-5IJEU \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1431385
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1431385.hg19.bigWig
+    shortLabel lung F ZVT3
+    longLabel GTEx RNA signal from female Lung (GTEX-ZVT3-0926-SM-5GICK)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0926-SM-5GICK \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLungSRR1437324
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1437324.hg19.bigWig
+    shortLabel lung F 11ZTS
+    longLabel GTEx RNA signal from female Lung (GTEX-11ZTS-1226-SM-5EQMQ)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-1226-SM-5EQMQ \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLungSRR1442778
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1442778.hg19.bigWig
+    shortLabel lung F NL3G
+    longLabel GTEx RNA signal from female Lung (GTEX-NL3G-0526-SM-4RTWW)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-NL3G age=60 sex=F hardyScore=2 sample=GTEX-NL3G-0526-SM-4RTWW \
+            tissue=lung autolysisScore=1 rnaIntegrity=5.7 batch=BP-17209 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/20/2011
+
+    track gtexRnaSignalLungSRR1444063
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1444063.hg19.bigWig
+    shortLabel lung F 13QJC
+    longLabel GTEx RNA signal from female Lung (GTEX-13QJC-0526-SM-5RQKB)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0526-SM-5RQKB \
+            tissue=lung autolysisScore=1 rnaIntegrity=7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1447736
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1447736.hg19.bigWig
+    shortLabel lung F ZF29
+    longLabel GTEx RNA signal from female Lung (GTEX-ZF29-1026-SM-4WKGC)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1488429
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1488429.hg19.bigWig
+    shortLabel lung F 148VI
+    longLabel GTEx RNA signal from female Lung (GTEX-148VI-0226-SM-5RQKA)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-148VI age=60 sex=F hardyScore=0 sample=GTEX-148VI-0226-SM-5RQKA \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.6 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1489265
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1489265.hg19.bigWig
+    shortLabel lung F ZYFG
+    longLabel GTEx RNA signal from female Lung (GTEX-ZYFG-0226-SM-5GIDT)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-0226-SM-5GIDT \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.7 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalLungSRR600584
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR600584.hg19.bigWig
+    shortLabel lung F OHPL
+    longLabel GTEx RNA signal from female Lung (GTEX-OHPL-0526-SM-2HMIX)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR600784
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR600784.hg19.bigWig
+    shortLabel lung F N7MT
+    longLabel GTEx RNA signal from female Lung (GTEX-N7MT-0126-SM-2D7VT)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0126-SM-2D7VT \
+            tissue=lung autolysisScore=1 rnaIntegrity=9.1 batch=BP-16829 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/24/2011
+
+    track gtexRnaSignalLungSRR603776
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR603776.hg19.bigWig
+    shortLabel lung F OXRP
+    longLabel GTEx RNA signal from female Lung (GTEX-OXRP-0526-SM-2I3EW)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-OXRP age=60 sex=F hardyScore=3 sample=GTEX-OXRP-0526-SM-2I3EW \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.3 batch=BP-18483 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/25/2011
+
+    track gtexRnaSignalLungSRR613066
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR613066.hg19.bigWig
+    shortLabel lung F RTLS
+    longLabel GTEx RNA signal from female Lung (GTEX-RTLS-0926-SM-2TF5X)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-0926-SM-2TF5X \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-21669 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/23/2012
+
+    track gtexRnaSignalLungSRR627427
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627427.hg19.bigWig
+    shortLabel lung F N7MT
+    longLabel GTEx RNA signal from female Lung (GTEX-N7MT-0126-SM-26GMS)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR627437
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627437.hg19.bigWig
+    shortLabel lung F O5YV
+    longLabel GTEx RNA signal from female Lung (GTEX-O5YV-0526-SM-26GMJ)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR627447
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627447.hg19.bigWig
+    shortLabel lung F N7MT
+    longLabel GTEx RNA signal from female Lung (GTEX-N7MT-0126-SM-26GMB)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR627459
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627459.hg19.bigWig
+    shortLabel lung F O5YV
+    longLabel GTEx RNA signal from female Lung (GTEX-O5YV-0526-SM-2D7VZ)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR627464
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627464.hg19.bigWig
+    shortLabel lung F O5YV
+    longLabel GTEx RNA signal from female Lung (GTEX-O5YV-0526-SM-26GN1)
+    subGroups sex=F age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR654826
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR654826.hg19.bigWig
+    shortLabel lung F RWS6
+    longLabel GTEx RNA signal from female Lung (GTEX-RWS6-0226-SM-2XCA9)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0226-SM-2XCA9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-22259 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/08/2012
+
+    track gtexRnaSignalLungSRR657801
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR657801.hg19.bigWig
+    shortLabel lung F TSE9
+    longLabel GTEx RNA signal from female Lung (GTEX-TSE9-0726-SM-3DB8C)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0726-SM-3DB8C \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.1 batch=BP-25190 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalLungSRR811866
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR811866.hg19.bigWig
+    shortLabel lung F X4EP
+    longLabel GTEx RNA signal from female Lung (GTEX-X4EP-0526-SM-3P5YW)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-0526-SM-3P5YW \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.3 batch=BP-30278 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalLungSRR817070
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR817070.hg19.bigWig
+    shortLabel lung F OHPL
+    longLabel GTEx RNA signal from female Lung (GTEX-OHPL-0526-SM-3NM8U)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-0526-SM-3NM8U \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.5 batch=BP-17822 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/21/2011
+
+    track gtexRnaSignalLungSRR819318
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR819318.hg19.bigWig
+    shortLabel lung F OXRO
+    longLabel GTEx RNA signal from female Lung (GTEX-OXRO-0326-SM-33HBM)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-OXRO age=60 sex=F hardyScore=4 sample=GTEX-OXRO-0326-SM-33HBM \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.1 batch=BP-18448 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2011
+
+    track gtexRnaSignalLungSRR820596
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR820596.hg19.bigWig
+    shortLabel lung F WYBS
+    longLabel GTEx RNA signal from female Lung (GTEX-WYBS-1126-SM-3NMAM)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-WYBS age=60 sex=F hardyScore=0 sample=GTEX-WYBS-1126-SM-3NMAM \
+            tissue=lung autolysisScore=3 rnaIntegrity=8.1 batch=BP-29435 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalLungSRR821302
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR821302.hg19.bigWig
+    shortLabel lung F X4EO
+    longLabel GTEx RNA signal from female Lung (GTEX-X4EO-0926-SM-3P5Z2)
+    subGroups sex=F age=a60 
+    color 167,243,12
+    metadata donor=GTEX-X4EO age=60 sex=F hardyScore=3 sample=GTEX-X4EO-0926-SM-3P5Z2 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.7 batch=BP-30751 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2012
+
+    track gtexRnaSignalLungSRR1087559
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1087559.hg19.bigWig
+    shortLabel lung M XQ3S
+    longLabel GTEx RNA signal from male Lung (GTEX-XQ3S-0926-SM-4BOPI)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-XQ3S age=20 sex=M hardyScore=1 sample=GTEX-XQ3S-0926-SM-4BOPI \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.5 batch=BP-33923 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/05/2012
+
+    track gtexRnaSignalLungSRR1098074
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1098074.hg19.bigWig
+    shortLabel lung M X5EB
+    longLabel GTEx RNA signal from male Lung (GTEX-X5EB-0426-SM-46MVY)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0426-SM-46MVY \
+            tissue=lung autolysisScore=1 rnaIntegrity=8 batch=BP-31052 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/12/2012
+
+    track gtexRnaSignalLungSRR1099286
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1099286.hg19.bigWig
+    shortLabel lung M P44H
+    longLabel GTEx RNA signal from male Lung (GTEX-P44H-1126-SM-48TBU)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-P44H age=40 sex=M hardyScore=4 sample=GTEX-P44H-1126-SM-48TBU \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.9 batch=BP-18616 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/01/2011
+
+    track gtexRnaSignalLungSRR1099546
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1099546.hg19.bigWig
+    shortLabel lung M QEG4
+    longLabel GTEx RNA signal from male Lung (GTEX-QEG4-0526-SM-48TZD)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-QEG4 age=30 sex=M hardyScore=1 sample=GTEX-QEG4-0526-SM-48TZD \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.7 batch=BP-20319 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/23/2011
+
+    track gtexRnaSignalLungSRR1309490
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1309490.hg19.bigWig
+    shortLabel lung M 11O72
+    longLabel GTEx RNA signal from male Lung (GTEX-11O72-1326-SM-5BC5A)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-1326-SM-5BC5A \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-44512 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalLungSRR1319560
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1319560.hg19.bigWig
+    shortLabel lung M QEG5
+    longLabel GTEx RNA signal from male Lung (GTEX-QEG5-1126-SM-5SI88)
+    subGroups sex=M age=a20 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1322373
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1322373.hg19.bigWig
+    shortLabel lung M PVOW
+    longLabel GTEx RNA signal from male Lung (GTEX-PVOW-1026-SM-5NQ7M)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1323896
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1323896.hg19.bigWig
+    shortLabel lung M PLZ6
+    longLabel GTEx RNA signal from male Lung (GTEX-PLZ6-0426-SM-5IFK2)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0426-SM-5IFK2 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.9 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalLungSRR1327386
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1327386.hg19.bigWig
+    shortLabel lung M 12584
+    longLabel GTEx RNA signal from male Lung (GTEX-12584-1426-SM-5EGJ9)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-1426-SM-5EGJ9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.1 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalLungSRR1330989
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1330989.hg19.bigWig
+    shortLabel lung M 13S86
+    longLabel GTEx RNA signal from male Lung (GTEX-13S86-0626-SM-5Q5E7)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-0626-SM-5Q5E7 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.9 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalLungSRR1332544
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1332544.hg19.bigWig
+    shortLabel lung M 11ZUS
+    longLabel GTEx RNA signal from male Lung (GTEX-11ZUS-0126-SM-5EQM5)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-0126-SM-5EQM5 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.5 batch=BP-44114 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLungSRR1345936
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1345936.hg19.bigWig
+    shortLabel lung M 146FQ
+    longLabel GTEx RNA signal from male Lung (GTEX-146FQ-0926-SM-5LUAV)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0926-SM-5LUAV \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLungSRR1349166
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1349166.hg19.bigWig
+    shortLabel lung M YFCO
+    longLabel GTEx RNA signal from male Lung (GTEX-YFCO-0426-SM-4W1Z7)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-0426-SM-4W1Z7 \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.7 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalLungSRR1352683
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1352683.hg19.bigWig
+    shortLabel lung M ZAB4
+    longLabel GTEx RNA signal from male Lung (GTEX-ZAB4-0626-SM-5CVN3)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-0626-SM-5CVN3 \
+            tissue=lung autolysisScore=3 rnaIntegrity=6.9 batch=BP-45390 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalLungSRR1360807
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1360807.hg19.bigWig
+    shortLabel lung M 144GM
+    longLabel GTEx RNA signal from male Lung (GTEX-144GM-0126-SM-5Q5AX)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-0126-SM-5Q5AX \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.9 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalLungSRR1370216
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1370216.hg19.bigWig
+    shortLabel lung M 12WSE
+    longLabel GTEx RNA signal from male Lung (GTEX-12WSE-0826-SM-5S2VL)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-12WSE age=20 sex=M hardyScore=2 sample=GTEX-12WSE-0826-SM-5S2VL \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.9 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalLungSRR1376694
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1376694.hg19.bigWig
+    shortLabel lung M ZUA1
+    longLabel GTEx RNA signal from male Lung (GTEX-ZUA1-1026-SM-4YCEA)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-1026-SM-4YCEA \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.1 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalLungSRR1384115
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1384115.hg19.bigWig
+    shortLabel lung M ZPU1
+    longLabel GTEx RNA signal from male Lung (GTEX-ZPU1-0926-SM-57WDO)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0926-SM-57WDO \
+            tissue=lung autolysisScore=0 rnaIntegrity=6.7 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalLungSRR1389084
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1389084.hg19.bigWig
+    shortLabel lung M PVOW
+    longLabel GTEx RNA signal from male Lung (GTEX-PVOW-1026-SM-5O9B9)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1395595
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1395595.hg19.bigWig
+    shortLabel lung M ZYT6
+    longLabel GTEx RNA signal from male Lung (GTEX-ZYT6-0526-SM-5GIEA)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0526-SM-5GIEA \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.8 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLungSRR1400955
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1400955.hg19.bigWig
+    shortLabel lung M WH7G
+    longLabel GTEx RNA signal from male Lung (GTEX-WH7G-0726-SM-5EGIX)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1401101
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1401101.hg19.bigWig
+    shortLabel lung M WH7G
+    longLabel GTEx RNA signal from male Lung (GTEX-WH7G-0726-SM-5EQ6C)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1405504
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1405504.hg19.bigWig
+    shortLabel lung M PLZ6
+    longLabel GTEx RNA signal from male Lung (GTEX-PLZ6-0426-SM-5IJDW)
+    subGroups sex=M age=a30 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1409813
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1409813.hg19.bigWig
+    shortLabel lung M 145MN
+    longLabel GTEx RNA signal from male Lung (GTEX-145MN-0926-SM-5NQBT)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-0926-SM-5NQBT \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1411070
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1411070.hg19.bigWig
+    shortLabel lung M 1339X
+    longLabel GTEx RNA signal from male Lung (GTEX-1339X-0626-SM-5IJER)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-1339X age=40 sex=M hardyScore=0 sample=GTEX-1339X-0626-SM-5IJER \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.6 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalLungSRR1417680
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1417680.hg19.bigWig
+    shortLabel lung M 11LCK
+    longLabel GTEx RNA signal from male Lung (GTEX-11LCK-0426-SM-5A5M8)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0426-SM-5A5M8 \
+            tissue=lung autolysisScore=1 rnaIntegrity=9.1 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalLungSRR1433027
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1433027.hg19.bigWig
+    shortLabel lung M 145LT
+    longLabel GTEx RNA signal from male Lung (GTEX-145LT-0326-SM-5LUAD)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-145LT age=40 sex=M hardyScore=0 sample=GTEX-145LT-0326-SM-5LUAD \
+            tissue=lung autolysisScore=1 rnaIntegrity=8 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLungSRR1434048
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1434048.hg19.bigWig
+    shortLabel lung M ZA64
+    longLabel GTEx RNA signal from male Lung (GTEX-ZA64-0326-SM-5HL8T)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-0326-SM-5HL8T \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.9 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLungSRR1434332
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1434332.hg19.bigWig
+    shortLabel lung M 11EQ9
+    longLabel GTEx RNA signal from male Lung (GTEX-11EQ9-0226-SM-5A5JX)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0226-SM-5A5JX \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.3 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLungSRR1434821
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1434821.hg19.bigWig
+    shortLabel lung M YB5E
+    longLabel GTEx RNA signal from male Lung (GTEX-YB5E-0726-SM-4VDSH)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0726-SM-4VDSH \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.7 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalLungSRR1441826
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1441826.hg19.bigWig
+    shortLabel lung M ZT9X
+    longLabel GTEx RNA signal from male Lung (GTEX-ZT9X-0326-SM-51MTE)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-0326-SM-51MTE \
+            tissue=lung autolysisScore=1 rnaIntegrity=9.6 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalLungSRR1442862
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1442862.hg19.bigWig
+    shortLabel lung M 11NSD
+    longLabel GTEx RNA signal from male Lung (GTEX-11NSD-0326-SM-5A5LS)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0326-SM-5A5LS \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalLungSRR1443677
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1443677.hg19.bigWig
+    shortLabel lung M 13NYB
+    longLabel GTEx RNA signal from male Lung (GTEX-13NYB-0626-SM-5MR47)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0626-SM-5MR47 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.5 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1471200
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1471200.hg19.bigWig
+    shortLabel lung M 11P7K
+    longLabel GTEx RNA signal from male Lung (GTEX-11P7K-0326-SM-59871)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0326-SM-59871 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1476927
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1476927.hg19.bigWig
+    shortLabel lung M U3ZM
+    longLabel GTEx RNA signal from male Lung (GTEX-U3ZM-0426-SM-57WG1)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1480697
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1480697.hg19.bigWig
+    shortLabel lung M 14A6H
+    longLabel GTEx RNA signal from male Lung (GTEX-14A6H-0526-SM-5NQAZ)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-14A6H age=30 sex=M hardyScore=0 sample=GTEX-14A6H-0526-SM-5NQAZ \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.9 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1489416
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1489416.hg19.bigWig
+    shortLabel lung M U3ZM
+    longLabel GTEx RNA signal from male Lung (GTEX-U3ZM-0426-SM-59HKR)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR598484
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR598484.hg19.bigWig
+    shortLabel lung M PW2O
+    longLabel GTEx RNA signal from male Lung (GTEX-PW2O-0526-SM-2I3DX)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-0526-SM-2I3DX \
+            tissue=lung autolysisScore=2 rnaIntegrity=8.3 batch=BP-19458 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalLungSRR602058
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR602058.hg19.bigWig
+    shortLabel lung M OOBK
+    longLabel GTEx RNA signal from male Lung (GTEX-OOBK-0526-SM-2HMJJ)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-0526-SM-2HMJJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-18256 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalLungSRR603188
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR603188.hg19.bigWig
+    shortLabel lung M Q2AH
+    longLabel GTEx RNA signal from male Lung (GTEX-Q2AH-0426-SM-2I3EP)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0426-SM-2I3EP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-19904 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2011
+
+    track gtexRnaSignalLungSRR603750
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR603750.hg19.bigWig
+    shortLabel lung M NPJ8
+    longLabel GTEx RNA signal from male Lung (GTEX-NPJ8-0326-SM-2D7VV)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-0326-SM-2D7VV \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-17314 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalLungSRR607166
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR607166.hg19.bigWig
+    shortLabel lung M NFK9
+    longLabel GTEx RNA signal from male Lung (GTEX-NFK9-1026-SM-2HMK1)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-1026-SM-2HMK1 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.6 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalLungSRR627445
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR627445.hg19.bigWig
+    shortLabel lung M NPJ8
+    longLabel GTEx RNA signal from male Lung (GTEX-NPJ8-0326-SM-26GMG)
+    subGroups sex=M age=a40 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR655625
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR655625.hg19.bigWig
+    shortLabel lung M S4Q7
+    longLabel GTEx RNA signal from male Lung (GTEX-S4Q7-0426-SM-3K2BJ)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0426-SM-3K2BJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-23024 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/12/2012
+
+    track gtexRnaSignalLungSRR656874
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR656874.hg19.bigWig
+    shortLabel lung M WFON
+    longLabel GTEx RNA signal from male Lung (GTEX-WFON-0426-SM-3GIL4)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0426-SM-3GIL4 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-27449 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalLungSRR656934
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR656934.hg19.bigWig
+    shortLabel lung M S33H
+    longLabel GTEx RNA signal from male Lung (GTEX-S33H-0626-SM-2XCBJ)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-S33H age=30 sex=M hardyScore=2 sample=GTEX-S33H-0626-SM-2XCBJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-22611 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalLungSRR660800
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR660800.hg19.bigWig
+    shortLabel lung M WFJO
+    longLabel GTEx RNA signal from male Lung (GTEX-WFJO-0326-SM-3GIL3)
+    subGroups sex=M age=a30 
+    color 167,243,12
+    metadata donor=GTEX-WFJO age=30 sex=M hardyScore=0 sample=GTEX-WFJO-0326-SM-3GIL3 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-27442 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalLungSRR662031
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR662031.hg19.bigWig
+    shortLabel lung M T5JC
+    longLabel GTEx RNA signal from male Lung (GTEX-T5JC-0826-SM-32PMC)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0826-SM-32PMC \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.2 batch=BP-24678 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalLungSRR665466
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR665466.hg19.bigWig
+    shortLabel lung M WFG8
+    longLabel GTEx RNA signal from male Lung (GTEX-WFG8-0926-SM-3GIKJ)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0926-SM-3GIKJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-27324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalLungSRR810461
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR810461.hg19.bigWig
+    shortLabel lung M WOFM
+    longLabel GTEx RNA signal from male Lung (GTEX-WOFM-0126-SM-3MJFE)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-0126-SM-3MJFE \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-28355 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/31/2012
+
+    track gtexRnaSignalLungSRR818499
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR818499.hg19.bigWig
+    shortLabel lung M WZTO
+    longLabel GTEx RNA signal from male Lung (GTEX-WZTO-0426-SM-3NM99)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-0426-SM-3NM99 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-29770 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/20/2012
+
+    track gtexRnaSignalLungSRR819186
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR819186.hg19.bigWig
+    shortLabel lung M OIZI
+    longLabel GTEx RNA signal from male Lung (GTEX-OIZI-1026-SM-3NB1K)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-1026-SM-3NB1K \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-18178 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/11/2011
+
+    track gtexRnaSignalLungSRR819658
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR819658.hg19.bigWig
+    shortLabel lung M WH7G
+    longLabel GTEx RNA signal from male Lung (GTEX-WH7G-0726-SM-3NMBM)
+    subGroups sex=M age=a40 
+    color 167,243,12
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-0726-SM-3NMBM \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.7 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalLungSRR821525
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR821525.hg19.bigWig
+    shortLabel lung M O5YT
+    longLabel GTEx RNA signal from male Lung (GTEX-O5YT-0526-SM-32PK8)
+    subGroups sex=M age=a20 
+    color 167,243,12
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-0526-SM-32PK8 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.9 batch=BP-17532 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalLungSRR1072150
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1072150.hg19.bigWig
+    shortLabel lung M XQ8I
+    longLabel GTEx RNA signal from male Lung (GTEX-XQ8I-1126-SM-4BOO2)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-1126-SM-4BOO2 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.1 batch=BP-34317 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2012
+
+    track gtexRnaSignalLungSRR1074769
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1074769.hg19.bigWig
+    shortLabel lung M XGQ4
+    longLabel GTEx RNA signal from male Lung (GTEX-XGQ4-0826-SM-4AT4T)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0826-SM-4AT4T \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.6 batch=BP-32102 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2012
+
+    track gtexRnaSignalLungSRR1081283
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1081283.hg19.bigWig
+    shortLabel lung M QDVN
+    longLabel GTEx RNA signal from male Lung (GTEX-QDVN-0726-SM-4B64L)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-0726-SM-4B64L \
+            tissue=lung autolysisScore=2 rnaIntegrity=8.1 batch=BP-20293 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalLungSRR1084766
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1084766.hg19.bigWig
+    shortLabel lung M XXEK
+    longLabel GTEx RNA signal from male Lung (GTEX-XXEK-0626-SM-4BRWE)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-0626-SM-4BRWE \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-34437 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalLungSRR1091670
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1091670.hg19.bigWig
+    shortLabel lung M XPVG
+    longLabel GTEx RNA signal from male Lung (GTEX-XPVG-1026-SM-4B64Y)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-1026-SM-4B64Y \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.9 batch=BP-33866 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/04/2012
+
+    track gtexRnaSignalLungSRR1095695
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1095695.hg19.bigWig
+    shortLabel lung M X585
+    longLabel GTEx RNA signal from male Lung (GTEX-X585-1026-SM-46MW6)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-1026-SM-46MW6 \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.1 batch=BP-31241 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/18/2012
+
+    track gtexRnaSignalLungSRR1308504
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1308504.hg19.bigWig
+    shortLabel lung M 117YW
+    longLabel GTEx RNA signal from male Lung (GTEX-117YW-0526-SM-5H11C)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-0526-SM-5H11C \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.2 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalLungSRR1310520
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1310520.hg19.bigWig
+    shortLabel lung M 111CU
+    longLabel GTEx RNA signal from male Lung (GTEX-111CU-0326-SM-5GZXO)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-0326-SM-5GZXO \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.6 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalLungSRR1318118
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1318118.hg19.bigWig
+    shortLabel lung M 13O3P
+    longLabel GTEx RNA signal from male Lung (GTEX-13O3P-1026-SM-5N9E7)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-1026-SM-5N9E7 \
+            tissue=lung autolysisScore=1 rnaIntegrity=5.7 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1322595
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1322595.hg19.bigWig
+    shortLabel lung M 12WSI
+    longLabel GTEx RNA signal from male Lung (GTEX-12WSI-0826-SM-5EGKD)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-12WSI age=50 sex=M hardyScore=2 sample=GTEX-12WSI-0826-SM-5EGKD \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.2 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1323382
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1323382.hg19.bigWig
+    shortLabel lung M 117YX
+    longLabel GTEx RNA signal from male Lung (GTEX-117YX-1326-SM-5H125)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-1326-SM-5H125 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1324250
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1324250.hg19.bigWig
+    shortLabel lung M 11DXZ
+    longLabel GTEx RNA signal from male Lung (GTEX-11DXZ-0726-SM-5N9C4)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11DXZ age=50 sex=M hardyScore=0 sample=GTEX-11DXZ-0726-SM-5N9C4 \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.8 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalLungSRR1325888
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1325888.hg19.bigWig
+    shortLabel lung M 13NZ9
+    longLabel GTEx RNA signal from male Lung (GTEX-13NZ9-0926-SM-5KM12)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-0926-SM-5KM12 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.6 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1326752
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1326752.hg19.bigWig
+    shortLabel lung M 13QJ3
+    longLabel GTEx RNA signal from male Lung (GTEX-13QJ3-1026-SM-5QGQU)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13QJ3 age=50 sex=M hardyScore=0 sample=GTEX-13QJ3-1026-SM-5QGQU \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.6 batch=BP-48448 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalLungSRR1335422
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1335422.hg19.bigWig
+    shortLabel lung M 145LU
+    longLabel GTEx RNA signal from male Lung (GTEX-145LU-0526-SM-5O9AT)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0526-SM-5O9AT \
+            tissue=lung autolysisScore=2 rnaIntegrity=7 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalLungSRR1335513
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1335513.hg19.bigWig
+    shortLabel lung M 12WSL
+    longLabel GTEx RNA signal from male Lung (GTEX-12WSL-1026-SM-5CVNJ)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-1026-SM-5CVNJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.3 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLungSRR1347020
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1347020.hg19.bigWig
+    shortLabel lung M 11DZ1
+    longLabel GTEx RNA signal from male Lung (GTEX-11DZ1-0426-SM-5H11A)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11DZ1 age=50 sex=M hardyScore=4 sample=GTEX-11DZ1-0426-SM-5H11A \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.4 batch=BP-43783 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalLungSRR1356805
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1356805.hg19.bigWig
+    shortLabel lung M 13111
+    longLabel GTEx RNA signal from male Lung (GTEX-13111-0426-SM-5DUXR)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0426-SM-5DUXR \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLungSRR1359469
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1359469.hg19.bigWig
+    shortLabel lung M 13O3Q
+    longLabel GTEx RNA signal from male Lung (GTEX-13O3Q-0526-SM-5KM18)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-0526-SM-5KM18 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.6 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1359609
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1359609.hg19.bigWig
+    shortLabel lung M 131XH
+    longLabel GTEx RNA signal from male Lung (GTEX-131XH-0426-SM-5DUWU)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-131XH age=50 sex=M hardyScore=2 sample=GTEX-131XH-0426-SM-5DUWU \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalLungSRR1361345
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1361345.hg19.bigWig
+    shortLabel lung M 11WQK
+    longLabel GTEx RNA signal from male Lung (GTEX-11WQK-1226-SM-5GU5Z)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-1226-SM-5GU5Z \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.5 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalLungSRR1364658
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1364658.hg19.bigWig
+    shortLabel lung M 13OVL
+    longLabel GTEx RNA signal from male Lung (GTEX-13OVL-0626-SM-5KM13)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-0626-SM-5KM13 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.2 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalLungSRR1376316
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1376316.hg19.bigWig
+    shortLabel lung M 13FLV
+    longLabel GTEx RNA signal from male Lung (GTEX-13FLV-0426-SM-5KLZA)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13FLV age=50 sex=M hardyScore=2 sample=GTEX-13FLV-0426-SM-5KLZA \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.7 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1376676
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1376676.hg19.bigWig
+    shortLabel lung M 13VXU
+    longLabel GTEx RNA signal from male Lung (GTEX-13VXU-2726-SM-5LU4N)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-2726-SM-5LU4N \
+            tissue=lung autolysisScore=1 rnaIntegrity=6 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalLungSRR1379089
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1379089.hg19.bigWig
+    shortLabel lung M WHSB
+    longLabel GTEx RNA signal from male Lung (GTEX-WHSB-0326-SM-5GICB)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1381161
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1381161.hg19.bigWig
+    shortLabel lung M 144GN
+    longLabel GTEx RNA signal from male Lung (GTEX-144GN-0426-SM-5O9AP)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-0426-SM-5O9AP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.9 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalLungSRR1382756
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1382756.hg19.bigWig
+    shortLabel lung M ZEX8
+    longLabel GTEx RNA signal from male Lung (GTEX-ZEX8-0526-SM-4WKH5)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1390477
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1390477.hg19.bigWig
+    shortLabel lung M WHSB
+    longLabel GTEx RNA signal from male Lung (GTEX-WHSB-0326-SM-5FQSD)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-0326-SM-5FQSD \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-27512 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalLungSRR1391724
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1391724.hg19.bigWig
+    shortLabel lung M ZTTD
+    longLabel GTEx RNA signal from male Lung (GTEX-ZTTD-1126-SM-51MRP)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZTTD age=50 sex=M hardyScore=3 sample=GTEX-ZTTD-1126-SM-51MRP \
+            tissue=lung autolysisScore=1 rnaIntegrity=8 batch=BP-43141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalLungSRR1408136
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1408136.hg19.bigWig
+    shortLabel lung M UPJH
+    longLabel GTEx RNA signal from male Lung (GTEX-UPJH-0826-SM-4WKFD)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1414934
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1414934.hg19.bigWig
+    shortLabel lung M 147F4
+    longLabel GTEx RNA signal from male Lung (GTEX-147F4-0926-SM-5Q5EO)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-0926-SM-5Q5EO \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalLungSRR1414958
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1414958.hg19.bigWig
+    shortLabel lung M 145MH
+    longLabel GTEx RNA signal from male Lung (GTEX-145MH-0626-SM-5NQAK)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0626-SM-5NQAK \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.8 batch=BP-47696 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1415463
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1415463.hg19.bigWig
+    shortLabel lung M WVJS
+    longLabel GTEx RNA signal from male Lung (GTEX-WVJS-0826-SM-4MVNR)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-WVJS age=50 sex=M hardyScore=0 sample=GTEX-WVJS-0826-SM-4MVNR \
+            tissue=lung autolysisScore=2 rnaIntegrity=6 batch=BP-28775 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalLungSRR1416226
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1416226.hg19.bigWig
+    shortLabel lung M 131XE
+    longLabel GTEx RNA signal from male Lung (GTEX-131XE-0726-SM-5HL9K)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0726-SM-5HL9K \
+            tissue=lung autolysisScore=1 rnaIntegrity=5.9 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalLungSRR1419869
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1419869.hg19.bigWig
+    shortLabel lung M XBEC
+    longLabel GTEx RNA signal from male Lung (GTEX-XBEC-1026-SM-4QASM)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-XBEC age=50 sex=M hardyScore=2 sample=GTEX-XBEC-1026-SM-4QASM \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.1 batch=BP-36349 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/21/2013
+
+    track gtexRnaSignalLungSRR1432430
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1432430.hg19.bigWig
+    shortLabel lung M ZZPT
+    longLabel GTEx RNA signal from male Lung (GTEX-ZZPT-1326-SM-5E43H)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZZPT age=50 sex=M hardyScore=4 sample=GTEX-ZZPT-1326-SM-5E43H \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.2 batch=BP-43495 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1442231
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1442231.hg19.bigWig
+    shortLabel lung M 13OW6
+    longLabel GTEx RNA signal from male Lung (GTEX-13OW6-0826-SM-5L3GA)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0826-SM-5L3GA \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalLungSRR1448051
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1448051.hg19.bigWig
+    shortLabel lung M SIU8
+    longLabel GTEx RNA signal from male Lung (GTEX-SIU8-0926-SM-5SI87)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-SIU8 age=50 sex=M hardyScore=2 sample=GTEX-SIU8-0926-SM-5SI87 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.1 batch=BP-23698 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalLungSRR1451988
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1451988.hg19.bigWig
+    shortLabel lung M ZAB5
+    longLabel GTEx RNA signal from male Lung (GTEX-ZAB5-0626-SM-5PNVB)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0626-SM-5PNVB \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.4 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalLungSRR1453971
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1453971.hg19.bigWig
+    shortLabel lung M 11NUK
+    longLabel GTEx RNA signal from male Lung (GTEX-11NUK-0826-SM-5HL4U)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-0826-SM-5HL4U \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalLungSRR1458447
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1458447.hg19.bigWig
+    shortLabel lung M 13O21
+    longLabel GTEx RNA signal from male Lung (GTEX-13O21-3026-SM-5J2NI)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-3026-SM-5J2NI \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.2 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1459055
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1459055.hg19.bigWig
+    shortLabel lung M 12WSH
+    longLabel GTEx RNA signal from male Lung (GTEX-12WSH-0126-SM-5GCO3)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1466889
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1466889.hg19.bigWig
+    shortLabel lung M ZDYS
+    longLabel GTEx RNA signal from male Lung (GTEX-ZDYS-0426-SM-5IJEQ)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-0426-SM-5IJEQ \
+            tissue=lung autolysisScore=0 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalLungSRR1471098
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1471098.hg19.bigWig
+    shortLabel lung M 11PRG
+    longLabel GTEx RNA signal from male Lung (GTEX-11PRG-0926-SM-5EGI8)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-11PRG age=50 sex=M hardyScore=2 sample=GTEX-11PRG-0926-SM-5EGI8 \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-45028 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalLungSRR1475546
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1475546.hg19.bigWig
+    shortLabel lung M 14DAR
+    longLabel GTEx RNA signal from male Lung (GTEX-14DAR-0226-SM-5S2PR)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-0226-SM-5S2PR \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalLungSRR1476719
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1476719.hg19.bigWig
+    shortLabel lung M 13PVQ
+    longLabel GTEx RNA signal from male Lung (GTEX-13PVQ-0926-SM-5IJFD)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0926-SM-5IJFD \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.5 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1478015
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1478015.hg19.bigWig
+    shortLabel lung M 139T6
+    longLabel GTEx RNA signal from male Lung (GTEX-139T6-0426-SM-5IJEM)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-139T6 age=50 sex=M hardyScore=0 sample=GTEX-139T6-0426-SM-5IJEM \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1481279
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1481279.hg19.bigWig
+    shortLabel lung M 13FHP
+    longLabel GTEx RNA signal from male Lung (GTEX-13FHP-0726-SM-5K7YI)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0726-SM-5K7YI \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.7 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1489995
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1489995.hg19.bigWig
+    shortLabel lung M ZT9W
+    longLabel GTEx RNA signal from male Lung (GTEX-ZT9W-0726-SM-4YCDC)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0726-SM-4YCDC \
+            tissue=lung autolysisScore=2 rnaIntegrity=8.1 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalLungSRR1498813
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1498813.hg19.bigWig
+    shortLabel lung M Y3I4
+    longLabel GTEx RNA signal from male Lung (GTEX-Y3I4-0426-SM-4TT29)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR599059
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR599059.hg19.bigWig
+    shortLabel lung M OIZG
+    longLabel GTEx RNA signal from male Lung (GTEX-OIZG-0526-SM-2HMLF)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-OIZG age=50 sex=M hardyScore=0 sample=GTEX-OIZG-0526-SM-2HMLF \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-18122 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/09/2011
+
+    track gtexRnaSignalLungSRR603092
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR603092.hg19.bigWig
+    shortLabel lung M QDVN
+    longLabel GTEx RNA signal from male Lung (GTEX-QDVN-0726-SM-2I3FO)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR607586
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR607586.hg19.bigWig
+    shortLabel lung M OXRL
+    longLabel GTEx RNA signal from male Lung (GTEX-OXRL-0526-SM-2I3EZ)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-OXRL age=50 sex=M hardyScore=0 sample=GTEX-OXRL-0526-SM-2I3EZ \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-18390 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalLungSRR607863
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR607863.hg19.bigWig
+    shortLabel lung M OIZH
+    longLabel GTEx RNA signal from male Lung (GTEX-OIZH-0526-SM-2HMKV)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-0526-SM-2HMKV \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-18147 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalLungSRR612239
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR612239.hg19.bigWig
+    shortLabel lung M QV44
+    longLabel GTEx RNA signal from male Lung (GTEX-QV44-0926-SM-2S1RH)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-0926-SM-2S1RH \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-20868 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/15/2011
+
+    track gtexRnaSignalLungSRR613138
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR613138.hg19.bigWig
+    shortLabel lung M RM2N
+    longLabel GTEx RNA signal from male Lung (GTEX-RM2N-0426-SM-2TF4T)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0426-SM-2TF4T \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-21548 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalLungSRR613414
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR613414.hg19.bigWig
+    shortLabel lung M RUSQ
+    longLabel GTEx RNA signal from male Lung (GTEX-RUSQ-0626-SM-2TF5V)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-RUSQ age=50 sex=M hardyScore=0 sample=GTEX-RUSQ-0626-SM-2TF5V \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-21930 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/30/2012
+
+    track gtexRnaSignalLungSRR614359
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR614359.hg19.bigWig
+    shortLabel lung M RN64
+    longLabel GTEx RNA signal from male Lung (GTEX-RN64-1226-SM-2TC6E)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-1226-SM-2TC6E \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.6 batch=BP-21626 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/20/2012
+
+    track gtexRnaSignalLungSRR614936
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR614936.hg19.bigWig
+    shortLabel lung M OHPM
+    longLabel GTEx RNA signal from male Lung (GTEX-OHPM-0526-SM-2YUMJ)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-OHPM age=50 sex=M hardyScore=0 sample=GTEX-OHPM-0526-SM-2YUMJ \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-17841 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/22/2011
+
+    track gtexRnaSignalLungSRR615129
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR615129.hg19.bigWig
+    shortLabel lung M QXCU
+    longLabel GTEx RNA signal from male Lung (GTEX-QXCU-0626-SM-2TC69)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0626-SM-2TC69 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-21102 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/29/2011
+
+    track gtexRnaSignalLungSRR615189
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR615189.hg19.bigWig
+    shortLabel lung M PSDG
+    longLabel GTEx RNA signal from male Lung (GTEX-PSDG-1126-SM-2S1ON)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-PSDG age=50 sex=M hardyScore=0 sample=GTEX-PSDG-1126-SM-2S1ON \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-19412 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/17/2011
+
+    track gtexRnaSignalLungSRR615551
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR615551.hg19.bigWig
+    shortLabel lung M O5YW
+    longLabel GTEx RNA signal from male Lung (GTEX-O5YW-0526-SM-2YUMX)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-O5YW age=50 sex=M hardyScore=0 sample=GTEX-O5YW-0526-SM-2YUMX \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.8 batch=BP-17669 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/18/2011
+
+    track gtexRnaSignalLungSRR654814
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR654814.hg19.bigWig
+    shortLabel lung M SIU8
+    longLabel GTEx RNA signal from male Lung (GTEX-SIU8-0926-SM-2XCDO)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR657880
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR657880.hg19.bigWig
+    shortLabel lung M R55D
+    longLabel GTEx RNA signal from male Lung (GTEX-R55D-0926-SM-3GAEU)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-R55D age=50 sex=M hardyScore=0 sample=GTEX-R55D-0926-SM-3GAEU \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-21289 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2012
+
+    track gtexRnaSignalLungSRR662162
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR662162.hg19.bigWig
+    shortLabel lung M T6MN
+    longLabel GTEx RNA signal from male Lung (GTEX-T6MN-0826-SM-32PM4)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0826-SM-32PM4 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.4 batch=BP-24680 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalLungSRR808472
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR808472.hg19.bigWig
+    shortLabel lung M WHPG
+    longLabel GTEx RNA signal from male Lung (GTEX-WHPG-1426-SM-3NMBB)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-1426-SM-3NMBB \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-30217 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2012
+
+    track gtexRnaSignalLungSRR809065
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR809065.hg19.bigWig
+    shortLabel lung M SIU7
+    longLabel GTEx RNA signal from male Lung (GTEX-SIU7-0526-SM-3NM8I)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-0526-SM-3NM8I \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.7 batch=BP-23387 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalLungSRR811121
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR811121.hg19.bigWig
+    shortLabel lung M QMRM
+    longLabel GTEx RNA signal from male Lung (GTEX-QMRM-0826-SM-3NB33)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-0826-SM-3NB33 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-29826 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalLungSRR813043
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR813043.hg19.bigWig
+    shortLabel lung M WHSB
+    longLabel GTEx RNA signal from male Lung (GTEX-WHSB-0326-SM-3LK6K)
+    subGroups sex=M age=a50 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR814703
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR814703.hg19.bigWig
+    shortLabel lung M WY7C
+    longLabel GTEx RNA signal from male Lung (GTEX-WY7C-0426-SM-3NB3C)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-WY7C age=50 sex=M hardyScore=0 sample=GTEX-WY7C-0426-SM-3NB3C \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.5 batch=BP-29321 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2012
+
+    track gtexRnaSignalLungSRR817166
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR817166.hg19.bigWig
+    shortLabel lung M V1D1
+    longLabel GTEx RNA signal from male Lung (GTEX-V1D1-0826-SM-3P5ZA)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0826-SM-3P5ZA \
+            tissue=lung autolysisScore=3 rnaIntegrity=6 batch=BP-26699 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalLungSRR817488
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR817488.hg19.bigWig
+    shortLabel lung M X4LF
+    longLabel GTEx RNA signal from male Lung (GTEX-X4LF-0526-SM-3NMB6)
+    subGroups sex=M age=a50 
+    color 167,243,12
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0526-SM-3NMB6 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.2 batch=BP-30712 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalLungSRR1086728
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1086728.hg19.bigWig
+    shortLabel lung M OOBJ
+    longLabel GTEx RNA signal from male Lung (GTEX-OOBJ-0526-SM-48TDK)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0526-SM-48TDK \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.7 batch=BP-29323 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2012
+
+    track gtexRnaSignalLungSRR1098785
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1098785.hg19.bigWig
+    shortLabel lung M XBED
+    longLabel GTEx RNA signal from male Lung (GTEX-XBED-0826-SM-47JYC)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-0826-SM-47JYC \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.9 batch=BP-31551 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalLungSRR1309468
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1309468.hg19.bigWig
+    shortLabel lung M 11EI6
+    longLabel GTEx RNA signal from male Lung (GTEX-11EI6-0826-SM-5985V)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0826-SM-5985V \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1310975
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1310975.hg19.bigWig
+    shortLabel lung M 111YS
+    longLabel GTEx RNA signal from male Lung (GTEX-111YS-0626-SM-5GZXV)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-0626-SM-5GZXV \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.1 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1321528
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1321528.hg19.bigWig
+    shortLabel lung M 145MO
+    longLabel GTEx RNA signal from male Lung (GTEX-145MO-1326-SM-5Q5EF)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-1326-SM-5Q5EF \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.5 batch=BP-48068 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalLungSRR1323723
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1323723.hg19.bigWig
+    shortLabel lung M 131XF
+    longLabel GTEx RNA signal from male Lung (GTEX-131XF-1026-SM-5BC6A)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-1026-SM-5BC6A \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.9 batch=BP-43916 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/24/2013
+
+    track gtexRnaSignalLungSRR1326384
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1326384.hg19.bigWig
+    shortLabel lung M X4XX
+    longLabel GTEx RNA signal from male Lung (GTEX-X4XX-1026-SM-4QARO)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-1026-SM-4QARO \
+            tissue=lung autolysisScore=1 rnaIntegrity=5.8 batch=BP-30732 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalLungSRR1333659
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1333659.hg19.bigWig
+    shortLabel lung M 13N2G
+    longLabel GTEx RNA signal from male Lung (GTEX-13N2G-0826-SM-5IJE6)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0826-SM-5IJE6 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1334074
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1334074.hg19.bigWig
+    shortLabel lung M 1497J
+    longLabel GTEx RNA signal from male Lung (GTEX-1497J-0326-SM-5Q5CN)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-0326-SM-5Q5CN \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.1 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalLungSRR1334490
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1334490.hg19.bigWig
+    shortLabel lung M 111FC
+    longLabel GTEx RNA signal from male Lung (GTEX-111FC-1126-SM-5GZWU)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-1126-SM-5GZWU \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.2 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalLungSRR1335670
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1335670.hg19.bigWig
+    shortLabel lung M 13JVG
+    longLabel GTEx RNA signal from male Lung (GTEX-13JVG-1426-SM-5MR4W)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-1426-SM-5MR4W \
+            tissue=lung autolysisScore=1 rnaIntegrity=5.8 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1336636
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1336636.hg19.bigWig
+    shortLabel lung M ZF28
+    longLabel GTEx RNA signal from male Lung (GTEX-ZF28-0726-SM-4WKFU)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1337624
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1337624.hg19.bigWig
+    shortLabel lung M 12BJ1
+    longLabel GTEx RNA signal from male Lung (GTEX-12BJ1-1026-SM-5EGJA)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-1026-SM-5EGJA \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.8 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalLungSRR1347795
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1347795.hg19.bigWig
+    shortLabel lung M YECK
+    longLabel GTEx RNA signal from male Lung (GTEX-YECK-0926-SM-4W214)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-YECK age=60 sex=M hardyScore=3 sample=GTEX-YECK-0926-SM-4W214 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.6 batch=BP-41767 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalLungSRR1352391
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1352391.hg19.bigWig
+    shortLabel lung M 13RTJ
+    longLabel GTEx RNA signal from male Lung (GTEX-13RTJ-1126-SM-5S2UJ)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-1126-SM-5S2UJ \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.8 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1355578
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1355578.hg19.bigWig
+    shortLabel lung M 144GO
+    longLabel GTEx RNA signal from male Lung (GTEX-144GO-0226-SM-5LUB1)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-144GO age=60 sex=M hardyScore=4 sample=GTEX-144GO-0226-SM-5LUB1 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.8 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLungSRR1357210
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1357210.hg19.bigWig
+    shortLabel lung M ZDXO
+    longLabel GTEx RNA signal from male Lung (GTEX-ZDXO-1326-SM-57WBS)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZDXO age=60 sex=M hardyScore=2 sample=GTEX-ZDXO-1326-SM-57WBS \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.7 batch=BP-42743 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/27/2013
+
+    track gtexRnaSignalLungSRR1362713
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1362713.hg19.bigWig
+    shortLabel lung M 13OVH
+    longLabel GTEx RNA signal from male Lung (GTEX-13OVH-1026-SM-5J2NP)
+    subGroups sex=M age=a70 
+    color 167,243,12
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-1026-SM-5J2NP \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.5 batch=BP-46999 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1365808
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1365808.hg19.bigWig
+    shortLabel lung M 11NV4
+    longLabel GTEx RNA signal from male Lung (GTEX-11NV4-1126-SM-5HL6J)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-1126-SM-5HL6J \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.1 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalLungSRR1368754
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1368754.hg19.bigWig
+    shortLabel lung M 13NYS
+    longLabel GTEx RNA signal from male Lung (GTEX-13NYS-1626-SM-5J2MU)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-1626-SM-5J2MU \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.9 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1374567
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1374567.hg19.bigWig
+    shortLabel lung M 13FHO
+    longLabel GTEx RNA signal from male Lung (GTEX-13FHO-1026-SM-5KM1Q)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13FHO age=60 sex=M hardyScore=0 sample=GTEX-13FHO-1026-SM-5KM1Q \
+            tissue=lung autolysisScore=1 rnaIntegrity=6 batch=BP-46680 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1374696
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1374696.hg19.bigWig
+    shortLabel lung M 147JS
+    longLabel GTEx RNA signal from male Lung (GTEX-147JS-1226-SM-5RQK4)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-147JS age=60 sex=M hardyScore=2 sample=GTEX-147JS-1226-SM-5RQK4 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.7 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1375738
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1375738.hg19.bigWig
+    shortLabel lung M POYW
+    longLabel GTEx RNA signal from male Lung (GTEX-POYW-1226-SM-5LZWQ)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1381934
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1381934.hg19.bigWig
+    shortLabel lung M 13NZA
+    longLabel GTEx RNA signal from male Lung (GTEX-13NZA-1426-SM-5KM4Y)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13NZA age=60 sex=M hardyScore=2 sample=GTEX-13NZA-1426-SM-5KM4Y \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.5 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1387769
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1387769.hg19.bigWig
+    shortLabel lung M POYW
+    longLabel GTEx RNA signal from male Lung (GTEX-POYW-1226-SM-5LU5O)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1395699
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1395699.hg19.bigWig
+    shortLabel lung M 12ZZY
+    longLabel GTEx RNA signal from male Lung (GTEX-12ZZY-0926-SM-5EQ6I)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-0926-SM-5EQ6I \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.8 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1406539
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1406539.hg19.bigWig
+    shortLabel lung M 13YAN
+    longLabel GTEx RNA signal from male Lung (GTEX-13YAN-1026-SM-5O9CF)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-1026-SM-5O9CF \
+            tissue=lung autolysisScore=2 rnaIntegrity=7.6 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalLungSRR1409193
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1409193.hg19.bigWig
+    shortLabel lung M 132NY
+    longLabel GTEx RNA signal from male Lung (GTEX-132NY-1226-SM-5PNVF)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-1226-SM-5PNVF \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalLungSRR1414578
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1414578.hg19.bigWig
+    shortLabel lung M 148VJ
+    longLabel GTEx RNA signal from male Lung (GTEX-148VJ-0826-SM-5LU8V)
+    subGroups sex=M age=a70 
+    color 167,243,12
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0826-SM-5LU8V \
+            tissue=lung autolysisScore=1 rnaIntegrity=7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalLungSRR1421010
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1421010.hg19.bigWig
+    shortLabel lung M ZDTS
+    longLabel GTEx RNA signal from male Lung (GTEX-ZDTS-1026-SM-4WAXS)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR1429203
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1429203.hg19.bigWig
+    shortLabel lung M 14E7W
+    longLabel GTEx RNA signal from male Lung (GTEX-14E7W-1326-SM-5RQIV)
+    subGroups sex=M age=a70 
+    color 167,243,12
+    metadata donor=GTEX-14E7W age=70 sex=M hardyScore=2 sample=GTEX-14E7W-1326-SM-5RQIV \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.6 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalLungSRR1433841
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1433841.hg19.bigWig
+    shortLabel lung M 13OW8
+    longLabel GTEx RNA signal from male Lung (GTEX-13OW8-1726-SM-5L3GO)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-1726-SM-5L3GO \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.6 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalLungSRR1434671
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1434671.hg19.bigWig
+    shortLabel lung M 13O61
+    longLabel GTEx RNA signal from male Lung (GTEX-13O61-0726-SM-5J2MD)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13O61 age=60 sex=M hardyScore=0 sample=GTEX-13O61-0726-SM-5J2MD \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.4 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalLungSRR1436674
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1436674.hg19.bigWig
+    shortLabel lung M 1212Z
+    longLabel GTEx RNA signal from male Lung (GTEX-1212Z-1026-SM-5EGJ8)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-1026-SM-5EGJ8 \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.2 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalLungSRR1440682
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1440682.hg19.bigWig
+    shortLabel lung M 132QS
+    longLabel GTEx RNA signal from male Lung (GTEX-132QS-0726-SM-5IJE9)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0726-SM-5IJE9 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.3 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1442822
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1442822.hg19.bigWig
+    shortLabel lung M 13G51
+    longLabel GTEx RNA signal from male Lung (GTEX-13G51-0426-SM-5K7Z5)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-0426-SM-5K7Z5 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalLungSRR1447347
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1447347.hg19.bigWig
+    shortLabel lung M ZYW4
+    longLabel GTEx RNA signal from male Lung (GTEX-ZYW4-1526-SM-5SIBA)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-1526-SM-5SIBA \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.2 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalLungSRR1452185
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1452185.hg19.bigWig
+    shortLabel lung M 139TT
+    longLabel GTEx RNA signal from male Lung (GTEX-139TT-0726-SM-5K7XW)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-0726-SM-5K7XW \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.9 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1457750
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1457750.hg19.bigWig
+    shortLabel lung M 13N1W
+    longLabel GTEx RNA signal from male Lung (GTEX-13N1W-0726-SM-5MR57)
+    subGroups sex=M age=a70 
+    color 167,243,12
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0726-SM-5MR57 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.8 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalLungSRR1472885
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1472885.hg19.bigWig
+    shortLabel lung M 11WQC
+    longLabel GTEx RNA signal from male Lung (GTEX-11WQC-0626-SM-5EQMF)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11WQC age=60 sex=M hardyScore=2 sample=GTEX-11WQC-0626-SM-5EQMF \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalLungSRR1472952
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1472952.hg19.bigWig
+    shortLabel lung M 1477Z
+    longLabel GTEx RNA signal from male Lung (GTEX-1477Z-0626-SM-5NQB7)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-0626-SM-5NQB7 \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.2 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalLungSRR1473161
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1473161.hg19.bigWig
+    shortLabel lung M Y5V6
+    longLabel GTEx RNA signal from male Lung (GTEX-Y5V6-0226-SM-4V6G7)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0226-SM-4V6G7 \
+            tissue=lung autolysisScore=1 rnaIntegrity=8.5 batch=BP-41604 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=07/31/2013
+
+    track gtexRnaSignalLungSRR1473340
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1473340.hg19.bigWig
+    shortLabel lung M 13FTZ
+    longLabel GTEx RNA signal from male Lung (GTEX-13FTZ-0526-SM-5IJCW)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13FTZ age=60 sex=M hardyScore=2 sample=GTEX-13FTZ-0526-SM-5IJCW \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.3 batch=BP-46943 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1473800
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1473800.hg19.bigWig
+    shortLabel lung M 11OF3
+    longLabel GTEx RNA signal from male Lung (GTEX-11OF3-1126-SM-5986C)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-1126-SM-5986C \
+            tissue=lung autolysisScore=2 rnaIntegrity=6.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalLungSRR1475524
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1475524.hg19.bigWig
+    shortLabel lung M 111VG
+    longLabel GTEx RNA signal from male Lung (GTEX-111VG-0726-SM-5GIDC)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-0726-SM-5GIDC \
+            tissue=lung autolysisScore=2 rnaIntegrity=5.9 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalLungSRR1487215
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1487215.hg19.bigWig
+    shortLabel lung M ZDTT
+    longLabel GTEx RNA signal from male Lung (GTEX-ZDTT-0926-SM-5J2MS)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-ZDTT age=60 sex=M hardyScore=0 sample=GTEX-ZDTT-0926-SM-5J2MS \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.4 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalLungSRR1487910
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1487910.hg19.bigWig
+    shortLabel lung M 139UW
+    longLabel GTEx RNA signal from male Lung (GTEX-139UW-0226-SM-5K7WU)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-139UW age=60 sex=M hardyScore=2 sample=GTEX-139UW-0226-SM-5K7WU \
+            tissue=lung autolysisScore=1 rnaIntegrity=6.3 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalLungSRR1490486
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR1490486.hg19.bigWig
+    shortLabel lung M 13OVG
+    longLabel GTEx RNA signal from male Lung (GTEX-13OVG-0326-SM-5KM57)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-0326-SM-5KM57 \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.6 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalLungSRR2135351
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR2135351.hg19.bigWig
+    shortLabel lung M SUCS
+    longLabel GTEx RNA signal from male Lung (GTEX-SUCS-0626-SM-5CHQE_rep1)
+    subGroups sex=M age=a70 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR601900
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR601900.hg19.bigWig
+    shortLabel lung M OHPJ
+    longLabel GTEx RNA signal from male Lung (GTEX-OHPJ-1026-SM-2HMLE)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR602492
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR602492.hg19.bigWig
+    shortLabel lung M P4QS
+    longLabel GTEx RNA signal from male Lung (GTEX-P4QS-0526-SM-2I3ET)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-0526-SM-2I3ET \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.9 batch=BP-18727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalLungSRR604480
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR604480.hg19.bigWig
+    shortLabel lung M P4PQ
+    longLabel GTEx RNA signal from male Lung (GTEX-P4PQ-0526-SM-2HMKR)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-P4PQ age=60 sex=M hardyScore=0 sample=GTEX-P4PQ-0526-SM-2HMKR \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.4 batch=BP-18708 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2011
+
+    track gtexRnaSignalLungSRR612755
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR612755.hg19.bigWig
+    shortLabel lung M REY6
+    longLabel GTEx RNA signal from male Lung (GTEX-REY6-0426-SM-2TF5G)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0426-SM-2TF5G \
+            tissue=lung autolysisScore=1 rnaIntegrity=7.2 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalLungSRR612791
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR612791.hg19.bigWig
+    shortLabel lung M RVPV
+    longLabel GTEx RNA signal from male Lung (GTEX-RVPV-1726-SM-2TF5W)
+    subGroups sex=M age=a60 
+    color 167,243,12
+
+    track gtexRnaSignalLungSRR656153
+    parent gtexRnaSignalLung off
+    type bigWig
+    bigDataUrl lung/gtexRnaSignalSRR656153.hg19.bigWig
+    shortLabel lung M S4Z8
+    longLabel GTEx RNA signal from male Lung (GTEX-S4Z8-0426-SM-3K2AH)
+    subGroups sex=M age=a60 
+    color 167,243,12
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-0426-SM-3K2AH \
+            tissue=lung autolysisScore=0 rnaIntegrity=8.4 batch=BP-23119 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/14/2012
+

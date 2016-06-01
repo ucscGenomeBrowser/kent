@@ -141,6 +141,8 @@
 
 #include "trackVersion.h"
 #include "genbank.h"
+#include "bedTabix.h"
+#include "knetUdc.h"
 
 #define CHROM_COLORS 26
 
@@ -1997,6 +1999,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+tg->attrTable = oregannoLoadAttrHash(conn);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
                  NULL, &rowOffset);
@@ -12316,9 +12319,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
-struct sqlConnection *conn = hAllocConn(database);
-tg->attrTable = oregannoLoadAttrHash(conn);
-hFreeConn(&conn);
+tg->attrTable = NULL;
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;
@@ -13636,6 +13637,24 @@ else if (sameWord(type, "bedLogR"))
     //track->bedSize = 10;
     }
     */
+else if (sameWord(type, "bedTabix"))
+    {
+    knetUdcInstall();
+    tdb->canPack = TRUE;
+    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "longTabix"))
+    {
+    char *words[2];
+    words[0] = type;
+    words[1] = "5";
+    complexBedMethods(track, tdb, FALSE, 2, words);
+    longRangeMethods(track, tdb);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);

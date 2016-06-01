@@ -1,0 +1,1137 @@
+    track gtexRnaSignalSpleenSRR1079046
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1079046.hg19.bigWig
+    shortLabel spleen F XV7Q
+    longLabel GTEx RNA signal from female Spleen (GTEX-XV7Q-0126-SM-4BRVK)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0126-SM-4BRVK \
+            tissue=spleen autolysisScore=2 rnaIntegrity=8.6 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalSpleenSRR1086983
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1086983.hg19.bigWig
+    shortLabel spleen F T5JW
+    longLabel GTEx RNA signal from female Spleen (GTEX-T5JW-0126-SM-4DM6K)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-0126-SM-4DM6K \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.3 batch=BP-25965 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalSpleenSRR1090984
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1090984.hg19.bigWig
+    shortLabel spleen F R55G
+    longLabel GTEx RNA signal from female Spleen (GTEX-R55G-0226-SM-48FEI)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0226-SM-48FEI \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.7 batch=BP-21546 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSpleenSRR1091500
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1091500.hg19.bigWig
+    shortLabel spleen F Q734
+    longLabel GTEx RNA signal from female Spleen (GTEX-Q734-0226-SM-48U1A)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0226-SM-48U1A \
+            tissue=spleen autolysisScore=2 rnaIntegrity=7.8 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSpleenSRR1092257
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1092257.hg19.bigWig
+    shortLabel spleen F POMQ
+    longLabel GTEx RNA signal from female Spleen (GTEX-POMQ-0126-SM-48TD6)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-POMQ age=20 sex=F hardyScore=0 sample=GTEX-POMQ-0126-SM-48TD6 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.3 batch=BP-19350 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2011
+
+    track gtexRnaSignalSpleenSRR1094073
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1094073.hg19.bigWig
+    shortLabel spleen F PX3G
+    longLabel GTEx RNA signal from female Spleen (GTEX-PX3G-0926-SM-48U12)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-PX3G age=20 sex=F hardyScore=0 sample=GTEX-PX3G-0926-SM-48U12 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.8 batch=BP-19882 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/03/2011
+
+    track gtexRnaSignalSpleenSRR1327747
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1327747.hg19.bigWig
+    shortLabel spleen F 11XUK
+    longLabel GTEx RNA signal from female Spleen (GTEX-11XUK-0426-SM-5EQML)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-0426-SM-5EQML \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSpleenSRR1348911
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1348911.hg19.bigWig
+    shortLabel spleen F 13VXT
+    longLabel GTEx RNA signal from female Spleen (GTEX-13VXT-1326-SM-5LU3Y)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-1326-SM-5LU3Y \
+            tissue=spleen autolysisScore=2 rnaIntegrity=6.4 batch=BP-47486 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSpleenSRR1351857
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1351857.hg19.bigWig
+    shortLabel spleen F 12WSJ
+    longLabel GTEx RNA signal from female Spleen (GTEX-12WSJ-0526-SM-5GCOZ)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0526-SM-5GCOZ \
+            tissue=spleen autolysisScore=0 rnaIntegrity=5.8 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSpleenSRR1375549
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1375549.hg19.bigWig
+    shortLabel spleen F ZYWO
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZYWO-0226-SM-5GZX3)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-0226-SM-5GZX3 \
+            tissue=spleen autolysisScore=0 rnaIntegrity=6.9 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSpleenSRR1378045
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1378045.hg19.bigWig
+    shortLabel spleen F 12WSK
+    longLabel GTEx RNA signal from female Spleen (GTEX-12WSK-0126-SM-5GCO7)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-0126-SM-5GCO7 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSpleenSRR1382687
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1382687.hg19.bigWig
+    shortLabel spleen F 1399S
+    longLabel GTEx RNA signal from female Spleen (GTEX-1399S-0226-SM-5IFFG)
+    subGroups sex=F age=a30 
+    color 227,184,136
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-0226-SM-5IFFG \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.1 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSpleenSRR1391553
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1391553.hg19.bigWig
+    shortLabel spleen F 11VI4
+    longLabel GTEx RNA signal from female Spleen (GTEX-11VI4-0126-SM-5GU6Z)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0126-SM-5GU6Z \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSpleenSRR1392861
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1392861.hg19.bigWig
+    shortLabel spleen F ZV6S
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZV6S-0826-SM-5NQ6Z)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZV6S age=40 sex=F hardyScore=0 sample=GTEX-ZV6S-0826-SM-5NQ6Z \
+            tissue=spleen autolysisScore=1 rnaIntegrity=5.7 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSpleenSRR1436323
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1436323.hg19.bigWig
+    shortLabel spleen F Y5LM
+    longLabel GTEx RNA signal from female Spleen (GTEX-Y5LM-0326-SM-4VBRN)
+    subGroups sex=F age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0326-SM-4VBRN \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.8 batch=BP-35803 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalSpleenSRR1471731
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1471731.hg19.bigWig
+    shortLabel spleen F ZP4G
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZP4G-0326-SM-4YCEF)
+    subGroups sex=F age=a20 
+    color 227,184,136
+    metadata donor=GTEX-ZP4G age=20 sex=F hardyScore=0 sample=GTEX-ZP4G-0326-SM-4YCEF \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.8 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSpleenSRR1488111
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1488111.hg19.bigWig
+    shortLabel spleen F 11P81
+    longLabel GTEx RNA signal from female Spleen (GTEX-11P81-1326-SM-5GU5S)
+    subGroups sex=F age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-1326-SM-5GU5S \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.1 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSpleenSRR1077944
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1077944.hg19.bigWig
+    shortLabel spleen F QCQG
+    longLabel GTEx RNA signal from female Spleen (GTEX-QCQG-0226-SM-48U28)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0226-SM-48U28 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.6 batch=BP-20114 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSpleenSRR1085087
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1085087.hg19.bigWig
+    shortLabel spleen F UJHI
+    longLabel GTEx RNA signal from female Spleen (GTEX-UJHI-0126-SM-4IHLP)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-UJHI age=50 sex=F hardyScore=0 sample=GTEX-UJHI-0126-SM-4IHLP \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.1 batch=BP-25734 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalSpleenSRR1318732
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1318732.hg19.bigWig
+    shortLabel spleen F 13FH7
+    longLabel GTEx RNA signal from female Spleen (GTEX-13FH7-1326-SM-5IFG8)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-1326-SM-5IFG8 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.1 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSpleenSRR1327279
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1327279.hg19.bigWig
+    shortLabel spleen F WXYG
+    longLabel GTEx RNA signal from female Spleen (GTEX-WXYG-0126-SM-4OND7)
+    subGroups sex=F age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1396227
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1396227.hg19.bigWig
+    shortLabel spleen F ZLWG
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZLWG-0426-SM-4WWFA)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0426-SM-4WWFA \
+            tissue=spleen autolysisScore=0 rnaIntegrity=8 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSpleenSRR1400775
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1400775.hg19.bigWig
+    shortLabel spleen F ZF2S
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZF2S-0326-SM-4WKGD)
+    subGroups sex=F age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1415510
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1415510.hg19.bigWig
+    shortLabel spleen F 13N11
+    longLabel GTEx RNA signal from female Spleen (GTEX-13N11-0126-SM-5KM2Z)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-0126-SM-5KM2Z \
+            tissue=spleen autolysisScore=0 rnaIntegrity=6.9 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSpleenSRR1436740
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1436740.hg19.bigWig
+    shortLabel spleen F ZZPU
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZZPU-0126-SM-5E446)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-0126-SM-5E446 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.2 batch=BP-43495 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSpleenSRR1440332
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1440332.hg19.bigWig
+    shortLabel spleen F 147F3
+    longLabel GTEx RNA signal from female Spleen (GTEX-147F3-0126-SM-5NQBJ)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-147F3 age=50 sex=F hardyScore=0 sample=GTEX-147F3-0126-SM-5NQBJ \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.9 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSpleenSRR1444156
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1444156.hg19.bigWig
+    shortLabel spleen F Y3IK
+    longLabel GTEx RNA signal from female Spleen (GTEX-Y3IK-0126-SM-4WWE9)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0126-SM-4WWE9 \
+            tissue=spleen autolysisScore=2 rnaIntegrity=8.4 batch=BP-35206 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSpleenSRR1456991
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1456991.hg19.bigWig
+    shortLabel spleen F W5WG
+    longLabel GTEx RNA signal from female Spleen (GTEX-W5WG-0626-SM-4SOID)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-0626-SM-4SOID \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8 batch=BP-40880 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalSpleenSRR1487485
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1487485.hg19.bigWig
+    shortLabel spleen F Y8LW
+    longLabel GTEx RNA signal from female Spleen (GTEX-Y8LW-0126-SM-4VBS1)
+    subGroups sex=F age=a50 
+    color 227,184,136
+    metadata donor=GTEX-Y8LW age=50 sex=F hardyScore=0 sample=GTEX-Y8LW-0126-SM-4VBS1 \
+            tissue=spleen autolysisScore=2 rnaIntegrity=7.2 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalSpleenSRR1095549
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1095549.hg19.bigWig
+    shortLabel spleen F XUJ4
+    longLabel GTEx RNA signal from female Spleen (GTEX-XUJ4-0226-SM-4BOP8)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-0226-SM-4BOP8 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-34205 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/11/2012
+
+    track gtexRnaSignalSpleenSRR1309597
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1309597.hg19.bigWig
+    shortLabel spleen F 11DXX
+    longLabel GTEx RNA signal from female Spleen (GTEX-11DXX-0726-SM-5H12X)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0726-SM-5H12X \
+            tissue=spleen autolysisScore=0 rnaIntegrity=5.8 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSpleenSRR1311205
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1311205.hg19.bigWig
+    shortLabel spleen F 1122O
+    longLabel GTEx RNA signal from female Spleen (GTEX-1122O-0526-SM-5N9DM)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0526-SM-5N9DM \
+            tissue=spleen autolysisScore=0 rnaIntegrity=7.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSpleenSRR1335875
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1335875.hg19.bigWig
+    shortLabel spleen F 13PL7
+    longLabel GTEx RNA signal from female Spleen (GTEX-13PL7-1126-SM-5MR5O)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-1126-SM-5MR5O \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.3 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSpleenSRR1345585
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1345585.hg19.bigWig
+    shortLabel spleen F 146FR
+    longLabel GTEx RNA signal from female Spleen (GTEX-146FR-1926-SM-5NQA6)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-1926-SM-5NQA6 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.5 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSpleenSRR1346794
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1346794.hg19.bigWig
+    shortLabel spleen F 13CF3
+    longLabel GTEx RNA signal from female Spleen (GTEX-13CF3-0226-SM-5J1NW)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-0226-SM-5J1NW \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.5 batch=BP-46482 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/03/2013
+
+    track gtexRnaSignalSpleenSRR1405099
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1405099.hg19.bigWig
+    shortLabel spleen F ZF29
+    longLabel GTEx RNA signal from female Spleen (GTEX-ZF29-0626-SM-4WKHD)
+    subGroups sex=F age=a60 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1441398
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1441398.hg19.bigWig
+    shortLabel spleen F 1211K
+    longLabel GTEx RNA signal from female Spleen (GTEX-1211K-0426-SM-5FQTP)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-0426-SM-5FQTP \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.7 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSpleenSRR1472929
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1472929.hg19.bigWig
+    shortLabel spleen F 12WSD
+    longLabel GTEx RNA signal from female Spleen (GTEX-12WSD-1726-SM-5GCN4)
+    subGroups sex=F age=a60 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1500495
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1500495.hg19.bigWig
+    shortLabel spleen F 13PVR
+    longLabel GTEx RNA signal from female Spleen (GTEX-13PVR-0326-SM-5RQJY)
+    subGroups sex=F age=a60 
+    color 227,184,136
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-0326-SM-5RQJY \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSpleenSRR1069539
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1069539.hg19.bigWig
+    shortLabel spleen M QLQW
+    longLabel GTEx RNA signal from male Spleen (GTEX-QLQW-0126-SM-447BK)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-0126-SM-447BK \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.2 batch=BP-20740 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2011
+
+    track gtexRnaSignalSpleenSRR1073947
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1073947.hg19.bigWig
+    shortLabel spleen M PLZ6
+    longLabel GTEx RNA signal from male Spleen (GTEX-PLZ6-0126-SM-48TC6)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-PLZ6 age=30 sex=M hardyScore=0 sample=GTEX-PLZ6-0126-SM-48TC6 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.9 batch=BP-19254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/05/2011
+
+    track gtexRnaSignalSpleenSRR1074526
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1074526.hg19.bigWig
+    shortLabel spleen M NPJ8
+    longLabel GTEx RNA signal from male Spleen (GTEX-NPJ8-0626-SM-48TBO)
+    subGroups sex=M age=a40 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1075198
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1075198.hg19.bigWig
+    shortLabel spleen M XMK1
+    longLabel GTEx RNA signal from male Spleen (GTEX-XMK1-0126-SM-4B65F)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-0126-SM-4B65F \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-32735 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2012
+
+    track gtexRnaSignalSpleenSRR1076369
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1076369.hg19.bigWig
+    shortLabel spleen M Q2AH
+    longLabel GTEx RNA signal from male Spleen (GTEX-Q2AH-0226-SM-48U1I)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0226-SM-48U1I \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.5 batch=BP-19904 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2011
+
+    track gtexRnaSignalSpleenSRR1077549
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1077549.hg19.bigWig
+    shortLabel spleen M WFON
+    longLabel GTEx RNA signal from male Spleen (GTEX-WFON-0126-SM-4LVM9)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-WFON age=40 sex=M hardyScore=0 sample=GTEX-WFON-0126-SM-4LVM9 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=5.8 batch=BP-27449 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2012
+
+    track gtexRnaSignalSpleenSRR1084055
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1084055.hg19.bigWig
+    shortLabel spleen M UPK5
+    longLabel GTEx RNA signal from male Spleen (GTEX-UPK5-1626-SM-4JBHI)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-UPK5 age=40 sex=M hardyScore=0 sample=GTEX-UPK5-1626-SM-4JBHI \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.1 batch=BP-29992 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/23/2012
+
+    track gtexRnaSignalSpleenSRR1086915
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1086915.hg19.bigWig
+    shortLabel spleen M U4B1
+    longLabel GTEx RNA signal from male Spleen (GTEX-U4B1-0526-SM-4DXTK)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-0526-SM-4DXTK \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.5 batch=BP-25599 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalSpleenSRR1086935
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1086935.hg19.bigWig
+    shortLabel spleen M S4Q7
+    longLabel GTEx RNA signal from male Spleen (GTEX-S4Q7-0126-SM-4AD5P)
+    subGroups sex=M age=a20 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1089230
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1089230.hg19.bigWig
+    shortLabel spleen M O5YT
+    longLabel GTEx RNA signal from male Spleen (GTEX-O5YT-0926-SM-48TDG)
+    subGroups sex=M age=a20 
+    color 227,184,136
+    metadata donor=GTEX-O5YT age=20 sex=M hardyScore=0 sample=GTEX-O5YT-0926-SM-48TDG \
+            tissue=spleen autolysisScore=0 rnaIntegrity=7 batch=BP-17532 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+
+    track gtexRnaSignalSpleenSRR1093196
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1093196.hg19.bigWig
+    shortLabel spleen M XAJ8
+    longLabel GTEx RNA signal from male Spleen (GTEX-XAJ8-0126-SM-47JYG)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-XAJ8 age=40 sex=M hardyScore=0 sample=GTEX-XAJ8-0126-SM-47JYG \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.1 batch=BP-31440 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/25/2012
+
+    track gtexRnaSignalSpleenSRR1094312
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1094312.hg19.bigWig
+    shortLabel spleen M PW2O
+    longLabel GTEx RNA signal from male Spleen (GTEX-PW2O-0126-SM-48TC8)
+    subGroups sex=M age=a20 
+    color 227,184,136
+    metadata donor=GTEX-PW2O age=20 sex=M hardyScore=0 sample=GTEX-PW2O-0126-SM-48TC8 \
+            tissue=spleen autolysisScore=2 rnaIntegrity=7.8 batch=BP-19458 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSpleenSRR1096291
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1096291.hg19.bigWig
+    shortLabel spleen M QV31
+    longLabel GTEx RNA signal from male Spleen (GTEX-QV31-0126-SM-447BP)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-QV31 age=30 sex=M hardyScore=0 sample=GTEX-QV31-0126-SM-447BP \
+            tissue=spleen autolysisScore=2 rnaIntegrity=6.5 batch=BP-20785 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSpleenSRR1310604
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1310604.hg19.bigWig
+    shortLabel spleen M 11NSD
+    longLabel GTEx RNA signal from male Spleen (GTEX-11NSD-0426-SM-5N9CR)
+    subGroups sex=M age=a20 
+    color 227,184,136
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0426-SM-5N9CR \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSpleenSRR1311980
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1311980.hg19.bigWig
+    shortLabel spleen M 11P7K
+    longLabel GTEx RNA signal from male Spleen (GTEX-11P7K-0426-SM-5BC5H)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0426-SM-5BC5H \
+            tissue=spleen autolysisScore=1 rnaIntegrity=5.8 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSpleenSRR1319690
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1319690.hg19.bigWig
+    shortLabel spleen M 14E6E
+    longLabel GTEx RNA signal from male Spleen (GTEX-14E6E-1226-SM-5S2R5)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-14E6E age=30 sex=M hardyScore=0 sample=GTEX-14E6E-1226-SM-5S2R5 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.8 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSpleenSRR1324062
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1324062.hg19.bigWig
+    shortLabel spleen M 11EQ9
+    longLabel GTEx RNA signal from male Spleen (GTEX-11EQ9-0426-SM-5A5JY)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0426-SM-5A5JY \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.1 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSpleenSRR1351016
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1351016.hg19.bigWig
+    shortLabel spleen M YFCO
+    longLabel GTEx RNA signal from male Spleen (GTEX-YFCO-0926-SM-5LUA5)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-0926-SM-5LUA5 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.9 batch=BP-41808 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/02/2013
+
+    track gtexRnaSignalSpleenSRR1352437
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1352437.hg19.bigWig
+    shortLabel spleen M 145MN
+    longLabel GTEx RNA signal from male Spleen (GTEX-145MN-0126-SM-5RQHY)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-0126-SM-5RQHY \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.6 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSpleenSRR1362555
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1362555.hg19.bigWig
+    shortLabel spleen M ZPU1
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZPU1-1026-SM-4YCEQ)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-1026-SM-4YCEQ \
+            tissue=spleen autolysisScore=0 rnaIntegrity=7.2 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalSpleenSRR1396765
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1396765.hg19.bigWig
+    shortLabel spleen M U3ZH
+    longLabel GTEx RNA signal from male Spleen (GTEX-U3ZH-0126-SM-4DXUK)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-0126-SM-4DXUK \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.2 batch=BP-25328 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/14/2012
+
+    track gtexRnaSignalSpleenSRR1401972
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1401972.hg19.bigWig
+    shortLabel spleen M YB5E
+    longLabel GTEx RNA signal from male Spleen (GTEX-YB5E-0426-SM-5IFHR)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0426-SM-5IFHR \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.6 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSpleenSRR1402109
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1402109.hg19.bigWig
+    shortLabel spleen M 11LCK
+    longLabel GTEx RNA signal from male Spleen (GTEX-11LCK-0126-SM-5A5M5)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0126-SM-5A5M5 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.5 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSpleenSRR1409677
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1409677.hg19.bigWig
+    shortLabel spleen M 12WSN
+    longLabel GTEx RNA signal from male Spleen (GTEX-12WSN-0126-SM-5DUX5)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-0126-SM-5DUX5 \
+            tissue=spleen autolysisScore=0 rnaIntegrity=6.8 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSpleenSRR1417566
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1417566.hg19.bigWig
+    shortLabel spleen M ZLFU
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZLFU-0526-SM-4WWBN)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-0526-SM-4WWBN \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.8 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalSpleenSRR1429287
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1429287.hg19.bigWig
+    shortLabel spleen M 13S86
+    longLabel GTEx RNA signal from male Spleen (GTEX-13S86-0126-SM-5S2PI)
+    subGroups sex=M age=a40 
+    color 227,184,136
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-0126-SM-5S2PI \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.9 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSpleenSRR1499503
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1499503.hg19.bigWig
+    shortLabel spleen M 1399R
+    longLabel GTEx RNA signal from male Spleen (GTEX-1399R-0226-SM-5IJGG)
+    subGroups sex=M age=a30 
+    color 227,184,136
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0226-SM-5IJGG \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.3 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSpleenSRR2135309
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR2135309.hg19.bigWig
+    shortLabel spleen M WFON
+    longLabel GTEx RNA signal from male Spleen (GTEX-WFON-0126-SM-5CHTF_rep1)
+    subGroups sex=M age=a40 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1069303
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1069303.hg19.bigWig
+    shortLabel spleen M XPVG
+    longLabel GTEx RNA signal from male Spleen (GTEX-XPVG-0626-SM-4B65B)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-0626-SM-4B65B \
+            tissue=spleen autolysisScore=1 rnaIntegrity=8.8 batch=BP-33777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSpleenSRR1069400
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1069400.hg19.bigWig
+    shortLabel spleen M XGQ4
+    longLabel GTEx RNA signal from male Spleen (GTEX-XGQ4-0126-SM-4AT4H)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0126-SM-4AT4H \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.4 batch=BP-32102 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2012
+
+    track gtexRnaSignalSpleenSRR1080600
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1080600.hg19.bigWig
+    shortLabel spleen M XXEK
+    longLabel GTEx RNA signal from male Spleen (GTEX-XXEK-0126-SM-4BRVU)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-0126-SM-4BRVU \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-34430 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2012
+
+    track gtexRnaSignalSpleenSRR1082447
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1082447.hg19.bigWig
+    shortLabel spleen M QDVN
+    longLabel GTEx RNA signal from male Spleen (GTEX-QDVN-0526-SM-48TZ4)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-0526-SM-48TZ4 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.7 batch=BP-20293 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalSpleenSRR1091404
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1091404.hg19.bigWig
+    shortLabel spleen M OIZH
+    longLabel GTEx RNA signal from male Spleen (GTEX-OIZH-0926-SM-48TBR)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-0926-SM-48TBR \
+            tissue=spleen autolysisScore=2 rnaIntegrity=6.1 batch=BP-18147 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalSpleenSRR1097417
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1097417.hg19.bigWig
+    shortLabel spleen M XQ8I
+    longLabel GTEx RNA signal from male Spleen (GTEX-XQ8I-1726-SM-4BOQB)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-XQ8I age=50 sex=M hardyScore=0 sample=GTEX-XQ8I-1726-SM-4BOQB \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6 batch=BP-34031 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/07/2012
+
+    track gtexRnaSignalSpleenSRR1326225
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1326225.hg19.bigWig
+    shortLabel spleen M QV44
+    longLabel GTEx RNA signal from male Spleen (GTEX-QV44-0126-SM-4R1KH)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-0126-SM-4R1KH \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.4 batch=BP-20865 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/15/2011
+
+    track gtexRnaSignalSpleenSRR1328339
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1328339.hg19.bigWig
+    shortLabel spleen M 117YX
+    longLabel GTEx RNA signal from male Spleen (GTEX-117YX-2126-SM-5GIEL)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-2126-SM-5GIEL \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.5 batch=BP-44261 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSpleenSRR1334200
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1334200.hg19.bigWig
+    shortLabel spleen M ZTTD
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZTTD-1726-SM-57WEL)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1345782
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1345782.hg19.bigWig
+    shortLabel spleen M X4LF
+    longLabel GTEx RNA signal from male Spleen (GTEX-X4LF-0226-SM-4QAS8)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0226-SM-4QAS8 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6 batch=BP-30712 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalSpleenSRR1352639
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1352639.hg19.bigWig
+    shortLabel spleen M 13111
+    longLabel GTEx RNA signal from male Spleen (GTEX-13111-0126-SM-5EGHO)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0126-SM-5EGHO \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSpleenSRR1359238
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1359238.hg19.bigWig
+    shortLabel spleen M 144GN
+    longLabel GTEx RNA signal from male Spleen (GTEX-144GN-2126-SM-5O99D)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-144GN age=50 sex=M hardyScore=0 sample=GTEX-144GN-2126-SM-5O99D \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.7 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSpleenSRR1367896
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1367896.hg19.bigWig
+    shortLabel spleen M WYJK
+    longLabel GTEx RNA signal from male Spleen (GTEX-WYJK-0726-SM-4ONC9)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1370495
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1370495.hg19.bigWig
+    shortLabel spleen M WHWD
+    longLabel GTEx RNA signal from male Spleen (GTEX-WHWD-0126-SM-4OORS)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-WHWD age=50 sex=M hardyScore=0 sample=GTEX-WHWD-0126-SM-4OORS \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.5 batch=BP-27512 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalSpleenSRR1373879
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1373879.hg19.bigWig
+    shortLabel spleen M Y3I4
+    longLabel GTEx RNA signal from male Spleen (GTEX-Y3I4-0126-SM-4TT26)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0126-SM-4TT26 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.9 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSpleenSRR1391961
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1391961.hg19.bigWig
+    shortLabel spleen M X585
+    longLabel GTEx RNA signal from male Spleen (GTEX-X585-1826-SM-4QAS3)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-1826-SM-4QAS3 \
+            tissue=spleen autolysisScore=2 rnaIntegrity=5.7 batch=BP-31298 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2012
+
+    track gtexRnaSignalSpleenSRR1401933
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1401933.hg19.bigWig
+    shortLabel spleen M 111CU
+    longLabel GTEx RNA signal from male Spleen (GTEX-111CU-0426-SM-5GZY1)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1418145
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1418145.hg19.bigWig
+    shortLabel spleen M QMRM
+    longLabel GTEx RNA signal from male Spleen (GTEX-QMRM-0226-SM-4R1K7)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-QMRM age=50 sex=M hardyScore=0 sample=GTEX-QMRM-0226-SM-4R1K7 \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.2 batch=BP-20785 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2011
+
+    track gtexRnaSignalSpleenSRR1443483
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1443483.hg19.bigWig
+    shortLabel spleen M ZDYS
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZDYS-1026-SM-4WKHC)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1447850
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1447850.hg19.bigWig
+    shortLabel spleen M 139YR
+    longLabel GTEx RNA signal from male Spleen (GTEX-139YR-0426-SM-5IFFV)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-139YR age=50 sex=M hardyScore=0 sample=GTEX-139YR-0426-SM-5IFFV \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.8 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSpleenSRR1453549
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1453549.hg19.bigWig
+    shortLabel spleen M 14DAR
+    longLabel GTEx RNA signal from male Spleen (GTEX-14DAR-0326-SM-5S2PS)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-14DAR age=50 sex=M hardyScore=0 sample=GTEX-14DAR-0326-SM-5S2PS \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.1 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSpleenSRR1454177
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1454177.hg19.bigWig
+    shortLabel spleen M WY7C
+    longLabel GTEx RNA signal from male Spleen (GTEX-WY7C-0126-SM-4ONCO)
+    subGroups sex=M age=a50 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1477057
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1477057.hg19.bigWig
+    shortLabel spleen M ZAB5
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZAB5-0526-SM-5CVMU)
+    subGroups sex=M age=a50 
+    color 227,184,136
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0526-SM-5CVMU \
+            tissue=spleen autolysisScore=0 rnaIntegrity=7.4 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalSpleenSRR1072456
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1072456.hg19.bigWig
+    shortLabel spleen M OOBJ
+    longLabel GTEx RNA signal from male Spleen (GTEX-OOBJ-0926-SM-48TDO)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-0926-SM-48TDO \
+            tissue=spleen autolysisScore=2 rnaIntegrity=7.5 batch=BP-18253 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSpleenSRR1073507
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1073507.hg19.bigWig
+    shortLabel spleen M S4Z8
+    longLabel GTEx RNA signal from male Spleen (GTEX-S4Z8-0226-SM-4AD5K)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-S4Z8 age=60 sex=M hardyScore=0 sample=GTEX-S4Z8-0226-SM-4AD5K \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.4 batch=BP-23077 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/13/2012
+
+    track gtexRnaSignalSpleenSRR1079782
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1079782.hg19.bigWig
+    shortLabel spleen M VJYA
+    longLabel GTEx RNA signal from male Spleen (GTEX-VJYA-0126-SM-4KL1P)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-0126-SM-4KL1P \
+            tissue=spleen autolysisScore=1 rnaIntegrity=7.5 batch=BP-26874 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/02/2012
+
+    track gtexRnaSignalSpleenSRR1085039
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1085039.hg19.bigWig
+    shortLabel spleen M P4QS
+    longLabel GTEx RNA signal from male Spleen (GTEX-P4QS-0926-SM-48TBS)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-0926-SM-48TBS \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.7 batch=BP-18727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalSpleenSRR1323788
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1323788.hg19.bigWig
+    shortLabel spleen M 12BJ1
+    longLabel GTEx RNA signal from male Spleen (GTEX-12BJ1-0726-SM-5EGGF)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-0726-SM-5EGGF \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.3 batch=BP-44399 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalSpleenSRR1334461
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1334461.hg19.bigWig
+    shortLabel spleen M 111FC
+    longLabel GTEx RNA signal from male Spleen (GTEX-111FC-1326-SM-5N9D9)
+    subGroups sex=M age=a60 
+    color 227,184,136
+
+    track gtexRnaSignalSpleenSRR1377756
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1377756.hg19.bigWig
+    shortLabel spleen M 132QS
+    longLabel GTEx RNA signal from male Spleen (GTEX-132QS-0226-SM-5IFFZ)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0226-SM-5IFFZ \
+            tissue=spleen autolysisScore=1 rnaIntegrity=6.3 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSpleenSRR1432500
+    parent gtexRnaSignalSpleen off
+    type bigWig
+    bigDataUrl spleen/gtexRnaSignalSRR1432500.hg19.bigWig
+    shortLabel spleen M ZDTT
+    longLabel GTEx RNA signal from male Spleen (GTEX-ZDTT-1026-SM-5KM19)
+    subGroups sex=M age=a60 
+    color 227,184,136
+    metadata donor=GTEX-ZDTT age=60 sex=M hardyScore=0 sample=GTEX-ZDTT-1026-SM-5KM19 \
+            tissue=spleen autolysisScore=0 rnaIntegrity=5.9 batch=BP-45485 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+

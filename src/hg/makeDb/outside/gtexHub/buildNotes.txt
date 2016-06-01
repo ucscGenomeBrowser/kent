@@ -1,0 +1,260 @@
+# GTEx signal graph post-processing and hubbification
+
+cd run
+
+# create scripts
+
+cat > run << 'EOF'
+#!/bin/csh -ef
+    set file = $1
+    if ($1 == "") then
+        echo "usage: run run.<tag>.ids"
+    endif
+    set bin = /hive/data/outside/gtex/signal/bin
+    csh $bin/runMany.csh $file &
+'EOF'
+
+cat > load << 'EOF'
+#!/bin/csh -ef
+set file = $1
+if ($1 == "") then
+    echo "usage: load load.<tag>.ids"
+endif
+set bin = /hive/data/outside/gtex/signal/bin
+csh $bin/loadMany.csh $file &
+'EOF'
+
+cat > s3load << 'EOF'
+#!/bin/csh -ef
+set file = $1
+if ($1 == "") then
+    echo "usage: s3load load.<tag>.ids"
+endif
+set bin = /hive/data/outside/gtex/signal/bin
+csh $bin/s3loadMany.csh $file &
+'EOF'
+
+cat > runload << 'EOF'
+#!/bin/csh -ef
+set run = $1
+if ($1 == "") then
+    echo "usage: runload run"
+endif
+set bin = /hive/data/outside/gtex/signal/bin
+csh $bin/runLoadMany.csh $run &
+'EOF'
+
+# create .ids file for tissue
+
+grep $tissue $listfile > run.$tissue.ids
+# format: SRR#  cloud-key   sample  sex  tissueDescription
+# where cloud-key was from signed URL file provided by Hannes in CGL
+# This was used by load script.  Alternate access was by direct S3 access (s3load)
+# In this usage, the second field isn't used
+
+# extract coverage wiggle from file in the cloud
+./run run.<tissue>.ids
+
+# NOTE: processing exceeded 1 week access window, so some files were loaded and then run:
+#./load load.<tissue>.ids
+#./runload runload.<tissue>.ids
+
+# link into hub dir
+../bin/linkMany.csh <tissue>
+
+# create trackDb.txt for tissue
+../bin/trackMany.csh <tissue>
+
+# SRR1074602
+# Read coverage from STAR2 aligned to hg38, with GENCODE v23 
+# From John Vivian, CGL group (Benedict Paten lead)
+wget https://s3-us-west-2.amazonaws.com/tcga-test-output/wiggle_files/SRRtest.wiggle.tar.gz
+
+Donor: GTEX-TML8
+Tissue: esophagus muscularis
+
+Sample: GTEX-TML8-1426-SM-4DXUT
+
+set sizes = /hive/data/genomes/hg38/chrom.sizes
+bedGraphToBigWig SRRtest.rnaSignal.Unique.str1.out.bg $sizes TML8.esophagusMuscular.unique.bw
+bedGraphToBigWig  SRRtest.rnaSignal.UniqueMultiple.str1.out.bg $sizes TML8.esophagusMuscular.multi.bw
+
+# reduces size form 1.8G to 300M
+
+hgsql hgFixed -e "select geneId, score from gtexSampleData where sample='GTEX-TML8-1426-SM-4DXUT' and tissue='esophagusMuscular'"
+
+# liftOver to hg19
+
+set chain = /hive/data/genomes/hg38/bed/liftOver/hg38ToHg19.over.chain.gz
+liftOver unique.hg38.bg $chain unique.hg19.bg unique.unmapped
+liftOver multi.hg38.bg $chain multi.hg19.bg multi.unmapped
+
+bedSort unique.hg19.bg unique.hg19.sorted.bg
+bedRemoveOverlap unique.hg19.sorted.bg unique.hg19.singlecov.bg
+bedSort multi.hg19.bg multi.hg19.sorted.bg
+bedRemoveOverlap multi.hg19.sorted.bg multi.hg19.singlecov.bg
+
+set sizes = /hive/data/genomes/hg19/chrom.sizes
+bedGraphToBigWig unique.hg19.singlecov.bg $sizes TML8.esophagusMuscular.unique.hg19.bw
+bedGraphToBigWig  multi.hg19.singlecov.bg $sizes TML8.esophagusMuscular.multi.hg19.bw
+
+
+$ bigWigCorrelate hg19/*.bw
+0.988978
+$ bigWigCorrelate hg38/*.bw
+0.988896
+
+
+hgsql hgFixed -N -e "select name, name, age from gtexDonor where gender='F' order by name" | \
+    sed 's/	/=/' -e 's/	/_/' -e 's/$/_yrs \\/' > donors.female.txt
+grep '20_yrs\|30_yrs\|40_yrs' donors.female.txt > donors.female.young.txt
+grep '50_yrs' donors.female.txt > donors.female.middle.txt
+grep '60_yrs\|70_yrs' donors.female.txt > donors.female.old.txt
+
+hgsql hgFixed -N -e "select name, name, age from gtexDonor where gender='M' order by name" | \
+    sed 's/	/=/' -e 's/	/_/' -e 's/$/_yrs \\/' > donors.male.txt
+grep '20_yrs\|30_yrs\|40_yrs' donors.male.txt > donors.male.young.txt
+grep '50_yrs' donors.male.txt > donors.male.middle.txt
+grep '60_yrs\|70_yrs' donors.male.txt > donors.male.old.txt
+
+# create trackDb files for each tissue, by gender
+cd run
+foreach f (`cat maleTissues.txt`)
+    echo $f
+    ../bin/trackGender.csh hg38 $f male
+end
+foreach f (`cat femaleTissues.txt`)
+    echo $f
+    ../bin/trackGender.csh hg38 $f female
+end
+
+# split tracks by age (but leave in single trackDb file by tissue and gender)
+cd run
+../bin/splitTracks.csh hg38 trackDb.bladder.male.txt
+../bin/splitTracks.csh hg38 trackDb.bladder.female.txt
+cd hub/hg38
+mv split/trackDb.bladder.male.txt .
+mv split/trackDb.bladder.female.txt .
+
+cd run
+../bin/splitTracks.csh hg38 trackDb.fallopianTube.female.txt
+cd hub/hg38
+mv split/trackDb.fallopianTube.female.txt .
+
+# edit trackDb.{male,female}.{young,middle,old}.txt to include appropriate donors file
+cd hub/hg38
+sed 's/GTEX-//' ../../dev/donors.female.young.txt >> trackDb.female.young.txt
+sed 's/GTEX-//' ../../dev/donors.female.middle.txt >> trackDb.female.middle.txt 
+sed 's/GTEX-//' ../../dev/donors.female.old.txt >> trackDb.female.old.txt 
+sed 's/GTEX-//' ../../dev/donors.male.old.txt >> trackDb.male.old.txt 
+sed 's/GTEX-//' ../../dev/donors.male.middle.txt >> trackDb.male.middle.txt 
+sed 's/GTEX-//' ../../dev/donors.male.young.txt >> trackDb.male.young.txt 
+
+# uniquify/improve labels
+# esophagus
+cp trackDb.esophagus*.txt sav
+sed 's/shortLabel esophagus/shortLabel esophMusc/' \
+        sav/trackDb.esophagusMuscular.male.txt > trackDb.esophagusMuscular.male.txt
+sed 's/shortLabel esophagus/shortLabel esophMusc/' \
+        sav/trackDb.esophagusMuscular.female.txt > trackDb.esophagusMuscular.female.txt
+
+sed 's/shortLabel esophagus/shortLabel esophMuco/' \
+        sav/trackDb.esophagusMucosa.male.txt > trackDb.esophagusMucosa.male.txt
+sed 's/shortLabel esophagus/shortLabel esophMuco/' \
+        sav/trackDb.esophagusMucosa.female.txt > trackDb.esophagusMucosa.female.txt
+
+sed 's/shortLabel esophagus/shortLabel esophJunc/' \
+        sav/trackDb.esophagusJunction.female.txt > trackDb.esophagusJunction.female.txt
+sed 's/shortLabel esophagus/shortLabel esophJunc/' \
+        sav/trackDb.esophagusJunction.male.txt > trackDb.esophagusJunction.male.txt
+
+# brainCere
+cp trackDb.brainCere*.txt sav
+sed 's/shortLabel brainCere/shortLabel brainCeHe/' \
+        sav/trackDb.brainCerebelHemi.male.txt > trackDb.brainCerebelHemi.male.txt
+sed 's/shortLabel brainCere/shortLabel brainCeHe/' \
+        sav/trackDb.brainCerebelHemi.female.txt > trackDb.brainCerebelHemi.female.txt
+
+# blood
+cp trackDb.wholeBlood.*.txt sav
+sed 's/shortLabel wholeBloo/shortLabel wholBlood/' \
+        sav/trackDb.wholeBlood.male.txt > trackDb.wholeBlood.male.txt
+sed 's/shortLabel wholeBloo/shortLabel wholBlood/' \
+        sav/trackDb.wholeBlood.female.txt > trackDb.wholeBlood.female.txt
+
+# cell lines
+cp trackDb.xformed*.txt sav
+sed 's/shortLabel xformedfi/shortLabel xformFib/' \
+        sav/trackDb.xformedfibroblasts.male.txt > trackDb.xformedfibroblasts.male.txt
+sed 's/shortLabel xformedfi/shortLabel xformFib/' \
+        sav/trackDb.xformedfibroblasts.female.txt > trackDb.xformedfibroblasts.female.txt
+
+sed 's/shortLabel xformedly/shortLabel xformLym/' \
+        sav/trackDb.xformedlymphocytes.male.txt > trackDb.xformedlymphocytes.male.txt
+sed 's/shortLabel xformedly/shortLabel xformLym/' \
+        sav/trackDb.xformedlymphocytes.female.txt > trackDb.xformedlymphocytes.female.txt
+
+
+# set defaults
+# determine individuals in each track with most tissues sampled
+
+hgFixed -e 'select sampleId, donor,  age, gender, count(*)  from gtexSample, gtexDonor where gtexDonor.name=gtexSample.donor group by donor order by count(*)' > donorAgeGenderCount.txt
+
+# donors with most tissues in each age/gender group:
+GTEX-ZAB4       40      M       34
+GTEX-13OW6      50      M       34
+GTEX-13OW8      60      M       30
+
+GTEX-YFC4       40      F       30
+GTEX-13OVJ      50      F       29
+GTEX-12WSD      60      F       34
+
+# add defaults
+cd hub/hg38
+foreach f (trackDb.*.{male,female}.txt)
+    ../../bin/addDefaults.csh hg38 $f
+end
+
+# reduce default and min wig height: maxHeightPixels 64:12:8
+
+############
+# Redo hg19 trackDb as male/female in 3 age groups
+
+# test
+cd hub/hg19
+mkdir old;  mv *.txt old
+
+cd run
+set dir = `pwd`/hub/hg19
+../bin/trackGender.csh hg19 bladder male
+../bin/splitTracks.csh hg19 bladder male
+# check file
+diff $dir/split/trackDb.bladder.male.txt $dir
+mv $dir/split/trackDb.bladder.male.txt $dir
+
+# test
+cp trackDb.female.*.txt trackDb.male.*.txt ../hg19
+# edif to add alpha prefix to age tag
+
+# create trackDb files for each tissue, by gender
+cd run
+set dir = `pwd`/hub/hg19
+foreach f (`cat maleTissues.txt`)
+    echo $f
+    ../bin/trackGender.csh hg19 $f male
+    ../bin/splitTracks.csh hg19 $f male
+    mv $dir/split/trackDb.$f.male.txt $dir
+    ../bin/addDefaults.csh hg19 trackDb.$f.male.txt
+    mv $dir/defaults/trackDb.$f.male.txt $dir
+exit
+end
+
+# add includes from trackDb.male.txt to trackDb.txt
+
+# repeat  for hg19 female, hg38 male, hg38 female
+
+# create per tissue tracks, in hg38 and hg19
+
+../bin/trackAllTissues hg19
+
+

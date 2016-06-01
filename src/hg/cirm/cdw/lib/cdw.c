@@ -6204,19 +6204,19 @@ fputc(lastSep,f);
 }
 
 
-char *cdwDatasetCommaSepFieldNames = "name,label,description,pmid,pmcid,metaDivTags";
+char *cdwDatasetCommaSepFieldNames = "id,name,label,description,pmid,pmcid,metaDivTags";
 
 void cdwDatasetStaticLoad(char **row, struct cdwDataset *ret)
 /* Load a row from cdwDataset table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-
-ret->name = row[0];
-ret->label = row[1];
-ret->description = row[2];
-ret->pmid = row[3];
-ret->pmcid = row[4];
-ret->metaDivTags = row[5];
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+ret->label = row[2];
+ret->description = row[3];
+ret->pmid = row[4];
+ret->pmcid = row[5];
+ret->metaDivTags = row[6];
 }
 
 struct cdwDataset *cdwDatasetLoadByQuery(struct sqlConnection *conn, char *query)
@@ -6249,8 +6249,8 @@ void cdwDatasetSaveToDb(struct sqlConnection *conn, struct cdwDataset *el, char 
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->name,  el->label,  el->description,  el->pmid,  el->pmcid,  el->metaDivTags);
+sqlDyStringPrintf(update, "insert into %s values ( '%d', '%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->id, el->name,  el->label,  el->description,  el->pmid,  el->pmcid,  el->metaDivTags);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -6262,12 +6262,13 @@ struct cdwDataset *cdwDatasetLoad(char **row)
 struct cdwDataset *ret;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
-ret->label = cloneString(row[1]);
-ret->description = cloneString(row[2]);
-ret->pmid = cloneString(row[3]);
-ret->pmcid = cloneString(row[4]);
-ret->metaDivTags = cloneString(row[5]);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+ret->label = cloneString(row[2]);
+ret->description = cloneString(row[3]);
+ret->pmid = cloneString(row[4]);
+ret->pmcid = cloneString(row[5]);
+ret->metaDivTags = cloneString(row[6]);
 return ret;
 }
 
@@ -6316,6 +6317,7 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->label = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
@@ -6358,6 +6360,8 @@ for (el = *pList; el != NULL; el = next)
 void cdwDatasetOutput(struct cdwDataset *el, FILE *f, char sep, char lastSep) 
 /* Print out cdwDataset.  Separate fields with sep. Follow last field with lastSep. */
 {
+fprintf(f, "%u", el->id);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);

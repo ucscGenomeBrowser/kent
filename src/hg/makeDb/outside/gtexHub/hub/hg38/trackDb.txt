@@ -1,0 +1,125 @@
+# supertrack definitions
+
+track gtexRnaSignalFemale
+superTrack on show
+shortLabel Female Donors
+longLabel GTEx RNA-seq from 199 Female Donors
+
+track gtexRnaSignalMale
+superTrack on
+shortLabel Male Donors
+longLabel GTEx RNA-seq from 371 Male Donors
+
+# track definitions
+
+include trackDb.female.young.txt
+include trackDb.female.middle.txt
+include trackDb.female.old.txt
+
+include trackDb.male.young.txt
+include trackDb.male.middle.txt
+include trackDb.male.old.txt
+
+# subtrack definitions - female
+
+include trackDb.adiposeSubcut.female.txt
+include trackDb.adiposeVisceral.female.txt
+include trackDb.adrenalGland.female.txt
+include trackDb.arteryAorta.female.txt
+include trackDb.arteryCoronary.female.txt
+include trackDb.arteryTibial.female.txt
+include trackDb.bladder.female.txt
+include trackDb.brainAmygdala.female.txt
+include trackDb.brainAnCinCortex.female.txt
+include trackDb.brainCaudate.female.txt
+include trackDb.brainCerebelHemi.female.txt
+include trackDb.brainCerebellum.female.txt
+include trackDb.brainCortex.female.txt
+include trackDb.brainFrontCortex.female.txt
+include trackDb.brainHippocampus.female.txt
+include trackDb.brainHypothalamus.female.txt
+include trackDb.brainNucAccumbens.female.txt
+include trackDb.brainPutamen.female.txt
+include trackDb.brainSpinalcord.female.txt
+include trackDb.brainSubstanNigra.female.txt
+include trackDb.breastMamTissue.female.txt
+include trackDb.colonSigmoid.female.txt
+include trackDb.colonTransverse.female.txt
+include trackDb.ectocervix.female.txt
+include trackDb.endocervix.female.txt
+include trackDb.esophagusJunction.female.txt
+include trackDb.esophagusMucosa.female.txt
+include trackDb.esophagusMuscular.female.txt
+include trackDb.fallopianTube.female.txt
+include trackDb.heartAtrialAppend.female.txt
+include trackDb.heartLeftVentricl.female.txt
+include trackDb.kidneyCortex.female.txt
+include trackDb.liver.female.txt
+include trackDb.lung.female.txt
+include trackDb.minorSalivGland.female.txt
+include trackDb.muscleSkeletal.female.txt
+include trackDb.nerveTibial.female.txt
+include trackDb.ovary.female.txt
+include trackDb.pancreas.female.txt
+include trackDb.pituitary.female.txt
+include trackDb.skinNotExposed.female.txt
+include trackDb.skinExposed.female.txt
+include trackDb.smallIntestine.female.txt
+include trackDb.spleen.female.txt
+include trackDb.stomach.female.txt
+include trackDb.thyroid.female.txt
+include trackDb.uterus.female.txt
+include trackDb.vagina.female.txt
+include trackDb.wholeBlood.female.txt
+include trackDb.xformedlymphocytes.female.txt
+include trackDb.xformedfibroblasts.female.txt
+
+# subtrack definitions - male
+
+include trackDb.adiposeSubcut.male.txt
+include trackDb.adiposeVisceral.male.txt
+include trackDb.adrenalGland.male.txt
+include trackDb.arteryAorta.male.txt
+include trackDb.arteryCoronary.male.txt
+include trackDb.arteryTibial.male.txt
+include trackDb.bladder.male.txt
+include trackDb.brainAmygdala.male.txt
+include trackDb.brainAnCinCortex.male.txt
+include trackDb.brainCaudate.male.txt
+include trackDb.brainCerebelHemi.male.txt
+include trackDb.brainCerebellum.male.txt
+include trackDb.brainCortex.male.txt
+include trackDb.brainFrontCortex.male.txt
+include trackDb.brainHippocampus.male.txt
+include trackDb.brainHypothalamus.male.txt
+include trackDb.brainNucAccumbens.male.txt
+include trackDb.brainPutamen.male.txt
+include trackDb.brainSpinalcord.male.txt
+include trackDb.brainSubstanNigra.male.txt
+include trackDb.breastMamTissue.male.txt
+include trackDb.colonSigmoid.male.txt
+include trackDb.colonTransverse.male.txt
+include trackDb.esophagusJunction.male.txt
+include trackDb.esophagusMucosa.male.txt
+include trackDb.esophagusMuscular.male.txt
+include trackDb.heartAtrialAppend.male.txt
+include trackDb.heartLeftVentricl.male.txt
+include trackDb.kidneyCortex.male.txt
+include trackDb.liver.male.txt
+include trackDb.lung.male.txt
+include trackDb.minorSalivGland.male.txt
+include trackDb.muscleSkeletal.male.txt
+include trackDb.nerveTibial.male.txt
+include trackDb.pancreas.male.txt
+include trackDb.pituitary.male.txt
+include trackDb.prostate.male.txt
+include trackDb.skinNotExposed.male.txt
+include trackDb.skinExposed.male.txt
+include trackDb.smallIntestine.male.txt
+include trackDb.spleen.male.txt
+include trackDb.stomach.male.txt
+include trackDb.testis.male.txt
+include trackDb.thyroid.male.txt
+include trackDb.wholeBlood.male.txt
+include trackDb.xformedlymphocytes.male.txt
+include trackDb.xformedfibroblasts.male.txt

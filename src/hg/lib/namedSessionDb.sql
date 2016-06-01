@@ -8,7 +8,7 @@ CREATE TABLE namedSessionDb (
     userName varchar(64) not null,	# User name (from genomewiki).
     sessionName varchar(255) not null,	# Name that user assigns to this session
     contents longblob not null,	# CGI string of var=val&... settings.
-    shared tinyint not null,	# 1 if this session may be shared with other users.
+    shared tinyint not null,	# 1 if this session may be shared with other users, 2 if added to the public listing.
     firstUse datetime not null,	# Session creation date.
     lastUse datetime not null,	# Session most-recent-usage date.
     useCount int not null,	# Number of times this session has been used.

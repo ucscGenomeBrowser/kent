@@ -4,6 +4,7 @@ user	rvnair
 assay	WGS
 pipeline	Macrogen MGX-WGS-0101
 biosample_date	10 Oct 2014
+meta top
 
 	lab_baldwin_treatment	Episome no VPA
 	ips	episome_ips_protocol.pdf
@@ -119,4 +120,7 @@ biosample_date	10 Oct 2014
 	meta	HDF_fib
 	lab_baldwin_treatment	Fibroblast starting cells
 	control	untreated
+
+	noMeta	whatever
+	cell_line nonexistant
 

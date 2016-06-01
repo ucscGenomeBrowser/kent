@@ -1,0 +1,645 @@
+    track gtexRnaSignalSRR1076823
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1076823.hg38.bigWig
+    shortLabel adrenalGl F XV7Q
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-XV7Q-0226-SM-4BRVL)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXXV7Q
+    color 116,215,116
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0226-SM-4BRVL \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalSRR1082733
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1082733.hg38.bigWig
+    shortLabel adrenalGl F XUZC
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-XUZC-0226-SM-4BOO7)
+    subGroups age=a30 tissue=adrenalGland donor=GTEXXUZC
+    color 116,215,116
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0226-SM-4BOO7 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-34317 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2012
+
+    track gtexRnaSignalSRR1083824
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1083824.hg38.bigWig
+    shortLabel adrenalGl F S341
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-S341-0126-SM-4AD64)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXS341
+    color 116,215,116
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0126-SM-4AD64 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8 batch=BP-22727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalSRR1085590
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1085590.hg38.bigWig
+    shortLabel adrenalGl F R55G
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-R55G-0126-SM-48FDS)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXR55G
+    color 116,215,116
+    metadata donor=GTEX-R55G age=40 sex=F hardyScore=0 sample=GTEX-R55G-0126-SM-48FDS \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.4 batch=BP-21546 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/18/2012
+
+    track gtexRnaSignalSRR1092160
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1092160.hg38.bigWig
+    shortLabel adrenalGl F T6MO
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-T6MO-0126-SM-4DM6X)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXT6MO
+    color 116,215,116
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-0126-SM-4DM6X \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.2 batch=BP-24837 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR1099378
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1099378.hg38.bigWig
+    shortLabel adrenalGl F Q734
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-Q734-0126-SM-48U1E)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXQ734
+    color 116,215,116
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0126-SM-48U1E \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.9 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalSRR1099694
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1099694.hg38.bigWig
+    shortLabel adrenalGl F PWCY
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-PWCY-0226-SM-48TD8)
+    subGroups age=a20 tissue=adrenalGland donor=GTEXPWCY
+    color 116,215,116
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-0226-SM-48TD8 \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=7.7 batch=BP-19460 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalSRR1100496
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1100496.hg38.bigWig
+    shortLabel adrenalGl F U3ZN
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-U3ZN-0826-SM-4DXSZ)
+    subGroups age=a30 tissue=adrenalGland donor=GTEXU3ZN
+    color 116,215,116
+    metadata donor=GTEX-U3ZN age=30 sex=F hardyScore=0 sample=GTEX-U3ZN-0826-SM-4DXSZ \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=9.2 batch=BP-25493 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/18/2012
+
+    track gtexRnaSignalSRR1322046
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1322046.hg38.bigWig
+    shortLabel adrenalGl F 14H4A
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-14H4A-0226-SM-5SI6Q)
+    subGroups age=a40 tissue=adrenalGland donor=GTEX14H4A
+    color 116,215,116
+    metadata donor=GTEX-14H4A age=40 sex=F hardyScore=0 sample=GTEX-14H4A-0226-SM-5SI6Q \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.8 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1400507
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1400507.hg38.bigWig
+    shortLabel adrenalGl F 12WSJ
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-12WSJ-0126-SM-5GCOM)
+    subGroups age=a40 tissue=adrenalGland donor=GTEX12WSJ
+    color 116,215,116
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0126-SM-5GCOM \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.8 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1403322
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1403322.hg38.bigWig
+    shortLabel adrenalGl F ZYWO
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZYWO-0126-SM-5GZWQ)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXZYWO
+    color 116,215,116
+    metadata donor=GTEX-ZYWO age=40 sex=F hardyScore=0 sample=GTEX-ZYWO-0126-SM-5GZWQ \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=9.1 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1416979
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1416979.hg38.bigWig
+    shortLabel adrenalGl F 14BMU
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-14BMU-0126-SM-5S2Q9)
+    subGroups age=a20 tissue=adrenalGland donor=GTEX14BMU
+    color 116,215,116
+    metadata donor=GTEX-14BMU age=20 sex=F hardyScore=0 sample=GTEX-14BMU-0126-SM-5S2Q9 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.7 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1466663
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1466663.hg38.bigWig
+    shortLabel adrenalGl F WYVS
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-WYVS-0226-SM-4ONDK)
+    subGroups age=a40 tissue=adrenalGland donor=GTEXWYVS
+    color 116,215,116
+
+    track gtexRnaSignalSRR1479977
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1479977.hg38.bigWig
+    shortLabel adrenalGl F 1399S
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-1399S-0426-SM-5IFG5)
+    subGroups age=a30 tissue=adrenalGland donor=GTEX1399S
+    color 116,215,116
+    metadata donor=GTEX-1399S age=30 sex=F hardyScore=0 sample=GTEX-1399S-0426-SM-5IFG5 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.3 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1480831
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1480831.hg38.bigWig
+    shortLabel adrenalGl F 11XUK
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-11XUK-0126-SM-5CVLK)
+    subGroups age=a40 tissue=adrenalGland donor=GTEX11XUK
+    color 116,215,116
+    metadata donor=GTEX-11XUK age=40 sex=F hardyScore=0 sample=GTEX-11XUK-0126-SM-5CVLK \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=6.6 batch=BP-44525 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1500382
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1500382.hg38.bigWig
+    shortLabel adrenalGl F 12WSK
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-12WSK-0326-SM-5GCOJ)
+    subGroups age=a40 tissue=adrenalGland donor=GTEX12WSK
+    color 116,215,116
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-0326-SM-5GCOJ \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1073365
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1073365.hg38.bigWig
+    shortLabel adrenalGl F QCQG
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-QCQG-0126-SM-48U27)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXQCQG
+    color 116,215,116
+    metadata donor=GTEX-QCQG age=50 sex=F hardyScore=0 sample=GTEX-QCQG-0126-SM-48U27 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.7 batch=BP-20114 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/15/2011
+
+    track gtexRnaSignalSRR1082616
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1082616.hg38.bigWig
+    shortLabel adrenalGl F S32W
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-S32W-0126-SM-4AD61)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXS32W
+    color 116,215,116
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-0126-SM-4AD61 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.1 batch=BP-22609 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalSRR1085951
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1085951.hg38.bigWig
+    shortLabel adrenalGl F R53T
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-R53T-0226-SM-48FEH)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXR53T
+    color 116,215,116
+    metadata donor=GTEX-R53T age=50 sex=F hardyScore=0 sample=GTEX-R53T-0226-SM-48FEH \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.2 batch=BP-21338 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/11/2012
+
+    track gtexRnaSignalSRR1321029
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1321029.hg38.bigWig
+    shortLabel adrenalGl F 13N11
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13N11-0826-SM-5IJFP)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX13N11
+    color 116,215,116
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-0826-SM-5IJFP \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.9 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1322536
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1322536.hg38.bigWig
+    shortLabel adrenalGl F 132AR
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-132AR-1726-SM-5EGHQ)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX132AR
+    color 116,215,116
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-1726-SM-5EGHQ \
+            tissue=adrenalGland autolysisScore=2 rnaIntegrity=8.2 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1322747
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1322747.hg38.bigWig
+    shortLabel adrenalGl F 1399U
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-1399U-0226-SM-5P9J2)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX1399U
+    color 116,215,116
+    metadata donor=GTEX-1399U age=50 sex=F hardyScore=0 sample=GTEX-1399U-0226-SM-5P9J2 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.3 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1327723
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1327723.hg38.bigWig
+    shortLabel adrenalGl F Y114
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-Y114-0526-SM-4TT8V)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXY114
+    color 116,215,116
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-0526-SM-4TT8V \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.1 batch=BP-34869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2013
+
+    track gtexRnaSignalSRR1332403
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1332403.hg38.bigWig
+    shortLabel adrenalGl F ZVT2
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZVT2-0826-SM-5GIEO)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXZVT2
+    color 116,215,116
+    metadata donor=GTEX-ZVT2 age=50 sex=F hardyScore=0 sample=GTEX-ZVT2-0826-SM-5GIEO \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1333263
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1333263.hg38.bigWig
+    shortLabel adrenalGl F ZF2S
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZF2S-0126-SM-4WKFO)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXZF2S
+    color 116,215,116
+
+    track gtexRnaSignalSRR1345806
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1345806.hg38.bigWig
+    shortLabel adrenalGl F 13D11
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13D11-0426-SM-5LZYA)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX13D11
+    color 116,215,116
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-0426-SM-5LZYA \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.8 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalSRR1351390
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1351390.hg38.bigWig
+    shortLabel adrenalGl F 12WSG
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-12WSG-0726-SM-5EGIG)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX12WSG
+    color 116,215,116
+    metadata donor=GTEX-12WSG age=50 sex=F hardyScore=0 sample=GTEX-12WSG-0726-SM-5EGIG \
+            tissue=adrenalGland autolysisScore=2 rnaIntegrity=6.8 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1359080
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1359080.hg38.bigWig
+    shortLabel adrenalGl F ZZPU
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZZPU-1226-SM-5N9CK)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXZZPU
+    color 116,215,116
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-1226-SM-5N9CK \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.6 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1407428
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1407428.hg38.bigWig
+    shortLabel adrenalGl F ZYVF
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZYVF-1626-SM-5N9EH)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXZYVF
+    color 116,215,116
+
+    track gtexRnaSignalSRR1415567
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1415567.hg38.bigWig
+    shortLabel adrenalGl F 14A5I
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-14A5I-2126-SM-5NQA8)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX14A5I
+    color 116,215,116
+
+    track gtexRnaSignalSRR1417364
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1417364.hg38.bigWig
+    shortLabel adrenalGl F 11I78
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-11I78-1826-SM-5A5M4)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX11I78
+    color 116,215,116
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-1826-SM-5A5M4 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1419015
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1419015.hg38.bigWig
+    shortLabel adrenalGl F Y3IK
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-Y3IK-0226-SM-51MRJ)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXY3IK
+    color 116,215,116
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0226-SM-51MRJ \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.3 batch=BP-35206 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalSRR1437576
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1437576.hg38.bigWig
+    shortLabel adrenalGl F ZLWG
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZLWG-0126-SM-4WWC5)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXZLWG
+    color 116,215,116
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0126-SM-4WWC5 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.7 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1448008
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1448008.hg38.bigWig
+    shortLabel adrenalGl F 131XG
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-131XG-1326-SM-5DUX4)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX131XG
+    color 116,215,116
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-1326-SM-5DUX4 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1451921
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1451921.hg38.bigWig
+    shortLabel adrenalGl F 13FH7
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13FH7-0226-SM-5IFGG)
+    subGroups age=a50 tissue=adrenalGland donor=GTEX13FH7
+    color 116,215,116
+    metadata donor=GTEX-13FH7 age=50 sex=F hardyScore=0 sample=GTEX-13FH7-0226-SM-5IFGG \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.7 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR816495
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR816495.hg38.bigWig
+    shortLabel adrenalGl F OHPK
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-OHPK-1326-SM-3MJGN)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXOHPK
+    color 116,215,116
+    metadata donor=GTEX-OHPK age=50 sex=F hardyScore=0 sample=GTEX-OHPK-1326-SM-3MJGN \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.1 batch=BP-17780 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/20/2011
+
+    track gtexRnaSignalSRR816865
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR816865.hg38.bigWig
+    shortLabel adrenalGl F OXRK
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-OXRK-0126-SM-3NB1E)
+    subGroups age=a50 tissue=adrenalGland donor=GTEXOXRK
+    color 116,215,116
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0126-SM-3NB1E \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.7 batch=BP-18261 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalSRR1094144
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1094144.hg38.bigWig
+    shortLabel adrenalGl F XYKS
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-XYKS-0926-SM-4BRVG)
+    subGroups age=a60 tissue=adrenalGland donor=GTEXXYKS
+    color 116,215,116
+    metadata donor=GTEX-XYKS age=60 sex=F hardyScore=0 sample=GTEX-XYKS-0926-SM-4BRVG \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.5 batch=BP-34738 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/27/2012
+
+    track gtexRnaSignalSRR1308035
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1308035.hg38.bigWig
+    shortLabel adrenalGl F 11DXX
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-11DXX-0126-SM-5EGH7)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX11DXX
+    color 116,215,116
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0126-SM-5EGH7 \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1323360
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1323360.hg38.bigWig
+    shortLabel adrenalGl F 1122O
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-1122O-0326-SM-5H124)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX1122O
+    color 116,215,116
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0326-SM-5H124 \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=8.7 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalSRR1337666
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1337666.hg38.bigWig
+    shortLabel adrenalGl F 13OVI
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13OVI-1226-SM-5J2ME)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX13OVI
+    color 116,215,116
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-1226-SM-5J2ME \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.3 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1347412
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1347412.hg38.bigWig
+    shortLabel adrenalGl F X4EO
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-X4EO-1726-SM-4QARN)
+    subGroups age=a60 tissue=adrenalGland donor=GTEXX4EO
+    color 116,215,116
+    metadata donor=GTEX-X4EO age=60 sex=F hardyScore=3 sample=GTEX-X4EO-1726-SM-4QARN \
+            tissue=adrenalGland autolysisScore=2 rnaIntegrity=6.7 batch=BP-30732 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalSRR1349585
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1349585.hg38.bigWig
+    shortLabel adrenalGl F 11GSP
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-11GSP-0326-SM-5A5KW)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX11GSP
+    color 116,215,116
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0326-SM-5A5KW \
+            tissue=adrenalGland autolysisScore=2 rnaIntegrity=6.1 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1364034
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1364034.hg38.bigWig
+    shortLabel adrenalGl F 13W3W
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13W3W-1326-SM-5LU4T)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX13W3W
+    color 116,215,116
+    metadata donor=GTEX-13W3W age=60 sex=F hardyScore=0 sample=GTEX-13W3W-1326-SM-5LU4T \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.1 batch=BP-47141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1377905
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1377905.hg38.bigWig
+    shortLabel adrenalGl F ZLV1
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-ZLV1-0226-SM-4WWC1)
+    subGroups age=a60 tissue=adrenalGland donor=GTEXZLV1
+    color 116,215,116
+    metadata donor=GTEX-ZLV1 age=60 sex=F hardyScore=0 sample=GTEX-ZLV1-0226-SM-4WWC1 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.1 batch=BP-42869 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalSRR1378179
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1378179.hg38.bigWig
+    shortLabel adrenalGl F 13PVR
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13PVR-0226-SM-5RQJI)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX13PVR
+    color 116,215,116
+    metadata donor=GTEX-13PVR age=60 sex=F hardyScore=0 sample=GTEX-13PVR-0226-SM-5RQJI \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.5 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1384456
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1384456.hg38.bigWig
+    shortLabel adrenalGl F 13O3O
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13O3O-1626-SM-5KM1O)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX13O3O
+    color 116,215,116
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-1626-SM-5KM1O \
+            tissue=adrenalGland autolysisScore=2 rnaIntegrity=6.5 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1392525
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1392525.hg38.bigWig
+    shortLabel adrenalGl F 1211K
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-1211K-0126-SM-59HJE)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX1211K
+    color 116,215,116
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-0126-SM-59HJE \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=9.3 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalSRR1399335
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1399335.hg38.bigWig
+    shortLabel adrenalGl F 13PL7
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-13PL7-1026-SM-5MR5C)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX13PL7
+    color 116,215,116
+    metadata donor=GTEX-13PL7 age=60 sex=F hardyScore=0 sample=GTEX-13PL7-1026-SM-5MR5C \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.9 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1400730
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1400730.hg38.bigWig
+    shortLabel adrenalGl F 14DAQ
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-14DAQ-1826-SM-5S2VV)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX14DAQ
+    color 116,215,116
+
+    track gtexRnaSignalSRR1432719
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1432719.hg38.bigWig
+    shortLabel adrenalGl F 146FR
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-146FR-1526-SM-5SIB8)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX146FR
+    color 116,215,116
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-1526-SM-5SIB8 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=8.2 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1491257
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1491257.hg38.bigWig
+    shortLabel adrenalGl F 12WSD
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-12WSD-2126-SM-5LZWK)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX12WSD
+    color 116,215,116
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-2126-SM-5LZWK \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=7.1 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1500282
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR1500282.hg38.bigWig
+    shortLabel adrenalGl F 11EMC
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-11EMC-0526-SM-5EGJN)
+    subGroups age=a60 tissue=adrenalGland donor=GTEX11EMC
+    color 116,215,116
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-0526-SM-5EGJN \
+            tissue=adrenalGland autolysisScore=3 rnaIntegrity=5.7 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR811631
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR811631.hg38.bigWig
+    shortLabel adrenalGl F OHPL
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-OHPL-1326-SM-3MJGG)
+    subGroups age=a60 tissue=adrenalGland donor=GTEXOHPL
+    color 116,215,116
+    metadata donor=GTEX-OHPL age=60 sex=F hardyScore=0 sample=GTEX-OHPL-1326-SM-3MJGG \
+            tissue=adrenalGland autolysisScore=0 rnaIntegrity=9.1 batch=BP-17822 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/21/2011
+
+    track gtexRnaSignalSRR814407
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl adrenalGland/gtexRnaSignalSRR814407.hg38.bigWig
+    shortLabel adrenalGl F O5YV
+    longLabel GTEx RNA signal from female Adrenal Gland (GTEX-O5YV-1126-SM-3LK73)
+    subGroups age=a60 tissue=adrenalGland donor=GTEXO5YV
+    color 116,215,116
+    metadata donor=GTEX-O5YV age=60 sex=F hardyScore=3 sample=GTEX-O5YV-1126-SM-3LK73 \
+            tissue=adrenalGland autolysisScore=1 rnaIntegrity=6.6 batch=BP-17536 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2011
+

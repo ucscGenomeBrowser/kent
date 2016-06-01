@@ -1,0 +1,258 @@
+    track gtexRnaSignalSRR1440699
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1440699.hg38.bigWig
+    shortLabel brainSubs F 11UD1
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-11UD1-0011-R2b-SM-5BC6O)
+    subGroups age=a40 tissue=brainSubstanNigra donor=GTEX11UD1
+    color 238,238,0
+    metadata donor=GTEX-11UD1 age=40 sex=F hardyScore=3 sample=GTEX-11UD1-0011-R2b-SM-5BC6O \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=8.1 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR1455171
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1455171.hg38.bigWig
+    shortLabel brainSubs F YFC4
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-YFC4-0011-R2a-SM-4V6DZ)
+    subGroups age=a40 tissue=brainSubstanNigra donor=GTEXYFC4
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R2a-SM-4V6DZ \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7.2 batch=BP-40981 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/18/2013
+
+    track gtexRnaSignalSRR1459655
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1459655.hg38.bigWig
+    shortLabel brainSubs F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-12ZZX-0011-R2a-SM-5EGLG)
+    subGroups age=a40 tissue=brainSubstanNigra donor=GTEX12ZZX
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R2a-SM-5EGLG \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7.9 batch=BP-44878 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR604074
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR604074.hg38.bigWig
+    shortLabel brainSubs F Q2AG
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-Q2AG-0011-R2A-SM-2HMIT)
+    subGroups age=a40 tissue=brainSubstanNigra donor=GTEXQ2AG
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R2A-SM-2HMIT \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=8.1 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalSRR665670
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR665670.hg38.bigWig
+    shortLabel brainSubs F T2IS
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-T2IS-0011-R2A-SM-32QPF)
+    subGroups age=a20 tissue=brainSubstanNigra donor=GTEXT2IS
+    color 238,238,0
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0011-R2A-SM-32QPF \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6 batch=BP-24010 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/10/2012
+
+    track gtexRnaSignalSRR1335688
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1335688.hg38.bigWig
+    shortLabel brainSubs F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-13OVJ-0011-R2b-SM-5L3GP)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEX13OVJ
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R2b-SM-5L3GP \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47491 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1420493
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1420493.hg38.bigWig
+    shortLabel brainSubs F 1313W
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-1313W-0011-R2a-SM-5EGLF)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEX1313W
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R2a-SM-5EGLF \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7 batch=BP-44999 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1459585
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1459585.hg38.bigWig
+    shortLabel brainSubs F ZV68
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-ZV68-0011-R2a-SM-4YCDK)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEXZV68
+    color 238,238,0
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0011-R2a-SM-4YCDK \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.1 batch=BP-41299 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalSRR1485333
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1485333.hg38.bigWig
+    shortLabel brainSubs F 13SLX
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-13SLX-0011-R2b-SM-5S2VP)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEX13SLX
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R2b-SM-5S2VP \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.5 batch=BP-48345 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1498482
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1498482.hg38.bigWig
+    shortLabel brainSubs F 12WS9
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-12WS9-0011-R2a-SM-5CVNE)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEX12WS9
+    color 238,238,0
+
+    track gtexRnaSignalSRR612455
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR612455.hg38.bigWig
+    shortLabel brainSubs F RU72
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-RU72-0011-R2A-SM-2TF6O)
+    subGroups age=a50 tissue=brainSubstanNigra donor=GTEXRU72
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R2A-SM-2TF6O \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.1 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/22/2012
+
+    track gtexRnaSignalSRR1360744
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1360744.hg38.bigWig
+    shortLabel brainSubs F 13QJC
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-13QJC-0011-R2b-SM-5PNUN)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEX13QJC
+    color 238,238,0
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0011-R2b-SM-5PNUN \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.7 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1389348
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1389348.hg38.bigWig
+    shortLabel brainSubs F 12WSD
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-12WSD-0011-R2a-SM-5LZWB)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEX12WSD
+    color 238,238,0
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0011-R2a-SM-5LZWB \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=5.8 batch=BP-44020 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2013
+
+    track gtexRnaSignalSRR1410448
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1410448.hg38.bigWig
+    shortLabel brainSubs F 13X6K
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-13X6K-0011-R2b-SM-5P9K3)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEX13X6K
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R2b-SM-5P9K3 \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.7 batch=BP-48229 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1459211
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1459211.hg38.bigWig
+    shortLabel brainSubs F 145LS
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-145LS-0011-R2a-SM-5PNZI)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEX145LS
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R2a-SM-5PNZI \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7.2 batch=BP-48227 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1475675
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR1475675.hg38.bigWig
+    shortLabel brainSubs F 11ZTS
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-11ZTS-0011-R2b-SM-5BC75)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEX11ZTS
+    color 238,238,0
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-0011-R2b-SM-5BC75 \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7.6 batch=BP-43229 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2013
+
+    track gtexRnaSignalSRR599486
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR599486.hg38.bigWig
+    shortLabel brainSubs F N7MT
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-N7MT-0011-R2a-SM-2I3GI)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXN7MT
+    color 238,238,0
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0011-R2a-SM-2I3GI \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.6 batch=BP-17394 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR603397
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR603397.hg38.bigWig
+    shortLabel brainSubs F NPJ7
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-NPJ7-0011-R2a-SM-2I3GF)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXNPJ7
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R2a-SM-2I3GF \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7 batch=BP-17410 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR612623
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR612623.hg38.bigWig
+    shortLabel brainSubs F QVJO
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-QVJO-0011-R2A-SM-2S1QK)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXQVJO
+    color 238,238,0
+    metadata donor=GTEX-QVJO age=60 sex=F hardyScore=4 sample=GTEX-QVJO-0011-R2A-SM-2S1QK \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=7.1 batch=BP-21964 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalSRR615934
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR615934.hg38.bigWig
+    shortLabel brainSubs F PWO3
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-PWO3-0011-R2A-SM-2S1OX)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXPWO3
+    color 238,238,0
+    metadata donor=GTEX-PWO3 age=60 sex=F hardyScore=4 sample=GTEX-PWO3-0011-R2A-SM-2S1OX \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.7 batch=BP-20083 center=D1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/14/2011
+
+    track gtexRnaSignalSRR818469
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR818469.hg38.bigWig
+    shortLabel brainSubs F OXRO
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-OXRO-0011-R2A-SM-3NB1W)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXOXRO
+    color 238,238,0
+    metadata donor=GTEX-OXRO age=60 sex=F hardyScore=4 sample=GTEX-OXRO-0011-R2A-SM-3NB1W \
+            tissue=brainSubstanNigra autolysisScore=-1 rnaIntegrity=6.3 batch=BP-19075 center=D1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2011
+
+    track gtexRnaSignalSRR821019
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainSubstanNigra/gtexRnaSignalSRR821019.hg38.bigWig
+    shortLabel brainSubs F X4EP
+    longLabel GTEx RNA signal from female Brain - Substantia nigra (GTEX-X4EP-0011-R2B-SM-3P625)
+    subGroups age=a60 tissue=brainSubstanNigra donor=GTEXX4EP
+    color 238,238,0
+

@@ -350,9 +350,10 @@ while (1)
 		int saveErrno = errno;
 		if ((bwtx == -1) && (saveErrno == EPIPE))
 		    { // if there was a EPIPE, accept and consume the SIGPIPE now.
-		    struct timespec zerotime = {0};
-		    if (sigtimedwait(&sigpipe_mask, 0, &zerotime) == -1) 
+		    int sigErr, sig;
+		    if ((sigErr = sigwait(&sigpipe_mask, &sig)) != 0) 
 			{
+			errno = sigErr;
 			perror("sigtimedwait");
 			exit(1);
 			}
