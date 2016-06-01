@@ -16,278 +16,375 @@ errAbort(
   "usage:\n"
   "   sqlToTxt fileId output\n"
   "options:\n"
-  "   -forceLayout = The output is a D3 forcelayout .json. \n"
   );
 }
 
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {"forceLayout", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-bool clForceLayout = FALSE; // Prints the data in .json format for d3 force layout visualizations
-int totalNodes = 0;
-int gStart = 0; 
-int gKey = 0;
-int gX = 200; 
-int gY = 200; 
-struct jsonNode *nodeList;
-struct jsonLink *linkList;
-
-struct jsonLink
+struct slFileRow
     {
-    struct jsonLink *next; 
-    char *text;
-    int start;
-    int end; 
+    struct slFileRow *next; 
+    unsigned fileId1; 
+    unsigned fileId2; 
+    bool moreThanTwo; 
     };
 
-struct jsonNode
-    {
-    struct jsonNode *next;
-    char *text; 
-    int key; 
-    bool diamond;
-    int xloc; 
-    int yloc; 
-    };
-
-    
-struct jsonNode *newJsonNode(char *text, int key, bool diamond, int xloc, int yloc)
+struct slFileRow *slFileRowNew(unsigned fileId1, unsigned fileId2, bool moreThanTwo)
+/* Return a new slFileRow. */
 {
-struct jsonNode *newNode; 
-AllocVar(newNode); 
-newNode->text=cloneString(text); 
-newNode->key=key; 
-newNode->diamond=diamond; 
-newNode->xloc=xloc; 
-newNode->yloc=yloc;
-return newNode; 
+struct slFileRow *a;
+AllocVar(a);
+a->fileId1 = fileId1;
+a->fileId2 = fileId2;
+a->moreThanTwo = moreThanTwo; 
+return a;
 }
 
-struct jsonLink *newJsonLink(char *text, int start, int end)
+bool lookBackward(char *fileId, struct slFileRow *files, struct slInt *steps)
+/* Look backwards through the cdwStep tables until the source is found, store 
+ * the file and step rows along the way */ 
 {
-struct jsonLink *newLink; 
-AllocVar(newLink); 
-newLink->text=cloneString(text); 
-newLink->start=start; 
-newLink->end=end;
-return newLink; 
-}
-
-
-
-void printToForceLayoutJson(FILE *f)
-{
-// Print to D3 forceLayout format. 
-int normalizeX = 200;
-int currentLevel = 0;
-bool firstLine = true; 
-struct jsonNode *iterN;
-fprintf(f,"{\n\t\"nodes\":[\n"); 
-for (iterN = nodeList; iterN -> next!=NULL; iterN = iterN->next)
-    {
-    if (firstLine)
-	{
-	currentLevel = iterN->yloc/200; 
-	firstLine = false; 
-	}
-    int updatedXloc = iterN->xloc;
-    if (iterN->xloc > normalizeX) normalizeX=iterN->xloc; 
-    if (iterN->yloc/200 != currentLevel) 
-	updatedXloc = normalizeX/2; 
-	currentLevel = iterN->yloc/200; 
-    fprintf(f,"\t{\"name\":\"%s\",\"group\":%i}", iterN->text, currentLevel);     
-    if (iterN->next->next !=NULL) fprintf(f,",");
-    fprintf(f,"\n"); 
-    }
-fprintf(f,"],\n\t\"links\":[\n"); 
-struct jsonLink *iterL; 
-for (iterL = linkList; iterL->next !=NULL; iterL = iterL->next)
-    {
-    fprintf(f,"\t{\"source\":%i,\"target\":%i,\"value\":%i}", slCount(nodeList) - 2 - iterL->start,slCount(nodeList) - 2 - iterL->end, 1);//iterL->text); 
-    if (iterL->next->next != NULL) fprintf(f,",");
-    fprintf(f,"\n"); 
-    }
-fprintf(f,"]}\n"); 
-}
-
-void generateHtml(FILE *f, char *fileName)
-/* Generate a .html file for the D3 visualizations.  */
-{
-
-fprintf(f,"<!DOCTYPE html><meta charset=\"utf-8\"><title> %s force layout</title><style>.node{stroke: #fff; stroke-width: 1.5px;}.link{stroke: #999; stroke-opacity: .6;}</style><body><script src=\"https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js\"></script><script>var width=960, height=500;var color=d3.scale.category20();var force=d3.layout.force() .charge(-120) .linkDistance(30) .size([width, height]);var svg=d3.select(\"body\").append(\"svg\") .attr(\"width\", width) .attr(\"height\", height);d3.json(\"%s.json\", function(error, graph){if (error) throw error; force .nodes(graph.nodes) .links(graph.links) .start(); var link=svg.selectAll(\".link\") .data(graph.links) .enter().append(\"line\") .attr(\"class\", \"link\") .style(\"stroke-width\", function(d){return Math.sqrt(d.value);}); var node=svg.selectAll(\".node\") .data(graph.nodes) .enter().append(\"circle\") .attr(\"class\", \"node\") .attr(\"r\", 5) .style(\"fill\", function(d){return color(d.group);}) .call(force.drag); node.append(\"title\")", fileName, fileName); 
-fprintf(f,".text(function(d){return d.name;}); force.on(\"tick\", function(){link.attr(\"x1\", function(d){return d.source.x;}) .attr(\"y1\", function(d){return d.source.y;}) .attr(\"x2\", function(d){return d.target.x;}) .attr(\"y2\", function(d){return d.target.y;}); node.attr(\"cx\", function(d){return d.x;}) .attr(\"cy\", function(d){return d.y;});});});// Color leaf nodes orange, and packages white or blue.function color(d){return d._children ? \"#3182bd\" : d.children ? \"#c6dbef\" : \"#fd8d3c\";}// Toggle children on click.function click(d){if (!d3.event.defaultPrevented){if (d.children){d._children=d.children; d.children=null;}else{d.children=d._children; d._children=null;}update();}}// Returns a list of all nodes under the root.function flatten(root){var nodes=[], i=0; function recurse(node){if (node.children) node.children.forEach(recurse); if (!node.id) node.id=++i; nodes.push(node);}recurse(root); return nodes;}</script>"); 
-}
-
-
-void printToGoJson(FILE *f)
-{
-/* Print a list of jsonNodes and jsonLinks to go.js format. Will likely get things working here then jump ship to a more
- * free option */ 
-struct jsonNode *iterN;
-fprintf(f,"{ \"class\":\"go.GraphLinksModel\",\"linkFromPortIdProperty\":\"fromPort\",\"linkToPortIdProperty\": \"toPort\",\"nodeDataArray\":[\n");
-for (iterN = nodeList; iterN->next !=NULL; iterN = iterN->next)
-    {
-    fprintf(f,"{\"text\":\"%s\",\"key\":\"%i\",\"loc\":\"%i %i\"}",iterN->text, iterN->key, iterN->xloc, iterN->yloc);
-    if (iterN->next->next !=NULL) fprintf(f,",");
-    fprintf(f,"\n"); 
-    }
-fprintf(f,"],\n\"linkDataArray\":[\n"); 
-struct jsonLink *iterL; 
-for (iterL = linkList; iterL->next !=NULL; iterL = iterL->next)
-    {
-    fprintf(f,"{\"from\":%i,\"to\":%i,\"fromPort\":\"B\", \"toPort\":\"T\", \"visible\":true, \"text\":\"%s\"}",iterL->start, iterL->end, iterL->text);
-    if (iterL->next->next != NULL) fprintf(f,",");
-    fprintf(f,"\n"); 
-    }
-fprintf(f,"]}\n"); 
-}
-
-
-
-void addTransitionNode(int stepRunId, int yPos)
-/* takes in stepRunId and adds a node to the linked list. The nodes
- * name is from the cdwStepDef table */ 
-{
-// Take stepRunId and map it to id in cdwStepRun, this gives a stepDefId
-struct sqlConnection *conn = sqlConnect("cdw"); 
+bool findAnything = TRUE; 
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
 char query[1024]; 
-sqlSafef(query, 1024, "select * from cdwStepRun where id = '%i';", stepRunId);
-struct cdwStepRun *out = cdwStepRunLoadByQuery(conn, query);
+
+// Check if the fileId is in the stepOut table, if it is then start looping back
+sqlSafef(query, 1024, "select * from cdwStepOut where fileId = '%s'", fileId);
+struct cdwStepOut *cSO = cdwStepOutLoadByQuery(conn,query);
+if (cSO != NULL)  // Base case
+    {
+    // Check for siblings 
+    sqlSafef(query, 1024, "select * from cdwStepOut where stepRunId = '%u'", cSO->stepRunId); 
+    struct cdwStepOut *cSOList = cdwStepOutLoadByQuery(conn,query);
+    unsigned siblingId = 0; 
+    bool moreThanOneSibling = FALSE; 
+    struct cdwStepOut *iter;
+    for (iter = cSOList; iter != NULL; iter=iter->next)
+	{
+	if (iter->fileId != cSO->fileId)
+	    {
+	    siblingId = iter->fileId; 
+	    }
+	}
+    if (slCount(cSOList) > 2)
+	moreThanOneSibling = TRUE;
+    struct slFileRow *newRow = slFileRowNew(atoi(fileId), siblingId, moreThanOneSibling); 
+    slAddTail(&files, newRow);
+    findAnything = FALSE; 
+    }
+
+while(cSO != NULL)
+    {
+    // Add the step to the list of steps 
+    struct slInt *newStep = slIntNew(cSO->stepRunId);
+    slAddTail(&steps, newStep);
+    
+    // All steps have input files, go find them 
+    sqlSafef(query, 1024, "select * from cdwStepIn where stepRunId = '%u'", cSO->stepRunId); 
+    struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn, query);
+
+    // To keep the graphs simple only the first file is further analyzed, the 
+    // existance of one, or possibly N more is determined and stored for future use
+    unsigned fileId2;
+    bool moreThanTwo = FALSE; 
+    if (cSI->next != NULL)
+	{
+	if (cSI->next->next != NULL)
+	    moreThanTwo = TRUE;
+	fileId2 = cSI->next->fileId;
+	}
+    else 
+	fileId2 = 0;
+    struct slFileRow *newRow = slFileRowNew(cSI->fileId, fileId2, moreThanTwo); 
+    slAddTail(&files, newRow);  
+	
+    // Update the while loop to see if any of these input files are also output files. 
+    sqlSafef(query, 1024, "select * from cdwStepOut where fileId = '%u'", cSI->fileId);
+    cSO = cdwStepOutLoadByQuery(conn,query);
+    }
+sqlDisconnect(&conn); 
+slReverse(files);
+slReverse(steps);
+return findAnything; 
+}
+
+void lookForward(char *fileId, struct slFileRow *files, struct slInt *steps, bool upstream)
+/* Look backwards through the cdwStep tables until the source is found, store 
+ * the file and step rows along the way */ 
+{
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
+char query[1024]; 
+
+// Check if the fileId is in the stepOut table, if it is then start looping back
+sqlSafef(query, 1024, "select * from cdwStepIn where fileId = '%s'", fileId);
+struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn,query);
+
+if (cSI != NULL && upstream)
+    {
+    // Check for siblings 
+    sqlSafef(query, 1024, "select * from cdwStepIn where stepRunId = '%u'", cSI->stepRunId); 
+    struct cdwStepIn *cSIList = cdwStepInLoadByQuery(conn,query);
+    unsigned siblingId = 0; 
+    bool moreThanOneSibling = FALSE; 
+    struct cdwStepIn *iter;
+    for (iter = cSIList; iter != NULL; iter=iter->next)
+	{
+	if (iter->fileId != cSI->fileId)
+	    {
+	    siblingId = iter->fileId; 
+	    }
+	}
+    if (slCount(cSIList) > 2)
+	moreThanOneSibling = TRUE;
+    struct slFileRow *newRow = slFileRowNew(atoi(fileId), siblingId, moreThanOneSibling); 
+    slAddTail(&files, newRow);
+    }
+
+while(cSI != NULL)
+    {
+    // Add the step to the list of steps 
+    struct slInt *newStep = slIntNew(cSI->stepRunId);
+    slAddTail(&steps, newStep);
+    
+    // All steps have input files, go find them 
+    sqlSafef(query, 1024, "select * from cdwStepOut where stepRunId = '%u'", cSI->stepRunId); 
+    struct cdwStepOut *cSO = cdwStepOutLoadByQuery(conn, query);
+
+    // To keep the graphs simple only the first file is further analyzed, the 
+    // existance of one, or possibly N more is determined and stored for future use
+    unsigned fileId2;
+    bool moreThanTwo = FALSE; 
+    if (cSO->next != NULL)
+	{
+	if (cSO->next->next != NULL)
+	    moreThanTwo = TRUE;
+	fileId2 = cSO->next->fileId;
+	}
+    else 
+	fileId2 = 0;
+    struct slFileRow *newRow = slFileRowNew(cSO->fileId, fileId2, moreThanTwo); 
+    slAddTail(&files, newRow);  
+	
+    // Update the while loop to see if any of these input files are also output files. 
+    sqlSafef(query, 1024, "select * from cdwStepIn where fileId = '%u'", cSO->fileId);
+    cSI = cdwStepInLoadByQuery(conn,query);
+    }
+sqlDisconnect(&conn); 
+return; 
+}
+
+
+void printToStrictJson(FILE *f, struct slFileRow *files, struct slInt *steps)
+/* Print the files to .json format.  This prints a valid .json file
+ * However it is difficult to actually make a flowchart from it! 
+ * Mostly due to the complexity of having a node with multiple parents.*/
+{
+struct slFileRow *fileRow; 
+struct slInt *stepRow = steps->next;  
+fprintf(f,"[");
+for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
+    {
+    if (fileRow->fileId2 != 0)
+	{
+	fprintf(f,"{\"name\":\"%u\"},", fileRow->fileId2);
+	}
+    if (fileRow->moreThanTwo)
+	{
+	fprintf(f,"{\"name\":\"%i\"},",  fileRow->moreThanTwo); 
+	}
+    fprintf(f,"{\"name\":\"%u\"", fileRow->fileId1);
+    if (fileRow->next != NULL) 
+	fprintf(f,",\"children\":[{\"name\":\"%i\",\"children\":[", stepRow->val); 
+    }
+int iter; 
+for (iter = 0; iter < slCount(files) + 1 ; ++iter)
+    {
+    fprintf(f,"}]");     
+    }
+fprintf(f,"\n");
+}
+    
+
+void printRowToStep(FILE *f, struct slFileRow *fileRow, struct slInt *stepRow)
+{
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
+char query[1024]; 
+// The main branch file 
+sqlSafef(query, 1024, "select * from cdwValidFile where fileId = '%u'", fileRow->fileId1);
+struct cdwValidFile *cVF = cdwValidFileLoadByQuery(conn, query);
+fprintf(f,"g.setEdge(\"%s 1\",", cVF->format); 
+
+// The main branch step 
+sqlSafef(query, 1024, "select * from cdwStepRun where id = '%i'", stepRow->val);
+struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+sqlSafef(query, 1024, "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+fprintf(f,"\"%s\", ""{label:\"\"});\n", cSD->name);
+if (fileRow->fileId2 != 0) // Any siblings?  
+    {
+    sqlSafef(query, 1024, "select * from cdwValidFile where fileId = '%u'", fileRow->fileId2);
+    cVF = cdwValidFileLoadByQuery(conn, query);
+    fprintf(f,"g.setEdge(\"%s 2\", \"%s\", {label:\"\"} );\n", cVF->format, cSD->name);
+    }
+if (fileRow->moreThanTwo) // Too many siblings, put a placeholder instead.  
+    {
+    fprintf(f,"g.setEdge(\"%s n\", \"%s\", {label:\"\"} );\n", cVF->format, cSD->name);
+    }
 sqlDisconnect(&conn);
-
-/* Take stepDefId and map it to id in cdwStepDef, this gives a name which is used 
- * to label a node */ 
-struct sqlConnection *conn1 = sqlConnect("cdw"); 
-char query1[1024]; 
-sqlSafef(query1, 1024, "select * from cdwStepDef where id = '%i';", out->stepDef);
-struct cdwStepDef *out1 = cdwStepDefLoadByQuery(conn1, query1);
-sqlDisconnect(&conn1);
-
-gY+=200; // Move the node down the page 
-struct jsonNode *middleNode = newJsonNode(out1->name, totalNodes, false, gX, yPos);
-slAddHead(&nodeList, middleNode); // add the node to the list
-++totalNodes; // Add one to the total node count (used for links)
 }
 
-void addEndNode(int fileId, int yPos)
-/* Takes in a fileId and adds a node to the linked list. The nodes name 
- * is from the cdwValidFile table.  The yPos is updated locally instead of globablly
- * to account for multiple nodes on this level.  */ 
+void printStepToRow(FILE *f, struct slFileRow *fileRow, struct slInt *stepRow)
 {
-struct sqlConnection *conn6 = sqlConnect("cdw"); 
-char query6[1024]; 
-sqlSafef(query6, 1024, "select * from cdwValidFile where fileId=\'%i\'",fileId);
-struct cdwValidFile *out6 = cdwValidFileLoadByQuery(conn6, query6);
-sqlDisconnect(&conn6);
-struct jsonNode *endNode = newJsonNode(out6->licensePlate, totalNodes, false, gX, yPos+400);
-slAddHead(&nodeList, endNode);
-++totalNodes;
-gX += 200; 
-}
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
+char query[1024]; 
+sqlSafef(query, 1024, "select * from cdwStepRun where id = '%i'", stepRow->val);
+struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+sqlSafef(query, 1024, "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+sqlSafef(query, 1024, "select * from cdwValidFile where fileId = '%u'", fileRow->next->fileId1);
+struct cdwValidFile *cVF = cdwValidFileLoadByQuery(conn, query);
+fprintf(f,"g.setEdge(\"%s\", \"%s 1\", {label:\"\"});\n", cSD->name, cVF->format);
 
-void rLookForNodes(int fileId, int currentNode, int yPos)
-{
-/* Assumes the first node has been created, now we are looking in the cdwStepIn file. If we find something
- * then the function continues. */  
-struct sqlConnection *conn1 = sqlConnect("cdw"); 
-char query1[1024]; 
-sqlSafef(query1, 1024, "select * from cdwStepIn where fileId = '%i'", fileId); 
-struct cdwStepIn *out1 = cdwStepInLoadByQuery(conn1, query1);
-sqlDisconnect(&conn1);
-struct jsonLink *firstLink = newJsonLink(out1->name, currentNode-1, currentNode);
-//Create a link from the previous node to the intermediate node 
-slAddHead(&linkList, firstLink);// Add the link to the list 
-// Add the intermediate node 
-addTransitionNode(out1->stepRunId, yPos+200); 
-// Look at the table cdwStepOut for the output nodes, there could be more than one... 
-struct sqlConnection *conn5 = sqlConnect("cdw"); 
-char query5[1024]; 
-sqlSafef(query5, 1024, "select * from cdwStepOut where stepRunId = '%i';", out1->stepRunId);
-struct cdwStepOut *out5 = cdwStepOutLoadByQuery(conn5, query5);
-struct cdwStepOut *iter = out5; 
-for (; iter != NULL; iter = iter->next) 
-    // Iterate through the output rows. 
+// Check if the fileId is in the stepOut table, if it is then start looping back
+sqlSafef(query, 1024, "select * from cdwStepOut where fileId = '%u'", fileRow->next->fileId1);
+
+struct cdwStepOut *cSOStepRuns = cdwStepOutLoadByQuery(conn, query);
+sqlSafef(query, 1024, "select * from cdwStepOut where stepRunId = '%u'", cSOStepRuns->stepRunId);
+
+
+struct cdwStepOut *cSOIter, *cSOList = cdwStepOutLoadByQuery(conn, query);
+
+for (cSOIter = cSOList; cSOIter != NULL; cSOIter=cSOIter->next)
     {
-    //create a link from the intermediate node to the end node. 
-    struct jsonLink *secondLink = newJsonLink(iter->name, currentNode, totalNodes);
-    slAddHead(&linkList, secondLink); // add the link to the list. 
-    addEndNode(iter->fileId, yPos);// add the end node to the list.  
-    struct sqlConnection *conn3 = sqlConnect("cdw"); 
-    char query3[1024];
-    sqlSafef(query3, 1024, "select * from cdwStepIn where fileId = '%i'", iter->fileId); 
-    struct cdwStepIn *out3 = cdwStepInLoadByQuery(conn3, query3); 
-    if (out3 !=NULL)
+    if (cSOIter->fileId == fileRow->next->fileId2)
+	fprintf(f,"g.setEdge(\"%s\", \"%s 2\", {label:\"\"});\n", cSD->name, cVF->format);
+    }
+sqlDisconnect(&conn);
+}
+
+void printToDagreD3(FILE *f, char *fileId, struct slFileRow *files, struct slInt *steps)
+/* Print out the modular parts of a a dager-d3 javascript visualization
+ * These will need to be put into the .js code at the right place. The
+ * base flowchart code that is being used was found here; 
+ * http://cpettitt.github.io/project/dagre-d3/latest/demo/tcp-state-diagram.html */ 
+{
+struct slFileRow *fileRow; 
+struct slInt *stepRow = steps->next;  
+fprintf(f,"<!doctype html>  <meta charset=\"utf-8\"> <title>file flowchart</title>  <link rel=\"stylesheet\" href=\"demo.css\"> <script src=\"http://d3js.org/d3.v3.min.js\" charset=\"utf-8\"></script> <script src=\"http://cpettitt.github.io/project/dagre-d3/latest/dagre-d3.js\"></script>  <style id=\"css\"> body { font: 300 14px 'Helvetica Neue', Helvetica; } "); 
+fprintf(f,".node rect,.node ellipse {stroke: #333;fill: #fff;stroke-width: 1.5px;}"); // Node appearances defined via CSS. 
+fprintf(f,"  .edgePath path { stroke: #333; fill: #333; stroke-width: 1.5px; } </style> <svg width=600 height=800><g/>"); 
+fprintf(f,"</svg>  <script id=\"js\"> var g = new dagreD3.graphlib.Graph().setGraph({});");  
+// Define all the nodes, this sets the visual node name
+fprintf(f,"var states = [");
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
+char query[1024]; 
+for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
+    {
+    sqlSafef(query, 1024, "select * from cdwValidFile where fileId = '%u'", fileRow->fileId1);
+    struct cdwValidFile *cVF = cdwValidFileLoadByQuery(conn, query);
+    fprintf(f,"\"%s 1\"", cVF->format);
+    if (fileRow->fileId2 != 0)
 	{
-	rLookForNodes(out5->fileId, totalNodes, yPos+400);  	
+	fprintf(f,",\"%s 2\"", cVF->format);
+	}
+    if (fileRow->moreThanTwo)
+	{
+	fprintf(f,",\"%s n\"", cVF->format); 
+	}
+    if (fileRow->next != NULL) 
+	{
+	sqlSafef(query, 1024, "select * from cdwStepRun where id = '%i'", stepRow->val);
+	struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+	sqlSafef(query, 1024, "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+	struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+	fprintf(f,",\"%s\",", cSD->name); 
+	stepRow = stepRow->next; 
 	}
     }
-sqlDisconnect(&conn5); 
-}
-
-void normalizeXCoords ()
-/* Some tricky code I am playing with... It takes advantage of the output 
- * printing convention, so it is very finicky.  */
-{
-int cLev = nodeList->yloc, xTot = 0, stCnt = 0 ; 
-while (cLev > 0)
+fprintf(f,"]\n"); 
+// Link the nodes up 
+fprintf(f,"states.forEach(function(state) { g.setNode(state, { label: state }); });");
+stepRow = steps->next; 
+struct slInt *iter; 
+// Make the step's ellipses, the actual appearance is defined with CSS above. 
+for (iter = stepRow; iter != NULL; iter=iter->next)
     {
-    struct jsonNode *iterN;  
-    for (iterN=nodeList; iterN!=NULL; iterN = iterN->next) 
-	{
-	if (iterN->yloc == cLev)
-	    {
-	    xTot += iterN->xloc; 
-	    ++stCnt;
-	    
-	    }
-	if (iterN->yloc == cLev-200)
-	    {
-	    iterN->xloc = xTot/stCnt; 
-	    stCnt = 0; 
-	    xTot = 0; 
-	    }
-	}
-    --cLev; 
+    sqlSafef(query, 1024, "select * from cdwStepRun where id = '%i'", iter->val);
+    struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+    sqlSafef(query, 1024, "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+    struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+    fprintf(f, "g.setNode(\"%s\", {shape:\"ellipse\"});", cSD->name ); 
     }
+stepRow = steps->next; 
+for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
+    {
+    // Print row to step 
+    printRowToStep(f, fileRow, stepRow);  
+    // Print step to next row 
+    if (fileRow->next != NULL) 
+	{
+	printStepToRow(f, fileRow, stepRow);
+	stepRow = stepRow->next; 
+	}
+    if (stepRow == NULL) break;
+    }
+fprintf(f,"g.nodes().forEach(function(v) { var node = g.node(v); node.rx = node.ry = 5; }); ");
+
+sqlSafef(query, 1024, "select * from cdwValidFile where id = '%s'", fileId); 
+struct cdwValidFile *cVF = cdwValidFileLoadByQuery(conn,query); 
+// Color the node that is being selected 
+fprintf(f,"g.node('%s 1').style = \"fill: #7f7\";", cVF->format); 
+
+fprintf(f,"var svg = d3.select(\"svg\"), inner = svg.select(\"g\");   var render = new dagreD3.render();  render(inner, g);  var initialScale = 0.75; zoom .translate([(svg.attr(\"width\") - g.graph().width * initialScale) / 2, 20]) .scale(initialScale) .event(svg)"); 
+fprintf(f,"; svg.attr('height', g.graph().height * initialScale + 40); </script>\n"); 
+sqlDisconnect(&conn);
 }
 
-void sqlToTxt(char *startQuery, char *outputFile)
+
+void sqlToTxt(char *fileId, char *outputFile)
 /* sqlToTxt - A program that runs through SQL tables and generates history flow chart information. */
 {
-AllocVar(nodeList); 
-AllocVar(linkList); 
-// graph the fileId to a licensePlate for the first node
-struct sqlConnection *conn = sqlConnect("cdw"); 
-char query[1024]; 
-sqlSafef(query, 1024, "select * from cdwValidFile where fileId = '%s'", startQuery); 
-struct cdwValidFile *out = cdwValidFileLoadByQuery(conn, query); 
-struct jsonNode *startNode = newJsonNode(out->licensePlate, totalNodes, false, 200, 200);
-slAddHead(&nodeList, startNode);
-++totalNodes;
-rLookForNodes(atoi(startQuery), totalNodes, 200); 
+struct slFileRow *files;  
+struct slInt *steps;
+AllocVar(files); 
+AllocVar(steps); 
 
-normalizeXCoords(); 
-if (clForceLayout)
-    {
-    generateHtml(mustOpen(catTwoStrings(outputFile,".html"),"w"), outputFile);  
-    printToForceLayoutJson(mustOpen(catTwoStrings(outputFile,".json"),"w")); 
-    verbose(0, "The output was printed to %s.html and %s.json.\n", outputFile, outputFile); 
-    }
-else 
-    {
-    printToGoJson(mustOpen(catTwoStrings(outputFile,".json"),"w")); 
-    verbose(0, "The output was printed to %s.json.\n", outputFile); 
-    }
+/* Go backwards (in the pipeline from a time/analysis perpsective) until there are no more steps */
+
+struct sqlConnection *conn = sqlConnect("cdw_chris"); 
+char query[1024]; 
+sqlSafef(query, 1024, "select * from cdwValidFile where id = '%s'", fileId);
+struct cdwValidFile *cVF = cdwValidFileLoadByQuery(conn, query);
+sqlDisconnect(&conn); 
+if (cVF == NULL) 
+    errAbort("There is no entry in cdwValidFile for the fileId %s.", fileId); 
+// This boolean addresses the base case
+bool upstream = lookBackward(fileId, files, steps);
+
+/* Go forwards until there are no more steps */ 
+lookForward(fileId, files, steps, upstream);
+if (slCount(files) == 1 || slCount(steps) == 1)
+    errAbort("There is no entry in either cdwStepIn or cdwStep Out for the fileId %s. Use the script maniMani to populate these tables.", fileId); 
+
+assert(slCount(files) == slCount(steps) + 1); 
+
+/* Iterate over steps and files printing to some output format (json/newick) */ 
+
+// TODO If statement for printing, throw in a flag so the user can choose. 
+///fprintf(f,"\n"); 
+FILE *f = mustOpen(outputFile,"w");
+//printToStrictJson(f, files, steps);
+printToDagreD3(f, fileId, files, steps); 
+carefulClose(&f); 
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-clForceLayout = optionExists("forceLayout");
 if (argc != 3)
     usage();
 sqlToTxt(argv[1], argv[2]);

@@ -468,6 +468,11 @@ void doPeptideAtlas(struct trackDb *tdb, char *item);
 void doGtexGeneExpr(struct trackDb *tdb, char *item);
 /* Details of GTEX gene expression item */
 
+void printAddWbr(char *text, int distance);
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.

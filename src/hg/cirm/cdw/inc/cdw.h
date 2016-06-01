@@ -2444,7 +2444,7 @@ void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep);
 #define cdwTrackVizCommaOut(el,f) cdwTrackVizOutput(el,f,',',',');
 /* Print out cdwTrackViz as a comma separated list including final comma. */
 
-#define CDWDATASET_NUM_COLS 6
+#define CDWDATASET_NUM_COLS 7
 
 extern char *cdwDatasetCommaSepFieldNames;
 
@@ -2452,6 +2452,7 @@ struct cdwDataset
 /* A dataset is a collection of files, usually associated to a paper */
     {
     struct cdwDataset *next;  /* Next in singly linked list. */
+    unsigned id;	/* Dataset ID */
     char *name;	/* Short name of this dataset, one word, no spaces */
     char *label;	/* short title of the dataset, a few words */
     char *description;	/* Description of dataset, can be a complete html paragraph. */

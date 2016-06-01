@@ -748,3 +748,8 @@ img.speciesIcon {
   margin-bottom: 5px;
   text-align: center
 }
+
+/* hgPublicSessions-specific */
+a:link img.sessionThumbnail {
+  padding: 5px;
+}

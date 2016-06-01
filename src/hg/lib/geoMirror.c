@@ -1,4 +1,4 @@
-/* geoMirror - support geographic based mirroring (e.g. euronode) */
+/* geoMirror - support geographic based mirroring (e.g. euro and asia nodes) */
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
@@ -20,6 +20,7 @@
    spec from above wiki page:
         browser.node=1 -> US server (genome.ucsc.edu)
         browser.node=2 -> European server (genome-euro.ucsc.edu)
+        browser.node=3 -> Asian server (genome-asia.ucsc.edu)
 
 
    For Testing, use browser.geoSuffix: e.g.

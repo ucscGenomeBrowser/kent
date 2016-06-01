@@ -623,6 +623,8 @@ hubConnectAddDescription(db, tdb);
 char *type = cloneFirstWord(tdb->type);
 if (sameString(type, "bigBed"))
     showSchemaBigBed(table, tdb);
+else if (sameString(type, "longTabix"))
+    showSchemaLongTabix(table, tdb);
 else if (sameString(type, "bam"))
     showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
@@ -651,6 +653,8 @@ if (isHubTrack(table))
     showSchemaHub(db, table);
 else if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table, tdb);
+else if (isLongTabixTable(table))
+    showSchemaLongTabix(table, tdb);
 else if (isBamTable(table))
     showSchemaBam(table, tdb);
 else if (isVcfTable(table, &isTabix))

@@ -18,12 +18,15 @@ return tg->height = sqlUnsigned(cartUsualString(cart, buffer, LONG_DEFHEIGHT));
 static void longRangeDraw(struct track *tg, int seqStart, int seqEnd,
         struct hvGfx *hvg, int xOff, int yOff, int width, 
         MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a list of longTabix structures. */
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct bed *beds = tg->items;
 unsigned int maxWidth;
 struct longRange *longRange;
 char buffer[1024];
+char itemBuf[2048];
+char statusBuf[2048];
 
 safef(buffer, sizeof buffer, "%s.%s", tg->tdb->track, LONG_MINSCORE);
 double minScore = sqlDouble(cartUsualString(cart, buffer, LONG_DEFMINSCORE));
@@ -31,37 +34,68 @@ struct longRange *longRangeList = parseLongTabix(beds, &maxWidth, minScore);
 
 for(longRange=longRangeList; longRange; longRange=longRange->next)
     {
-    if (sameString(longRange->sChrom, longRange->eChrom))
-        {
-        int sx = (longRange->s - seqStart) * scale + xOff;
-        int ex = (longRange->e - seqStart) * scale + xOff;
-        double longRangeWidth = longRange->e - longRange->s;
-        int height = (tg->height - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
-        int tsx = sx;
-        int tex = ex;
+    safef(itemBuf, sizeof itemBuf, "%d", longRange->id);
+    safef(statusBuf, sizeof statusBuf, "%g %s:%d %s:%d", longRange->score, longRange->sChrom, longRange->s, longRange->eChrom, longRange->e);
 
-        if (tsx > tex)
+    boolean sOnScreen = (longRange->s >= seqStart) && (longRange->s < seqEnd);
+    unsigned sx = 0, ex = 0;
+    if (sOnScreen)
+        sx = (longRange->s - seqStart) * scale + xOff;
+
+    if (differentString(longRange->sChrom, longRange->eChrom))
+        {
+        if (!sOnScreen)
+            continue;
+
+        int height = tg->height/2;
+        if (tg->visibility == tvDense)
+            height = tg->height;
+        unsigned yPos = yOff + height;
+        hvGfxLine(hvg, sx, yOff, sx, yPos, MG_BLUE);
+        if (tg->visibility == tvFull)
             {
-            tsx = sx;
-            tex = ex;
+            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - 2, yOff, 4, tg->height/2,
+                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+
+            safef(buffer, sizeof buffer, "%s:%d",  longRange->eChrom, longRange->e);
+            hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);
             }
+        }
+    else 
+        {
+        boolean eOnScreen = (longRange->e >= seqStart) && (longRange->e < seqEnd);
+        if (!(sOnScreen || eOnScreen))
+            continue;
+
+        if (eOnScreen)
+            ex = (longRange->e - seqStart) * scale + xOff;
+
+        double longRangeWidth = longRange->e - longRange->s;
+        int peak = (tg->height - 15) * ((double)longRangeWidth / maxWidth) + yOff + 10;
+        if (tg->visibility == tvDense)
+            peak = yOff + tg->height;
         
-        hvGfxLine(hvg, sx, yOff, tsx, height, color);
-        hvGfxLine(hvg, ex, yOff, tex, height, color);
+        if (sOnScreen)
+            hvGfxLine(hvg, sx, yOff, sx, peak, color);
+        if (eOnScreen)
+            hvGfxLine(hvg, ex, yOff, ex, peak, color);
 
         if (tg->visibility == tvFull)
             {
-            hvGfxLine(hvg, tsx, height, tex, height, color);
-            char statusBuf[2048];
-            safef(statusBuf, sizeof statusBuf, "%g %s:%d", longRange->score, longRange->eChrom, longRange->e);
-            char itemBuf[2048];
-            safef(itemBuf, sizeof itemBuf, "%d", longRange->id);
+            unsigned sPeak = sOnScreen ? sx : xOff;
+            unsigned ePeak = eOnScreen ? ex : xOff + width;
 
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tsx, height-2, tex-tsx, 4,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tsx - 2, yOff, 4, height - yOff,
-                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
-            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e,tex - 2, yOff, 4, height - yOff,
+            hvGfxLine(hvg, sPeak, peak, ePeak, peak, color);
+            safef(statusBuf, sizeof statusBuf, "%g %s:%d %s:%d", longRange->score, longRange->sChrom, longRange->s, longRange->eChrom, longRange->e);
+
+            if (sOnScreen)
+                mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, sx - 2, yOff, 4, peak - yOff,
+                                       tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+            if (eOnScreen)
+                mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, ex - 2, yOff, 4, peak - yOff,
+                                       tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
+
+            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->e, sPeak, peak-2, ePeak - sPeak, 4,
                                    tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
 
             }

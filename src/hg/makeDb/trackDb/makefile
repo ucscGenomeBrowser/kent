@@ -124,6 +124,7 @@ DBS = \
 	nomLeu1 nomLeu2 nomLeu3 \
 	ochPri2 ochPri3 \
 	oncVol1 \
+	orcOrc1 \
 	oreNil1 oreNil2 \
 	ornAna1 ornAna2 \
 	oryCun1 oryCun2 \

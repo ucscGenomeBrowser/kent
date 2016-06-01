@@ -3164,3 +3164,22 @@ http://genome.crg.es/genepredictions/P.paniscus/panPan1/geneid_v1.4/panPan1.gene
 #    enrich 63.28x
 
 ##########################################################################
+# LIFTOVER TO panPan2 (DONE - 2016-05-17 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan1/bed/blat.panPan2.2016-05-17
+    cd /hive/data/genomes/panPan1/bed/blat.panPan2.2016-05-17
+
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -ooc=/hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan1 panPan2
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc=/hive/data/genomes/panPan1/jkStuff/panPan1.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan1 panPan2) > doLiftOverToPanPan2.log 2>&1
+    # real    339m4.444s
+
+    # verify this functions in the genome browser from panPan1 to panPan2
+
+##############################################################################

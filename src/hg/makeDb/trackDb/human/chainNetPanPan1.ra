@@ -1,0 +1,15 @@
+        track chainPanPan1
+        subTrack primateChainNetViewchain on
+        subGroups view=chain species=abBonobo clade=aaHominidae
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain panPan1
+        otherDb panPan1
+
+        track netPanPan1
+        subTrack primateChainNetViewnet on
+        subGroups view=net species=abBonobo clade=aaHominidae
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign panPan1 chainPanPan1
+        otherDb panPan1

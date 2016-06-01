@@ -21,59 +21,24 @@
 <div class="section">
 <h1> Session Gallery </h1>
 <div class="sectionContent">
-<p><b>Table of Contents:</b>
 <td>
   <ul><b>
-    <li><a class="toc" href="#What">What is a Session?</a>
-    <li><a class="toc" href="#What2">What is the Session Gallery?</a>
-    <li><a class="toc" href="#Gallery">Session Gallery</a>
-      <ul>
-        <li><a class="toc" href="#dna">DNA/Codon View</a>
-        <li><a class="toc" href="#evolution">Evolution</a>
-        <li><a class="toc" href="#snp">SNPs and Disease</a>
-        <li><a class="toc" href="#tfbs">Expression/Regulation: TFBS/RNA-seq/ChIP-seq</a>
-        <li><a class="toc" href="#mlq">Mailing List Support</a>
-      </ul>
-    <li><a class="toc" href="#Trouble">Troubleshooting Common Problems</a>
-      <ul>
-        <li><a class="toc" href="#links">Creating Links</a>
-        <li><a class="toc" href="#customTracks">Custom Tracks</a>
+     <li><a class="toc" href="#dna">DNA/Codon View</a>
+     <li><a class="toc" href="#evolution">Evolution</a>
+     <li><a class="toc" href="#snp">SNPs and Disease</a>
+     <li><a class="toc" href="#tfbs">Expression/Regulation: TFBS/RNA-seq/ChIP-seq</a>
+     <li><a class="toc" href="#mlq">Mailing List Support</a>
+     <li><a class="toc" href="#more">More Information about Sessions</a>
+       <ul>
+         <li><a class="toc" href="#What">What is a Session?</a>
+         <li><a class="toc" href="#What2">What is the Session Gallery?</a>
+         <li><a class="toc" href="#links">Don't copy that link -- make a Session!</a>
+         <li><a class="toc" href="#customTracks">Custom Track Caveats</a>
+       </ul>
 </b></ul>
 </td>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
-
-<a name="What"></a>
-<div class="section">
-<h1>What is a Session?</h1>
-<div class="sectionContent">
-<p>
-A <a href="hgSessionHelp.html" target="_blank">session</a> is a specific set of track
-combinations, that can include custom tracks allowing snapshots of browser activities.
-Multiple sessions may be saved for future reference, for comparing different data sets, or
-for sharing with your colleagues. Follow these links to learn how to
-<a href="hgSessionHelp.html#Create" target="_blank">create</a>
-and <a href="hgSessionHelp.html#Share" target="_blank">share</a> sessions.
-</p>
-</div><!-- .sectionContent -->
-</div><!-- .section -->
-
-<a name="What2"></a>
-<div class="section">
-<h1>What is the Session Gallery?</h1>
-<div class="sectionContent">
-<p>
-The Session Gallery is a collection of track views that help highlight viewing different
-topics in the browser. The sessions in the Session Gallery were created in the browser
-and then saved to a local file, which was then uploaded to an online location.  
-This allows creating a single link, such as
-http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=U,
-where <b>U</b> is the URL of the session file, e.g. http://www.mysite.edu/~me/mySession.txt, enabling
-users to maintain external control of the content file for easy update.
-</p>
-</div><!-- .sectionContent -->
-</div><!-- .section -->
-
 
 <a name="Gallery"></a>
 <div class="section">
@@ -306,6 +271,64 @@ Hypersensitivity, ChIP-seq Transcription Factor binding sites, and Genome Segmen
 </p>
 </div><!-- .sectionContent -->
 
+<h4 class="title">Example search of enhancer information around the gene TNFAIP3</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.enhancer"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.enhancer.png"></center></a>
+<p>
+This session comes from a question regarding how to search for enhancer
+RNA for the gene TNFAIP3. 
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/q3OyjSo4Qdk/mhrQtRBhXbYJ"
+target="_blank">The response</a> displays the various ENCODE tracks around the gene TNFAIP3
+indicating where DNase activity, Transcription Factor Binding, RNA transcription, and histone
+modification has been observed. The layered H3K4Me1 and layered H3K27Ac tracks show where
+modification of histone proteins is suggestive of enhancer and other regulatory activity.
+Investigating where RNA-seq signals overlap with Transcription Factor Binding upstream of
+TNFAIP3 transcription would appear to indicate possible eRNA locations and the segmentation
+track displays possible Strong and Weak Enhancers as calculated by the ChromHMM and Segway programs.
+</p>
+</div><!-- .sectionContent -->
+
+<h4 class="title">Example of how DNaseI Hypersensitivity Clusters track represents multiple experiments</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.Dnase"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.Dnase.png"></center></a>
+<p>
+This session comes from a question about how the DNaseI Hypersensitivity Clusters track is generated.
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/mwPp41nqVWw/c7QdhdLCwvgJ"
+target="_blank">The response</a> explains that the clusters track represents the combining and
+filtering of multiple DNaseI Hypersensitivity Uniform Peaks tracks in an attempt to summarize
+multiple individual experiments, which also can be viewed individually in the browser.
+</p>
+</div><!-- .sectionContent -->
+
+<h4 class="title">Example of how the Transcription Factor ChIP Track is generated from multiple experiments</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.TFBScluster"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.TFBScluster.png"></center></a>
+<p>
+This session helps illustrate the process behind creating the TFBS Clusters track.
+Uniform processing resulted in a comparable signal scores viewable in the wgEncodeAwgTfbsUniform track,
+that was then used to generate the clustered score in the wgEncodeRegTfbsClusteredV3 track,
+where a normalization factor was used to attempt to better distribute scores evenly.
+The session originated from a question regarding whether it was correct to interpret
+the darker score as increased biological evidence of binding for a transcription factor
+at a particular spot.
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/FPZuwGAuWoI/Hn00L0SPRUAJ"
+target="_blank">The response</a> shared how by filtering to display only the
+JUN, JUNB, JUND, and MYC factors you can see several individual "Uniform ...c-Myc" tracks
+displayed below the clusters track. Those are the separate wgEncodeAwgTfbsUniform tracks
+used to generate the processed clustered summary wgEncodeRegTfbsClusteredV3 track for this MYC cluster.
+Those individual uniform processed scores were used to create the cluster score given to
+the MYC cluster. Like the MYC factor, you can also click the JUN factors and you will see
+there is only one observed cell type where this data indicates this factor binds at this
+location. And similarly below, you will see the "Uniform... Jun" tracks that contributed
+to the clusters track.
+</p>
+</div><!-- .sectionContent -->
+
+
+
 <!-- Topic Division -->
 <a name="mlq"></a>
 <h3><em>Mailing List Support</em></h3>
@@ -316,7 +339,7 @@ Hypersensitivity, ChIP-seq Transcription Factor binding sites, and Genome Segmen
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.AluY"
 target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.AluY.png"></center></a>
 <p>
-A user was interested in an intron region of the gene PHKB where a repeat element for AluY was given.
+A user was interested in an intron of the gene PHKB where a repeat element for AluY was given.
 The user could not find the Alu repeat, and 
 <a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/_X1bURBW8ho/TRs18-kez2AJ"
 target="_blank">the response</a> was to aid the user in turning on the RepeatMasker track
@@ -324,16 +347,79 @@ where information on repeats, such as the AluY element desired, is contained.
 </p>
 </div><!-- .sectionContent -->
 
+<h4 class="title">Example of refGene exonFrames coming from mRNA</h4>
+<div class="sectionContent">
+<a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg38.refGeneFrame"
+target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg38.refGeneFrame.png"></center></a>
+<p>
+A user had written some code to generate exon frame data from the refGene table,
+based on the belief that the exonFrames should be possible to derive entirely
+from the cds{Start,End} and exon{Starts,Ends} by taking differences and dividing
+by three for the size of codons. However, the user noticed an inconsistency
+with the their generated exonFrames output compared to the information in the refGene table. In
+<a href="https://groups.google.com/a/soe.ucsc.edu/d/msg/genome/XRdN33qDvug/iTAZPUYksUsJ"
+target="_blank">the response</a> the explanation was that the exon frames come from the mRNA,
+not the genome, and the example provided (NM_001282171/KIR3DS1) represented a transcript where there
+were deletions in respect to the reference at chr19_KI270922v1_alt:123,732-123,733.</p>
+<ul>
+<pre>
+aacaga..agtgaacagc 000870
+||||||  |||||||||| >>>>>>
+aacagaacagtgaacagc 123743
+</pre>
+</ul>
+By clicking into the details of the RefSeq gene NM_001282171 transcript
+and clicking the first link in the  section titled &quot;mRNA/Genome Alignments&quot;
+one can see the alignments of the mRNA to the genome and find the dots <tt>aga..agt</tt>
+indicating a deletion. 
+</p>
+</div><!-- .sectionContent -->
 
+</div><!-- .sectionContent of entire Gallery -->
+</div><!-- .section -->
+
+<a name="more"</a>
+<div class="section">
+<h1>More Information about Sessions</h1>
+<div class="sectionContent">
+<!-- larger section with subsections --->
+<p>
+
+<a name="What"></a>
+<div class="section">
+<h1>What is a Session?</h1>
+<div class="sectionContent">
+<p>
+A <a href="hgSessionHelp.html" target="_blank">session</a> is a specific set of track
+combinations, that can include custom tracks allowing snapshots of browser activities.
+Multiple sessions may be saved for future reference, for comparing different data sets, or
+for sharing with your colleagues. Follow these links to learn how to
+<a href="hgSessionHelp.html#Create" target="_blank">create</a>
+and <a href="hgSessionHelp.html#Share" target="_blank">share</a> sessions.
+</p>
 </div><!-- .sectionContent -->
 </div><!-- .section -->
 
-<a name="Trouble"></a>
+<a name="What2"></a>
 <div class="section">
-<h1>Troubleshooting Common Problems</h1>
+<h1>What is the Session Gallery?</h1>
 <div class="sectionContent">
+<p>
+The Session Gallery is a collection of track views that help highlight viewing different
+topics in the browser. The sessions in the Session Gallery were created in the browser
+and then saved to a local file, which was then uploaded to an online location.  
+This allows creating a single link, such as
+http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=U,
+where <b>U</b> is the URL of the session file, e.g. http://www.mysite.edu/~me/mySession.txt, enabling
+users to maintain external control of the content file for easy update.
+</p>
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
 <a name="links"></a>
-<h3><em>Creating Links</em></h3>
+<div class="section">
+<h1>Don't copy that link -- make a Session!</h1>
+<div class="sectionContent">
 <p>
 Please see the <a href="http://genome.ucsc.edu/blog/how-to-share-your-ucsc-screenthoughts/"
 target="_blank">How to share your UCSC screenthoughts</a> blog entry for a thorough 
@@ -360,8 +446,13 @@ the only further improvement being to locally download your session file and the
 from your own private collection in an internet accessible location using the
 <tt><b>hgS_loadUrlName=</b></tt> option. For example seen in this link: <tt>http://genome.ucsc.edu/cgi-bin/hgTracks?<b>hgS_doLoadUrl=submit&hgS_loadUrlName=</b>http://genome.ucsc.edu/goldenPath/help/examples/sessions/encodeDemonstration</tt>
 </p>
+</div><!-- .sectionContent -->
+</div><!-- .section -->
+
 <a name="customTracks"></a>
-<h3><em>Custom Tracks</em></h3>
+<div class="section">
+<h1><em>Custom Track caveats</em></h1>
+<div class="sectionContent">
 <p>
 We have changed our policy about the persistence of session data including custom tracks in sessions.
 In the past saved sessions were only committed to persist for four months after the last access
@@ -393,6 +484,9 @@ page, perhaps giving a top line such as <code>track name=&quot;blat&quot;
 description=&quot;My BLAT results for X,Y,Z&quot;</code> to describe it.    
 </p>
 </div><!-- .sectionContent -->
+</div><!-- .section -->
+
+</div><!-- .sectionContent More information about sessions -->
 </div><!-- .section -->
 
 </div><!-- .content -->
