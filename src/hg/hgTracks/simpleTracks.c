@@ -12319,9 +12319,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
-struct sqlConnection *conn = hAllocConn(database);
 tg->attrTable = NULL;
-hFreeConn(&conn);
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;
