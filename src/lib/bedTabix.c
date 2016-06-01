@@ -34,7 +34,8 @@ while ((wordCount = lineFileChopTab(btf->lf, words)) > 0)
 return bedList;
 }
 
-void bedTabixFileClose(struct bedTabixFile *btf)
+void bedTabixFileClose(struct bedTabixFile **pBtf)
 {
-lineFileClose(&btf->lf);
+lineFileClose(&((*pBtf)->lf));
+*pBtf = NULL;
 }

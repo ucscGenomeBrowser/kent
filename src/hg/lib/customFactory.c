@@ -2226,7 +2226,7 @@ if (doExtraChecking)
 			   track->tdb->shortLabel, bigDataUrl);
 	    }
         else
-            bedTabixFileClose(btf);
+            bedTabixFileClose(&btf);
 	}
     errCatchEnd(errCatch);
     if (isNotEmpty(errCatch->message->string))
