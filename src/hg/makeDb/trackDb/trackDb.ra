@@ -1116,6 +1116,7 @@ track oreganno
 shortLabel ORegAnno
 longLabel Regulatory elements from ORegAnno
 group regulation
+release alpha
 visibility hide
 color 102,102,0
 type bed 4 +
