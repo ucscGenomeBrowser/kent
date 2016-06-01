@@ -526,5 +526,6 @@ while ((row = sqlNextRow(result)) != NULL)
     attr = oregannoAttrLoad(row);
     hashAdd (attrHash, attr->id, attr);
     }
+sqlFreeResult(&result);
 return attrHash;
 }
