@@ -127,7 +127,7 @@ struct gff3Ann
     struct slName *ontologyTerms; /* cross reference to ontology terms. */
 
     struct gff3Attr *attrs;  /* attributes, both user-define and spec-defined,
-                                  * parsed into one or more values */
+                              * parsed into one or more values */
 
     struct gff3AnnRef *children;  /* child nodes */
 
@@ -152,7 +152,7 @@ struct gff3Attr
 {
     struct gff3Attr *next;     /* next attribute in the list */
     char *tag;                 /* name of attribute */
-   struct slName *vals;       /* values for the attribute */
+    struct slName *vals;       /* values for the attribute */
 };
 
 struct gff3SeqRegion
