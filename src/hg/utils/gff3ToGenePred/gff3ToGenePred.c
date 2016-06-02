@@ -20,7 +20,11 @@ errAbort(
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
   "  -warnAndContinue - on bad genePreds being created, put out warning but continue\n"
-  "  -useName - rather than using 'id' as names, use the 'name' tag\n"
+  "  -useName - rather than using 'id' as name, use the 'name' tag\n"
+  "  -rnaNameAttr - If this attribute exists on an RNA record, use it as the genePred\n"
+  "   name column\n"
+  "  -geneNameAttr - If this attribute exists on a gene record, use it as the genePred\n"
+  "   name2 column\n"
   "  -attrsOut=file - output attributes of mRNA record to file.  These are per-genePred row,\n"
   "   not per-GFF3 record. Thery are derived from GFF3 attributes, not the attributes themselves.\n"
   "  -unprocessedRootsOut=file - output GFF3 root records that were not used.  This will not be a\n"
@@ -67,6 +71,8 @@ static struct optionSpec options[] = {
     {"maxConvertErrors", OPTION_INT},
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
+    {"rnaNameAttr", OPTION_STRING},
+    {"geneNameAttr", OPTION_STRING},
     {"honorStartStopCodons", OPTION_BOOLEAN},
     {"defaultCdsStatusToUnknown", OPTION_BOOLEAN},
     {"allowMinimalGenes", OPTION_BOOLEAN},
@@ -76,6 +82,8 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 static boolean useName = FALSE;
+static char* rnaNameAttr = NULL;
+static char* geneNameAttr = NULL;
 static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static boolean defaultCdsStatusToUnknown = FALSE;
@@ -171,6 +179,40 @@ else
     }
 }
 
+
+static char* getRnaName(struct gff3Ann* mrna)
+/* return the value to use for the genePred name field */
+{
+char *name = NULL;
+if (rnaNameAttr != NULL)
+    {
+    struct gff3Attr *attr = gff3AnnFindAttr(mrna, rnaNameAttr);
+    if (attr != NULL)
+        name = attr->vals->name;
+    }
+if (name == NULL)
+    name = (useName ? mrna->name : mrna->id);
+if (name == NULL)
+    name = mrna->id;
+return name;
+}
+
+static char* getGeneName(struct gff3Ann* gene)
+/* return the value to use for the genePred name2 field,
+ * or NULL if can't be defined. */
+{
+char *name2 = NULL;
+if (geneNameAttr != NULL)
+    {
+    struct gff3Attr *attr = gff3AnnFindAttr(gene, geneNameAttr);
+    if (attr != NULL)
+        name2 = attr->vals->name;
+    }
+if (name2 == NULL)
+    name2 = (useName ? gene->name : gene->id);
+return name2;
+}
+
 static struct genePred *makeGenePred(struct gff3Ann *gene, struct gff3Ann *mrna, struct gff3AnnRef *exons, struct gff3AnnRef *cdsBlks)
 /* construct the empty genePred, return NULL on a failure. */
 {
@@ -191,16 +233,10 @@ if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
     return NULL;
     }
 
-char *name = (useName ? mrna->name : mrna->id);
-char *name2 = (useName ? gene->name : gene->id);
-
-if (name == NULL)
-    name = mrna->id;
-
-struct genePred *gp = genePredNew(name, mrna->seqid, mrna->strand[0],
+struct genePred *gp = genePredNew(getRnaName(mrna), mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
                                   genePredAllFlds, slCount(exons));
-gp->name2 = cloneString(name2);
+gp->name2 = cloneString(getGeneName(gene));
 
 // set start/end status based on codon features if requested
 if (honorStartStopCodons)
@@ -526,6 +562,8 @@ if (argc != 3)
 
 warnAndContinue = optionExists("warnAndContinue");
 useName = optionExists("useName");
+rnaNameAttr = optionVal("rnaNameAttr", NULL);
+geneNameAttr = optionVal("geneNameAttr", NULL);
 maxParseErrors = optionInt("maxParseErrors", maxParseErrors);
 if (maxParseErrors < 0)
     maxParseErrors = INT_MAX;

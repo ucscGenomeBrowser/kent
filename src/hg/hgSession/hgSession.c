@@ -974,6 +974,12 @@ for (hel = cartHelList;  hel != NULL;  hel = hel->next)
     {
     char *encSessionName = hel->name + strlen(hgsDeletePrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
+    sqlSafef(query, sizeof(query), "select shared from %s "
+      "where userName = '%s' and sessionName = '%s';",
+      namedSessionTable, encUserName, encSessionName);
+    int shared = sqlQuickNum(conn, query);
+    if (shared >= 2)
+        doGalleryRemove(encUserName, encSessionName, conn);
     sqlSafef(query, sizeof(query), "DELETE FROM %s "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encUserName, encSessionName);
@@ -981,7 +987,6 @@ for (hel = cartHelList;  hel != NULL;  hel = hel->next)
     dyStringPrintf(dyMessage,
 		   "Deleted session <B>%s</B>.<BR>\n",
 		   htmlEncode(sessionName));
-    doGalleryRemove(encUserName, encSessionName, conn);
     didSomething = TRUE;
     }
 

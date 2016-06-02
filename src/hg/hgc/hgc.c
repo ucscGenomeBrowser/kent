@@ -3930,7 +3930,7 @@ char *bigDataUrl = hashFindVal(tdb->settingsHash, "bigDataUrl");
 struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
 char *chromName = cartString(cart, "c");
 struct bed *list = bedTabixReadBeds(btf, chromName, winStart, winEnd, bedLoad5);
-bedTabixFileClose(btf);
+bedTabixFileClose(&btf);
 unsigned maxWidth;
 struct longRange *longRangeList = parseLongTabix(list, &maxWidth, 0);
 struct longRange *longRange, *ourLongRange = NULL;

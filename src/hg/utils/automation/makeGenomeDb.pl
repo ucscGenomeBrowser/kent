@@ -115,6 +115,10 @@ ncbiBioProject nnnnn
   - The NCBI bioproject number to construct the URL:
     http://www.ncbi.nlm.nih.gov/bioproject/nnnnn
 
+ncbiBioSample nnnnn
+  - A numeric NCBI identifier for the genome information reference at
+    http://www.ncbi.nlm.nih.gov/biosample/nnnnn
+
 genBankAccessionID GCA_nnn
   - The NCBI assembly accession identification from the ASSEMBLY_INFO file
     in the downloads from the FTP site ftp.ncbi.nlm.nih.gov/genbank/genomes
@@ -222,7 +226,7 @@ use vars qw/
     /;
 
 # Required config parameters:
-my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $genBankAccessionID,
+my ($db, $scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -307,6 +311,7 @@ sub parseConfig {
   $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
   $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
   $ncbiBioProject = &requireVar('ncbiBioProject', \%config);
+  $ncbiBioSample = &requireVar('ncbiBioSample', \%config);
   $genBankAccessionID = &requireVar('genBankAccessionID', \%config);
   # Conditionally required variables -- optional here, but they might be
   # required later on in some cases.
@@ -1023,6 +1028,7 @@ NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
 <B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
+<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample" TARGET="_blank"> NCBI Bioproject: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
