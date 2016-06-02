@@ -59,6 +59,10 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
 
             safef(buffer, sizeof buffer, "%s:%d",  longRange->eChrom, longRange->e);
             hvGfxTextCentered(hvg, sx, yPos + 2, 4, 4, MG_BLUE, font, buffer);
+            int width = vgGetFontStringWidth(hvg->vg, font, buffer);
+            int height = vgGetFontPixelHeight(hvg->vg, font);
+            mapBoxHgcOrHgGene(hvg, longRange->s, longRange->s, sx - width/2, yPos, width, height,
+                                   tg->track, itemBuf, statusBuf, NULL, TRUE, NULL);
             }
         }
     else 

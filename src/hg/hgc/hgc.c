@@ -3966,12 +3966,26 @@ if (s < 0 )
 int chromSize = hChromSize(database, seqName);
 if (e > chromSize)
     e = chromSize;
+
+char num1Buf[1024],num2Buf[1024];
+sprintLongWithCommas(num1Buf, ourLongRange->s);
+sprintLongWithCommas(num2Buf, ourLongRange->e);
 if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
-    printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
-        ourLongRange->sChrom, ourLongRange->s - 20, ourLongRange->s + 20);
+    {
+    printf("<B>Interchromosomal: </B> (Position on chrom you clicked on)</B> %s:%s-%s<BR>\n", 
+        ourLongRange->sChrom, num1Buf,num1Buf);
+    printf("<B>Position on other chromosome:</B> %s:%s-%s<BR>\n", 
+        ourLongRange->eChrom, num2Buf, num2Buf);
+    }
 else
+    {
+    char num3Buf[1024];
+    sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->s);
+    printf("<B>Intrachromosomal:</B> %s:%s-%s (%sbp)<BR>\n", 
+        ourLongRange->sChrom, num1Buf, num2Buf, num3Buf);
     printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to range covered by interaction.</B></A><BR>\n",  
         ourLongRange->sChrom, s, e);
+    }
 
 printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
 
