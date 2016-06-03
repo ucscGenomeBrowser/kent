@@ -1492,6 +1492,12 @@ void cgiMakeCheckBox(char *name, boolean checked)
 cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, NULL);
 }
 
+void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled)
+/* Make check box, optionally enabled/disabled. */
+{
+cgiMakeCheckBox2Bool(name, checked, enabled, NULL, NULL);
+}
+
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {

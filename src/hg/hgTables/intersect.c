@@ -69,9 +69,12 @@ boolean anyIntersection()
 {
 boolean specd = (cartVarExists(cart, hgtaIntersectTrack) &&
 		 cartVarExists(cart, hgtaIntersectTable));
-if (specd && canIntersect(database, curTable))
+if (specd && canIntersect(database, curTable) && ! isNoGenomeDisabled(database, curTable))
     {
     char *table = cartString(cart, hgtaIntersectTable);
+    if (isNoGenomeDisabled(database, table))
+        // Don't clear the cart vars, just ignore in case region later changes back to position
+        return FALSE;
     if (canIntersect(database, table))
 	return TRUE;
     else
@@ -139,7 +142,7 @@ struct trackDb *track;
 struct grp *selGroup;
 hPrintf("<TR><TD>");
 selGroup = showGroupField(groupVar, groupScript, conn, FALSE);
-track = showTrackField(selGroup, trackVar, trackScript);
+track = showTrackField(selGroup, trackVar, trackScript, TRUE);
 hPrintf("</TD></TR>\n");
 return track;
 }
