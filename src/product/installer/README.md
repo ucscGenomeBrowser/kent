@@ -38,9 +38,9 @@ potentially destructive steps require confirmation by the user (unless the -b =
 batch mode option is specified).
 
 In particular, Mysql and Apache are installed and setup with the right package
-manager (yum or apt-get or port). A default random password is set for the
+manager (yum or apt-get). A default random password is set for the
 Mysql root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup Mysql, you would need to create to create the file
+If you already have setup Mysql, you would need to create the file
 ~/.my.cnf, the script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
 mariadb, deactivating SELinux, finding the right path for your apache install
@@ -102,9 +102,13 @@ this could be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
-If you find a bug or your linux distribution is not supported, please file pull
-requests, open a github issue or contact genome-mirror@soe.ucsc.edu. 
-
+If you find a bug or your linux distribution is not supported, please contact 
+<a href="mailto:&#103;&#101;no&#109;&#101;&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;o&#101;.
+&#117;&#99;&#115;c.
+&#101;&#100;&#117;">
+&#103;&#101;no&#109;&#101;&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;o&#101;.
+&#117;&#99;&#115;c.
+&#101;&#100;&#117;</a>.
 More details about the Genome Browser installation are at
 http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
 
