@@ -274,6 +274,22 @@ char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 return sameString(regionType, "genome");
 }
 
+boolean isNoGenomeDisabled(char *db, char *table)
+/* Return TRUE if table (or a track with which it is associated) has 'tableBrowser noGenome'
+ * and region is genome. */
+{
+return (fullGenomeRegion() && cartTrackDbIsNoGenome(db, table));
+}
+
+void checkNoGenomeDisabled(char *db, char *table)
+/* Before producing output, make sure that the URL hasn't been hacked to make a
+ * genome-wide query on a noGenome table. */
+{
+if (isNoGenomeDisabled(db, table))
+    errAbort("Can't do genome-wide query on %s.  "
+             "Please go back and choose a position range.", table);
+}
+
 static int regionCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start */
 {
@@ -1434,6 +1450,7 @@ else
     if (cTdb)
 	track = cTdb;
     }
+checkNoGenomeDisabled(database, table);
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&

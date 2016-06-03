@@ -10,7 +10,7 @@ var HgIntegratorModel = ImModel.extend({
     // Hardcoded params / constants
     maxDataSources: 5,
     maxRelatedTables: 4,
-    tdbFields: 'track,table,shortLabel,parent,subtracks',
+    tdbFields: 'track,table,shortLabel,parent,subtracks,noGenome',
     excludeTypes: 'bam,wigMaf,maf',
 
     // Cart variables
@@ -29,7 +29,7 @@ var HgIntegratorModel = ImModel.extend({
         } else if (cartVar === 'userRegions') {
             // If we just changed db and there are no defined regions for this db,
             // hgi_range can't be 'userRegions'.
-            range = mutState.getIn(['regionSelect', 'hgi_range']);
+            range = mutState.getIn(['regionSelect', this.rangeSelectVar]);
             if ((! newValue || newValue === '') && range === 'userRegions') {
                 this.clearUserRegions(mutState);
             }
@@ -76,6 +76,35 @@ var HgIntegratorModel = ImModel.extend({
         this.cartUpdateUiChoices(mutState, this.uiChoicesVar);
     },
 
+    regionIsGenome: function(mutState) {
+        // Return true if the user has selected genome as the query region.
+        return (mutState.getIn(['regionSelect', this.rangeSelectVar]) === 'genome');
+    },
+
+    dataSourceIsNoGenome: function(mutState, ds) {
+        // Return true if the trackDb entry for ds has noGenome.
+        var trackPath = ds.get('trackPath');
+        var track = this.findGroupedTrack(mutState, trackPath);
+        // track might be null, e.g. if ds is carried over from some other db
+        return track && track.get('noGenome');
+    },
+
+    checkNoGenome: function(mutState) {
+        // If one of the dataSources has the tdb setting 'tableBrowser noGenome',
+        // disable the region option for genome, and if genome is currently selected
+        // as the region, force it to position.
+        var regionIsGenome = this.regionIsGenome(mutState);
+        var dataSources = mutState.get('dataSources') || Immutable.List();
+        var includesNoGenome = dataSources.some(function(ds) {
+            return this.dataSourceIsNoGenome(mutState, ds);
+        }, this);
+        mutState.setIn(['regionSelect', 'disableGenome'], includesNoGenome);
+        if (regionIsGenome && includesNoGenome) {
+            mutState.setIn(['regionSelect', this.rangeSelectVar], 'position');
+            this.cartSet(this.rangeSelectVar, 'position');
+        }
+    },
+
     handleQueryState: function(mutState, cartVar, queryState) {
         // The querySpec from cart, received only when the page is initially displaying,
         // requires special handling because portions of it become top-level UI state,
@@ -98,6 +127,7 @@ var HgIntegratorModel = ImModel.extend({
                 this.setUiChoice(mutState, [], Immutable.fromJS(uiChoices));
             }
             this.querySpecUpdateUiChoices(mutState);
+            this.checkNoGenome(mutState);
         } else {
             this.error('handleQueryState: unexpectedly given', cartVar, queryState);
         }
@@ -177,15 +207,17 @@ var HgIntegratorModel = ImModel.extend({
                     optionList.forEach(
                         function (option, opIx) {
                             var relTable = option.get('value');
-                            var disableIt = !!tablesIncluded[relTable];
+                            var disableIt = (!!tablesIncluded[relTable] ||
+                                             (option.get('noGenome') &&
+                                              this.regionIsGenome(mutState)));
                             mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'options',
                                             opIx, 'disabled'],
                                            disableIt);
                             if (disableIt && relTable === selectedTable) {
                                 disableAddButton = true;
                             }
-                        }
-                    );
+                        },
+                        this);
                     // Set selected relTable
                     mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'selected'],
                                    selectedTable);
@@ -231,6 +263,7 @@ var HgIntegratorModel = ImModel.extend({
         // tableFieldsFromServer settings are plain JS:
         // { <track>: { <table>: { label: ___,
         //                         fields: [ { name: ___, desc: ___ }, ... ],
+        //                         noGenome: true|false
         //                       },
         //                       ... },
         //            }, ... }
@@ -242,6 +275,9 @@ var HgIntegratorModel = ImModel.extend({
                         // Each table has a label, a list of objects w/field name and description,
                         // and a (usually empty) list of related db.table names
                         var fsPathToTable = ['fieldSelect', track, 'tableFields', table];
+                        if (tableInfo.isNoGenome && this.regionIsGenome(mutState)) {
+                            return;
+                        }
                         mutState.setIn(fsPathToTable.concat('label'), tableInfo.label);
                         // Add each field's checkbox state for UI
                         mutState.setIn(fsPathToTable.concat('fields'), Immutable.List());
@@ -311,8 +347,9 @@ var HgIntegratorModel = ImModel.extend({
                         function(tblDescTuple) {
                             var relTable = tblDescTuple[0];
                             var label = tblDescTuple[1];
+                            var noGenome = tblDescTuple[2];
                             // Don't set disabled until we know all tables included in the query.
-                            return { value: relTable, label: label };
+                            return { value: relTable, label: label, noGenome: noGenome };
                         });
                     mutState.setIn(['fieldSelect', track, 'relatedAvailable', 'options'],
                                    Immutable.fromJS(options));
@@ -395,11 +432,6 @@ var HgIntegratorModel = ImModel.extend({
         return selectedObj;
     },
 
-    makeValLabel: function(value, label) {
-        // Return a {value, label} object suitable for describing <LabeledSelect> options
-        return Immutable.Map({ value: value, label: label });
-    },
-
     groupLabel: function(groupObj) {
         return groupObj.get('label');
     },
@@ -426,13 +458,18 @@ var HgIntegratorModel = ImModel.extend({
         return label;
     },
 
-    makeMenu: function(objList, selectedObj, label, valueField, labelFunc, hidden) {
+    makeMenu: function(objList, selectedObj, label, valueField, optionLabelFunc, hidden) {
         // Return an Immutable menu descriptor object suitable for <LabeledSelectRow>.
         // objList must be an Immutable.List of Immutable objects that have valueField.
-        // labelFunc, when called on a member of objList, returns a string.
+        // optionLabelFunc, when called on a member of objList, returns a string.
         // selectedObj must be a member of objList or falsey.
+        // For now, include the noGenome flag but don't set disabled -- that would be overwritten
+        // later in disableDataSourcesInAddDsMenus.
         var valLabels = objList.map(function(obj) {
-            return this.makeValLabel(obj.get(valueField), labelFunc(obj));
+            return Immutable.Map({ value: obj.get(valueField),
+                                   label: optionLabelFunc(obj),
+                                   noGenome: obj.get('noGenome')
+                                 });
         }, this);
         var selected = selectedObj ? selectedObj.get(valueField) : null;
         return Immutable.fromJS({ valLabels: valLabels,
@@ -442,7 +479,7 @@ var HgIntegratorModel = ImModel.extend({
     },
 
     updateAddDsMenu: function(mutState, changedIx, ix, objList, selectedValue,
-                              menuLabel, valueField, labelFunc, childField) {
+                              menuLabel, valueField, optionLabelFunc, childField) {
         // If ix >= changedIx, or if selectedValue doesn't match the selected value of the
         // ixth level of addDsMenus, then rebuild the ixth level of addDsMenus and truncate
         // any member(s) of addDsMenus past ix.
@@ -472,7 +509,7 @@ var HgIntegratorModel = ImModel.extend({
             mutState.setIn(['addDsInfo', 'menus'],
                            addDsMenus.splice(ix, addDsMenus.size,
                                              this.makeMenu(objList, selectedObj, menuLabel,
-                                                           valueField, labelFunc, hidden)));
+                                                           valueField, optionLabelFunc, hidden)));
         }
         return selectedObj;
     },
@@ -497,26 +534,6 @@ var HgIntegratorModel = ImModel.extend({
                        this.schemaUrlFromTrackPath(mutState, db, trackPath));
     },
 
-    updateAddDsDisable: function(mutState) {
-        // If user has added the max # of data sources, or has already added the currently
-        // selected track, disable the Add button.
-        var dataSources = mutState.get('dataSources');
-        if (! dataSources) {
-            return;
-        }
-        var addDsTrackPath = this.getAddDsTrackPath(mutState);
-        var alreadyAddedTrack = dataSources.some(function(ds) {
-            var trackPath = ds.get('trackPath');
-            return trackPath.equals(addDsTrackPath);
-        });
-        var groupMenuOptions = mutState.getIn(['addDsInfo', 'menus', 0, 'valLabels']);
-        var emptyMenus = !groupMenuOptions || groupMenuOptions.size < 1;
-        var disabled = (dataSources.size >= this.maxDataSources ||
-                        alreadyAddedTrack ||
-                        emptyMenus);
-        mutState.setIn(['addDsInfo', 'disabled'], disabled);
-    },
-
     disableDataSourcesInAddDsMenus: function (mutState) {
         // Disable the leaf (rightmost) menu's options only for already-added data sources.
         var dataSources = mutState.get('dataSources');
@@ -526,12 +543,11 @@ var HgIntegratorModel = ImModel.extend({
         var addDsMenusPath = ['addDsInfo', 'menus'];
         var addDsMenus = mutState.getIn(addDsMenusPath);
         var leafIx = addDsMenus.size - 1;
-        var leafOptionsPath = _.flatten([addDsMenusPath, leafIx, 'valLabels']);
+        var leafOptionsPath = addDsMenusPath.concat([leafIx, 'valLabels']);
         // Remove all menu options' disabled flags:
         addDsMenus.forEach(function(menuInfo, menuIx) {
             menuInfo.get('valLabels').forEach(function(valLabel, optionIx) {
-                var fullPath = _.flatten([addDsMenusPath, menuIx, 'valLabels',
-                                          optionIx, 'disabled']);
+                var fullPath = addDsMenusPath.concat([menuIx, 'valLabels', optionIx, 'disabled']);
                 mutState.removeIn(fullPath);
             });
         });
@@ -547,7 +563,7 @@ var HgIntegratorModel = ImModel.extend({
                     mutState.getIn(leafOptionsPath).forEach(function(option, opIx) {
                         var optionDisablePath;
                         if (option.get('value') === tpValue) {
-                            optionDisablePath = _.flatten([leafOptionsPath, opIx, 'disabled']);
+                            optionDisablePath = leafOptionsPath.concat([opIx, 'disabled']);
                             mutState.setIn(optionDisablePath, 'true');
                             // All done -- break out of forEach
                             return false;
@@ -560,6 +576,70 @@ var HgIntegratorModel = ImModel.extend({
                 }
             });
         });
+    },
+
+    disableNoGenomeInAddDsMenus: function (mutState) {
+        // If region is genome, then disable each Add Data Sources menu option with noGenome flag.
+        // If caller is also calling disableDataSourcesInAddDsMenus, call that first because it
+        // removes pre-existing disabled flags!
+        var menusPath, addDsMenus;
+        if (this.regionIsGenome(mutState)) {
+            menusPath = ['addDsInfo', 'menus'];
+            addDsMenus = mutState.getIn(menusPath);
+            addDsMenus.forEach(function (menu, menuIx) {
+                var options = menu.get('valLabels');
+                options.forEach(function(option, optionIx) {
+                    var fullPath;
+                    if (option.get('noGenome')) {
+                        fullPath = menusPath.concat([menuIx, 'valLabels', optionIx, 'disabled']);
+                        mutState.setIn(fullPath, 'true');
+                    }
+                });
+            });
+        }
+    },
+
+    addDsSelectedIsDisabled: function (mutState) {
+        // Follow addDsTrackPath through the menu options; if any option is disabled, return true.
+        var trackPath = this.getAddDsTrackPath(mutState) || Immutable.List();
+        var trackPathIsDisabled = false;
+        trackPath.forEach(function(tpValue, tpIx) {
+            var options = mutState.getIn(['addDsInfo', 'menus', tpIx, 'valLabels']) ||
+                          Immutable.List();
+            var selected = options.find(function(opt) { return (opt.get('value') === tpValue); });
+            if (selected && selected.get('disabled')) {
+                trackPathIsDisabled = true;
+                // All done, break out of forEach:
+                return false;
+            }
+        });
+        return trackPathIsDisabled;
+    },
+
+    updateAddDsButton: function(mutState) {
+        // If user has added the max # of data sources, or has already added the currently
+        // selected track, disable the Add button.  Call this after we have determined which
+        // menu options are disabled.
+        var dataSources = mutState.get('dataSources');
+        if (! dataSources) {
+            return;
+        }
+        var groupMenuOptions = mutState.getIn(['addDsInfo', 'menus', 0, 'valLabels']);
+        var emptyMenus = !groupMenuOptions || groupMenuOptions.size < 1;
+        var disabled = (dataSources.size >= this.maxDataSources ||
+                        this.addDsSelectedIsDisabled(mutState) ||
+                        emptyMenus);
+        mutState.setIn(['addDsInfo', 'disabled'], disabled);
+    },
+
+    updateAddDsSection: function (mutState) {
+        // Whenever there is a change to dataSources, to a menu in the Add Data Sources section,
+        // or to region, update several dependencies in the Add Data Sources section.
+        this.checkNoGenome(mutState);
+        // These functions must be called in the right order:
+        this.disableDataSourcesInAddDsMenus(mutState);
+        this.disableNoGenomeInAddDsMenus(mutState);
+        this.updateAddDsButton(mutState);
     },
 
     groupedTrackDbToMenus: function (mutState, db, trackPath, changedIx) {
@@ -584,12 +664,11 @@ var HgIntegratorModel = ImModel.extend({
             this.rMakeSubtrackMenus(mutState, trackObjList, changedIx, trackPath, ix);
         }
         // Now update the things that depend on menus and other state:
-        this.disableDataSourcesInAddDsMenus(mutState);
-        this.updateAddDsDisable(mutState);
+        this.updateAddDsSection(mutState);
         this.updateAddDsSchemaUrl(mutState, db);
     },
 
-   handleGroupedTrackDb: function(mutState, cartVar, newValue) {
+    handleGroupedTrackDb: function(mutState, cartVar, newValue) {
         // Server just sent new groupedTrackDb; if it is for the current db,
         // build group/track/etc menus for <AddDataSource>.
         var currentDb, addDsTrackPath;
@@ -672,8 +751,7 @@ var HgIntegratorModel = ImModel.extend({
             if (! newDataSources.equals(dataSources)) {
                 mutState.set('dataSources', newDataSources);
             }
-            this.disableDataSourcesInAddDsMenus(mutState);
-            this.updateAddDsDisable(mutState);
+            this.updateAddDsSection(mutState);
         }
     },
 
@@ -687,6 +765,8 @@ var HgIntegratorModel = ImModel.extend({
         } else {
             this.changeCartString(mutState, uiPath, newValue);
         }
+        // Depending on whether region is genome, some tracks may be disabled (or not).
+        this.updateAddDsSection(mutState);
     },
 
     clearUserRegions: function(mutState) {
@@ -827,8 +907,7 @@ var HgIntegratorModel = ImModel.extend({
         mutState.update('dataSources', function(list) {
             return list.push(dataSource);
         });
-        this.disableDataSourcesInAddDsMenus(mutState);
-        this.updateAddDsDisable(mutState);
+        this.updateAddDsSection(mutState);
         this.cartSendQuerySpec(mutState);
     },
 
@@ -878,8 +957,7 @@ var HgIntegratorModel = ImModel.extend({
                 mutState.update('dataSources', function(oldList) {
                     return oldList.remove(ix);
                 });
-                this.disableDataSourcesInAddDsMenus(mutState);
-                this.updateAddDsDisable(mutState);
+                this.updateAddDsSection(mutState);
                 this.cartSendQuerySpec(mutState);
             } else {
                 this.error('dataSourceClick: unrecognized path', path);

@@ -3107,7 +3107,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off
+tableBrowser noGenome
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3118,7 +3118,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
+tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3129,7 +3129,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimAv omimAvRepl
+tableBrowser noGenome omimAv omimAvRepl
 
 track cosmic
 shortLabel COSMIC

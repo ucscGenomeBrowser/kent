@@ -94,8 +94,8 @@ struct grp *showGroupField(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk);
 /* Show group control. Returns selected group. */
 
-struct trackDb *showTrackField(struct grp *selGroup,
-	char *trackVar, char *trackScript);
+struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *trackScript,
+                               boolean disableNoGenome);
 /* Show track control. Returns selected track. */
 
 char *showTableField(struct trackDb *track, char *varName, boolean useJoiner);
@@ -132,6 +132,14 @@ char *getRegionName();
 
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
+
+boolean isNoGenomeDisabled(char *db, char *table);
+/* Return TRUE if table (or a track with which it is associated) has 'tableBrowser noGenome'
+ * and region is genome. */
+
+void checkNoGenomeDisabled(char *db, char *table);
+/* Before producing output, make sure that the URL hasn't been hacked to make a
+ * genome-wide query on a noGenome table. */
 
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
@@ -560,6 +568,9 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outGalaxy "galaxyQuery"
 #define outMaf "maf"
 #define outPalOptions "fasta"
+
+/* For disabling tables in 'tableBrowser noGenome' settings, when region is genome */
+#define NO_GENOME_CLASS " class=\"hgtaNoGenome\" title=\"Position range queries only\""
 
 /* --------- Identifier list handling stuff. ------------ */
 

@@ -55,6 +55,7 @@ cartRemove(cart, hgtaDoPalOut);
 if (anyIntersection() && intersectionIsBpWise())
     errAbort("Can't do CDS FASTA output when bit-wise intersection is on. "
     "Please go back and select another output type, or clear the intersection.");
+checkNoGenomeDisabled(database, curTable);
 
 struct lm *lm = lmInit(64*1024);
 int fieldCount;

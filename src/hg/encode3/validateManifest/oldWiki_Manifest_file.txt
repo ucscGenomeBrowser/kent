@@ -1,0 +1,40 @@
+ Manifest file
+Jump to: navigation, search
+
+The manifest file is a tab separated file that describes other files in an ENCODE lab track hub. The manifest is used to guide the file validator, validateManifest, that runs on a lab's machine locally. The validator will append additional columns, and the result will be used to guide the transfer of data to the big file warehouse, where additional validations will happen. Be sure to match the column name exactly and to use only one tab between columns.
+
+The columns for the manifest file are:
+
+    file_name - local file name, relative to the directory where the manifest.txt, and resulting validated.txt, are located. If the file name ends in .gz, it is assumed to be gzipped. BAM and big* files are already compressed.
+    format - describes file format. Allowed values are: fastq bam bigWig bigBed bedRnaElements bedRrbs bedMethyl narrowPeak broadPeak unknown idat rcc. The values allowed in this column correspond to the file types in ValidateFiles (However bed formats from enc2 will be bigBed formats in enc3).
+    output_type - describes what type of output is in the file. It often but not always echos the file format. An example where it could differ is if an RNA analysis produced a list of exons as well as a list of introns, both of which were stored in bigBed files. Example values include: reads, alignments, signal, peak which are used for fastq, BAM, bigWig, and bigBed files in many cases. Consult with your wrangler for other output_types which may be more specific for your data sets, or when you have multiple outputs in the same format.
+    experiment - a label the labs use to group together files that describe the same experiment. This will be a shared key with the metadata system, and will be provided by the DCC wranglers. Should start with "ENC".
+    replicate - "1" or "2" or other small number or "pooled" or "n/a." Separates replicates of the same experiment when appropriate.
+    enriched_in - describes where we expect to see a signal enrichment. Possibilities are: exon intron open (for open chromatin) promoter coding utr utr5 utr3 unknown.
+    ucsc_db - UCSC database/assembly name. Typically hg19 or mm9 in initial phases of project. Only needed if the file_name does not begin with a directory named after the UCSC database.
+    technical_replicate - optional column. Should be "1" or "2" or other small number or "pooled" or "n/a". This separates technical replicates (different sequencing runs from the same sequencing library typically).
+    paired_end - Required only if manifest contains fastq files. Values are "1" or "2" or "n/a." For non-fastq files and single ended fastqs, enter "n/a" 
+
+Here would be a small example:
+#file_name 	format 	output_type 	experiment 	replicate 	enriched_in 	ucsc_db 	paired_end 	technical_replicate
+hg19/fcK562Stat_1.fastq.gz 	fastq 	reads 	ENCSR012AAA 	1 	open 	hg19 	1 	1
+hg19/fcK562Stat_2.fastq.gz 	fastq 	reads 	ENCSR012AAA 	2 	open 	hg19 	2 	1
+hg19/fcK562Stat_1.bam 	bam 	alignments 	ENCSR012AAA 	1 	open 	hg19 	n/a 	1
+hg19/fcK562Stat_2.bam 	bam 	alignments 	ENCSR012AAA 	2 	open 	hg19 	n/a 	1
+hg19/fcK562StatSignal_1.bigWig 	bigWig 	signal 	ENCSR012AAA 	1 	open 	hg19 	n/a 	1
+hg19/fcK562StatSignal_2.bigWig 	bigWig 	signal 	ENCSR012AAA 	2 	open 	hg19 	n/a 	1
+hg19/fcK562StatPeaks.narrowPeak.bigBed 	narrowPeak 	narrowPeak 	ENCSR012AAA 	pooled 	open 	hg19 	n/a 	1
+hg19/fcK562Myc_1.fastq.gz 	fastq 	reads 	ENCSR013AAA 	1 	open 	hg19 	1 	1
+hg19/fcK562Myc_2.fastq.gz 	fastq 	reads 	ENCSR013AAA 	2 	open 	hg19 	2 	1
+hg19/fcK562Myc_1.bam 	bam 	alignments 	ENCSR013AAA 	1 	open 	hg19 	n/a 	1
+hg19/fcK562Myc_2.bam 	bam 	alignments 	ENCSR013AAA 	2 	open 	hg19 	n/a 	1
+hg19/fcK562MycSignal_1.bigWig 	bigWig 	signal 	ENCSR013AAA 	1 	open 	hg19 	n/a 	1
+hg19/fcK562MycSignal_2.bigWig 	bigWig 	signal 	ENCSR013AAA 	2 	open 	hg19 	n/a 	1
+hg19/fcK562MycPeaks.narrowPeak.bigBed 	narrowPeak 	narrowPeak 	ENCSR013AAA 	pooled 	open 	hg19 	n/a 	1
+hg19/fcK562MycPeaks.broadPeak.bigBed 	broadPeak 	broadPeak 	ENCSR013AAA 	pooled 	open 	hg19 	n/a 	1
+hg19/something.bedRnaElements.bigBed 	bedRnaElements 	sitesRnaElements 	ENCSR013AAA 	pooled 	open 	hg19 	n/a 	1
+hg19/haibMethylRrbsHepg2DukeSitesRep2.bigBed 	bedRrbs 	sites 	ENCSR592WWM 	2 	unknown 	hg19 	n/a 	1
+
+The validateManifest program will add these columns: md5_sum size modified valid_key
+which mean respectively MD5 sum, file size, file last modification date, and a validation key.
+This produces a validated submission file for getting files into the ENCODE data warehouse. 

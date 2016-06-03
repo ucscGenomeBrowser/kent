@@ -92,17 +92,27 @@ hPrintf("var %s='%s';\n", jsVar, val);
 hPrintf("</SCRIPT>\n");
 }
 
+void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
+                                        char *val, char *selVal, char *extraHtml)
+/* Make a radio button with extra HTML attributes that also sets tracking variable
+ * in javascript. */
+{
+hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", cgiVar);
+hPrintf(" VALUE=\"%s\"", val);
+if (isNotEmpty(extraHtml))
+    hPrintf(" %s", extraHtml);
+hPrintf(" onClick=\"%s='%s';\"", jsVar, val);
+if (sameString(val, selVal))
+    hPrintf(" CHECKED");
+hPrintf(">");
+}
+
 void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 	char *val, char *selVal)
 /* Make a radio button that also sets tracking variable
  * in javascript. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", cgiVar);
-hPrintf(" VALUE=\"%s\"", val);
-hPrintf(" onClick=\"%s='%s';\"", jsVar, val);
-if (sameString(val, selVal))
-    hPrintf(" CHECKED");
-hPrintf(">");
+jsMakeTrackingRadioButtonExtraHtml(cgiVar, jsVar, val, selVal, NULL);
 }
 
 void jsMakeTrackingCheckBox(struct cart *cart,
