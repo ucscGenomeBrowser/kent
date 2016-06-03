@@ -817,5 +817,61 @@ done
 # 40658543 bases of 2902896901 (1.401%) in intersection
 
 ##########################################################################
+# LASTZ cow/bosTau8 killer whale/orcOrc1 - (DONE - 2016-06-01,02 - Hiram)
+    mkdir /hive/data/genomes/bosTau8/bed/lastzOrcOrc1.2016-06-01
+    cd /hive/data/genomes/bosTau8/bed/lastzOrcOrc1.2016-06-01
 
+    printf '# cow vs. killer whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
 
+# TARGET: cow bosTau8
+SEQ1_DIR=/hive/data/genomes/bosTau8/bosTau8.2bit
+SEQ1_LEN=/hive/data/genomes/bosTau8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=40
+
+# QUERY: killer whale orcOrc1
+SEQ2_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ2_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/bosTau8/bed/lastzOrcOrc1.2016-06-01
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1439m45.464s
+
+    cat fb.bosTau8.chainOrcOrc1Link.txt
+    # 1670894199 bases of 2649307237 (63.069%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` bosTau8 orcOrc1) \
+      > rbest.log 2>&1 &
+    # real    590m0.045s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.bosTau8.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.bosTau8.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/bosTau8/bed/lastzOrcOrc1.2016-06-01/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    411m32.032s
+
+    cat fb.orcOrc1.chainBosTau8Link.txt
+    # 1659691513 bases of 2249582125 (73.778%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 bosTau8) \
+       > rbest.log 2>&1
+    # real    515m19.362s
+
+#########################################################################
