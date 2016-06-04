@@ -337,6 +337,14 @@ if (tdb->settingsHash)
             jsonWriteString(jw, hel->name, encoded);
             }
         }
+    if (fieldOk("noGenome", fieldHash))
+        {
+        if ((hel = hashLookup(tdb->settingsHash, "tableBrowser")) != NULL)
+            {
+            if (startsWithWord("noGenome", (char *)(hel->val)))
+                jsonWriteBoolean(jw, "noGenome", TRUE);
+            }
+        }
     }
 }
 

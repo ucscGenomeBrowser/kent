@@ -42,7 +42,8 @@ struct hash *oldVars = NULL;          /* Old contents of cart before it was upda
 #define DO_QUERY "hgi_doQuery"
 
 #define hgiRegionType "hgi_range"
-#define hgiRegionTypeDefault "position"
+#define hgiRegionTypePosition "position"
+#define hgiRegionTypeDefault hgiRegionTypePosition
 
 static void writeCartVar(struct cartJson *cj, char *varName)
 {
@@ -107,11 +108,15 @@ slReverse(&fieldList);
 return fieldList;
 }
 
-static void writeTableFields(struct jsonWrite *jw, char *label, char *table, struct slPair *fields)
-/* Add a json object for a table containing its label and field descriptions. */
+static void writeTableFields(struct jsonWrite *jw, char *label, char *db, char *dotTable,
+                             struct slPair *fields)
+/* Add a json object for dotTable containing its label and field descriptions. */
 {
-jsonWriteObjectStart(jw, table);
+char *dot = strchr(dotTable, '.');
+char *table = dot ? dot+1 : dotTable;
+jsonWriteObjectStart(jw, dotTable);
 jsonWriteString(jw, "label", label);
+jsonWriteBoolean(jw, "isNoGenome", cartTrackDbIsNoGenome(db, table));
 jsonWriteListStart(jw, "fields");
 struct slPair *field;
 for (field = fields;  field != NULL;  field = field->next)
@@ -125,21 +130,21 @@ jsonWriteListEnd(jw);
 jsonWriteObjectEnd(jw);
 }
 
-static void writeTableFieldsFromAsObj(struct jsonWrite *jw, char *label, char *table,
+static void writeTableFieldsFromAsObj(struct jsonWrite *jw, char *label, char *db, char *table,
                                       struct asObject *asObj)
 /* Add a json object for a table containing its label and field descriptions from autoSql. */
 {
 struct slPair *fieldList = fieldsFromAsObj(asObj);
-writeTableFields(jw, label, table, fieldList);
+writeTableFields(jw, label, db, table, fieldList);
 slPairFreeList(&fieldList);
 }
 
 static void writeTableFieldsFromDbTable(struct jsonWrite *jw, char *label,
-                                        struct sqlConnection *conn, char *table)
+                                        struct sqlConnection *conn, char *db, char *table)
 /* Add a json object for a table containing its label and field descriptions from autoSql. */
 {
 struct slPair *fieldList = fieldsFromSqlFields(conn, table);
-writeTableFields(jw, label, table, fieldList);
+writeTableFields(jw, label, db, table, fieldList);
 slPairFreeList(&fieldList);
 }
 
@@ -206,7 +211,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
                 {
                 char label[PATH_LEN*2];
                 makeTrackLabel(tdb, tableName, label, sizeof(label));
-                writeTableFieldsFromAsObj(cj->jw, label, table->name, asObj);
+                writeTableFieldsFromAsObj(cj->jw, label, db, table->name, asObj);
                 }
             else
                 warn("No autoSql for track %s", table->name);
@@ -236,12 +241,12 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
                 struct asObject *asObj = hAnnoGetAutoSqlForDbTable(db, realTable, tdb, TRUE);
                 char *label = getRelatedTableLabel(db, tableName, tdb);
                 if (asObj)
-                    writeTableFieldsFromAsObj(cj->jw, label, table->name, asObj);
+                    writeTableFieldsFromAsObj(cj->jw, label, db, table->name, asObj);
                 else
                     {
                     warn("No autoSql for table %s", tableName);
                     // Show sql field names, no descriptions available.
-                    writeTableFieldsFromDbTable(cj->jw, label, conn, realTable);
+                    writeTableFieldsFromDbTable(cj->jw, label, conn, db, realTable);
                     }
                 }
             else
@@ -365,12 +370,12 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
     struct joinerDtf *relatedTables = findRelatedTables(joiner, cartDb, dbTableList);
     if (relatedTables != NULL)
         {
-        // Write a list of [table, description] tuples
+        // Write a list of [table, description, isNoGenome] tuples
         jsonWriteListStart(cj->jw, mainTable);
         struct joinerDtf *dtf;
         for (dtf = relatedTables;  dtf != NULL;  dtf = dtf->next)
             {
-            // Write one [table, description] tuple
+            // Write one [table, description, isNoGenome] tuple
             jsonWriteListStart(cj->jw, NULL);
             // If related table is in same database as main table, make its name begin with
             // just "." so saved settings don't pull in related tables from the old database
@@ -388,6 +393,7 @@ for (tableGroup = tableGroups;  tableGroup != NULL;  tableGroup = tableGroup->ne
             //#*** TODO: move jsonStringEscape inside jsonWriteString
             char *encoded = jsonStringEscape(description);
             jsonWriteString(cj->jw, NULL, encoded);
+            jsonWriteBoolean(cj->jw, NULL, cartTrackDbIsNoGenome(dtf->database, dtf->table));
             jsonWriteListEnd(cj->jw);
             }
         jsonWriteListEnd(cj->jw);
@@ -407,6 +413,7 @@ joinerFree(&joiner);
 #define hgtaUserRegionsFile "hgta_userRegionsFile"
 #define hgtaUserRegionsDb "hgta_userRegionsDb"
 #define hgtaRegionTypeUserRegions "userRegions"
+#define hgtaRegionTypeGenome "genome"
 
 
 boolean userRegionsExist()
@@ -650,6 +657,58 @@ if (outFileOptions)
 return tabOut;
 }
 
+static void filterNoGenome(char *db, boolean regionIsGenome, struct jsonElement *configEl)
+/* If we are doing a genome-wide query and configEl specifies related tables, then remove
+ * any related tables that appear in a 'tableBrowser noGenome' setting in trackDb. */
+{
+if (configEl && regionIsGenome)
+    {
+    struct jsonElement *relatedTablesEl = jsonFindNamedField(configEl, "config", "relatedTables");
+    if (relatedTablesEl)
+        {
+        // relatedTables is a list of objects like { table: <[db.]table name>,
+        //                                           fields: [ <field1>, <field2>, ...] }
+        struct slRef *relatedTables = jsonListVal(relatedTablesEl, "relatedTables");
+        struct slRef *tfRef, *tfRefNext, *newRefList = NULL;
+        for (tfRef = relatedTables;  tfRef != NULL;  tfRef = tfRefNext)
+            {
+            tfRefNext = tfRef->next;
+            struct jsonElement *tfEl = tfRef->val;
+            char *dbTable = jsonStringField(tfEl, "table");
+            char tfDb[PATH_LEN], tfTable[PATH_LEN];
+            hParseDbDotTable(db, dbTable, tfDb, sizeof(tfDb), tfTable, sizeof(tfTable));
+            if (isEmpty(tfDb))
+                safecpy(tfDb, sizeof(tfDb), db);
+            if (! cartTrackDbIsNoGenome(tfDb, tfTable))
+                slAddHead(&newRefList, tfRef);
+            }
+        slReverse(&newRefList);
+        struct jsonElement *newListEl = newJsonList(newRefList);
+        jsonObjectAdd(configEl, "relatedTables", newListEl);
+        }
+    }
+}
+
+static struct trackDb *tdbForDataSource(struct jsonElement *dsObj, char *db,
+                                        struct trackDb *fullTrackList)
+/* Use dsObj's trackPath to find its trackDb record in fullTrackList.  abort if not found. */
+{
+struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
+                                      "trackPath");
+// The first item in trackPath is group.  The second is track (or composite):
+struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
+// and the last item in trackPath is track or leaf subtrack.
+struct slRef *leafRef = slLastEl(trackPath);
+struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
+char *leafTrack = jsonStringVal(leafEl, "leaf");
+char *topTrack = jsonStringVal(trackEl, "track");
+struct trackDb *tdb = tdbForTrack(db, leafTrack, &fullTrackList);
+if (!tdb)
+    tdb = tdbForTrack(db, topTrack, &fullTrackList);
+if (!tdb)
+    errAbort("doQuery: no tdb for track %s, leaf %s", topTrack, leafTrack);
+return tdb;
+}
 
 static void regionQuery(struct annoAssembly *assembly, struct bed4 *region,
                         struct slRef *dataSources, struct trackDb *fullTrackList,
@@ -661,26 +720,15 @@ static void regionQuery(struct annoAssembly *assembly, struct bed4 *region,
 char *db = assembly->name;
 struct annoStreamer *primary = NULL;
 struct annoGrator *gratorList = NULL;
+boolean regionIsGenome = isEmpty(region->chrom);
 struct slRef *dsRef;
 int i;
 for (i = 0, dsRef = dataSources;  dsRef != NULL;  i++, dsRef = dsRef->next)
     {
     struct jsonElement *dsObj = dsRef->val;
-    struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
-                                          "trackPath");
     struct jsonElement *configEl = jsonFindNamedField(dsObj, "dataSource", "config");
-    // The first item in trackPath is group.  The second is track (or composite):
-    struct jsonElement *trackEl = (struct jsonElement *)(trackPath->next->val);
-    // and the last item in trackPath is track or leaf subtrack.
-    struct slRef *leafRef = slLastEl(trackPath);
-    struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
-    char *leafTrack = jsonStringVal(leafEl, "leaf");
-    char *topTrack = jsonStringVal(trackEl, "track");
-    struct trackDb *tdb = tdbForTrack(db, leafTrack, &fullTrackList);
-    if (!tdb)
-        tdb = tdbForTrack(db, topTrack, &fullTrackList);
-    if (!tdb)
-        errAbort("doQuery: no tdb for track %s, leaf %s", topTrack, leafTrack);
+    filterNoGenome(db, regionIsGenome, configEl);
+    struct trackDb *tdb = tdbForDataSource(dsObj, db, fullTrackList);
     char *table = tdb->table;
     if (i == 0)
         {
@@ -724,6 +772,77 @@ for (;  grator != NULL;  grator = nextGrator)
     }
 }
 
+static struct bed4 *positionToBed4(char *position)
+/* Expect position to be chr:start-end; parse that and return a new BED4 with chrom, chromStart,
+ * chromEnd but no name. */
+{
+struct bed4 *bed = NULL;
+char *chrom = NULL;
+uint start = 0, end = 0;
+if (! parsePosition(position, &chrom, &start, &end))
+    errAbort("doQuery: Expected position to be chrom:start-end but got '%s'", position);
+AllocVar(bed);
+bed->chrom = cloneString(chrom);
+bed->chromStart = start;
+bed->chromEnd = end;
+return bed;
+}
+
+static boolean hasTBNoGenome(struct slRef *dataSources, char *db, struct trackDb *fullTrackList)
+/* Return TRUE if any dataSource has the 'tableBrowser noGenome' trackDb setting. */
+{
+boolean foundNoGenome = FALSE;
+struct slRef *dsRef;
+for (dsRef = dataSources;  dsRef != NULL;  dsRef = dsRef->next)
+    {
+    struct jsonElement *dsObj = dsRef->val;
+    struct trackDb *tdb = tdbForDataSource(dsObj, db, fullTrackList);
+    char *setting = tdb ? trackDbSetting(tdb, "tableBrowser") : NULL;
+    if (setting && startsWithWord("noGenome", setting))
+        {
+        foundNoGenome = TRUE;
+        break;
+        }
+    }
+return foundNoGenome;
+}
+
+static struct bed4 *getRegionList(char *db, struct slRef *dataSources,
+                                  struct trackDb *fullTrackList,
+                                  char *retRegionDesc, size_t retRegionDescSize)
+/* Return a bed or list of bed: one bed for position range, possible multiple beds for
+ * user-defined regions, and for genome-wide search, a bed with chrom=NULL, start=end=0.
+ * If genome-wide search is specified but one of the dataSources has tdb setting
+ * 'tableBrowser noGenome', force region to position range.  Put a human-readable
+ * description of the region(s) in retRegionDesc. */
+{
+struct bed4 *regionList = NULL;
+char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
+if (sameString(regionType, hgiRegionTypePosition) ||
+    (sameString(regionType, hgtaRegionTypeGenome) && hasTBNoGenome(dataSources, db, fullTrackList)))
+    {
+    char *position = cartUsualString(cart, "position", hDefaultPos(db));
+    regionList = positionToBed4(position);
+    safef(retRegionDesc, retRegionDescSize, "%s:%d-%d",
+          regionList->chrom, regionList->chromStart+1, regionList->chromEnd);
+    }
+else if (sameString(regionType, hgtaRegionTypeUserRegions))
+    {
+    regionList = userRegionsGetBedList();
+    slSort(&regionList, bedCmp);
+    safecpy(retRegionDesc, retRegionDescSize, "defined-regions");
+    }
+else if (sameString(regionType, hgtaRegionTypeGenome))
+    {
+    // genome-wide query: chrom=NULL, start=end=0
+    AllocVar(regionList);
+    safecpy(retRegionDesc, retRegionDescSize, "genome");
+    }
+else
+    errAbort("Unrecognized region type '%s'", regionType);
+return regionList;
+}
+
 void doQuery()
 /* Execute a query that has been built up by the UI. */
 {
@@ -736,42 +855,21 @@ void doQuery()
 //#*** file or db table when a new minChrom is passed in or when streamer->setRegion
 //#*** is called.
 
-char *db = cartString(cart, "db");
-char *regionType = cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault);
-struct bed4 *regionList = NULL;
-char regionDesc[PATH_LEN];
-if (sameString(regionType, "position"))
-    {
-    char *chrom = NULL;
-    uint start = 0, end = 0;
-    char *position = cartUsualString(cart, "position", hDefaultPos(db));
-    if (! parsePosition(position, &chrom, &start, &end))
-        errAbort("doQuery: Expected position to be chrom:start-end but got '%s'", position);
-    AllocVar(regionList);
-    regionList->chrom = cloneString(chrom);
-    regionList->chromStart = start;
-    regionList->chromEnd = end;
-    safef(regionDesc, sizeof(regionDesc), "%s:%d-%d", chrom, start+1, end);
-    }
-else if (sameString(regionType, hgtaRegionTypeUserRegions))
-    {
-    regionList = userRegionsGetBedList();
-    slSort(&regionList, bedCmp);
-    safecpy(regionDesc, sizeof(regionDesc), "defined-regions");
-    }
-else
-    {
-    // genome-wide query: chrom=NULL, start=end=0
-    AllocVar(regionList);
-    safecpy(regionDesc, sizeof(regionDesc), "genome");
-    }
-struct annoAssembly *assembly = hAnnoGetAssembly(db);
 // Decode and parse CGI-encoded querySpec.
 char *querySpec = cartString(cart, QUERY_SPEC);
 int len = strlen(querySpec);
 char querySpecDecoded[len+1];
 cgiDecodeFull(querySpec, querySpecDecoded, len);
 struct jsonElement *queryObj = jsonParse(querySpecDecoded);
+struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
+                                        "dataSources");
+// Get trackDb, assembly and regionList.
+struct trackDb *fullTrackList = getFullTrackList(cart);
+char *db = cartString(cart, "db");
+struct annoAssembly *assembly = hAnnoGetAssembly(db);
+char regionDesc[PATH_LEN];
+struct bed4 *regionList = getRegionList(db, dataSources, fullTrackList,
+                                        regionDesc, sizeof(regionDesc));
 // Set up output.
 int savedStdout = -1;
 struct pipeline *textOutPipe = configTextOut(queryObj, &savedStdout);
@@ -783,21 +881,17 @@ printf("# hgIntegrator: database=%s region=%s %s", db, regionDesc, ctime(&now));
 // For now, tab-separated output is it.
 struct annoFormatter *formatter = makeTabFormatter(queryObj);
 
-// Unpack the query spec.
-struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
-                                        "dataSources");
-// Get trackDb.
-struct trackDb *fullTrackList = getFullTrackList(cart);
-
 // For now, do a complete annoGrator query for each region, rebuilding each data source
 // since annoStreamers don't yet handle split tables/files internally.  For decent
 // performance, it will be necessary to push split-source handling inside the streamers,
 // and then all we'll need to do is make one set of streamers and then loop only on calls
 // to annoGratorQuerySetRegion and annoGratorQueryExecute.
+boolean userDefinedRegions = sameString(hgtaRegionTypeUserRegions,
+                                        cartUsualString(cart, hgiRegionType, hgiRegionTypeDefault));
 struct bed4 *region;
 for (region = regionList;  region != NULL;  region = region->next)
     {
-    if (sameString(regionType, hgtaRegionTypeUserRegions))
+    if (userDefinedRegions)
         printf("# region=%s:%d-%d\n",
                region->chrom, region->chromStart+1, region->chromEnd);
     regionQuery(assembly, region, dataSources, fullTrackList, formatter);

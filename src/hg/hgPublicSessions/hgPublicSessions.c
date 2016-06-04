@@ -23,8 +23,14 @@ struct galleryEntry
 /* Holds data for a single session in the gallery*/
     {
     struct galleryEntry *next;
-    char *userName, *realName, *sessionName, *settings, *db, *firstUse;
-    char *imgPath, *imgUri;
+    char *userName;
+    char *realName;
+    char *sessionName;
+    char *settings;
+    char *db;
+    char *firstUse;
+    char *imgPath;
+    char *imgUri;
     struct dyString *sessionUrl;
     unsigned long useCount;
     };
@@ -62,12 +68,20 @@ else
     ret->imgUri = NULL;
 ret->useCount = sqlUnsignedLong(row[4]);
 ret->settings = cloneString(row[5]);
-dbIdx = strstr(row[6], "db=") + 3;
-dbEnd = strchr(dbIdx, '&');
-if (dbEnd != NULL)
-    ret->db = cloneStringZ(dbIdx, dbEnd-dbIdx);
+if (startsWith("db=", row[6]))
+    dbIdx = row[6] + 3;
 else
-    ret->db = cloneString(dbIdx);
+    dbIdx = strstr(row[6], "&db=") + 4;
+if (dbIdx != NULL)
+    {
+    dbEnd = strchr(dbIdx, '&');
+    if (dbEnd != NULL)
+        ret->db = cloneStringZ(dbIdx, dbEnd-dbIdx);
+    else
+        ret->db = cloneString(dbIdx);
+    }
+else
+    ret->db = cloneString("n/a");
 ret->firstUse = cloneString(row[7]);
 char *spacePt = strchr(ret->firstUse, ' ');
 if (spacePt != NULL) *spacePt = '\0';
@@ -138,6 +152,9 @@ void galleryDisplay(struct galleryEntry *galList)
 {
 struct galleryEntry *thisSession = galList;
 
+/* Hide the orderable columns and disable ordering on the visible columns
+ * https://datatables.net/reference/option/columnDefs for more info.
+ * Then set up the ordering drop-down menu */
 printf ("<script type=\"text/javascript\">"
 "$(document).ready(function () {\n"
 "    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
@@ -247,7 +264,8 @@ printf("<p>Our users have marked the following sessions as being of "
 showGalleryTab();
 
 printf ("<p>You can adjust the settings for your own sessions on\n"
-    "the <a href=\"hgSession\">Sessions</a> page.\n</p>");
+    "the <a href=\"hgSession?%s\">Sessions</a> page.\n</p>",
+    cartSidUrlString(cart));
 
 cartWebEnd();
 }

@@ -2794,9 +2794,10 @@ if (helList != NULL)
 		       "), so it may not appear as originally intended.  ");
 	}
     dyStringPrintf(dyMessage,
-		   "Custom tracks are subject to an expiration policy described in the "
-		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
-		   "Session documentation</A>.</P>");
+		   "These custom tracks should not expire, however, "
+		   "the UCSC Genome Browser is not a data storage service; "
+		   "<b>please keep a local backup of your sessions contents "
+		   "and custom track data</b>. </P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }

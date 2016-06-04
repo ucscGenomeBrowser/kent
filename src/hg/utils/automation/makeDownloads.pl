@@ -39,7 +39,7 @@ my $dbHost = 'hgwdev';
 # config.ra file variables:
 # Required config parameters:
 my $configFile= "";
-my ($scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $genBankAccessionID,
+my ($scientificName, $assemblyDate, $assemblyLabel, $assemblyShortLabel, $orderKey, $photoCreditURL, $photoCreditName, $ncbiGenomeId, $ncbiAssemblyName, $ncbiAssemblyId, $ncbiBioProject, $ncbiBioSample, $genBankAccessionID,
     $mitoAcc, $fastaFiles, $dbDbSpeciesDir, $taxId);
 # Conditionally required config parameters:
 my ($fakeAgpMinContigGap, $fakeAgpMinScaffoldGap,
@@ -725,6 +725,7 @@ For more information about this assembly, please note the NCBI resources:
     http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
+    http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
 
 Files included in this directory:
 
@@ -932,6 +933,7 @@ For more information about this assembly, please note the NCBI resources:
     http://www.ncbi.nlm.nih.gov/genome/$ncbiGenomeId
     http://www.ncbi.nlm.nih.gov/genome/assembly/$ncbiAssemblyId
     http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject
+    http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample
 
 Repeats from RepeatMasker and Tandem Repeats Finder (with period
 of 12 or less) are shown in lower case; non-repeating sequence is
@@ -1200,6 +1202,7 @@ sub parseConfig {
   $ncbiAssemblyName = &requireVar('ncbiAssemblyName', \%config);
   $ncbiAssemblyId = &requireVar('ncbiAssemblyId', \%config);
   $ncbiBioProject = &requireVar('ncbiBioProject', \%config);
+  $ncbiBioSample = &requireVar('ncbiBioSample', \%config);
   $genBankAccessionID = &requireVar('genBankAccessionID', \%config);
   # Conditionally required variables -- optional here, but they might be
   # required later on in some cases.
