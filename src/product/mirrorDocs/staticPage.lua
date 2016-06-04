@@ -183,9 +183,33 @@ function Strikeout(s)
   return '<del>' .. s .. '</del>'
 end
 
+function obfuscate(s)
+   -- obfuscate the email address a la Hiram's encodeEmail.pl 
+   local refs = {}
+   for i = 1, string.len(s) do
+      local ascCode = string.byte(s, i)
+      local ref = "&#" .. tostring(ascCode)
+      table.insert(refs, ref)
+   end
+   return table.concat(refs, "")
+end
+
 function Link(s, src, tit, attr)
-  return "<a href='" .. escape(src,true) .. "' title='" ..
-         escape(tit,true) .. "'>" .. s .. "</a>"
+  if string.sub(src, 1, 7)=="mailto:" then
+      src = "mailto:" .. obfuscate(string.sub(src, 7), 7)
+      -- assume that the link label is an email address if it contains an @ character
+      if string.match(s, "%@")~=nil then
+          s = obfuscate(s)
+      end
+  else
+      src = escape(src, true)
+      tit = escape(tit, true)
+      s = escape(s, true)
+  end
+
+
+  return "<a href='" .. src .. "' title='" .. tit .. "'>" .. s .. "</a>"
+
 end
 
 function Image(s, src, tit, attr)
