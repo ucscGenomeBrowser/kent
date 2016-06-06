@@ -343,7 +343,7 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", NULL);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", "../js/dbDbTaxonomy.js");
 if (isNotEmpty(dbDbTree))
     printf("<script src=\"%s\"></script>\n", dbDbTree);
 
