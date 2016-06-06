@@ -36,14 +36,14 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Fri Jun  3 13:18:44 PDT 2016
     # real    284m1.002s
 
     cat fb.orcOrc1.chainOviAri3Link.txt
-    # 108740749 bases of 2729860805 (3.983%) in intersection
+    # 1647057996 bases of 2249582125 (73.216%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` orcOrc1 oviAri3) > rbest.log 2>&1 &
-    # real    206m46.355s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 oviAri3) \
+        > rbest.log 2>&1 &
+    # real    796m36.497s
 
     # and for the swap:
     mkdir /hive/data/genomes/oviAri3/bed/blastz.orcOrc1.swap
@@ -51,16 +51,18 @@ XXX - running - Fri Jun  3 13:18:44 PDT 2016
 
     time (doBlastzChainNet.pl -verbose=2 \
       /hive/data/genomes/orcOrc1/bed/lastzOviAri3.2016-06-03/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    16m43.312s
+    #  real    268m11.052s
 
     cat fb.oviAri3.chainOrcOrc1Link.txt
-    # 95694615 bases of 1218501075 (7.853%) in intersection
+    # 1668855009 bases of 2534335866 (65.850%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` oviAri3 orcOrc1) > rbest.log 2>&1
-    # real    171m15.342s
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oviAri3 orcOrc1) \
+      > rbest.log 2>&1
+    # real    908m54.965s
 
 #########################################################################
 # LASTZ killer whale/orcOrc1 vs. sheep/turTru2 - (DONE - 2016-06-03 - Hiram)
@@ -100,14 +102,14 @@ TMPDIR=/dev/shm
         -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > do.log 2>&1
-XXX - running - Fri Jun  3 13:18:44 PDT 2016
-    # real    284m1.002s
+    # real    1109m43.604s
 
     cat fb.orcOrc1.chainTurTru2Link.txt
-    # 108740749 bases of 2729860805 (3.983%) in intersection
+    # 2116631228 bases of 2249582125 (94.090%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` orcOrc1 turTru2) > rbest.log 2>&1 &
-    # real    206m46.355s
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 turTru2) \
+      > rbest.log 2>&1 &
+    # real    103m20.994s
 
     # and for the swap:
     mkdir /hive/data/genomes/turTru2/bed/blastz.orcOrc1.swap
@@ -115,15 +117,16 @@ XXX - running - Fri Jun  3 13:18:44 PDT 2016
 
     time (doBlastzChainNet.pl -verbose=2 \
       /hive/data/genomes/orcOrc1/bed/lastzTurTru2.2016-06-03/DEF \
-        -swap -chainMinScore=5000 -chainLinearGap=loose \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
           -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
             -syntenicNet) > swap.log 2>&1
-    #  real    16m43.312s
+    #  real    857m47.170s
 
     cat fb.turTru2.chainOrcOrc1Link.txt
-    # 95694615 bases of 1218501075 (7.853%) in intersection
+    # 2148433509 bases of 2332402443 (92.112%) in intersection
 
-    time (doRecipBest.pl -buildDir=`pwd` turTru2 orcOrc1) > rbest.log 2>&1
-    # real    171m15.342s
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` turTru2 orcOrc1) \
+      > rbest.log 2>&1
 
 #########################################################################
