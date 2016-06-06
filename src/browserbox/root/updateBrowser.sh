@@ -226,6 +226,14 @@ if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
    apt-get -y autoremove
 fi
 
+# install imagemagick for the session gallery
+if apt-cache policy imagemagick | grep "Installed: .none." > /dev/null; then
+   echo - Installing imagemagick
+   apt-get update
+   apt-get --no-install-recommends install -y imagemagick
+   apt-get -y autoremove
+fi
+
 echo
 echo - Updating the genome browser software via rsync:
 
