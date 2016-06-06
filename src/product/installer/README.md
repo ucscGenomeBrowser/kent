@@ -103,14 +103,9 @@ this could be added to your crontab file:
     sudo bash browserInstall.sh clean
 
 If you find a bug or your linux distribution is not supported, please contact 
-<a href="mailto:&#103;&#101;no&#109;&#101;&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;o&#101;.
-&#117;&#99;&#115;c.
-&#101;&#100;&#117;">
-&#103;&#101;no&#109;&#101;&#45;&#109;&#105;&#114;&#114;&#111;&#114;&#64;&#115;o&#101;.
-&#117;&#99;&#115;c.
-&#101;&#100;&#117;</a>.
-More details about the Genome Browser installation are at
-http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
+[genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
+Genome Browser installation are at
+[http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product).
 
 # All options
 
@@ -130,8 +125,8 @@ command is one of:
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
                recommended, see documentation.
-  clean      - remove temporary files of the genome browser, do not delete
-               any custom tracks
+  clean      - remove temporary files of the genome browser older than one 
+               day, but do not delete any uploaded custom tracks
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -146,10 +141,12 @@ examples:
   bash browserSetup.sh mirror -t noEncode hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash browserSetup.sh update     -  update the Genome Browser CGI programs
-  bash browserSetup.sh clean      -  remove temporary files
+  bash browserSetup.sh update hg19 -  update all data and all tables of the hg19 assembly
+                         (in total 7TB)
+  bash browserSetup.sh cgiUpdate   - update the Genome Browser CGI programs
+  bash browserSetup.sh clean       -  remove temporary files older than one day
 
-All options have to precede the list of genome assemblies.
+All options have to precede the command.
 
 options:
   -a   - use alternative download server at SDSC
@@ -158,9 +155,9 @@ options:
          This option is only useful for Human/Mouse assemblies.
          Download only certain tracks, possible values:
          noEncode = do not download any tables with the wgEncode prefix, 
-                    except Gencode genes, saves 4TB/6TB for hg19
+                    except Gencode genes, saves 4TB/7TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
-                    2TB/6TB for hg19
+                    2TB/7TB for hg19
          main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
