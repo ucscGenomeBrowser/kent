@@ -2,20 +2,22 @@
 
 # An install script for the UCSC Genome Browser
 
-This script installs Mysql, Apache, Ghostscript, configures them and copies the UCSC Genome
+This script installs Mysql, Apache, and Ghostscript, configures them, and copies the UCSC Genome
 Browser CGIs onto the local machine under /usr/local/apache/. It also deactivates the default
 Apache htdocs/cgi folders, so it is best run on a new machine or at least a host that is not 
 already used as a web server. The script can also download full or partial assembly databases,
 can update the CGIs and remove temporary files (aka "trash cleaning").
 
-The script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, Centos 7, Fedora 20 and OSX 10.10.
+The script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, Centos 7, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu
-14) and Microsoft Azure (Ubuntu). If you do not want to download the full genome assembly,
+14) and Microsoft Azure (Ubuntu). If you do not want to download a full genome assembly,
 you need to select the data centers called "San Francisco" (Amazon) or "West
 Coast" (Microsoft) for best performance. Other data centers (e.g. East Coast) will require a local
-copy of the genome assembly, which can mean 2TB-7TB of storage for the hg19 assembly. Note that this
-exceeds the current maximum size of a single Amazon EBS volume.
+copy of the genome assembly, which requires 2TB-7TB of storage for the hg19 assembly. Note 
+that this exceeds the current maximum size of a single Amazon EBS volume.
+
+# Basic Instructions
 
 Run this script as root, like this:
 
@@ -36,9 +38,9 @@ potentially destructive steps require confirmation by the user (unless the -b =
 batch mode option is specified).
 
 In particular, Mysql and Apache are installed and setup with the right package
-manager (yum or apt-get or port). A default random password is set for the
+manager (yum or apt-get). A default random password is set for the
 Mysql root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup Mysql, you would need to create to create the file
+If you already have setup Mysql, you would need to create the file
 ~/.my.cnf, the script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
 mariadb, deactivating SELinux, finding the right path for your apache install
@@ -100,11 +102,10 @@ this could be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
-If you find a bug or your linux distribution is not supported, please file pull
-requests, open a github issue or contact genome-mirror@soe.ucsc.edu. 
-
-More details about the Genome Browser installation are at
-http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product
+If you find a bug or your linux distribution is not supported, please contact 
+[genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
+Genome Browser installation are at
+[http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product).
 
 # All options
 
@@ -124,8 +125,8 @@ command is one of:
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
                recommended, see documentation.
-  clean      - remove temporary files of the genome browser, do not delete
-               any custom tracks
+  clean      - remove temporary files of the genome browser older than one 
+               day, but do not delete any uploaded custom tracks
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -140,10 +141,12 @@ examples:
   bash browserSetup.sh mirror -t noEncode hg19  - install Genome Browser, download hg19 
                         but no ENCODE tables and switch to offline mode 
                         (see the -o option)
-  bash browserSetup.sh update     -  update the Genome Browser CGI programs
-  bash browserSetup.sh clean      -  remove temporary files
+  bash browserSetup.sh update hg19 -  update all data and all tables of the hg19 assembly
+                         (in total 7TB)
+  bash browserSetup.sh cgiUpdate   - update the Genome Browser CGI programs
+  bash browserSetup.sh clean       -  remove temporary files older than one day
 
-All options have to precede the list of genome assemblies.
+All options have to precede the command.
 
 options:
   -a   - use alternative download server at SDSC
@@ -152,9 +155,9 @@ options:
          This option is only useful for Human/Mouse assemblies.
          Download only certain tracks, possible values:
          noEncode = do not download any tables with the wgEncode prefix, 
-                    except Gencode genes, saves 4TB/6TB for hg19
+                    except Gencode genes, saves 4TB/7TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
-                    2TB/6TB for hg19
+                    2TB/7TB for hg19
          main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.

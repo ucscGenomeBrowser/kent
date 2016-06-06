@@ -1,0 +1,118 @@
+track hg38Patch7
+compositeTrack on
+shortLabel GRC Patch Release
+longLabel GRCh38 patch release 7, alternate sequences and reference sequence patches
+subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
+dragAndDrop subTracks
+# sortOrder view=+
+visibility hide
+type bed 4
+noInherit on
+group map
+chromosomes chr1,chr10,chr11,chr12,chr13,chr15,chr15_KI270905v1_alt,chr16,chr18,chr19,chr2,chr22,chr3,chr4,chr5,chr6,chr7,chr9,chrY
+otherDb hg38Patch7
+chainMinScore 2000
+chainLinearGap medium
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+matrixHeader A, C, G, T
+html hg38Patch7
+dataVersion GRCh38 Patch 7 update, Mar. 2016
+
+    track hg38Patch7Location
+    shortLabel Patch/Haplotype
+    view location
+    visibility pack
+    parent hg38Patch7
+    noScoreFilter .
+
+        track hg38Patch7Haplotypes
+        parent hg38Patch7Location
+        subGroups view=location
+        color 32,32,190
+        shortLabel Haplotypes
+        longLabel New haplotype sequences to GRCh38 Reference Sequence
+        html hg38Patch7
+        priority 1
+        urlLabel NCBI Entrez Nucleotide record (GRCh38.p7):
+        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+
+        track hg38Patch7Patches
+        parent hg38Patch7Location
+        subGroups view=location
+        color 190,32,32
+        shortLabel Patches
+        longLabel Patches to GRCh38 Reference Sequence
+        html hg38Patch7
+        priority 2
+        urlLabel NCBI Entrez Nucleotide record (GRCh38.p7):
+        url http://www.ncbi.nlm.nih.gov/nuccore/$$
+
+    track hg38Patch7Align
+    shortLabel Alignment
+    view psl
+    visibility hide
+    parent hg38Patch7
+    type psl
+    indelDoubleInsert on
+    indelQueryInsert on
+    showDiffBasesAllScales .
+    showDiffBasesMaxZoom 10000.0
+    showCdsMaxZoom 10000.0
+    showCdsAllScales .
+    baseColorDefault itemBases
+    pslSequence no
+    baseColorUseSequence extFile seqHg38Patch7 extHg38Patch7
+
+        track altSeqLiftOverPslP7
+        parent hg38Patch7Align
+        subGroups view=psl
+        shortLabel Alignment
+        longLabel Alignments of the patch 7 sequences to the reference GRCh38 
+        html hg38Patch7
+        priority 3
+
+    track hg38Patch7Chain
+    shortLabel Chain
+    view chain
+    visibility hide
+    parent hg38Patch7
+    spectrum on
+
+        track chainHg38Patch7
+        parent hg38Patch7Chain
+        subGroups view=chain
+        shortLabel Chain
+        longLabel GRCh38 patch 7 Sequence Chained Alignments
+        type chain hg38Patch7
+        html chainNet
+        priority 4
+
+    track hg38Patch7Net
+    shortLabel Net
+    view net
+    visibility hide
+    parent hg38Patch7
+
+        track netHg38Patch7
+        parent hg38Patch7Net
+        subGroups view=net
+        shortLabel Net
+        longLabel GRCh38 patch 7 Sequence Alignment Net
+        type netAlign hg38Patch7 chainHg38Patch7
+        html chainNet
+        priority 5
+
+
+searchTable hg38Patch7Patches
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex K[QN][0-9]+(\.[0-9]+)?
+searchPriority 18
+
+searchTable hg38Patch7Haplotypes
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex K[QN][0-9]+(\.[0-9]+)?
+searchPriority 18

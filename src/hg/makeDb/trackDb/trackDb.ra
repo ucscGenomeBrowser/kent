@@ -3034,7 +3034,7 @@ allButtonPair on
 
 	track ncbiRefSeq
         release alpha
-        parent ncbiRefGenesView on
+        parent ncbiRefGenesView off
         shortLabel All RefSeq
         subGroups view=aGenes
         longLabel All RefSeq annotations from NCBI
@@ -3043,7 +3043,7 @@ allButtonPair on
 
         track refGene
         release alpha
-	parent ncbiRefGenesView off
+	parent ncbiRefGenesView on
         shortLabel UCSC RefSeq
         longLabel RefSeq UCSC alignments
         subGroups view=aGenes
