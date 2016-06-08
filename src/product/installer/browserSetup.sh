@@ -592,7 +592,8 @@ function installRedhat () {
     echo2 Installing EPEL, ghostscript, libpng
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
-    yum -y install epel-release ghostscript rsync
+    # imagemagick is required for the session gallery
+    yum -y install epel-release ghostscript rsync ImageMagick
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -829,6 +830,14 @@ function installDebian ()
         echo2 Installing ghostscript
         waitKey
         apt-get --assume-yes install ghostscript
+    fi
+
+    # use dpkg to check if imagemagick is installed
+    if dpkg-query -W imagemagick 2>&1 | grep "no packages found" > /dev/null; then 
+        echo2
+        echo2 Installing imagemagick
+        waitKey
+        apt-get --assume-yes install imagemagick
     fi
 
     if [ ! -f $APACHECONF ]; then
