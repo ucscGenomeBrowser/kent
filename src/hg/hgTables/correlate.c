@@ -303,13 +303,28 @@ else
 	{
 	selTrack = findSelectedTrack(limitedTrackList, selGroup, trackVar);
 	}
+    boolean selTrackIsDisabled = FALSE;
+    struct trackDb *firstEnabled = NULL;
     for (track = limitedTrackList; track != NULL; track = track->next)
 	{
 	if (allTracks || sameString(selGroup->name, track->grp))
-	    hPrintf(" <OPTION VALUE=%s%s>%s\n", track->table,
-		(track == selTrack ? " SELECTED" : ""),
-		track->shortLabel);
+	    {
+	    hPrintf(" <OPTION VALUE=\"%s\"", track->track);
+            if (isNoGenomeDisabled(database, track->table))
+                {
+                hPrintf(" DISABLED");
+                if (track == selTrack)
+                    selTrackIsDisabled = TRUE;
+                }
+            else if (firstEnabled == NULL)
+                firstEnabled = track;
+            if (track == selTrack && !selTrackIsDisabled)
+                hPrintf(" SELECTED");
+            hPrintf(">%s</OPTION>", track->shortLabel);
+	    }
 	}
+    if (selTrackIsDisabled)
+        selTrack = firstEnabled;
     hPrintf("</SELECT>\n");
     }
 hPrintf("\n");
@@ -2391,6 +2406,8 @@ tableList = NULL;	/*	initialize the list	*/
 correlateOK1 = correlateTrackOK(curTrack);
 
 table2onEntry = cartUsualString(cart, hgtaNextCorrelateTable, "none");
+if (isNoGenomeDisabled(database, table2onEntry))
+    table2onEntry = "none";
 
 /*	add first table to the list	*/
 tableList = allocTrackTable();

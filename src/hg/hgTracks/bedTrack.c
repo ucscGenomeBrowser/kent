@@ -90,7 +90,7 @@ if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->t
     char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
     struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
     list = bedTabixReadBeds(btf, chromName, winStart, winEnd, loader);
-    bedTabixFileClose(btf);
+    bedTabixFileClose(&btf);
     }
 else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks

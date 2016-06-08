@@ -1999,6 +1999,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+tg->attrTable = oregannoLoadAttrHash(conn);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
                  NULL, &rowOffset);
@@ -12318,9 +12319,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
-struct sqlConnection *conn = hAllocConn(database);
-tg->attrTable = oregannoLoadAttrHash(conn);
-hFreeConn(&conn);
+tg->attrTable = NULL;
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;

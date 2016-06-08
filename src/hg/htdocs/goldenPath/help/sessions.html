@@ -56,8 +56,13 @@
 target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.stopCodons.png"></center></a>
 <p>
 The above session helps illustrate the display of how one gene can have  different
-transcripts with different stop codons, displayed in red in the browser.
+transcripts with different stop codons, displayed in red in the browser.  Note that
+the three transcripts the terminate at the right side of the screen are in a different
+frame than the transcript that terminates near the left side.  The three potential
+reading frames through the region can be seen at the top of the graphic.  Only one of
+the three is free of stop codons throughout this range.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from our wiki: http://genomewiki.cse.ucsc.edu/index.php/Genome_Browser_Session_Gallery -->
@@ -66,18 +71,30 @@ transcripts with different stop codons, displayed in red in the browser.
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg18.stop"
 target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg18.stop.png"></center></a>
 <p>
-A premature stop codon was found in the hg18 reference genome and about half of
-people of European descent. The UCSC Genes track was forced to skip the codon.
+A premature stop codon was found in the hg18 reference genome and in about half of
+people of European descent. The UCSC Genes track was forced to skip the codon to
+indicate a full-length coding region for this gene.  The SNP indicated by the G
+nucleotide in many of the mRNA alignments shows that in many samples from
+Genbank, the T > G transversion encodes a glutamic acid in the protein, reading through the
+premature stop predicted by the reference assembly.
 <a href="../../cgi-bin/hgc?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg18.stop&c=chr18&o=59530817&t=59530818&g=hgdpGeo&i=rs4940595"
 target="_blank"><center><img width="40%" height="40%" src="../../images/hg18.stop2.png"></center></a>
 <p>
 Clicking the top highlighted rs4940595 in the <a href="../../cgi-bin/hgTrackUi?db=hg18&g=hgdpGeo"
-target="_blank" >Human Genome Diversity Project SNP Population Allele Frequencies</a> track will
-display the world frequency image regarding this variant. In the more recent hg38 reference
-genome this area displays differently.
+target="_blank" >Human Genome Diversity Project SNP Population Allele
+Frequencies</a> track will display the world frequency image regarding this
+variant. In the more recent hg38 reference genome this area displays differently.
+
+Click into the active session and then into the SNP to read the details.
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/hg38.stop"
-target="_blank">Link to region in hg38 for comparison</a>.
+target="_blank">Link to region in hg38 for comparison</a>.  Specifically, in
+hg38 the T in the previous reference assembly has been replaced by a G, giving
+the reference a glutamic acid, E, and no longer prematurely truncates the
+predicted transcript.  The SNP at this location, rs4940595, now indicates the
+G > T transversion in the reverse direction from previously, indicating a
+premature stop at this location for the T allele.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -88,13 +105,14 @@ target="_blank"><center><img width="70%" height="70%" src="../../images/session.
 <p>
 The above session helps illustrate the display of how one gene can have different
 transcripts with different start codons, displayed in green in the browser.
-Here is an example session displaying 
+Here is an example session displaying
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.reverseStart"
 target="_blank">a start codon on the reverse strand</a>. By clicking the &quot;reverse&quot; button
 below the browser one can
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.reverseStart2"
 target="_blank">flip the view</a>.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -115,6 +133,7 @@ Using the multi-region exon-only feature available under the top blue menu bar a
 &quot;Multi-Region&quot; you can remove introns adjusting padding down to just one base (or none) 
 to more clearly see the split codon above.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -129,6 +148,7 @@ codon numbers in the literature. Here is an additional view of the region zoomed
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.codonNums2"
 target="_blank">the alternate splicing</a>.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Topic Division -->
@@ -148,6 +168,7 @@ There is a conservation of function through evolution with V > I > F amino acids
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.wobble2"
 target="_blank">wobble</a>.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -170,6 +191,7 @@ centromere in the Chimp chr2B:
 <a href="../../cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.chimp3"
 target="_blank"><center><img width="70%" height="70%" src="../../images/session.hg19.chimp3.png"></center></a>
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Topic Division -->
@@ -193,6 +215,7 @@ AA sequences.
 <a href="http://genome.ucsc.edu/cgi-bin/hgGene?hgg_gene=uc004cda.1&hgg_prot=P16442&hgg_chrom=chr9&hgg_start=136130562&hgg_end=136150630&hgg_type=knownGene&db=hg19#geneAlleles"
 target="_blank"><center><img width="70%" height="70%" src="../../images/aboVariantDetails.png"></center></a>
 <p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -210,6 +233,7 @@ target="_blank">mouseover OMIM variants to access details</a> such as OMIM Allel
 in the far right to see &quot;PRO366LEU,rs121909641:HYPOGONADOTROPIC HYPOGONADISM 2
 WITH ANOSMIA, SUSCEPTIBILITY TO&quot; to learn additional information about each variant.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -222,6 +246,7 @@ The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=oligoMatch
 target="_blank" >Short Match Track</a> to display matches of &quot;cagcagcagcagcagcag&quot;
 repeats in a polyglutamine region (Note Qs) of the gene HTT, Huntingtin, linked to Huntington's disease.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from https://users.soe.ucsc.edu/~kuhn/workshops/jamesMadison2015/education.html -->
@@ -241,6 +266,7 @@ Another example featuring the Segmental Dups track is the
 target="_blank">15q11 Prader-Willi region</a> in which same-chromosome duplications lead to gain
 and loss of copies and a rare genetic disorder when some genes are deleted or unexpressed.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Topic Division -->
@@ -257,6 +283,7 @@ The above session uses the <a href="../../cgi-bin/hgTrackUi?db=hg19&g=genotypeAr
 target="_blank" >Microarray Probesets</a> track to display Affymetrix, Agilent, and
 Illumina probe information.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <!-- Session INFO: This comes from the ENCODE index.html -->
@@ -269,6 +296,7 @@ The above session highlights some key integrated track data from the ENCODE proj
 GENCODE gene sets, Transcription Levels by RNA-seq, H3K27Ac histone mark, DNaseI
 Hypersensitivity, ChIP-seq Transcription Factor binding sites, and Genome Segmentations.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <h4 class="title">Example search of enhancer information around the gene TNFAIP3</h4>
@@ -287,6 +315,7 @@ Investigating where RNA-seq signals overlap with Transcription Factor Binding up
 TNFAIP3 transcription would appear to indicate possible eRNA locations and the segmentation
 track displays possible Strong and Weak Enhancers as calculated by the ChromHMM and Segway programs.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <h4 class="title">Example of how DNaseI Hypersensitivity Clusters track represents multiple experiments</h4>
@@ -300,6 +329,7 @@ target="_blank">The response</a> explains that the clusters track represents the
 filtering of multiple DNaseI Hypersensitivity Uniform Peaks tracks in an attempt to summarize
 multiple individual experiments, which also can be viewed individually in the browser.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <h4 class="title">Example of how the Transcription Factor ChIP Track is generated from multiple experiments</h4>
@@ -325,6 +355,7 @@ there is only one observed cell type where this data indicates this factor binds
 location. And similarly below, you will see the "Uniform... Jun" tracks that contributed
 to the clusters track.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 
@@ -345,6 +376,7 @@ The user could not find the Alu repeat, and
 target="_blank">the response</a> was to aid the user in turning on the RepeatMasker track
 where information on repeats, such as the AluY element desired, is contained.
 </p>
+<hr>
 </div><!-- .sectionContent -->
 
 <h4 class="title">Example of refGene exonFrames coming from mRNA</h4>

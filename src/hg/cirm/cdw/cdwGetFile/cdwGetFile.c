@@ -106,7 +106,9 @@ mustHaveAccess(conn, ef);
 // Take the extension from the submitted filename, as cdwFile.format is not the same as the extension
 // e.g. format=fasta -> fa.gz
 char *submitExt = skipBeyondDelimit(basename(ef->submitFileName), '.');
-char* suggestName = catTwoStrings(vf->licensePlate, submitExt);
+
+char suggestName[8000];
+safef(suggestName, sizeof(suggestName), "%s.%s", vf->licensePlate, submitExt);
 
 apacheSendX(vf->format, filePath, suggestName);
 }

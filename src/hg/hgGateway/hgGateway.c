@@ -254,13 +254,18 @@ struct sqlConnection *conn = hConnectCentral();
 // may be used for different assemblies of the same species.  Using defaultDb means that
 // we send a taxId consistent with the taxId of the assembly that we'll change to when
 // the species is selected from the tree.
-char *query = NOSQLINJ "select dbDb.genome, taxId from dbDb, defaultDb "
+char *query = NOSQLINJ "select dbDb.genome, taxId, dbDb.name from dbDb, defaultDb "
     "where defaultDb.name = dbDb.name and active = 1 "
     "and taxId > 1;"; // filter out experimental hgwdev-only stuff with invalid taxIds
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)
-    jsonWriteNumber(jw, row[0], atoi(row[1]));
+    {
+    char *genome = row[0], *db = row[2];
+    int taxId = atoi(row[1]);
+    if (hDbExists(db))
+        jsonWriteNumber(jw, genome, taxId);
+    }
 hDisconnectCentral(&conn);
 jsonWriteObjectEnd(jw);
 puts(jw->dy->string);
@@ -343,7 +348,7 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 
 // Phylogenetic tree .js file, produced by dbDbTaxonomy.pl:
-char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", NULL);
+char *dbDbTree = cfgOptionDefault("hgGateway.dbDbTaxonomy", "../js/dbDbTaxonomy.js");
 if (isNotEmpty(dbDbTree))
     printf("<script src=\"%s\"></script>\n", dbDbTree);
 

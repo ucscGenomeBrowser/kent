@@ -1,8 +1,11 @@
+/* Copyright (C) 2016 The Regents of the University of California 
+ * See README in this or parent directory for licensing information. */
+
 #include "common.h"
 #include "aveStats.h"
 
 static int cmpDouble(const void *va, const void *vb)
-/* Compare two slNames. */
+/* Compare two doubles. */
 {
 const double *a = va;
 const double *b = vb;
@@ -15,70 +18,67 @@ else
    return 0;
 }
 
-struct aveStats *aveStatsCalc(double *array, int count)
-/* Compute stats on sorted array */
+static inline double calcMedian(double *array, int count)
+/* Calculate the median of a list of numbers. */
+{
+// if the array has an odd number of elements choose the center element
+if (count & 1) 
+    return array[count / 2];
+
+// return the mean of the two central elements if the number of elements is even
+return (array[count/2 - 1] + array[count/2]) / 2.0;
+}
+
+struct aveStats *aveStatsCalc(double *array, unsigned count)
+/* Compute statistics on an unsorted array of doubles. Use Tukey hinge method for quartiles. */
 {
 struct aveStats *as;
 
 AllocVar(as);
-if (count == 0)
-    return as;
-
-qsort(array, count, sizeof(array[0]), cmpDouble);
-
 as->count = count;
 
-double val, minVal = DBL_MAX, maxVal = -DBL_MAX;
-double total = 0, average;
-int i;
-int q1Index, q3Index;		/*	quartile positions	*/
-double oneVar, totalVar = 0;
-
-for (i=0; i<count; ++i)
+// special case for arrays of size 0 and 1
+if (count == 0)
+    return as;
+else if (count == 1)
     {
-    val = array[i];
-    if (minVal > val) minVal = val;
-    if (maxVal < val) maxVal = val;
-    total += val;
+    as->q1 = as->median = as->q3 = as->average = as->minVal = as->maxVal = as->total = array[0];
+    as->var = as->stdDev = 0.0;
+    return as;
     }
 
-as->average = average = total/count;
-as->minVal = minVal;
-as->maxVal = maxVal;
+qsort(array, count, sizeof array[0], cmpDouble);
+
+as->minVal = array[0];
+as->maxVal = array[count-1];
+
+double *lastValue = &array[count];
+double *valuePtr;
+
+double total = 0;
+for( valuePtr = array; valuePtr < lastValue; valuePtr++)
+    total += *valuePtr;
 as->total = total;
 
-q1Index = (count+1)/4;		/*	one fourth, rounded down	*/
-q3Index = (3*(count+1))/4;	/*	three fourths, rounded down	*/
-if (q1Index < (count-1))
-    {
-    double range = array[q1Index+1] - array[q1Index];
-    as->q1 = array[q1Index] +
-        ((((double)count+1.0)/4.0)-(double)q1Index)*range;
-    }
-else
-    as->q1 = array[q1Index];
-if (q3Index < (count-1))
-    {
-    double range = array[q3Index+1] - array[q3Index];
-    as->q3 = array[q3Index] +
-        ((3.0*((double)count+1.0)/4.0)-(double)q3Index)*range;
-    }
-else
-    as->q3 = array[q3Index];
+double average;
+as->average = average = total/count;
 
-for (i=0; i<count; ++i)
+double oneVar, totalVar = 0;
+for( valuePtr = array; valuePtr < lastValue; valuePtr++)
     {
-    val = array[i];
-    oneVar = (average-val);
-    totalVar += oneVar*oneVar;
+    oneVar = (average - *valuePtr);
+    totalVar += oneVar * oneVar;
     }
 
 as->var = totalVar;
-if (count > 1)
-    as->var /= count-1;
+as->var /= count-1;  // use sample standard deviation
 as->stdDev = sqrt(as->var);
-as->median = array[count/2];
+
+as->median = calcMedian(array, count);
+
+unsigned halfSize = count/2 + (count & 1);
+as->q1 = calcMedian(array, halfSize);
+as->q3 = calcMedian(&array[count/2], halfSize);
 
 return as;
 }
-

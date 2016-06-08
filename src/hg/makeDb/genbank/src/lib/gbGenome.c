@@ -149,6 +149,7 @@ static char *chlSabNames[] = {"Chlorocebus sabaeus", "Chlorocebus aethiops", "Ch
 static char *ascSuuNames[] = {"Ascaris suum", NULL};
 static char *galVarNames[] = {"Galeopterus variegatus", NULL};
 static char *rouAegNames[] = {"Rousettus aegyptiacus", NULL};
+static char *orcOrcNames[] = {"Orcinus orca", NULL};
 
 static char *endNames[] = {NULL};
 
@@ -272,6 +273,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"ascSuu", ascSuuNames},
     {"galVar", galVarNames},
     {"rouAeg", rouAegNames},
+    {"orcOrc", orcOrcNames},
     {"CHM", hgNames},
     {"braNey", hgNames},
     {NULL, endNames}

@@ -15,6 +15,9 @@ boolean cartTrackDbIsAccessDenied(char *db, char *table);
  * if access to table is denied (at least on this host) by 'tableBrowser off'
  * or by the tableAccessControl table. */
 
+boolean cartTrackDbIsNoGenome(char *db, char *table);
+/* Return TRUE if range queries, but not genome-queries, are permitted for this table. */
+
 struct slName *cartTrackDbTablesForTrack(char *db, struct trackDb *track, boolean useJoiner);
 /* Return list of all tables associated with track.  If useJoiner, the result can include
  * non-positional tables that are related to track by all.joiner. */
