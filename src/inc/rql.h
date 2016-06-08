@@ -119,6 +119,14 @@ void rqlStatementFree(struct rqlStatement **pRql);
 void rqlStatementDump(struct rqlStatement *rql, FILE *f);
 /* Print out statement to file. */
 
+void *rqlHashFindValEvenInWilds(struct hash *hash, char *name);
+/* Find hash val but if no exact match look for wildcards in hash and then match. */
+
+void rqlCheckFieldsExist(struct rqlStatement *rql, 
+    struct hash *fieldsThatExist, char *fieldSource);
+/* Check that all fields referenced in an rql statement actually exist.
+ * fieldsThatExist is a hash of field names, and fieldSource is where they came from. */
+
 typedef char* (*RqlEvalLookup)(void *record, char *key);
 /* Callback for rqlEvalOnRecord to lookup a variable value. */
 
