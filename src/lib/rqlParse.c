@@ -715,6 +715,108 @@ lineFileClose(&lf);
 return rql;
 }
 
+// Specialized wildHash could be added to hash.c, but will be so rarely used.
+// It's purpose here is for wildCard tagTypes (e.g. "*Filter") which get
+// loaded into an RA hash but require specialized hashFindVal to pick them up.
+#define WILD_CARD_HASH_BIN "[wildCardHash]"
+#define WILD_CARD_HASH_EMPTY "[]"
+int wildExpressionCmp(const void *va, const void *vb)
+/* Compare two slPairs. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return (strlen(a->name) - strlen(b->name));
+}
+
+struct slPair *wildHashMakeList(struct hash *hash)
+/* Makes a sub hash containing a list of hash elements whose names contain wildcards ('*', '?').
+   The sub hash will be put into WILD_CARD_HASH_BIN for use by wildHashLookup(). */
+{
+struct slPair *wildList = NULL;
+struct hashEl* hel = NULL;
+struct hashCookie cookie = hashFirst(hash);
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    if (strchr(hel->name,'*') != NULL || strchr(hel->name,'?') != NULL)
+        slPairAdd(&wildList, hel->name, hel);
+    }
+if (wildList == NULL)                                 // Note: adding an "empty" pair will
+    slPairAdd(&wildList, WILD_CARD_HASH_EMPTY, NULL); //       prevent rebuilding this list
+else if (slCount(wildList) > 1)
+    slSort(&wildList,wildExpressionCmp); // sort on length, so the most restrictive
+                                         // wildcard match goes first?
+hashAdd(hash, WILD_CARD_HASH_BIN, wildList);
+return wildList;
+}
+
+struct hashEl *wildHashLookup(struct hash *hash, char *name)
+/* If wildcards are in hash, then look up var in "wildCardHash" bin. */
+{
+struct slPair *wild = hashFindVal(hash, WILD_CARD_HASH_BIN);
+if (wild == NULL)  // Hasn't been made yet.
+    wild = wildHashMakeList(hash);
+if (wild == NULL
+|| (slCount(wild) == 1 && sameString(wild->name,WILD_CARD_HASH_EMPTY)))
+    return NULL; // Empty list means hash contains no names with wildcards
+
+for ( ;wild != NULL; wild=wild->next)
+    if (wildMatch(wild->name,name))
+        return wild->val;
+
+return NULL;
+}
+
+static void *wildHashFindVal(struct hash *hash, char *name)
+/* If wildcards are in hash, then look up var in "wildCardHash" bin. */
+{
+struct hashEl *hel = wildHashLookup(hash,name);
+if (hel != NULL)
+    return hel->val;
+return NULL;
+}
+
+static struct hashEl *hashLookupEvenInWilds(struct hash *hash, char *name)
+/* Lookup hash el but if no exact match look for wildcards in hash and then match. */
+{
+struct hashEl *hel = hashLookup(hash, name);
+if (hel == NULL)
+    hel = wildHashLookup(hash, name);
+return hel;
+}
+
+void *rqlHashFindValEvenInWilds(struct hash *hash, char *name)
+/* Find hash val but if no exact match look for wildcards in hash and then match. */
+{
+void *val = hashFindVal(hash, name);
+if (val == NULL)
+    val = wildHashFindVal(hash, name);
+return val;
+}
+
+
+void rqlCheckFieldsExist(struct rqlStatement *rql, 
+    struct hash *fieldsThatExist, char *fieldSource)
+/* Check that all fields referenced in an rql statement actually exist.
+ * fieldsThatExist is a hash of field names, and fieldSource is where they came from. */
+{
+/* Do checks that tags are all legitimate and with correct types. */
+struct slName *field;
+for (field = rql->fieldList; field != NULL; field = field->next)
+    {
+    if (!anyWild(field->name))
+	if (!hashLookupEvenInWilds(fieldsThatExist, field->name))
+	    errAbort("Field %s in query doesn't exist in %s.", field->name, fieldSource);
+    }
+struct slName *var;
+for (var = rql->whereVarList; var != NULL; var = var->next)
+    {
+    if (!hashLookupEvenInWilds(fieldsThatExist, var->name))
+        errAbort("Tag %s doesn't exist. Maybe you mispelled a variable or forgot to put quotes "
+                 "around\na word? Maybe %s is hosed?.", var->name, fieldSource);
+    }
+}
+
+
 void rqlStatementDump(struct rqlStatement *rql, FILE *f)
 /* Print out statement to file. */
 {

@@ -844,3 +844,31 @@ if (sameStringN(string + wordOffset, word, wordLen) &&
     return TRUE;
 return FALSE;
 }
+
+void ensureNamesCaseUnique(struct slName *fieldList)
+/* Ensure that there would be no name conflicts in fieldList if all fields were lower-cased. */
+{
+struct slName *field;
+struct hash *hash = hashNew(0);
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    char *s = field->name;
+    int len = strlen(s);
+    assert(len<512);  // avoid stack overflow
+    char lower[len+1];
+    strcpy(lower, s);
+    strLower(lower);
+    char *conflict = hashFindVal(hash, lower);
+    if (conflict)
+	 {
+	 if (sameString(conflict,s))
+	     errAbort("Duplicate symbol %s", s);
+	 else
+	     errAbort("Conflict between symbols with different cases: %s vs %s",
+		conflict, s);
+	 }
+    hashAdd(hash, lower, s);
+    }
+hashFree(&hash);
+}
+
