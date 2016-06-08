@@ -456,6 +456,9 @@ struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *use
 struct tagStorm *cdwUserTagStormFromList(struct sqlConnection *conn, 
     struct cdwUser *user, struct cdwFile *validList ,struct rbTree *groupedFiles);
 
+void cdwCheckRqlFields(struct rqlStatement *rql, struct slName *tagFieldList);
+/* Make sure that rql query only includes fields that exist in tags */
+
 char *cdwRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza. */
 

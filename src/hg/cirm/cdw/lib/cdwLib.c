@@ -2083,10 +2083,21 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void cdwCheckRqlFields(struct rqlStatement *rql, struct slName *tagFieldList)
+/* Make sure that rql query only includes fields that exist in tags */
+{
+struct hash *hash = hashFromSlNameList(tagFieldList);
+rqlCheckFieldsExist(rql, hash, "cdwFileTags table");
+hashFree(&hash);
+}
+
 struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
 /* Return list of references to stanzas that match RQL query */
 {
 struct rqlStatement *rql = rqlStatementParseString(query);
+struct slName *tagFieldList = tagStormFieldList(tags);
+cdwCheckRqlFields(rql, tagFieldList);
+slFreeList(&tagFieldList);
 int matchCount = 0;
 struct slRef *list = NULL;
 struct lm *lm = lmInit(0);
