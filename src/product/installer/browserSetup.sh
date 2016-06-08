@@ -825,7 +825,7 @@ function installDebian ()
     fi
 
     # use dpkg to check if ghostscript is installed
-    if dpkg-query -W ghostscript 2>&1 | grep "no packages found" > /dev/null; then 
+    if dpkg-query -s ghostscript 2>&1 | grep "is not installed" > /dev/null; then 
         echo2
         echo2 Installing ghostscript
         waitKey
@@ -833,7 +833,7 @@ function installDebian ()
     fi
 
     # use dpkg to check if imagemagick is installed
-    if dpkg-query -W imagemagick 2>&1 | grep "no packages found" > /dev/null; then 
+    if dpkg-query -s imagemagick 2>&1 | grep "is not installed" > /dev/null; then 
         echo2
         echo2 Installing imagemagick
         waitKey
