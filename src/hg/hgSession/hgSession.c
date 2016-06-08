@@ -893,11 +893,11 @@ webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
 if (gotSettings)
-    sqlSafef(query, sizeof(query), "SELECT shared, firstUse, contents, settings from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse, settings from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 else
-    sqlSafef(query, sizeof(query), "SELECT shared, firstUse contents from %s "
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse from %s "
 	  "WHERE userName = '%s' AND sessionName = '%s'",
           namedSessionTable, encUserName, encSessionName);
 sr = sqlGetResult(conn, query);
@@ -905,10 +905,9 @@ if ((row = sqlNextRow(sr)) != NULL)
     {
     int shared = atoi(row[0]);
     char *firstUse = row[1];
-    char *contents = row[2];
     char *settings = NULL;
     if (gotSettings)
-	settings = row[3];
+	settings = row[2];
     char *description = getSetting(settings, "description");
     if (description == NULL) description = "";
 
@@ -966,65 +965,12 @@ if ((row = sqlNextRow(sr)) != NULL)
     dyStringPrintf(dyMessage,
 		   "Created on %s.<BR>\n", firstUse);
     /* Print custom track counts per assembly */
-    if (startsWith("ctfile_", contents) || (strstr(contents, "&ctfile_") != NULL))
-        {
-        char *splitContents = cloneString(contents);
-        subChar(splitContents, '&', ' ');
-        struct hash *contentsHash = hashFromString(splitContents);
-        struct hash *ctValidCount = hashNew(2);
-        struct hash *ctInvalidCount = hashNew(2);
-        struct hashEl *elList = hashElListHash(contentsHash), *thisEl = elList;
-        while (thisEl != NULL)
-            {
-            if (startsWith("ctfile_", thisEl->name))
-                {
-                char *db = thisEl->name + 7;
-                char *ctFile = cloneString(thisEl->val);
-                cgiDecode(ctFile,ctFile,strlen(ctFile));
-                if (!fileExists(ctFile))
-                    {
-                    if (hashFindVal(ctInvalidCount, db) == NULL)
-                        hashAddInt(ctInvalidCount, db, 1);
-                    else
-                        hashIncInt(ctInvalidCount, db);
-                    }
-                else
-                    {
-                    if (hashFindVal(ctValidCount, db) == NULL)
-                        hashAddInt(ctValidCount, db, 1);
-                    else
-                        hashIncInt(ctValidCount, db);
-                    }
-                }
-                thisEl = thisEl->next;
-            }
-        elList = hashElListHash(ctValidCount);
-        if (elList != NULL)
-            {
-            dyStringPrintf(dyMessage, "Custom track counts per assembly: %s (%d)",
-                elList->name, ptToInt(elList->val));
-            thisEl = elList->next;
-            while (thisEl != NULL)
-                {
-                dyStringPrintf(dyMessage, ", %s (%d)", thisEl->name, ptToInt(thisEl->val));
-                thisEl = thisEl->next;
-                }
-            dyStringPrintf(dyMessage, "<br>\n");
-            }
-        elList = hashElListHash(ctInvalidCount);
-        if (elList != NULL)
-            {
-            dyStringPrintf(dyMessage, "Expired custom track counts per assembly: %s (%d)",
-                elList->name, ptToInt(elList->val));
-            thisEl = elList->next;
-            while (thisEl != NULL)
-                {
-                dyStringPrintf(dyMessage, ", %s (%d)", thisEl->name, ptToInt(thisEl->val));
-                thisEl = thisEl->next;
-                }
-            dyStringPrintf(dyMessage, "<br>\n");
-            }
-        }
+    struct cart *tmpCart = cartNew(NULL,NULL,NULL,NULL);
+    struct sqlConnection *conn2 = hConnectCentral();
+    cartLoadUserSession(conn2, userName, sessionName, tmpCart, NULL, NULL);
+    hDisconnectCentral(&conn2);
+    cartCheckForCustomTracks(tmpCart, dyMessage);
+
     if (gotSettings)
         {
         description = replaceChars(description, "\\\\", "\\__ESC__");
