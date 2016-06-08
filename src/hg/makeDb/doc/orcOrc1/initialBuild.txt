@@ -196,11 +196,10 @@ taxId 9733
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/orcOrc1/orcOrc1.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku orcOrc1) > do.log 2>&1
-XXX - running - Tue May 31 15:59:24 PDT 2016
-    # real    5m44.521s
+    # real    6m3.280s
 
     cat fb.orcOrc1.cpgIslandExtUnmasked.txt
-    # 86926460 bases of 1910250568 (4.551%) in intersection
+    # 37760057 bases of 2249582125 (1.679%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2016-05-31 - Hiram)
@@ -453,11 +452,10 @@ searchPriority 8
     cd /hive/data/genomes/orcOrc1/bed/cpgIslands
     time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
       -workhorse=hgwdev -smallClusterHub=ku orcOrc1) > do.log 2>&1
-XXX - running - Wed Jun  1 11:17:20 PDT 2016
-    # real    5m19.286s
+    #   real    5m33.326s
 
     cat fb.orcOrc1.cpgIslandExt.txt
-    # 80027987 bases of 1910250568 (4.189%) in intersection
+    # 28442572 bases of 2249582125 (1.264%) in intersection
 
 ##############################################################################
 # genscan - (DONE - 2016-06-01 - Hiram)
@@ -465,14 +463,19 @@ XXX - running - Wed Jun  1 11:17:20 PDT 2016
     cd /hive/data/genomes/orcOrc1/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku orcOrc1) > do.log 2>&1
-XXX - running - Wed Jun  1 11:17:20 PDT 2016
-    # real    17m23.384s
+    # real    25m18.870s
+    # one job broken, run with window of 2,000,000:
+    ./lastRunGsBig.csh NW_004438481v1 000 gtf/000/NW_004438481v1.gtf pep/000/NW_004438481v1.pep subopt/000/NW_004438481v1.bed
+    # real    12m47.728s
 
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku orcOrc1) > makeBed.log 2>&1
+    #   real    1m0.711s
     cat fb.orcOrc1.genscan.txt
-    # 60809045 bases of 1910250568 (3.183%) in intersection
+    # 52075483 bases of 2249582125 (2.315%) in intersection
 
     cat fb.orcOrc1.genscanSubopt.txt
-    # 50801373 bases of 1910250568 (2.659%) in intersection
+    # 49181696 bases of 2249582125 (2.186%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2016-06-01 - Hiram)
@@ -641,12 +644,14 @@ orcOrc1.genbank.est.native.load = no
 
     cd /hive/data/genomes/orcOrc1
     time (makeDownloads.pl orcOrc1) > downloads.log 2>&1
-    #  real    27m1.207s
+    #  real    15m52.648s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/orcOrc1/pushQ
     cd /hive/data/genomes/orcOrc1/pushQ
     time makePushQSql.pl orcOrc1 > orcOrc1.pushQ.sql 2> stderr.out
+    #   real    11m56.179s
+
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/orcOrc1/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/orcOrc1/wib/quality.wib
