@@ -824,21 +824,9 @@ function installDebian ()
        touch /tmp/browserInstall.aptGetUpdateDone
     fi
 
-    # use dpkg to check if ghostscript is installed
-    if dpkg-query -s ghostscript 2>&1 | grep "is not installed" > /dev/null; then 
-        echo2
-        echo2 Installing ghostscript
-        waitKey
-        apt-get --assume-yes install ghostscript
-    fi
-
-    # use dpkg to check if imagemagick is installed
-    if dpkg-query -s imagemagick 2>&1 | grep "is not installed" > /dev/null; then 
-        echo2
-        echo2 Installing imagemagick
-        waitKey
-        apt-get --assume-yes install imagemagick
-    fi
+    echo2 Installing ghostscript and imagemagick
+    waitKey
+    apt-get --assume-yes install ghostscript imagemagick
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1171,24 +1159,27 @@ function mysqlDbSetup ()
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
 function installBrowser () 
 {
-    if [ ! -f $COMPLETEFLAG ]; then
-        echo '--------------------------------'
-        echo UCSC Genome Browser installation
-        echo '--------------------------------'
-        echo Detected OS: $OS/$DIST, $VER
-        echo 
-        echo This script will go through three steps:
-        echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
-        echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
-        echo "3 - optional: download genome assembly databases into mysql and /gbdb"
-        echo
-        echo This script will now install and configure Mysql and Apache if they are not yet installed. 
-        echo "Your distribution's package manager will be used for this."
-        echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
-        echo
-        echo This script will also deactivate SELinux if active and open port 80/http.
-        waitKey
+    if [ -f $COMPLETEFLAG ]; then
+        echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
+        exit 246
     fi
+
+    echo '--------------------------------'
+    echo UCSC Genome Browser installation
+    echo '--------------------------------'
+    echo Detected OS: $OS/$DIST, $VER
+    echo 
+    echo This script will go through three steps:
+    echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
+    echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
+    echo "3 - optional: download genome assembly databases into mysql and /gbdb"
+    echo
+    echo This script will now install and configure Mysql and Apache if they are not yet installed. 
+    echo "Your distribution's package manager will be used for this."
+    echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
+    echo
+    echo This script will also deactivate SELinux if active and open port 80/http.
+    waitKey
 
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
