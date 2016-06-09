@@ -71,18 +71,6 @@ if (wikiLinkEnabled())
 
     if (isNotEmpty(wikiLoggedIn) && isNotEmpty(wikiUserName))
 	{
-        if (loginSystemEnabled())
-            {
-            struct sqlConnection *conn = hConnectCentral();
-            char query[512];
-            sqlSafef(query, sizeof(query), "select idx from gbMembers where userName='%s'",
-                     wikiUserName);
-            char buf[512];
-            char *userId = sqlQuickQuery(conn, query, buf, sizeof(buf));
-            hDisconnectCentral(&conn);
-            if (!sameString(userId, wikiLoggedIn))
-                return NULL;
-            }
 	return cloneString(wikiUserName);
 	}
     }
