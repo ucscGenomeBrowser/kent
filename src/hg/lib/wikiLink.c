@@ -18,8 +18,6 @@
 static boolean alreadyAuthenticated = FALSE;
 // Set by loginValidateCookies, used by wikiLinkUserName
 static boolean authenticated = FALSE;
-// User name from remote login cookies
-static char *remoteUserName = NULL;
 // If we need to change some cookies, store cookie strings here in case loginValidateCookies
 // is called multiple times (e.g. validate before cookie-writing, then later write cookies)
 static struct slName *cookieStrings = NULL;
@@ -166,7 +164,7 @@ return isValid;
 static void deleteKey(struct sqlConnection *conn, uint idx, char *key)
 /* Remove key from idx row's comma-separated keyList. */
 {
-char query[2048];
+char query[512];
 sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
 char buf[1024];
 char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -188,7 +186,7 @@ if (isNotEmpty(keyListStr))
 static void insertKey(struct sqlConnection *conn, uint idx, char *key)
 /* Add a new entry to gbMembers.keyList for idx. */
 {
-char query[2048];
+char query[512];
 sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
 char buf[1024];
 char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
@@ -285,7 +283,6 @@ struct slName *loginLogoutUser()
 {
 alreadyAuthenticated = TRUE;
 authenticated = FALSE;
-cookieStrings = NULL;
 char *key = NULL;
 uint idx = getCookieIdKey(&key, NULL);
 struct sqlConnection *conn = hConnectCentral();
@@ -294,74 +291,7 @@ if (haveKeyList(conn) && key)
 hDisconnectCentral(&conn);
 slAddHead(&cookieStrings, loginIdKeyCookieString(0, NULL));
 slAddHead(&cookieStrings, loginUserNameCookieString(NULL));
-// BEGIN TODO: remove in July 2016
-if (wikiLinkEnabled())
-    {
-    slAddHead(&cookieStrings, newCookieString(wikiLinkLoggedInCookie(), NULL));
-    slAddHead(&cookieStrings, newCookieString(wikiLinkUserNameCookie(), NULL));
-    }
-// END TODO: remove in July 2016
 return cookieStrings;
-}
-
-static char *getRemoteCookiePrefix(char *wikiHost)
-/* Try to guess what cookie prefix wikiHost will use, to tide us over for release 333.
- * It's better to set hg.conf's login.tokenCookie and login.userNameCookie than to rely on this. */
-{
-if (sameString("genome.ucsc.edu", wikiHost))
-    return "hguid";
-if (startsWith("hgwbeta.", wikiHost))
-    return "hguid.hgwbeta";
-if (startsWith("genome-test.", wikiHost) || startsWith("hgwdev.", wikiHost))
-    return "hguid.genome-test";
-return NULL;
-}
-
-static char *getRemoteCookieVal(char *cfgCookieName, char *remoteCookiePrefix, char *suffix)
-/* Return the value of the remote login cookie.  If the cookie name is not specified in hg.conf,
- * make a guess to tide us over for release 333.  Do not free result. */
-{
-char *cookie = cfgOption(cfgCookieName);
-if (isNotEmpty(cookie))
-    return findCookieData(cookie);
-if (remoteCookiePrefix)
-    {
-    char defaultCookie[512];
-    safef(defaultCookie, sizeof(defaultCookie), "%s.%s", remoteCookiePrefix, suffix);
-    return findCookieData(defaultCookie);
-    }
-return NULL;
-}
-
-static void remoteHostBypass()
-/* If a remote host was used for login, redirecting back to this server, then this server's
- * central database does not have the correct login token -- so we can't validate cookies.
- * Fall back on the old method of just accepting whatever cookies we get.  Unfortunately
- * we'll have to take a guess at what those cookies are, although hg.conf can override. */
-{
-char *wikiHost = cfgOption(CFG_WIKI_HOST);
-if (isEmpty(wikiHost) || sameString(wikiHost, "HTTPHOST") || sameString(wikiHost, hHttpHost()))
-    return;
-alreadyAuthenticated = TRUE;
-cookieStrings = NULL;
-char *cookiePrefix = getRemoteCookiePrefix(wikiHost);
-char *userName = getRemoteCookieVal(CFG_LOGIN_USER_NAME_COOKIE, cookiePrefix, "hgLoginUserName");
-char *idKey = getRemoteCookieVal(CFG_LOGIN_IDKEY_COOKIE, cookiePrefix, "hgLoginToken");
-authenticated = (isNotEmpty(userName) && isNotEmpty(idKey));
-remoteUserName = userName;
-// BEGIN TODO: remove in July 2016
-if (! authenticated && wikiLinkEnabled())
-    {
-    // Accept old wiki cookies for now
-    char *wikiUserName = findCookieData(wikiLinkUserNameCookie());
-    char *wikiLoggedIn = findCookieData(wikiLinkLoggedInCookie());
-    if (isNotEmpty(wikiLoggedIn) && isNotEmpty(wikiUserName))
-        {
-        authenticated = TRUE;
-        remoteUserName = wikiUserName;
-        }
-    }
-// END TODO: remove in July 2016
 }
 
 struct slName *loginValidateCookies()
@@ -370,7 +300,6 @@ struct slName *loginValidateCookies()
  * If login cookies are present but invalid, the result deletes/expires the cookies.
  * Otherwise returns NULL (no change to cookies). */
 {
-remoteHostBypass();
 if (alreadyAuthenticated)
     return cookieStrings;
 alreadyAuthenticated = TRUE;
@@ -470,8 +399,6 @@ if (loginSystemEnabled())
     char *userName = findCookieData(loginUserNameCookie());
     if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
         userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
-    if (isEmpty(userName) && isNotEmpty(remoteUserName))
-        userName = remoteUserName;
     if (authenticated)
         return cloneString(userName);
     }
