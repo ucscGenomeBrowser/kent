@@ -269,6 +269,16 @@ if (wikiLinkEnabled())
             if (authToken == 0)
                 return NULL;
             }
+        else
+            {
+            // Wiki only: fall back on checking ID cookie vs. gbMembers.idx
+            uint cookieId = getCookieToken();
+            struct sqlConnection *conn = hConnectCentral();
+            uint memberIdx = getMemberIdx(conn, wikiUserName);
+            hDisconnectCentral(&conn);
+            if (cookieId != memberIdx)
+                return NULL;
+            }
 	return cloneString(wikiUserName);
 	}
     }
