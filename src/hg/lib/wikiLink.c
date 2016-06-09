@@ -168,7 +168,7 @@ static void deleteKey(struct sqlConnection *conn, uint idx, char *key)
 {
 char query[2048];
 sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
-char buf[1024];
+char buf[2048];
 char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
 if (isNotEmpty(keyListStr))
     {
@@ -190,13 +190,23 @@ static void insertKey(struct sqlConnection *conn, uint idx, char *key)
 {
 char query[2048];
 sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
-char buf[1024];
+char buf[2048];
 char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
-if (isNotEmpty(keyListStr))
+if (isEmpty(keyListStr))
+    sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s' where idx = %u", key, idx);
+else
+    {
+    // Orphaned keys can pile up when we test this feature by editing or deleting cookies,
+    // or when cookies aren't working properly.
+    // If there are many more keys in keyListStr than we would expect a user to have
+    // (e.g. 5 devices * 3 browsers = 15 keys, 28 chars per key = 420 chars, so say 1000 chars)
+    // then delete the oldest key(s) to avoid buffer overflow.
+    char *p;
+    while (strlen(keyListStr) > 1000 && (p = strrchr(keyListStr, ',')) != NULL)
+        *p = '\0';
     sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s,%s' where idx = %u",
              key, keyListStr, idx);
-else
-    sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s' where idx = %u", key, idx);
+    }
 sqlUpdate(conn, query);
 }
 
