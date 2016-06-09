@@ -6,8 +6,6 @@
 #include "common.h"
 #include "hash.h"
 #include "htmshell.h"
-#include "autoUpgrade.h"
-#include "cartDb.h"
 #include "cheapcgi.h"
 #include "hgConfig.h"
 #include "hui.h"
@@ -16,11 +14,18 @@
 
 // Flag to indicate that loginValidateCookies has been called:
 static boolean alreadyAuthenticated = FALSE;
-// Set by loginValidateCookies, used by wikiLinkUserName
-static boolean authenticated = FALSE;
+// If centralDb has table gbMemberToken, then loginValidateCookies will set this
+// to a random token that validates the user; otherwise if the cookie has the same
+// value as gbMembers.idx, this is set to that ID; otherwise it stays 0 and the user
+// is not logged in.
+static uint authToken = 0;
 // If we need to change some cookies, store cookie strings here in case loginValidateCookies
 // is called multiple times (e.g. validate before cookie-writing, then later write cookies)
 static struct slName *cookieStrings = NULL;
+
+// If a random token in gbMemberToken is more than this many seconds old, make a new
+// random token and delete the old:
+#define TOKEN_LIFESPAN 300
 
 char *loginSystemName()
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
@@ -58,11 +63,11 @@ static char *wikiLinkUserNameCookie()
 return cfgOption(CFG_WIKI_USER_NAME_COOKIE);
 }
 
-static char *loginIdKeyCookie()
-/* Return the name of the login system <id>_<key> cookie.  Do not free result. */
+static char *loginTokenCookie()
+/* Return the name of the login system random token cookie.  Do not free result. */
 {
 static char defaultCookie[512];
-char *cookie = cfgOption(CFG_LOGIN_IDKEY_COOKIE);
+char *cookie = cfgOption(CFG_LOGIN_TOKEN_COOKIE);
 if (isEmpty(cookie))
     {
     char *centralDbPrefix = cfgOptionDefault(CFG_CENTRAL_COOKIE, "central");
@@ -86,39 +91,19 @@ if (isEmpty(cookie))
 return cookie;
 }
 
-static uint getCookieIdKey(char **retKey
-                         , boolean *retReplaceOld                 // TODO: remove in July 2016
+static uint getCookieToken(
+                           boolean *retReplaceOld                 // TODO: remove in July 2016
                            )
-/* The cookie may have either just a number <idx> or <idx>_<key>.  Return idx;
- * key defaults to NULL, and is placed in retKey if retKey is non-NULL. */
+/* If the cookie holding the login token exists, return its uint value, else 0. */
 {
-uint idx = 0;
-char *key = NULL;
-char *cookieIdKeyStr = findCookieData(loginIdKeyCookie());
-
-// BEGIN TODO: remove in July 2016
-// If login cookies are not set, but wiki cookies are, accept their values but replace them later
-if (isEmpty(cookieIdKeyStr) && wikiLinkEnabled())
-    {
-    cookieIdKeyStr = findCookieData(wikiLinkLoggedInCookie());
-    if (retReplaceOld && isNotEmpty(cookieIdKeyStr))
-        *retReplaceOld = TRUE;
-    }
-// END TODO: remove in July 2016
-
-if (isNotEmpty(cookieIdKeyStr))
-    {
-    char copy[strlen(cookieIdKeyStr)+1];
-    safecpy(copy, sizeof(copy), cookieIdKeyStr);
-    char *p = strchr(copy, '_');
-    if (p != NULL)
-        *p++ = '\0';
-    idx = (uint)atoll(copy);
-    key = (p) ? cloneString(p) : NULL;
-    }
-if (retKey)
-    *retKey = key;
-return idx;
+char *cookieTokenStr = findCookieData(loginTokenCookie());
+if (isEmpty(cookieTokenStr) && wikiLinkEnabled())                 // TODO: remove in July 2016
+    {                                                             // TODO: remove in July 2016
+    cookieTokenStr = findCookieData(wikiLinkLoggedInCookie());    // TODO: remove in July 2016
+    if (retReplaceOld && isNotEmpty(cookieTokenStr))              // TODO: remove in July 2016
+        *retReplaceOld = TRUE;                                    // TODO: remove in July 2016
+    }                                                             // TODO: remove in July 2016
+return cookieTokenStr ? (uint)atoll(cookieTokenStr) : 0;
 }
 
 static uint getMemberIdx(struct sqlConnection *conn, char *userName)
@@ -129,73 +114,64 @@ sqlSafef(query, sizeof(query), "select idx from gbMembers where userName='%s'", 
 return (uint)sqlQuickLongLong(conn, query);
 }
 
-static boolean haveKeyList(struct sqlConnection *conn)
-/* Return true if gbMembers has column keyList. */
+static boolean haveTokenTable(struct sqlConnection *conn)
+/* Return true if centralDb has table gbMemberToken. */
 {
-if (sqlColumnExists(conn, "gbMembers", "keyList"))
-    return TRUE;
-else
-    {
-    autoUpgradeTableAddColumn(conn, "gbMembers", "keyList", "longblob", FALSE, "NULL");
-    return sqlColumnExists(conn, "gbMembers", "keyList");
-    }
+return sqlTableExists(conn, "gbMemberToken");
 }
 
-static boolean isValidKey(struct sqlConnection *conn, uint idx, char *userName, char *key)
-/* Return TRUE if gbMembers has a row that maps idx to userName and key. */
+static boolean isValidToken(struct sqlConnection *conn, uint token, char *userName,
+                            boolean *retMakeNewToken)
+/* Return TRUE if gbMemberToken has an entry that maps token to userName.
+ * If retMakeNewToken is non-NULL, set it to TRUE if the token is older than TOKEN_LIFESPAN. */
 {
 boolean isValid = FALSE;
 char query[512];
-sqlSafef(query, sizeof(query), "select userName, keyList from gbMembers where idx = %u", idx);
+sqlSafef(query, sizeof(query), "select userName, createTime from gbMemberToken where token = %u",
+         token);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 if ((row = sqlNextRow(sr)) != NULL)
     {
-    if (sameString(row[0], userName))
+    char *userForToken = cloneString(row[0]);
+    if (retMakeNewToken != NULL)
         {
-        struct slName *validKeyList = slNameListFromString(row[1], ',');
-        isValid = slNameInListUseCase(validKeyList, key);
+        long createTime = sqlDateToUnixTime(row[1]);
+        *retMakeNewToken = (time(NULL) - createTime > TOKEN_LIFESPAN);
         }
+    isValid = sameString(userForToken, userName);
     }
 sqlFreeResult(&sr);
 return isValid;
 }
 
-static void deleteKey(struct sqlConnection *conn, uint idx, char *key)
-/* Remove key from idx row's comma-separated keyList. */
+static void deleteToken(struct sqlConnection *conn, uint token)
+/* Remove token's entry from gbMemberToken. */
 {
 char query[512];
-sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
-char buf[1024];
-char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
-if (isNotEmpty(keyListStr))
-    {
-    struct slName *keyList = slNameListFromString(keyListStr, ',');
-    struct slName *keyToDelete = slNameFind(keyList, key);
-    if (keyToDelete)
-        {
-        slRemoveEl(&keyList, keyToDelete);
-        char *newListStr = slNameListToString(keyList, ',');
-        sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s' where idx = %u",
-                 newListStr, idx);
-        sqlUpdate(conn, query);
-        }
-    }
+sqlSafef(query, sizeof(query), "delete from gbMemberToken where token = %u", token);
+sqlUpdate(conn, query);
 }
 
-static void insertKey(struct sqlConnection *conn, uint idx, char *key)
-/* Add a new entry to gbMembers.keyList for idx. */
+static void insertToken(struct sqlConnection *conn, uint token, char *userName)
+/* Add a new entry to gbMemberToken mapping token to userName. */
 {
 char query[512];
-sqlSafef(query, sizeof(query), "select keyList from gbMembers where idx = %u", idx);
-char buf[1024];
-char *keyListStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
-if (isNotEmpty(keyListStr))
-    sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s,%s' where idx = %u",
-             key, keyListStr, idx);
-else
-    sqlSafef(query, sizeof(query), "update gbMembers set keyList='%s' where idx = %u", key, idx);
+sqlSafef(query, sizeof(query), "insert into gbMemberToken values (%u, '%s', now())",
+         token, userName);
 sqlUpdate(conn, query);
+}
+
+static uint newToken()
+/* Return a random nonnegative integer.  In the extremely unlikely event that it is 0,
+ * the user will have to log in again. */
+{
+uint token = 0;
+// open random system device for read-only access.
+FILE *f = mustOpen("/dev/urandom", "r");
+mustRead(f, &token, 4);
+carefulClose(&f);
+return token;
 }
 
 char *getCookieDomainString()
@@ -211,169 +187,164 @@ else
 return domainString;
 }
 
-#define NO_EXPIRE_COOKIE_DATE "Thu, 31-Dec-2037 23:59:59 GMT"
+static char *loginCookieDate()
+/* For now, don't expire (before we retire :)  Consider changing this to 6 months in the
+ * future or something like that, maybe under hg.conf control (for CIRM vs GB?). */
+{
+return "Thu, 31-Dec-2037 23:59:59 GMT";
+}
+
 #define EXPIRED_COOKIE_DATE "Thu, 01-Jan-1970 00:00:00 GMT"
 
-struct slName *newCookieString(char *name, char *value)
-/* Return a cookie string that sets cookie to value if non-empty and
- * deletes/invalidates the cookie if value is empty or NULL. */
+struct slName *invalidateCookieString(char *cookieName)
+/* Return a cookie string that deletes/invalidates the cookie. */
 {
 char *domain = getCookieDomainString();
 char cookieString[2048];
-if (isNotEmpty(value))
-    // Set the cookie to value
-    safef(cookieString, sizeof(cookieString), "%s=%s;%s path=/; expires="NO_EXPIRE_COOKIE_DATE,
-          name, value, domain);
-else
-    // Invalidate the cookie
-    safef(cookieString, sizeof(cookieString), "%s=;%s path=/; expires="EXPIRED_COOKIE_DATE,
-          name, domain);
+safef(cookieString, sizeof(cookieString), "%s=;%s path=/; expires="EXPIRED_COOKIE_DATE,
+      cookieName, domain);
 return slNameNew(cookieString);
 }
 
-static struct slName *loginUserNameCookieString(char *userName)
+struct slName *loginUserNameCookieString(char *userName)
 /* Return a cookie string that sets userName cookie to userName if non-empty and
- * deletes/invalidates the cookie if empty/NULL. */
+ * deletes/invalidates the cookie if empty. */
 {
-return newCookieString(loginUserNameCookie(), userName);
-}
-
-static struct slName *loginIdKeyCookieString(uint idx, char *key)
-/* Return a cookie string that sets ID cookie to idKey if idKey is non-empty and
- * deletes/invalidates the cookie if empty/NULL. */
-{
-char newVal[1024];
-if (isNotEmpty(key))
-    safef(newVal, sizeof(newVal), "%u_%s", idx, key);
-else
-    safef(newVal, sizeof(newVal), "%u", idx);
-return newCookieString(loginIdKeyCookie(), idx ? newVal : NULL);
-}
-
-static char *makeNewKey()
-/* Return a new random key using the same number of bits that we use for
- * {userDb,sessionDb}.sessionKey */
-{
-// at least 128 bits of protection, 33 for the world population size.
-int numBits = 128 + 33;
-return cartDbMakeRandomKey(numBits);
-}
-
-struct slName *loginLoginUser(char *userName, uint idx)
-/* Return cookie strings to set for user so we'll recognize that user is logged in.
- * Call this after validating userName's password. */
-{
-alreadyAuthenticated = TRUE;
-authenticated = TRUE;
-char *key = NULL;
-struct sqlConnection *conn = hConnectCentral();
-if (haveKeyList(conn))
+char *cookie = loginUserNameCookie();
+if (isNotEmpty(userName))
     {
-    key = makeNewKey();
-    insertKey(conn, idx, key);
+    // Send userName in cookie
+    char *domain = getCookieDomainString();
+    char cookieString[2048];
+    safef(cookieString, sizeof(cookieString), "%s=%s;%s path=/; expires=%s",
+          cookie, userName, domain, loginCookieDate());
+    return slNameNew(cookieString);
     }
+else
+    return invalidateCookieString(cookie);
+}
+
+struct slName *loginTokenCookieString(uint token)
+/* Return a cookie string that sets token cookie to token if token is valid and
+ * deletes/invalidates the cookie if not. */
+{
+char *cookie = loginTokenCookie();
+if (token)
+    {
+    // Validated; send new token in cookie
+    char *domain = getCookieDomainString();
+    char cookieString[2048];
+    safef(cookieString, sizeof(cookieString), "%s=%u;%s path=/; expires=%s",
+          cookie, token, domain, loginCookieDate());
+    return slNameNew(cookieString);
+    }
+else
+    return invalidateCookieString(cookie);
+}
+
+struct slName *loginLoginUser(char *userName)
+/* Return a nonzero token which caller must set as the value of CFG_WIKI_LOGGED_IN_COOKIE.
+ * Call this when userName's password has been validated. */
+{
+struct sqlConnection *conn = hConnectCentral();
+alreadyAuthenticated = TRUE;
+if (haveTokenTable(conn))
+    {
+    authToken = newToken();
+    insertToken(conn, authToken, userName);
+    }
+else
+    // Fall back on gbMembers.idx
+    authToken = getMemberIdx(conn, userName);
 hDisconnectCentral(&conn);
-slAddHead(&cookieStrings, loginIdKeyCookieString(idx, key));
+slAddHead(&cookieStrings, loginTokenCookieString(authToken));
 slAddHead(&cookieStrings, loginUserNameCookieString(userName));
 return cookieStrings;
 }
 
 struct slName *loginLogoutUser()
-/* Return cookie strings to set (deleting the login cookies). */
+/* If the gbMemberToken table exists, delete the user's random token. */
 {
-alreadyAuthenticated = TRUE;
-authenticated = FALSE;
-char *key = NULL;
-uint idx = getCookieIdKey(&key, NULL);
 struct sqlConnection *conn = hConnectCentral();
-if (haveKeyList(conn) && key)
-    deleteKey(conn, idx, key);
-hDisconnectCentral(&conn);
-slAddHead(&cookieStrings, loginIdKeyCookieString(0, NULL));
+if (haveTokenTable(conn))
+    deleteToken(conn, getCookieToken(NULL));
+slAddHead(&cookieStrings, loginTokenCookieString(0));
 slAddHead(&cookieStrings, loginUserNameCookieString(NULL));
+hDisconnectCentral(&conn);
 return cookieStrings;
 }
 
 struct slName *loginValidateCookies()
 /* Return possibly empty list of cookie strings for the caller to set.
- * If login cookies are obsolete but (formerly) valid, the results sets updated cookies.
+ * If login cookies are present and valid, but the current token has aged out,
+ * the returned cookie string sets the token cookie to a new token value.
  * If login cookies are present but invalid, the result deletes/expires the cookies.
  * Otherwise returns NULL (no change to cookies). */
 {
 if (alreadyAuthenticated)
     return cookieStrings;
 alreadyAuthenticated = TRUE;
-authenticated = FALSE;
+authToken = 0;
 char *userName = findCookieData(loginUserNameCookie());
-
-// BEGIN TODO: remove in July 2016
-// If we're using values from old wiki cookies, replace the cookies.
-boolean replaceOldCookies = FALSE;
-if (isEmpty(userName) && wikiLinkEnabled())
-    {
-    userName = findCookieData(wikiLinkUserNameCookie());
-    if (isNotEmpty(userName))
-        replaceOldCookies = TRUE;
-    }
-boolean deleteCookies = FALSE;
-// END TODO: remove in July 2016
-
-char *cookieKey = NULL;
-uint cookieIdx = getCookieIdKey(&cookieKey, &replaceOldCookies);
-if (userName && cookieIdx)
+boolean replaceOldCookies = FALSE;                            // TODO: remove in July 2016
+if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
+    {                                                         // TODO: remove in July 2016
+    userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
+    if (isNotEmpty(userName))                                 // TODO: remove in July 2016
+        replaceOldCookies = TRUE;                             // TODO: remove in July 2016
+    }                                                         // TODO: remove in July 2016
+boolean deleteCookies = FALSE;                                // TODO: remove in July 2016
+uint cookieToken = getCookieToken(&replaceOldCookies);
+if (userName && cookieToken)
     {
     struct sqlConnection *conn = hConnectCentral();
-    if (haveKeyList(conn))
+    uint memberIdx = getMemberIdx(conn, userName);
+    if (haveTokenTable(conn))
         {
-        uint memberIdx = getMemberIdx(conn, userName);        // TODO: remove in July 2016
-        // Check userName and cookieKey vs gbMembers' userName and keyList for cookieIdx
-        boolean keyIsValid = isValidKey(conn, cookieIdx, userName, cookieKey);
-        if (keyIsValid)
-            authenticated = TRUE;
-
-// BEGIN TODO: remove in July 2016
-        // For the first couple months, also accept gbMembers.idx to smooth the transition.
-        else if (cookieKey == NULL && cookieIdx == memberIdx)
+        // Look up cookieToken and userName in gbMemberToken
+        boolean makeNewToken = FALSE;
+        boolean tokenIsValid = isValidToken(conn, cookieToken, userName, &makeNewToken);
+        if (tokenIsValid
+            // Also accept gbMembers.idx to smooth the transition; TODO: remove in July 2016
+            || (cookieToken == memberIdx)) // TODO: remove in July 2016
             {
-            authenticated = TRUE;
-            // Create and store a new key, and make a cookie string with the new key.
-            char *newKey = makeNewKey();
-            insertKey(conn, cookieIdx, newKey);
-            slAddHead(&cookieStrings, loginIdKeyCookieString(cookieIdx, newKey));
+            if (makeNewToken
+                || ! tokenIsValid) // TODO: remove in July 2016
+                {
+                // Delete the old token, create and store a new token, and make a cookie string
+                // with the new token.
+                deleteToken(conn, cookieToken);
+                authToken = newToken();
+                insertToken(conn, authToken, userName);
+                slAddHead(&cookieStrings, loginTokenCookieString(authToken));
+                }
+            else
+                // Keep using this token, no change to cookie
+                authToken = cookieToken;
             }
-// END TODO: remove in July 2016
-
         else
             {
-            // Invalid key; delete cookies
+            // Invalid token; delete cookies
             deleteCookies = TRUE;                                      // TODO: remove in July 2016
-            slAddHead(&cookieStrings, loginIdKeyCookieString(0, NULL));
+            slAddHead(&cookieStrings, loginTokenCookieString(0));
             slAddHead(&cookieStrings, loginUserNameCookieString(NULL));
             }
         }
-    else
-        {
-        // gbMembers does not have keyList column -- just use gbMembers.idx
-        uint memberIdx = getMemberIdx(conn, userName);
-        if (cookieIdx == memberIdx)
-            authenticated = TRUE;
-        }
+    else if (cookieToken == memberIdx)
+        // centralDb does not have gbMemberToken table -- fall back on gbMembers.idx
+        authToken = cookieToken;
     hDisconnectCentral(&conn);
     }
-
-// BEGIN TODO: remove in July 2016
-// Delete the cookies that we used to use and make sure the new cookies are set.
-if (replaceOldCookies)
-    {
-    slAddHead(&cookieStrings, newCookieString(wikiLinkLoggedInCookie(), NULL));
-    slAddHead(&cookieStrings, newCookieString(wikiLinkUserNameCookie(), NULL));
-    if (cookieStrings == NULL)
-        slAddHead(&cookieStrings, loginIdKeyCookieString(cookieIdx, cookieKey));
-    if (! deleteCookies)
-        slAddHead(&cookieStrings, loginUserNameCookieString(userName));
-    }
-// END TODO: remove in July 2016
-
+// Delete the cookies that we used to use and make sure the new cookies are set. remove in July '16
+if (replaceOldCookies)                                                 // TODO: remove in July 2016
+    {                                                                  // TODO: remove in July 2016
+    if (cookieStrings == NULL)                                         // TODO: remove in July 2016
+        slAddHead(&cookieStrings, loginTokenCookieString(authToken));            // TODO: remove in July 2016
+    if (! deleteCookies)                                               // TODO: remove in July 2016
+        slAddHead(&cookieStrings, loginUserNameCookieString(userName));          // TODO: remove in July 2016
+    slAddHead(&cookieStrings, invalidateCookieString(wikiLinkLoggedInCookie())); // TODO: remove in July 2016
+    slAddHead(&cookieStrings, invalidateCookieString(wikiLinkUserNameCookie())); // TODO: remove in July 2016
+    }                                                                  // TODO: remove in July 2016
 return cookieStrings;
 }
 
@@ -399,7 +370,7 @@ if (loginSystemEnabled())
     char *userName = findCookieData(loginUserNameCookie());
     if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
         userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
-    if (authenticated)
+    if (authToken)
         return cloneString(userName);
     }
 else if (wikiLinkEnabled())
