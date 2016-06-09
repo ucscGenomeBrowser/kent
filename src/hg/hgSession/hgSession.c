@@ -130,6 +130,18 @@ else
 }
 
 
+char *getLinkUserName()
+/* Return the user name specified in cookies from the browser, or NULL
+ * if 
+ * the user doesn't appear to be logged in. */
+{
+if (wikiLinkEnabled())
+   {
+   return cloneString(wikiLinkUserName());
+   }
+return NULL;
+}
+
 void showCartLinks()
 /* Print out links to cartDump and cartReset. */
 {
@@ -621,14 +633,15 @@ printf("</UL>\n");
 dyStringFree(&dyUrl);
 }
 
-void doMainPage(char *userName, char *message)
+void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
 if (wikiLinkEnabled())
     {
-    if (userName)
-	welcomeUser(userName);
+    char *wikiUserName = wikiLinkUserName();
+    if (wikiUserName)
+	welcomeUser(wikiUserName);
     else
 	offerLogin();
     if (isNotEmpty(message))
@@ -639,8 +652,8 @@ if (wikiLinkEnabled())
 	    webNewSection("Updated Session");
 	puts(message);
 	}
-    showSessionControls(userName, TRUE, TRUE);
-    showLinkingTemplates(userName);
+    showSessionControls(wikiUserName, TRUE, TRUE);
+    showLinkingTemplates(wikiUserName);
     }
 else 
     {
@@ -727,16 +740,15 @@ else
 }
 
 #define INITIAL_USE_COUNT 0
-char *doNewSession(char *userName)
+char *doNewSession()
 /* Save current settings in a new named session.
  * Return a message confirming what we did. */
 {
-if (userName == NULL)
-    return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
@@ -877,13 +889,12 @@ if (filePath != NULL)
 sqlFreeResult(&sr);
 }
 
-char *doSessionDetail(char *userName, char *sessionName)
+char *doSessionDetail(char *sessionName)
 /* Show details about a particular session. */
 {
-if (userName == NULL)
-    return "Sorry, please log in again.";
 struct dyString *dyMessage = dyStringNew(4096);
 char *encSessionName = cgiEncodeFull(sessionName);
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
@@ -993,17 +1004,16 @@ else
 return dyStringCannibalize(&dyMessage);
 }
 
-char *doUpdateSessions(char *userName)
+char *doUpdateSessions()
 /* Look for cart variables matching prefixes for sharing/unsharing,
  * loading or deleting a previously saved session.
  * Return a message confirming what we did, or NULL if no such variables
  * were in the cart. */
 {
-if (userName == NULL)
-    return NULL;
 struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
@@ -1094,7 +1104,7 @@ if (hel != NULL)
     {
     char *encSessionName = hel->name + strlen(hgsEditPrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
-    dyStringPrintf(dyMessage, "%s", doSessionDetail(userName, sessionName));
+    dyStringPrintf(dyMessage, "%s", doSessionDetail(sessionName));
     didSomething = TRUE;
     }
 
@@ -1291,16 +1301,15 @@ if (cartVarExists(cart, varName))
     }
 }
 
-char *doSessionChange(char *userName, char *oldSessionName)
+char *doSessionChange(char *oldSessionName)
 /* Process changes to session from session details page. */
 {
-if (userName == NULL)
-    return "Unable to make changes to session.  Please log in again.";
 struct dyString *dyMessage = dyStringNew(1024);
 webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
@@ -1441,19 +1450,17 @@ struct hash *oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
-char *userName = wikiLinkEnabled() ? wikiLinkUserName() : NULL;
-
 if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
-    doMainPage(userName, NULL);
+    doMainPage(NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {
-    char *message = doNewSession(userName);
-    doMainPage(userName, message);
+    char *message = doNewSession();
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoOtherUser))
     {
     char *message = doOtherUser(hgsDoOtherUser);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSaveLocal))
     {
@@ -1462,27 +1469,27 @@ else if (cartVarExists(cart, hgsDoSaveLocal))
 else if (cartVarExists(cart, hgsDoLoadLocal))
     {
     char *message = doLoad(FALSE, hgsDoLoadLocal);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoLoadUrl))
     {
     char *message = doLoad(TRUE, hgsDoLoadUrl);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSessionDetail))
     {
-    char *message = doSessionDetail(userName, cartString(cart, hgsDoSessionDetail));
-    doMainPage(userName, message);
+    char *message = doSessionDetail(cartString(cart, hgsDoSessionDetail));
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSessionChange))
     {
-    char *message = doSessionChange(userName, cartString(cart, hgsOldSessionName));
-    doMainPage(userName, message);
+    char *message = doSessionChange(cartString(cart, hgsOldSessionName));
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsOldSessionName))
     {
-    char *message1 = doSessionChange(userName, cartString(cart, hgsOldSessionName));
-    char *message2 = doUpdateSessions(userName);
+    char *message1 = doSessionChange(cartString(cart, hgsOldSessionName));
+    char *message2 = doUpdateSessions();
     char *message = message2;
     if (!startsWith("No changes to session", message1))
 	{
@@ -1490,12 +1497,12 @@ else if (cartVarExists(cart, hgsOldSessionName))
 	message = needMem(len);
 	safef(message, len, "%s%s", message1, message2);
 	}
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else
     {
-    char *message = doUpdateSessions(userName);
-    doMainPage(userName, message);
+    char *message = doUpdateSessions();
+    doMainPage(message);
     }
 
 cleanHgSessionFromCart(cart);
