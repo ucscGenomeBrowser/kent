@@ -868,13 +868,22 @@ else
     }
 }
 
-static bool sqlTableCacheTableExists(struct sqlConnection *conn, char* table)
+static bool sqlTableCacheTableExists(struct sqlConnection *conn, char *maybeTable)
 /* check if table exists in table name cache */
 // (see redmine 3780 for some historical background on this caching)
 {
 char query[1024];
 char *tableListTable = cfgVal("showTableCache");
-sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
+char table[2048];
+safecpy(table, sizeof table, maybeTable);
+char *dot = strchr(table, '.');
+if (dot)
+    {
+    *dot = 0;
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s.%s WHERE tableName='%s'", table, tableListTable, dot+1);
+    }
+else
+    sqlSafef(query, sizeof(query), "SELECT count(*) FROM %s WHERE tableName='%s'", tableListTable, table);
 return (sqlQuickNum(conn, query)!=0);
 }
 
@@ -1918,14 +1927,14 @@ if (((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn)) | sqlNeverLocal)
         {
         if (getcwd(tabPath, sizeof(tabPath)) == NULL)
 	    errAbort("sqlLoadTableFile: getcwd failed");
-        strcat(tabPath, "/");
+        safecat(tabPath, sizeof(tabPath), "/");
         }
-    strcat(tabPath, path);
+    safecat(tabPath, sizeof(tabPath), path);
     localOpt = "";
     }
 else
     {
-    strcpy(tabPath, path);
+    safecpy(tabPath, sizeof(tabPath), path);
     localOpt = "LOCAL";
     }
 
@@ -2168,7 +2177,7 @@ if ((sr = sqlGetResult(sc, query)) == NULL)
 row = sqlNextRow(sr);
 if (row != NULL && row[0] != NULL)
     {
-    strncpy(buf, row[0], bufSize);
+    safecpy(buf, bufSize, row[0]);
     ret = buf;
     }
 sqlFreeResult(&sr);

@@ -732,6 +732,10 @@ if (vf->format)	// We only can validate if we have something for format
 	cdwValidateJpg(path);
 	suffix = ".jpg";
 	}
+    else if (sameString(format, "expression_matrix"))
+	{
+	makeValidText(conn, path, ef, vf); 
+	}
     else if (sameString(format, "text"))
         {
 	makeValidText(conn, path, ef, vf);
@@ -858,6 +862,8 @@ sqlSafef(query, sizeof(query),
     "and updateTime != 0", 
     startId, endId);
 struct cdwFile *ef, *efList = cdwFileLoadByQuery(conn, query);
+if (efList == NULL)
+    errAbort("No files in %d to %d", startId, endId);
 
 for (ef = efList; ef != NULL; ef = ef->next)
     {
@@ -877,25 +883,13 @@ for (ef = efList; ef != NULL; ef = ef->next)
 	    {
 	    if (vfId != 0)
 	        cdwClearFileError(conn, ef->id);
-	    struct cgiParsedVars *tags = cgiParsedVarsNew(ef->tags);
-	    struct cgiParsedVars *parentTags = NULL;
-	    char query[256];
-	    sqlSafef(query, sizeof(query), 
-		"select tags from cdwMetaTags where id=%u", ef->metaTagsId);
-	    char *metaCgi = sqlQuickString(conn, query);
-	    if (metaCgi != NULL)
-	        {
-		parentTags = cgiParsedVarsNew(metaCgi);
-		tags->next = parentTags;
-		}
+	    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
 	    if (!makeValidFile(conn, ef, tags, vfId))
 	        {
 		if (++errCount >= maxErrCount)
 		    errAbort("Aborting after %d errors", errCount);
 		}
-	    cgiParsedVarsFree(&tags);
-	    freez(&metaCgi);
-	    cgiParsedVarsFree(&parentTags);
+	    cgiParsedVarsFreeList(&tags);
 	    }
 	else
 	    {

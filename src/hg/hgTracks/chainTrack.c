@@ -160,7 +160,14 @@ if (tg->isBigBed)
     closure = &bbClosure;
     queryFunc = doBbQuery;
     char *fileName = trackDbSetting(tg->tdb, "linkDataUrl");
+    if (fileName == NULL)
+        {
+        warn("Cannot find linkDataUrl in custom track \"%s\"\n", tg->shortLabel);
+        return;
+        }
     struct bbiFile *bbi =  bigBedFileOpen(fileName);
+    if (bbi == NULL)
+        return;
     bbClosure.bbi =  bbi;
     }
 else

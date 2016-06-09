@@ -1403,3 +1403,80 @@ EOF
 ##############################################################################
 # TransMap V3 tracks. see makeDb/doc/transMapTracks.txt (2014-12-21 markd)
 ##############################################################################
+
+##############################################################################
+# LIFTOVER TO galGal5 (DONE - 2016-04-15 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galGal4/bed/blat.galGal5.2016-04-15
+    cd /hive/data/genomes/galGal4/bed/blat.galGal5.2016-04-15
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+         galGal4 galGal5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/galGal4/jkStuff/galGal4.11.ooc \
+         galGal4 galGal5) > doLiftOverToGalGal5.log 2>&1
+    # real    155m34.324s
+
+    # see if the liftOver menus function in the browser from galGal5 to galGal4
+
+##############################################################################
+# LASTZ chicken/galGal4 vs. Chinese softshell turtle - (DONE - 2016-05-17 - Hiram)
+    mkdir /hive/data/genomes/galGal4/bed/lastzPelSin1.2016-05-17
+    cd /hive/data/genomes/galGal4/bed/lastzPelSin1.2016-05-17
+
+    printf '# chicken vs. Chinese softshell turtle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken galGal4
+SEQ1_DIR=/hive/data/genomes/galGal4/galGal4.2bit
+SEQ1_LEN=/hive/data/genomes/galGal4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Chinese softshell turtle pelSin1
+SEQ2_DIR=/hive/data/genomes/pelSin1/pelSin1.2bit
+SEQ2_LEN=/hive/data/genomes/pelSin1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE= /hive/data/genomes/galGal4/bed/lastzPelSin1.2016-05-17
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    85m6.637s
+
+    cat fb.galGal4.chainPelSin1Link.txt
+    #  253365632 bases of 1032854810 (24.531%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal4 pelSin1) \
+          > rbest.log 2>&1 &
+    #  real    110m52.863s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/pelSin1/bed/blastz.galGal4.swap
+    cd /hive/data/genomes/pelSin1/bed/blastz.galGal4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/galGal4/bed/lastzPelSin1.2016-05-17/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    50m44.030s
+
+    cat fb.pelSin1.chainGalGal4Link.txt
+    # 269390769 bases of 2106639384 (12.788%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` pelSin1 galGal4) \
+       > rbest.log 2>&1
+    # real    168m45.457s
+
+#########################################################################

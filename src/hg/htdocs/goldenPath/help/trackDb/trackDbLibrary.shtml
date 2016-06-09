@@ -792,7 +792,7 @@
     </pre>
 </DIV>
 
-<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred"></span>
+<DIV class="skipEmptyFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
     <div class="format">
         <code>skipEmptyFields on</code><BR>
     </div>
@@ -802,7 +802,7 @@
     fields but only few of them have a value.</P> 
 </DIV>
 
-<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred"></span>
+<DIV class="skipFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
     <div class="format">
         <code>skipFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>
@@ -816,7 +816,7 @@
     </pre>
 </DIV>
 
-<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred"></span>
+<DIV class="sepFields"><span class="types bigBed bigPsl bigGenePred bigMaf bigChain"></span>
     <div class="format">
         <code>sepFields &lt;fieldName1&gt;="&lt;url1&gt;" &lt;fieldName2&gt;="&lt;url2&gt;" ...</code><BR>
     </div>

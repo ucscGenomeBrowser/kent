@@ -2552,7 +2552,8 @@ if (wigTrack == NULL)
     else
         {
         /* use or scored refs from maf table*/
-        drawScoreOverview(track->table, height, seqStart, seqEnd, hvg,
+        if (differentString(track->tdb->type, "bigMaf"))
+            drawScoreOverview(track->table, height, seqStart, seqEnd, hvg,
                             xOff, yOff, width, font, color, color, scoreVis);
         yOff++;
         }

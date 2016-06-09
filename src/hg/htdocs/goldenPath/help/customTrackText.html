@@ -52,6 +52,9 @@ Browser, including
 <A HREF="../../FAQ/FAQformat.html#format1">BED</A>, 
 <A HREF="bigBed.html">bigBed</A>, <A HREF="wiggle.html">WIG</A>, 
 <A HREF="bigGenePred.html">bigGenePred</A>, 
+<A HREF="bigMaf.html">bigMaf</A>, 
+<A HREF="bigChain.html">bigChain</A>, 
+<A HREF="bigPsl.html">bigPsl</A>, 
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bam.html">BAM</A>,
 <A HREF="vcf.html">VCF</A>,
@@ -1017,9 +1020,10 @@ and they won't display in the browser. Why? <BR>
 <em>OR</em><BR>
 <B><I>Problem:</I></B> When I try to visualize my custom tracks in the Browser, I receive 
 the error message &quot;Byte-range request was ignored by server&quot;.<BR>
-<B><I>Solution:</I></B> Data servers (such as Google Drive) should work for
-hosting simple text-based custom tracks. However, for large custom track data sets, the use
-of indexed binary formats such as bigBed and bigWig is preferable. These formats provide much 
+<B><I>Solution:</I></B> Data servers (such as Google Drive) used to work for
+hosting simple text-based custom tracks, but things have changed. For large custom track data
+sets, the use of indexed binary formats such as bigBed and bigWig is preferable but never
+worked with Google Drive and often fail with other free data providers. These formats provide much 
 faster display performance because only the portion of the file needed to display the currently 
 viewed region must be transferred to the Genome Browser server. To allow this type of display, 
 byte-range support must be enabled on the data server. To check if your server has byte-range 

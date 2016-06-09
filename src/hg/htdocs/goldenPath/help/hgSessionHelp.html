@@ -49,6 +49,7 @@
      <LI><A CLASS="toc" HREF="#CTs">Displaying Your Own Tracks in a Session</A>
      <LI><A CLASS="toc" HREF="#Delete">Deleting a Session</A>
      <LI><A CLASS="toc" HREF="#Lifespan">Lifespan of a Session</A>
+     <LI><A CLASS="toc" HREF="#Gallery">Session Gallery</A>
      </B></UL>
 
     <P><A HREF="../../contacts.html">Questions
@@ -88,8 +89,8 @@
    options. Multiple sessions may be saved for future reference, for comparing 
    different data sets, or for sharing with your colleagues.  
    <A HREF="#Lifespan">Saved sessions persist</A> 
-   for four months after the last access, unless deleted. 
-   <A HREF="#CTs">Custom tracks persist</A> 
+   indefinitely, unless deleted.
+   <A HREF="#CTs">BLAT result tracks persist</A>
    for at least 48 hours after the last time they are viewed.</A>
    The creation date of a session can be viewed in the Session
    Management menu. This date only reflects the inital creation of the
@@ -345,7 +346,8 @@
    </UL>
 
    <P>After you save a session, it will be 
-   <A HREF="#Lifespan">available</A> to you for four months.</P>
+   <A HREF="#Lifespan">available</A> to you indefinitely, unless you
+   <a href="#Delete">delete</a> it.</P>
 
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
@@ -629,8 +631,8 @@ not be updated to reflect any edits.
    Before you create and save your session, be sure to upload your 
    <A HREF="../../cgi-bin/hgCustom" target="_blank">Custom Track</A> or 
    <A HREF="../../cgi-bin/hgGenome" target="_blank">Genome Graph</A> track.
-   These user-generated tracks will be kept for <B>four months</B> from the
-   time the session was last accessed.  BLAT results always have a lifespan of
+   These user-generated tracks associated with a saved session will be kept
+   indefinitely, along with the session itself. BLAT results always have a lifespan of
    48 hours, even if they are part of a session.</P>
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
@@ -696,17 +698,14 @@ not be updated to reflect any edits.
    <TR><TH HEIGHT=10></TH></TR>
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
-   <P>Once you save a session for the first time, it will be available to you 
-   (and others if you <A HREF="#Share">share</A> it) for four months. The creation 
-   date will also be saved and displayed in the Session Management menu. If you 
-   access the session again during those four months, it will then be available 
-   for another four months after the access date. So, as long as you access your session 
-   at least once every four months, it will persist on the server until you 
-   <A HREF="#Delete">delete</A> it.</P>
-
-   <P>Note that it is possible for <A HREF="#CTs">user-generated 
-   tracks</A> contained within sessions to expire before the session does.
-   If that happens, your session will persist without those tracks.</P>
+   <p>
+   Your saved sessions will be available you (and others if you <A HREF="#Share">share</A> them)
+   indefinitely and will persist on our server until you <A HREF="#Delete">delete</A> them.
+   We have discontinued our previous policy of removing saved sessions and
+   associated custom track data after four months. However, note that the UCSC Genome
+   Browser is not a data storage service; please keep a local backup of your session contents and
+   custom track data.
+   </p>
 
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
@@ -716,8 +715,36 @@ not be updated to reflect any edits.
 </TABLE>
 <P>
 
-
-
+<!-- =====Session Gallery======================== -->
+<A NAME="Gallery"></A>
+<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+<TR><TD>
+ <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+ <TR><TD>
+  <TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+  <TR><TD>
+  <FONT SIZE="4"><B>&nbsp; Session Gallery </B></FONT>
+  </TD></TR>
+  </TABLE>
+   <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+   <TR><TH HEIGHT=10></TH></TR>
+   <TR><TD WIDTH=10>&nbsp;</TD><TD>
+   <p>
+   The <a href="sessions.html" target="_blank">Session Gallery</a> is a
+   collection of track views that help highlight viewing different
+   topics in the browser. The sessions in the Session Gallery were created in the browser
+   and then saved to a local file, which was then uploaded to an online location.
+   This allows creating a single link, such as
+   http://genome.ucsc.edu/cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=U,
+   where <b>U</b> is the URL of the session file, e.g. http://www.mysite.edu/~me/mySession.txt, enabling
+   users to maintain external control of the content file for easy update.
+   </p>
+  </TD><TD WIDTH=15></TD></TR>
+  </TABLE>
+ <BR></TD></TR>
+ </TABLE>
+</TD></TR>
+</TABLE>
 
 <!-- ====End of Document=================== -->
   </TD></TR>

@@ -509,3 +509,23 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+struct hash *oregannoLoadAttrHash(struct sqlConnection *conn)
+/* Construct a hash table of the entries in the oregannoAttr table, indexed by ID.
+ * Free with hashFreeWithVals(&attrHash, oregannoAttrFree).
+ */
+{
+struct hash *attrHash = hashNew(0);
+struct sqlResult *result = NULL;
+struct oregannoAttr *attr = NULL;
+char query[2048], **row = NULL;
+
+sqlSafef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type'");
+result = sqlGetResult (conn, query);
+while ((row = sqlNextRow(result)) != NULL)
+    {
+    attr = oregannoAttrLoad(row);
+    hashAdd (attrHash, attr->id, attr);
+    }
+sqlFreeResult(&result);
+return attrHash;
+}

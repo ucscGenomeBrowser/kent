@@ -1,9 +1,25 @@
-# hg19 specific sections.
+# hg38 specific sections.
 
 # Immediately before the microarray section
 #name geneAlleles
 #shortLabel Gene Alleles
 #longLabel Common Gene Haplotype Alleles
 #priority 38
+
+name gtex
+shortLabel RNA-Seq Expression
+longLabel RNA-Seq Expression Data from GTEx (53 Tissues, 570 Donors)
+priority 39
+
+name microarray
+shortLabel Microarray Expression
+longLabel Microarray Expression Data
+priority 40
+visibility hide
+
+
+
+
+
 
 

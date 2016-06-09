@@ -1,0 +1,318 @@
+    track gtexRnaSignalSRR1362060
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1362060.hg38.bigWig
+    shortLabel brainCeHe F 13JUV
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13JUV-0011-R11a-SM-5LZYH)
+    subGroups age=a40 tissue=brainCerebelHemi donor=GTEX13JUV
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R11a-SM-5LZYH \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=6.6 batch=BP-47085 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1363810
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1363810.hg38.bigWig
+    shortLabel brainCeHe F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-12ZZX-0011-R11a-SM-5DUVJ)
+    subGroups age=a40 tissue=brainCerebelHemi donor=GTEX12ZZX
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R11a-SM-5DUVJ \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.8 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1387875
+    parent gtexRnaSignalFemaleYoung on
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1387875.hg38.bigWig
+    shortLabel brainCeHe F YFC4
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-YFC4-0011-R11a-SM-4SOK6)
+    subGroups age=a40 tissue=brainCerebelHemi donor=GTEXYFC4
+    color 238,238,0
+    metadata donor=GTEX-YFC4 age=40 sex=F hardyScore=1 sample=GTEX-YFC4-0011-R11a-SM-4SOK6 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=9 batch=BP-41079 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2013
+
+    track gtexRnaSignalSRR608718
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR608718.hg38.bigWig
+    shortLabel brainCeHe F Q2AG
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-Q2AG-0011-R11A-SM-2HMKZ)
+    subGroups age=a40 tissue=brainCerebelHemi donor=GTEXQ2AG
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R11A-SM-2HMKZ \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=9.5 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalSRR656179
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR656179.hg38.bigWig
+    shortLabel brainCeHe F T2IS
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-T2IS-0011-R11A-SM-32QPC)
+    subGroups age=a20 tissue=brainCerebelHemi donor=GTEXT2IS
+    color 238,238,0
+    metadata donor=GTEX-T2IS age=20 sex=F hardyScore=1 sample=GTEX-T2IS-0011-R11A-SM-32QPC \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.5 batch=BP-24010 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=04/10/2012
+
+    track gtexRnaSignalSRR1317808
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1317808.hg38.bigWig
+    shortLabel brainCeHe F 14BIN
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-14BIN-0011-R11a-SM-5SI79)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEX14BIN
+    color 238,238,0
+    metadata donor=GTEX-14BIN age=50 sex=F hardyScore=2 sample=GTEX-14BIN-0011-R11a-SM-5SI79 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.4 batch=BP-48831 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1338323
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1338323.hg38.bigWig
+    shortLabel brainCeHe F ZE7O
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-ZE7O-0011-R11a-SM-57WBC)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEXZE7O
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R11a-SM-57WBC \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.2 batch=BP-41252 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2013
+
+    track gtexRnaSignalSRR1447986
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1447986.hg38.bigWig
+    shortLabel brainCeHe F 13SLX
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13SLX-0011-R11b-SM-5O9C8)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEX13SLX
+    color 238,238,0
+    metadata donor=GTEX-13SLX age=50 sex=F hardyScore=2 sample=GTEX-13SLX-0011-R11b-SM-5O9C8 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.3 batch=BP-47873 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1452056
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1452056.hg38.bigWig
+    shortLabel brainCeHe F 131XW
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-131XW-0011-R11a-SM-5DUV9)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEX131XW
+    color 238,238,0
+    metadata donor=GTEX-131XW age=50 sex=F hardyScore=4 sample=GTEX-131XW-0011-R11a-SM-5DUV9 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=6.8 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalSRR1475737
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1475737.hg38.bigWig
+    shortLabel brainCeHe F RU72
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-RU72-0011-R11A-SM-5SI8G)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEXRU72
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R11A-SM-5SI8G \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.8 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/22/2012
+
+    track gtexRnaSignalSRR1478294
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1478294.hg38.bigWig
+    shortLabel brainCeHe F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13OVJ-0011-R11a-SM-5P9H8)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEX13OVJ
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R11a-SM-5P9H8 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.8 batch=BP-47984 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR615766
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR615766.hg38.bigWig
+    shortLabel brainCeHe F RU72
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-RU72-0011-R11A-SM-2TF6J)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEXRU72
+    color 238,238,0
+
+    track gtexRnaSignalSRR821468
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR821468.hg38.bigWig
+    shortLabel brainCeHe F WWYW
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-WWYW-0011-R11A-SM-3NB38)
+    subGroups age=a50 tissue=brainCerebelHemi donor=GTEXWWYW
+    color 238,238,0
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0011-R11A-SM-3NB38 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.1 batch=BP-29430 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2012
+
+    track gtexRnaSignalSRR1322270
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1322270.hg38.bigWig
+    shortLabel brainCeHe F 13S7M
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13S7M-0011-R11b-SM-5P9HU)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX13S7M
+    color 238,238,0
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0011-R11b-SM-5P9HU \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.1 batch=BP-48180 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1356375
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1356375.hg38.bigWig
+    shortLabel brainCeHe F 11GSP
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-11GSP-0011-R11b-SM-5NQ7V)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX11GSP
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R11b-SM-5NQ7V \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=9 batch=BP-42719 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/26/2013
+
+    track gtexRnaSignalSRR1377445
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1377445.hg38.bigWig
+    shortLabel brainCeHe F 13X6K
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13X6K-0011-R11a-SM-5P9F5)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX13X6K
+    color 238,238,0
+    metadata donor=GTEX-13X6K age=60 sex=F hardyScore=4 sample=GTEX-13X6K-0011-R11a-SM-5P9F5 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.4 batch=BP-48302 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/14/2014
+
+    track gtexRnaSignalSRR1387072
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1387072.hg38.bigWig
+    shortLabel brainCeHe F 13O3O
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13O3O-0011-R11b-SM-5KM4G)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX13O3O
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R11b-SM-5KM4G \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.6 batch=BP-47251 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/16/2013
+
+    track gtexRnaSignalSRR1402513
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1402513.hg38.bigWig
+    shortLabel brainCeHe F ZVT3
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-ZVT3-0011-R11b-SM-57WBI)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEXZVT3
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R11b-SM-57WBI \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.2 batch=BP-42240 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalSRR1440763
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1440763.hg38.bigWig
+    shortLabel brainCeHe F X4EP
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-X4EP-0011-R11B-SM-4QASK)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEXX4EP
+    color 238,238,0
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-0011-R11B-SM-4QASK \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.8 batch=BP-32212 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/16/2012
+
+    track gtexRnaSignalSRR1451897
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1451897.hg38.bigWig
+    shortLabel brainCeHe F 131YS
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-131YS-0011-R11b-SM-5EGLM)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX131YS
+    color 238,238,0
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0011-R11b-SM-5EGLM \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.9 batch=BP-44999 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1455060
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1455060.hg38.bigWig
+    shortLabel brainCeHe F 13PLJ
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-13PLJ-0011-R11b-SM-5O9BS)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX13PLJ
+    color 238,238,0
+    metadata donor=GTEX-13PLJ age=60 sex=F hardyScore=2 sample=GTEX-13PLJ-0011-R11b-SM-5O9BS \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.2 batch=BP-47673 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1476632
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1476632.hg38.bigWig
+    shortLabel brainCeHe F 14BIM
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-14BIM-0011-R11b-SM-5S2RN)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX14BIM
+    color 238,238,0
+    metadata donor=GTEX-14BIM age=60 sex=F hardyScore=3 sample=GTEX-14BIM-0011-R11b-SM-5S2RN \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8 batch=BP-48689 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/27/2014
+
+    track gtexRnaSignalSRR1479912
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1479912.hg38.bigWig
+    shortLabel brainCeHe F 145MI
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-145MI-0011-R11a-SM-5P9JZ)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX145MI
+    color 238,238,0
+    metadata donor=GTEX-145MI age=60 sex=F hardyScore=2 sample=GTEX-145MI-0011-R11a-SM-5P9JZ \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7 batch=BP-48227 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1485789
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1485789.hg38.bigWig
+    shortLabel brainCeHe F 12WSB
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-12WSB-0011-R11b-SM-57WBJ)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEX12WSB
+    color 238,238,0
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0011-R11b-SM-57WBJ \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=6 batch=BP-43579 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR1498702
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR1498702.hg38.bigWig
+    shortLabel brainCeHe F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-ZVZQ-0011-R11a-SM-51MS6)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEXZVZQ
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R11a-SM-51MS6 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=8.8 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalSRR600754
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR600754.hg38.bigWig
+    shortLabel brainCeHe F N7MT
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-N7MT-0011-R11A-SM-2I3DZ)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEXN7MT
+    color 238,238,0
+
+    track gtexRnaSignalSRR600957
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainCerebelHemi/gtexRnaSignalSRR600957.hg38.bigWig
+    shortLabel brainCeHe F NPJ7
+    longLabel GTEx RNA signal from female Brain - Cerebellar Hemisphere (GTEX-NPJ7-0011-R11A-SM-2I3E8)
+    subGroups age=a60 tissue=brainCerebelHemi donor=GTEXNPJ7
+    color 238,238,0
+    metadata donor=GTEX-NPJ7 age=60 sex=F hardyScore=4 sample=GTEX-NPJ7-0011-R11A-SM-2I3E8 \
+            tissue=brainCerebelHemi autolysisScore=-1 rnaIntegrity=7.2 batch=BP-19109 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=09/28/2011
+

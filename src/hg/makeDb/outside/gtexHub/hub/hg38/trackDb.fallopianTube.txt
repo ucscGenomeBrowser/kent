@@ -1,0 +1,57 @@
+    track gtexRnaSignalFallopianTubeSRR1071359
+    parent gtexRnaSignalFallopianTube off
+    type bigWig
+    bigDataUrl fallopianTube/gtexRnaSignalSRR1071359.hg38.bigWig
+    shortLabel fallopian F U3ZN
+    longLabel GTEx RNA signal from female Fallopian Tube (GTEX-U3ZN-1126-SM-4DXUL)
+    subGroups sex=F age=a30 
+    color 247,205,200
+
+    track gtexRnaSignalFallopianTubeSRR1074140
+    parent gtexRnaSignalFallopianTube off
+    type bigWig
+    bigDataUrl fallopianTube/gtexRnaSignalSRR1074140.hg38.bigWig
+    shortLabel fallopian F T6MO
+    longLabel GTEx RNA signal from female Fallopian Tube (GTEX-T6MO-1026-SM-4DM72)
+    subGroups sex=F age=a40 
+    color 247,205,200
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-1026-SM-4DM72 \
+            tissue=fallopianTube autolysisScore=1 rnaIntegrity=7.7 batch=BP-24887 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/01/2012
+
+    track gtexRnaSignalFallopianTubeSRR1082520
+    parent gtexRnaSignalFallopianTube off
+    type bigWig
+    bigDataUrl fallopianTube/gtexRnaSignalSRR1082520.hg38.bigWig
+    shortLabel fallopian F S341
+    longLabel GTEx RNA signal from female Fallopian Tube (GTEX-S341-0826-SM-4AD73)
+    subGroups sex=F age=a40 
+    color 247,205,200
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0826-SM-4AD73 \
+            tissue=fallopianTube autolysisScore=0 rnaIntegrity=7.6 batch=BP-22766 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/29/2012
+
+    track gtexRnaSignalFallopianTubeSRR1083776
+    parent gtexRnaSignalFallopianTube off
+    type bigWig
+    bigDataUrl fallopianTube/gtexRnaSignalSRR1083776.hg38.bigWig
+    shortLabel fallopian F T5JW
+    longLabel GTEx RNA signal from female Fallopian Tube (GTEX-T5JW-0326-SM-4DM6J)
+    subGroups sex=F age=a20 
+    color 247,205,200
+    metadata donor=GTEX-T5JW age=20 sex=F hardyScore=0 sample=GTEX-T5JW-0326-SM-4DM6J \
+            tissue=fallopianTube autolysisScore=1 rnaIntegrity=8.1 batch=BP-25967 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/05/2012
+
+    track gtexRnaSignalFallopianTubeSRR1076584
+    parent gtexRnaSignalFallopianTube off
+    type bigWig
+    bigDataUrl fallopianTube/gtexRnaSignalSRR1076584.hg38.bigWig
+    shortLabel fallopian F S32W
+    longLabel GTEx RNA signal from female Fallopian Tube (GTEX-S32W-1326-SM-4AD5Q)
+    subGroups sex=F age=a50 
+    color 247,205,200
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-1326-SM-4AD5Q \
+            tissue=fallopianTube autolysisScore=1 rnaIntegrity=6.8 batch=BP-22720 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+

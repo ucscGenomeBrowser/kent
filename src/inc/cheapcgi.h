@@ -285,6 +285,9 @@ void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 /* Make check box with javascript */
 
+void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled);
+/* Make check box, optionally enabled/disabled. */
+
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 
@@ -574,6 +577,9 @@ struct cgiParsedVars *cgiParsedVarsNew(char *cgiString);
 
 void cgiParsedVarsFree(struct cgiParsedVars **pTags);
 /* Free up memory associated with cgiParsedVars */
+
+void cgiParsedVarsFreeList(struct cgiParsedVars **pList);
+/* Free up list of cgiParsedVars */
 
 char *cgiScriptDirUrl();
 /* Return the cgi-bin directory path on this webserver.

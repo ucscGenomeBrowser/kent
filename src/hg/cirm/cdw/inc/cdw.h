@@ -1158,7 +1158,7 @@ void cdwExperimentOutput(struct cdwExperiment *el, FILE *f, char sep, char lastS
 #define cdwExperimentCommaOut(el,f) cdwExperimentOutput(el,f,',',',');
 /* Print out cdwExperiment as a comma separated list including final comma. */
 
-#define CDWVALIDFILE_NUM_COLS 23
+#define CDWVALIDFILE_NUM_COLS 24
 
 extern char *cdwValidFileCommaSepFieldNames;
 
@@ -1189,6 +1189,7 @@ struct cdwValidFile
     char *pairedEnd;	/* The paired_end tag from the manifest.  Values 1,2 or '' */
     signed char qaVersion;	/* Version of QA pipeline making status decisions */
     double uniqueMapRatio;	/* Fraction of reads that map uniquely to genome for bams and fastqs */
+    char *lane;	/* What sequencing lane if any associated with this file. */
     };
 
 void cdwValidFileStaticLoad(char **row, struct cdwValidFile *ret);
@@ -2442,6 +2443,78 @@ void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep);
 
 #define cdwTrackVizCommaOut(el,f) cdwTrackVizOutput(el,f,',',',');
 /* Print out cdwTrackViz as a comma separated list including final comma. */
+
+#define CDWDATASET_NUM_COLS 7
+
+extern char *cdwDatasetCommaSepFieldNames;
+
+struct cdwDataset
+/* A dataset is a collection of files, usually associated to a paper */
+    {
+    struct cdwDataset *next;  /* Next in singly linked list. */
+    unsigned id;	/* Dataset ID */
+    char *name;	/* Short name of this dataset, one word, no spaces */
+    char *label;	/* short title of the dataset, a few words */
+    char *description;	/* Description of dataset, can be a complete html paragraph. */
+    char *pmid;	/* Pubmed ID of abstract */
+    char *pmcid;	/* PubmedCentral ID of paper full text */
+    char *metaDivTags;	/* Comma separated list of fields use to make tree out of metadata */
+    };
+
+void cdwDatasetStaticLoad(char **row, struct cdwDataset *ret);
+/* Load a row from cdwDataset table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwDataset *cdwDatasetLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwDataset from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwDatasetFreeList(). */
+
+void cdwDatasetSaveToDb(struct sqlConnection *conn, struct cdwDataset *el, char *tableName, int updateSize);
+/* Save cdwDataset as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwDataset *cdwDatasetLoad(char **row);
+/* Load a cdwDataset from row fetched with select * from cdwDataset
+ * from database.  Dispose of this with cdwDatasetFree(). */
+
+struct cdwDataset *cdwDatasetLoadAll(char *fileName);
+/* Load all cdwDataset from whitespace-separated file.
+ * Dispose of this with cdwDatasetFreeList(). */
+
+struct cdwDataset *cdwDatasetLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwDataset from chopper separated file.
+ * Dispose of this with cdwDatasetFreeList(). */
+
+#define cdwDatasetLoadAllByTab(a) cdwDatasetLoadAllByChar(a, '\t');
+/* Load all cdwDataset from tab separated file.
+ * Dispose of this with cdwDatasetFreeList(). */
+
+struct cdwDataset *cdwDatasetCommaIn(char **pS, struct cdwDataset *ret);
+/* Create a cdwDataset out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwDataset */
+
+void cdwDatasetFree(struct cdwDataset **pEl);
+/* Free a single dynamically allocated cdwDataset such as created
+ * with cdwDatasetLoad(). */
+
+void cdwDatasetFreeList(struct cdwDataset **pList);
+/* Free a list of dynamically allocated cdwDataset's */
+
+void cdwDatasetOutput(struct cdwDataset *el, FILE *f, char sep, char lastSep);
+/* Print out cdwDataset.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwDatasetTabOut(el,f) cdwDatasetOutput(el,f,'\t','\n');
+/* Print out cdwDataset as a line in a tab-separated file. */
+
+#define cdwDatasetCommaOut(el,f) cdwDatasetOutput(el,f,',',',');
+/* Print out cdwDataset as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

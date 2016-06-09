@@ -1,0 +1,296 @@
+#!/usr/bin/env python2.7
+# maniMani
+"""
+Runs on two manifest.txt files that represent adjacent files in a pipeline (for example 
+manifestFastq.txt and manifestKallisto.txt). The program will generate SQL insert statements for
+the cdwStepIn,  cdwStepRun and cdwStepOut tables from these two manifest files. The manifest files
+are linked via the 'meta' column, however this can be overwritten with thestartMetaColumn and 
+endMetaColumn options. 
+"""
+
+from __future__ import print_function
+import  sys, operator, fileinput, collections, string, os.path
+import  re, argparse, subprocess, MySQLdb
+sys.path.append(os.path.join(os.path.dirname(__file__), 'pyLib'))
+import common
+import random
+
+def parseArgs(args): 
+    """
+    Parse the arguments into an opened file for reading (inputFile), and 
+    an open file for writing (outputFile). 
+    """
+    parser = argparse.ArgumentParser(description = __doc__)
+    parser.add_argument ("startMani",
+    help = " The starting manifest, should contain upstream files",
+    type = argparse.FileType('r'))
+    parser.add_argument ("endMani",
+    help = " The ending manifest, should contain downstream (by a single step) files.",
+    type = argparse.FileType('r'))
+    parser.add_argument ("outputFile",
+    help = " The output file where the SQL insert commands will be if printed.",
+    type = argparse.FileType('w'))
+    parser.add_argument ("--stepDef",
+    help = " The stepDef value for the cdwStepRun inserts, default is 2 (Kallisto output).  "
+            " Use this cmd to see the possible stepDef values; hgsql cdw -e \"select * from cdwStepDef\"",
+    type = int,
+    action = "store")
+    parser.add_argument ("--stepVersion",
+    help = " The stepVersion value for the cdwStepRun inserts, default is 'unknown'. ",
+    action = "store")
+    parser.add_argument ("--startMetaColumn", 
+    help = "Overwrite the meta column with some other column for the start manifest (Ex. data_set_id).",
+    action = 'store')
+    parser.add_argument ("--endMetaColumn", 
+    help = "Overwrite the meta column with some other column for the start manifest (Ex. data_set_id).",
+    action = 'store')
+    parser.add_argument ("--database",
+    help = " The database that should be used, default is cdw_chris. ",
+    action = "store")
+    parser.add_argument ("--realRun",
+    help = " Actually perform the inserts! Note the stepRunId values will increment. ", 
+    action = "store_true")
+    parser.add_argument ("--verbose",
+    help = " Show runtime messages.",
+    action = "store_true")
+    
+    parser.set_defaults(verbose = False)
+    parser.set_defaults(realRun = False)
+    parser.set_defaults(database = "cdw_chris")
+    parser.set_defaults(stepDef = 2)
+    parser.set_defaults(stepVersion = "unknown")
+    parser.set_defaults(startMetaColumn = "meta")
+    parser.set_defaults(endMetaColumn = "meta")
+    if (len(sys.argv) == 1): 
+        parser.print_help()
+        exit(1)
+    options = parser.parse_args() #Options is a structure that holds the command line arguments information
+    return options
+
+# Seems that certain punctuation is cast to '%' when it gets input into 
+# the cdw databases, this applies the same filter so things match. 
+trans = string.maketrans(string.punctuation, "%"*32)
+# All files should come from the same submit directory 
+# populate this at runtime and then assert each file has the 
+# same submit directory id.  
+submitDirId = 0 
+
+def readManiToDict(maniFile, keyColumn):
+    """
+    Read a manifest file into a dictionary. Assumes there is no header.  
+    Input:
+        maniFile - An opened file like object.
+        keyColumn - An integer that specifies the column to link on.
+    Output:
+        result - A hash that representes a manifest file. Meta keys to linked list (of list) values.
+    """
+    result = dict() # A hash where meta tags key into a list of lists.
+    for line in maniFile:
+        splitLine = line[:-1].strip("#").strip("\n").split("\t")
+        fieldValues = [] # Create a list for the meta values associated with a single mani row.
+        for item in splitLine: 
+            fieldValues.append(item)
+        if result.get(splitLine[keyColumn].translate(trans)):
+            # If the meta value is the same add a new list to the list of lists
+            result[splitLine[keyColumn].translate(trans)].append(fieldValues)
+        else: result.setdefault(splitLine[keyColumn].translate(trans),[fieldValues]) 
+            # Default to list with one list in it
+    return result 
+
+def insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options):
+    """
+    Generates insert commands for cdwStepIn and cdwStepRun as well as a hash table that can link 
+    the stepIn, stepRun and stepOut tables.
+    Input: 
+        db = A mysql database (opened)
+        startManiDict = A dictionary/hash that holds a manifest file
+        startManiHeader = The header columns for the manifest file
+        options = outputFile, stepDef string, stepVersion string, realRun bool, verbose bool
+    Output:
+        startToEndDict = A dictionary that maps meta values to stepIn id's
+    """
+    # The dictionary maps strings to ints
+    startToEndDict = dict() # Used later to link up stepIn and stepOut
+    global submitDirId
+    fileCol = startManiHeader.split("\t").index("file")
+    outputCol = startManiHeader.split("\t").index("output")
+    metaCol = startManiHeader.split("\t").index("meta")
+   
+    # Grab the max(id) via query for test runs
+    idCur = db.cursor() # Open the connection to the database
+    query = ("SELECT max(id) from cdwStepRun")
+    idCur.execute(query)
+    cdwStepRunId = 0
+    for (item) in idCur: 
+        cdwStepRunId = item[0]
+    idCur.close()
+    
+    # Go through the start manifest file, each key is a meta tag and each value 
+    # is a list of lists. 
+    for key, value in startManiDict.iteritems():
+        # Insert the step into cdwStepRun.
+        stepCmd = ("insert into cdwStepRun (stepDef, stepVersion) values (%i, '%s')"%(options.stepDef, options.stepVersion))
+        options.outputFile.write(stepCmd + ";\n")
+        if (options.verbose): print (stepCmd)
+        if (options.realRun):
+            idCur = db.cursor() # Open the connection to the database
+            idCur.execute(stepCmd)
+            idCur.close()
+        # Create an entry in the hash 
+        runInId = db.insert_id() # The id of the step that was inserted. 
+        cdwStepRunId += 1
+        if runInId==0: runInId = cdwStepRunId
+        #if (options.realRun): # Make sure only one instance of this is running at a time.
+        #    assert(cdwStepRunId == runInId) 
+        startToEndDict.setdefault(key, runInId) # Insert into the hash table, this will be used for the cdwStepOut inserts. 
+        
+        # Iterate over all rows (input files) that have this meta tag. 
+        for row in value: 
+            cur = db.cursor()
+            # Assume that submit file name+meta form a unique field and can be used to grab a file id 
+            #query = "select id from cdwFile where submitFileName = '%s'" % (row[fileCol])
+            tags = key
+            if (options.startMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
+            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            if (options.verbose): print(query)
+            cur.execute(query)
+            fileId = 0 # This will hold the fileId. 
+            result = cur.fetchall()
+            assert(len(result) == 1) # This SQL query is supposed to be unique!
+            for line in result:
+                fileId = line[0]
+
+            # Verify that the file has the same submission dir
+            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
+                            (row[fileCol], tags))
+            if (options.verbose): print(query)
+            cur = db.cursor()
+            cur.execute(query)
+            result = cur.fetchall()
+            assert(len(result) == 1) 
+            for line in result:
+                assert(line[0] == submitDirId)
+           
+            # Map over to cdwValidFile 
+            query = "select id from cdwValidFile where fileId ='%s'" %(fileId)
+            if (options.verbose): print(query)
+            cur.execute(query)
+            validFileId = 0 # This will hold the fileId. 
+            result = cur.fetchall()
+            assert(len(result) == 1) # Either the file is not valid or the query is not unique.   
+            for line in result:
+                validFileId = line[0]
+
+            # Insert into cdwStepIn
+            # The name corresponds to the 'output' field in manifest files. 
+            query = "insert into cdwStepIn (stepRunId, name, ix, fileId) values (%i,'%s',0,'%s')" % (runInId, row[outputCol], validFileId)
+            if (options.realRun): cur.execute(query) 
+            options.outputFile.write(query+";\n")
+            if (options.verbose): print (query) 
+            cur.close()
+
+    return startToEndDict
+
+def insertToStepOut(db, endManiDict, endManiHeader, startToEndDict, options): 
+    """
+    Generates the insert commands for the cdwStepOut table. 
+    input: 
+        db - A mysql database connection
+        endManiDict - a dictionary encasulating a manifest file
+        endManiHeader - the header column associated with the manifest file
+        startToEndDict - A dict that maps meta tags to cdwStepRun id's 
+        options - outputFile, endMetaColumn string, realRun bool,  verbose bool 
+    """
+    global submitDirId
+    fileCol = endManiHeader.split("\t").index("file")
+    outputCol = endManiHeader.split("\t").index("output")
+    metaCol = endManiHeader.split("\t").index("meta")
+    for key, value in endManiDict.iteritems():
+        for row in value:
+            fileId = 0 # This will store the fileId. 
+            cur = db.cursor()
+            tags = key
+            if (options.endMetaColumn is not "meta"): tags = row[metaCol].translate(trans) 
+            query = "select id from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%(row[fileCol],tags)
+            cur.execute(query)
+            if (options.verbose): print (query)
+            result = cur.fetchall()
+            for line in result:
+                fileId = line[0]
+            assert(len(result) == 1) # This SQL query is supposed to be unique!
+            
+            # Verify that the file has the same submission dir
+            query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
+                            (row[fileCol], tags))
+            if (options.verbose): print(query)
+            cur = db.cursor()
+            cur.execute(query)
+            result = cur.fetchall()
+            assert(len(result) == 1) 
+            for line in result:
+                assert(line[0] == submitDirId)
+
+            # Map over to cdwValidFile 
+            query = "select id from cdwValidFile where fileId ='%s'" %(fileId)
+            if (options.verbose): print(query)
+            cur.execute(query)
+            validFileId = 0 # This will hold the fileId. 
+            result = cur.fetchall()
+            assert(len(result) == 1) # This SQL query is supposed to be unique!
+            for line in result:
+                validFileId = line[0]
+            
+            # Insert into cdwStepOut
+            query = "insert into cdwStepOut (stepRunId, name, ix, fileId) values (%i,'%s',0,'%s')" % (startToEndDict[key],row[outputCol],validFileId)
+            if (options.realRun): cur.execute(query)
+            options.outputFile.write(query + ";\n")
+            if (options.verbose): print (query)
+
+def main(args):
+    """
+    Define the options and read in the arguments.  Initialize things and stitch
+    the functions together.  
+    """
+    options = parseArgs(args)
+    global submitDirId
+
+    # Write the users run options to the output file.
+    options.outputFile.write(" ".join(sys.argv)+"\n")
+
+    # Set up the connection to the database. 
+    hst, usr, pw = common.getSQLLoginInfo()
+    db = MySQLdb.connect(host= hst,user = usr, passwd = pw, db = options.database)
+
+    # Get the header line from both manifests, clean them up a bit. 
+    startManiHeader = options.startMani.readline().strip("#").strip("\n")
+    endManiHeader = options.endMani.readline().strip("#").strip("\n")
+
+    # Determine the indexing column (usually meta) 
+    startIndexCol = startManiHeader.split("\t").index(options.startMetaColumn)
+    endIndexCol = endManiHeader.split("\t").index(options.endMetaColumn)
+    
+    # Read in the manifest files.
+    startManiDict = readManiToDict(options.startMani, startIndexCol)    
+    endManiDict = readManiToDict(options.endMani, endIndexCol)
+
+    myPick = random.choice(startManiDict.keys())
+
+    query = ("select submitDirId from cdwFile where submitFileName = '%s' and tags like '%%%s%%'"%
+                    (startManiDict[myPick][0][0], myPick))
+    if (options.verbose): print(query)
+    cur = db.cursor()
+    cur.execute(query)
+    result = cur.fetchall()
+    cur.close()
+    assert(len(result) == 1) 
+    for line in result:
+        submitDirId = line[0]
+    # Generate the insert commands.
+    startToEndDict = insertoToStepRunAndStepIn(db, startManiDict, startManiHeader, options)
+    insertToStepOut(db, endManiDict, endManiHeader, startToEndDict, options) 
+
+    # Close the database connection. 
+    db.close()
+
+if __name__ == "__main__" :
+    sys.exit(main(sys.argv))

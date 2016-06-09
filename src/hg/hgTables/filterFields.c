@@ -206,15 +206,17 @@ if (outList != NULL)
 	struct sqlConnection *conn = hAllocConn(out->db);
 	struct asObject *asObj = asForTable(conn, out->table);
 	char *var = dbTableVar(varPrefix, out->db, out->table);
+        boolean disabled = isNoGenomeDisabled(out->db, out->table);
+        char *classString = disabled ? NO_GENOME_CLASS : "";
 	hPrintf("<TR>");
 	hPrintf("<TD>");
-	cgiMakeCheckBox(var, varOn(var));
+        cgiMakeCheckBoxEnabled(var, varOn(var) && !disabled, !disabled);
 	hPrintf("</TD>");
-	hPrintf("<TD>%s</TD>", out->db);
-	hPrintf("<TD>%s</TD>", out->table);
+	hPrintf("<TD><span%s>%s</span></TD>", classString, out->db);
+	hPrintf("<TD><span%s>%s</span></TD>", classString, out->table);
 	hPrintf("<TD>");
 	if (asObj != NULL)
-	    hPrintf("%s", asObj->comment);
+	    hPrintf("<span%s>%s</span>", classString, asObj->comment);
 	else
 	    hPrintf("&nbsp;");
 	hPrintf("</TD>");
@@ -337,6 +339,8 @@ showItemRgb=bedItemRgb(tdb);	/* should we expect itemRgb instead of "reserved" *
 struct slName *fieldList;
 if (isBigBed(database, rootTable, curTrack, ctLookupName))
     fieldList = bigBedGetFields(rootTable, conn);
+else if (isLongTabixTable(rootTable))
+    fieldList = getLongTabixFields();
 else if (isBamTable(rootTable))
     fieldList = bamGetFields();
 else if (isVcfTable(rootTable, NULL))
@@ -422,9 +426,12 @@ static void showLinkedFields(struct dbTable *dtList)
 struct dbTable *dt;
 for (dt = dtList; dt != NULL; dt = dt->next)
     {
-    /* Put it up in a new section. */
-    webNewSection("%s.%s fields", dt->db, dt->table);
-    showTableFields(dt->db, dt->table, FALSE);
+    if (! isNoGenomeDisabled(dt->db, dt->table))
+        {
+        /* Put it up in a new section. */
+        webNewSection("%s.%s fields", dt->db, dt->table);
+        showTableFields(dt->db, dt->table, FALSE);
+        }
     }
 }
 
@@ -496,24 +503,27 @@ else
 }
 
 boolean primaryOrLinked(char *dbTableField)
-/* Return TRUE if this is the primary table for field selection, or if it
- * is linked with that table. */
+/* Return TRUE if this is the primary table for field selection, or if the field's checkbox
+ * is checked, and table is not disabled due to range==genome and 'tableBrowser noGenome'. */
 {
-char dbTable[256];
+char dbTable[PATH_LEN], db[PATH_LEN], table[PATH_LEN];
 char *ptr = NULL;
 
-/* Extract just the db.table part of db.table.field */
+/* Extract just the db.table part of db.table.field as well as db and table separately */
 safef(dbTable, sizeof(dbTable), "%s", dbTableField);
 ptr = strchr(dbTable, '.');
 if (ptr == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find first .",
 	     dbTableField);
-ptr = strchr(ptr+1, '.');
-if (ptr == NULL)
+safencpy(db, sizeof(db), dbTable, ptr-dbTable);
+char *p2 = strchr(ptr+1, '.');
+if (p2 == NULL)
     errAbort("Expected 3 .-separated words in %s but can't find second .",
 	     dbTableField);
-*ptr = 0;
-
+*p2 = '\0';
+safecpy(table, sizeof(table), ptr+1);
+if (isNoGenomeDisabled(db, table))
+    return FALSE;
 if (sameString(dbTable, cartString(cart, hgtaFieldSelectTable)))
     return TRUE;
 else
@@ -938,6 +948,7 @@ boolean isWig = isSmallWig || isBigWig;
 boolean isBedGr = tdb ? tdbIsBedGraph(tdb) : isBedGraph(rootTable);
 boolean isBb = tdb ? tdbIsBigBed(tdb) : isBigBed(database, table, curTrack, ctLookupName);
 boolean isBam = tdb ? tdbIsBam(tdb) : isBamTable(rootTable);
+boolean isLongTabix = tdb ? tdbIsLongTabix(tdb) : isLongTabixTable(rootTable);
 boolean isVcf = tdb ? tdbIsVcf(tdb) : isVcfTable(rootTable, NULL);
 
 if (isWig)
@@ -963,6 +974,8 @@ else
     struct sqlFieldType *ftList;
     if (isBb)
         ftList = bigBedListFieldsAndTypes(tdb, conn);
+    else if (isLongTabix)
+	ftList = longTabixListFieldsAndTypes();
     else if (isBam)
 	ftList = bamListFieldsAndTypes();
     else if (isVcf)
@@ -973,7 +986,7 @@ else
     }
 
 /* Printf free-form query row. */
-if (!(isWig||isBedGr||isBam||isVcf))
+if (!(isWig||isBedGr||isBam||isVcf||isLongTabix))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD>\n");
@@ -989,7 +1002,7 @@ if (!(isWig||isBedGr||isBam||isVcf))
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig||isBedGr||isBam||isVcf)
+if (isWig||isBedGr||isBam||isVcf||isLongTabix)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1048,6 +1061,11 @@ else if (isBigBed(db, table, curTrack, ctLookupName))
     struct sqlFieldType *ftList = bigBedListFieldsAndTypes(ct->tdb, NULL);
     printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
     }
+else if (isLongTabixTable(table))
+    {
+    struct sqlFieldType *ftList = longTabixListFieldsAndTypes();
+    printSqlFieldListAsControlTable(ftList, db, table, ct->tdb, FALSE);
+    }
 else if (isBamTable(table))
     {
     struct sqlFieldType *ftList = bamListFieldsAndTypes();
@@ -1103,7 +1121,7 @@ else
 
 puts("</TABLE>");
 
-if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL))
+if (ct->wiggle || isBigWigTable(table) || isBamTable(table) || isVcfTable(table, NULL) || isLongTabixTable(table))
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");
@@ -1136,9 +1154,12 @@ static void showLinkedFilters(struct dbTable *dtList)
 struct dbTable *dt;
 for (dt = dtList; dt != NULL; dt = dt->next)
     {
-    /* Put it up in a new section. */
-    webNewSection("%s.%s based filters", dt->db, dt->table);
-    filterControlsForTable(dt->db, dt->table);
+    if (! isNoGenomeDisabled(dt->db, dt->table))
+        {
+        /* Put it up in a new section. */
+        webNewSection("%s.%s based filters", dt->db, dt->table);
+        filterControlsForTable(dt->db, dt->table);
+        }
     }
 }
 
@@ -1229,8 +1250,10 @@ return isNotEmpty(pat) && stringArrayIx(cmpOp, cmpOpMenu, cmpOpMenuSize) > 0;
 
 static boolean filteredOrLinked(char *db, char *table)
 /* Return TRUE if this table is the table to be filtered or if it is to be
- * linked with that table. */
+ * linked with that table, and is not disabled due to region==genome and 'tableBrowser noGenome'. */
 {
+if (isNoGenomeDisabled(db, table))
+    return FALSE;
 char *dbTable = getDbTable(db, table);
 char *filterTable = cartUsualString(cart, hgtaFilterTable, "");
 boolean isFilterTable = sameString(dbTable, filterTable);

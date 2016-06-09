@@ -1492,6 +1492,12 @@ void cgiMakeCheckBox(char *name, boolean checked)
 cgiMakeCheckBox2Bool(name, checked, TRUE, NULL, NULL);
 }
 
+void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled)
+/* Make check box, optionally enabled/disabled. */
+{
+cgiMakeCheckBox2Bool(name, checked, enabled, NULL, NULL);
+}
+
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript)
 /* Make check box with javascript. */
 {
@@ -2358,6 +2364,19 @@ if (tags != NULL)
     freeMem(tags->stringBuf);
     freez(pTags);
     }
+}
+
+void cgiParsedVarsFreeList(struct cgiParsedVars **pList)
+/* Free up list of cgiParsedVars */
+{
+struct cgiParsedVars *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cgiParsedVarsFree(&el);
+    }
+*pList = NULL;
 }
 
 void cgiEncodeHash(struct hash *hash, struct dyString *dy)

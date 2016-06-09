@@ -85,6 +85,13 @@ To create a bigWig track from a wiggle file, follow these steps:<BR>
   (Note that the wigToBigWig program also accepts a gzipped wig input file.)
  <LI> Move the newly created bigWig file (<TT>myBigWig.bw</TT>) to a http, 
   https, or ftp location.
+ <LI> If the file URL ends with .bigWig or .bw, you can paste the URL directly 
+  into the <A HREF="../../cgi-bin/hgCustom">custom track</A> management page, click
+  submit and view in the Genome Browser. 
+  The track name will then be the name of the file. If you 
+  want to configure the track label or other visualisation options, you will
+  need to create a <A HREF="hgTracksHelp.html#TRACK">track line</A>, as shown
+  below.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
   using a single 
   <A HREF="hgTracksHelp.html#TRACK">track line</A>.                            
@@ -122,7 +129,17 @@ To create a bigWig track from a wiggle file, follow these steps:<BR>
 <P>In this example, you will use an existing bigWig file to create a bigWig 
 custom track.  A bigWig file that spans chromosome 21 on the hg19 assembly 
 has been placed on our http server.  
-You can create a custom track using this bigWig file by constructing a 
+You can create a custom track using this bigWig file by pasting the URL 
+<tt>http://genome.ucsc.edu/goldenPath/help/examples/bigWigExample.bw</tt> 
+into the 
+<A HREF="../../cgi-bin/hgCustom">custom track</A> management page for the
+human assembly hg19 (Feb. 2009), then
+press the <EM>submit</EM> button.
+On the following page, press the <EM>chr21</EM> link in the custom track
+listing to view the bigWig track at position chr21:33,031,597-33,041,570 in the
+Genome Browser.</P>
+
+Alternatively, you can construct a 
 &quot;track&quot; line that references this file like so:</P>
 
 <TT>track type=bigWig name=&quot;Example One&quot; 
@@ -158,8 +175,8 @@ wiggle file.
   <TT><B>wigToBigWig</B> wigVarStepExample.gz hg19.chrom.sizes myBigWig.bw</TT>
  <LI> Place the bigWig file you just created (<TT>myBigWig.bw</TT>) on a 
   web-accessible server (see <EM>step 6</EM>).
- <LI> Construct a &quot;track&quot; line that points to your bigWig file
-  (see <EM>step 7</EM>).
+ <LI> Paste the URL to the file into the custom track entry form or construct a
+ &quot;track&quot; line that points to your bigWig file (see <EM>step 7</EM>).
  <LI> Create the custom track on the human assembly hg19 (Feb. 2009), and 
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
   wiggle file spans only chromsome 21.
@@ -193,7 +210,7 @@ To create a bigWig track from a bedGraph file, follow these steps:<BR>
   (Note that the bedGraphToBigWig program <b>DOES NOT</b> accept a gzipped bedGraph input file.)
  <LI> Move the newly created bigWig file (<TT>myBigWig.bw</TT>) to a http,
   https, or ftp location.
- <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
+ <LI> Paste the URL into the custom track entry form or construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A>
   using a single
   <A HREF="hgTracksHelp.html#TRACK">track line</A>.
  <LI> Paste this custom track line into the text box in the
@@ -226,6 +243,7 @@ utilities.<BR>
  <LI><TT>bigWigInfo</TT> &mdash; this program prints out information about a 
       bigWig file.
 </UL>
+These utilities accept paths to files or alternatively URLs to file.
 As with all UCSC Genome Browser programs, simply type the program name
 at the command line with no parameters to see the usage statement.
 </P>

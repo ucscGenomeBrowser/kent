@@ -51,6 +51,11 @@ void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 /* Make a radio button that also sets tracking variable
  * in javascript. */
 
+void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
+                                        char *val, char *selVal, char *extraHtml);
+/* Make a radio button with extra HTML attributes that also sets tracking variable
+ * in javascript. */
+
 void jsMakeTrackingCheckBox(struct cart *cart, char *cgiVar,
 	char *jsVar, boolean usualVal);
 /* Make a check box filling in with existing value and

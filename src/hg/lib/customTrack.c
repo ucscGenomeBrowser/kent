@@ -433,7 +433,7 @@ return result;
 char *customTrackFileVar(char *database)
 /* return CGI var name containing custom track filename for a database */
 {
-char buf[64];
+char buf[512];
 safef(buf, sizeof buf, "%s%s", CT_FILE_VAR_PREFIX, database);
 return cloneString(buf);
 }
@@ -653,10 +653,15 @@ else
 return cloneString(buf);
 }
 
-char* customTrackTypeFromBigFile(char *fileName)
+char* customTrackTypeFromBigFile(char *url)
 /* return most likely type for a big file name or NULL,
- * has to be freed */
+ * has to be freed. */
 {
+// pull out file part from the URL, strip off the query part after "?"
+char fileName[2000];
+safecpy(fileName, sizeof(fileName), url);
+chopSuffixAt(fileName, '?');
+
 // based on udc cache dir analysis by hiram in rm #12813
 if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileName, ".bigbed"))
     return cloneString("bigBed");

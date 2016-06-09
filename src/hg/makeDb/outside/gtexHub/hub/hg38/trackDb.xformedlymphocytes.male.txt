@@ -1,0 +1,729 @@
+    track gtexRnaSignalSRR1071403
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1071403.hg38.bigWig
+    shortLabel xformLym M WH7G
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WH7G-0002-SM-4LVN9)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXWH7G
+    color 255,113,255
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-0002-SM-4LVN9 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1082833
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1082833.hg38.bigWig
+    shortLabel xformLym M WFG8
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WFG8-0001-SM-4LVN8)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXWFG8
+    color 255,113,255
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0001-SM-4LVN8 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1084007
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1084007.hg38.bigWig
+    shortLabel xformLym M XMK1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XMK1-0001-SM-4B64F)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXXMK1
+    color 255,113,255
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-0001-SM-4B64F \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-32984 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1091918
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1091918.hg38.bigWig
+    shortLabel xformLym M X5EB
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-X5EB-0004-SM-46MWA)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXX5EB
+    color 255,113,255
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0004-SM-46MWA \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1093483
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1093483.hg38.bigWig
+    shortLabel xformLym M XBEW
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XBEW-0002-SM-4AT5O)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXXBEW
+    color 255,113,255
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0002-SM-4AT5O \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-32984 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1094601
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1094601.hg38.bigWig
+    shortLabel xformLym M X88G
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-X88G-0004-SM-47JZ6)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXX88G
+    color 255,113,255
+    metadata donor=GTEX-X88G age=30 sex=M hardyScore=-1 sample=GTEX-X88G-0004-SM-47JZ6 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-32684 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/31/2012
+
+    track gtexRnaSignalSRR1325527
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1325527.hg38.bigWig
+    shortLabel xformLym M WOFM
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WOFM-0001-SM-4OOT2)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXWOFM
+    color 255,113,255
+    metadata donor=GTEX-WOFM age=20 sex=M hardyScore=0 sample=GTEX-WOFM-0001-SM-4OOT2 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1331422
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1331422.hg38.bigWig
+    shortLabel xformLym M 11TT1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-11TT1-0004-SM-5S2NT)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEX11TT1
+    color 255,113,255
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-0004-SM-5S2NT \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-45438 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/04/2013
+
+    track gtexRnaSignalSRR1353437
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1353437.hg38.bigWig
+    shortLabel xformLym M ZTX8
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZTX8-0002-SM-4YCEU)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXZTX8
+    color 255,113,255
+    metadata donor=GTEX-ZTX8 age=20 sex=M hardyScore=0 sample=GTEX-ZTX8-0002-SM-4YCEU \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=8.3 batch=BP-39937 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1361456
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1361456.hg38.bigWig
+    shortLabel xformLym M ZT9X
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZT9X-0004-SM-4YCDT)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXZT9X
+    color 255,113,255
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-0004-SM-4YCDT \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-39937 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1364824
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1364824.hg38.bigWig
+    shortLabel xformLym M X3Y1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-X3Y1-0001-SM-4PQYP)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXX3Y1
+    color 255,113,255
+    metadata donor=GTEX-X3Y1 age=40 sex=M hardyScore=0 sample=GTEX-X3Y1-0001-SM-4PQYP \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-32984 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1381865
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1381865.hg38.bigWig
+    shortLabel xformLym M ZVTK
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZVTK-0003-SM-51MRV)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXZVTK
+    color 255,113,255
+    metadata donor=GTEX-ZVTK age=20 sex=M hardyScore=1 sample=GTEX-ZVTK-0003-SM-51MRV \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-39935 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1406200
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1406200.hg38.bigWig
+    shortLabel xformLym M ZUA1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZUA1-0002-SM-4YCF7)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXZUA1
+    color 255,113,255
+    metadata donor=GTEX-ZUA1 age=40 sex=M hardyScore=2 sample=GTEX-ZUA1-0002-SM-4YCF7 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.3 batch=BP-39937 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1415048
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1415048.hg38.bigWig
+    shortLabel xformLym M YB5E
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-YB5E-0001-SM-4VDSV)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXYB5E
+    color 255,113,255
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0001-SM-4VDSV \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-37581 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/04/2013
+
+    track gtexRnaSignalSRR1418968
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1418968.hg38.bigWig
+    shortLabel xformLym M Y9LG
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-Y9LG-0001-SM-4VBRQ)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXY9LG
+    color 255,113,255
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0001-SM-4VBRQ \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-38039 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/22/2013
+
+    track gtexRnaSignalSRR1447938
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1447938.hg38.bigWig
+    shortLabel xformLym M ZQUD
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZQUD-0003-SM-4YCD3)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXZQUD
+    color 255,113,255
+    metadata donor=GTEX-ZQUD age=30 sex=M hardyScore=0 sample=GTEX-ZQUD-0003-SM-4YCD3 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1459300
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1459300.hg38.bigWig
+    shortLabel xformLym M ZTSS
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZTSS-0004-SM-4YCCS)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXZTSS
+    color 255,113,255
+    metadata donor=GTEX-ZTSS age=40 sex=M hardyScore=0 sample=GTEX-ZTSS-0004-SM-4YCCS \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-39935 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1480745
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1480745.hg38.bigWig
+    shortLabel xformLym M 11EQ9
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-11EQ9-0002-SM-5QGQ1)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEX11EQ9
+    color 255,113,255
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0002-SM-5QGQ1 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-40621 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=07/10/2013
+
+    track gtexRnaSignalSRR807849
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR807849.hg38.bigWig
+    shortLabel xformLym M UPK5
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-UPK5-0003-SM-3NMDI)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXUPK5
+    color 255,113,255
+    metadata donor=GTEX-UPK5 age=40 sex=M hardyScore=0 sample=GTEX-UPK5-0003-SM-3NMDI \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31430 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR807925
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR807925.hg38.bigWig
+    shortLabel xformLym M U3ZH
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-U3ZH-0002-SM-3NMDD)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXU3ZH
+    color 255,113,255
+    metadata donor=GTEX-U3ZH age=30 sex=M hardyScore=0 sample=GTEX-U3ZH-0002-SM-3NMDD \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31387 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR814794
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR814794.hg38.bigWig
+    shortLabel xformLym M U3ZM
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-U3ZM-0002-SM-3NMDM)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXU3ZM
+    color 255,113,255
+    metadata donor=GTEX-U3ZM age=40 sex=M hardyScore=0 sample=GTEX-U3ZM-0002-SM-3NMDM \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR815067
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR815067.hg38.bigWig
+    shortLabel xformLym M WFG7
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WFG7-0001-SM-3P61S)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXWFG7
+    color 255,113,255
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-0001-SM-3P61S \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.6 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR815398
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR815398.hg38.bigWig
+    shortLabel xformLym M S4Q7
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-S4Q7-0003-SM-3NM8M)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXS4Q7
+    color 255,113,255
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0003-SM-3NM8M \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-25565 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR816039
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR816039.hg38.bigWig
+    shortLabel xformLym M SNOS
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-SNOS-0003-SM-3NMAO)
+    subGroups age=a40 tissue=xformedlymphocytes donor=GTEXSNOS
+    color 255,113,255
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0003-SM-3NMAO \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR819234
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR819234.hg38.bigWig
+    shortLabel xformLym M TKQ1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-TKQ1-0003-SM-3NMAE)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXTKQ1
+    color 255,113,255
+    metadata donor=GTEX-TKQ1 age=30 sex=M hardyScore=0 sample=GTEX-TKQ1-0003-SM-3NMAE \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31388 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR819394
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR819394.hg38.bigWig
+    shortLabel xformLym M VUSH
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-VUSH-0004-SM-3P61T)
+    subGroups age=a30 tissue=xformedlymphocytes donor=GTEXVUSH
+    color 255,113,255
+    metadata donor=GTEX-VUSH age=30 sex=M hardyScore=-1 sample=GTEX-VUSH-0004-SM-3P61T \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.7 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR819919
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR819919.hg38.bigWig
+    shortLabel xformLym M T5JC
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-T5JC-0001-SM-3NMAK)
+    subGroups age=a20 tissue=xformedlymphocytes donor=GTEXT5JC
+    color 255,113,255
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-0001-SM-3NMAK \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31388 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR1075683
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1075683.hg38.bigWig
+    shortLabel xformLym M X585
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-X585-0002-SM-46MVA)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXX585
+    color 255,113,255
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-0002-SM-46MVA \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1085426
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1085426.hg38.bigWig
+    shortLabel xformLym M XXEK
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XXEK-0004-SM-4BRWO)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXXXEK
+    color 255,113,255
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-0004-SM-4BRWO \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR1086328
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1086328.hg38.bigWig
+    shortLabel xformLym M XGQ4
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XGQ4-0004-SM-4AT5S)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXXGQ4
+    color 255,113,255
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0004-SM-4AT5S \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-34920 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/08/2013
+
+    track gtexRnaSignalSRR1327994
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1327994.hg38.bigWig
+    shortLabel xformLym M WHSB
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WHSB-0002-SM-4M1ZR)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXWHSB
+    color 255,113,255
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-0002-SM-4M1ZR \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.6 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1328869
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1328869.hg38.bigWig
+    shortLabel xformLym M WHWD
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WHWD-0003-SM-4M1ZS)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXWHWD
+    color 255,113,255
+
+    track gtexRnaSignalSRR1356397
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1356397.hg38.bigWig
+    shortLabel xformLym M X4LF
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-X4LF-0002-SM-4QASG)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXX4LF
+    color 255,113,255
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0002-SM-4QASG \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31744 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=10/03/2012
+
+    track gtexRnaSignalSRR1379133
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1379133.hg38.bigWig
+    shortLabel xformLym M ZVZP
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZVZP-0004-SM-51MS8)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZVZP
+    color 255,113,255
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-0004-SM-51MS8 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.6 batch=BP-39937 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1392701
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1392701.hg38.bigWig
+    shortLabel xformLym M ZV7C
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZV7C-0003-SM-4YCF6)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZV7C
+    color 255,113,255
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-0003-SM-4YCF6 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-39935 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1413722
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1413722.hg38.bigWig
+    shortLabel xformLym M WWTW
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WWTW-0002-SM-4MVNH)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXWWTW
+    color 255,113,255
+    metadata donor=GTEX-WWTW age=50 sex=M hardyScore=0 sample=GTEX-WWTW-0002-SM-4MVNH \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.7 batch=BP-32984 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1431647
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1431647.hg38.bigWig
+    shortLabel xformLym M ZG7Y
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZG7Y-0003-SM-4WWEJ)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZG7Y
+    color 255,113,255
+    metadata donor=GTEX-ZG7Y age=50 sex=M hardyScore=0 sample=GTEX-ZG7Y-0003-SM-4WWEJ \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-39146 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/20/2013
+
+    track gtexRnaSignalSRR1440397
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1440397.hg38.bigWig
+    shortLabel xformLym M ZEX8
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZEX8-0004-SM-4WKFQ)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZEX8
+    color 255,113,255
+
+    track gtexRnaSignalSRR1457895
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1457895.hg38.bigWig
+    shortLabel xformLym M ZTTD
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZTTD-0001-SM-4YCD5)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZTTD
+    color 255,113,255
+    metadata donor=GTEX-ZTTD age=50 sex=M hardyScore=3 sample=GTEX-ZTTD-0001-SM-4YCD5 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.9 batch=BP-39937 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR1486391
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1486391.hg38.bigWig
+    shortLabel xformLym M ZT9W
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZT9W-0003-SM-4YCE6)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXZT9W
+    color 255,113,255
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0003-SM-4YCE6 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-39937 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=06/14/2013
+
+    track gtexRnaSignalSRR657869
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR657869.hg38.bigWig
+    shortLabel xformLym M RUSQ
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-RUSQ-0003-SM-2XCEB)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXRUSQ
+    color 255,113,255
+
+    track gtexRnaSignalSRR808968
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR808968.hg38.bigWig
+    shortLabel xformLym M VUSG
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-VUSG-0003-SM-3NMDK)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXVUSG
+    color 255,113,255
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0003-SM-3NMDK \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR809233
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR809233.hg38.bigWig
+    shortLabel xformLym M V1D1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-V1D1-0003-SM-3NMDP)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXV1D1
+    color 255,113,255
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0003-SM-3NMDP \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR809725
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR809725.hg38.bigWig
+    shortLabel xformLym M SIU7
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-SIU7-0001-SM-3NMAW)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXSIU7
+    color 255,113,255
+    metadata donor=GTEX-SIU7 age=50 sex=M hardyScore=0 sample=GTEX-SIU7-0001-SM-3NMAW \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.9 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR811309
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR811309.hg38.bigWig
+    shortLabel xformLym M WHPG
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WHPG-0004-SM-3NMDO)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXWHPG
+    color 255,113,255
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-0004-SM-3NMDO \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR812562
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR812562.hg38.bigWig
+    shortLabel xformLym M UPJH
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-UPJH-0001-SM-3NMDE)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXUPJH
+    color 255,113,255
+    metadata donor=GTEX-UPJH age=50 sex=M hardyScore=2 sample=GTEX-UPJH-0001-SM-3NMDE \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31387 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR814768
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR814768.hg38.bigWig
+    shortLabel xformLym M T6MN
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-T6MN-0002-SM-3NMAH)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXT6MN
+    color 255,113,255
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-0002-SM-3NMAH \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31388 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR815637
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR815637.hg38.bigWig
+    shortLabel xformLym M TKQ2
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-TKQ2-0004-SM-3NMAC)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXTKQ2
+    color 255,113,255
+    metadata donor=GTEX-TKQ2 age=50 sex=M hardyScore=0 sample=GTEX-TKQ2-0004-SM-3NMAC \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31387 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR820914
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR820914.hg38.bigWig
+    shortLabel xformLym M WCDI
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-WCDI-0002-SM-3P61U)
+    subGroups age=a50 tissue=xformedlymphocytes donor=GTEXWCDI
+    color 255,113,255
+    metadata donor=GTEX-WCDI age=50 sex=M hardyScore=-1 sample=GTEX-WCDI-0002-SM-3P61U \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.8 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR1073413
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1073413.hg38.bigWig
+    shortLabel xformLym M XBED
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XBED-0003-SM-47JWP)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXXBED
+    color 255,113,255
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-0003-SM-47JWP \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.7 batch=BP-32984 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/08/2012
+
+    track gtexRnaSignalSRR1087585
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1087585.hg38.bigWig
+    shortLabel xformLym M XLM4
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-XLM4-0004-SM-4AT5I)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXXLM4
+    color 255,113,255
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0004-SM-4AT5I \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-33716 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/29/2012
+
+    track gtexRnaSignalSRR1321307
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1321307.hg38.bigWig
+    shortLabel xformLym M Y8DK
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-Y8DK-0004-SM-4RGM7)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXY8DK
+    color 255,113,255
+    metadata donor=GTEX-Y8DK age=60 sex=M hardyScore=2 sample=GTEX-Y8DK-0004-SM-4RGM7 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.9 batch=BP-36905 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/13/2013
+
+    track gtexRnaSignalSRR1327951
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1327951.hg38.bigWig
+    shortLabel xformLym M ZDTT
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZDTT-0004-SM-4WKG3)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXZDTT
+    color 255,113,255
+
+    track gtexRnaSignalSRR1333330
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1333330.hg38.bigWig
+    shortLabel xformLym M 11OC5
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-11OC5-0004-SM-5S2O6)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEX11OC5
+    color 255,113,255
+
+    track gtexRnaSignalSRR1355451
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1355451.hg38.bigWig
+    shortLabel xformLym M 12BJ1
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-12BJ1-0003-SM-5SI6V)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEX12BJ1
+    color 255,113,255
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-0003-SM-5SI6V \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-45438 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=11/04/2013
+
+    track gtexRnaSignalSRR1358713
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1358713.hg38.bigWig
+    shortLabel xformLym M ZDTS
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-ZDTS-0001-SM-4WAXW)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXZDTS
+    color 255,113,255
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0001-SM-4WAXW \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-38039 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=04/22/2013
+
+    track gtexRnaSignalSRR1377468
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1377468.hg38.bigWig
+    shortLabel xformLym M Y5V6
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-Y5V6-0003-SM-4V6FX)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXY5V6
+    color 255,113,255
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0003-SM-4V6FX \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-36905 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/13/2013
+
+    track gtexRnaSignalSRR1398752
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR1398752.hg38.bigWig
+    shortLabel xformLym M Y8E5
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-Y8E5-0002-SM-57WD9)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXY8E5
+    color 255,113,255
+    metadata donor=GTEX-Y8E5 age=60 sex=M hardyScore=-1 sample=GTEX-Y8E5-0002-SM-57WD9 \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-36905 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=03/13/2013
+
+    track gtexRnaSignalSRR811839
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR811839.hg38.bigWig
+    shortLabel xformLym M VJYA
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-VJYA-0001-SM-3NMDJ)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXVJYA
+    color 255,113,255
+    metadata donor=GTEX-VJYA age=60 sex=M hardyScore=0 sample=GTEX-VJYA-0001-SM-3NMDJ \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=9.2 batch=BP-31430 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/25/2012
+
+    track gtexRnaSignalSRR811988
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR811988.hg38.bigWig
+    shortLabel xformLym M S95S
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-S95S-0002-SM-3NM8K)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXS95S
+    color 255,113,255
+    metadata donor=GTEX-S95S age=60 sex=M hardyScore=0 sample=GTEX-S95S-0002-SM-3NM8K \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-25565 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=05/22/2012
+
+    track gtexRnaSignalSRR818294
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR818294.hg38.bigWig
+    shortLabel xformLym M SSA3
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-SSA3-0002-SM-3P61R)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXSSA3
+    color 255,113,255
+    metadata donor=GTEX-SSA3 age=60 sex=M hardyScore=-1 sample=GTEX-SSA3-0002-SM-3P61R \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31388 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+
+    track gtexRnaSignalSRR819430
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl xformedlymphocytes/gtexRnaSignalSRR819430.hg38.bigWig
+    shortLabel xformLym M TMZS
+    longLabel GTEx RNA signal from male Cells - EBV-transformed lymphocytes (GTEX-TMZS-0001-SM-3P61Q)
+    subGroups age=a60 tissue=xformedlymphocytes donor=GTEXTMZS
+    color 255,113,255
+    metadata donor=GTEX-TMZS age=60 sex=M hardyScore=-1 sample=GTEX-TMZS-0001-SM-3P61Q \
+            tissue=xformedlymphocytes autolysisScore=-1 rnaIntegrity=10 batch=BP-31387 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=09/24/2012
+

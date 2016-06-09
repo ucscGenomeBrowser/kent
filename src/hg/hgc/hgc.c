@@ -5,6 +5,7 @@
  * See README in this or parent directory for licensing information. */
 
 #include "common.h"
+#include <float.h>
 #include "obscure.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -249,6 +250,10 @@
 #include "geneReviewsClick.h"
 #include "bigBed.h"
 #include "bigPsl.h"
+#include "bedTabix.h"
+#include "longRange.h"
+#include "hmmstats.h"
+#include "aveStats.h"
 
 static char *rootDir = "hgcData";
 
@@ -1177,11 +1182,11 @@ char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
 char *filterTopScorers = trackDbSetting(tdb,"filterTopScorers");
 boolean doFilterTopScorers = FALSE;
 char *words[3];
-char query[512];
+char cartVar[512];
 int filterTopScoreCt = 0;
 char *filterTopScoreTable = NULL;
 
-safef(query, sizeof query, "%s.%s", table, "filterTopScorersOn");
+safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersOn");
 if (filterTopScorers != NULL)
     {
     if (chopLine(cloneString(filterTopScorers), words) == 3)
@@ -1196,12 +1201,12 @@ if (bedSize >= 5 && showTopScorers != NULL)
     {
     /* list top-scoring elements in window */
     int maxScorers = sqlUnsigned(showTopScorers);
-    doFilterTopScorers = cartCgiUsualBoolean(cart, query, doFilterTopScorers);
+    doFilterTopScorers = cartCgiUsualBoolean(cart, cartVar, doFilterTopScorers);
     if (doFilterTopScorers && hTableExists(database, filterTopScoreTable))
         {
         /* limit to those in the top N, from table */
-        safef(query, sizeof query, "%s.%s", table, "filterTopScorersCt");
-        filterTopScoreCt = cartCgiUsualInt(cart, query, filterTopScoreCt);
+        safef(cartVar, sizeof cartVar, "%s.%s", table, "filterTopScorersCt");
+        filterTopScoreCt = cartCgiUsualInt(cart, cartVar, filterTopScoreCt);
         }
     else
         /* show all */
@@ -1598,7 +1603,9 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    puts("<tr><td>");
+    printAddWbr(col->comment, 10);
+    puts("</td>"); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -2941,7 +2948,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-pslList = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), NULL, NULL);
+pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
 printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
@@ -3205,7 +3212,7 @@ if (otherOrg == NULL)
     otherOrg = firstWordInLine(cloneString(tdb->shortLabel));
     }
 
-if (isHubTrack(tdb->track))
+if (isHubTrack(tdb->track) || isCustomTrack(tdb->track))
     {
     char *fileName = bbiNameFromSettingOrTable(tdb, conn, tdb->table);
     char *linkFileName = trackDbSetting(tdb, "linkDataUrl");
@@ -3916,6 +3923,85 @@ else
     }
 }
 
+static void doLongTabix(struct trackDb *tdb, char *item)
+/* Handle a click on a long range interaction */
+{
+char *bigDataUrl = hashFindVal(tdb->settingsHash, "bigDataUrl");
+struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+char *chromName = cartString(cart, "c");
+struct bed *list = bedTabixReadBeds(btf, chromName, winStart, winEnd, bedLoad5);
+bedTabixFileClose(&btf);
+unsigned maxWidth;
+struct longRange *longRangeList = parseLongTabix(list, &maxWidth, 0);
+struct longRange *longRange, *ourLongRange = NULL;
+unsigned itemNum = sqlUnsigned(item);
+unsigned count = slCount(longRangeList);
+double *doubleArray;
+
+AllocArray(doubleArray, count);
+
+int ii = 0;
+for(longRange = longRangeList; longRange; longRange = longRange->next, ii++)
+    {
+    if (longRange->id == itemNum)
+        {
+        ourLongRange = longRange;
+        }
+    doubleArray[ii] = longRange->score;
+    }
+
+if (ourLongRange == NULL)
+    errAbort("cannot find long range item with id %d\n", itemNum);
+
+struct aveStats *as = aveStatsCalc(doubleArray, count);
+
+printf("Item you clicked on:<BR>\n");
+printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
+printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
+unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
+int s = ourLongRange->s - padding; 
+int e = ourLongRange->e + padding; 
+if (s < 0 ) 
+    s = 0;
+int chromSize = hChromSize(database, seqName);
+if (e > chromSize)
+    e = chromSize;
+
+char num1Buf[1024],num2Buf[1024];
+sprintLongWithCommas(num1Buf, ourLongRange->s);
+sprintLongWithCommas(num2Buf, ourLongRange->e);
+if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
+    {
+    printf("<B>Interchromosomal: </B> (Position on chrom you clicked on)</B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B>%s:%s-%s</B></A><BR>\n",  
+        ourLongRange->sChrom, num1Buf,num1Buf,ourLongRange->sChrom, num1Buf,num1Buf);
+    printf("<B>Position on other chromosome:</B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B>%s:%s-%s<BR></A><BR>\n",  
+        ourLongRange->eChrom, num2Buf, num2Buf, ourLongRange->eChrom, num2Buf, num2Buf);
+    }
+else
+    {
+    char num3Buf[1024];
+    sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->s);
+    printf("<B>Intrachromosomal:</B><A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B> %s:%s-%s (%sbp) </B></A><BR>\n",  
+        ourLongRange->sChrom, num1Buf, num2Buf,  ourLongRange->sChrom, num1Buf, num2Buf, num3Buf);
+    }
+
+printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
+
+printf("<TABLE BORDER=1>\n");
+printf("<TR><TD><B>Q1</B></TD><TD>%f</TD></TR>\n", as->q1);
+printf("<TR><TD><B>median</B></TD><TD>%f</TD></TR>\n", as->median);
+printf("<TR><TD><B>Q3</B></TD><TD>%f</TD></TR>\n", as->q3);
+printf("<TR><TD><B>average</B></TD><TD>%f</TD></TR>\n", as->average);
+printf("<TR><TD><B>min</B></TD><TD>%f</TD></TR>\n", as->minVal);
+printf("<TR><TD><B>max</B></TD><TD>%f</TD></TR>\n", as->maxVal);
+printf("<TR><TD><B>count</B></TD><TD>%d</TD></TR>\n", as->count);
+printf("<TR><TD><B>total</B></TD><TD>%f</TD></TR>\n", as->total);
+printf("<TR><TD><B>standard deviation</B></TD><TD>%f</TD></TR>\n", as->stdDev);
+printf("</TABLE>\n");
+}
+
 void genericClickHandlerPlus(
         struct trackDb *tdb, char *item, char *itemForUrl, char *plus)
 /* Put up generic track info, with additional text appended after item. */
@@ -4116,6 +4202,8 @@ else if (wordCount > 0)
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
 #endif // USE_BAM
+    else if ( startsWith("longTabix", type))
+	doLongTabix(tdb, item);
     }
 if (imagePath)
     {
@@ -5764,12 +5852,8 @@ char splitTable[64];
 char query[256];
 if (!hFindSplitTable(database, seqName, table, splitTable, &hasBin))
     errAbort("can't find table %s or %s_%s", table, seqName, table);
-if (startsWith("ucscRetro", table))
-    {
-    sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
-    }
-else
-    sqlSafef(query, sizeof(query), "select * from %s where qName like '%s%%'", splitTable, acc);
+
+sqlSafef(query, sizeof(query), "select * from %s where qName = '%s'", splitTable, acc);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -7057,7 +7141,13 @@ unsigned int cdsStart = 0, cdsEnd = 0;
 writeFramesetType();
 puts("<HTML>");
 aliTable = cartString(cart, "aliTable");
-tdb = hashFindVal(trackHash, aliTable);
+if (isCustomTrack(aliTable))
+    {
+    struct customTrack *ct = lookupCt(aliTable);
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(trackHash, aliTable);
 printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
 
 /* Get some environment vars. */
@@ -7082,7 +7172,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
-psl = pslFromBigPsl(seqName, bb,  hChromSize(database, seqName), &seq, &cdsString);
+psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 
@@ -14783,7 +14873,7 @@ if (row != NULL)
 	stsInfoRatFree(&infoRow);
 
 	/* Find sts in clone sequece alignment info */
-        safef(query1, sizeof(query1), "qName = '%s'", stsClone);
+        sqlSafefFrag(query1, sizeof(query1), "qName = '%s'", stsClone);
 	sr2 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query1,
 			  &hasBin);
 	i = 0;
@@ -20721,6 +20811,8 @@ struct customTrack *ctList = getCtList();
 struct customTrack *ct;
 struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
+int end = cartInt(cart, "t");
+char *item = cartString(cart, "i");
 char *type;
 fileName = nextWord(&fileItem);
 for (ct = ctList; ct != NULL; ct = ct->next)
@@ -20734,10 +20826,18 @@ itemName = skipLeadingSpaces(fileItem);
 printf("<H2>%s</H2>\n", ct->tdb->longLabel);
 if (sameWord(type, "array"))
     doExpRatio(ct->tdb, fileItem, ct);
+else if ( startsWith( "longTabix", type))
+    doLongTabix(ct->tdb, item);
 else if (sameWord(type, "encodePeak"))
     doEncodePeak(ct->tdb, ct, fileName);
 else if (sameWord(type, "bigWig"))
     bigWigCustomClick(ct->tdb);
+else if (sameWord(type, "bigChain"))
+    genericChainClick(NULL, ct->tdb, item, start, "seq");
+else if (sameWord(type, "bigPsl"))
+    genericBigPslClick(NULL, ct->tdb, item, start, end);
+else if (sameWord(type, "bigMaf"))
+    genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
 #ifdef USE_BAM
@@ -24698,6 +24798,31 @@ va_end(args);
 return res;
 }
 
+void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
+
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -24780,7 +24905,7 @@ if (isCustomTrack(track))
     }
 
 if ((!isCustomTrack(track) && dbIsFound)
-||  ((ct!= NULL) && (ct->dbTrackType != NULL) && sameString(ct->dbTrackType, "maf")))
+||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
     if (sameString("htcBigPslAli", track) )
@@ -24806,7 +24931,7 @@ if ((!isCustomTrack(track) && dbIsFound)
         typeLine = cloneString(tdb->type);
         wordCount = chopLine(typeLine, words);
         if (wordCount < 1)
-         errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
+            errAbort("trackDb entry for parentWigMaf track %s has corrupt type line.",
                     parentWigMaf);
         safef(wigType, 128, "wig ");
         for (i = 1; i < wordCount; ++i)

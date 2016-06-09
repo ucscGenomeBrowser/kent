@@ -68,6 +68,8 @@
 #include "customFactory.h"
 #include "genbank.h"
 #include "bigWarn.h"
+#include "wigCommon.h"
+#include "knetUdc.h"
 
 /* Other than submit and Submit all these vars should start with hgt.
  * to avoid weeding things out of other program's namespaces.
@@ -1185,6 +1187,20 @@ tg->tdb = tdb;
 return tg;
 }
 
+Color maybeDarkerLabels(struct track *track, struct hvGfx *hvg, Color color)
+/* For tracks having light track display but needing a darker label */
+{
+if (trackDbSetting(track->tdb, "darkerLabels"))
+    {
+    struct hsvColor hsv = mgRgbToHsv(mgColorIxToRgb(NULL, color));
+    // check if really pale
+    if (hsv.s < 500 ||(hsv.h > 40.0 && hsv.h < 150.0))
+        return somewhatDarkerColor(hvg, color);
+    return slightlyDarkerColor(hvg, color);
+    }
+return color;
+}
+
 static int doLeftLabels(struct track *track, struct hvGfx *hvg, MgFont *font,
                                 int y)
 /* Draw left labels.  Return y coord. */
@@ -1206,6 +1222,7 @@ struct slList *item;
 enum trackVisibility vis = track->limitedVis;
 Color labelColor = (track->labelColor ?
                         track->labelColor : track->ixColor);
+labelColor = maybeDarkerLabels(track, hvg, labelColor);
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 if (vis == tvHide)
@@ -1296,6 +1313,8 @@ switch (vis)
 
             if (track->itemLabelColor != NULL)
                 labelColor = track->itemLabelColor(track, item, hvg);
+            else
+                labelColor = maybeDarkerLabels(track, hvg, labelColor);
 
             /* Do some fancy stuff for sample tracks.
              * Draw y-value limits for 'sample' tracks. */
@@ -1489,6 +1508,7 @@ if (track->limitedVis != tvHide)
                                                 tdbComposite->colorG, tdbComposite->colorB);
                 }
             }
+        labelColor = maybeDarkerLabels(track, hvg, labelColor);
         hvGfxTextCentered(hvg, insideX, y+1, fullInsideWidth, insideHeight,
                           labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
@@ -1646,6 +1666,7 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
+labelColor = maybeDarkerLabels(track, hvg, labelColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
 		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
@@ -4896,6 +4917,9 @@ if (withLeftLabels)
             y += REMOTE_TRACK_HEIGHT;
         else
             {
+            boolean doWiggle = cartOrTdbBoolean(cart, track->tdb, "doWiggle" , FALSE);
+            if (doWiggle)
+                track->drawLeftLabels = wigLeftLabels;
         #ifdef IMAGEv2_NO_LEFTLABEL_ON_FULL
             if (theImgBox && track->limitedVis != tvDense)
                 y += sliceHeight;
@@ -5965,6 +5989,13 @@ else if (sameString(type, "makeItems"))
     makeItemsMethods(tg);
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
+    }
+else if (sameString(type, "bedTabix")  || sameString(type, "longTabix"))
+    {
+    knetUdcInstall();
+    tg = trackFromTrackDb(tdb);
+    tg->customPt = ct;
+    tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
     }
 else if (sameString(type, "bedDetail"))
     {
@@ -7275,14 +7306,21 @@ for (track = trackList; track != NULL; track = track->next)
     if (tdbIsSuperTrackChild(track->tdb))
         limitSuperTrackVis(track);
 
-    /* remove cart priority variables if they are set
-       to the default values in the trackDb */
-    if (!hTrackOnChrom(track->tdb, chromName))
+    /* hide tracks not on any windows chromNames */
+    boolean hideIt = TRUE;
+    struct window *w;
+    for (w = windows; w; w=w->next)
+        {
+        if (hTrackOnChrom(track->tdb, w->chromName))
+            hideIt = FALSE;
+        }
+    if (hideIt)
         {
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
-	}
+        }
     }
+
 
 if (sameString(cfgOptionDefault("trackLog", "off"), "on"))
     logTrackVisibilities(cartSessionId(cart), trackList);
@@ -9367,7 +9405,7 @@ hPrintf("Mousetrap.bind('v d', gotoGetDnaPage); \n");
 
 // focus
 hPrintf("Mousetrap.bind('/', function() { $('input[name=\"hgt.positionInput\"]').focus(); return false; }, 'keydown'); \n");
-hPrintf("Mousetrap.bind('?', function() { $( \"#hotkeyHelp\" ).dialog({width:'600'});}); \n");
+hPrintf("Mousetrap.bind('?', showHotkeyHelp);\n");
 
 // menu
 if (gotExtTools)
@@ -9379,6 +9417,15 @@ hPrintf("Mousetrap.bind('e v', function() { window.location.href='%s?%s=%s&virtM
 hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtModeType=default'; });  \n",
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
+// links to a few tools
+hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+
+// also add an entry to the help menu that shows the keyboard shortcut help dialog
+hPrintf("$(document).ready(addKeyboardHelpEntries);");
 
 hPrintf("</script>\n");
 

@@ -25,6 +25,7 @@ SCRIPT_FILES = \
 	doEnsGeneUpdate.pl \
 	doGenscan.pl \
 	doHgNearBlastp.pl \
+	doIdKeys.pl \
 	ensemblInfo.pl \
 	synBlastp.csh \
 	doRecipBest.pl \

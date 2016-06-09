@@ -1,0 +1,864 @@
+    track gtexRnaSignalSRR1076393
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1076393.hg19.bigWig
+    shortLabel pituitary M T5JC
+    longLabel GTEx RNA signal from male Pituitary (GTEX-T5JC-2526-SM-4DM6G)
+    subGroups age=a20 tissue=pituitary donor=GTEXT5JC
+    color 167,252,167
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-2526-SM-4DM6G \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.4 batch=BP-24833 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR1082685
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1082685.hg19.bigWig
+    shortLabel pituitary M R55E
+    longLabel GTEx RNA signal from male Pituitary (GTEX-R55E-2726-SM-48FCX)
+    subGroups age=a20 tissue=pituitary donor=GTEXR55E
+    color 167,252,167
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-2726-SM-48FCX \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.8 batch=BP-21446 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/13/2012
+
+    track gtexRnaSignalSRR1309119
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1309119.hg19.bigWig
+    shortLabel pituitary M 11DXW
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11DXW-1226-SM-5H133)
+    subGroups age=a40 tissue=pituitary donor=GTEX11DXW
+    color 167,252,167
+    metadata donor=GTEX-11DXW age=40 sex=M hardyScore=2 sample=GTEX-11DXW-1226-SM-5H133 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7 batch=BP-43730 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1347236
+    parent gtexRnaSignalMaleYoung on
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1347236.hg19.bigWig
+    shortLabel pituitary M ZAB4
+    longLabel GTEx RNA signal from male Pituitary (GTEX-ZAB4-3126-SM-57WCJ)
+    subGroups age=a40 tissue=pituitary donor=GTEXZAB4
+    color 167,252,167
+    metadata donor=GTEX-ZAB4 age=40 sex=M hardyScore=4 sample=GTEX-ZAB4-3126-SM-57WCJ \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.2 batch=BP-42024 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2013
+
+    track gtexRnaSignalSRR1351368
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1351368.hg19.bigWig
+    shortLabel pituitary M 11O72
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11O72-3026-SM-5986R)
+    subGroups age=a40 tissue=pituitary donor=GTEX11O72
+    color 167,252,167
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-3026-SM-5986R \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.2 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1439896
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1439896.hg19.bigWig
+    shortLabel pituitary M 11ZUS
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11ZUS-3026-SM-5EGI4)
+    subGroups age=a30 tissue=pituitary donor=GTEX11ZUS
+    color 167,252,167
+    metadata donor=GTEX-11ZUS age=30 sex=M hardyScore=1 sample=GTEX-11ZUS-3026-SM-5EGI4 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=8.2 batch=BP-45028 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1471524
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1471524.hg19.bigWig
+    shortLabel pituitary M 12584
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12584-3126-SM-5EGKR)
+    subGroups age=a40 tissue=pituitary donor=GTEX12584
+    color 167,252,167
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-3126-SM-5EGKR \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR665442
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR665442.hg19.bigWig
+    shortLabel pituitary M P44H
+    longLabel GTEx RNA signal from male Pituitary (GTEX-P44H-2626-SM-2XCET)
+    subGroups age=a40 tissue=pituitary donor=GTEXP44H
+    color 167,252,167
+
+    track gtexRnaSignalSRR808994
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR808994.hg19.bigWig
+    shortLabel pituitary M WHSE
+    longLabel GTEx RNA signal from male Pituitary (GTEX-WHSE-3126-SM-3P5ZI)
+    subGroups age=a20 tissue=pituitary donor=GTEXWHSE
+    color 167,252,167
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-3126-SM-3P5ZI \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.4 batch=BP-27757 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/23/2012
+
+    track gtexRnaSignalSRR812342
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR812342.hg19.bigWig
+    shortLabel pituitary M WZTO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-WZTO-3026-SM-3NMA2)
+    subGroups age=a40 tissue=pituitary donor=GTEXWZTO
+    color 167,252,167
+    metadata donor=GTEX-WZTO age=40 sex=M hardyScore=1 sample=GTEX-WZTO-3026-SM-3NMA2 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=8.1 batch=BP-29931 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2012
+
+    track gtexRnaSignalSRR1089785
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1089785.hg19.bigWig
+    shortLabel pituitary M OXRN
+    longLabel GTEx RNA signal from male Pituitary (GTEX-OXRN-2626-SM-48TBX)
+    subGroups age=a50 tissue=pituitary donor=GTEXOXRN
+    color 167,252,167
+    metadata donor=GTEX-OXRN age=50 sex=M hardyScore=0 sample=GTEX-OXRN-2626-SM-48TBX \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=5.9 batch=BP-18408 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/22/2011
+
+    track gtexRnaSignalSRR1096339
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1096339.hg19.bigWig
+    shortLabel pituitary M T6MN
+    longLabel GTEx RNA signal from male Pituitary (GTEX-T6MN-2726-SM-4DM77)
+    subGroups age=a50 tissue=pituitary donor=GTEXT6MN
+    color 167,252,167
+    metadata donor=GTEX-T6MN age=50 sex=M hardyScore=2 sample=GTEX-T6MN-2726-SM-4DM77 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.6 batch=BP-24837 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalSRR1310817
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1310817.hg19.bigWig
+    shortLabel pituitary M 1192X
+    longLabel GTEx RNA signal from male Pituitary (GTEX-1192X-3026-SM-5N9BM)
+    subGroups age=a50 tissue=pituitary donor=GTEX1192X
+    color 167,252,167
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-3026-SM-5N9BM \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1317963
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1317963.hg19.bigWig
+    shortLabel pituitary M 11NUK
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11NUK-3126-SM-5986M)
+    subGroups age=a50 tissue=pituitary donor=GTEX11NUK
+    color 167,252,167
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-3126-SM-5986M \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.4 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalSRR1319946
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1319946.hg19.bigWig
+    shortLabel pituitary M X585
+    longLabel GTEx RNA signal from male Pituitary (GTEX-X585-3126-SM-4QASH)
+    subGroups age=a50 tissue=pituitary donor=GTEXX585
+    color 167,252,167
+    metadata donor=GTEX-X585 age=50 sex=M hardyScore=4 sample=GTEX-X585-3126-SM-4QASH \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=5.8 batch=BP-31492 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2012
+
+    track gtexRnaSignalSRR1326408
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1326408.hg19.bigWig
+    shortLabel pituitary M 13OVL
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13OVL-3226-SM-5L3H8)
+    subGroups age=a50 tissue=pituitary donor=GTEX13OVL
+    color 167,252,167
+    metadata donor=GTEX-13OVL age=50 sex=M hardyScore=2 sample=GTEX-13OVL-3226-SM-5L3H8 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.1 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1331962
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1331962.hg19.bigWig
+    shortLabel pituitary M Y111
+    longLabel GTEx RNA signal from male Pituitary (GTEX-Y111-2926-SM-4TT25)
+    subGroups age=a50 tissue=pituitary donor=GTEXY111
+    color 167,252,167
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-2926-SM-4TT25 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=8.1 batch=BP-35709 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalSRR1336529
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1336529.hg19.bigWig
+    shortLabel pituitary M 11WQK
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11WQK-3226-SM-5EGI3)
+    subGroups age=a50 tissue=pituitary donor=GTEX11WQK
+    color 167,252,167
+    metadata donor=GTEX-11WQK age=50 sex=M hardyScore=2 sample=GTEX-11WQK-3226-SM-5EGI3 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.9 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1348074
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1348074.hg19.bigWig
+    shortLabel pituitary M 145MH
+    longLabel GTEx RNA signal from male Pituitary (GTEX-145MH-3126-SM-5S2QT)
+    subGroups age=a50 tissue=pituitary donor=GTEX145MH
+    color 167,252,167
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-3126-SM-5S2QT \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6 batch=BP-48818 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1350792
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1350792.hg19.bigWig
+    shortLabel pituitary M 13112
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13112-3126-SM-5IFGP)
+    subGroups age=a50 tissue=pituitary donor=GTEX13112
+    color 167,252,167
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-3126-SM-5IFGP \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalSRR1384713
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1384713.hg19.bigWig
+    shortLabel pituitary M 14BMV
+    longLabel GTEx RNA signal from male Pituitary (GTEX-14BMV-3126-SM-5S2UV)
+    subGroups age=a50 tissue=pituitary donor=GTEX14BMV
+    color 167,252,167
+    metadata donor=GTEX-14BMV age=50 sex=M hardyScore=2 sample=GTEX-14BMV-3126-SM-5S2UV \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.4 batch=BP-48651 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1403565
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1403565.hg19.bigWig
+    shortLabel pituitary M 14BIL
+    longLabel GTEx RNA signal from male Pituitary (GTEX-14BIL-2926-SM-5SIAF)
+    subGroups age=a50 tissue=pituitary donor=GTEX14BIL
+    color 167,252,167
+    metadata donor=GTEX-14BIL age=50 sex=M hardyScore=2 sample=GTEX-14BIL-2926-SM-5SIAF \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1410847
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1410847.hg19.bigWig
+    shortLabel pituitary M 13OW6
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13OW6-3126-SM-5L3IA)
+    subGroups age=a50 tissue=pituitary donor=GTEX13OW6
+    color 167,252,167
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-3126-SM-5L3IA \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.7 batch=BP-47524 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1441287
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1441287.hg19.bigWig
+    shortLabel pituitary M 13VXU
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13VXU-3126-SM-5SIA4)
+    subGroups age=a50 tissue=pituitary donor=GTEX13VXU
+    color 167,252,167
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-3126-SM-5SIA4 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.8 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1441785
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1441785.hg19.bigWig
+    shortLabel pituitary M 13OW7
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13OW7-3126-SM-5L3HB)
+    subGroups age=a50 tissue=pituitary donor=GTEX13OW7
+    color 167,252,167
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-3126-SM-5L3HB \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1444179
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1444179.hg19.bigWig
+    shortLabel pituitary M 145MF
+    longLabel GTEx RNA signal from male Pituitary (GTEX-145MF-2626-SM-5O98S)
+    subGroups age=a50 tissue=pituitary donor=GTEX145MF
+    color 167,252,167
+    metadata donor=GTEX-145MF age=50 sex=M hardyScore=2 sample=GTEX-145MF-2626-SM-5O98S \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.3 batch=BP-47675 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1445046
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1445046.hg19.bigWig
+    shortLabel pituitary M 13FHP
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13FHP-3126-SM-5KLYX)
+    subGroups age=a50 tissue=pituitary donor=GTEX13FHP
+    color 167,252,167
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-3126-SM-5KLYX \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.8 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1477476
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1477476.hg19.bigWig
+    shortLabel pituitary M ZYFD
+    longLabel GTEx RNA signal from male Pituitary (GTEX-ZYFD-3126-SM-5E44O)
+    subGroups age=a50 tissue=pituitary donor=GTEXZYFD
+    color 167,252,167
+
+    track gtexRnaSignalSRR1477499
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1477499.hg19.bigWig
+    shortLabel pituitary M 12WSH
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12WSH-2926-SM-5GCMR)
+    subGroups age=a50 tissue=pituitary donor=GTEX12WSH
+    color 167,252,167
+
+    track gtexRnaSignalSRR1485117
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1485117.hg19.bigWig
+    shortLabel pituitary M 13X6J
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13X6J-3126-SM-5Q5EJ)
+    subGroups age=a50 tissue=pituitary donor=GTEX13X6J
+    color 167,252,167
+
+    track gtexRnaSignalSRR1486239
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1486239.hg19.bigWig
+    shortLabel pituitary M 12WSC
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12WSC-3126-SM-5GCNB)
+    subGroups age=a50 tissue=pituitary donor=GTEX12WSC
+    color 167,252,167
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-3126-SM-5GCNB \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.6 batch=BP-44157 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1499722
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1499722.hg19.bigWig
+    shortLabel pituitary M 12ZZW
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12ZZW-3026-SM-5LZW7)
+    subGroups age=a50 tissue=pituitary donor=GTEX12ZZW
+    color 167,252,167
+    metadata donor=GTEX-12ZZW age=50 sex=M hardyScore=4 sample=GTEX-12ZZW-3026-SM-5LZW7 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.3 batch=BP-45139 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalSRR1500194
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1500194.hg19.bigWig
+    shortLabel pituitary M 117YW
+    longLabel GTEx RNA signal from male Pituitary (GTEX-117YW-2826-SM-5H116)
+    subGroups age=a50 tissue=pituitary donor=GTEX117YW
+    color 167,252,167
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-2826-SM-5H116 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalSRR808452
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR808452.hg19.bigWig
+    shortLabel pituitary M WL46
+    longLabel GTEx RNA signal from male Pituitary (GTEX-WL46-3026-SM-3LK7Z)
+    subGroups age=a50 tissue=pituitary donor=GTEXWL46
+    color 167,252,167
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-3026-SM-3LK7Z \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.9 batch=BP-30217 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2012
+
+    track gtexRnaSignalSRR813959
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR813959.hg19.bigWig
+    shortLabel pituitary M X261
+    longLabel GTEx RNA signal from male Pituitary (GTEX-X261-3226-SM-3NMC3)
+    subGroups age=a50 tissue=pituitary donor=GTEXX261
+    color 167,252,167
+    metadata donor=GTEX-X261 age=50 sex=M hardyScore=4 sample=GTEX-X261-3226-SM-3NMC3 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.6 batch=BP-30273 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalSRR816677
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR816677.hg19.bigWig
+    shortLabel pituitary M WVLH
+    longLabel GTEx RNA signal from male Pituitary (GTEX-WVLH-3126-SM-3MJGA)
+    subGroups age=a50 tissue=pituitary donor=GTEXWVLH
+    color 167,252,167
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-3126-SM-3MJGA \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.6 batch=BP-28815 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalSRR1082664
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1082664.hg19.bigWig
+    shortLabel pituitary M XLM4
+    longLabel GTEx RNA signal from male Pituitary (GTEX-XLM4-3126-SM-4AT6M)
+    subGroups age=a60 tissue=pituitary donor=GTEXXLM4
+    color 167,252,167
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-3126-SM-4AT6M \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.4 batch=BP-32521 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/24/2012
+
+    track gtexRnaSignalSRR1311599
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1311599.hg19.bigWig
+    shortLabel pituitary M 11GS4
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11GS4-3026-SM-5A5LG)
+    subGroups age=a60 tissue=pituitary donor=GTEX11GS4
+    color 167,252,167
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-3026-SM-5A5LG \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.1 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1311709
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1311709.hg19.bigWig
+    shortLabel pituitary M 11NV4
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11NV4-2326-SM-5BC4X)
+    subGroups age=a60 tissue=pituitary donor=GTEX11NV4
+    color 167,252,167
+    metadata donor=GTEX-11NV4 age=60 sex=M hardyScore=2 sample=GTEX-11NV4-2326-SM-5BC4X \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.8 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalSRR1311958
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1311958.hg19.bigWig
+    shortLabel pituitary M 11OF3
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11OF3-3026-SM-5GU52)
+    subGroups age=a60 tissue=pituitary donor=GTEX11OF3
+    color 167,252,167
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-3026-SM-5GU52 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.1 batch=BP-44312 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalSRR1318026
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1318026.hg19.bigWig
+    shortLabel pituitary M 147GR
+    longLabel GTEx RNA signal from male Pituitary (GTEX-147GR-2926-SM-5RQIN)
+    subGroups age=a60 tissue=pituitary donor=GTEX147GR
+    color 167,252,167
+    metadata donor=GTEX-147GR age=60 sex=M hardyScore=2 sample=GTEX-147GR-2926-SM-5RQIN \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.3 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalSRR1321650
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1321650.hg19.bigWig
+    shortLabel pituitary M 148VJ
+    longLabel GTEx RNA signal from male Pituitary (GTEX-148VJ-2926-SM-5Q5DA)
+    subGroups age=a70 tissue=pituitary donor=GTEX148VJ
+    color 167,252,167
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-2926-SM-5Q5DA \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1324184
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1324184.hg19.bigWig
+    shortLabel pituitary M 111FC
+    longLabel GTEx RNA signal from male Pituitary (GTEX-111FC-3026-SM-5GZYJ)
+    subGroups age=a60 tissue=pituitary donor=GTEX111FC
+    color 167,252,167
+
+    track gtexRnaSignalSRR1325161
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1325161.hg19.bigWig
+    shortLabel pituitary M 13SLW
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13SLW-2926-SM-5Q5BQ)
+    subGroups age=a70 tissue=pituitary donor=GTEX13SLW
+    color 167,252,167
+    metadata donor=GTEX-13SLW age=70 sex=M hardyScore=2 sample=GTEX-13SLW-2926-SM-5Q5BQ \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.3 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1325944
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1325944.hg19.bigWig
+    shortLabel pituitary M 11GSO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11GSO-2826-SM-5HL6Q)
+    subGroups age=a60 tissue=pituitary donor=GTEX11GSO
+    color 167,252,167
+
+    track gtexRnaSignalSRR1326797
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1326797.hg19.bigWig
+    shortLabel pituitary M 1477Z
+    longLabel GTEx RNA signal from male Pituitary (GTEX-1477Z-2826-SM-5SI9J)
+    subGroups age=a60 tissue=pituitary donor=GTEX1477Z
+    color 167,252,167
+    metadata donor=GTEX-1477Z age=60 sex=M hardyScore=4 sample=GTEX-1477Z-2826-SM-5SI9J \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=5.7 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1328143
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1328143.hg19.bigWig
+    shortLabel pituitary M 13NYS
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13NYS-2926-SM-5IFGH)
+    subGroups age=a60 tissue=pituitary donor=GTEX13NYS
+    color 167,252,167
+    metadata donor=GTEX-13NYS age=60 sex=M hardyScore=4 sample=GTEX-13NYS-2926-SM-5IFGH \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6 batch=BP-46680 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalSRR1332024
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1332024.hg19.bigWig
+    shortLabel pituitary M 11TUW
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11TUW-3026-SM-5EGKM)
+    subGroups age=a60 tissue=pituitary donor=GTEX11TUW
+    color 167,252,167
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-3026-SM-5EGKM \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.1 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalSRR1332904
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1332904.hg19.bigWig
+    shortLabel pituitary M ZDXO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-ZDXO-1426-SM-4WKHG)
+    subGroups age=a60 tissue=pituitary donor=GTEXZDXO
+    color 167,252,167
+
+    track gtexRnaSignalSRR1336029
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1336029.hg19.bigWig
+    shortLabel pituitary M 117XS
+    longLabel GTEx RNA signal from male Pituitary (GTEX-117XS-2926-SM-5N9BX)
+    subGroups age=a60 tissue=pituitary donor=GTEX117XS
+    color 167,252,167
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-2926-SM-5N9BX \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1347278
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1347278.hg19.bigWig
+    shortLabel pituitary M 145MO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-145MO-3126-SM-5S2RT)
+    subGroups age=a60 tissue=pituitary donor=GTEX145MO
+    color 167,252,167
+    metadata donor=GTEX-145MO age=60 sex=M hardyScore=3 sample=GTEX-145MO-3126-SM-5S2RT \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=5.9 batch=BP-48818 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalSRR1352169
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1352169.hg19.bigWig
+    shortLabel pituitary M 13OVH
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13OVH-3126-SM-5MR4Z)
+    subGroups age=a70 tissue=pituitary donor=GTEX13OVH
+    color 167,252,167
+    metadata donor=GTEX-13OVH age=70 sex=M hardyScore=2 sample=GTEX-13OVH-3126-SM-5MR4Z \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.4 batch=BP-47656 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalSRR1353097
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1353097.hg19.bigWig
+    shortLabel pituitary M 12ZZY
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12ZZY-3126-SM-5DUX3)
+    subGroups age=a60 tissue=pituitary donor=GTEX12ZZY
+    color 167,252,167
+    metadata donor=GTEX-12ZZY age=60 sex=M hardyScore=2 sample=GTEX-12ZZY-3126-SM-5DUX3 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.1 batch=BP-44437 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1356531
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1356531.hg19.bigWig
+    shortLabel pituitary M 1192W
+    longLabel GTEx RNA signal from male Pituitary (GTEX-1192W-3026-SM-5GZZV)
+    subGroups age=a60 tissue=pituitary donor=GTEX1192W
+    color 167,252,167
+    metadata donor=GTEX-1192W age=60 sex=M hardyScore=2 sample=GTEX-1192W-3026-SM-5GZZV \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=5.9 batch=BP-43783 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1362287
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1362287.hg19.bigWig
+    shortLabel pituitary M 11DYG
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11DYG-3126-SM-5A5L6)
+    subGroups age=a60 tissue=pituitary donor=GTEX11DYG
+    color 167,252,167
+    metadata donor=GTEX-11DYG age=60 sex=M hardyScore=2 sample=GTEX-11DYG-3126-SM-5A5L6 \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1366707
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1366707.hg19.bigWig
+    shortLabel pituitary M 12696
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12696-3126-SM-5FQUX)
+    subGroups age=a60 tissue=pituitary donor=GTEX12696
+    color 167,252,167
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-3126-SM-5FQUX \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.7 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalSRR1376557
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1376557.hg19.bigWig
+    shortLabel pituitary M 11EI6
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11EI6-3126-SM-5H111)
+    subGroups age=a60 tissue=pituitary donor=GTEX11EI6
+    color 167,252,167
+
+    track gtexRnaSignalSRR1398057
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1398057.hg19.bigWig
+    shortLabel pituitary M 13JVG
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13JVG-3026-SM-5IJEV)
+    subGroups age=a60 tissue=pituitary donor=GTEX13JVG
+    color 167,252,167
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-3026-SM-5IJEV \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR1405374
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1405374.hg19.bigWig
+    shortLabel pituitary M 139TT
+    longLabel GTEx RNA signal from male Pituitary (GTEX-139TT-2726-SM-5IJFM)
+    subGroups age=a60 tissue=pituitary donor=GTEX139TT
+    color 167,252,167
+    metadata donor=GTEX-139TT age=60 sex=M hardyScore=2 sample=GTEX-139TT-2726-SM-5IJFM \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalSRR1414771
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1414771.hg19.bigWig
+    shortLabel pituitary M 14A5H
+    longLabel GTEx RNA signal from male Pituitary (GTEX-14A5H-3026-SM-5RQHV)
+    subGroups age=a60 tissue=pituitary donor=GTEX14A5H
+    color 167,252,167
+    metadata donor=GTEX-14A5H age=60 sex=M hardyScore=2 sample=GTEX-14A5H-3026-SM-5RQHV \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.8 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1414876
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1414876.hg19.bigWig
+    shortLabel pituitary M 12WSM
+    longLabel GTEx RNA signal from male Pituitary (GTEX-12WSM-2226-SM-5DUVS)
+    subGroups age=a60 tissue=pituitary donor=GTEX12WSM
+    color 167,252,167
+    metadata donor=GTEX-12WSM age=60 sex=M hardyScore=2 sample=GTEX-12WSM-2226-SM-5DUVS \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.8 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalSRR1429450
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1429450.hg19.bigWig
+    shortLabel pituitary M 13IVO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13IVO-3026-SM-5J2M2)
+    subGroups age=a70 tissue=pituitary donor=GTEX13IVO
+    color 167,252,167
+
+    track gtexRnaSignalSRR1442087
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1442087.hg19.bigWig
+    shortLabel pituitary M 13OW5
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13OW5-2926-SM-5IJF2)
+    subGroups age=a60 tissue=pituitary donor=GTEX13OW5
+    color 167,252,167
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-2926-SM-5IJF2 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.1 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1442332
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1442332.hg19.bigWig
+    shortLabel pituitary M 13RTJ
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13RTJ-2926-SM-5Q5DE)
+    subGroups age=a60 tissue=pituitary donor=GTEX13RTJ
+    color 167,252,167
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-2926-SM-5Q5DE \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR1445132
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1445132.hg19.bigWig
+    shortLabel pituitary M 13NZA
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13NZA-3126-SM-5IJFU)
+    subGroups age=a60 tissue=pituitary donor=GTEX13NZA
+    color 167,252,167
+
+    track gtexRnaSignalSRR1455722
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1455722.hg19.bigWig
+    shortLabel pituitary M 11DXY
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11DXY-3026-SM-5N9CB)
+    subGroups age=a60 tissue=pituitary donor=GTEX11DXY
+    color 167,252,167
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-3026-SM-5N9CB \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.5 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1456754
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1456754.hg19.bigWig
+    shortLabel pituitary M 139UC
+    longLabel GTEx RNA signal from male Pituitary (GTEX-139UC-3026-SM-5IJE4)
+    subGroups age=a60 tissue=pituitary donor=GTEX139UC
+    color 167,252,167
+
+    track gtexRnaSignalSRR1470438
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1470438.hg19.bigWig
+    shortLabel pituitary M 13N1W
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13N1W-3126-SM-5IFHB)
+    subGroups age=a70 tissue=pituitary donor=GTEX13N1W
+    color 167,252,167
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-3126-SM-5IFHB \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.4 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1471633
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1471633.hg19.bigWig
+    shortLabel pituitary M 13G51
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13G51-3226-SM-5IFG7)
+    subGroups age=a60 tissue=pituitary donor=GTEX13G51
+    color 167,252,167
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-3226-SM-5IFG7 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=7.2 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1474041
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1474041.hg19.bigWig
+    shortLabel pituitary M ZF28
+    longLabel GTEx RNA signal from male Pituitary (GTEX-ZF28-3126-SM-4WKFC)
+    subGroups age=a60 tissue=pituitary donor=GTEXZF28
+    color 167,252,167
+
+    track gtexRnaSignalSRR1477221
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1477221.hg19.bigWig
+    shortLabel pituitary M 14753
+    longLabel GTEx RNA signal from male Pituitary (GTEX-14753-2926-SM-5LU9J)
+    subGroups age=a60 tissue=pituitary donor=GTEX14753
+    color 167,252,167
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-2926-SM-5LU9J \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.1 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalSRR1485237
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1485237.hg19.bigWig
+    shortLabel pituitary M 13CF2
+    longLabel GTEx RNA signal from male Pituitary (GTEX-13CF2-3226-SM-5IFF6)
+    subGroups age=a60 tissue=pituitary donor=GTEX13CF2
+    color 167,252,167
+    metadata donor=GTEX-13CF2 age=60 sex=M hardyScore=2 sample=GTEX-13CF2-3226-SM-5IFF6 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=6.5 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalSRR1499607
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR1499607.hg19.bigWig
+    shortLabel pituitary M 11ONC
+    longLabel GTEx RNA signal from male Pituitary (GTEX-11ONC-2826-SM-5P9GQ)
+    subGroups age=a60 tissue=pituitary donor=GTEX11ONC
+    color 167,252,167
+    metadata donor=GTEX-11ONC age=60 sex=M hardyScore=2 sample=GTEX-11ONC-2826-SM-5P9GQ \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=6.5 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR808375
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR808375.hg19.bigWig
+    shortLabel pituitary M UTHO
+    longLabel GTEx RNA signal from male Pituitary (GTEX-UTHO-3126-SM-3P5ZB)
+    subGroups age=a60 tissue=pituitary donor=GTEXUTHO
+    color 167,252,167
+    metadata donor=GTEX-UTHO age=60 sex=M hardyScore=3 sample=GTEX-UTHO-3126-SM-3P5ZB \
+            tissue=pituitary autolysisScore=2 rnaIntegrity=7.2 batch=BP-26701 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalSRR816609
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl pituitary/gtexRnaSignalSRR816609.hg19.bigWig
+    shortLabel pituitary M N7MS
+    longLabel GTEx RNA signal from male Pituitary (GTEX-N7MS-2625-SM-3LK77)
+    subGroups age=a60 tissue=pituitary donor=GTEXN7MS
+    color 167,252,167
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-2625-SM-3LK77 \
+            tissue=pituitary autolysisScore=1 rnaIntegrity=8.5 batch=BP-16741 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/19/2011
+

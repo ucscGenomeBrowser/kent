@@ -99,9 +99,18 @@ div.jwStaticRightColumn {
     width: 500px;
 }
 
+div.jwFloatLeft {
+    display: inline-block;
+    float: left;
+}
+
 div.jwFloatRight {
     display: inline-block;
     float: right;
+}
+
+div.jwClearBoth {
+    clear: both;
 }
 
 div.jwSection {
@@ -117,6 +126,7 @@ div.jwSectionTitle {
     font-weight: bold;
     font-size: 21px;
     letter-spacing: -0.005em;
+    width: 100%;
 }
 
 div.jwSectionContents {
@@ -285,6 +295,12 @@ div.jwSpeciesPicker {
     letter-spacing: 0.050em;
 }
 
+.jwCurrentPos {
+    padding-left: 3px;
+    font-size: 13px;
+    color: #333333;
+}
+
 .jwPosDisplay {
     padding-right: 10px;
 }
@@ -414,5 +430,5 @@ div.jwFooterCopyright {
 }
 
 .vertSpacerBelowPosition {
-    padding-top: 32px;
+    padding-top: 14px;
 }

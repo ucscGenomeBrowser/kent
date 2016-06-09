@@ -12,6 +12,7 @@
 #include "bigBed.h"
 #include "hgTracks.h"
 #include "cds.h"
+#include "bedTabix.h"
 
 #define SEQ_DELIM '~'
 
@@ -83,7 +84,15 @@ if ((setting = trackDbSettingClosestToHome(tg->tdb, "filterTopScorers")) != NULL
     }
 
 /* Get list of items */
-if (tg->isBigBed)
+if (startsWith("bedTabix", tg->tdb->type ) || startsWith("longTabix", tg->tdb->type ))
+    {
+    struct hash *settings = tg->tdb->settingsHash;
+    char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+    struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+    list = bedTabixReadBeds(btf, chromName, winStart, winEnd, loader);
+    bedTabixFileClose(&btf);
+    }
+else if (tg->isBigBed)
     { // avoid opening an unneeded db connection for bigBed; required not to use mysql for parallel fetch tracks
     char *scoreFilter = cartOrTdbString(cart, tg->tdb, "scoreFilter", NULL);
     struct lm *lm = lmInit(0);

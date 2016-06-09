@@ -1,0 +1,279 @@
+    track gtexRnaSignalSRR1334741
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1334741.hg38.bigWig
+    shortLabel brainPuta F 12ZZX
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-12ZZX-0011-R7b-SM-5DUVV)
+    subGroups age=a40 tissue=brainPutamen donor=GTEX12ZZX
+    color 238,238,0
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-0011-R7b-SM-5DUVV \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=8.4 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR1358561
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1358561.hg38.bigWig
+    shortLabel brainPuta F 13JUV
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-13JUV-0011-R7b-SM-5LZZG)
+    subGroups age=a40 tissue=brainPutamen donor=GTEX13JUV
+    color 238,238,0
+    metadata donor=GTEX-13JUV age=40 sex=F hardyScore=0 sample=GTEX-13JUV-0011-R7b-SM-5LZZG \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=5.8 batch=BP-46932 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2013
+
+    track gtexRnaSignalSRR602540
+    parent gtexRnaSignalFemaleYoung off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR602540.hg38.bigWig
+    shortLabel brainPuta F Q2AG
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-Q2AG-0011-R7A-SM-2HMJP)
+    subGroups age=a40 tissue=brainPutamen donor=GTEXQ2AG
+    color 238,238,0
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0011-R7A-SM-2HMJP \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=8.8 batch=BP-20085 center=C1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=11/14/2011
+
+    track gtexRnaSignalSRR1321462
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1321462.hg38.bigWig
+    shortLabel brainPuta F 1313W
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-1313W-0011-R7b-SM-5DUWL)
+    subGroups age=a50 tissue=brainPutamen donor=GTEX1313W
+    color 238,238,0
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0011-R7b-SM-5DUWL \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=8.9 batch=BP-44932 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/23/2013
+
+    track gtexRnaSignalSRR1407315
+    parent gtexRnaSignalFemaleMiddle on
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1407315.hg38.bigWig
+    shortLabel brainPuta F 13OVJ
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-13OVJ-0011-R7a-SM-5L3G1)
+    subGroups age=a50 tissue=brainPutamen donor=GTEX13OVJ
+    color 238,238,0
+    metadata donor=GTEX-13OVJ age=50 sex=F hardyScore=2 sample=GTEX-13OVJ-0011-R7a-SM-5L3G1 \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.6 batch=BP-47491 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/17/2013
+
+    track gtexRnaSignalSRR1457551
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1457551.hg38.bigWig
+    shortLabel brainPuta F ZE7O
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-ZE7O-0011-R7a-SM-57WCU)
+    subGroups age=a50 tissue=brainPutamen donor=GTEXZE7O
+    color 238,238,0
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-0011-R7a-SM-57WCU \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=6 batch=BP-41299 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2013
+
+    track gtexRnaSignalSRR1473822
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1473822.hg38.bigWig
+    shortLabel brainPuta F ZV68
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-ZV68-0011-R7a-SM-51MT4)
+    subGroups age=a50 tissue=brainPutamen donor=GTEXZV68
+    color 238,238,0
+    metadata donor=GTEX-ZV68 age=50 sex=F hardyScore=2 sample=GTEX-ZV68-0011-R7a-SM-51MT4 \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=6.3 batch=BP-42240 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/13/2013
+
+    track gtexRnaSignalSRR614455
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR614455.hg38.bigWig
+    shortLabel brainPuta F RNOR
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-RNOR-0011-R7A-SM-2TF4V)
+    subGroups age=a50 tissue=brainPutamen donor=GTEXRNOR
+    color 238,238,0
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0011-R7A-SM-2TF4V \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.7 batch=BP-22572 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/21/2012
+
+    track gtexRnaSignalSRR614515
+    parent gtexRnaSignalFemaleMiddle off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR614515.hg38.bigWig
+    shortLabel brainPuta F RU72
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-RU72-0011-R7A-SM-2TF5U)
+    subGroups age=a50 tissue=brainPutamen donor=GTEXRU72
+    color 238,238,0
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0011-R7A-SM-2TF5U \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=6.4 batch=BP-22593 center=C1,A1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=02/22/2012
+
+    track gtexRnaSignalSRR1360718
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1360718.hg38.bigWig
+    shortLabel brainPuta F X4EP
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-X4EP-0011-R7B-SM-4PQZW)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXX4EP
+    color 238,238,0
+    metadata donor=GTEX-X4EP age=60 sex=F hardyScore=4 sample=GTEX-X4EP-0011-R7B-SM-4PQZW \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=8 batch=BP-32212 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/16/2012
+
+    track gtexRnaSignalSRR1374115
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1374115.hg38.bigWig
+    shortLabel brainPuta F ZVT3
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-ZVT3-0011-R7a-SM-57WCO)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXZVT3
+    color 238,238,0
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0011-R7a-SM-57WCO \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=6.9 batch=BP-41480 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/29/2013
+
+    track gtexRnaSignalSRR1382869
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1382869.hg38.bigWig
+    shortLabel brainPuta F 145MI
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-145MI-0011-R7b-SM-5Q5AZ)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX145MI
+    color 238,238,0
+
+    track gtexRnaSignalSRR1385124
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1385124.hg38.bigWig
+    shortLabel brainPuta F 131YS
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-131YS-0011-R7a-SM-5IJDA)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX131YS
+    color 238,238,0
+    metadata donor=GTEX-131YS age=60 sex=F hardyScore=2 sample=GTEX-131YS-0011-R7a-SM-5IJDA \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.8 batch=BP-45522 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/06/2013
+
+    track gtexRnaSignalSRR1387833
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1387833.hg38.bigWig
+    shortLabel brainPuta F ZVZQ
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-ZVZQ-0011-R7b-SM-57WBB)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXZVZQ
+    color 238,238,0
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0011-R7b-SM-57WBB \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.1 batch=BP-42319 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/14/2013
+
+    track gtexRnaSignalSRR1403958
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1403958.hg38.bigWig
+    shortLabel brainPuta F 145LS
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-145LS-0011-R7a-SM-5PNWM)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX145LS
+    color 238,238,0
+    metadata donor=GTEX-145LS age=60 sex=F hardyScore=4 sample=GTEX-145LS-0011-R7a-SM-5PNWM \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=8.7 batch=BP-48227 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/12/2014
+
+    track gtexRnaSignalSRR1408327
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1408327.hg38.bigWig
+    shortLabel brainPuta F 13QJC
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-13QJC-0011-R7b-SM-5PNUM)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX13QJC
+    color 238,238,0
+    metadata donor=GTEX-13QJC age=60 sex=F hardyScore=2 sample=GTEX-13QJC-0011-R7b-SM-5PNUM \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.1 batch=BP-48180 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/10/2014
+
+    track gtexRnaSignalSRR1409351
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1409351.hg38.bigWig
+    shortLabel brainPuta F 11GSP
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-11GSP-0011-R7b-SM-57WC3)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX11GSP
+    color 238,238,0
+    metadata donor=GTEX-11GSP age=60 sex=F hardyScore=2 sample=GTEX-11GSP-0011-R7b-SM-57WC3 \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.8 batch=BP-42768 center=B1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/27/2013
+
+    track gtexRnaSignalSRR1419714
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1419714.hg38.bigWig
+    shortLabel brainPuta F 13S7M
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-13S7M-0011-R7a-SM-5O9DK)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX13S7M
+    color 238,238,0
+    metadata donor=GTEX-13S7M age=60 sex=F hardyScore=2 sample=GTEX-13S7M-0011-R7a-SM-5O9DK \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7 batch=BP-47873 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2014
+
+    track gtexRnaSignalSRR1420215
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1420215.hg38.bigWig
+    shortLabel brainPuta F 13O3O
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-13O3O-0011-R7b-SM-5P9GZ)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX13O3O
+    color 238,238,0
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0011-R7b-SM-5P9GZ \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.6 batch=BP-47984 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2014
+
+    track gtexRnaSignalSRR1421305
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1421305.hg38.bigWig
+    shortLabel brainPuta F 12WSB
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-12WSB-0011-R7b-SM-5GU6V)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX12WSB
+    color 238,238,0
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0011-R7b-SM-5GU6V \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.7 batch=BP-43747 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/19/2013
+
+    track gtexRnaSignalSRR1457597
+    parent gtexRnaSignalFemaleOld on
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR1457597.hg38.bigWig
+    shortLabel brainPuta F 12WSD
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-12WSD-0011-R7b-SM-5PNWE)
+    subGroups age=a60 tissue=brainPutamen donor=GTEX12WSD
+    color 238,238,0
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0011-R7b-SM-5PNWE \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.9 batch=BP-43982 center=C1,A1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2013
+
+    track gtexRnaSignalSRR2135363
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR2135363.hg38.bigWig
+    shortLabel brainPuta F TSE9
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-TSE9-0011-R7A-SM-5CHS2_rep1)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXTSE9
+    color 238,238,0
+
+    track gtexRnaSignalSRR601287
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR601287.hg38.bigWig
+    shortLabel brainPuta F N7MT
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-N7MT-0011-R7a-SM-2I3FZ)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXN7MT
+    color 238,238,0
+    metadata donor=GTEX-N7MT age=60 sex=F hardyScore=4 sample=GTEX-N7MT-0011-R7a-SM-2I3FZ \
+            tissue=brainPutamen autolysisScore=-1 rnaIntegrity=7.3 batch=BP-17394 center=D1,A1 \
+            isolationMethod=RNA_isolation_QIAGEN_miRNeasy isolationDate=07/05/2011
+
+    track gtexRnaSignalSRR614924
+    parent gtexRnaSignalFemaleOld off
+    type bigWig
+    bigDataUrl brainPutamen/gtexRnaSignalSRR614924.hg38.bigWig
+    shortLabel brainPuta F QVJO
+    longLabel GTEx RNA signal from female Brain - Putamen (basal ganglia) (GTEX-QVJO-0011-R7A-SM-2S1QO)
+    subGroups age=a60 tissue=brainPutamen donor=GTEXQVJO
+    color 238,238,0
+

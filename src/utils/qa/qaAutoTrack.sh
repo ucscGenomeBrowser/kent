@@ -75,6 +75,11 @@ EOF
 # Output function
 function outputCovDiff () {
 	# four positional arguments. $1 == prevLogFile. $2 == tblCov. $3 == tableName. $4 == tblDate.
+	# Dependency: Coverage information from previous log file (positional argument $1)
+	# If no previous log file exists or if previous log file doesn't contain coverage info,
+	# then no coverage diff will be calculated and the percentDiff variable will retain its
+	# default value of ""
+ 
 	if [[ $1 != "" ]] # Check for previous log file. True if file exists.
 	then
 		# get info needed for diff
@@ -102,6 +107,10 @@ function outputCovDiff () {
 # Function to raise errors
 function checkForIssues () {
 	# four positional arguments. $1 == tblDate. $2 == tooOld. $3 == tableName. $4 == precentDiff.
+	# Dependency: percentDiff, positional argument $4, is expected to be set by outputCovDiff
+	# If percent diff is not set (so it retains default empty "" value), then checkForIssues
+	# will raise no errors.
+
 	# Raises an error if it's been too long since last update
 	if [ $(date -d "$1" +%s) -le $(date -d "$2" +%s) ]
 	then
@@ -112,7 +121,7 @@ function checkForIssues () {
 	if [[ "$4" != "" ]]
 	then
 		#Round our percentDiff to 3 decimal places. Really small numbers don't play nice with bc.
-		percentDiffRounded=$(echo $4 | xargs printf "%.3f\n")
+		percentDiffRounded=$(printf "%.3f\n" "$4")
 		if [ $(echo "$percentDiffRounded >= 10" | bc) -ne 0 ]
 		then
 			issueNote+="Large coverage diff for $3\n"
@@ -165,6 +174,9 @@ currLogFile="$logDir/$db.$tableName.$currDate.txt"
 
 # set info for prevLog
 prevLogDate=$(ls -Lt $logDir | sed -n /$db.$tableName/p | head -1 | awk -F . '{print $3}')
+
+#initialize output string
+output="\n$db\n"
 
 if [ -e $logDir/$db.$tableName.$prevLogDate.txt ]
 then
@@ -263,7 +275,7 @@ else
 			else
 				output+="$tbl\nLast updated: $tblDate\n\n"
 				# Check for issues with table
-				checkForIssues "$tblDate" "$tooOld" "$tbl" "$percentDiff"
+				checkForIssues "$tblDate" "$tooOld" "$tbl" ""
 			fi
 		done
 	# Tests for all other table based autopushed tracks

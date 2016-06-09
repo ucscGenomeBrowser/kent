@@ -481,6 +481,11 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
+/* Validate login cookies if login is enabled */
+if (loginSystemEnabled())
+    {
+    loginValidateCookies(cart);
+    }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
@@ -1555,6 +1560,13 @@ if (geoMirrorEnabled())
         {
         printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
         }
+    }
+/* Validate login cookies if login is enabled */
+if (loginSystemEnabled())
+    {
+    struct slName *newCookies = loginValidateCookies(cart), *sl;
+    for (sl = newCookies;  sl != NULL;  sl = sl->next)
+        printf("Set-Cookie: %s\r\n", sl->name);
     }
 }
 
@@ -2782,9 +2794,10 @@ if (helList != NULL)
 		       "), so it may not appear as originally intended.  ");
 	}
     dyStringPrintf(dyMessage,
-		   "Custom tracks are subject to an expiration policy described in the "
-		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
-		   "Session documentation</A>.</P>");
+		   "These custom tracks should not expire, however, "
+		   "the UCSC Genome Browser is not a data storage service; "
+		   "<b>please keep a local backup of your sessions contents "
+		   "and custom track data</b>. </P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }

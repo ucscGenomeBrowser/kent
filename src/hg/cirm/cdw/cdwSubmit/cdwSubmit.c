@@ -516,7 +516,7 @@ static char *otherSupportedFormats[] = {"unknown", "fastq", "bam", "bed", "gtf",
     "bed_bedLogR", "bed_bedRrbs", "bed_bedMethyl", "bed_broadPeak", "bed_narrowPeak",
     "bedRnaElements", "openChromCombinedPeaks", "peptideMapping", "shortFrags", 
     "rcc", "idat", "fasta", "customTrack", "pdf", "vcf", "cram", "jpg", "text", "html",
-    "kallisto_abundance",
+    "kallisto_abundance", "expression_matrix",
     };
 static int otherSupportedFormatsCount = ArraySize(otherSupportedFormats);
 if (stringArrayIx(format, otherSupportedFormats, otherSupportedFormatsCount) >= 0)
@@ -755,6 +755,23 @@ for (row = table->rowList; row != NULL; row = row->next)
 	if (enrichedIn == NULL)
 	    errAbort("Genomics file %s missing enriched_in tag", file);
 	}
+
+    if (justTest)
+        {
+	static char *otherForcedFields[] = {"body_part", "data_set_id", "assay", "lab", 
+	    "life_stage", "ucsc_db"};
+	int i;
+	for (i=0; i<ArraySize(otherForcedFields); ++i)
+	    {
+	    char *field = otherForcedFields[i];
+	    int tableIx = stringArrayIx(field, table->fields, table->fieldCount);  // In manifest
+	    if (tableIx < 0)
+	        {
+		if (tagFindVal(stanza, field) == NULL)
+		     errAbort("Missing %s field for %s", field, file);
+		}
+	    }
+	}
     }
 
 /* Check manifest.txt tags */
@@ -925,19 +942,29 @@ char query[4*1024];
 char *submitDir = getCurrentDir();
 
 /* Get table with the required fields and calculate field positions */
-char *requiredFields[] = {"file", "format", "meta", };
+
+/* Look at the header line of the manifest file. If there is a data_set_id field use it as
+ * the linker for meta data. Otherwise use the meta field. */
+FILE *f = mustOpen(manifestFile,"r");
+char header[2048]; 
+mustGetLine(f, header, 2048); 
+// Look for data_set_id in the manifestFile, if it is there then override
+// the meta value for the rest of the submit pipeline
+char *requiredFields[] = {"file", "format", "meta",};  
+
 struct fieldedTable *table = fieldedTableFromTabFile(manifestFile, manifestFile,
     requiredFields, ArraySize(requiredFields));
 int fileIx = stringArrayIx("file", table->fields, table->fieldCount);
 int formatIx = stringArrayIx("format", table->fields, table->fieldCount);
-int metaIx = stringArrayIx("meta", table->fields, table->fieldCount);
+int metaIx = stringArrayIx("meta", table->fields, table->fieldCount); 
 int enrichedInIx = stringArrayIx("enriched_in", table->fields, table->fieldCount);
 
 verbose(1, "Got %d fields and %d rows in %s\n", 
     table->fieldCount, slCount(table->rowList), manifestFile);
 struct tagStorm *tagStorm = tagStormFromFile(metaFile);
-struct hash *metaHash = tagStormUniqueIndex(tagStorm, "meta");
+struct hash *metaHash = tagStormIndexExtended(tagStorm, "meta", TRUE, FALSE); 
 verbose(1, "Got %d items in metaHash\n", metaHash->elCount);
+
 struct sqlConnection *conn = cdwConnectReadWrite();
 struct cdwUser *user = cdwMustGetUserFromEmail(conn, email);
 checkManifestAndMetadata(table, fileIx, formatIx, metaIx, enrichedInIx,

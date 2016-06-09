@@ -274,6 +274,22 @@ char *regionType = cartUsualString(cart, hgtaRegionType, "genome");
 return sameString(regionType, "genome");
 }
 
+boolean isNoGenomeDisabled(char *db, char *table)
+/* Return TRUE if table (or a track with which it is associated) has 'tableBrowser noGenome'
+ * and region is genome. */
+{
+return (fullGenomeRegion() && cartTrackDbIsNoGenome(db, table));
+}
+
+void checkNoGenomeDisabled(char *db, char *table)
+/* Before producing output, make sure that the URL hasn't been hacked to make a
+ * genome-wide query on a noGenome table. */
+{
+if (isNoGenomeDisabled(db, table))
+    errAbort("Can't do genome-wide query on %s.  "
+             "Please go back and choose a position range.", table);
+}
+
 static int regionCmp(const void *va, const void *vb)
 /* Compare to sort based on chrom,start */
 {
@@ -569,6 +585,8 @@ if (tdb->subtracks == NULL)
     {
     if (startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type))
 	hti = bigBedToHti(tdb->table, NULL);
+    else if (startsWithWord("longTabix", tdb->type))
+	hti = longTabixToHti(tdb->table);
     else if (startsWithWord("bam", tdb->type))
 	hti = bamToHti(tdb->table);
     else if (startsWithWord("vcfTabix", tdb->type))
@@ -597,6 +615,8 @@ if (isHubTrack(table))
     }
 else if (isBigBed(database, table, curTrack, ctLookupName))
     hti = bigBedToHti(table, conn);
+else if (isLongTabixTable(table))
+    hti = longTabixToHti(table);
 else if (isBamTable(table))
     hti = bamToHti(table);
 else if (isVcfTable(table, &isTabix))
@@ -1167,6 +1187,8 @@ void doTabOutTable( char *db, char *table, FILE *f, struct sqlConnection *conn, 
 boolean isTabix = FALSE;
 if (isBigBed(database, table, curTrack, ctLookupName))
     bigBedTabOut(db, table, conn, fields, f);
+else if (isLongTabixTable(table))
+    longTabixTabOut(db, table, conn, fields, f);
 else if (isBamTable(table))
     bamTabOut(db, table, conn, fields, f);
 else if (isVcfTable(table, &isTabix))
@@ -1192,6 +1214,8 @@ if (isBigBed(database, table, curTrack, ctLookupName))
     fieldList = bigBedGetFields(table, conn);
     hFreeConn(&conn);
     }
+else if (isLongTabixTable(table))
+    fieldList = getLongTabixFields(6);
 else if (isHalTable(table))
     fieldList = getBedFields(6);
 else if (isBamTable(table))
@@ -1426,6 +1450,7 @@ else
     if (cTdb)
 	track = cTdb;
     }
+checkNoGenomeDisabled(database, table);
 if (track != NULL)
     {
     if (sameString(track->table, "gvPos") &&

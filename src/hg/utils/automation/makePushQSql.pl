@@ -464,6 +464,20 @@ sub getTrackEntries {
   return \@entries;
 } # getTrackEntries
 
+my @expectedTables = qw( augustusGene chromInfo cpgIslandExt
+cpgIslandExtUnmasked cytoBandIdeo gap genscan gold grp hgFindSpec
+microsat nestedRepeats rmsk simpleRepeat tableDescriptions trackDb
+ucscToINSDC windowmaskerSdust );
+
+# verify the standard set of tables exist
+sub verifyExpectedTables {
+  my ($allTables) = @_;
+  foreach my $requiredTable (@expectedTables) {
+    if (! exists($allTables->{$requiredTable})) {
+      printf STDERR "WARNING: %s does not have %s\n", $db, $requiredTable;
+    }
+  }
+}
 
 sub getEntries {
   # Get the set of tables in $db.  Process that into a set of push
@@ -473,6 +487,8 @@ sub getEntries {
   # accounted for.
   my @entries = ();
   my $allTables = &getAllTables($db);
+
+  &verifyExpectedTables($allTables);
 
   push @entries, &getInfrastructureEntry($allTables);
   push @entries, &getGenbankEntry($allTables) unless $opt_noGenbank;

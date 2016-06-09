@@ -48,6 +48,8 @@ struct section
     char *rgdGeneTable;	/* Which table to use. */
 
     void *extras;        // Contains any section specific stuff
+    int checkTime;      // Time to check existence (for performance tuning) */
+    int printTime;      // Time to print (for performance tuning) */
     };
 
 struct section *sectionNew(struct hash *sectionRa, char *name);
@@ -169,6 +171,9 @@ struct section *allelesSection(struct sqlConnection *conn,
 
 void prGRShortKg(struct sqlConnection *conn, char *itemName);
 /* print GeneReviews short label associated to this refGene item */
+
+struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa);
+/* Create GTEx gene expression section. */
 
 #ifdef EXAMPLE
 struct section *xyzSection(struct sqlConnection *conn, 

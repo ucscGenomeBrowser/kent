@@ -141,6 +141,8 @@
 
 #include "trackVersion.h"
 #include "genbank.h"
+#include "bedTabix.h"
+#include "knetUdc.h"
 
 #define CHROM_COLORS 26
 
@@ -312,12 +314,22 @@ return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
 Color somewhatDarkerColor(struct hvGfx *hvg, Color color)
-/* Get a somewhat lighter shade of a color - 1/3 of the way towards black. */
+/* Get a somewhat darker shade of a color - 1/3 of the way towards black. */
 {
 struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
 rgbColor.r = (2*(int)rgbColor.r)/3;
 rgbColor.g = (2*(int)rgbColor.g)/3;
 rgbColor.b = (2*(int)rgbColor.b)/3;
+return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
+}
+
+Color slightlyDarkerColor(struct hvGfx *hvg, Color color)
+/* Get a slightly darker shade of a color - 1/4 of the way towards black. */
+{
+struct rgbColor rgbColor =  hvGfxColorIxToRgb(hvg, color);
+rgbColor.r = (9*(int)rgbColor.r)/10;
+rgbColor.g = (9*(int)rgbColor.g)/10;
+rgbColor.b = (9*(int)rgbColor.b)/10;
 return hvGfxFindColorIx(hvg, rgbColor.r, rgbColor.g, rgbColor.b);
 }
 
@@ -728,7 +740,13 @@ if (doWiggle)
     struct wigCartOptions *wigCart = tg->wigCartData;
     if (tg->wigCartData == NULL)
 	{
-	wigCart = wigCartOptionsNew(cart, tg->tdb, 0, NULL );
+        // fake the trackDb range for this auto-wiggle
+        int wordCount = 3;
+        char *words[3];
+        words[0] = "wig";
+        words[1] = "0";
+        words[2] = "127";
+	wigCart = wigCartOptionsNew(cart, tg->tdb, wordCount, words );
 	tg->wigCartData = (void *) wigCart;
 	}
     return wigTotalHeight(tg, vis);
@@ -1937,24 +1955,25 @@ winEnd = winEndCopy;
 return list;
 }
 
-boolean oregannoFilterType (struct oreganno *el)
+
+
+
+boolean oregannoFilterType (struct oreganno *el, struct hash *attrTable)
 /* filter of the type of region from the oregannoAttr table */
 {
 int cnt = 0;
-struct oregannoAttr *attr = NULL;
-char query[256];
-struct sqlConnection *conn = hAllocConn(database);
+struct oregannoAttr *attr = hashFindVal(attrTable, el->id);
+boolean tmpAttr = FALSE;
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where id = '%s' and attribute = 'type'", el->id);
-attr = oregannoAttrLoadByQuery(conn, query);
-hFreeConn(&conn);
 if (attr == NULL)
     {
     AllocVar(attr);
     attr->attrVal = cloneString("NULL");
     attr->id = NULL; /* so free will work */
     attr->attribute = NULL;
+    tmpAttr = TRUE;
     }
+
 for (cnt = 0; cnt < oregannoTypeSize; cnt++)
     {
     if ((!cartVarExists(cart, oregannoTypeString[cnt])
@@ -1962,11 +1981,13 @@ for (cnt = 0; cnt < oregannoTypeSize; cnt++)
         && differentString(cartString(cart, oregannoTypeString[cnt]), "0")))
         && (cmpWordsWithEmbeddedNumbers(oregannoTypeDbValue[cnt], attr->attrVal))==0)
         {
-        oregannoAttrFree(&attr);
+        if (tmpAttr == TRUE)
+            oregannoAttrFree(&attr);
         return TRUE; /* include this type */
         }
     }
-oregannoAttrFree(&attr);
+if (tmpAttr == TRUE)
+    oregannoAttrFree(&attr);
 return FALSE;
 }
 
@@ -1978,13 +1999,14 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 int rowOffset;
+tg->attrTable = oregannoLoadAttrHash(conn);
 
 sr = hRangeQuery(conn, tg->table, chromName, winStart, winEnd,
                  NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct oreganno *el = oregannoLoad(row);
-    if (!oregannoFilterType(el))
+    if (!oregannoFilterType(el, tg->attrTable))
         oregannoFree(&el);
     else
         slAddHead(&list, el);
@@ -4441,6 +4463,7 @@ unsigned *counts = countOverlaps(tg);
 countsToPixels(counts, pre);
 freez(&counts);
 
+tg->colorShades = shadesOfGray;
 hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 tg->mapsSelf = FALSE; // some magic to turn off the link out
 wigPreDrawPredraw(tg, seqStart, seqEnd, hvg, xOff, yOff, width, font, color, vis,
@@ -5651,8 +5674,7 @@ for(; lf; lf = lf->next)
     {
     struct genePred *gp = lf->original;
     gp->optFields |= genePredExonFramesFld | genePredCdsStatFld | genePredCdsStatFld;
-    safef(query, sizeof query, NOSQLINJ "select * from knownCds where name=\"%s\"",
-	gp->name);
+    sqlSafef(query, sizeof query, "select * from knownCds where name=\"%s\"", gp->name);
 
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = NULL;
@@ -11994,17 +12016,14 @@ Color oregannoColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
 struct oreganno *el = item;
 struct oregannoAttr *details = NULL;
-struct sqlConnection *conn = hAllocConn(database);
 char *id = NULL;
-char query[256];
 Color itemColor = MG_BLACK;
 if (el->id != NULL)
     id = el->id;
 else
     id = el->name;
 
-sqlSafef(query, sizeof(query), "select * from oregannoAttr where attribute = 'type' and id = '%s'", id);
-details = oregannoAttrLoadByQuery(conn, query);
+details = hashFindVal(tg->attrTable, id);
 /* ORegAnno colors 666600 (Dark Green), CCCC66 (Tan), CC0033 (Red),
                    CCFF99 (Background Green)                        */
 if (sameString(details->attrVal, "REGULATORY POLYMORPHISM"))
@@ -12024,8 +12043,6 @@ else if (sameString(details->attrVal, "Regulatory Haplotype"))
     itemColor = hvGfxFindColorIx(hvg, 213, 94, 0);  /* Vermillion */
 else if (sameString(details->attrVal, "miRNA Binding Site"))
     itemColor = hvGfxFindColorIx(hvg, 0, 158, 115);  /* bluish Green */
-oregannoAttrFreeList(&details);
-hFreeConn(&conn);
 return itemColor;
 }
 
@@ -12302,6 +12319,7 @@ tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
 void oregannoMethods (struct track *tg)
 /* load so can allow filtering on type */
 {
+tg->attrTable = NULL;
 tg->loadItems = loadOreganno;
 tg->itemColor = oregannoColor;
 tg->itemNameColor = oregannoColor;
@@ -13619,6 +13637,24 @@ else if (sameWord(type, "bedLogR"))
     //track->bedSize = 10;
     }
     */
+else if (sameWord(type, "bedTabix"))
+    {
+    knetUdcInstall();
+    tdb->canPack = TRUE;
+    complexBedMethods(track, tdb, FALSE, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
+else if (sameWord(type, "longTabix"))
+    {
+    char *words[2];
+    words[0] = type;
+    words[1] = "5";
+    complexBedMethods(track, tdb, FALSE, 2, words);
+    longRangeMethods(track, tdb);
+    if (trackShouldUseAjaxRetrieval(tg))
+        track->loadItems = dontLoadItems;
+    }
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);

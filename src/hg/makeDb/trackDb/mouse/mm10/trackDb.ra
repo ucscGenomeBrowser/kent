@@ -53,7 +53,7 @@ visibility hide
 color 20,20,170
 type bed 12
 
-track knownGeneOld7
+track knownGeneOld8
 shortLabel Old UCSC Genes
 longLabel Previous Version of UCSC Genes
 group genes
@@ -61,12 +61,12 @@ visibility hide
 color 82,82,160
 type genePred
 hgsid on
-oldToNew kg7ToKg8
+oldToNew kg8ToKg9
 baseColorUseCds given
 baseColorDefault genomicCodons
 
-searchName knownGeneOld7
-searchTable knownGeneOld7
+searchName knownGeneOld8
+searchTable knownGeneOld8
 searchDescription Previous Version of UCSC Genes
 searchMethod fuzzy
 query select chrom, txStart,txEnd, name from %s where name like '%%%s%%'
@@ -74,6 +74,7 @@ searchPriority 3.53
 
 
 include altSeqComposite1.ra
+include mm10Patch4.ra
 
 include mm10Strains1SuperTrack.ra
 

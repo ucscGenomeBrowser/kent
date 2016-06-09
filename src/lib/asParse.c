@@ -140,6 +140,8 @@ for (i = 0;  i < ArraySize(asTypes);  i++)
 	else
 	    return asTypes[i].name;
 	}
+if (sameString(buf, "date"))
+    return "string";
 return NULL;
 }
 

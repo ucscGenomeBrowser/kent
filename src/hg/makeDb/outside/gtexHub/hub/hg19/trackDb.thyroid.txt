@@ -1,0 +1,3243 @@
+    track gtexRnaSignalThyroidSRR1073267
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1073267.hg19.bigWig
+    shortLabel thyroid F XV7Q
+    longLabel GTEx RNA signal from female Thyroid (GTEX-XV7Q-0326-SM-4BRVM)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-XV7Q age=40 sex=F hardyScore=0 sample=GTEX-XV7Q-0326-SM-4BRVM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-34373 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/14/2012
+
+    track gtexRnaSignalThyroidSRR1073341
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1073341.hg19.bigWig
+    shortLabel thyroid F SE5C
+    longLabel GTEx RNA signal from female Thyroid (GTEX-SE5C-0726-SM-4BRWY)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-SE5C age=40 sex=F hardyScore=0 sample=GTEX-SE5C-0726-SM-4BRWY \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.8 batch=BP-23389 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/26/2012
+
+    track gtexRnaSignalThyroidSRR1076753
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1076753.hg19.bigWig
+    shortLabel thyroid F XUZC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-XUZC-0126-SM-4BOO6)
+    subGroups sex=F age=a30 
+    color 0,139,69
+    metadata donor=GTEX-XUZC age=30 sex=F hardyScore=0 sample=GTEX-XUZC-0126-SM-4BOO6 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-34317 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/13/2012
+
+    track gtexRnaSignalThyroidSRR1318898
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1318898.hg19.bigWig
+    shortLabel thyroid F 11EM3
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11EM3-0126-SM-5985K)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-11EM3 age=20 sex=F hardyScore=0 sample=GTEX-11EM3-0126-SM-5985K \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.4 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1327632
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1327632.hg19.bigWig
+    shortLabel thyroid F ZGAY
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZGAY-1026-SM-4WWBR)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZGAY age=40 sex=F hardyScore=0 sample=GTEX-ZGAY-1026-SM-4WWBR \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-42869 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/29/2013
+
+    track gtexRnaSignalThyroidSRR1332713
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1332713.hg19.bigWig
+    shortLabel thyroid F 14BMU
+    longLabel GTEx RNA signal from female Thyroid (GTEX-14BMU-0226-SM-5S2QA)
+    subGroups sex=F age=a20 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1335940
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1335940.hg19.bigWig
+    shortLabel thyroid F Y5LM
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Y5LM-0626-SM-4V6G4)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Y5LM age=40 sex=F hardyScore=0 sample=GTEX-Y5LM-0626-SM-4V6G4 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.9 batch=BP-35795 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/05/2013
+
+    track gtexRnaSignalThyroidSRR1350588
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1350588.hg19.bigWig
+    shortLabel thyroid F ZTPG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZTPG-0826-SM-5DUVC)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-ZTPG age=20 sex=F hardyScore=0 sample=GTEX-ZTPG-0826-SM-5DUVC \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.4 batch=BP-43308 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/09/2013
+
+    track gtexRnaSignalThyroidSRR1351624
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1351624.hg19.bigWig
+    shortLabel thyroid F ZC5H
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZC5H-0626-SM-5LU9K)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZC5H age=40 sex=F hardyScore=0 sample=GTEX-ZC5H-0626-SM-5LU9K \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.7 batch=BP-45395 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalThyroidSRR1352575
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1352575.hg19.bigWig
+    shortLabel thyroid F 11VI4
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11VI4-0226-SM-5GU6C)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-11VI4 age=40 sex=F hardyScore=0 sample=GTEX-11VI4-0226-SM-5GU6C \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.4 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalThyroidSRR1367612
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1367612.hg19.bigWig
+    shortLabel thyroid F 13FTY
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13FTY-0726-SM-5J2OH)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13FTY age=40 sex=F hardyScore=2 sample=GTEX-13FTY-0726-SM-5J2OH \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.4 batch=BP-46650 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalThyroidSRR1368917
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1368917.hg19.bigWig
+    shortLabel thyroid F ZV6S
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZV6S-0226-SM-59HJT)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZV6S age=40 sex=F hardyScore=0 sample=GTEX-ZV6S-0226-SM-59HJT \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.4 batch=BP-43441 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/11/2013
+
+    track gtexRnaSignalThyroidSRR1379471
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1379471.hg19.bigWig
+    shortLabel thyroid F 13VXT
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13VXT-0626-SM-5SIA1)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-13VXT age=20 sex=F hardyScore=0 sample=GTEX-13VXT-0626-SM-5SIA1 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.3 batch=BP-47656 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalThyroidSRR1399457
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1399457.hg19.bigWig
+    shortLabel thyroid F 11P81
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11P81-0126-SM-5HL5Y)
+    subGroups sex=F age=a30 
+    color 0,139,69
+    metadata donor=GTEX-11P81 age=30 sex=F hardyScore=0 sample=GTEX-11P81-0126-SM-5HL5Y \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalThyroidSRR1404044
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1404044.hg19.bigWig
+    shortLabel thyroid F 13QBU
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13QBU-0626-SM-5J2OG)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13QBU age=40 sex=F hardyScore=0 sample=GTEX-13QBU-0626-SM-5J2OG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-47070 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalThyroidSRR1404988
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1404988.hg19.bigWig
+    shortLabel thyroid F 12ZZX
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12ZZX-1226-SM-5EGHS)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-12ZZX age=40 sex=F hardyScore=1 sample=GTEX-12ZZX-1226-SM-5EGHS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1419211
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1419211.hg19.bigWig
+    shortLabel thyroid F 12WSJ
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WSJ-0326-SM-5GCMT)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-12WSJ age=40 sex=F hardyScore=0 sample=GTEX-12WSJ-0326-SM-5GCMT \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalThyroidSRR1419848
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1419848.hg19.bigWig
+    shortLabel thyroid F 14AS3
+    longLabel GTEx RNA signal from female Thyroid (GTEX-14AS3-0226-SM-5Q5B6)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-14AS3 age=40 sex=F hardyScore=0 sample=GTEX-14AS3-0226-SM-5Q5B6 \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=5.9 batch=BP-48448 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalThyroidSRR1435113
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1435113.hg19.bigWig
+    shortLabel thyroid F YFC4
+    longLabel GTEx RNA signal from female Thyroid (GTEX-YFC4-2626-SM-5P9FQ)
+    subGroups sex=F age=a40 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1440584
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1440584.hg19.bigWig
+    shortLabel thyroid F 13PL6
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13PL6-1026-SM-5L3E5)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13PL6 age=40 sex=F hardyScore=3 sample=GTEX-13PL6-1026-SM-5L3E5 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalThyroidSRR1447325
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1447325.hg19.bigWig
+    shortLabel thyroid F 11XUK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11XUK-0226-SM-5EQLW)
+    subGroups sex=F age=a40 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1454265
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1454265.hg19.bigWig
+    shortLabel thyroid F S341
+    longLabel GTEx RNA signal from female Thyroid (GTEX-S341-0226-SM-5S2VG)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-S341 age=40 sex=F hardyScore=0 sample=GTEX-S341-0226-SM-5S2VG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-22727 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/28/2012
+
+    track gtexRnaSignalThyroidSRR1487465
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1487465.hg19.bigWig
+    shortLabel thyroid F 145ME
+    longLabel GTEx RNA signal from female Thyroid (GTEX-145ME-0126-SM-5S2QM)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-145ME age=40 sex=F hardyScore=0 sample=GTEX-145ME-0126-SM-5S2QM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-48818 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/28/2014
+
+    track gtexRnaSignalThyroidSRR1499699
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1499699.hg19.bigWig
+    shortLabel thyroid F 12WSK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WSK-0926-SM-5CVNQ)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-12WSK age=40 sex=F hardyScore=0 sample=GTEX-12WSK-0926-SM-5CVNQ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-44437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalThyroidSRR598645
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR598645.hg19.bigWig
+    shortLabel thyroid F PWOO
+    longLabel GTEx RNA signal from female Thyroid (GTEX-PWOO-0926-SM-2I3EC)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-PWOO age=40 sex=F hardyScore=0 sample=GTEX-PWOO-0926-SM-2I3EC \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-19857 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/02/2011
+
+    track gtexRnaSignalThyroidSRR601157
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR601157.hg19.bigWig
+    shortLabel thyroid F PWN1
+    longLabel GTEx RNA signal from female Thyroid (GTEX-PWN1-2626-SM-2I3FH)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-PWN1 age=40 sex=F hardyScore=0 sample=GTEX-PWN1-2626-SM-2I3FH \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-19818 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/01/2011
+
+    track gtexRnaSignalThyroidSRR602389
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR602389.hg19.bigWig
+    shortLabel thyroid F PWCY
+    longLabel GTEx RNA signal from female Thyroid (GTEX-PWCY-2326-SM-2I3EQ)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-PWCY age=20 sex=F hardyScore=0 sample=GTEX-PWCY-2326-SM-2I3EQ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-19461 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/19/2011
+
+    track gtexRnaSignalThyroidSRR602978
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR602978.hg19.bigWig
+    shortLabel thyroid F Q2AG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Q2AG-0826-SM-2HMKF)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Q2AG age=40 sex=F hardyScore=2 sample=GTEX-Q2AG-0826-SM-2HMKF \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.3 batch=BP-19901 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/04/2011
+
+    track gtexRnaSignalThyroidSRR603268
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR603268.hg19.bigWig
+    shortLabel thyroid F Q734
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Q734-0526-SM-2I3EH)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Q734 age=40 sex=F hardyScore=0 sample=GTEX-Q734-0526-SM-2I3EH \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-20044 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalThyroidSRR614023
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR614023.hg19.bigWig
+    shortLabel thyroid F RU1J
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RU1J-0226-SM-2TF5Y)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-RU1J age=20 sex=F hardyScore=0 sample=GTEX-RU1J-0226-SM-2TF5Y \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-21803 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/25/2012
+
+    track gtexRnaSignalThyroidSRR615491
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR615491.hg19.bigWig
+    shortLabel thyroid F R55G
+    longLabel GTEx RNA signal from female Thyroid (GTEX-R55G-0726-SM-2TC6J)
+    subGroups sex=F age=a40 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR655076
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR655076.hg19.bigWig
+    shortLabel thyroid F R3RS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-R3RS-0726-SM-3GIJR)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-R3RS age=40 sex=F hardyScore=4 sample=GTEX-R3RS-0726-SM-3GIJR \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6 batch=BP-21198 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/06/2012
+
+    track gtexRnaSignalThyroidSRR655780
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR655780.hg19.bigWig
+    shortLabel thyroid F W5X1
+    longLabel GTEx RNA signal from female Thyroid (GTEX-W5X1-0426-SM-3GILB)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-W5X1 age=40 sex=F hardyScore=0 sample=GTEX-W5X1-0426-SM-3GILB \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-27179 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalThyroidSRR656373
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR656373.hg19.bigWig
+    shortLabel thyroid F WEY5
+    longLabel GTEx RNA signal from female Thyroid (GTEX-WEY5-0526-SM-3GIKZ)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-WEY5 age=40 sex=F hardyScore=0 sample=GTEX-WEY5-0526-SM-3GIKZ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.4 batch=BP-27183 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalThyroidSRR657101
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR657101.hg19.bigWig
+    shortLabel thyroid F UPIC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-UPIC-0226-SM-3GADO)
+    subGroups sex=F age=a20 
+    color 0,139,69
+    metadata donor=GTEX-UPIC age=20 sex=F hardyScore=0 sample=GTEX-UPIC-0226-SM-3GADO \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-26178 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/12/2012
+
+    track gtexRnaSignalThyroidSRR665490
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR665490.hg19.bigWig
+    shortLabel thyroid F T6MO
+    longLabel GTEx RNA signal from female Thyroid (GTEX-T6MO-0226-SM-32QOL)
+    subGroups sex=F age=a40 
+    color 0,139,69
+    metadata donor=GTEX-T6MO age=40 sex=F hardyScore=0 sample=GTEX-T6MO-0226-SM-32QOL \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-24837 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/30/2012
+
+    track gtexRnaSignalThyroidSRR813848
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR813848.hg19.bigWig
+    shortLabel thyroid F WI4N
+    longLabel GTEx RNA signal from female Thyroid (GTEX-WI4N-0926-SM-3LK7K)
+    subGroups sex=F age=a40 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1088808
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1088808.hg19.bigWig
+    shortLabel thyroid F W5WG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-W5WG-1426-SM-4KKZP)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-W5WG age=50 sex=F hardyScore=0 sample=GTEX-W5WG-1426-SM-4KKZP \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.6 batch=BP-27175 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/10/2012
+
+    track gtexRnaSignalThyroidSRR1089809
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1089809.hg19.bigWig
+    shortLabel thyroid F SN8G
+    longLabel GTEx RNA signal from female Thyroid (GTEX-SN8G-1526-SM-4DM79)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-SN8G age=50 sex=F hardyScore=2 sample=GTEX-SN8G-1526-SM-4DM79 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-23820 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/05/2012
+
+    track gtexRnaSignalThyroidSRR1092567
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1092567.hg19.bigWig
+    shortLabel thyroid F X8HC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-X8HC-0726-SM-46MWG)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-X8HC age=50 sex=F hardyScore=0 sample=GTEX-X8HC-0726-SM-46MWG \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.9 batch=BP-31492 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/26/2012
+
+    track gtexRnaSignalThyroidSRR1099520
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1099520.hg19.bigWig
+    shortLabel thyroid F XUW1
+    longLabel GTEx RNA signal from female Thyroid (GTEX-XUW1-1026-SM-4BONY)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-XUW1 age=50 sex=F hardyScore=0 sample=GTEX-XUW1-1026-SM-4BONY \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.5 batch=BP-34262 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2012
+
+    track gtexRnaSignalThyroidSRR1317001
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1317001.hg19.bigWig
+    shortLabel thyroid F 131XG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-131XG-0226-SM-5IFG1)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-131XG age=50 sex=F hardyScore=0 sample=GTEX-131XG-0226-SM-5IFG1 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalThyroidSRR1323850
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1323850.hg19.bigWig
+    shortLabel thyroid F Y3IK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Y3IK-0526-SM-4WWE3)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-Y3IK age=50 sex=F hardyScore=0 sample=GTEX-Y3IK-0526-SM-4WWE3 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8 batch=BP-35169 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/16/2013
+
+    track gtexRnaSignalThyroidSRR1349540
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1349540.hg19.bigWig
+    shortLabel thyroid F ZZPU
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZZPU-1326-SM-5GZWS)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZZPU age=50 sex=F hardyScore=0 sample=GTEX-ZZPU-1326-SM-5GZWS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalThyroidSRR1351257
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1351257.hg19.bigWig
+    shortLabel thyroid F ZYVF
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZYVF-1126-SM-5E458)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZYVF age=50 sex=F hardyScore=0 sample=GTEX-ZYVF-1126-SM-5E458 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-43529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/13/2013
+
+    track gtexRnaSignalThyroidSRR1374778
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1374778.hg19.bigWig
+    shortLabel thyroid F 113JC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-113JC-0126-SM-5EGJW)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-113JC age=50 sex=F hardyScore=2 sample=GTEX-113JC-0126-SM-5EGJW \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalThyroidSRR1381247
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1381247.hg19.bigWig
+    shortLabel thyroid F 12WS9
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WS9-0726-SM-5FQT7)
+    subGroups sex=F age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1388046
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1388046.hg19.bigWig
+    shortLabel thyroid F 13N11
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13N11-1026-SM-5K7XQ)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13N11 age=50 sex=F hardyScore=0 sample=GTEX-13N11-1026-SM-5K7XQ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.7 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR1392007
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1392007.hg19.bigWig
+    shortLabel thyroid F ZE7O
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZE7O-1126-SM-57WC8)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZE7O age=50 sex=F hardyScore=2 sample=GTEX-ZE7O-1126-SM-57WC8 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.2 batch=BP-42662 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/23/2013
+
+    track gtexRnaSignalThyroidSRR1394872
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1394872.hg19.bigWig
+    shortLabel thyroid F 11I78
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11I78-0526-SM-5986A)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-11I78 age=50 sex=F hardyScore=0 sample=GTEX-11I78-0526-SM-5986A \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1397885
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1397885.hg19.bigWig
+    shortLabel thyroid F 13D11
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13D11-0226-SM-5LZXL)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13D11 age=50 sex=F hardyScore=0 sample=GTEX-13D11-0226-SM-5LZXL \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalThyroidSRR1413032
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1413032.hg19.bigWig
+    shortLabel thyroid F 132AR
+    longLabel GTEx RNA signal from female Thyroid (GTEX-132AR-1126-SM-5P9GA)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-132AR age=50 sex=F hardyScore=0 sample=GTEX-132AR-1126-SM-5P9GA \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalThyroidSRR1415195
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1415195.hg19.bigWig
+    shortLabel thyroid F 12WSG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WSG-0226-SM-5EGIF)
+    subGroups sex=F age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1434910
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1434910.hg19.bigWig
+    shortLabel thyroid F 11ZVC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11ZVC-0126-SM-5986G)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-11ZVC age=50 sex=F hardyScore=2 sample=GTEX-11ZVC-0126-SM-5986G \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1443695
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1443695.hg19.bigWig
+    shortLabel thyroid F 13X6H
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13X6H-0526-SM-5LU4Q)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13X6H age=50 sex=F hardyScore=0 sample=GTEX-13X6H-0526-SM-5LU4Q \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-47591 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1457925
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1457925.hg19.bigWig
+    shortLabel thyroid F Y114
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Y114-0626-SM-4TT98)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-Y114 age=50 sex=F hardyScore=0 sample=GTEX-Y114-0626-SM-4TT98 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.8 batch=BP-34869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2013
+
+    track gtexRnaSignalThyroidSRR1457972
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1457972.hg19.bigWig
+    shortLabel thyroid F ZAK1
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZAK1-0726-SM-5HL8Q)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZAK1 age=50 sex=F hardyScore=2 sample=GTEX-ZAK1-0726-SM-5HL8Q \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-45395 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalThyroidSRR1499543
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1499543.hg19.bigWig
+    shortLabel thyroid F ZLWG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZLWG-0526-SM-4WWFB)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZLWG age=50 sex=F hardyScore=0 sample=GTEX-ZLWG-0526-SM-4WWFB \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.9 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalThyroidSRR1501097
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1501097.hg19.bigWig
+    shortLabel thyroid F 1313W
+    longLabel GTEx RNA signal from female Thyroid (GTEX-1313W-0726-SM-5EGK1)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-1313W age=50 sex=F hardyScore=2 sample=GTEX-1313W-0726-SM-5EGK1 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6 batch=BP-44901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR598100
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR598100.hg19.bigWig
+    shortLabel thyroid F P4QT
+    longLabel GTEx RNA signal from female Thyroid (GTEX-P4QT-2626-SM-2I3FM)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-P4QT age=50 sex=F hardyScore=0 sample=GTEX-P4QT-2626-SM-2I3FM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-18731 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalThyroidSRR601359
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR601359.hg19.bigWig
+    shortLabel thyroid F OHPK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OHPK-2626-SM-2HMK9)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-OHPK age=50 sex=F hardyScore=0 sample=GTEX-OHPK-2626-SM-2HMK9 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-17781 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/20/2011
+
+    track gtexRnaSignalThyroidSRR604294
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR604294.hg19.bigWig
+    shortLabel thyroid F OXRK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OXRK-0626-SM-2HMJ5)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-OXRK age=50 sex=F hardyScore=0 sample=GTEX-OXRK-0626-SM-2HMJ5 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-18261 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalThyroidSRR614743
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR614743.hg19.bigWig
+    shortLabel thyroid F RU72
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RU72-0126-SM-2TF6Z)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-RU72 age=50 sex=F hardyScore=2 sample=GTEX-RU72-0126-SM-2TF6Z \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-21930 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/30/2012
+
+    track gtexRnaSignalThyroidSRR614912
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR614912.hg19.bigWig
+    shortLabel thyroid F RNOR
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RNOR-0926-SM-2TF56)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-RNOR age=50 sex=F hardyScore=1 sample=GTEX-RNOR-0926-SM-2TF56 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-21628 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/20/2012
+
+    track gtexRnaSignalThyroidSRR658117
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR658117.hg19.bigWig
+    shortLabel thyroid F S32W
+    longLabel GTEx RNA signal from female Thyroid (GTEX-S32W-0726-SM-2XCBL)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-S32W age=50 sex=F hardyScore=0 sample=GTEX-S32W-0726-SM-2XCBL \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-22609 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/23/2012
+
+    track gtexRnaSignalThyroidSRR808886
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR808886.hg19.bigWig
+    shortLabel thyroid F WWYW
+    longLabel GTEx RNA signal from female Thyroid (GTEX-WWYW-0826-SM-3NB2X)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WWYW age=50 sex=F hardyScore=3 sample=GTEX-WWYW-0826-SM-3NB2X \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.8 batch=BP-28889 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2012
+
+    track gtexRnaSignalThyroidSRR810343
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR810343.hg19.bigWig
+    shortLabel thyroid F WXYG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-WXYG-0226-SM-3NB2Y)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WXYG age=50 sex=F hardyScore=0 sample=GTEX-WXYG-0226-SM-3NB2Y \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.8 batch=BP-28887 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/07/2012
+
+    track gtexRnaSignalThyroidSRR816892
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR816892.hg19.bigWig
+    shortLabel thyroid F X15G
+    longLabel GTEx RNA signal from female Thyroid (GTEX-X15G-0526-SM-3NMB7)
+    subGroups sex=F age=a50 
+    color 0,139,69
+    metadata donor=GTEX-X15G age=50 sex=F hardyScore=0 sample=GTEX-X15G-0526-SM-3NMB7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-30276 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/28/2012
+
+    track gtexRnaSignalThyroidSRR1070960
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1070960.hg19.bigWig
+    shortLabel thyroid F XUJ4
+    longLabel GTEx RNA signal from female Thyroid (GTEX-XUJ4-0726-SM-4BOOP)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-XUJ4 age=60 sex=F hardyScore=0 sample=GTEX-XUJ4-0726-SM-4BOOP \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8.1 batch=BP-34129 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/10/2012
+
+    track gtexRnaSignalThyroidSRR1095792
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1095792.hg19.bigWig
+    shortLabel thyroid F OXRO
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OXRO-1226-SM-48TDL)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-OXRO age=60 sex=F hardyScore=4 sample=GTEX-OXRO-1226-SM-48TDL \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.1 batch=BP-29826 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/21/2012
+
+    track gtexRnaSignalThyroidSRR1095937
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1095937.hg19.bigWig
+    shortLabel thyroid F XYKS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-XYKS-0826-SM-4BRVF)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1311897
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1311897.hg19.bigWig
+    shortLabel thyroid F 1122O
+    longLabel GTEx RNA signal from female Thyroid (GTEX-1122O-0226-SM-5N9DA)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1122O age=60 sex=F hardyScore=0 sample=GTEX-1122O-0226-SM-5N9DA \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=6.2 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalThyroidSRR1316793
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1316793.hg19.bigWig
+    shortLabel thyroid F 1128S
+    longLabel GTEx RNA signal from female Thyroid (GTEX-1128S-0126-SM-5H12S)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1128S age=60 sex=F hardyScore=2 sample=GTEX-1128S-0126-SM-5H12S \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalThyroidSRR1319283
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1319283.hg19.bigWig
+    shortLabel thyroid F 13113
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13113-0126-SM-5LZVX)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13113 age=60 sex=F hardyScore=0 sample=GTEX-13113-0126-SM-5LZVX \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalThyroidSRR1323936
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1323936.hg19.bigWig
+    shortLabel thyroid F 12WSB
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WSB-0726-SM-5N9GD)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-12WSB age=60 sex=F hardyScore=4 sample=GTEX-12WSB-0726-SM-5N9GD \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.7 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1327349
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1327349.hg19.bigWig
+    shortLabel thyroid F 11ZTS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11ZTS-1126-SM-5LU9X)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11ZTS age=60 sex=F hardyScore=2 sample=GTEX-11ZTS-1126-SM-5LU9X \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalThyroidSRR1330792
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1330792.hg19.bigWig
+    shortLabel thyroid F 11DXX
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11DXX-0226-SM-5P9HL)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11DXX age=60 sex=F hardyScore=0 sample=GTEX-11DXX-0226-SM-5P9HL \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=6.5 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalThyroidSRR1331383
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1331383.hg19.bigWig
+    shortLabel thyroid F ZYY3
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZYY3-1926-SM-5GZXS)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1333550
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1333550.hg19.bigWig
+    shortLabel thyroid F Y5V5
+    longLabel GTEx RNA signal from female Thyroid (GTEX-Y5V5-0326-SM-5RQJG)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-Y5V5 age=60 sex=F hardyScore=0 sample=GTEX-Y5V5-0326-SM-5RQJG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalThyroidSRR1334939
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1334939.hg19.bigWig
+    shortLabel thyroid F 11TTK
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11TTK-0826-SM-5N9EG)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11TTK age=60 sex=F hardyScore=4 sample=GTEX-11TTK-0826-SM-5N9EG \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.7 batch=BP-44312 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/04/2013
+
+    track gtexRnaSignalThyroidSRR1349144
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1349144.hg19.bigWig
+    shortLabel thyroid F 11ZTT
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11ZTT-1026-SM-5EQKF)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11ZTT age=60 sex=F hardyScore=0 sample=GTEX-11ZTT-1026-SM-5EQKF \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.5 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalThyroidSRR1350936
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1350936.hg19.bigWig
+    shortLabel thyroid F 1211K
+    longLabel GTEx RNA signal from female Thyroid (GTEX-1211K-0726-SM-5FQUW)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1211K age=60 sex=F hardyScore=0 sample=GTEX-1211K-0726-SM-5FQUW \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalThyroidSRR1360523
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1360523.hg19.bigWig
+    shortLabel thyroid F ZYFG
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZYFG-0626-SM-5GZYA)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZYFG age=60 sex=F hardyScore=0 sample=GTEX-ZYFG-0626-SM-5GZYA \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalThyroidSRR1367588
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1367588.hg19.bigWig
+    shortLabel thyroid F OXRP
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OXRP-0326-SM-5SI7J)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1368710
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1368710.hg19.bigWig
+    shortLabel thyroid F ZVT3
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZVT3-0726-SM-5GICN)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZVT3 age=60 sex=F hardyScore=2 sample=GTEX-ZVT3-0726-SM-5GICN \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.8 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalThyroidSRR1374716
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1374716.hg19.bigWig
+    shortLabel thyroid F 11GSP
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11GSP-0126-SM-5A5KU)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1376497
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1376497.hg19.bigWig
+    shortLabel thyroid F 13O3O
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13O3O-0926-SM-5KM1F)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13O3O age=60 sex=F hardyScore=3 sample=GTEX-13O3O-0926-SM-5KM1F \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.8 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1394655
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1394655.hg19.bigWig
+    shortLabel thyroid F ZLV1
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZLV1-0126-SM-4WWBZ)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1406307
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1406307.hg19.bigWig
+    shortLabel thyroid F ZQG8
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZQG8-0926-SM-57WFF)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZQG8 age=60 sex=F hardyScore=0 sample=GTEX-ZQG8-0926-SM-57WFF \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.2 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalThyroidSRR1409875
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1409875.hg19.bigWig
+    shortLabel thyroid F 11EMC
+    longLabel GTEx RNA signal from female Thyroid (GTEX-11EMC-0226-SM-5EGLP)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11EMC age=60 sex=F hardyScore=2 sample=GTEX-11EMC-0226-SM-5EGLP \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalThyroidSRR1410469
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1410469.hg19.bigWig
+    shortLabel thyroid F 145MI
+    longLabel GTEx RNA signal from female Thyroid (GTEX-145MI-1126-SM-5O9AK)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-145MI age=60 sex=F hardyScore=2 sample=GTEX-145MI-1126-SM-5O9AK \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalThyroidSRR1411002
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1411002.hg19.bigWig
+    shortLabel thyroid F ZPCL
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZPCL-0126-SM-4WWC8)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZPCL age=60 sex=F hardyScore=0 sample=GTEX-ZPCL-0126-SM-4WWC8 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalThyroidSRR1434182
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1434182.hg19.bigWig
+    shortLabel thyroid F ZVZQ
+    longLabel GTEx RNA signal from female Thyroid (GTEX-ZVZQ-0626-SM-59HJU)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZVZQ age=60 sex=F hardyScore=1 sample=GTEX-ZVZQ-0626-SM-59HJU \
+            tissue=thyroid autolysisScore=3 rnaIntegrity=5.7 batch=BP-43375 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalThyroidSRR1434689
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1434689.hg19.bigWig
+    shortLabel thyroid F 12WSD
+    longLabel GTEx RNA signal from female Thyroid (GTEX-12WSD-0926-SM-5GCNL)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-12WSD age=60 sex=F hardyScore=2 sample=GTEX-12WSD-0926-SM-5GCNL \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-43881 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalThyroidSRR1456208
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1456208.hg19.bigWig
+    shortLabel thyroid F 13CF3
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13CF3-0926-SM-5LZZC)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13CF3 age=60 sex=F hardyScore=0 sample=GTEX-13CF3-0926-SM-5LZZC \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.7 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalThyroidSRR1457197
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1457197.hg19.bigWig
+    shortLabel thyroid F RTLS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RTLS-0626-SM-5SI7Z)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-RTLS age=60 sex=F hardyScore=4 sample=GTEX-RTLS-0626-SM-5SI7Z \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.5 batch=BP-21669 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/23/2012
+
+    track gtexRnaSignalThyroidSRR1473443
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1473443.hg19.bigWig
+    shortLabel thyroid F 13NZ8
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13NZ8-0226-SM-5J2OK)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13NZ8 age=60 sex=F hardyScore=4 sample=GTEX-13NZ8-0226-SM-5J2OK \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-46978 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR1479549
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1479549.hg19.bigWig
+    shortLabel thyroid F 146FR
+    longLabel GTEx RNA signal from female Thyroid (GTEX-146FR-0326-SM-5SI8U)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-146FR age=60 sex=F hardyScore=0 sample=GTEX-146FR-0326-SM-5SI8U \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.6 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1487728
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1487728.hg19.bigWig
+    shortLabel thyroid F 13OVI
+    longLabel GTEx RNA signal from female Thyroid (GTEX-13OVI-0826-SM-5KLZ8)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13OVI age=60 sex=F hardyScore=0 sample=GTEX-13OVI-0826-SM-5KLZ8 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR604342
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR604342.hg19.bigWig
+    shortLabel thyroid F OHPL
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OHPL-2626-SM-2HMJA)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR613018
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613018.hg19.bigWig
+    shortLabel thyroid F RTLS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RTLS-0626-SM-2TF6G)
+    subGroups sex=F age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR655495
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR655495.hg19.bigWig
+    shortLabel thyroid F TSE9
+    longLabel GTEx RNA signal from female Thyroid (GTEX-TSE9-0626-SM-3DB8B)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-TSE9 age=60 sex=F hardyScore=0 sample=GTEX-TSE9-0626-SM-3DB8B \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-25188 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/09/2012
+
+    track gtexRnaSignalThyroidSRR656469
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR656469.hg19.bigWig
+    shortLabel thyroid F OXRP
+    longLabel GTEx RNA signal from female Thyroid (GTEX-OXRP-0326-SM-33HBJ)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-OXRP age=60 sex=F hardyScore=3 sample=GTEX-OXRP-0326-SM-33HBJ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-18483 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/25/2011
+
+    track gtexRnaSignalThyroidSRR663368
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR663368.hg19.bigWig
+    shortLabel thyroid F RWS6
+    longLabel GTEx RNA signal from female Thyroid (GTEX-RWS6-0626-SM-2XCAS)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-RWS6 age=60 sex=F hardyScore=0 sample=GTEX-RWS6-0626-SM-2XCAS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-22343 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/10/2012
+
+    track gtexRnaSignalThyroidSRR808658
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR808658.hg19.bigWig
+    shortLabel thyroid F WYBS
+    longLabel GTEx RNA signal from female Thyroid (GTEX-WYBS-1926-SM-3NM8N)
+    subGroups sex=F age=a60 
+    color 0,139,69
+    metadata donor=GTEX-WYBS age=60 sex=F hardyScore=0 sample=GTEX-WYBS-1926-SM-3NM8N \
+            tissue=thyroid autolysisScore=3 rnaIntegrity=7.7 batch=BP-29478 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalThyroidSRR1070863
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1070863.hg19.bigWig
+    shortLabel thyroid M XBEW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XBEW-0126-SM-4AT66)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-XBEW age=40 sex=M hardyScore=0 sample=GTEX-XBEW-0126-SM-4AT66 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-31713 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/02/2012
+
+    track gtexRnaSignalThyroidSRR1074189
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1074189.hg19.bigWig
+    shortLabel thyroid M XMK1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XMK1-0626-SM-4B65A)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-XMK1 age=40 sex=M hardyScore=0 sample=GTEX-XMK1-0626-SM-4B65A \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-32848 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/05/2012
+
+    track gtexRnaSignalThyroidSRR1082909
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1082909.hg19.bigWig
+    shortLabel thyroid M X5EB
+    longLabel GTEx RNA signal from male Thyroid (GTEX-X5EB-0726-SM-46MVR)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-X5EB age=40 sex=M hardyScore=0 sample=GTEX-X5EB-0726-SM-46MVR \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.9 batch=BP-31131 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/14/2012
+
+    track gtexRnaSignalThyroidSRR1309657
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1309657.hg19.bigWig
+    shortLabel thyroid M 11EQ9
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11EQ9-0626-SM-5A5K1)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-11EQ9 age=30 sex=M hardyScore=2 sample=GTEX-11EQ9-0626-SM-5A5K1 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-44264 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalThyroidSRR1312024
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1312024.hg19.bigWig
+    shortLabel thyroid M 11O72
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11O72-2326-SM-5BC7H)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-11O72 age=40 sex=M hardyScore=2 sample=GTEX-11O72-2326-SM-5BC7H \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.1 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalThyroidSRR1322790
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1322790.hg19.bigWig
+    shortLabel thyroid M WHSE
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WHSE-0626-SM-4RGNF)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-WHSE age=20 sex=M hardyScore=3 sample=GTEX-WHSE-0626-SM-4RGNF \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.8 batch=BP-40888 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/16/2013
+
+    track gtexRnaSignalThyroidSRR1327410
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1327410.hg19.bigWig
+    shortLabel thyroid M 13S86
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13S86-1126-SM-5RQJX)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13S86 age=40 sex=M hardyScore=0 sample=GTEX-13S86-1126-SM-5RQJX \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.7 batch=BP-48564 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalThyroidSRR1336113
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1336113.hg19.bigWig
+    shortLabel thyroid M 1399R
+    longLabel GTEx RNA signal from male Thyroid (GTEX-1399R-0126-SM-5IFEV)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-1399R age=30 sex=M hardyScore=0 sample=GTEX-1399R-0126-SM-5IFEV \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-46589 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1337364
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1337364.hg19.bigWig
+    shortLabel thyroid M WFG7
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WFG7-0326-SM-5SI7L)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-WFG7 age=20 sex=M hardyScore=0 sample=GTEX-WFG7-0326-SM-5SI7L \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-27213 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/11/2012
+
+    track gtexRnaSignalThyroidSRR1345669
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1345669.hg19.bigWig
+    shortLabel thyroid M YEC4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YEC4-0626-SM-5CVLU)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-YEC4 age=40 sex=M hardyScore=0 sample=GTEX-YEC4-0626-SM-5CVLU \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-45390 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/01/2013
+
+    track gtexRnaSignalThyroidSRR1349497
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1349497.hg19.bigWig
+    shortLabel thyroid M 13FTW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13FTW-0626-SM-5IFEX)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13FTW age=40 sex=M hardyScore=0 sample=GTEX-13FTW-0626-SM-5IFEX \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.6 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalThyroidSRR1350566
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1350566.hg19.bigWig
+    shortLabel thyroid M ZZ64
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZZ64-0126-SM-5GZXA)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-ZZ64 age=20 sex=M hardyScore=0 sample=GTEX-ZZ64-0126-SM-5GZXA \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.3 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalThyroidSRR1352001
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1352001.hg19.bigWig
+    shortLabel thyroid M 13RTK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13RTK-0326-SM-5RQHS)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-13RTK age=20 sex=M hardyScore=0 sample=GTEX-13RTK-0326-SM-5RQHS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalThyroidSRR1356120
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1356120.hg19.bigWig
+    shortLabel thyroid M 11P7K
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11P7K-0226-SM-5986Z)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-11P7K age=30 sex=M hardyScore=0 sample=GTEX-11P7K-0226-SM-5986Z \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1365356
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1365356.hg19.bigWig
+    shortLabel thyroid M 144GM
+    longLabel GTEx RNA signal from male Thyroid (GTEX-144GM-0226-SM-5Q5CB)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-144GM age=20 sex=M hardyScore=0 sample=GTEX-144GM-0226-SM-5Q5CB \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1368486
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1368486.hg19.bigWig
+    shortLabel thyroid M 14ICL
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14ICL-0426-SM-5RQJ3)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-14ICL age=30 sex=M hardyScore=0 sample=GTEX-14ICL-0426-SM-5RQJ3 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-48576 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalThyroidSRR1370151
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1370151.hg19.bigWig
+    shortLabel thyroid M ZPU1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZPU1-0426-SM-4WWCA)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZPU1 age=40 sex=M hardyScore=0 sample=GTEX-ZPU1-0426-SM-4WWCA \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalThyroidSRR1379279
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1379279.hg19.bigWig
+    shortLabel thyroid M Y8E4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Y8E4-0126-SM-4VBQ2)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Y8E4 age=40 sex=M hardyScore=0 sample=GTEX-Y8E4-0126-SM-4VBQ2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-42087 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/08/2013
+
+    track gtexRnaSignalThyroidSRR1381414
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1381414.hg19.bigWig
+    shortLabel thyroid M ZYT6
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZYT6-0426-SM-5GID3)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-0426-SM-5GID3 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.2 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalThyroidSRR1387724
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1387724.hg19.bigWig
+    shortLabel thyroid M 14E6C
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14E6C-2626-SM-5RQJP)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-14E6C age=40 sex=M hardyScore=4 sample=GTEX-14E6C-2626-SM-5RQJP \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.8 batch=BP-48576 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/22/2014
+
+    track gtexRnaSignalThyroidSRR1391678
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1391678.hg19.bigWig
+    shortLabel thyroid M ZA64
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZA64-0426-SM-5HL96)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-ZA64 age=20 sex=M hardyScore=0 sample=GTEX-ZA64-0426-SM-5HL96 \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7 batch=BP-45247 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalThyroidSRR1391700
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1391700.hg19.bigWig
+    shortLabel thyroid M YB5E
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YB5E-0626-SM-4VDSE)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-YB5E age=40 sex=M hardyScore=0 sample=GTEX-YB5E-0626-SM-4VDSE \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalThyroidSRR1396570
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1396570.hg19.bigWig
+    shortLabel thyroid M 11NSD
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11NSD-0126-SM-5987F)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-11NSD age=20 sex=M hardyScore=0 sample=GTEX-11NSD-0126-SM-5987F \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.8 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1402922
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1402922.hg19.bigWig
+    shortLabel thyroid M 12584
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12584-0826-SM-5FQSK)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-12584 age=40 sex=M hardyScore=3 sample=GTEX-12584-0826-SM-5FQSK \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalThyroidSRR1415980
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1415980.hg19.bigWig
+    shortLabel thyroid M 11LCK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11LCK-0526-SM-5A5M9)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-11LCK age=30 sex=M hardyScore=0 sample=GTEX-11LCK-0526-SM-5A5M9 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-44512 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/10/2013
+
+    track gtexRnaSignalThyroidSRR1434760
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1434760.hg19.bigWig
+    shortLabel thyroid M ZLFU
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZLFU-0626-SM-4WWBO)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-0626-SM-4WWBO \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.7 batch=BP-42826 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/28/2013
+
+    track gtexRnaSignalThyroidSRR1445765
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1445765.hg19.bigWig
+    shortLabel thyroid M Y9LG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Y9LG-0426-SM-4VBRT)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-Y9LG age=30 sex=M hardyScore=0 sample=GTEX-Y9LG-0426-SM-4VBRT \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.7 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalThyroidSRR1455104
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1455104.hg19.bigWig
+    shortLabel thyroid M 11TT1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11TT1-1126-SM-5P9GV)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-11TT1 age=20 sex=M hardyScore=0 sample=GTEX-11TT1-1126-SM-5P9GV \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.1 batch=BP-47888 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalThyroidSRR1455436
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1455436.hg19.bigWig
+    shortLabel thyroid M ZT9X
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZT9X-0226-SM-51MT2)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-ZT9X age=40 sex=M hardyScore=0 sample=GTEX-ZT9X-0226-SM-51MT2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=9.3 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalThyroidSRR1456591
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1456591.hg19.bigWig
+    shortLabel thyroid M 11P82
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11P82-0226-SM-5HL4O)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-11P82 age=20 sex=M hardyScore=1 sample=GTEX-11P82-0226-SM-5HL4O \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-43753 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalThyroidSRR1471267
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1471267.hg19.bigWig
+    shortLabel thyroid M YFCO
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YFCO-0326-SM-4W1ZP)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-YFCO age=40 sex=M hardyScore=0 sample=GTEX-YFCO-0326-SM-4W1ZP \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7 batch=BP-42185 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/12/2013
+
+    track gtexRnaSignalThyroidSRR1473295
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1473295.hg19.bigWig
+    shortLabel thyroid M 12WSN
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12WSN-0726-SM-5GCMS)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-12WSN age=40 sex=M hardyScore=0 sample=GTEX-12WSN-0726-SM-5GCMS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.4 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalThyroidSRR1476348
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1476348.hg19.bigWig
+    shortLabel thyroid M 146FQ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-146FQ-0726-SM-5LUA7)
+    subGroups sex=M age=a30 
+    color 0,139,69
+    metadata donor=GTEX-146FQ age=30 sex=M hardyScore=0 sample=GTEX-146FQ-0726-SM-5LUA7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1486044
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1486044.hg19.bigWig
+    shortLabel thyroid M 13NYB
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13NYB-0726-SM-5MR4J)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-0726-SM-5MR4J \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.8 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR598565
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR598565.hg19.bigWig
+    shortLabel thyroid M Q2AI
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Q2AI-0326-SM-2I3EK)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Q2AI age=40 sex=M hardyScore=0 sample=GTEX-Q2AI-0326-SM-2I3EK \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-20043 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/10/2011
+
+    track gtexRnaSignalThyroidSRR603726
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR603726.hg19.bigWig
+    shortLabel thyroid M Q2AH
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Q2AH-0726-SM-2I3EA)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-Q2AH age=40 sex=M hardyScore=0 sample=GTEX-Q2AH-0726-SM-2I3EA \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-19999 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/09/2011
+
+    track gtexRnaSignalThyroidSRR603834
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR603834.hg19.bigWig
+    shortLabel thyroid M NFK9
+    longLabel GTEx RNA signal from male Thyroid (GTEX-NFK9-0726-SM-2HMJW)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-NFK9 age=40 sex=M hardyScore=0 sample=GTEX-NFK9-0726-SM-2HMJW \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8.8 batch=BP-16993 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/02/2011
+
+    track gtexRnaSignalThyroidSRR608512
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR608512.hg19.bigWig
+    shortLabel thyroid M OOBK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OOBK-2626-SM-2HMKY)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-OOBK age=40 sex=M hardyScore=0 sample=GTEX-OOBK-2626-SM-2HMKY \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-18257 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalThyroidSRR613402
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613402.hg19.bigWig
+    shortLabel thyroid M R55E
+    longLabel GTEx RNA signal from male Thyroid (GTEX-R55E-0826-SM-2TC5M)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-R55E age=20 sex=M hardyScore=1 sample=GTEX-R55E-0826-SM-2TC5M \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-21406 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/12/2012
+
+    track gtexRnaSignalThyroidSRR615886
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR615886.hg19.bigWig
+    shortLabel thyroid M R55C
+    longLabel GTEx RNA signal from male Thyroid (GTEX-R55C-0626-SM-2TF4Q)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-R55C age=40 sex=M hardyScore=0 sample=GTEX-R55C-0626-SM-2TF4Q \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-21397 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/12/2012
+
+    track gtexRnaSignalThyroidSRR654754
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR654754.hg19.bigWig
+    shortLabel thyroid M SNOS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SNOS-0226-SM-32PLR)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-SNOS age=40 sex=M hardyScore=0 sample=GTEX-SNOS-0226-SM-32PLR \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8.5 batch=BP-24455 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/23/2012
+
+    track gtexRnaSignalThyroidSRR655277
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR655277.hg19.bigWig
+    shortLabel thyroid M WFG8
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WFG8-0426-SM-3GILD)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-WFG8 age=20 sex=M hardyScore=0 sample=GTEX-WFG8-0426-SM-3GILD \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.6 batch=BP-27324 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/12/2012
+
+    track gtexRnaSignalThyroidSRR663380
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR663380.hg19.bigWig
+    shortLabel thyroid M U4B1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-U4B1-0626-SM-3DB8L)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-U4B1 age=40 sex=M hardyScore=0 sample=GTEX-U4B1-0626-SM-3DB8L \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-25599 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/23/2012
+
+    track gtexRnaSignalThyroidSRR663795
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR663795.hg19.bigWig
+    shortLabel thyroid M S4Q7
+    longLabel GTEx RNA signal from male Thyroid (GTEX-S4Q7-0326-SM-3K2B1)
+    subGroups sex=M age=a20 
+    color 0,139,69
+    metadata donor=GTEX-S4Q7 age=20 sex=M hardyScore=0 sample=GTEX-S4Q7-0326-SM-3K2B1 \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.8 batch=BP-23024 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/12/2012
+
+    track gtexRnaSignalThyroidSRR665646
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR665646.hg19.bigWig
+    shortLabel thyroid M WFG7
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WFG7-0326-SM-3GILI)
+    subGroups sex=M age=a20 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR809503
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR809503.hg19.bigWig
+    shortLabel thyroid M OIZI
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OIZI-0726-SM-2XCEI)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-OIZI age=40 sex=M hardyScore=0 sample=GTEX-OIZI-0726-SM-2XCEI \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-18178 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/11/2011
+
+    track gtexRnaSignalThyroidSRR821207
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR821207.hg19.bigWig
+    shortLabel thyroid M WH7G
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WH7G-0526-SM-3NMBI)
+    subGroups sex=M age=a40 
+    color 0,139,69
+    metadata donor=GTEX-WH7G age=40 sex=M hardyScore=0 sample=GTEX-WH7G-0526-SM-3NMBI \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-27491 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalThyroidSRR1088044
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1088044.hg19.bigWig
+    shortLabel thyroid M V1D1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-V1D1-0926-SM-4JBHQ)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-V1D1 age=50 sex=M hardyScore=0 sample=GTEX-V1D1-0926-SM-4JBHQ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.8 batch=BP-26699 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2012
+
+    track gtexRnaSignalThyroidSRR1089926
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1089926.hg19.bigWig
+    shortLabel thyroid M XXEK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XXEK-1326-SM-4BRV1)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-XXEK age=50 sex=M hardyScore=0 sample=GTEX-XXEK-1326-SM-4BRV1 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-34543 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/19/2012
+
+    track gtexRnaSignalThyroidSRR1090770
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1090770.hg19.bigWig
+    shortLabel thyroid M XGQ4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XGQ4-0426-SM-4AT4I)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-XGQ4 age=50 sex=M hardyScore=0 sample=GTEX-XGQ4-0426-SM-4AT4I \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.7 batch=BP-32102 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/12/2012
+
+    track gtexRnaSignalThyroidSRR1308715
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1308715.hg19.bigWig
+    shortLabel thyroid M 117YW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-117YW-0126-SM-5EGGN)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-117YW age=50 sex=M hardyScore=3 sample=GTEX-117YW-0126-SM-5EGGN \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalThyroidSRR1310758
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1310758.hg19.bigWig
+    shortLabel thyroid M 1192X
+    longLabel GTEx RNA signal from male Thyroid (GTEX-1192X-1126-SM-5EGGU)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-1192X age=50 sex=M hardyScore=4 sample=GTEX-1192X-1126-SM-5EGGU \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalThyroidSRR1317218
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1317218.hg19.bigWig
+    shortLabel thyroid M 11NUK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11NUK-1026-SM-5HL5J)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-11NUK age=50 sex=M hardyScore=2 sample=GTEX-11NUK-1026-SM-5HL5J \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.6 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalThyroidSRR1319858
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1319858.hg19.bigWig
+    shortLabel thyroid M Y3I4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Y3I4-0226-SM-4TT27)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-Y3I4 age=50 sex=M hardyScore=0 sample=GTEX-Y3I4-0226-SM-4TT27 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6 batch=BP-35758 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/04/2013
+
+    track gtexRnaSignalThyroidSRR1322494
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1322494.hg19.bigWig
+    shortLabel thyroid M 13X6J
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13X6J-0826-SM-5LU32)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13X6J age=50 sex=M hardyScore=2 sample=GTEX-13X6J-0826-SM-5LU32 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.9 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1322711
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1322711.hg19.bigWig
+    shortLabel thyroid M 13OW7
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13OW7-0826-SM-5L3EL)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13OW7 age=50 sex=M hardyScore=2 sample=GTEX-13OW7-0826-SM-5L3EL \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1329442
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1329442.hg19.bigWig
+    shortLabel thyroid M 111CU
+    longLabel GTEx RNA signal from male Thyroid (GTEX-111CU-0226-SM-5GZXC)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-111CU age=50 sex=M hardyScore=0 sample=GTEX-111CU-0226-SM-5GZXC \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=7.4 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalThyroidSRR1329464
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1329464.hg19.bigWig
+    shortLabel thyroid M ZVZP
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZVZP-1026-SM-5GICI)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZVZP age=50 sex=M hardyScore=0 sample=GTEX-ZVZP-1026-SM-5GICI \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.6 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalThyroidSRR1335296
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1335296.hg19.bigWig
+    shortLabel thyroid M 13VXU
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13VXU-0826-SM-5KLZ2)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13VXU age=50 sex=M hardyScore=2 sample=GTEX-13VXU-0826-SM-5KLZ2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.6 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1342938
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1342938.hg19.bigWig
+    shortLabel thyroid M 11UD2
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11UD2-0626-SM-5GU6L)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-11UD2 age=50 sex=M hardyScore=2 sample=GTEX-11UD2-0626-SM-5GU6L \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalThyroidSRR1346978
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1346978.hg19.bigWig
+    shortLabel thyroid M Y111
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Y111-1926-SM-4SOIS)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-Y111 age=50 sex=M hardyScore=1 sample=GTEX-Y111-1926-SM-4SOIS \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.3 batch=BP-34869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=01/07/2013
+
+    track gtexRnaSignalThyroidSRR1348270
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1348270.hg19.bigWig
+    shortLabel thyroid M 14ABY
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14ABY-0926-SM-5Q5DY)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-14ABY age=50 sex=M hardyScore=2 sample=GTEX-14ABY-0926-SM-5Q5DY \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.1 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1356308
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1356308.hg19.bigWig
+    shortLabel thyroid M 13FHP
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13FHP-0926-SM-5L3EC)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13FHP age=50 sex=M hardyScore=4 sample=GTEX-13FHP-0926-SM-5L3EC \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-46734 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalThyroidSRR1358459
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1358459.hg19.bigWig
+    shortLabel thyroid M 11DZ1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11DZ1-2726-SM-5A5KH)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-11DZ1 age=50 sex=M hardyScore=4 sample=GTEX-11DZ1-2726-SM-5A5KH \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.6 batch=BP-44264 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalThyroidSRR1361050
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1361050.hg19.bigWig
+    shortLabel thyroid M 117YX
+    longLabel GTEx RNA signal from male Thyroid (GTEX-117YX-1226-SM-5H11S)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-117YX age=50 sex=M hardyScore=0 sample=GTEX-117YX-1226-SM-5H11S \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalThyroidSRR1364935
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1364935.hg19.bigWig
+    shortLabel thyroid M 13NZ9
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13NZ9-1126-SM-5MR37)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13NZ9 age=50 sex=M hardyScore=0 sample=GTEX-13NZ9-1126-SM-5MR37 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1377557
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1377557.hg19.bigWig
+    shortLabel thyroid M YEC3
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YEC3-0826-SM-5P9JF)
+    subGroups sex=M age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1377967
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1377967.hg19.bigWig
+    shortLabel thyroid M 145MH
+    longLabel GTEx RNA signal from male Thyroid (GTEX-145MH-0426-SM-5LU8T)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-145MH age=50 sex=M hardyScore=1 sample=GTEX-145MH-0426-SM-5LU8T \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6 batch=BP-47616 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1380163
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1380163.hg19.bigWig
+    shortLabel thyroid M 145MG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-145MG-0826-SM-5Q5C2)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-145MG age=50 sex=M hardyScore=2 sample=GTEX-145MG-0826-SM-5Q5C2 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.7 batch=BP-48057 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1388913
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1388913.hg19.bigWig
+    shortLabel thyroid M ZAB5
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZAB5-0726-SM-5P9JG)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZAB5 age=50 sex=M hardyScore=0 sample=GTEX-ZAB5-0726-SM-5P9JG \
+            tissue=thyroid autolysisScore=0 rnaIntegrity=6.3 batch=BP-45374 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalThyroidSRR1396270
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1396270.hg19.bigWig
+    shortLabel thyroid M 14C38
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14C38-0826-SM-5S2U8)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-14C38 age=50 sex=M hardyScore=0 sample=GTEX-14C38-0826-SM-5S2U8 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-48651 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalThyroidSRR1398971
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1398971.hg19.bigWig
+    shortLabel thyroid M 13111
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13111-0226-SM-5EQ55)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13111 age=50 sex=M hardyScore=0 sample=GTEX-13111-0226-SM-5EQ55 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1408633
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1408633.hg19.bigWig
+    shortLabel thyroid M 13FXS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13FXS-0726-SM-5LZXJ)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13FXS age=50 sex=M hardyScore=2 sample=GTEX-13FXS-0726-SM-5LZXJ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1414471
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1414471.hg19.bigWig
+    shortLabel thyroid M ZY6K
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZY6K-0226-SM-5SIAY)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZY6K age=50 sex=M hardyScore=0 sample=GTEX-ZY6K-0226-SM-5SIAY \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8 batch=BP-43956 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalThyroidSRR1415274
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1415274.hg19.bigWig
+    shortLabel thyroid M ZDYS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZDYS-0626-SM-5J2N5)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZDYS age=50 sex=M hardyScore=0 sample=GTEX-ZDYS-0626-SM-5J2N5 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-45485 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalThyroidSRR1415660
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1415660.hg19.bigWig
+    shortLabel thyroid M 145LU
+    longLabel GTEx RNA signal from male Thyroid (GTEX-145LU-0426-SM-5O9AH)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-145LU age=50 sex=M hardyScore=2 sample=GTEX-145LU-0426-SM-5O9AH \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.9 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalThyroidSRR1418650
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1418650.hg19.bigWig
+    shortLabel thyroid M 13O3Q
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13O3Q-0626-SM-5IJG1)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13O3Q age=50 sex=M hardyScore=2 sample=GTEX-13O3Q-0626-SM-5IJG1 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.3 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR1418688
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1418688.hg19.bigWig
+    shortLabel thyroid M 13PVQ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13PVQ-0726-SM-5L3GI)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13PVQ age=50 sex=M hardyScore=2 sample=GTEX-13PVQ-0726-SM-5L3GI \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.4 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1421223
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1421223.hg19.bigWig
+    shortLabel thyroid M 13W46
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13W46-0926-SM-5LU3T)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13W46 age=50 sex=M hardyScore=0 sample=GTEX-13W46-0926-SM-5LU3T \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.1 batch=BP-47141 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1431552
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1431552.hg19.bigWig
+    shortLabel thyroid M 144FL
+    longLabel GTEx RNA signal from male Thyroid (GTEX-144FL-2326-SM-5LUAC)
+    subGroups sex=M age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1436042
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1436042.hg19.bigWig
+    shortLabel thyroid M ZV7C
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZV7C-0126-SM-57WDE)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZV7C age=50 sex=M hardyScore=0 sample=GTEX-ZV7C-0126-SM-57WDE \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalThyroidSRR1436515
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1436515.hg19.bigWig
+    shortLabel thyroid M ZT9W
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZT9W-0226-SM-4YCCZ)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZT9W age=50 sex=M hardyScore=0 sample=GTEX-ZT9W-0226-SM-4YCCZ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalThyroidSRR1441483
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1441483.hg19.bigWig
+    shortLabel thyroid M ZYFC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZYFC-0926-SM-5GZWW)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZYFC age=50 sex=M hardyScore=2 sample=GTEX-ZYFC-0926-SM-5GZWW \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6 batch=BP-43507 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalThyroidSRR1451857
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1451857.hg19.bigWig
+    shortLabel thyroid M 13OW6
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13OW6-0726-SM-5L3FX)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-0726-SM-5L3FX \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-47486 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalThyroidSRR1453787
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1453787.hg19.bigWig
+    shortLabel thyroid M OHPM
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OHPM-2626-SM-5SI7I)
+    subGroups sex=M age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1458506
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1458506.hg19.bigWig
+    shortLabel thyroid M ZVP2
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZVP2-0426-SM-57WC2)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-ZVP2 age=50 sex=M hardyScore=0 sample=GTEX-ZVP2-0426-SM-57WC2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.7 batch=BP-43375 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/10/2013
+
+    track gtexRnaSignalThyroidSRR1459697
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1459697.hg19.bigWig
+    shortLabel thyroid M 12WSC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12WSC-0826-SM-5EQ5Q)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-12WSC age=50 sex=M hardyScore=2 sample=GTEX-12WSC-0826-SM-5EQ5Q \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.4 batch=BP-44399 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/07/2013
+
+    track gtexRnaSignalThyroidSRR1470682
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1470682.hg19.bigWig
+    shortLabel thyroid M 13112
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13112-0326-SM-5P9IW)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-0326-SM-5P9IW \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-47901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalThyroidSRR1472598
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1472598.hg19.bigWig
+    shortLabel thyroid M 12WSH
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12WSH-0226-SM-5GCOG)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-12WSH age=50 sex=M hardyScore=2 sample=GTEX-12WSH-0226-SM-5GCOG \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalThyroidSRR1475430
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1475430.hg19.bigWig
+    shortLabel thyroid M 131XE
+    longLabel GTEx RNA signal from male Thyroid (GTEX-131XE-0126-SM-5LZVC)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-131XE age=50 sex=M hardyScore=0 sample=GTEX-131XE-0126-SM-5LZVC \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-45782 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/14/2013
+
+    track gtexRnaSignalThyroidSRR1475483
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1475483.hg19.bigWig
+    shortLabel thyroid M 13O21
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13O21-2226-SM-5MR3L)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13O21 age=50 sex=M hardyScore=0 sample=GTEX-13O21-2226-SM-5MR3L \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.7 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1498226
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1498226.hg19.bigWig
+    shortLabel thyroid M YEC3
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YEC3-0826-SM-4WWFP)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-YEC3 age=50 sex=M hardyScore=0 sample=GTEX-YEC3-0826-SM-4WWFP \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-43231 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/06/2013
+
+    track gtexRnaSignalThyroidSRR1498438
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1498438.hg19.bigWig
+    shortLabel thyroid M 13O3P
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13O3P-0726-SM-5J2OM)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-13O3P age=50 sex=M hardyScore=4 sample=GTEX-13O3P-0726-SM-5J2OM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-47051 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalThyroidSRR1500908
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1500908.hg19.bigWig
+    shortLabel thyroid M 12WSL
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12WSL-0626-SM-5GCOY)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-12WSL age=50 sex=M hardyScore=0 sample=GTEX-12WSL-0626-SM-5GCOY \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.5 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalThyroidSRR601962
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR601962.hg19.bigWig
+    shortLabel thyroid M QDVN
+    longLabel GTEx RNA signal from male Thyroid (GTEX-QDVN-0626-SM-2I3FP)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-QDVN age=50 sex=M hardyScore=0 sample=GTEX-QDVN-0626-SM-2I3FP \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-20293 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/22/2011
+
+    track gtexRnaSignalThyroidSRR602338
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR602338.hg19.bigWig
+    shortLabel thyroid M OIZH
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OIZH-2626-SM-2HMJM)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-OIZH age=50 sex=M hardyScore=0 sample=GTEX-OIZH-2626-SM-2HMJM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-18148 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/10/2011
+
+    track gtexRnaSignalThyroidSRR613258
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613258.hg19.bigWig
+    shortLabel thyroid M OIZG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OIZG-0226-SM-2TC5L)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-OIZG age=50 sex=M hardyScore=0 sample=GTEX-OIZG-0226-SM-2TC5L \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-18122 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=08/09/2011
+
+    track gtexRnaSignalThyroidSRR613711
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613711.hg19.bigWig
+    shortLabel thyroid M RN64
+    longLabel GTEx RNA signal from male Thyroid (GTEX-RN64-0626-SM-2TC5V)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-RN64 age=50 sex=M hardyScore=1 sample=GTEX-RN64-0626-SM-2TC5V \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-21577 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/19/2012
+
+    track gtexRnaSignalThyroidSRR613795
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613795.hg19.bigWig
+    shortLabel thyroid M RM2N
+    longLabel GTEx RNA signal from male Thyroid (GTEX-RM2N-0526-SM-2TF4N)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-RM2N age=50 sex=M hardyScore=0 sample=GTEX-RM2N-0526-SM-2TF4N \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-21549 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalThyroidSRR615285
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR615285.hg19.bigWig
+    shortLabel thyroid M QXCU
+    longLabel GTEx RNA signal from male Thyroid (GTEX-QXCU-0326-SM-2TC63)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-QXCU age=50 sex=M hardyScore=1 sample=GTEX-QXCU-0326-SM-2TC63 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-21102 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/29/2011
+
+    track gtexRnaSignalThyroidSRR615347
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR615347.hg19.bigWig
+    shortLabel thyroid M QV44
+    longLabel GTEx RNA signal from male Thyroid (GTEX-QV44-0826-SM-2S1RG)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-QV44 age=50 sex=M hardyScore=0 sample=GTEX-QV44-0826-SM-2S1RG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-20868 center=B1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=12/15/2011
+
+    track gtexRnaSignalThyroidSRR656191
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR656191.hg19.bigWig
+    shortLabel thyroid M S7SE
+    longLabel GTEx RNA signal from male Thyroid (GTEX-S7SE-0726-SM-2XCD7)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-S7SE age=50 sex=M hardyScore=2 sample=GTEX-S7SE-0726-SM-2XCD7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-23171 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=03/16/2012
+
+    track gtexRnaSignalThyroidSRR657360
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR657360.hg19.bigWig
+    shortLabel thyroid M UJMC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-UJMC-0326-SM-3GAE2)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-UJMC age=50 sex=M hardyScore=0 sample=GTEX-UJMC-0326-SM-3GAE2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8 batch=BP-26092 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/08/2012
+
+    track gtexRnaSignalThyroidSRR657821
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR657821.hg19.bigWig
+    shortLabel thyroid M SIU7
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SIU7-1126-SM-2XCDW)
+    subGroups sex=M age=a50 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR663149
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR663149.hg19.bigWig
+    shortLabel thyroid M VUSG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-VUSG-0426-SM-3GIKD)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-VUSG age=50 sex=M hardyScore=0 sample=GTEX-VUSG-0426-SM-3GIKD \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.1 batch=BP-26940 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/03/2012
+
+    track gtexRnaSignalThyroidSRR663392
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR663392.hg19.bigWig
+    shortLabel thyroid M SIU8
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SIU8-0626-SM-2XCDN)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-SIU8 age=50 sex=M hardyScore=2 sample=GTEX-SIU8-0626-SM-2XCDN \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7 batch=BP-23696 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalThyroidSRR807799
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR807799.hg19.bigWig
+    shortLabel thyroid M WK11
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WK11-0926-SM-3NMAU)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WK11 age=50 sex=M hardyScore=1 sample=GTEX-WK11-0926-SM-3NMAU \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7 batch=BP-28091 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+
+    track gtexRnaSignalThyroidSRR814919
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR814919.hg19.bigWig
+    shortLabel thyroid M WHPG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WHPG-0226-SM-3NMB9)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WHPG age=50 sex=M hardyScore=0 sample=GTEX-WHPG-0226-SM-3NMB9 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-27869 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/24/2012
+
+    track gtexRnaSignalThyroidSRR818749
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR818749.hg19.bigWig
+    shortLabel thyroid M WYJK
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WYJK-1626-SM-3NM9J)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WYJK age=50 sex=M hardyScore=0 sample=GTEX-WYJK-1626-SM-3NM9J \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-29482 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/15/2012
+
+    track gtexRnaSignalThyroidSRR819690
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR819690.hg19.bigWig
+    shortLabel thyroid M X4LF
+    longLabel GTEx RNA signal from male Thyroid (GTEX-X4LF-0426-SM-3NMB5)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-X4LF age=50 sex=M hardyScore=0 sample=GTEX-X4LF-0426-SM-3NMB5 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-30712 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/06/2012
+
+    track gtexRnaSignalThyroidSRR819867
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR819867.hg19.bigWig
+    shortLabel thyroid M WVLH
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WVLH-0626-SM-3MJG7)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WVLH age=50 sex=M hardyScore=2 sample=GTEX-WVLH-0626-SM-3MJG7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-28780 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/06/2012
+
+    track gtexRnaSignalThyroidSRR820186
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR820186.hg19.bigWig
+    shortLabel thyroid M WHSB
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WHSB-1626-SM-3LK6J)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WHSB age=50 sex=M hardyScore=0 sample=GTEX-WHSB-1626-SM-3LK6J \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-27514 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/17/2012
+
+    track gtexRnaSignalThyroidSRR821176
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR821176.hg19.bigWig
+    shortLabel thyroid M WL46
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WL46-0126-SM-3TW8I)
+    subGroups sex=M age=a50 
+    color 0,139,69
+    metadata donor=GTEX-WL46 age=50 sex=M hardyScore=2 sample=GTEX-WL46-0126-SM-3TW8I \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.1 batch=BP-27629 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/19/2012
+
+    track gtexRnaSignalThyroidSRR1069279
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1069279.hg19.bigWig
+    shortLabel thyroid M X4XX
+    longLabel GTEx RNA signal from male Thyroid (GTEX-X4XX-0926-SM-46MV7)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-X4XX age=60 sex=M hardyScore=4 sample=GTEX-X4XX-0926-SM-46MV7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-30751 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/07/2012
+
+    track gtexRnaSignalThyroidSRR1074694
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1074694.hg19.bigWig
+    shortLabel thyroid M X4XY
+    longLabel GTEx RNA signal from male Thyroid (GTEX-X4XY-0826-SM-4E3JM)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-X4XY age=60 sex=M hardyScore=0 sample=GTEX-X4XY-0826-SM-4E3JM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.6 batch=BP-36096 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=02/13/2013
+
+    track gtexRnaSignalThyroidSRR1083031
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1083031.hg19.bigWig
+    shortLabel thyroid M XLM4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XLM4-0726-SM-4AT64)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-XLM4 age=60 sex=M hardyScore=3 sample=GTEX-XLM4-0726-SM-4AT64 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.2 batch=BP-32244 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/17/2012
+
+    track gtexRnaSignalThyroidSRR1090815
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1090815.hg19.bigWig
+    shortLabel thyroid M XBED
+    longLabel GTEx RNA signal from male Thyroid (GTEX-XBED-0126-SM-47JY7)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-XBED age=60 sex=M hardyScore=0 sample=GTEX-XBED-0126-SM-47JY7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8.3 batch=BP-31549 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/27/2012
+
+    track gtexRnaSignalThyroidSRR1309578
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1309578.hg19.bigWig
+    shortLabel thyroid M 1192W
+    longLabel GTEx RNA signal from male Thyroid (GTEX-1192W-0126-SM-5EGGS)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1192W age=60 sex=M hardyScore=2 sample=GTEX-1192W-0126-SM-5EGGS \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-44460 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/08/2013
+
+    track gtexRnaSignalThyroidSRR1319924
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1319924.hg19.bigWig
+    shortLabel thyroid M 12ZZZ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12ZZZ-1226-SM-59HK1)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-12ZZZ age=60 sex=M hardyScore=2 sample=GTEX-12ZZZ-1226-SM-59HK1 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.1 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalThyroidSRR1322437
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1322437.hg19.bigWig
+    shortLabel thyroid M 111VG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-111VG-0526-SM-5N9BW)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-111VG age=60 sex=M hardyScore=3 sample=GTEX-111VG-0526-SM-5N9BW \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.8 batch=BP-43989 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/26/2013
+
+    track gtexRnaSignalThyroidSRR1323065
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1323065.hg19.bigWig
+    shortLabel thyroid M 111YS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-111YS-0726-SM-5GZY8)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-111YS age=60 sex=M hardyScore=0 sample=GTEX-111YS-0726-SM-5GZY8 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.4 batch=BP-43507 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/12/2013
+
+    track gtexRnaSignalThyroidSRR1323914
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1323914.hg19.bigWig
+    shortLabel thyroid M 1212Z
+    longLabel GTEx RNA signal from male Thyroid (GTEX-1212Z-0426-SM-5FQT6)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1212Z age=60 sex=M hardyScore=2 sample=GTEX-1212Z-0426-SM-5FQT6 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.9 batch=BP-43881 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/23/2013
+
+    track gtexRnaSignalThyroidSRR1325353
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1325353.hg19.bigWig
+    shortLabel thyroid M Y5V6
+    longLabel GTEx RNA signal from male Thyroid (GTEX-Y5V6-0526-SM-4VBRV)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-0526-SM-4VBRV \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-41767 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/01/2013
+
+    track gtexRnaSignalThyroidSRR1327366
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1327366.hg19.bigWig
+    shortLabel thyroid M ZDTS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZDTS-0926-SM-4WAXG)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZDTS age=60 sex=M hardyScore=2 sample=GTEX-ZDTS-0926-SM-4WAXG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-42588 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=08/22/2013
+
+    track gtexRnaSignalThyroidSRR1330305
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1330305.hg19.bigWig
+    shortLabel thyroid M 11GS4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11GS4-0826-SM-5986J)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11GS4 age=60 sex=M hardyScore=2 sample=GTEX-11GS4-0826-SM-5986J \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7 batch=BP-44902 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1337137
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1337137.hg19.bigWig
+    shortLabel thyroid M 139TS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-139TS-0126-SM-5K7XJ)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-139TS age=60 sex=M hardyScore=2 sample=GTEX-139TS-0126-SM-5K7XJ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalThyroidSRR1348318
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1348318.hg19.bigWig
+    shortLabel thyroid M 1497J
+    longLabel GTEx RNA signal from male Thyroid (GTEX-1497J-0126-SM-5Q5BK)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-0126-SM-5Q5BK \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.1 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1349518
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1349518.hg19.bigWig
+    shortLabel thyroid M ZXG5
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZXG5-0926-SM-5NQ8H)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZXG5 age=60 sex=M hardyScore=3 sample=GTEX-ZXG5-0926-SM-5NQ8H \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.7 batch=BP-43639 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalThyroidSRR1350263
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1350263.hg19.bigWig
+    shortLabel thyroid M 148VJ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-148VJ-0726-SM-5LU8J)
+    subGroups sex=M age=a70 
+    color 0,139,69
+    metadata donor=GTEX-148VJ age=70 sex=M hardyScore=2 sample=GTEX-148VJ-0726-SM-5LU8J \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.8 batch=BP-47616 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1354225
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1354225.hg19.bigWig
+    shortLabel thyroid M 11DXY
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11DXY-0426-SM-5H12R)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11DXY age=60 sex=M hardyScore=2 sample=GTEX-11DXY-0426-SM-5H12R \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.2 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalThyroidSRR1357344
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1357344.hg19.bigWig
+    shortLabel thyroid M 11GSO
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11GSO-0626-SM-5A5LW)
+    subGroups sex=M age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1359529
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1359529.hg19.bigWig
+    shortLabel thyroid M 13JVG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13JVG-0926-SM-5IJE1)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13JVG age=60 sex=M hardyScore=2 sample=GTEX-13JVG-0926-SM-5IJE1 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalThyroidSRR1365512
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1365512.hg19.bigWig
+    shortLabel thyroid M 13YAN
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13YAN-0926-SM-5O9C3)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13YAN age=60 sex=M hardyScore=0 sample=GTEX-13YAN-0926-SM-5O9C3 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-47675 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/19/2013
+
+    track gtexRnaSignalThyroidSRR1365850
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1365850.hg19.bigWig
+    shortLabel thyroid M YJ89
+    longLabel GTEx RNA signal from male Thyroid (GTEX-YJ89-0726-SM-5P9F7)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-YJ89 age=60 sex=M hardyScore=2 sample=GTEX-YJ89-0726-SM-5P9F7 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.7 batch=BP-45374 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/31/2013
+
+    track gtexRnaSignalThyroidSRR1366772
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1366772.hg19.bigWig
+    shortLabel thyroid M 13G51
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13G51-1226-SM-5K7Z3)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13G51 age=60 sex=M hardyScore=2 sample=GTEX-13G51-1226-SM-5K7Z3 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalThyroidSRR1377949
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1377949.hg19.bigWig
+    shortLabel thyroid M 13IVO
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13IVO-0926-SM-5KLZP)
+    subGroups sex=M age=a70 
+    color 0,139,69
+    metadata donor=GTEX-13IVO age=70 sex=M hardyScore=4 sample=GTEX-13IVO-0926-SM-5KLZP \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.1 batch=BP-46650 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/05/2013
+
+    track gtexRnaSignalThyroidSRR1392030
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1392030.hg19.bigWig
+    shortLabel thyroid M 131XF
+    longLabel GTEx RNA signal from male Thyroid (GTEX-131XF-1826-SM-5EGKG)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-131XF age=60 sex=M hardyScore=0 sample=GTEX-131XF-1826-SM-5EGKG \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-44901 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1393428
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1393428.hg19.bigWig
+    shortLabel thyroid M 14753
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14753-0926-SM-5Q5BI)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-14753 age=60 sex=M hardyScore=4 sample=GTEX-14753-0926-SM-5Q5BI \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.9 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1393470
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1393470.hg19.bigWig
+    shortLabel thyroid M 13N2G
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13N2G-0726-SM-5MR38)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13N2G age=60 sex=M hardyScore=2 sample=GTEX-13N2G-0726-SM-5MR38 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.9 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1394894
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1394894.hg19.bigWig
+    shortLabel thyroid M 139UW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-139UW-0126-SM-5KM1B)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-139UW age=60 sex=M hardyScore=2 sample=GTEX-139UW-0126-SM-5KM1B \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-46925 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/10/2013
+
+    track gtexRnaSignalThyroidSRR1397861
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1397861.hg19.bigWig
+    shortLabel thyroid M 12696
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12696-0326-SM-5EGL4)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0326-SM-5EGL4 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.6 batch=BP-45028 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/24/2013
+
+    track gtexRnaSignalThyroidSRR1398686
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1398686.hg19.bigWig
+    shortLabel thyroid M 132QS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-132QS-0326-SM-5IJFN)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-132QS age=60 sex=M hardyScore=0 sample=GTEX-132QS-0326-SM-5IJFN \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-45499 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=11/05/2013
+
+    track gtexRnaSignalThyroidSRR1404384
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1404384.hg19.bigWig
+    shortLabel thyroid M 144GO
+    longLabel GTEx RNA signal from male Thyroid (GTEX-144GO-0126-SM-5LUAO)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-144GO age=60 sex=M hardyScore=4 sample=GTEX-144GO-0126-SM-5LUAO \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.1 batch=BP-47591 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/18/2013
+
+    track gtexRnaSignalThyroidSRR1409721
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1409721.hg19.bigWig
+    shortLabel thyroid M 11EI6
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11EI6-0726-SM-59866)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11EI6 age=60 sex=M hardyScore=4 sample=GTEX-11EI6-0726-SM-59866 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-44902 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/22/2013
+
+    track gtexRnaSignalThyroidSRR1413851
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1413851.hg19.bigWig
+    shortLabel thyroid M 132NY
+    longLabel GTEx RNA signal from male Thyroid (GTEX-132NY-1026-SM-5P9IY)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-132NY age=60 sex=M hardyScore=1 sample=GTEX-132NY-1026-SM-5P9IY \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-47901 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/06/2014
+
+    track gtexRnaSignalThyroidSRR1419593
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1419593.hg19.bigWig
+    shortLabel thyroid M 12BJ1
+    longLabel GTEx RNA signal from male Thyroid (GTEX-12BJ1-0426-SM-5FQSO)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-12BJ1 age=60 sex=M hardyScore=0 sample=GTEX-12BJ1-0426-SM-5FQSO \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.9 batch=BP-44157 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalThyroidSRR1433311
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1433311.hg19.bigWig
+    shortLabel thyroid M 13O1R
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13O1R-0826-SM-5J2MB)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-0826-SM-5J2MB \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-46978 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR1436629
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1436629.hg19.bigWig
+    shortLabel thyroid M 111FC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-111FC-1026-SM-5GZX1)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-111FC age=60 sex=M hardyScore=1 sample=GTEX-111FC-1026-SM-5GZX1 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.9 batch=BP-43693 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/17/2013
+
+    track gtexRnaSignalThyroidSRR1437056
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1437056.hg19.bigWig
+    shortLabel thyroid M 11TUW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11TUW-0226-SM-5LU8X)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11TUW age=60 sex=M hardyScore=2 sample=GTEX-11TUW-0226-SM-5LU8X \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.5 batch=BP-45139 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/28/2013
+
+    track gtexRnaSignalThyroidSRR1440625
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1440625.hg19.bigWig
+    shortLabel thyroid M 13NYC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13NYC-2426-SM-5MR3K)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13NYC age=60 sex=M hardyScore=2 sample=GTEX-13NYC-2426-SM-5MR3K \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.4 batch=BP-46529 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR1441631
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1441631.hg19.bigWig
+    shortLabel thyroid M ZYW4
+    longLabel GTEx RNA signal from male Thyroid (GTEX-ZYW4-1126-SM-5SI99)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-ZYW4 age=60 sex=M hardyScore=3 sample=GTEX-ZYW4-1126-SM-5SI99 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.8 batch=BP-43956 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/25/2013
+
+    track gtexRnaSignalThyroidSRR1443419
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1443419.hg19.bigWig
+    shortLabel thyroid M 13OW8
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13OW8-0126-SM-5IJE5)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13OW8 age=60 sex=M hardyScore=2 sample=GTEX-13OW8-0126-SM-5IJE5 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.7 batch=BP-47125 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalThyroidSRR1446606
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1446606.hg19.bigWig
+    shortLabel thyroid M 11EQ8
+    longLabel GTEx RNA signal from male Thyroid (GTEX-11EQ8-0826-SM-5N9FG)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-11EQ8 age=60 sex=M hardyScore=4 sample=GTEX-11EQ8-0826-SM-5N9FG \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=5.7 batch=BP-43753 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/19/2013
+
+    track gtexRnaSignalThyroidSRR1454498
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1454498.hg19.bigWig
+    shortLabel thyroid M 14A5H
+    longLabel GTEx RNA signal from male Thyroid (GTEX-14A5H-0726-SM-5Q5DW)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-14A5H age=60 sex=M hardyScore=2 sample=GTEX-14A5H-0726-SM-5Q5DW \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.1 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalThyroidSRR1471862
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1471862.hg19.bigWig
+    shortLabel thyroid M 13OVG
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13OVG-0226-SM-5LU93)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13OVG age=60 sex=M hardyScore=0 sample=GTEX-13OVG-0226-SM-5LU93 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=5.7 batch=BP-47524 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/17/2013
+
+    track gtexRnaSignalThyroidSRR1475281
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1475281.hg19.bigWig
+    shortLabel thyroid M 13OW5
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13OW5-0626-SM-5J2N2)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-13OW5 age=60 sex=M hardyScore=3 sample=GTEX-13OW5-0626-SM-5J2N2 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-46999 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/11/2013
+
+    track gtexRnaSignalThyroidSRR1476903
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1476903.hg19.bigWig
+    shortLabel thyroid M P4PQ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-P4PQ-2626-SM-5SI7K)
+    subGroups sex=M age=a60 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR1480565
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1480565.hg19.bigWig
+    shortLabel thyroid M 117XS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-117XS-0526-SM-5987Q)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-117XS age=60 sex=M hardyScore=2 sample=GTEX-117XS-0526-SM-5987Q \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7 batch=BP-44577 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/11/2013
+
+    track gtexRnaSignalThyroidSRR1491275
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR1491275.hg19.bigWig
+    shortLabel thyroid M 13N1W
+    longLabel GTEx RNA signal from male Thyroid (GTEX-13N1W-0826-SM-5MR5J)
+    subGroups sex=M age=a70 
+    color 0,139,69
+    metadata donor=GTEX-13N1W age=70 sex=M hardyScore=0 sample=GTEX-13N1W-0826-SM-5MR5J \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=6.9 batch=BP-46529 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/04/2013
+
+    track gtexRnaSignalThyroidSRR2135283
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR2135283.hg19.bigWig
+    shortLabel thyroid M SUCS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SUCS-0226-SM-5CHQG_rep1)
+    subGroups sex=M age=a70 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR2135284
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR2135284.hg19.bigWig
+    shortLabel thyroid M SUCS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SUCS-0226-SM-5CHQG_rep2)
+    subGroups sex=M age=a70 
+    color 0,139,69
+
+    track gtexRnaSignalThyroidSRR597952
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR597952.hg19.bigWig
+    shortLabel thyroid M OOBJ
+    longLabel GTEx RNA signal from male Thyroid (GTEX-OOBJ-2626-SM-2I3F6)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-OOBJ age=60 sex=M hardyScore=0 sample=GTEX-OOBJ-2626-SM-2I3F6 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.2 batch=BP-18254 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=08/16/2011
+
+    track gtexRnaSignalThyroidSRR604148
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR604148.hg19.bigWig
+    shortLabel thyroid M P4QS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-P4QS-2626-SM-2I3EV)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-P4QS age=60 sex=M hardyScore=0 sample=GTEX-P4QS-2626-SM-2I3EV \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-18728 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=09/08/2011
+
+    track gtexRnaSignalThyroidSRR607679
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR607679.hg19.bigWig
+    shortLabel thyroid M N7MS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-N7MS-2326-SM-2HMLD)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-2326-SM-2HMLD \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=8.5 batch=BP-16741 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/19/2011
+
+    track gtexRnaSignalThyroidSRR613975
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR613975.hg19.bigWig
+    shortLabel thyroid M RVPV
+    longLabel GTEx RNA signal from male Thyroid (GTEX-RVPV-1226-SM-2TF73)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-RVPV age=60 sex=M hardyScore=3 sample=GTEX-RVPV-1226-SM-2TF73 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.3 batch=BP-21957 center=D1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/31/2012
+
+    track gtexRnaSignalThyroidSRR614107
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR614107.hg19.bigWig
+    shortLabel thyroid M REY6
+    longLabel GTEx RNA signal from male Thyroid (GTEX-REY6-0526-SM-2TF5M)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-REY6 age=60 sex=M hardyScore=0 sample=GTEX-REY6-0526-SM-2TF5M \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.8 batch=BP-21547 center=C1 \
+            isolationMethod=RNA_isolation_Trizol_Manual_(Cell_Pellet) isolationDate=01/18/2012
+
+    track gtexRnaSignalThyroidSRR656528
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR656528.hg19.bigWig
+    shortLabel thyroid M POYW
+    longLabel GTEx RNA signal from male Thyroid (GTEX-POYW-0826-SM-2XCEM)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-POYW age=60 sex=M hardyScore=0 sample=GTEX-POYW-0826-SM-2XCEM \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6.3 batch=BP-19380 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=10/13/2011
+
+    track gtexRnaSignalThyroidSRR658009
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR658009.hg19.bigWig
+    shortLabel thyroid M SUCS
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SUCS-0226-SM-32PLQ)
+    subGroups sex=M age=a70 
+    color 0,139,69
+    metadata donor=GTEX-SUCS age=70 sex=M hardyScore=0 sample=GTEX-SUCS-0226-SM-32PLQ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.2 batch=BP-24528 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/24/2012
+
+    track gtexRnaSignalThyroidSRR658021
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR658021.hg19.bigWig
+    shortLabel thyroid M U8T8
+    longLabel GTEx RNA signal from male Thyroid (GTEX-U8T8-2326-SM-3DB96)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-U8T8 age=60 sex=M hardyScore=0 sample=GTEX-U8T8-2326-SM-3DB96 \
+            tissue=thyroid autolysisScore=2 rnaIntegrity=7.2 batch=BP-25740 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/29/2012
+
+    track gtexRnaSignalThyroidSRR662510
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR662510.hg19.bigWig
+    shortLabel thyroid M SJXC
+    longLabel GTEx RNA signal from male Thyroid (GTEX-SJXC-0726-SM-2XCFJ)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-SJXC age=60 sex=M hardyScore=2 sample=GTEX-SJXC-0726-SM-2XCFJ \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=7.3 batch=BP-23698 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/02/2012
+
+    track gtexRnaSignalThyroidSRR809043
+    parent gtexRnaSignalThyroid off
+    type bigWig
+    bigDataUrl thyroid/gtexRnaSignalSRR809043.hg19.bigWig
+    shortLabel thyroid M WOFL
+    longLabel GTEx RNA signal from male Thyroid (GTEX-WOFL-0726-SM-3MJG4)
+    subGroups sex=M age=a60 
+    color 0,139,69
+    metadata donor=GTEX-WOFL age=60 sex=M hardyScore=0 sample=GTEX-WOFL-0726-SM-3MJG4 \
+            tissue=thyroid autolysisScore=1 rnaIntegrity=6 batch=BP-28095 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=07/26/2012
+

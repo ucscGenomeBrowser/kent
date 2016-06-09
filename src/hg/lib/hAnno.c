@@ -22,6 +22,7 @@
 #include "annoStreamDbFactorSource.h"
 #include "annoStreamTab.h"
 #include "annoStreamVcf.h"
+#include "annoStreamTabix.h"
 #include "annoStreamWig.h"
 #include "annoGrateWigDb.h"
 #include "annoFormatTab.h"
@@ -182,6 +183,11 @@ if (isCustomTrack(selTable))
     }
 if (startsWithWord("wig", tdb->type))
     streamer = annoStreamWigDbNew(dataDb, dbTable, assembly, maxOutRows);
+else if (sameString("longTabix", tdb->type))
+    {
+    char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);
+    streamer = annoStreamTabixNew(fileOrUrl,  assembly, maxOutRows);
+    }
 else if (sameString("vcfTabix", tdb->type))
     {
     char *fileOrUrl = getBigDataFileName(dataDb, tdb, selTable, chrom);

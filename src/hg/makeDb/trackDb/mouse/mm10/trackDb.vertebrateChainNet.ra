@@ -74,14 +74,6 @@ html vertebrateChainNet
         type chain melUnd1
         otherDb melUnd1
 
-        track chainGalGal4
-        subTrack vertebrateChainNetViewchain off
-        subGroups view=chain species=gChicken clade=bAves
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain galGal4
-        otherDb galGal4
-
         track chainTaeGut1
         subTrack vertebrateChainNetViewchain off
         subGroups view=chain species=fZFinch clade=bAves
@@ -248,13 +240,8 @@ html vertebrateChainNet
         type netAlign melUnd1 chainMelUnd1
         otherDb melUnd1
 
-        track netGalGal4
-        subTrack vertebrateChainNetViewnet off
-        subGroups view=net species=gChicken clade=bAves
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign galGal4 chainGalGal4
-        otherDb galGal4
+include chainNetGalGal4.ra beta,public
+include chainNetGalGal5.ra alpha
 
         track netTaeGut1
         subTrack vertebrateChainNetViewnet on

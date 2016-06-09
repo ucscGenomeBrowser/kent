@@ -30,7 +30,7 @@ longLabel MalaCards Disease Associations
 priority 35.1
 
 name microarray
-shortLabel Microarray
+shortLabel Microarray Expression
 longLabel Microarray Expression Data
 priority 40
 

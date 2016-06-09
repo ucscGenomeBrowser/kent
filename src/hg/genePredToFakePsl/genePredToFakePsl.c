@@ -47,6 +47,12 @@ errAbort(
 static void cnvGenePredCds(struct genePred *gp, int qSize, FILE *cdsFh)
 /* determine CDS and output */
 {
+/*
+ * Warning: Genbank CDS does't have the ability to represent
+ * partial codons.  If we have genePreds created from GFF/GTF, they can have
+ * partial codons, which is indicated in frame.  This code does not correctly handle
+ * this case, or frame shifting indels.
+ */
 int e, off = 0;
 int qCdsStart = -1, qCdsEnd = -1;
 int eCdsStart, eCdsEnd;

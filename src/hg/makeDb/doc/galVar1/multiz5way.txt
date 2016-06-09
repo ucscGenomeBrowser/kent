@@ -1,0 +1,1509 @@
+#############################################################################
+## 5-Way Multiz (DONE - 2016-05-03 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way
+    cd /hive/data/genomes/galVar1/bed/multiz5way
+
+    # from the 191-way in the source tree, select out the 5 used here:
+    /cluster/bin/phast/tree_doctor \
+        --prune-all-but hg38,cavPor3,galVar1,mm10,tupBel1 \
+        /cluster/home/hiram/kent/src/hg/utils/phyloTrees/191way.nh \
+          > galVar1.5way.nh.0
+    cat galVar1.5way.nh.0
+    # ((hg38:0.143908,(tupBel1:0.136203,galVar1:0.080000):0.054937):0.002000,
+    #    (mm10:0.315424,cavPor3:0.175779):0.041059);
+
+    # using TreeGraph2 tree editor on the Mac, rearrange to get galVar1
+    # at the top:
+
+    #	what that looks like:
+ ~/kent/src/hg/utils/phyloTrees/asciiTree.pl galVar1.5way.nh | sed -e 's/^/# /;'
+# (((galVar1:0.08,
+#   tupBel1:0.136203):0.054937,
+#  hg38:0.143908):0.002,
+# (mm10:0.315424,
+# cavPor3:0.175779):0.041059);
+
+    # extract species list from that .nh file
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+        galVar1.5way.nh | xargs echo | sed 's/ //g; s/,/ /g' \
+        | sed 's/[()]//g; s/,/ /g' | tr '[ ]' '[\n]' > species.list.txt
+
+    # construct db to name translation list:
+    cat species.list.txt | while read DB
+do
+hgsql -N -e "select name,organism from dbDb where name=\"${DB}\";" hgcentraltest
+done | sed -e "s/\t/->/; s/ /_/g;" | sed -e 's/$/;/' | sed -e 's/\./_/g' \
+        | sed -e 's/-nosed/_nosed/; s/-eating/_eating/;' > db.to.name.txt
+
+    # construct a common name .nh file:
+    /cluster/bin/phast/tree_doctor --rename \
+    "`cat db.to.name.txt`" galVar1.5way.nh | sed -e 's/00*)/)/g; s/00*,/,/g' \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > galVar1.5way.commonNames.nh
+    cat galVar1.5way.commonNames.nh | sed -e 's/^/# /;'
+# (((Malayan_flying_lemur:0.08,
+#   Tree_shrew:0.136203):0.054937,
+#  Human:0.143908):0.002,
+# (Mouse:0.315424,
+# Guinea_pig:0.175779):0.041059);
+
+#	Use this specification in the phyloGif tool:
+#	http://genome.ucsc.edu/cgi-bin/phyloGif
+#	to obtain a png image for src/hg/htdocs/images/phylo/galVar1_5way.png
+
+    ~/kent/src/hg/utils/phyloTrees/asciiTree.pl galVar1.5way.nh > t.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh t.nh \
+       | $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+          > galVar1.5way.scientificNames.nh
+    rm -f t.nh
+    cat galVar1.5way.scientificNames.nh | sed -e 's/^/# /;'
+# (((Galeopterus_variegatus:0.08,
+#   Tupaia_belangeri:0.136203):0.054937,
+#  Homo_sapiens:0.143908):0.002,
+# (Mus_musculus:0.315424,
+# Cavia_porcellus:0.175779):0.041059);
+
+    /cluster/bin/phast/all_dists galVar1.5way.nh | grep galVar1 \
+        | sed -e "s/galVar1.//" | sort -k2n > 5way.distances.txt
+    #	Use this output to create the table below
+    cat 5way.distances.txt | sed -e 's/^/# /;'
+# tupBel1       0.216203
+# hg38  	0.278845
+# cavPor3       0.353775
+# mm10  	0.493420
+
+    printf '#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<5way.distances.txt") or
+        die "can not read 5way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($D, $dist) = split('"'"'\\s+'"'"', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/galVar1/bed/lastz.$D/fb.galVar1." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '"'"'{print \\$5}'"'"' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\\%%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.galVar1/fb.${D}.chainGalVar1Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+	$swapMeasure =
+	    `awk '"'"'{print \\$5}'"'"' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+	chomp $swapMeasure;
+	$swapMeasure = 0.0 if (length($swapMeasure) < 1);
+	$swapMeasure =~ s/\\%%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name="$D";" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    printf "# %%02d  %%.4f (%%%% %%06.3f) (%%%% %%06.3f) - %%s %%s\\n", $count, $dist,
+        $chainLinkMeasure, $swapMeasure, $orgName, $D;
+}
+close (FH);
+' > sizeStats.pl
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+
+#       featureBits chainLink measures
+#               chainLink
+#  N distance  on galVar1  on other     other species
+# 01  0.2162 (% 41.502) (% 50.947) - Tree shrew tupBel1
+# 02  0.2788 (% 64.881) (% 57.036) - Human hg38
+# 03  0.3538 (% 48.448) (% 48.820) - Guinea pig cavPor3
+# 04  0.4934 (% 35.972) (% 35.618) - Mouse mm10
+
+# None of this concern for distances matters in building the first step, the
+# maf files.  The distances will be better calibrated later.
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	galVar1.5way.nh | xargs echo | sed 's/ //g; s/,/ /g' > tree.nh
+
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+    # galVar1 tupBel1 hg38 mm10 cavPor3
+
+    # survey N50 for each
+    for db in `cat species.list`
+do
+n50.pl /hive/data/genomes/$db/chrom.sizes
+done
+#       reading: /hive/data/genomes/galVar1/chrom.sizes
+#       contig count: 179514, total size: 3187660572, one half size:
+#       1593830286
+# cumulative    N50 count       contig  contig size
+1593691350      3422    NW_007730159v1  245222
+1593830286 one half size
+1593936539      3423    NW_007729331v1  245189
+#       reading: /hive/data/genomes/tupBel1/chrom.sizes
+#       contig count: 150851, total size: 3660774957, one half size:
+#       1830387478
+# cumulative    N50 count       contig  contig size
+1830345737      7910    scaffold_129972.1-127906        127906
+1830387478 one half size
+1830473625      7911    scaffold_147844.1-127888        127888
+#       reading: /hive/data/genomes/hg38/chrom.sizes
+#       contig count: 455, total size: 3209286105, one half size: 1604643052
+# cumulative    N50 count       contig  contig size
+1547391171      8       chrX    156040895
+1604643052 one half size
+1692529807      9       chr8    145138636
+#       reading: /hive/data/genomes/mm10/chrom.sizes
+#       contig count: 66, total size: 2730871774, one half size: 1365435887
+# cumulative    N50 count       contig  contig size
+1312176979      8       chr7    145441459
+1365435887 one half size
+1442871972      9       chr10   130694993
+#       reading: /hive/data/genomes/cavPor3/chrom.sizes
+#       contig count: 3144, total size: 2723219641, one half size: 1361609820
+# cumulative    N50 count       contig  contig size
+1356838683      27      scaffold_25     28222655
+1361609820 one half size
+1384780737      28      scaffold_27     27942054
+
+
+    #	bash shell syntax here ...
+    cd /hive/data/genomes/galVar1/bed/multiz5way
+    export H=/hive/data/genomes/galVar1/bed
+    mkdir mafLinks
+    # good assemblies can use syntenic net:
+    #  hg38 mm10 cavPor3
+    for G in hg38 mm10 cavPor3
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/axtChain/galVar1.${G}.synNet.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/axtChain/galVar1.${G}.synNet.maf.gz ./mafLinks/$G
+    done
+
+    # other assemblies using recip best net:
+    #  tupBel1
+    for G in tupBel1
+    do
+      mkdir mafLinks/$G
+      echo ln -s ${H}/lastz.$G/mafRBestNet/galVar1.${G}.rbest.maf.gz ./mafLinks/$G
+      ln -s ${H}/lastz.$G/mafRBestNet/galVar1.${G}.rbest.maf.gz ./mafLinks/$G
+    done
+
+    # verify the symLinks are good:
+    ls -ogrtL mafLinks/*/* | sed -e 's/^/# /; s/-rw-rw-r-- 1//;'
+#   889451310 Apr 18 15:11 mafLinks/cavPor3/galVar1.cavPor3.synNet.maf.gz
+#   751623432 Apr 26 12:11 mafLinks/tupBel1/galVar1.tupBel1.rbest.maf.gz
+#  1145536271 Apr 26 15:57 mafLinks/hg38/galVar1.hg38.synNet.maf.gz
+#   663877752 Apr 26 18:28 mafLinks/mm10/galVar1.mm10.synNet.maf.gz
+
+    # split the maf files into a set of hashed named files
+    # this hash named split keeps the same chr/contig names in the same
+    # named hash file.
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/mafSplit
+    cd /hive/data/genomes/galVar1/bed/multiz5way/mafSplit
+    time for D in `sed -e "s/galVar1 //" ../species.list`
+do
+    echo "${D}"
+    mkdir $D
+    cd $D
+    echo "mafSplit -byTarget -useHashedName=8 /dev/null . ../../mafLinks/${D}/*.maf.gz"
+    mafSplit -byTarget -useHashedName=8 /dev/null . \
+	../../mafLinks/${D}/*.maf.gz
+    cd ..
+done
+    # real    6m13.536s
+
+    # construct a list of all possible maf file names.
+    # they do not all exist in each of the species directories
+    find . -type f | wc -l
+    # 1024
+    find . -type f | grep ".maf$" | xargs -L 1 basename | sort -u > maf.list
+    wc -l maf.list
+    # 256 maf.list
+
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/splitRun
+    cd /hive/data/genomes/galVar1/bed/multiz5way/splitRun
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/multiz penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/maf_project penn
+    cp -p /cluster/bin/penn/multiz.2009-01-21_patched/autoMZ penn
+
+    #	verify the db and pairs settings are correct
+    printf '#!/bin/csh -ef
+set db = galVar1
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /dev/shm/$db/multiz.$c
+set pairs = /hive/data/genomes/galVar1/bed/multiz5way/mafSplit
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../../tree.nh ../../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/$db //" species.list`)
+    set in = $pairs/$s/$c
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c $result
+/bin/rm -fr $tmp
+' > autoMultiz.csh
+
+    chmod +x autoMultiz.csh
+
+    printf '#LOOP
+./autoMultiz.csh $(file1) {check out line+ /hive/data/genomes/galVar1/bed/multiz5way/splitRun/maf/$(root1).maf}
+#ENDLOOP
+' > template
+
+# << happy emacs
+
+    ln -s ../../mafSplit/maf.list maf.list
+    ssh ku
+    cd /hive/data/genomes/galVar1/bed/multiz5way/splitRun/run
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+# Completed: 256 of 256 jobs
+# CPU time in finished jobs:      68470s    1141.16m    19.02h    0.79d  0.002 y
+# IO & Wait Time:                   772s      12.87m     0.21h    0.01d  0.000 y
+# Average job time:                 270s       4.51m     0.08h    0.00d
+# Longest finished job:             438s       7.30m     0.12h    0.01d
+# Submission to last job:           877s      14.62m     0.24h    0.01d
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    cd /hive/data/genomes/galVar1/bed/multiz5way
+    head -1 splitRun/maf/020.maf > multiz5way.maf
+    time for F in splitRun/maf/*.maf
+do
+    echo "${F}" 1>&2
+    egrep -v "^#" ${F}
+done >> multiz5way.maf
+    # real    1m2.904s
+
+
+    tail -1 splitRun/maf/020.maf >> multiz5way.maf
+# -rw-rw-r-- 1 9927867620 May  3 13:51 multiz5way.maf
+
+    # Load into database
+    ssh hgwdev
+    cd /hive/data/genomes/galVar1/bed/multiz5way
+    mkdir /gbdb/galVar1/multiz5way
+    ln -s `pwd`/multiz5way.maf /gbdb/galVar1/multiz5way
+    cd /dev/shm
+    time hgLoadMaf galVar1 multiz5way
+# Loaded 9883887 mafs in 1 files from /gbdb/galVar1/multiz5way
+#  real    3m5.211s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 galVar1 multiz5waySummary \
+	/gbdb/galVar1/multiz5way/multiz5way.maf
+# Created 62787 summary blocks from 1838380 components and 9883887 mafs from /gbdb/galVar1/multiz5way/multiz5way.maf
+# real    1m56.217s
+
+# -rw-rw-r-- 1 532880034 May  3 13:54 multiz5way.tab
+# -rw-rw-r-- 1   3187689 May  3 13:58 multiz5waySummary.tab
+
+    wc -l multiz5way*.tab
+#   9883887 multiz5way.tab
+#     62787 multiz5waySummary.tab
+
+    rm multiz5way*.tab
+
+##############################################################################
+# GAP ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE - 2016-05-03 - Hiram)
+    # mafAddIRows has to be run on single chromosome maf files, it does not
+    #	function correctly when more than one reference sequence
+    #	are in a single file.  Need to split of the maf file into individual
+    #   maf files
+    mkdir -p /hive/data/genomes/galVar1/bed/multiz5way/anno/mafSplit
+    cd /hive/data/genomes/galVar1/bed/multiz5way/anno/mafSplit
+
+    time mafSplit -outDirDepth=2 -byTarget -useFullSequenceName \
+        /dev/null . ../../multiz5way.maf
+    #   real    4m59.924s
+    find . -type f | wc -l
+    #   77237
+
+    # check for N.bed files everywhere:
+    cd /hive/data/genomes/galVar1/bed/multiz5way/anno
+    for DB in `cat ../species.list`
+do
+    if [ ! -s /hive/data/genomes/${DB}/${DB}.N.bed ]; then
+        echo "MISS: ${DB}"
+#         cd /hive/data/genomes/${DB}
+#         twoBitInfo -nBed ${DB}.2bit ${DB}.N.bed
+    else
+        echo "  OK: ${DB}"
+    fi
+done
+
+    cd /hive/data/genomes/galVar1/bed/multiz5way/anno
+    for DB in `cat ../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+    # make sure they all are successful symLinks:
+    ls -ogrtL
+
+    screen -S gapAnno      # use a screen to control this longish job
+    ssh ku
+    cd /hive/data/genomes/galVar1/bed/multiz5way/anno
+    mkdir result
+    find ./mafSplit -type d | sed -e 's#./mafSplit/##' | while read D
+do
+    echo mkdir -p result/${D}
+    mkdir -p result/${D}
+done
+    printf '#LOOP
+mafAddIRows -nBeds=nBeds mafSplit/$(path1) /hive/data/genomes/galVar1/galVar1.2bit {check out exists+ result/$(path1)}
+#ENDLOOP
+' > template
+    # << happy emacs
+
+    find ./mafSplit -type f | sed -e 's#^./mafSplit/##' > maf.list
+    gensub2 maf.list single template jobList
+    # limit jobs on a node with the ram=32g requirement because they go fast
+    para -ram=32g create jobList
+    para try ... check ... push ...
+# Completed: 76237 of 76237 jobs
+# CPU time in finished jobs:      63114s    1051.90m    17.53h    0.73d  0.002 y
+# IO & Wait Time:                194221s    3237.02m    53.95h    2.25d  0.006 y
+# Average job time:                   3s       0.06m     0.00h    0.00d
+# Longest finished job:               7s       0.12m     0.00h    0.00d
+# Submission to last job:          2312s      38.53m     0.64h    0.03d
+
+    # verify all result files have some content, look for 0 size files:
+    find ./result -type f -size 0
+    # should see none
+    # or in this manner:
+    find ./result -type f | xargs ls -og | sort -k3nr | tail
+
+    # combine into one file  (the 1>&2 redirect sends the echo to stderr)
+    head -q -n 1 result/4/0/NW_007804317v1.maf > galVar1.5way.maf
+    time find ./result -type f | while read F
+do
+    echo "${F}" 1>&2
+    grep -h -v "^#" ${F}
+done >> galVar1.5way.maf
+    # real    16m7.367s
+
+    #	these maf files do not have the end marker, this does nothing:
+    #	tail -q -n 1 result/4/0/NW_007804317v1.maf >> galVar1.5way.maf
+    # How about an official end marker:
+    echo "##eof maf" >> galVar1.5way.maf
+    ls -og
+# -rw-rw-r--  1 13063560432 May  4 10:33 galVar1.5way.maf
+
+    du -hsc galVar1.5way.maf
+    # 13G     galVar1.5way.maf
+
+    # construct symlinks to get the individual maf files into gbdb:
+    rm /gbdb/galVar1/multiz5way/multiz5way.maf   # remove previous results
+    ln -s `pwd`/galVar1.5way.maf /gbdb/galVar1/multiz5way/multiz5way.maf
+
+    # Load into database
+    cd /dev/shm
+    time hgLoadMaf -pathPrefix=/gbdb/galVar1/multiz5way galVar1 multiz5way
+    # Loaded 11015101 mafs in 1 files from /gbdb/galVar1/multiz5way
+    # real    3m55.357s
+
+    time hgLoadMafSummary -verbose=2 -minSize=30000 \
+	-mergeGap=1500 -maxSize=200000 galVar1 multiz5waySummary \
+        /gbdb/galVar1/multiz5way/multiz5way.maf
+    # Created 62787 summary blocks from 1838380 components and 11015101 mafs from /gbdb/galVar1/multiz5way/multiz5way.maf
+    # real    2m45.214s
+
+    # -rw-rw-r-- 1 596358396 May  4 10:37 multiz5way.tab
+    # -rw-rw-r-- 1   3313263 May  4 12:54 multiz5waySummary.tab
+
+    rm multiz5way*.tab
+
+######################################################################
+# MULTIZ7WAY MAF FRAMES (DONE - 2016-05-05 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/frames
+    cd /hive/data/genomes/galVar1/bed/multiz5way/frames
+#   survey all the genomes to find out what kinds of gene tracks they have
+    printf '#!/bin/csh -fe
+foreach db (`cat ../species.list`)
+    printf "# ${db}: "
+    set tables = `hgsql $db -N -e "show tables" | egrep "Gene|ncbiRefSeq"`
+    foreach table ($tables)
+        if ($table == "ensGene" || $table == "refGene" || \
+           $table == "ncbiRefSeq" || $table == "mgcGenes" || \
+           $table == "knownGene" || $table == "xenoRefGene" ) then
+           set count = `hgsql $db -N -e "select count(*) from $table"`
+            echo -n "${table}: ${count}, "
+        endif
+    end
+    set orgName = `hgsql hgcentraltest -N -e \
+            "select scientificName from dbDb where name='"'"'$db'"'"'"`
+    set orgId = `hgsql $db -N -e \
+            "select id from organism where name='"'"'$orgName'"'"'"`
+    if ($orgId == "") then
+        echo "Mrnas: 0"
+    else
+        set count = `hgsql $db -N -e "select count(*) from gbCdnaInfo where organism=$orgId"`
+        echo "Mrnas: ${count}"
+    endif
+end
+' > showGenes.csh
+    # << happy emacs
+    chmod +x ./showGenes.csh
+    time ./showGenes.csh
+# galVar1: ncbiRefSeq: 41547, xenoRefGene: 473670, Mrnas: 0
+# tupBel1: ensGene: 34727, xenoRefGene: 688682, Mrnas: 2509
+# hg38: ensGene: 208239, knownGene: 197782, mgcGenes: 35390, ncbiRefSeq:
+#      161913, refGene: 63332, xenoRefGene: 181602, Mrnas: 11351569
+# mm10: ensGene: 103734, knownGene: 63759, mgcGenes: 26768, ncbiRefSeq:
+#      116846, refGene: 35838, xenoRefGene: 172783, Mrnas: 5250157
+# cavPor3: ensGene: 26129, refGene: 488, xenoRefGene: 296142, Mrnas: 21235
+
+    # from that summary, use these gene sets:
+    # knownGene - hg38 mm10
+    # ncbiRefSeq - galVar1
+    # ensGene - tupBel1 cavPor3
+ 
+    mkdir genes
+    #   1. knownGene: hg38 mm10
+    for DB in hg38 mm10
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from knownGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > genes/${DB}.gp.gz
+    printf "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# hg38: checked: 21375 failed: 0
+# mm10: checked: 21100 failed: 0
+
+    #   2. ensGene: tupBel1 cavPor3
+    for DB in tupBel1 cavPor3
+do
+hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds
+from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    printf "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# tupBel1: checked: 29256 failed: 0
+# cavPor3: checked: 18631 failed: 0
+
+    #   3. ncbiRefSeq for galVar1
+    for DB in galVar1
+do
+hgsql -N -e "select * from ncbiRefSeq" ${DB} | cut -f2- \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /dev/shm/${DB}.tmp.gz
+    mv /dev/shm/${DB}.tmp.gz genes/$DB.gp.gz
+    echo -n "# ${DB}: "
+    genePredCheck -db=${DB} genes/${DB}.gp.gz
+done
+# galVar1: checked: 23389 failed: 0
+
+    # verify counts for genes are reasonable:
+    for T in genes/*.gz
+do
+    echo -n "# $T: "
+    zcat $T | cut -f1 | sort | uniq -c | wc -l
+done
+# genes/cavPor3.gp.gz: 18631
+# genes/galVar1.gp.gz: 23054
+# genes/hg38.gp.gz: 21375
+# genes/mm10.gp.gz: 21100
+# genes/tupBel1.gp.gz: 15407
+
+    time (cat ../anno/galVar1.5way.maf \
+	| genePredToMafFrames galVar1 stdin stdout \
+          `cat ../species.list.txt | xargs echo \
+            | sed -e "s#\([a-zA-Z0-9]*\)#\1 genes/\1.gp.gz#g;"` \
+		| gzip > multiz5wayFrames.bed.gz)
+    # real    2m59.575s
+
+    # verify there are frames on everything, should be 5 species:
+    zcat multiz5wayFrames.bed.gz | awk '{print $4}' | sort | uniq -c \
+       | sed -e 's/^/# /;'
+#  215465 cavPor3
+#  192421 galVar1
+#  223000 hg38
+#  224647 mm10
+#  193994 tupBel1
+
+    #   load the resulting file
+    ssh hgwdev
+    cd /hive/data/genomes/galVar1/bed/multiz5way/frames
+    time hgLoadMafFrames galVar1 multiz5wayFrames multiz5wayFrames.bed.gz
+    #   real    0m10.869s
+
+    time featureBits -countGaps galVar1 multiz5wayFrames
+    # 37650990 bases of 3187660572 (1.181%) in intersection
+    # real    1m3.863s
+
+    #   enable the trackDb entries:
+# frames multiz5wayFrames
+# irows on
+    #   appears to work OK
+
+#########################################################################
+# Phylogenetic tree from 5-way (DONE - 2016-05-06 - Hiram)
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/4d
+    cd /hive/data/genomes/galVar1/bed/multiz5way/4d
+
+    # using the ncbiRefSeq
+    hgsql -N -e "select * from ncbiRefSeq;" galVar1 \
+      | cut -f2- | genePredSingleCover stdin stdout > /dev/shm/galVar1.tmp.gp
+    mv /dev/shm/galVar1.tmp.gp galVar1.ncbiRefSeq.gp
+    genePredCheck -db=galVar1 galVar1.ncbiRefSeq.gp
+    # checked: 23389 failed: 0
+
+    genePredSingleCover galVar1.ncbiRefSeq.gp stdout \
+       | sort > galVar1.ncbiRefSeqNR.gp
+    genePredCheck -db=galVar1 galVar1.ncbiRefSeqNR.gp
+    # checked: 23389 failed: 0
+
+    # the annotated maf is:
+    og ../anno/galVar1.5way.maf
+# -rw-rw-r-- 1 13063560432 May  4 10:33 ../anno/galVar1.5way.maf
+
+    mkdir annoSplit
+    cd annoSplit
+    time mafSplit -verbose=2 -outDirDepth=2 -byTarget -useFullSequenceName \
+	/dev/null . ../../anno/galVar1.5way.maf
+    # real    5m38.677s
+
+    find . -type f | wc -l
+    #   76237
+    ssh ku
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/4d/run
+    cd /hive/data/genomes/galVar1/bed/multiz5way/4d/run
+    mkdir ../mfa
+
+    # newer versions of msa_view have a slightly different operation
+    # the sed of the gp file inserts the reference species in the chr name
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set GP = galVar1.ncbiRefSeqNR.gp
+set r = "/hive/data/genomes/galVar1/bed/multiz5way"
+set c = $1:r
+set infile = $r/4d/annoSplit/$2
+set outDir = $r/4d/mfa/$3:h
+set outfile = $r/4d/mfa/$3
+/bin/mkdir -p $outDir
+cd /dev/shm
+/bin/awk -v C=$c '"'"'$2 == C {print}'"'"' $r/4d/$GP | sed -e "s/\\t$c\\t/\\tgalVar1.$c\\t/" > $c.gp
+set NL=`wc -l $c.gp| gawk '"'"'{print $1}'"'"'`
+echo $NL
+if ("$NL" != "0") then
+    $PHASTBIN/msa_view --4d --features $c.gp -i MAF $infile -o SS > $c.ss
+    $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $outfile
+else
+    echo "" > $outfile
+endif
+/bin/rm -f /dev/shm/$c.gp /dev/shm/$c.ss
+' > 4d.csh
+
+    chmod +x 4d.csh
+
+    find ../annoSplit -type f | sed -e "s#../annoSplit/##" > maf.list
+    wc -l maf.list
+# 76237 maf.list
+
+    printf '#LOOP
+4d.csh $(file1) $(path1) {check out line+ ../mfa/$(dir1)/$(dir2)$(root1).mfa}
+#ENDLOOP
+' > template
+
+    gensub2 maf.list single template jobList
+    para create jobList
+    para try ... check
+    para time
+# Completed: 75895 of 76237 jobs
+# Crashed: 342 jobs
+# CPU time in finished jobs:       2831s      47.19m     0.79h    0.03d  0.000 y
+# IO & Wait Time:                192714s    3211.90m    53.53h    2.23d  0.006 y
+# Average job time:                   3s       0.04m     0.00h    0.00d
+# Longest finished job:               6s       0.10m     0.00h    0.00d
+# Submission to last job:          1615s      26.92m     0.45h    0.02d
+
+    # Not all results have contents, or finish successfully, that is OK
+    # it is because not all contigs have genes, only gene sequences are measured
+
+    # combine mfa files
+    ssh hgwdev
+    cd /hive/data/genomes/galVar1/bed/multiz5way/4d
+    # remove the broken empty files, size 0 and size 1:
+    find ./mfa -type f -size 0 | xargs rm -f
+    # sometimes this doesn't work, don't know why
+    find ./mfa -type f -size 1 | xargs rm -f
+    # when it doesn't, use this empty list procedure
+    find ./mfa -type f | xargs ls -og | awk '$3 < 2' | awk '{print $NF}' \
+        > empty.list
+    cat empty.list | xargs rm -f
+    # see what is left:
+    ls -ogrt mfa/*/*/*.mfa | sort -k3nr | wc
+    #  8027   56189  473583
+
+    # want comma-less species.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_view \
+	--aggregate "`cat ../species.list`" mfa/*/*/*.mfa | sed s/"> "/">"/ \
+	    > 4d.all.mfa
+    # real    1m10.731s
+
+    # check they are all in there:
+    grep "^>" 4d.all.mfa | wc -l
+    # 5
+    grep "^>" 4d.all.mfa | sed -e 's/^/# /;'
+# >galVar1
+# >tupBel1
+# >hg38
+# >mm10
+# >cavPor3
+
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	../galVar1.5way.nh | xargs echo | sed -e 's/ //g' > tree_commas.nh
+    # tree_commas.nh looks like:
+    # (((galVar1,tupBel1),hg38),(mm10,cavPor3))
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/phyloFit \
+	    --EM --precision MED --msa-format FASTA --subst-mod REV \
+		--tree tree_commas.nh 4d.all.mfa
+    #  real    0m1.209s
+
+    mv phyloFit.mod all.mod
+
+    grep TREE all.mod
+# TREE:
+# (((galVar1:0.101018,tupBel1:0.179618):0.00922862,hg38:0.116754):0.0253261,
+#    (mm10:0.281608,cavPor3:0.209143):0.0253261);
+
+    # compare these calculated lengths to the tree extracted from 191way:
+    grep TREE all.mod | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep galVar1 \
+          | sed -e "s/galVar1.//;"  | sort > new.dists
+    /cluster/bin/phast/all_dists ../galVar1.5way.nh | grep galVar1 \
+        | sed -e "s/galVar1.//;" | sort > old.dists
+     # printing out the 'new', the 'old' the 'difference' and percent difference
+    join new.dists old.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+#       hg38    0.227001        0.278845        -0.051844       -18.592408
+#       tupBel1 0.280636        0.216203        0.064433        29.802084
+#       cavPor3 0.370042        0.353775        0.016267        4.598120
+#       mm10    0.442507        0.493420        -0.050913       -10.318390
+
+     # compare this tree with the one generated from the cavPor3 5-way
+    grep TREE all.mod | sed -e 's/TREE: //' \
+     | /cluster/bin/phast/all_dists /dev/stdin | grep cavPor3 \
+        | sed -e "s/cavPor3.//" | sort > galVar1.cavPor3.dists
+    grep TREE /hive/data/genomes/cavPor3/bed/multiz5way/4d/all.mod \
+       | sed -e 's/TREE: //' \
+       | /cluster/bin/phast/all_dists /dev/stdin | grep cavPor3 \
+          | sed -e "s/cavPor3.//;"  | sort > cavPor3.cavPor3.dists
+    # appears to be systematically shorter branch lengths with this galVar1
+    # reference, all by a similar percentage:
+    # table headings:
+#       species  galVar1        cavPor3        galVar1-cavPor3     percent
+#                dist est.     dist est.         difference      difference
+    join galVar1.cavPor3.dists cavPor3.cavPor3.dists | awk '{
+  printf "#\t%s\t%8.6f\t%8.6f\t%8.6f\t%8.6f\n", $1, $2, $3, $2-$3, 100*($2-$3)/$3 }' \
+      | sort -k3n
+#       galVar1 0.370042        0.383228        -0.013186       -3.440772
+#       hg38    0.376549        0.390633        -0.014084       -3.605430
+#       tupBel1 0.448642        0.464419        -0.015777       -3.397148
+#       mm10    0.490751        0.509725        -0.018974       -3.722399
+
+#########################################################################
+# phastCons 5-way (DONE - 2016-05-06 - Hiram)
+    # split 5way mafs into 10M chunks and generate sufficient statistics
+    # files for # phastCons
+    ssh ku
+    mkdir -p /hive/data/genomes/galVar1/bed/multiz5way/cons/SS
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/SS
+    mkdir result done
+
+    printf '#!/bin/csh -ef
+set d = $1
+set c = $2
+set doneDir = done/$d
+set MAF = /hive/data/genomes/galVar1/bed/multiz5way/anno/result/$d/$c.maf
+set WINDOWS = /hive/data/genomes/galVar1/bed/multiz5way/cons/SS/result/$d/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $3 ) then
+    exit 0
+endif
+if ( -s $3.running ) then
+    exit 0
+endif
+
+/bin/mkdir -p $doneDir
+/bin/date >> $3.running
+
+/bin/rm -fr $WINDOWS
+/bin/mkdir -p $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/msa_split \\
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+/bin/date >> $3
+/bin/rm -f $3.running
+' > mkSS.csh
+
+    chmod +x mkSS.csh
+
+    printf '#LOOP
+mkSS.csh $(dir1) $(root1) {check out line+ done/$(dir1)/$(root1)}
+#ENDLOOP
+' > template
+
+    find ../../anno/result -type f | sed -e "s#../../anno/result/##" > maf.list
+    wc -l maf.list
+# 76237 maf.list
+
+    ssh ku
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/SS
+
+    gensub2 maf.list single template jobList
+    # beware overwhelming the cluster with these quick high I/O jobs
+    para create jobList
+    para try ... check ... etc
+    para -maxJob=64 push
+# Completed: 76237 of 76237 jobs
+# CPU time in finished jobs:       3491s      58.19m     0.97h    0.04d  0.000 y
+# IO & Wait Time:                321255s    5354.25m    89.24h    3.72d  0.010 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              10s       0.17m     0.00h    0.00d
+# Submission to last job:          1583s      26.38m     0.44h    0.02d
+
+
+    find ./result -type f | wc -l
+    # 24853
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, beware where this
+    #	takes place or do not run too many at once.
+    ssh ku
+    mkdir -p /hive/data/genomes/galVar1/bed/multiz5way/cons/run.cons
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/run.cons
+
+    #	This is setup for multiple runs based on subsets, but only running
+    #   the 'all' subset here.
+    #   It triggers off of the current working directory
+    #	$cwd:t which is the "grp" in this script.  Running:
+    #	all and vertebrates
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set c = $1
+set d = $2
+set f = $3
+set len = $4
+set cov = $5
+set rho = $6
+set grp = $cwd:t
+set cons = /hive/data/genomes/galVar1/bed/multiz5way/cons
+set tmp = $cons/tmp/${d}_${c}
+mkdir -p $tmp
+set ssSrc = $cons/SS/result
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  ln -s $cons/$grp/$grp.mod $tmp
+  ln -s $cons/$grp/$grp.non-inf $tmp
+  ln -s $ssSrc/$d/$f $tmp
+else
+  ln -s $ssSrc/$d/$f $tmp
+  ln -s $cons/$grp/$grp.mod $tmp
+endif
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --not-informative `cat $grp.non-inf` \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+else
+  $PHASTBIN/phastCons $f $useGrp \\
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \\
+    --seqname $c --idpref $c --most-conserved $c.bed --score > $c.pp
+endif
+popd > /dev/null
+mkdir -p pp/$d bed/$d
+sleep 4
+touch pp/$d bed/$d
+rm -f pp/$d/$c.pp
+rm -f bed/$d/$c.bed
+mv $tmp/$c.pp pp/$d
+mv $tmp/$c.bed bed/$d
+rm -fr $tmp
+rmdir --ignore-fail-on-non-empty $cons/tmp/$d:h
+' > doPhast.csh
+
+    chmod +x doPhast.csh
+
+    #	this template will serve for all runs
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    printf '#LOOP
+../run.cons/doPhast.csh $(root1) $(dir1) $(file1) 45 0.3 0.3 {check out line+ pp/$(dir1)/$(root1).pp}
+#ENDLOOP
+' > template
+
+    find ../SS/result -type f | sed -e "s#../SS/result/##" > ss.list
+    wc -l ss.list
+    #	24853 ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons
+    mkdir -p all
+    cd all
+    #	Using the .mod tree
+    cp -p ../../4d/all.mod ./all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para -ram=32g create jobList
+    para try ... check ...
+    para push
+# Completed: 24815 of 24853 jobs
+# Crashed: 38 jobs
+# CPU time in finished jobs:       6246s     104.09m     1.73h    0.07d  0.000 y
+# IO & Wait Time:                222621s    3710.36m    61.84h    2.58d  0.007 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              18s       0.30m     0.01h    0.00d
+# Submission to last job:           935s      15.58m     0.26h    0.01d
+
+   # the 38 crash jobs were actually finished, they failed the last rmdir:
+# rmdir: failed to remove `/hive/data/genomes/galVar1/bed/multiz5way/cons/tmp/7/6': No such file or directory
+
+    # create Most Conserved track
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/all
+    time cut -f1 ../../../../chrom.sizes | while read C
+do
+    ls -d bed/?/?/${C} 2> /dev/null | while read D
+    do
+        echo ${D}/${C}*.bed 1>&2
+        cat ${D}/${C}*.bed
+    done | sort -k1,1 -k2,2n \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", "'${C}'", $2, $3, $5, $5;}'
+done > tmpMostConserved.bed
+    # real    19m26.845s
+
+    time /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed \
+         > mostConserved.bed
+    # real    0m5.667s
+
+    # -rw-rw-r--  1 36626033 May  6 14:55 mostConserved.bed
+
+    # load into database
+    ssh hgwdev
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/all
+    time hgLoadBed galVar1 phastConsElements5way mostConserved.bed
+    # Read 932856 elements of size 5 from mostConserved.bed
+    # real    0m9.898s
+
+    # on human we often try for 5% overall cov, and 70% CDS cov
+    # most bets are off here for that goal, these alignments are too few
+    #	and too far between
+    #	--rho 0.3 --expected-length 45 --target-coverage 0.3
+    time featureBits galVar1 -enrichment ncbiRefSeq:cds phastConsElements5way
+# ncbiRefSeq:cds 1.217%, phastConsElements5way 3.976%, both 0.819%,
+#   cover 67.27%, enrich 16.92x
+    # real    2m33.330s
+
+    # Create merged posterier probability file and wiggle track data files
+    cd /hive/data/genomes/galVar1/bed/multiz5way/cons/all
+    mkdir downloads
+
+    # the third sed fixes the chrom names, removing the partition extensions
+    time (find ./pp -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| sed -e 's/\.[0-9][0-9]*-[0-9][0-9]* start/ start/' \
+        | gzip -c > downloads/phastCons5way.wigFix.gz)
+    #   real    27m47.145s
+# -rw-rw-r-- 1 2207346680 May  6 15:33 phastCons5way.wigFix.gz
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phastCons5way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/galVar1/chrom.sizes \
+	    phastCons5way.bw) > bigWig.log 2>&1
+    egrep "real|VmPeak" bigWig.log
+    # pid=37326: VmPeak:    20943944 kB
+    # real    30m30.283s
+
+    bigWigInfo phastCons5way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 3,364,371,979
+# primaryIndexSize: 81,959,008
+# zoomLevels: 10
+# chromCount: 24853
+# basesCovered: 1,910,088,593
+# mean: 0.117235
+# min: 0.000000
+# max: 1.000000
+# std: 0.237776
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phastCons5way.wigFix.gz \
+	| wigEncode stdin phastCons5way.wig phastCons5way.wib)
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    #  real    10m31.797s
+
+    du -hsc *.wi?
+    #  1.8G    phastCons5way.wib
+    #  275M    phastCons5way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons5way.wib /gbdb/galVar1/multiz5way/phastCons5way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/galVar1/multiz5way \
+	galVar1 phastCons5way phastCons5way.wig
+    #   real    0m30.803s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh galVar1 phastCons5way
+# db.table               min max mean       count sumData
+# galVar1.phastCons5way   0 1 0.117235 1910088593 2.23929e+08
+#     stdDev  viewLimits
+#    0.237776 viewLimits=0:1
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram -db=galVar1 \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    phastCons5way > histogram.data 2>&1
+    #	real    4m6.489s
+
+    #	create plot of histogram:
+
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Malayan flying lemur galVar1 Histogram phastCons5way track"
+set xlabel " phastCons5way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \\
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+
+#########################################################################
+# phyloP for 5-way (DONE - 2016-05-09,11 - Hiram)
+    # run phyloP with score=LRT
+    ssh ku
+    mkdir /cluster/data/galVar1/bed/multiz5way/consPhyloP
+    cd /cluster/data/galVar1/bed/multiz5way/consPhyloP
+
+    mkdir run.phyloP
+    cd run.phyloP
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../4d/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.562
+    /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin/modFreqs \
+	../../4d/all.mod 0.562 > all.mod
+    # verify, the BACKGROUND should now be paired up:
+    grep BACK all.mod
+    #   BACKGROUND: 0.219000 0.281000 0.281000 0.219000 
+
+    printf '#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-12-30/bin
+set f = $1
+set d = $f:h
+set file1 = $f:t
+set out = $2
+set cName = $f:t:r
+set grp = $cwd:t
+set cons = /hive/data/genomes/galVar1/bed/multiz5way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = "/hive/data/genomes/galVar1/bed/multiz5way/cons/SS/result/$f"
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \\
+    -i SS $useGrp $ssSrc.ss > $file1.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+/bin/touch $out:h
+/bin/mv $tmp/$file1.wigFix $out
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp/$d:h
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp/$grp
+/bin/rmdir --ignore-fail-on-non-empty $cons/tmp
+' > doPhyloP.csh
+
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../../cons/SS/result -type f | grep ".ss$" \
+	| sed -e "s/.ss$//; s#^../../cons/SS/result/##" > ss.list
+    # make sure the list looks good
+    wc -l ss.list
+    #	24853 ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    printf '#LOOP
+../run.phyloP/doPhyloP.csh $(path1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+' > template
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/consPhyloP/all
+    cd /hive/data/genomes/galVar1/bed/multiz5way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    #	beware overwhelming the cluster with these fast running high I/O jobs
+    para create jobList
+    para try ... check ... push ... etc ...
+    para -maxJob=53 push
+    para time > run.time
+# Completed: 24852 of 24853 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:       7517s     125.29m     2.09h    0.09d  0.000 y
+# IO & Wait Time:                166287s    2771.45m    46.19h    1.92d  0.005 y
+# Average job time:                   7s       0.12m     0.00h    0.00d
+# Longest finished job:              11s       0.18m     0.00h    0.00d
+# Submission to last job:          1799s      29.98m     0.50h    0.02d
+
+    # the one failed job was just the last rmdir command:
+# /bin/rmdir: failed to remove `/hive/data/genomes/galVar1/bed/multiz5way/consPhyloP/tmp/all/5/2
+
+    mkdir downloads
+
+    time (find ./wigFix -type f | sed -e "s#^./##; s#\.# d #g; s#-# m #;" \
+	| sort -k1,1 -k3,3n | sed -e "s# d #.#g; s# m #-#g;" | xargs cat \
+	| gzip -c > downloads/phyloP5way.wigFix.gz)
+    #   real    30m20.572s
+
+    # check integrity of data with wigToBigWig
+    time (zcat downloads/phyloP5way.wigFix.gz \
+	| wigToBigWig -verbose=2 stdin /hive/data/genomes/galVar1/chrom.sizes \
+	phyloP5way.bw) > bigWig.log 2>&1
+    egrep "real|VmPeak" bigWig.log
+    # pid=19896: VmPeak:    20943916 kB
+    # real    215m36.588s
+
+    bigWigInfo phyloP5way.bw | sed -e 's/^/# /;'
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 3,067,676,886
+# primaryIndexSize: 81,959,008
+# zoomLevels: 10
+# chromCount: 24853
+# basesCovered: 1,910,088,593
+# mean: 0.061208
+# min: -2.599000
+# max: 0.833000
+# std: 0.611659
+
+    #	encode those files into wiggle data
+    time (zcat downloads/phyloP5way.wigFix.gz \
+	| wigEncode stdin phyloP5way.wig phyloP5way.wib)
+    # Converted stdin, upper limit 0.83, lower limit -2.60
+    #    real    9m4.543s
+
+    du -hsc *.wi?
+    # 1.8G    phyloP5way.wib
+    # 279M    phyloP5way.wig
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phyloP5way.wib /gbdb/galVar1/multiz5way/phyloP5way.wib
+    time hgLoadWiggle -pathPrefix=/gbdb/galVar1/multiz5way galVar1 \
+	phyloP5way phyloP5way.wig
+    # real    0m30.869s
+
+    # use to set trackDb.ra entries for wiggle min and max
+    # and verify table is loaded correctly
+
+    wigTableStats.sh galVar1 phyloP5way
+# db.table      min max mean count sumData
+# galVar1.phyloP5way  -2.599 0.833 0.0612084 1910088593 1.16914e+08
+#       stdDev viewLimits
+#     0.611659 viewLimits=-2.599:0.833
+
+    #	that range is: 0.833+2.599 = 3.432 for hBinSize=0.003432
+
+    #  Create histogram to get an overview of all the data
+    time hgWiggle -doHistogram \
+	-hBinSize=0.003432 -hBinCount=1000 -hMinVal=-2.559 -verbose=2 \
+	    -db=galVar1 phyloP5way > histogram.data 2>&1
+    # real    4m20.444s
+
+    # find the Y range for the 2:5 graph
+    grep -v chrom histogram.data | grep "^[0-9]" | ave -col=5 stdin \
+      | sed -e 's/^/# /;'
+# Q1 0.000087
+# median 0.000381
+# Q3 0.001361
+# average 0.001112
+# min 0.000000
+# max 0.032088
+# count 899
+# total 0.999990
+# standard deviation 0.002165
+
+    # find the X range for the 2:5 graph
+    grep "^[0-9]" histogram.data | ave -col=2 stdin \
+      | sed -e 's/^/# /;'
+# Q1 -1.773070
+# median -1.004300
+# Q3 -0.228672
+# average -0.962349
+# min -2.559000
+# max 0.831816
+# count 899
+# total -865.151612
+# standard deviation 0.954068
+
+    #	create plot of histogram:
+    printf 'set terminal png small x000000 xffffff xc000ff x66ff66 xffff00 x00ffff font \
+"/usr/share/fonts/default/Type1/n022004l.pfb"
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Guinea pig galVar1 Histogram phyloP5way track"
+set xlabel " phyloP5way score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set xtics
+set xrange [-2.6:0.85]
+set yrange [0:0.033]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+' | gnuplot > histo.png
+
+    display histo.png &
+    # appears to have an odd hole in the data near X=0 ?
+
+#############################################################################
+# hgPal downloads (DONE - 2016-05-09,11 - Hiram)
+#   FASTA from 5-way for knownGene, refGene and knownCanonical
+
+    ssh hgwdev
+    screen -S galVar1HgPal
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/pal
+    cd /hive/data/genomes/galVar1/bed/multiz5way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop takes about 2.5 hours on this large count contig assembly
+    export mz=multiz5way
+    export gp=ncbiRefSeq
+    export db=galVar1
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    printf '#!/bin/sh\n' > $gp.jobs
+
+    time for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done >> $gp.jobs
+    # real    115m16.333s
+
+
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    chmod +x  ncbiRefSeq.jobs 
+
+    time (./$gp.jobs) > $gp.jobs.log 2>&1 &
+    # real    14m50.750s
+
+    export mz=multiz5way
+    export gp=ncbiRefSeq
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    #  real    4m20.026s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    4m45.761s
+
+  #  -rw-rw-r--   1 36201970 May 11 11:25 ncbiRefSeq.multiz5way.exonAA.fa.gz
+  #  -rw-rw-r--   1 59404213 May 11 11:30 ncbiRefSeq.multiz5way.exonNuc.fa.gz
+
+    export mz=multiz5way
+    export gp=ncbiRefSeq
+    export db=galVar1
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# construct download files for 5-way (DONE - 2016-05-11 - Hiram)
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/multiz5way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/phastCons5way
+    mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/phyloP5way
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/downloads
+    cd /hive/data/genomes/galVar1/bed/multiz5way/downloads
+    mkdir multiz5way phastCons5way phyloP5way
+    cd multiz5way
+    time cp -p ../../anno/galVar1.5way.maf .
+    #   real    0m21.607s
+
+    # -rw-rw-r-- 1 13063560432 May  4 10:33 galVar1.5way.maf
+
+    du -hsc *
+    #  13G     galVar1.5way.maf
+
+    time gzip *.maf
+    #   real    40m20.076s
+
+    # -rw-rw-r-- 1 3142755006 May  4 10:33 galVar1.5way.maf.gz
+    du -hsc *.maf.gz
+    #  3.0G    galVar1.5way.maf.gz
+
+    grep TREE ../../4d/all.mod | awk '{print $NF}' \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > galVar1.5way.nh
+    ~/kent/src/hg/utils/phyloTrees/commonNames.sh galVar1.5way.nh \
+      | ~/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+         > galVar1.5way.commonNames.nh
+    ~/kent/src/hg/utils/phyloTrees/scientificNames.sh galVar1.5way.nh \
+	| $HOME/kent/src/hg/utils/phyloTrees/asciiTree.pl /dev/stdin \
+	    > galVar1.5way.scientificNames.nh
+    time md5sum *.nh *.maf.gz > md5sum.txt
+    #   real    0m35.144s
+
+    ln -s `pwd`/* \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/multiz5way
+
+    du -hsc *.maf.gz ../../anno/galVar1.5way.maf
+    #  3.0G     galVar1.5way.maf.gz
+    #  13G     ../../anno/galVar1.5way.maf
+
+    # obtain the README.txt from cavPor3/multiz5way and update for this
+    #   situation
+
+    #####################################################################
+    cd /hive/data/genomes/galVar1/bed/multiz5way/downloads/phastCons5way
+
+    ln -s ../../cons/all/downloads/phastCons5way.wigFix.gz \
+        ./galVar1.phastCons5way.wigFix.gz
+    ln -s ../../cons/all/phastCons5way.bw ./galVar1.phastCons5way.bw
+    ln -s ../../cons/all/all.mod ./galVar1.phastCons5way.mod
+    time md5sum *.gz *.mod *.bw > md5sum.txt
+    #   real    0m20.354s
+
+    # obtain the README.txt from cavPor3/phastCons5way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/phastCons5way
+
+    #####################################################################
+    cd /hive/data/genomes/galVar1/bed/multiz5way/downloads/phyloP5way
+
+    ln -s ../../consPhyloP/all/downloads/phyloP5way.wigFix.gz \
+        ./galVar1.phyloP5way.wigFix.gz
+    ln -s ../../consPhyloP/run.phyloP/all.mod galVar1.phyloP5way.mod
+    ln -s ../../consPhyloP/all/phyloP5way.bw galVar1.phyloP5way.bw
+
+    time md5sum *.mod *.bw *.gz > md5sum.txt
+    #   real    0m29.662s
+
+    # obtain the README.txt from galVar1/phyloP17way and update for this
+    #   situation
+    ln -s `pwd`/* \
+      /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/phyloP5way
+
+    ###########################################################################
+    ## create upstream refGene maf files
+    cd /hive/data/genomes/galVar1/bed/multiz5way/downloads/multiz5way
+    # bash script
+#!/bin/sh
+export geneTbl="ncbiRefSeq"
+for S in 1000 2000 5000
+do
+    echo "making upstream${S}.maf"
+    featureBits galVar1 ${geneTbl}:upstream:${S} -fa=/dev/null -bed=stdout \
+        | perl -wpe 's/_up[^\t]+/\t0/' | sort -k1,1 -k2,2n \
+        | /cluster/bin/$MACHTYPE/mafFrags galVar1 multiz5way \
+                stdin stdout \
+                -orgs=/hive/data/genomes/galVar1/bed/multiz5way/species.list \
+        | gzip -c > upstream${S}.${geneTbl}.maf.gz
+    echo "done upstream${S}.${geneTbl}.maf.gz"
+done
+    #   about 20 minutes
+
+    md5sum *.maf.gz *.nh upstream*.gz README.txt >> md5sum.txt
+
+    # some other symlinks were already made above
+    # obtain the README.txt from cavPor3/multiz5way and update for this
+    #   situation
+    ln -s `pwd`/upstream*.gz `pwd`/README.txt \
+        /usr/local/apache/htdocs-hgdownload/goldenPath/galVar1/multiz5way
+
+#############################################################################
+# hgPal downloads (DONE - 2016-05-11 - Hiram)
+#   FASTA from 5-way for knownGene, refGene and knownCanonical
+
+    ssh hgwdev
+    screen -S galVar1HgPal
+    mkdir /hive/data/genomes/galVar1/bed/multiz5way/pal
+    cd /hive/data/genomes/galVar1/bed/multiz5way/pal
+    cat ../species.list | tr '[ ]' '[\n]' > order.list
+
+    # this for loop takes about 2.5 hours on this large count contig assembly
+    export mz=multiz5way
+    export gp=xenoRefGene
+    export db=galVar1
+    export I=0
+    export D=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+        D=`echo $D | awk '{print $1+1}'`
+        dNum=`echo $D | awk '{printf "%03d", int($1/1000)}'`
+        mkdir -p exonNuc/${dNum} > /dev/null
+        mkdir -p exonAA/${dNum} > /dev/null
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/${dNum}/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/${dNum}/$C.exonAA.fa.gz &"
+        if [ $I -gt 16 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
+    # real    175m50.376s
+
+
+    export mz=multiz5way
+    export gp=xenoRefGene
+    time find ./exonAA -type f | grep exonAA.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonAA.fa.gz
+    # real    10m29.500s
+
+    time find ./exonNuc -type f | grep exonNuc.fa.gz | xargs zcat \
+     | gzip -c > $gp.$mz.exonNuc.fa.gz
+    #   real    15m9.974s
+
+  # -rw-rw-r--   1 611281544 Apr 15 20:37 xenoRefGene.multiz5way.exonAA.fa.gz
+  # -rw-rw-r--   1 955571425 Apr 15 21:06 xenoRefGene.multiz5way.exonNuc.fa.gz
+
+    export mz=multiz5way
+    export gp=xenoRefGene
+    export db=galVar1
+    export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    md5sum *.fa.gz > md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    ln -s `pwd`/md5sum.txt $pd/
+
+    rm -rf exonAA exonNuc
+
+#############################################################################
+# wiki page for 5-way (DONE - 2016-05-11 - Hiram)
+    mkdir /hive/users/hiram/bigWays/galVar1.5way
+    cd /hive/users/hiram/bigWays
+    echo "galVar1" > galVar1.5way/ordered.list
+    awk '{print $1}' /hive/data/genomes/galVar1/bed/multiz5way/5way.distances.txt \
+       >> galVar1.5way/ordered.list
+
+    # sizeStats.sh catches up the cached measurements required for data
+    # in the tables.  They are usually already mostly done, only new
+    # assemblies will have updates.
+    ./sizeStats.sh galVar1.5way/ordered.list
+    # dbDb.sh constructs galVar1.5way/GalVar1_5-way_conservation_alignment.html
+    # may need to add new assembly references to srcReference.list and
+    # urlReference.list
+    ./dbDb.sh galVar1 5way
+    # sizeStats.pl constructs galVar1.5way/GalVar1_5-way_Genome_size_statistics.html
+    # this requires entries in coverage.list for new sequences
+    ./sizeStats.pl galVar1 5way
+
+    # defCheck.pl constructs GalVar1_5-way_conservation_lastz_parameters.html
+    ./defCheck.pl galVar1 5way
+
+    # this constructs the html pages in galVar1.5way/:
+# -rw-rw-r-- 1 3317 May 11 11:08 GalVar1_5-way_conservation_alignment.html
+# -rw-rw-r-- 1 4827 May 11 11:08 GalVar1_5-way_Genome_size_statistics.html
+# -rw-rw-r-- 1 3308 May 11 11:08 GalVar1_5-way_conservation_lastz_parameters.html
+    # add those pages to the genomewiki.  Their page names are the
+    # names of the .html files without the .html:
+#  GalVar1_5-way_conservation_alignment
+#  GalVar1_5-way_Genome_size_statistics
+#  GalVar1_5-way_conservation_lastz_parameters
+
+    # when you view the first one you enter, it will have links to the
+    # missing two.
+
+############################################################################

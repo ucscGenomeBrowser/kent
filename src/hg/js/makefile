@@ -11,7 +11,7 @@ UCSC_JS_FILES=ajax.js alleles.js autocomplete.js edwPersona.js \
     encodeProject.js encodeDataSummary.js encodeDataMatrix.js encodeChipMatrix.js encodeMatrix.js d3.dendrograms.js
 
 # STATIC files must pass jshint
-STATIC_FILES=staticDoc.js dbDbTaxonomy.hgwdev.js dbDbTaxonomy.rr.js
+STATIC_FILES=staticDoc.js dbDbTaxonomy.js
 
 # JQUERY files and other third pary files which have NOT BEEN TOUCHED by UCSC
 JQUERY_FILES_UNTOUCHED= \

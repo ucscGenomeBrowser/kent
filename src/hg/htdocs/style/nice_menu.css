@@ -279,8 +279,6 @@ ul.nice-menu li.menuparent ul iframe,
 }
 
 
-
-
 /* START OF ORIGINAL nice_menu.css */
 
 ul.nice-menu {
@@ -435,7 +433,7 @@ ul.nice-menu ul li a {
 	padding:0;
 	margin:0;
 	color:#121e9b !important;
-	display:block;
+	display:inline-block;
 	background:none;
 	text-align:left;
 	padding:8px;
@@ -443,7 +441,7 @@ ul.nice-menu ul li a {
 	padding-bottom:5px !important;
 	padding-right:0px;
 	border:0px !important;
-	width:180px;
+	width:160px;
 	font-size:13px;
 	font-weight:bold;
 	font-family:Arial, Helvetica, sans-serif;
@@ -497,6 +495,13 @@ ul.nice-menu li.horizSep:hover {
     height: 2px;
     background-color: #DDD !important;
 }
+
+/* a keyboard shortcut can be specified for a menu entry */
+#main-menu ul li.menuparent ul li span.shortcut {
+    color : #bbbbbb;
+    padding : 0;
+}
+
 
 /* over-riding HGStyle for demo */
 .blueToggleBar {

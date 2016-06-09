@@ -5,7 +5,7 @@ BIN_DIR = bin/$(MACHTYPE)
 GENE_PRED_TESTER = ${BIN_DIR}/genePredTester
 EXP_DIR = expected/genePred
 OUT_DIR = output/genePred
-DB=hg16
+DB=hg15
 TEST_TBL=gpTest_${USER}
 
 

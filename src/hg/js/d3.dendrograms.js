@@ -238,8 +238,8 @@ if (!d3) { throw "d3 wasn't included!";}
 					vert = (i * height - offset) + (radius*(1/2)) ; // All legends are the same height, the width location varies	
 					// Asign the legend width for each ring, scale to fit. 
 					if (layer=="inner") horz= 20 ;  
-					if (layer=="middle") horz= 40 + viewerWidth/3; 
-					if (layer=="outer") horz= 60 + 2*viewerWidth/3; 
+					else if (layer=="middle") horz= 40 + viewerWidth/3; 
+					else if (layer=="outer") horz= 60 + 2*viewerWidth/3; 
 					if (first)
 						{
 						vis.append("text")// The layer, this is either 'inner', 'middle', or 'outer'.  
@@ -264,7 +264,7 @@ if (!d3) { throw "d3 wasn't included!";}
 									} 
 								return title; 
 								});
-						first =0;
+						first = 0;// 1 is true, 0 is false; 
 						}
 					return 'translate(' + horz + ',' + vert + ')'; // Actually move the legend. 
 					});
@@ -393,29 +393,30 @@ if (!d3) { throw "d3 wasn't included!";}
 	d3.dendrogram.nodeColors = function(val, selector){
 		var vis = d3.select(selector).selectAll("svg");
 		var node=vis.selectAll("g.internalNode").selectAll("circle");
-		if (val < 6)
+		if (val < 8)
 			{
 			node.attr("r", function(d){
 				if (d.name === " "){
 					if (val == 2) return Math.sqrt(d.kids-1);
-					if (val == 3) return 1; 	
-					if (val == 4) return 3; 	
-					if (val == 5) return 5; 	
+					else if (val == 3) return 1; //small	
+					else if (val == 4) return 3; //normal
+					else if (val == 5) return 5; //large
+					else if (val == 6) return 0.5; //tiny
+					else if (val == 7) return 10; //huge
 					}
 				});
 			}
-		if (val > 5)
+		else
 			{
 			var link = vis.selectAll("path.link")
 				.attr("stroke-width", function(d){
-					if (val == 6) return ".04px"; 
-					if (val == 7) return ".2px"; 
-					if (val == 8) return "1px"; 
+					if (val == 8) return ".07px"; // small
+					else if (val ==9) return ".2px"; // normal
+					else if (val == 10) return ".5px"; // large
 					}); 
 			}
 		}; 
 
-  	// README
 	// The javascript buttons are created at runtime based on the .json file provided. This allows the .html code to be greatly
 	// simplified at the expense of some rather confusing javascript.  All functions with the prefix d3.dendrograms.js are
 	// accessible from outside this module. All functions without the prefix can only be used within the module. 
@@ -492,7 +493,14 @@ if (!d3) { throw "d3 wasn't included!";}
 		if (layer == "inner") prevInBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
 		if (layer == "middle") prevMidBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
 		if (layer == "outer") prevOutBut = d3.select("#"+layer+capitalizeFirstLetter(title).replace("_","")+"Button").selectAll("button");
-		
+	
+		if (val == -1)
+			{
+			vis.selectAll("text."+layer+"LegendTitle").remove(); 
+			vis.selectAll("text."+layer+"LegendTitleLabel").remove(); 
+			d3.select("#"+layer+"RemoveButton").remove();
+			}
+
 		// Color the current button. 
 		d3.select("#"+layer+capitalizeFirstLetter(title).replace("_", "")+"Button").selectAll("button")	
 			.style("background","cornflowerblue"); 
@@ -507,11 +515,8 @@ if (!d3) { throw "d3 wasn't included!";}
 					colors = d3.scale.category20().range(distanceRange).domain(distanceDomain); 
 					return d3.rgb(d.colorGroup);
 					}
-				if (val==-1) // A val of -1 indicates a remove ring call. Kill everything. 
+				else if (val==-1) // A val of -1 indicates a remove ring call. Kill everything. 
 					{
-					vis.selectAll("text."+layer+"LegendTitle").remove(); 
-					vis.selectAll("text."+layer+"LegendTitleLabel").remove(); 
-					d3.select("#"+layer+"RemoveButton").remove();
 					return "none";
 					}
 				var count = 0;
@@ -799,7 +804,7 @@ if (!d3) { throw "d3 wasn't included!";}
 		var width =  viewerWidth -25,
 			height = viewerHeight - 50; 
 
-		var metaHorz = (viewerWidth)/12,
+		var metaHorz = 50,
 			metaVert = (viewerHeight)/2; 
 		
 		// Setup the svg for the radial display. 
@@ -872,12 +877,14 @@ if (!d3) { throw "d3 wasn't included!";}
 		
 		// Add a bunch of the default options for to the general commands dropdown. 
 		addNodeButton("#interiorDendroNodes" ,2, selector, "Node size: sqrt(kids)"); 
+		addNodeButton("#interiorDendroNodes" ,6, selector, "Node size: tiny"); 
 		addNodeButton("#interiorDendroNodes" ,3, selector, "Node size: small"); 
 		addNodeButton("#interiorDendroNodes" ,4, selector, "Node size: normal"); 
 		addNodeButton("#interiorDendroNodes" ,5, selector, "Node size: large"); 
-		addNodeButton("#interiorDendroNodes" ,6, selector, "Link width: thin"); 
-		addNodeButton("#interiorDendroNodes" ,7, selector, "Link width: normal"); 
-		addNodeButton("#interiorDendroNodes" ,8, selector, "Link width: thick"); 
+		addNodeButton("#interiorDendroNodes" ,7, selector, "Node size: huge"); 
+		addNodeButton("#interiorDendroNodes" ,8, selector, "Link width: thin"); 
+		addNodeButton("#interiorDendroNodes" ,9, selector, "Link width: normal"); 
+		addNodeButton("#interiorDendroNodes" ,10, selector, "Link width: thick"); 
 
 		// These are true nodes in the sense that they are actually calculated and defined, 
 		// however this code is not repsonsible for the actual visuale representation. This
@@ -928,7 +935,7 @@ if (!d3) { throw "d3 wasn't included!";}
 			.append("circle")
 				.attr("r", function(d){ // Handle node size
 					if (d.name==" "){
-					return Math.sqrt(d.kids-1);}
+					return 3;}
 					else{return 0;}
 					})
 				.style("fill", function(d){ // Handle node color 

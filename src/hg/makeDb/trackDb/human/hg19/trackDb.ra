@@ -64,8 +64,8 @@ origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
 
 track gwasCatalog override
-snpTable snp137
-snpVersion 137
+snpTable snp144
+snpVersion 144
 
 track ucscRetroAli5
 shortLabel Retroposed Genes
@@ -239,12 +239,6 @@ track eioJcviNAS override
 shortLabel CD34 DnaseI
 origAssembly hg18
 pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-
-track oreganno override
-release beta,public
-origAssembly hg18
-pennantIcon 18.jpg ../goldenPath/help/liftOver.html "lifted from hg18"
-html oregannoOld
 
 track laminB1Super override
 origAssembly hg18
@@ -650,6 +644,17 @@ noInherit on
     #visibility hide
     #type bed 5
     #release alpha
+
+track snpedia
+shortLabel SNPedia
+longLabel SNPedia: dbSNPs with a SNPedia article
+group phenDis
+visibility hide
+color 50,0,100
+type bigBed 4 
+bigDataUrl /gbdb/hg19/bbi/snpedia.bb
+url https://www.snpedia.com/index.php/$$
+release alpha
 
 track cons46way
 compositeTrack on

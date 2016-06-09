@@ -1,0 +1,264 @@
+    track gtexRnaSignalSRR1071807
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1071807.hg19.bigWig
+    shortLabel kidneyCor M T5JC
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-T5JC-1526-SM-4DM68)
+    subGroups age=a20 tissue=kidneyCortex donor=GTEXT5JC
+    color 227,184,136
+    metadata donor=GTEX-T5JC age=20 sex=M hardyScore=2 sample=GTEX-T5JC-1526-SM-4DM68 \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=5.9 batch=BP-24680 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=04/26/2012
+
+    track gtexRnaSignalSRR1328447
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1328447.hg19.bigWig
+    shortLabel kidneyCor M QLQW
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-QLQW-1626-SM-4R1K1)
+    subGroups age=a30 tissue=kidneyCortex donor=GTEXQLQW
+    color 227,184,136
+    metadata donor=GTEX-QLQW age=30 sex=M hardyScore=0 sample=GTEX-QLQW-1626-SM-4R1K1 \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=8.4 batch=BP-20740 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=12/12/2011
+
+    track gtexRnaSignalSRR1380931
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1380931.hg19.bigWig
+    shortLabel kidneyCor M 13NYB
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-13NYB-1726-SM-5N9G2)
+    subGroups age=a40 tissue=kidneyCortex donor=GTEX13NYB
+    color 227,184,136
+    metadata donor=GTEX-13NYB age=40 sex=M hardyScore=2 sample=GTEX-13NYB-1726-SM-5N9G2 \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=5.7 batch=BP-46734 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/06/2013
+
+    track gtexRnaSignalSRR1432650
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1432650.hg19.bigWig
+    shortLabel kidneyCor M ZLFU
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-ZLFU-0926-SM-5P9F8)
+    subGroups age=a40 tissue=kidneyCortex donor=GTEXZLFU
+    color 227,184,136
+    metadata donor=GTEX-ZLFU age=40 sex=M hardyScore=0 sample=GTEX-ZLFU-0926-SM-5P9F8 \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=6.4 batch=BP-43141 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/05/2013
+
+    track gtexRnaSignalSRR1447631
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1447631.hg19.bigWig
+    shortLabel kidneyCor M ZYT6
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-ZYT6-2226-SM-5GIC9)
+    subGroups age=a30 tissue=kidneyCortex donor=GTEXZYT6
+    color 227,184,136
+    metadata donor=GTEX-ZYT6 age=30 sex=M hardyScore=1 sample=GTEX-ZYT6-2226-SM-5GIC9 \
+            tissue=kidneyCortex autolysisScore=3 rnaIntegrity=6.8 batch=BP-44261 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/03/2013
+
+    track gtexRnaSignalSRR1500261
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1500261.hg19.bigWig
+    shortLabel kidneyCor M 145MN
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-145MN-0326-SM-5QGQI)
+    subGroups age=a30 tissue=kidneyCortex donor=GTEX145MN
+    color 227,184,136
+    metadata donor=GTEX-145MN age=30 sex=M hardyScore=0 sample=GTEX-145MN-0326-SM-5QGQI \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=7.5 batch=BP-48437 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/17/2014
+
+    track gtexRnaSignalSRR821356
+    parent gtexRnaSignalMaleYoung off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR821356.hg19.bigWig
+    shortLabel kidneyCor M NPJ8
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-NPJ8-2226-SM-3TW8D)
+    subGroups age=a40 tissue=kidneyCortex donor=GTEXNPJ8
+    color 227,184,136
+    metadata donor=GTEX-NPJ8 age=40 sex=M hardyScore=4 sample=GTEX-NPJ8-2226-SM-3TW8D \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=7.2 batch=BP-17316 center=D1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=06/27/2011
+
+    track gtexRnaSignalSRR1080366
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1080366.hg19.bigWig
+    shortLabel kidneyCor M XPVG
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-XPVG-0526-SM-4B65N)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEXXPVG
+    color 227,184,136
+    metadata donor=GTEX-XPVG age=50 sex=M hardyScore=0 sample=GTEX-XPVG-0526-SM-4B65N \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=7.9 batch=BP-33777 center=B1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=11/30/2012
+
+    track gtexRnaSignalSRR1317086
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1317086.hg19.bigWig
+    shortLabel kidneyCor M 147F4
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-147F4-2626-SM-5Q5CS)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEX147F4
+    color 227,184,136
+    metadata donor=GTEX-147F4 age=50 sex=M hardyScore=2 sample=GTEX-147F4-2626-SM-5Q5CS \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=6.8 batch=BP-48068 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/08/2014
+
+    track gtexRnaSignalSRR1325483
+    parent gtexRnaSignalMaleMiddle on
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1325483.hg19.bigWig
+    shortLabel kidneyCor M 13OW6
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-13OW6-1826-SM-5N9F9)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEX13OW6
+    color 227,184,136
+    metadata donor=GTEX-13OW6 age=50 sex=M hardyScore=2 sample=GTEX-13OW6-1826-SM-5N9F9 \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=5.7 batch=BP-47125 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/13/2013
+
+    track gtexRnaSignalSRR1329154
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1329154.hg19.bigWig
+    shortLabel kidneyCor M 13112
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-13112-2126-SM-5GCO4)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEX13112
+    color 227,184,136
+    metadata donor=GTEX-13112 age=50 sex=M hardyScore=2 sample=GTEX-13112-2126-SM-5GCO4 \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=6.2 batch=BP-44172 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/01/2013
+
+    track gtexRnaSignalSRR1416516
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1416516.hg19.bigWig
+    shortLabel kidneyCor M 11PRG
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-11PRG-2226-SM-5GU5R)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEX11PRG
+    color 227,184,136
+
+    track gtexRnaSignalSRR1442708
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1442708.hg19.bigWig
+    shortLabel kidneyCor M ZYFD
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-ZYFD-1526-SM-5NQ7T)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEXZYFD
+    color 227,184,136
+    metadata donor=GTEX-ZYFD age=50 sex=M hardyScore=3 sample=GTEX-ZYFD-1526-SM-5NQ7T \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=5.8 batch=BP-43639 center=C1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/16/2013
+
+    track gtexRnaSignalSRR2135353
+    parent gtexRnaSignalMaleMiddle off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR2135353.hg19.bigWig
+    shortLabel kidneyCor M T6MN
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-T6MN-1826-SM-5CHQB_rep1)
+    subGroups age=a50 tissue=kidneyCortex donor=GTEXT6MN
+    color 227,184,136
+
+    track gtexRnaSignalSRR1362263
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1362263.hg19.bigWig
+    shortLabel kidneyCor M ZDXO
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-ZDXO-0226-SM-4WKH7)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEXZDXO
+    color 227,184,136
+
+    track gtexRnaSignalSRR1396700
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1396700.hg19.bigWig
+    shortLabel kidneyCor M ZE9C
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-ZE9C-1426-SM-4WKGM)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEXZE9C
+    color 227,184,136
+
+    track gtexRnaSignalSRR1420649
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1420649.hg19.bigWig
+    shortLabel kidneyCor M 13RTJ
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-13RTJ-2226-SM-5S2Q1)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEX13RTJ
+    color 227,184,136
+    metadata donor=GTEX-13RTJ age=60 sex=M hardyScore=4 sample=GTEX-13RTJ-2226-SM-5S2Q1 \
+            tissue=kidneyCortex autolysisScore=3 rnaIntegrity=5.9 batch=BP-48647 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=01/24/2014
+
+    track gtexRnaSignalSRR1433066
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1433066.hg19.bigWig
+    shortLabel kidneyCor M 12696
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-12696-0926-SM-5FQTV)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEX12696
+    color 227,184,136
+    metadata donor=GTEX-12696 age=60 sex=M hardyScore=3 sample=GTEX-12696-0926-SM-5FQTV \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=7.8 batch=BP-44114 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/30/2013
+
+    track gtexRnaSignalSRR1443092
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1443092.hg19.bigWig
+    shortLabel kidneyCor M 11OF3
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-11OF3-1326-SM-5N9FJ)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEX11OF3
+    color 227,184,136
+    metadata donor=GTEX-11OF3 age=60 sex=M hardyScore=2 sample=GTEX-11OF3-1326-SM-5N9FJ \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=5.7 batch=BP-43730 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=09/18/2013
+
+    track gtexRnaSignalSRR1445835
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1445835.hg19.bigWig
+    shortLabel kidneyCor M 13O1R
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-13O1R-2526-SM-5N9FW)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEX13O1R
+    color 227,184,136
+    metadata donor=GTEX-13O1R age=60 sex=M hardyScore=2 sample=GTEX-13O1R-2526-SM-5N9FW \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=5.7 batch=BP-47051 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/12/2013
+
+    track gtexRnaSignalSRR1452888
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1452888.hg19.bigWig
+    shortLabel kidneyCor M 1497J
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-1497J-0826-SM-5NQAJ)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEX1497J
+    color 227,184,136
+    metadata donor=GTEX-1497J age=60 sex=M hardyScore=0 sample=GTEX-1497J-0826-SM-5NQAJ \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=6.3 batch=BP-47696 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=12/20/2013
+
+    track gtexRnaSignalSRR1490658
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR1490658.hg19.bigWig
+    shortLabel kidneyCor M Y5V6
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-Y5V6-2026-SM-5IFHO)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEXY5V6
+    color 227,184,136
+    metadata donor=GTEX-Y5V6 age=60 sex=M hardyScore=0 sample=GTEX-Y5V6-2026-SM-5IFHO \
+            tissue=kidneyCortex autolysisScore=1 rnaIntegrity=6.5 batch=BP-45268 center=B1 \
+            isolationMethod=RNA_Extraction_from_Paxgene-derived_Lysate_Plate_Based isolationDate=10/29/2013
+
+    track gtexRnaSignalSRR809943
+    parent gtexRnaSignalMaleOld off
+    type bigWig
+    bigDataUrl kidneyCortex/gtexRnaSignalSRR809943.hg19.bigWig
+    shortLabel kidneyCor M N7MS
+    longLabel GTEx RNA signal from male Kidney - Cortex (GTEX-N7MS-1626-SM-3LK5F)
+    subGroups age=a60 tissue=kidneyCortex donor=GTEXN7MS
+    color 227,184,136
+    metadata donor=GTEX-N7MS age=60 sex=M hardyScore=2 sample=GTEX-N7MS-1626-SM-3LK5F \
+            tissue=kidneyCortex autolysisScore=2 rnaIntegrity=6.8 batch=BP-16741 center=C1 \
+            isolationMethod=RNA_isolation_PAXgene_Tissue_miRNA isolationDate=05/19/2011
+

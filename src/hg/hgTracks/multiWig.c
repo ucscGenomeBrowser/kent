@@ -195,7 +195,8 @@ for (ref = refList; ref != NULL; numTrack++,ref = ref->next)
 	    {
 	    if (yOffsets)
 		yOffsets[offset] = val;
-	    else
+
+            if ((numTrack == 0) || (yOffsets == NULL))
 		{
 		if (min > val) min = val;
 		if (max < val) max = val;

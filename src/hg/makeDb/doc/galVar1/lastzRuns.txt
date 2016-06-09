@@ -1,0 +1,61 @@
+#########################################################################
+# LASTZ Malayan flying lemur galVar1 tree shrew tupBel1- (DONE - 2016-04-25 - Hiram)
+    mkdir /hive/data/genomes/galVar1/bed/lastzTupBel1.2016-04-25
+    cd /hive/data/genomes/galVar1/bed/lastzTupBel1.2016-04-25
+
+    printf "#  Malayan flying lemur vs tree shrew
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254 
+
+# TARGET:  Malayan flying lemur galVar1
+SEQ1_DIR=/hive/data/genomes/galVar1/galVar1.2bit
+SEQ1_LEN=/hive/data/genomes/galVar1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=800
+SEQ1_LAP=10000
+
+# QUERY: Tree shrew tupBel1
+SEQ2_DIR=/hive/data/genomes/tupBel1/tupBel1.2bit
+SEQ2_LEN=/hive/data/genomes/tupBel1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=1000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/galVar1/bed/lastzTupBel1.2016-04-25
+TMPDIR=/dev/shm
+" > DEF
+    # << happy emacs
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1032m29.536s
+
+    cat fb.galVar1.chainTupBel1Link.txt
+    # 1163275671 bases of 2802917674 (41.502%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galVar1 tupBel1) \
+        > rbest.log 2>&1 &
+    # real    129m31.676s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/tupBel1/bed/blastz.galVar1.swap
+    cd /hive/data/genomes/tupBel1/bed/blastz.galVar1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/galVar1/bed/lastzTupBel1.2016-04-25/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    386m50.217s
+
+    cat fb.tupBel1.chainGalVar1Link.txt
+    #  1088845329 bases of 2137225476 (50.947%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` tupBel1 galVar1) \
+            > rbest.log 2>&1
+    # real    183m49.967s
+
+#########################################################################
+

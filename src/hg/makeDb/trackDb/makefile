@@ -101,7 +101,7 @@ DBS = \
 	haeCon1 haeCon2 \
 	hetBac1 \
 	hetGla1 hetGla2 \
-	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10 \
+	hg16 hg17 hg18 hg19 hg38 hg19Haps hg19Patch2 hg19Patch5 hg19Patch9 hg19Patch10 hg38Patch7 \
 	latCha1 \
 	loaLoa1 \
 	loxAfr1 loxAfr2 loxAfr3 \
@@ -113,7 +113,7 @@ DBS = \
 	melHap1 \
 	melInc1 melInc2 \
 	micMur1 micMur2 \
-	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 \
+	mm6 mm7 mm8 mm9 mm10 mm10Patch1 mm10Strains1 mm10Patch4 \
 	monDom1 monDom4 monDom5 \
 	musFur1 \
 	myoLuc1 myoLuc2 \
@@ -124,6 +124,7 @@ DBS = \
 	nomLeu1 nomLeu2 nomLeu3 \
 	ochPri2 ochPri3 \
 	oncVol1 \
+	orcOrc1 \
 	oreNil1 oreNil2 \
 	ornAna1 ornAna2 \
 	oryCun1 oryCun2 \
@@ -131,7 +132,7 @@ DBS = \
 	otoGar1 otoGar3 tupBel1\
 	oviAri1 oviAri3 \
 	oxyTri2 \
-	panPan1 \
+	panPan1 panPan2 \
 	panRed1 \
 	panTro1 panTro2 panTro3 panTro4 \
 	papHam1 papAnu2 \

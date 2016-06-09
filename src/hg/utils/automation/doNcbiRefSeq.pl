@@ -83,6 +83,10 @@ Automates UCSC's ncbiRefSeq track build.  Steps:
     cleanup: Removes or compresses intermediate files.
 All operations are performed in the build directory which is
 $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ncbiRefSeq.\$date unless -buildDir is given.
+
+Expects to find already done idKeys procedure and result file in:
+   /hive/data/genomes/<db>/bed/idKeys/<db>.idKeys.txt
+See also: doIdKeys.pl command.
 ";
   # Detailed help (-help):
   print STDERR "
@@ -159,16 +163,18 @@ _EOF_
     );
   }
   $bossScript->add(<<_EOF_
-twoBitDup -keyList=stdout $asmId.ncbi.2bit \\
-  | sort > ncbi.$asmId.sequence.keys
-twoBitDup -keyList=stdout /hive/data/genomes/$db/$db.2bit \\
-  | sort > ucsc.$db.sequence.keys
+mkdir -p $runDir/idKeys
+cd $runDir/idKeys
+time (doIdKeys.pl -buildDir=$runDir/idKeys -twoBit=$runDir/$asmId.ncbi.2bit $db) > idKeys.log 2>&1
+cd $runDir
+ln -s idKeys/$db.idKeys.txt ./ncbi.$asmId.idKeys.txt
+ln -s /hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt ./ucsc.$db.idKeys.txt
 twoBitInfo $asmId.ncbi.2bit stdout | sort -k2nr > $asmId.chrom.sizes
 zcat ${asmId}_rna.fna.gz | sed -e 's/ .*//;' | gzip -c > $asmId.rna.fa.gz
 faToTwoBit $asmId.rna.fa.gz t.2bit
 twoBitInfo t.2bit stdout | sort -k2nr > rna.chrom.sizes
 rm -f t.2bit
-join -t'\t' ucsc.$db.sequence.keys ncbi.$asmId.sequence.keys \\
+join -t'\t' ucsc.$db.idKeys.txt ncbi.$asmId.idKeys.txt \\
    | cut -f2-3 | sort \\
      | join -t'\t' - <(sort /hive/data/genomes/$db/chrom.sizes) \\
        | awk -F'\t' '{printf "0\\t%s\\t%d\\t%s\\t%d\\n", \$2, \$3, \$1, \$3}' \\
@@ -228,17 +234,23 @@ liftUp -extGenePred -type=.gp stdout $downloadDir/${asmId}To${db}.lift drop $asm
 genePredCheck -db=$db $asmId.$db.gp.gz
 zcat $asmId.$db.gp.gz | cut -f1 | sort -u > $asmId.$db.name.list
 join -t'\t' $asmId.$db.name.list $asmId.refLink.tab > $asmId.$db.ncbiRefSeqLink.tab
-zegrep "^N(M|R)_|^YP_" $asmId.$db.gp.gz > $db.curated.gp
+zegrep "^N(M|R)_|^YP_" $asmId.$db.gp.gz || true > $db.curated.gp
+# may not be any curated genes
+if [ ! -s $db.curated.gp ]; then
+  rm -f $db.curated.gp
+fi
 zegrep "^X(M|R)_" $asmId.$db.gp.gz > $db.predicted.gp
 zegrep -v "^N(M|R)_|^YP_|^X(M|R)_" $asmId.$db.gp.gz > $db.other.gp
-genePredCheck -db=$db $db.curated.gp
+if [ -s $db.curated.gp ]; then
+  genePredCheck -db=$db $db.curated.gp
+fi
 genePredCheck -db=$db $db.predicted.gp
 genePredCheck -db=$db $db.other.gp
 (zgrep "^#" $downloadDir/${asmId}_genomic.gff.gz | head || true) > gffForPsl.gff
 zegrep -v "NG_" $downloadDir/${asmId}_genomic.gff.gz \\
   | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
 gff3ToPsl $downloadDir/$asmId.chrom.sizes $downloadDir/rna.chrom.sizes \\
-  gffForPsl.gff $asmId.psl 
+  gffForPsl.gff stdout | pslPosTarget stdin $asmId.psl
 simpleChain -outPsl $asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout $downloadDir/${asmId}To${db}.lift drop stdin \\
    | gzip -c > $db.psl.gz
@@ -250,7 +262,7 @@ pslSort dirs stdout \\
    ./tmpdir $db.psl.gz $db.someRecords.psl | gzip -c > $asmId.$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=$db $asmId.$db.psl.gz
-$gbffToCds $downloadDir/${asmId}_rna.gbff.gz > $asmId.rna.cds
+$gbffToCds $downloadDir/${asmId}_rna.gbff.gz | sort > $asmId.rna.cds
 rm -f tmp.bigPsl
 pslToBigPsl -fa=$downloadDir/$asmId.rna.fa.gz -cds=$asmId.rna.cds $db.psl.gz tmp.bigPsl
 sort -k1,1 -k2,2n tmp.bigPsl > $asmId.$db.bigPsl
@@ -283,8 +295,10 @@ sub doLoad {
 hgLoadGenePred -genePredExt $db ncbiRefSeq process/$asmId.$db.gp.gz
 genePredCheck -db=$db ncbiRefSeq
 
-hgLoadGenePred -genePredExt $db ncbiRefSeqCurated process/$db.curated.gp
-genePredCheck -db=$db ncbiRefSeqCurated
+if [ -s process/$db.curated.gp ]; then
+  hgLoadGenePred -genePredExt $db ncbiRefSeqCurated process/$db.curated.gp
+  genePredCheck -db=$db ncbiRefSeqCurated
+fi
 
 hgLoadGenePred -genePredExt $db ncbiRefSeqPredicted process/$db.predicted.gp
 genePredCheck -db=$db ncbiRefSeqPredicted
@@ -292,8 +306,13 @@ genePredCheck -db=$db ncbiRefSeqPredicted
 hgLoadGenePred -genePredExt $db ncbiRefSeqOther process/$db.other.gp
 genePredCheck -db=$db ncbiRefSeqOther
 
-hgLoadSqlTab $db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql \\
-   process/$asmId.rna.cds 
+# select only coding genes to have CDS records
+
+hgsql -N -e 'select name from ncbiRefSeq where cdsStart!=cdsEnd;' $db \\
+  | sort -u > coding.cds.name.list
+
+join -t'\t' coding.cds.name.list process/$asmId.rna.cds \\
+  | hgLoadSqlTab $db ncbiRefSeqCds ~/kent/src/hg/lib/cdsSpec.sql stdin
 
 # loading the cross reference data
 hgLoadSqlTab $db ncbiRefSeqLink ~/kent/src/hg/lib/ncbiRefSeqLink.sql \\
@@ -336,6 +355,9 @@ hgLoadSeq -drop -seqTbl=seqNcbiRefSeq -extFileTbl=extNcbiRefSeq $db \\
 
 hgLoadPsl $db -table=ncbiRefSeqPsl process/$asmId.$db.psl.gz
 
+featureBits $db ncbiRefSeq > fb.ncbiRefSeq.$db.txt 2>&1
+cat fb.ncbiRefSeq.$db.txt 2>&1
+
 _EOF_
   );
   $bossScript->execute();
@@ -374,6 +396,10 @@ chomp $secondsStart;
 
 # expected command line arguments after options are processed
 ($genbankRefseq, $subGroup, $species, $asmId, $db) = @ARGV;
+
+if ( ! -s "/hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt") {
+  die "ERROR: can not find /hive/data/genomes/$db/bed/idKeys/$db.idKeys.txt";
+}
 
 # Force debug and verbose until this is looking pretty solid:
 # $opt_debug = 1;

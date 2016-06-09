@@ -653,6 +653,8 @@ else if(startsWith("bigGenePred", type))
     cType = cfgGenePred;
 else if(startsWith("bigWig", type))
     cType = cfgWig;
+else if(startsWith("longTabix", type))
+    cType = cfgLong;
 else if(startsWith("bedGraph", type))
     cType = cfgWig;
 else if (startsWith("netAlign", type)

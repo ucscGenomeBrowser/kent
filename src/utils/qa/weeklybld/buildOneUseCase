@@ -11,13 +11,17 @@ setenv USE_SSL ${1}
 shift argv
 setenv USE_TABIX ${1}
 shift argv
+setenv USE_SAMTABIX ${1}
+shift argv
+setenv USE_HTS ${1}
+shift argv
 setenv KNETFILE_HOOKS ${1}
 shift argv
 setenv USE_HAL ${1}
 shift argv
 
 echo
-echo '***' Starting make argv=$argv USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL} on `date`
+echo '***' Starting make argv=$argv USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} USE_SAMTABIX=${USE_SAMTABIX} USE_HTS=${USE_HTS} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL} on `date`
 cd ${targetDir}
 if ("$1" == "alpha") then
   git pull >& /dev/null
@@ -28,7 +32,7 @@ endif
 make -j 24 $argv
 set ret = $status
 if ($ret) then
-    echo '***' ERROR stopped make ret code=$ret USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}
+    echo '***' ERROR stopped make ret code=$ret USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} USE_SAMTABIX=${USE_SAMTABIX} USE_HTS=${USE_HTS} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}
     exit $ret
 endif
-echo '***' Finished make USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}
+echo '***' Finished make USE_BAM=${USE_BAM} USE_SSL=${USE_SSL} USE_TABIX=${USE_TABIX} USE_SAMTABIX=${USE_SAMTABIX} USE_HTS=${USE_HTS} KNETFILE_HOOKS=${KNETFILE_HOOKS} USE_HAL=${USE_HAL}

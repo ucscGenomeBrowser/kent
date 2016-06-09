@@ -9,11 +9,11 @@
 /* some stuff for mutation type choices */
 /* labels for checkboxes */
 char *oregannoTypeLabel[] = {
-    "regulatory polymorphism",
-    "transcription factor binding site",
-    "regulatory region",
-    "miRNA binding site",
-    "regulatory haplotype",
+    "regulatory polymorphism <span style=\"color:rgb(0,114,178)\">(dark blue)</span>",
+    "transcription factor binding site <span style=\"color:rgb(230,159,0)\">(orange)</span>",
+    "regulatory region <span style=\"color:rgb(86,180,233)\">(light blue)</span>",
+    "miRNA binding site <span style=\"color:rgb(0,158,115)\">(green)</span>",
+    "regulatory haplotype <span style=\"color:rgb(213,94,0)\">(red)</span>",
 };
 
 /* names for checkboxes */

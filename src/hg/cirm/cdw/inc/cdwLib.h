@@ -71,6 +71,9 @@ char *cdwTempDirForToday(char dir[PATH_LEN]);
 long long cdwNow();
 /* Return current time in seconds since Epoch. */
 
+struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName);
+/* Return user associated with that username or NULL if not found */
+
 struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email);
 /* Return user associated with that email or NULL if not found */
 
@@ -226,6 +229,9 @@ struct cdwFile *cdwFileFromId(struct sqlConnection *conn, long long fileId);
 
 struct cdwFile *cdwFileFromIdOrDie(struct sqlConnection *conn, long long fileId);
 /* Return cdwFile given fileId - aborts if not found. */
+
+int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf);
+/* return most recent fileId for file where submitDir.url+submitFname ends with suf. 0 if not found. */
 
 struct genomeRangeTree *cdwMakeGrtFromBed3List(struct bed3 *bedList);
 /* Make up a genomeRangeTree around bed file. */
@@ -450,6 +456,9 @@ struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *use
 struct tagStorm *cdwUserTagStormFromList(struct sqlConnection *conn, 
     struct cdwUser *user, struct cdwFile *validList ,struct rbTree *groupedFiles);
 
+void cdwCheckRqlFields(struct rqlStatement *rql, struct slName *tagFieldList);
+/* Make sure that rql query only includes fields that exist in tags */
+
 char *cdwRqlLookupField(void *record, char *key);
 /* Lookup a field in a tagStanza. */
 
@@ -460,5 +469,8 @@ boolean cdwRqlStatementMatch(struct rqlStatement *rql, struct tagStanza *stanza,
 struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 /* Return list of references to stanzas that match RQL query */
 
+struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef);
+/* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
+ * with cgiParsedVarsFreeList() */
 
 #endif /* CDWLIB_H */

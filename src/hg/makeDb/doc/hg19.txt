@@ -31486,4 +31486,60 @@ hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
     make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
+# killer whale/orcOrc1 Lastz run  (WORKING - 2016-06-03 - Hiram)
+    # note: incorrect date on this directory name, should be 2016-06-03
 
+    mkdir /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+    cd  /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+    printf '# human vs killer whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: killer whale OrcOrc1
+SEQ2_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ2_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # real    747m9.241s
+
+    cat fb.hg19.chainOrcOrc1Link.txt
+    #  1507066837 bases of 2897316137 (52.016%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg19 orcOrc1) \
+      > rbest.log 2>&1 &
+    # real    517m17.718s
+
+    # running the swap
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    121m53.369s
+
+    cat fb.orcOrc1.chainHg19Link.txt
+    #    1445188424 bases of 2249582125 (64.243%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 hg19) \
+      > rbest.log 2>&1 &
+    #   real    463m9.924s
+
+#########################################################################

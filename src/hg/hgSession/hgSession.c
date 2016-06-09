@@ -23,7 +23,9 @@
 #include "udc.h"
 #include "hgSession.h"
 #include "hubConnect.h"
-
+#include "hgConfig.h"
+#include "sessionThumbnail.h"
+#include "obscure.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -61,6 +63,17 @@ char *wikiHost = wikiLinkHost();
 
 cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
+
+/* Includes for the jquery datatables plugin. Clashes a bit with the jquery included
+ * by cartWebStart, unfortunately.  Should resolve this ultimately (ideally by solving
+ * the issues preventing us from upgrading the global jquery include) */
+printf ("<link rel=\"stylesheet\" type=\"text/css\" "
+        "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
+printf ("<script type=\"text/javascript\" "
+        "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>\n");
+printf ("<script type=\"text/javascript\" charset=\"utf8\" "
+        "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>\n");
+
 if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
     {
     printf("<h4 style=\"margin: 0pt 0pt 7px;\">Your Account Information</h4>"
@@ -116,18 +129,6 @@ else
     }
 }
 
-
-char *getLinkUserName()
-/* Return the user name specified in cookies from the browser, or NULL
- * if 
- * the user doesn't appear to be logged in. */
-{
-if (wikiLinkEnabled())
-   {
-   return cloneString(wikiLinkUserName());
-   }
-return NULL;
-}
 
 void showCartLinks()
 /* Print out links to cartDump and cartReset. */
@@ -278,49 +279,107 @@ boolean foundAny = FALSE;
 char *encUserName = cgiEncodeFull(userName);
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
+/* DataTables configuration: only allow ordering on session name, creation date, and database.
+ * https://datatables.net/reference/option/columnDefs */
+printf ("<script type=\"text/javascript\">"
+        "$(document).ready(function () {\n"
+        "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
+        "                                       \"order\":[1,'asc']\n"
+        "                                 });\n"
+        "} );\n"
+        "</script>\n");
+
 printf("<H3>My Sessions</H3>\n");
-printf("<TABLE BORDERWIDTH=0>\n");
-sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse from %s "
-      "WHERE userName = '%s' ORDER BY sessionName;",
-      namedSessionTable, encUserName);
+printf("<div style=\"max-width:1024px\">");
+printf("<table id=\"sessionTable\" class=\"display compact\" borderwidth=0>\n");
+printf("<thead><tr>");
+printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
+       "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
+       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD><TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD>"
+       "<td align-center><b>post in&nbsp;<br><a href=\"../cgi-bin/hgPublicSessions?%s\">public listing</a>?</b></td>"
+       "<TD align=center><B>send to<BR>mail</B></TD></TH>",
+       cartSidUrlString(cart));
+printf("</tr></thead>");
+printf("<tbody>\n");
+
+if (gotSettings)
+    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, contents, settings from %s "
+        "WHERE userName = '%s' ORDER BY sessionName;",
+        namedSessionTable, encUserName);
+else
+    sqlSafef(query, sizeof(query), "SELECT sessionName, shared, firstUse, contents from %s "
+        "WHERE userName = '%s' ORDER BY sessionName;",
+        namedSessionTable, encUserName);
 sr = sqlGetResult(conn, query);
-printf("<TH><TD><B>session name</B></TD><TD><B>created on</B></TD><TD align=center><B>use this&nbsp;<BR>session&nbsp;</B></TD>"
-       "<TD align=center><B>delete this&nbsp;<BR>session&nbsp;</B></TD><TD align=center><B>share with&nbsp;<BR>others?&nbsp;</B></TD><TD align=center><B>link to<BR>session</B></TD>"
-       "<TD align=center><B>send to<BR>mail</B></TD></TH>");
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *encSessionName = row[0];
     char *sessionName = cgiDecodeClone(encSessionName);
     char *link = NULL;
-    boolean shared = atoi(row[1]);
+    int shared = atoi(row[1]);
     char *firstUse = row[2];
     char buf[512];
+    boolean inGallery = FALSE;
+
+    if (shared >=2)
+        inGallery = TRUE;
+
     printf("<TR><TD>&nbsp;&nbsp;</TD><TD>");
-    if (gotSettings)
-	printf("<A HREF=\"%s?%s&%s=%s\">",
-	       hgSessionName(), cartSidUrlString(cart), hgsDoSessionDetail, encSessionName);
-    htmlTextOut(sessionName);
+
+    struct dyString *dy = dyStringNew(1024);
+    addSessionLink(dy, encUserName, encSessionName, FALSE);
+    printf("<a href=\"%s\">%s</a>", dyStringContents(dy), sessionName);
+    dyStringFree(&dy);
+
     char *spacePt = strchr(firstUse, ' ');
     if (spacePt != NULL) *spacePt = '\0';
+        printf("&nbsp;&nbsp;</TD>"
+	        "<TD><nobr>%s<nobr>&nbsp;&nbsp;</TD><TD align=center>", firstUse);
+
+    char *dbIdx = NULL;
+    if (startsWith("db=", row[3]))
+        dbIdx = row[3]+3;
+    else
+        dbIdx = strstr(row[3], "&db=") + 4;
+        
+    if (dbIdx != NULL)
+        {
+        char *dbEnd = strchr(dbIdx, '&');
+        char *db = NULL;
+        if (dbEnd != NULL)
+            db = cloneStringZ(dbIdx, dbEnd-dbIdx);
+        else
+            db = cloneString(dbIdx);
+        printf("%s</td><td align=center>", db);
+        }
+    else
+        printf("n/a</td><td align=center>");
+
     if (gotSettings)
-	printf("</A>");
-    printf("&nbsp;&nbsp;</TD>"
-	   "<TD>%s&nbsp;&nbsp;</TD><TD align=center>", firstUse);
-    safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, encSessionName);
-    cgiMakeButton(buf, "use");
+        {
+        safef(buf, sizeof(buf), "%s%s", hgsEditPrefix, encSessionName);
+        cgiMakeButton(buf, "details");
+        }
+    else
+        printf("unavailable");
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
     safef(command, sizeof(command), confirmDeleteFormat, sessionName);
     cgiMakeOnClickSubmitButton(command, buf, "delete");
+
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
-    cgiMakeCheckBoxJS(buf, shared, "onchange=\"document.mainForm.submit();\"");
-    link = getSessionLink(encUserName, encSessionName);
-    printf("</TD><TD align=center>%s</TD>\n", link);
-    freez(&link);
+    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"document.mainForm.submit();\"");
+
+    printf("</TD><TD align=center>");
+    safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
+    cgiMakeCheckBoxFourWay(buf, inGallery, shared>0, NULL, NULL,
+        "onchange=\"document.mainForm.submit();\"");
+
     link = getSessionEmailLink(encUserName, encSessionName);
-    printf("<TD align=center>%s</TD></TR>", link);
+    printf("</td><td align=center>%s</td></tr>", link);
     freez(&link);
     foundAny = TRUE;
     struct slName *sn = slNameNew(sessionName);
@@ -329,8 +388,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 if (!foundAny)
     printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>(none)</TD>"
 	   "<TD colspan=5></TD></TR>\n");
-printf("<TR><TD colspan=7></TD></TR>\n");
+
+printf("</tbody>\n");
+
 printf("</TABLE>\n");
+printf("</div>\n");
 printf("<P></P>\n");
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
@@ -480,7 +542,10 @@ else
 
 printf("See the <A HREF=\"../goldenPath/help/hgSessionHelp.html\" "
        "TARGET=_BLANK>Sessions User's Guide</A> "
-       "for more information about this tool.<P/>\n");
+       "for more information about this tool. "
+       "See the <A HREF=\"../goldenPath/help/sessions.html\" "
+       "TARGET=_BLANK>Session Gallery</A> "
+       "for example sessions.<P/>\n");
 
 showCartLinks();
 
@@ -519,9 +584,16 @@ if (userName != NULL)
            "click the Browser link it will take you to the Genome "
            "Browser and become a uniquely identified URL once the "
            "session loads, so that resulting link is not advised "
-           "for sharing.</LI>\n");
+           "for sharing.</LI>\n"
+       "<li>Each previously saved named session also appears with "
+           "a checkbox to add the session to our "
+           "<a href=\"../cgi-bin/hgPublicSessions?%s\">Public Sessions</a> "
+           "listing. Adding a session to this listing allows other "
+           "browser users to view the description and a thumbnail "
+           "image of your session, and to load the session if they "
+           "are interested.</li>\n", cartSidUrlString(cart));
     }
-else if (wikiLinkEnabled())
+else if (loginSystemEnabled() || wikiLinkEnabled())
     {
      printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able " 
             " to save named sessions which will be displayed with "
@@ -541,21 +613,22 @@ printf("<LI>If a saved settings file is available from a web server, "
        "settings file, e.g. http://www.mysite.edu/~me/mySession.txt .  "
        "In this type of link, you can replace "
        "\"hgSession\" with \"hgTracks\" in order to proceed directly to "
-       "the Genome Browser.</LI>\n",
+       "the Genome Browser. For an example page using such links "
+       "please see the <A HREF=\"../goldenPath/help/sessions.html\" "
+       "TARGET=_BLANK>Session Gallery</A>.</LI>\n",
        dyUrl->string);
 printf("</UL>\n");
 dyStringFree(&dyUrl);
 }
 
-void doMainPage(char *message)
+void doMainPage(char *userName, char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
-if (wikiLinkEnabled())
+if (loginSystemEnabled() || wikiLinkEnabled())
     {
-    char *wikiUserName = wikiLinkUserName();
-    if (wikiUserName)
-	welcomeUser(wikiUserName);
+    if (userName)
+	welcomeUser(userName);
     else
 	offerLogin();
     if (isNotEmpty(message))
@@ -566,8 +639,8 @@ if (wikiLinkEnabled())
 	    webNewSection("Updated Session");
 	puts(message);
 	}
-    showSessionControls(wikiUserName, TRUE, TRUE);
-    showLinkingTemplates(wikiUserName);
+    showSessionControls(userName, TRUE, TRUE);
+    showLinkingTemplates(userName);
     }
 else 
     {
@@ -596,7 +669,11 @@ char varName[256];
 safef(varName, sizeof(varName), "%s%s", cgiBooleanShadowPrefix(), hgsSharePrefix);
 cartRemovePrefix(cart, varName);
 cartRemovePrefix(cart, hgsSharePrefix);
+safef(varName, sizeof(varName), "%s%s", cgiBooleanShadowPrefix(), hgsGalleryPrefix);
+cartRemovePrefix(cart, varName);
+cartRemovePrefix(cart, hgsGalleryPrefix);
 cartRemovePrefix(cart, hgsLoadPrefix);
+cartRemovePrefix(cart, hgsEditPrefix);
 cartRemovePrefix(cart, hgsLoadLocalFileName);
 cartRemovePrefix(cart, hgsDeletePrefix);
 cartRemovePrefix(cart, hgsDo);
@@ -650,15 +727,16 @@ else
 }
 
 #define INITIAL_USE_COUNT 0
-char *doNewSession()
+char *doNewSession(char *userName)
 /* Save current settings in a new named session.
  * Return a message confirming what we did. */
 {
+if (userName == NULL)
+    return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
-char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
@@ -742,20 +820,234 @@ hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
 }
 
+void thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn)
+/* Create a thumbnail image for the gallery.  Leaks memory from a generated filename string,
+ * plus a couple of dyStrings.  Returns without determining if the image creation
+ * succeeded. */
+{
+char query[4096];
+char **row;
+struct sqlResult *sr;
+sqlSafef(query, sizeof(query),
+    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
+    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    encUserName, encSessionName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("cannot add session to gallery; user %s, session %s",
+        encUserName, encSessionName);
 
-char *doUpdateSessions()
+char *destFile = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+if (destFile != NULL)
+    {
+    struct dyString *hgTracksUrl = dyStringNew(0);
+    addSessionLink(hgTracksUrl, encUserName, encSessionName, FALSE);
+    struct dyString *renderUrl =
+        dyStringSub(hgTracksUrl->string, "cgi-bin/hgTracks", "cgi-bin/hgRenderTracks");
+    dyStringAppend(renderUrl, "&pix=640");
+    char *renderCmd[] = {"wget", "-q", "-O", "-", renderUrl->string, NULL};
+    char *convertCmd[] = {"convert", "-", "-resize", "320", "-crop", "320x240+0+0", destFile, NULL};
+    char **cmdsImg[] = {renderCmd, convertCmd, NULL};
+    pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL);
+    }
+sqlFreeResult(&sr);
+}
+
+
+void thumbnailRemove(char *encUserName, char *encSessionName, struct sqlConnection *conn)
+/* Unlink thumbnail image for the gallery.  Leaks memory from a generated filename string. */
+{
+char query[4096];
+char **row;
+struct sqlResult *sr;
+sqlSafef(query, sizeof(query),
+    "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
+    "where m.userName = \"%s\" and n.sessionName = \"%s\"",
+    encUserName, encSessionName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("cannot remove session from gallery; user %s, session %s",
+        encUserName, encSessionName);
+
+char *filePath = sessionThumbnailFilePath(row[0], encSessionName, row[1]);
+if (filePath != NULL)
+    unlink(filePath);
+sqlFreeResult(&sr);
+}
+
+char *doSessionDetail(char *userName, char *sessionName)
+/* Show details about a particular session. */
+{
+if (userName == NULL)
+    return "Sorry, please log in again.";
+struct dyString *dyMessage = dyStringNew(4096);
+char *encSessionName = cgiEncodeFull(sessionName);
+char *encUserName = cgiEncodeFull(userName);
+struct sqlConnection *conn = hConnectCentral();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+char query[512];
+webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
+boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
+
+if (gotSettings)
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse, settings from %s "
+	  "WHERE userName = '%s' AND sessionName = '%s'",
+          namedSessionTable, encUserName, encSessionName);
+else
+    sqlSafef(query, sizeof(query), "SELECT shared, firstUse from %s "
+	  "WHERE userName = '%s' AND sessionName = '%s'",
+          namedSessionTable, encUserName, encSessionName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    int shared = atoi(row[0]);
+    char *firstUse = row[1];
+    char *settings = NULL;
+    if (gotSettings)
+	settings = row[2];
+    char *description = getSetting(settings, "description");
+    if (description == NULL) description = "";
+
+    dyStringPrintf(dyMessage, "<A HREF=\"../goldenPath/help/hgSessionHelp.html#Details\" "
+		   "TARGET=_BLANK>Session Details Help</A><P/>\n");
+
+#define highlightAccChanges " var b = document.getElementById('" hgsDoSessionChange "'); " \
+                            "  if (b) { b.style.background = '#ff9999'; }"
+
+#define toggleGalleryDisable \
+                            "  var c = document.getElementById('detailsSharedCheckbox'); " \
+                            "  var d = document.getElementById('detailsGalleryCheckbox'); " \
+                            "  if (c.checked)" \
+                            "    {d.disabled = false;} " \
+                            "  else" \
+                            "    {d.disabled = true; " \
+                            "     d.checked = false; }"
+
+    dyStringPrintf(dyMessage, "<B>%s</B><P>\n"
+		   "<FORM ACTION=\"%s\" NAME=\"detailForm\" METHOD=GET>\n"
+		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%s>"
+		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">"
+		   "Session Name: "
+		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\" "
+		   "onChange=\"{%s}\" onKeypress=\"{%s}\">\n",
+		   sessionName, hgSessionName(),
+		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
+		   hgsNewSessionName, 32, sessionName, highlightAccChanges, highlightAccChanges);
+    dyStringPrintf(dyMessage,
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"delete\" "
+		   "onClick=\"" confirmDeleteFormat "\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
+		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
+		   "<BR>\n",
+		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
+		   sessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+    dyStringPrintf(dyMessage,
+		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
+		   "onChange=\"{%s %s}\" onClick=\"{%s %s}\" id=\"detailsSharedCheckbox\">\n"
+		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
+		   hgsSharePrefix, encSessionName, (shared>0 ? " CHECKED" : ""),
+		   highlightAccChanges, toggleGalleryDisable, highlightAccChanges, toggleGalleryDisable,
+		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
+
+    dyStringPrintf(dyMessage,
+		   "List in Public Sessions? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
+		   "onChange=\"{%s}\" onClick=\"{%s}\" id=\"detailsGalleryCheckbox\">\n"
+		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
+		   hgsGalleryPrefix, encSessionName, (shared>=2 ? " CHECKED" : ""),
+		   highlightAccChanges, highlightAccChanges,
+		   cgiBooleanShadowPrefix(), hgsGalleryPrefix, encSessionName);
+    /* Set initial disabled state of the gallery checkbox */
+    dyStringPrintf(dyMessage, "\n<script>\n%s\n</script>\n", toggleGalleryDisable);
+    dyStringPrintf(dyMessage,
+		   "Created on %s.<BR>\n", firstUse);
+    /* Print custom track counts per assembly */
+    struct cart *tmpCart = cartNew(NULL,NULL,NULL,NULL);
+    struct sqlConnection *conn2 = hConnectCentral();
+    cartLoadUserSession(conn2, userName, sessionName, tmpCart, NULL, NULL);
+    hDisconnectCentral(&conn2);
+    cartCheckForCustomTracks(tmpCart, dyMessage);
+
+    if (gotSettings)
+        {
+        description = replaceChars(description, "\\\\", "\\__ESC__");
+        description = replaceChars(description, "\\r", "\r");
+        description = replaceChars(description, "\\n", "\n");
+        description = replaceChars(description, "\\__ESC__", "\\");
+        dyStringPrintf(dyMessage,
+            "Description:<BR>\n"
+            "<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d "
+            "onChange=\"%s\" onKeypress=\"%s\">%s</TEXTAREA><BR>\n",
+            hgsNewSessionDescription, 5, 80,
+            highlightAccChanges, highlightAccChanges, description);
+        }
+    dyStringAppend(dyMessage, "</FORM>\n");
+    sqlFreeResult(&sr);
+    }
+else
+    errAbort("doSessionDetail: got no results from query:<BR>\n%s\n", query);
+
+return dyStringCannibalize(&dyMessage);
+}
+
+char *doUpdateSessions(char *userName)
 /* Look for cart variables matching prefixes for sharing/unsharing,
  * loading or deleting a previously saved session.
  * Return a message confirming what we did, or NULL if no such variables
  * were in the cart. */
 {
+if (userName == NULL)
+    return NULL;
 struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
-char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
+
+cartHelList = cartFindPrefix(cart, hgsGalleryPrefix);
+if (cartHelList != NULL)
+    {
+    struct hash *galleryHash = hashNew(0);
+    char **row;
+    struct sqlResult *sr;
+    sqlSafef(query, sizeof(query),
+	  "select sessionName,shared from %s where userName = '%s'",
+	  namedSessionTable, encUserName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	    hashAddInt(galleryHash, row[0], atoi(row[1]));
+    sqlFreeResult(&sr);
+    for (hel = cartHelList;  hel != NULL;  hel = hel->next)
+	{
+	char *encSessionName = hel->name + strlen(hgsGalleryPrefix);
+	char *sessionName = cgiDecodeClone(encSessionName);
+	boolean inGallery = hashIntVal(galleryHash, encSessionName) >= 2 ? TRUE : FALSE;
+	boolean newGallery  = cartUsualInt(cart, hel->name, 0) > 0 ? TRUE : FALSE;
+
+	if (newGallery != inGallery)
+	    {
+	    sqlSafef(query, sizeof(query), "UPDATE %s SET shared = %d "
+		  "WHERE userName = '%s' AND sessionName = '%s';",
+		  namedSessionTable, newGallery == TRUE ? 2 : 1, encUserName, encSessionName);
+	    sqlUpdate(conn, query);
+	    sessionTouchLastUse(conn, encUserName, encSessionName);
+	    dyStringPrintf(dyMessage,
+			   "Marked session <B>%s</B> as %s.<BR>\n",
+			   htmlEncode(sessionName),
+			   (newGallery == TRUE ? "added to gallery" : "removed from public listing"));
+        if (newGallery == FALSE)
+            thumbnailRemove(encUserName, encSessionName, conn);
+        if (newGallery == TRUE)
+            thumbnailAdd(encUserName, encSessionName, conn);
+	    didSomething = TRUE;
+	    }
+	}
+    hashFree(&galleryHash);
+    }
 
 cartHelList = cartFindPrefix(cart, hgsSharePrefix);
 if (cartHelList != NULL)
@@ -774,24 +1066,38 @@ if (cartHelList != NULL)
 	{
 	char *encSessionName = hel->name + strlen(hgsSharePrefix);
 	char *sessionName = cgiDecodeClone(encSessionName);
-	boolean alreadyShared = hashIntVal(sharedHash, encSessionName);
-	boolean shared  = cartUsualBoolean(cart, hel->name, TRUE);
-	if (shared != alreadyShared)
+	boolean alreadyShared = hashIntVal(sharedHash, encSessionName) > 0 ? TRUE : FALSE;
+    boolean inGallery = hashIntVal(sharedHash, encSessionName) >= 2 ? TRUE : FALSE;
+	boolean newShared = cartUsualInt(cart, hel->name, 1) ? TRUE : FALSE;
+
+	if (newShared != alreadyShared)
 	    {
 	    sqlSafef(query, sizeof(query), "UPDATE %s SET shared = %d "
 		  "WHERE userName = '%s' AND sessionName = '%s';",
-		  namedSessionTable, shared, encUserName, encSessionName);
+		  namedSessionTable, newShared, encUserName, encSessionName);
 	    sqlUpdate(conn, query);
 	    sessionTouchLastUse(conn, encUserName, encSessionName);
 	    dyStringPrintf(dyMessage,
 			   "Marked session <B>%s</B> as %s.<BR>\n",
 			   htmlEncode(sessionName),
-			   (shared ? "shared" : "unshared"));
+			   (newShared == TRUE ? "shared" : "unshared"));
+        if (newShared == FALSE && inGallery == TRUE)
+            thumbnailRemove(encUserName, encSessionName, conn);
 	    didSomething = TRUE;
 	    }
 	}
     hashFree(&sharedHash);
     }
+
+hel = cartFindPrefix(cart, hgsEditPrefix);
+if (hel != NULL)
+    {
+    char *encSessionName = hel->name + strlen(hgsEditPrefix);
+    char *sessionName = cgiDecodeClone(encSessionName);
+    dyStringPrintf(dyMessage, "%s", doSessionDetail(userName, sessionName));
+    didSomething = TRUE;
+    }
+
 hel = cartFindPrefix(cart, hgsLoadPrefix);
 if (hel != NULL)
     {
@@ -817,6 +1123,12 @@ for (hel = cartHelList;  hel != NULL;  hel = hel->next)
     {
     char *encSessionName = hel->name + strlen(hgsDeletePrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
+    sqlSafef(query, sizeof(query), "select shared from %s "
+      "where userName = '%s' and sessionName = '%s';",
+      namedSessionTable, encUserName, encSessionName);
+    int shared = sqlQuickNum(conn, query);
+    if (shared >= 2)
+        thumbnailRemove(encUserName, encSessionName, conn);
     sqlSafef(query, sizeof(query), "DELETE FROM %s "
 	  "WHERE userName = '%s' AND sessionName = '%s';",
 	  namedSessionTable, encUserName, encSessionName);
@@ -966,95 +1278,6 @@ if (lf != NULL)
 return dyStringCannibalize(&dyMessage);
 }
 
-char *doSessionDetail(char *sessionName)
-/* Show details about a particular session. */
-{
-struct dyString *dyMessage = dyStringNew(4096);
-char *encSessionName = cgiEncodeFull(sessionName);
-char *userName = getLinkUserName();
-char *encUserName = cgiEncodeFull(userName);
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = NULL;
-char **row = NULL;
-char query[512];
-webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
-boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
-
-if (gotSettings)
-    sqlSafef(query, sizeof(query), "SELECT shared, firstUse, settings from %s "
-	  "WHERE userName = '%s' AND sessionName = '%s'",
-          namedSessionTable, encUserName, encSessionName);
-else
-    sqlSafef(query, sizeof(query), "SELECT shared, firstUse from %s "
-	  "WHERE userName = '%s' AND sessionName = '%s'",
-          namedSessionTable, encUserName, encSessionName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    boolean shared = atoi(row[0]);
-    char *firstUse = row[1];
-    char *settings = NULL;
-    if (gotSettings)
-	settings = row[2];
-    char *description = getSetting(settings, "description");
-    if (description == NULL) description = "";
-
-    dyStringPrintf(dyMessage, "<A HREF=\"../goldenPath/help/hgSessionHelp.html#Details\" "
-		   "TARGET=_BLANK>Session Details Help</A><P/>\n");
-
-#define highlightAccChanges "{ var b = document.getElementById('" hgsDoSessionChange "'); " \
-                            "  if (b) { b.style.background = '#ff9999'; } }"
-
-    dyStringPrintf(dyMessage, "<B>%s</B><P>\n"
-		   "<FORM ACTION=\"%s\" NAME=\"detailForm\" METHOD=GET>\n"
-		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=%s>"
-		   "<INPUT TYPE=HIDDEN NAME=\"%s\" VALUE=\"%s\">"
-		   "Session Name: "
-		   "<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\" "
-		   "onChange=\"%s\" onKeypress=\"%s\">\n",
-		   sessionName, hgSessionName(),
-		   cartSessionVarName(cart), cartSessionId(cart), hgsOldSessionName, sessionName,
-		   hgsNewSessionName, 32, sessionName, highlightAccChanges, highlightAccChanges);
-    dyStringPrintf(dyMessage,
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"use\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s%s\" VALUE=\"delete\" "
-		   "onClick=\"" confirmDeleteFormat "\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT ID=\"%s\" NAME=\"%s\" VALUE=\"accept changes\">"
-		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
-		   "<BR>\n",
-		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   sessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
-    dyStringPrintf(dyMessage,
-		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
-		   "onChange=\"%s\" onClick=\"%s\">\n"
-		   "<INPUT TYPE=HIDDEN NAME=\"%s%s%s\" VALUE=0><BR>\n",
-		   hgsSharePrefix, encSessionName, (shared ? " CHECKED" : ""),
-		   highlightAccChanges, highlightAccChanges,
-		   cgiBooleanShadowPrefix(), hgsSharePrefix, encSessionName);
-    dyStringPrintf(dyMessage,
-		   "Created on %s.<BR>\n", firstUse);
-    if (gotSettings)
-	{
-	description = replaceChars(description, "\\\\", "\\__ESC__");
-	description = replaceChars(description, "\\r", "\r");
-	description = replaceChars(description, "\\n", "\n");
-	description = replaceChars(description, "\\__ESC__", "\\");
-	dyStringPrintf(dyMessage,
-		       "Description:<BR>\n"
-		       "<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d "
-		       "onChange=\"%s\" onKeypress=\"%s\">%s</TEXTAREA><BR>\n",
-		       hgsNewSessionDescription, 5, 80,
-		       highlightAccChanges, highlightAccChanges, description);
-	}
-    dyStringAppend(dyMessage, "</FORM>\n");
-    sqlFreeResult(&sr);
-    }
-else
-    errAbort("doSessionDetail: got no results from query:<BR>\n%s\n", query);
-
-return dyStringCannibalize(&dyMessage);
-}
-
 void renamePrefixedCartVar(char *prefix, char *oldName, char *newName)
 /* If cart has prefix+oldName, replace it with prefix+newName = submit. */
 {
@@ -1068,21 +1291,22 @@ if (cartVarExists(cart, varName))
     }
 }
 
-char *doSessionChange(char *oldSessionName)
+char *doSessionChange(char *userName, char *oldSessionName)
 /* Process changes to session from session details page. */
 {
+if (userName == NULL)
+    return "Unable to make changes to session.  Please log in again.";
 struct dyString *dyMessage = dyStringNew(1024);
 webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;
-char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[512];
-boolean shared = TRUE;
+int shared = 1;
 char *settings = NULL;
 boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 
@@ -1117,27 +1341,47 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
 		   sessionName, newName);
     sessionName = newName;
     encSessionName = encNewName;
+    renamePrefixedCartVar(hgsEditPrefix, encOldSessionName, encNewName);
     renamePrefixedCartVar(hgsLoadPrefix, encOldSessionName, encNewName);
     renamePrefixedCartVar(hgsDeletePrefix, encOldSessionName, encNewName);
+    if (shared >= 2)
+        {
+        thumbnailRemove(encUserName, encSessionName, conn);
+        thumbnailAdd(encUserName, encNewName, conn);
+        }
     }
-char varName[256];
-safef(varName, sizeof(varName), hgsSharePrefix "%s", encOldSessionName);
-if (cgiBooleanDefined(varName))
-    {
-    boolean newShared = cartBoolean(cart, varName);
-    if (newShared != shared)
-	{
-	sqlSafef(query, sizeof(query),
-	      "UPDATE %s set shared = %d WHERE userName = '%s' AND sessionName = '%s';",
-	      namedSessionTable, newShared, encUserName, encSessionName);
-	sqlUpdate(conn, query);
-	dyStringPrintf(dyMessage, "Marked session <B>%s</B> as %s.<BR>\n",
-		       htmlEncode(sessionName), (newShared ? "shared" : "unshared"));
 
-	}
-    cartRemove(cart, varName);
+char sharedVarName[256];
+char galleryVarName[256];
+safef(sharedVarName, sizeof(sharedVarName), hgsSharePrefix "%s", encOldSessionName);
+safef(galleryVarName, sizeof(galleryVarName), hgsGalleryPrefix "%s", encOldSessionName);
+if (cgiBooleanDefined(sharedVarName) || cgiBooleanDefined(galleryVarName))
+    {
+    int newShared = shared;
+    if (cgiBooleanDefined(sharedVarName))
+        newShared = cartBoolean(cart, sharedVarName) ? 1 : 0;
+    if (cgiBooleanDefined(galleryVarName))
+        newShared = cartBoolean(cart, galleryVarName) ? 2 : newShared;
+    if (newShared != shared)
+        {
+        sqlSafef(query, sizeof(query),
+            "UPDATE %s set shared = %d WHERE userName = '%s' AND sessionName = '%s';",
+            namedSessionTable, newShared, encUserName, encSessionName);
+        sqlUpdate(conn, query);
+        dyStringPrintf(dyMessage, "Marked session <B>%s</B> as %s.<BR>\n",
+            htmlEncode(sessionName), (newShared>0 ? newShared>=2 ? "shared in public listing" :
+                "shared, but not in public listing" : "unshared"));
+        if (shared >= 2 && newShared < 2)
+            thumbnailRemove(encUserName, encSessionName, conn);
+        if (shared < 2 && newShared >= 2)
+            thumbnailAdd(encUserName, encSessionName, conn);
+        }
+    cartRemove(cart, sharedVarName);
+    cartRemove(cart, galleryVarName);
     char shadowVarName[512];
-    safef(shadowVarName, sizeof(shadowVarName), "%s%s", cgiBooleanShadowPrefix(), varName);
+    safef(shadowVarName, sizeof(shadowVarName), "%s%s", cgiBooleanShadowPrefix(), sharedVarName);
+    cartRemove(cart, shadowVarName);
+    safef(shadowVarName, sizeof(shadowVarName), "%s%s", cgiBooleanShadowPrefix(), galleryVarName);
     cartRemove(cart, shadowVarName);
     }
 if (gotSettings)
@@ -1197,17 +1441,19 @@ struct hash *oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
+char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+
 if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
-    doMainPage(NULL);
+    doMainPage(userName, NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {
-    char *message = doNewSession();
-    doMainPage(message);
+    char *message = doNewSession(userName);
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsDoOtherUser))
     {
     char *message = doOtherUser(hgsDoOtherUser);
-    doMainPage(message);
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsDoSaveLocal))
     {
@@ -1216,27 +1462,27 @@ else if (cartVarExists(cart, hgsDoSaveLocal))
 else if (cartVarExists(cart, hgsDoLoadLocal))
     {
     char *message = doLoad(FALSE, hgsDoLoadLocal);
-    doMainPage(message);
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsDoLoadUrl))
     {
     char *message = doLoad(TRUE, hgsDoLoadUrl);
-    doMainPage(message);
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsDoSessionDetail))
     {
-    char *message = doSessionDetail(cartString(cart, hgsDoSessionDetail));
-    doMainPage(message);
+    char *message = doSessionDetail(userName, cartString(cart, hgsDoSessionDetail));
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsDoSessionChange))
     {
-    char *message = doSessionChange(cartString(cart, hgsOldSessionName));
-    doMainPage(message);
+    char *message = doSessionChange(userName, cartString(cart, hgsOldSessionName));
+    doMainPage(userName, message);
     }
 else if (cartVarExists(cart, hgsOldSessionName))
     {
-    char *message1 = doSessionChange(cartString(cart, hgsOldSessionName));
-    char *message2 = doUpdateSessions();
+    char *message1 = doSessionChange(userName, cartString(cart, hgsOldSessionName));
+    char *message2 = doUpdateSessions(userName);
     char *message = message2;
     if (!startsWith("No changes to session", message1))
 	{
@@ -1244,12 +1490,12 @@ else if (cartVarExists(cart, hgsOldSessionName))
 	message = needMem(len);
 	safef(message, len, "%s%s", message1, message2);
 	}
-    doMainPage(message);
+    doMainPage(userName, message);
     }
 else
     {
-    char *message = doUpdateSessions();
-    doMainPage(message);
+    char *message = doUpdateSessions(userName);
+    doMainPage(userName, message);
     }
 
 cleanHgSessionFromCart(cart);

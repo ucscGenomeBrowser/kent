@@ -423,6 +423,7 @@ typedef enum _eCfgType
     cfgPsl      =10,
     cfgVcf      =11,
     cfgSnake    =12,
+    cfgLong     =13,
     cfgUndetermined // Not specifically denied, but not determinable in lib code
     } eCfgType;
 
@@ -613,6 +614,12 @@ INLINE boolean tdbIsBigWig(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
 return startsWithWord("bigWig", tdb->type);
+}
+
+INLINE boolean tdbIsLongTabix(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a long tabix file.
+{
+return startsWithWord("longTabix", tdb->type);
 }
 
 INLINE boolean tdbIsBam(struct trackDb *tdb)

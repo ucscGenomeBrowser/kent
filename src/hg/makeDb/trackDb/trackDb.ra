@@ -1116,6 +1116,7 @@ track oreganno
 shortLabel ORegAnno
 longLabel Regulatory elements from ORegAnno
 group regulation
+release alpha
 visibility hide
 color 102,102,0
 type bed 4 +
@@ -2888,6 +2889,15 @@ url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel INSDC link:
 type bed 4
 
+track ucscToRefSeq
+shortLabel RefSeq Acc
+longLabel RefSeq Accession
+group map
+visibility hide
+url http://www.ncbi.nlm.nih.gov/nuccore/$$
+urlLabel RefSeq accession:
+type bed 4
+
 track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions
@@ -3024,7 +3034,7 @@ allButtonPair on
 
 	track ncbiRefSeq
         release alpha
-        parent ncbiRefGenesView on
+        parent ncbiRefGenesView off
         shortLabel All RefSeq
         subGroups view=aGenes
         longLabel All RefSeq annotations from NCBI
@@ -3033,7 +3043,7 @@ allButtonPair on
 
         track refGene
         release alpha
-	parent ncbiRefGenesView off
+	parent ncbiRefGenesView on
         shortLabel UCSC RefSeq
         longLabel RefSeq UCSC alignments
         subGroups view=aGenes
@@ -3095,12 +3105,21 @@ allButtonPair on
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
 
-searchName refSeqComposite
+searchName refSeqCompositeAccession
 searchTable ncbiRefSeq
 searchType genePred
-shortCircuit 1
+semiShortCircuit 1
 searchMethod fuzzy
-termRegex [35A-Za-z][.0-9A-Za-z-]+
+termRegex ([NX][MR]|YP)_[0-9]+(\.[0-9]+)
+dontCheck ..[^_].*
+searchPriority 50
+
+searchName refSeqCompositeName
+searchTable ncbiRefSeq
+searchType genePred
+searchMethod fuzzy
+termRegex ..[^_].*
+dontCheck ([NX][MR]|YP)_[0-9]+(\.[0-9]+)
 searchPriority 50
 
 searchName refSeqName2
@@ -3114,7 +3133,7 @@ searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq protAcc search alias
-shortCircuit 1
+semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,protAcc from %s where protAcc like '%s%%'
 termRegex [NZY]P_[0-9]+(\.[0-9]+)?
@@ -3124,7 +3143,7 @@ searchTable ncbiRefSeq
 searchType genePred
 searchMethod prefix
 searchDescription ncbiRefSeq mrnaAcc search alias
-shortCircuit 1
+semiShortCircuit 1
 xrefTable ncbiRefSeqLink
 xrefQuery select id,mrnaAcc from %s where mrnaAcc like '%s%%'
 termRegex [NX][MR]_[0-9]+(\.[0-9]+)?

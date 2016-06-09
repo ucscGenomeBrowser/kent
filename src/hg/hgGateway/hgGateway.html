@@ -14,7 +14,7 @@
         </div>
         <div class="jwSectionContents">
 
-          <div class="jwSubsectionTitle">
+          <div id="popSpeciesTitle" class="jwSubsectionTitle">
             Popular Species
           </div>
           <div class="jwSubsectionContents">
@@ -47,12 +47,13 @@
             </div>
           </div>
 
-          <div class="jwSubsectionTitle">
+          <!-- This subsection is hidden unless hgGateway.js has a tree to draw. -->
+          <div id="representedSpeciesTitle" class="jwSubsectionTitle" style="display: none;">
             Represented Species
           </div>
-          <div id="speciesGraphic" class="jwSubsectionContents">
+          <div id="speciesGraphic" class="jwSubsectionContents" style="display: none;">
             <div id="sliderWidgetContainer" class="jwSliderWidget">
-              <div id="sliderSvgContainer" class="jwSliderIcon" style="display: none;">
+              <div id="sliderSvgContainer" class="jwSliderIcon">
                 <svg id="sliderSvg"
                      xmlns:svg="http://www.w3.org/2000/svg"
                      xmlns="http://www.w3.org/2000/svg"
@@ -191,10 +192,11 @@
       </div>
 
       <div id="findPositionSection" class ="jwColumn">
-        <div class="jwSectionTitle">
+        <div id="findPositionTitle" class="jwSectionTitle">
           Find Position
         </div>
-        <div class="jwSectionContents">
+        <div id="findPositionContents" class="jwSectionContents"
+             style="display: none;"> <!-- To avoid empty containers jumping around, hide first. -->
 
           <div id="findPosInputContainer" style="display: inline-block;">
             <div id="selectAssemblyLabel" class="jwInputLabel">Assembly</div>
@@ -204,12 +206,15 @@
             <div class="vertSpacerAbovePosition"></div>
 
             <div class="jwInputLabel">
-              Position:
-              <span id="positionDisplay" class="jwPosDisplay"></span>
-              <i id="copyPosition" class="fa fa-copy jwTextBlue"
-                 title="Copy the current position into the input below"></i>
+              Position/Search Term
             </div>
             <input id="positionInput" value="" size="40">
+            <div class="jwCurrentPos">
+              Current position:
+              <span id="positionDisplay" class="jwPosDisplay"></span>
+              <i id="copyPosition" class="fa fa-copy jwTextBlue"
+                 title="Copy the current position into the input above"></i>
+            </div>
           </div>
 
           <div class="jwGoButtonContainer"
@@ -223,15 +228,18 @@
           <div class="vertSpacerBelowPosition"></div>
 
           <div id="descriptionTitle" class="jwDescriptionTitle">
-            <b><span id="descriptionGenome"></span> Genome Browser</b> -
-            <span id="descriptionDb"></span> assembly
-            <div class="jwFloatRight">
+            <div class="jwFloatLeft">
+              <b><span id="descriptionGenome"></span> Genome Browser</b> -
+              <span id="descriptionDb"></span> assembly
+            </div>
+            <div class="jwFloatRight" style="margin-left: 5px;">
               <a id="chromInfoLink" class="jwAnchor" href="hgTracks?chromInfoPage=&hgsid=$hgsid">
                 <div class="jwWhiteButton">
                   view sequences
                 </div>
               </a>
             </div>
+            <div class="jwClearBoth"></div>
           </div>
           <div id="descriptionText" class="jwDescriptionText">
           </div>

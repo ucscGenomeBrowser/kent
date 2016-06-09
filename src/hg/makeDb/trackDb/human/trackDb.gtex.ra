@@ -8,6 +8,12 @@ priority 10.15
 maxItems 200
 spectrum on
 
+searchTable gtexGene
+query select chrom, chromStart, chromEnd, geneId from %s where geneId like '%s%%'
+termRegex gtex:ENSG[0-9]+(\.[0-9]+)?
+termPrefix gtex:
+shortCircuit 1
+
 track gtexGeneV4
 release alpha
 type bed 6 +
@@ -44,6 +50,7 @@ priority 10.2
 type bed 6
 exonArrows off
 minGrayLevel 2
+darkerLabels on
 subGroup1 tissue Tissue \
 		adiposeSubcut=adiposeSubcut \
 		adiposeVisceral=adiposeVisceral \

@@ -1,0 +1,619 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the panPan2
+# Bonobo -- 
+
+# this is an update to panPan1 sequence to fix big errors in their chrom
+#    structures
+
+# chrMT listed in assembly ASM225v1 Mmul_051212 == NC_005943.1
+
+#############################################################################
+# fetch sequence from new style download directory (DONE - 2016-01-08 - Hiram)
+    mkdir -p /hive/data/genomes/panPan2/refseq
+    cd /hive/data/genomes/panPan2/refseq
+
+    time rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Pan_paniscus/all_assembly_versions/GCF_000258655.2_panpan1.1/ ./
+    # real    6m9.041s
+    # sent 2810 bytes  received 3928893248 bytes  10633006.92 bytes/sec
+    # total size is 3928403393  speedup is 1.00
+
+    # measure what we have here:
+    faSize  GCF_000258655.2_panpan1.1_genomic.fna.gz
+# 3286643896 bases (560753890 N's 2725890006 real 1745980756 upper 979909250
+# lower) in 10274 sequences in 1 files
+# Total size: mean 319899.2 sd 6899023.6 min 217 (NW_014024393.1) max 247869975 (NC_027870.1) median 1230
+# %29.81 masked total, %35.95 masked real
+
+    time faCount  GCF_000258655.2_panpan1.1_genomic.fna.gz | less
+# #seq    len             A       C          G       T         N       cpg
+# total 3286643896  806971547 555159394 555452392 808306673 560753890 25946869
+# real    1m27.422s
+
+#############################################################################
+# fixup to UCSC naming scheme (DONE - 2016-04-18 - Hiram)
+    mkdir /hive/data/genomes/panPan2/ucsc
+    cd /hive/data/genomes/panPan2/ucsc
+
+    time ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+     ../refseq/*_genomic.fna.gz ../refseq/*_assembly_structure/Primary_Assembly
+
+NC_027868.1 chr1
+NC_027869.1 chr2A
+NC_027870.1 chr2B
+NC_027871.1 chr3
+NC_027872.1 chr4
+NC_027873.1 chr5
+NC_027874.1 chr6
+NC_027875.1 chr7
+NC_027876.1 chr8
+NC_027877.1 chr9
+NC_027878.1 chr10
+NC_027879.1 chr11
+NC_027880.1 chr12
+NC_027881.1 chr13
+NC_027882.1 chr14
+NC_027883.1 chr15
+NC_027884.1 chr16
+NC_027885.1 chr17
+NC_027886.1 chr18
+NC_027887.1 chr19
+NC_027888.1 chr20
+NC_027889.1 chr21
+NC_027890.1 chr22
+NC_027891.1 chrX
+
+real    17m57.979s
+
+    time ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # processed 10249 sequences into chrUn.fa.gz
+    # real    4m35.540s
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../panPan2.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# mitoAcc NC_001644.1
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+    # verify fasta and AGP match:
+    time faToTwoBit chr*.fa.gz test.2bit
+    # real    1m45.015s
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    #  All AGP and FASTA entries agree - both files are valid
+
+
+    # verify nothing lost compared to genbank:
+    faSize *.fa.gz
+# 3286643896 bases (560753890 N's 2725890006 real 2725890006 upper 0 lower) in 10274 sequences in 26 files
+# Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1) max 247869975 (chr2B) median 1230
+
+    # same totals as above:
+# 3286643896 bases (560753890 N's 2725890006 real 1745980756 upper 979909250
+# lower) in 10274 sequences in 1 files
+# Total size: mean 319899.2 sd 6899023.6 min 217 (NW_014024393.1) max 247869975 (NC_027870.1) median 1230
+
+#############################################################################
+#  Initial database build (DONE - 2016-04-18 - Hiram)
+
+# construct the required photoReference.txt
+    cd /hive/data/genomes/panPan2
+    printf "photoCreditURL http://a-z-animals.com/animals/bonobo/pictures/2955/
+photoCreditName Photo courtesy of Kabir Bakie\n" > photoReference.txt
+
+    # this almost functioned OK.  It couldn't find a commonName or the
+    # bioProject
+    ~/kent/src/hg/utils/automation/prepConfig.pl panPan2 mammal bonobo \
+       refseq/*_assembly_report.txt > panPan2.config.ra
+    
+    cat panPan2.config.ra
+# config parameters for makeGenomeDb.pl:
+db panPan2
+clade mammal
+genomeCladePriority 15
+scientificName Pan paniscus
+commonName Bonobo
+assemblyDate Aug. 2015
+assemblyLabel Max-Planck Institute for Evolutionary Anthropology
+assemblyShortLabel MPI-EVA panpan1.1
+orderKey 2624
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001644.1
+# http://www.ncbi.nlm.nih.gov/bioproject/PRJNA11815
+mitoAcc none
+fastaFiles /hive/data/genomes/panPan2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/panPan2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bonobo
+photoCreditURL http://a-z-animals.com/animals/bonobo/pictures/2955/
+photoCreditName Photo courtesy of Kabir Bakie
+ncbiGenomeId 10729
+ncbiAssemblyId 474211
+ncbiAssemblyName panpan1.1
+ncbiBioProject 169343
+ncbiBioSample SAMEA1029457
+genBankAccessionID GCF_000258655.2
+taxId 9597
+
+    # verify sequence and AGP are OK:
+    time makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp panPan2.config.ra > agp.log 2>&1
+    # real    3m58.459s
+
+    # then finish it off:
+    time (~/kent/src/hg/utils/automation/makeGenomeDb.pl -workhorse=hgwdev \
+       -dbHost=hgwdev -fileServer=hgwdev -continue=db \
+           panPan2.config.ra ) > db.log 2>&1
+    # real    29m36.731s
+
+    # check in the trackDb files created and add to trackDb/makefile
+    # temporary symlink until after masking
+    ln -s `pwd`/panPan2.unmasked.2bit /gbdb/panPan2/panPan2.2bit
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-04-19 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/cytoBand
+    cd /hive/data/genomes/panPan2/bed/cytoBand
+    makeCytoBandIdeo.csh panPan2
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-04-19 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/panPan2/bed/cpgIslandsUnmasked
+
+    # run stepwise so the loading can be done in a different table
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/panPan2/panPan2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku panPan2) > do.log 2>&1
+    # real    22m23.619s
+
+    cat fb.panPan2.cpgIslandExtUnmasked.txt
+    # 23203460 bases of 2725937399 (0.851%) in intersection
+
+#############################################################################
+# running repeat masker (DONE - 2016-04-19,05-04 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/repeatMasker
+    cd /hive/data/genomes/panPan2/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku panPan2) > do.log 2>&1 &
+    # real    805m20.249s
+    # had one missing ID failure:
+#RepeatMasker bug?: Undefined id, line 3391703 of input:
+#  2118  12.4  3.8  2.4  chr4      152298481 152298818 (43505445) +  MER61C         LTR/ERV1                86  428    (0)
+# At least one ID was missing (see warnings above) -- please report to Robert Hubley.  -continue at your disgression.
+
+    # cleaning out the single bad record
+    grep -v "152298481 152298818" panPan2.sorted.fa.out > panPan2.cleaned.fa.out
+    mv panPan2.sorted.fa.out panPan2.sorted.fa.out.badRecord
+    mv panPan2.cleaned.fa.out panPan2.sorted.fa.out
+
+    # continuing:
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -continue=mask -smallClusterHub=ku panPan2) > mask.log 2>&1
+
+    cat faSize.rmsk.txt
+# 3286643896 bases (560753890 N's 2725890006 real 1348347850 upper
+#    1377542156 lower) in 10274 sequences in 1 files
+# Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
+#    max 247869975 (chr2B) median 1230
+# %41.91 masked total, %50.54 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps panPan2 rmsk
+    # 1378308706 bases of 3286643896 (41.937%) in intersection
+    # real    0m56.056s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' panPan2 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1378308706.000000
+    # real    0m36.998s
+
+##########################################################################
+# running simple repeat (DONE - 2016-04-19 - Hiram)
+
+    mkdir /hive/data/genomes/panPan2/bed/simpleRepeat
+    cd /hive/data/genomes/panPan2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        panPan2) > do.log 2>&1 &
+    # real    20m23.012s
+
+    cat fb.simpleRepeat
+    # 53570869 bases of 2725937399 (1.965%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/panPan2
+    twoBitMask panPan2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed panPan2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa panPan2.2bit stdout | faSize stdin > faSize.panPan2.2bit.txt
+    cat faSize.panPan2.2bit.txt
+    # 3286643896 bases (560753890 N's 2725890006 real 1346906367 upper
+    #    1378983639 lower) in 10274 sequences in 1 files
+    # Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
+    #    max 247869975 (chr2B) median 1230
+    # %41.96 masked total, %50.59 masked real
+
+    rm /gbdb/panPan2/panPan2.2bit
+    ln -s `pwd`/panPan2.2bit /gbdb/panPan2/panPan2.2bit
+
+#############################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-04-19 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/panPan2/bed/microsat
+    cd /cluster/data/panPan2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed panPan2 microsat microsat.bed
+    # Read 26743 elements of size 4 from microsat.bed
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2016-04-19 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/panPan2/bed/ucscToINSDC
+    cd /hive/data/genomes/panPan2/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../panPan2.agp
+# chrM    1       16563   1       O       NC_001644.1     1       16563   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_001644.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    # there is no name for chrM/NC_007393.1 sequence, there is no such
+    #  sequence with an INSDC name
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    # 2490 insdc.refseq.txt
+    # 2490 insdcToUcsc.txt
+    # 2490 name.coordinate.tab
+    # 2490 ucscToINSDC.bed
+    # 2490 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 20
+    # use the 20 in this sed
+    sed -e "s/21/20/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab panPan2 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords panPan2
+    # should cover %100 entirely:
+    featureBits -countGaps panPan2 ucscToINSDC
+    # 3286643896 bases of 3286643896 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2016-04-19 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/bonobo/panPan2
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" panPan2 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+# 121336 AJFE.1
+#      1 NC_.1
+
+    # implies a search rule of: '[ACEFJN_]+[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" panPan2 | wc -l
+    # 121337
+
+    hgsql -N -e "select frag from gold;" panPan2 \
+       | egrep -e '[ACEFJN_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 121337
+
+    hgsql -N -e "select frag from gold;" panPan2 \
+       | egrep -v -e '[ACEFJN_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/panPan2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACEFJN_]+[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-05-04 - Hiram)
+
+    mkdir /hive/data/genomes/panPan2/bed/windowMasker
+    cd /hive/data/genomes/panPan2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev panPan2) > do.log 2>&1
+    # real    379m56.649s
+
+    # Masking statistics
+    cat faSize.panPan2.cleanWMSdust.txt
+# 3286643896 bases (560753890 N's 2725890006 real 1730579207 upper
+#    995310799 lower) in 10274 sequences in 1 files
+# Total size: mean 319899.2 sd 6899023.6 min 217 (chrUn_NW_014024393v1)
+#    max 247869975 (chr2B) median 1230
+# %30.28 masked total, %36.51 masked real
+
+    cat fb.panPan2.rmsk.windowmaskerSdust.txt
+    # 768236951 bases of 3286643896 (23.375%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/cpgIslands
+    cd /hive/data/genomes/panPan2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku panPan2) > do.log 2>&1
+    # real    6m54.203s
+
+    cat fb.panPan2.cpgIslandExt.txt
+    # 17035990 bases of 2725937399 (0.625%) in intersection
+
+##############################################################################
+# ncbiRefSeq gene track (DONE - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/ncbiRefSeq
+    cd /hive/data/genomes/panPan2/bed/ncbiRefSeq
+
+    # working on this script, running step by step:
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -stop=download -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 panPan2) > download.log 2>&1
+    # real    12m36.320s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=process -stop=process -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 panPan2) > process.log 2>&1
+    # real    4m22.621s
+
+    time (/cluster/home/hiram/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+  -continue=load -stop=load -buildDir=`pwd` -bigClusterHub=ku \
+  -fileServer=hgwdev -workhorse=hgwdev -smallClusterHub=ku -dbHost=hgwdev \
+      refseq vertebrate_mammalian Pan_paniscus \
+         GCF_000258655.2_panpan1.1 panPan2) > load.log 2>&1
+    # real    0m21.690s
+
+    cat fb.ncbiRefSeq.panPan2.txt
+    # 74646536 bases of 2725937399 (2.738%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-05-05 - Hiram)
+    mkdir /hive/data/genomes/panPan2/bed/genscan
+    cd /hive/data/genomes/panPan2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku panPan2) > do.log 2>&1
+# Completed: 10270 of 10274 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:     450524s    7508.73m   125.15h    5.21d  0.014 y
+# IO & Wait Time:                 27120s     452.00m     7.53h    0.31d  0.001 y
+# Time in running jobs:          167787s    2796.45m    46.61h    1.94d  0.005 y
+# Average job time:                  47s       0.78m     0.01h    0.00d
+# Longest running job:            83913s    1398.55m    23.31h    0.97d
+# Longest finished job:           64597s    1076.62m    17.94h    0.75d
+# Submission to last job:         64787s    1079.78m    18.00h    0.75d
+
+    # two jobs failed due to almost all N's in the hard mask sequence and
+    # they sneaked through the check for that, continuing:
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku panPan2) > makeBed.log 2>&1
+    # real    2m23.103s
+
+    cat fb.panPan2.genscan.txt
+    #   45997720 bases of 2725937399 (1.687%) in intersection
+
+    cat fb.panPan2.genscanSubopt.txt
+    #   45930774 bases of 2725937399 (1.685%) in intersection
+
+#############################################################################
+# augustus gene track (DONE - 2016-05-11 - Hiram)
+
+    mkdir /hive/data/genomes/panPan2/bed/augustus
+    cd /hive/data/genomes/panPan2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev panPan2) > do.log 2>&1
+    # real    95m5.905s
+
+    cat fb.panPan2.augustusGene.txt
+    # 49244982 bases of 3142093174 (1.567%) in intersection
+
+#########################################################################
+# Create kluster run files (DONE - 2016-05-11 - Hiram)
+
+    # numerator is panPan2 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap panPan2 gap
+    # 469457882 bases of 2682465908 (17.501%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2682465908 / 2861349177 \) \* 1024
+    # ( 2682465908 / 2861349177 ) * 1024 = 959.982484
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 100
+    cd /hive/data/genomes/panPan2
+    time blat panPan2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/panPan2.11.ooc \
+        -repMatch=900
+    #   Wrote 34618 overused 11-mers to jkStuff/panPan2.11.ooc
+    #    real    0m56.353s
+
+    #   check non-bridged gaps to see what the typical size is:
+    hgsql -N \
+        -e 'select * from gap where bridge="no" order by size;' panPan2 \
+        | sort -k7,7nr
+    #   minimum size is 1000
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+    gapToLift -verbose=2 -minGap=1000 panPan2 jkStuff/panPan2.nonBridged.lft \
+        -bedFile=jkStuff/panPan2.nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2016-05-17 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism       mrnaCnt estCnt  refSeqCnt
+    # Pan paniscus    440     1       46
+
+
+    # edit etc/genbank.conf to add panPan2 just before panPan1
+
+# panPan2 (bonobo - Pan paniscus)
+panPan2.serverGenome = /hive/data/genomes/panPan2/panPan2.2bit
+panPan2.clusterGenome = /hive/data/genomes/panPan2/panPan2.2bit
+panPan2.ooc = /hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc
+panPan2.lift = /hive/data/genomes/panPan2/jkStuff/panPan2.nonBridged.lft
+panPan2.perChromTables = no
+panPan2.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+panPan2.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+panPan2.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+panPan2.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+panPan2.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+panPan2.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+panPan2.downloadDir = panPan2
+# defaults yes genbank.mrna.native, genbank.est.native.load,
+#              refseq.mrna.native, refseq.mrna.xeno
+# DO NOT NEED genbank.mrna.xeno except for human, mouse
+panPan2.genbank.est.native.load = no
+
+    git commit -m "Added panPan2; refs #16036" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+# Edit src/lib/gbGenome.c to add new species.  Skipped
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial panPan2
+    #  logFile: var/build/logs/2016.05.11-14:44:15.panPan2.initalign.log
+    #   real    196m8.278s
+    tail -2 var/build/logs/2016.05.11-14:44:15.panPan2.initalign.log
+# hgwdev 2016.05.11-17:58:29 panPan2.initalign: Succeeded: panPan2
+# hgwdev 2016.05.11-18:00:23 panPan2.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.panPan2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad panPan2
+    # logFile: var/dbload/hgwdev/logs/2016.05.13-16:11:17.panPan2.dbload.log
+    # real    11m44.667s
+    tail -1 var/dbload/hgwdev/logs/2016.05.13-16:11:17.panPan2.dbload.log
+    # hgwdev 2016.05.13-16:23:02 panPan2.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add panPan2 to:
+    #   etc/align.dbs
+    #   etc/hgwdev.dbs
+    git add etc/align.dbs
+    git add etc/hgwdev.dbs
+    git commit -m "Added panPan2 - Bonobo refs #16036" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+##############################################################################
+# LIFTOVER TO panPan1 (DONE - 2016-05-17 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panPan2/bed/blat.panPan1.2016-05-17
+    cd /hive/data/genomes/panPan2/bed/blat.panPan1.2016-05-17
+
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -ooc=/hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan2 panPan1
+
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -ooc=/hive/data/genomes/panPan2/jkStuff/panPan2.11.ooc \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+         panPan2 panPan1) > doLiftOverToPanPan1.log 2>&1
+    # real    156m48.953s
+
+    # verify this functions in the genome browser from panPan2 to panPan1
+
+##############################################################################
+# set default position to FOXP2 gene displays  (DONE - 2016-05-24 - Hiram)
+    hgsql -e \
+'update dbDb set defaultPos="chr7:119036070-119363606" where name="panPan2";' \
+	hgcentraltest
+
+##############################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Steve)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=panPan2 -keys all.joiner
+    joinerCheck -database=panPan2 -tableCoverage all.joiner
+    joinerCheck -database=panPan2 -times all.joiner
+
+    cd /hive/data/genomes/panPan2
+    makeDownloads.pl panPan2 > do.log 2>&1
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/panPan2/pushQ
+    cd /hive/data/genomes/panPan2/pushQ
+    makePushQSql.pl panPan2 > panPan2.pushQ.sql 2> stderr.out
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/panPan2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/panPan2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/panPan2/bbi/quality.bw
+    # WARNING: panPan2 does not have seq
+    # WARNING: panPan2 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p panPan2.pushQ.sql qateam@hgwbeta:/tmp
+    ssh hgwbeta
+    cd /tmp
+    hgsql qapushq < panPan2.pushQ.sql
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

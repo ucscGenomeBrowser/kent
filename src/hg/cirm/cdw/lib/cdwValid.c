@@ -209,6 +209,7 @@ char *cdwAllowedTags[] = {
     "antibody",
     "assay",
     "assay_seq",
+    "average_insert_size",
     "biomaterial_provider",
     "biosample_date",
     "body_part",
@@ -228,6 +229,7 @@ char *cdwAllowedTags[] = {
     "dna_concentration",
     "donor",
     "enriched_in",
+    "experiment",
     "file",
     "file_part",
     "fluidics_chip",
@@ -239,6 +241,7 @@ char *cdwAllowedTags[] = {
     "karyotype",
     "keywords",
     "lab",
+    "lane",
     "life_stage",
     "md5",
     "meta",
@@ -249,6 +252,7 @@ char *cdwAllowedTags[] = {
     "output",
     "paired_end",
     "passage_number",
+    "pcr_cycles",
     "pipeline",
     "pmid",
     "ratio_260_280",
@@ -297,6 +301,7 @@ return allowedHash;
 void cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
+char *geoPrefix = "GEO_";
 // If it's not a legal C symbol, don't let it be a tag
 if (!isSymbolString(tag))
     errAbort("Bad tag symbol %s.", tag);
@@ -309,14 +314,25 @@ else if (startsWith("lab_", tag) || startsWith("user_", tag) )
     {
     return;
     }
-else if (startsWith("GEO_", tag) || startsWith("SRA_", tag))
+else if (startsWith(geoPrefix, tag) || startsWith("SRA_", tag))
     {
+    // Generally just pass GEO_ and SRA_ tags through, but do check that
+    // the case is what we expect to avoid duplicate symbol conflicts between
+    // differently cased versions of GEO_ tags in particular.
+
+    // We have a couple of built-in geo_ tags for the major GEO database identifiers.
     int tagLen = strlen(tag);
     char lowerTag[tagLen+1];
     strcpy(lowerTag, tag);
     tolowers(lowerTag);
     if (hashLookup(allowedHash, lowerTag))
         errAbort("Please change %s tag to %s", tag, lowerTag);
+
+    // This will detect a misguided attempt to change case on bits after GEO_ that
+    // bit us once.
+    int geoPrefixSize = strlen(geoPrefix);
+    if (!isupper(tag[geoPrefixSize]))
+        errAbort("Looks like %s has been altered, expecting upper case letter after GEO_.", tag);
     return;
     }
 // Otherwise see if it's one of our reserved but unimplemented things
@@ -371,8 +387,10 @@ char *disease[] =
 {
 "DCM",
 "HCM",
+"LQT",
 "TNM stage IIA, grade 3, ductal carcinoma",
 "chronic myelogenous leukemia (CML)",
+"LQT",
 "acute promyelocytic leukemia",
 };
 char *enriched_in[] =
@@ -410,6 +428,7 @@ char *formats[] =
 };
 char *sequencer[] =
 {
+"Illumina HiSeq",
 "Illumina HiSeq 2000",
 "Illumina HiSeq 2500",
 "Illumina HiSeq 3000",
@@ -507,6 +526,7 @@ if (list == NULL)
 	"text	Unicode 8-bit formatted text file",
 	"vcf Variant call format",
 	"kallisto_abundance abundance.txt file output from Kallisto containing RNA abundance info",
+	"expression_matrix  Genes/transcripts are rows, samples are columns",
 	"unknown	File is in  format unknown to the data hub.  No validations are applied",
 	};
     int i;

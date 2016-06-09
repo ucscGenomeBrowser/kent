@@ -51,7 +51,7 @@ assert(sizeOne == ret->blockCount);
 }
 ret->oSequence = cloneString(row[17]);
 ret->oCDS = cloneString(row[18]);
-ret->oBlock = sqlUnsigned(row[19]);
+ret->chromSize = sqlUnsigned(row[19]);
 ret->match = sqlUnsigned(row[20]);
 ret->misMatch = sqlUnsigned(row[21]);
 ret->repMatch = sqlUnsigned(row[22]);
@@ -153,7 +153,7 @@ s = sqlEatChar(s, ',');
 }
 ret->oSequence = sqlStringComma(&s);
 ret->oCDS = sqlStringComma(&s);
-ret->oBlock = sqlUnsignedComma(&s);
+ret->chromSize = sqlUnsignedComma(&s);
 ret->match = sqlUnsignedComma(&s);
 ret->misMatch = sqlUnsignedComma(&s);
 ret->repMatch = sqlUnsignedComma(&s);
@@ -272,7 +272,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->oCDS);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->oBlock);
+fprintf(f, "%u", el->chromSize);
 fputc(sep,f);
 fprintf(f, "%u", el->match);
 fputc(sep,f);
@@ -286,7 +286,7 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb, unsigned chromSize, char **seq, char **cds)
+struct psl  *pslFromBigPsl( char *chrom, struct bigBedInterval *bb,  char **seq, char **cds)
 /* build a psl from a bigPsl */
 {
 char *extra = cloneString(bb->rest);
@@ -307,6 +307,7 @@ if ((cds != NULL) && row[15] != NULL)
 
 if ((seq != NULL) && row[14] != NULL)
     *seq = cloneString(row[14]);
+psl->tSize = sqlUnsigned(row[16]);
 psl->match = sqlUnsigned(row[17]);
 psl->misMatch = sqlUnsigned(row[18]);
 psl->repMatch = sqlUnsigned(row[19]);
@@ -314,7 +315,6 @@ psl->nCount = sqlUnsigned(row[20]);
 psl->tName = chrom;
 psl->tStart = bb->start;
 psl->tEnd = bb->end;
-psl->tSize = chromSize;
 psl->blockCount = sqlSigned(row[6]);
 sqlUnsignedDynamicArray(row[7], &psl->blockSizes, &sizeOne);
 assert(sizeOne == psl->blockCount);
@@ -323,14 +323,13 @@ assert(sizeOne == psl->blockCount);
 psl->qStart = sqlSigned(row[9]); 
 psl->qEnd = sqlSigned(row[10]); 
 psl->strand[1] = *row[11];
-psl->strand[1] = 0;
+psl->strand[2] = 0;
 psl->qSize = sqlSigned(row[12]); 
 sqlUnsignedDynamicArray(row[13], &psl->qStarts, &sizeOne);
 assert(sizeOne == psl->blockCount);
 for(ii=0; ii < psl->blockCount; ii++)
     {
     psl->tStarts[ii] += psl->tStart;
-//    psl->qStarts[ii] += psl->qStart;
     }
 
 pslComputeInsertCounts(psl);

@@ -179,7 +179,6 @@ html chainNet
 # pelSin1 - Chinese softshell turtle - Pelodiscus sinensis - vertebrate - testudines - 4400
 ################################################################
 track chainNetPelSin1
-release alpha
 compositeTrack on
 shortLabel $o_Organism Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments

@@ -23,6 +23,7 @@
 #include "bamFile.h"
 #include "raToStruct.h"
 #include "web.h"
+#include "hdb.h"
 #include "cdwValid.h"
 #include "cdw.h"
 #include "cdwFastqFileFromRa.h"
@@ -244,6 +245,18 @@ if (email)
 return email;
 }
 
+struct cdwUser *cdwUserFromUserName(struct sqlConnection *conn, char* userName)
+/* Return user associated with that username or NULL if not found */
+{
+struct sqlConnection *cc = hConnectCentral();
+char query[512];
+sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+char *email = sqlQuickString(cc, query);
+hDisconnectCentral(&cc);
+
+struct cdwUser *user = cdwUserFromEmail(conn, email);
+return user;
+}
 
 struct cdwUser *cdwUserFromEmail(struct sqlConnection *conn, char *email)
 /* Return user associated with that email or NULL if not found */
@@ -927,6 +940,18 @@ if (ef == NULL)
 return ef;
 }
 
+int cdwFileIdFromPathSuffix(struct sqlConnection *conn, char *suf)
+/* return most recent fileId for file where submitDir.url+submitFname ends with suf. 0 if not found. */
+{
+char query[4096];
+int sufLen = strlen(suf);
+sqlSafef(query, sizeof(query), "SELECT cdwFile.id FROM cdwSubmitDir, cdwFile " 
+    "WHERE cdwFile.submitDirId=cdwSubmitDir.id AND RIGHT(CONCAT_WS('/', cdwSubmitDir.url, submitFileName), %d)='%s' "
+    "ORDER BY cdwFile.id DESC LIMIT 1;", sufLen, suf);
+int fileId = sqlQuickNum(conn, query);
+return fileId;
+}
+
 struct cdwValidFile *cdwValidFileFromFileId(struct sqlConnection *conn, long long fileId)
 /* Return cdwValidFile give fileId - returns NULL if not validated. */
 {
@@ -1360,8 +1385,9 @@ dyStringPrintf(dy, " replicateQaStatus=0,");
 dyStringPrintf(dy, " part='%s',", el->part);
 dyStringPrintf(dy, " pairedEnd='%s',", el->pairedEnd);
 dyStringPrintf(dy, " qaVersion='%d',", el->qaVersion);
-dyStringPrintf(dy, " uniqueMapRatio=%g", el->uniqueMapRatio);
-#if (CDWVALIDFILE_NUM_COLS != 23)
+dyStringPrintf(dy, " uniqueMapRatio=%g,", el->uniqueMapRatio);
+dyStringPrintf(dy, " lane='%s'", el->lane);
+#if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
 dyStringPrintf(dy, " where id=%lld\n", (long long)id);
@@ -1389,15 +1415,26 @@ return ret;
 void cdwValidFileFieldsFromTags(struct cdwValidFile *vf, struct cgiParsedVars *tags)
 /* Fill in many of vf's fields from tags. */
 {
+// Most fields are just taken directly from tags, converted from underbar to camelCased
+// separation conventions.
 vf->format = cloneString(cdwLookupTag(tags, "format"));
 vf->outputType = cloneString(cdwLookupTag(tags, "output_type"));
-vf->experiment = cloneString(cdwLookupTag(tags, "meta"));
 vf->replicate = cloneString(cdwLookupTag(tags, "replicate"));
 vf->enrichedIn = cloneString(cdwLookupTag(tags, "enriched_in"));
 vf->ucscDb = cloneString(cdwLookupTag(tags, "ucsc_db"));
 vf->part = cloneString(cdwLookupTag(tags, "file_part"));
 vf->pairedEnd = cloneString(cdwLookupTag(tags, "paired_end"));
-#if (CDWVALIDFILE_NUM_COLS != 23)
+vf->lane = cloneString(cdwLookupTag(tags, "lane"));
+
+// Experiment field defaults to same as meta, but sometimes needs to be different.
+// Experiment field drives replicate comparisons.
+char *experiment = cdwLookupTag(tags, "experiment");
+if (isEmpty(experiment))
+    experiment = cdwLookupTag(tags, "meta");
+vf->experiment = cloneString(experiment);
+
+// Make sure we update this routine if we add fields to cdwValidFile
+#if (CDWVALIDFILE_NUM_COLS != 24)
    #error "Please update this routine with new column"
 #endif
 }
@@ -1455,10 +1492,10 @@ else
     /* The revalidation case relies on cdwMakeValidFile to update the cdwValidFile table.
      * Here we must do it ourselves. */
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    struct cgiParsedVars *tags = cgiParsedVarsNew(newTags);
+    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
     cdwValidFileFieldsFromTags(vf, tags);
     cdwValidFileUpdateDb(conn, vf, vf->id);
-    cgiParsedVarsFree(&tags);
+    cgiParsedVarsFreeList(&tags);
     cdwValidFileFree(&vf);
     }
 }
@@ -2046,10 +2083,21 @@ for (stanza = stanzaList; stanza != NULL; stanza = stanza->next)
     }
 }
 
+void cdwCheckRqlFields(struct rqlStatement *rql, struct slName *tagFieldList)
+/* Make sure that rql query only includes fields that exist in tags */
+{
+struct hash *hash = hashFromSlNameList(tagFieldList);
+rqlCheckFieldsExist(rql, hash, "cdwFileTags table");
+hashFree(&hash);
+}
+
 struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query)
 /* Return list of references to stanzas that match RQL query */
 {
 struct rqlStatement *rql = rqlStatementParseString(query);
+struct slName *tagFieldList = tagStormFieldList(tags);
+cdwCheckRqlFields(rql, tagFieldList);
+slFreeList(&tagFieldList);
 int matchCount = 0;
 struct slRef *list = NULL;
 struct lm *lm = lmInit(0);
@@ -2057,5 +2105,24 @@ rBuildStanzaRefList(tags, tags->forest, rql, lm, &matchCount, &list);
 rqlStatementFree(&rql);
 lmCleanup(&lm);
 return list;
+}
+
+struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef)
+/* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
+ * with cgiParsedVarsFreeList() */
+{
+struct cgiParsedVars *tagsList = cgiParsedVarsNew(ef->tags);
+struct cgiParsedVars *parentTags = NULL;
+char query[256];
+sqlSafef(query, sizeof(query), 
+    "select tags from cdwMetaTags where id=%u", ef->metaTagsId);
+char *metaCgi = sqlQuickString(conn, query);
+if (metaCgi != NULL)
+    {
+    parentTags = cgiParsedVarsNew(metaCgi);
+    tagsList->next = parentTags;
+    freez(&metaCgi);
+    }
+return tagsList;
 }
 

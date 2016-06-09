@@ -94,8 +94,8 @@ struct grp *showGroupField(char *groupVar, char *groupScript,
     struct sqlConnection *conn, boolean allTablesOk);
 /* Show group control. Returns selected group. */
 
-struct trackDb *showTrackField(struct grp *selGroup,
-	char *trackVar, char *trackScript);
+struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *trackScript,
+                               boolean disableNoGenome);
 /* Show track control. Returns selected track. */
 
 char *showTableField(struct trackDb *track, char *varName, boolean useJoiner);
@@ -132,6 +132,14 @@ char *getRegionName();
 
 boolean fullGenomeRegion();
 /* Return TRUE if region is full genome. */
+
+boolean isNoGenomeDisabled(char *db, char *table);
+/* Return TRUE if table (or a track with which it is associated) has 'tableBrowser noGenome'
+ * and region is genome. */
+
+void checkNoGenomeDisabled(char *db, char *table);
+/* Before producing output, make sure that the URL hasn't been hacked to make a
+ * genome-wide query on a noGenome table. */
 
 struct sqlResult *regionQuery(struct sqlConnection *conn, char *table,
 	char *fields, struct region *region, boolean isPositional,
@@ -561,6 +569,9 @@ void doSubtrackMergeSubmit(struct sqlConnection *conn);
 #define outMaf "maf"
 #define outPalOptions "fasta"
 
+/* For disabling tables in 'tableBrowser noGenome' settings, when region is genome */
+#define NO_GENOME_CLASS " class=\"hgtaNoGenome\" title=\"Position range queries only\""
+
 /* --------- Identifier list handling stuff. ------------ */
 
 char *identifierFileName();
@@ -796,6 +807,29 @@ struct slName *halGetFields(char *table);
 
 void halTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
 /* BAM stuff from bam.c */
+
+boolean isLongTabixTable(char *table);
+/* Return TRUE if table corresponds to a longTabix file. */
+
+struct slName *getLongTabixFields();
+/* Get fields of bam as simple name list. */
+
+void longTabixTabOut(char *db, char *table, struct sqlConnection *conn, char *fields, FILE *f);
+/* Print out selected fields from long tabix.  If fields is NULL, then print out all fields. */
+
+struct hTableInfo *longTabixToHti(char *table);
+/* Get standard fields of BAM into hti structure. */
+
+struct bed *longTabixGetFilteredBedsOnRegions(struct sqlConnection *conn,
+	char *db, char *table, struct region *regionList, struct lm *lm,
+	int *retFieldCount);
+/* Get list of beds from long tabix, in all regions, that pass filtering. */
+
+struct sqlFieldType *longTabixListFieldsAndTypes();
+/* Get fields of BAM as list of sqlFieldType. */
+
+void showSchemaLongTabix(char *table, struct trackDb *tdb);
+/* Show schema on long tabix. */
 
 boolean isBamTable(char *table);
 /* Return TRUE if table corresponds to a BAM file. */

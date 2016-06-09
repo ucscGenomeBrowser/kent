@@ -217,6 +217,7 @@ table cdwValidFile
     string pairedEnd; "The paired_end tag from the manifest.  Values 1,2 or ''"
     byte qaVersion; "Version of QA pipeline making status decisions"
     double uniqueMapRatio; "Fraction of reads that map uniquely to genome for bams and fastqs"
+    string lane;	"What sequencing lane if any associated with this file."
     )
 
 table cdwFastqFile
@@ -461,3 +462,14 @@ table cdwTrackViz
     string bigDataFile; "Where big data file lives relative to cdwRootDir"
     )
 
+table cdwDataset
+"A dataset is a collection of files, usually associated with a paper"
+    (
+    uint id primary auto; "Dataset ID"
+    string name unique;  "Short name of this dataset, one word, no spaces"
+    string label;  "short title of the dataset, a few words"
+    lstring description;  "Description of dataset, can be a complete html paragraph."
+    string pmid;  "Pubmed ID of abstract"
+    string pmcid;  "PubmedCentral ID of paper full text"
+    string metaDivTags; "Comma separated list of fields used to make tree out of metadata"
+    )
