@@ -9,19 +9,17 @@
 #include "cheapcgi.h"
 #include "hgConfig.h"
 #include "hui.h"
+#include "cart.h"
 #include "web.h"
 #include "wikiLink.h"
 
-// Flag to indicate that loginValidateCookies has been called:
+// Flag to indicate that loginSystemValidateCookies has been called:
 static boolean alreadyAuthenticated = FALSE;
-// If centralDb has table gbMemberToken, then loginValidateCookies will set this
+// If centralDb has table gbMemberToken, then loginSystemValidateCookies will set this
 // to a random token that validates the user; otherwise if the cookie has the same
 // value as gbMembers.idx, this is set to that ID; otherwise it stays 0 and the user
 // is not logged in.
 static uint authToken = 0;
-// If we need to change some cookies, store cookie strings here in case loginValidateCookies
-// is called multiple times (e.g. validate before cookie-writing, then later write cookies)
-static struct slName *cookieStrings = NULL;
 
 // If a random token in gbMemberToken is more than this many seconds old, make a new
 // random token and delete the old:
@@ -43,14 +41,6 @@ return FALSE;
 #endif
 }
 
-boolean wikiLinkEnabled()
-/* Return TRUE if all wiki.* parameters are defined in hg.conf . */
-{
-return ((cfgOption(CFG_WIKI_HOST) != NULL) &&
-	(cfgOption(CFG_WIKI_USER_NAME_COOKIE) != NULL) &&
-	(cfgOption(CFG_WIKI_LOGGED_IN_COOKIE) != NULL));
-}
-
 static char *wikiLinkLoggedInCookie()
 /* Return the cookie name specified in hg.conf as the wiki logged-in cookie. */
 {
@@ -63,46 +53,10 @@ static char *wikiLinkUserNameCookie()
 return cfgOption(CFG_WIKI_USER_NAME_COOKIE);
 }
 
-static char *loginTokenCookie()
-/* Return the name of the login system random token cookie.  Do not free result. */
-{
-static char defaultCookie[512];
-char *cookie = cfgOption(CFG_LOGIN_TOKEN_COOKIE);
-if (isEmpty(cookie))
-    {
-    char *centralDbPrefix = cfgOptionDefault(CFG_CENTRAL_COOKIE, "central");
-    safef(defaultCookie, sizeof(defaultCookie), "%s.hgLoginToken", centralDbPrefix);
-    cookie = defaultCookie;
-    }
-return cookie;
-}
-
-static char *loginUserNameCookie()
-/* Return the name of the login system user name cookie.  Do not free result. */
-{
-static char defaultCookie[512];
-char *cookie = cfgOption(CFG_LOGIN_USER_NAME_COOKIE);
-if (isEmpty(cookie))
-    {
-    char *centralDbPrefix = cfgOptionDefault(CFG_CENTRAL_COOKIE, "central");
-    safef(defaultCookie, sizeof(defaultCookie), "%s.hgLoginUserName", centralDbPrefix);
-    cookie = defaultCookie;
-    }
-return cookie;
-}
-
-static uint getCookieToken(
-                           boolean *retReplaceOld                 // TODO: remove in July 2016
-                           )
+static uint getCookieToken()
 /* If the cookie holding the login token exists, return its uint value, else 0. */
 {
-char *cookieTokenStr = findCookieData(loginTokenCookie());
-if (isEmpty(cookieTokenStr) && wikiLinkEnabled())                 // TODO: remove in July 2016
-    {                                                             // TODO: remove in July 2016
-    cookieTokenStr = findCookieData(wikiLinkLoggedInCookie());    // TODO: remove in July 2016
-    if (retReplaceOld && isNotEmpty(cookieTokenStr))              // TODO: remove in July 2016
-        *retReplaceOld = TRUE;                                    // TODO: remove in July 2016
-    }                                                             // TODO: remove in July 2016
+char *cookieTokenStr = findCookieData(wikiLinkLoggedInCookie());
 return cookieTokenStr ? (uint)atoll(cookieTokenStr) : 0;
 }
 
@@ -163,86 +117,17 @@ sqlUpdate(conn, query);
 }
 
 static uint newToken()
-/* Return a random nonnegative integer.  In the extremely unlikely event that it is 0,
- * the user will have to log in again. */
+/* Return a random nonzero positive integer. */
 {
-uint token = 0;
-// open random system device for read-only access.
-FILE *f = mustOpen("/dev/urandom", "r");
-mustRead(f, &token, 4);
-carefulClose(&f);
+srand(clock1000());
+uint token = (uint)rand();
+if (token == 0)
+    // highly unlikely - try again.
+    token = (uint)rand();
 return token;
 }
 
-char *getCookieDomainString()
-/* Get a string that will look something like " domain=.ucsc.edu;" if central.domain
- * is defined, otherwise just "".  Don't free result. */
-{
-static char domainString[256];
-char *domain = cloneString(cfgOption(CFG_CENTRAL_DOMAIN));
-if (domain != NULL && strchr(domain, '.') != NULL)
-    safef(domainString, sizeof(domainString), " domain=%s;", domain);
-else
-    domainString[0] = '\0';
-return domainString;
-}
-
-static char *loginCookieDate()
-/* For now, don't expire (before we retire :)  Consider changing this to 6 months in the
- * future or something like that, maybe under hg.conf control (for CIRM vs GB?). */
-{
-return "Thu, 31-Dec-2037 23:59:59 GMT";
-}
-
-#define EXPIRED_COOKIE_DATE "Thu, 01-Jan-1970 00:00:00 GMT"
-
-struct slName *invalidateCookieString(char *cookieName)
-/* Return a cookie string that deletes/invalidates the cookie. */
-{
-char *domain = getCookieDomainString();
-char cookieString[2048];
-safef(cookieString, sizeof(cookieString), "%s=;%s path=/; expires="EXPIRED_COOKIE_DATE,
-      cookieName, domain);
-return slNameNew(cookieString);
-}
-
-struct slName *loginUserNameCookieString(char *userName)
-/* Return a cookie string that sets userName cookie to userName if non-empty and
- * deletes/invalidates the cookie if empty. */
-{
-char *cookie = loginUserNameCookie();
-if (isNotEmpty(userName))
-    {
-    // Send userName in cookie
-    char *domain = getCookieDomainString();
-    char cookieString[2048];
-    safef(cookieString, sizeof(cookieString), "%s=%s;%s path=/; expires=%s",
-          cookie, userName, domain, loginCookieDate());
-    return slNameNew(cookieString);
-    }
-else
-    return invalidateCookieString(cookie);
-}
-
-struct slName *loginTokenCookieString(uint token)
-/* Return a cookie string that sets token cookie to token if token is valid and
- * deletes/invalidates the cookie if not. */
-{
-char *cookie = loginTokenCookie();
-if (token)
-    {
-    // Validated; send new token in cookie
-    char *domain = getCookieDomainString();
-    char cookieString[2048];
-    safef(cookieString, sizeof(cookieString), "%s=%u;%s path=/; expires=%s",
-          cookie, token, domain, loginCookieDate());
-    return slNameNew(cookieString);
-    }
-else
-    return invalidateCookieString(cookie);
-}
-
-struct slName *loginLoginUser(char *userName)
+uint loginSystemLoginUser(char *userName)
 /* Return a nonzero token which caller must set as the value of CFG_WIKI_LOGGED_IN_COOKIE.
  * Call this when userName's password has been validated. */
 {
@@ -257,48 +142,60 @@ else
     // Fall back on gbMembers.idx
     authToken = getMemberIdx(conn, userName);
 hDisconnectCentral(&conn);
-slAddHead(&cookieStrings, loginTokenCookieString(authToken));
-slAddHead(&cookieStrings, loginUserNameCookieString(userName));
-return cookieStrings;
+return authToken;
 }
 
-struct slName *loginLogoutUser()
-/* If the gbMemberToken table exists, delete the user's random token. */
+static char *loginCookieDate()
+/* For now, don't expire (before we retire :)  Consider changing this to 6 months in the
+ * future or something like that, maybe under hg.conf control (for CIRM vs GB?). */
 {
-struct sqlConnection *conn = hConnectCentral();
-if (haveTokenTable(conn))
-    deleteToken(conn, getCookieToken(NULL));
-slAddHead(&cookieStrings, loginTokenCookieString(0));
-slAddHead(&cookieStrings, loginUserNameCookieString(NULL));
-hDisconnectCentral(&conn);
-return cookieStrings;
+return "Thu, 31-Dec-2037 23:59:59 GMT";
 }
 
-struct slName *loginValidateCookies()
-/* Return possibly empty list of cookie strings for the caller to set.
- * If login cookies are present and valid, but the current token has aged out,
- * the returned cookie string sets the token cookie to a new token value.
- * If login cookies are present but invalid, the result deletes/expires the cookies.
- * Otherwise returns NULL (no change to cookies). */
+static char *expiredCookieDate()
+/* Return a date that passed long ago. */
+{
+return "Thu, 01-Jan-1970 00:00:00 GMT";
+}
+
+char *makeAuthCookieString()
+/* Return a cookie string that sets cookie to authToken if token is valid and
+ * deletes/invalidates both cookies if not. */
+{
+struct dyString *dy = dyStringCreate("%s=", wikiLinkLoggedInCookie());
+if (authToken)
+    // Validated; send new token in cookie
+    dyStringPrintf(dy, "%u; path=/; domain=%s; expires=%s\r\n",
+                   authToken, cgiServerName(), loginCookieDate());
+else
+    {
+    // Remove both cookies
+    dyStringPrintf(dy, "; path=/; domain=%s; expires=%s\r\n",
+                   cgiServerName(), expiredCookieDate());
+    dyStringPrintf(dy, "%s=; path=/; domain=%s; expires=%s\r\n",
+                   wikiLinkUserNameCookie(),
+                   cgiServerName(), expiredCookieDate());
+    }
+return dyStringCannibalize(&dy);
+}
+
+char *loginSystemValidateCookies()
+/* Return a cookie string or NULL.  If login cookies are present and valid, but the current
+ * token has aged out, the returned cookie string sets a cookie to a new token value.
+ * If login cookies are present but invalid, the cookie string deletes/expires the cookies.
+ * Otherwise returns NULL. */
 {
 if (alreadyAuthenticated)
-    return cookieStrings;
+    return makeAuthCookieString();
 alreadyAuthenticated = TRUE;
 authToken = 0;
-char *userName = findCookieData(loginUserNameCookie());
-boolean replaceOldCookies = FALSE;                            // TODO: remove in July 2016
-if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
-    {                                                         // TODO: remove in July 2016
-    userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
-    if (isNotEmpty(userName))                                 // TODO: remove in July 2016
-        replaceOldCookies = TRUE;                             // TODO: remove in July 2016
-    }                                                         // TODO: remove in July 2016
-boolean deleteCookies = FALSE;                                // TODO: remove in July 2016
-uint cookieToken = getCookieToken(&replaceOldCookies);
+char *userName = findCookieData(wikiLinkUserNameCookie());
+uint cookieToken = getCookieToken();
 if (userName && cookieToken)
     {
     struct sqlConnection *conn = hConnectCentral();
     uint memberIdx = getMemberIdx(conn, userName);
+    char *cookieString = NULL;
     if (haveTokenTable(conn))
         {
         // Look up cookieToken and userName in gbMemberToken
@@ -316,36 +213,23 @@ if (userName && cookieToken)
                 deleteToken(conn, cookieToken);
                 authToken = newToken();
                 insertToken(conn, authToken, userName);
-                slAddHead(&cookieStrings, loginTokenCookieString(authToken));
+                cookieString = makeAuthCookieString();
                 }
             else
                 // Keep using this token, no change to cookie
                 authToken = cookieToken;
             }
         else
-            {
-            // Invalid token; delete cookies
-            deleteCookies = TRUE;                                      // TODO: remove in July 2016
-            slAddHead(&cookieStrings, loginTokenCookieString(0));
-            slAddHead(&cookieStrings, loginUserNameCookieString(NULL));
-            }
+            // Invalid token; delete both cookies
+            cookieString = makeAuthCookieString();
         }
     else if (cookieToken == memberIdx)
         // centralDb does not have gbMemberToken table -- fall back on gbMembers.idx
         authToken = cookieToken;
     hDisconnectCentral(&conn);
+    return cookieString;
     }
-// Delete the cookies that we used to use and make sure the new cookies are set. remove in July '16
-if (replaceOldCookies)                                                 // TODO: remove in July 2016
-    {                                                                  // TODO: remove in July 2016
-    if (cookieStrings == NULL)                                         // TODO: remove in July 2016
-        slAddHead(&cookieStrings, loginTokenCookieString(authToken));            // TODO: remove in July 2016
-    if (! deleteCookies)                                               // TODO: remove in July 2016
-        slAddHead(&cookieStrings, loginUserNameCookieString(userName));          // TODO: remove in July 2016
-    slAddHead(&cookieStrings, invalidateCookieString(wikiLinkLoggedInCookie())); // TODO: remove in July 2016
-    slAddHead(&cookieStrings, invalidateCookieString(wikiLinkUserNameCookie())); // TODO: remove in July 2016
-    }                                                                  // TODO: remove in July 2016
-return cookieStrings;
+return NULL;
 }
 
 char *wikiLinkHost()
@@ -354,31 +238,39 @@ char *wikiLinkHost()
  * */
 {
 char *wikiHost = cfgOption(CFG_WIKI_HOST);
-if (isEmpty(wikiHost) || sameString(wikiHost, "HTTPHOST"))
+if ((wikiHost!=NULL) && sameString(wikiHost, "HTTPHOST"))
     wikiHost = hHttpHost();
 return cloneString(wikiHost);
+}
+
+boolean wikiLinkEnabled()
+/* Return TRUE if all wiki.* parameters are defined in hg.conf . */
+{
+return ((cfgOption(CFG_WIKI_HOST) != NULL) &&
+	(cfgOption(CFG_WIKI_USER_NAME_COOKIE) != NULL) &&
+	(cfgOption(CFG_WIKI_LOGGED_IN_COOKIE) != NULL));
 }
 
 char *wikiLinkUserName()
 /* Return the user name specified in cookies from the browser, or NULL if 
  * the user doesn't appear to be logged in. */
 {
-if (loginSystemEnabled())
-    {
-    if (! alreadyAuthenticated)
-        errAbort("wikiLinkUserName: loginValidateCookies must be called first.");
-    char *userName = findCookieData(loginUserNameCookie());
-    if (isEmpty(userName) && wikiLinkEnabled())                   // TODO: remove in July 2016
-        userName = findCookieData(wikiLinkUserNameCookie());      // TODO: remove in July 2016
-    if (authToken)
-        return cloneString(userName);
-    }
-else if (wikiLinkEnabled())
+if (wikiLinkEnabled())
     {
     char *wikiUserName = findCookieData(wikiLinkUserNameCookie());
     char *wikiLoggedIn = findCookieData(wikiLinkLoggedInCookie());
+
     if (isNotEmpty(wikiLoggedIn) && isNotEmpty(wikiUserName))
-        return cloneString(wikiUserName);
+	{
+        if (loginSystemEnabled())
+            {
+            if (! alreadyAuthenticated)
+                errAbort("wikiLinkUserName: loginSystemValidateCookies must be called first.");
+            if (authToken == 0)
+                return NULL;
+            }
+	return cloneString(wikiUserName);
+	}
     }
 else
     errAbort("wikiLinkUserName called when wiki is not enabled (specified "
@@ -404,6 +296,9 @@ char *wikiLinkUserLoginUrlReturning(char *hgsid, char *returnUrl)
 char buf[2048];
 if (loginSystemEnabled())
     {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
+           "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
         cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
@@ -435,6 +330,9 @@ char *wikiLinkUserLogoutUrlReturning(char *hgsid, char *returnUrl)
 char buf[2048];
 if (loginSystemEnabled())
     {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
+            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
         cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
@@ -468,6 +366,9 @@ char *retEnc = encodedHgSessionReturnUrl(hgsid);
 
 if (loginSystemEnabled())
     {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkUserSignupUrl called when login system is not enabled "
+            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
         cgiAppendSForHttps(), wikiLinkHost(), retEnc);
@@ -493,6 +394,9 @@ char *retEnc = encodedHgSessionReturnUrl(hgsid);
 
 if (loginSystemEnabled())
     {
+    if (! wikiLinkEnabled())
+        errAbort("wikiLinkChangePasswordUrl called when login system is not enabled "
+            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
         "http%s://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
         cgiAppendSForHttps(), wikiLinkHost(), retEnc);

@@ -12,15 +12,8 @@
 #define CFG_WIKI_LOGGED_IN_COOKIE "wiki.loggedInCookie"
 #define CFG_WIKI_SESSION_COOKIE "wiki.sessionCookie"
 
-/* hg.conf login system parameter -- using non-wiki login system (hgLogin) if defined */
+/* hg.conf login system parameter -- using non-wiki login system if defined */ 
 #define CFG_LOGIN_SYSTEM_NAME "login.systemName"
-/* hg.conf optional cookie names to override default */
-#define CFG_LOGIN_TOKEN_COOKIE "login.tokenCookie"
-#define CFG_LOGIN_USER_NAME_COOKIE "login.userNameCookie"
-
-/* hg.conf central db parameters */
-#define CFG_CENTRAL_DOMAIN "central.domain"
-#define CFG_CENTRAL_COOKIE "central.cookie"
 
 char *loginSystemName();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
@@ -28,19 +21,15 @@ char *loginSystemName();
 boolean loginSystemEnabled();
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
 
-struct slName *loginLoginUser(char *userName);
-/* Return cookie strings to set for user so we'll recognize that user is logged in.
- * Call this after validating userName's password. */
+uint loginSystemLoginUser(char *userName);
+/* Return a nonzero token which caller must set as the value of CFG_WIKI_LOGGED_IN_COOKIE.
+ * Call this when userName's password has been validated. */
 
-struct slName *loginLogoutUser();
-/* Return cookie strings to set (deleting the login cookies). */
-
-struct slName *loginValidateCookies();
-/* Return possibly empty list of cookie strings for the caller to set.
- * If login cookies are present and valid, but the current token has aged out,
- * the returned cookie string sets the token cookie to a new token value.
- * If login cookies are present but invalid, the result deletes/expires the cookies.
- * Otherwise returns NULL (no change to cookies). */
+char *loginSystemValidateCookies();
+/* Return a cookie string or NULL.  If login cookies are present and valid, but the current
+ * token has aged out, the returned cookie string sets a cookie to a new token value.
+ * If login cookies are present but invalid, the cookie string deletes/expires the cookies.
+ * Otherwise returns NULL. */
 
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */

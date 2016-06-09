@@ -593,7 +593,7 @@ if (userName != NULL)
            "image of your session, and to load the session if they "
            "are interested.</li>\n", cartSidUrlString(cart));
     }
-else if (loginSystemEnabled() || wikiLinkEnabled())
+else if (wikiLinkEnabled())
     {
      printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able " 
             " to save named sessions which will be displayed with "
@@ -625,7 +625,7 @@ void doMainPage(char *userName, char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
-if (loginSystemEnabled() || wikiLinkEnabled())
+if (wikiLinkEnabled())
     {
     if (userName)
 	welcomeUser(userName);
@@ -1441,7 +1441,7 @@ struct hash *oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
-char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
+char *userName = wikiLinkEnabled() ? wikiLinkUserName() : NULL;
 
 if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
     doMainPage(userName, NULL);

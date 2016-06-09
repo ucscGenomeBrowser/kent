@@ -484,7 +484,7 @@ char **row = NULL;
 /* Validate login cookies if login is enabled */
 if (loginSystemEnabled())
     {
-    loginValidateCookies(cart);
+    loginSystemValidateCookies();
     }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
@@ -1564,9 +1564,9 @@ if (geoMirrorEnabled())
 /* Validate login cookies if login is enabled */
 if (loginSystemEnabled())
     {
-    struct slName *newCookies = loginValidateCookies(cart), *sl;
-    for (sl = newCookies;  sl != NULL;  sl = sl->next)
-        printf("Set-Cookie: %s\r\n", sl->name);
+    char *loginCookieString = loginSystemValidateCookies();
+    if (loginCookieString)
+        printf("Set-Cookie: %s", loginCookieString);
     }
 }
 
