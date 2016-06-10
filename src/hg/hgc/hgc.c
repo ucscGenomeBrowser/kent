@@ -3968,23 +3968,36 @@ if (e > chromSize)
     e = chromSize;
 
 char num1Buf[1024],num2Buf[1024];
-sprintLongWithCommas(num1Buf, ourLongRange->s);
-sprintLongWithCommas(num2Buf, ourLongRange->e);
+char num3Buf[1024],num4Buf[1024];
+char num5Buf[1024],num6Buf[1024];
+char num7Buf[1024];
+sprintLongWithCommas(num1Buf, ourLongRange->s - ourLongRange->sw/2);
+sprintLongWithCommas(num2Buf, ourLongRange->s + ourLongRange->sw/2);
+sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->ew/2);
+sprintLongWithCommas(num4Buf, ourLongRange->e + ourLongRange->ew/2);
+sprintLongWithCommas(num5Buf, ourLongRange->sw);
+sprintLongWithCommas(num6Buf, ourLongRange->ew);
+sprintLongWithCommas(num7Buf, ourLongRange->ew + ourLongRange->e - ourLongRange->s);
 if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
     {
-    printf("<B>Interchromosomal: </B> (Position on chrom you clicked on)</B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B>%s:%s-%s</B></A><BR>\n",  
-        ourLongRange->sChrom, num1Buf,num1Buf,ourLongRange->sChrom, num1Buf,num1Buf);
-    printf("<B>Position on other chromosome:</B>");
-    printf("<A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B>%s:%s-%s<BR></A><BR>\n",  
-        ourLongRange->eChrom, num2Buf, num2Buf, ourLongRange->eChrom, num2Buf, num2Buf);
+    printf("<B>Current region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
+        ourLongRange->sChrom, num1Buf,num2Buf,ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<B>Paired region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
     }
 else
     {
-    char num3Buf[1024];
-    sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->s);
-    printf("<B>Intrachromosomal:</B><A HREF=\"hgTracks?position=%s:%s-%s\" TARGET=_BLANK><B> %s:%s-%s (%sbp) </B></A><BR>\n",  
-        ourLongRange->sChrom, num1Buf, num2Buf,  ourLongRange->sChrom, num1Buf, num2Buf, num3Buf);
+    printf("<B>Lower region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
+        ourLongRange->sChrom, num1Buf,num2Buf, ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<B>Upper region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
+    printf("<B>Intrachromasomal interaction region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num1Buf, num4Buf, ourLongRange->eChrom, num1Buf, num4Buf, num7Buf);
     }
 
 printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
