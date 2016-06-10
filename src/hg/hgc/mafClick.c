@@ -713,6 +713,7 @@ else
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
 	cgiContinueHiddenVar("c");
+	cgiContinueHiddenVar("i");
 	printf("Capitalize ");
         cgiMakeDropListFull(codeVarName, codeAll, codeAll,
 	    ArraySize(codeAll), codeVarVal, autoSubmit);
