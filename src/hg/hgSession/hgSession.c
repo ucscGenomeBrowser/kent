@@ -39,11 +39,15 @@ errAbort(
 
 /* Global variables. */
 struct cart *cart;
-char *excludeVars[] = {"Submit", "submit", NULL};
+char *excludeVars[] = {"Submit",
+                       "submit",
+                       hgSessionTableState,
+                       hgPublicSessionsTableState,
+                       NULL};
 struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
-#define confirmDeleteFormat "return confirm('Are you sure you want to delete %s?');"
+#define confirmDeleteFormat "return confirm('Are you sure you want to delete ' + decodeURIComponent('%s') + '?');"
 
 char *cgiDecodeClone(char *encStr)
 /* Allocate and return a CGI-decoded copy of encStr. */
@@ -64,15 +68,7 @@ char *wikiHost = wikiLinkHost();
 cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
 
-/* Includes for the jquery datatables plugin. Clashes a bit with the jquery included
- * by cartWebStart, unfortunately.  Should resolve this ultimately (ideally by solving
- * the issues preventing us from upgrading the global jquery include) */
-printf ("<link rel=\"stylesheet\" type=\"text/css\" "
-        "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
-printf ("<script type=\"text/javascript\" "
-        "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>\n");
-printf ("<script type=\"text/javascript\" charset=\"utf8\" "
-        "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>\n");
+jsIncludeDataTablesLibs();
 
 if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
     {
@@ -105,7 +101,7 @@ cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 if (loginSystemEnabled())
     {
-   printf("<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\""
+   printf("<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\">"
 "<li><A HREF=\"%s\">Login</A></li>",
         wikiLinkUserLoginUrl(cartSessionId(cart)));
     printf("<li><A HREF=\"%s\">"
@@ -294,16 +290,21 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
 printf ("<script type=\"text/javascript\">"
+        "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
-        "                                       \"order\":[1,'asc']\n"
+        "                                       \"order\":[1,'asc'],\n"
+        "                                       \"stateSave\":true,\n"
+        "                                       \"stateSaveCallback\": %s,\n"
+        "                                       \"stateLoadCallback\": %s\n"
         "                                 });\n"
         "} );\n"
-        "</script>\n");
+        "}\n"
+        "</script>\n", jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
 
 printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
-printf("<table id=\"sessionTable\" class=\"display compact\" borderwidth=0>\n");
+printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
 printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
        "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
@@ -378,12 +379,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
-    safef(command, sizeof(command), confirmDeleteFormat, sessionName);
+    safef(command, sizeof(command), confirmDeleteFormat, encSessionName);
     cgiMakeOnClickSubmitButton(command, buf, "delete");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
-    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"document.mainForm.submit();\"");
+    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"console.log('new status' + this.checked); document.mainForm.submit();\"");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
@@ -955,7 +956,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
 		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   sessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+		   encSessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
 		   "onChange=\"{%s %s}\" onClick=\"{%s %s}\" id=\"detailsSharedCheckbox\">\n"

@@ -64,7 +64,8 @@
 </li>
 <li class="menuparent" id="myData"><span>My Data</span>
 	<ul style="display: none; visibility: hidden;">
-	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">Sessions</a></li>
+	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
+	<li><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
 	<li class="last"><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	</ul>

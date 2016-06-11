@@ -754,6 +754,10 @@ img.speciesIcon {
 }
 
 /* hgPublicSessions-specific */
+table.sessionTable tbody tr:hover{
+  background-color:#fdffb7 !important;
+}
+
 a:link img.sessionThumbnail {
   padding: 5px;
 }

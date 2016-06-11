@@ -503,11 +503,19 @@ if ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *sessionVar = cartSessionVarName();
 	char *hgsid = cartSessionId(cart);
+    char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+    sessionTableString = cloneString(sessionTableString);
+    char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+    pubSessionsTableString = cloneString(pubSessionsTableString);
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetString(cart, sessionVar, hgsid);
+    if (sessionTableString != NULL)
+        cartSetString(cart, hgSessionTableState, sessionTableString);
+    if (pubSessionsTableString != NULL)
+        cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
@@ -541,9 +549,17 @@ char *line = NULL;
 int size = 0;
 char *sessionVar = cartSessionVarName();
 char *hgsid = cartSessionId(cart);
-
+char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+sessionTableString = cloneString(sessionTableString);
+char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+pubSessionsTableString = cloneString(pubSessionsTableString);
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
+if (sessionTableString != NULL)
+    cartSetString(cart, hgSessionTableState, sessionTableString);
+if (pubSessionsTableString != NULL)
+    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+
 while (lineFileNext(lf, &line, &size))
     {
     char *var = nextWord(&line);
