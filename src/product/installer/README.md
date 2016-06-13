@@ -2,11 +2,11 @@
 
 # An install script for the UCSC Genome Browser
 
-This script installs Mysql, Apache, and Ghostscript, configures them, and copies the UCSC Genome
+This script installs and configures MySQL, Apache, and Ghostscript, and copies the UCSC Genome
 Browser CGIs onto the local machine under /usr/local/apache/. It also deactivates the default
 Apache htdocs/cgi folders, so it is best run on a new machine or at least a host that is not 
 already used as a web server. The script can also download full or partial assembly databases,
-can update the CGIs and remove temporary files (aka "trash cleaning").
+update the CGIs, and remove temporary files (aka "trash cleaning").
 
 The script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, Centos 7, and Fedora 20.
 
@@ -17,7 +17,7 @@ Coast" (Microsoft) for best performance. Other data centers (e.g. East Coast) wi
 copy of the genome assembly, which requires 2TB-7TB of storage for the hg19 assembly. Note 
 that this exceeds the current maximum size of a single Amazon EBS volume.
 
-# Basic Instructions
+# Quick Start Instructions
 
 Run this script as root, like this:
 
@@ -33,7 +33,7 @@ If you do not have wget installed, use curl instead:
 
 # How does this work?
 
-The script then downloads the CGIs and sets up the central Mysql database. All
+The script downloads the Genome Browser CGIs and sets up the central Mysql database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
 
