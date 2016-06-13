@@ -1,0 +1,25 @@
+# config parameters for makeGenomeDb.pl:
+db rouAeg1
+clade mammal
+genomeCladePriority 35
+scientificName Rousettus aegyptiacus
+commonName Egyptian rousette
+assemblyDate Mar 2016
+assemblyLabel Boston University School of Medicine
+assemblyShortLabel Raegyp2.0
+orderKey 5316
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_007393.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rouAeg1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/rouAeg1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bats
+photoCreditURL https://commons.wikimedia.org/wiki/User:MathKnight
+photoCreditName photographer Oren Peles via WikimediaCommons user MathKnight
+ncbiGenomeId 7672
+ncbiAssemblyId 707221
+ncbiAssemblyName Raegyp2.0
+ncbiBioProject 309421
+genBankAccessionID GCF_001466805.2
+taxId 9407

@@ -1,0 +1,26 @@
+# Config parameters for makeGenomeDb.pl:
+db galVar1
+clade mammal
+genomeCladePriority 35
+scientificName Galeopterus variegatus
+commonName Malayan flying lemur
+assemblyDate Jun. 2014
+assemblyLabel Washington University (WashU)
+assemblyShortLabel G_variegatus-3.0.2
+orderKey 13060
+# chrM included in the refseq sequence assembly
+#  mitoAcc NC_004031.1
+mitoAcc none
+fastaFiles /hive/data/genomes/galVar1/ucsc/chr*.fa
+agpFiles /hive/data/genomes/galVar1/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir galVar
+photoCreditURL https://www.flickr.com/photos/64565252@N00/453554996
+# https://upload.wikimedia.org/wikipedia/commons/c/cd/Colugo_%28Galeopterus_variegatus%2C_adult_female%29%2C_Central_Catchment_Area%2C_Singapore_-_20060618.jpg
+photoCreditName Lip Kee Yap
+ncbiGenomeId 792
+ncbiAssemblyId 182621
+ncbiAssemblyName G_variegatus-3.0.2
+ncbiBioProject 253111
+genBankAccessionID GCF_000696425.1
+taxId 482537

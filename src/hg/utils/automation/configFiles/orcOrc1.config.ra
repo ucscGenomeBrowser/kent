@@ -1,0 +1,25 @@
+# config parameters for makeGenomeDb.pl:
+db orcOrc1
+clade mammal
+scientificName Orcinus orca
+commonName Killer whale
+assemblyDate Jan. 2013
+assemblyLabel Marine mammals
+assemblyShortLabel Oorc_1.1
+orderKey 11489
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_023889.1
+mitoAcc none
+fastaFiles /hive/data/genomes/orcOrc1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/orcOrc1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir whale
+photoCreditURL http://www.afsc.noaa.gov/Quarterly/amj2005/divrptsNMML3.htm
+photoCreditName Robert Pitman (NOAA)
+ncbiGenomeId 14034
+ncbiAssemblyId 556608
+ncbiAssemblyName Oorc_1.1
+ncbiBioProject 189949
+ncbiBioSample SRS365047
+genBankAccessionID GCF_000331955.2
+taxId 9733
