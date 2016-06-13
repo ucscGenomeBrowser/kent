@@ -3108,7 +3108,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome
-release alpha
+release alpha, beta
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3120,7 +3120,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
-release alpha
+release alpha, beta
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3132,7 +3132,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimAv omimAvRepl
-release alpha
+release alpha, beta
 
 track omimLocation
 shortLabel OMIM Pheno Loci
@@ -3144,7 +3144,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser off
-release beta,public
+release public
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3156,7 +3156,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
-release beta,public
+release public
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3168,7 +3168,7 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser off omimAv omimAvRepl
-release beta,public
+release public
 
 track cosmic
 shortLabel COSMIC
