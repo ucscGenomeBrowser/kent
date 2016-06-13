@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db panRed1
+clade worm
+genomeCladePriority 70
+scientificName Panagrellus redivivus
+commonName P. redivivus
+assemblyDate Feb. 2013
+assemblyShortLabel Pred3
+assemblyLabel California Institute of Technology P. redivivus genome project
+orderKey 16020
+mitoAcc KM192364.1
+fastaFiles /hive/data/genomes/panRed1/ucsc/panRed1.fa.gz
+agpFiles /hive/data/genomes/panRed1/ucsc/panRed1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.wormbase.org/species/p_redivivus#4--10
+photoCreditName WormBase WS240
+ncbiGenomeId 16242
+ncbiAssemblyId 541658
+ncbiAssemblyName WS240/Pred3
+ncbiBioProject 186477
+genBankAccessionID GCA_000341325.1
+taxId 6233

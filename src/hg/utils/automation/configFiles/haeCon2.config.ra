@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db haeCon2
+clade worm
+# genomeCladePriority 86
+scientificName Haemonchus contortus
+commonName H. contortus
+assemblyDate Jul. 2013
+assemblyLabel Sanger Institute
+assemblyShortLabel WormBase WS239
+orderKey 8004
+mitoAcc EU346694.2
+fastaFiles /hive/data/genomes/haeCon2/ucsc/haeCon2.fa.gz
+agpFiles /hive/data/genomes/haeCon2/ucsc/haeCon2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.wormbase.org/species/h_contortus#0--10
+photoCreditName Wellcome Trust Sanger Institute H. contortus genome project
+ncbiGenomeId 16936
+ncbiAssemblyId 64951
+ncbiAssemblyName Haemonchus_contortus_MHco3-2.0
+ncbiBioProject 194485
+genBankAccessionID GCA_000469685.1
+taxId 6289

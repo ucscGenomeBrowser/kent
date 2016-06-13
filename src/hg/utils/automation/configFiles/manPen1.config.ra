@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db manPen1
+clade mammal
+genomeCladePriority 31
+scientificName Manis pentadactyla
+commonName Chinese pangolin
+assemblyDate Aug. 2014
+assemblyLabel Washington University
+assemblyShortLabel M_pentadactyla-1.1.1
+orderKey 3355
+# mitoAcc included in source fasta prepared above
+# mitoAcc NC_016008.1
+mitoAcc none
+fastaFiles /hive/data/genomes/manPen1/ucsc/manPen1.ucsc.fa.gz
+agpFiles /hive/data/genomes/manPen1/ucsc/manPen1.ucsc.agp
+# qualFiles none
+dbDbSpeciesDir pangolin
+photoCreditURL https://www.flickr.com/people/dotpolka/
+photoCreditName Caroline Hrdter/flicker
+ncbiGenomeId 10694
+ncbiAssemblyId 203041
+ncbiAssemblyName M_pentadactyla-1.1.1
+ncbiBioProject 20331
+genBankAccessionID GCA_000738955.1
+taxId 143292

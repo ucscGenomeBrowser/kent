@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db thaSir1
+clade vertebrate
+genomeCladePriority 50
+scientificName Thamnophis sirtalis
+commonName Garter snake
+assemblyDate Jun. 2015
+assemblyLabel The Genome Institute at Washington University School of Medicine (WUGSC) Thamnophis_sirtalis-6.0
+assemblyShortLabel WUGSC 6.0
+orderKey 7000
+mitoAcc none
+fastaFiles /hive/data/genomes/thaSir1/ucsc/*.fa
+agpFiles /hive/data/genomes/thaSir1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir reptiles
+photoCreditURL http://www.flickr.com/photos/briangratwicke/5898713669/
+photoCreditName Copyright (C) 2011 Brian Gratwicke
+ncbiGenomeId 16688
+ncbiAssemblyId 472161
+ncbiAssemblyName Thamnophis_sirtalis-6.0
+ncbiBioProject 189551
+genBankAccessionID GCA_001077635.2
+taxId 35019

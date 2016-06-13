@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db ornAna2
+clade mammal
+genomeCladePriority 65
+commonName Platypus
+scientificName Ornithorhynchus anatinus
+assemblyDate Feb. 2007
+assemblyLabel WUGSC ASM227v2
+assemblyShortLabel ASM227v2
+orderKey 16409
+# chrMt: http://www.ncbi.nlm.nih.gov/bioproject/10802
+mitoAcc NC_000891.1
+fastaFiles /cluster/data/ornAna2/ucsc/chr*.fa
+agpFiles /cluster/data/ornAna2/ucsc/chr*.agp
+dbDbSpeciesDir platypus
+photoCreditURL http://commons.wikimedia.org/wiki/File:Platypus.jpg
+photoCreditName Stefan Kraft - Wikimedia Commons
+ncbiGenomeId 110
+ncbiAssemblyId 237598
+ncbiAssemblyName ASM227v2
+ncbiBioProject 19039 
+genBankAccessionID GCA_000002275.2
+taxId 9258

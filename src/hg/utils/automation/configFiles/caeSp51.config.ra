@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db caeSp51
+clade worm
+genomeCladePriority 68
+scientificName Caenorhabditis sp5 ju800
+commonName C. sp. 5 ju800
+assemblyDate Jan. 2012
+assemblyLabel University of Edinburgh Caenorhabditis sp. 5 genome project
+assemblyShortLabel WS230/Caenorhabditis_sp_5-JU800-1.0
+orderKey 3082
+mitoAcc none
+fastaFiles /hive/data/genomes/caeSp51/ucsc/caeSp51.fa.gz
+agpFiles /hive/data/genomes/caeSp51/ucsc/caeSp51.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/c_sp5
+photoCreditName no photo found
+ncbiGenomeId 1219476
+ncbiAssemblyId 1219476
+ncbiAssemblyName WS230/Caenorhabditis_sp_5-JU800-1.0
+ncbiBioProject 194557
+genBankAccessionID n/a
+taxId 1219476
