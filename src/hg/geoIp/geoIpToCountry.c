@@ -28,16 +28,6 @@ errAbort("Usage:\n"
 }
 
 
-void padDottedQuad(char dottedQuad[17])
-/* pad quads with leading 0 to length of 3 */
-{
-unsigned char quad[4];
-internetParseDottedQuad(dottedQuad, quad);
-safef(dottedQuad, 17, "%03u.%03u.%03u.%03u",
- quad[0] , quad[1] , quad[2] , quad[3]);
-}
-
-
 void geoIpToCountry(char *fileName) 
 /* List each field in tab-separated file on a new line, dashed-lines separate records */
 {
@@ -59,15 +49,8 @@ while (lineFileNext(lf, &line, &lineSize))
     bits32 endIp = sqlUnsigned(stripEnclosingChar(words[1],'"'));
     char *countryCode = stripEnclosingChar(words[4],'"');
 
-    char startIpQuad[17];
-    internetIpToDottedQuad(startIp, startIpQuad);
-    padDottedQuad(startIpQuad);
-    char endIpQuad[17];
-    internetIpToDottedQuad(endIp, endIpQuad);
-    padDottedQuad(endIpQuad);
-
     if (!sameString(countryCode, "ZZ")) // Filter out Reserved Ip ranges
-	printf("%s\t%s\t%s\n", startIpQuad, endIpQuad, countryCode);
+	printf("%u\t%u\t%s\n", startIp, endIp, countryCode);
     //printf("start IP %s %u %s\n", words[0], startIp, startIpQuad);
     //printf("  end IP %s %u %s\n", words[1], endIp, endIpQuad);
     //printf("country code %s\n", countryCode);

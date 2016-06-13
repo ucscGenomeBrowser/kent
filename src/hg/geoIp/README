@@ -2,6 +2,8 @@ http://software77.net/geo-ip/
 
 wget 'http://software77.net/geo-ip/?DL=1' -O IpToCountry.csv.gz
 gunzip IpToCountry.csv.gz
+make
+geoIpToCountry IpToCountry.csv > geoIpCountry.tab
 
 This was developed on hgFixed, and is still used and updated there.
 But we copy the two required-by-cgi tables gbNode and geoIpNode
