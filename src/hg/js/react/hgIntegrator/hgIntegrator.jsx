@@ -626,7 +626,8 @@ The controls in this section are for selecting a genome assembly and region to s
   <li><b>group</b>:
       A species group: Mammal, Vertebrate, Insect etc.</li>
   <li><b>genome</b>:
-      A single species such as Human or Mouse.</li>
+      A single species such as Human or Mouse
+      (not available for certain tracks with restrictions on data sharing).</li>
   <li><b>assembly</b>:
       A version of the reference genome assembly such as GRCh37/hg19.</li>
 </ul>
@@ -646,7 +647,9 @@ Under &quot;<b>Add Data Source</b>&quot;, several menus display available data s
       or &quot;Regulation&quot;.</li>
   <li><b>track</b>:
       One or more data tables containing results of an experiment
-      or a group of closely related experiments.</li>
+      or a group of closely related experiments.
+      Some tracks are not available when the region is set
+      to <b>genome</b> due to the data provider's restrictions on sharing.</li>
   <li><b>table</b>:
       This appears only when the selected track has more than one data table.</li>
 </ul>
@@ -676,7 +679,10 @@ Click on the Add button to add a new data source.
   <li><b>Choose fields</b>:
       click this button to pop up a dialog box with a checkbox
       for each field of each data source.  If a checkbox is checked, that field will
-      appear in the output.</li>
+      appear in the output.
+      Some tracks also have related mysql tables that can be selected and added to output.
+      However, some of those tables may be unavailable when region is set
+      to <b>genome</b> due to the data provider's restrictions on sharing.</li>
 </ul>
 </p>
 </Section>
