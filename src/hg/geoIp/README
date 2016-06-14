@@ -1,67 +1,193 @@
-http://software77.net/geo-ip/
+NEW genome-asia!
 
-wget 'http://software77.net/geo-ip/?DL=1' -O IpToCountry.csv.gz
-gunzip IpToCountry.csv.gz
-make
-geoIpToCountry IpToCountry.csv > geoIpCountry.tab
+Our previous update was from 2011 when genome-euro was first made,
+so we are going to update everything with fresh data.
 
-This was developed on hgFixed, and is still used and updated there.
-But we copy the two required-by-cgi tables gbNode and geoIpNode
-to hgcentral (hgcentraltest on hgwdev) for final release.
+RESTARTING update from ground zero,
+all tables backed up and cleared out on hgFixed
 
-The others shall remain in hgwdev.hgFixed db,
-as we need to periodically update them.
-This could be done even just once a year.
+wget 'http://dev.maxmind.com/static/csv/codes/iso3166.csv' -O country.csv
 
-The update script will only work on hgwdev.
-Then these two tables will be pushed to hgcentral 
-on hgwbeta and RR.
-
-These helpful mysql functions make it convenient
-to store the IP addresses as 4-byte unsigned 32-bit numbers
-which makes the main lookup table extremely fast.
-
-INET_ATON()
-INET_NTOA()
-
-Several of the simple .csv files were found online and downloaded,
-like the country or continent, even the mapping from country to cont.
-
-Several of these were converted with awk/sed to .tab files for easy loading.
-
-The .as files were defined also to correspond to them.
-The generated .sql files can be used to initialize empty tables.
-
-The Ip-to-country data is downloaded as above and then 
-we run the little c program geoIpToCountry on it producing
-geoIpToCountry.tab
-
-At this point, we need a table that goes from geoIp to node,
-so we need a mapping from country (which we have) to node.
-
-Although we can arbitrarily assign countries to nodes,
-I made a table by joining the country and continent
-and country-to-continent tables.  Mapping whole continents
-to the nodes may be too simplistic, but it is really just
-a starting point.  It can be re-done if people want to.
-
-After than, one can just maintain the countryToNode table in hgFixed,
-and then use it to join with geoIpToCountry to create geoIpNode,
-the main lookup table.  Then that would need to get pushed to 
-hgcentral on various machines.
-
-The join would look something like this:
-
-delete from geoIpNode;
-insert into geoIpNode select gic.ipStart, gic.ipEnd, ctn.node from geoIpCountry gic, continentToNode ctn where gic.country=ctn.country;
+To convert csv to tab-separated (removing quotes):
+cat country.csv | gawk -F "," '{print $1 "\t" $2}' | sed 's/"//g' > country.tab
 
 
-TESTING:
-hg.conf::browser.geoSuffix=Test
-for geoIpNodeTest, can just drop all rows and it will default to node1.
-Then just add back the ip addresses for specific test machines that
-you want to appear as though they are in node2.  This is my screech IP address.
+wget 'http://dev.maxmind.com/static/csv/codes/country_continent.csv' -O countryToContinent.csv
+To convert csv to tab-separated:
+cat countryToContinent.csv | gawk -F "," '{print $1 "\t" $2}' > countryToContinent.tab
 
- insert into geoIpNodeTest values (inet_aton('128.114.57.19'),inet_aton('128.114.57.19'),'2');
+https://gist.github.com/nobuti/3816985
+Manually made continent.csv
+It seems odd that nobody has an easy to download cvs or tab-delimited continents list.
+To convert csv to tab-separated:
+cat continent.csv | gawk -F "," '{print $1 "\t" $2}' > continent.tab
 
+I have my data, so now I load the tables:
+
+This is a little script that runs autoSql on each .as to get the .sql files
+However these .sql files are not checked in to git since they are 
+so easily generated.
+
+./make-sql
+
+took the old gbNode.tab with US and euro,
+and added the japan record:
+vi gbNode.tab
+| 3    | genome-asia.ucsc.edu | JP          | Asian node of UCSC Genome Browser at the RIKEN institute of Japan | Japan Server  |
+changed "\" to tab char.
+
+made a script to create and load the .as tables
+some of them actually do not have any data yet,
+since the data is created by joins of other tables
+
+./load-tables
+
+note that because the script is so simple
+and some of the tables do not have .tab files,
+they will give errors. We will fill the empty
+tables later by inserting from a join of other tables.
+
+gbNode
+geoIpNode
+geoIpCountry
+country
+continent
+countryToContinent
+
+Check the integrity of the continent/country tables:
+
+forgot to strip off the 1st row of the csv file.
+Cleanup left-over header row.
+delete from countryToContinent where  continentId = '"continent code"';
+
+DONE maybe I need to delete A1 and A2 which are weird special categories
+that are not real countries and do not have an assigned continent which is given the value "--".
+| A1 | Anonymous Proxy      |
+| A2 | Satellite Provider   |
+These turn out not to be a problem.
+
+
+mysql> select * from countryToContinent where countryId not in (select id from country);
++-----------+-------------+
+| countryId | continentId |
++-----------+-------------+
+| AN        | NA          |
+| FX        | EU          |
++-----------+-------------+
+
+AN Netherlands Antilles
+
+insert into country values ('AN', 'Netherlands Antilles');
+
+insert into country values ('FX', 'France, Metropolitan');
+
+mysql> select * from countryToContinent where continentId not in (select id from continent);
++-----------+-------------+
+| countryId | continentId |
++-----------+-------------+
+| A1        | --          |
+| A2        | --          |
+| O1        | --          |
++-----------+-------------+
+
+insert into continent values ('--','not applicable');
+
+mysql> select count(*) from geoIpCountry where countryId not in (select id from country);
++----------+
+| count(*) |
++----------+
+|        0 |
++----------+
+
+--
+
+start off with crude continent-level assignments:
+
+make everything 1 by default
+
+insert into continentToNode select id, 1 from continent;
+
+Europe
+update continentToNode set node=2 where continentId = "EU";
+
+Asia
+update continentToNode set node=3 where continentId = "AS";
+
+Now we just can make a join
+
+insert into countryToNode (select countryId, node from countryToContinent cc, continentToNode cn where cc.continentId = cn.continentId);
+
+# fix ones requested by Bob to be included in euro instead of defaulting to america.
+# these are mostly around the middle east.
+update countryToNode set node=2 where countryId in ('AE','AM','BH','CY','GE','IL','IQ','JO','KW','LB','OM','PS','QA','SA','SY','YE');
+
+I compared the before and after updating with public_html/geoMap/test.csh at
+ http://hgwdev.cse.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+And it looked identical. So we did not lose anything.
+
+mysql> select distinct countryId from geoIpCountry where countryId not in (select distinct countryId from countryToNode);
++-----------+
+| countryId |
++-----------+
+| SS        |
+| CW        |
+| SX        |
+| BQ        |
++-----------+
+
+mysql> select * from country where id in ('SS','CW','SX','BQ');
++----+--------------+
+| id | name         |
++----+--------------+
+| BQ | Bonaire      |
+| CW | Curacao      |
+| SS | South Sudan  |
+| SX | Sint Maarten |
++----+--------------+
+
+
+So, what happened to these countries, and why are they not in countryToNode?
+Shall we add them?
+
+insert into countryToContinent values ('SS', 'AF');
+insert into countryToContinent values ('SX', 'NA');
+insert into countryToContinent values ('CW', 'NA');
+insert into countryToContinent values ('BQ', 'NA');
+
+insert into countryToNode values ('SS', '1');
+insert into countryToNode values ('SX', '1');
+insert into countryToNode values ('CW', '1');
+insert into countryToNode values ('BQ', '1');
+
+
+mysql> select distinct countryId from geoIpCountry where countryId not in (select distinct countryId from countryToNode);
+Empty set (0.13 sec)
+
+Re-ran test.csh and checked again:
+http://hgwdev.cse.ucsc.edu/~galt/geoMap/countryToNodeMap.html
+
+This means we should have full integrity.
+
+insert into geoIpNode (select ipStart, ipEnd, node from geoIpCountry gic, countryToNode ctn where gic.countryId=ctn.countryId);
+
+Query OK, 164390 rows affected (1.61 sec)
+Records: 164390  Duplicates: 0  Warnings: 0
+
+NOW IT IS READY!
+
+Note that in the future we may be putting other contries with other servers,
+like we did with the middle-east countries, overriding their default continent mappings
+in countryToNode.
+
+
+Not sure yet if I am going to do this again.
+It was what I did last time.
+The idea was to keep a backup of these important tables.
+That way perhaps hgFixed could be used when generating
+other sets of testing tables for redirect.
+
+TODO at the end:
+rename tables to real:
+gbNodeReal
+geoIpNodeReal
 

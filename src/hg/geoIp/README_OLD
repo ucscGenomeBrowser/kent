@@ -1,0 +1,67 @@
+http://software77.net/geo-ip/
+
+wget 'http://software77.net/geo-ip/?DL=1' -O IpToCountry.csv.gz
+gunzip IpToCountry.csv.gz
+make
+geoIpToCountry IpToCountry.csv > geoIpCountry.tab
+
+This was developed on hgFixed, and is still used and updated there.
+But we copy the two required-by-cgi tables gbNode and geoIpNode
+to hgcentral (hgcentraltest on hgwdev) for final release.
+
+The others shall remain in hgwdev.hgFixed db,
+as we need to periodically update them.
+This could be done even just once a year.
+
+The update script will only work on hgwdev.
+Then these two tables will be pushed to hgcentral 
+on hgwbeta and RR.
+
+These helpful mysql functions make it convenient
+to store the IP addresses as 4-byte unsigned 32-bit numbers
+which makes the main lookup table extremely fast.
+
+INET_ATON()
+INET_NTOA()
+
+Several of the simple .csv files were found online and downloaded,
+like the country or continent, even the mapping from country to cont.
+
+Several of these were converted with awk/sed to .tab files for easy loading.
+
+The .as files were defined also to correspond to them.
+The generated .sql files can be used to initialize empty tables.
+
+The Ip-to-country data is downloaded as above and then 
+we run the little c program geoIpToCountry on it producing
+geoIpToCountry.tab
+
+At this point, we need a table that goes from geoIp to node,
+so we need a mapping from country (which we have) to node.
+
+Although we can arbitrarily assign countries to nodes,
+I made a table by joining the country and continent
+and country-to-continent tables.  Mapping whole continents
+to the nodes may be too simplistic, but it is really just
+a starting point.  It can be re-done if people want to.
+
+After than, one can just maintain the countryToNode table in hgFixed,
+and then use it to join with geoIpToCountry to create geoIpNode,
+the main lookup table.  Then that would need to get pushed to 
+hgcentral on various machines.
+
+The join would look something like this:
+
+delete from geoIpNode;
+insert into geoIpNode select gic.ipStart, gic.ipEnd, ctn.node from geoIpCountry gic, continentToNode ctn where gic.country=ctn.country;
+
+
+TESTING:
+hg.conf::browser.geoSuffix=Test
+for geoIpNodeTest, can just drop all rows and it will default to node1.
+Then just add back the ip addresses for specific test machines that
+you want to appear as though they are in node2.  This is my screech IP address.
+
+ insert into geoIpNodeTest values (inet_aton('128.114.57.19'),inet_aton('128.114.57.19'),'2');
+
+
