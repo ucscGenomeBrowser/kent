@@ -6905,7 +6905,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         char query[256];
         if  (isRefGene)
             {
-            sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+            sqlSafef(query, sizeof(query), "select cast(omimId as char) from %s where mrnaAcc = '%s'", refLinkTable, lf->name);
             }
         else
             {
