@@ -39,11 +39,7 @@ errAbort(
 
 /* Global variables. */
 struct cart *cart;
-char *excludeVars[] = {"Submit",
-                       "submit",
-                       hgSessionTableState,
-                       hgPublicSessionsTableState,
-                       NULL};
+char *excludeVars[] = {"Submit", "submit", NULL};
 struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
