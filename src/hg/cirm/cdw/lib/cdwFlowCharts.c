@@ -6,6 +6,7 @@
 #include "jksql.h"
 #include "cdw.h"
 #include "cdwStep.h"
+#include "cart.h"
 
 
 void makeFileLink(char *file, struct cart *cart)
@@ -41,8 +42,19 @@ int result = 0;
 // Check if the fileId is in the stepOut table, if it is then start looping back
 sqlSafef(query, 1024, "select * from cdwStepOut where fileId = '%i'", fileId);
 struct cdwStepOut *cSO = cdwStepOutLoadByQuery(conn,query);
+
+// If the file is not in the step out field its either the starting row, or it hasn't
+// been linked up yet. 
 if (cSO == NULL)
+    {
+    sqlSafef(query, 1024, "select * from cdwStepIn where fileId = '%i'", fileId);
+    struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn,query);   
+    if (cSI == NULL) 
+	fileId = 0; 
     return fileId; 
+    }
+
+uglyf("whats going on here, inside \n"); 
 while(cSO != NULL)
     {
     // All steps have input files, go find them 
@@ -302,7 +314,6 @@ AllocVar(steps);
 
 char query[1024]; 
 sqlSafef(query, 1024, "select * from cdwFile where id = '%i'", fileId);
-
 struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
 if (cF == NULL) 
     {
@@ -311,6 +322,9 @@ if (cF == NULL)
     }
 // This boolean helps address the base case
 int startId = findFirstParent(conn, fileId);
+
+if (startId == 0)
+    return;
 
 /* Go forwards until there are no more steps */ 
 lookForward(conn, startId, files, steps);
