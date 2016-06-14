@@ -1,35 +1,39 @@
-% Genome-Browser-in-the-Cloud Installation Instructions
+% Genome Browser in the Cloud User Guide
 
-# An install script for the UCSC Genome Browser
+# What is Genome Browser in the Cloud?
 
-This script installs and configures MySQL, Apache, and Ghostscript, and copies the UCSC Genome
+The Genome Browser in the Cloud (GBiC) script is a convenient script that automates the setup of a
+UCSC Genome Browser mirror, including the installation and setup of MySQL (or MariaDB) 
+and Apache servers.
+
+After setting up  MySQL, Apache, and Ghostscript, the GBiC script copies the Genome
 Browser CGIs onto the local machine under /usr/local/apache/. It also deactivates the default
-Apache htdocs/cgi folders, so it is best run on a new machine or at least a host that is not 
+Apache htdocs/cgi folders, so it is best run on a new machine, or at least a host that is not 
 already used as a web server. The script can also download full or partial assembly databases,
 update the CGIs, and remove temporary files (aka "trash cleaning").
 
-The script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, Centos 7, and Fedora 20.
+The GBiC script has been tested with Ubuntu 14 LTS, Centos 6, Centos 6.7, 
+Centos 7, and Fedora 20.
 
-It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu
-14) and Microsoft Azure (Ubuntu). If you do not want to download a full genome assembly,
-you need to select the data centers called "San Francisco" (Amazon) or "West
-Coast" (Microsoft) for best performance. Other data centers (e.g. East Coast) will require a local
-copy of the genome assembly, which requires 2TB-7TB of storage for the hg19 assembly. Note 
-that this exceeds the current maximum size of a single Amazon EBS volume.
+It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
+Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
+data centers "San Francisco" (Amazon) or "West Coast" (Microsoft) for best performance. 
+Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which 
+requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
+size of a single Amazon EBS volume.
 
 # Quick Start Instructions
+
+Download the GBiC script from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
 
 Run this script as root, like this:
 
     sudo -i
-    wget https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
     bash browserSetup.sh install
 
-If you do not have wget installed, use curl instead:
-
-    sudo -i
-    curl -O https://raw.githubusercontent.com/ucscGenomeBrowser/kent/master/src/product/installer/browserSetup.sh
-    bash browserSetup.sh install
+The install command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
+CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
+run before any other command is used.
 
 # How does this work?
 
@@ -40,7 +44,7 @@ batch mode option is specified).
 In particular, Mysql and Apache are installed and setup with the right package
 manager (yum or apt-get). A default random password is set for the
 Mysql root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup Mysql, you would need to create the file
+If you already have setup Mysql, you will need to create the file
 ~/.my.cnf, the script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
 mariadb, deactivating SELinux, finding the right path for your apache install
@@ -53,7 +57,7 @@ enough to test if your setup is working.
 
 # The different commands
 
-To increase performance, the script accepts the command "minimal". It will download the
+To increase performance, the script accepts the command `minimal`. It will download the
 minimal tables required for reasonable performance from places on the US continent and 
 possibly others, e.g. from Japan. Call it like this to trade space for performance
 and download a few essential pieces of hg38:
@@ -66,7 +70,7 @@ UDR, a UDP-based fast transfer protocol (option: -u).
 
     sudo bash browserSetup.sh -u mirror hg38
 
-A successful run of "mirror" will also cut the connection to UCSC: no tables
+A successful run of `mirror` will also cut the connection to UCSC: no tables
 or files are downloaded anymore from the UCSC servers on-the-fly. To change
 the remote on-the-fly loading, specify the option -o (offline) or 
 -f (on-the-fly).
@@ -77,7 +81,7 @@ up to 2TB or even less, use the -t option, e.g.
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
 When you want to update all CGIs and fully mirrored assemblies, you can call the
-script with the "update" parameter like this: 
+script with the `update` parameter like this: 
 
     sudo bash browserInstall.sh update
 
@@ -89,9 +93,9 @@ maybe run it every day, so your local tables stay in sync with UCSC:
     sudo bash browserInstall.sh minimal hg19 hg38
 
 To update only the CGI software parts of the browser and not the data, use the
-"cgiUpdate" command. This is a problematic update, functions may break if the
+`cgiUpdate` command. This is a problematic update, functions may break if the
 data needed for them is not available. In most circumstances, we recommend you
-use the "mirror" or "update" commands instead.
+use the `mirror` or `update` commands instead.
 
     sudo bash browserInstall.sh cgiUpdate
 
@@ -109,7 +113,7 @@ Genome Browser installation are at
 
 # All options
 
-Here is the full listing of commands and options supported by browserSetup.sh: 
+Here is the full listing of commands and options supported by the GBiC script: 
 
 ```
 browserSetup.sh [options] [command] [assemblyList] - UCSC genome browser install script
