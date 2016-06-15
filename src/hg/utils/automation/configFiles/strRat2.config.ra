@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db strRat2
+clade worm
+# genomeCladePriority 68
+scientificName Strongyloides ratti
+commonName S. ratti ed321
+assemblyDate Sep. 2014
+assemblyLabel Wellcome Trust Sanger Institute S. ratti genome project
+assemblyShortLabel S. ratti ED321
+orderKey 19049
+mitoAcc none
+fastaFiles /hive/data/genomes/strRat2/ucsc/*.fa
+agpFiles /hive/data/genomes/strRat2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.bristol.ac.uk/biology/people/mark-e-viney/index.html
+photoCreditName Mark Viney/University of Bristol
+ncbiGenomeId 3496
+ncbiAssemblyId 356801
+ncbiAssemblyName S_ratti_ED321
+ncbiBioProject 62033
+genBankAccessionID GCA_000208845.1
+taxId 34506

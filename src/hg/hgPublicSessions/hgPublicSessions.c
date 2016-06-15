@@ -18,6 +18,7 @@
 #include "hPrint.h"
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
+#include "jsHelper.h"
 
 struct galleryEntry
 /* Holds data for a single session in the gallery*/
@@ -132,21 +133,6 @@ hDisconnectCentral(&conn);
 return galList;
 }
 
-void doGalleryIncludes()
-/* Print external links to the jquery js and css files used for this CGI.  Unfortunately
- * this conflicts a bit with the jquery we inherit from cartWebStart().  Hope
- * to resolve that some day by figuring out what's preventing us from updating
- * our jquery version elsewhere */
-{
-printf ("<link rel=\"stylesheet\" type=\"text/css\" "
-        "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
-printf ("<script type=\"text/javascript\" "
-        "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>\n");
-printf ("<script type=\"text/javascript\" charset=\"utf8\" "
-        "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>\n");
-}
-
-
 void galleryDisplay(struct galleryEntry *galList)
 /* Print a table containing the gallery data from galList */
 {
@@ -155,22 +141,47 @@ struct galleryEntry *thisSession = galList;
 /* Hide the orderable columns and disable ordering on the visible columns
  * https://datatables.net/reference/option/columnDefs for more info.
  * Then set up the ordering drop-down menu */
-printf ("<script type=\"text/javascript\">"
-"$(document).ready(function () {\n"
-"    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
-"                                                   {\"orderable\":false, \"targets\":[0,1]}\n"
-"                                                  ],\n"
-"                                       \"order\":[3,'desc']});\n"
-"} );\n"
-"function changeSort() {\n"
-"   var newSort = document.getElementById('sortMethod').value;\n"
-"   var theTable = $('#sessionTable').DataTable();\n"
-"   if (newSort == \"useDesc\") {theTable.order([3,'desc']).draw(); }\n"
-"   if (newSort == \"useAsc\") {theTable.order([3,'asc']).draw(); }\n"
-"   if (newSort == \"dateDesc\") {theTable.order([2,'desc']).draw(); }\n"
-"   if (newSort == \"dateAsc\") {theTable.order([2,'asc']).draw(); }\n"
-"}\n"
-"</script>\n");
+printf ("<script type=\"text/javascript\">");
+printf("$(document).ready(function () {\n"
+    "    $('#sessionTable').DataTable({\"columnDefs\": [{\"visible\":false, \"targets\":[2,3]},\n"
+    "                                                   {\"orderable\":false, \"targets\":[0,1]}\n"
+    "                                                  ],\n"
+    "                                       \"dom\":\"lftip\",\n"
+    "                                       \"stateSave\":true,\n"
+    "                                       \"stateSaveCallback\": %s,\n"
+    "                                       \"stateLoadCallback\": %s,\n"
+    "                                });\n"
+    /* Recover previous sorting choice from the cart settings, if available */
+    "    var startOrder = $('#sessionTable').DataTable().order();\n"
+    "    if (startOrder[0][0] == 3) {\n"
+    "        if (startOrder[0][1] == \"asc\") {\n"
+    "            $('#sortMethod').val(\"useAsc\");\n"
+    "        } else {\n"
+    "            $('#sortMethod').val(\"useDesc\");\n"
+    "        }\n"
+    "    } else {\n"
+    "        if (startOrder[0][0] == 2) {\n"
+    "            if (startOrder[0][1] == \"asc\") {\n"
+    "                $('#sortMethod').val(\"dateAsc\");\n"
+    "            } else {\n"
+    "                $('#sortMethod').val(\"dateDesc\");\n"
+    "            }\n"
+    "        } else {\n"
+    "            $('#sessionTable').DataTable().order([3,'desc']).draw();\n"
+    "            $('#sortMethod').val(\"useDesc\");\n"
+    "        }\n"
+    "    }\n"
+    "});\n",
+    jsDataTableStateSave(hgPublicSessionsPrefix), jsDataTableStateLoad(hgPublicSessionsPrefix, cart));
+printf ("function changeSort() {\n"
+    "    var newSort = document.getElementById('sortMethod').value;\n"
+    "    var theTable = $('#sessionTable').DataTable();\n"
+    "    if (newSort == \"useDesc\") {theTable.order([3,'desc']).draw(); }\n"
+    "    if (newSort == \"useAsc\") {theTable.order([3,'asc']).draw(); }\n"
+    "    if (newSort == \"dateDesc\") {theTable.order([2,'desc']).draw(); }\n"
+    "    if (newSort == \"dateAsc\") {theTable.order([2,'asc']).draw(); }\n"
+    "}\n");
+printf("</script>\n");
 
 printf ("<p>\n");
 printf ("<b>Sort by:</b> <select id=\"sortMethod\" onchange=\"changeSort()\">\n");
@@ -179,15 +190,15 @@ printf ("\t\t<option value=\"useAsc\">Popularity (ascending)</option>\n");
 printf ("\t\t<option value=\"dateDesc\">Creation (newest first)</option>\n");
 printf ("\t\t<option value=\"dateAsc\">Creation (oldest first)</option>\n");
 printf ("</select></p>\n");
-printf ("<table id=\"sessionTable\" class=\"display compact\" width=\"100%%\">\n"
-"    <thead>"
-"        <tr>"
-"            <th>Screenshot</th>\n"
-"            <th>Session Properties</th>\n"
-"            <th>Creation Date</th>\n"
-"            <th>Use Count</th>\n"
-"        </tr>\n"
-"    </thead>\n");
+printf ("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" width=\"100%%\">\n"
+    "    <thead>"
+    "        <tr>"
+    "            <th>Screenshot</th>\n"
+    "            <th>Session Properties</th>\n"
+    "            <th>Creation Date</th>\n"
+    "            <th>Use Count</th>\n"
+    "        </tr>\n"
+    "    </thead>\n");
 
 printf ("<tbody>\n");
 
@@ -253,19 +264,23 @@ cart = theCart;
 char *db = cartUsualString(cart, "db", hDefaultDb());
 cartWebStart(cart, db, "Public Sessions");
 
-doGalleryIncludes();
+/* Not in a form; can't use cartSaveSession() to set up an hgsid input */
+printf ("<script>var common = {hgsid:\"%s\"};</script>\n", cartSessionId(cart));
 
-printf("<p>Our users have marked the following sessions as being of "
-    "interest to the community."
-    "<br>See the <a href=\"../goldenPath/help/hgSessionHelp.html\" "
-    "target=_blank>Sessions User's Guide</a> "
-    "for more information on how to add your sessions to this page.<p/>\n");
+jsIncludeDataTablesLibs();
+
+printf("<p>Sessions allow users to save snapshots of the Genome Browser "
+"and its current configuration, including displayed tracks, position, "
+"and custom track data. The Public Sessions tool allows users to easily "
+"share those sessions that they deem interesting with the rest of the "
+"world's researchers. You can add your own sessions to this list by "
+"checking the appropriate box on the "
+"<a href=\"../cgi-bin/hgSession?%s\">Session Management</a> page.</p>\n"
+"<p>See the "
+"<a href=\"../goldenPath/help/hgSessionHelp.html\">Sessions User's Guide</a> "
+"for more information.\n</p>", cartSidUrlString(cart));
 
 showGalleryTab();
-
-printf ("<p>You can adjust the settings for your own sessions on\n"
-    "the <a href=\"hgSession?%s\">Sessions</a> page.\n</p>",
-    cartSidUrlString(cart));
 
 cartWebEnd();
 }

@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db bruMal2
+clade worm
+# genomeCladePriority 80
+scientificName Brugia malayi
+commonName Filarial worm
+assemblyDate May. 2014
+assemblyLabel University of Pittsburgh B. malayi genome project
+assemblyShortLabel WS244/B_malayi-3.1
+orderKey 2009
+mitoAcc AF538716.1
+fastaFiles /hive/data/genomes/bruMal2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/bruMal2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/b_malayi
+photoCreditName no photo found
+ncbiGenomeId 42
+ncbiAssemblyId 176691
+ncbiAssemblyName WS244/B_malayi-3.1
+ncbiBioProject 10729
+genBankAccessionID GCF_000002995.3
+taxId 6279

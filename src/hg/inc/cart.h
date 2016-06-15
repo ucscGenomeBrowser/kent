@@ -436,8 +436,13 @@ void cartSetDbDisconnector(DbDisconnect disconnector);
 
 
 /* Libified constants and code that originally belonged only to hgSession
- * (now hgTracks uses them too): */
+ * (now hgTracks uses them too), plus a couple for DataTables in hgSession
+ * and hgPublicSessions: */
 #define hgSessionPrefix "hgS_"
+#define hgPublicSessionsPrefix "hgPS_"
+#define dataTableStateName "DataTableState"
+#define hgSessionTableState hgSessionPrefix dataTableStateName
+#define hgPublicSessionsTableState hgPublicSessionsPrefix dataTableStateName
 
 #define hgsOtherUserName hgSessionPrefix "otherUserName"
 #define hgsOtherUserSessionName hgSessionPrefix "otherUserSessionName"

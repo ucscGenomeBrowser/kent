@@ -1,0 +1,54 @@
+
+Activating CRAM support for the Genome Browser.
+
+The UCSC Genome Browser is capable of displaying tracks from both the BAM and
+CRAM file formats.  While BAM tracks provide all of the required data within
+the file, however, CRAM tracks depend on external "reference sequence" files
+(see http://www.ebi.ac.uk/ena/software/cram-toolkit for more information about
+the CRAM format).  A bit of information on how the Browser works with these
+files is included below.  For installation instructions, skip to the numbered
+steps at the end of this file.
+
+The directory that Genome Browser CGIs check for CRAM reference files is set
+with the cramRef setting in hg.conf.  For example, the following setting is
+used on our production servers:
+
+cramRef=/userdata/cramCache
+
+When loading tracks from the CRAM file format, CGIs will look for reference
+sequences in that directory.  The filename of each reference sequence should be
+the MD5 or SHA1 checksum of the reference sequence as described at
+http://www.ebi.ac.uk/ena/software/cram-reference-registry.  If a CGI is unable
+to find the reference sequence file for a CRAM track, it will next check the
+cramRef/pending/ directory to see if a request for that reference sequence has
+already been made, and the cramRef/error/ directory to see if a previous
+attempt at downloading that reference sequence resulted in an error.  If none
+of those files are found, the CGI will then create a request file in the
+cramRef/pending/ directory.  The name of the request file will be the MD5 or
+SHA1 sequence checksum, as specified in the CRAM data file.  The contents of
+the request file will be the URL to download that reference sequence.  A
+separate tool can then be used to download reference sequences listed in the
+pending/ directory and place them into cramRef/.
+
+Steps to set up CRAM track support:
+
+1.  Add the hg.conf setting cramRef.  The value should be the path (relative
+    or absolute) to a directory where CRAM reference sequences are stored.
+
+2.  Inside the cramRef directory create subdirectories called "pending" and
+    "error".  The apache user must have read/write permissions for the pending/
+    directory, and at least read permissions for the cramRef/ and error/
+    directories.
+
+If you plan to manually load all CRAM reference sequences for your tracks into
+the cramRef directory, track support is now complete.  If you prefer to
+have reference sequences automatically downloaded and placed in that directory
+(e.g., for user-submitted custom tracks), continue to step 3.
+
+3.  Add a cron job to run a script that parses files in the cramRef/pending/
+    directory, downloads the corresponding reference sequence files, and places
+    those sequence files in cramRef/.  Error messages during file retrieval
+    should be placed in cramRef/error/.  An example script is provided in this
+    repository at kent/src/product/scripts/fetchCramReference.sh.  The account
+    that runs this script must have read/write permissions for the cramRef/,
+    cramRef/pending/, and cramRef/error/ directories.

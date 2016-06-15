@@ -864,9 +864,6 @@ int len = 0;
 char del[2];
 char *s;
 
-if (list == NULL)
-    return cloneString("");
-
 del[0] = delimiter;
 del[1] = '\0';
 

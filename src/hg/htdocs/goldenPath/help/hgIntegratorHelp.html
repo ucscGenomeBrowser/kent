@@ -112,7 +112,8 @@
 		<ul>
 		<li> To display all of the data records for the selected track(s), select
 		<select><option>genome</option></select> from the
-                <b>region to annotate</b> menu.
+                <b>region to annotate</b> menu
+                (not available for certain tracks with restrictions on data sharing).
 		<li>
 		To restrict the data to a specific position
 		range, select
@@ -170,6 +171,8 @@
 	
 	<p>After selecting your track from the drop-down menus, click
 	<button type="button">Add</button>. You may add up to five tracks.
+        Some tracks are not available when the region is set to <b>genome</b> due
+        to the data provider's restrictions on sharing.
 	See the <a href="#DataSources">Selecting Data Sources</a> section for more details.
 	<p>
 	<b>Step 4. Rearrange your data sources (Optional)</b><br>
@@ -225,7 +228,12 @@
 	a track to a new position in the list. A track can be removed by clicking the
 	"<b>X</b>" next to it.  
 
-	
+        <p>Some data providers stipulate that their data can be browsed visually in the Genome
+        Browser, but cannot be provided for download via the Table Browser or Data Integrator.
+        Tracks from those providers do not appear in the track menus.
+        Other providers allow queries within specific regions, but not genome-wide queries.
+        Their tracks appear in the menus, but are grayed out when region is set
+        to <b>genome</b>.
 	</div><!-- .sectionContent --> 
 </div><!-- .section -->
 
@@ -286,8 +294,10 @@
 	<img style="border: 1px solid black; display: block;"
 	src="../../images/hgIntegratorRelatedTablesAnnouncement.png">
 
-	<p> Note that not all tracks in the Genome Browser database will have related tracks. If no
-	&quot;Related tables&quot; section appears for a particular selected track, then
+	<p> Note that not all tracks in the Genome Browser database will have related tables.
+        Also, some tables may be unavailable when region is set to <b>genome</b> due
+        to the data provider's restrictions on sharing.
+	If no &quot;Related tables&quot; section appears for a particular selected track, then
 	there are no related tables for this track.
 
 	<p>After you have finished selecting your output fields and related tables,

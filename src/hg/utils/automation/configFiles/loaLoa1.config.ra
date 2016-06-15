@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db loaLoa1
+clade worm
+genomeCladePriority 68
+scientificName Loa loa
+commonName Eye worm
+assemblyDate Jul. 2012
+assemblyLabel Broad Institute L. loa genome project
+assemblyShortLabel WS235/L_loa_Cameroon_isolate
+orderKey 6000
+mitoAcc HQ186250.1
+fastaFiles /hive/data/genomes/loaLoa1/ucsc/loaLoa1.fa.gz
+agpFiles /hive/data/genomes/loaLoa1/ucsc/loaLoa1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/parasites/loiasis/disease.html
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 2686
+ncbiAssemblyId 195281
+ncbiAssemblyName WS235/Loa_loa_V3.1
+ncbiBioProject 60051
+genBankAccessionID GCA_000183805.3
+taxId 7209

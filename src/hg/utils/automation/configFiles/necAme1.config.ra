@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db necAme1
+clade worm
+genomeCladePriority 86
+scientificName Necator americanus
+commonName Hookworm
+assemblyDate Dec. 2013
+assemblyLabel The Genome Institute at Washington University
+assemblyShortLabel WS242/N_americanus_v1
+orderKey 8679
+mitoAcc AJ417719.2
+fastaFiles /hive/data/genomes/necAme1/ucsc/necAme1.fa.gz
+agpFiles /hive/data/genomes/necAme1/ucsc/necAme1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/dpdx/hookworm/
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 770
+ncbiAssemblyId 88321
+ncbiAssemblyName WS242/N_americanus_v1
+ncbiBioProject 72135
+genBankAccessionID GCA_000507365.1
+taxId 51031

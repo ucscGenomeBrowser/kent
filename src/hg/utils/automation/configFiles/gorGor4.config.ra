@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db gorGor4
+clade mammal
+genomeCladePriority 12
+scientificName  Gorilla gorilla gorilla
+commonName Gorilla
+assemblyDate Dec 2014
+assemblyLabel Wellcome Trust Sanger Institute Dec 2014 (NCBI project 31265, GCA_000151905.1)
+assemblyShortLabel gorGor4.1
+orderKey 7682
+# no mito accession - already part of assembly: LN611626.1
+mitoAcc none
+fastaFiles /hive/data/genomes/gorGor4/ucsc/*fa
+agpFiles /hive/data/genomes/gorGor4/ucsc/*agp
+# qualFiles none
+dbDbSpeciesDir gorilla
+photoCreditURL https://commons.wikimedia.org/wiki/User:Arpingstone
+photoCreditName Wikimedia Commons/Adrian Pingstone
+ncbiGenomeId 2156
+ncbiAssemblyId 503571
+ncbiAssemblyName gorGor4
+ncbiBioProject 31265
+genBankAccessionID GCA_000151905.3
+taxId 9595

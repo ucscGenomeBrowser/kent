@@ -2017,6 +2017,19 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
+struct bed* loadLongTabixAsBed (struct track *tg, char *chr, int start, int end)
+/* load bigBed for a range, as a bed list (for next item button). Just grab one item */
+{
+struct hash *settings = tg->tdb->settingsHash;
+char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
+struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+struct bed *bed  = bedTabixReadFirstBed(btf, chromName, start, end, bedLoad5);
+bedTabixFileClose(&btf);
+
+return bed;
+}
+
+
 struct bed* loadBigBedAsBed (struct track *tg, char *chr, int start, int end)
 /* load bigBed for a range, as a bed list (for next item button). Just grab one item */
 {
@@ -2803,6 +2816,8 @@ if (end > start)
 #ifndef GBROWSE
 	    if (sameWord(tg->table, WIKI_TRACK_TABLE))
 		items = wikiTrackGetBedRange(tg->table, mw->chromName, mw->winStart, mw->winEnd);
+	    else if (startsWith("longTabix", tg->tdb->type))
+		items = loadLongTabixAsBed(tg, mw->chromName, mw->winStart, mw->winEnd);
 	    else if (sameWord(tg->table, "gvPos"))
 		items = loadGvAsBed(tg, mw->chromName, mw->winStart, mw->winEnd);
 	    else if (sameWord(tg->table, "oreganno"))
@@ -6905,7 +6920,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         char query[256];
         if  (isRefGene)
             {
-            sqlSafef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
+            sqlSafef(query, sizeof(query), "select cast(omimId as char) from %s where mrnaAcc = '%s'", refLinkTable, lf->name);
             }
         else
             {

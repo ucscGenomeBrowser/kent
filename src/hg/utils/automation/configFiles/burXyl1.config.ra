@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db burXyl1
+clade worm
+genomeCladePriority 68
+scientificName Bursaphelenchus xylophilus
+commonName Pine wood nematode
+assemblyDate Nov. 2011
+assemblyLabel Wellcome Trust Sanger Institute B. xylophilus genome project
+assemblyShortLabel WS229/B. xylophilus Ka4C1
+orderKey 16350
+mitoAcc GQ332424.1
+fastaFiles /hive/data/genomes/burXyl1/ucsc/burXyl1.fa.gz
+agpFiles /hive/data/genomes/burXyl1/ucsc/burXyl1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/b_xylophilus
+photoCreditName photo TBD
+ncbiGenomeId 11822
+ncbiAssemblyId 310678
+ncbiAssemblyName WS229/ASM23113v1
+ncbiBioProject 64437
+genBankAccessionID GCA_000231135.1
+taxId 6326

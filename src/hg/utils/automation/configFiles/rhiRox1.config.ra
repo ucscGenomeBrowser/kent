@@ -11,8 +11,8 @@ orderKey 394
 # chrM bioproject: 17209
 # mitoAcc NC_008218.1 already included
 mitoAcc none
-fastaFiles /hive/data/genomes/nasLar1/ucsc/*.fa
-agpFiles /hive/data/genomes/nasLar1/ucsc/*.agp
+fastaFiles /hive/data/genomes/rhiRox1/ucsc/*.fa
+agpFiles /hive/data/genomes/rhiRox1/ucsc/*.agp
 # qualFiles none
 dbDbSpeciesDir rhinopithecus
 photoCreditURL http://jackhynes.com

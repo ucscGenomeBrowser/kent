@@ -105,6 +105,18 @@ void jsIncludeReactLibs();
 /* Prints out <script src="..."> tags for external libraries including ReactJS & ImmutableJS
  * and our own model libs, React mixins and components. */
 
+void jsIncludeDataTablesLibs();
+/* Prints out <script src="..."> tags for external libraries: jQuery 1.12.3, the jQuery DataTables
+ * plugin (version 1.10.12), and the accompanying standard CSS file for DataTables. */
+
+char *jsDataTableStateSave (char *cartPrefix);
+/* Prints out a javascript function to save the state of a DataTables jQuery plugin-enabled
+ * table to the cart, using the specified cart prefix to help name the variable. */
+
+char *jsDataTableStateLoad (char *cartPrefix, struct cart *cart);
+/* Prints out a javascript function to load the state of a DataTables jQuery plugin-enabled
+ * table from the cart variable whose prefix is specified in the first argument */
+
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state);
 /* Returns javascript for use as an onclick attribute value to apply "check all"/"uncheck all"
  * to all checkboxes with given idPrefix.

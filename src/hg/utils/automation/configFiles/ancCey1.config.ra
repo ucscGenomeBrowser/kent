@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db ancCey1
+clade worm
+genomeCladePriority 86
+scientificName Ancylostoma ceylanicum
+commonName Hookworm
+assemblyDate Mar. 2014
+assemblyLabel Cornell University Ancylostoma ceylanicum genome project
+assemblyShortLabel WS243/Acey_2013.11.30.genDNA
+orderKey 8680
+mitoAcc none
+fastaFiles /hive/data/genomes/ancCey1/ucsc/ancCey1.fa.gz
+agpFiles /hive/data/genomes/ancCey1/ucsc/ancCey1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/dpdx/hookworm/
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 10936
+ncbiAssemblyId 177101
+ncbiAssemblyName WS243/Acey_2013.11.30.genDNA
+ncbiBioProject 231479
+genBankAccessionID GCA_000688135.1
+taxId 53326

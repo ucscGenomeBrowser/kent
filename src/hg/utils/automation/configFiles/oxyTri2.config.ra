@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db oxyTri2
+clade ciliate
+genomeCladePriority 1200
+scientificName Oxytricha trifallax
+commonName Oxytricha trifallax
+assemblyDate Sep. 2015
+assemblyLabel Washington University Genome Sequencing Center
+assemblyShortLabel WashU ASM129792v1
+orderKey 40100
+# mito sequence included in the UCSC files
+mitoAcc none
+fastaFiles /hive/data/genomes/oxyTri2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/oxyTri2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir ciliate
+photoCreditURL https://www.genome.gov/dmd/img.cfm?node=Photos/Microorganisms&id=79122
+photoCreditName NHGRI 79122
+ncbiGenomeId 13412
+ncbiAssemblyId 2342058
+ncbiAssemblyName ASM129792v1
+ncbiBioProject 74629
+genBankAccessionID GCA_001297925.1
+taxId 1172189

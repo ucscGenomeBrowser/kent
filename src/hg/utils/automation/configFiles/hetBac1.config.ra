@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db hetBac1
+clade worm
+genomeCladePriority 86
+scientificName Heterorhabditis bacteriophora
+commonName H. bacteriophora/M31e
+assemblyDate Aug. 2011
+assemblyLabel Washington University Genome Sequencing Center Heterorhabditis_bacteriophora-7.0
+assemblyShortLabel WS229/H. bacteriophora 7.0
+orderKey 8000
+mitoAcc EF043402.1
+fastaFiles /hive/data/genomes/hetBac1/ucsc/hetBac1.fa.gz
+agpFiles /hive/data/genomes/hetBac1/ucsc/hetBac1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.forestryimages.org/browse/detail.cfm?imgnum=1316021
+photoCreditName USDA/Peggy Greb
+ncbiGenomeId 481
+ncbiAssemblyId 300668
+ncbiAssemblyName WS229/Haemonchus_contortus_MHco3-2.0
+ncbiBioProject 13977
+genBankAccessionID GCA_000223415.1
+taxId 37862

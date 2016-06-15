@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db priExs1
+clade worm
+genomeCladePriority 68
+scientificName Pristionchus exspectatus
+commonName P. exspectatus
+assemblyDate Mar. 2014
+assemblyLabel Max Planck Institite for Developmental Genetics
+assemblyShortLabel WS243/P_exspectatus_v1
+orderKey 16000
+mitoAcc none
+fastaFiles /hive/data/genomes/priExs1/ucsc/priExs1.fa.gz
+agpFiles /hive/data/genomes/priExs1/ucsc/priExs1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.molgen.mpg.de/2168/en
+photoCreditName Max Planck Institite for Developmental Genetics
+ncbiGenomeId n/a
+ncbiAssemblyId n/a
+ncbiAssemblyName WS243/P_exspectatus_v1
+ncbiBioProject 243339
+genBankAccessionID n/a
+taxId 1195656

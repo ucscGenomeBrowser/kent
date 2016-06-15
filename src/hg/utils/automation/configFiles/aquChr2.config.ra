@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db aquChr2
+clade vertebrate
+genomeCladePriority 50
+scientificName Aquila chrysaetos canadensis
+commonName Golden eagle
+assemblyDate Oct. 2014
+assemblyLabel WashU
+assemblyShortLabel aquChr-1.0.2
+orderKey 7664
+mitoAcc none
+fastaFiles /hive/data/genomes/aquChr2/ucsc/*.fa
+agpFiles /hive/data/genomes/aquChr2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://commons.wikimedia.org/wiki/User:Juan_lacruz
+photoCreditName Juan Lacruz - Wikimedia Commons
+ncbiGenomeId 32031
+ncbiAssemblyId 217061
+ncbiAssemblyName Aquila_chrysaetos-1.0.2
+ncbiBioProject 256103
+genBankAccessionID GCA_000766835.1
+taxId 216574

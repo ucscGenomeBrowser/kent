@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db ce11
+# clade worm
+# genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Aug. 2014
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WBcel245
+assemblyShortLabel WBcel245
+orderKey 3024
+mitoAcc X54252.1
+fastaFiles /hive/data/genomes/ce11/ucsc/chr*.fa
+agpFiles   /hive/data/genomes/ce11/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+photoCreditURL http://www.nematodes.org/
+photoCreditName Photo courtesy of Mark Blaxter
+ncbiGenomeId 41
+ncbiAssemblyId 554278
+ncbiAssemblyName WBcel245
+ncbiBioProject 13758
+genBankAccessionID GCA_000002985.3
+taxId 6239
