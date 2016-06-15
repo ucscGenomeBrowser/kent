@@ -89,8 +89,8 @@ char *rTempName(char *dir, char *base, char *suffix);
  * file runs from - this is necessary for portable code. */
 struct tempName
 	{
-	char forCgi[128];
-	char forHtml[128];
+	char forCgi[4096];
+	char forHtml[4096];
 	};
 
 void makeTempName(struct tempName *tn, char *base, char *suffix);
