@@ -29,10 +29,10 @@ The bigPsl format stores alignments between two sequences, as
 <p>
 bigPsl files are created using the program <TT>bedToBigBed</TT> with a
 special AutoSQL file that defines the fields of the bigPsl.   The
-resulting bigBed files are in an indexed binary format.  The main advantage of
-the bigBed files is that only portions of the files needed to display a
-particular region are transferred to UCSC. So for large data sets, bigBed is
-considerably faster than regular BED files.  The bigBed file remains on 
+resulting bigPsl files are in an indexed binary format.  The main advantage of
+the bigpsl files is that only portions of the files needed to display a
+particular region are transferred to UCSC. So for large data sets, bigPsl is
+considerably faster than regular PSL files.  The bigPsl file remains on 
 your web accessible server (http, https, or ftp), not on the UCSC server. 
 Only the portion that is needed
 for the chromosomal position you are currently viewing is locally cached as a 
@@ -41,7 +41,7 @@ for the chromosomal position you are currently viewing is locally cached as a
 <H4><A name=bigPsl></A>Big PSL</H4>
 The following AutoSQL definition is used for bigPsl gene prediction files. 
 This is the <A HREF="examples/bigPsl.as"><tt>bigPsl.as</tt></A>
-file defined by the <tt>-as=</tt> option when using <tt>bedToBigBed</tt>.
+file defined by the <tt>-as</tt> option when using <tt>bedToBigBed</tt>.
 Click this <A HREF="examples/bigPsl.txt"><tt>bigPsl.txt</tt></A> file for
 an example of bigPsl input. 
 <PRE>
