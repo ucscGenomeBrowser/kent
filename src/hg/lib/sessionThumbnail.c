@@ -7,52 +7,38 @@
 #include "common.h"
 #include "dystring.h"
 #include "hash.h"
-#include "hgConfig.h"
+#include "trashDir.h"
 
-
-char *sessionThumbnailFileName(char *userIdx, char *encSessionName,
-                               char *firstUse)
-/* Return a pointer to a string containing the name of the thumbnail image that
- * would be associated with the given user and session name.  Result must be freed.
- * userIdx is a presumed unique ID suitable for being part of a filename.
- * encSessionName is the cgi-encoded session name, and firstUse is the
- * mysql-formatted time string for the session's creation date */
+void sessionBuildThumbnailFilePaths(struct tempName *thumbnailPath, char *userIdx,
+                                  char *encSessionName, char *firstUse)
+/* Populate thumbnailPath with paths to the thumbnail image for the specified session.
+ * The basename of the thumbnail image is based on several pieces of data on the session:
+ * userIdx is a presumed unique ID suitable for being part of a filename,
+ * encSessionName is the cgi-encoded session name,
+ * and firstUse is the mysql-formatted time string for the session's creation date.
+ * Leaks memory via a dyString. */
 {
-struct dyString *fileName = dyStringCreate("hgPS_%s_%u_%ld.png",
+struct dyString *base = dyStringCreate("hgPS_%s_%u_%ld",
     userIdx, hashString(encSessionName), dateToSeconds(firstUse, "%Y-%m-%d %T"));
-return dyStringCannibalize(&fileName);
+trashDirReusableFile(thumbnailPath, "hgPS", dyStringContents(base), ".png");
 }
 
 char *sessionThumbnailFilePath(char *userIdx, char *encSessionName,
                                char *firstUse)
-/* Returns NULL if the image directory for session thumbnails hasn't been
- * set in hg.conf.  Otherwise, returns the filename and path for the
- * thumbnail of the specified session */
+/* Returns the path to the thumbnail image of the specified session as seen by CGIs.
+ * Result must be freed. */
 {
-char *imgDir = cfgOption("sessionThumbnail.imgDir");
-if (imgDir == NULL)
-    return NULL;
-
-struct dyString *filePath = dyStringCreate("%s", imgDir);
-if (lastChar(imgDir) != '/')
-    dyStringAppendC(filePath, '/');
-dyStringAppend(filePath, sessionThumbnailFileName(userIdx, encSessionName, firstUse));
-return dyStringCannibalize(&filePath);
+struct tempName thumbnailPath;
+sessionBuildThumbnailFilePaths(&thumbnailPath, userIdx, encSessionName, firstUse);
+return cloneString(thumbnailPath.forCgi);
 }
 
 char *sessionThumbnailFileUri(char *userIdx, char *encSessionName,
                               char *firstUse)
-/* Returns NULL if the web path to session thumbnails hasn't been
- * defined in hg.conf.  Otherwise, returns the path and filename for the
- * thumbnail of the specified session */
+/* Returns the path to the thumbnail image of the specified session as seen by web viewers.
+ * Result must be freed. */
 {
-char *pathBase = cfgOption("sessionThumbnail.webPath");
-if (pathBase == NULL)
-    return NULL;
-
-struct dyString *fileUri = dyStringCreate("%s", pathBase);
-if (lastChar(pathBase) != '/')
-    dyStringAppendC(fileUri, '/');
-dyStringAppend(fileUri, sessionThumbnailFileName(userIdx, encSessionName, firstUse));
-return dyStringCannibalize(&fileUri);
+struct tempName thumbnailPath;
+sessionBuildThumbnailFilePaths(&thumbnailPath, userIdx, encSessionName, firstUse);
+return cloneString(thumbnailPath.forHtml);
 }
