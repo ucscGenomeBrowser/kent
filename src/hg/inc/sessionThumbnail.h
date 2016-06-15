@@ -7,13 +7,10 @@
 
 char *sessionThumbnailFilePath(char *userIdx, char *encSessionName,
                                char *firstUse);
-/* Returns NULL if the image directory for session thumbnails hasn't been
- * set in hg.conf.  Otherwise, returns the filename and path for the
- * thumbnail of the specified session */
+/* Returns the path to the thumbnail image of the specified session as seen by CGIs.
+ * Result must be freed. */
 
 char *sessionThumbnailFileUri(char *userIdx, char *encSessionName,
                               char *firstUse);
-/* Returns NULL if the web path to session thumbnails hasn't been
- * defined in hg.conf.  Otherwise, returns the path and filename for the
- * thumbnail of the specified session */
-
+/* Returns the path to the thumbnail image of the specified session as seen by web viewers.
+ * Result must be freed. */
