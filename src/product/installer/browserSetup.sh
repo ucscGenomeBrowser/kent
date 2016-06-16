@@ -824,21 +824,9 @@ function installDebian ()
        touch /tmp/browserInstall.aptGetUpdateDone
     fi
 
-    # use dpkg to check if ghostscript is installed
-    if dpkg-query -s ghostscript 2>&1 | grep "is not installed" > /dev/null; then 
-        echo2
-        echo2 Installing ghostscript
-        waitKey
-        apt-get --assume-yes install ghostscript
-    fi
-
-    # use dpkg to check if imagemagick is installed
-    if dpkg-query -s imagemagick 2>&1 | grep "is not installed" > /dev/null; then 
-        echo2
-        echo2 Installing imagemagick
-        waitKey
-        apt-get --assume-yes install imagemagick
-    fi
+    echo2 Installing ghostscript and imagemagick
+    waitKey
+    apt-get --assume-yes install ghostscript imagemagick
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1171,24 +1159,27 @@ function mysqlDbSetup ()
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
 function installBrowser () 
 {
-    if [ ! -f $COMPLETEFLAG ]; then
-        echo '--------------------------------'
-        echo UCSC Genome Browser installation
-        echo '--------------------------------'
-        echo Detected OS: $OS/$DIST, $VER
-        echo 
-        echo This script will go through three steps:
-        echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
-        echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
-        echo "3 - optional: download genome assembly databases into mysql and /gbdb"
-        echo
-        echo This script will now install and configure Mysql and Apache if they are not yet installed. 
-        echo "Your distribution's package manager will be used for this."
-        echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
-        echo
-        echo This script will also deactivate SELinux if active and open port 80/http.
-        waitKey
+    if [ -f $COMPLETEFLAG ]; then
+        echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
+        exit 246
     fi
+
+    echo '--------------------------------'
+    echo UCSC Genome Browser installation
+    echo '--------------------------------'
+    echo Detected OS: $OS/$DIST, $VER
+    echo 
+    echo This script will go through three steps:
+    echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
+    echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
+    echo "3 - optional: download genome assembly databases into mysql and /gbdb"
+    echo
+    echo This script will now install and configure Mysql and Apache if they are not yet installed. 
+    echo "Your distribution's package manager will be used for this."
+    echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
+    echo
+    echo This script will also deactivate SELinux if active and open port 80/http.
+    waitKey
 
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
@@ -1396,7 +1387,7 @@ function downloadGenomes
 
     showMyAddress
 
-    echo2 If have not downloaded the human hg38 assembly and you get an error message 
+    echo2 If you have not downloaded the human hg38 assembly and you get an error message 
     echo2 'Could not connect to database' on the genome selection page, then modify 
     echo2 the hg.conf file and change the organism, e.g. to Mouse if you downloaded mouse.
     echo2 with a command like "'nano /usr/local/apache/cgi-bin/hg.conf'"
@@ -1405,7 +1396,7 @@ function downloadGenomes
     echo2 If the assembly is not the default for this organism, you also have to change 
     echo2 the mysql table hgcentral.defaultDb to the correct database for your organism, 
     echo2 e.g. '"mm9"' for Mouse, with a command like
-    echo2 mysql hgcentral -e \''update defaultDb set name="mm10" where genome="Mouse"'\'
+    echo2 mysql hgcentral -e \''update defaultDb set name="mm9" where genome="Mouse"'\'
     echo2 
     echo2 Note that the installation assumes that emails cannot be sent from
     echo2 this machine. New Genome Browser user accounts will not receive confirmation emails.

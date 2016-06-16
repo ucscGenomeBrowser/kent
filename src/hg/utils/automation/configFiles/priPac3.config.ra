@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db priPac3
+clade worm
+# genomeCladePriority 70
+scientificName Pristionchus pacificus
+commonName P. pacificus
+assemblyDate Aug. 2014
+assemblyShortLabel P_pacificus-v2
+assemblyLabel Max Planck Institute for Developmental Biology P. pacificus genome project
+orderKey 16013
+mitoAcc JF414117.1
+fastaFiles /hive/data/genomes/priPac3/ucsc/priPac3.fa.gz
+agpFiles /hive/data/genomes/priPac3/ucsc/priPac3.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.eb.tuebingen.mpg.de/departments/4-evolutionary-biology/department-4-evolutionary-biology
+photoCreditName Scanning electron micrograph courtesy of Jürgen Berger, and Ralf J. Sommer, Max Planck Institute for Developmental Biology, All Rights Reserved
+ncbiGenomeId 246
+ncbiAssemblyId 320251
+ncbiAssemblyName WS221
+ncbiBioProject 12644
+genBankAccessionID GCA_000180635.2
+taxId 54126

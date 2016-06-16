@@ -82,6 +82,12 @@ To create a bigBed track, follow these steps:<BR>
   <TT><B>bedToBigBed</B> input.bed chrom.sizes myBigBed.bb</TT><BR>
  <LI> Move the newly created bigBed file (<TT>myBigBed.bb</TT>) to a http, 
   https, or ftp location.
+ <LI> If the file URL ends with .bigBed or .bb, you can paste the URL directly 
+  into the <A HREF="../../cgi-bin/hgCustom">custom track</A> management page, click submit 
+      and view in the Genome Browser. 
+  The track name will then be the name of the file. If you 
+  want to configure the track name and descriptions, you will need to create a 
+   <A HREF="hgTracksHelp.html#TRACK">track line</A>, as shown below.
  <LI> Construct a <A HREF="hgTracksHelp.html#CustomTracks">custom track</A> 
   using a single 
   <A HREF="hgTracksHelp.html#TRACK">track line</A>. 
@@ -103,11 +109,17 @@ below.  A full list of the available options can be seen by running
 
 <p>
 <H3>Example One</H3>
-</p>
+
 <P>In this example, you will use an existing bigBed file to create a bigBed 
 custom track.  A bigBed file that contains data on chromosome 21 on the hg19 
-assembly has been placed on our http server.  
-You can create a custom track using this bigBed file by constructing a 
+assembly has been placed on our http server.<P>
+
+<P>You can create a custom track using this bigBed file by pasting the URL 
+<TT>http://genome.ucsc.edu/goldenPath/help/examples/bigBedExample.bb</TT>
+into the <A HREF="../../cgi-bin/hgCustom">custom track</A> management page, clicking
+submit and clicking the <i>chr21</i> link in the custom track listing.</P>
+
+<P>Alternatively, you can construct a 
 &quot;track&quot; line that references this file like so:</P>
 
 <TT>track type=bigBed name=&quot;bigBed Example One&quot; 
@@ -143,8 +155,8 @@ bed file.
   <TT><B>bedToBigBed</B> bedExample.txt hg19.chrom.sizes myBigBed.bb</TT>
  <LI> Place the bigBed file you just created (<TT>myBigBed.bb</TT>) on a 
   web-accessible server (see <EM>step 6</EM>).
- <LI> Construct a &quot;track&quot; line that points to your bigBed file
-  (see <EM>step 7</EM>).
+ <LI> Paste the URL itself into the Custom Tracks entry form or construct a
+ &quot;track&quot; line that points to your bigBed file (see <EM>step 7</EM>).
  <LI> Create the custom track on the human assembly hg19 (Feb. 2009), and 
   view it in the genome browser (see <EM>step 8</EM>). Note that the original
   BED file contains data on only chromsome 21.
@@ -184,7 +196,7 @@ and the first of the extra fields to be used for track item search.
    hg18.chrom.sizes myBigBed2.bb</TT>
  <LI> Place the bigBed file you just created (<TT>myBigBed2.bb</TT>) on a
   web-accessible server (see <EM>step 6</EM>).
- <LI> Construct a &quot;track&quot; line that points to your bigBed file
+ <LI> Paste the URL itself into the custom tracks entry form or construct a &quot;track&quot; line that points to your bigBed file
   (see <EM>step 7</EM>).  Because this bigBed file includes a field for color,
   you must include the <A HREF="../../FAQ/FAQformat.html#format1"><TT>itemRgb</TT></A>
   attribute in the &quot;track&quot; line. It will look somewhat similar to
@@ -226,8 +238,9 @@ utilities.<BR>
  <LI><TT>bigBedInfo</TT> &mdash; this program prints out information about a 
       bigBed file.
 </UL>
-As with all UCSC Genome Browser programs, simply type the program name
-at the command line with no parameters to see the usage statement.
+These programs accept file names as input or alternatively also URLs to files.
+As with all UCSC Genome Browser programs, simply type the program name at the
+command line with no parameters to see the usage statement.
 </P>
 
 <H3>Troubleshooting</H3>

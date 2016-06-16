@@ -1,0 +1,27 @@
+# config parameters for makeGenomeDb.pl:
+db panPan2
+clade mammal
+genomeCladePriority 15
+scientificName Pan paniscus
+commonName Bonobo
+assemblyDate Aug. 2015
+assemblyLabel Max-Planck Institute for Evolutionary Anthropology
+assemblyShortLabel MPI-EVA panpan1.1
+orderKey 2624
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001644.1
+# http://www.ncbi.nlm.nih.gov/bioproject/PRJNA11815
+mitoAcc none
+fastaFiles /hive/data/genomes/panPan2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/panPan2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bonobo
+photoCreditURL http://a-z-animals.com/animals/bonobo/pictures/2955/
+photoCreditName Photo courtesy of Kabir Bakie
+ncbiGenomeId 10729
+ncbiAssemblyId 474211
+ncbiAssemblyName panpan1.1
+ncbiBioProject 169343
+ncbiBioSample SAMEA1029457
+genBankAccessionID GCF_000258655.2
+taxId 9597

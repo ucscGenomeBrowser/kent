@@ -1,0 +1,25 @@
+# Config parameters for makeGenomeDb.pl:
+db ci3
+clade deuterostome
+genomeCladePriority 10
+scientificName Ciona intestinalis
+commonName C. intestinalis
+assemblyDate Apr. 2011
+assemblyLabel Kyoto KH
+assemblyShortLabel Kyoto KH
+orderKey 3044
+# chrM bioproject: 30531
+# mitoAcc NC_004447.2 already included
+mitoAcc none
+fastaFiles /hive/data/genomes/ci3/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/ci3/ucsc/*.agp.gz
+# qualFiles none
+dbDbSpeciesDir squirt
+photoCreditURL http://www.ascidians.com/
+photoCreditName Arjan Gittenberger
+ncbiGenomeId 49
+ncbiAssemblyId 527578
+ncbiAssemblyName KH
+ncbiBioProject 187185
+genBankAccessionID GCF_000224145.1
+taxId 7719

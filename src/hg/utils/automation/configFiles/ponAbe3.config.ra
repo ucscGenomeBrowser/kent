@@ -1,0 +1,41 @@
+# Config parameters for makeGenomeDb.pl:
+db ponAbe3
+clade mammal
+# clade already on in ponAbe1
+# genomeCladePriority 11
+commonName Orangutan
+scientificName Pongo pygmaeus abelii
+assemblyDate Nov. 2008
+assemblyLabel Orangutan Genome Sequencing Consortium 2.0.2
+assemblyShortLabel P_pygmaeus_2.0.2
+orderKey 12764
+# mitoAcc aka: NC_002083.1
+mitoAcc X97707.1
+fastaFiles /cluster/data/ponAbe3/ucsc/chr*.fa
+agpFiles /cluster/data/ponAbe3/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir orangutan
+ photoCreditURL http://commons.wikimedia.org/wiki/File:Platypus.jpg
+ photoCreditName Stefan Kraft - Wikimedia Commons
+ncbiGenomeId 325
+ ncbiAssemblyId 237598
+ ncbiAssemblyName ASM227v2
+ ncbiBioProject 19039 
+genBankAccessionID GCA_000001545.3
+taxId 9601
+
+# Config parameters for makeGenomeDb.pl:
+# chrMt: http://www.ncbi.nlm.nih.gov/bioproject/10802
+ mitoAcc NC_000891.1
+
+# Organism name:  Pongo abelii
+# Taxid:          9601
+# Submitter:      Orangutan Genome Sequencing Consortium
+# Date:           2008-11-13
+# BioSample:      SAMN02981238
+# Assembly type:  haploid-with-alt-loci
+# Release type:   major
+# Assembly level: Chromosome
+# Genome representation: full
+# GenBank Assembly Accession: GCA_000001545.3 (latest)
+#

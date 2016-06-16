@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db oncVol1
+clade worm
+genomeCladePriority 68
+scientificName Onchocerca volvulus
+commonName O. volvulus
+assemblyDate Nov. 2013
+assemblyLabel Wellcome Trust Sanger Institute O. volvulus genome project
+assemblyShortLabel WS241/O_volvulus_Cameroon_v3
+orderKey 15000
+mitoAcc AF015193.1
+fastaFiles /hive/data/genomes/oncVol1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/oncVol1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://parasite.org.au/blog/the-pugh-parasitology-collection/
+photoCreditName R.E. Pugh parasitology collection
+ncbiGenomeId 2687
+ncbiAssemblyId 81741
+ncbiAssemblyName WS241/OVOC001
+ncbiBioProject 226660
+genBankAccessionID GCA_000499405.1
+taxId 6282

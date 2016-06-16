@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db triSui1
+clade worm
+genomeCladePriority 68
+scientificName Trichuris suis
+commonName Whipworm
+assemblyDate Jul. 2014
+assemblyLabel University of Melboure T. suis (male) genome project
+assemblyShortLabel WS243/T. suis DCEP-RM93M male
+orderKey 23200
+mitoAcc GU070737.1
+fastaFiles /hive/data/genomes/triSui1/ucsc/triSui1.fa.gz
+agpFiles /hive/data/genomes/triSui1/ucsc/triSui1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/parasites/whipworm/
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 13427
+ncbiAssemblyId 205451
+ncbiAssemblyName WS243/Tsuis_adult_male_v1.0
+ncbiBioProject 208415
+genBankAccessionID GCA_000701005.1
+taxId 68888

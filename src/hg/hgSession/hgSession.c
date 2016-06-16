@@ -43,7 +43,7 @@ char *excludeVars[] = {"Submit", "submit", NULL};
 struct slName *existingSessionNames = NULL;
 
 /* Javascript to confirm that the user truly wants to delete a session. */
-#define confirmDeleteFormat "return confirm('Are you sure you want to delete %s?');"
+#define confirmDeleteFormat "return confirm('Are you sure you want to delete ' + decodeURIComponent('%s') + '?');"
 
 char *cgiDecodeClone(char *encStr)
 /* Allocate and return a CGI-decoded copy of encStr. */
@@ -64,15 +64,7 @@ char *wikiHost = wikiLinkHost();
 cartWebStart(cart, NULL, "Welcome %s", wikiUserName);
 jsInit();
 
-/* Includes for the jquery datatables plugin. Clashes a bit with the jquery included
- * by cartWebStart, unfortunately.  Should resolve this ultimately (ideally by solving
- * the issues preventing us from upgrading the global jquery include) */
-printf ("<link rel=\"stylesheet\" type=\"text/css\" "
-        "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
-printf ("<script type=\"text/javascript\" "
-        "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"></script>\n");
-printf ("<script type=\"text/javascript\" charset=\"utf8\" "
-        "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"></script>\n");
+jsIncludeDataTablesLibs();
 
 if (loginSystemEnabled()) /* Using the new hgLogin CGI for login? */
     {
@@ -105,7 +97,7 @@ cartWebStart(cart, NULL, "Sign in to UCSC Genome Bioinformatics");
 jsInit();
 if (loginSystemEnabled())
     {
-   printf("<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\""
+   printf("<ul style=\"list-style: none outside none; margin: 0pt; padding: 0pt;\">"
 "<li><A HREF=\"%s\">Login</A></li>",
         wikiLinkUserLoginUrl(cartSessionId(cart)));
     printf("<li><A HREF=\"%s\">"
@@ -129,6 +121,18 @@ else
     }
 }
 
+
+char *getLinkUserName()
+/* Return the user name specified in cookies from the browser, or NULL
+ * if 
+ * the user doesn't appear to be logged in. */
+{
+if (wikiLinkEnabled())
+   {
+   return cloneString(wikiLinkUserName());
+   }
+return NULL;
+}
 
 void showCartLinks()
 /* Print out links to cartDump and cartReset. */
@@ -282,16 +286,21 @@ boolean gotSettings = (sqlFieldIndex(conn, namedSessionTable, "settings") >= 0);
 /* DataTables configuration: only allow ordering on session name, creation date, and database.
  * https://datatables.net/reference/option/columnDefs */
 printf ("<script type=\"text/javascript\">"
+        "if (theClient.isIePre11() === false)\n{\n"
         "$(document).ready(function () {\n"
         "    $('#sessionTable').DataTable({\"columnDefs\": [{\"orderable\":false, \"targets\":[0,4,5,6,7,8]}],\n"
-        "                                       \"order\":[1,'asc']\n"
+        "                                       \"order\":[1,'asc'],\n"
+        "                                       \"stateSave\":true,\n"
+        "                                       \"stateSaveCallback\": %s,\n"
+        "                                       \"stateLoadCallback\": %s\n"
         "                                 });\n"
         "} );\n"
-        "</script>\n");
+        "}\n"
+        "</script>\n", jsDataTableStateSave(hgSessionPrefix), jsDataTableStateLoad(hgSessionPrefix, cart));
 
 printf("<H3>My Sessions</H3>\n");
 printf("<div style=\"max-width:1024px\">");
-printf("<table id=\"sessionTable\" class=\"display compact\" borderwidth=0>\n");
+printf("<table id=\"sessionTable\" class=\"sessionTable stripe hover row-border compact\" borderwidth=0>\n");
 printf("<thead><tr>");
 printf("<TH><TD><B>session name (click to load)</B></TD><TD><B>created on</B></TD><td><b>assembly</b></td>"
        "<TD align=center><B>view/edit&nbsp;<BR>details&nbsp;</B></TD>"
@@ -366,12 +375,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, encSessionName);
     char command[512];
-    safef(command, sizeof(command), confirmDeleteFormat, sessionName);
+    safef(command, sizeof(command), confirmDeleteFormat, encSessionName);
     cgiMakeOnClickSubmitButton(command, buf, "delete");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, encSessionName);
-    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"document.mainForm.submit();\"");
+    cgiMakeCheckBoxJS(buf, shared>0, "onchange=\"console.log('new status' + this.checked); document.mainForm.submit();\"");
 
     printf("</TD><TD align=center>");
     safef(buf, sizeof(buf), "%s%s", hgsGalleryPrefix, encSessionName);
@@ -593,7 +602,7 @@ if (userName != NULL)
            "image of your session, and to load the session if they "
            "are interested.</li>\n", cartSidUrlString(cart));
     }
-else if (loginSystemEnabled() || wikiLinkEnabled())
+else if (wikiLinkEnabled())
     {
      printf("<LI>If you <A HREF=\"%s\">sign in</A>, you will be able " 
             " to save named sessions which will be displayed with "
@@ -621,14 +630,15 @@ printf("</UL>\n");
 dyStringFree(&dyUrl);
 }
 
-void doMainPage(char *userName, char *message)
+void doMainPage(char *message)
 /* Login status/links and session controls. */
 {
 puts("Content-Type:text/html\n");
-if (loginSystemEnabled() || wikiLinkEnabled())
+if (wikiLinkEnabled())
     {
-    if (userName)
-	welcomeUser(userName);
+    char *wikiUserName = wikiLinkUserName();
+    if (wikiUserName)
+	welcomeUser(wikiUserName);
     else
 	offerLogin();
     if (isNotEmpty(message))
@@ -639,8 +649,8 @@ if (loginSystemEnabled() || wikiLinkEnabled())
 	    webNewSection("Updated Session");
 	puts(message);
 	}
-    showSessionControls(userName, TRUE, TRUE);
-    showLinkingTemplates(userName);
+    showSessionControls(wikiUserName, TRUE, TRUE);
+    showLinkingTemplates(wikiUserName);
     }
 else 
     {
@@ -727,16 +737,15 @@ else
 }
 
 #define INITIAL_USE_COUNT 0
-char *doNewSession(char *userName)
+char *doNewSession()
 /* Save current settings in a new named session.
  * Return a message confirming what we did. */
 {
-if (userName == NULL)
-    return "Unable to save session -- please log in and try again.";
 struct dyString *dyMessage = dyStringNew(2048);
 char *sessionName = trimSpaces(cartString(cart, hgsNewSessionName));
 char *encSessionName = cgiEncodeFull(sessionName);
 boolean shareSession = cartBoolean(cart, hgsNewSessionShare);
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 
@@ -877,13 +886,12 @@ if (filePath != NULL)
 sqlFreeResult(&sr);
 }
 
-char *doSessionDetail(char *userName, char *sessionName)
+char *doSessionDetail(char *sessionName)
 /* Show details about a particular session. */
 {
-if (userName == NULL)
-    return "Sorry, please log in again.";
 struct dyString *dyMessage = dyStringNew(4096);
 char *encSessionName = cgiEncodeFull(sessionName);
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
@@ -944,7 +952,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 		   "&nbsp;&nbsp;<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"cancel\"> "
 		   "<BR>\n",
 		   hgsLoadPrefix, encSessionName, hgsDeletePrefix, encSessionName,
-		   sessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
+		   encSessionName, hgsDoSessionChange, hgsDoSessionChange, hgsCancel);
     dyStringPrintf(dyMessage,
 		   "Share with others? <INPUT TYPE=CHECKBOX NAME=\"%s%s\"%s VALUE=on "
 		   "onChange=\"{%s %s}\" onClick=\"{%s %s}\" id=\"detailsSharedCheckbox\">\n"
@@ -993,17 +1001,16 @@ else
 return dyStringCannibalize(&dyMessage);
 }
 
-char *doUpdateSessions(char *userName)
+char *doUpdateSessions()
 /* Look for cart variables matching prefixes for sharing/unsharing,
  * loading or deleting a previously saved session.
  * Return a message confirming what we did, or NULL if no such variables
  * were in the cart. */
 {
-if (userName == NULL)
-    return NULL;
 struct dyString *dyMessage = dyStringNew(1024);
 struct hashEl *cartHelList = NULL, *hel = NULL;
 struct sqlConnection *conn = hConnectCentral();
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 boolean didSomething = FALSE;
 char query[512];
@@ -1094,7 +1101,7 @@ if (hel != NULL)
     {
     char *encSessionName = hel->name + strlen(hgsEditPrefix);
     char *sessionName = cgiDecodeClone(encSessionName);
-    dyStringPrintf(dyMessage, "%s", doSessionDetail(userName, sessionName));
+    dyStringPrintf(dyMessage, "%s", doSessionDetail(sessionName));
     didSomething = TRUE;
     }
 
@@ -1291,16 +1298,15 @@ if (cartVarExists(cart, varName))
     }
 }
 
-char *doSessionChange(char *userName, char *oldSessionName)
+char *doSessionChange(char *oldSessionName)
 /* Process changes to session from session details page. */
 {
-if (userName == NULL)
-    return "Unable to make changes to session.  Please log in again.";
 struct dyString *dyMessage = dyStringNew(1024);
 webPushErrHandlersCartDb(cart, cartUsualString(cart, "db", NULL));
 char *sessionName = oldSessionName;
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encOldSessionName = encSessionName;
+char *userName = getLinkUserName();
 char *encUserName = cgiEncodeFull(userName);
 struct sqlConnection *conn = hConnectCentral();
 struct sqlResult *sr = NULL;
@@ -1441,19 +1447,17 @@ struct hash *oldVars = hashNew(10);
  * take care of headers instead of using a fixed cart*Shell(). */
 cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldVars);
 
-char *userName = (loginSystemEnabled() || wikiLinkEnabled()) ? wikiLinkUserName() : NULL;
-
 if (cartVarExists(cart, hgsDoMainPage) || cartVarExists(cart, hgsCancel))
-    doMainPage(userName, NULL);
+    doMainPage(NULL);
 else if (cartVarExists(cart, hgsDoNewSession))
     {
-    char *message = doNewSession(userName);
-    doMainPage(userName, message);
+    char *message = doNewSession();
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoOtherUser))
     {
     char *message = doOtherUser(hgsDoOtherUser);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSaveLocal))
     {
@@ -1462,27 +1466,27 @@ else if (cartVarExists(cart, hgsDoSaveLocal))
 else if (cartVarExists(cart, hgsDoLoadLocal))
     {
     char *message = doLoad(FALSE, hgsDoLoadLocal);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoLoadUrl))
     {
     char *message = doLoad(TRUE, hgsDoLoadUrl);
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSessionDetail))
     {
-    char *message = doSessionDetail(userName, cartString(cart, hgsDoSessionDetail));
-    doMainPage(userName, message);
+    char *message = doSessionDetail(cartString(cart, hgsDoSessionDetail));
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsDoSessionChange))
     {
-    char *message = doSessionChange(userName, cartString(cart, hgsOldSessionName));
-    doMainPage(userName, message);
+    char *message = doSessionChange(cartString(cart, hgsOldSessionName));
+    doMainPage(message);
     }
 else if (cartVarExists(cart, hgsOldSessionName))
     {
-    char *message1 = doSessionChange(userName, cartString(cart, hgsOldSessionName));
-    char *message2 = doUpdateSessions(userName);
+    char *message1 = doSessionChange(cartString(cart, hgsOldSessionName));
+    char *message2 = doUpdateSessions();
     char *message = message2;
     if (!startsWith("No changes to session", message1))
 	{
@@ -1490,12 +1494,12 @@ else if (cartVarExists(cart, hgsOldSessionName))
 	message = needMem(len);
 	safef(message, len, "%s%s", message1, message2);
 	}
-    doMainPage(userName, message);
+    doMainPage(message);
     }
 else
     {
-    char *message = doUpdateSessions(userName);
-    doMainPage(userName, message);
+    char *message = doUpdateSessions();
+    doMainPage(message);
     }
 
 cleanHgSessionFromCart(cart);

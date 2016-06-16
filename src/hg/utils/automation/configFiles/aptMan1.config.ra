@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db aptMan1
+clade vertebrate
+genomeCladePriority 50 
+scientificName Apteryx australis
+commonName Brown kiwi
+assemblyDate Jun. 2015
+assemblyLabel Max-Plank Institute for Evolutionary Anthropology AptMant0
+assemblyShortLabel MPI-EVA AptMant0
+orderKey 2715
+mitoAcc LK054805.1
+fastaFiles /hive/data/genomes/aptMan1/ucsc/*.fa
+agpFiles /hive/data/genomes/aptMan1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir birds
+photoCreditURL http://www.md.ucl.ac.be/peca/test/copyright.html
+photoCreditName S. Moniotte
+ncbiGenomeId 10907
+ncbiAssemblyId 356101
+ncbiAssemblyName AptMant0
+ncbiBioProject 287231
+genBankAccessionID GCF_001039765.1
+taxId 202946

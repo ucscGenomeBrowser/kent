@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db dirImm1
+clade worm
+genomeCladePriority 68
+scientificName Dirofilaria immitis
+commonName Dog heartworm nematode
+assemblyDate Sep. 2013
+assemblyLabel Edinburgh University D. immitis genome project
+assemblyShortLabel WS240/D. immitis v2.2
+orderKey 4670
+mitoAcc AJ537512.1
+fastaFiles /hive/data/genomes/dirImm1/ucsc/dirImm1.fa.gz
+agpFiles /hive/data/genomes/dirImm1/ucsc/dirImm1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://parasite.org.au/blog/the-pugh-parasitology-collection/
+photoCreditName R.E. Pugh parasitology collection
+ncbiGenomeId 10757
+ncbiAssemblyId PRJEB1797
+ncbiAssemblyName WS240/D. immitis v2.2
+ncbiBioProject 208635
+genBankAccessionID PRJEB1797
+taxId 6287

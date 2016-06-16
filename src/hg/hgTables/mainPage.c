@@ -648,7 +648,8 @@ if (isPositional)
     if (disableGenome)
         {
         makeRegionButtonExtraHtml(hgtaRegionTypeGenome, regionType, "DISABLED");
-        hPrintf("&nbsp;<span"NO_GENOME_CLASS">genome</span>&nbsp;");
+        hPrintf("&nbsp;<span"NO_GENOME_CLASS">genome (unavailable for selected track)</span>"
+                "&nbsp;");
         }
     else
         {

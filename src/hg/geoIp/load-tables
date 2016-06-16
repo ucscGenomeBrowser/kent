@@ -1,0 +1,11 @@
+#!/bin/tcsh
+# we want to use autoSql to make the .sql 
+# which is handy for initializing empty tables
+# but we do not need the .c and .h files at this time.
+foreach f ( *.as )
+    echo $f
+    #hgsql hgFixed -e "drop table $f:r"
+    hgsql hgFixed < $f:r.sql
+    hgsql hgFixed -e "load data local infile '$f:r.tab' into table $f:r"
+    hgsql hgFixed -e "select count(*) from $f:r"
+end

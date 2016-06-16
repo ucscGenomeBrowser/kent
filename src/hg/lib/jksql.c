@@ -1927,14 +1927,14 @@ if (((options & SQL_TAB_FILE_ON_SERVER) && !sqlIsRemote(conn)) | sqlNeverLocal)
         {
         if (getcwd(tabPath, sizeof(tabPath)) == NULL)
 	    errAbort("sqlLoadTableFile: getcwd failed");
-        strcat(tabPath, "/");
+        safecat(tabPath, sizeof(tabPath), "/");
         }
-    strcat(tabPath, path);
+    safecat(tabPath, sizeof(tabPath), path);
     localOpt = "";
     }
 else
     {
-    strcpy(tabPath, path);
+    safecpy(tabPath, sizeof(tabPath), path);
     localOpt = "LOCAL";
     }
 
@@ -2177,7 +2177,7 @@ if ((sr = sqlGetResult(sc, query)) == NULL)
 row = sqlNextRow(sr);
 if (row != NULL && row[0] != NULL)
     {
-    strncpy(buf, row[0], bufSize);
+    safecpy(buf, bufSize, row[0]);
     ret = buf;
     }
 sqlFreeResult(&sr);

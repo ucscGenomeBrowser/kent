@@ -47,6 +47,10 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
         if (!sOnScreen)
             continue;
 
+        // draw the foot
+        int footWidth = scale * (longRange->sw / 2);
+        hvGfxLine(hvg, sx - footWidth, yOff, sx + footWidth, yOff, MG_BLUE);
+
         int height = tg->height/2;
         if (tg->visibility == tvDense)
             height = tg->height;
@@ -80,9 +84,17 @@ for(longRange=longRangeList; longRange; longRange=longRange->next)
             peak = yOff + tg->height;
         
         if (sOnScreen)
+            {
+            int footWidth = scale * (longRange->sw / 2);
+            hvGfxLine(hvg, sx - footWidth, yOff, sx + footWidth, yOff, color);
             hvGfxLine(hvg, sx, yOff, sx, peak, color);
+            }
         if (eOnScreen)
+            {
+            int footWidth = scale * (longRange->ew / 2);
+            hvGfxLine(hvg, ex - footWidth, yOff, ex + footWidth, yOff, color);
             hvGfxLine(hvg, ex, yOff, ex, peak, color);
+            }
 
         if (tg->visibility == tvFull)
             {

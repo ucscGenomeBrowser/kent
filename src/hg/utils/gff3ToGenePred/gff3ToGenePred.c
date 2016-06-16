@@ -190,9 +190,9 @@ if (rnaNameAttr != NULL)
     if (attr != NULL)
         name = attr->vals->name;
     }
-if (name == NULL)
+if (isEmpty(name))
     name = (useName ? mrna->name : mrna->id);
-if (name == NULL)
+if (isEmpty(name))
     name = mrna->id;
 return name;
 }
@@ -208,7 +208,7 @@ if (geneNameAttr != NULL)
     if (attr != NULL)
         name2 = attr->vals->name;
     }
-if (name2 == NULL)
+if (isEmpty(name2))
     name2 = (useName ? gene->name : gene->id);
 return name2;
 }

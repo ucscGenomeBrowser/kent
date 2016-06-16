@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db chlSab2
+clade primate
+genomeCladePriority 15
+scientificName Chlorocebus sabaeus
+commonName Green monkey
+assemblyDate Mar. 2014
+assemblyLabel Washington University School of Medicine
+assemblyShortLabel Vervet/1994-021
+orderKey 7779
+# chrM already included
+mitoAcc none
+fastaFiles /hive/data/genomes/chlSab2/ucsc/chr*.fa
+agpFiles /hive/data/genomes/chlSab2/ucsc/chr*.agp
+# qualFiles none
+dbDbSpeciesDir chlorocebus
+photoCreditURL http://commons.wikimedia.org/wiki/User:Atamari
+photoCreditName Wikimedia commons user Atamari
+ncbiGenomeId 13136
+ncbiAssemblyId 132581
+ncbiAssemblyName Vervet/1994-021
+ncbiBioProject 215854
+genBankAccessionID GCA_000409795.2
+taxId 60711
