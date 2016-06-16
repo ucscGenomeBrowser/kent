@@ -68,6 +68,7 @@ DBS = \
 	chrPic1 chrPic2 \
 	ci1 ci2 ci3 cioSav2 \
 	cioSav1 \
+	colAng1 \
 	criGri1 \
 	danRer3 danRer4 danRer5 danRer6 danRer7 danRer10 \
 	dasNov1 dasNov2 dasNov3 \
