@@ -7,7 +7,14 @@
 #include "cdw.h"
 #include "cdwStep.h"
 #include "cart.h"
+#include "cdwLib.h" 
 
+struct slFileRow
+// A linked list of slInt's, each slFileRow holds all the file id's for a given row.  
+    {
+    struct slFileRow *next; 
+    struct slInt *fileList; 
+    };
 
 void makeFileLink(char *file, struct cart *cart)
 /* Write out wrapper that links us to metadata display */
@@ -17,14 +24,7 @@ printf("<A HREF=\"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_nam
 printf("%s</A>", file);
 }
 
-struct slFileRow
-// A linked list of slInt's, each slFileRow holds all the file id's for a given row.  
-    {
-    struct slFileRow *next; 
-    struct slInt *fileList; 
-    };
-
-struct slFileRow *slFileRowNew(struct slInt *fileList)
+static struct slFileRow *slFileRowNew(struct slInt *fileList)
 /* Return a new slFileRow. */
 {
 struct slFileRow *a;
@@ -34,7 +34,7 @@ return a;
 }
 
 
-int findFirstParent(struct sqlConnection *conn, int fileId)
+static int findFirstParent(struct sqlConnection *conn, int fileId)
 // Return a fileID that corresponds to the first row of the flow chart
 {
 char query[1024]; 
@@ -54,7 +54,6 @@ if (cSO == NULL)
     return fileId; 
     }
 
-uglyf("whats going on here, inside \n"); 
 while(cSO != NULL)
     {
     // All steps have input files, go find them 
@@ -68,7 +67,7 @@ while(cSO != NULL)
 return result; 
 }
 
-void lookForward(struct sqlConnection *conn, int fileId, struct slFileRow *files, struct slInt *steps)
+static void lookForward(struct sqlConnection *conn, int fileId, struct slFileRow *files, struct slInt *steps)
 /* Look forwards through the cdwStep tables until the source is found, store 
  * the file and step rows along the way. Start by looking at cdwStepIn. */ 
 {
@@ -122,7 +121,7 @@ while(cSI != NULL)
 return; 
 }
 
-void printRowToStep(struct sqlConnection *conn, struct slFileRow *fileRow, struct slInt *stepRow, int filesPerRow)
+static void printRowToStep(struct sqlConnection *conn, struct slFileRow *fileRow, struct slInt *stepRow, int filesPerRow)
 {
 char query[1024];
 struct slInt *item;
@@ -164,7 +163,7 @@ for (item = fileRow->fileList; item != NULL; item = item->next)
     }
 }
 
-void printStepToRow(struct sqlConnection *conn, struct slFileRow *fileRow, struct slInt *stepRow, int filesPerRow)
+static void printStepToRow(struct sqlConnection *conn, struct slFileRow *fileRow, struct slInt *stepRow, int filesPerRow)
 // The difficult case, a step can produce 1 file in the next row, 2 files, or up to n files.  
 {
 char query[1024]; 
@@ -204,7 +203,7 @@ for (item = fileRow->fileList; item != NULL; item = item->next)
     }
 }
 
-void printToDagreD3(struct sqlConnection *conn, int fileId, struct slFileRow *files, struct slInt *steps, int filesPerRow)
+static void printToDagreD3(struct sqlConnection *conn, int fileId, struct slFileRow *files, struct slInt *steps, int filesPerRow)
 /* Print out the modular parts of a a dager-d3 javascript visualization
  * These will need to be put into the .js code at the right place. The
  * base flowchart code that is being used was found here; 
@@ -302,13 +301,16 @@ printf("svg.attr('height', g.graph().height * initialScale + 40); </script>\n");
 }
 
 
-void makeCdwFlowchart(struct sqlConnection *conn, int fileId, struct cart *cart)
+void makeCdwFlowchart(int fileId, struct cart *cart)
 /* sqlToTxt - A program that runs through SQL tables and generates history flow chart information. */
 {
 struct slFileRow *files;  
 struct slInt *steps;
 AllocVar(files); 
 AllocVar(steps); 
+
+
+struct sqlConnection *conn = cdwConnect(); 
 
 /* Go backwards (in the pipeline from a time/analysis perpsective) until there are no more steps */
 
@@ -318,12 +320,15 @@ struct cdwFile *cF = cdwFileLoadByQuery(conn, query);
 if (cF == NULL) 
     {
     printf("There is currently no recognized pipeline for this file.\n"); 
+    sqlDisconnect(&conn); 
     return; 
     }
 // This boolean helps address the base case
 int startId = findFirstParent(conn, fileId);
 
 if (startId == 0)
+    printf("There is currently no recognized pipeline for this file.\n"); 
+    sqlDisconnect(&conn); 
     return;
 
 /* Go forwards until there are no more steps */ 
@@ -331,9 +336,11 @@ lookForward(conn, startId, files, steps);
 if (slCount(files) == 1 || slCount(steps) == 1)
     {
     printf("There is currently no recognized pipeline for this file.\n");
+    sqlDisconnect(&conn); 
     return; 
     }
 assert(slCount(files) == slCount(steps) + 1); 
-printToDagreD3(conn, fileId, files, steps, 5); 
+printToDagreD3(conn, fileId, files, steps, 5);
+sqlDisconnect(&conn); 
 }
 
