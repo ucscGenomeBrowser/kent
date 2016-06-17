@@ -85,28 +85,9 @@ uncompressed BED input file.</p>
 
 <p>
 To create a bigPsl track, follow these steps:
-<!--
-<pre>
-This needs to be incorporated into the text below
-
-pslToBigPsl  bigPsl.psl stdout -cds=bigPsl.cds -fa=bigPsl.fa  | sort -k1,1 -k2,2n > bigPsl.txt
-</pre>
--->
 <ol>
-<!--
-   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the first twelve fields
-        described by a normal PSL file as described <a href="../../FAQ/FAQformat.html#format1">here</a>.
-        (You can also read about PSL <a href="../../FAQ/FAQformat.html#format2">here</a>.)  
-      <ul>
-         <li>Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
-         <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
-             match, misMatch, repMatch, nCount </tt> 
-         <li>Your bigPsl file must be sorted by chrom then chromStart. You can use the UNIX sort 
-             command to do this: <tt>sort -k1,1 -k2,2n unsorted.bed &gt; input.bed</tt>
-      </ul>
--->
    <li>If you already have a PSL file, perhaps from using BLAT or other tools, skip to <em>step 2</em>, otherwise
-       download the example PSL <a href="./examples/bigPsl.psl">file</a> for the Human GRCh38(hg38) assembly.
+       download the example <a href="./examples/bigPsl.psl">PSL file</a> for the Human GRCh38(hg38) assembly.
       <ul>
          <li>You may also want to download the 
              <a href="./examples/bigPsl.fa">bigPsl.fa</a> and 
@@ -125,8 +106,8 @@ pslToBigPsl  bigPsl.psl stdout -cds=bigPsl.cds -fa=bigPsl.fa  | sort -k1,1 -k2,2
        database, the hg38.chrom.sizes are located at
        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
        target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
-   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the first twelve fields
-        described by a normal PSL file as described <a href="#bigPsl">here</a>.
+   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the twelve fields
+        described by a bigPSL file as described <a href="#bigPsl">here</a>.
         (You can also read about PSL <a href="../../FAQ/FAQformat.html#format2">here</a>.)  
       <ul>
          <li>Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
@@ -139,10 +120,10 @@ pslToBigPsl  bigPsl.psl stdout -cds=bigPsl.cds -fa=bigPsl.fa  | sort -k1,1 -k2,2
              to generate a more informative final bigPsl file:
              <br><tt>pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</tt>
       </ul>
-   <li>Create the bigBed file from your sorted bigPsl input file using the <tt>bedToBigBed</tt>
+   <li>Create the bigPsl file from your sorted bigPsl input file using the <tt>bedToBigBed</tt>
        utility like so: 
-       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+12 bigPsl.txt chrom.sizes myBigPsl.bb</tt>
-   <li>Move the newly created bigBed file (<tt>myBigPsl.bb</tt>) to an http, 
+       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+12 bigPsl.txt chrom.sizes bigPsl.bb</tt>
+   <li>Move the newly created bigPsl file (<tt>bigPsl.bb</tt>) to an http, 
        https, or ftp location.
    <li>Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> 
        using a single 
@@ -166,11 +147,11 @@ A full list of the available options can be seen by running
 <p>
 <h3>Example One</h3>
 </p>
-<P>In this example, you will use an existing bigPsl file to create a bigPsl 
-custom track.  A bigPsl file that contains data on the hg38 
+<p>In this example, you will use an existing bigPsl file to create a bigPsl 
+custom track. A bigPsl file that contains data on the hg38 
 assembly has been placed on our http server.  
 You can create a custom track using this bigPsl file by constructing a 
-&quot;track&quot; line that references this file like so:</P>
+&quot;track&quot; line that references this file like so:</p>
 
 <tt>track type=bigPsl name=&quot;bigPsl Example One&quot; 
 description=&quot;A bigPsl file&quot; 
