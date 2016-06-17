@@ -34,7 +34,8 @@ struct variant *variantNew(char *chrom, unsigned start, unsigned end, unsigned n
 /* Create a variant from basic information that is easy to extract from most other variant
  * formats: coords, allele count, string of slash-separated alleles and reference allele. */
 
-struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm);
+struct variant *variantFromPgSnpAnnoRow(struct annoRow *row, char *refAllele, boolean hasBin,
+                                        struct lm *lm);
 /* Translate pgSnp annoRow into variant (allocated by lm). */
 
 struct variant *variantFromVcfAnnoRow(struct annoRow *row, char *refAllele, struct lm *lm,
