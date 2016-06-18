@@ -649,23 +649,49 @@ sqlFreeResult(&sr);
 return hash;
 }
 
+
+struct chromPos *snpIndexLookup(struct sqlConnection *conn, char *table, char *query, char *name)
+/* Lookup the marker name in the snp table using the name index.
+ * As the snp table grew beyond 150 million rows, 
+ * loading the entire table into a hash from the database became too slow. */
+{
+static struct chromPos pos;
+char fullQuery[256];
+sqlSafef(fullQuery, sizeof fullQuery, query, table);
+sqlSafefAppend(fullQuery, sizeof fullQuery, " where name='%s'", name);
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, fullQuery);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    pos.chrom = cloneString(row[0]);
+    pos.pos = sqlUnsigned(row[1]);
+    }
+sqlFreeResult(&sr);
+if (!row)
+    return NULL;
+return &pos;
+}
+
 void processDb(struct sqlConnection *conn,
 	struct customPp *cpp, int colCount, char *formatType, 
 	boolean firstLineLabels, struct labeledFile *fileList, 
 	char *table, char *query, char *aliasTable, char *aliasQuery,
-	boolean report)
+	boolean report, boolean isSnpTable)
 /* Process two column input file into chromGraph.  Treat first
  * column as a name to look up in bed-format table, which should
  * not be split. Return TRUE on success. */
 {
-struct hash *hash = tableToChromPosHash(conn, table, query);
+struct hash *hash = NULL;
+if (!isSnpTable)
+    hash = tableToChromPosHash(conn, table, query);
 struct hash *aliasHash = NULL;
 char **row;
 int match = 0, total = 0;
 struct chromGraph *cg;
 struct chromPos *pos;
 
-if (report)
+if (!isSnpTable && report)
     printf("Loaded %d elements from %s table for mapping.<BR>\n", 
     	hash->elCount, table);
 if (aliasTable != NULL)
@@ -692,12 +718,17 @@ while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
     char *marker = cloneString(name);
     touppers(name);
     ++total;
-    pos = hashFindVal(hash, name);
-    if (pos == NULL && aliasHash != NULL)
-        {
-	name = hashFindVal(aliasHash, name);
-	if (name != NULL)
-	    pos = hashFindVal(hash, name);
+    if (isSnpTable)
+    	pos = snpIndexLookup(conn, table, query, name);
+    else
+	{
+	pos = hashFindVal(hash, name);
+	if (pos == NULL && aliasHash != NULL)
+	    {
+	    name = hashFindVal(aliasHash, name);
+	    if (name != NULL)
+		pos = hashFindVal(hash, name);
+	    }
 	}
     if (pos != NULL)
         {
@@ -742,14 +773,14 @@ boolean mayProcessDb(struct sqlConnection *conn,
 	struct customPp *cpp, int colCount, char *formatType, 
 	boolean firstLineLabels, struct labeledFile *fileList, 
 	char *table, char *query, char *aliasTable, char *aliasQuery, 
-	boolean report)
+	boolean report, boolean isSnpTable)
 /* Process database table into chromGraph.  If there's a problem
  * print warning message and return FALSE. */
 {
 struct errCatch *errCatch = errCatchNew();
 if (errCatchStart(errCatch))
      processDb(conn, cpp, colCount, formatType, firstLineLabels, 
-     	fileList, table, query, aliasTable, aliasQuery, report);
+     	fileList, table, query, aliasTable, aliasQuery, report, isSnpTable);
 return errCatchFinish(&errCatch);
 }
 
@@ -783,7 +814,7 @@ else if (sameString(markerType, cgfMarkerSts))
     ok = mayProcessDb(conn, cpp, colCount, formatType, 
     	firstLineLabels, fileList, "stsMap",
     	"select chrom,round((chromStart+chromEnd)*0.5),name from %s",
-	"stsAlias", "select alias,trueName from %s", report);
+	"stsAlias", "select alias,trueName from %s", report, FALSE);
 else if (sameString(markerType, cgfMarkerSnp))
     {
     char *snpTable = hFindLatestSnpTableConn(conn, NULL);
@@ -792,7 +823,7 @@ else if (sameString(markerType, cgfMarkerSnp))
     char *query = "select chrom,chromStart,name from %s";
     ok = mayProcessDb(conn, cpp, colCount, formatType, 
 	    firstLineLabels, fileList, snpTable, 
-	    query, NULL, NULL, report);
+	    query, NULL, NULL, report, TRUE);
     }
 else if (sameString(markerType, cgfMarkerAffy100))
     {
@@ -822,7 +853,7 @@ else if (sameString(markerType, cgfMarkerAffy500)
 		markerType);
     ok = mayProcessDb(conn, cpp, colCount, formatType,
     	firstLineLabels, fileList, table,
-    	"select chrom,chromStart,name from %s", NULL, NULL, report);
+    	"select chrom,chromStart,name from %s", NULL, NULL, report, FALSE);
     }
 else
     {
@@ -876,7 +907,7 @@ if (sameString(formatType, cgfFormatGuess))
     }
 hashMayRemove(settings, "formatType");
 
-/* Now that we know format can count columns and determin how to
+/* Now that we know format can count columns and determine how to
  * chop up lines. */
 colCount = countColumns(preview, formatType);
 Chopper chopper = getChopper(formatType);
