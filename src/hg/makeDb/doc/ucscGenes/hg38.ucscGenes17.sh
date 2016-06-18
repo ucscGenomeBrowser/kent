@@ -519,24 +519,23 @@ cat run.time
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
 /^ACC/ {print}
-/^DESC/ {print; printf("\n");}
+/^DESC/ {print}
+/^TC/ {print $1,$3; printf("\n");}
 _EOF_
 awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam29.0/Pfam-A.hmm  > pfamDesc.ra
-raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
+raToTab -cols=ACC,NAME,DESC,TC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\t%g\n", $1, $2, $3, $4);}' | sort > pfamDesc.tab
 
 # Convert output to tab-separated file. 
 cd $dir/pfam
-catDir result | sed '/^#/d' | awk 'BEGIN {OFS="\t"} {if ($7 < 0.0001) print $1,$18-1,$19,$4,$7}' | sort > ucscPfam.tab
+catDir result | sed '/^#/d' > allResults.tab
+awk 'BEGIN {OFS="\t"} { print $5,$1,$18-1,$19,$4,$14}' allResults.tab | sort > allUcscPfam.tab
+join  -t $'\t' -j 1  allUcscPfam.tab pfamDesc.tab | tawk '{if ($6 > $9) print $2, $3, $4, $5, $6, $1}' > ucscPfam.tab
 cd $dir
 
 # Convert output to knownToPfam table
-awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfam/pfamDesc.tab > sub.tab
-cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
-rm -f sub.tab
+tawk '{print $1, gensub(/\.[0-9]+/, "", "g", $6)}' pfam/ucscPfam.tab | sort -u > knownToPfam.tab
 hgLoadSqlTab -notOnServer $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
-#hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+tawk '{print gensub(/\.[0-9]+/, "", "g", $1), $2, $3}' pfam/pfamDesc.tab| hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql stdin
 
 cd $dir/pfam
 genePredToFakePsl hg38 knownGene knownGene.psl cdsOut.tab
