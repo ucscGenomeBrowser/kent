@@ -26,9 +26,9 @@
 The bigPsl format stores alignments between two sequences, as
 <a href="../../FAQ/FAQformat.html#format2">PSL</a> files do, but they are compressed and 
 indexed as bigBeds. bigPsl files are created using the program <tt>bedToBigBed</tt> with a
-special AutoSQL file that defines the fields of the bigPsl.   The
+special AutoSQL file that defines the fields of the bigPsl. The
 resulting bigPsl files are in an indexed binary format.  The main advantage of
-the bigpsl files is that only portions of the files needed to display a
+the bigPsl files is that only portions of the files needed to display a
 particular region are transferred to UCSC. So for large data sets, bigPsl is
 considerably faster than regular PSL files.  The bigPsl file remains on 
 your web accessible server (http, https, or ftp), not on the UCSC server. 
@@ -87,11 +87,11 @@ uncompressed BED input file.</p>
 To create a bigPsl track, follow these steps:
 <ol>
    <li>If you already have a PSL file, perhaps from using BLAT or other tools, skip to <em>step 2</em>, otherwise
-       download the example <a href="./examples/bigPsl.psl">PSL file</a> for the Human GRCh38(hg38) assembly.
+       download the example <a href="examples/bigPsl.psl">PSL file</a> for the Human GRCh38(hg38) assembly.
       <ul>
          <li>You may also want to download the 
-             <a href="./examples/bigPsl.fa">bigPsl.fa</a> and 
-             <a href="./examples/bigPsl.cds">bigPsl.cds</a> files if you would like to use the
+             <a href="examples/bigPsl.fa">bigPsl.fa</a> and 
+             <a href="examples/bigPsl.cds">bigPsl.cds</a> files if you would like to use the
              alternate options in <em>step 4</em>.
       </ul>
    <li>Download the <tt>bedToBigBed</tt> and <tt>pslToBigPsl</tt> programs from the 
@@ -106,23 +106,22 @@ To create a bigPsl track, follow these steps:
        database, the hg38.chrom.sizes are located at
        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
        target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
-   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the twelve fields
+   <li>Create a <tt>bed12+12</tt> bigPsl format file that has the 24 fields
         described by a bigPSL file as described <a href="#bigPsl">here</a>.
-        (You can also read about PSL <a href="../../FAQ/FAQformat.html#format2">here</a>.)  
       <ul>
          <li>Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
          <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
              match, misMatch, repMatch, nCount </tt> 
-         <li>Use the pslToBigPsl utility to create a correctly formatted <tt>bed12+12</tt> file like so:
+         <li>Use the <tt>pslToBigPsl</tt> utility to create a correctly formatted <tt>bed12+12</tt> file like so:
          <br><tt>pslToBigPsl bigPsl.psl stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</tt>
          <li>Note that if you have created your own PSL file you may have corresponding FASTA 
-             and CDS files that accompany it. You may provide these files as input to pslToBigPsl
+             and CDS files that accompany it. You may provide these files as input to <tt>pslToBigPsl</tt>
              to generate a more informative final bigPsl file:
              <br><tt>pslToBigPsl bigPsl.psl -cds=bigPsl.cds -fa=bigPsl.fa stdout | sort -k1,1 -k2,2n &gt; bigPsl.txt</tt>
       </ul>
-   <li>Create the bigPsl file from your sorted bigPsl input file using the <tt>bedToBigBed</tt>
+   <li>Create the binary indexed bigPsl file from your sorted bigPsl input file using the <tt>bedToBigBed</tt>
        utility like so: 
-       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+12 bigPsl.txt chrom.sizes bigPsl.bb</tt>
+       <br><tt>bedToBigBed -as=bigPsl.as -type=bed12+12 -tab bigPsl.txt chrom.sizes bigPsl.bb</tt>
    <li>Move the newly created bigPsl file (<tt>bigPsl.bb</tt>) to an http, 
        https, or ftp location.
    <li>Construct a <a href="hgTracksHelp.html#CustomTracks">custom track</a> 
@@ -168,29 +167,10 @@ bigPsl track, but includes parameters on the URL line:
 target="_blank"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&hgct_customText=track%20type=bigPsl%20name=Example%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</tt></a>
 </p>
 <p>
-With this example bigPsl loaded, click into a gene from the track.  Note
-that the details page has a &quot;Links to sequence:&quot; section that includes
-&quot;Translated Protein&quot;, &quot;Predicted mRNA&quot;, and &quot;Genomic
-Sequence&quot; links. Click the &quot;Go to ... track controls&quot; link.
-There change the &quot;Color track by codons:&quot; option from &quot;OFF&quot;
-too &quot;genomic codons&quot; and be sure &quot;Display mode:&quot is &quot;full&quot;
-then click &quot;Submit&quot;.  Then zoom to a region where amino acids display,
-such as <tt>chr9:133,255,650-133,255,700</tt> and see how bigPsl allows
-the display of codons. Click back into the track controls page and click the box next
-to &quot;Show codon numbering&quot;. Return to the browser to see amino acid
-numbering.</p>
-
-<p>
-You can also add a parameter in the custom track line,
-<tt>baseColorDefault=genomicCodons</tt>, to set the display of codons:
-<p>
-<tt>browser position chr1:11,874-14,361 <br>
-track type=bigPsl baseColorDefault=genomicCodons name="bigPsl Example Two" description="A bigPsl file" visibility=pack bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb
-</tt>
-<p>
-Paste the above into the hg38 <a href="../../cgi-bin/hgCustom?db=hg38">custom track</a>
-page to see an example of bigPsl amino acid display around the beginning of the gene SIRT1
-on chromosome 10.</p>
+With this example bigPsl loaded, click into an item from the track.  Note
+how the details page displays information about the alignment, similar to
+PSL tracks, as well as links to display the browser position of the alignment
+and more detailed information about the alignment. 
 </p>
 
 <h3>Example Two</h3>
@@ -199,7 +179,7 @@ bigPsl input file.
 
 <ul>
   <li>Save this <tt>bed12+12</tt> <a href="examples/bigPsl.txt">bigPsl.txt</a>
-      example input file to your machine (<em>satisfies above step 1</em>).
+      example input file to your machine (<em>satisfies above step 4</em>).
   <li>Download the <tt>bedToBigBed</tt> <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">utility</a>
       (<em>step 2</em>).
   <li>Save this <tt>hg38.chrom.sizes</tt> <a href="hg38.chrom.sizes">text file</a> to your machine.
@@ -207,17 +187,15 @@ bigPsl input file.
       (<em>step 3</em>).
   <li>Save this <tt>bigPsl.as</tt> <a href="examples/bigPsl.as"> text file</a> to your machine.
   <li>Run the utility to create the bigBed output file 
-      (<em>step 4</em>):<br>
-      <tt><b>bedToBigBed</b> -type=bed12+12 -tab -as=bigPsl.as bigPsl.txt hg38.chrom.sizes bigPsl.bb</tt>
-  <li>Place the bigBed file you just created (<tt>bigPsl.bb</tt>) on a 
-      web-accessible server (<em>step 5</em>).
+      (<em>step 5</em>):<br>
+      <tt>bedToBigBed -as=bigPsl.as -type=bed12+12 -tab  bigPsl.txt hg38.chrom.sizes bigPsl.bb</tt>
+  <li>Place the bigPsl file you just created (<tt>bigPsl.bb</tt>) on a 
+      web-accessible server (<em>step 6</em>).
   <li>Construct a &quot;track&quot; line that points to your bigPsl file
-      (see <em>step 6</em>).
+      (see <em>step 7</em>).
   <li>Create the custom track on the human assembly hg38 (Dec. 2013), and 
-      view it in the genome browser (see <em>step 7</em>).
+      view it in the genome browser (see <em>step 8</em>).
 </ul>
-Note the above description in <b>Example One</b> on how to view genomic codons,
-including numbering. 
 
 <h3>Sharing Your Data with Others</h3>
 <p>
@@ -226,11 +204,10 @@ how to create a URL by looking at <b><em>Example 11</em></b> on
 <a href="customTrack.html#SHARE">this</a> page.
 </p>
 
-<h3>Extracting Data from bigBed Format</h3>
+<h3>Extracting Data from bigPsl Format</h3>
 <p>
 Since the bigPsl files are an extension of bigBed files, which are indexed binary files, 
-they can be difficult to
-extract data from. We have developed the following 
+they can be difficult to extract data from. We have developed the following 
 programs, all of which are available from the 
 <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> of binary
 utilities.<br>
