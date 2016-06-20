@@ -229,7 +229,9 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
-	dyStringPrintf(query, "%s\"%s\"", connector, (char*)tag->val);
+	char *escaped = makeEscapedString(tag->val, '"');
+	dyStringPrintf(query, "%s\"%s\"", connector, escaped);
+	freeMem(escaped);
 	connector = ",";
 	}
     dyStringPrintf(query, ")");

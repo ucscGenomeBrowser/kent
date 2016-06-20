@@ -33,7 +33,7 @@ so easily generated.
 took the old gbNode.tab with US and euro,
 and added the japan record:
 vi gbNode.tab
-| 3    | genome-asia.ucsc.edu | JP          | Asian node of UCSC Genome Browser at the RIKEN institute of Japan | Japan Server  |
+| 3    | genome-asia.ucsc.edu | JP          | Asian node of UCSC Genome Browser at the RIKEN institute of Japan | Asian Server  |
 changed "\" to tab char.
 
 made a script to create and load the .as tables
