@@ -8,7 +8,6 @@
 #include "cdwLib.h"
 #include "obscure.h"
 
-
 // Options and an int to keep track of the validation. 
 int gSubmitId = -1; 
 boolean gWait = FALSE; 
@@ -217,7 +216,8 @@ for (job = jobList;; job = job->next)
     {
     char *prefix = "cdwQaAgent ";
     assert(startsWith(prefix, job->commandLine)); 
-    char *fileId = job->commandLine + strlen(prefix);
+    char *fileIdString = job->commandLine + strlen(prefix);
+    long long fileId = sqlLongLong(fileIdString);
     if (job->startTime > 0)
 	{
 	if (job->endTime > 0)
@@ -229,21 +229,21 @@ for (job = jobList;; job = job->next)
 		{
 		++validFiles; 
 		if (startsWith("status", command) && gLong) 
-		    printValidFileStats(f, fileId);
+		    printValidFileStats(f, fileIdString);
 		}
 	    else
 	    // Jobs that failed validation. 
 		{
 		++failedJobs;
 		if (startsWith("failed", command))
-		    fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileId, job->stderr);  
+		    fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileIdString, job->stderr);  
 		if (startsWith("status", command) && gLong) 
-		   fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileId, job->stderr);  
-		if (startsWith(" retry",command))
+		   fprintf(f,"File id: %s | Valid: No | Error: %s |\n", fileIdString, job->stderr);  
+		if (startsWith("retry",command))
 		    {
-		    fprintf(f,"Rerunning file %s \n", fileId); 
+		    fprintf(f,"Rerunning file %s \n", fileIdString); 
 		    struct sqlConnection *conn = sqlConnect("cdw"); 
-		    cdwAddQaJob(conn, (long long int) fileId, job->submitId);
+		    cdwAddQaJob(conn, fileId, job->submitId);
 		    sqlDisconnect(&conn); 
 		    }
 		}
@@ -253,7 +253,7 @@ for (job = jobList;; job = job->next)
 	    {
 	    ++workingJobs;
 	    if (startsWith("status", command) && gLong) 
-		fprintf(f,"File id: %s | Valid: running | Run time: %i | \n", fileId, (int)((unsigned)time(NULL) - job->startTime));  
+		fprintf(f,"File id: %s | Valid: running | Run time: %i | \n", fileIdString, (int)((unsigned)time(NULL) - job->startTime));  
 	    }
 	}
     else
@@ -261,7 +261,7 @@ for (job = jobList;; job = job->next)
 	{
 	++queuedJobs;
 	if (startsWith("status", command) && gLong) 
-	    fprintf(f,"File id: %s | Valid: queued | \n", fileId);  
+	    fprintf(f,"File id: %s | Valid: queued | \n", fileIdString);  
 	}
     if (!job->next) 
 	break;
