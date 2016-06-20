@@ -44,7 +44,7 @@ for (;;)
 	}
     else
 	{
-	/* draw 4 quadrandts of a circle */
+	/* draw 4 quadrants of a circle */
 	mgPutDot(mg, xCen+x, yCen+y, color);
 	mgPutDot(mg, xCen+x, yCen-y, color);
 	mgPutDot(mg, xCen-x, yCen+y, color);
