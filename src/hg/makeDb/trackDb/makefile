@@ -97,7 +97,7 @@ DBS = \
 	galGal2 galGal3 galGal4 galGal5 \
 	galVar1 \
 	gasAcu1 \
-	gorGor1 gorGor2 gorGor3 gorGor4 \
+	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \
 	h1n1 \
 	haeCon1 haeCon2 \
 	hetBac1 \
