@@ -5890,6 +5890,7 @@ tablesIgnored hg38
     altSeqLiftOverPslP2
     altSeqLiftOverPslP3
     altSeqLiftOverPslP6
+    altSeqLiftOverPslP7
     centromeres
     coriellDelDup
     hg38Patch7Haplotypes
