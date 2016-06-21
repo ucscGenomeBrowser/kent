@@ -1603,9 +1603,7 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    puts("<tr><td>");
-    printAddWbr(col->comment, 10);
-    puts("</td>"); // bold style now in HGStyle.css
+    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
