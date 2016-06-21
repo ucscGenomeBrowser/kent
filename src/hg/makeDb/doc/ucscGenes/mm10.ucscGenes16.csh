@@ -1544,6 +1544,9 @@ rm -r run.*/out
 # Add hgdownload directories on dev for proteinDB/$pbDb and uniProt/$spDb,
 # updating the README.txt files accordingly.
 
+# Update/add entries to the hgGene/hgGeneData .ra files so that links
+# to other organisms and sites are correct for the data used in this build.
+
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  
 #
