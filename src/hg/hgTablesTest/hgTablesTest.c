@@ -16,6 +16,9 @@
 #include "hdb.h"
 #include "qa.h"
 #include "chromInfo.h"
+#include "obscure.h"
+#include <unistd.h>
+#include <limits.h>
 
 #define MAX_ATTEMPTS 10
 
@@ -55,25 +58,29 @@ errAbort(
   "   -tables=N - Number of tables per track to test (default %d)\n"
   "   -verbose=N - Set to 0 for silent operation, 2 or 3 for debugging\n"
   "   -appendLog - Append to log file rather than creating it\n"
+  "   -seed flag to specify seed for random number generator as debugging aid.\n"
   , clOrgs, clDbs, clTracks, clTables);
 }
 
 FILE *logFile;	/* Log file. */
+int seed = 0;           /* seed for random number generator */
 
-static struct optionSpec options[] = {
-   {"org", OPTION_STRING},
-   {"db", OPTION_STRING},
-   {"group", OPTION_STRING},
-   {"track", OPTION_STRING},
-   {"table", OPTION_STRING},
-   {"orgs", OPTION_INT},
-   {"dbs", OPTION_INT},
-   {"search", OPTION_STRING},
-   {"groups", OPTION_INT},
-   {"tracks", OPTION_INT},
-   {"tables", OPTION_INT},
-   {"appendLog", OPTION_BOOLEAN},
-   {NULL, 0},
+static struct optionSpec options[] = 
+{
+    {"org", OPTION_STRING},
+    {"db", OPTION_STRING},
+    {"group", OPTION_STRING},
+    {"track", OPTION_STRING},
+    {"table", OPTION_STRING},
+    {"orgs", OPTION_INT},
+    {"dbs", OPTION_INT},
+    {"search", OPTION_STRING},
+    {"groups", OPTION_INT},
+    {"tracks", OPTION_INT},
+    {"tables", OPTION_INT},
+    {"appendLog", OPTION_BOOLEAN},
+    {"seed", OPTION_INT},
+    {NULL, 0},
 };
 
 struct tablesTest
@@ -84,14 +91,15 @@ struct tablesTest
     char *info[6];
     };
 
-enum tablesTestInfoIx {
-   ntiiType,
-   ntiiOrg,
-   ntiiDb,
-   ntiiGroup,
-   ntiiTrack,
-   ntiiTable,
-   ntiiTotalCount,
+enum tablesTestInfoIx 
+{
+    ntiiType,
+    ntiiOrg,
+    ntiiDb,
+    ntiiGroup,
+    ntiiTrack,
+    ntiiTable,
+    ntiiTotalCount,
 };
 
 
@@ -190,6 +198,30 @@ sqlDisconnect(&conn);
 return size;
 }
 
+void showConnectInfo(char *db)
+/* Show connection info used by this program. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+char *user = sqlQuickString(conn, NOSQLINJ "select current_user()");
+char *hostinfo = sqlHostInfo(conn);
+      verbose(1, "Connecting as %s to database server %s\n", user, hostinfo);
+fprintf(logFile, "Connecting as %s to database server %s\n", user, hostinfo); fflush(logFile);
+sqlDisconnect(&conn);
+}
+
+void showRunningHostName()
+/* Show hostname of the machine we are running on. */
+{
+char hostname[HOST_NAME_MAX];
+if (gethostname(hostname, sizeof hostname))
+    {
+    perror("gethostname");
+    safecpy(hostname, sizeof hostname, "error-reading-hostname");
+    }
+      verbose(1, "Runnng on machine %s\n", hostname);
+fprintf(logFile, "Runnng on machine %s\n", hostname); fflush(logFile);
+}
+
 void quickErrReport()
 /* Report error at head of list if any */
 {
@@ -263,7 +295,7 @@ outPage = quickSubmit(tablePage, org, db, group, track, table,
     "allFields", hgtaDoTopSubmit, "submit");
 /* check for NULL outPage */
 if (outPage == NULL)
-    errAbort("Null page in testAllFields");
+    errAbort("Null page in testAllFields (%s %s %s %s %s)", org, db, group, track, table);
 rowCount = countNoncommentLines(outPage->htmlText);
 htmlPageFree(&outPage);
 return rowCount;
@@ -698,11 +730,31 @@ struct slName *table;
 int tableIx;
 
 if (trackPage == NULL)
-    errAbort("Couldn't select track %s", track);
+    {
+    // is this an exception?
+    // exception for bigPsl (2016-06-20), may be short-lived.
+    struct sqlConnection *conn = sqlConnect(db);
+    char query[256];
+    sqlSafef(query, sizeof query, "select type from trackDb where tableName='%s'", track);
+    char *type = sqlQuickString(conn, query);
+    sqlDisconnect(&conn);
+    if (sameString(type, "bigPsl"))
+	{
+    	      verbose(1, "Skipping testing track %s since type bigPsl not supported by hgTables at this time (2016-06-20)\n", track);
+    	fprintf(logFile, "Skipping testing track %s since type bigPsl not supported by hgTables at this time (2016-06-20)\n", track);
+	return;
+	}
+    else
+	errAbort("Couldn't select track %s", track);
+    }
 if ((mainForm = htmlFormGet(trackPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on trackPage");
 if ((tableVar = htmlFormVarGet(mainForm, hgtaTable)) == NULL)
     errAbort("Can't find table var");
+
+// put the tables in random order:
+shuffleList(&tableVar->values);
+
 for (table = tableVar->values, tableIx = 0; 
 	table != NULL && tableIx < maxTables; 
 	table = table->next, ++tableIx)
@@ -729,6 +781,10 @@ if ((mainForm = htmlFormGet(groupPage, "mainForm")) == NULL)
     errAbort("Couldn't get main form on groupPage");
 if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)
     errAbort("Can't find track var");
+
+// put the tracks in random order:
+shuffleList(&trackVar->values);
+
 for (track = trackVar->values, trackIx = 0; 
 	track != NULL && trackIx < maxTracks; 
 	track = track->next, ++trackIx)
@@ -1123,6 +1179,18 @@ else
 if (! endsWith(url, "hgTables"))
     warn("Warning: first argument should be a complete URL to hgTables, "
 	 "but doesn't look like one (%s)", url);
+
+fprintf(logFile,"seed=%d\n",seed);
+ 
+showRunningHostName();
+
+verbose(1, "Testing URL %s\n", url);
+fprintf(logFile, "Testing URL %s\n", url);
+
+/* Show what database server we are connecting to. 
+Matters for expected rows in tables. */
+showConnectInfo("uniProt");
+
 htmlPageValidateOrAbort(rootPage);
 
 /* Go test what they've specified in command line. */
@@ -1173,6 +1241,9 @@ pushCarefulMemHandler(500000000);
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+seed = optionInt("seed",time(NULL));
+      verbose(1,"seed=%d\n",seed);
+srand(seed);
 clDb = optionVal("db", clDb);
 clOrg = optionVal("org", clOrg);
 clGroup = optionVal("group", clGroup);
