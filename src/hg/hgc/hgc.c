@@ -1603,7 +1603,14 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    char *entry;
+    if (sameString(fieldName, "cdsStartStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS start annotation (none, unknown, incomplete, or complete)";
+    else if (sameString(fieldName, "cdsEndStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
+    else
+        entry = col->comment;
+    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
