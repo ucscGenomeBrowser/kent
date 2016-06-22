@@ -1009,7 +1009,7 @@ char urlLabelSetting[32];
 // replace the $$ and other wildchards with the url given in tdb 
 char *url = getUrlSetting(tdb, "url");
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
-if (url==NULL)
+if (url==NULL || isEmpty(url))
     return;
 
 char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);

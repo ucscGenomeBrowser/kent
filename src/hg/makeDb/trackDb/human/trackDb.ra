@@ -3108,7 +3108,6 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome
-release alpha, beta
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3120,7 +3119,6 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
-release alpha, beta
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3132,43 +3130,6 @@ type bed 4
 hgsid on
 url http://www.omim.org/entry/
 tableBrowser noGenome omimAv omimAvRepl
-release alpha, beta
-
-track omimLocation
-shortLabel OMIM Pheno Loci
-longLabel OMIM Phenotypes - Gene Unknown
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser off
-release public
-
-track omimGene2
-shortLabel OMIM Genes
-longLabel OMIM Genes - Dark Green Can Be Disease-causing
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
-release public
-
-track omimAvSnp
-shortLabel OMIM AV SNPs
-longLabel OMIM Allelic Variant SNPs
-group phenDis
-visibility hide
-color 0, 80, 0
-type bed 4
-hgsid on
-url http://www.omim.org/entry/
-tableBrowser off omimAv omimAvRepl
-release public
 
 track cosmic
 shortLabel COSMIC
