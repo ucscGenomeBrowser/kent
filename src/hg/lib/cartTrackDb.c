@@ -229,16 +229,20 @@ static struct hash *accessControlInit(char *db)
  * accessControlTrackRefList (see getFullTrackList). */
 {
 struct hash *acHash = hashNew(0);
-struct sqlConnection *conn = hAllocConn(db);
-if (sqlTableExists(conn, "tableAccessControl"))
+if (! trackHubDatabase(db))
     {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    acHash = newHash(0);
-    sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
-    while ((row = sqlNextRow(sr)) != NULL)
-	acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE);
-    sqlFreeResult(&sr);
+    struct sqlConnection *conn = hAllocConn(db);
+    if (sqlTableExists(conn, "tableAccessControl"))
+        {
+        struct sqlResult *sr = NULL;
+        char **row = NULL;
+        acHash = newHash(0);
+        sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
+        while ((row = sqlNextRow(sr)) != NULL)
+            acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE);
+        sqlFreeResult(&sr);
+        }
+    hFreeConn(&conn);
     }
 struct slRef *tdbRef;
 for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
@@ -258,7 +262,6 @@ for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     while ((tbl = nextWord(&tbOff)) != NULL)
         acHashAddOneTable(acHash, tbl, NULL, isNoGenome);
     }
-hFreeConn(&conn);
 return acHash;
 }
 
