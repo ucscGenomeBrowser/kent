@@ -11280,7 +11280,7 @@ hgsql -e 'INSERT INTO trackVersion \
     rm -f $pd/$gp.exonAA.fa.gz $pd/$gp.exonNuc.fa.gz $pd/md5sum.txt
     ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-    md5sum $pd/*.fa.gz > md5sum.txt
+    (cd $pd && md5sum *.fa.gz) > md5sum.txt
     ln -s `pwd`/md5sum.txt $pd/
 
 
