@@ -2022,7 +2022,7 @@ struct bed* loadLongTabixAsBed (struct track *tg, char *chr, int start, int end)
 {
 struct hash *settings = tg->tdb->settingsHash;
 char *bigDataUrl = hashFindVal(settings, "bigDataUrl");
-struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
+struct bedTabixFile *btf = bedTabixFileOpen(bigDataUrl, NULL, 0, 0);
 struct bed *bed  = bedTabixReadFirstBed(btf, chromName, start, end, bedLoad5);
 bedTabixFileClose(&btf);
 
