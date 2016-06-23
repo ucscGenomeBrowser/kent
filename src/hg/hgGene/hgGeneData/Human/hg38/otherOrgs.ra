@@ -17,6 +17,7 @@ db dm6
 pepTable ensPep
 geneTable ensGene
 otherName Ensembl
+otherIdSql select name from ensGene where name='%s'
 otherUrl http://www.ensembl.org/Drosophila_melanogaster/transview?transcript=%s
 
 
