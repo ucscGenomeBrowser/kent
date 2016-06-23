@@ -191,3 +191,9 @@ rename tables to real:
 gbNodeReal
 geoIpNodeReal
 
+Make an extra backup of just the git untracked files just in case:
+
+mkdir /hive/data/outside/geoIp/
+gitu | xargs -I X cp X /hive/data/outside/geoIp/
+
+
