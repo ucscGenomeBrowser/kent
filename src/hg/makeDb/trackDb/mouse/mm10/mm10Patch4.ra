@@ -1,6 +1,6 @@
 track mm10Patch4
 compositeTrack on
-shortLabel GRC Patch Release 4
+shortLabel GRC Patch Release
 longLabel GRCm38 patch release 4, alternate sequences and reference sequence patches
 subGroup1 view Views location=Patch/Haplotype psl=Alignment chain=Chain net=Net
 dragAndDrop subTracks
