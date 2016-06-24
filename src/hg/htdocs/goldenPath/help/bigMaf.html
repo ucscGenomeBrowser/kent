@@ -24,7 +24,7 @@
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
 <p>
 The bigMaf format stores multiple alignments in a format compatible with
-<a href="../../FAQ/FAQformat.html#format5">MAF</a> files, that are then compressed and 
+<a href="../../FAQ/FAQformat.html#format5">MAF</a> files, which are then compressed and 
 indexed as bigBeds are. bigMaf files are created using the program <tt>bedToBigBed</tt> with a
 special AutoSQL file that defines the fields of the bigMaf. The
 resulting bigMaf files are in an indexed binary format. The main advantage of
@@ -77,7 +77,7 @@ To create a bigMaf track, follow these steps:<br>
          <li>If you would like to include optional frame summary and information with your bigMaf file,
              you will also want to download the
              <a href="examples/mafSummary.as">mafSummary.as</a> and 
-             <a href="examples/mafFrames.as">mafFrames.as</a> files as well.
+             <a href="examples/mafFrames.as">mafFrames.as</a> files.
       </ul>
    <li>Download the <tt>bedToBigBed</tt> program from the 
        <a href="http://hgdownload.cse.ucsc.edu/admin/exe/">directory</a> 
@@ -188,8 +188,6 @@ bigMaf input file.
    <li>Save this <tt>hg38.chrom.sizes</tt> <a href="hg38.chrom.sizes">text file</a> to your machine.
        It contains the chrom.sizes for the human (hg38) assembly 
        (<em>step 4</em>).
-   <li>Download this <a href="examples/mafToBigMaf.awk"><tt>mafToBigMaf.awk</tt></a> script
-       (<em>Step 5</em>).
    <li>Use the <tt>bedToBigBed</tt> utility to create the binary indexed MAF file 
        (<em>completes step 6</em>):<br>
    <tt>bedToBigBed -type=bed3+1 -tab -as=bigMaf.as bigMaf.txt hg38.chrom.sizes bigMaf.bb</tt>
