@@ -19,11 +19,11 @@ cd "${WORKDIR}"
 
 rm -f ftp.isca.rsp
 echo "user anonymous otto@soe.ucsc.edu
-cd pub/dbVar/data/Homo_sapiens/by_study/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map
+cd /pub/dbVar/data/Homo_sapiens/by_study/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map
 ls
-cd pub/dbVar/data/Homo_sapiens/by_study/nstd101_ClinGen_Kaminsky_et_al_2011
+cd /pub/dbVar/data/Homo_sapiens/by_study/nstd101_ClinGen_Kaminsky_et_al_2011
 ls
-cd pub/dbVar/data/Homo_sapiens/by_study/nstd37_ClinGen_Laboratory-Submitted
+cd /pub/dbVar/data/Homo_sapiens/by_study/nstd37_ClinGen_Laboratory-Submitted
 ls
 bye" > ftp.isca.rsp
 
