@@ -24,9 +24,8 @@ fi
 
 cd "${WORKDIR}"
 
-#wget -q --timestamping http://www.genome.gov/admin/gwascatalog.txt
+# Note: timestamping no longer works
 wget -q --timestamping  -O gwascatalog.txt http://www.ebi.ac.uk/gwas/api/search/downloads/full
-
 if [  ! gwascatalog.txt  -nt old.gwascatalog.txt ]; then
     echo "Not newer"
     exit 0
@@ -39,7 +38,7 @@ mv gwascatalog.txt old.gwascatalog.txt
 
 cd $today
 
-head -1 gwascatalog.txt | sed -re 's/\t/\n/g' > foundColumns.txt
+head -1 gwascatalog.txt | sed -re 's/\t/\n/g' | tr -d '\r' > foundColumns.txt
 
 if cmp foundColumns.txt ../expectedColumns.txt
 then
