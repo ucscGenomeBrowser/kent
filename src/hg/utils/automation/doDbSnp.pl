@@ -359,7 +359,6 @@ cd $assemblyDir
 $wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
 cd $assemblyDir/data
 set orgDir = $orgDir
-set orgDirTrimmed = $orgDirTrimmed
 # $ContigLoc table has coords, orientation, loc_type, and refNCBI allele
 $wget $ftpSnpDb/$ContigLoc.bcp.gz
 # $ContigLocusId table has functional annotations
