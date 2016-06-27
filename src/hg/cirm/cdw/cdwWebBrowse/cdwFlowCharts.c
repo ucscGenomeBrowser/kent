@@ -187,7 +187,6 @@ slAddTail(&existingRow->fileList, fileRow);
 
 static void rLookForward(struct sqlConnection *conn, int fileId, int depth)
 {
-uglyf("rLookForward\n");
 //check for the number of times the file shows up in cdwStepIn
 char query[1024]; 
 // Get the cdwStepIn entry for an entry in the first row, note that the file could have
@@ -197,7 +196,6 @@ struct cdwStepIn *cSIList = cdwStepInLoadByQuery(conn,query);
 //if it doesnt; 	return; 
 if (cSIList == NULL)
     return; 
-uglyf("recursing...\n"); 
 
 struct cdwStepIn *curStep; 
 // This looks through the pipeline steps horizontally 
@@ -207,9 +205,7 @@ struct cdwStepIn *curStep;
 */
 for (curStep = cSIList; curStep != NULL; curStep = curStep->next) 
     {
-    uglyf("s count here is %i depth is % i\n", slCount(steps), depth);
     addToSteps(depth, slIntNew(curStep->stepRunId));
-    uglyf("s count here is %i depth is % i\n", slCount(steps), depth);
     
     // get the associated stepOut files 
     sqlSafef(query, sizeof(query), "select * from cdwStepOut where stepRunId = '%u'", curStep->stepRunId); 
@@ -223,13 +219,8 @@ for (curStep = cSIList; curStep != NULL; curStep = curStep->next)
 	{
 	slAddHead(&fileIdList, slIntNew((int) iter->fileId));
 	}
-    uglyf("f count here is %i depth is %i\n", slCount(files),depth);
     slSort(fileIdList,  *slIntCmp);
     addToFiles(depth + 1, fileIdList); 
-    uglyf("f count here is %i depth is %i\n", slCount(files),depth);
-    uglyf("the fileId is %i", cSOList->fileId);
-    uglyf("the fileId is %i", cSOList->fileId);
-
     rLookForward(conn, fileIdList->val, depth+2); // Could put this in the for loop to recurse on all children instead of just 1
     }
 }
@@ -240,7 +231,6 @@ char query[1024];
 struct slInt *item;
 int count = 0;
 // Go through the list of int's that are the file Id's for each row
-//uglyf("in here somewhere \n"); 
 for (item = fileRow->fileList; item != NULL; item = item->next)
     {
     // Check if the files all share the same stepRow
@@ -269,8 +259,6 @@ for (item = fileRow->fileList; item != NULL; item = item->next)
     
     sqlSafef(query, sizeof(query), "select * from cdwStepIn where fileId='%u' and stepRunId='%i'", item->val, stepRow->val);
     struct cdwStepIn *cSI = cdwStepInLoadByQuery(conn, query);
-    //uglyf("the query is %s\n", query); 
-    //uglyf("here...,%i  %i \n", item->val, stepRow->val);
     if (stepRow->next != NULL)
 	stepRow = stepRow->next; 
     
@@ -332,7 +320,7 @@ for (item = fileRow->fileList; item != NULL; item = item->next)
     }
 }
 
-static void printToDagreD3(struct sqlConnection *conn, int fileId, struct slRow *files, struct slRow *steps, int filesPerRow)
+static void printToDagreD3(struct sqlConnection *conn, int fileId, struct slRow *files, struct slRow *steps, int filesPerRow, struct cart *cart)
 /* Print out the modular parts of a a dager-d3 javascript visualization
  * These will need to be put into the .js code at the right place. The
  * base flowchart code that is being used was found here; 
@@ -347,7 +335,7 @@ printf(".edgePath path {\n\tstroke: #333;\n\tfill: #333;\n\tstroke-width: 1.5px;
 
 // Calculate a rough SVG box size. Since the table is always very wide we can ignore
 // width and focus on height. 
-int height = (slCount(files) + slCount(steps) - 2)*80; 
+int height = (slCount(files) + slCount(steps) - 2) * 80;
 printf("</style>\n<svg width=5000 height=%i>\n<g/>\n</svg>\n", height);
 printf("<script id=\"js\">\n");
 printf("var g = new dagreD3.graphlib.Graph().setGraph({});\n");  
@@ -392,16 +380,20 @@ for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
 printf("];\n"); 
 printf("states.forEach(function(state) { g.setNode(state, { label: state }); });\n");
 
-// Define the step's as 'ellipses' so they look different, css definition of elipse is above 
+// Define the step's as 'ellipses' so they look different, css definition of elipse is above. 
 stepRow = steps->next; 
-struct slInt *iter; 
-for (iter = stepRow->fileList; iter != NULL; iter=iter->next)
+struct slRow *outerIter; 
+for (outerIter = steps; outerIter != NULL; outerIter = outerIter->next) // Loop vertically (frequently used).
     {
-    sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", iter->val);
-    struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
-    sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
-    struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
-    printf("g.setNode(\"%s\", {shape:\"ellipse\"});\n", cSD->name ); 
+    struct slInt *innerIter;
+    for (innerIter = outerIter->fileList; innerIter != NULL; innerIter=innerIter->next) // Loop horizontally (rarely used).
+	{
+	sqlSafef(query, sizeof(query), "select * from cdwStepRun where id = '%i'", innerIter->val);
+	struct cdwStepRun *cSR = cdwStepRunLoadByQuery(conn,query); 
+	sqlSafef(query, sizeof(query), "select * from cdwStepDef where id = '%i'", cSR->stepDef); 
+	struct cdwStepDef *cSD = cdwStepDefLoadByQuery(conn,query); 
+	printf("g.setNode(\"%s\", {shape:\"ellipse\"});\n", cSD->name ); 
+	}
     }
 
 // Link the nodes up, all the files from a given row are linked to the next row. 
@@ -418,26 +410,36 @@ for (fileRow = files->next; fileRow != NULL; fileRow=fileRow->next)
 	}
     if (stepRow == NULL) break;
     }
-printf("\nconsole.log(g.nodes())"); 
-
 printf("\ng.nodes().forEach(function(v) \n{ \n\tvar node = g.node(v); \n\tnode.rx = node.ry = 5; \n}); \n");
-
 
 sqlSafef(query, sizeof(query), "select * from cdwFile where id= '%i'", fileId); 
 struct cdwFile *cF = cdwFileLoadByQuery(conn,query); 
 // Color the node that is being selected 
 printf("g.node('%s 1').style = \"fill: #7f7\";\n", stripFilePath(cF->cdwFileName)); 
 
-printf("var svg = d3.select(\"svg\"), inner = svg.select(\"g\");\nvar render = new dagreD3.render();\nrender(inner, g);");
-printf("var initialScale = 0.75;\n"); 
-printf("zoom .translate([(svg.attr(\"width\") - g.graph().width * initialScale) / 2, 20]) .scale(initialScale) .event(svg);\n"); 
-printf("svg.attr('height', g.graph().height * initialScale + 40); </script>\n"); 
+printf("var svg = d3.select(\"svg\"), inner = svg.select(\"g\");\nvar render = new dagreD3.render();\nrender(inner, g);\n");
+// Add hyperlinking to the nodes, first build a list of all nodes and find its length.
+printf("var nodeList = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0];\n"); 
+printf("var nodeListLen = d3.select(inner.select(\"g.output\").select(\"g.nodes\").selectAll(\"g.node\"))[0][0][0].length;\n");
+// Use a for loop to traverse the list of nodes, for each node attach a hyperlink to the 'on click' function . 
+printf("for (i = 0; i < nodeListLen; i++)\n"); 
+printf("\t\t{\n\t\td3.select(nodeList[i])\n\t\t\t.on(\"click\", function (d)\n\t\t\t\t{\n"); // Define an on click event. 
+printf("\t\t\t\tfileNameParts = d.split(\" \");"); // Find the file name (SCH000***) which is used to build the hyperlink. 
+printf("\n\t\t\t\tif (fileNameParts.length == 1)\n\t\t\t\t\t{return;}"); // This grabs the step nodes and returns before applying a bad hyperlink. 
+printf("\n\t\t\t\tif (fileNameParts[0] === \"...\")\n\t\t\t\t\t{");  // This grabs the files that start with '...'. 
+printf("\n\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[1]+\"&%s\";\n", cartSidUrlString(cart)); 
+printf("\t\t\t\t\twindow.location.href = fileLink;\n\t\t\t\t\t}\n");  
+printf("\t\t\t\telse{\n"); // This deals with the majority of nodes.  
+printf("\t\t\t\t\tvar fileLink = \"../cgi-bin/cdwWebBrowse?cdwCommand=oneFile&cdwFileTag=file_name&cdwFileVal=\"+fileNameParts[0]+\"&%s\";\n", cartSidUrlString(cart)); 
+printf("\t\t\t\t\twindow.location.href = fileLink;\n");
+printf("\t\t\t\t\t}\n\t\t\t\t});\n\t\t}\n\n"); 
+printf("var initialScale = 0.75;</script>\n"); 
 }
 
 void makeCdwFlowchart(int fileId, struct cart *cart)
-/* sqlToTxt - A program that runs through SQL tables and generates history flow chart information. */
+/* Run through SQL tables and generate history flow chart information. */
 {
-//struct slRow *files, *steps; // All the file id's for each row are stored in files, and the steps in steps
+
 AllocVar(files); 
 AllocVar(steps); 
 
@@ -457,35 +459,21 @@ if (cF == NULL)
 if (baseCase(conn, fileId) == FALSE)
     return; 
 
+// Look backwards and use an assert to ensure things are going as they should. 
 lookBackward(conn, fileId);
-uglyf("There are this many items in steps %i and this many in files %i", slCount(steps), slCount(files)); 
 assert(slCount(files) == slCount(steps) + 1); 
 
+// Look forwards and use an assert to ensure things are going as they should. 
 rLookForward(conn, fileId, slCount(steps) + slCount(files) -1);
-uglyf("There are this many items in steps %i and this many in files %i", slCount(steps), slCount(files)); 
 assert(slCount(files) == slCount(steps) + 1); 
-
-
-
-/*struct slRow *stepIter, *fileIter; 
-for (stepIter = steps; stepIter !=NULL; stepIter = stepIter->next)
-    {
-    slSort(stepIter->fileList,  *slIntCmp);
-    }
-
-for (fileIter = files; fileIter !=NULL; fileIter = fileIter->next)
-    {
-    slSort(fileIter->fileList,  *slIntCmp);
-    }
-*/
-uglyf("getting here..?"); 
 
 if (slCount(files) == 1 || slCount(steps) == 1)
     {
     sqlDisconnect(&conn); 
     return; 
     }
-printToDagreD3(conn, fileId, files, steps, 5);
+// Print everything 
+printToDagreD3(conn, fileId, files, steps, 5, cart);
 sqlDisconnect(&conn); 
 }
 
