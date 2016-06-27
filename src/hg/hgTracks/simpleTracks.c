@@ -38,7 +38,6 @@
 #include "htmshell.h"
 #include "kxTok.h"
 #include "hash.h"
-#include "regexHelper.h"
 
 #ifndef GBROWSE
 #include "encode.h"
