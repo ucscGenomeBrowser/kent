@@ -38,6 +38,7 @@
 #include "htmshell.h"
 #include "kxTok.h"
 #include "hash.h"
+#include "regexHelper.h"
 
 #ifndef GBROWSE
 #include "encode.h"
@@ -9029,6 +9030,15 @@ for (i = 0;  prefixes[i] != NULL;  i++)
 	skipped += strlen(prefixes[i]);
 	break;
 	}
+    }
+/* perhaps a contig name of some other prefix */
+if (NULL == skipped && scaffoldPrefixes == prefixes)
+    {
+    skipped = cloneString(name);
+    chopSuffixAt(skipped, 'v');  /* remove the vNN version, usually v1 */
+    eraseNonDigits(skipped);  /* strip characters, leave digits only */
+    if (0 == strlen(skipped))  /* if none left, did not work */
+       skipped = NULL;
     }
 return skipped;
 }

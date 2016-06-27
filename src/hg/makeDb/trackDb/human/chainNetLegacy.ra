@@ -67,6 +67,14 @@ html chainNet
         type chain panTro3
         otherDb panTro3
 
+        track chainGorGor3
+        subTrack legacyChainNetViewchain on
+        subGroups view=chain species=bGorilla clade=aHom
+        shortLabel $o_db Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor3
+        otherDb gorGor3
+
         track chainGorGor1
         subTrack legacyChainNetViewchain on
         subGroups view=chain species=bGorilla clade=aHom
@@ -344,6 +352,14 @@ html chainNet
         longLabel $o_Organism ($o_date) Alignment Net
         type netAlign panTro3 chainPanTro3
         otherDb panTro3
+
+        track netGorGor3
+        subTrack legacyChainNetViewnet on
+        subGroups view=net species=bGorilla clade=aHom
+        shortLabel $o_db Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor3 chainGorGor3
+        otherDb gorGor3
 
         track netGorGor1
         subTrack legacyChainNetViewnet on
