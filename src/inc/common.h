@@ -985,6 +985,9 @@ void eraseTrailingSpaces(char *s);
 void eraseWhiteSpace(char *s);
 /* Remove white space from a string */
 
+void eraseNonDigits(char *s);
+/* Remove any chars leaving digits only */
+
 void eraseNonAlphaNum(char *s);
 /* Remove non-alphanumeric chars from string */
 
