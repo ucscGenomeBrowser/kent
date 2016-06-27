@@ -849,10 +849,10 @@ synBlastp.csh $xdb $db
 #new number of unique target values 22470
 
 synBlastp.csh $ratDb $db ensGene knownGene
-old number of unique query values:  27888  
-old number of unique target values  18988  
-new number of unique query values:  24530  
-new number of unique target values  18411  
+#old number of unique query values:  27888  
+#old number of unique target values  18988  
+#new number of unique query values:  24530  
+#new number of unique target values  18411  
 
 
 # need to generate multiz downloads
