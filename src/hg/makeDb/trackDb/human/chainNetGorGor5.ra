@@ -1,0 +1,17 @@
+
+        track chainGorGor5
+        subTrack primateChainNetViewchain off
+        subGroups view=chain species=acGorilla clade=aaHominidae
+        shortLabel $o_Organism Chain
+        longLabel $o_Organism ($o_date) Chained Alignments
+        type chain gorGor5
+        otherDb gorGor5
+
+        track netGorGor5
+        subTrack primateChainNetViewnet off
+        subGroups view=net species=acGorilla clade=aaHominidae
+        shortLabel $o_Organism Net
+        longLabel $o_Organism ($o_date) Alignment Net
+        type netAlign gorGor5 chainGorGor5
+        otherDb gorGor5
+
