@@ -29,6 +29,7 @@
 #include "tablesTables.h"
 #include "jsHelper.h"
 #include "wikiLink.h"
+#include "cdwFlowCharts.h"
 
 /* Global vars */
 struct cart *cart;	// User variables saved from click to click
@@ -289,12 +290,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fileName = mustFindFieldInRow("file_name", list, row);
     char *fileSize = mustFindFieldInRow("file_size", list, row);
     char *format = mustFindFieldInRow("format", list, row);
+    char *fileId = mustFindFieldInRow("file_id", list, row);
     long long size = atoll(fileSize);
     printf("Tags associated with %s a %s format file of size ", fileName, format);
     printLongWithCommas(stdout, size);
+     
     printf("<BR>\n");
-
-
+    makeCdwFlowchart(atoi(fileId), cart);
     static char *outputFields[] = {"tag", "value"};
     struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
     int fieldIx = 0;
@@ -327,6 +329,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
     fieldedTableFree(&table);
     }
+sqlFreeResult(&sr);
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
