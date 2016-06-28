@@ -1836,8 +1836,7 @@ done | tr '[\t]' '[ ]' >> README.txt
         /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz100way
 
 #############################################################################
-# hgPal downloads (TBD - 2014-06-06 - Hiram)
-#   FASTA from 100-way for knownGene, refGene and knownCanonical
+# hgPal downloads (rebuilt knownGene and knownCanonical 2016-06-27 braney)
 
     ssh hgwdev
     screen -S hg38HgPal
@@ -1864,13 +1863,13 @@ done | tr '[\t]' '[ ]' >> README.txt
     echo "date" >> $gp.jobs
     echo "wait" >> $gp.jobs
 
-    time ./$gp.jobs > $gp.jobs.log 2>&1 &
-    #   real    238m24.800s
+    time sh -x ./$gp.jobs > $gp.jobs.log 2>&1 &
+    # real    208m39.304s
 
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    5m17.017s
+    #   real    5m34.850s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    20m57.158s
+    #   real    21m15.426s
 
     export mz=multiz100way
     export gp=knownGene
@@ -1942,7 +1941,7 @@ done | tr '[\t]' '[ ]' >> README.txt
     export mz=multiz100way
     export gp=knownCanonical
     export db=hg38
-    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
+    mkdir exonAA exonNuc knownCanonical
 
     time cut -f1 ../../../chrom.sizes | while read C
     do
@@ -1959,18 +1958,14 @@ done | tr '[\t]' '[ ]' >> README.txt
     done | while read C
     do
 	echo "date"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
-	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
 	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
 	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
 	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
 	    gzip -c > exonAA/$C.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1
-    # real    404m29.788s
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 
+    # 267m58.813s
 
     rm *.known.bed
     export mz=multiz100way
@@ -1978,11 +1973,9 @@ done | tr '[\t]' '[ ]' >> README.txt
     export db=hg38
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz &
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
     # about 6 minutes
 
-    rm -rf exonAA exonNuc ppredAA ppredNuc
+    rm -rf exonAA exonNuc
 
     export mz=multiz100way
     export gp=knownCanonical
