@@ -752,13 +752,14 @@ if (isPositional)
 	cgiMakeButton(hgtaDoIntersectPage, "edit");
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");
+        hPrintf("</TD></TR>\n");
 	}
     else if (canIntersect(database, curTable))
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "create");
+        hPrintf("</TD></TR>\n");
 	}
-    hPrintf("</TD></TR>\n");
     }
 
 /* Correlation line. */

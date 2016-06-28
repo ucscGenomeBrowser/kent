@@ -26,6 +26,7 @@ use vars @HgStepManager::optionVars;
 use vars qw/
     $opt_buildDir
     $opt_unmaskedSeq
+    $opt_trf409
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -42,6 +43,7 @@ my $defaultSmallClusterHub = 'most available';
 my $defaultWorkhorse = 'least loaded';
 my $dbHost = 'hgwdev';
 my $unmaskedSeq = "\$db.unmasked.2bit";
+my $trf409 = "";
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -61,6 +63,10 @@ options:
                           (necessary when continuing at a later date).
     -unmaskedSeq seq.2bit Use seq.2bit as the unmasked input sequence instead
                           of default ($unmaskedSeq).
+    -trf409 n             use new -l option to trf v4.09 (l=n)
+                          maximum TR length expected (in millions)
+                          (eg, -l=3 for 3 million)
+                          Human genome hg38 uses: -trf409=6 -> -l=6
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -106,6 +112,7 @@ sub checkOptions {
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
 		      'unmaskedSeq=s',
+		      'trf409=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -141,6 +148,10 @@ sub doCluster {
   }
   my $partDir .= "$okOut[0]/$db/TrfPart";
 
+  my $trf409Option = "";
+  if ($trf409 ne 0) {
+     $trf409Option = "-l=$trf409";
+  }
   # Cluster job script:
   my $fh = &HgAutomate::mustOpen(">$runDir/TrfRun.csh");
   print $fh <<_EOF_
@@ -167,7 +178,7 @@ foreach spec (`cat \$inLst`)
   # seq:start-end for liftUp's sake:
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" \\
-  | $clusterBin/trfBig -trf=$clusterBin/trf \\
+  | $clusterBin/trfBig $trf409Option -trf=$clusterBin/trf \\
       stdin /dev/null -bedAt=\$base.bed -tempDir=/scratch/tmp
 end
 
@@ -252,10 +263,15 @@ sub doSingle {
   my $whatItDoes = "It runs trfBig on the entire (small) genome in one pass.";
   my $bossScript = new HgRemoteScript("$runDir/doTrf.csh", $workhorse,
 				      $runDir, $whatItDoes);
+
+  my $trf409Option = "";
+  if ($trf409 ne 0) {
+     $trf409Option = "-l=$trf409";
+  }
   $bossScript->add(<<_EOF_
 $HgAutomate::setMachtype
 twoBitToFa $unmaskedSeq stdout \\
-| $clusterBin/trfBig -trf=$clusterBin/trf \\
+| $clusterBin/trfBig $trf409Option -trf=$clusterBin/trf \\
       stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
 _EOF_
   );
@@ -381,6 +397,7 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
   "$HgAutomate::clusterData/$db/$HgAutomate::trackBuild/simpleRepeat.$date";
 $unmaskedSeq = $opt_unmaskedSeq ? $opt_unmaskedSeq :
   "$HgAutomate::clusterData/$db/$db.unmasked.2bit";
+$trf409 = $opt_trf409 ? $opt_trf409 : "";
 
 if (! -e $unmaskedSeq) {
   die $opt_unmaskedSeq ? "Error: -unmaskedSeq $unmaskedSeq does not exist.\n" :

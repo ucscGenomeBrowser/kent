@@ -34,7 +34,8 @@ considerably faster than regular PSL files.  The bigPsl file remains on
 your web accessible server (http, https, or ftp), not on the UCSC server. 
 Only the portion that is needed
 for the chromosomal position you are currently viewing is locally cached as a 
-&quot;sparse file&quot;.</p>
+&quot;sparse file&quot;.
+</p>
 
 <h4><a name=bigPsl></a>Big PSL</h4>
 <p>
@@ -87,7 +88,7 @@ uncompressed BED input file.</p>
 To create a bigPsl track, follow these steps:
 <ol>
    <li>If you already have a PSL file, perhaps from using BLAT or other tools, skip to <em>step 2</em>, otherwise
-       download the example <a href="examples/bigPsl.psl">PSL file</a> for the Human GRCh38(hg38) assembly.
+       download the example <a href="examples/bigPsl.psl">PSL file</a> for the Human GRCh38/hg38 assembly.
       <ul>
          <li>You may also want to download the 
              <a href="examples/bigPsl.fa">bigPsl.fa</a> and 
@@ -107,7 +108,7 @@ To create a bigPsl track, follow these steps:
        <a href="http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes"
        target="_blank">http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.chrom.sizes</a>.
    <li>Create a <tt>bed12+12</tt> bigPsl format file that has the 24 fields
-        described by a bigPSL file as described <a href="#bigPsl">here</a>.
+        described by a bigPsl file as described <a href="#bigPsl">here</a>.
       <ul>
          <li>Your bigPsl file must have the extra twelve fields described in the AutoSQL file above:
          <tt>oChromStart, oChromEnd, oStrand, oChromSize, oChromStarts, oSequence, oCDS, chromSize, 
@@ -133,14 +134,13 @@ To create a bigPsl track, follow these steps:
        The most basic version of the &quot;track&quot; line will look something 
        like this:<br>
 <tt>track type=bigPsl name="My Big Psl" description="Some mRNAs Discovered from Data from My Lab" bigDataUrl=http://myorg.edu/mylab/myBigPsl.bb</tt>
-   <li>Paste this custom track line into the text box in the 
+   <li>Paste this custom track line into the text box on the 
        <a href="../../cgi-bin/hgCustom">custom track</a> management page.
 </ol>
 
 <p>
 The <tt>bedToBigBed</tt> program can also be run with several additional options.
-A full list of the available options can be seen by running
-<tt>bedToBigBed</tt> with no arguments to display the usage message.
+Run <tt>bedToBigBed</tt> with no arguments to view a full list of the available options.
 </p>
 
 <p>
@@ -158,7 +158,7 @@ bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bigPsl.bb</tt>
 
 <p>Paste the above &quot;track&quot; line into the 
 <a href="../../cgi-bin/hgCustom?db=hg38">custom track</a> management page for the
-human assembly hg38 (Dec. 2013), then press the <em>submit</em> button.
+human assembly hg38, then press the <em>submit</em> button.
 <p>
 Custom tracks can also be loaded via one URL line.  The below link loads the same
 bigPsl track, but includes parameters on the URL line:
@@ -194,7 +194,7 @@ bigPsl input file.
   <li>Construct a &quot;track&quot; line that points to your bigPsl file
       (see <em>step 7</em>).
   <li>Create the custom track on the human assembly hg38 (Dec. 2013), and 
-      view it in the genome browser (see <em>step 8</em>).
+      view it in the Genome Browser (see <em>step 8</em>).
 </ul>
 
 <h3>Sharing Your Data with Others</h3>
@@ -204,7 +204,7 @@ how to create a URL by looking at <b><em>Example 11</em></b> on
 <a href="customTrack.html#SHARE">this</a> page.
 </p>
 
-<h3>Extracting Data from bigPsl Format</h3>
+<h3>Extracting Data from the bigPsl Format</h3>
 <p>
 Since the bigPsl files are an extension of bigBed files, which are indexed binary files, 
 they can be difficult to extract data from. We have developed the following 
