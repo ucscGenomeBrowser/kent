@@ -34,7 +34,8 @@ int clTracks = 4;	/* Number of track to test. */
 int clTables = 2;	/* Number of tables to test. */
 int clDbs = 1;		/* Number of databases per organism. */
 int clOrgs = 2;		/* Number of organisms to test. */
-boolean appendLog;      /* append to log rather than create it */
+boolean appendLog;      /* Append to log rather than create it. */
+boolean noShuffle;      /* Suppress shuffling of track and table lists. */
 
 void usage()
 /* Explain usage and exit. */
@@ -58,7 +59,8 @@ errAbort(
   "   -tables=N - Number of tables per track to test (default %d)\n"
   "   -verbose=N - Set to 0 for silent operation, 2 or 3 for debugging\n"
   "   -appendLog - Append to log file rather than creating it\n"
-  "   -seed flag to specify seed for random number generator as debugging aid.\n"
+  "   -seed N - Specify seed for random number generator as debugging aid.\n"
+  "   -noShuffle - do not shuffle tracks and tables lists.\n"
   , clOrgs, clDbs, clTracks, clTables);
 }
 
@@ -80,6 +82,7 @@ static struct optionSpec options[] =
     {"tables", OPTION_INT},
     {"appendLog", OPTION_BOOLEAN},
     {"seed", OPTION_INT},
+    {"noShuffle", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -164,6 +167,17 @@ if (basePage != NULL)
         htmlPageSetVar(basePage, NULL, hgtaTable, table);
     qs = qaPageFromForm(basePage, basePage->forms, 
 	    button, buttonVal, &page);
+
+    if (!page)
+	{
+	verbose(2, "page is NULL, qs->errMessage=[%s]\n", qs->errMessage);
+	if (startsWith("carefulAlloc: Allocated too much memory", qs->errMessage))
+	    {
+	          verbose(1, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
+	    fprintf(logFile, "Response html page too large (500MB) (%s %s %s %s %s)\n", org, db, group, track, table);
+	    }
+	}
+
     /* 
     if (page->forms != NULL)
         htmlFormPrint(page->forms, stdout);
@@ -218,8 +232,8 @@ if (gethostname(hostname, sizeof hostname))
     perror("gethostname");
     safecpy(hostname, sizeof hostname, "error-reading-hostname");
     }
-      verbose(1, "Runnng on machine %s\n", hostname);
-fprintf(logFile, "Runnng on machine %s\n", hostname); fflush(logFile);
+      verbose(1, "Running on machine %s\n", hostname);
+fprintf(logFile, "Running on machine %s\n", hostname); fflush(logFile);
 }
 
 void quickErrReport()
@@ -295,7 +309,11 @@ outPage = quickSubmit(tablePage, org, db, group, track, table,
     "allFields", hgtaDoTopSubmit, "submit");
 /* check for NULL outPage */
 if (outPage == NULL)
-    errAbort("Null page in testAllFields (%s %s %s %s %s)", org, db, group, track, table);
+    {
+          verbose(1, "Null page in testAllFields (%s %s %s %s %s)\n", org, db, group, track, table);
+    fprintf(logFile, "Null page in testAllFields (%s %s %s %s %s)\n", org, db, group, track, table);
+    return -1;
+    }
 rowCount = countNoncommentLines(outPage->htmlText);
 htmlPageFree(&outPage);
 return rowCount;
@@ -682,33 +700,47 @@ if (!hashLookup(uniqHash, fullName))
 	    }
 	else
 	    {
+	    verbose(3, "testOneTable testSchema() got here 1.1\n");
 	    testSchema(tablePage, mainForm, org, db, group, track, table);
+	    verbose(3, "testOneTable testSummaryStats() got here 1.2\n");
 	    testSummaryStats(tablePage, mainForm, org, db, group, track, table);
+	    verbose(3, "testOneTable got here 1.3\n");
 	    if (outTypeAvailable(mainForm, "bed")) 
 		{
+		verbose(3, "testOneTable bed output avail means can filter on position got here 2\n");
 		if (outTypeAvailable(mainForm, "primaryTable"))
 		    {
-		    int rowCount;
-		    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-		    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-		    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
-		    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
-		    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
-		    testOutGff(tablePage, mainForm, org, db, group, track, table);
-		    if (rowCount > 0)
-			testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+		    verbose(3, "testOneTable got here 3\n");
+		    int rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		    if (rowCount >= 0)
+			{
+			testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutGff(tablePage, mainForm, org, db, group, track, table);
+			if (rowCount > 0)
+			    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
+			}
 		    }
 		}
 	    else if (outTypeAvailable(mainForm, "primaryTable"))
 		{
+		verbose(3, "testOneTable no bed output available, so no position filtering available. got here 4\n");
 		/* If BED type is not available then the region will be ignored, and
 		 * we'll end up scanning whole table.  Make sure table is not huge
 		 * before proceeding. */
-		if (tableSize(db, table) < 500000)
+		int tableRows = tableSize(db, table);
+		if (tableRows < 500000)
 		    {
-		    int rowCount;
-		    rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-		    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    int rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		    if (rowCount >= 0)
+			testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+		    }
+		else
+		    {
+			  verbose(1, "%s.%s tableRows=%d, too large >= 500000, skipping.\n", db, table, tableRows);
+		    fprintf(logFile, "%s.%s tableRows=%d, too large >= 500000, skipping.\n", db, table, tableRows);
 		    }
 		}
 	    }
@@ -753,14 +785,17 @@ if ((tableVar = htmlFormVarGet(mainForm, hgtaTable)) == NULL)
     errAbort("Can't find table var");
 
 // put the tables in random order:
-shuffleList(&tableVar->values);
+if (!noShuffle)
+    shuffleList(&tableVar->values);
 
 for (table = tableVar->values, tableIx = 0; 
 	table != NULL && tableIx < maxTables; 
-	table = table->next, ++tableIx)
+	table = table->next)
     {
-    if (clTable == NULL || sameString(clTable, table->name))
-	testOneTable(trackPage, org, db, group, track, table->name);
+    if (clTable && !sameString(clTable, table->name))
+	continue;
+    testOneTable(trackPage, org, db, group, track, table->name);
+    ++tableIx;
     }
 /* Clean up. */
 htmlPageFree(&trackPage);
@@ -783,14 +818,17 @@ if ((trackVar = htmlFormVarGet(mainForm, hgtaTrack)) == NULL)
     errAbort("Can't find track var");
 
 // put the tracks in random order:
-shuffleList(&trackVar->values);
+if (!noShuffle)
+    shuffleList(&trackVar->values);
 
 for (track = trackVar->values, trackIx = 0; 
 	track != NULL && trackIx < maxTracks; 
-	track = track->next, ++trackIx)
+	track = track->next)
     {
-    if (clTrack == NULL || sameString(track->name, clTrack))
-	testOneTrack(groupPage, org, db, group, track->name, clTables);
+    if (clTrack && !sameString(track->name, clTrack))
+	continue;
+    testOneTrack(groupPage, org, db, group, track->name, clTables);
+    ++trackIx;
     }
 
 /* Clean up. */
@@ -811,12 +849,14 @@ if ((groupVar = htmlFormVarGet(mainForm, hgtaGroup)) == NULL)
     errAbort("Can't find group var");
 for (group = groupVar->values, groupIx=0; 
 	group != NULL && groupIx < maxGroups; 
-	group = group->next, ++groupIx)
+	group = group->next)
     {
     if (!sameString("allTables", group->name))
 	{
-	if (clGroup == NULL || sameString(clGroup, group->name))
-	    testOneGroup(dbPage, org, db, group->name, clTracks);
+	if (clGroup && !sameString(clGroup, group->name))
+	    continue;
+	testOneGroup(dbPage, org, db, group->name, clTracks);
+	++groupIx;
 	}
     }
 }
@@ -1255,6 +1295,7 @@ clGroups = optionInt("groups", clGroups);
 clTracks = optionInt("tracks", clTracks);
 clTables = optionInt("tables", clTables);
 appendLog = optionExists("appendLog");
+noShuffle = optionExists("noShuffle");
 if (clOrg != NULL)
    clOrgs = BIGNUM;
 hgTablesTest(argv[1], argv[2]);
