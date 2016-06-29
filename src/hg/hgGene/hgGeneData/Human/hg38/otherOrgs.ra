@@ -1,5 +1,7 @@
 name mouse
 db mm10
+geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
 
 name rat
 db rn6
@@ -26,9 +28,12 @@ db ce11
 pepTable ws245GenesPeptide
 geneTable ws245Genes
 
-
 name yeast
 db sacCer3
 geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none
 sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near_search=%s
+
+name human
+geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Human&near_search=%s
 

@@ -1,8 +1,12 @@
 name mouse
 db mm9
+geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
 
 name rat
 db rn4
+geneUrl ../cgi-bin/hgGene?org=Rat&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Rat&near_search=%s
 
 name zebrafish
 db danRer4
@@ -10,9 +14,20 @@ otherUrl http://dec2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
 db dm3
+otherIdSql select flyBase2004Xref.fbgn from flyBase2004Xref,flyBaseGene where flyBaseGene.name = '%s' and flyBaseGene.name = flyBase2004Xref.name
+geneUrl ../cgi-bin/hgGene?org=D.+melanogaster&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near_search=%s
 
 name cElegans
 db ce6
+geneUrl ../cgi-bin/hgGene?org=C.+elegans&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=C.+elegans&near_search=%s
 
 name yeast
 db sacCer2
+geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near_search=%s
+
+name human
+geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Human&near_search=%s
