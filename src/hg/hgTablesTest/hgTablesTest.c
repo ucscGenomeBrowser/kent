@@ -672,64 +672,6 @@ if (obsolete)
 return obsolete;
 }
 
-
-int findExpectedIntersectingRows(char *db, char *table, struct htmlPage *tablePage)
-/* Even when it can support intersections, some tables have way too many rows.
- * Try to estimate how big the output will be using bin column. */
-{
-struct sqlConnection *conn = sqlConnect(db);
-int size = -1;
-
-if (!sqlTableExists(conn, table))
-    return -3;  // not table found, might be a custom track or hub?
-
-// TODO add or call code to discover if this is a bigBed and if it is local?
-// it should have 1 column called "fileName" 
-if (hHasField(db, table, "fileName") && (sqlCountColumnsInTable(conn,table) == 1))
-    return -4;  // bigBed (maybe bigWig)?
-
-if (!hIsBinned(db, table))
-    return -1;  // no bin column
-
-char *region = cloneString(htmlPageGetVar(tablePage, NULL, "position")->curVal);
-char *chrom = region;
-char *colon = strchr(region,':');
-char *dash = strchr(region,'-');
-*colon = 0;
-*dash = 0;
-int start = sqlUnsigned(colon+1);
-int end = sqlUnsigned(dash+1);
-
-struct dyString *query = newDyString(256);
-sqlDyStringPrintf(query, "select count(*) from %s where ", table);
-
-hAddBinToQuery(start, end, query);
-
-char *chromField = NULL;
-if (hHasField(db, table, "chrom"))
-    chromField = "chrom";
-if (hHasField(db, table, "tName"))
-    chromField = "tName";
-if (hHasField(db, table, "genoName"))
-    chromField = "genoName";
-if (!chromField) // no chrom field found
-    {
-          verbose(1, "findExpectedIntersectingRows failed to find chrom column name in %s.%s\n", db, table);
-    fprintf(logFile, "findExpectedIntersectingRows failed to find chrom column name in %s.%s\n", db, table);
-    return -2;  // no chrom name column
-    }
-
-sqlDyStringPrintfFrag(query, "%s = '%s'", chromField, chrom);
-
-verbose(2, "query=[%s]\n", query->string);
-
-size = sqlQuickNum(conn, dyStringCannibalize(&query));
-
-sqlDisconnect(&conn);
-return size;
-}
-
-
 void testOneTable(struct htmlPage *trackPage, char *org, char *db,
 	char *group, char *track, char *table)
 /* Test stuff on one table if we haven't already tested this table. */
@@ -769,28 +711,16 @@ if (!hashLookup(uniqHash, fullName))
 		if (outTypeAvailable(mainForm, "primaryTable"))
 		    {
 		    verbose(3, "testOneTable got here 3\n");
-
-		    int expectedSize = 0; // DEBUG RESTORE findExpectedIntersectingRows(db, table, tablePage);
-		    // DEBUG RESTORE verbose(1, "%s.%s expectedSize=%d\n", db, table, expectedSize);
-
-		    if (expectedSize < 500000)
+		    int rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
+		    if (rowCount >= 0)
 			{
-			int rowCount = testAllFields(tablePage, mainForm, org, db, group, track, table);
-			if (rowCount >= 0)
-			    {
-			    testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
-			    testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
-			    testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
-			    testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
-			    testOutGff(tablePage, mainForm, org, db, group, track, table);
-			    if (rowCount > 0)
-				testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
-			    }
-			}
-		    else
-			{
-			      verbose(1, "%s.%s expectedSize=%d, too large, skipping.\n", db, table, expectedSize);
-			fprintf(logFile, "%s.%s expectedSize=%d, too large, skipping.\n", db, table, expectedSize);
+			testOneField(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutSequence(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutBed(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutHyperlink(tablePage, mainForm, org, db, group, track, table, rowCount);
+			testOutGff(tablePage, mainForm, org, db, group, track, table);
+			if (rowCount > 0)
+			    testOutCustomTrack(tablePage, mainForm, org, db, group, track, table);
 			}
 		    }
 		}
