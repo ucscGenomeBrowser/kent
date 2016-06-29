@@ -14,20 +14,24 @@ export Db=Hg38
 export xdb=mm10
 export Xdb=Mm10
 export ydb=canFam3
-export zdb=rheMac3
-export ratDb=rn4
-export RatDb=Rn4
-export fishDb=danRer7
-export flyDb=dm3
-export wormDb=ce6
+export zdb=rheMac8
+export ratDb=rn6
+export RatDb=Rn6
+export fishDb=danRer10
+export flyDb=dm6
+export wormDb=ce11
 export yeastDb=sacCer3
 export tempFa=$dir/ucscGenes.faa
 export genomes=/hive/data/genomes
-export xdbFa=$genomes/$xdb/bed/ucsc.15.1/ucscGenes.faa
-export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
-export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
-export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
-export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
+export xdbFa=$genomes/$xdb/bed/ucsc.16.1/ucscGenes.faa
+export ratFa=$genomes/$ratDb/bed/ensGene.83/ensembl.faa
+#export ratFa=$genomes/$ratDb/bed/blastpRgdGene2/rgdGene2Pep.faa
+export fishFa=$genomes/$fishDb/bed/ensGene.83/ensembl.faa
+#export fishFa=$genomes/$fishDb/bed/blastp/ensembl.faa
+export flyFa=$genomes/$flyDb/bed/ensGene.83/ensembl.faa
+#export flyFa=$genomes/$flyDb/bed/hgNearBlastp/100806/$flyDb.flyBasePep.faa
+export wormFa=$genomes/$wormDb/bed/ws245Genes/ws245Pep.faa
+#export wormFa=$genomes/$wormDb/bed/blastp/wormPep190.faa
 export yeastFa=$genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 export scratchDir=/hive/users/braney/scratch
 
@@ -303,28 +307,27 @@ ln -s $genomes/$db/bed/liftOver/${db}To${Xdb}.over.chain.gz \
 # delete non-syntenic genes from rat and mouse blastp tables
 cd $dir/hgNearBlastp
 synBlastp.csh $tempDb $xdb
-#old number of unique query values: 88197
-#old number of unique target values 23927
-#new number of unique query values: 83114
-#new number of unique target values 23354
+#old number of unique query values: 88204
+#old number of unique target values 24004
+#new number of unique query values: 83149
+#new number of unique target values 23427
 
 export oldDb=hg19
 hgsql -e "select  count(*) from mmBlastTab\G" $oldDb | tail -n +2
 # count(*): 66798
 hgsql -e "select  count(*) from mmBlastTab\G" $tempDb | tail -n +2
-# count(*): 82325
+# count(*): 83149
 
-#STOPPED HERE
-synBlastp.csh $tempDb $ratDb knownGene rgdGene2
-# old number of unique query values: 75074
-# old number of unique target values 10176
-# new number of unique query values: 40867
-# new number of unique target values 7693
+synBlastp.csh $tempDb $ratDb knownGene ensGene
+old number of unique query values: 87847
+old number of unique target values 19487
+new number of unique query values: 80851
+new number of unique target values 18671
 
 hgsql -e "select  count(*) from rnBlastTab\G" $oldDb | tail -n +2
 # count(*): 28372
 hgsql -e "select  count(*) from rnBlastTab\G" $tempDb | tail -n +2
-# count(*): 40867
+# count(*): 80851
 
 # Make reciprocal best subset for the blastp pairs that are too
 # Far for synteny to help
@@ -341,7 +344,7 @@ hgLoadBlastTab $tempDb drBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from drBlastTab\G" $oldDb | tail -n +2
 # count(*): 13111
 hgsql -e "select  count(*) from drBlastTab\G" $tempDb | tail -n +2
-# count(*): 13113
+# count(*): 13355
 
 # Us vs. fly
 cd $dir/hgNearBlastp
@@ -355,7 +358,7 @@ hgLoadBlastTab $tempDb dmBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from dmBlastTab\G" $oldDb | tail -n +2
 #  count(*): 5975
 hgsql -e "select  count(*) from dmBlastTab\G" $tempDb | tail -n +2
-# count(*): 5987
+# count(*): 6033
 
 # Us vs. worm
 cd $dir/hgNearBlastp
@@ -369,7 +372,7 @@ hgLoadBlastTab $tempDb ceBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from ceBlastTab\G" $oldDb | tail -n +2
 # count(*): 4948
 hgsql -e "select  count(*) from ceBlastTab\G" $tempDb | tail -n +2
-# count(*): 4950
+# count(*): 4397
 
 # Us vs. yeast
 cd $dir/hgNearBlastp
@@ -383,13 +386,12 @@ hgLoadBlastTab $tempDb scBlastTab $aToB/recipBest.tab
 hgsql -e "select  count(*) from scBlastTab\G" $oldDb | tail -n +2
 # count(*): 2365
 hgsql -e "select  count(*) from scBlastTab\G" $tempDb | tail -n +2
-# count(*): 2378
+# count(*): 2379
 
 # Clean up
 cd $dir/hgNearBlastp
 cat run.$tempDb.$tempDb/out/*.tab | gzip -c > run.$tempDb.$tempDb/all.tab.gz
 gzip run.*/all.tab
-#end didn't do
 
 # Don't do
 # load malacards table
@@ -519,24 +521,23 @@ cat run.time
 cat << '_EOF_' > makePfamRa.awk
 /^NAME/ {print}
 /^ACC/ {print}
-/^DESC/ {print; printf("\n");}
+/^DESC/ {print}
+/^TC/ {print $1,$3; printf("\n");}
 _EOF_
 awk -f makePfamRa.awk  /hive/data/outside/pfam/Pfam29.0/Pfam-A.hmm  > pfamDesc.ra
-raToTab -cols=ACC,NAME,DESC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\n", gensub(/\.[0-9]+/, "", "g", $1), $2, $3);}' > pfamDesc.tab
+raToTab -cols=ACC,NAME,DESC,TC pfamDesc.ra stdout |  awk -F '\t' '{printf("%s\t%s\t%s\t%g\n", $1, $2, $3, $4);}' | sort > pfamDesc.tab
 
 # Convert output to tab-separated file. 
 cd $dir/pfam
-catDir result | sed '/^#/d' | awk 'BEGIN {OFS="\t"} {if ($7 < 0.0001) print $1,$18-1,$19,$4,$7}' | sort > ucscPfam.tab
+catDir result | sed '/^#/d' > allResults.tab
+awk 'BEGIN {OFS="\t"} { print $5,$1,$18-1,$19,$4,$14}' allResults.tab | sort > allUcscPfam.tab
+join  -t $'\t' -j 1  allUcscPfam.tab pfamDesc.tab | tawk '{if ($6 > $9) print $2, $3, $4, $5, $6, $1}' > ucscPfam.tab
 cd $dir
 
 # Convert output to knownToPfam table
-awk '{printf("%s\t%s\n", $2, gensub(/\.[0-9]+/, "", "g", $1));}' \
-	pfam/pfamDesc.tab > sub.tab
-cut -f 1,4 pfam/ucscPfam.tab | subColumn 2 stdin sub.tab stdout | sort -u > knownToPfam.tab
-rm -f sub.tab
+tawk '{print $1, gensub(/\.[0-9]+/, "", "g", $6)}' pfam/ucscPfam.tab | sort -u > knownToPfam.tab
 hgLoadSqlTab -notOnServer $tempDb knownToPfam $kent/src/hg/lib/knownTo.sql knownToPfam.tab
-hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql pfam/pfamDesc.tab
-#hgsql $tempDb -e "delete k from knownToPfam k, kgXref x where k.name = x.kgID and x.geneSymbol = 'abParts'"
+tawk '{print gensub(/\.[0-9]+/, "", "g", $1), $2, $3}' pfam/pfamDesc.tab| hgLoadSqlTab -notOnServer $tempDb pfamDesc $kent/src/hg/lib/pfamDesc.sql stdin
 
 cd $dir/pfam
 genePredToFakePsl hg38 knownGene knownGene.psl cdsOut.tab
@@ -812,13 +813,13 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # 4. On hgwdev, insert new records into blatServers and targetDb, using the 
 # host (field 2) and port (field 3) specified by cluster-admin.  Identify the
 # blatServer by the keyword "$db"Kg with the version number appended
-  hg38KgSeq9 blat4c, port 17869.
+# untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq9", "blat4c", 17869, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq10", "blat41", 17873, 0, 1);'
 hgsql hgcentraltest -e \                                                    
-      'INSERT into targetDb values("hg38KgSeq9", "UCSC Genes", \
+      'INSERT into targetDb values("hg38KgSeq10", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \
-         "/gbdb/hg38/targetDb/kgTargetSeq9.2bit", 1, now(), "");'
+         "/gbdb/hg38/targetDb/kgTargetSeq10.2bit", 1, now(), "");'
 
 #
 ##
@@ -838,20 +839,21 @@ hgLoadBlastTab $ratDb $blastTab run.$ratDb.$tempDb/out/*.tab
 hgLoadBlastTab $flyDb $blastTab run.$flyDb.$tempDb/recipBest.tab
 hgLoadBlastTab $wormDb $blastTab run.$wormDb.$tempDb/recipBest.tab
 hgLoadBlastTab $yeastDb $blastTab run.$yeastDb.$tempDb/recipBest.tab
-#hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
+hgLoadBlastTab $fishDb $blastTab run.$fishDb.$tempDb/recipBest.tab
 
 # Do synteny on mouse/human/rat
 synBlastp.csh $xdb $db
-# old number of unique query values: 44985
-# old number of unique target values 22854
-# new number of unique query values: 41649
-# new number of unique target values 22340
+#old number of unique query values: 45399
+#old number of unique target values 22999
+#new number of unique query values: 42015
+#new number of unique target values 22470
 
-synBlastp.csh $ratDb $db rgdGene2 knownGene
-#old number of unique query values: 11216
-#old number of unique target values 10819
-#new number of unique query values: 8112
-#new number of unique target values 8182
+synBlastp.csh $ratDb $db ensGene knownGene
+#old number of unique query values:  27888  
+#old number of unique target values  18988  
+#new number of unique query values:  24530  
+#new number of unique target values  18411  
+
 
 # need to generate multiz downloads
 #/usr/local/apache/htdocs-hgdownload/goldenPath/hg38/multiz46way/alignments/knownCanonical.exonAA.fa.gz

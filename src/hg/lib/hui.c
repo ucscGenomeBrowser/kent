@@ -6192,6 +6192,9 @@ int i;
 char *species[MAX_SP_SIZE];
 char option[MAX_SP_SIZE];
 
+*list = NULL;
+*groupCt = 0;
+
 /* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL && speciesUseFile == NULL)
     {

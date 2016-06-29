@@ -1,17 +1,39 @@
 name mouse
 db mm10
+geneUrl ../cgi-bin/hgGene?org=Mouse&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Mouse&near_search=%s
 
 name rat
-db rn4
+db rn6
+pepTable ensPep
+geneTable ensGene
+otherName Ensembl
+otherUrl http://www.ensembl.org/Rattus_norvegicus/transview?transcript=%s
+
 
 name zebrafish
-db danRer7
+db danRer10
 
 name drosophila
-db dm3
+db dm6
+pepTable ensPep
+geneTable ensGene
+otherName Ensembl
+otherIdSql select name from ensGene where name='%s'
+otherUrl http://www.ensembl.org/Drosophila_melanogaster/transview?transcript=%s
+
 
 name cElegans
-db ce6
+db ce11
+pepTable ws245GenesPeptide
+geneTable ws245Genes
 
 name yeast
 db sacCer3
+geneUrl ../cgi-bin/hgGene?org=S.+cerevisiae&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=S.+cerevisiae&near_search=%s
+
+name human
+geneUrl ../cgi-bin/hgGene?org=Human&hgg_gene=%s&hgg_chrom=none
+sorterUrl ../cgi-bin/hgNear?org=Human&near_search=%s
+

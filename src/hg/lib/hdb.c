@@ -3284,7 +3284,7 @@ boolean hIsPreviewHost()
 {
 if (cfgOption("test.preview"))
     return TRUE;
-return hHostHasPrefix("genome-preview");
+return hHostHasPrefix("genome-preview") || hHostHasPrefix("hgwalpha");
 }
 
 char *hBrowserName()

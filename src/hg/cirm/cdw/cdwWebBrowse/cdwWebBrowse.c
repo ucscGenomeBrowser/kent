@@ -292,9 +292,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     long long size = atoll(fileSize);
     printf("Tags associated with %s a %s format file of size ", fileName, format);
     printLongWithCommas(stdout, size);
+     
     printf("<BR>\n");
-
-
     static char *outputFields[] = {"tag", "value"};
     struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
     int fieldIx = 0;
@@ -327,6 +326,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
     fieldedTableFree(&table);
     }
+sqlFreeResult(&sr);
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)

@@ -37,18 +37,18 @@ run before any other command is used.
 
 # How does this work?
 
-The script downloads the Genome Browser CGIs and sets up the central Mysql database. All
+The script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
 
-In particular, Mysql and Apache are installed and setup with the right package
+In particular, MySQL and Apache are installed and setup with the right package
 manager (yum or apt-get). A default random password is set for the
-Mysql root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup Mysql, you will need to create the file
+MySQL root user and added to the ~/.my.cnf file of the Unix root account. 
+If you already have setup MySQL, you will need to create the file
 ~/.my.cnf, the script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
-mariadb, deactivating SELinux, finding the right path for your apache install
-and adapting the Mysql socket config.
+mariadb, deactivating SELinux, finding the right path for your Apache install
+and adapting the MySQL socket config.
 
 This will leave you with a genome browser accessible on localhost that loads its data 
 through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
@@ -133,7 +133,7 @@ command is one of:
                day, but do not delete any uploaded custom tracks
 
 parameters for 'minimal', 'mirror' and 'update':
-  <assemblyList>     - download Mysql + /gbdb files for a space-separated
+  <assemblyList>     - download MySQL + /gbdb files for a space-separated
                        list of genomes
 
 examples:

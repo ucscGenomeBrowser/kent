@@ -37,7 +37,7 @@
      <LI><A CLASS="toc" HREF="#Example">Some Simple Examples</A>
      <LI><A CLASS="toc" HREF="#Create">Creating a Session</A>
      <LI><A CLASS="toc" HREF="#Details">Session Details</A>     
-     <LI><A CLASS="toc" HREF="#Share">Sharing Sessions</A>
+     <LI><A CLASS="toc" HREF="#Share">Sharing a Session</A>
 <!--
      <UL>
       <LI><A CLASS="toc" HREF="#ShareOrNot">Shared vs. Non-shared Data</A>
@@ -88,8 +88,9 @@
    and save the configuration 
    options. Multiple sessions may be saved for future reference, for comparing 
    different data sets, or for sharing with your colleagues.  
-   <A HREF="#Lifespan">Saved sessions persist</A> 
-   indefinitely, unless deleted.
+   Saved sessions <A HREF="#Lifespan">will not be expired</A>, however, we still
+   recommend that you keep local back-ups of your session contents and any
+   associated custom tracks.
    <A HREF="#CTs">BLAT result tracks persist</A>
    for at least 48 hours after the last time they are viewed.</A>
    The creation date of a session can be viewed in the Session
@@ -345,9 +346,10 @@
     the file name blank and click <TT><B>submit</B></TT>.</P>
    </UL>
 
-   <P>After you save a session, it will be 
-   <A HREF="#Lifespan">available</A> to you indefinitely, unless you
-   <a href="#Delete">delete</a> it.</P>
+   <P>Saved sessions <A HREF="#Lifespan">will not be expired</A>, and
+   should persist until you <a href="#Delete">delete</a> them. However, it is still
+   recommended that you keep local back-ups of your session contents and any
+   associated custom tracks.</P>
 
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
@@ -375,19 +377,19 @@
    the Session page. Each session entry is listed by name and offers the 
    following options to open, share, and manipulate it:
    <UL>
-   <LI><B>Use this session.</B> Click this button to load the session as
-   your current session without launching the Genome Browser. This allows you to
-   perform other configuration tasks on the session before opening it in the 
-   browser. To launch the Genome Browser using this session, click the 
-   <TT><B>Browser</B></TT> link.
+   <li><b>Session name.</b> Click the session name to view it in the Genome Browser.
+   <li><b>View/edit details.</b> Click the <tt><b>details</b></tt> button to edit the session
+   description and view sessions details such as creation date/time, assemblies with custom tracks
+   and more.
    <LI><B>Delete the session.</B> Click the <TT><B>delete</B></TT> button to 
    permanently remove this session from the list.
    <LI><B>Share with others</B>: Check this box to allow others to access this
    session. By default, this option is unchecked, which limits access to only
-   the session owner. 
-   <LI><B>Browser.</B> Click this link to open the Genome Browser using these
-   session settings.
-   <LI><B>Email.</B>Click this link to <A HREF="#Share">email</A> this session 
+   the session owner.
+   <li><b>Post in public listing</b>: Check this box to add your session to the list of
+   <a href="../../../cgi-bin/hgPublicSessions">Public Sessions</a>. Sessions in the listing
+   will be availble to be loaded and viewed by the world.
+   <LI><B>Email.</B> Click this link to <A HREF="#Share">email</A> this session
    to a colleague. 
    </UL>
   </TD><TD WIDTH=15></TD></TR>
@@ -466,7 +468,12 @@ not be updated to reflect any edits.
  information
  <LI>the URL of a web-accessible session settings file
  </UL>
- Note that your shared sessions will not be available in a general way to 
+
+ Sessions which you've added to the list of <a href="../../../cgi-bin/hgPublicSessions"
+ >Public Sessions</a> will available to the world.
+
+ Note that unless you've added them to this list of Public Sessions, your shared sessions
+ will not be available in a general way to
  other Genome Browser users; they will need at least one of these access 
  methods.</P>
  <P>If you choose to keep your session private, other users of the Genome 
@@ -481,7 +488,7 @@ not be updated to reflect any edits.
 <A NAME="HowToShare"></A>
  <HR>
  <B><FONT SIZE="3" COLOR="#0000FF">Sharing Your Session with Others</FONT></B>
- <P>There are four ways to let others know about your saved sessions:
+ <P>There are five ways to let others know about your saved sessions:
   <UL>
 
   <LI><B>Save the session URL.</B> Immediately upon saving a new session,
@@ -515,6 +522,11 @@ not be updated to reflect any edits.
    link, you may 
    replace &quot;<TT>hgSession</TT>&quot; with &quot;<TT>hgTracks</TT>&quot; 
    to proceed directly to the Genome Browser.</LI>
+  <li><b>List it on the Public Sessions page.</b> The
+   &quot;<a href="../../../cgi-bin/hgPublicSessions">Public Sessions</a>&quot;
+   tool allows you to post and share your exciting and interesting Browser snapshots
+   with the world. After having saved your session, you can add it to this public listing
+   by checking the box in the column under "post in public listing?"
   </UL>
  </P>
 
@@ -631,8 +643,8 @@ not be updated to reflect any edits.
    Before you create and save your session, be sure to upload your 
    <A HREF="../../cgi-bin/hgCustom" target="_blank">Custom Track</A> or 
    <A HREF="../../cgi-bin/hgGenome" target="_blank">Genome Graph</A> track.
-   These user-generated tracks associated with a saved session will be kept
-   indefinitely, along with the session itself. BLAT results always have a lifespan of
+   These user-generated tracks associated with a saved session will not be expired.
+   BLAT results always have a lifespan of
    48 hours, even if they are part of a session.</P>
   </TD><TD WIDTH=15></TD></TR>
   </TABLE>
@@ -699,8 +711,8 @@ not be updated to reflect any edits.
    <TR><TD WIDTH=10>&nbsp;</TD><TD>
 
    <p>
-   Your saved sessions will be available you (and others if you <A HREF="#Share">share</A> them)
-   indefinitely and will persist on our server until you <A HREF="#Delete">delete</A> them.
+   Your saved sessions will not be expired and will available you (and others if you
+   <A HREF="#Share">share</A> them) until you <A HREF="#Delete">delete</A> them.
    We have discontinued our previous policy of removing saved sessions and
    associated custom track data after four months. However, note that the UCSC Genome
    Browser is not a data storage service; please keep a local backup of your session contents and

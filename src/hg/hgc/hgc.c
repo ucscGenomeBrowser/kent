@@ -1009,7 +1009,7 @@ char urlLabelSetting[32];
 // replace the $$ and other wildchards with the url given in tdb 
 char *url = getUrlSetting(tdb, "url");
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
-if (url==NULL)
+if (url==NULL || isEmpty(url))
     return;
 
 char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);
@@ -1603,9 +1603,14 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    puts("<tr><td>");
-    printAddWbr(col->comment, 10);
-    puts("</td>"); // bold style now in HGStyle.css
+    char *entry;
+    if (sameString(fieldName, "cdsStartStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS start annotation (none, unknown, incomplete, or complete)";
+    else if (sameString(fieldName, "cdsEndStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
+    else
+        entry = col->comment;
+    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);

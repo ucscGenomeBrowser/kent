@@ -62,7 +62,7 @@ struct cdwSubmit *submitList = cdwSubmitLoadByQuery(conn, query);
 
 struct cdwSubmit *submission;
 // Keep track of the # of submissions, meta files and mani files. 
-int count = 0, metaCount = 0, maniCount = 0;	 
+int count = 0; 
 long long int totalFiles = 0, totalBytes = 0;	// Count the total files and bytes. 
 struct slName *submitters = NULL, *user;    // Keep track of the submitters.   
 // Loop over all cdwSubmit entries and gather/print out stats.  

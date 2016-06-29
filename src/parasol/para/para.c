@@ -666,7 +666,7 @@ safef(tmpName, sizeof(tmpName), "%s.%d.%s.tmp", fileName, getpid(),
 
 writeBatch(db, tmpName);
 
-/* now rename (which is attomic) */
+/* now rename (which is atomic) */
 if (rename(tmpName, fileName) < 0)
     errnoAbort("can't rename %s to %s", tmpName, fileName);
 
