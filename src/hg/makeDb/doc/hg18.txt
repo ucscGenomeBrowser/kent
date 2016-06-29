@@ -32330,3 +32330,74 @@ vi README
 # I renamed the table to altLocations to match use in other assemblies.
 
 #############################################################################
+# LASTZ human/hg18 Gorilla/gorGor4 - (DONE - 2016-06-23 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+    cd /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+
+    printf "# human vs gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: gorilla gorGor4
+SEQ2_DIR=/hive/data/genomes/gorGor4/gorGor4.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    218m52.836s
+
+    cat fb.hg18.chainGorGor4Link.txt
+    # 2736963227 bases of 2881515245 (94.983%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg18 gorGor4) \
+      > rbest.log 2>&1 &
+XXX - running - Tue Jun 28 11:02:47 PDT 2016
+    # real    42m25.526s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor4/bed/blastz.hg18.swap
+    cd /hive/data/genomes/gorGor4/bed/blastz.hg18.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+XXX - running - Tue Jun 28 11:03:40 PDT 2016
+    #  real    116m45.998s
+
+    cat fb.gorGor4.chainHg18Link.txt
+    # 2588342923 bases of 2822760080 (91.695%) in intersection
+
+    time (doRecipBest.pl -buildDir=`pwd` gorGor4 hg18) > rbest.log 2>&1
+    # real    42m41.291s
+
+#########################################################################

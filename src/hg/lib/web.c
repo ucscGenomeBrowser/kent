@@ -1147,6 +1147,8 @@ boolean image = !js
 if (!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
     errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
 
+char *httpHost = hHttpHost();
+
 // Build and verify directory
 char *dirName = "";
 if (js)
@@ -1163,8 +1165,8 @@ else
     // tolerate missing docRoot (i.e. when running from command line)
     fullDirName = dyStringCreate("%s", dirName);
 if (!fileExists(dyStringContents(fullDirName)))
-    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n",
-             dyStringContents(fullDirName));
+    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist. (host: %s)\n",
+             dyStringContents(fullDirName), httpHost);
 
 // build and verify real path to file
 struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDirName), fileName);
