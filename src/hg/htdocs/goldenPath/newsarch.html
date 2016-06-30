@@ -44,6 +44,33 @@
 <a name="2016"></a>
 
 <!-- add <hr> to bottom of first entry when pushing down-->
+<a name="0630B16">
+  <font color="#006666" size="4"><b>30 June 2016 - CRAM files now supported!</b></font>
+  <p>
+  We are excited to announce the support of <a href="help/cram.html"
+  target="_blank">CRAM</a> files on the Browser!</p>
+  <p>
+  CRAM files, which are more dense than BAM files, use an additional external
+  &quot;reference sequence&quot; file to both compress and decompress the read
+  information. For CRAM tracks to load there is an expectation that the checksum
+  of the reference sequence used to create the CRAM will be in the CRAM header and
+  be accessible from the <a href="http://www.ebi.ac.uk/ena/software/cram-reference-registry"
+  target="_blank">EBI CRAM reference registry</a> or in a designated 
+  &quot;<tt>refUrl</tt>&quot; location.</p>
+  <p>
+  <a href="/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&hgct_customText=track%20type=bam%20name=%22CRAM%20Example%22%20description=%22A%201000%20Genomes%20CRAM%20file%22%20visibility=full%20bigDataUrl=ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00139/exome_alignment/HG00139.mapped.ILLUMINA.bwa.GBR.exome.20121211.bam.cram%20doWiggle=1"
+  target="_blank">Click here</a> to load an example CRAM file from the 1000 Genomes
+  Project where reads are displayed as a bar graph using the &quot;Display data as
+  a density graph&quot; option. Loading CRAM tracks is identical to loading BAM files,
+  the only difference is that instead of providing the URL to a BAM file, the URL
+  instead points to a CRAM file. Both use <tt>type bam</tt> in hub and custom track lines,
+  and both expect an associated index file (CRAM.crai for CRAMs).</p>
+  <p>
+  See complete details on the <a href="help/cram.html" target="_blank">CRAM Track Format</a> page.
+  <p>
+  Thanks to Jonathan Casper and Brian Raney for the implementation of this feature.</p>
+  <hr>
+
 <a name="063016"></a>
   <font color="#006666" size="4"><b>30 June 2016 - Updated Gene Tracks Available for 
   the Human (hg38) and Mouse (mm10) Assemblies</b></font>
