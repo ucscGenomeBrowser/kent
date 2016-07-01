@@ -13,7 +13,7 @@ table clinVarBed
     int blockCount;    "Number of blocks"
     int[blockCount] blockSizes; "Comma separated list of block sizes"
     int[blockCount] chromStarts; "Start positions relative to chromStart"
-    lstring origName;         "Orignal name of item"
+    lstring origName;         "Original name of item"
     string type;         "Type of Variant"
     string geneId;         "NCBI Entrez Gene ID"
     string geneSym;         "NCBI Entrez Gene Symbol"
