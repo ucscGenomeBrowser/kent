@@ -9398,6 +9398,7 @@ hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink').click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
 hPrintf("$(document).ready(addKeyboardHelpEntries);");
