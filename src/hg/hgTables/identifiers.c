@@ -139,12 +139,17 @@ if (!isCustomTrack(curTable) && !hIsBrowserbox() && (conn == NULL || sqlCanCreat
 	char tmpTable[512];
 	char query[2048];
 	// do not use any db. prefix on curTable for name
+	char *plainXrefTable = strrchr(xrefTable, '.');  
+	if (plainXrefTable)
+	    plainXrefTable++;
+	else
+	    plainXrefTable = xrefTable;
 	char *plainCurTable = strrchr(curTable, '.');  
 	if (plainCurTable)
 	    plainCurTable++;
 	else
 	    plainCurTable = curTable;
-	safef(tmpTable, sizeof(tmpTable), "hgTemp.tmp%s%s", plainCurTable, xrefTable);
+	safef(tmpTable, sizeof(tmpTable), "hgTemp.tmp%s%s", plainCurTable, plainXrefTable);
 	if (differentString(xrefTable, curTable))
 	    sqlSafef(query, sizeof(query),
 		  "create temporary table %s select %s.%s as %s from %s,%s "
