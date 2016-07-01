@@ -16,6 +16,7 @@ DIRS = \
 	hgFlyBase \
 	hgGnfMicroarray \
 	hgGtex \
+	hgGtexAse \
 	hgGtexExonBed \
 	hgGtexGeneBed \
 	hgJaxQtl \
