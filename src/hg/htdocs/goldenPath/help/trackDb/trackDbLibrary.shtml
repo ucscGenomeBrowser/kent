@@ -844,9 +844,9 @@
     then the mouse over will fallback to the name field. </P>
     <P>
     To make this work, create a bigBed file with at least 8 columns and put the
-    text for the mouse over into extended an bigBed field as
+    text for the mouse over into an extended bigBed field as
     explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
-    The field name from your .as file is the field name referenced in this statement.
+    The field name from your .as file is the field name for this statement.
     </P> 
 
     <P><B>Example:</B></P>
