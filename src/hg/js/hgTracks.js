@@ -3294,6 +3294,9 @@ function addKeyboardHelpEntries() {
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);
 
+    html = '<span class="shortcut">p s</span>';
+    $('#publicSessionsMenuLink').after(html);
+
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
 
