@@ -77,14 +77,17 @@ mustWrite(stdout, h, size);
 printf("\n");
 }
 
-void dumpFf(struct ffAli *left, DNA *needle, DNA *hay)
+void dumpFf(struct ffAli *left, bioSeq *qSeq, bioSeq *tSeq, struct trans3 *t3List)
 /* Print info on ffAli. */
 {
 struct ffAli *ff;
 for (ff = left; ff != NULL; ff = ff->right)
     {
-    printf("(%ld - %ld)[%ld-%ld] ", (long)(ff->hStart-hay), (long)(ff->hEnd-hay),
-	(long)(ff->nStart - needle), (long)(ff->nEnd - needle));
+    int hStart = trans3GenoPos(ff->hStart, tSeq, t3List, FALSE);
+    int hEnd   = trans3GenoPos(ff->hEnd  , tSeq, t3List, TRUE);
+
+    printf("(%d - %d)[%ld-%ld] ", hStart, hEnd,
+	(long)(ff->nStart - qSeq->dna), (long)(ff->nEnd - qSeq->dna));
     }
 printf("\n");
 }
@@ -101,7 +104,7 @@ for (bun = bunList; bun != NULL; bun = bun->next)
     printf("Bundle of %d between %s and %s\n", slCount(bun->ffList), qSeq->name, genoSeq->name);
     for (ffl = bun->ffList; ffl != NULL; ffl = ffl->next)
 	{
-	dumpFf(ffl->ff, bun->qSeq->dna, bun->genoSeq->dna);
+	dumpFf(ffl->ff, bun->qSeq, bun->genoSeq, bun->t3List);
 	}
     }
 }
@@ -716,7 +719,8 @@ else
 }
 
 struct ffAli *cutAtBigIntrons(struct ffAli *ffList, int maxIntron, 
-	int *pScore, enum ffStringency stringency,
+	int *pScore, enum ffStringency stringency, 
+	boolean isProt, bioSeq *tSeq, struct trans3 *t3List,
 	struct ffAli **returnLeftovers)
 /* Return ffList up to the first intron that's too big.
  * Put the rest of the blocks back onto the leftovers list. */
@@ -725,7 +729,9 @@ struct ffAli *prevFf, *ff, *cutFf = NULL;
 prevFf = ffList;
 for (ff = prevFf->right; ff != NULL; ff = ff->right)
     {
-    int dt = ff->hStart - prevFf->hEnd;
+    int nhStart = trans3GenoPos(    ff->hStart, tSeq, t3List, FALSE);
+    int ohEnd   = trans3GenoPos(prevFf->hEnd  , tSeq, t3List, TRUE);
+    int dt = nhStart - ohEnd;
     if (dt > maxIntron)
         {
 	cutFf = prevFf;
@@ -739,7 +745,10 @@ if (cutFf != NULL)
     cutFf->right = NULL;
     ff->left = NULL;
     ffCat(returnLeftovers, &ff);
-    *pScore = ffScore(ffList, stringency);
+    if (isProt)
+	*pScore = ffScoreProtein(ffList, stringency);
+    else
+	*pScore = ffScore(ffList, stringency);
     }
 return ffList;
 }
@@ -778,9 +787,11 @@ ffList = ffMergeClose(ffList, qSeq->dna, genoSeq->dna);
 
 while (ffList != NULL)
     {
+
     ssFindBest(ffList, qSeq, genoSeq, stringency, 
     	bundle->isProt, bundle->t3List,
     	&bestPath, &score, &ffList);
+
 
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
@@ -803,7 +814,8 @@ while (ffList != NULL)
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
     if (ffIntronMax != ffIntronMaxDefault)
 	{
-	bestPath = cutAtBigIntrons(bestPath, ffIntronMax, &score, stringency,
+	bestPath = cutAtBigIntrons(bestPath, ffIntronMax, &score, stringency, 
+		bundle->isProt, genoSeq, bundle->t3List,
 		&ffList);
 	}
     if (!bundle->isProt)
