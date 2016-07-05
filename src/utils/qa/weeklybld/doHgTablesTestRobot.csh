@@ -31,6 +31,6 @@ if ( "$wc" != "0" ) then
 endif
 #
 echo Done.
-echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTEREMAIL} luvina mspeir
+echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 exit 0
 
