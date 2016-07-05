@@ -6,7 +6,6 @@ make
 cd $WEEKLYBLD
 
 setenv HGDB_CONF /cluster/home/build/.hg.conf.beta
-setenv HGDB_PROF beta
 set log = v${BRANCHNN}.hgTables.log
 
 echo "$HOME/bin/$MACHTYPE/hgTablesTest -db=hg38 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
