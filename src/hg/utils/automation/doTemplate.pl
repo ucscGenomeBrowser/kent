@@ -87,7 +87,7 @@ Assumptions:
 # Command line args: db
 my ($db);
 # Other:
-my ($buildDir);
+my ($buildDir, $secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -150,6 +150,8 @@ _EOF_
 # Make sure we have valid options and exactly 1 argument:
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
+$secondsStart = `date "+%s"`;
+chomp $secondsStart;
 ($db) = @ARGV;
 
 # Force debug and verbose until this is looking pretty solid:
@@ -170,8 +172,14 @@ my $stopStep = $stepper->getStopStep();
 my $upThrough = ($stopStep eq 'cleanup') ? "" :
   "  (through the '$stopStep' step)";
 
+$secondsEnd = `date "+%s"`;
+chomp $secondsEnd;
+my $elapsedSeconds = $secondsEnd - $secondsStart;
+my $elapsedMinutes = int($elapsedSeconds/60);
+$elapsedSeconds -= $elapsedMinutes * 60;
+
 &HgAutomate::verbose(1,
-	"\n *** All done!$upThrough\n");
+	"\n *** All done !$upThrough  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	" *** Steps were performed in $buildDir\n");
 &HgAutomate::verbose(1, "\n");
