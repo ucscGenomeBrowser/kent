@@ -6,6 +6,7 @@ make
 cd $WEEKLYBLD
 
 setenv HGDB_CONF /cluster/home/build/.hg.conf.beta
+setenv HGDB_PROF beta
 set log = v${BRANCHNN}.hgTables.log
 
 echo "$HOME/bin/$MACHTYPE/hgTablesTest -db=hg38 hgwbeta.cse.ucsc.edu/cgi-bin/hgTables ./logs/$log" > ./logs/$log
@@ -25,11 +26,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res2"
- echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER ${BUILDMEISTEREMAIL} luvina mspeir
+ echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
  exit 1
 endif
 #
 echo Done.
-echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTEREMAIL} luvina mspeir
+echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER ${BUILDMEISTEREMAIL} browser-qa@soe.ucsc.edu
 exit 0
 
