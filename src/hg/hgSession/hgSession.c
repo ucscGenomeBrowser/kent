@@ -829,14 +829,40 @@ hDisconnectCentral(&conn);
 return dyStringCannibalize(&dyMessage);
 }
 
-void thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn)
-/* Create a thumbnail image for the gallery.  Leaks memory from a generated filename string,
- * plus a couple of dyStrings.  Returns without determining if the image creation
- * succeeded. */
+int thumbnailAdd(char *encUserName, char *encSessionName, struct sqlConnection *conn, struct dyString *dyMessage)
+/* Create a thumbnail image for the gallery.  If the necessary tools can't be found,
+ * add a warning message to dyMessage unless the hg.conf setting
+ * sessionThumbnail.suppressWarning is set to "on".
+ * Leaks memory from a generated filename string, plus a couple of dyStrings.
+ * Returns without determining if image creation succeeded (it happens in a separate
+ * thread); the return value is 0 if a message was added to dyMessage, otherwise it's 1. */
 {
 char query[4096];
 char **row;
 struct sqlResult *sr;
+
+char *suppressConvert = cfgOption("sessionThumbnail.suppress");
+if (suppressConvert != NULL && sameString(suppressConvert, "on"))
+    return 1;
+
+char *convertPath = cfgOption("sessionThumbnail.convertPath");
+if (convertPath == NULL)
+    convertPath = cloneString("convert");
+char convertTestCmd[4096];
+safef(convertTestCmd, sizeof(convertTestCmd), "which %s >& /dev/null", convertPath);
+int convertTestResult = system(convertTestCmd);
+if (convertTestResult != 0)
+    {
+    dyStringPrintf(dyMessage,
+         "Note: A thumbnail image for this session was not created because the ImageMagick convert "
+         "tool could not be found.  Please contact your mirror administrator to resolve this "
+         "issue, either by installing convert so that it is part of the webserver's PATH, "
+         "by adding the \"sessionThumbnail.convertPath\" option to the mirror's hg.conf file "
+         "to specify the path to that program, or by adding \"sessionThumbnail.suppress=on\" to "
+         "the mirror's hg.conf file to suppress this warning.<br>");
+    return 0;
+    }
+
 sqlSafef(query, sizeof(query),
     "select m.idx, n.firstUse from gbMembers m join namedSessionDb n on m.userName = n.userName "
     "where m.userName = \"%s\" and n.sessionName = \"%s\"",
@@ -856,11 +882,12 @@ if (destFile != NULL)
         dyStringSub(hgTracksUrl->string, "cgi-bin/hgTracks", "cgi-bin/hgRenderTracks");
     dyStringAppend(renderUrl, "&pix=640");
     char *renderCmd[] = {"wget", "-q", "-O", "-", renderUrl->string, NULL};
-    char *convertCmd[] = {"convert", "-", "-resize", "320", "-crop", "320x240+0+0", destFile, NULL};
+    char *convertCmd[] = {convertPath, "-", "-resize", "320", "-crop", "320x240+0+0", destFile, NULL};
     char **cmdsImg[] = {renderCmd, convertCmd, NULL};
     pipelineOpen(cmdsImg, pipelineWrite, "/dev/null", NULL);
     }
 sqlFreeResult(&sr);
+return 1;
 }
 
 
@@ -1049,7 +1076,7 @@ if (cartHelList != NULL)
         if (newGallery == FALSE)
             thumbnailRemove(encUserName, encSessionName, conn);
         if (newGallery == TRUE)
-            thumbnailAdd(encUserName, encSessionName, conn);
+            thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
 	    didSomething = TRUE;
 	    }
 	}
@@ -1353,7 +1380,7 @@ if (isNotEmpty(newName) && !sameString(sessionName, newName))
     if (shared >= 2)
         {
         thumbnailRemove(encUserName, encSessionName, conn);
-        thumbnailAdd(encUserName, encNewName, conn);
+        thumbnailAdd(encUserName, encNewName, conn, dyMessage);
         }
     }
 
@@ -1380,7 +1407,7 @@ if (cgiBooleanDefined(sharedVarName) || cgiBooleanDefined(galleryVarName))
         if (shared >= 2 && newShared < 2)
             thumbnailRemove(encUserName, encSessionName, conn);
         if (shared < 2 && newShared >= 2)
-            thumbnailAdd(encUserName, encSessionName, conn);
+            thumbnailAdd(encUserName, encSessionName, conn, dyMessage);
         }
     cartRemove(cart, sharedVarName);
     cartRemove(cart, galleryVarName);
