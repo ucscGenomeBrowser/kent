@@ -327,7 +327,7 @@ puts(
 #include "hgGateway.html.h"
 );
 
-// Set global JS variables hgsid and activeGenomes
+// Set global JS variables hgsid, activeGenomes, surveyLink and surveyLabel at page load time
 // We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
 // "window.hgsid = ".
 puts("<script>");
@@ -335,6 +335,18 @@ printf("window.%s = '%s';\n", cartSessionVarName(), cartSessionId(cart));
 puts("window.activeGenomes =");
 printActiveGenomes();
 puts(";");
+char *surveyLink = cfgOption("survey");
+if (isNotEmpty(surveyLink))
+    {
+    char *surveyLabel = cfgOptionDefault("surveyLabel", "Please take our survey");
+    printf("window.surveyLink=\"%s\";\n", jsonStringEscape(surveyLink));
+    printf("window.surveyLabel=\"%s\";\n", jsonStringEscape(surveyLabel));
+    }
+else
+    {
+    puts("window.surveyLink=null;");
+    puts("window.surveyLabel=null;");
+    }
 puts("</script>");
 
 puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
