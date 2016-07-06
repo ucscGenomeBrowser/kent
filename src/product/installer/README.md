@@ -31,7 +31,7 @@ Run this script as root, like this:
     sudo -i
     bash browserSetup.sh install
 
-The install command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
+The `install` command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
@@ -84,7 +84,7 @@ you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
-In the case of hg19, the full assembly download is ~7TB. To cut this down to
+In the case of hg19, the full assembly download is ~6.5TB. To cut this down to
 up to 2TB or even less, use the -t option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
@@ -121,8 +121,8 @@ this should be added to your crontab file:
 If you find a bug or your linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
 Genome Browser installation are at
-[http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product).
-
+<http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
+ 
 # All options
 
 Here is the full listing of commands and options supported by the GBiC script: 

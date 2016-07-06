@@ -3034,47 +3034,47 @@ allButtonPair on
 	track ncbiRefSeq
         release alpha
         parent ncbiRefGenesView off
-        shortLabel All RefSeq
+        shortLabel NCBI RefSeq
         subGroups view=aGenes
-        longLabel All RefSeq annotations from NCBI
+        longLabel NCBI RefSeq annotations, all subsets
         html refGene.new
         priority 1
+
+	track ncbiRefSeqCurated
+        release alpha
+	parent ncbiRefGenesView off
+	shortLabel NCBI Curated
+        subGroups view=aGenes
+	longLabel NCBI RefSeq curated subset (NM_* and NR_*)
+        priority 2
+
+	track ncbiRefSeqPredicted
+        release alpha
+	parent ncbiRefGenesView off
+	shortLabel NCBI Predicted
+        subGroups view=aGenes
+	longLabel NCBI RefSeq predicted subset (XM_* and XR_*)
+        priority 3
+
+	track ncbiRefSeqOther
+        release alpha
+	parent ncbiRefGenesView off
+	shortLabel NCBI Other
+        subGroups view=aGenes
+	longLabel NCBI RefSeq other genes subset, not (NM_* or NR_* or XM_* or XR_*)
+        priority 4
 
         track refGene
         release alpha
 	parent ncbiRefGenesView on
-        shortLabel UCSC RefSeq
-        longLabel RefSeq UCSC alignments
+        shortLabel UCSC Alignments
+        longLabel UCSC alignments of RefSeq mRNAs
         subGroups view=aGenes
         color 12,12,120
         type genePred refPep refMrna
         idXref refLink mrnaAcc name
         html refGene.new
-        priority 2
-
-	track ncbiRefSeqCurated
-        release alpha
-	parent ncbiRefGenesView off
-	shortLabel RefSeq Curated
-        subGroups view=aGenes
-	longLabel RefSeq Curated (NM_* and NR_*)
-        priority 3
-
-	track ncbiRefSeqPredicted
-        release alpha
-	parent ncbiRefGenesView off
-	shortLabel RefSeq Predicted
-        subGroups view=aGenes
-	longLabel RefSeq Predicted (XM_* and XR_*)
-        priority 4
-
-	track ncbiRefSeqOther
-        release alpha
-	parent ncbiRefGenesView off
-	shortLabel RefSeq Other
-        subGroups view=aGenes
-	longLabel RefSeq other genes, not (NM_* or NR_* or XM_* or XR_*)
-        priority 5
+        priority 6
 
     track ncbiRefAlignView
     release alpha
@@ -3088,10 +3088,11 @@ allButtonPair on
 
 	track ncbiRefSeqPsl
         release alpha
+        priority 5
 	parent ncbiRefAlignView off
-	shortLabel mRNA Alignments
+	shortLabel NCBI Alignments
         subGroups view=zAlign
-	longLabel mRNA Alignments for RefSeq gene predictions from NCBI
+	longLabel NCBI Alignments of RefSeq mRNAs
         type psl
         indelDoubleInsert on
         indelQueryInsert on
