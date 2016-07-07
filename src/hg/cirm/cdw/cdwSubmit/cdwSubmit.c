@@ -349,9 +349,23 @@ if (context->lastChecked != now)  // Only do check every second
 return context->isInterrupted;
 }
 
+char *metaManiFieldVal(char *field, struct fieldedTable *table, struct fieldedRow *row,
+    int metaIx, struct hash *metaHash)
+/* Look up value of field in table if it exists.  If not in table, look in tagStorm
+ * that is indexed by metaHash.  If not in either return NULL. */
+{
+int tableIx = stringArrayIx(field, table->fields, table->fieldCount);  // In manifest
+if (tableIx >= 0)
+    return row->row[tableIx];
+char *meta = row->row[metaIx];
+struct tagStanza *stanza = hashFindVal(metaHash, meta);
+return tagFindVal(stanza, field);
+}
+
 int cdwFileFetch(struct sqlConnection *conn, struct cdwFile *ef, int fd, 
 	char *submitUrl, unsigned submitId, unsigned submitDirId, unsigned hostId,
-	struct cdwUser *user)
+	struct cdwUser *user, struct fieldedTable *table, struct fieldedRow *row, 
+	int metaIx, struct hash *metaHash)
 /* Fetch file and if successful update a bunch of the fields in ef with the result. 
  * Returns fileId. */
 {
@@ -366,8 +380,17 @@ copyFile(ef->submitFileName, cdwPath);
 chmod(cdwPath, 0444);
 ef->cdwFileName = cloneString(cdwFile);
 ef->endUploadTime = cdwNow();
+char *access = metaManiFieldVal("access", table, row, metaIx, metaHash);
+if (access == NULL)
+    access = "group";
+
 ef->userAccess = cdwAccessWrite;
-ef->groupAccess = cdwAccessRead;
+if (sameString(access, "all"))
+    ef->allAccess = cdwAccessRead;
+else if (sameString(access, "group"))
+    ef->groupAccess = cdwAccessRead;
+else if (!sameString(access, "user"))
+    errAbort("Unknown access %s", access);
 
 /* Now we got the file.  We'll go ahead and save rest of cdwFile record.  This
  * includes tags that may be long, so we make query in a dy. Node that the
@@ -539,8 +562,9 @@ if (sameString(format, "fastq") || sameString(format, "vcf"))
 }
 
 void getSubmittedFile(struct sqlConnection *conn, char *format,
-    struct tagStorm *tagStorm, struct cdwFile *ef,  
-    char *submitDir, char *submitUrl, int submitId, struct cdwUser *user)
+    struct tagStorm *tagStorm, struct hash *metaHash, struct cdwFile *ef,  
+    char *submitDir, char *submitUrl, int submitId, struct cdwUser *user,
+    struct fieldedTable *table, struct fieldedRow *row, int metaIx)
 /* We know the submission, we know what the file is supposed to look like.  Fetch it.
  * If things go badly catch the error, attach it to the submission record, and then
  * keep throwing. */
@@ -557,7 +581,8 @@ if (errCatchStart(errCatch))
 
     prefetchChecks(format, ef->submitFileName);
     verbose(1, "copying %s\n", ef->submitFileName);
-    int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user);
+    int fileId = cdwFileFetch(conn, ef, fd, submitUrl, submitId, submitDirId, hostId, user,
+	table, row, metaIx, metaHash);
     close(fd);
     cdwAddQaJob(conn, fileId, submitId);
     tellSubscribers(conn, submitDir, ef->submitFileName, fileId);
@@ -721,7 +746,8 @@ char *formats[] = {"bed", "bigBed", "bigWig", "fastq", "gtf",};
 return stringArrayIx(format, formats, ArraySize(formats)) >= 0;
 }
 
-void checkManifestAndMetadata( struct fieldedTable *table, int fileIx, int formatIx, int metaIx, int enrichedInIx,
+void checkManifestAndMetadata( struct fieldedTable *table, 
+    int fileIx, int formatIx, int metaIx, int enrichedInIx,
     struct tagStorm *tagStorm, struct hash *metaHash)
 /* Make sure that all file names are unique, all metadata tags are unique, and that
  * meta tags in table exist in tagStorm.  Some of the replace a file logic is here. */
@@ -759,17 +785,13 @@ for (row = table->rowList; row != NULL; row = row->next)
     if (justTest)
         {
 	static char *otherForcedFields[] = {"body_part", "data_set_id", "assay", "lab", 
-	    "life_stage", "ucsc_db"};
+	    "ucsc_db"};
 	int i;
 	for (i=0; i<ArraySize(otherForcedFields); ++i)
 	    {
 	    char *field = otherForcedFields[i];
-	    int tableIx = stringArrayIx(field, table->fields, table->fieldCount);  // In manifest
-	    if (tableIx < 0)
-	        {
-		if (tagFindVal(stanza, field) == NULL)
-		     errAbort("Missing %s field for %s", field, file);
-		}
+	    if (metaManiFieldVal(field, table, row, metaIx, metaHash) == NULL)
+		errAbort("Missing %s field for %s", field, file);
 	    }
 	}
     }
@@ -1088,7 +1110,8 @@ if (errCatchStart(errCatch))
 	{
 	struct cdwFile *bf = sfr->file;
 	char *format = sfr->fr->row[formatIx];
-	getSubmittedFile(conn, format, tagStorm, bf, submitDir, submitUrl, submitId, user);
+	getSubmittedFile(conn, format, tagStorm, metaHash, bf, 
+	    submitDir, submitUrl, submitId, user, table, sfr->fr, metaIx);
 
 	/* Update submit record with progress (getSubmittedFile might be
 	 * long and get interrupted) */

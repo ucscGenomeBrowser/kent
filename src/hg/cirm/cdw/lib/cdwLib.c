@@ -1864,16 +1864,16 @@ else
     }
 }
 
-struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwValidFile *vf)
+struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValidFile *vf)
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 {
 char *otherEnd = cdwOppositePairedEndString(vf->pairedEnd);
 char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
-    " where experiment='%s' and outputType='%s' and replicate='%s' "
+    " where experiment='%s' and submitDirId=%d and outputType='%s' and replicate='%s' "
     " and part='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
-    , vf->experiment, vf->outputType, vf->replicate, vf->part, otherEnd
+    , vf->experiment, ef->submitDirId, vf->outputType, vf->replicate, vf->part, otherEnd
     , vf->itemCount);
 struct cdwValidFile *otherVf = cdwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)

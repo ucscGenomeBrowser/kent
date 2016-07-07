@@ -397,7 +397,7 @@ if (sameString(vf->format, "fastq"))
 	}
     else if (!isEmpty(vf->pairedEnd))
         {
-	struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, vf);
+	struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, ef, vf);
 	if (otherVf == NULL)
 	    passStat = 0;   // Need to wait for other end.
 	else

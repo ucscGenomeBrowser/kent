@@ -198,7 +198,7 @@ void pairedEndQa(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValid
 {
 verbose(2, "pairedEndQa on %u %s %s\n", ef->id, ef->cdwFileName, ef->submitFileName);
 /* Get other end, return if not found. */
-struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, vf);
+struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, ef, vf);
 if (otherVf == NULL)
     return;
 
