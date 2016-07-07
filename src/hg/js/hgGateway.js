@@ -24,7 +24,7 @@
 // hgGateway: module of mostly view/controller code (model state comes directly from server).
 
 // Globals (pragma for jshint):
-/* globals dbDbTree, activeGenomes, cart */
+/* globals dbDbTree, activeGenomes, surveyLink, surveyLabel, cart */
 /* globals calculateHgTracksWidth */ // function is defined in utils.js
 
 
@@ -1620,6 +1620,16 @@ var hgGateway = (function() {
         });
     }
 
+    function displaySurvey() {
+        // If hg.conf specifies a survey link, then hgGateway.c has set corresponding global vars.
+        // Use those to display a labeled link (possibly with html) in the otherwise empty
+        // #surveyContainer.
+        if (surveyLink && surveyLabel) {
+            $('#surveyContainer').html('<a href="' + surveyLink + '" target=_blank>' +
+                                       surveyLabel + '</a>');
+        }
+    }
+
     function init() {
         // Boot up the page; initialize elements and install event handlers.
         var searchObj = {};
@@ -1656,6 +1666,7 @@ var hgGateway = (function() {
             $('#copyPosition').click(onClickCopyPosition);
             $('.jwGoButtonContainer').click(goToHgTracks);
             $(window).resize(setRightColumnWidth.bind(null, scrollbarWidth));
+            displaySurvey();
             replaceHgsidInLinks();
             // Fill in searchObj here once everything is displayed.
             autocompleteFromTree(prunedDbDbTree, searchObj);

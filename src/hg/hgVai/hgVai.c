@@ -2450,17 +2450,26 @@ if (cartUsualBoolean(cart, "hgva_txStatus_refSeqStatus", FALSE) &&
 return txStatusExtras;
 }
 
-static void configAddTableField(struct dyString *dy, char *table, char *field, boolean *pIsFirst)
-/* Add a JSON object with table and (list of one) field. */
-// (with "." prepended to table name
-// because that's the convention for related tables in same db as track):
+static void configAddDtf(struct dyString *dy, struct joinerDtf *dtf, boolean *pIsFirst)
+/* Add a JSON object with [db].table and (list of one) field. */
 {
 if (! *pIsFirst)
     dyStringAppend(dy, ", ");
-dyStringPrintf(dy, "{ \"table\": \".%s\", \"fields\": [\"%s\"] }", table, field);
+// The convention for related tables in same db as track is to prepend "." instead of "<db>.":
+char *db = (sameString(dtf->database, database) ? "" : dtf->database);
+dyStringPrintf(dy, "{ \"table\": \"%s.%s\", \"fields\": [\"%s\"] }", db, dtf->table, dtf->field);
 *pIsFirst = FALSE;
 }
 
+static void configAddTableField(struct dyString *dy, char *table, char *field, boolean *pIsFirst)
+/* Add a JSON object with current database, table and (list of one) field. */
+{
+struct joinerDtf dtf;
+dtf.database = database;
+dtf.table = table;
+dtf.field = field;
+configAddDtf(dy, &dtf, pIsFirst);
+}
 
 static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb,
                                              struct joinerDtf *txStatusExtras)
@@ -2482,7 +2491,7 @@ if (sameString(track, "knownGene") &&
     }
 struct joinerDtf *txStatDtf;
 for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->next)
-    configAddTableField(dyConfig, txStatDtf->table, txStatDtf->field, &isFirst);
+    configAddDtf(dyConfig, txStatDtf, &isFirst);
 
 // If any of the above apply, close the relatedTables list and config object
 // and parse into jsonElements.
@@ -2514,8 +2523,10 @@ for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->nex
     {
     char *tag = NULL, *description = NULL;
     boolean isBoolean = FALSE;
-    if (differentString(txStatDtf->database, database))
-        errAbort("addTxStatusExtras: Expected db=%s in txStatDtf but got %s",
+    // Double-check that we're not joining in some table from a different assembly database:
+    if (differentString(txStatDtf->database, database) &&
+        differentString(txStatDtf->database, "hgFixed"))
+        errAbort("addTxStatusExtras: Expected db=%s or hgFixed in txStatDtf but got %s",
                  database, txStatDtf->database);
     if ((startsWith(GENCODE_PREFIX"Tag", txStatDtf->table) &&
          sameString(txStatDtf->field, "tag")) ||
