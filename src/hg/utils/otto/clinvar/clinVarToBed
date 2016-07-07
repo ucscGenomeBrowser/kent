@@ -79,6 +79,36 @@ def lastMonth(d,x=1):
       newday = d.day
     return datetime( newyear, newmonth, newday)
 
+def compareWithLastMonth(fname, maxDiff):
+    " go back one month from current date, make sure that linecount diff is at most maxDiff "
+    previousDate = lastMonth(date.today())
+    previousDate = previousDate.date().isoformat()
+    previousFname = fname.replace(today, previousDate)
+    if not isfile(previousFname):
+        print("Cannot find %s, cannot compare new data with previous month" % previousFname)
+        return
+        
+    previousCount = sum(1 for line in open(previousFname))
+    todayCount = sum(1 for line in open(fname))
+    percDiff = (todayCount-previousCount)/float(todayCount)
+
+    if percDiff < 0 and maxDiff:
+        raise Exception("line count change negative: %s %d, %s %d. Run without --maxDiff to ignore this error. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % \
+            (previousFname, previousCount, fname, todayCount))
+    if percDiff > maxDiff:
+        raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % (previousCount, todayCount))
+    # see RM 14350 do more than just linecount
+    # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
+    cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
+    diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
+    logging.info("%s: %d lines changed" % (fname, diffCount))
+    percDiff = float(diffCount)/todayCount
+    if percDiff > maxDiff:
+        logging.info(cmd)
+        diffFname =  abspath(join("archive", "lastDiff.txt"))
+        cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
+        os.system(cmd) # ret code is not 0, as there are differences, so no need to check
+        raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
 # ----------- MAIN --------------
 if args==[] and not options.auto:
     parser.print_help()
@@ -201,9 +231,10 @@ for line in ifh:
     if geneSymbol=="more than 10":
         geneSymbol = "not shown, more than 10 genes"
         
+    name = alleleId+"|"+name
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
-        name, allType, geneId, geneSymbol, clinSign,
+        name, clinSign, allType, geneId, geneSymbol,
         snpAcc, dbVarAcc, irvcAcc, inGtr, phenotypeIds, origin, assembly, cytogenetic,
         reviewStatus, hgvsCod, hgvsProt, numberSubmitters, lastEval, guidelines, otherIds]
 
@@ -245,37 +276,14 @@ fnames = [hg19Bed.name, hg38Bed.name, hg19BedCnv.name, hg38BedCnv.name]
 
 # sort the files
 for fname in fnames:
-    cmd = "bedSort %s %s" % (fname, fname) 
+    cmd = "bedSort %s %s" % (fname, fname)
     logging.debug(cmd)
     assert(os.system(cmd)==0)
 
 # check new bed files against last months's bed files
 if options.maxDiff:
     for fname in fnames:
-        # go back one month from current date
-        previousDate = lastMonth(date.today())
-        previousDate = previousDate.date().isoformat()
-        previousFname = fname.replace(today, previousDate)
-        todayCount = sum(1 for line in open(fname))
-        previousCount = sum(1 for line in open(previousFname))
-        percDiff = (todayCount-previousCount)/float(todayCount)
-        if percDiff < 0 and options.maxDiff:
-            raise Exception("line count change negative: %s %d, %s %d. Run without --maxDiff to ignore this error. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % \
-                (previousFname, previousCount, fname, todayCount))
-        if percDiff > options.maxDiff:
-            raise Exception("line count increased too much: yesterday %d , today %d. Check if the input file is OK. If yes, remove the --maxDiff option from the clinVarToBed, call it only with the --auto option. Or run the cronjob script doUpdate.sh with -nocheck to ignore this error." % (previousCount, todayCount))
-        # see RM 14350 do more than just linecount
-        # see http://stackoverflow.com/questions/1566461/how-to-count-differences-between-two-files-on-linux
-        cmd = "diff %s %s --speed-large-files | grep '^[\>\<]'  | wc -l" % (fname, previousFname)
-        diffCount = int(subprocess.check_output(cmd, shell=True, stderr=subprocess.STDOUT))
-        logging.info("%s: %d lines changed" % (fname, diffCount))
-        percDiff = float(diffCount)/todayCount
-        if percDiff > options.maxDiff:
-            logging.info(cmd)
-            diffFname =  abspath(join("archive", "lastDiff.txt"))
-            cmd = "diff %s %s --speed-large-files > %s" % (fname, previousFname, diffFname)
-            os.system(cmd) # ret code is not 0, as there are differences, so no need to check
-            raise Exception("too many differences: %d out of %d lines. Look at the differences n the file %s. If you are OK with them, run '/hive/data/outside/otto/clinvar/doUpdate.sh -nocheck'" % (diffCount, todayCount, diffFname))
+        compareWithLastMonth(fname, options.maxDiff)
 
 # convert to bigBed without the date in the fname, like clinvarMain.hg19.bb
 for fname in fnames:

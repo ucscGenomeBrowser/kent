@@ -4013,26 +4013,6 @@ if (bedPadding > 0)
 return TRUE;
 }
 
-// TODO OBSOLETED by lastDbPosCart
-boolean restoreCartSetting(char *cartSetting)
-/* Restore cart setting from var=val setting. */
-{  
-if (!cartSetting)
-    return FALSE;
-char *eq = strchr(cartSetting,'=');
-if (!eq)  // nothing to do
-    return FALSE;
-*eq = 0;
-char *cartVar = cartSetting;
-char *cartVal = eq+1;
-if (sameString(cartVal, "(null)"))
-    cartRemove(cart, cartVar);
-else
-    cartSetString(cart, cartVar, cartVal);
-*eq = '=';
-return TRUE;
-}
-
 void restoreSavedVirtPosition()
 /* Set state from lastDbPosCart. 
  * This involves parsing the extra state that was saved.*/
@@ -4077,10 +4057,6 @@ if (saveBoth)
 boolean initRegionList()
 /* initialize window list */
 {
-
-// TODO GALT
-//  update, well by 2015-04-28 it seems like we are not going to support windows from other assemblies
-// due to difficulties with tracklist.
 
 struct virtRegion *v;
 virtRegionList = NULL;
@@ -4236,9 +4212,6 @@ else if (sameString(virtModeType, "demo1"))
 
     AllocVar(v2);
     //chr22:33,031,597-33,041,570
-    //window2->organism  = "Mouse";
-    //window2->database  = "mm10";
-    //window2->database  = "hg38";
     v2->chrom = "chr22";
     v2->start = 33031597 - 1;
     v2->end = 33041570;
@@ -8797,12 +8770,13 @@ else
 
 	// For now, do this manually here:
 	// sets window to full genome size, which for these demos should be small except for allChroms
-	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly") || sameString(virtModeType, "kcGenes")) // create 1k window near middle of vchrom
+	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly")
+       	 || sameString(virtModeType, "customUrl") || sameString(virtModeType, "kcGenes"))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
 	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{
+		{ // create 1k window near middle of vchrom
 		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
 		virtWinStart = virtSeqBaseCount / 2;
 		virtWinEnd = virtWinStart + 1000;
@@ -8818,10 +8792,12 @@ else
 	    virtMode = TRUE;
 	    }
 	else if (!sameString(virtModeType, "default"))
-	    {
+	    { // try to set view to entire vchrom
 	    virtWinStart = 0;
 	    virtWinEnd = virtSeqBaseCount;
 	    virtMode = TRUE;
+	    // TODO what if the full-vchrom view has "too many windows"
+	    // check if virtRegionCount > 4000?
 	    }
 
 	remapHighlightPos(); 
@@ -9422,6 +9398,7 @@ hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
 hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink').click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
 hPrintf("$(document).ready(addKeyboardHelpEntries);");

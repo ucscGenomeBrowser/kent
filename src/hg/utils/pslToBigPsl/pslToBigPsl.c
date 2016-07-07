@@ -75,6 +75,7 @@ bigPsl.blockSizes = (int *)blockSizes;
 bigPsl.chromStarts = (int *)blockStarts;
 bigPsl.oChromStarts = (int *)oBlockStarts;
 bigPsl.oSequence = "";
+bigPsl.oCDS = "";
 int ii;
 for(ii=0; ii < bigPsl.blockCount; ii++)
     {
@@ -124,6 +125,9 @@ void pslToBigPsl(char *pslFile, char *bigPslOutput, char *fastaFile, char *cdsFi
 struct psl *psl = pslLoadAll(pslFile);
 struct hash *fastHash = NULL;
 struct hash *cdsHash = NULL;
+
+if (pslIsProtein(psl))
+    errAbort("error: bigPsl does not support protein psls");
 
 if (fastaFile != NULL)
     {

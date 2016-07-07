@@ -763,10 +763,10 @@ chainMergeSort run/mm10Patch4.mm10.lifted.chain \
 
 chainSplit chain mm10Patch4.mm10.all.chain.gz
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
-time chainPreNet  mm10Patch4.mm10.all.chain.gz \
+time chainPreNet -inclHap mm10Patch4.mm10.all.chain.gz \
     ../../mm10Patch4.chrom.sizes \
     /hive/data/genomes/mm10/chrom.sizes stdout \
-    | chainNet  stdin -minSpace=1 ../../mm10Patch4.chrom.sizes \
+    | chainNet -inclHap stdin -minSpace=1 ../../mm10Patch4.chrom.sizes \
         /hive/data/genomes/mm10/chrom.sizes stdout /dev/null \
     | netSyntenic stdin noClass.net
     #   real    0m0.811s
@@ -928,16 +928,16 @@ featureBits mm10 chainMm10Patch4Link
 
 chainSplit chain mm10.mm10Patch4.all.chain.gz
 # Make nets ("noClass", i.e. without rmsk/class stats which are added later):
-time chainPreNet mm10.mm10Patch4.all.chain.gz \
+time chainPreNet -inclHap mm10.mm10Patch4.all.chain.gz \
     /hive/data/genomes/mm10/chrom.sizes \
     ../../mm10Patch4.chrom.sizes stdout \
-    | chainNet  stdin -minSpace=1 /hive/data/genomes/mm10/chrom.sizes \
+    | chainNet -inclHap stdin -minSpace=1 /hive/data/genomes/mm10/chrom.sizes \
         ../../mm10Patch4.chrom.sizes stdout /dev/null \
     | netSyntenic stdin noClass.net
     #   real    0m0.576s
 
 netClass -verbose=0 -noAr noClass.net mm10 mm10Patch4 mm10.mm10Patch4.net
-# -rw-rw-r-- 1   66094 May 17 11:32 mm10.mm10Patch4.net
+# -rw-rw-r-- 1 2854952 Jun 29 16:44 mm10.mm10Patch4.net
 
 netFilter -minGap=10 mm10.mm10Patch4.net \
   | hgLoadNet -verbose=0 mm10 netMm10Patch4 stdin
@@ -945,7 +945,7 @@ netFilter -minGap=10 mm10.mm10Patch4.net \
 # Make liftOver chains:
 netChainSubset -verbose=0 noClass.net mm10.mm10Patch4.all.chain.gz stdout \
     | chainStitchId stdin stdout | gzip -c > mm10.mm10Patch4.over.chain.gz
-# -rw-rw-r-- 1    5617 May 17 11:33 mm10.mm10Patch4.over.chain.gz
+# -rw-rw-r-- 1  202518 Jun 29 16:47 mm10.mm10Patch4.over.chain.gz
 
 # Make axtNet for download: one .axt per mm10Patch4 seq.
 netSplit noClass.net net
@@ -1050,3 +1050,5 @@ md5sum * > md5sum.txt
     genbank/GCA_000001635.6_GRCm38.p4_assembly_report.txt \
     genbank/GCA_000001635.6_GRCm38.p4_assembly_regions.txt \
      patchLocations.bed new.sequences.list
+
+#############################################################################

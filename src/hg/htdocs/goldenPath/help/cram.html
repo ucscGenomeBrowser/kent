@@ -26,9 +26,9 @@ align="left"><img src="../../images/title.jpg"></th></tr>
 
 <p>
 The UCSC Genome Browser is capable of displaying both
-the <a href="bam.html">BAM</a> and CRAM file formats. While
+the BAM  and CRAM file formats. While
 BAM files contain all sequence data within a file, CRAM
-files are smaller by taking advanatage of an additional
+files are smaller by taking advantage of an additional
 external &quot;reference sequence&quot; file. This file
 is needed to both compress and decompress the read information.
 </p>
@@ -36,15 +36,42 @@ is needed to both compress and decompress the read information.
 <p>
 Since CRAM files are more dense than BAM files, many groups
 are switching to the CRAM format to save disk space. For
-CRAM tracks to load there is an expectation that the md5sum of the
+CRAM tracks to load there is an expectation that the checksum of the
 reference sequence used to create the CRAM will be in the CRAM header.
-A file with a matching md5sum is also expected to be
-accessible from the EBI CRAM Reference Registry.
+A file with a matching checksum is also expected to be
+accessible from the EBI CRAM reference registry
+(see <a href="#refs">References</a> for CRAM resources).
+Otherwise, users must specify a <tt>refUrl</tt> setting that will
+point to a server that is offering up the reference sequences (see
+<a href="#example4">Example Four</a>).
 </p>
 
 <p>
-Please also note that just as a <a href="bam.html">BAM</a>
-file requires an associated BAM.bai index file, a CRAM file will
+Since the loading of CRAM data requires the specific reference sequence
+used to create the CRAM file, it is very important that the exact same
+reference sequence is used for compression and decompression. When a
+CRAM file is first loaded on a given chromosome, a check for the preexistence
+in a special browser &quot;cramCache&quot; directory of the specified reference
+checksum will take place. If the reference sequence information specific
+for that CRAM for the currently viewed chromosome region does not exist, a message
+will display about the file not being found along with a note about downloading
+the reference from the EBI CRAM reference registry if it is available (or from
+the specified <tt>refUrl</tt>).
+A refresh of the page once the download is
+complete will display the CRAM data as if it were a BAM file.
+</p>
+
+<p>
+The track lines to describe CRAM tracks are identical to track
+lines for BAM tracks. This includes the <tt>type</tt> parameter,
+which is still <tt>bam</tt> even for CRAM tracks. The only
+difference is that instead of providing the URL to a BAM file,
+the URL instead points to a CRAM file.
+</p>
+
+<p>
+Please also note that just as a BAM file
+requires an associated BAM.bai index file, a CRAM file will
 require an associated CRAM.crai index file in the same location to load.
 </p>
 
@@ -54,7 +81,7 @@ require an associated CRAM.crai index file in the same location to load.
 
 <p>
 Here is an example CRAM track that displays around the gene SOD1
-on hg19 that can be cut and pasted ast text into the
+on hg19 that can be cut and pasted as text into the
 <a href="/cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks</a>
 page:
 </p>
@@ -66,6 +93,11 @@ track type=bam db=hg19 name=exampleCRAM bigDataUrl=http://genome.ucsc.edu/golden
 </ul>
 
 <p>
+Please note at the above URL location there is also a
+<tt>http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram.crai</tt> file.
+</p>
+
+<p>
 Clicking this following link will also load the above track. The information
 following <tt>hgct_customText</tt> is equivalent to pasting the text in to 
 the Custom Tracks page:
@@ -74,20 +106,6 @@ the Custom Tracks page:
 target="_blank"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&<b>hgct_customText=</b>track%20type=bam%20name=exampleCRAM%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram</tt></a>
 </p>
 </ul>
-
-<p>
-Since the loading of CRAM data requires the specific reference sequence
-used to create the CRAM file, it is very important that the exact same
-reference sequence is used for compression and decompression. When a
-CRAM file is first loaded on a given chromosome, a check for the preexistence
-in a special browser &quot;cramCache&quot; directory of the specified reference
-md5sum will take place. If the reference sequence information specific
-for that CRAM for the currently viewed chromosome region does not exist, a message
-will display about the file not being found along with a note about downloading
-the reference from the EBI CRAM Reference Registry if it is available.
-A refresh of the page once the download is
-complete will display the CRAM data as if it were a BAM file.
-</p>
 
 <p>
 <h3>Example Two</h3>
@@ -160,9 +178,37 @@ visibility pack
 bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00361/exome_alignment/HG00361.mapped.ILLUMINA.bwa.FIN.exome.20120522.bam.cram
 </pre>
 
+<p>
+<a name="example4"</a>
+<h3>Example Four</h3>
+</p>
+
+<p>If users do not register their reference sequence with the EBI CRAM reference
+registry then there is the option to use a <tt>refUrl</tt> setting to point the
+browser to the appropriarte place to find the reference sequence. The below example
+is a hub track stanza using the  <tt>refUrl</tt> option:
+<p>
+<pre>
+track cramExample
+type bam
+visibility full
+shortLabel cramExRefUrl
+longLabel This CRAM file points to a reference sequence specified by refUrl
+refUrl http://university.edu/URL/cramRef/%s
+bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/alignment/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
+</pre>
+
+<p>
+The use of <tt>refUrl</tt> can also be employed on a custom track line:<br>
+<tt>
+track type=bam db=hg19 name=cramExRefUrl refUrl=http://university.edu/URL/cramRef/%s bigDataUrl=ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/alignment/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram 
+</tt>
+</p>
+
+<a name="refs"</a>
 <h3>References</h3>
 
-The below are a collection of helpful CRAM references:
+The below are a collection of helpful CRAM resources:
 <ul>
 <li><a href="http://www.ebi.ac.uk/ena/software/cram-toolkit"
 target="_blank">CRAM toolkit</a></li>

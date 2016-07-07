@@ -359,7 +359,6 @@ cd $assemblyDir
 $wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
 cd $assemblyDir/data
 set orgDir = $orgDir
-set orgDirTrimmed = $orgDirTrimmed
 # $ContigLoc table has coords, orientation, loc_type, and refNCBI allele
 $wget $ftpSnpDb/$ContigLoc.bcp.gz
 # $ContigLocusId table has functional annotations
@@ -1432,6 +1431,7 @@ sub codingDbSnp {
   my $whatItDoes = "It processes dbSNP's functional annotations into ${snpBase}CodingDbSnp.";
   my $bossScript = new HgRemoteScript("$runDir/coding.csh",
 				      $dbHost, $runDir, $whatItDoes, $CONFIG);
+  $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
   $bossScript->add(<<_EOF_
     zcat ncbiFuncAnnotations.txt.gz \\
     | $Bin/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \\
@@ -1442,7 +1442,7 @@ sub codingDbSnp {
     cut -f 6 ncbiFuncAnnotationsFixed.txt \\
     | sort -n | uniq -c
     $Bin/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \\
-    | liftUp ${snpBase}CodingDbSnp.bed suggested.lft warn stdin
+    | liftUp ${snpBase}CodingDbSnp.bed $liftUp warn stdin
     hgLoadBed $db ${snpBase}CodingDbSnp -sqlTable=\$HOME/kent/src/hg/lib/snp125Coding.sql \\
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \\
       ${snpBase}CodingDbSnp.bed

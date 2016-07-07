@@ -313,7 +313,7 @@ my $elapsedMinutes = int($elapsedSeconds/60);
 $elapsedSeconds -= $elapsedMinutes * 60;
 
 &HgAutomate::verbose(1,
-	"\n *** All done!$upThrough\n");
+	"\n *** All done !$upThrough  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	" *** Steps were performed in $buildDir\n");
 &HgAutomate::verbose(1, "\n");
