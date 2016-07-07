@@ -31545,4 +31545,167 @@ TMPDIR=/dev/shm
       > rbest.log 2>&1 &
     #   real    463m9.924s
 
+
 #########################################################################
+# DBSNP B147 / SNP147 (DONE 7/1/16 angie)
+    # Redmine #17209
+    mkdir -p /hive/data/outside/dbSNP/147/human_hg19
+    cd /hive/data/outside/dbSNP/147/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b147_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b147_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b147_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b147_GRCh37p13
+build 147
+buildAssembly 107
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP dumped only GRCh37-specific files, not the whole complement of files
+    # that we usually download.  So make some links to hg38 download files,
+    # run doDbSnp.pl -debug to make scripts, run a subset of the commands in the
+    # download & loadDbSnp steps instead of running those steps as usual.
+    rmdir rs_fasta
+    ln -s ../human_hg38/rs_fasta .
+    rmdir schema
+    ln -s ../human_hg38/schema .
+    cd data
+    ln -s ../../human_hg38/data/[A-Z]*.bcp.gz .
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+
+    # Adapted from ../download_human_hg19_147.csh:
+    set orgDir = human_9606_b147_GRCh37p13
+    set ftpOrgData = ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/database/organism_data
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPContigLoc_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPContigLocusId_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_ContigInfo_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPMapInfo_105.bcp.gz
+    cd ..
+
+    # Adapted from loadDbSnp.csh, but just copying non-GRCh37 tables from hg38snp147:
+    set tmpDir = `mktemp -d $TMPDIR/doDbSnp.pl.translate.XXXXXX`
+    chmod 775 $tmpDir
+    cd $tmpDir
+    echo $tmpDir > /hive/data/outside/dbSNP/147/human_hg19/workingDir
+    hgsql -e 'create database hg19snp147'
+    # Ugh, the schema has _107 for GRCh38 but GRCh37 is 105, so substitute
+    sed -e 's/_107/_105/' /hive/data/outside/dbSNP/147/human_hg19/schema/table.sql \
+    | hgsql hg19snp147
+    # Get these empty tables out of the way -- copy from hg38snp147 using create view:
+    foreach table (Allele Batch SNP SNPAlleleFreq SNPAlleleFreq_TGP SNPSubSNPLink \
+                   SNP_bitfield SubSNP)
+      hgsql hg19snp147 -e "drop table if exists $table;"
+      hgsql hg19snp147 -e "create view $table as select * from hg38snp147.$table;"
+    end
+    foreach t (b147_ContigInfo_105 b147_SNPContigLocusId_105 b147_SNPMapInfo_105)
+      zcat /hive/data/outside/dbSNP/147/human_hg19/data/$t.bcp.gz  | grep -vwFf '/hive/data/outside/dbSNP/147/human_hg19/../../144/human_hg19/patchContigs.txt'\
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+        > tmp.tab
+      hgLoadSqlTab -oldTable hg19snp147 $t placeholder tmp.tab
+      rm tmp.tab
+    end
+    hgsql hg19snp147 -e \
+      'alter table b147_ContigInfo_105 add index (ctg_id); \
+       alter table b147_SNPContigLocusId_105 add index (ctg_id); \
+       alter table b147_SNPMapInfo_105 add index (snp_id);'
+    # Make sure there are no orient != 0 contigs among those selected.
+    set badCount = `hgsql hg19snp147 -NBe \
+                      'select count(*) from b147_ContigInfo_105 where orient != 0;'`
+    if ($badCount > 0) then
+      echo "found $badCount contigs in b147_ContigInfo_105 with orient != 0"
+    endif
+#found 695 contigs in b147_ContigInfo_105 with orient != 0
+    # Uh-oh -- looks like some HuRef and other assembly contigs weren't grepped out...
+    hgsql hg19snp147 -NBe 'select count(*) from b147_ContigInfo_105 where orient != 0 and group_label = "HuRef";'
+#695
+    # So delete those manually and continue.
+    hgsql hg19snp147 -NBe 'delete from b147_ContigInfo_105 where group_label != "GRCh37.p13";'
+    # OK, now back to stuff from loadDbSnp.csh:
+
+    # b147_SNPContigLoc_105 is huge, and we want only the reference contig mappings.
+    # Keep lines only if they have a word match to some reference contig ID.
+    # That allows some false positives from coord matches; clean those up afterward.
+    hgsql hg19snp147 -NBe 'select ctg_id from b147_ContigInfo_105' \
+    | sort -n > b147_ContigInfo_105.ctg_id.txt
+    zcat /hive/data/outside/dbSNP/147/human_hg19/data/b147_SNPContigLoc_105.bcp.gz \
+    | grep -Fwf b147_ContigInfo_105.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp147 b147_SNPContigLoc_105 placeholder stdin
+    # Get rid of those false positives:
+    hgsql hg19snp147 -e 'alter table b147_SNPContigLoc_105 add index (ctg_id);'
+    hgsql hg19snp147 -e 'create table ContigLocFix select cl.* from b147_SNPContigLoc_105 as cl, b147_ContigInfo_105 as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg19snp147 -e 'alter table ContigLocFix add index (ctg_id);'
+    hgsql hg19snp147 -e 'drop table b147_SNPContigLoc_105; \
+                         rename table ContigLocFix to b147_SNPContigLoc_105;'
+    hgsql hg19snp147 -e 'alter table b147_SNPContigLoc_105 add index (snp_id);'
+
+    # Now continue with business as usual at the addToDbSnp step.
+    cd /hive/data/outside/dbSNP/147/human_hg19 
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    ln -s ../human_hg38/rsFastaIds.txt .
+    # zcat rs_fasta/rs*.fas.gz \
+    # | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    # | sort -u > rsFastaIds.txt
+    zcat data/b147_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#1 missingFromRsFasta.txt
+    cat missingFromRsFasta.txt
+#rs869025304
+    # According to http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs869025304 it's
+    # a pathogenic allele... better include it.
+    # Since there's only one, instead of batch query, just get its fasta from the web page.
+    cat > rs_fasta/rs_chBatchQuery.fas <<EOF
+>gnl|dbSNP|rs869025304 rs=869025304|pos=51|len=101|taxid=9606|mol="genomic"|class=in-del|alleles="TT/CCGTATAGCTGG"|build=147|allele origin=C(maternal)/+.-----(germline)|suspect=?|clinsig=Pathogenic
+TCCAAGGGAT ATCTTCTAAC CATACCGATG ATTCTCCGTA TAGCTGGTCT
+N
+TCCACCTTAT CATCCTTCCT CTGAGAAGTA TGAAAACACT AAGGTAAGGC
+EOF
+    # uh-oh -- "class=in-del" needed to be edited to "class=2" (see ../shared/SnpClassCode.bcp.gz)
+    # in order to match the download files that we parse.
+    gzip rs_fasta/rs_chBatchQuery.fas
+    # Now start over from addToDbSnp...
+    kill %1
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNP147 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/2/16 angie)
+    # Redmine #17209
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp147Ortho.2016-07-01
+    cd /hive/data/genomes/hg19/bed/snp147Ortho.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 147 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP147 (DONE 7/1/16 angie)
+    # Redmine #17209
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp147Mask.2016-07-01
+    cd /hive/data/genomes/hg19/snp147Mask.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 147 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################

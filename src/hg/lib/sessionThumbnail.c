@@ -8,6 +8,10 @@
 #include "dystring.h"
 #include "hash.h"
 #include "trashDir.h"
+#include "hgConfig.h"
+
+#define IMGDIR_OPTION "sessionThumbnail.imgDir"
+#define WEBPATH_OPTION "sessionThumbnail.webPath"
 
 void sessionBuildThumbnailFilePaths(struct tempName *thumbnailPath, char *userIdx,
                                   char *encSessionName, char *firstUse)
@@ -20,7 +24,26 @@ void sessionBuildThumbnailFilePaths(struct tempName *thumbnailPath, char *userId
 {
 struct dyString *base = dyStringCreate("hgPS_%s_%u_%ld",
     userIdx, hashString(encSessionName), dateToSeconds(firstUse, "%Y-%m-%d %T"));
-trashDirReusableFile(thumbnailPath, "hgPS", dyStringContents(base), ".png");
+char *imgDir = cfgOption(IMGDIR_OPTION);
+char *webPath = cfgOption(WEBPATH_OPTION);
+if (imgDir != NULL && webPath != NULL)
+    {
+    makeDirsOnPath(imgDir);
+    safef(thumbnailPath->forCgi, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
+        lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
+        dyStringContents(base));
+    safef(thumbnailPath->forHtml, sizeof(thumbnailPath->forCgi), "%s%s%s.png", imgDir,
+        lastChar(thumbnailPath->forCgi) == '/' ? "" : "/",
+        dyStringContents(base));
+    }
+else if (imgDir != NULL || webPath != NULL)
+    {
+    errAbort("Error with session thumbnail path configuration.  "
+        "Either both %s and %s should be set in hg.conf or neither.",
+        IMGDIR_OPTION, WEBPATH_OPTION);
+    }
+else
+    trashDirReusableFile(thumbnailPath, "hgPS", dyStringContents(base), ".png");
 }
 
 char *sessionThumbnailFilePath(char *userIdx, char *encSessionName,

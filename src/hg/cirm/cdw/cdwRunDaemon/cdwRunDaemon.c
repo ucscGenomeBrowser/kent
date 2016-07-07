@@ -111,6 +111,7 @@ for (i=0; i<errorMessageSize; ++i)
     if (c < '\n')
         errMessage[i] = ' ' ;
     }
+stripString(errMessage, "NOSQLINJ");
 job->stderr = errMessage;
 
 

@@ -31,7 +31,7 @@ Run this script as root, like this:
     sudo -i
     bash browserSetup.sh install
 
-The install command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
+The `install` command downloads and configures Apache, MySQL and Ghostscript, copies the Genome Browser
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
@@ -57,6 +57,12 @@ enough to test if your setup is working.
 
 # The different commands
 
+There are a number of options supported by the GBiC script. In all cases, options must
+be specified before the command. The following example correctly specifies the
+batch mode option to the script:
+
+    sudo bash browserSetup.sh -b install
+
 To increase performance, the script accepts the command `minimal`. It will download the
 minimal tables required for reasonable performance from places on the US continent and 
 possibly others, e.g. from Japan. Call it like this to trade space for performance
@@ -64,28 +70,34 @@ and download a few essential pieces of hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
-If the genome browser is still too slow you have to mirror all tables of a genome assembly.
-By default rsync is used for the download.  Alternatively you can use
+If the genome browser is still too slow then you will need to mirror all tables of a 
+genome assembly. By default rsync is used for the download.  Alternatively you can use
 UDR, a UDP-based fast transfer protocol (option: -u). 
 
     sudo bash browserSetup.sh -u mirror hg38
 
 A successful run of `mirror` will also cut the connection to UCSC: no tables
-or files are downloaded anymore from the UCSC servers on-the-fly. To change
+or files are downloaded on-the-fly anymore from the UCSC servers. To change
 the remote on-the-fly loading, specify the option -o (offline) or 
--f (on-the-fly).
+-f (on-the-fly). If you are planning on keeping sensitive data on your mirror,
+you will want to disable on-the-fly loading, like so:
 
-In the case of hg19, the full assembly download is 7TB big. To cut this down to
-up to 2TB or even less, use the -t option, e.g.
+    sudo bash browserSetup.sh -o
+
+In the case of hg19, the full assembly download is ~6.5TB. To cut this down to
+up to 2TB or even less, use the -t option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
+
+For a full list of -t options, see the [All options](#all-options) section  or run the 
+script with no arguments.
 
 When you want to update all CGIs and fully mirrored assemblies, you can call the
 script with the `update` parameter like this: 
 
     sudo bash browserInstall.sh update
 
-Minimal mirrors, so those that have never mirrored a full assembly, should not 
+Minimal mirrors (those that have never mirrored a full assembly) should not 
 use the update command, but rather just re-run the minimal command, as it will
 just update the minimal tables. You may want to add this command to your crontab,
 maybe run it every day, so your local tables stay in sync with UCSC:
@@ -93,7 +105,7 @@ maybe run it every day, so your local tables stay in sync with UCSC:
     sudo bash browserInstall.sh minimal hg19 hg38
 
 To update only the CGI software parts of the browser and not the data, use the
-`cgiUpdate` command. This is a problematic update, functions may break if the
+`cgiUpdate` command. If this is a problematic update, functions may break if the
 data needed for them is not available. In most circumstances, we recommend you
 use the `mirror` or `update` commands instead.
 
@@ -102,15 +114,15 @@ use the `mirror` or `update` commands instead.
 You probably also want to add a cleaning command to your crontab to remove 
 the temporary files that are created during genome browser usage. They accumulate
 in /usr/local/apache/trash and can quickly take up a lot of space. A command like
-this could be added to your crontab file:
+this should be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
 If you find a bug or your linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
 Genome Browser installation are at
-[http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product](http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product).
-
+<http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
+ 
 # All options
 
 Here is the full listing of commands and options supported by the GBiC script: 

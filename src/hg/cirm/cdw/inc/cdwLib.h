@@ -386,7 +386,7 @@ struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fi
 char *cdwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
-struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwValidFile *vf);
+struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValidFile *vf);
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 
 struct cdwQaPairedEndFastq *cdwQaPairedEndFastqFromVfs(struct sqlConnection *conn,

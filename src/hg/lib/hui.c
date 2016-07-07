@@ -1918,11 +1918,11 @@ for (trackEl = trackList; trackEl != NULL; trackEl = trackEl->next)
     struct trackDb *tdb = trackEl->val;
     char *dupe = cloneString(tdb->type);
     char *type = firstWordInLine(dupe);
-    if ((sameString(type, "genePred")) && (!sameString(tdb->table, "tigrGeneIndex") && !tdbIsComposite(tdb)))
+    if ((sameString(type, "genePred")) && (!sameString(tdb->table, "tigrGeneIndex") && !tdbIsComposite(tdb) && !tdbIsCompositeView(tdb)))
 	{
 	AllocVar(name);
 	name->name = tdb->track;
-	name->label = tdb->shortLabel;
+	name->label = tdb->longLabel;
 	slAddHead(&nameList, name);
 	}
     freez(&dupe);
