@@ -563,6 +563,21 @@ in psl gives the query negative strand coordinate above.<br>
 The 4, 14, and 5 bases at beginning, middle, and end were
 chosen to not match with the genome at the corresponding position.<br>
 
+<br>
+<B><I>Protein Query:</I></B><BR>
+A protein query consists of amino acids. 
+To align against a database of nucleic acids, 
+each target chromosome gets translated into amino-acids in 3 different versions, one for each frame. 
+The protein psl is a hybrid, because the query fields are all in amino-acid coordinates and sizes,
+while the target database fields are in nucleic-acid chromosome coordinates and sizes.
+The fields shared by query and target are blockCount and blockSizes. 
+Since blockSizes differ between query (AA) and target (NA), 
+a choice was made to report the blockSizes field in amino acids since it is a protein query.
+<br>
+<br>
+Use <b>blockSizes[exonNumber]*3</b> to find the size of a target exon in nucleic-acids.
+<br>
+Use tStarts[exonNumber] + <b>(blockSizes[exonNumber]*3)</b> to find the end-position of a target exon.
 
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
