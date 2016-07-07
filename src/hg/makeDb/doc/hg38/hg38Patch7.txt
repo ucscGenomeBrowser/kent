@@ -868,6 +868,8 @@ ln -s ../hg38Patch7.unmasked.2bit hg38Patch7.2bit
 ln -s ../hg38Patch7.agp
 ln -s ../hg38Patch7.fa.gz
 md5sum * > md5sum.txt
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/hg38Patch7
+ln -s `pwd`/*  /usr/local/apache/htdocs-hgdownload/goldenPath/hg38/hg38Patch7/
 
 # copy README.txt from previous patch and edit as needed - replace the
 # patch description lines with the output of running
