@@ -117,7 +117,7 @@ def parseConf(fname):
                 inclDict = parseConf(inclPath)
                 conf.update(inclDict)
         elif "=" in line: # string search for "="
-            key, value = line.split("=")
+            key, value = string.split(line, "=", 1)
             conf[key] = value
     return conf
 
