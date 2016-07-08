@@ -19,6 +19,7 @@
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
 #include "jsHelper.h"
+#include "verbose.h"
 
 struct galleryEntry
 /* Holds data for a single session in the gallery*/
@@ -293,6 +294,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
