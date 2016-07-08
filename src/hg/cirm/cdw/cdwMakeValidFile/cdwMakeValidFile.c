@@ -73,12 +73,13 @@ return fd;
 }
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
-	struct cdwAssembly *assembly, struct cdwValidFile *vf)
+	struct cdwAssembly *assembly, struct cdwValidFile *vf, char *assay)
 /* Fill out fields of vf.  Create sample subset. */
 {
 /* Make cdwFastqFile record. */
 long long fileId = ef->id;
-cdwMakeFastqStatsAndSample(conn, fileId);
+
+cdwMakeFastqStatsAndSample(conn, fileId, assay);
 struct cdwFastqFile *fqf = cdwFastqFileFromFileId(conn, fileId);
 verbose(1, "Made sample fastq with %lld reads\n", fqf->sampleCount);
 
@@ -583,7 +584,6 @@ if (assembly == NULL)
 	(long long)ef->id, ef->submitFileName, format);
 }
 
-
 void mustMakeValidFile(struct sqlConnection *conn, struct cdwFile *ef, struct cgiParsedVars *tags,
     long long oldValidId)
 /* If possible make a cdwValidFile record for this.  Makes sure all the right tags are there,
@@ -625,8 +625,9 @@ if (vf->format)	// We only can validate if we have something for format
 
     if (sameString(format, "fastq"))
 	{
+	char *assay = cdwLookupTag(tags, "assay");
 	needAssembly(ef, format, assembly);
-	makeValidFastq(conn, path, ef, assembly, vf);
+	makeValidFastq(conn, path, ef, assembly, vf, assay);
 	suffix = ".fastq.gz";
 	}
     else if (cdwIsSupportedBigBedFormat(format))
