@@ -55,12 +55,12 @@ static struct optionSpec options[] = {
 };
 
 void alignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
-    char *fastqPath, struct cdwValidFile *vf, FILE *bedF)
+    char *fastqPath, struct cdwValidFile *vf, FILE *bedF, char *assay)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
  * Update vf->mapRatio and related fields. */
 {
 cdwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF, 
-    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio);
+    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio, assay);
 }
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
@@ -70,7 +70,7 @@ void makeValidFastq( struct sqlConnection *conn, char *path, struct cdwFile *ef,
 /* Make cdwFastqFile record. */
 long long fileId = ef->id;
 
-cdwMakeFastqStatsAndSample(conn, fileId, assay);
+cdwMakeFastqStatsAndSample(conn, fileId);
 struct cdwFastqFile *fqf = cdwFastqFileFromFileId(conn, fileId);
 verbose(1, "Made sample fastq with %lld reads\n", fqf->sampleCount);
 
@@ -85,7 +85,7 @@ char sampleBedName[PATH_LEN], temp[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%scdwSampleBedXXXXXX", cdwTempDirForToday(temp));
 cdwReserveTempFile(sampleBedName);
 FILE *bedF = mustOpen(sampleBedName, "w");
-alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF);
+alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF, assay);
 carefulClose(&bedF);
 vf->sampleBed = cloneString(sampleBedName);
 

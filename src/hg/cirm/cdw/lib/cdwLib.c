@@ -1594,19 +1594,25 @@ void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
  * second time it was run in same app.  Resorting therefore to temp files. */
 char genoFile[PATH_LEN], cutadaptFile[PATH_LEN];
 cdwBwaIndexPath(assembly, genoFile);
-
 char cmd[3*PATH_LEN], *saiName, *samName;
-if (strcmp(assay, "long-RNA-seq"))
+if (!strcmp(assay, "long-RNA-seq"))
     {
     safef(cutadaptFile, PATH_LEN, "%scdwCutadaptXXXXXX", cdwTempDir());
     cdwReserveTempFile(cutadaptFile);
-    safef(cmd, sizeof(cmd), "cutadapt -a \"AAAAAAAAAAAAAAAAAAAAAAAAA\" %s -o %s", 
-	fastqPath, cutadaptFile); 
+    struct slName *file = charSepToSlNames(fastqPath, '.'); 
+    // Need to add a .fastq between the file name and the .gz for cutadapt to run.
+    // Use a symlink.  
+    safef(cmd, sizeof(cmd), "ln -s %s %s.fastq.gz", fastqPath, file->name); 
+    mustSystem(cmd); 
+    // Run cutadapt on the new file then pass the output into BWA. 
+    safef(cmd, sizeof(cmd), "cutadapt -a \"AAAAAAAAAAAAAAAAAAAAAAAAA\" %s.fastq.gz -o %s", 
+	file->name, cutadaptFile); 
+    mustSystem(cmd);
 	
     saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
     safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, cutadaptFile, saiName);
     mustSystem(cmd);
-
+    
     samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
     safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, cutadaptFile, samName);
     mustSystem(cmd);
