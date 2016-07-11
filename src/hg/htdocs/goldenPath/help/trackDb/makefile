@@ -1,3 +1,4 @@
+kentSrc = ../../../../..
 include ../../../../../inc/common.mk
 
 CPFLAGS = -p --remove-destination

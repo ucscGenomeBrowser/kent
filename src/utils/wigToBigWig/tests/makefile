@@ -1,3 +1,4 @@
+kentSrc = ../../..
 A = ${DESTBINDIR}/wigToBigWig
 include ../../../inc/common.mk
 

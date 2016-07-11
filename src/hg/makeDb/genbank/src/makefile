@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 GBROOT = ..
 include ${GBROOT}/common.mk
 

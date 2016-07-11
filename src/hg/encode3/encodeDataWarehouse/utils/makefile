@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 # Build all subdirectories we care about
 
 include ../../../../inc/common.mk

@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 gff3ToGenePred = ${DESTBINDIR}/gff3ToGenePred

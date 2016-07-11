@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build all directories in utils
 
 include ../../../inc/common.mk

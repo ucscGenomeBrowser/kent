@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 O = eapDb.o eapGraph.o eapLib.o 

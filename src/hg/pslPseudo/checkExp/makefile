@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 L = -l ssl -lm $(MYSQLLIBS)

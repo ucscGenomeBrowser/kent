@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 # These mixin files are Javascript not JSX, so use simple.mk not ../react.mk

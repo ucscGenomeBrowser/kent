@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 O = encodeDataWarehouse.o edwBamFileFromRa.o edwFastqFileFromRa.o edwLib.o edwQaWigSpotFromRa.o

@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 # !!! NOTE we use gcc34 here to avoid a compiler compatibility issue with openss
 #CC = gcc34
