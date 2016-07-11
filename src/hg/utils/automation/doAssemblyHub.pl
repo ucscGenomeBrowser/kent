@@ -33,6 +33,9 @@ use vars qw/
 my $stepper = new HgStepManager(
     [ { name => 'download',   func => \&doDownload },
       { name => 'sequence',   func => \&doSequence },
+      { name => 'assemblyGap',   func => \&doAssemblyGap },
+      { name => 'gatewayPage',   func => \&doGatewayPage },
+      { name => 'gc5Base',   func => \&doGc5Base },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -565,6 +568,109 @@ _EOF_
   );
   $bossScript->execute();
 } # doSequence
+
+#########################################################################
+# * step: assemblyGap [workhorse]
+sub doAssemblyGap {
+  my $runDir = "$buildDir/trackData/assemblyGap";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct assembly and gap tracks from AGP file";
+  my $workhorse = &HgAutomate::chooseWorkhorse();
+  my $bossScript = newBash HgRemoteScript("$runDir/doAssemblyGap.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.agp.gz -nt \$asmId.assembly.bb ]; then
+
+zcat ../../\$asmId.agp.gz | grep -v "^#" | awk '\$5 != "N" && \$5 != "U"' \\
+   | awk '{printf "%s\\t%d\\t%d\\t%s\\t0\\t%s\\n", \$1, \$2-1, \$3, \$6, \$9}' \\
+      | sort -k1,1 -k2,2n > \$asmId.assembly.bed
+
+zcat ../../\$asmId.agp.gz | grep -v "^#" | awk '\$5 == "N" || \$5 == "U"' \\
+   | awk '{printf "%s\\t%d\\t%d\\t%s\\n", \$1, \$2-1, \$3, \$8}' \\
+      | sort -k1,1 -k2,2n > \$asmId.gap.bed
+
+bedToBigBed -extraIndex=name -verbose=0 \$asmId.assembly.bed \\
+    ../../\$asmId.chrom.sizes \$asmId.assembly.bb
+touch -r ../../\$asmId.agp.gz \$asmId.assembly.bb
+
+if [ -s \$asmId.gap.bed ]; then
+  bedToBigBed -extraIndex=name -verbose=0 \$asmId.gap.bed \\
+    ../../\$asmId.chrom.sizes \$asmId.gap.bb
+  touch -r ../../\$asmId.agp.gz \$asmId.gap.bb
+fi
+
+rm -f \$asmId.assembly.bed \$asmId.gap.bed
+
+### XXX perhaps to be done, run up an ix ixx pair to index the assembly names
+
+else
+  printf "# assemblyGap step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # assemblyGap
+
+#########################################################################
+# * step: gatewayPage [workhorse]
+sub doGatewayPage {
+  my $runDir = "$buildDir/html";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct html/$asmId.description.html";
+  my $workhorse = &HgAutomate::chooseWorkhorse();
+  my $bossScript = newBash HgRemoteScript("$runDir/doGatewayPage.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
+  \$HOME/kent/src/hg/utils/automation/genbank/gatewayPage.pl \\
+     ../download/\${asmId}_assembly_report.txt \\
+        > \$asmId.description.html 2> /dev/null
+else
+  printf "# gatewayPage step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # gatewayPage
+
+#########################################################################
+# * step: gc5Base [workhorse]
+sub doGc5Base {
+  my $runDir = "$buildDir/trackData/gc5Base";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct gc5Base bigWig track data";
+  my $workhorse = &HgAutomate::chooseWorkhorse();
+  my $bossScript = newBash HgRemoteScript("$runDir/doGc5Base.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
+  hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 test \\
+    ../../\$asmId.2bit \\
+      | gzip -c > \$asmId.wigVarStep.gz
+  wigToBigWig \$asmId.wigVarStep.gz ../../\$asmId.chrom.sizes \$asmId.gc5Base.bw
+  rm -f \$asmId.wigVarStep.gz
+else
+  printf "# gc5Base step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # gc5Base
 
 #########################################################################
 # * step: cleanup [fileServer]
