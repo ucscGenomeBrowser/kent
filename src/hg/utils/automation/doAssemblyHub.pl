@@ -137,21 +137,23 @@ sub doDownload {
 				      $runDir, $whatItDoes);
 
   $bossScript->add(<<_EOF_
-if ${asmId}_genomic.fna.gz -nt $asmId.2bit ]; then
-  rm -f ${asmId}_genomic.fna.gz \\
-    ${asmId}_assembly_report.txt \\
-    ${asmId}_rm.out.gz \\
-    ${asmId}_assembly_structure \\
-    $asmId.2bit
+export asmId=$asmId
 
-  ln -s $assemblySource/${asmId}_genomic.fna.gz .
-  ln -s $assemblySource/${asmId}_assembly_report.txt .
-  ln -s $assemblySource/${asmId}_rm.out.gz .
-  if [ -d $assemblySource/${asmId}_assembly_structure ]; then
-    ln -s $assemblySource/${asmId}_assembly_structure .
+if [ ! -L \${asmId}_genomic.fna.gza -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
+  rm -f \${asmId}_genomic.fna.gz \\
+    \${asmId}_assembly_report.txt \\
+    \${asmId}_rm.out.gz \\
+    \${asmId}_assembly_structure \\
+    \$asmId.2bit
+
+  ln -s $assemblySource/\${asmId}_genomic.fna.gz .
+  ln -s $assemblySource/\${asmId}_assembly_report.txt .
+  ln -s $assemblySource/\${asmId}_rm.out.gz .
+  if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
+    ln -s $assemblySource/\${asmId}_assembly_structure .
   fi
-  faToTwoBit ${asmId}_genomic.fna.gz $asmId.2bit
-  touch -r ${asmId}_genomic.fna.gz $asmId.2bit
+  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
 else
   printf "# download step previously completed\\n" 1>&2
   exit 0
@@ -541,7 +543,7 @@ if [ -s ../\$asmId.chrom.sizes ]; then
   exit 0
 fi
 
-zcat *.agp.gz | gzip > ../\$asmId.agp
+zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
 twoBitInfo ../\$asmId.2bit stdout | sort -k2nr > ../\$asmId.chrom.sizes
 # verify everything is there
@@ -549,8 +551,13 @@ twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.s
 export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
 export oldTotal=`ave -col=2 source.\$asmId.chrom.sizes | grep "^total"`
 if [ "\$newTotal" != "\$oldTotal" ]; then
-  printf "# sequence construction error: not same totals\n" 1>&2
+  printf "# ERROR: sequence construction error: not same totals source vs. new:\n" 1>&2
   printf "# \$newTotal != \$oldTotal\n" 1>&2
+  exit 255
+fi
+export checkAgp=`checkAgpAndFa ../\$asmId.agp.gz ../\$asmId.2bit 2>&1 | tail -1`
+if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ]; then
+  printf "# ERROR: checkAgpAndFa \$asmId.agp.gz \$asmId.2bit failing\n" 1>&2
   exit 255
 fi
 
@@ -568,7 +575,7 @@ sub doCleanup {
   my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-printf "to be done\n" 1>&2
+printf "to be done\\n" 1>&2
 _EOF_
   );
   $bossScript->execute();
