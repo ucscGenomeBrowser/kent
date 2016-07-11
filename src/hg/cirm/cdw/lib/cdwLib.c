@@ -1564,6 +1564,8 @@ void cdwReserveTempFile(char *path)
 int fd = mkstemp(path);
 if (fd == -1)
      errnoAbort("Couldn't create temp file %s", path);
+if (fchmod(fd, 0664) == -1)
+    errnoAbort("Couldn't change permissions on temp file %s", path);
 mustCloseFd(&fd);
 }
 

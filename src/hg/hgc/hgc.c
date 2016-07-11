@@ -7270,7 +7270,7 @@ else if (sameString("HInvGeneMrna", aliTable))
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
-else if (sameString("ncbiRefSeqPsl", aliTable))
+else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
     {
     rnaSeq = getBaseColorSequence(acc, aliTable);
     }
@@ -8704,7 +8704,7 @@ puts("<B>Alignment Summary:</B><BR>\n");
 // sprintLongWithCommas(strBuf, altSize);
 // printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
 pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
 puts("<P>");
 total = 0;

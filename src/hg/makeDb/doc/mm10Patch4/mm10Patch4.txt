@@ -1041,6 +1041,8 @@ ln -s ../mm10Patch4.unmasked.2bit mm10Patch4.2bit
 ln -s ../mm10Patch4.agp
 ln -s ../mm10Patch4.fa.gz
 md5sum * > md5sum.txt
+mkdir /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/mm10Patch4
+ln -s `pwd`/* /usr/local/apache/htdocs-hgdownload/goldenPath/mm10/mm10Patch4/
 
 # copy README.txt from previous patch and edit as needed - replace the
 # patch description lines with the output of running

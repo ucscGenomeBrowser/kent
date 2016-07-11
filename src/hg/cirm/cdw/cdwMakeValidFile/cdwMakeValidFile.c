@@ -63,15 +63,6 @@ cdwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF,
     &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio);
 }
 
-int makeReadableTemp(char *fileName)
-/* Make temp file that other people can read. */
-{
-int fd = mkstemp(fileName);
-if (fchmod(fd, 0664) == -1)
-    errnoAbort("Couldn't change permissions on temp file %s", fileName);
-return fd;
-}
-
 void makeValidFastq( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
 	struct cdwAssembly *assembly, struct cdwValidFile *vf)
 /* Fill out fields of vf.  Create sample subset. */
@@ -91,8 +82,8 @@ vf->basesInSample = fqf->basesInSample;
 /* Align fastq and turn results into bed. */
 char sampleBedName[PATH_LEN], temp[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%scdwSampleBedXXXXXX", cdwTempDirForToday(temp));
-int bedFd = makeReadableTemp(sampleBedName);
-FILE *bedF = fdopen(bedFd, "w");
+cdwReserveTempFile(sampleBedName);
+FILE *bedF = mustOpen(sampleBedName, "w");
 alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF);
 carefulClose(&bedF);
 vf->sampleBed = cloneString(sampleBedName);
@@ -470,8 +461,8 @@ if (!gff->isGtf)
 /* Convert it to a somewhat smaller less informative bed file for sampling purposes. */
 char sampleFileName[PATH_LEN], temp[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%scdwGffBedXXXXXX", cdwTempDirForToday(temp));
-int sampleFd = makeReadableTemp(sampleFileName);
-FILE *f = fdopen(sampleFd, "w");
+cdwReserveTempFile(sampleFileName);
+FILE *f = fopen(sampleFileName, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 
 /* Loop through lines writing out simple bed and adding to genome range tree. */
