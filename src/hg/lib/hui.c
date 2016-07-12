@@ -3984,10 +3984,8 @@ switch(cType)
                         break;
     case cfgBedFilt:    bedFiltCfgUi(cart,tdb,prefix,title, boxed);
                         break;
-#ifdef USE_BAM
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
                         break;
-#endif
     case cfgVcf:        vcfCfgUi(cart, tdb, prefix, title, boxed);
                         break;
     case cfgLong:       longRangeCfgUi(cart, tdb, prefix, title, boxed);
@@ -6581,7 +6579,6 @@ if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
 cfgEndBox(boxed);
 }
 
-#ifdef USE_BAM
 static char *grayLabels[] =
     { "alignment quality",
       "base qualities",
@@ -6697,7 +6694,6 @@ if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
 
 cfgEndBox(boxed);
 }
-#endif//def USE_BAM
 
 void lrgCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* LRG: Locus Reference Genomic sequences mapped to assembly. */

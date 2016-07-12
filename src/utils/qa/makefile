@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 # ${SCRIPTS} is ${HOME}/bin/scripts (defined in kent/src/inc/common.mk)
 # to install in /cluster/bin/scripts/, run (in this directory):

@@ -1,3 +1,4 @@
+kentSrc = ../../..
 A = ${DESTBINDIR}/bigWigCat 
 include ../../../inc/common.mk
 

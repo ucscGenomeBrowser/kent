@@ -6,7 +6,6 @@
 #include "linefile.h"
 #include "options.h"
 
-#ifdef USE_TABIX
 
 #include "sqlNum.h"
 #include "udc.h"
@@ -106,12 +105,3 @@ tabixFetch(argv[1], argv[2]);
 return 0;
 }
 
-#else // no USE_TABIX
-int main(int argc, char *argv[])
-/* Process command line. */
-{
-errAbort(COMPILE_WITH_TABIX, "tabixFetch");
-return 1;
-}
-
-#endif // no USE_TABIX

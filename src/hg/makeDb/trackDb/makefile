@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Make your private trackDb with 
 #	make update
 # Your private trackDb with additional options, for example:

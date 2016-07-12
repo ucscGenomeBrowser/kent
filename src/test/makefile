@@ -1,3 +1,4 @@
+kentSrc = ..
 include ../inc/common.mk
 
 ../cgi-bin/test.cgi: ../lib/$(MACHTYPE)/jkweb.a test.c

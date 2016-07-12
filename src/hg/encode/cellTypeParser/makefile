@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build encode validator
 
 include ../../../inc/common.mk

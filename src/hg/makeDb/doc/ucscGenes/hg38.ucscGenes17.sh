@@ -815,7 +815,7 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
 # blatServer by the keyword "$db"Kg with the version number appended
 # untrans gfServer for hg38KgSeq10 on host blat1c, port 17873
 hgsql hgcentraltest -e \
-      'INSERT into blatServers values ("hg38KgSeq10", "blat41", 17873, 0, 1);'
+      'INSERT into blatServers values ("hg38KgSeq10", "blat1c", 17873, 0, 1);'
 hgsql hgcentraltest -e \                                                    
       'INSERT into targetDb values("hg38KgSeq10", "UCSC Genes", \
          "hg38", "kgTargetAli", "", "", \

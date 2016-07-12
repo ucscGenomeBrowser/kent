@@ -1,3 +1,4 @@
+kentSrc = ..
 include ../inc/localEnvironment.mk
 include ../inc/common.mk
 

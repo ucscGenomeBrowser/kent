@@ -15,9 +15,7 @@
 #include "localmem.h"
 #include "cheapcgi.h"
 #include "udc.h"
-#ifdef USE_HTS
 #include "htslib/tbx.h"
-#endif
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -211,11 +209,6 @@ lf->buf = s;
 return lf;
 }
 
-#if (defined USE_TABIX && defined KNETFILE_HOOKS && !defined USE_SAMTABIX)
-// UCSC aliases for backwards compatibility with independently patched & linked samtools and tabix:
-#define bgzf_tell ti_bgzf_tell
-#define bgzf_read ti_bgzf_read
-#endif
 
 struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
 /* Wrap a line file around a data file that has been compressed and indexed
@@ -224,13 +217,11 @@ struct lineFile *lineFileTabixMayOpen(char *fileOrUrl, bool zTerm)
  * This works only if kent/src has been compiled with USE_TABIX=1 and linked
  * with the tabix C library. */
 {
-#ifdef USE_TABIX
 if (fileOrUrl == NULL)
     errAbort("lineFileTabixMayOpen: fileOrUrl is NULL");
 int tbiNameSize = strlen(fileOrUrl) + strlen(".tbi") + 1;
 char tbiName[tbiNameSize];
 safef(tbiName, sizeof(tbiName), "%s.tbi", fileOrUrl);
-#ifdef USE_HTS
 htsFile *htsFile = hts_open(fileOrUrl, "r");
 if (htsFile == NULL)
     {
@@ -239,15 +230,6 @@ if (htsFile == NULL)
     }
 tbx_t *tabix;
 if ((tabix = tbx_index_load2(fileOrUrl, tbiName)) == NULL)
-#else
-tabix_t *tabix = ti_open(fileOrUrl, tbiName);
-if (tabix == NULL)
-    {
-    warn("Unable to open \"%s\"", fileOrUrl);
-    return NULL;
-    }
-if ((tabix->idx = ti_index_load(tbiName)) == NULL)
-#endif
     {
     warn("Unable to load tabix index from \"%s\"", tbiName);
     if (tabix)
@@ -262,33 +244,23 @@ lf->bufSize = 64 * 1024;
 lf->buf = needMem(lf->bufSize);
 lf->zTerm = zTerm;
 lf->tabix = tabix;
-#ifdef USE_HTS
 lf->htsFile = htsFile;
 kstring_t *kline;
 AllocVar(kline);
 kline->s = malloc(8192);
 lf->kline = kline;
 lf->tabixIter = tbx_itr_queryi(tabix, HTS_IDX_REST, 0, 0);
-#else
-lf->tabixIter = ti_iter_first();
-#endif
 return lf;
-#else // no USE_TABIX
-warn(COMPILE_WITH_TABIX, "lineFileTabixMayOpen");
-return NULL;
-#endif // no USE_TABIX
 }
 
 boolean lineFileSetTabixRegion(struct lineFile *lf, char *seqName, int start, int end)
 /* Assuming lf was created by lineFileTabixMayOpen, tell tabix to seek to the specified region
  * and return TRUE (or if there are no items in region, return FALSE). */
 {
-#ifdef USE_TABIX
 if (lf->tabix == NULL)
     errAbort("lineFileSetTabixRegion: lf->tabix is NULL.  Did you open lf with lineFileTabixMayOpen?");
 if (seqName == NULL)
     return FALSE;
-#ifdef USE_HTS
 int tabixSeqId = ti_get_tid(lf->tabix, seqName);
 if (tabixSeqId < 0 && startsWith("chr", seqName))
     // We will get some files that have chr-less Ensembl chromosome names:
@@ -296,32 +268,16 @@ if (tabixSeqId < 0 && startsWith("chr", seqName))
 if (tabixSeqId < 0)
     return FALSE;
 ti_iter_t *iter = ti_queryi((tbx_t *)lf->tabix, tabixSeqId, start, end);
-#else
-int tabixSeqId = ti_get_tid(lf->tabix->idx, seqName);
-if (tabixSeqId < 0 && startsWith("chr", seqName))
-    // We will get some files that have chr-less Ensembl chromosome names:
-    tabixSeqId = ti_get_tid(lf->tabix->idx, seqName+strlen("chr"));
-if (tabixSeqId < 0)
-    return FALSE;
-ti_iter_t iter = ti_queryi(lf->tabix, tabixSeqId, start, end);
-#endif
 if (iter == NULL)
     return FALSE;
 if (lf->tabixIter != NULL)
     ti_iter_destroy(lf->tabixIter);
 lf->tabixIter = iter;
-#ifndef USE_HTS
-lf->bufOffsetInFile = bgzf_tell(lf->tabix->fp);
-#endif
 lf->bytesInBuf = 0;
 lf->lineIx = -1;
 lf->lineStart = 0;
 lf->lineEnd = 0;
 return TRUE;
-#else // no USE_TABIX
-warn(COMPILE_WITH_TABIX, "lineFileSetTabixRegion");
-return FALSE;
-#endif // no USE_TABIX
 }
 
 struct lineFile *lineFileUdcMayOpen(char *fileOrUrl, bool zTerm)
@@ -395,10 +351,8 @@ lf->reuse = TRUE;
 
 INLINE void noTabixSupport(struct lineFile *lf, char *where)
 {
-#ifdef USE_TABIX
 if (lf->tabix != NULL)
     lineFileAbort(lf, "%s: not implemented for lineFile opened with lineFileTabixMayOpen.", where);
-#endif // USE_TABIX
 }
 
 void lineFileSeek(struct lineFile *lf, off_t offset, int whence)
@@ -510,20 +464,13 @@ if (lf->udcFile)
     return TRUE;
     }
 
-#ifdef USE_TABIX
 if (lf->tabix != NULL && lf->tabixIter != NULL)
     {
     // Just use line-oriented ti_read:
     int lineSize = 0;
-#ifdef USE_HTS
     lineSize = tbx_itr_next(lf->htsFile, lf->tabix, lf->tabixIter, lf->kline);
     if (lineSize == -1)
 	return FALSE;
-#else
-    const char *line = ti_read(lf->tabix, lf->tabixIter, &lineSize);
-    if (line == NULL)
-	return FALSE;
-#endif
     lf->bufOffsetInFile = -1;
     lf->bytesInBuf = lineSize;
     lf->lineIx = -1;
@@ -532,18 +479,13 @@ if (lf->tabix != NULL && lf->tabixIter != NULL)
     if (lineSize > lf->bufSize)
 	// shouldn't be!  but just in case:
 	lineFileExpandBuf(lf, lineSize * 2);
-#ifdef USE_HTS
     kstring_t *kline = lf->kline;
     safecpy(lf->buf, lf->bufSize, kline->s);
-#else 
-    safecpy(lf->buf, lf->bufSize, line);
-#endif
     *retStart = lf->buf;
     if (retSize != NULL)
 	*retSize = lineSize;
     return TRUE;
     }
-#endif // USE_TABIX
 
 determineNlType(lf, buf+endIx, bytesInBuf);
 
@@ -592,18 +534,12 @@ while (!gotLf)
     lf->bufOffsetInFile += oldEnd;
     if (lf->fd >= 0)
 	readSize = lineFileLongNetRead(lf->fd, buf+sizeLeft, readSize);
-#ifdef USE_TABIX
     else if (lf->tabix != NULL && readSize > 0)
 	{
-#ifdef USE_HTS
         errAbort("bgzf read not supported with htslib (yet)");
-#else
-	readSize = bgzf_read(lf->tabix->fp, buf+sizeLeft, readSize);
-#endif
 	if (readSize < 1)
 	    return FALSE;
 	}
-#endif // USE_TABIX
     else
         readSize = 0;
 
@@ -743,19 +679,15 @@ if ((lf = *pLf) != NULL)
 	close(lf->fd);
 	freeMem(lf->buf);
 	}
-#ifdef USE_TABIX
     else if (lf->tabix != NULL)
 	{
 	if (lf->tabixIter != NULL)
 	    ti_iter_destroy(lf->tabixIter);
 	ti_close(lf->tabix);
-#ifdef USE_HTS
         hts_close(lf->htsFile);
         kstring_t *kline = lf->kline;
         free(kline->s);
-#endif
 	}
-#endif // USE_TABIX
     else if (lf->udcFile != NULL)
         udcFileClose(&lf->udcFile);
 

@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../common.mk
 
 PSLPSEUDO = /cluster/home/baertsch/bin/x86_64/pslPseudo 
