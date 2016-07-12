@@ -115,7 +115,7 @@ bam_hdr_t *bam_hdr_read(BGZF *fp)
 {
     bam_hdr_t *h;
     char buf[4];
-    int magic_len, has_EOF;
+    int magic_len; // has_EOF;
     int32_t i, name_len, num_names = 0;
     size_t bufsize;
     ssize_t bytes;

@@ -142,7 +142,7 @@ int cram_index_load(cram_fd *fd, const char *fn, const char *fn_idx) {
     char buf[65536];
     ssize_t len;
     kstring_t kstr = {0};
-    FILE *fp;
+    hFILE *fp;
     cram_index *idx;
     cram_index **idx_stack = NULL, *ep, e;
     int idx_stack_alloc = 0, idx_stack_ptr = 0;

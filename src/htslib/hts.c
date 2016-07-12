@@ -1967,15 +1967,15 @@ int hts_itr_next(BGZF *fp, hts_itr_t *iter, void *r, void *data)
  *** Retrieve index ***
  **********************/
 
-static char *test_and_fetch(const char *fn)
+static const char *test_and_fetch(const char *fn)
 {
     FILE *fp;
     if (hisremote(fn)) {
-        const int buf_size = 1 * 1024 * 1024;
         hFILE *fp_remote;
+#ifdef NOTNOW
+        const int buf_size = 1 * 1024 * 1024;
         uint8_t *buf;
         int l;
-#ifdef NOTNOW
         const char *p;
         for (p = fn + strlen(fn) - 1; p >= fn; --p)
             if (*p == '/') break;
@@ -2015,7 +2015,8 @@ return fn;
 char *hts_idx_getfn(const char *fn, const char *ext)
 {
     int i, l_fn, l_ext;
-    char *fnidx, *ret;
+    char *fnidx;
+    const char *ret;
     l_fn = strlen(fn); l_ext = strlen(ext);
     fnidx = (char*)calloc(l_fn + l_ext + 1, 1);
     strcpy(fnidx, fn); strcpy(fnidx + l_fn, ext);
