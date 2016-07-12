@@ -36,6 +36,7 @@ my $stepper = new HgStepManager(
       { name => 'assemblyGap',   func => \&doAssemblyGap },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'gc5Base',   func => \&doGc5Base },
+      { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -44,6 +45,10 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
+my $workhorse = "hgwdev";  # default workhorse when none chosen
+my $fileServer = "hgwdev";  # default workhorse when none chosen
+my $bigClusterHub = "ku";  # default workhorse when none chosen
+my $smallClusterHub = "ku";  # default workhorse when none chosen
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -78,10 +83,10 @@ options:
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
-						'workhorse' => '',
-						'fileServer' => '',
-						'bigClusterHub' => '',
-						'smallClusterHub' => '');
+						'workhorse' => $workhorse,
+						'fileServer' => $fileServer,
+						'bigClusterHub' => $bigClusterHub,
+						'smallClusterHub' => $smallClusterHub);
   print STDERR "
 Automates build of assembly hub.  Steps:
     doDownload: sets up sym link working hierarchy from already mirrored
@@ -129,43 +134,9 @@ sub checkOptions {
 }
 
 #########################################################################
-# * step: download [workhorse]
-sub doDownload {
-  my $runDir = "$buildDir/download";
-  &HgAutomate::mustMkdir($runDir);
-
-  my $whatItDoes = "setup work hierarchy of sym links to source files in\n\t$runDir/";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
-				      $runDir, $whatItDoes);
-
-  $bossScript->add(<<_EOF_
-export asmId=$asmId
-
-if [ ! -L \${asmId}_genomic.fna.gza -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
-  rm -f \${asmId}_genomic.fna.gz \\
-    \${asmId}_assembly_report.txt \\
-    \${asmId}_rm.out.gz \\
-    \${asmId}_assembly_structure \\
-    \$asmId.2bit
-
-  ln -s $assemblySource/\${asmId}_genomic.fna.gz .
-  ln -s $assemblySource/\${asmId}_assembly_report.txt .
-  ln -s $assemblySource/\${asmId}_rm.out.gz .
-  if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
-    ln -s $assemblySource/\${asmId}_assembly_structure .
-  fi
-  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
-  touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
-else
-  printf "# download step previously completed\\n" 1>&2
-  exit 0
-fi
-_EOF_
-  );
-  $bossScript->execute();
-} # doDownload
-
+#########################################################################
+#  assistant subroutines here.  The 'do' steps follow this section
+#########################################################################
 #########################################################################
 #  return true if result does not exist or it is older than source
 #  else return false
@@ -432,13 +403,54 @@ sub unplacedFasta($$$$) {
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
+#########################################################################
+# do Steps section
+#########################################################################
+#########################################################################
+# * step: download [workhorse]
+sub doDownload {
+  my $runDir = "$buildDir/download";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "setup work hierarchy of sym links to source files in\n\t$runDir/";
+  my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
+				      $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ! -L \${asmId}_genomic.fna.gz -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
+  rm -f \${asmId}_genomic.fna.gz \\
+    \${asmId}_assembly_report.txt \\
+    \${asmId}_rm.out.gz \\
+    \${asmId}_assembly_structure \\
+    \$asmId.2bit
+
+  ln -s $assemblySource/\${asmId}_genomic.fna.gz .
+  ln -s $assemblySource/\${asmId}_assembly_report.txt .
+  ln -s $assemblySource/\${asmId}_rm.out.gz .
+  if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
+    ln -s $assemblySource/\${asmId}_assembly_structure .
+  fi
+  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
+else
+  printf "# download step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doDownload
+
+
+#########################################################################
 # * step: sequence [workhorse]
 sub doSequence {
   my $runDir = "$buildDir/sequence";
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "process source files into 2bit sequence and agp";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doSequence.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
@@ -542,13 +554,16 @@ export asmId="$asmId"
 
 
 if [ -s ../\$asmId.chrom.sizes ]; then
-  printf "sequence stop already completed\\n" 1>&2
+  printf "sequence step previously completed\\n" 1>&2
   exit 0
 fi
 
 zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
+touch -r ../download/\$asmId.2bit ../\$asmId.2bit
+touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
 twoBitInfo ../\$asmId.2bit stdout | sort -k2nr > ../\$asmId.chrom.sizes
+touch -r ../\$asmId.2bit ../\$asmId.chrom.sizes
 # verify everything is there
 twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.sizes
 export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
@@ -576,7 +591,6 @@ sub doAssemblyGap {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct assembly and gap tracks from AGP file";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doAssemblyGap.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -596,6 +610,11 @@ zcat ../../\$asmId.agp.gz | grep -v "^#" | awk '\$5 == "N" || \$5 == "U"' \\
 bedToBigBed -extraIndex=name -verbose=0 \$asmId.assembly.bed \\
     ../../\$asmId.chrom.sizes \$asmId.assembly.bb
 touch -r ../../\$asmId.agp.gz \$asmId.assembly.bb
+\$HOME/kent/src/hg/utils/automation/genbank/nameToIx.pl \\
+    \$asmId.assembly.bed | sort -u > \$asmId.assembly.ix.txt
+if [ -s \$asmId.assembly.ix.txt ]; then
+  ixIxx \$asmId.assembly.ix.txt \$asmId.assembly.ix \$asmId.assembly.ixx
+fi
 
 if [ -s \$asmId.gap.bed ]; then
   bedToBigBed -extraIndex=name -verbose=0 \$asmId.gap.bed \\
@@ -603,7 +622,7 @@ if [ -s \$asmId.gap.bed ]; then
   touch -r ../../\$asmId.agp.gz \$asmId.gap.bb
 fi
 
-rm -f \$asmId.assembly.bed \$asmId.gap.bed
+rm -f \$asmId.assembly.bed \$asmId.gap.bed \$asmId.assembly.ix.txt
 
 ### XXX perhaps to be done, run up an ix ixx pair to index the assembly names
 
@@ -623,7 +642,6 @@ sub doGatewayPage {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct html/$asmId.description.html";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doGatewayPage.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -634,6 +652,7 @@ if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; t
   \$HOME/kent/src/hg/utils/automation/genbank/gatewayPage.pl \\
      ../download/\${asmId}_assembly_report.txt \\
         > \$asmId.description.html 2> /dev/null
+  touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
 else
   printf "# gatewayPage step previously completed\\n" 1>&2
   exit 0
@@ -650,7 +669,6 @@ sub doGc5Base {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct gc5Base bigWig track data";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doGc5Base.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -663,6 +681,7 @@ if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
       | gzip -c > \$asmId.wigVarStep.gz
   wigToBigWig \$asmId.wigVarStep.gz ../../\$asmId.chrom.sizes \$asmId.gc5Base.bw
   rm -f \$asmId.wigVarStep.gz
+  touch -r ../../\$asmId.2bit \$asmId.gc5Base.bw
 else
   printf "# gc5Base step previously completed\\n" 1>&2
   exit 0
@@ -673,11 +692,31 @@ _EOF_
 } # gc5Base
 
 #########################################################################
+# * step: trackDb [workhorse]
+sub doTrackDb {
+  my $runDir = "$buildDir";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct asmId.trackDb.txt file";
+  my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
+   > \$asmId.trackDb.txt
+
+_EOF_
+  );
+  $bossScript->execute();
+} # trackDb
+
+#########################################################################
 # * step: cleanup [fileServer]
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "clean up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
@@ -712,6 +751,10 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
+$workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
+$bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
+$smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
+$fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 
 $assemblySource = "$sourceDir/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
 
