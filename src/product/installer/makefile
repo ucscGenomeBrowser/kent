@@ -2,7 +2,9 @@ kentSrc = ../..
 include ../../inc/common.mk
 
 user:
-	rm $(DOCUMENTROOT)-$(USER)/goldenPath/help/gbic.html
+	if test -e $(DOCUMENTROOT)-$(USER)/goldenPath/help/gbic.html; then \
+	    rm $(DOCUMENTROOT)-$(USER)/goldenPath/help/gbic.html ; \
+	fi
 	pandoc -t html5 -o $(DOCUMENTROOT)-$(USER)/goldenPath/help/gbic.html README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua
 	chmod a+x $(DOCUMENTROOT)-$(USER)/goldenPath/help/gbic.html
 alpha:
