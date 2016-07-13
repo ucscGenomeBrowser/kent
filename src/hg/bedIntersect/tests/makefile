@@ -113,6 +113,12 @@ allowStartEqEndPlusAHitAnyPlusBScore: mkout
 	  -allowStartEqualEnd -aHitAny -bScore
 	diff expected/$@.aSubBBig.bed output/$@.aSubBBig.bed
 
+commutativeTest: mkout
+	@${bedIntersect} input/chrUn_LVXT01056135v1.bed \
+		input/chrUn_LVXT01056135v1Gaps.bed stdout | cut -f1-3 > output/$@.first.bed
+	@${bedIntersect} input/chrUn_LVXT01056135v1Gaps.bed \
+		input/chrUn_LVXT01056135v1.bed stdout | cut -f1-3 >  output/$@.second.bed
+	@diff output/$@.first.bed output/$@.second.bed
 
 mkout:
 	@mkdir -p output
