@@ -9854,23 +9854,59 @@ char *chrom = cartString(cart, "c");
 
 printf("<H3>Patient %s </H3>", itemName);
 
-/* print phenotypes */
-sqlSafef(query, sizeof(query),
-      "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if ((row != NULL) && strlen(row[0]) >= 1)
+/* print phenotypes and other information, if available */
+if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
-    printf("<B>Phenotype: </B><UL>");
-    while (row != NULL)
+    sqlSafef(query, sizeof(query),
+        "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
+        "from decipherRaw where id = '%s'", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
         {
-	printf("<LI>");
-	printf("%s\n", row[0]);
-	row = sqlNextRow(sr);
+        char *phenoString = replaceChars(row[0], "|", "</li>\n<li>");
+        printf("<b>Phenotypes:</b>\n<ul>\n"
+               "<li>%s</li>\n"
+               "</ul>\n", phenoString);
+        // freeMem(phenoString);
         }
-    printf("</UL>");
+    if ((row != NULL) && strlen(row[1]) >= 1)
+        {
+        printf("<b>Mean Ratio:</b> %s\n<br>\n", row[1]);
+        }
+    if ((row != NULL) && strlen(row[2]) >= 1)
+        {
+        printf("<b>Inheritance:</b> %s\n<br>\n", row[2]);
+        }
+    if ((row != NULL) && strlen(row[3]) >= 1)
+        {
+        printf("<b>Pathogenicity:</b> %s\n<br>\n", row[3]);
+        }
+    if ((row != NULL) && strlen(row[3]) >= 1)
+        {
+        printf("<b>Contribution:</b> %s\n<br>\n", row[4]);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    sqlSafef(query, sizeof(query),
+          "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        printf("<B>Phenotype: </B><UL>");
+        while (row != NULL)
+            {
+        printf("<LI>");
+        printf("%s\n", row[0]);
+        row = sqlNextRow(sr);
+            }
+        printf("</UL>");
+        }
+    sqlFreeResult(&sr);
+    }
 
 /* link to Ensembl DECIPHER Patient View page */
 printf("<B>Patient View: </B>\n");

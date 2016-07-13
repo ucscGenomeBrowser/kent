@@ -6456,9 +6456,32 @@ static char *decipherPhenotypeList(char *name)
 /* Return list of diseases associated with a DECIPHER entry */
 {
 char query[256];
-sqlSafef(query, sizeof(query),
+static char list[4096];
+struct sqlConnection *conn = hAllocConn(database);
+if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
+    {
+    list[0] = '\0';
+    sqlSafef(query, sizeof(query),
+        "select phenotypes from decipherRaw where id='%s'", name);
+    struct sqlResult *sr = sqlMustGetResult(conn, query);
+    char **row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        char *prettyResult = replaceChars(row[0], "|", "; ");
+        safecpy(list, sizeof(list), prettyResult);
+        // freeMem(prettyResult);
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    sqlSafef(query, sizeof(query),
         "select distinct phenotype from decipherRaw where id='%s' order by phenotype", name);
-return collapseRowsFromQuery(query, "; ", 20);
+    hFreeConn(&conn);
+    return collapseRowsFromQuery(query, "; ", 20);
+    }
+hFreeConn(&conn);
+return list;
 }
 
 void decipherLoad(struct track *tg)
