@@ -25,15 +25,18 @@ endif
 user:
 	if test -d ${DOCUMENTROOT_USER}; then \
 	    ${MAKE} doInstall destDir=${DOCUMENTROOT_USER} ; \
+	    cd pandoc/installer && ${MAKE} user ; \
 	fi
 
 alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
+	cd pandoc/installer && ${MAKE} alpha
 
 beta:
 	${GITUP}
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
+	cd pandoc/installer && ${MAKE} beta
 
 # Run rsync.  Care is taking to preserve times and mode on files.  rsync is
 # smart about recreating file under the current users so that times and
@@ -43,7 +46,6 @@ beta:
 rsyncOpts = --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
 doInstall:
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
-	cd pandoc/installer && ${MAKE} doInstall destDir=${destDir}
 
 # Other targets that may be invoked by ../makefile:
 compile:
