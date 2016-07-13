@@ -43,6 +43,7 @@ beta:
 rsyncOpts = --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'
 doInstall:
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
+	cd pandoc/installer && ${MAKE} doInstall destDir=${destDir}
 
 # Other targets that may be invoked by ../makefile:
 compile:
