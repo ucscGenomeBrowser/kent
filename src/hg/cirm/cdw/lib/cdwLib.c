@@ -1583,6 +1583,61 @@ void cdwAsPath(char *format, char path[PATH_LEN])
 safef(path, PATH_LEN, "%sas/%s.as", cdwValDataDir, format);
 }
 
+boolean cdwTrimReadsForAssay(char *fastqPath, char trimmedPath[PATH_LEN], char *assay)
+/* Look at assay and see if it's one that needs trimming.  If so make a new trimmed
+ * file and put file name in trimmedPath.  Otherwise just copy fastqPath to trimmed
+ * path and return FALSE. */
+{
+if (sameString(assay, "long-RNA-seq"))
+    {
+    char cmd[3*PATH_LEN];
+    // Make up temp file name for poly-A trimmed file
+    safef(trimmedPath, PATH_LEN, "%scdwCutadaptXXXXXX", cdwTempDir());
+    cdwReserveTempFile(trimmedPath);
+
+    // cutadapt needs file to end with .fastq.gz, but it just ends with gz, 
+    // so we construct the proper file name
+    // Need to add a .fastq between the file name and the .gz for cutadapt to run.
+    // Use a symlink.  
+    char fastqGzPath[PATH_LEN];
+    strcpy(fastqGzPath, fastqPath);
+    char *e = strrchr(fastqGzPath, '.'); 
+    if (e == NULL)
+	{
+	strcat(fastqGzPath, ".fastq");
+	}
+    else
+	{
+	chopSuffix(fastqGzPath); 
+	strcat(fastqGzPath, ".fastq.gz");
+	}
+    // Make a symbolic link to the name that cutadapt will accept
+    safef(cmd, sizeof(cmd), "ln -s %s %s", fastqPath, fastqGzPath); 
+    mustSystem(cmd); 
+
+    // Run cutadapt on the new file then pass the output into BWA. 
+    safef(cmd, sizeof(cmd), "cutadapt -a \"AAAAAAAAAAAAAAAA\" %s -o %s", 
+	fastqGzPath, trimmedPath); 
+    mustSystem(cmd);
+
+    // Clean up and go home
+    remove(fastqGzPath);
+    return TRUE;
+    }
+else
+    {
+    strcpy(trimmedPath, fastqPath);
+    return FALSE;
+    }
+}
+
+void cdwCleanupTrimReads(char *fastqPath, char trimmedPath[PATH_LEN])
+/* Remove trimmed sample file.  Does nothing if fastqPath and trimmedPath the same. */
+{
+if (!sameString(fastqPath, trimmedPath))
+    remove(trimmedPath);
+}
+
 void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
@@ -1590,44 +1645,25 @@ void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
  * bedF and all the ret parameters can be NULL. */
 {
-/* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
- * second time it was run in same app.  Resorting therefore to temp files. */
-char genoFile[PATH_LEN], cutadaptFile[PATH_LEN];
+// Figure out BWA index
+char genoFile[PATH_LEN];
 cdwBwaIndexPath(assembly, genoFile);
-char cmd[3*PATH_LEN], *saiName, *samName;
-if (!strcmp(assay, "long-RNA-seq"))
-    {
-    safef(cutadaptFile, PATH_LEN, "%scdwCutadaptXXXXXX", cdwTempDir());
-    cdwReserveTempFile(cutadaptFile);
-    struct slName *file = charSepToSlNames(fastqPath, '.'); 
-    // Need to add a .fastq between the file name and the .gz for cutadapt to run.
-    // Use a symlink.  
-    safef(cmd, sizeof(cmd), "ln -s %s %s.fastq.gz", fastqPath, file->name); 
-    mustSystem(cmd); 
-    // Run cutadapt on the new file then pass the output into BWA. 
-    safef(cmd, sizeof(cmd), "cutadapt -a \"AAAAAAAAAAAAAAAAAAAAAAAAA\" %s.fastq.gz -o %s", 
-	file->name, cutadaptFile); 
-    mustSystem(cmd);
-	
-    saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
-    safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, cutadaptFile, saiName);
-    mustSystem(cmd);
-    
-    samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
-    safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, cutadaptFile, samName);
-    mustSystem(cmd);
-    remove(saiName);
-    }
-else{ 
-    saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
-    safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, fastqPath, saiName);
-    mustSystem(cmd);
 
-    samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
-    safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath, samName);
-    mustSystem(cmd);
-    remove(saiName);
-    }
+// Trim reads if need be
+char trimmedFile[PATH_LEN];
+cdwTrimReadsForAssay(fastqPath, trimmedFile, assay);
+
+// Run BWA alignment
+char cmd[3*PATH_LEN], *saiName, *samName;
+saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, trimmedFile, saiName);
+mustSystem(cmd);
+
+samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
+safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, trimmedFile, samName);
+mustSystem(cmd);
+remove(saiName);
+
 /* Scan sam file to calculate vf->mapRatio, vf->sampleCoverage and vf->depth. 
  * and also to produce little bed file for enrichment step. */
 struct genomeRangeTree *grt = genomeRangeTreeNew();
@@ -1645,6 +1681,9 @@ if (retSampleCoverage)
     *retSampleCoverage = (double)basesHitBySample/assembly->baseCount;
 if (retUniqueMapRatio)
     *retUniqueMapRatio = (double)uniqueHitCount/(hitCount+missCount);
+
+// Clean up and go home
+cdwCleanupTrimReads(fastqPath, trimmedFile);
 genomeRangeTreeFree(&grt);
 remove(samName);
 }
@@ -1709,9 +1748,9 @@ if (fqf == NULL)
     safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
 	cdwSampleTargetSize, path, statsFile, sampleFile);
     mustSystem(command);
-    safef(command, sizeof(command), "gzip %s", sampleFile);
+    safef(command, sizeof(command), "gzip -c %s > %s.fastq.gz", sampleFile, sampleFile);
     mustSystem(command);
-    strcat(sampleFile, ".gz");
+    strcat(sampleFile, ".fastq.gz");
     fqf = cdwFastqFileOneFromRa(statsFile);
     fqf->fileId = fileId;
     fqf->sampleFileName = cloneString(sampleFile);
