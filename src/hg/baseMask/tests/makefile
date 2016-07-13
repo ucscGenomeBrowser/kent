@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 BASEMASK = ${DESTBINDIR}/baseMask -verbose=0

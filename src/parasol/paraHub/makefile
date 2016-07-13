@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 
 O = paraHub.o spoke.o heartbeat.o queue.o sockSuck.o

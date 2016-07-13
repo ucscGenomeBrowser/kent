@@ -1150,7 +1150,6 @@ pgSnpMapItem(tg, hvg, item, itemName, mapItemName, psvs->vcfStart, psvs->vcfEnd,
 }
 
 
-#ifdef USE_TABIX
 
 static void vcfTabixLoadItems(struct track *tg)
 /* Load items in window from VCF file using its tabix index file. */
@@ -1220,33 +1219,6 @@ track->loadItems = vcfTabixLoadItems;
 track->canPack = TRUE;
 }
 
-#else // no USE_TABIX:
-
-// If code was not built with USE_TABIX=1, but there are vcfTabix tracks, display a message
-// in place of the tracks (instead of annoying "No track handler" warning messages).
-
-static void drawUseVcfTabixWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-				   int xOff, int yOff, int width, MgFont *font, Color color,
-				   enum trackVisibility vis)
-/* Draw a message saying that the code needs to be built with USE_TABIX=1. */
-{
-char message[512];
-safef(message, sizeof(message),
-      "Get tabix from samtools.sourceforge.net and recompile kent/src with USE_TABIX=1");
-Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
-hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
-hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
-}
-
-void vcfTabixMethods(struct track *track)
-/* Methods for VCF alignment files, in absence of tabix lib. */
-{
-// NOP warning method to warn users that tabix is not installed.
-messageLineMethods(track);
-track->drawItems = drawUseVcfTabixWarning;
-}
-
-#endif // no USE_TABIX
 
 static void vcfLoadItems(struct track *tg)
 /* Load items in window from VCF file. */

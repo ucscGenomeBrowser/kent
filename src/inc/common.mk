@@ -17,7 +17,7 @@ ifneq (,$(findstring -,$(MACHTYPE)))
 endif
 
 HG_DEFS=-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -D_GNU_SOURCE -DMACHTYPE_${MACHTYPE}
-HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc
+HG_INC+=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../inc -I$(kentSrc)/htslib
 
 # to check for Mac OSX Darwin specifics:
 UNAME_S := $(shell uname -s)
@@ -25,7 +25,7 @@ UNAME_S := $(shell uname -s)
 FULLWARN = $(shell uname -n)
 
 #global external libraries 
-L=
+L=$(kentSrc)/htslib/libhts.a
 
 # pthreads is required
 ifneq ($(UNAME_S),Darwin)
@@ -217,27 +217,6 @@ endif
 L+=${PNGLIB}
 HG_INC+=${PNGINCL}
 
-# autodetect UCSC installation of htslib:
-ifeq (${HTSDIR},)
-    HTSDIR = /hive/data/outside/htslib/${MACHTYPE}
-    ifneq ($(wildcard ${HTSDIR}),)
-        ifeq (${USE_HTS},)
-            USE_HTS=1
-        endif
-    endif
-endif
-
-
-# autodetect UCSC installation of samtabix:
-ifeq (${SAMTABIXDIR},)
-    SAMTABIXDIR = /hive/data/outside/samtabix/${MACHTYPE}
-    ifneq ($(wildcard ${SAMTABIXDIR}),)
-        ifeq (${USE_SAMTABIX},)
-          USE_SAMTABIX=1
-        endif
-    endif
-endif
-
 # pass through COREDUMP
 ifneq (${COREDUMP},)
     HG_DEFS+=-DCOREDUMP
@@ -248,63 +227,6 @@ GBIBDIR = /hive/groups/browser/gbib/
 ifneq ($(wildcard ${GBIBDIR}/*.c),)
   HG_DEFS+=-DUSE_GBIB_PWD
   HG_INC += -I${GBIBDIR}
-endif
-
-ifeq (${USE_HTS},1)
-    HG_DEFS+=-DUSE_HTS
-    USE_SAMTABIX=1
-    SAMTABIXDIR = ${HTSDIR}
-    SAMTABIXLIB=${HTSDIR}/libhts.a
-endif
-
-# libsamtabix (samtools + tabix + Angie's KNETFILE_HOOKS extension to it): disabled by default
-ifeq (${USE_SAMTABIX},1)
-    KNETFILE_HOOKS=1
-    USE_BAM=1
-    USE_TABIX=1
-    ifeq (${SAMTABIXINC},)
-        SAMTABIXINC = ${SAMTABIXDIR}
-    endif
-    ifeq (${SAMTABIXLIB},)
-        SAMTABIXLIB = ${SAMTABIXDIR}/libsamtabix.a
-    endif
-    HG_INC += -I${SAMTABIXINC}
-    L+=${SAMTABIXLIB} -lz
-    HG_DEFS+=-DUSE_SAMTABIX -DUSE_BAM -DUSE_TABIX -DKNETFILE_HOOKS
-else
-  # Deprecated but supported for mirrors, for now: independent samtools and tabix libs
-
-  # libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
-  ifeq (${USE_BAM},1)
-      ifeq (${SAMINC},)
-          SAMINC = ${SAMDIR}
-      endif
-      ifeq (${SAMLIB},)
-          SAMLIB = ${SAMDIR}/libbam.a
-      endif
-      HG_INC += -I${SAMINC}
-      L+=${SAMLIB}
-      HG_DEFS+=-DUSE_BAM
-      ifeq (${KNETFILE_HOOKS},1)
-          HG_DEFS+=-DKNETFILE_HOOKS
-      endif
-  endif
-
-  # libtabix and Angie's KNETFILE_HOOKS extension to it: disabled by default
-  ifeq (${USE_TABIX},1)
-      ifeq (${TABIXINC},)
-          TABIXINC = ${TABIXDIR}
-      endif
-      ifeq (${TABIXLIB},)
-          TABIXLIB = ${TABIXDIR}/libtabix.a
-      endif
-      HG_INC += -I${TABIXINC}
-      L+=${TABIXLIB} -lz
-      HG_DEFS+=-DUSE_TABIX
-      ifeq (${KNETFILE_HOOKS},1)
-	HG_DEFS+=-DKNETFILE_HOOKS
-      endif
-  endif
 endif
 
 SYS = $(shell uname -s)

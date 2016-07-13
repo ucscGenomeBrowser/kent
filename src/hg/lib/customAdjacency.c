@@ -27,9 +27,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 #include "bigBed.h"
-#ifdef USE_BAM
 #include "hgBam.h"
-#endif//def USE_BAM
 #include "vcf.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"

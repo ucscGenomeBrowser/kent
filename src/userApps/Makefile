@@ -10,8 +10,6 @@ export MACHTYPE = local
 export CGI_BIN = ${DESTDIR}/cgi-bin
 export DOCUMENTROOT = ${DESTDIR}/htdocs
 export SCRIPTS = ${DESTDIR}/scripts
-export SAMTABIXDIR = ${DESTDIR}/samtabix
-export USE_SAMTABIX = 1
 export USE_SSL = 1
 export NOSQLTEST = 1
 
@@ -23,7 +21,6 @@ utils: libs
 	./kent/src/utils/userApps/mkREADME.sh ${DESTDIR}/${BINDIR} ${CURDIR}/kentUtils.Documentation.txt
 
 libs: installEnvironment
-	cd samtabix && ${MAKE}
 	cd kent/src && ${MAKE} libs
 
 clean:
@@ -53,8 +50,6 @@ export MACHTYPE = ${MACHTYPE}\n\
 export CGI_BIN = ${CGI_BIN}\n\
 export DOCUMENTROOT = ${DOCUMENTROOT}\n\
 export SCRIPTS = ${SCRIPTS}\n\
-export SAMTABIXDIR = ${SAMTABIXDIR}\n\
-export USE_SAMTABIX = 1\n\
 export USE_SSL = 1\n\
 export NOSQLTEST = 1" | sed -e 's/-e //' > kent/src/inc/localEnvironment.mk
 

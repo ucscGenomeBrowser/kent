@@ -7,7 +7,6 @@
 #include "hdb.h"
 #include "hgBam.h"
 
-#ifdef USE_BAM
 #include "htmshell.h"
 #include "samAlignment.h"
 
@@ -134,11 +133,7 @@ for (i=0; i<size; ++i)
 return TRUE;
 }
 
-#ifdef USE_HTS
 int bamAddOneSamAlignment(const bam1_t *bam, void *data, bam_hdr_t *header)
-#else
-int bamAddOneSamAlignment(const bam1_t *bam, void *data)
-#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a samAlignment. */
 {
@@ -153,11 +148,7 @@ sam->flag = core->flag;
 if (helper->chrom != NULL)
     sam->rName = helper->chrom;
 else
-#ifdef USE_HTS
     sam->rName = lmCloneString(lm, header->target_name[core->tid]);
-#else
-    sam->rName = lmCloneString(lm, helper->samFile->header->target_name[core->tid]);
-#endif
 sam->pos = core->pos + 1;
 sam->mapQ = core->qual;
 dyStringClear(dy);
@@ -168,11 +159,7 @@ if (core->mtid >= 0)
     if (core->tid == core->mtid)
 	sam->rNext = "=";
     else
-#ifdef USE_HTS
 	sam->rNext = lmCloneString(lm, header->target_name[core->mtid]);
-#else
-	sam->rNext = lmCloneString(lm, helper->samFile->header->target_name[core->mtid]);
-#endif
     }
 else
     sam->rNext = "*";
@@ -222,11 +209,7 @@ struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int star
 return bamFetchSamAlignmentPlus(fileOrUrl, chrom, start, end, lm, NULL, NULL);
 }
 
-#ifdef USE_HTS
 struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm)
-#else
-struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
-#endif
 /* Read next count alignments in SAM format, allocated in lm.  May return less than
  * count at end of file. */
 {
@@ -243,15 +226,9 @@ int i;
 bam1_t *b = bam_init1();
 for (i=0; i<count; ++i)
     {
-#ifdef USE_HTS
     if (sam_read1(fh,   header,  b) < 0)
        break;
     bamAddOneSamAlignment(b, &helper, header);
-#else
-    if (samread(fh, b) < 0)
-       break;
-    bamAddOneSamAlignment(b, &helper);
-#endif
     }
 bam_destroy1(b);
 
@@ -261,55 +238,3 @@ slReverse(&helper.samList);
 return helper.samList;
 }
 
-#else
-// If we're not compiling with samtools, make stub routines so compile won't fail:
-
-char *bamFileNameFromTable(struct sqlConnection *conn, char *table, char *bamSeqName)
-/* Return file name from table.  If table has a seqName column, then grab the
- * row associated with bamSeqName (which is not nec. in chromInfo, e.g.
- * bam file might have '1' not 'chr1'). */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamFileNameFromTable");
-return NULL;
-}
-
-struct samAlignment *bamFetchSamAlignmentPlus(char *fileOrUrl, char *chrom, int start, int end,
-	struct lm *lm,  char *refUrl, char *cacheDir)
-/* Fetch region as a list of samAlignments - which is more or less an unpacked
- * bam record.  Results is allocated out of lm, since it tends to be large... */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignmentPlus");
-return NULL;
-}
-
-struct samAlignment *bamFetchSamAlignment(char *fileOrUrl, char *chrom, int start, int end,
-	struct lm *lm)
-/* Fetch region as a list of samAlignments - which is more or less an unpacked
- * bam record.  Results is allocated out of lm, since it tends to be large... */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamFetchSamAlignment");
-return NULL;
-}
-
-#ifdef USE_HTS
-struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, bam_hdr_t *header,  int count, struct lm *lm)
-#else
-struct samAlignment *bamReadNextSamAlignments(samfile_t *fh, int count, struct lm *lm)
-#endif
-/* Read next count alignments in SAM format, allocated in lm.  May return less than
- * count at end of file. */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamReadNextSamAlignments");
-return NULL;
-}
-
-struct ffAli *bamToFfAli(const bam1_t *bam, struct dnaSeq *target, int targetOffset,
-			 boolean useStrand, char **retQSeq)
-/* Convert from bam to ffAli format.  If retQSeq is non-null, set it to the
- * query sequence into which ffAli needle pointers point. */
-{
-errAbort(COMPILE_WITH_SAMTOOLS, "bamToFfAli");
-return NULL;
-}
-
-#endif//ndef USE_BAM

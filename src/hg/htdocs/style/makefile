@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 # recursive target to do install to DEST, with extra excludes EXCL.

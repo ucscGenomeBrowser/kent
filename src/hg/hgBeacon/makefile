@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 
 #cannot use common include rules, don't know how to overwrite :: targets

@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 #build the config directory for a pipeline
 
 include ../../../../inc/common.mk

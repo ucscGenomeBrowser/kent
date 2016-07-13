@@ -14,16 +14,6 @@ export branch="beta"
 
 # export branch="HEAD"
 
-# script to fetch extra source to use with the kent build,
-# and then selectively parts of the kent source tree, enough to
-# build just the user utilities
-
-# the combined samtabix source for the SAM/BAM/TABIX functions:
-rm -fr samtabix
-echo "fetch samtabix" 1>&2
-git clone http://genome-source.cse.ucsc.edu/samtabix.git samtabix \
-  > /dev/null 2>&1
-
 # These selective git archive commands only work up to a certain size
 # of fetched source (number of arguments), hence the multiple set of
 # individual fetches to get all the parts
@@ -295,6 +285,7 @@ echo "fetch kent source part ${partNumber} ${ofN}" 1>&2
 git archive --format=zip -9 --remote=git://genome-source.cse.ucsc.edu/kent.git \
 --prefix=kent/ ${branch} \
 src/parasol \
+src/htslib \
 src/hg/pslToChain \
 src/hg/makeDb/outside \
 src/hg/makeDb/trackDbRaFormat \

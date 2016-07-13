@@ -32,7 +32,7 @@
     <!-- Override nice-menu.css's menu background and fonts: -->
     <link rel="stylesheet" href="../style/jWest.afterNiceMenu.css">
 
-    <div id="staticMain" class="jwStaticMain">
+    <div id="staticMain" class="jwStaticMain" style="display: inline-block;">
 
       <!-- hgwdev warning (if applicable) -->
       <!--#if expr='("$SERVER_NAME" = /hgwdev.*.ucsc.edu/ || "$SERVER_NAME" = /genome-test.*.ucsc.edu/) && "$SERVER_NAME" != /hgwdev-demo6/'-->
@@ -127,6 +127,12 @@
       </div> <!-- row2 -->
 
     </div> <!-- main -->
+
+    <div style="display: inline-block; vertical-align: top; padding-top: 10px;">
+      <a href="https://www.surveymonkey.com/r/QYVSXKW" target="_blank"</a>
+      <img src="../images/surveyButton.jpg" alt="user survey" 
+      title="Your feedback is important to us! Please take our 2016 user survey."/>
+    </div>
 
     <!-- Note: after v335 release, we should change "inc/jWestFooter.html" to
         "/cgi-bin/hgMenubar?incFile=/inc/jWestFooter.html" so there won't be extra

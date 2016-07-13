@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 
 ifeq (${USE_TABIX},1)

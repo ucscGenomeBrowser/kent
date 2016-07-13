@@ -1323,7 +1323,6 @@ report("std: %f\n", calcStdFromSums(sum.sumData, sum.sumSquares, sum.validCount)
 
 }
 
-#ifdef USE_BAM
 struct bamCallbackData
     {
     char *file;
@@ -1567,11 +1566,7 @@ samfile_t *fh = samopen(lf->fileName, "rb", NULL);
 if (fh == NULL)
     reportErrAbort("Aborting ... Cannot open BAM file: %s", lf->fileName);
 
-#ifdef USE_HTS
 bam_hdr_t *head = sam_hdr_read(fh);
-#else
-bam_header_t *head = fh->header;
-#endif
 
 if (head == NULL)
     reportErrAbort("Aborting ... Bad BAM header in file: %s", lf->fileName);
@@ -1628,7 +1623,6 @@ for(ii=0; ii < head->n_targets; ii++)
     {
     char position[256];
     safef(position, sizeof position, "%s:%d-%d",head->target_name[ii], 0, head->target_len[ii]);
-#ifdef USE_HTS
     bam1_t *b;
     AllocVar(b);
     hts_itr_t *iter = sam_itr_querys(idx, head, position);
@@ -1639,16 +1633,6 @@ for(ii=0; ii < head->n_targets; ii++)
     while ((result = sam_itr_next(fh, iter, b)) >= 0)
         parseBamRecord(b, bd);
 
-#else
-    int chromId, start, end;
-    // ignore return code from bam_parse_region()
-    (void) bam_parse_region(fh->header, position, &chromId, &start, &end);
-
-    bd->chrom = head->target_name[ii];
-    verbose(2,"asking for alignments on %s\n",bd->chrom);
-    // ignore return code from bam_fetch()
-    (void) bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
-#endif
 
     }
 
@@ -1692,7 +1676,6 @@ for(ii=0; ii < 256; ii++)
 report("\n");
 
 }
-#endif
 
 void validateRcc(struct lineFile *lf)
 {
@@ -1846,9 +1829,7 @@ hashAdd(funcs, "broadPeak",      &validateBroadPeak);
 hashAdd(funcs, "narrowPeak",     &validateNarrowPeak);
 hashAdd(funcs, "gappedPeak",     &validateGappedPeak);
 hashAdd(funcs, "bedGraph",       &validateBedGraph);
-#ifdef USE_BAM
 hashAdd(funcs, "bam",            &validateBAM);
-#endif
 hashAdd(funcs, "bigWig",         &validateBigWig);
 
 hashAdd(funcs, "bedN",           &validateBedN);

@@ -56,7 +56,7 @@ ${RSYNC} --partial --stats ${HGDOWNLOAD}/gbdb/${DB}/trackDb.ix \
 	${HGDOWNLOAD}/gbdb/${DB}/trackDb.ixx ${GBDB}/${DB}/
 echo "#  checking for ${DB}/nib/ directory"
 ${RSYNC} --partial --stats \
-    ${HGDOWNLOAD}/gbdb/${DB}/nib/ ${GBDB}/${DB}/nib/
+    ${HGDOWNLOAD}/gbdb/${DB}/nib/ ${GBDB}/${DB}/nib/ > /dev/null 2>&1
 echo "#  checking for ${DB}/html/ directory"
 ${RSYNC} --partial --stats \
     ${HGDOWNLOAD}/gbdb/${DB}/html/ ${GBDB}/${DB}/html/

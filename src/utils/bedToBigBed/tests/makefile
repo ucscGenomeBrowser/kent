@@ -1,3 +1,4 @@
+kentSrc = ../../..
 A = bedToBigBed
 include ../../../inc/common.mk
 

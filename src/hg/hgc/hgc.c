@@ -4216,10 +4216,8 @@ else if (wordCount > 0)
         {
         doGvf(tdb, item);
         }
-#ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
-#endif // USE_BAM
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
     }
@@ -7270,7 +7268,7 @@ else if (sameString("HInvGeneMrna", aliTable))
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
-else if (sameString("ncbiRefSeqPsl", aliTable))
+else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
     {
     rnaSeq = getBaseColorSequence(acc, aliTable);
     }
@@ -8704,7 +8702,7 @@ puts("<B>Alignment Summary:</B><BR>\n");
 // sprintLongWithCommas(strBuf, altSize);
 // printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
 pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
 puts("<P>");
 total = 0;
@@ -20858,14 +20856,10 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
-#ifdef USE_BAM
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
-#endif//def USE_BAM
-#ifdef USE_TABIX
 else if (sameWord(type, "vcfTabix"))
     doVcfTabixDetails(ct->tdb, itemName);
-#endif//def USE_TABIX
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
 else if (sameWord(type, "makeItems"))
@@ -26153,12 +26147,10 @@ else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }
-#ifdef USE_TABIX
 else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
     {
     doVcfTabixDetails(tdb, item);
     }
-#endif // USE_TABIX
 else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);

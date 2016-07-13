@@ -10,8 +10,6 @@
 #include "dystring.h"
 #include "udc.h"
 
-#ifdef USE_TABIX
-#ifdef USE_HTS
 #define tabix_t tbx_t
 #define ti_iter_t hts_itr_t
 #define ti_open hts_open
@@ -20,10 +18,6 @@
 #define ti_get_tid tbx_name2id
 #define ti_queryi tbx_itr_queryi
 #define ti_iter_destroy tbx_itr_destroy
-#else
-#include "tabix.h"
-#endif
-#endif
 
 #define LF_BOGUS_FILE_PREFIX "somefile."
 
@@ -64,17 +58,10 @@ struct lineFile
     struct metaOutput *metaOutput;   /* list of FILE handles to write metaData to */
     bool isMetaUnique;          /* if set, do not repeat comments in output */
     struct hash *metaLines;     /* save lines to suppress repetition */
-#ifdef USE_TABIX
-#ifdef USE_HTS
     void *htsFile;              /* HTS file handle */
     void *tabix;		/* A tabix-compressed file and its binary index file (.tbi) */
     void *tabixIter;	        /* An iterator to get decompressed indexed lines of text */
     void *kline;                /* A buffer used for reading from htsfile. */
-#else
-    tabix_t *tabix;		/* A tabix-compressed file and its binary index file (.tbi) */
-    ti_iter_t tabixIter;	/* An iterator to get decompressed indexed lines of text */
-#endif
-#endif
     struct udcFile *udcFile;    /* udc file if using caching */
     struct dyString *fullLine;  // Filled with full line when a lineFileNextFull is called
     struct dyString *rawLines;  // Filled with raw lines used to create the full line
