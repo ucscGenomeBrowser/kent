@@ -23,7 +23,7 @@ beta:
 	rsync ${rsyncOpts} ${DOCUMENTROOT}-beta/goldenPath/help/gbic.html qateam@hgwbeta:${DOCUMENTROOT}/goldenPath/help/
 
 doInstall:
-	pandoc -t html5 -o ${destDir}/goldenPath/help/gbic.html README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua 
+	pandoc -t html5 -o ${destDir}/goldenPath/help/gbic.html ${kentSrc}/product/installer/README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua 
 
 # Run rsync.  Care is taking to preserve times and mode on files.  rsync is
 # smart about recreating file under the current users so that times and
