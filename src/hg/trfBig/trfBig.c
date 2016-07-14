@@ -294,10 +294,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
 trf409_l = optionInt("l", trf409_l);
-if (trf409_l > 0)
-   trfExe = optionVal("trf.4.09", trfExe);
-else
-   trfExe = optionVal("trf", trfExe);
+trfExe = optionVal("trf", trfExe);
 doBed = optionExists("bed") || optionExists("bedAt");
 tempDir = optionVal("tempDir", tempDir);
 maxPeriod = optionInt("maxPeriod", maxPeriod);

@@ -4,7 +4,7 @@
 ##
 track wgEncodeGencodeV23
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel All GENCODE v23
 longLabel All GENCODE transcripts including comprehensive set v23
 group genes
