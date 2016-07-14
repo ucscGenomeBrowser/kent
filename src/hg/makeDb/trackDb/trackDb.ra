@@ -3045,7 +3045,7 @@ allButtonPair on
 	parent ncbiRefGenesView off
 	shortLabel NCBI Curated
         subGroups view=aGenes
-	longLabel NCBI RefSeq curated subset (NM_* and NR_*)
+	longLabel NCBI RefSeq curated subset (NM_*, NR_*, and YP_*)
         priority 2
 
 	track ncbiRefSeqPredicted
@@ -3061,14 +3061,14 @@ allButtonPair on
 	parent ncbiRefGenesView off
 	shortLabel NCBI Other
         subGroups view=aGenes
-	longLabel NCBI RefSeq other genes subset, not (NM_* or NR_* or XM_* or XR_*)
+	longLabel NCBI RefSeq other genes subset, not (NM_*, NR_*, XM_*, XR_*, or YP_*)
         priority 4
 
         track refGene
         release alpha
 	parent ncbiRefGenesView on
         shortLabel UCSC Alignments
-        longLabel UCSC alignments of RefSeq mRNAs
+        longLabel UCSC alignments of RefSeq mRNAs (NM_* and NR_*)
         subGroups view=aGenes
         color 12,12,120
         type genePred refPep refMrna
