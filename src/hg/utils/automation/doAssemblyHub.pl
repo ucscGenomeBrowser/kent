@@ -36,6 +36,7 @@ my $stepper = new HgStepManager(
       { name => 'assemblyGap',   func => \&doAssemblyGap },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'gc5Base',   func => \&doGc5Base },
+      { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -649,9 +650,11 @@ sub doGatewayPage {
 export asmId=$asmId
 
 if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
-  \$HOME/kent/src/hg/utils/automation/genbank/gatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt \\
-        > \$asmId.description.html 2> /dev/null
+  \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
+     ../download/\${asmId}_assembly_report.txt ../\$asmId.chrom.sizes \\
+        > \$asmId.description.html 2> \$asmId.names.tab
+  \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
+       ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
   touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
 else
   printf "# gatewayPage step previously completed\\n" 1>&2
@@ -690,6 +693,39 @@ _EOF_
   );
   $bossScript->execute();
 } # gc5Base
+
+#########################################################################
+# * step: repeatMasker [workhorse]
+sub doRepeatMasker {
+  my $runDir = "$buildDir/trackData/repeatMasker";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct repeatMasker track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doRepeatMasker.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
+export species=`echo $species | sed -e 's/_/ /g;'`
+
+/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+
+gzip $asmId.sorted.fa.out
+
+/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/$asmId.sorted.fa.out.gz `pwd`
+
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # repeatMasker
+
 
 #########################################################################
 # * step: trackDb [workhorse]
