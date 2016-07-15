@@ -36,6 +36,11 @@ my $stepper = new HgStepManager(
       { name => 'assemblyGap',   func => \&doAssemblyGap },
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'gc5Base',   func => \&doGc5Base },
+      { name => 'repeatMasker',   func => \&doRepeatMasker },
+      { name => 'simpleRepeat',   func => \&doSimpleRepeat },
+      { name => 'allGaps',   func => \&doAllGaps },
+      { name => 'idKeys',   func => \&doIdKeys },
+      { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
 				);
@@ -44,6 +49,10 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
+my $workhorse = "hgwdev";  # default workhorse when none chosen
+my $fileServer = "hgwdev";  # default workhorse when none chosen
+my $bigClusterHub = "ku";  # default workhorse when none chosen
+my $smallClusterHub = "ku";  # default workhorse when none chosen
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -78,10 +87,10 @@ options:
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
-						'workhorse' => '',
-						'fileServer' => '',
-						'bigClusterHub' => '',
-						'smallClusterHub' => '');
+						'workhorse' => $workhorse,
+						'fileServer' => $fileServer,
+						'bigClusterHub' => $bigClusterHub,
+						'smallClusterHub' => $smallClusterHub);
   print STDERR "
 Automates build of assembly hub.  Steps:
     doDownload: sets up sym link working hierarchy from already mirrored
@@ -129,43 +138,9 @@ sub checkOptions {
 }
 
 #########################################################################
-# * step: download [workhorse]
-sub doDownload {
-  my $runDir = "$buildDir/download";
-  &HgAutomate::mustMkdir($runDir);
-
-  my $whatItDoes = "setup work hierarchy of sym links to source files in\n\t$runDir/";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
-  my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
-				      $runDir, $whatItDoes);
-
-  $bossScript->add(<<_EOF_
-export asmId=$asmId
-
-if [ ! -L \${asmId}_genomic.fna.gza -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
-  rm -f \${asmId}_genomic.fna.gz \\
-    \${asmId}_assembly_report.txt \\
-    \${asmId}_rm.out.gz \\
-    \${asmId}_assembly_structure \\
-    \$asmId.2bit
-
-  ln -s $assemblySource/\${asmId}_genomic.fna.gz .
-  ln -s $assemblySource/\${asmId}_assembly_report.txt .
-  ln -s $assemblySource/\${asmId}_rm.out.gz .
-  if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
-    ln -s $assemblySource/\${asmId}_assembly_structure .
-  fi
-  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
-  touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
-else
-  printf "# download step previously completed\\n" 1>&2
-  exit 0
-fi
-_EOF_
-  );
-  $bossScript->execute();
-} # doDownload
-
+#########################################################################
+#  assistant subroutines here.  The 'do' steps follow this section
+#########################################################################
 #########################################################################
 #  return true if result does not exist or it is older than source
 #  else return false
@@ -432,13 +407,54 @@ sub unplacedFasta($$$$) {
 }	# sub unplacedFasta($$$$)
 
 #########################################################################
+#########################################################################
+# do Steps section
+#########################################################################
+#########################################################################
+# * step: download [workhorse]
+sub doDownload {
+  my $runDir = "$buildDir/download";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "setup work hierarchy of sym links to source files in\n\t$runDir/";
+  my $bossScript = newBash HgRemoteScript("$runDir/doDownload.bash", $workhorse,
+				      $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ! -L \${asmId}_genomic.fna.gz -o \${asmId}_genomic.fna.gz -nt \$asmId.2bit ]; then
+  rm -f \${asmId}_genomic.fna.gz \\
+    \${asmId}_assembly_report.txt \\
+    \${asmId}_rm.out.gz \\
+    \${asmId}_assembly_structure \\
+    \$asmId.2bit
+
+  ln -s $assemblySource/\${asmId}_genomic.fna.gz .
+  ln -s $assemblySource/\${asmId}_assembly_report.txt .
+  ln -s $assemblySource/\${asmId}_rm.out.gz .
+  if [ -d $assemblySource/\${asmId}_assembly_structure ]; then
+    ln -s $assemblySource/\${asmId}_assembly_structure .
+  fi
+  faToTwoBit \${asmId}_genomic.fna.gz \$asmId.2bit
+  touch -r \${asmId}_genomic.fna.gz \$asmId.2bit
+else
+  printf "# download step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # doDownload
+
+
+#########################################################################
 # * step: sequence [workhorse]
 sub doSequence {
   my $runDir = "$buildDir/sequence";
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "process source files into 2bit sequence and agp";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doSequence.bash", $workhorse,
 				      $runDir, $whatItDoes);
 
@@ -542,13 +558,16 @@ export asmId="$asmId"
 
 
 if [ -s ../\$asmId.chrom.sizes ]; then
-  printf "sequence stop already completed\\n" 1>&2
+  printf "sequence step previously completed\\n" 1>&2
   exit 0
 fi
 
 zcat *.agp.gz | gzip > ../\$asmId.agp.gz
 faToTwoBit *.fa.gz ../\$asmId.2bit
+touch -r ../download/\$asmId.2bit ../\$asmId.2bit
+touch -r ../download/\$asmId.2bit ../\$asmId.agp.gz
 twoBitInfo ../\$asmId.2bit stdout | sort -k2nr > ../\$asmId.chrom.sizes
+touch -r ../\$asmId.2bit ../\$asmId.chrom.sizes
 # verify everything is there
 twoBitInfo ../download/\$asmId.2bit stdout | sort -k2nr > source.\$asmId.chrom.sizes
 export newTotal=`ave -col=2 ../\$asmId.chrom.sizes | grep "^total"`
@@ -564,6 +583,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   exit 255
 fi
 
+twoBitToFa \$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r \$asmId.2bit \$asmId.faCount.txt.gz
+zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
+touch -r \$asmId.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -576,7 +599,6 @@ sub doAssemblyGap {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct assembly and gap tracks from AGP file";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doAssemblyGap.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -596,6 +618,11 @@ zcat ../../\$asmId.agp.gz | grep -v "^#" | awk '\$5 == "N" || \$5 == "U"' \\
 bedToBigBed -extraIndex=name -verbose=0 \$asmId.assembly.bed \\
     ../../\$asmId.chrom.sizes \$asmId.assembly.bb
 touch -r ../../\$asmId.agp.gz \$asmId.assembly.bb
+\$HOME/kent/src/hg/utils/automation/genbank/nameToIx.pl \\
+    \$asmId.assembly.bed | sort -u > \$asmId.assembly.ix.txt
+if [ -s \$asmId.assembly.ix.txt ]; then
+  ixIxx \$asmId.assembly.ix.txt \$asmId.assembly.ix \$asmId.assembly.ixx
+fi
 
 if [ -s \$asmId.gap.bed ]; then
   bedToBigBed -extraIndex=name -verbose=0 \$asmId.gap.bed \\
@@ -603,7 +630,7 @@ if [ -s \$asmId.gap.bed ]; then
   touch -r ../../\$asmId.agp.gz \$asmId.gap.bb
 fi
 
-rm -f \$asmId.assembly.bed \$asmId.gap.bed
+rm -f \$asmId.assembly.bed \$asmId.gap.bed \$asmId.assembly.ix.txt
 
 ### XXX perhaps to be done, run up an ix ixx pair to index the assembly names
 
@@ -623,7 +650,6 @@ sub doGatewayPage {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct html/$asmId.description.html";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doGatewayPage.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -631,9 +657,12 @@ sub doGatewayPage {
 export asmId=$asmId
 
 if [ ../download/\${asmId}_assembly_report.txt -nt \$asmId.description.html ]; then
-  \$HOME/kent/src/hg/utils/automation/genbank/gatewayPage.pl \\
-     ../download/\${asmId}_assembly_report.txt \\
-        > \$asmId.description.html 2> /dev/null
+  \$HOME/kent/src/hg/utils/automation/asmHubGatewayPage.pl \\
+     ../download/\${asmId}_assembly_report.txt ../\$asmId.chrom.sizes \\
+        > \$asmId.description.html 2> \$asmId.names.tab
+  \$HOME/kent/src/hg/utils/automation/genbank/buildStats.pl \\
+       ../\$asmId.chrom.sizes 2> \$asmId.build.stats.txt
+  touch -r ../download/\${asmId}_assembly_report.txt \$asmId.description.html
 else
   printf "# gatewayPage step previously completed\\n" 1>&2
   exit 0
@@ -650,7 +679,6 @@ sub doGc5Base {
   &HgAutomate::mustMkdir($runDir);
 
   my $whatItDoes = "construct gc5Base bigWig track data";
-  my $workhorse = &HgAutomate::chooseWorkhorse();
   my $bossScript = newBash HgRemoteScript("$runDir/doGc5Base.bash",
                     $workhorse, $runDir, $whatItDoes);
 
@@ -663,6 +691,7 @@ if [ ../../\$asmId.2bit -nt \$asmId.gc5Base.bw ]; then
       | gzip -c > \$asmId.wigVarStep.gz
   wigToBigWig \$asmId.wigVarStep.gz ../../\$asmId.chrom.sizes \$asmId.gc5Base.bw
   rm -f \$asmId.wigVarStep.gz
+  touch -r ../../\$asmId.2bit \$asmId.gc5Base.bw
 else
   printf "# gc5Base step previously completed\\n" 1>&2
   exit 0
@@ -673,11 +702,203 @@ _EOF_
 } # gc5Base
 
 #########################################################################
+# * step: repeatMasker [workhorse]
+sub doRepeatMasker {
+  my $runDir = "$buildDir/trackData/repeatMasker";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct repeatMasker track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doRepeatMasker.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
+export species=`echo $species | sed -e 's/_/ /g;'`
+
+doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+
+gzip \$asmId.sorted.fa.out \$asmId.fa.out \$asmId.nestedRepeats.bed
+
+doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/\$asmId.sorted.fa.out.gz `pwd`
+
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # repeatMasker
+
+#########################################################################
+# * step: simpleRepeat [workhorse]
+sub doSimpleRepeat {
+  my $runDir = "$buildDir/trackData/simpleRepeat";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct TRF/simpleRepeat track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
+  doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
+    -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  doSimpleRepeat.pl -buildDir=`pwd` \\
+    -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  gzip simpleRepeat.bed trfMask.bed
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # simpleRepeat
+
+##   my $rmskResult = "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit";
+##   if (! -s $rmskResult) {
+##     die "simpleRepeat: previous step repeatMasker has not completed\n" .
+##       "# not found: $rmskResult\n";
+##   }
+##   twoBitMask ../repeatMasker/\$asmId.rmsk.2bit -add trfMask.bed \\
+##     \$asmId.RM_TRF_masked.2bit
+
+#########################################################################
+# * step: allGaps [workhorse]
+sub doAllGaps {
+  my $runDir = "$buildDir/trackData/allGaps";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct 'all' gap track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAllGaps.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt \$asmId.NOT.gap.bed ]; then
+  findMotif -motif=gattaca -verbose=4 -strand=+ ../../\$asmId.2bit \\
+       > \$asmId.findMotif.txt 2>&1
+  grep "^#GAP " \$asmId.findMotif.txt | sed -e 's/^#GAP //;' \\
+      > \$asmId.allGaps.bed
+  bigBedToBed ../assemblyGap/\$asmId.gap.bb \$asmId.gap.bed
+  # verify the 'all' gaps should include the gap track items
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \$asmId.gap.bed \\
+     \$asmId.verify.annotated.gap.bed
+  gapTrackCoverage=`awk '{print \$3-\$2}' \$asmId.gap.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  intersectCoverage=`ave -col=5 \$asmId.verify.annotated.gap.bed \\
+     | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$gapTrackCoverage -ne \$intersectCoverage ]; then
+    printf "ERROR: 'all' gaps does not include gap track coverage\n" 1>&2
+    printf "gapTrackCoverage: \$gapTrackCoverage != \$intersectCoverage intersection\n" 1>&2
+    exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.allGaps.bed \\
+    > \$asmId.NOT.allGaps.bed
+  # verify bedInvert worked correctly
+  #   sum of both sizes should equal genome size
+  both=`cat \$asmId.NOT.allGaps.bed \$asmId.allGaps.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  genomeSize=`ave -col=2 ../../\$asmId.chrom.sizes | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert.pl did not function correctly on allGaps.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.gap.bed \\
+      > \$asmId.NOT.gap.bed
+  # again, verify bedInvert is working correctly, sum of both == genomeSize
+  both=`cat \$asmId.NOT.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert did not function correctly on gap.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \\
+     \$asmId.NOT.gap.bed \$asmId.notAnnotated.gap.bed
+  # verify the intersect functioned correctly
+  # sum of new gaps plus gap track should equal all gaps
+  allGapCoverage=`awk '{print \$3-\$2}' \$asmId.allGaps.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  both=`cat \$asmId.notAnnotated.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$allGapCoverage -ne \$both ]; then
+     printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
+     printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
+  fi
+else
+  printf "# allgaps step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # allGaps
+
+#########################################################################
+# * step: idKeys [workhorse]
+sub doIdKeys {
+  my $runDir = "$buildDir/trackData/idKeys";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct ID key data for each contig/chr";
+  my $bossScript = newBash HgRemoteScript("$runDir/doIdKeys.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
+  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=../../\$asmId.2bit
+else
+  printf "# idKeys step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # idKeys
+
+#########################################################################
+# * step: trackDb [workhorse]
+sub doTrackDb {
+  my $runDir = "$buildDir";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct asmId.trackDb.txt file";
+  my $bossScript = newBash HgRemoteScript("$runDir/doTrackDb.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+\$HOME/kent/src/hg/utils/automation/asmHubTrackDb.sh \$asmId $runDir \\
+   > \$asmId.trackDb.txt
+
+_EOF_
+  );
+  $bossScript->execute();
+} # trackDb
+
+#########################################################################
 # * step: cleanup [fileServer]
 sub doCleanup {
   my $runDir = "$buildDir";
   my $whatItDoes = "clean up or compresses intermediate files.";
-  my $fileServer = &HgAutomate::chooseFileServer($runDir);
   my $bossScript = newBash HgRemoteScript("$runDir/doCleanup.bash", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
@@ -712,6 +933,10 @@ $buildDir = $opt_buildDir ? $opt_buildDir :
 
 $sourceDir = $opt_sourceDir ? $opt_sourceDir : $sourceDir;
 $ucscNames = $opt_ucscNames ? 1 : $ucscNames;   # '1' == 'TRUE'
+$workhorse = $opt_workhorse ? $opt_workhorse : $workhorse;
+$bigClusterHub = $opt_bigClusterHub ? $opt_bigClusterHub : $bigClusterHub;
+$smallClusterHub = $opt_smallClusterHub ? $opt_smallClusterHub : $smallClusterHub;
+$fileServer = $opt_fileServer ? $opt_fileServer : $fileServer;
 
 $assemblySource = "$sourceDir/$genbankRefseq/$subGroup/$species/all_assembly_versions/$asmId";
 

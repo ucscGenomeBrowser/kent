@@ -26,7 +26,7 @@ size of a single Amazon EBS volume.
 
 Download the GBiC script from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
 
-Run this script as root, like this:
+Run the script as root, like this:
 
     sudo -i
     bash browserSetup.sh install
@@ -37,17 +37,17 @@ run before any other command is used.
 
 # How does this work?
 
-The script downloads the Genome Browser CGIs and sets up the central MySQL database. All
+The GBiC script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
 
 In particular, MySQL and Apache are installed and setup with the right package
 manager (yum or apt-get). A default random password is set for the
 MySQL root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup MySQL, you will need to create the file
-~/.my.cnf, the script will detect this and create a template file for you.
+If you have already setup MySQL, you will need to create the file
+~/.my.cnf. The script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
-mariadb, deactivating SELinux, finding the right path for your Apache install
+MariaDB, deactivating SELinux, finding the right path for your Apache install
 and adapting the MySQL socket config.
 
 This will leave you with a genome browser accessible on localhost that loads its data 
@@ -84,8 +84,8 @@ you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
-In the case of hg19, the full assembly download is ~6.5TB. To cut this down to
-up to 2TB or even less, use the -t option: 
+In the case of hg19, the full assembly download is ~6.5TB. Limit this
+to 2TB or less with the -t option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
@@ -104,21 +104,23 @@ maybe run it every day, so your local tables stay in sync with UCSC:
 
     sudo bash browserInstall.sh minimal hg19 hg38
 
-To update only the CGI software parts of the browser and not the data, use the
-`cgiUpdate` command. If this is a problematic update, functions may break if the
-data needed for them is not available. In most circumstances, we recommend you
-use the `mirror` or `update` commands instead.
+To update only the browser software and not the data, use the
+`cgiUpdate` command: 
 
     sudo bash browserInstall.sh cgiUpdate
 
-You probably also want to add a cleaning command to your crontab to remove 
-the temporary files that are created during genome browser usage. They accumulate
+However, software may break or not work correctly if the needed data is not available. 
+Thus in most circumstances we recommend you use the `mirror` or `update` commands instead
+of `cgiUpdate`.
+
+You will probably also want to add a cleaning command to your crontab to remove 
+the temporary files that are created during normal genome browser usage. They accumulate
 in /usr/local/apache/trash and can quickly take up a lot of space. A command like
 this should be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
-If you find a bug or your linux distribution is not supported, please contact 
+If you find a bug or your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
 Genome Browser installation are at
 <http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>

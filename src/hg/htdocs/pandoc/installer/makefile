@@ -1,8 +1,12 @@
-kentSrc = ../..
-include ../../inc/common.mk
+kentSrc = ../../../..
+include ../../../../inc/common.mk
 
 GIT = git
 GITUP = ${GIT} pull
+
+ifeq (${DOCUMENTROOT_USER},)
+    DOCUMENTROOT_USER=${DOCUMENTROOT}-${USER}
+endif
 
 user:
 	if test -d ${DOCUMENTROOT_USER}; then \
@@ -14,11 +18,12 @@ alpha:
 
 beta:
 	${GITUP}
-	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
+#	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
+	rsync ${rsyncOpts} ${DOCUMENTROOT}-beta/goldenPath/help/gbic.html qateam@hgwbeta:${DOCUMENTROOT}/goldenPath/help/
 
 doInstall:
-	pandoc -t html5 README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua | rsync --files-from=- ${rsyncOpts} ${destDir}/gbic.html
+	pandoc -t html5 -o ${destDir}/goldenPath/help/gbic.html ${kentSrc}/product/installer/README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua 
 
 # Run rsync.  Care is taking to preserve times and mode on files.  rsync is
 # smart about recreating file under the current users so that times and

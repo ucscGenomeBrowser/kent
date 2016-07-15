@@ -69,6 +69,7 @@ fprintf(f,
 "/* Process command line. */\n"
 "{\n"
 "cgiSpoof(&argc, argv);\n"
+"setUdcCacheDir();\n"
 "cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);\n"
 "return 0;\n"
 "}\n"

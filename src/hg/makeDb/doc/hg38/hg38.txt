@@ -6397,7 +6397,6 @@ rm tmpChrom
 
 #########################################################################
 2015-12-08: import of UCSC GENCODE group processing of GENCODE V24 (markd)
-    -- not for release to RR
     # download files
     mkdir -p /hive/data/genomes/hg38/bed/gencodeV24
     cd /hive/data/genomes/hg38/bed/gencodeV24

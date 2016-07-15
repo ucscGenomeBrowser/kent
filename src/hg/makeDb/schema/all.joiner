@@ -1807,7 +1807,7 @@ identifier wgEncodeGencodeRefSeqV24
 identifier wgEncodeGencodeRefSeqToRefGeneV24
 "Link together Gencode RefSeq table with refGene track"
     hg38.wgEncodeGencodeRefSeqV24.rnaAcc dupeOk chopAfter=.
-    hg38.refGene.name minCheck=0.8
+    hg38.refGene.name minCheck=0.77
 
 identifier wgEncodeGencodeTagV24
 "Link together Gencode Tag table with Attributes table"
@@ -1823,7 +1823,7 @@ identifier wgEncodeGencodeTranscriptSourceV24
 identifier wgEncodeGencodeTranscriptSupportV24
 "Link together Gencode Transcript Support table with Attributes table"
     hg38.wgEncodeGencodeTranscriptSupportV24.transcriptId dupeOk
-    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.2297
+    hg38.wgEncodeGencodeAttrsV24.transcriptId minCheck=0.2285
 
 identifier wgEncodeGencodeTranscriptionSupportLevelV24
 "Link together Gencode Transcription Support Level table with Attributes table"
