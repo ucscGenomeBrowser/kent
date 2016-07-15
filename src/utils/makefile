@@ -155,6 +155,7 @@ SCRIPT_FILES = \
 	apacheLogParse \
 	extToolsChromeParse \
 	patSeqFilterBulkAndAnnotate \
+	uniprotToTab \
 	patSeqSummarizeDocs
 
 # List of all directories to build
