@@ -344,6 +344,12 @@ _EOF_
   }
   $bossScript->add(<<_EOF_
 awk '{if (\$5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+awk 'BEGIN{OFS="\\t"}{name=substr(\$16,0,16);\$4=name;printf "%s\\n", \$0}' \\
+   simpleRepeat.bed | sort -k1,1 -k2,2n > simpleRepeat.bed16.bed
+twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
+bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
+   simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
+rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
 _EOF_
   );
   if ($chromBased) {
