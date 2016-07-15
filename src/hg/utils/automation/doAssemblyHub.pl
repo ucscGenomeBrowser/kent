@@ -39,6 +39,7 @@ my $stepper = new HgStepManager(
       { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
       { name => 'allGaps',   func => \&doAllGaps },
+      { name => 'idKeys',   func => \&doIdKeys },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -848,6 +849,29 @@ _EOF_
   $bossScript->execute();
 } # allGaps
 
+#########################################################################
+# * step: idKeys [workhorse]
+sub doIdKeys {
+  my $runDir = "$buildDir/trackData/idKeys";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct ID key data for each contig/chr";
+  my $bossScript = newBash HgRemoteScript("$runDir/doIdKeys.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
+  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=../../\$asmId.2bit
+else
+  printf "# idKeys step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # idKeys
 
 #########################################################################
 # * step: trackDb [workhorse]
