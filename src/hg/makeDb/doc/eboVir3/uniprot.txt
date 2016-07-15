@@ -1,5 +1,5 @@
 # parse uniprot
-uniprotParse /hive/data/outside/uniProtCurrent/  --taxon 128952 eboVirUniprot/
+uniprotToTab /hive/data/outside/uniProtCurrent/  --taxon 128952 eboVirUniprot/
 # create a mapping from uniprot prot seq to DNA. The mapping has to be in nucl
 # space, so use pslProtCnv
 blat -t=dnax -q=prot /hive/data/genomes/eboVir3/eboVir3.2bit eboVirUniprot/uniprot.128952.fa.gz stdout -noHead | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.95 -minCover=0.95 | pslProtCnv > spToeboVir3.psl
