@@ -3074,7 +3074,7 @@ allButtonPair on
         type genePred refPep refMrna
         idXref refLink mrnaAcc name
         html refGene.new
-        priority 6
+        priority 7
 
     track ncbiRefAlignView
     release alpha
@@ -3104,6 +3104,25 @@ allButtonPair on
         pslSequence no
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
+
+	track refSeqAli
+        release alpha
+        priority 6
+	parent ncbiRefAlignView off
+	shortLabel UCSC Alignments
+        subGroups view=zAlign
+	longLabel UCSC Alignments of RefSeq mRNAs
+        type psl
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        showCdsMaxZoom 10000.0
+        showCdsAllScales .
+        baseColorDefault diffCodons
+        pslSequence no
+        baseColorUseCds table gbCdnaInfo
+        baseColorUseSequence extFile seq gbSeq
 
 searchName refSeqCompositeAccession
 searchTable ncbiRefSeq
