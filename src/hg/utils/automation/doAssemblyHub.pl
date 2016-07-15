@@ -38,6 +38,7 @@ my $stepper = new HgStepManager(
       { name => 'gc5Base',   func => \&doGc5Base },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
+      { name => 'allGaps',   func => \&doAllGaps },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -768,6 +769,85 @@ _EOF_
 ##   }
 ##   twoBitMask ../repeatMasker/\$asmId.rmsk.2bit -add trfMask.bed \\
 ##     \$asmId.RM_TRF_masked.2bit
+
+#########################################################################
+# * step: allGaps [workhorse]
+sub doAllGaps {
+  my $runDir = "$buildDir/trackData/allGaps";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct 'all' gap track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAllGaps.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt \$asmId.NOT.gap.bed ]; then
+  findMotif -motif=gattaca -verbose=4 -strand=+ ../../\$asmId.2bit \\
+       > \$asmId.findMotif.txt 2>&1
+  grep "^#GAP " \$asmId.findMotif.txt | sed -e 's/^#GAP //;' \\
+      > \$asmId.allGaps.bed
+  bigBedToBed ../assemblyGap/\$asmId.gap.bb \$asmId.gap.bed
+  # verify the 'all' gaps should include the gap track items
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \$asmId.gap.bed \\
+     \$asmId.verify.annotated.gap.bed
+  gapTrackCoverage=`awk '{print \$3-\$2}' \$asmId.gap.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  intersectCoverage=`ave -col=5 \$asmId.verify.annotated.gap.bed \\
+     | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$gapTrackCoverage -ne \$intersectCoverage ]; then
+    printf "ERROR: 'all' gaps does not include gap track coverage\n" 1>&2
+    printf "gapTrackCoverage: \$gapTrackCoverage != \$intersectCoverage intersection\n" 1>&2
+    exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.allGaps.bed \\
+    > \$asmId.NOT.allGaps.bed
+  # verify bedInvert worked correctly
+  #   sum of both sizes should equal genome size
+  both=`cat \$asmId.NOT.allGaps.bed \$asmId.allGaps.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  genomeSize=`ave -col=2 ../../\$asmId.chrom.sizes | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert.pl did not function correctly on allGaps.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.gap.bed \\
+      > \$asmId.NOT.gap.bed
+  # again, verify bedInvert is working correctly, sum of both == genomeSize
+  both=`cat \$asmId.NOT.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert did not function correctly on gap.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \\
+     \$asmId.NOT.gap.bed \$asmId.notAnnotated.gap.bed
+  # verify the intersect functioned correctly
+  # sum of new gaps plus gap track should equal all gaps
+  allGapCoverage=`awk '{print \$3-\$2}' \$asmId.allGaps.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  both=`cat \$asmId.notAnnotated.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$allGapCoverage -ne \$both ]; then
+     printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
+     printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
+  fi
+else
+  printf "# allgaps step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # allGaps
+
 
 #########################################################################
 # * step: trackDb [workhorse]
