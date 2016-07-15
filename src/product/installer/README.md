@@ -17,7 +17,7 @@ Centos 7, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
-data centers "San Francisco" (Amazon) or "West Coast" (Microsoft) for best performance. 
+data centers "UC West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
 Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which 
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
@@ -53,9 +53,17 @@ and adapting the MySQL socket config.
 This will leave you with a genome browser accessible on localhost that loads its data 
 through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
-enough to test if your setup is working.
+enough to test if your setup is working. You can then use the script to download 
+assemblies of interest to your local Genome Browser, which will make it at least 
+as fast as the UCSC site.
 
 # The different commands
+
+The first argumentof the script is called 'command' in the following. The first
+commmand that you will need is "install", it installs the browser dependencies,
+binaries and basic Mysql infrastructure:
+
+    sudo bash browserSetup.sh install
 
 There are a number of options supported by the GBiC script. In all cases, options must
 be specified before the command. The following example correctly specifies the
@@ -63,10 +71,11 @@ batch mode option to the script:
 
     sudo bash browserSetup.sh -b install
 
-To increase performance, the script accepts the command `minimal`. It will download the
-minimal tables required for reasonable performance from places on the US continent and 
-possibly others, e.g. from Japan. Call it like this to trade space for performance
-and download a few essential pieces of hg38:
+To increase performance of your Genome Browser, the script accepts the command
+`minimal`. It will download the minimal tables required for reasonable
+performance from places on the US continent and possibly others, e.g. from
+Japan. Call it like this to trade space for performance and download a few
+essential pieces of hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
