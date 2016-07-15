@@ -37,6 +37,7 @@ my $stepper = new HgStepManager(
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'gc5Base',   func => \&doGc5Base },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
+      { name => 'simpleRepeat',   func => \&doSimpleRepeat },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -580,6 +581,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   exit 255
 fi
 
+twoBitToFa \$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r \$asmId.2bit \$asmId.faCount.txt.gz
+zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
+touch -r \$asmId.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -710,15 +715,15 @@ export asmId=$asmId
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
 export species=`echo $species | sed -e 's/_/ /g;'`
 
-/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
-gzip $asmId.sorted.fa.out
+gzip \$asmId.sorted.fa.out \$asmId.fa.out \$asmId.nestedRepeats.bed
 
-/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
-\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/$asmId.sorted.fa.out.gz `pwd`
+\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/\$asmId.sorted.fa.out.gz `pwd`
 
 fi
 _EOF_
@@ -726,6 +731,43 @@ _EOF_
   $bossScript->execute();
 } # repeatMasker
 
+#########################################################################
+# * step: simpleRepeat [workhorse]
+sub doSimpleRepeat {
+  my $runDir = "$buildDir/trackData/simpleRepeat";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct TRF/simpleRepeat track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
+  doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
+    -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  doSimpleRepeat.pl -buildDir=`pwd` \\
+    -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  gzip simpleRepeat.bed trfMask.bed
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # simpleRepeat
+
+##   my $rmskResult = "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit";
+##   if (! -s $rmskResult) {
+##     die "simpleRepeat: previous step repeatMasker has not completed\n" .
+##       "# not found: $rmskResult\n";
+##   }
+##   twoBitMask ../repeatMasker/\$asmId.rmsk.2bit -add trfMask.bed \\
+##     \$asmId.RM_TRF_masked.2bit
 
 #########################################################################
 # * step: trackDb [workhorse]
