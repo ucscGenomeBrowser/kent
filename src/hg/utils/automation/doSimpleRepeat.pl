@@ -142,15 +142,20 @@ sub doCluster {
   my $inHive = 0;
   $inHive = 1 if ($okIn[0] =~ m#/hive/data/genomes#);
   my $clusterSeqDir = "$okIn[0]/$db";
+  $clusterSeqDir = "$buildDir" if ($opt_unmaskedSeq);
   my $clusterSeq = "$clusterSeqDir/$db.doSimp.2bit";
   if ($inHive) {
     $clusterSeq = "$clusterSeqDir/$db.unmasked.2bit";
   }
+  $clusterSeq = "$unmaskedSeq" if ($opt_unmaskedSeq);
   my $partDir .= "$okOut[0]/$db/TrfPart";
+  $partDir = "$buildDir/TrfPart" if ($opt_unmaskedSeq);
 
   my $trf409Option = "";
+  my $trfCmd = "trf";
   if ($trf409 ne 0) {
      $trf409Option = "-l=$trf409";
+     $trfCmd = "trf.4.09";
   }
   # Cluster job script:
   my $fh = &HgAutomate::mustOpen(">$runDir/TrfRun.csh");
@@ -178,7 +183,7 @@ foreach spec (`cat \$inLst`)
   # seq:start-end for liftUp's sake:
   twoBitToFa \$spec stdout \\
   | sed -e "s/^>.*/>\$base/" \\
-  | $clusterBin/trfBig $trf409Option -trf=$clusterBin/trf \\
+  | $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
       stdin /dev/null -bedAt=\$base.bed -tempDir=/scratch/tmp
 end
 
@@ -225,7 +230,7 @@ and runs it on the cluster with the most available bandwidth.";
   my $bossScript = new HgRemoteScript("$runDir/doTrf.csh", $paraHub,
 				      $runDir, $whatItDoes);
 
-  if (! $inHive) {
+  if ( ! $opt_unmaskedSeq && ! $inHive) {
     $bossScript->add(<<_EOF_
 mkdir -p $clusterSeqDir
 rsync -av $unmaskedSeq $clusterSeq
@@ -233,6 +238,18 @@ _EOF_
     );
   }
 
+  if ($opt_unmaskedSeq) {
+    $bossScript->add(<<_EOF_
+chmod a+x TrfRun.csh
+
+rm -rf $partDir
+$Bin/simplePartition.pl $clusterSeq $chunkSize $partDir
+
+$HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
+$HgAutomate::paraRun
+_EOF_
+    );
+  } else {
   $bossScript->add(<<_EOF_
 chmod a+x TrfRun.csh
 
@@ -245,8 +262,9 @@ $HgAutomate::gensub2 $partDir/partitions.lst single gsub jobList
 $HgAutomate::paraRun
 _EOF_
   );
+  }
 
-  if (! $inHive) {
+  if (! $opt_unmaskedSeq && ! $inHive) {
     $bossScript->add(<<_EOF_
 rm -f $clusterSeq
 _EOF_
@@ -265,13 +283,15 @@ sub doSingle {
 				      $runDir, $whatItDoes);
 
   my $trf409Option = "";
+  my $trfCmd = "trf";
   if ($trf409 ne 0) {
      $trf409Option = "-l=$trf409";
+     $trfCmd = "trf.4.09";
   }
   $bossScript->add(<<_EOF_
 $HgAutomate::setMachtype
 twoBitToFa $unmaskedSeq stdout \\
-| $clusterBin/trfBig $trf409Option -trf=$clusterBin/trf \\
+| $clusterBin/trfBig $trf409Option -trf=$clusterBin/$trfCmd \\
       stdin /dev/null -bedAt=simpleRepeat.bed -tempDir=/scratch/tmp
 _EOF_
   );
@@ -324,6 +344,12 @@ _EOF_
   }
   $bossScript->add(<<_EOF_
 awk '{if (\$5 <= 12) print;}' simpleRepeat.bed > trfMask.bed
+awk 'BEGIN{OFS="\\t"}{name=substr(\$16,0,16);\$4=name;printf "%s\\n", \$0}' \\
+   simpleRepeat.bed | sort -k1,1 -k2,2n > simpleRepeat.bed16.bed
+twoBitInfo $unmaskedSeq stdout | sort -k2nr > tmp.chrom.sizes
+bedToBigBed -tab -type=bed4+12 -as=\$HOME/kent/src/hg/lib/simpleRepeat.as \\
+   simpleRepeat.bed16.bed tmp.chrom.sizes simpleRepeat.bb
+rm -f tmp.chrom.sizes simpleRepeat.bed16.bed tmp.chrom.sizes
 _EOF_
   );
   if ($chromBased) {
@@ -368,8 +394,8 @@ sub doCleanup {
   my $bossScript = new HgRemoteScript("$runDir/doCleanup.csh", $fileServer,
 				      $runDir, $whatItDoes);
   $bossScript->add(<<_EOF_
-rm -rf TrfPart/*
-rm -f TrfPart
+rm -fr TrfPart/*
+rm -fr TrfPart
 if (-d /hive/data/genomes/$db/TrfPart) then
   rmdir /hive/data/genomes/$db/TrfPart
 endif
