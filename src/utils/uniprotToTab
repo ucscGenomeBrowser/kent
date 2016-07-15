@@ -103,6 +103,7 @@ def setupLogging(progName, options, parser=None, logFileName=None, \
     assert(progName!=None)
     global debugMode
 
+    stdoutLevel=logging.INFO
     if options==None:
         stdoutLevel=logging.DEBUG
 
