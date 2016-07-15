@@ -706,6 +706,28 @@ an assembly is found in, for example hg18: /gbdb/hg18/nib/chr*.nib
 Some assemblies have all the DNA sequence in a single .2bit file,
 for example: /gbdb/mm8/mm8.2bit
 
+# Modifying the source code
+
+If you want to make changes to the source code, contact us first via the
+mailing list, to make sure that there is no option in development or an
+undocumented way to solve your problem. 
+
+If you need to change the code, make sure to isolate your changes into a
+single function, if possible. Using git, merge your branch into our "beta"
+branch, ideally for every release, then recompile.  If your changes could be
+useful for someone else, and you are getting tired of updating them to keep up
+with our changing code base, consider submitting them as a pull request, so we
+can integrate it into the main code base and you do not have to worry about
+updating them anymore.
+
+Once you have git setup properly, merging your changes into our current
+release should be as easy as this:
+
+    git pull # get new version
+    git checkout beta # switch to our stable branch
+    git merge myChangesBranch # merge your changes into the beta branch
+    make -j 20 cgi-alpha # compile and put CGIs into /usr/local/apache/cgi-bin
+
 # Custom Track Database
 
 A new feature of the genome browser as of March 2007 is the ability to
