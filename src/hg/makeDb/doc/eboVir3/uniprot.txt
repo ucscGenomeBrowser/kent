@@ -1,12 +1,10 @@
 # parse uniprot
-# this is the pubs uniprot parser in ~max/projects/pubs/tools
-# also on github
-pubParseDb uniprot  --taxon 128952 
+uniprotToTab /hive/data/outside/uniProtCurrent/  --taxon 128952 eboVirUniprot/
 # create a mapping from uniprot prot seq to DNA. The mapping has to be in nucl
 # space, so use pslProtCnv
-blat -t=dnax -q=prot /hive/data/genomes/eboVir3/eboVir3.2bit uniprot.128952.fa.gz stdout -noHead | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.95 -minCover=0.95 | pslProtCnv > spToeboVir3.psl
+blat -t=dnax -q=prot /hive/data/genomes/eboVir3/eboVir3.2bit eboVirUniprot/uniprot.128952.fa.gz stdout -noHead | sort -k1,1n -r | pslCDnaFilter stdin stdout -minId=0.95 -minCover=0.95 | pslProtCnv > spToeboVir3.psl
 # lift the uniprot annotations
-uniprotLift 128952 eboVir3 spToeboVir3.psl 
+uniprotLift eboVirUniprot/128952 eboVir3 spToeboVir3.psl 
 # copy over output files
 ln -s /cluster/data/eboVir3/bed/uniprot/spMut.bb /gbdb/eboVir3/bbi/spMut.bb
 ln -s /cluster/data/eboVir3/bed/uniprot/spAnnot.bb /gbdb/eboVir3/bbi/spAnnot.bb

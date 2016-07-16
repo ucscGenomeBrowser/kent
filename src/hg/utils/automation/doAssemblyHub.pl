@@ -37,6 +37,9 @@ my $stepper = new HgStepManager(
       { name => 'gatewayPage',   func => \&doGatewayPage },
       { name => 'gc5Base',   func => \&doGc5Base },
       { name => 'repeatMasker',   func => \&doRepeatMasker },
+      { name => 'simpleRepeat',   func => \&doSimpleRepeat },
+      { name => 'allGaps',   func => \&doAllGaps },
+      { name => 'idKeys',   func => \&doIdKeys },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -580,6 +583,10 @@ if [ "\$checkAgp" != "All AGP and FASTA entries agree - both files are valid" ];
   exit 255
 fi
 
+twoBitToFa \$asmId.2bit stdout | faCount stdin | gzip -c > \$asmId.faCount.txt.gz
+touch -r \$asmId.2bit \$asmId.faCount.txt.gz
+zgrep -P "^total\t" \$asmId.faCount.txt.gz > \$asmId.faCount.signature.txt
+touch -r \$asmId.2bit \$asmId.faCount.signature.txt
 _EOF_
   );
   $bossScript->execute();
@@ -710,15 +717,15 @@ export asmId=$asmId
 if [ $buildDir/\$asmId.2bit -nt faSize.rmsk.txt ]; then
 export species=`echo $species | sed -e 's/_/ /g;'`
 
-/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+doRepeatMasker.pl -stop=mask -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
-gzip $asmId.sorted.fa.out
+gzip \$asmId.sorted.fa.out \$asmId.fa.out \$asmId.nestedRepeats.bed
 
-/cluster/home/hiram/kent/src/hg/utils/automation/doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
-  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" $asmId
+doRepeatMasker.pl -continue=cleanup -buildDir=`pwd` -unmaskedSeq=$buildDir/\$asmId.2bit \\
+  -bigClusterHub=$bigClusterHub -workhorse=$workhorse -species="\$species" \$asmId
 
-\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/$asmId.sorted.fa.out.gz `pwd`
+\$HOME/kent/src/hg/utils/automation/asmHubRepeatMasker.sh \$asmId `pwd`/\$asmId.sorted.fa.out.gz `pwd`
 
 fi
 _EOF_
@@ -726,6 +733,145 @@ _EOF_
   $bossScript->execute();
 } # repeatMasker
 
+#########################################################################
+# * step: simpleRepeat [workhorse]
+sub doSimpleRepeat {
+  my $runDir = "$buildDir/trackData/simpleRepeat";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct TRF/simpleRepeat track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doSimpleRepeat.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
+  doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
+    -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  doSimpleRepeat.pl -buildDir=`pwd` \\
+    -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+        -workhorse=$workhorse \$asmId
+  gzip simpleRepeat.bed trfMask.bed
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # simpleRepeat
+
+##   my $rmskResult = "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit";
+##   if (! -s $rmskResult) {
+##     die "simpleRepeat: previous step repeatMasker has not completed\n" .
+##       "# not found: $rmskResult\n";
+##   }
+##   twoBitMask ../repeatMasker/\$asmId.rmsk.2bit -add trfMask.bed \\
+##     \$asmId.RM_TRF_masked.2bit
+
+#########################################################################
+# * step: allGaps [workhorse]
+sub doAllGaps {
+  my $runDir = "$buildDir/trackData/allGaps";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct 'all' gap track data";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAllGaps.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+export buildDir=$buildDir
+
+if [ \$buildDir/\$asmId.2bit -nt \$asmId.NOT.gap.bed ]; then
+  findMotif -motif=gattaca -verbose=4 -strand=+ ../../\$asmId.2bit \\
+       > \$asmId.findMotif.txt 2>&1
+  grep "^#GAP " \$asmId.findMotif.txt | sed -e 's/^#GAP //;' \\
+      > \$asmId.allGaps.bed
+  bigBedToBed ../assemblyGap/\$asmId.gap.bb \$asmId.gap.bed
+  # verify the 'all' gaps should include the gap track items
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \$asmId.gap.bed \\
+     \$asmId.verify.annotated.gap.bed
+  gapTrackCoverage=`awk '{print \$3-\$2}' \$asmId.gap.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  intersectCoverage=`ave -col=5 \$asmId.verify.annotated.gap.bed \\
+     | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$gapTrackCoverage -ne \$intersectCoverage ]; then
+    printf "ERROR: 'all' gaps does not include gap track coverage\n" 1>&2
+    printf "gapTrackCoverage: \$gapTrackCoverage != \$intersectCoverage intersection\n" 1>&2
+    exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.allGaps.bed \\
+    > \$asmId.NOT.allGaps.bed
+  # verify bedInvert worked correctly
+  #   sum of both sizes should equal genome size
+  both=`cat \$asmId.NOT.allGaps.bed \$asmId.allGaps.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  genomeSize=`ave -col=2 ../../\$asmId.chrom.sizes | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert.pl did not function correctly on allGaps.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedInvert.pl ../../\$asmId.chrom.sizes \$asmId.gap.bed \\
+      > \$asmId.NOT.gap.bed
+  # again, verify bedInvert is working correctly, sum of both == genomeSize
+  both=`cat \$asmId.NOT.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" \\
+    | sed -e 's/.000000//;'`
+  if [ \$genomeSize -ne \$both ]; then
+     printf "ERROR: bedInvert did not function correctly on gap.bed\n" 1>&2
+     printf "genomeSize: \$genomeSize != \$both both gaps data\n" 1>&2
+     exit 255
+  fi
+  bedIntersect -minCoverage=0.0000000014 \$asmId.allGaps.bed \\
+     \$asmId.NOT.gap.bed \$asmId.notAnnotated.gap.bed
+  # verify the intersect functioned correctly
+  # sum of new gaps plus gap track should equal all gaps
+  allGapCoverage=`awk '{print \$3-\$2}' \$asmId.allGaps.bed \\
+     | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  both=`cat \$asmId.notAnnotated.gap.bed \$asmId.gap.bed \\
+    | awk '{print \$3-\$2}' | ave stdin | grep "^total" | sed -e 's/.000000//;'`
+  if [ \$allGapCoverage -ne \$both ]; then
+     printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
+     printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
+  fi
+else
+  printf "# allgaps step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # allGaps
+
+#########################################################################
+# * step: idKeys [workhorse]
+sub doIdKeys {
+  my $runDir = "$buildDir/trackData/idKeys";
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "construct ID key data for each contig/chr";
+  my $bossScript = newBash HgRemoteScript("$runDir/doIdKeys.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../../\$asmId.2bit -nt \$asmId.keySignature.txt ]; then
+  doIdKeys.pl \$asmId -buildDir=`pwd` -twoBit=../../\$asmId.2bit
+else
+  printf "# idKeys step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # idKeys
 
 #########################################################################
 # * step: trackDb [workhorse]
