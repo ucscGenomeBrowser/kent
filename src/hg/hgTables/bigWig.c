@@ -45,12 +45,13 @@ if (isCustomTrack(table))
     if (ct != NULL)
         fileName = cloneString(trackDbSetting(ct->tdb, "bigDataUrl"));
     }
-else if (isHubTrack(table))
+else
     {
     struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
     assert(tdb != NULL);
     fileName = cloneString(trackDbSetting(tdb, "bigDataUrl"));
-    assert(fileName != NULL);
+    if (isHubTrack(table))   // if it's a native track, we'll assume it has a table with the name
+        assert(fileName != NULL);
     }
 return fileName;
 }

@@ -251,8 +251,11 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region,
 /* Add relevant beds in reverse order to pBedList */
 {
 struct lm *lm = lmInit(0);
-struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
-    	region->start, region->end, lm);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
+char *cacheDir =  cfgOption("cramRef");
+char *refUrl = trackDbSetting(tdb, "refUrl");
+struct samAlignment *sam, *samList = bamFetchSamAlignmentPlus(fileName, region->chrom,
+    	region->start, region->end, lm, refUrl, cacheDir);
 char *row[SAMALIGNMENT_NUM_COLS];
 char numBuf[BAM_NUM_BUF_SIZE];
 for (sam = samList; sam != NULL; sam = sam->next)
@@ -319,6 +322,13 @@ int orderedCount = count * 4;
 if (orderedCount < 10000)
     orderedCount = 10000;
 bam_hdr_t *header = sam_hdr_read(fh);
+if (fh->format.format == cram) 
+    {
+    char *cacheDir =  cfgOption("cramRef");
+    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
+    char *refUrl = trackDbSetting(tdb, "refUrl");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, orderedCount, lm);
 
 /* Shuffle list and extract qNames from first count of them. */
@@ -385,6 +395,13 @@ hPrintf("</TR>\n");
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
 bam_hdr_t *header = sam_hdr_read(fh);
+if (fh->format.format == cram) 
+    {
+    char *cacheDir =  cfgOption("cramRef");
+    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
+    char *refUrl = trackDbSetting(tdb, "refUrl");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, 10, lm);
 
 /* Print sample lines. */
