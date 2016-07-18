@@ -248,33 +248,41 @@ bigDataUrl bbi/%s.simpleRepeat.bb
 html html/%s.simpleRepeat\n\n" "${asmId}" "${asmId}"
 fi
 
-exit $?
 
 # may or may not have a searchTrix for ncbiGene, assume none
 searchTrix=""
 # check to see if there is a index for ncbiGene
-if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.ix ]; then
+if [ -s ${buildDir}/trackData/geneTrack/ucsc.NZO_HlLtJ.ix ]; then
   searchTrix="
-searchTrix trackData/ncbiGene/${asmId}.ncbiGene.ix"
+searchTrix ixIxx/$asmId.geneTrack.ix"
 fi
 
-if [ -s ${buildDir}/trackData/ncbiGene/${asmId}.ncbiGene.bb ]; then
-  printf "track ncbiGene
-longLabel ncbiGene - gene predictions delivered with assembly from NCBI
-shortLabel ncbiGene
+if [ -s ${buildDir}/trackData/geneTrack/ucsc.NZO_HlLtJ.bb ]; then
+rm -f $buildDir/bbi/${asmId}.geneTrack.bb
+rm -f $buildDir/ixIxx/${asmId}.geneTrack.ix
+rm -f $buildDir/ixIxx/${asmId}.geneTrack.ixx
+ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.bb $buildDir/bbi/${asmId}.geneTrack.bb
+ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.ix $buildDir/ixIxx/${asmId}.geneTrack.ix
+ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.ixx $buildDir/ixIxx/${asmId}.geneTrack.ixx
+  printf "track geneTrack
+longLabel geneTrack - gene predictions
+shortLabel geneTrack
 priority 12
 visibility pack
 color 0,80,150
 altColor 150,80,0
 colorByStrand 0,80,150 150,80,0
-bigDataUrl trackData/ncbiGene/%s.ncbiGene.bb
+bigDataUrl bbi/%s.geneTrack.bb
 type bigGenePred
-html html/%s.ncbiGene
+html html/%s.geneTrack
 searchIndex name%s
-url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
-urlLabel NCBI Nucleotide database
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 fi
+
+exit $?
+
+# url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
+# urlLabel NCBI Nucleotide database
 
 ###################################################################
 # CpG Islands composite

@@ -40,6 +40,7 @@ my $stepper = new HgStepManager(
       { name => 'simpleRepeat',   func => \&doSimpleRepeat },
       { name => 'allGaps',   func => \&doAllGaps },
       { name => 'idKeys',   func => \&doIdKeys },
+      { name => 'addMask',   func => \&doAddMask },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -872,6 +873,48 @@ _EOF_
   );
   $bossScript->execute();
 } # idKeys
+
+#########################################################################
+# * step: addMask [workhorse]
+sub doAddMask {
+  my $runDir = "$buildDir/trackData/addMask";
+
+  my $goNoGo = 0;
+  if ( ! -s "$buildDir/trackData/repeatMasker/$asmId.rmsk.2bit" ) {
+      printf STDERR "ERROR: repeatMasker step not completed\n";
+      printf STDERR "can not find: $buildDir/trackData/repeatMasker/$asmId.rmsk.2bit\n";
+      $goNoGo = 1;
+  }
+  if ( ! -s "$buildDir/trackData/simpleRepeat/trfMask.bed.gz" ) {
+      printf STDERR "ERROR: simpleRepeat step not completed\n";
+      printf STDERR "can not find: $buildDir/trackData/simpleRepeat/trfMask.bed.gz\n";
+      $goNoGo = 1;
+  }
+  if ($goNoGo) {
+      printf STDERR "ERROR: must complete both repeatMasker and simpleRepeat before addMask\n";
+      exit 255;
+  }
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "add together repeatMasker and trf/simpleRepeats to construct masked 2bit file";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAddMask.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ ../simpleRepeat/trfMask.bed.gz -nt \$asmId.trfRM.faSize.txt ]; then
+  twoBitMask ../repeatMasker/\$asmId.rmsk.2bit -type=.bed \\
+     -add ../simpleRepeat/trfMask.bed.gz \$asmId.trfRM.2bit
+  twoBitToFa \$asmId.trfRM.2bit stdout | faSize stdin > \$asmId.trfRM.faSize.txt
+else
+  printf "# addMask step previously completed\\n" 1>&2
+  exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # addMask
 
 #########################################################################
 # * step: trackDb [workhorse]
