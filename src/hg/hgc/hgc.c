@@ -17011,6 +17011,22 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
 
 #define FOURBLANKCELLS "<TD></TD><TD></TD><TD></TD><TD></TD>"
 
+static char *abbreviateAllele(char *allele)
+/* If allele is >50bp then return an abbreviated version with first & last 20 bases and length;
+ * otherwise just return (cloned) allele. */
+{
+int length = strlen(allele);
+if (length > 50)
+    {
+    struct dyString *dyAbbr = dyStringCreate("%.20s", allele);
+    dyStringAppend(dyAbbr, "...");
+    dyStringAppend(dyAbbr, allele+length - 20);
+    dyStringPrintf(dyAbbr, " (%d bases)", length);
+    return dyStringCannibalize(&dyAbbr);
+    }
+return cloneString(allele);
+}
+
 void printSnpAlleleRows(struct snp125 *snp, int version)
 /* Print the UCSC ref allele (and dbSNP if it differs), as row(s) of a
  * 6-column table. */
@@ -17019,32 +17035,28 @@ if (sameString(snp->strand,"+") ||
     strchr(snp->refUCSC, '(')) // don't try to revComp refUCSC if it is "(N bp insertion)" etc.
     {
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refUCSC);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refUCSC));
     if (!sameString(snp->refUCSC, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     }
 else if (sameString(snp->strand,"-"))
     {
-    char refUCSCRevComp[1024];
-    if (sameString(snp->strand, "-"))
-	{
-	safef(refUCSCRevComp, sizeof(refUCSCRevComp), "%s", snp->refUCSC);
-	reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
-	}
+    char *refUCSCRevComp = cloneString(snp->refUCSC);
+    reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", refUCSCRevComp);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(refUCSCRevComp));
     if (version < 127 && !sameString(refUCSCRevComp, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     else if (version >= 127 && !sameString(snp->refUCSC, snp->refNCBI))
 	{
-	char refNCBIRevComp[1024];
-	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp->refNCBI);
-	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+	char *refNCBIRevComp = cloneString(snp->refNCBI);
+        if (! strchr(snp->refNCBI, '('))
+            reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
 	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n",
-	       refNCBIRevComp);
+	       abbreviateAllele(refNCBIRevComp));
 	}
     }
 }
@@ -17308,8 +17320,7 @@ void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTra
 			      struct genePred *gene, int exonIx, char *geneName)
 /* Show the effect of each observed allele of snp on the given exon of gene. */
 {
-char refAllele[1024];
-safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
+char *refAllele = cloneString(snp->refUCSC);
 boolean refIsAlpha = isalpha(refAllele[0]);
 boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
 if (geneIsRc && refIsAlpha)
@@ -17320,8 +17331,7 @@ int snpCodonPos = 0;
 char refCodon[4], refAA = '\0';
 if (refIsSingleBase)
     getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
-char alleleStr[1024];
-safecpy(alleleStr, sizeof(alleleStr), snp->observed);
+char *alleleStr = cloneString(snp->observed);
 char *indivAlleles[64];
 int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
 int j;
@@ -17390,7 +17400,8 @@ for (j = 0;  j < alleleCount;  j++)
 	}
     else
 	printf(firstTwoColumnsPctS "%s %s --> %s\n",
-	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"), refAllele, al);
+	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"),
+               abbreviateAllele(refAllele), abbreviateAllele(al));
     }
 }
 
