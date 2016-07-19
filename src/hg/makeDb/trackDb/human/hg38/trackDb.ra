@@ -270,9 +270,9 @@ searchName ucscRetroInfoRefSeq8
 searchTable ucscRetroAli8
 searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo8
+xrefTable hgFixed.refLink, ucscRetroInfo8
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo8.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo8.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 track mrnaBig
@@ -343,9 +343,9 @@ searchName ucscRetroInfoRefSeq9
 searchTable ucscRetroAli9
 searchDescription Retroposed Genes V9, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo9
+xrefTable hgFixed.refLink, ucscRetroInfo9
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo9.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo9.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna9

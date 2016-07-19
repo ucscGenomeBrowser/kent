@@ -429,6 +429,12 @@ div.jwFooterCopyright {
     font-size: 0.5em;
 }
 
+.jwSurveyContainer {
+    display: inline-block;
+    padding: 10px;
+    float: right;
+}
+
 /* Layout tweaks for hgGateway.html */
 
 #findPosInputContainer {
