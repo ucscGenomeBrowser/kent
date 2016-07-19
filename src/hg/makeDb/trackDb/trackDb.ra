@@ -3072,7 +3072,7 @@ allButtonPair on
         subGroups view=aGenes
         color 12,12,120
         type genePred refPep refMrna
-        idXref refLink mrnaAcc name
+        idXref hgFixed.refLink mrnaAcc name
         html refGene.new
         priority 7
 
