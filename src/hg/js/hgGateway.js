@@ -24,7 +24,7 @@
 // hgGateway: module of mostly view/controller code (model state comes directly from server).
 
 // Globals (pragma for jshint):
-/* globals dbDbTree, activeGenomes, surveyLink, surveyLabel, cart */
+/* globals dbDbTree, activeGenomes, surveyLink, surveyLabel, surveyLabelImage, cart */
 /* globals calculateHgTracksWidth */ // function is defined in utils.js
 
 
@@ -1622,11 +1622,17 @@ var hgGateway = (function() {
 
     function displaySurvey() {
         // If hg.conf specifies a survey link, then hgGateway.c has set corresponding global vars.
-        // Use those to display a labeled link (possibly with html) in the otherwise empty
+        // Use those to display a labeled link (possibly an <img>) in the otherwise empty
         // #surveyContainer.
-        if (surveyLink && surveyLabel) {
+        var label;
+        if (surveyLink && (surveyLabel || surveyLabelImage)) {
+            if (surveyLabelImage) {
+                label = '<img src="' + surveyLabelImage + '" alt="' + surveyLabel + '">';
+            } else {
+                label = surveyLabel;
+            }
             $('#surveyContainer').html('<a href="' + surveyLink + '" target=_blank>' +
-                                       surveyLabel + '</a>');
+                                       label + '</a>');
         }
     }
 

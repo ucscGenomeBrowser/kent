@@ -327,7 +327,7 @@ puts(
 #include "hgGateway.html.h"
 );
 
-// Set global JS variables hgsid, activeGenomes, surveyLink and surveyLabel at page load time
+// Set global JS variables hgsid, activeGenomes, and survey* at page load time
 // We can't just use "var hgsid = " or the other scripts won't see it -- it has to be
 // "window.hgsid = ".
 puts("<script>");
@@ -336,16 +336,22 @@ puts("window.activeGenomes =");
 printActiveGenomes();
 puts(";");
 char *surveyLink = cfgOption("survey");
-if (isNotEmpty(surveyLink))
+if (isNotEmpty(surveyLink) && !sameWord(surveyLink, "off"))
     {
-    char *surveyLabel = cfgOptionDefault("surveyLabel", "Please take our survey");
     printf("window.surveyLink=\"%s\";\n", jsonStringEscape(surveyLink));
+    char *surveyLabel = cfgOptionDefault("surveyLabel", "Please take our survey");
     printf("window.surveyLabel=\"%s\";\n", jsonStringEscape(surveyLabel));
+    char *surveyLabelImage = cfgOption("surveyLabelImage");
+    if (isNotEmpty(surveyLabelImage))
+        printf("window.surveyLabelImage=\"%s\";\n", jsonStringEscape(surveyLabelImage));
+    else
+        puts("window.surveyLabelImage=null;");
     }
 else
     {
     puts("window.surveyLink=null;");
     puts("window.surveyLabel=null;");
+    puts("window.surveyLabelImage=null;");
     }
 puts("</script>");
 
