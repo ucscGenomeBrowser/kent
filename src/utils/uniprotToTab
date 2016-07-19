@@ -859,9 +859,13 @@ def parseRefInfo(entryEl, recName):
         refRow = RefRec(**ref)
         yield refRow
 
-def readIsoforms(inDir):
+def readIsoforms(inDir, db):
     " return all isoform sequences as dict isoName (eg. P48347-2) -> sequence "
-    isoFname = join(inDir, "uniprot_sprot_varsplic.fasta.gz")
+    if db=="uniprot":
+        isoFname = join(inDir, "uniprot_sprot_varsplic.fasta.gz")
+    else:
+        isoFname = join(inDir, "uniprot_trembl.fasta.gz")
+
     isoFile = gzip.open(isoFname)
     logging.info("reading isoform sequences from %s" % isoFname)
     isoSeqs = parseFastaAsDict(isoFile)
@@ -929,15 +933,15 @@ def parseUniprot(db, inDir, outDir, taxonIds):
         outDir = "."
         outPrefix = "temp"
     else:
-        isoSeqs, recCount = readIsoforms(inDir)
+        isoSeqs, recCount = readIsoforms(inDir, db)
         if db=="uniprot":
             xmlBase = "uniprot_sprot.xml.gz"
             outPrefix = "uniprot"
-            recCount = 500000
+            recCount = 600000
         elif db=="trembl":
             xmlBase = "uniprot_trembl.xml.gz"
             outPrefix = "uniprotTrembl"
-            recCount = 500000*37
+            recCount = 600000*37
         else:
             raise Exception("unknown db")
         xmlFile = gzip.open(join(inDir, xmlBase))
@@ -1039,8 +1043,10 @@ This parser:
 - blacklists some PMIDs, annotations from these are skipped
 
 Example:
-
 %prog /hive/data/outside/uniProtCurrent/ 9606 uniprotTab/
+
+If you get no results from this script, your species may be only in Trembl.
+Use the '-t trembl' option to parse UniProt/Trembl instead of UniProt/SwissProt.
 """)
 
 parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
