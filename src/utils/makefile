@@ -156,7 +156,8 @@ SCRIPT_FILES = \
 	extToolsChromeParse \
 	patSeqFilterBulkAndAnnotate \
 	uniprotToTab \
-	patSeqSummarizeDocs
+	patSeqSummarizeDocs \
+	pslProtCnv
 
 # List of all directories to build
 
