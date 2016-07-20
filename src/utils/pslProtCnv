@@ -1,0 +1,65 @@
+#!/usr/bin/awk -f 
+#
+# pslProtCnv protPsl > naLikePsl
+#   Convert a protein PSL to have block sizes in units of nucleaic acids
+#   so it will work as custom track.  Note that this will ocassionally
+#   create overlapping blocks, which will still display in the browser.
+#
+BEGIN {
+    FS = OFS = "\t";
+}
+!/^[0-9]+/ {
+    print $0; # pass through track lines, etc
+    next;
+}
+{
+    strand=$9;
+    qSize=$11;
+    qStart=$12;
+    qEnd=$13;
+    tSize=$15;
+    blkCnt=$18;
+    blkSizesStr=$19;
+    qStartsStr=$20;
+    tStartsStr=$21;
+
+    # make strand untranslated, check for rev cmpl
+    newStrand = (strand == "+-") ? "-" : "+";
+    rc = (strand == "+-");
+
+    split(blkSizesStr, blkSizes, ",");
+    split(qStartsStr, qStarts, ",");
+    split(tStartsStr, tStarts, ",");
+
+    newBlkSizesStr = newQStartsStr = newTStartsStr = "";
+
+    for (i = 1; i <= blkCnt; i++) {
+        # get adjusted block size and starts
+        bs = 3*blkSizes[i];
+        if (rc) {
+            qs = 3*(qSize-(qStarts[i]+blkSizes[i]));
+            ts = (tSize-(tStarts[i]+bs));
+        } else {
+            qs = 3*qStarts[i];
+            ts = tStarts[i];
+        }
+        # add to comma-separated columns
+        if (rc) {
+            newBlkSizesStr = bs "," newBlkSizesStr;
+            newQStartsStr = qs "," newQStartsStr;
+            newTStartsStr =   ts "," newTStartsStr;
+        } else {
+            newBlkSizesStr = newBlkSizesStr bs ",";
+            newQStartsStr = newQStartsStr qs ",";
+            newTStartsStr = newTStartsStr ts ",";
+        }
+    }
+    $9 = newStrand;
+    $11 = 3*qSize
+    $12 = 3*qStart;
+    $13 = 3*qEnd;
+    $19 = newBlkSizesStr;
+    $20 = newQStartsStr;
+    $21 = newTStartsStr;
+    print $0;
+}
