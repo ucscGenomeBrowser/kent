@@ -157,7 +157,8 @@ SCRIPT_FILES = \
 	patSeqFilterBulkAndAnnotate \
 	uniprotToTab \
 	patSeqSummarizeDocs \
-	pslProtCnv
+	pslProtCnv \
+	pslSameGene
 
 # List of all directories to build
 
