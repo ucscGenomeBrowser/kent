@@ -1,0 +1,28 @@
+# convert uniprot to tab files
+~/kent/src/utils/uniprotToTab /hive/data/outside/uniProt/current/ 9606 uniprotTab/
+
+# ABO = swissprot P16442 (hg19) or trembl A0A087X0C2 (exact match against gencode on hg38)
+
+cp ~/kent/src/hg/utils/uniprotMutations/bed12UniProt*.as ./
+cp ~/kent/src/hg/utils/uniprotMutations/mapUniprot_doBlast ./
+
+# try to make a lift file uniprot -> hg38
+~/kent/src/hg/utils/uniprotMutations/makeUniProtToHg.sh uniprotTab/ hg38
+
+# gencode fix for hg38:
+# gencode maps some genes currently to trembl sequences
+# confirmed by email from Branwen
+
+# manually fix the mapping of uniprot -> knownGene -> genome by using the
+# HGNC symbols
+# 1) use mapping uniprot -> symbol from uniprot
+cat uniprotTab/uniprot.9606.tab  | cut -f2,18 | awk '($2!="")' | tabExpand 1 /dev/stdin > upToSym.tab
+# 2) use mapping known gene -> symbol from gencode
+hgsql hg38 -NB -e 'select kgId, geneSymbol from kgXref' > kgToSym.tab
+# 3) filter the psl to keep only best alignments from the same gene
+find upMap/work/aligns -name '*.psl' | xargs cat | pslSameGene upToSym.tab kgToSym.tab /dev/stdin | pslCDnaFilter stdin -globalNearBest=0  -bestOverlap -filterWeirdOverlapped stdout | sort -k 14,14 -k 16,16n -k 17,17n > uniProtTohg38.psl
+# 4) use this to create a mapping uniprot -> genome
+pslMap upMap/work/uniProtVsUcscMRna.psl upMap/work/ucscMRna.psl uniProtTohg38.psl
+
+~/kent/src/utils/uniprotLift uniprotTab/ 9606 /hive/data/genomes/hg38/chrom.sizes uniProtTohg38.psl
+
