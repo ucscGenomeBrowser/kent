@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -beEu -o pipefail
 umask 002
 
@@ -51,7 +51,7 @@ fi
 
 if [ ! -d "$ERRORDIR" ]
 then
-    echo "Error: $DESTDIR is missing or not a directory"
+    echo "Error: $ERRORDIR is missing or not a directory"
     exit 255
 fi
 
@@ -82,7 +82,7 @@ find ${ERRORDIR} -type f -mmin +60 -printf "%f\0" |
 
 
 # Fetch files in parallel; up to 5 at a time.  If xargs does not support -P 5
-# in your locale, delete that option to do serial fetch.
+# in your Unix, delete that option to do serial fetch.
 
 ls "$PENDING" | (egrep -v 'fetch.lock|.out|.try' || true) |
 xargs -I % -n 1 -P 5 sh -c \
