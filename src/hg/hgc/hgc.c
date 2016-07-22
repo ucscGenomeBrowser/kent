@@ -9870,21 +9870,24 @@ if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
                "</ul>\n", phenoString);
         // freeMem(phenoString);
         }
-    if ((row != NULL) && strlen(row[1]) >= 1)
+    if (row != NULL)
         {
-        printf("<b>Mean Ratio:</b> %s\n<br>\n", row[1]);
-        }
-    if ((row != NULL) && strlen(row[2]) >= 1)
-        {
-        printf("<b>Inheritance:</b> %s\n<br>\n", row[2]);
-        }
-    if ((row != NULL) && strlen(row[3]) >= 1)
-        {
-        printf("<b>Pathogenicity:</b> %s\n<br>\n", row[3]);
-        }
-    if ((row != NULL) && strlen(row[3]) >= 1)
-        {
-        printf("<b>Contribution:</b> %s\n<br>\n", row[4]);
+        if (isNotEmpty(row[1]))
+            {
+            printf("<b>Mean Ratio:</b> %s\n<br>\n", row[1]);
+            }
+        if (isNotEmpty(row[2]))
+            {
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[2]);
+            }
+        if (isNotEmpty(row[3]))
+            {
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[3]);
+            }
+        if (isNotEmpty(row[4]))
+            {
+            printf("<b>Contribution:</b> %s\n<br>\n", row[4]);
+            }
         }
     sqlFreeResult(&sr);
     }
