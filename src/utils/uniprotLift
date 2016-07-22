@@ -289,14 +289,17 @@ if __name__ == '__main__':
     print "reading %s" % uniProtMutFname
     for mut in iterTsvRows(open(uniProtMutFname)):
         if mut.acc not in speciesAccs:
+            logging.debug("skipping %s, not in work/chromSizes" % mut.acc)
             continue
         if options.filterAnnots and mut.featType in removeTypes:
+            logging.debug("skipping %s, explicitely removed annotation" % str(mut))
             continue
         mutName = mut.featType.replace(" ", "_")+":"+mut.acc+":"+mut.origAa+mut.begin+mut.mutAa
 
         # remove annotations that cover the whole protein, probably not very useful
         #print mut.begin, mut.end, mut.acc, seqSizes[mut.acc]
         if int(mut.begin)==1 and int(mut.end)==int(seqSizes[mut.acc])+1:
+            logging.debug("skipping %s, covers whole protein" % str(mut))
             continue
 
         mutPos = 3*(int(mut.begin)-1)
@@ -308,7 +311,7 @@ if __name__ == '__main__':
     
     # lift from protein sequence bed to target bed
     print "lifting"
-    cmd = "bedToPsl work/chromSizes work/temp.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > work/temp.lifted.bed" % liftFname
+    cmd = "bedToPsl work/chromSizes work/temp.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > work/temp.lifted.bed" % liftFname
     run(cmd)
 
     print "adding extra fields"

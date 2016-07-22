@@ -309,6 +309,21 @@ echo - Pulling other files
 # make sure we never overwrite the hg.conf.local file
 rsync $RSYNCOPTS $PUSHLOC / --exclude=hg.conf.local
 
+# July 2016: add the cram fetcher to root's crontab 
+# this has to be done after the PUSHLOC directory has been copied over
+if grep -q fetchCramReference /var/spool/cron/crontabs/root; then
+        true
+   else
+       crontab -l | awk '{print} END {print "\n# handle CRAM auto reference download\n*/1 * * * * /root/fetchCramReference.sh /data/cramCache/pending /data/cramCache/ /data/cramCache/error/\n"}' | crontab -   
+fi
+# also create the directories for the cram files
+# cram also requires that the directories are writable by the apache user
+if [ ! -d /data/cramCache ]; then
+    mkdir -p /data/cramCache/pending /data/cramCache/error
+    chown -R www-data:www-data /data/cramCache
+fi
+# -- end July 2016
+
 if [ "$1" != "hgwdev" ] ; then
   echo updating MYSQL files - browser will not work during the MYSQL update
   # inspired by http://forums.mysql.com/read.php?35,45577,47063#msg-47063

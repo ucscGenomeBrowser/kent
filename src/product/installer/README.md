@@ -1,6 +1,6 @@
 % Genome Browser in the Cloud User Guide
 
-# What is Genome Browser in the Cloud?
+# **What is Genome Browser in the Cloud?**
 
 The Genome Browser in the Cloud (GBiC) script is a convenient script that automates the setup of a
 UCSC Genome Browser mirror, including the installation and setup of MySQL (or MariaDB) 
@@ -22,7 +22,7 @@ Other data centers (e.g. East Coast) will require a local copy of the genome ass
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
 
-# Quick Start Instructions
+# **Quick Start Instructions**
 
 Download the GBiC script from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
 
@@ -35,7 +35,7 @@ The `install` command downloads and configures Apache, MySQL and Ghostscript, co
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
-# How does this work?
+# **How does this work?**
 
 The GBiC script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
@@ -53,11 +53,11 @@ and adapting the MySQL socket config.
 This will leave you with a genome browser accessible on localhost that loads its data 
 through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
-enough to test if your setup is working. You can then use the script to download 
+enough to test that your setup is working. You can then use the script to download 
 assemblies of interest to your local Genome Browser, which will make it at least 
 as fast as the UCSC site.
 
-# The different commands
+# **The different commands**
 
 The first argumentof the script is called 'command' in the following. The first
 commmand that you will need is "install", it installs the browser dependencies,
@@ -66,8 +66,9 @@ binaries and basic Mysql infrastructure:
     sudo bash browserSetup.sh install
 
 There are a number of options supported by the GBiC script. In all cases, options must
-be specified before the command. The following example correctly specifies the
-batch mode option to the script:
+be specified before the command. 
+
+The following example correctly specifies thebatch mode option to the script:
 
     sudo bash browserSetup.sh -b install
 
@@ -134,7 +135,7 @@ If you find a bug or your Linux distribution is not supported, please contact
 Genome Browser installation are at
 <http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
  
-# All options
+# **All options**
 
 Here is the full listing of commands and options supported by the GBiC script: 
 
@@ -200,6 +201,6 @@ options:
   -h   - this help message
 ```
 
-# Credits
+# **Credits**
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
 * Bruce O'Neill, Malcolm Cook for feedback
