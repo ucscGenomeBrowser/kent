@@ -32,8 +32,8 @@ mach = $(shell uname -m)
 # Release info and files from Sanger.
 # BEGIN EDIT THESE EACH RELEASE
 ##
-db = mm10
-#db = hg38
+#db = mm10
+db = hg38
 #db = hg19
 ifeq (${db},mm10)
     prevDb = mm10
@@ -57,7 +57,8 @@ else ifeq (${db},hg38)
     ensemblVer = 85_38
     ensemblCDnaDb = homo_sapiens_cdna_${ensemblVer}
     patchSeqs = KN196487.1 KN538364.1 KN196473.1 KN196486.1 KN196472.1 KN196484.1 KN196485.1 KN196480.1 KN538369.1 KN196481.1 KN538362.1 KN538370.1 KN538363.1 KN538371.1 KN538360.1 KN538368.1 KN538372.1 KN538373.1 KN196479.1 KN538361.1 KN196478.1 KN196477.1 KN196474.1 KN196475.1 KQ031383.1 KQ031384.1 KQ031389.1 KQ031387.1 KQ031385.1 \
-	KQ458387.1 KQ090021.1 KQ458386.1 KQ458382.1 KN196482.1 KQ458383.1 KQ458385.1 KQ458388.1 KQ090015.1 KQ458384.1 KQ090016.1 KQ090014.1 KQ090024.1 KQ090028.1 KQ090018.1 KQ090026.1 KQ090025.1 KQ090022.1 KQ090027.1
+	KQ458387.1 KQ090021.1 KQ458386.1 KQ458382.1 KN196482.1 KQ458383.1 KQ458385.1 KQ458388.1 KQ090015.1 KQ458384.1 KQ090016.1 KQ090014.1 KQ090024.1 KQ090028.1 KQ090018.1 KQ090026.1 KQ090025.1 KQ090022.1 KQ090027.1 \
+	KN196476.1 KQ983258.1 KQ983256.1 KQ759760.1 KQ759762.1 KQ983257.1 KQ759761.1 KQ759759.1 KQ983255.1
 else ifeq (${db},hg19)
     prevDb = hg19
     grcRefAssembly = GRCh37
@@ -428,7 +429,11 @@ cmpRelease: loadTables
 
 joinerCheck: loadTables
 	@mkdir -p check
-	for tbl in $$(hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} | egrep -v 'wgEncodeGencode2wayConsPseudo|wgEncodeGencodePolya') ; do echo  table=$$tbl; runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes ; done >check/joiner.out 2>&1
+	for tbl in $$(hgsql -Ne 'show tables like "wgEncodeGencode%V${ver}"' ${db} | egrep -v 'wgEncodeGencode2wayConsPseudo|wgEncodeGencodePolya') ; do \
+	    echo  table=$$tbl; \
+	    runJoiner.csh ${db} $$tbl ~/kent/src/hg/makeDb/schema/all.joiner noTimes; \
+	    done >check/joiner.out 2>&1
+	if fgrep Error: check/joiner.out ; then false;  else true; fi
 
 
 clean:
