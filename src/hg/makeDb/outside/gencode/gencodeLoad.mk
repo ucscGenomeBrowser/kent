@@ -38,12 +38,12 @@ db = mm10
 ifeq (${db},mm10)
     prevDb = mm10
     grcRefAssembly = GRCm38
-    ver = M9
-    prevVer = M8
+    ver = M10
+    prevVer = M9
     gencodeOrg = Gencode_mouse
     ftpReleaseSubdir = release_${ver}
     annGtfTypeName = chr_patch_hapl_scaff.annotation
-    ensemblVer = 84_38
+    ensemblVer = 85_38
     ensemblCDnaDb = mus_musculus_cdna_${ensemblVer}
     patchSeqs = KB469740.1 KB469738.2 JH792833.1 KB469741.1 JH792826.1 KK082443.1 KB469739.1 JH792832.1 KK082442.1 JH792831.1 KB469742.1 JH792834.1 JH792827.1 KK082441.1 JH792830.1 JH792828.1 KQ030491.1 KQ030485.1 KB469738.3 KQ030495.1 KQ030490.1 KQ030488.1 KQ030496.1 KQ030489.1 KQ030493.1 KQ030486.1 KQ030484.1 KQ030494.1 KQ030487.1 KQ030497.1
 else ifeq (${db},hg38)
@@ -262,9 +262,9 @@ ${table2WayConsPseudoGp}: ${pseudo2WayGtf}
 	zcat $< | tawk '$$3=="transcript"{$$3 = "exon"} {print $$0}' | gtfToGenePred -ignoreGroupsWithoutExons stdin $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
-${tablePolyAGp}: ${polyAGtf}
+${tablePolyAGp}: ${polyAGtf} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	gencodePolyaGtfToGenePred $< $@.${tmpExt}
+	gencodePolyaGxfToGenePred ${skipPatchSeqOpts} $< ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableUniProtTab}: ${tableSwissProtMeta} ${tableTrEMBLMeta}
@@ -298,7 +298,7 @@ ${tableTranscriptSupportTab}: ${tableTranscriptSupportMeta}
 	${copyTabGz}
 ${tableExonSupportTab}: ${tableExonSupportMeta} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	gencodeExonSupportToTable ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
+	gencodeExonSupportToTable ${skipPatchSeqOpts} ${tableExonSupportMeta} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 ${tablePdbTab}: ${tablePdbMeta}
 	${copyTabGz}
@@ -328,7 +328,7 @@ ${tableEntrezGeneTab}: ${tableEntrezGeneMeta}
 ##
 ${gencodeGp}: ${annotationGtf} ${ensemblToUcscChain}
 	@mkdir -p $(dir $@)
-	gencodeGtfToGenePred ${skipPatchSeqOpts} ${annotationGtf} ${ensemblToUcscChain} $@.${tmpExt}
+	gencodeGxfToGenePred ${skipPatchSeqOpts} ${annotationGtf} ${ensemblToUcscChain} $@.${tmpExt}
 	mv -f $@.${tmpExt} $@
 
 ${tableTranscriptionSupportLevelData}: ${gencodeTsv}
