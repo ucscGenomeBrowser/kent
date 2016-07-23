@@ -12349,8 +12349,7 @@ TMPDIR=/dev/shm
     (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
 
     # compare tables from previous release to see if number changed makes
-    # sense.
-        make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk cmpRelease >gencode-cmp.tsv
+    # sense.  Results are in gencode-cmp.tsv
 
     ## Copy and update trackDb files from previous release.
     ## Change version and use lower priority so it sorts to top of
