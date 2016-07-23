@@ -1423,7 +1423,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP B147 / SNP147 (DONE 7/1/16 angie)
+# DBSNP B147 / SNP147 (DONE 7/22/16 angie)
+# Initially done 7/1/16.  Updated 7/22/16 to fix func code bug (see below).
     # Redmine #17209
     mkdir -p /hive/data/outside/dbSNP/147/human_hg38
     cd /hive/data/outside/dbSNP/147/human_hg38
@@ -1469,6 +1470,27 @@ EOF
     ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
     tail -f do.log
 # *** All done!
+
+
+    # 7/22/16 -- Chris Lee found some NR_'s and XR_'s in snp147CodingDbSnp where they
+    # don't belong.  Turns out that dbSnp was assigning cds-indel to any deletion with
+    # length multiple of 3 that intersected an exon, whether the transcript was coding or
+    # not.  Fix the affected rows with some SQL.  First make a table of affected rs IDs:
+    cd /hive/data/outside/dbSNP/147/human_hg38
+    hgsql hg38 -NBe 'create table snp147NoncodingCdsIndelIds \
+                       select distinct(name) from snp147CodingDbSnp where transcript like "_R\_%"; \
+                     select count(*) from snp147NoncodingCdsIndelIds;'
+#27574
+    # For each affected rs, replace 'cds-indel' with 'ncRNA' in snp147.func:
+    hgsql hg38 -e 'update snp147,snp147NoncodingCdsIndelIds \
+                     set func = replace(func, "cds-indel", "ncRNA") \
+                     where snp147.name=snp147NoncodingCdsIndelIds.name;'
+    # Remove noncoding transcript rows from snp147CodingDbSnp:
+    hgsql hg38 -e 'delete from snp147CodingDbSnp where transcript like "_R\_%";'
+    # Regenerate {Common,Mult,Flagged}.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue filter --stop filter >>& do.log &
+    tail -f do.log
+# *** All done!  (through the 'filter' step)
 
 
 ##############################################################################
