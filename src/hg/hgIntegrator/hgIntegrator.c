@@ -623,6 +623,22 @@ static struct annoFormatter *makeTabFormatter(struct jsonElement *queryObj)
 // Create and configure an annoFormatter subclass as specified by queryObj.
 {
 struct annoFormatter *tabOut = annoFormatTabNew("stdout");
+// In case the autoSql includes the bin column, turn it off.  The user can explicitly enable it
+// in the UI, and in that case we'll turn it back on below.
+struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj", "dataSources"),
+                                        "dataSources");
+struct slRef *dsRef;
+for (dsRef = dataSources;  dsRef != NULL;  dsRef = dsRef->next)
+    {
+    struct jsonElement *dsObj = dsRef->val;
+    struct slRef *trackPath = jsonListVal(jsonMustFindNamedField(dsObj, "dataSource", "trackPath"),
+                                          "trackPath");
+    struct slRef *leafRef = slLastEl(trackPath);
+    struct jsonElement *leafEl = (struct jsonElement *)(leafRef->val);
+    char *sourceName = jsonStringVal(leafEl, "trackPath leaf");
+    // If source's asObject doesn't have a bin column then this won't have any effect.
+    annoFormatTabSetColumnVis(tabOut, sourceName, "bin", FALSE);
+    }
 // Look for fields that have been deselected by the user
 struct jsonElement *outFileOptions = jsonFindNamedField(queryObj, QUERY_SPEC, "outFileOptions");
 if (outFileOptions)
@@ -648,7 +664,7 @@ if (outFileOptions)
                 char *colName = innerHel->name;
                 struct jsonElement *enabledEl = innerHel->val;
                 boolean enabled = jsonBooleanVal(enabledEl, colName);
-                if (!enabled)
+                if (!enabled || sameString(colName, "bin"))
                     annoFormatTabSetColumnVis(tabOut, sourceName, colName, enabled);
                 }
             }
