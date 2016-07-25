@@ -17,7 +17,7 @@ Centos 7, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
-data centers "UC West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
+data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
 Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which 
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
