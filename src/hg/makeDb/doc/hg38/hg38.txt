@@ -6459,3 +6459,40 @@ create table gwipsvizRiboseq select * from gc5BaseBw;
 update gwipsvizRiboseq set fileName="/gbdb/hg38/bbi/gwipsvizRiboseq/gwipsvizRiboseq.bw" where fileName="/gbdb/hg38/bbi/gc5BaseBw/gc5Base.bw";
 
 #########################################################################
+2016-07-23: import of UCSC GENCODE group processing of GENCODE V25 (markd)
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/hg38/bed/gencodeV25
+    pushd /hive/data/genomes/hg38/bed/gencodeV25
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.  Follow instructions in ra file to ensure
+    ## filters are correct.
+    cd kent/src/hg/makeDb/trackDb
+    cp mouse/hg38/wgEncodeGencodeVM9.ra mouse/hg38/wgEncodeGencodeV25.ra
+    cp mouse/hg38/wgEncodeGencodeVM9.html mouse/hg38/wgEncodeGencodeV25.html
+
+    # edit these plus mouse/hg38/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeV25.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.  [ONLY if it's going to be pushed]
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/hg38/bed/gencodeV25
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
