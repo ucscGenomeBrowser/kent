@@ -363,10 +363,10 @@ char *hgLoginHost = wikiLinkHost();
 char *cgiDir = cgiScriptDirUrl();
 hPrintf("<script  language=\"JavaScript\">\n"
     "<!-- \n"
-    "window.location =\"http%s://%s%shgLogin?%s\""
+    "window.location =\"https://%s%shgLogin?%s\""
     "//-->"
     "\n"
-    "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, paramStr);
+    "</script>", hgLoginHost, cgiDir, paramStr);
 }
     
 void  displayActMailSuccess()
@@ -479,10 +479,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccess=1\""
+        "window.location =\"https://%s%shgLogin?hgLogin.do.displayMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir);
+        "</script>", hgLoginHost, cgiDir);
     }
 }
 
@@ -547,10 +547,10 @@ else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "window.location =\"https://%s%shgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, username);
+        "</script>", hgLoginHost, cgiDir, username);
     }
 }
 
@@ -681,8 +681,8 @@ char *remoteAddr=getenv("REMOTE_ADDR");
 char *cgiDir = cgiScriptDirUrl();
 
 safef(activateURL, sizeof(activateURL),
-    "http%s://%s%shgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
-    cgiAppendSForHttps(), hgLoginHost, cgiDir,
+    "https://%s%shgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
+    hgLoginHost, cgiDir,
     cgiEncode(username),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
