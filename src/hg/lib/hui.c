@@ -8478,7 +8478,8 @@ return s;
 char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
     int winEnd, char *track, boolean encode) 
 /* replace $$ in url with idInUrl. Supports many other wildchards 
- * XX Do we have readable docs for these parameters somewhere? */
+ * XX Do we have readable docs for these parameters somewhere?
+ * Look at http://genome.ucsc.edu/goldenpath/help/trackDb/trackDbHub.html */
 {
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
@@ -8547,6 +8548,12 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
+// This code is using l and r which are the coordinates of the window,
+// so it does not work right for hgc item boundaries at this time.
+// For hgc, it should use cart vars o and t.
+// For hgGene (in future?) it should use hgg_start and hgg_end.
+// For hgTracks, I do not know if it needs this feature or which cart vars it should use.
+// Can somebody (maybe Max) review and fix this?
 if (cartOptionalString(cart, "l") && cartOptionalString(cart, "r"))
     {
     int itemBeg = cartIntExp(cart, "l"); // Should strip any unexpected commas
