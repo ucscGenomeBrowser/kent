@@ -33,6 +33,7 @@ UTIL_DIRS = \
     cdwSubmit \
     cdwSwapInSymLink \
     cdwUndeprecate \
+    utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 
 CGI_DIRS = \
