@@ -357,6 +357,7 @@ struct trackHubGenome *hubGenome = trackHubFindGenome(hub->trackHub, database);
 struct trackDb *tdbList = trackHubTracksForGenome(hub->trackHub, hubGenome);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = trackDbPolishAfterLinkup(tdbList, database);
+trackDbPrioritizeContainerItems(tdbList);
 trackHubPolishTrackNames(hub->trackHub, tdbList);
 char *fixTrackName = cloneString(trackName);
 trackHubFixName(fixTrackName);

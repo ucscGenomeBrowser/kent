@@ -102,8 +102,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
+        "https://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
+        wikiLinkHost(), returnUrl);
     } 
 else 
     {
@@ -136,8 +136,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
+        "https://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
+        wikiLinkHost(), returnUrl);
     } 
 else
     {
@@ -172,8 +172,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserSignupUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        "https://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
+        wikiLinkHost(), retEnc);
     }
 else
     {
@@ -200,8 +200,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkChangePasswordUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        "https://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
+        wikiLinkHost(), retEnc);
     }
 else
     {

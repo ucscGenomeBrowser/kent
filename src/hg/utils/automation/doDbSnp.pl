@@ -353,7 +353,6 @@ $wget $ftpShared/SnpValidationCode.bcp.gz
 # Also fetch Allele, so we can translate allele IDs in SNPAlleleFreq
 # into base values.
 $wget $ftpShared/Allele.bcp.gz
-chmod 664 *
 
 # Get $commonName-specific data:
 cd $assemblyDir
@@ -376,19 +375,19 @@ $wget $ftpSnpDb/SNP_bitfield.bcp.gz
 $wget $ftpSnpDb/Batch.bcp.gz
 $wget $ftpSnpDb/SubSNP.bcp.gz
 $wget $ftpSnpDb/SNPSubSNPLink.bcp.gz
-chmod 664 *
 
 # Get schema
 cd $assemblyDir/schema
 $wget $ftpOrgSchema/${orgDirTrimmed}_table.sql.gz
 $wget $ftpSharedSchema/dbSNP_main_table.sql.gz
-chmod 664 *
 
 # Get fasta files
 # using headers of fasta files for molType, class, observed
 cd $assemblyDir/rs_fasta
 $wget ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/rs_fasta/\\*.gz
-chmod 664 *
+
+# Make all files group writeable so others can update them if necessary
+find $buildDir -user \$USER -not -perm -660 | xargs chmod ug+w
 
 # Extract the set of assembly labels in case we need to exclude any.
 zcat $assemblyDir/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\

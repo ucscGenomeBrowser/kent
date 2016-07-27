@@ -22,8 +22,8 @@ exec </dev/null
 gbRoot=/hive/data/outside/genbank
 cd $gbRoot
 . $gbRoot/lib/gbCommon.sh
-databases=$(gbGetDatabases etc/align.dbs)
-maxParallel=16
+databases=$(gbGetDatabases etc/hgwbeta.dbs)
+maxParallel=24
 
 buildTime=var/build/build.time
 

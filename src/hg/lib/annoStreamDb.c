@@ -226,7 +226,7 @@ else
         joinerDtfToSqlFieldString(jp->b, self->db, fieldB, sizeof(fieldB));
         struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
         if (sameOk(jfA->separator, ","))
-            dyStringPrintf(query, " find_in_set(%s, %s)", fieldB, fieldA);
+            dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
         else
             dyStringPrintf(query, " on %s = %s", fieldA, fieldB);
         hasLeftJoin = TRUE;
