@@ -603,7 +603,7 @@
     description and configuration pages.
     This setting has three parts:</P>
     <UL>
-    <LI>icon -  Currently must refer to an icon in the Browser's images directory in the 
+    <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
     Browser source tree.</LI>
     <LI>html - A relative or full html path to a description document explaining the
     icon's meaning.  This page displays when the user clicks on the icon.</LI>

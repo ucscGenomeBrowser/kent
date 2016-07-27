@@ -25,9 +25,9 @@ beta:
 doInstall:
 	pandoc -t html5 -o ${destDir}/goldenPath/help/gbic.html ${kentSrc}/product/installer/README.md --template staticPage.html -t ../mirrorDocs/staticPage.lua 
 
-# Run rsync.  Care is taking to preserve times and mode on files.  rsync is
-# smart about recreating file under the current users so that times and
-# permissions maybe modified.  However, problems happen when a directory
+# Run rsync.  Care is taken to preserve times and modes on files.  rsync is
+# smart about recreating files under the current users so that times and
+# permissions may be modified.  However, problems happen when a directory
 # is not owned by the current users.  These options attemp to work around it.
 # use care in changing
 rsyncOpts = --times --omit-dir-times --cvs-exclude --no-relative

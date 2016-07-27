@@ -48,8 +48,17 @@ fprintf(f,
 "/* Set up globals and make web page */\n"
 "{\n"
 "cart = theCart;\n"
-"char *db = cartUsualString(cart, \"db\", hDefaultDb());\n"
-"cartWebStart(cart, db, \"%s\");\n"
+"char *database = NULL;\n"
+"char *genome = NULL;\n"
+"getDbAndGenome(cart, &database, &genome, oldVars);\n"
+"initGenbankTableNames(database);\n\n"
+
+"int timeout = cartUsualInt(cart, \"udcTimeout\", 300);\n"
+"if (udcCacheTimeout() < timeout)\n"
+"    udcSetCacheTimeout(timeout);\n"
+"knetUdcInstall();\n\n"
+
+"cartWebStart(cart, database, \"%s\");\n"
 "printf(\"Your code goes here....\");\n"
 "cartWebEnd();\n"
 "}\n"
@@ -69,6 +78,7 @@ fprintf(f,
 "/* Process command line. */\n"
 "{\n"
 "cgiSpoof(&argc, argv);\n"
+"setUdcCacheDir();\n"
 "cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);\n"
 "return 0;\n"
 "}\n"
@@ -138,6 +148,9 @@ if (cgi)
     fprintf(f, "#include \"cheapcgi.h\"\n");
     fprintf(f, "#include \"cart.h\"\n");
     fprintf(f, "#include \"hui.h\"\n");
+    fprintf(f, "#include \"udc.h\"\n");
+    fprintf(f, "#include \"knetUdc.h\"\n");
+    fprintf(f, "#include \"genbank.h\"\n");
     }
 fprintf(f, "\n");
 
@@ -182,6 +195,8 @@ else
     L = cloneString("L += -lm");
     myLibs = cloneString("MYLIBS =  ${MYLIBDIR}/jkweb.a");
     }
+
+fprintf(f, "kentSrc = %s\n", upLevel);
 
 if (cgi)
     {

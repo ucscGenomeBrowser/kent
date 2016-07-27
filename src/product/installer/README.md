@@ -1,6 +1,6 @@
 % Genome Browser in the Cloud User Guide
 
-# What is Genome Browser in the Cloud?
+# **What is Genome Browser in the Cloud?**
 
 The Genome Browser in the Cloud (GBiC) script is a convenient script that automates the setup of a
 UCSC Genome Browser mirror, including the installation and setup of MySQL (or MariaDB) 
@@ -17,16 +17,16 @@ Centos 7, and Fedora 20.
 
 It has also been tested on virtual machines in Amazon EC2 (Centos 6 and Ubuntu 14) and Microsoft 
 Azure (Ubuntu). If you want to load data on the fly from UCSC, you need to select the 
-data centers "San Francisco" (Amazon) or "West Coast" (Microsoft) for best performance. 
+data centers "US West (N. California)" (Amazon) or "West US" (Microsoft) for best performance. 
 Other data centers (e.g. East Coast) will require a local copy of the genome assembly, which 
 requires 2TB-7TB of storage for the hg19 assembly. Note that this exceeds the current maximum 
 size of a single Amazon EBS volume.
 
-# Quick Start Instructions
+# **Quick Start Instructions**
 
 Download the GBiC script from the [UCSC Genome-Browser store](https://genome-store.ucsc.edu/).
 
-Run this script as root, like this:
+Run the script as root, like this:
 
     sudo -i
     bash browserSetup.sh install
@@ -35,38 +35,48 @@ The `install` command downloads and configures Apache, MySQL and Ghostscript, co
 CGIs, and configures the mirror to load data remotely from UCSC. The `install` command must be
 run before any other command is used.
 
-# How does this work?
+# **How does this work?**
 
-The script downloads the Genome Browser CGIs and sets up the central MySQL database. All
+The GBiC script downloads the Genome Browser CGIs and sets up the central MySQL database. All
 potentially destructive steps require confirmation by the user (unless the -b = 
 batch mode option is specified).
 
 In particular, MySQL and Apache are installed and setup with the right package
 manager (yum or apt-get). A default random password is set for the
 MySQL root user and added to the ~/.my.cnf file of the Unix root account. 
-If you already have setup MySQL, you will need to create the file
-~/.my.cnf, the script will detect this and create a template file for you.
+If you have already setup MySQL, you will need to create the file
+~/.my.cnf. The script will detect this and create a template file for you.
 The script also does a few smaller things, like placing symlinks, detecting
-mariadb, deactivating SELinux, finding the right path for your Apache install
+MariaDB, deactivating SELinux, finding the right path for your Apache install
 and adapting the MySQL socket config.
 
 This will leave you with a genome browser accessible on localhost that loads its data 
 through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
-enough to test if your setup is working.
+enough to test that your setup is working. You can then use the script to download 
+assemblies of interest to your local Genome Browser, which will make it at least 
+as fast as the UCSC site.
 
-# The different commands
+# **The different commands**
+
+The first argumentof the script is called 'command' in the following. The first
+commmand that you will need is "install", it installs the browser dependencies,
+binaries and basic Mysql infrastructure:
+
+    sudo bash browserSetup.sh install
 
 There are a number of options supported by the GBiC script. In all cases, options must
-be specified before the command. The following example correctly specifies the
-batch mode option to the script:
+be specified before the command. 
+
+The following example correctly specifies thebatch mode option to the script:
 
     sudo bash browserSetup.sh -b install
 
-To increase performance, the script accepts the command `minimal`. It will download the
-minimal tables required for reasonable performance from places on the US continent and 
-possibly others, e.g. from Japan. Call it like this to trade space for performance
-and download a few essential pieces of hg38:
+To increase performance of your Genome Browser, the script accepts the command
+`minimal`. It will download the minimal tables required for reasonable
+performance from places on the US continent and possibly others, e.g. from
+Japan. Call it like this to trade space for performance and download a few
+essential pieces of hg38:
 
     sudo bash browserSetup.sh minimal hg38
 
@@ -84,8 +94,8 @@ you will want to disable on-the-fly loading, like so:
 
     sudo bash browserSetup.sh -o
 
-In the case of hg19, the full assembly download is ~6.5TB. To cut this down to
-up to 2TB or even less, use the -t option: 
+In the case of hg19, the full assembly download is ~6.5TB. Limit this
+to 2TB or less with the -t option: 
 
     sudo bash browserSetup.sh -t noEncode mirror hg19
 
@@ -104,26 +114,28 @@ maybe run it every day, so your local tables stay in sync with UCSC:
 
     sudo bash browserInstall.sh minimal hg19 hg38
 
-To update only the CGI software parts of the browser and not the data, use the
-`cgiUpdate` command. If this is a problematic update, functions may break if the
-data needed for them is not available. In most circumstances, we recommend you
-use the `mirror` or `update` commands instead.
+To update only the browser software and not the data, use the
+`cgiUpdate` command: 
 
     sudo bash browserInstall.sh cgiUpdate
 
-You probably also want to add a cleaning command to your crontab to remove 
-the temporary files that are created during genome browser usage. They accumulate
+However, software may break or not work correctly if the needed data is not available. 
+Thus in most circumstances we recommend you use the `mirror` or `update` commands instead
+of `cgiUpdate`.
+
+You will probably also want to add a cleaning command to your crontab to remove 
+the temporary files that are created during normal genome browser usage. They accumulate
 in /usr/local/apache/trash and can quickly take up a lot of space. A command like
 this should be added to your crontab file:
 
     sudo bash browserInstall.sh clean
 
-If you find a bug or your linux distribution is not supported, please contact 
+If you find a bug or your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
 Genome Browser installation are at
 <http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
  
-# All options
+# **All options**
 
 Here is the full listing of commands and options supported by the GBiC script: 
 
@@ -189,6 +201,6 @@ options:
   -h   - this help message
 ```
 
-# Credits
+# **Credits**
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
 * Bruce O'Neill, Malcolm Cook for feedback

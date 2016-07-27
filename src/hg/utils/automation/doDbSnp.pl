@@ -386,6 +386,9 @@ $wget $ftpSharedSchema/dbSNP_main_table.sql.gz
 cd $assemblyDir/rs_fasta
 $wget ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/rs_fasta/\\*.gz
 
+# Make all files group writeable so others can update them if necessary
+find $buildDir -user \$USER -not -perm -660 | xargs chmod ug+w
+
 # Extract the set of assembly labels in case we need to exclude any.
 zcat $assemblyDir/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\
   > $assemblyLabelFile

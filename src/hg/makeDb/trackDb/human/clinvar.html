@@ -26,14 +26,34 @@ variant's details page.  Leave the mouse over a feature for more than 2 seconds
 to show the clinical significance of a variant.
 </p>
 
+<p>The track is divided into two subtracks, one for copy number variants, these
+are typically a lot larger, and a second track for short substitutions and indels.</p>
+
+<H2>Data access</H2>
+<p>
+The raw data can be explored interactively with the <a href="../cgi-bin/hgTables">Table Browser</a>.
+For automated download and analysis, the genome annotation is stored in a bigBed file that
+can be downloaded from
+<a href="http://hgdownload.cse.ucsc.edu/gbdb/$db/bbi/" target="_blank">our download server</a>.
+The files for this track are called <tt>clinVarMain.bb</tt> and <tt>clinVarCnv.bb</tt>. Individual
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+which can be compiled from the source code or downloaded as a precompiled
+binary for your system. Instructions for downloading source code and binaries can be found
+<a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>.
+The tool
+can also be used to obtain only features within a given range, e.g. 
+<tt>bigBedToBed http://hgdownload.cse.ucsc.edu/gbdb/hg19/bbi/clinvar/clinvarMain.bb -chrom=chr21 -start=0 -end=100000000 stdout</tt></p>
+</p>
+
 <h2>Methods</h2>
 
 <p>
 ClinVar files were reformatted at UCSC to the <a href="../goldenPath/help/bigBed.html">bigBed</a> format.
+The data is updated every month, one week after the ClinVar release date.
+The exact procedure is available on <a href="https://github.com/ucscGenomeBrowser/kent/blob/master/src/hg/utils/otto/clinvar/clinVarToBed">Github</a>.
 </p>
 
 <h2>Credits</h2>
-
 <p>
-Thanks to NCBI for making the ClinVar data available on their FTP site.
+Thanks to NCBI for making the ClinVar data available on their FTP site as a tab-separated file.
 </p>

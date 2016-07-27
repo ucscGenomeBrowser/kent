@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("""usage: %prog [options] queryGenes targetGenes inPsl - pick out match of query against target where both query and target are from the same gene
+    
+    queryGenes and targetGenes are two files with columns queryId,geneId
+    """)
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    #parser.add_option("-f", "--file", dest="file", action="store", help="run on file") 
+    #parser.add_option("", "--test", dest="test", action="store_true", help="do something") 
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+# ----------- main --------------
+def readDict(fname):
+    " return map query (transcript) -> target (geneId) "
+    ret = {}
+    for line in open(fname):
+        query, target = line.strip().split()
+        ret[query] = target
+    return ret
+
+def main():
+    args, options = parseArgs()
+
+    queryGeneFname, targetGeneFname, inPslFname = args
+    queryGenes = readDict(queryGeneFname)
+    targetGenes = readDict(targetGeneFname)
+
+    for line in open(inPslFname):
+        row = line.strip("\n").split("\t")
+        qName, tName = row[9], row[13]
+        if queryGenes.get(qName, 1) != targetGenes.get(tName, 2): # no gene? -> 1!=2 -> skip
+            continue
+        print line,
+
+main()
