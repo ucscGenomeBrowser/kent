@@ -8548,16 +8548,10 @@ if (stringIn(":", idInUrl)) {
 // URL may now contain item boundaries
 ins[9] = "${";
 ins[10] = "$}";
-// This code is using l and r which are the coordinates of the window,
-// so it does not work right for hgc item boundaries at this time.
-// For hgc, it should use cart vars o and t.
-// For hgGene (in future?) it should use hgg_start and hgg_end.
-// For hgTracks, I do not know if it needs this feature or which cart vars it should use.
-// Can somebody (maybe Max) review and fix this?
-if (cartOptionalString(cart, "l") && cartOptionalString(cart, "r"))
+if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
-    int itemBeg = cartIntExp(cart, "l"); // Should strip any unexpected commas
-    int itemEnd = cartIntExp(cart, "r");
+    int itemBeg = cartIntExp(cart, "o"); // Should strip any unexpected commas
+    int itemEnd = cartIntExp(cart, "t");
     safef(begItem, sizeof begItem, "%d", itemBeg);
     safef(endItem, sizeof endItem, "%d", itemEnd);
     outs[9] = begItem;
