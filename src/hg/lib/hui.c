@@ -8098,6 +8098,18 @@ if (setting != NULL)
     {
     setting = cloneString(setting);
     char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    char buffer[4096];
+    char *src = NULL;
+    
+    if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
+        startsWith("https://", icon))
+        src = icon;
+    else
+        {
+        safef(buffer, sizeof buffer, "../images/%s", icon);
+        src = buffer;
+        }
+
     char *url = NULL;
     if (setting != NULL)
 	url = nextWord(&setting);
@@ -8109,11 +8121,11 @@ if (setting != NULL)
         {
 	if (isEmpty(hint))
 	    printf("<P><a href='%s' TARGET=ucscHelp><img height='16' width='16' "
-		   "src='../images/%s'></a>",url,icon);
+		   "src='%s'></a>",url,src);
 	else
 	    {
 	    printf("<P><a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
-		   "src='../images/%s'></a>",hint,url,icon);
+		   "src='%s'></a>",hint,url,src);
 
 	    // Special case for liftOver from hg17 or hg18, but this should probably be generalized.
 	    if (sameString(icon,"18.jpg") && startsWithWord("lifted",hint))
@@ -8128,7 +8140,7 @@ if (setting != NULL)
 	    }
 	}
     else
-        printf("<BR><img height='16' width='16' src='../images/%s'>\n",icon);
+        printf("<BR><img height='16' width='16' src='%s'>\n",src);
     return TRUE;
     }
 return FALSE;
@@ -8142,7 +8154,18 @@ char *setting = trackDbSetting(tdb, "pennantIcon");
 if (setting != NULL)
     {
     setting = cloneString(setting);
+    char buffer[4096];
+    char *src = NULL;
     char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
+        startsWith("https://", icon))
+        src = icon;
+    else
+        {
+        safef(buffer, sizeof buffer, "../images/%s", icon);
+        src = buffer;
+        }
+
     if (setting)
         {
         char *url = nextWord(&setting);
@@ -8150,12 +8173,12 @@ if (setting != NULL)
             {
             char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
             hPrintf("<a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
-                    "src='../images/%s'></a>\n",hint,url,icon);
+                    "src='%s'></a>\n",hint,url,src);
             freeMem(hint);
             }
         else
             hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' "
-                    "src='../images/%s'></a>\n",url,icon);
+                    "src='%s'></a>\n",url,src);
         }
     else
         hPrintf("<img height='16' width='16' src='%s'>\n",icon);
