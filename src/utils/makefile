@@ -44,6 +44,7 @@ UTILS_APPLIST = \
 	countChars \
 	faAlign \
 	fastqToFa \
+	fastqStatsAndSubsample \
 	faCmp \
 	faCount \
 	faFilterN \
