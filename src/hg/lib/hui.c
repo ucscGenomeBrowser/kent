@@ -280,7 +280,7 @@ printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);
        "title='Show metadata details...'>%s<img src='../images/downBlue.png'/></A>",
        (embeddedInText?"&nbsp;":"<P>"),tdb->track,tdb->track, showLongLabel?"true":"false",
        (title?title:""));
-printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->track);
+printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->track, metadataAsHtmlTable(db,tdb,showLongLabel,FALSE));
 return TRUE;
 }
 
