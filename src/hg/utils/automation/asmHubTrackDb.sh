@@ -30,9 +30,8 @@ if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.assembly.bb ]; then
 rm -f $buildDir/bbi/${asmId}.assembly.bb
 ln -s $buildDir/trackData/assemblyGap/${asmId}.assembly.bb $buildDir/bbi/${asmId}.assembly.bb
 printf "track assembly
-longLabel Assembly 
-shortLabel Assembly 
-priority 10
+longLabel Assembly
+shortLabel Assembly
 visibility pack
 colorByStrand 150,100,30 230,170,40
 color 150,100,30
@@ -50,11 +49,10 @@ if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
 rm -f $buildDir/bbi/${asmId}.gap.bb
 ln -s $buildDir/trackData/assemblyGap/${asmId}.gap.bb $buildDir/bbi/${asmId}.gap.bb
 printf "track gap
-longLabel Gap 
-shortLabel Gap 
-priority 11
+longLabel AGP gap
+shortLabel Gap (AGP defined)
 visibility dense
-color 0,0,0 
+color 0,0,0
 bigDataUrl bbi/%s.gap.bb
 type bigBed 4
 group map
@@ -68,7 +66,6 @@ printf "track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
 group map
-priority 23.5
 visibility full
 autoScale Off
 maxHeightPixels 128:36:16
@@ -92,7 +89,6 @@ compositeTrack on
 shortLabel RepeatMasker
 longLabel Repeating Elements by RepeatMasker
 group varRep
-priority 149.1
 visibility dense
 type bed 3 .
 noInherit on
@@ -241,7 +237,6 @@ printf "track simpleRepeat
 shortLabel Simple Repeats
 longLabel Simple Tandem Repeats by TRF
 group varRep
-priority 149.3
 visibility dense
 type bigBed 4 +
 bigDataUrl bbi/%s.simpleRepeat.bb
@@ -267,7 +262,6 @@ ln -s $buildDir/trackData/geneTrack/ucsc.NZO_HlLtJ.ixx $buildDir/ixIxx/${asmId}.
   printf "track geneTrack
 longLabel geneTrack - gene predictions
 shortLabel geneTrack
-priority 12
 visibility pack
 color 0,80,150
 altColor 150,80,0
@@ -279,42 +273,75 @@ searchIndex name%s
 group genes\n\n" "${asmId}" "${asmId}" "${searchTrix}"
 fi
 
-exit $?
-
 # url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 # urlLabel NCBI Nucleotide database
 
 ###################################################################
 # CpG Islands composite
-if [ -s ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked${suffix}.bb -o -s ${buildDir}/bbi/${asmId}.cpgIslandExt${suffix}.bb ]; then
+if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb -o -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
+rm -f ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExt.bb
+
 printf "track cpgIslands
 compositeTrack on
 shortLabel CpG Islands
 longLabel CpG Islands (Islands < 300 Bases are Light Green)
 group regulation
-priority 90
 visibility pack
 type bed 3 .
 noInherit on
-html %s.cpgIslands\n\n" "${asmId}"
+html html/%s.cpgIslands\n\n" "${asmId}"
 fi
 
-if [ -s ${buildDir}/bbi/${asmId}.cpgIslandExt${suffix}.bb ]; then
+if [ -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
+ln -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ${buildDir}/bbi/${asmId}.cpgIslandExt.bb
 printf "    track cpgIslandExt
     parent cpgIslands
     shortLabel CpG Islands
     longLabel CpG Islands (Islands < 300 Bases are Light Green)
     priority 1
     type bigBed 4 +
-    bigDataUrl bbi/%s.cpgIslandExt%s.bb\n\n" "${asmId}" "${suffix}"
+    bigDataUrl bbi/%s.cpgIslandExt.bb\n\n" "${asmId}"
 fi
 
-if [ -s ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked${suffix}.bb ]; then
+if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ]; then
+ln -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb ${buildDir}/bbi/${asmId}.cpgIslandExtUnmasked.bb
 printf "    track cpgIslandExtUnmasked
     parent cpgIslands
     shortLabel Unmasked CpG
     longLabel CpG Islands on All Sequence (Islands < 300 Bases are Light Green)
     priority 2
     type bigBed 4 +
-    bigDataUrl bbi/%s.cpgIslandExtUnmasked%s.bb\n\n" "${asmId}" "${suffix}"
+    bigDataUrl bbi/%s.cpgIslandExtUnmasked.bb\n\n" "${asmId}"
+fi
+
+###################################################################
+# windowMasker
+if [ -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ]; then
+rm -f ${buildDir}/bbi/${asmId}.windowMasker.bb
+ln -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ${buildDir}/bbi/${asmId}.windowMasker.bb
+
+printf "track windowMasker
+shortLabel WM + SDust
+longLabel Genomic Intervals Masked by WindowMasker + SDust
+group varRep
+visibility dense
+type bigBed 3
+bigDataUrl bbi/%s.windowMasker.bb
+html html/%s.windowMasker\n\n" "${asmId}" "${asmId}"
+fi
+
+###################################################################
+# allGaps
+if [ -s ${buildDir}/trackData/allGaps/${asmId}.allGaps.bb ]; then
+rm -f ${buildDir}/bbi/${asmId}.allGaps.bb
+ln -s ${buildDir}/trackData/allGaps/${asmId}.allGaps.bb ${buildDir}/bbi/${asmId}.allGaps.bb
+
+printf "track allGaps
+shortLabel All Gaps
+longLabel All gaps of unknown nucleotides (N's), including AGP annotated gaps
+group map
+visibility dense
+type bigBed 3
+bigDataUrl bbi/%s.allGaps.bb
+html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
 fi
