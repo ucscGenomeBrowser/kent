@@ -3237,7 +3237,8 @@ char *httpHost = getenv("HTTP_HOST");
 
 if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
-    httpHost = host;
+    // small mem leak is acceptable when run from command line
+    httpHost = cloneString(host);
 
 return httpHost;
 }
