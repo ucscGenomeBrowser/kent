@@ -347,11 +347,19 @@ void cdwAsPath(char *format, char path[PATH_LEN]);
 void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage,
-    double *retUniqueMapRatio);
+    double *retUniqueMapRatio, char *assay);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
 
 void cdwMakeTempFastqSample(char *source, int size, char dest[PATH_LEN]);
 /* Copy size records from source into a new temporary dest.  Fills in dest */
+
+void cdwCleanupTrimReads(char *fastqPath, char trimmedPath[PATH_LEN]);
+/* Remove trimmed sample file.  Does nothing if fastqPath and trimmedPath the same. */
+
+boolean cdwTrimReadsForAssay(char *fastqPath, char trimmedPath[PATH_LEN], char *assay);
+/* Look at assay and see if it's one that needs trimming.  If so make a new trimmed
+ * file and put file name in trimmedPath.  Otherwise just copy fastqPath to trimmed
+ * path and return FALSE. */
 
 void cdwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
 /* Run fastqStatsAndSubsample, and put results into cdwFastqFile table. */
@@ -449,6 +457,9 @@ struct tagStanza;
 struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
+
+char *cdwLookupTag(struct cgiParsedVars *list, char *tag); 
+/* Return first occurence of tag on list, or empty string if not found */
 
 struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user);
 /* Return tag storm just for files user has access to. */

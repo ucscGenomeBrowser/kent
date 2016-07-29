@@ -26212,7 +26212,7 @@ else if (tdb != NULL)
 else
     {
     cartWebStart(cart, database, "%s", track);
-    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
+    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
 /* End of 1000+ line dispatch on table involving 100+ if/elses. */
 

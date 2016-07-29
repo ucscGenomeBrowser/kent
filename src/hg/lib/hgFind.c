@@ -2523,7 +2523,7 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	hgPositionsFree(&hgp);
-	warn("Sorry, couldn't locate %s in genome database\n", htmlEncode(terms[i]));
+	warn("Sorry, couldn't locate %s in genome database\n", terms[i]);
 	if (multiTerm)
 	    hUserAbort("%s not uniquely determined -- "
 		     "can't do multi-position search.", terms[i]);
