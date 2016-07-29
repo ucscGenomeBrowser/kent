@@ -5,6 +5,12 @@
 #ifndef TABLESTABLES_H
 #define TABLESTABLES_H
 
+void webTableBuildQuery(struct cart *cart, char *from, char *initialWhere, 
+    char *varPrefix, char *fields, boolean withFilters, 
+    struct dyString **retQuery, struct dyString **retWhere);
+/* Construct select and where clauses in query, keeping an additional copy of where 
+ * Returns the SQL query and the SQL where expression as two dyStrings (need to be freed)  */
+
 struct fieldedTable *fieldedTableFromDbQuery(struct sqlConnection *conn, char *query);
 /* Return fieldedTable from a database query */
 
@@ -28,21 +34,22 @@ struct fieldedTableSegment
     };
 
 void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table, 
-    char *returnUrl, char *varPrefix, int maxLenField, 
-    struct hash *tagOutputWrappers, void *wrapperContext,
+    char *returnUrl, char *varPrefix,
+    int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash);
+    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
+    void (*addFunc)(void) );
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
- * Pass in 0 for no max */
+ * Pass in 0 for no max. */
 
 
 void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
     char *fields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
     struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash);
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) );
 /* Given a query to the database in conn that is basically a select query broken into
  * separate clauses, construct and display an HTML table around results. This HTML table has
  * column names that will sort the table, and optionally (if withFilters is set)

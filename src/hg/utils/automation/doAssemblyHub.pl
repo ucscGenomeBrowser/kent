@@ -809,7 +809,7 @@ sub doAllGaps {
 export asmId=$asmId
 export buildDir=$buildDir
 
-if [ \$buildDir/\$asmId.2bit -nt \$asmId.NOT.gap.bed ]; then
+if [ \$buildDir/\$asmId.2bit -nt \$asmId.allGaps.bb ]; then
   findMotif -motif=gattaca -verbose=4 -strand=+ ../../\$asmId.2bit \\
        > \$asmId.findMotif.txt 2>&1
   grep "^#GAP " \$asmId.findMotif.txt | sed -e 's/^#GAP //;' \\
@@ -864,6 +864,10 @@ if [ \$buildDir/\$asmId.2bit -nt \$asmId.NOT.gap.bed ]; then
      printf "ERROR: bedIntersect to identify new gaps did not function correctly\n" 1>&2
      printf "allGaps: \$allGapCoverage != \$both (new + gap track)\n" 1>&2
   fi
+  cut -f1-3 \$asmId.allGaps.bed | sort -k1,1 -k2,2n > toBbi.bed
+  bedToBigBed -type=bed3 toBbi.bed ../../\$asmId.chrom.sizes \$asmId.allGaps.bb
+  rm -f toBbi.bed
+  gzip *.bed *.txt
 else
   printf "# allgaps step previously completed\\n" 1>&2
   exit 0
