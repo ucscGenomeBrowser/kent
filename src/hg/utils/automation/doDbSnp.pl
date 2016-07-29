@@ -182,7 +182,7 @@ ncbiAssemblyReportFile GCF_000*.assembly.txt
     if the RefSeq folks alter a chromosome or contig, the mapping will have to
     be deduced by you from NCBI Nucleotide sequence descriptions.
     HOW TO find this file for your assembly:
-    1. Search in Entrez Assembly (http://www.ncbi.nlm.nih.gov/assembly/)
+    1. Search in Entrez Assembly (https://www.ncbi.nlm.nih.gov/assembly/)
        for the refAssemblyLabel value (see above)
     2. Select the most recent matching assembly
     3. Find the link labeled 'Download the full sequence report' and copy
@@ -618,7 +618,7 @@ sub getNcbiAssemblyReportFile() {
   # with multiple assembly report files.
   my $assemblyLabel = $assemblyLabels[0];
   my $ua = LWP::UserAgent->new;
-  my $eUtilBase = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils';
+  my $eUtilBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';
   my $assemblyIdQuery = "$eUtilBase/esearch.fcgi?db=assembly&term=$assemblyLabel";
   my $assemblyId = eUtilQuery($ua, $assemblyIdQuery, '<Id>(\d+)<');
   if (! defined $assemblyId) {
