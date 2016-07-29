@@ -43,6 +43,7 @@ searchIndex name%s
 url http://www.ncbi.nlm.nih.gov/nuccore/\$\$
 urlLabel NCBI Nucleotide database
 group map\n\n" "${asmId}" "${asmId}" "${searchTrix}"
+asmHubAssembly.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId > $buildDir/html/$asmId.assembly.html
 fi
 
 if [ -s ${buildDir}/trackData/assemblyGap/${asmId}.gap.bb ]; then
@@ -57,6 +58,7 @@ bigDataUrl bbi/%s.gap.bb
 type bigBed 4
 group map
 html html/%s.gap\n\n" "${asmId}" "${asmId}"
+asmHubGap.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId > $buildDir/html/$asmId.gap.html
 fi
 
 if [ -s ${buildDir}/trackData/gc5Base/${asmId}.gc5Base.bw ]; then
