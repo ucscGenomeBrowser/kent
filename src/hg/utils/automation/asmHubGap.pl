@@ -73,8 +73,8 @@ NCBI also provides
 target="_blank">specific information about this assembly</a>.
 </p>
 <p>
-The definition of the gaps in this assembly is from the<br>
-<a href="$hubUrl/$agpFileBase" target=_blank>AGP file</a><br>
+The definition of the gaps in this assembly is from the AGP file:
+<a href="$hubUrl/$agpFileBase" target=_blank>$asmId.agp.gz</a><br>
 The NCBI document
 <a href="https://www.ncbi.nlm.nih.gov/assembly/agp/AGP_Specification/"
 target=_blank>AGP Specification</a> describes the format of the AGP file.
