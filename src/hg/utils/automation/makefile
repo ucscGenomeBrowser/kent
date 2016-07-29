@@ -17,6 +17,14 @@ LIB_FILES = \
 	HgStepManager.pm \
 
 SCRIPT_FILES = \
+	asmHubAssembly.pl \
+	asmHubGatewayPage.pl \
+	asmHubRmsk.pl
+	asmHubCpG.pl \
+	asmHubHtml.pl \
+	asmHubTrackDb.sh
+	asmHubGap.pl \
+	asmHubRepeatMasker.sh \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
