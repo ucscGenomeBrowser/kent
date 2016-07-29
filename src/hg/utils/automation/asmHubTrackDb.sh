@@ -95,6 +95,7 @@ visibility dense
 type bed 3 .
 noInherit on
 html html/%s.repeatMasker\n\n" "${asmId}"
+asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
 fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
