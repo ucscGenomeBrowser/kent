@@ -49,15 +49,6 @@ sqlSafef(query, sizeof(query),
 return cdwFileLoadByQuery(conn, query);
 }
 
-void alignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
-    char *fastqPath, struct cdwValidFile *vf, FILE *bedF)
-/* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
- * Update vf->mapRatio and related fields. */
-{
-cdwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF, 
-    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio);
-}
-
 #define FASTQ_SAMPLE_SIZE 100000
 
 int cdwQaContamMade(struct sqlConnection *conn, long long fileId, int targetId)
@@ -110,16 +101,21 @@ if (needScreen)
     {
     verbose(1, "screenFastqForContaminants(%u(%s))\n", ef->id, ef->submitFileName);
 
+    // Get the assay tag. 
+    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
+    char *assay = cdwLookupTag(tags, "assay");
+
     /* Get fastq record. */
     struct cdwFastqFile *fqf = cdwFastqFileFromFileId(conn, ef->id);
     if (fqf == NULL)
         errAbort("No cdwFastqFile record for file id %lld", (long long)ef->id);
 
-    /* Create downsampled fastq in temp directory - downsampled more than default even. */
     char sampleFastqName[PATH_LEN];
+    
+    /* Create downsampled fastq in temp directory - downsampled more than default even. */
     cdwMakeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
     verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
-
+    
     for (target = targetList; target != NULL; target = target->next)
 	{
 	/* Get assembly associated with target */
@@ -137,7 +133,7 @@ if (needScreen)
 	    /* We run the bed-file maker, just for side effect calcs. */
 	    double mapRatio = 0, depth = 0, sampleCoverage = 0, uniqueMapRatio;
 	    cdwAlignFastqMakeBed(ef, newAsm, sampleFastqName, vf, NULL,
-		&mapRatio, &depth, &sampleCoverage, &uniqueMapRatio);
+		&mapRatio, &depth, &sampleCoverage, &uniqueMapRatio, assay);
 
 	    verbose(1, "%s mapRatio %g, depth %g, sampleCoverage %g\n", 
 		newAsm->name, mapRatio, depth, sampleCoverage);
