@@ -21,6 +21,7 @@ metaDb: return list of values for metaDb parameter
 hgt_mdbVal: return metaDb value control - see code for details
 
 tableMetadata: returns an html table with metadata for track parameter
+**** DEPRECATED:  Not currently used in GB
 
 codonToPos: returns genomic position for given codon; parameters: codon, table and name (which is gene name).
 

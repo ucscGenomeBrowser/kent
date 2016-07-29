@@ -1580,36 +1580,13 @@ if (sameString(assay, "long-RNA-seq"))
     {
     char cmd[3*PATH_LEN];
     // Make up temp file name for poly-A trimmed file
-    safef(trimmedPath, PATH_LEN, "%scdwCutadaptXXXXXX", cdwTempDir());
+    safef(trimmedPath, PATH_LEN, "%scdwFastqPolyFilterXXXXXX", cdwTempDir());
     cdwReserveTempFile(trimmedPath);
 
-    // cutadapt needs file to end with .fastq.gz, but it just ends with gz, 
-    // so we construct the proper file name
-    // Need to add a .fastq between the file name and the .gz for cutadapt to run.
-    // Use a symlink.  
-    char fastqGzPath[PATH_LEN];
-    strcpy(fastqGzPath, fastqPath);
-    char *e = strrchr(fastqGzPath, '.'); 
-    if (e == NULL)
-	{
-	strcat(fastqGzPath, ".fastq");
-	}
-    else
-	{
-	chopSuffix(fastqGzPath); 
-	strcat(fastqGzPath, ".fastq.gz");
-	}
-    // Make a symbolic link to the name that cutadapt will accept
-    safef(cmd, sizeof(cmd), "ln -s %s %s", fastqPath, fastqGzPath); 
-    mustSystem(cmd); 
-
-    // Run cutadapt on the new file then pass the output into BWA. 
-    safef(cmd, sizeof(cmd), "cutadapt -a \"AAAAAAAAAAAAAAAA\" %s -o %s", 
-	fastqGzPath, trimmedPath); 
+    // Run cdwFastqPolyFilter on the new file then pass the output into BWA. 
+    safef(cmd, sizeof(cmd), "cdwFastqPolyFilter %s %s", 
+	fastqPath, trimmedPath); 
     mustSystem(cmd);
-
-    // Clean up and go home
-    remove(fastqGzPath);
     return TRUE;
     }
 else
@@ -1732,7 +1709,7 @@ if (fqf == NULL)
     char dayTempDir[PATH_LEN];
     safef(sampleFile, PATH_LEN, "%scdwFastqSampleXXXXXX", cdwTempDirForToday(dayTempDir));
     cdwReserveTempFile(sampleFile);
-    // For RNA seq files run on the cutadapt output, otherwise run on the unaltered CDW file.  
+    // For RNA seq files run on the fastqTrimmed output, otherwise run on the unaltered CDW file.  
     safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
 	cdwSampleTargetSize, path, statsFile, sampleFile);
     mustSystem(command);
