@@ -91,18 +91,15 @@ This assembly has $gapCount gaps, with the following principal types of gaps:
 <ul>
 _EOF_
     ;
-printf STDERR `zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"N\"' | awk '{print \$7}' | sort | uniq -c | sort -n`;
 open (GL, "zcat $agpFile | grep -v '^#' | awk -F'\t' '\$5 == \"N\"' | awk '{print \$7}' | sort | uniq -c | sort -n|") or die "can not read $asmId.agp.gz";
 while (my $line = <GL>) {
     chomp $line;
-printf STDERR "line 0: '%s'\n", $line;
     $line =~ s/^\s+//;
     my ($count, $type) = split('\s+', $line);
     my $minSize = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 == "N"' | awk -F'\t' '\$7 == "'$type'"' | sort -k6,6n | head -1 | awk -F'\t' '{print \$6}'`;
     chomp $minSize;
     my $maxSize = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 == "N"' | awk -F'\t' '\$7 == "'$type'"' | sort -k6,6nr | head -1 | awk -F'\t' '{print \$6}'`;
     chomp $maxSize;
-printf STDERR "min,max size: '%s', '%s'\n", $minSize, $maxSize;
     my $sizeMessage = "";
     if ($minSize == $maxSize) {
         $sizeMessage = sprintf ("all of size %s bases", commify($minSize));
@@ -114,9 +111,8 @@ printf STDERR "min,max size: '%s', '%s'\n", $minSize, $maxSize;
         printf "<li><B>%s</B> - %s (count: %s; %s)</li>\n", $type,
             $gapTypes{$type}, commify($count), $sizeMessage;
     } else {
-        die "makeLocalTrackDbRa: missing AGP gap type definition: $type";
+        die "asmHubGap.pl: missing AGP gap type definition: $type";
     }
-printf STDERR "line 1: '%s'\n", $line;
 }
 close (GL);
 
