@@ -317,6 +317,10 @@ printf "    track cpgIslandExtUnmasked
     bigDataUrl bbi/%s.cpgIslandExtUnmasked.bb\n\n" "${asmId}"
 fi
 
+if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb -o -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
+  asmHubCpG.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.cpgIslands.html
+fi
+
 ###################################################################
 # windowMasker
 if [ -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ]; then
