@@ -305,7 +305,7 @@ va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
-char *encodedMessage = htmlEncodeText(warning,FALSE); // NO tags allowed to prevent XSS hacks
+char *encodedMessage = htmlEncodeText(warning,TRUE); // NOTE: While some internal HTML should work,
                                                      // a single quote (') will will screw it up!
 printf("<script type='text/javascript'>{showWarnBox();"
         "var warnList=document.getElementById('warnList');"
