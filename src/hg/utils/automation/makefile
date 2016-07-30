@@ -19,10 +19,10 @@ LIB_FILES = \
 SCRIPT_FILES = \
 	asmHubAssembly.pl \
 	asmHubGatewayPage.pl \
-	asmHubRmsk.pl
+	asmHubRmsk.pl \
 	asmHubCpG.pl \
 	asmHubHtml.pl \
-	asmHubTrackDb.sh
+	asmHubTrackDb.sh \
 	asmHubGap.pl \
 	asmHubRepeatMasker.sh \
 	blastz-make-joblist \
@@ -65,7 +65,7 @@ all: mkDir libFiles $(SCRIPT_FILES:%=%.all)
 
 mkDir:
 	${MKDIR} ${SCRIPTS}
-	
+
 libFiles: mkDir $(LIB_FILES:%=%.libFile)
 
 %.libFile:
@@ -75,7 +75,7 @@ libFiles: mkDir $(LIB_FILES:%=%.libFile)
 	chmod 664 ${SCRIPTS}/$*
 
 alpha: all
- 
+
 development:
 	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts pipelibs
 
