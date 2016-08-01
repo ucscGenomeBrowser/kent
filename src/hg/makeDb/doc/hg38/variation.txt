@@ -1423,8 +1423,8 @@ EOF
 
 
 ##############################################################################
-# DBSNP B147 / SNP147 (DONE 7/22/16 angie)
-# Initially done 7/1/16.  Updated 7/22/16 to fix func code bug (see below).
+# DBSNP B147 / SNP147 (DONE 7/30/16 angie)
+# Initially done 7/1/16.  Updated 7/28/16 to fix func code bug (see below).
     # Redmine #17209
     mkdir -p /hive/data/outside/dbSNP/147/human_hg38
     cd /hive/data/outside/dbSNP/147/human_hg38
@@ -1472,25 +1472,26 @@ EOF
 # *** All done!
 
 
-    # 7/22/16 -- Chris Lee found some NR_'s and XR_'s in snp147CodingDbSnp where they
-    # don't belong.  Turns out that dbSnp was assigning cds-indel to any deletion with
-    # length multiple of 3 that intersected an exon, whether the transcript was coding or
-    # not.  Fix the affected rows with some SQL.  First make a table of affected rs IDs:
+    # 7/28/16 -- Chris Lee found some NR_'s and XR_'s in snp147CodingDbSnp where they don't
+    # belong.  Turns out that dbSnp was assigning cds-indel to any deletion with length
+    # multiple of 3 that intersected an exon, whether the transcript was coding or not.
+    # Some affected variants will end up with both cds-indel and ncRNA because they hit
+    # both coding and noncoding transcripts.
+    # This does not affect ortho alleles or SNP-masked sequences.
+    # Fix the values in hg38snp147.b147_SNPContigLocusId_107 and rebuild from ucscFunc onwards.
+    # For rows in which dbSNP has assigned cds-indel (45) to a non-coding transcript (NR_ or
+    # XR_), assign ncRNA (30) instead.
     cd /hive/data/outside/dbSNP/147/human_hg38
-    hgsql hg38 -NBe 'create table snp147NoncodingCdsIndelIds \
-                       select distinct(name) from snp147CodingDbSnp where transcript like "_R\_%"; \
-                     select count(*) from snp147NoncodingCdsIndelIds;'
-#27574
-    # For each affected rs, replace 'cds-indel' with 'ncRNA' in snp147.func:
-    hgsql hg38 -e 'update snp147,snp147NoncodingCdsIndelIds \
-                     set func = replace(func, "cds-indel", "ncRNA") \
-                     where snp147.name=snp147NoncodingCdsIndelIds.name;'
-    # Remove noncoding transcript rows from snp147CodingDbSnp:
-    hgsql hg38 -e 'delete from snp147CodingDbSnp where transcript like "_R\_%";'
-    # Regenerate {Common,Mult,Flagged}.
-    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue filter --stop filter >>& do.log &
+    hgsql hg38snp147 -e 'update b147_SNPContigLocusId_107 set fxn_class = 30 \
+                           where fxn_class = 45 and mrna_acc like "_R\_%";'
+    # Comment out all of the parts of addToDbSnp.csh except for the part that creates ucscFunc
+    # and run the modified script.
+    mkdir -p `cat workingDir`
+    csh -efx ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Re-run the pipeline from bigJoin onward.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue bigJoin >>& do.log &
     tail -f do.log
-# *** All done!  (through the 'filter' step)
+# *** All done!
 
 
 ##############################################################################
