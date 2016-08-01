@@ -923,11 +923,20 @@ struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
 
     if (createSubdirs)
+        {
+        struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
+        // if we have an absolute pathname in our DB, strip the leading '/'
+        // so if someone runs the script as root, it will not start to write
+        // files in strange directories
+        char* submitFname = cf->submitFileName;
+        if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
+            submitFname += 1;
+
         printf("curl 'http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
-            host, vf->licensePlate, token, cf->submitFileName);
+            host, vf->licensePlate, token, submitFname);
+        }
     else
         printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
             host, vf->licensePlate, token, optArg);
