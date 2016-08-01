@@ -2,15 +2,10 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
-
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
 
 my $argc = scalar(@ARGV);
 
@@ -97,12 +92,12 @@ while (my $line = <FH>) {
   } else {
     printf "<td>(n/a)</td>";
   }
-  printf "<td align=\"right\">%s</td>", commify($contigCount);
-  printf "<td align=\"right\">%s</td>", commify($genomeSize);
-  printf "<td align=\"right\">%s</td>", commify($n50);
+  printf "<td align=\"right\">%s</td>", &AsmHub::commify($contigCount);
+  printf "<td align=\"right\">%s</td>", &AsmHub::commify($genomeSize);
+  printf "<td align=\"right\">%s</td>", &AsmHub::commify($n50);
   printf "<td align=\"right\">%%&nbsp;%.2f</td>", $gcContent;
-  printf "<td align=\"right\">%s<br>%%&nbsp;%.2f</td>", commify($gapsN), $NperCent;
-  printf "<td align=\"right\">%s<br>%s<br>%%&nbsp;%.2f</td>", commify($geneCount), commify($geneBasesCovered), $genePercentCoverage;
+  printf "<td align=\"right\">%s<br>%%&nbsp;%.2f</td>", &AsmHub::commify($gapsN), $NperCent;
+  printf "<td align=\"right\">%s<br>%s<br>%%&nbsp;%.2f</td>", &AsmHub::commify($geneCount), &AsmHub::commify($geneBasesCovered), $genePercentCoverage;
   printf "<td><a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" target=\"_blank\">%s</a></td>", $asmAccession, $asmAccession;
   printf "<td><a href=\"ftp://ftp.ncbi.nlm.nih.gov/%s\" target=\"_blank\">%s</a></td>", $ftpName, $asmName;
   printf "<td>%s</td>", $asmType;

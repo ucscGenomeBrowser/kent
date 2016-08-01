@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
 
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
@@ -10,14 +13,6 @@ sub usage() {
   printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   exit 255;
-}
-
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
 }
 
 sub chromSizes($) {
@@ -58,8 +53,8 @@ sub chromSizes($) {
     my $n50Size = $totalSize / 2;
 
     my $genomeSize = $totalSize;
-    printf "<b>Total assembly nucleotides:</b> %s<br>\n", commify($totalSize);
-    printf "<b>Assembly contig count:</b> %s<br>\n", commify($contigCount);
+    printf "<b>Total assembly nucleotides:</b> %s<br>\n", &AsmHub::commify($totalSize);
+    printf "<b>Assembly contig count:</b> %s<br>\n", &AsmHub::commify($contigCount);
 
     my $prevContig = "";
     my $prevSize = 0;
@@ -73,7 +68,7 @@ sub chromSizes($) {
 	    $prevName =~ s/_X_[0-9]+//;
 	    my $origName = $key;
 	    $origName =~ s/_X_[0-9]+//;
-            printf "<b>N50 size:</b> %s<br>\n", commify($sizes{$key});
+            printf "<b>N50 size:</b> %s<br>\n", &AsmHub::commify($sizes{$key});
 	    last;
 	}
 	$prevContig = $key;

@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 
 my $argc = scalar(@ARGV);
 
@@ -24,14 +27,6 @@ if ( ! -s $wmBbi ) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $em = "<em>";
 my $noEm = "</em>";
 my $assemblyDate = `grep -v "^#" $namesFile | cut -f9`;
@@ -44,10 +39,9 @@ my $basesCovered = `bigBedInfo $wmBbi | egrep "basesCovered:" | sed -e 's/basesC
 chomp $basesCovered;
 my $bases = $basesCovered;
 $bases =~ s/,//g;
-my $asmSize=`ave -col=2 $chromSizes | grep "total" | sed -e 's/total //; s/.000000//;'`;
-chomp $asmSize;
+my $asmSize = &AsmHub::asmSize($chromSizes)
 my $percentCoverage = sprintf("%.2f", (100.0 * $bases) / $asmSize);
-$asmSize = commify($asmSize);
+$asmSize = &AsmHub::commify($asmSize);
 
 print <<_EOF_
 <h2>Description</h2>
