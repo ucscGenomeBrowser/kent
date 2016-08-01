@@ -80,6 +80,7 @@ viewLimits 30:70
 type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
+asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
 
 # see if there are repeatMasker bb files
@@ -335,6 +336,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.windowMasker.bb
 html html/%s.windowMasker\n\n" "${asmId}" "${asmId}"
+asmHubWindowMasker.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.windowMasker.html
 fi
 
 ###################################################################
