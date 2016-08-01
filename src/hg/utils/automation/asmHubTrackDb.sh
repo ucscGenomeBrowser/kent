@@ -244,8 +244,8 @@ visibility dense
 type bigBed 4 +
 bigDataUrl bbi/%s.simpleRepeat.bb
 html html/%s.simpleRepeat\n\n" "${asmId}" "${asmId}"
+asmHubSimpleRepeat.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.simpleRepeat.html
 fi
-
 
 # may or may not have a searchTrix for ncbiGene, assume none
 searchTrix=""
