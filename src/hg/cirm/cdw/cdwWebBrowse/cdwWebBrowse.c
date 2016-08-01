@@ -1016,6 +1016,7 @@ puts("The URLs are valid for one week.<p>\n");
 puts("To download the files:\n");
 puts("<ul>\n");
 puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
+puts("<li>Linux/OSX: With curl and four threads: <tt>parallel -j4 :::: downloadCirm.sh</tt>\n");
 puts("</ul>\n");
 puts("<div>\n");
 cdwFileFreeList(&efList);
