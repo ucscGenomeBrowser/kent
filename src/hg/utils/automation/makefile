@@ -15,6 +15,7 @@ LIB_FILES = \
 	EnsGeneAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
+	AsmHub.pm
 
 SCRIPT_FILES = \
 	asmHubAssembly.pl \
