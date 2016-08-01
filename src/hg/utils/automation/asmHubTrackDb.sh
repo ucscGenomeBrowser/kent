@@ -80,6 +80,7 @@ viewLimits 30:70
 type bigWig 0 100
 bigDataUrl bbi/%s.gc5Base.bw
 html html/%s.gc5Base\n\n" "${asmId}" "${asmId}"
+asmHubGc5Percent.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.gc5Base.html
 fi
 
 # see if there are repeatMasker bb files
@@ -95,6 +96,7 @@ visibility dense
 type bed 3 .
 noInherit on
 html html/%s.repeatMasker\n\n" "${asmId}"
+asmHubRmsk.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/trackData/repeatMasker/$asmId.rmsk.class.profile.txt > $buildDir/html/$asmId.repeatMasker.html
 fi
 
 if [ -s ${buildDir}/trackData/repeatMasker/bbi/${asmId}.rmsk.SINE.bb ]; then
@@ -243,8 +245,8 @@ visibility dense
 type bigBed 4 +
 bigDataUrl bbi/%s.simpleRepeat.bb
 html html/%s.simpleRepeat\n\n" "${asmId}" "${asmId}"
+asmHubSimpleRepeat.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.simpleRepeat.html
 fi
-
 
 # may or may not have a searchTrix for ncbiGene, assume none
 searchTrix=""
@@ -316,6 +318,10 @@ printf "    track cpgIslandExtUnmasked
     bigDataUrl bbi/%s.cpgIslandExtUnmasked.bb\n\n" "${asmId}"
 fi
 
+if [ -s ${buildDir}/trackData/cpgIslands/unmasked/${asmId}.cpgIslandExtUnmasked.bb -o -s ${buildDir}/trackData/cpgIslands/masked/${asmId}.cpgIslandExt.bb ]; then
+  asmHubCpG.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.cpgIslands.html
+fi
+
 ###################################################################
 # windowMasker
 if [ -s ${buildDir}/trackData/windowMasker/${asmId}.windowMasker.bb ]; then
@@ -330,6 +336,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.windowMasker.bb
 html html/%s.windowMasker\n\n" "${asmId}" "${asmId}"
+asmHubWindowMasker.pl $asmId $buildDir/html/$asmId.names.tab $buildDir > $buildDir/html/$asmId.windowMasker.html
 fi
 
 ###################################################################

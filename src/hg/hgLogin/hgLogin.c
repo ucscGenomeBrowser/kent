@@ -1392,7 +1392,8 @@ htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
-struct dyString *dy = dyStringCreate("https://%s%shgLogin", wikiLinkHost(), cgiScriptDirUrl());
+struct dyString *dy = dyStringCreate("http%s://%s%shgLogin",
+                                     loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
 hgLoginUrl = dyStringCannibalize(&dy);
 oldCart = hashNew(10);
 cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);

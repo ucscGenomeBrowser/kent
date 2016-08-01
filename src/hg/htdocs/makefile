@@ -25,18 +25,15 @@ endif
 user:
 	if test -d ${DOCUMENTROOT_USER}; then \
 	    ${MAKE} doInstall destDir=${DOCUMENTROOT_USER} ; \
-	    cd pandoc/installer && ${MAKE} user ; \
 	fi
 
 alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} 
-	cd pandoc/installer && ${MAKE} alpha
 
 beta:
 	${GITUP}
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
-	cd pandoc/installer && ${MAKE} beta
 
 # Run rsync. Care is taken to preserve times and modes on files.  rsync is
 # smart about recreating files under the current users so that times and

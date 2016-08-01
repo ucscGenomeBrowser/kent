@@ -37,12 +37,7 @@ UTIL_DIRS = \
     utils/cdwVcfStats
 
 CGI_DIRS = \
-    cdwWebAuthLogin \
-    cdwWebAuthLogout \
-    cdwWebBrowse \
-    cdwWebCreateUser \
-    cdwWebDeprecate \
-    cdwWebSubmit \
+    cdwWebBrowse 
 
 TEST_DIRS = \
 	encode2BedDoctor 
