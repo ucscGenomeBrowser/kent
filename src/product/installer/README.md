@@ -57,7 +57,7 @@ enough to test that your setup is working. You can then use the script to downlo
 assemblies of interest to your local Genome Browser, which will make it at least 
 as fast as the UCSC site.
 
-# **The different commands**
+# **The commands**
 
 The first argumentof the script is called 'command' in the following. The first
 commmand that you will need is "install", it installs the browser dependencies,
@@ -68,7 +68,7 @@ binaries and basic Mysql infrastructure:
 There are a number of options supported by the GBiC script. In all cases, options must
 be specified before the command. 
 
-The following example correctly specifies thebatch mode option to the script:
+The following example correctly specifies the batch mode option to the script:
 
     sudo bash browserSetup.sh -b install
 
