@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
@@ -39,14 +42,6 @@ my %gapTypes = (
 'fragment' => 'gaps between whole genome shotgun contigs'
 );
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $em = "<em>";
 my $noEm = "</em>";
 my $assemblyDate = `grep -v "^#" $namesFile | cut -f9`;
@@ -57,7 +52,7 @@ my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 my $gapCount = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 == "N"' | wc -l`;
 chomp $gapCount;
-$gapCount = commify($gapCount);
+$gapCount = &AsmHub::commify($gapCount);
 
 print <<_EOF_
 <h2>Description</h2>
@@ -102,14 +97,14 @@ while (my $line = <GL>) {
     chomp $maxSize;
     my $sizeMessage = "";
     if ($minSize == $maxSize) {
-        $sizeMessage = sprintf ("all of size %s bases", commify($minSize));
+        $sizeMessage = sprintf ("all of size %s bases", &AsmHub::commify($minSize));
     } else {
         $sizeMessage = sprintf ("size range: %s - %s bases",
-            commify($minSize), commify($maxSize));
+            &AsmHub::commify($minSize), &AsmHub::commify($maxSize));
     }
     if (exists ($gapTypes{$type}) ) {
         printf "<li><B>%s</B> - %s (count: %s; %s)</li>\n", $type,
-            $gapTypes{$type}, commify($count), $sizeMessage;
+            $gapTypes{$type}, &AsmHub::commify($count), $sizeMessage;
     } else {
         die "asmHubGap.pl: missing AGP gap type definition: $type";
     }
