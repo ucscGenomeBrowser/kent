@@ -21,10 +21,13 @@ SCRIPT_FILES = \
 	asmHubGatewayPage.pl \
 	asmHubRmsk.pl \
 	asmHubCpG.pl \
+	asmHubGc5Percent.pl \
 	asmHubHtml.pl \
 	asmHubTrackDb.sh \
 	asmHubGap.pl \
+	asmHubSimpleRepeat.pl \
 	asmHubRepeatMasker.sh \
+	asmHubWindowMasker.pl \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
