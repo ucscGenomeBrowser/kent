@@ -140,5 +140,8 @@ struct bptFile *bigBedOpenExtraIndex(struct bbiFile *bbi, char *fieldName, int *
 struct slName *bigBedListExtraIndexes(struct bbiFile *bbi);
 /* Return list of names of extra indexes beyond primary chrom:start-end one" */
 
+int bbExtraFieldIndex(struct bbiFile *bbi, char* fieldName);
+/* return the index of a given extra field */
+
 #endif /* BIGBED_H */
 
