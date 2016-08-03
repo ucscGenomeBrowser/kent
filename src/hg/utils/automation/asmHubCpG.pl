@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
@@ -23,14 +26,6 @@ my $maskedBbi = "$bbiPrefix.cpgIslandExt.bb";
 if ( ! -s $maskedBbi ) {
   printf STDERR "ERROR: can not find CpG masked file:\n\t'%s'\n", $maskedBbi;
   exit 255;
-}
-
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
 }
 
 my $em = "<em>";

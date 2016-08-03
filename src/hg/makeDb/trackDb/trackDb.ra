@@ -1246,6 +1246,63 @@ useScore 1
 exonArrows on
 type bed 6 .
 
+track snp148Common
+shortLabel Common SNPs(148)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp148Seq
+snpExceptionDesc snp148ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp148CodingDbSnp,
+
+track snp148Flagged
+shortLabel Flagged SNPs(148)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 148) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp148Seq
+snpExceptionDesc snp148ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp148CodingDbSnp,
+
+track snp148Mult
+shortLabel Mult. SNPs(148)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 148) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp148Seq
+snpExceptionDesc snp148ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp148CodingDbSnp,
+
+track snp148
+shortLabel All SNPs(148)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 148)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+codingAnnotations snp148CodingDbSnp,
 
 track snp139Common
 shortLabel Common SNPs(139)
@@ -2348,6 +2405,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.9878
+padding 250
+
+searchTable snp148Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9843
+padding 250
+
+searchTable snp148Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9844
+padding 250
+
+searchTable snp148Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9845
+padding 250
+
+searchTable snp148
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.952
 padding 250
 
 searchTable ensGene

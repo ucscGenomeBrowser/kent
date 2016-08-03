@@ -490,10 +490,10 @@
     <LI>$T - database table name</LI>
     <LI>$S - chromomosome name (scaffold name on
     scaffold assemblies)</LI>
-    <LI>$[ - chromStart location of current window (relative to zero)</LI>
-    <LI>$] - chromEnd location of current window (relative to one)</LI>
-    <LI>${ - chromStart location of clicked item (relative to zero)</LI>
-    <LI>$} - chromEnd location of clicked item (relative to one)</LI>
+    <LI>$[ - left-most position of current viewing window (relative to zero)</LI>
+    <LI>$] - right-most position of current viewing window (relative to one)</LI>
+    <LI>${ - start location of clicked item (relative to zero)</LI>
+    <LI>$} - end location of clicked item (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
     <LI>  $D - database name (e.g. "hg19")</LI>
@@ -699,10 +699,10 @@
     <LI>$T - database table name</LI>
     <LI>$S - chromomosome name (scaffold name on
     scaffold assemblies)</LI>
-    <LI>$[ - chromStart location of current window (relative to zero)</LI>
-    <LI>$] - chromEnd location of current window (relative to one)</LI>
-    <LI>${ - chromStart location of clicked item (relative to zero)</LI>
-    <LI>$} - chromEnd location of clicked item (relative to one)</LI>
+    <LI>$[ - left-most position of current viewing window (relative to zero)</LI>
+    <LI>$] - right-most position of current viewing window (relative to one)</LI>
+    <LI>${ - start location of clicked item (relative to zero)</LI>
+    <LI>$} - end location of clicked item (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
     <LI>  $D - database name (e.g. "hg19")</LI>

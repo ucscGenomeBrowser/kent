@@ -895,8 +895,17 @@ if (user==NULL)
 
 char *token = createTokenForUser();
 
+// if we recreate the submission dir structure, we need to create a shell script
+boolean createSubdirs = FALSE;
+if (sameOk(cgiOptionalString("cdwDownloadName"), "subAndDir"))
+    createSubdirs = TRUE;
+
 cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
-puts("Content-disposition: attachment; filename=fileUrls.txt\n");
+
+if (createSubdirs)
+    puts("Content-disposition: attachment; filename=downloadCirm.sh\n");
+else
+    puts("Content-disposition: attachment; filename=fileUrls.txt\n");
 
 char *searchString = cartUsualString(cart, "cdwFileSearch", "");
 char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
@@ -914,7 +923,23 @@ struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", host, vf->licensePlate, token, optArg);
+
+    if (createSubdirs)
+        {
+        struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
+        // if we have an absolute pathname in our DB, strip the leading '/'
+        // so if someone runs the script as root, it will not start to write
+        // files in strange directories
+        char* submitFname = cf->submitFileName;
+        if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
+            submitFname += 1;
+
+        printf("curl 'http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
+            host, vf->licensePlate, token, submitFname);
+        }
+    else
+        printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
+            host, vf->licensePlate, token, optArg);
     }
 }
 
@@ -952,14 +977,26 @@ printf("<h4>Data Download Options</h4>\n");
 printf("<b>Number of files:</b> %d<br>\n", fCount);
 printf("<b>Total size:</b> %s<p>\n", sizeStr);
 
-cgiMakeRadioButton("cdwDownloadName", "acc", TRUE);
-printf("Name files by accession<br>");
-cgiMakeRadioButton("cdwDownloadName", "sub", FALSE);
-printf("Name files as submitted<p>");
+puts("<input class='urlListButton' type=radio name='cdwDownloadName' VALUE='acc' checked>\n");
+//cgiMakeRadioButton("cdwDownloadName", "acc", TRUE);
+puts("Name files by accession, one single directory<br>");
+//cgiMakeRadioButton("cdwDownloadName", "sub", FALSE);
+puts("<input class='urlListButton' type=radio name='cdwDownloadName' VALUE='sub'>\n");
+puts("Name files as submitted, one single directory<br>");
+//cgiMakeRadioButton("cdwDownloadName", "subAndDir", FALSE);
+puts("<input class='scriptButton' type=radio name='cdwDownloadName' VALUE='subAndDir'>\n");
+puts("Name files as submitted and put into subdirectories<p>");
 
 cgiMakeSubmitButton();
 printf("</FORM>\n");
 
+
+puts("<script>\n");
+puts("$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )");
+puts("$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )");
+puts("</script>\n");
+
+puts("<div id='urlListDoc'>\n");
 puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");
 puts("The URLs are valid for one week.<p>\n");
 puts("To download the files:\n");
@@ -971,6 +1008,17 @@ puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -
 puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q < fileUrls.txt</tt>\n");
 puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c -x 16 -s 2 -i fileUrls.txt</tt>\n");
 puts("</ul>\n");
+puts("</div>\n");
+
+puts("<div id='scriptDoc' style='display:none'>\n");
+puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
+puts("The URLs are valid for one week.<p>\n");
+puts("To download the files:\n");
+puts("<ul>\n");
+puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
+puts("<li>Linux/OSX: With curl and four threads: <tt>parallel -j4 :::: downloadCirm.sh</tt>\n");
+puts("</ul>\n");
+puts("<div>\n");
 cdwFileFreeList(&efList);
 }
 

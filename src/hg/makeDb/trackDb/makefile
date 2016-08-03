@@ -136,7 +136,7 @@ DBS = \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
-	panTro1 panTro2 panTro3 panTro4 \
+	panTro1 panTro2 panTro3 panTro4 panTro5 \
 	papHam1 papAnu2 \
 	petMar1 petMar2 \
 	plasFalc3D7V12 \

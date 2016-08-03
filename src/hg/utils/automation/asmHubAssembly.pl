@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
@@ -26,14 +29,6 @@ if ( ! -s $agpFile ) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 # definition of contig types in the AGP file
 my %goldTypes = (
 'A' => 'active finishing',
@@ -54,7 +49,7 @@ my $organism = `grep -v "^#" $namesFile | cut -f5`;
 chomp $organism;
 my $partCount = `zcat $agpFile | grep -v "^#" | awk -F'\t' '\$5 != "N"' | wc -l`;
 chomp $partCount;
-$partCount = commify($partCount);
+$partCount = &AsmHub::commify($partCount);
 
 print <<_EOF_
 <h2>Description</h2>
@@ -107,7 +102,7 @@ while (my $line = <GL>) {
       if (length($singleMessage)) {
          printf "<li>%s - one %s %s</li>\n", $type, $goldTypes{$type}, $singleMessage;
       } else {
-         printf "<li>%s - %s (count: %s)</li>\n", $type, $goldTypes{$type}, commify($count);
+         printf "<li>%s - %s (count: %s)</li>\n", $type, $goldTypes{$type}, &AsmHub::commify($count);
       }
    } else {
       die "asmHubAssembly.pl: missing AGP contig type definition: $type";

@@ -2,6 +2,9 @@
 
 use strict;
 use warnings;
+use FindBin qw($Bin);
+use lib "$Bin";
+use AsmHub;
 use File::Basename;
 
 my $argc = scalar(@ARGV);
@@ -23,14 +26,6 @@ if ( ! -s $rmskClassProfile ) {
   exit 255;
 }
 
-# from Perl Cookbook Recipe 2.17, print out large numbers with comma
-# delimiters:
-sub commify($) {
-    my $text = reverse $_[0];
-    $text =~ s/(\d\d\d)(?=\d)(?!\d*\.)/$1,/g;
-    return scalar reverse $text
-}
-
 my $em = "<em>";
 my $noEm = "</em>";
 my $assemblyDate = `grep -v "^#" $namesFile | cut -f9`;
@@ -43,7 +38,7 @@ chomp $organism;
 print <<_EOF_
 <h2>Description</h2>
 <p>
-This track shows the sequences used in the $assemblyDate $em${organism}$noEm/$asmId genome assembly.
+This track shows the Repeat Masker annotations on the $assemblyDate $em${organism}$noEm/$asmId genome assembly.
 </p>
 
 <p>
@@ -116,7 +111,7 @@ open (FH, "grep classBed $rmskClassProfile | sed -e 's/^  *//; s#$asmId.rmsk.##;
 while (my $line = <FH>) {
   chomp $line;
   my ($count, $class) = split('\s+', $line);
-  printf "<li>%s - %s</li>\n", commify($count), $class;
+  printf "<li>%s - %s</li>\n", &AsmHub::commify($count), $class;
 }
 close (FH);
 printf "</ul>\n</p>\n<h2>Detail class profiles</h2>\n<p>\n<ul>\n";
@@ -124,7 +119,7 @@ open (FH, "grep rmskClass $rmskClassProfile | sed -e 's/^  *//; s#rmskClass/##; 
 while (my $line = <FH>) {
   chomp $line;
   my ($count, $class) = split('\s+', $line);
-  printf "<li>%s - %s</li>\n", commify($count), $class;
+  printf "<li>%s - %s</li>\n", &AsmHub::commify($count), $class;
 }
 close (FH);
 

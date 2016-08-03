@@ -119,7 +119,7 @@ char otherConstraints[80] = "", query[2048], **row;
 
 sqlSafef (query, sizeof(query),
     "select m.realName, s.userName, m.idx, s.sessionName, s.useCount, s.settings, s.contents, s.firstUse from "
-    "%s s left join gbMembers m on m.userName = s.userName where shared = 2%s limit 30"
+    "%s s left join gbMembers m on m.userName = s.userName where shared = 2%s"
     , namedSessionTable, otherConstraints);
 sr = sqlGetResult(conn, query);
 

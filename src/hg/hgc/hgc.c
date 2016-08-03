@@ -6945,6 +6945,10 @@ if (retSeq)
     *retSeq = dnaSeq;
 
 tRcAdjustedStart = tStart;
+
+if (psl->strand[1] == '-')
+    pslRc(psl);
+
 if (psl->strand[0] == '-')
     {
     if (retIsRc)

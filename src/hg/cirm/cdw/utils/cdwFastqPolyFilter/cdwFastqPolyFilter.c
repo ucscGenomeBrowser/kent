@@ -30,13 +30,12 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void trim(struct fq *fq, int minSize, int minTrim)
+void trim(struct fq *fq, int minSize, int minTrim, char target)
 /* Trim fq leaving at least minSize bases. */
 {
 char *dna = fq->dna;
 int size = strlen(dna);
 int pos;
-char target = 'A';
 
 for (pos = size-1; pos >= minSize; --pos)
     {
@@ -64,7 +63,8 @@ struct fq *fq;
 
 while ((fq = fqReadNext(lf)) != NULL)
     {
-    trim(fq, minSize, minTrim);
+    trim(fq, minSize, minTrim, 'A');
+    trim(fq, minSize, minTrim, 'T');
     fqWriteNext(fq, f);
     fqFree(&fq);
     }

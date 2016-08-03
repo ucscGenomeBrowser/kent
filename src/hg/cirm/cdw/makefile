@@ -13,7 +13,9 @@ UTIL_DIRS = \
     cdwAddQaEnrichTarget \
     cdwAddSubscriber \
     cdwChangeFormat \
-    cdwCorrectFileTags \
+    cdwCheckDataset \
+	cdwCheckValidation \
+	cdwCorrectFileTags \
     cdwCreateUser \
     cdwFakeManifestFromSubmit \
     cdwJob \
