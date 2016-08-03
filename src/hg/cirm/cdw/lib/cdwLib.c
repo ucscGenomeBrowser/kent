@@ -1439,6 +1439,62 @@ vf->experiment = cloneString(experiment);
 #endif
 }
 
+void cdwRemoveQaRecords(struct sqlConnection *conn, long long fileId)
+/* Remove records associated with a file from all of the cdwQaXxx and cdwXxxFile
+ * tables */
+{
+char query[1024];
+sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from cdwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaRepeat where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), 
+    "delete from cdwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+}
+
+void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really)
+/* Remove all records of file from database and from Unix file system if 
+ * the really flag is set.  Otherwise just print some info on the file. */
+{
+struct cdwFile *ef = cdwFileFromId(conn, fileId);
+char *path = cdwPathForFileId(conn, fileId);
+verbose(1, "removing id=%u, submitFileName=%s, path=%s\n", 
+    ef->id, ef->submitFileName, path);
+if (really)
+    {
+    char query[1024];
+    cdwRemoveQaRecords(conn, fileId);
+    sqlSafef(query, sizeof(query),
+	"delete from cdwGroupFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
+    sqlUpdate(conn, query);
+    mustRemove(path);
+    }
+freez(&path);
+cdwFileFree(&ef);
+}
+
 void cdwFileResetTags(struct sqlConnection *conn, struct cdwFile *ef, char *newTags, 
     boolean revalidate, int submitId)
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
@@ -1459,30 +1515,7 @@ if (revalidate)
     sqlUpdate(conn, query);
 
     /* Get rid of records referring to file in other validation and qa tables. */
-    sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaRepeat where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), 
-	"delete from cdwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
+    cdwRemoveQaRecords(conn, fileId);
 
     /* schedule validator */
     cdwAddQaJob(conn, ef->id, submitId);
