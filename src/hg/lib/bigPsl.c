@@ -11,7 +11,7 @@
 
 
 
-char *bigPslCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,oBlock,match,misMatch,repMatch,nCount";
+char *bigPslCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,reserved,blockCount,blockSizes,chromStarts,oChromStart,oChromEnd,oStrand,oChromSize,oChromStarts,oSequence,oCDS,chromSize,match,misMatch,repMatch,nCount";
 
 struct bigPsl *bigPslLoad(char **row)
 /* Load a bigPsl from row fetched with select * from bigPsl
@@ -146,7 +146,7 @@ s = sqlEatChar(s, '{');
 AllocArray(ret->oChromStarts, ret->blockCount);
 for (i=0; i<ret->blockCount; ++i)
     {
-    ret->oChromStarts[i] = sqlUnsignedComma(&s);
+    ret->oChromStarts[i] = sqlSignedComma(&s);
     }
 s = sqlEatChar(s, '}');
 s = sqlEatChar(s, ',');
@@ -258,7 +258,7 @@ int i;
 if (sep == ',') fputc('{',f);
 for (i=0; i<el->blockCount; ++i)
     {
-    fprintf(f, "%u", el->oChromStarts[i]);
+    fprintf(f, "%d", el->oChromStarts[i]);
     fputc(',', f);
     }
 if (sep == ',') fputc('}',f);
