@@ -8507,7 +8507,6 @@ char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* 
 struct dyString *uUrl = NULL;
 struct dyString *eUrl = NULL;
 char startString[64], endString[64];
-char begItem[64], endItem[64];
 char *ins[13], *outs[13];
 char *eItem = (encode ? cgiEncode(idInUrl) : cloneString(idInUrl));
 
@@ -8573,12 +8572,10 @@ ins[9] = "${";
 ins[10] = "$}";
 if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
-    int itemBeg = cartIntExp(cart, "o"); // Should strip any unexpected commas
-    int itemEnd = cartIntExp(cart, "t");
-    safef(begItem, sizeof begItem, "%d", itemBeg);
-    safef(endItem, sizeof endItem, "%d", itemEnd);
-    outs[9] = begItem;
-    outs[10] = endItem;
+    char* itemBeg = cartString(cart, "o"); // unexpected commas?
+    char* itemEnd = cartString(cart, "t");
+    outs[9] = itemBeg;
+    outs[10] = itemEnd;
     }
 else // should never be but I am unwilling to bet the farm
     {
