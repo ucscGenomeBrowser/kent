@@ -332,6 +332,14 @@ for(ii=0; ii < psl->blockCount; ii++)
     psl->tStarts[ii] += psl->tStart;
     }
 
+// because reference blocks  are always on the positive strand in beds, we need to revComp them
+// if the alignment is meant to be on the reference's negative strand
+if (psl->strand[1] == '-')
+    {
+    psl->strand[1] = '+';
+    pslRc(psl);
+    }
+
 pslComputeInsertCounts(psl);
 return psl;
 }
