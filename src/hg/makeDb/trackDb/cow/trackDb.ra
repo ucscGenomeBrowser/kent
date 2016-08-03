@@ -1,3 +1,16 @@
 #	"$Id: trackDb.ra,v 1.8 2010/02/25 00:27:10 hiram Exp $";
 
 include trackDb.chainNet.ra
+
+track snp148Common override
+defaultGeneTracks refSeqComposite
+priority 1
+
+track snp148Flagged override
+defaultGeneTracks refSeqComposite
+
+track snp148Mult override
+defaultGeneTracks refSeqComposite
+
+track snp148 override
+defaultGeneTracks refSeqComposite
