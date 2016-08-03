@@ -484,4 +484,8 @@ struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile
 /* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
  * with cgiParsedVarsFreeList() */
 
+void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really);
+/* Remove all records of file from database and from Unix file system if 
+ * the really flag is set.  Otherwise just print some info on the file. */
+
 #endif /* CDWLIB_H */
