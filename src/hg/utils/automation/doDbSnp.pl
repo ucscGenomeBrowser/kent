@@ -663,27 +663,31 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     my (undef, $seqRole, $chr, undef, $gbAcc, $hopefullyEqual, $refSeqAcc) = split("\t");
     (my $rsaTrimmed = $refSeqAcc) =~ s/\.\d+$//;
     (my $gbaTrimmed = $gbAcc) =~ s/\.\d+$//;
-    # hg38 contig names keep the version number, replacing the '.' with 'v':
-    if ($db eq 'hg38') {
-      ($gbaTrimmed = $gbAcc) =~ s/\./v/;
-    }
+    # contig names for more recent assemblies keep the version number, replacing the '.' with 'v':
+    (my $altTrimmed = $gbAcc) =~ s/\./v/;
     if (exists $missingContigs{$rsaTrimmed}) {
       my $ucscName;
       if ($chr eq "na") {
-	if ($db eq 'susScr3') {
-	  $ucscName = $gbAcc;
-	  $ucscName =~ s/\./-/;
-	} else {
-	  $ucscName = "chrUn_$gbaTrimmed";
-	}
+        if ($db eq 'susScr3') {
+          $ucscName = $gbAcc;
+          $ucscName =~ s/\./-/;
+        } else {
+          $ucscName = "chrUn_$gbaTrimmed";
+        }
       } else {
-	$chr = "M" if ($chr eq "MT");
-	$chr = "chr$chr" unless ($chr =~ /^chr/);
-	my $suffix = 'random';
-	if ($db eq 'hg38' && $seqRole eq 'alt-scaffold') {
-	  $suffix = 'alt';
-	}
-	$ucscName = join('_', $chr, $gbaTrimmed, $suffix);
+        $chr = "M" if ($chr eq "MT");
+        $chr = "chr$chr" unless ($chr =~ /^chr/);
+        my $suffix = 'random';
+        if ($db eq 'hg38' && $seqRole eq 'alt-scaffold') {
+          $suffix = 'alt';
+        }
+        $ucscName = join('_', $chr, $gbaTrimmed, $suffix);
+      }
+      # If a ucsc name without the version number isn't found, try it with.
+      # (e.g., chrUn_GJ057137 vs. chrUn_GJ057137v1)
+      (my $altName = $ucscName) =~ s/$gbaTrimmed/$altTrimmed/;
+      if (!exists $chromSizes->{$ucscName}) {
+        ($ucscName, $altName) = ($altName, $ucscName);
       }
       if (exists $chromSizes->{$ucscName}) {
 	if ($hopefullyEqual ne '=') {
@@ -702,7 +706,7 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
 	  $liftUpCount++;
 	}
       } else {
-	push @missingInfo, [ "$seqRole (no $ucscName in chrom.sizes)", $rsaTrimmed, $chr ];
+	push @missingInfo, [ "$seqRole (no $ucscName or $altName in chrom.sizes)", $rsaTrimmed, $chr ];
       }
     } # else this contig is not in our missing list; ignore it.
   }
