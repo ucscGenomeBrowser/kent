@@ -422,14 +422,16 @@ dyStringFree(&dy);
 return ef->id;
 }
 
-int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, int submitDirId)
+int findFileGivenMd5AndSubmitDir(struct sqlConnection *conn, char *md5, char *submitFileName,
+    int submitDirId)
 /* Given hexed md5 and a submitDir see if we have a matching file. */
 {
-char query[256];
+char query[2*PATH_LEN];
 sqlSafef(query, sizeof(query), 
     "select file.id from cdwSubmit sub,cdwFile file "
-    "where file.md5 = '%s' and file.submitId = sub.id and sub.submitDirId = %d"
-    , md5, submitDirId);
+    "where file.md5 = '%s' and file.submitId = sub.id and sub.submitDirId = %d "
+    "and file.submitFileName = '%s'"
+    , md5, submitDirId, submitFileName);
 return sqlQuickNum(conn, query);
 }
 
@@ -825,7 +827,7 @@ int storeSubmissionFile(struct sqlConnection *conn,
 {
 /* Calculate md5sum and see if we have it already. */
 char *md5 = md5HexForFile(submitFileName);
-int oldFileId = findFileGivenMd5AndSubmitDir(conn, md5, submitDirId);
+int oldFileId = findFileGivenMd5AndSubmitDir(conn, md5, submitFileName, submitDirId);
 if (oldFileId != 0)
     {
     freeMem(md5);
@@ -1072,7 +1074,8 @@ if (errCatchStart(errCatch))
 	struct cdwFile *file = sfr->file;
 
 	/* See if it is already in repository */
-	int oldFileId = findFileGivenMd5AndSubmitDir(conn, file->md5, submitDirId);
+	int oldFileId = findFileGivenMd5AndSubmitDir(conn, file->md5, file->submitFileName,
+	    submitDirId);
 	if (oldFileId != 0)
 	    {
 	    slAddHead(&oldList, sfr);

@@ -71,6 +71,7 @@ TEST_DIRS = \
 	gtfToGenePred \
 	overlapSelect \
 	pslMap \
+	pslToBigPsl \
 	refSeqGet \
 	transMapPslToGenePred
 
