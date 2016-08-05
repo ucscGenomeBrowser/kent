@@ -1020,6 +1020,11 @@ if (justTest)
 /* Create a submission record */
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
 
+/* Create a backup of the previous submission */
+char cmd[PATH_LEN]; 
+safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
+mustSystem(cmd); 
+
 /* Put our manifest and metadata files */
 int manifestFileId= storeSubmissionFile(conn, manifestFile, submitId, submitDirId, user->id);
 int metaFileId= storeSubmissionFile(conn, metaFile, submitId, submitDirId, user->id);
