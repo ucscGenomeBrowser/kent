@@ -176,6 +176,9 @@ login.browserName=UCSC Genome Browser Mirror
 login.browserAddr=http://127.0.0.1
 # signature written at the bottom of hgLogin system emails
 login.mailSignature=None
+# the browser login page by default uses https. This setting can be used to 
+# used to make it work over http (not recommended)
+#login.https=off
 
 # Credentials to access the local mysql server
 db.host=localhost
