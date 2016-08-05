@@ -12377,3 +12377,67 @@ TMPDIR=/dev/shm
     make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
+# LASTZ mouse/mm10 Chimp/panTro5 - (DONE - 2016-08-03 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+    cd /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+
+    printf '# mouse vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: chimp panTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    273m27.335s
+
+    cat fb.mm10.chainPanTro5Link.txt
+    # 935711523 bases of 2652783500 (35.273%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 panTro5) \
+      > rbest.log 2>&1 &
+    # real    624m28.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    98m32.623s
+
+    cat fb.panTro5.chainMm10Link.txt
+    # 965636631 bases of 3132620660 (30.825%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro5 mm10) \
+       > rbest.log 2>&1
+    # real    560m21.432s
+
+#########################################################################
