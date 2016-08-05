@@ -156,11 +156,10 @@ taxId 9595
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/gorGor5/gorGor5.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku gorGor5) > do.log 2>&1
-XXX - running - Tue Jun 21 11:14:07 PDT 2016
-    # real    6m3.280s
+    # real    7m7.412s
 
     cat fb.gorGor5.cpgIslandExtUnmasked.txt
-    # 37760057 bases of 2249582125 (1.679%) in intersection
+    # 31072911 bases of 3080431298 (1.009%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2016-06-21 - Hiram)
@@ -392,20 +391,13 @@ searchPriority 8
     cd /hive/data/genomes/gorGor5/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku gorGor5) > do.log 2>&1
-XXX - running - Fri Jun 24 12:17:14 PDT 2016
-    # real    25m18.870s
-    # one job broken, run with window of 2,000,000:
-    ./lastRunGsBig.csh NW_004438481v1 000 gtf/000/NW_004438481v1.gtf pep/000/NW_004438481v1.pep subopt/000/NW_004438481v1.bed
-    # real    12m47.728s
+    # real    68m0.620s
 
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku gorGor5) > makeBed.log 2>&1
-    #   real    1m0.711s
     cat fb.gorGor5.genscan.txt
-    # 52075483 bases of 2249582125 (2.315%) in intersection
+    # 52474606 bases of 3080431298 (1.703%) in intersection
 
     cat fb.gorGor5.genscanSubopt.txt
-    # 49181696 bases of 2249582125 (2.186%) in intersection
+    # 56892790 bases of 3080431298 (1.847%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2016-06-24 - Hiram)
@@ -459,7 +451,7 @@ XXX - running - Fri Jun 24 12:17:14 PDT 2016
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-06-02 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2016-07-22 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -498,13 +490,12 @@ gorGor5.downloadDir = gorGor5
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial gorGor5
-    # logFile: var/build/logs/2016.06.24-13:09:46.gorGor5.initalign.log
-XXX - running - Fri Jun 24 13:10:19 PDT 2016
-    #   real    167m43.804s
+    # real    67m3.917s
 
-     tail -2 var/build/logs/2016.06.24-13:09:46.gorGor5.initalign.log
-# hgwdev 2016.06.01-14:18:58 gorGor5.initalign: Succeeded: gorGor5
-# hgwdev 2016.06.01-14:20:36 gorGor5.initalign: finish
+    # logFile: var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+    # tail -2 var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+# hgwdev 2016.07.05-13:59:57 gorGor5.initalign: Succeeded: gorGor5
+# hgwdev 2016.07.05-14:00:06 gorGor5.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.gorGor5
@@ -513,10 +504,9 @@ XXX - running - Fri Jun 24 13:10:19 PDT 2016
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad gorGor5
-    # logFile: var/dbload/hgwdev/logs/2016.06.02-10:36:16.gorGor5.dbload.log
-    # real    5m35.289s
-    tail -1 var/dbload/hgwdev/logs/2016.06.02-10:36:16.gorGor5.dbload.log
-# hgwdev 2016.06.02-10:41:51 gorGor5.dbload: finish
+    # real    18m33.387s
+    tail -1 var/dbload/hgwdev/logs/2016.07.21-23:42:20.gorGor5.dbload.log
+# hgwdev 2016.07.22-00:00:53 gorGor5.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -524,25 +514,66 @@ XXX - running - Fri Jun 24 13:10:19 PDT 2016
     # add gorGor5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added gorGor5 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added gorGor5 - Gorilla  - refs #17580" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-06-01 - Hiram)
+# augustus gene track (DONE - 2016-06-24 - Hiram)
 
     mkdir /hive/data/genomes/gorGor5/bed/augustus
     cd /hive/data/genomes/gorGor5/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev gorGor5) > do.log 2>&1
-XXX - running - Fri Jun 24 12:17:14 PDT 2016
-    # real    153m58.477s
+    # real    200m53.178s
 
     cat fb.gorGor5.augustusGene.txt
-    # 47282944 bases of 2249582125 (2.102%) in intersection
+    # 55196723 bases of 3080431298 (1.792%) in intersection
 
-#########################################################################
+############################################################################
+# construct liftOver to gorGor4 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    cd /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4
+    # real    0m2.154s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4) > do.log 2>&1
+    #	real    2412m36.913s
+
+    # verify this file exists:
+    #	/gbdb/gorGor5/liftOver/gorGor5ToGorGor4.over.chain.gz
+    # and try out the conversion on genome-test from gorGor5 to gorGor4
+
+############################################################################
+# construct liftOver gorGor4 to gorGor5 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    cd /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5
+    # real    0m1.954s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5) > do.log 2>&1
+    #	real    3222m59.287s
+
+    # verify this file exists:
+    #	/gbdb/gorGor4/liftOver/gorGor4ToGorGor5.over.chain.gz
+    # and try out the conversion on genome-test from gorGor4 to gorGor5
+
+############################################################################
 #  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
