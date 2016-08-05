@@ -337,8 +337,5 @@ if (($earlyExit == 0) && defined($varReloadFile)) {
     renameVarReloadFile($varReloadFile)
 }
 
-if (!$keep) {
-    runProg("rm -rf $workDir");
-}
 endTask();
 
