@@ -67,12 +67,17 @@ defaultSeuratAttribute = "tsneCluster"
 
 # === command line interface, options and help ===
 def parseCmdLine():
-    parser = optparse.OptionParser("""usage: %prog [options] mysqlDatasetId matrixFname metaFname outDir - create html/js files that describes a CDW dataset. Includes basic summary information, cell type assignment charts and cell clustering
+    parser = optparse.OptionParser(
+    """usage: %prog [options] mysqlDatasetId matrixFname metaFname outDir - create html/js files 
+    that describes a CDW dataset. Includes basic summary information, cell type assignment 
+    charts and cell clustering
     
     mysqlDatasetId it not necessary, can be any value.
 
     If Seurat is not installed on your machine, install it like this:
-    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/"); library(devtools); source("http://bioconductor.org/biocLite.R"); install_github("satijalab/seurat")'
+    Rscript -e 'install.packages("devtools", repos="http://cran.rstudio.com/"); 
+    library(devtools); source("http://bioconductor.org/biocLite.R"); 
+    install_github("satijalab/seurat")'
 
     """)
 

@@ -2097,6 +2097,7 @@ for (track = trackList; track != NULL; track = track->next)
 struct highlightVar
 // store highlight information
 {
+struct highlightVar *next;
 char *db;
 char *chrom;
 long chromStart;
@@ -2105,74 +2106,88 @@ char *hexColor;
 };
 
 struct highlightVar *parseHighlightInfo()
-// Parse highlight info from cart var
-// db.chrom:start-end#hexColor
+// Parse highlight info from cart var to a linked list of highlightVar structs
+// db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|...
 {
-struct highlightVar *h = NULL;
+struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    AllocVar(h);
-    h->db     = cloneNextWordByDelimiter(&highlightDef,'.');
-    h->chrom  = cloneNextWordByDelimiter(&highlightDef,':');
-    // long to handle virt chrom coordinates
-    h->chromStart = atol(cloneNextWordByDelimiter(&highlightDef,'-'));
-    h->chromEnd   = atol(cloneNextWordByDelimiter(&highlightDef,'#'));
-    h->chromStart--; // Not zero based
-    if (highlightDef && *highlightDef != '\0')
-	h->hexColor = cloneString(highlightDef);
+    char *hlArr[256];
+    int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
+    int i;
+    for (i=0; i<hlCount; i++)
+        {
+        char *oneHl = hlArr[i];
+        struct highlightVar *h;
+        AllocVar(h);
+        h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+        h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
+        // long to handle virt chrom coordinates
+        h->chromStart = atol(cloneNextWordByDelimiter(&oneHl,'-'));
+        h->chromEnd   = atol(cloneNextWordByDelimiter(&oneHl,'#'));
+        h->chromStart--; // Not zero based
+        if (highlightDef && *highlightDef != '\0')
+            h->hexColor = cloneString(oneHl);
+        slAddHead(&hlList, h);
+        }
+    slReverse(&hlList);
     }
-return h;
+return hlList;
 }
 
-void highlightRegion(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
-// Highlights a region in the image.  Only done if theImgBox is not defined.
+static void highlightRegions(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
+// Highlights regions in the image.  Only done if theImgBox is not defined.
 // Thus it is done for ps/pdf and view image but the hgTracks image is highlighted via js
 {
-struct highlightVar *h = parseHighlightInfo();
+struct highlightVar *hlList = parseHighlightInfo();
 
-if(h && theImgBox == NULL) // Only highlight region when imgBox is not used. (pdf and show-image)
+if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used. (pdf and show-image)
     {
-    if (virtualSingleChrom()) // DISGUISE VMODE
-	{
-	if ((h->db && sameString(h->db, database))
-	&&  (h->chrom && sameString(h->chrom,chromName)))
-	    {
-	    char position[1024];
-	    safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
-	    char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-	    if (startsWith("virt:", newPosition))
-		{
-		parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
-		}
-	    }	    
-	}
-
-    if ((h->db && sameString(h->db, database))
-    &&  (h->chrom && sameString(h->chrom,virtChromName))
-    &&  (h->chromEnd != 0)
-    &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
+    struct highlightVar *h;
+    for (h=hlList; h; h=h->next) 
         {
-
-        h->chromStart = max(h->chromStart, virtWinStart);
-        h->chromEnd = min(h->chromEnd, virtWinEnd);
-        double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
-        int startPixels = pixelsPerBase * (h->chromStart - virtWinStart); // floor
-        if (startPixels < 0)
-            startPixels *= -1;  // reverse complement
-        int width = pixelsPerBase * (double)(h->chromEnd - h->chromStart) + 0.5; // round up
-        if (width < 2)
-            width = 2;
-
-        // Default color to light blue, but if setting has color, use it.
-        unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
-        if (h->hexColor)
+        if (virtualSingleChrom()) // DISGUISE VMODE
             {
-            long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
-            hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+            if ((h->db && sameString(h->db, database))
+            &&  (h->chrom && sameString(h->chrom,chromName)))
+                {
+                char position[1024];
+                safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
+                char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
+                if (startsWith("virt:", newPosition))
+                    {
+                    parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
+                    }
+                }	    
             }
 
-        hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
+        if ((h->db && sameString(h->db, database))
+        &&  (h->chrom && sameString(h->chrom,virtChromName))
+        &&  (h->chromEnd != 0)
+        &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
+            {
+
+            h->chromStart = max(h->chromStart, virtWinStart);
+            h->chromEnd = min(h->chromEnd, virtWinEnd);
+            double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
+            int startPixels = pixelsPerBase * (h->chromStart - virtWinStart); // floor
+            if (startPixels < 0)
+                startPixels *= -1;  // reverse complement
+            int width = pixelsPerBase * (double)(h->chromEnd - h->chromStart) + 0.5; // round up
+            if (width < 2)
+                width = 2;
+
+            // Default color to light blue, but if setting has color, use it.
+            unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+            if (h->hexColor)
+                {
+                long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
+                hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+                }
+
+            hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
+            }
         }
     }
 }
@@ -4665,7 +4680,7 @@ initColors(hvg);
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    highlightRegion(cart, hvg, imagePixelHeight);
+    highlightRegions(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
     {
