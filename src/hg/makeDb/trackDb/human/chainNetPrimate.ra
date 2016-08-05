@@ -27,13 +27,8 @@ html primateChainNet
     subTrack primateChainNet
     spectrum on
 
-        track chainPanTro4
-        subTrack primateChainNetViewchain on
-        subGroups view=chain species=aaChimp clade=aaHominidae
-        shortLabel $o_Organism Chain
-        longLabel $o_Organism ($o_date) Chained Alignments
-        type chain panTro4
-        otherDb panTro4
+include chainNetPanTro4.ra beta,public
+include chainNetPanTro5.ra alpha
 
 include chainNetPanPan1.ra beta,public
 include chainNetPanPan2.ra alpha
@@ -145,14 +140,6 @@ include chainNetRBestOtoGar3.ra alpha
     view net
     visibility dense
     subTrack primateChainNet
-
-        track netPanTro4
-        subTrack primateChainNetViewnet on
-        subGroups view=net species=aaChimp clade=aaHominidae
-        shortLabel $o_Organism Net
-        longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign panTro4 chainPanTro4
-        otherDb panTro4
 
         track netPonAbe2
         subTrack primateChainNetViewnet on

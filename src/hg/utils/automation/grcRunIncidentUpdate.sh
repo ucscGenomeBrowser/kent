@@ -31,12 +31,12 @@ cd ${TOP}
 export DS=`date "+%Y-%m-%d"`
 export YM=`date "+%Y/%m"`
 
-for D in GRCh37 GRCh38 GRCm38 Zv9 MGSCv37
+for D in GRCh37 GRCh38 GRCm38 Zv9 MGSCv37 GRCz10 Gallus_gallus-5.0
 do
   mkdir -p ${D}/log/${YM}
 done
 
-./grcUpdate.sh GRCh38 hg38 GRCh38.p6_issues human/GRC/Issue_Mapping \
+./grcUpdate.sh GRCh38 hg38 GRCh38.p8_issues human/GRC/Issue_Mapping \
   > GRCh38/log/${YM}/${DS}.txt 2>&1
 
 ./grcUpdate.sh GRCh37 hg19 GRCh37.p13_issues human/GRC/Issue_Mapping \
@@ -51,6 +51,11 @@ done
 ./grcUpdate.sh MGSCv37 mm9 MGSCv37_issues mouse/GRC/Issue_Mapping \
   > MGSCv37/log/${YM}/${DS}.txt 2>&1
 
+./grcUpdate.sh GRCz10 danRer10 GRCz10_issues zebrafish/GRC/Issue_Mapping \
+  > GRCz10/log/${YM}/${DS}.txt 2>&1
+
+./grcUpdate.sh Gallus_gallus-5.0 galGal5 Gallus_gallus-5.0_issues \
+    chicken/GRC/Issue_Mapping > Gallus_gallus-5.0/log/${YM}/${DS}.txt 2>&1
 
 WC=`tail --quiet --lines=1 ${TOP}/GRCh37/log/${YM}/${DS}.txt ${TOP}/GRCh38/log/${YM}/${DS}.txt ${TOP}/GRCm38/log/${YM}/${DS}.txt ${TOP}/MGSCv37/log/${YM}/${DS}.txt ${TOP}/Zv9/log/${YM}/${DS}.txt | grep SUCCESS | wc -l`
 if [ "${WC}" -ne 5 ]; then

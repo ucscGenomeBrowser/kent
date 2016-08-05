@@ -4,7 +4,7 @@ include ${kentSrc}/inc/common.mk
 
 MYLIBDIR = ${kentSrc}/lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-L += -lm
+L += -lm -lz
 
 A = pslMap
 O = pslMap.o
