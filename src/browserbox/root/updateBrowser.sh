@@ -324,6 +324,13 @@ if [ ! -d /data/cramCache ]; then
 fi
 # -- end July 2016
 
+# July 2016: genbank tables are now in hgFixed. By touching a few files, we make sure that at least refseqStatus 
+# is rsync'ed later, otherwise gbib is really slow, refs #17842
+touch /data/mysql/hgFixed/refSeqStatus.MYI /data/mysql/hgFixed/refSeqStatus.MYD /data/mysql/hgFixed/refSeqStatus.frm 
+touch /data/mysql/hgFixed/refLink.MYI /data/mysql/hgFixed/refLink.MYD /data/mysql/hgFixed/refLink.frm 
+# we can now remove the old tables
+rm -f /data/mysql/hg19/refSeqStatus*
+
 if [ "$1" != "hgwdev" ] ; then
   echo updating MYSQL files - browser will not work during the MYSQL update
   # inspired by http://forums.mysql.com/read.php?35,45577,47063#msg-47063
