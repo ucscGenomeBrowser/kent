@@ -332,7 +332,7 @@ sub scheduler() {
     while ((scalar(@pendingDbs) > 0) || ($numRunning > 0)) {
         # start some
         while ((scalar(@pendingDbs) > 0) && ($numRunning < $maxParallel)) {
-            my $db = pop(@pendingDbs);
+            my $db = shift(@pendingDbs);
             my $pid = startAlignForDatabase($db);
             $pidToDb{$pid} = $db;
             $numRunning += 1;
