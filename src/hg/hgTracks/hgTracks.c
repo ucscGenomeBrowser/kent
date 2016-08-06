@@ -9408,12 +9408,12 @@ hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtM
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 // links to a few tools
-hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
 hPrintf("$(document).ready(addKeyboardHelpEntries);");
