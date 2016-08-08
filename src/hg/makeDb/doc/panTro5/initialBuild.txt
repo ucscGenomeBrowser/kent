@@ -651,7 +651,7 @@ XXX - running - Tue Aug  2 21:02:53 PDT 2016
     # -rw-rw-r-- 1 2368731 Aug  2 08:42 nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (DONE - 2016-08-02 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2016-08-02,08 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -711,9 +711,10 @@ panTro5.genbank.mrna.xeno.load = yes
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad panTro5
-XXX - running - Thu Aug  4 21:45:30 PDT 2016
-    # logFile: var/dbload/hgwdev/logs/2016.08.04-21:44:59.panTro5.dbload.log
-    tail -1 var/dbload/hgwdev/logs/2016.08.04-21:44:59.panTro5.dbload.log
+    # real    143m28.104s
+    tail -2 var/dbload/hgwdev/logs/2016.08.05-10:00:13.panTro5.dbload.log
+# gbLoadRna: selected refseq.77 panTro5 native,xeno mrna: delete=0 seqChg=0 metaChg=0 extChg=0 new=426916 orphan=0 derived=0 noChg=0
+# hgwdev 2016.08.05-12:23:41 panTro5.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -721,7 +722,7 @@ XXX - running - Thu Aug  4 21:45:30 PDT 2016
     # add panTro5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added panTro5 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added panTro5 - chimp - Pan troglodytes refs #17817" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
@@ -751,14 +752,13 @@ XXX - running - Thu Aug  4 21:45:30 PDT 2016
     #	test it with some sequence
 
 ############################################################################
-## default position to casein beta (CSN2) gene (milk production)
-#                                 (TBD - 2016-06-02 - Hiram)
+## default position to FOXP2 (DONE - 2016-08-04 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_004438441v1:339887-349875"
+    hgsql -e 'update dbDb set defaultPos="chr7:118772635-119046356"
 	where name="panTro5";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2016-08-05 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=panTro5 -tableCoverage all.joiner
@@ -773,12 +773,12 @@ XXX - running - Thu Aug  4 21:45:30 PDT 2016
     mkdir /hive/data/genomes/panTro5/pushQ
     cd /hive/data/genomes/panTro5/pushQ
     time makePushQSql.pl panTro5 > panTro5.pushQ.sql 2> stderr.out
-    #   real    11m56.179s
+    #   real    6m9.066s
 
     #   check for errors in stderr.out, some are OK, e.g.:
     # WARNING: hgwdev does not have /gbdb/panTro5/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/panTro5/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/panTro5/bbi/quality.bw
+    # WARNING: hgwdev does not have /gbdb/panTro5/bbi/qualityBw/quality.bw
     # WARNING: panTro5 does not have seq
     # WARNING: panTro5 does not have extFile
 
