@@ -523,9 +523,9 @@ searchPriority 8
         -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
         -ooc=/hive/data/genomes/panTro5/jkStuff/panTro5.11.ooc \
          panTro5 panTro3) > doLiftOverToPanTro3.log 2>&1
-    # real    86m43.038s
+    # real    220m13.396s
 
-    # see if the liftOver menus function in the browser from panTro5 to panTro4
+    # see if the liftOver menus function in the browser from panTro5 to panTro3
 
 ##########################################################################
 # ncbiRefSeq (DONE - 2016-06-02 - Hiram)
