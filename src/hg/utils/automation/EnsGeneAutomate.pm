@@ -5807,7 +5807,7 @@ my %ensGeneFtpMySqlFileNames_85 = (
 );
 my @versionList = qw( 85 83 81 79 78 76 75 74 73 72 71 70 69 68 67 65 64 63 62 61 60 59 58 57 56 55 54 52 51 50 49 48 47 46 35 );
 
- @ensGtfReference;
+my @ensGtfReference;
 $ensGtfReference[85] = \%ensGeneGtfFileNames_85;
 $ensGtfReference[83] = \%ensGeneGtfFileNames_83;
 $ensGtfReference[81] = \%ensGeneGtfFileNames_81;
