@@ -149,6 +149,8 @@ taxId 9595
     # the fake AGP gets the frag name incorrect for chrM:
     hgsql -e 'update gold set frag="LN611626.1" where chrom="chrM";' gorGor5
 
+    # order key was incorrect:
+    hgsql -e 'update dbDb set orderKey=7681 where name="gorGor5";' hgcentraltest
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2016-06-21 - Hiram)
