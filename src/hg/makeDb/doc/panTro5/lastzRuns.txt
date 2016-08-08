@@ -53,8 +53,7 @@ TMPDIR=/dev/shm
     # filter with doRecipBest.pl
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         panTro5 gorGor5) > rbest.log 2>&1
-XXX - running - Thu Aug  4 21:46:45 PDT 2016
-    # real    57m55.320s
+    # real    136m0.379s
 
     # running the swap
     mkdir /hive/data/genomes/gorGor5/bed/blastz.panTro5.swap
@@ -64,15 +63,14 @@ XXX - running - Thu Aug  4 21:46:45 PDT 2016
         -chainMinScore=3000 -chainLinearGap=medium \
         -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
         -syntenicNet) > swap.log 2>&1
-XXX - running - Thu Aug  4 21:46:45 PDT 2016
-    # real    126m8.214s
+    # real    102m31.679s
 
     cat fb.gorGor5.chainPanTro5Link.txt
-    # 2935702060 bases of 3132620660 (93.714%) in intersection
+    # 2755486334 bases of 3080431298 (89.451%) in intersection
 
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         gorGor5 panTro5) > rbest.log 2>&1
-    # real    64m33.812s
+    # real    118m53.869s
 
 #############################################################################
 
