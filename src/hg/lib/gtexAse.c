@@ -10,7 +10,7 @@
 
 
 
-char *gtexAseCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,rgb,ASE,coverage,samples";
+char *gtexAseCommaSepFieldNames = "chrom,chromStart,chromEnd,name,score,strand,thickStart,thickEnd,itemRgb,medianASE,coverage,samples,donors,minASE,q1ASE,q3ASE,maxASE,stdASE";
 
 void gtexAseStaticLoad(char **row, struct gtexAse *ret)
 /* Load a row from gtexAse table into ret.  The contents of ret will
@@ -25,10 +25,16 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
-ret->rgb = sqlUnsigned(row[8]);
-ret->ASE = sqlFloat(row[9]);
+ret->itemRgb = sqlUnsigned(row[8]);
+ret->medianASE = sqlFloat(row[9]);
 ret->coverage = sqlFloat(row[10]);
 ret->samples = sqlUnsigned(row[11]);
+ret->donors = sqlUnsigned(row[12]);
+ret->minASE = sqlFloat(row[13]);
+ret->q1ASE = sqlFloat(row[14]);
+ret->q3ASE = sqlFloat(row[15]);
+ret->maxASE = sqlFloat(row[16]);
+ret->stdASE = sqlFloat(row[17]);
 }
 
 struct gtexAse *gtexAseLoadByQuery(struct sqlConnection *conn, char *query)
@@ -61,8 +67,8 @@ void gtexAseSaveToDb(struct sqlConnection *conn, struct gtexAse *el, char *table
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%g,%g,%u)", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->rgb,  el->ASE,  el->coverage,  el->samples);
+sqlDyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s',%u,%u,%u,%g,%g,%u,%u,%g,%g,%g,%g,%g)", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->strand,  el->thickStart,  el->thickEnd,  el->itemRgb,  el->medianASE,  el->coverage,  el->samples,  el->donors,  el->minASE,  el->q1ASE,  el->q3ASE,  el->maxASE,  el->stdASE);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -82,10 +88,16 @@ ret->score = sqlUnsigned(row[4]);
 safecpy(ret->strand, sizeof(ret->strand), row[5]);
 ret->thickStart = sqlUnsigned(row[6]);
 ret->thickEnd = sqlUnsigned(row[7]);
-ret->rgb = sqlUnsigned(row[8]);
-ret->ASE = sqlFloat(row[9]);
+ret->itemRgb = sqlUnsigned(row[8]);
+ret->medianASE = sqlFloat(row[9]);
 ret->coverage = sqlFloat(row[10]);
 ret->samples = sqlUnsigned(row[11]);
+ret->donors = sqlUnsigned(row[12]);
+ret->minASE = sqlFloat(row[13]);
+ret->q1ASE = sqlFloat(row[14]);
+ret->q3ASE = sqlFloat(row[15]);
+ret->maxASE = sqlFloat(row[16]);
+ret->stdASE = sqlFloat(row[17]);
 return ret;
 }
 
@@ -95,7 +107,7 @@ struct gtexAse *gtexAseLoadAll(char *fileName)
 {
 struct gtexAse *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[18];
 
 while (lineFileRow(lf, row))
     {
@@ -113,7 +125,7 @@ struct gtexAse *gtexAseLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexAse *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[12];
+char *row[18];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -142,10 +154,16 @@ ret->score = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->thickStart = sqlUnsignedComma(&s);
 ret->thickEnd = sqlUnsignedComma(&s);
-ret->rgb = sqlUnsignedComma(&s);
-ret->ASE = sqlFloatComma(&s);
+ret->itemRgb = sqlUnsignedComma(&s);
+ret->medianASE = sqlFloatComma(&s);
 ret->coverage = sqlFloatComma(&s);
 ret->samples = sqlUnsignedComma(&s);
+ret->donors = sqlUnsignedComma(&s);
+ret->minASE = sqlFloatComma(&s);
+ret->q1ASE = sqlFloatComma(&s);
+ret->q3ASE = sqlFloatComma(&s);
+ret->maxASE = sqlFloatComma(&s);
+ret->stdASE = sqlFloatComma(&s);
 *pS = s;
 return ret;
 }
@@ -200,13 +218,25 @@ fprintf(f, "%u", el->thickStart);
 fputc(sep,f);
 fprintf(f, "%u", el->thickEnd);
 fputc(sep,f);
-fprintf(f, "%u", el->rgb);
+fprintf(f, "%u", el->itemRgb);
 fputc(sep,f);
-fprintf(f, "%g", el->ASE);
+fprintf(f, "%g", el->medianASE);
 fputc(sep,f);
 fprintf(f, "%g", el->coverage);
 fputc(sep,f);
 fprintf(f, "%u", el->samples);
+fputc(sep,f);
+fprintf(f, "%u", el->donors);
+fputc(sep,f);
+fprintf(f, "%g", el->minASE);
+fputc(sep,f);
+fprintf(f, "%g", el->q1ASE);
+fputc(sep,f);
+fprintf(f, "%g", el->q3ASE);
+fputc(sep,f);
+fprintf(f, "%g", el->maxASE);
+fputc(sep,f);
+fprintf(f, "%g", el->stdASE);
 fputc(lastSep,f);
 }
 

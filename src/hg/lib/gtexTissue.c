@@ -6,13 +6,11 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
-#include "hdb.h"
-#include "gtexInfo.h"
 #include "gtexTissue.h"
 
 
 
-char *gtexTissueCommaSepFieldNames = "id,name,description,organ,color";
+char *gtexTissueCommaSepFieldNames = "id,name,description,organ,color,abbrev";
 
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret)
 /* Load a row from gtexTissue table into ret.  The contents of ret will
@@ -24,6 +22,7 @@ ret->name = row[1];
 ret->description = row[2];
 ret->organ = row[3];
 ret->color = sqlUnsigned(row[4]);
+ret->abbrev = row[5];
 }
 
 struct gtexTissue *gtexTissueLoadByQuery(struct sqlConnection *conn, char *query)
@@ -56,8 +55,8 @@ void gtexTissueSaveToDb(struct sqlConnection *conn, struct gtexTissue *el, char 
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%u)", 
-	tableName,  el->id,  el->name,  el->description,  el->organ,  el->color);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s',%u,'%s')", 
+	tableName,  el->id,  el->name,  el->description,  el->organ,  el->color,  el->abbrev);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -74,6 +73,7 @@ ret->name = cloneString(row[1]);
 ret->description = cloneString(row[2]);
 ret->organ = cloneString(row[3]);
 ret->color = sqlUnsigned(row[4]);
+ret->abbrev = cloneString(row[5]);
 return ret;
 }
 
@@ -83,7 +83,7 @@ struct gtexTissue *gtexTissueLoadAll(char *fileName)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -101,7 +101,7 @@ struct gtexTissue *gtexTissueLoadAllByChar(char *fileName, char chopper)
 {
 struct gtexTissue *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -127,6 +127,7 @@ ret->name = sqlStringComma(&s);
 ret->description = sqlStringComma(&s);
 ret->organ = sqlStringComma(&s);
 ret->color = sqlUnsignedComma(&s);
+ret->abbrev = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -141,6 +142,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->name);
 freeMem(el->description);
 freeMem(el->organ);
+freeMem(el->abbrev);
 freez(pEl);
 }
 
@@ -175,10 +177,17 @@ fprintf(f, "%s", el->organ);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 fprintf(f, "%u", el->color);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->abbrev);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+#include "hdb.h"
+#include "gtexInfo.h"
+
 void gtexTissueCreateTable(struct sqlConnection *conn, char *table)
 /* Create expression record format table of given name. */
 {
@@ -191,6 +200,7 @@ sqlSafef(query, sizeof(query),
 "    description varchar(255) not null, # GTEx tissue type detail\n"
 "    organ varchar(255) not null,      # GTEx tissue collection area\n"
 "    color int unsigned not null,      # GTEx assigned color\n"
+"    abbrev varchar(255) not null,     # GTEx abbreviation\n"
 "              #Indices\n"
 "    PRIMARY KEY(id)\n"
 ")\n",   table);

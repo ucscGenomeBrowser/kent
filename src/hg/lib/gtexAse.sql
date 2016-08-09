@@ -13,10 +13,16 @@ CREATE TABLE gtexAse (
     strand char(1) not null,	# n/a
     thickStart int unsigned not null,	# n/a
     thickEnd int unsigned not null,	# n/a
-    rgb int unsigned not null,	# Color by ASE value
-    ASE float not null,	# Allelic imbalance (0-.5)
+    itemRgb int unsigned not null,	# Color by ASE value
+    medianASE float not null,	# Allelic imbalance (0-.5) median
     coverage float not null,	# RNA-seq reads overlapping this position
     samples int unsigned not null,	# Sample count
+    donors int unsigned not null,	# Donor count
+    minASE float not null,	# Minimum ASE
+    q1ASE float not null,	# Q1 ASE
+    q3ASE float not null,	# Q3 ASE
+    maxASE float not null,	# Maximum ASE
+    stdASE float not null,	# ASE standard deviation
               #Indices
     INDEX(chrom(20), chromStart)
 );

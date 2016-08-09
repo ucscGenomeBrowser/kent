@@ -6,7 +6,7 @@
 #define GTEXASE_H
 
 #include "jksql.h"
-#define GTEXASE_NUM_COLS 12
+#define GTEXASE_NUM_COLS 18
 
 extern char *gtexAseCommaSepFieldNames;
 
@@ -22,10 +22,16 @@ struct gtexAse
     char strand[2];	/* n/a */
     unsigned thickStart;	/* n/a */
     unsigned thickEnd;	/* n/a */
-    unsigned rgb;	/* Color by ASE value */
-    float ASE;	/* Allelic imbalance (0-.5) */
+    unsigned itemRgb;	/* Color by binned ASE value (none, moderate, strong) */
+    float medianASE;	/* Allelic imbalance (0-.5) median */
     float coverage;	/* RNA-seq reads overlapping this position */
     unsigned samples;	/* Sample count */
+    unsigned donors;	/* Donor count */
+    float minASE;	/* Minimum ASE */
+    float q1ASE;	/* Q1 ASE */
+    float q3ASE;	/* Q3 ASE */
+    float maxASE;	/* Maximum ASE */
+    float stdASE;	/* ASE standard deviation */
     };
 
 void gtexAseStaticLoad(char **row, struct gtexAse *ret);

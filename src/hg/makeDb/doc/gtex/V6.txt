@@ -114,3 +114,16 @@ hgLoadSqlTab hgFixed gtexSampleDataV6_full ~kate/kent/src/hg/lib/gtexSampleData.
 hgLoadSqlTab hgFixed gtexTissueMedianV6 ~kate/kent/src/hg/lib/gtexTissueMedian.sql \
                 $dir/gtex4V6TissueMedianAll.tab
 
+############
+# Add GTEX consortium abbreviation column to tissue table (e.g. for ASE)
+
+cd /hive/data/outside/gtex/V6/metadata
+hgsql hgFixed -e 'select * from gtexTissue' > gtexTissue.old.tab
+
+awk -F"\t" 'NR>1 {print $2}' gtex_tissue_colors.txt  | paste gtexTissue.old.tab - > gtexTissue.new.tab
+hgLoadSqlTab hgFixed gtexTissueNew ~kate/kent/src/hg/lib/gtexTissue.sql $dir/gtexTissue.new.tab
+hgsql hgFixed -e 'alter table gtexTissueV6 rename to gtexTissueV6Old; alter table gtexTissueNew rename to gtexTissueV6'
+
+# Test GTEx track on hgwdev still works with new table
+
+

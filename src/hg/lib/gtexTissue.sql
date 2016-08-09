@@ -10,6 +10,7 @@ CREATE TABLE gtexTissue (
     description varchar(255) not null,	# GTEX tissue type detail
     organ varchar(255) not null,	# GTEX tissue collection area
     color int unsigned not null,	# GTEX assigned color
+    abbrev varchar(255) not null,	# GTEX tissue abbreviation
               #Indices
     PRIMARY KEY(id)
 );

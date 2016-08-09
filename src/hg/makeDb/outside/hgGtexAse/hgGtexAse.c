@@ -1,7 +1,8 @@
 /* hgGtexAse - Load tables of GTEx Allele-Specific Expression summary data from Lappalainen lab 
         at NY Genome Center.  Contact:  Stephane Castel.
 
-    Header line:  chr, pos, samples, median_coverage, median_ae
+    Header line:  chr, pos, rsid, samples, individuals, median_coverage, 
+                        min_ae, q1_ae, median_ae, q3_ae, max_ae, std_ae
 */
 
 /* Copyright (C) 2016 The Regents of the University of California 
@@ -10,9 +11,11 @@
 #include "common.h"
 #include "portable.h"
 #include "verbose.h"
+#include "memgfx.h"
 #include "options.h"
 #include "basicBed.h"
 #include "linefile.h"
+#include "gtexTissue.h"
 #include "gtexAse.h"
 
 // Versions are used to suffix tablenames
@@ -27,9 +30,11 @@ void usage()
 {
 errAbort(
   "hgGtexAse - Write files of ASE GTEx ASE summary files:\n"
-  "             BED 9+ of ASE with all fields, named by SNP, colored by median ASE\n"
+  "             BED 9+9 of ASE (gtexAse.h) with all fields, named by SNP, colored by median ASE\n"
   "usage:\n"
   "   hgGtexAse database tableRoot indir outdir\n"
+  "     where files in indir are named TISSUEABBREV.ase_stats.txt\n"
+  "             and the combined file starts with 'all'\n"
   "options:\n"
   "    -version=VN (default \'%s\')\n"
   "    -trackDb    add composite to trackDb  \n"
@@ -42,33 +47,33 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 
-#define GRAY    0x7D7D7D
-#define GREEN   0x34D100
-#define BLUE    0x3366FF
-#define PURPLE  0xCC33FF
-#define RED     0xFF3366
 
-unsigned assignColor(float val)
+unsigned assignColor(int score, unsigned color)
+/* No ASE -> Gray.  Moderate ASE -> Grayed down tissue color. High ASE -> tissue color */
 {
-int ase = val * 100;
-if (ase == 0)
+//#define GRAY    0x7D7D7D
+#define GRAY    0xA3A3A3
+if (score < 300)
     return GRAY;
-if (ase <= 15)
-    return GREEN;
-if (ase <= 25)
-    return BLUE;
-if (ase <= 49)
-    return PURPLE;
-if (ase == 50)
-    return RED;
-errAbort("ERROR: unexpected ASE value: %0.2f.  Must be 0-.5", val);
-return 0;
+if (score >= 600)
+    return color;
+struct rgbColor rgb = mgColorIxToRgb(NULL, color);
+struct rgbColor grayRgb = mgColorIxToRgb(NULL, GRAY);
+rgb.r += (grayRgb.r - rgb.r) / 2;
+rgb.g += (grayRgb.g - rgb.g) / 2;
+rgb.b += (grayRgb.b - rgb.b) / 2;
+return MAKECOLOR_32(rgb.r, rgb.g, rgb.b);
 }
 
-void parseAse(char *aseFile, char *inDir, char *outDir, char *table)
+int assignScore(double val)
 {
-verbose(2, "Parsing file `%s`\n", aseFile);
-char *words[5];
+return val * 2000.0;
+}
+
+void parseAse(char *aseFile, char *inDir, char *outDir, char *table, unsigned tissueColor)
+{
+verbose(2, "Parsing file '%s'\n", aseFile);
+char *words[32];
 char inPath[64];
 safef(inPath, sizeof(inPath), "%s/%s", inDir, aseFile);
 struct lineFile *lf = lineFileOpen(inPath, TRUE);
@@ -87,28 +92,52 @@ if (!startsWith("chr", line))
 
 while (lineFileNext(lf, &line, NULL))
     {
-    verbose(3, "    %s\n", line);
+    verbose(5, "    %s\n", line);
     int count = chopTabs(line, words);
-    lineFileExpectWords(lf, 5, count);
+    lineFileExpectWords(lf, 12, count);
     AllocVar(bed);
     safef(buf, sizeof(buf), "chr%s", words[0]);
     bed->chrom = cloneString(buf);
     bed->chromStart = bed->thickStart = sqlUnsigned(words[1])-1;
     bed->chromEnd = bed->thickEnd = sqlUnsigned(words[1]);
-    bed->name = "rs000000";
+    bed->name = words[2];
+    if (isEmpty(bed->name))
+        {
+        safef(buf, sizeof buf, "%s:%d", bed->chrom, bed->chromStart+1);
+        bed->name = cloneString(buf);
+        }
     bed->strand[0] = '.';
-    bed->samples = sqlUnsigned(words[2]);
-    bed->coverage = sqlDouble(words[3]);
-    bed->ASE = sqlDouble(words[4]);
-    bed->rgb = assignColor(bed->ASE);
+    bed->samples = sqlUnsigned(words[3]);
+    bed->donors = sqlUnsigned(words[4]);
+    bed->coverage = sqlDouble(words[5]);
+    bed->minASE = sqlDouble(words[6]);
+    bed->q1ASE = sqlDouble(words[7]);
+
+    bed->medianASE = sqlDouble(words[8]);
+    bed->score = assignScore(bed->medianASE);
+    bed->itemRgb = assignColor(bed->score, tissueColor);
+
+    bed->q3ASE = sqlDouble(words[9]);
+    bed->maxASE = sqlDouble(words[10]);
+    bed->stdASE = sqlDouble(words[11]);
     gtexAseTabOut(bed, f);
     }
 lineFileClose(&lf);
 fclose(f);
 }
 
+struct hash *getTissueByAbbrev(char *version)
+/* Make hash of tissue info by abbreviation (to retrieve UCSC short name) */
+{
+struct gtexTissue *tis, *tissues = gtexGetTissues(version);
+struct hash *tisHash = hashNew(0);
+for (tis = tissues; tis != NULL; tis = tis->next)
+    hashAdd(tisHash, tis->abbrev, tis);
+return tisHash;
+}
+
 void hgGtexAse(char *database, char *tableRoot, char *inDir, char *outDir)
-/* Main function to parse data files and load tables*/
+/* Main function to parse data files and load tables */
 {
 // Create trackDb file 
 char trackDbFile[64];
@@ -121,31 +150,59 @@ if (trackDb)
     fprintf(f, "track %s\n", tableRoot);
     fprintf(f, "compositeTrack on\n");
     fprintf(f, "shortLabel GTEx ASE\n");
-    fprintf(f, "longLabel  Allele-Specific Expression in 53 tissues from GTEx Analysis Group (V6)\n");
+    fprintf(f, "longLabel  Allele-Specific Expression Summary in 53 tissues from GTEx Analysis (NY Genome Ctr)\n");
     fprintf(f, "dragAndDrop subTracks\n");
-    fprintf(f, "group expression\n");
-    fprintf(f, "type bed 6\n\n");
+    //fprintf(f, "group expression\n");
+    fprintf(f, "itemRgb on\n");
+    fprintf(f, "darkerLabels on\n");
+    fprintf(f, "scoreFilter 500\n");
+    fprintf(f, "type bigBed 9 +\n\n");
     }
 
 // Read median data from files in inDir directory, and create output files
 struct slName *file, *files = listDir(inDir, "*.txt");
+struct hash *tissues = getTissueByAbbrev(version);
+
+unsigned color;
+char *name, *descr;
 for (file = files; file != NULL; file = file->next)
     {
     char *fileName = file->name;
-    char *tissue = cloneString(fileName);
-    chopSuffix(tissue);
-    toUpperN(tissue, 1);
+    if (startsWith("all", fileName))
+        {
+        color = 0;
+        name = "combined";
+        descr = "All Tissues";
+        }
+    else
+        {
+        char *tissueAbbrev = cloneString(fileName);
+        chopSuffix(tissueAbbrev);
+        chopSuffix(tissueAbbrev);
+        struct gtexTissue *tissue = hashMustFindVal(tissues, tissueAbbrev);
+        color = tissue->color;
+        name = tissue->name;
+        descr = tissue->description;
+        }
 
+    char *tissueUpper = cloneString(name);
+    toUpperN(tissueUpper, 1);
     char table[64];
-    safef(table, sizeof(table), "%s%s%s", tableRoot, "Bed", tissue);
-
-    parseAse(fileName, inDir, outDir, table);
+    safef(table, sizeof(table), "%s%s", tableRoot, tissueUpper);
+    parseAse(fileName, inDir, outDir, table, color);
 
     fprintf(f, "    track %s\n", table);
     fprintf(f, "    parent %s\n", tableRoot);
-    fprintf(f, "    shortLabel %s\n", tissue);
-    fprintf(f, "    longLabel Median Allele-Specific Expression in %s from GTEx Analysis Group (V6)\n", tissue);
-    fprintf(f, "    type bed 9+\n\n");
+    fprintf(f, "    shortLabel %s\n", name);
+    fprintf(f, "    longLabel Median Allele-Specific Expression in %s from GTEx Analysis (NY Genome Ctr)\n", descr);
+    fprintf(f, "    type bigBed 9 +\n");
+    fprintf(f, "    bigDataUrl %s.bb\n", table);
+    struct rgbColor rgb;
+    rgb.b = (color >> 0) & 0xff;
+    rgb.g = (color >> 8) & 0xff;
+    rgb.r = (color >> 16) & 0xff;
+    fprintf(f, "    color %d,%d,%d\n", rgb.r, rgb.g, rgb.b);
+    fprintf(f, "\n");
     }
 fclose(f);
 }
