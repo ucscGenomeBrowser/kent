@@ -6,113 +6,10 @@ cd /hive/data/outside/GTEx/V6
 makdir ase
 cd ase
 
-# Link to UCSC GTEx tissue names
-
-mkdir in
-mv *.ase_stats.txt in
-cd in
-ln -s ADPSBQ.ase_stats.txt    adiposeSubcut.txt
-ln -s MSCLSK.ase_stats.txt    muscleSkeletal.txt
-ln -s WHLBLD.ase_stats.txt    wholeBlood.txt
-
-textHistogram -col=5 -real wholeBlood.txt -skip=1 -binSize=.1 
-0.000000 *************************************************** 75346
-0.100000 ************************************************************ 88921
-0.200000 ****************** 26100
-0.300000 ***** 7469
-0.400000 ** 2525
-0.500000 ****** 8528
-
-$ textHistogram -col=5 -real -skip=1 -binSize=.1 all.1-30.txt
-0.000000 ************************************************************ 82477
-0.100000 *********** 15192
-0.200000 *** 3852
-0.300000 * 1529
-0.400000 * 1130
-0.500000 *** 4155
-
-
-
- textHistogram -col=5 -real wholeBlood.txt -skip=1 -binSize=.1 -log
-0.000000 *********************************************************** 75346
-0.100000 ************************************************************ 88921
-0.200000 ****************************************************** 26100
-0.300000 *********************************************** 7469
-0.400000 ***************************************** 2525
-0.500000 ************************************************ 8528
-
-# assign colors by ASE:
-# Selected bins based on figure 7 scatterplot in Castel et.al. Genome Biology 2015
-
-0               gray
-.01-.15         green   (most data here)
-.16-.25         blue    (a bit of a cluster here)
-.26-.49         purple
-.5              red
-
- ~/bin/x86_64/hgGtexAse hg19 gtexAwgAse in out
-
-cd out
-foreach f (AdiposeSubcut MuscleSkeletal WholeBlood)
-    set t = gtexAwgAseBed$f
-    echo "Loading table $t"
-    bedSort $t.tab stdout | hgLoadSqlTab hg19 $t ~/kent/src/hg/lib/gtexAse.sql stdin
-end
-
-# bedSort the .bed files now (should do this in the parse tool)
-
-# Coverage graphs
-
-mkdir ../coverage
-set p = gtexAwgAseCoverage
-set d = /gbdb/hg19/bbi/gtex
-mkdir -p $d
-#foreach f (AdiposeSubcut MuscleSkeletal WholeBlood)
-foreach f (MuscleSkeletal)
-    set t = $p$f
-    echo "Loading table $t"
-    awk 'OFS="\t" {print $1, $2, $3, $11}' gtexAwgAseBed$f.tab > ../coverage/$p$f.bedGraph
-    cd ../coverage
-    bedGraphToBigWig $p$f.bedGraph /hive/data/genomes/hg19/chrom.sizes $p$f.bw
-    ln -s `pwd`/$p$f.bw $d
-    hgBbiDbLink hg19 $t $d/$p$f.bw
-    cd ../out
-end
-
-# use bigWigInfo to get data range for type statement in trackDb
-
-foreach f (*.bw)
-    echo $f
-    bigWigInfo $f | grep min
-    bigWigInfo $f | grep max
-end
-
-mkdir ../sample
-set p = gtexAwgAseSampleCount
-set d = /gbdb/hg19/bbi/gtex
-mkdir -p $d
-foreach f (AdiposeSubcut MuscleSkeletal WholeBlood)
-    cd ../out
-    set t = $p$f
-    echo "Loading table $t"
-    awk 'OFS="\t" {print $1, $2, $3, $12}' gtexAwgAseBed$f.tab > ../sample/$p$f.bedGraph
-    cd ../sample
-    bedGraphToBigWig $p$f.bedGraph /hive/data/genomes/hg19/chrom.sizes $p$f.bw
-    ln -s `pwd`/$p$f.bw $d
-    hgBbiDbLink hg19 $t $d/$p$f.bw
-end
-
-# use bigWigInfo to get data range for type statement in trackDb
-
-foreach f (*.bw)
-    echo $f
-    bigWigInfo $f | grep min
-    bigWigInfo $f | grep max
-end
-
-
 ###################3
 # June 28 full dataset from Stephane
+
+# Move earlier experiments to old/ directory.
 
 # combined:  all*txt
 
@@ -146,6 +43,8 @@ $ textHistogram -col=5 -real -skip=1 -binSize=.1 all.1-30.txt
 #       alter table gtexTissue add column abbrev varchar(255) after color
 # (Actually, use hgLoadSqlTab for this)
 
+
+# Parse per-tissue ASE files into BED 9+9 format  (gtexAse.as)
 cd /hive/data/outside/GTEx/V6/ase
 set bin = ~/bin/x86_64
 $bin/hgGtexAse hg19 gtexAwgAse lab/results hub/hg19 -verbose=3
@@ -187,4 +86,30 @@ set sizes = /hive/data/genomes/hg38/chrom.sizes
 liftOver -bedPlus=8 $t.tab $chain stdout ../hg38/$t.unmapped  | bedSort stdin ../hg38/$t.tab
 bedToBigBed -type=bed8+4 -as=$lib/gtexAse.as ../hg38/$t.tab $sizes ../hg38/$t.bb
 
-all_tissues.ase_stats.window.10.2.bedgraph.gz
+###############
+# Cross-tissue sliding window analysis from Stephane (on 7/28).  After review during the July
+# meeting, he suggested this would be more informative as summary than the Combined track.
+
+cd /hive/data/outside/GTEx/V6/ase
+mkdir windows; cd windows
+
+# process file from dropbox
+gunzip -c all_tissues.ase_stats.window.10.2.bedgraph.gz | \
+        sed 's/^/chr/' | sort -k1,1 -k2,2n > ase_stats.window.hg19.bedgraph 
+
+# remove overlaps, as per S. Castel
+/cluster/bin/bedtools/mergeBed  -i ase_stats.window.hg19.bedgraph -c 4 -o median > \
+        ase.hg19.merged.bg
+
+# create hg38 version
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+liftOver -bedPlus=3 ase.hg19.merged.bg $chain stdout unmapped.txt  | \
+        bedSort stdin ase.hg38.merged.bg
+
+# convert to bigWig
+foreach db (hg19 hg38)
+    set sizes = /hive/data/genomes/$db/chrom.sizes
+    bedGraphToBigWig ase.$db.merged.bg $sizes gtexAwgAseSummary.$db.bw
+end
+
+
