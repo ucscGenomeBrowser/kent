@@ -20,6 +20,7 @@ struct gtexGeneExtras
     char *version;              /* Suffix to table name, e.g. 'V6' */
     boolean codingOnly;         /* User filter to limit display to coding genes */
     boolean showExons;          /* Show gene model exons */
+    boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -397,6 +398,8 @@ extras->codingOnly = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_CO
                                                         GTEX_CODING_GENE_FILTER_DEFAULT);
 extras->showExons = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_SHOW_EXONS,
                                                         GTEX_SHOW_EXONS_DEFAULT);
+extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_NO_WHITEOUT,
+                                                        GTEX_NO_WHITEOUT_DEFAULT);
 /* Get geneModels in range */
 char buf[256];
 char *modelTable = "gtexGeneModel";
@@ -721,7 +724,9 @@ int graphX = gtexGraphX(geneBed);
 int x1 = xOff + graphX;         // x1 is at left of graph
 int keepX = x1;
 drawGraphBase(tg, geneInfo, hvg, keepX, yZero+1);
-drawGraphBox(tg, geneInfo, hvg, keepX, yZero+1);
+
+if (!extras->noWhiteout)
+    drawGraphBox(tg, geneInfo, hvg, keepX, yZero+1);
 
 int startX = x1;
 struct rgbColor lineColor = {.r=0};
