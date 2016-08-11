@@ -3030,6 +3030,24 @@ compositeTrack on
         mouseOverField comments
         noScoreFilter on
 
+track crispr
+release alpha
+#compositeTrack on
+shortLabel CRISPR targets
+longLabel CRISPR/Cas9 Sp. Pyog. target sites
+group genes
+visibility pack
+type bed 4
+dragAndDrop subTracks
+
+    track crisprRanges
+    release alpha
+    shortLabel CRISPR/Cas9 analyzed genomic regions
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
+    visibility dense
+    color 110,110,110
+    type bed 3
+
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
 longLabel NCBI Gene Annotations with Exon Overlaps
