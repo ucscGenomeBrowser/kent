@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Make your private trackDb with 
 #	make update
 # Your private trackDb with additional options, for example:
@@ -97,7 +98,7 @@ DBS = \
 	galGal2 galGal3 galGal4 galGal5 \
 	galVar1 \
 	gasAcu1 \
-	gorGor1 gorGor2 gorGor3 gorGor4 \
+	gorGor1 gorGor2 gorGor3 gorGor4 gorGor5 \
 	h1n1 \
 	haeCon1 haeCon2 \
 	hetBac1 \
@@ -135,7 +136,7 @@ DBS = \
 	oxyTri2 \
 	panPan1 panPan2 \
 	panRed1 \
-	panTro1 panTro2 panTro3 panTro4 \
+	panTro1 panTro2 panTro3 panTro4 panTro5 \
 	papHam1 papAnu2 \
 	petMar1 petMar2 \
 	plasFalc3D7V12 \

@@ -5,22 +5,21 @@
  * will include the menu bar into a static page.
  */
 #include "common.h"
+#include "cheapcgi.h"
 #include "dystring.h"
 #include "filePath.h"
 #include "linefile.h"
 
 #define CGI_NAME "cgi-bin/hgMenubar"
+#define NAVBAR_INC_PATH "/inc/globalNavBar.inc"
+#define OLD_HREF "href=\"../"
 
-struct dyString *navBarFilePath(char *cgiPath, char *docRoot)
+char *incFilePath(char *cgiPath, char *filePath, char *docRoot)
+/* Replace CGI_NAME in cgiPath with docRoot/filePath.  filePath must begin with "/" eg "/inc/..." */
 {
-struct dyString *navPath = dyStringCreate("%s", docRoot);
-// Memory leak - replaceChars returns memory that is never freed
-char *incPath = replaceChars(cgiPath, "/cgi-bin/hgMenubar", "/inc/globalNavBar.inc");
-
-dyStringAppend(navPath, incPath);
-return navPath;
+char *incPath = replaceChars(cgiPath, "/"CGI_NAME, filePath);
+return catTwoStrings(docRoot, incPath);
 }
-
 
 void printIncludes(char* baseDir)
 {
@@ -30,28 +29,28 @@ printf ("<script type='text/javascript' SRC='%sjs/jquery.plugins.js'></script>\n
 printf ("<LINK rel='STYLESHEET' href='%sstyle/nice_menu.css' TYPE='text/css'>\n", baseDir);
 }
 
-void printMenuBar(char *cgiPath, char *docRoot, char *pagePath)
+void printMenuBar(char *cgiPath, char *docRoot, char *pagePath, char *filePath)
 {
-struct dyString *navBarLoc = navBarFilePath(cgiPath, docRoot);
-struct lineFile *menuFile = lineFileOpen(dyStringContents(navBarLoc), TRUE);
+char *navBarLoc = incFilePath(cgiPath, filePath, docRoot);
+struct lineFile *menuFile = lineFileOpen(navBarLoc, TRUE);
 char* oldLine = NULL;
 int lineSize = 0;
 
 char *cgiContainerPath = replaceChars(cgiPath, CGI_NAME, "");
 char *newPath = makeRelativePath(pagePath, cgiContainerPath);
 
-struct dyString *oldHref = dyStringCreate("href=\"../");
-struct dyString *newHref = dyStringCreate("href=\"%s", newPath);
+char *newHref = catTwoStrings("href=\"", newPath);
 
 printf ("Content: text/html\r\n\r\n");
 
-printIncludes(newPath);
+if (sameString(filePath, NAVBAR_INC_PATH))
+    printIncludes(newPath);
 
 while (lineFileNext(menuFile, &oldLine, &lineSize))
     {
     // Not quite as robust as perl search and replace - no variable whitespace handling
     // Also lots of memory leakage - every line is reallocated and forgotten
-    char *newLine = replaceChars(oldLine, dyStringContents(oldHref), dyStringContents(newHref));
+    char *newLine = replaceChars(oldLine, OLD_HREF, newHref);
     printf("%s\n", newLine);
     }
 
@@ -79,6 +78,8 @@ int main(int argc, char *argv[])
 {
 char *cgiPath, *docRoot, *pagePath;
 parseEnvOrDie(&cgiPath, &docRoot, &pagePath);
-printMenuBar(cgiPath, docRoot, pagePath);
+cgiSpoof(&argc, argv);
+char *incFile = cgiUsualString("incFile", NAVBAR_INC_PATH);
+printMenuBar(cgiPath, docRoot, pagePath, incFile);
 return 0;
 }

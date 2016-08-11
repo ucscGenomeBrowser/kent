@@ -173,12 +173,8 @@ shuffleArrayOfChars(map, inMappedCount);
 samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
 
 /* Open up sam output and write header */
-#ifdef USE_HTS
 bam_hdr_t *header = sam_hdr_read(in);
 samfile_t *out = bamMustOpenLocal(sampleBam, "wb", header);
-#else
-samfile_t *out = bamMustOpenLocal(sampleBam, "wb", in->header);
-#endif
 
 
 /* Loop through bam items, writing them to sam or not according to map. */
@@ -188,22 +184,14 @@ ZeroVar(&one);	// This seems to be necessary!
 for (;;)
     {
     /* Read next record. */
-#ifdef USE_HTS
     if (sam_read1(in, header, &one) < 0)
-#else
-    if (samread(in, &one) < 0)
-#endif
 	break;
 
     /* Just consider mapped reads. */
     if ((one.core.flag & BAM_FUNMAP) == 0 && one.core.tid >= 0)
         {
 	if (map[mapIx])
-#ifdef USE_HTS
 	    sam_write1(out, header, &one);
-#else
-	    samwrite(out, &one);
-#endif
 	++mapIx;
 	}
     }
@@ -219,11 +207,7 @@ void openSamReadHeader(char *fileName, samfile_t **retSf, bam_header_t **retHead
 /* Open file and check header.  Abort with error message if a problem. */
 {
 samfile_t *sf = bamMustOpenLocal(fileName, "rb", NULL);
-#ifdef USE_HTS
 bam_hdr_t *head = sam_hdr_read(sf);
-#else
-bam_header_t *head = sf->header;
-#endif
 if (head == NULL)
     errAbort("Aborting ... Bad BAM header in file: %s", fileName);
 *retSf = sf;
@@ -337,11 +321,7 @@ ZeroVar(&one);	// This seems to be necessary!
 for (;;)
     {
     /* Read next record. */
-#ifdef USE_HTS
     if (sam_read1(sf, head, &one) < 0)
-#else
-    if (bam_read1(sf->x.bam, &one) < 0)
-#endif
 	break;
 
     /* Gather read count and length statistics. */
@@ -434,16 +414,9 @@ if (sampleBed != NULL)
     tpList = slListRandomSample(tpList, sampleBedSize);
     slSort(&tpList, targetPosCmp);
     FILE *bf = mustOpen(sampleBed, "w");
-#ifndef USE_HTS
-    bam_header_t *bamHeader = sf->header;
-#endif
     for (tp = tpList; tp != NULL; tp = tp->next)
         {
-#ifdef USE_HTS
         char *chrom = head->target_name[tp->targetId];
-#else
-        char *chrom = bamHeader->target_name[tp->targetId];
-#endif
 	fprintf(bf, "%s\t%u\t%u\t.\t0\t%c\n", 
 	    chrom, tp->pos, tp->pos + tp->size, tp->strand);
 	}

@@ -4,7 +4,6 @@
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-#ifdef USE_BAM
 
 #include "common.h"
 #include "hCommon.h"
@@ -302,11 +301,7 @@ if (core->qual < btd->minAliQual)
 return TRUE;
 }
 
-#ifdef USE_HTS
 int addBam(const bam1_t *bam, void *data, bam_hdr_t *hdr)
-#else
-int addBam(const bam1_t *bam, void *data)
-#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeatures item, and add it to tg->items. */
 {
@@ -355,11 +350,7 @@ lfs->features = lf;
 return lfs;
 }
 
-#ifdef USE_HTS
 int addBamPaired(const bam1_t *bam, void *data, bam_hdr_t *header)
-#else
-int addBamPaired(const bam1_t *bam, void *data)
-#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeaturesSeries item, and either store it until we find its mate
  * or add it to tg->items. */
@@ -880,11 +871,7 @@ int width;
 int preDrawZero;
 };
 
-#ifdef USE_HTS
 static int countBam(const bam1_t *bam, void *data, bam_hdr_t *header)
-#else
-static int countBam(const bam1_t *bam, void *data)
-#endif
 /* bam_fetch() calls this on each bam alignment retrieved.  */
 {
 struct bamWigTrackData *btd = (struct bamWigTrackData *)data;
@@ -1016,38 +1003,3 @@ track->preDrawItems = bamWigPreDrawItems;
 track->preDrawMultiRegion = wigMultiRegionGraphLimits;
 track->drawItems = bamWigDrawItems;
 }
-#else /* no USE_BAM */
-
-#include "common.h"
-#include "hgTracks.h"
-// If code was not built with USE_BAM=1, but there are bam tracks, display a message
-// in place of the tracks (instead of annoying "No track handler" warning messages).
-
-void drawUseBamWarning(struct track *tg, int seqStart, int seqEnd, struct hvGfx *hvg,
-                 int xOff, int yOff, int width, MgFont *font, Color color,
-                 enum trackVisibility vis)
-/* Draw a message saying that the code needs to be built with USE_BAM=1. */
-{
-char message[512];
-safef(message, sizeof(message),
-      "Get samtools(.sourceforge.net) and recompile kent/src with USE_BAM=1");
-Color yellow = hvGfxFindRgb(hvg, &undefinedYellowColor);
-hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
-hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
-}
-
-void bamMethods(struct track *track)
-/* Methods for BAM alignment files, in absence of USE_BAM (samtools lib). */
-{
-messageLineMethods(track);
-track->drawItems = drawUseBamWarning;
-}
-
-void bamWigMethods(struct track *track, struct trackDb *tdb,
-	int wordCount, char *words[])
-/* Same stub when compiled without USE_BAM. */
-{
-bamMethods(track);
-}
-
-#endif /* no USE_BAM */

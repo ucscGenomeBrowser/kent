@@ -44,6 +44,7 @@ UTILS_APPLIST = \
 	countChars \
 	faAlign \
 	fastqToFa \
+	fastqStatsAndSubsample \
 	faCmp \
 	faCount \
 	faFilterN \
@@ -155,7 +156,11 @@ SCRIPT_FILES = \
 	apacheLogParse \
 	extToolsChromeParse \
 	patSeqFilterBulkAndAnnotate \
-	patSeqSummarizeDocs
+	uniprotToTab \
+	patSeqSummarizeDocs \
+	pslProtCnv \
+	pslSameGene \
+	matrixMerge
 
 # List of all directories to build
 

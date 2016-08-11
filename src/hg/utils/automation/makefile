@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build all directories in utils
 
 include ../../../inc/common.mk
@@ -14,8 +15,20 @@ LIB_FILES = \
 	EnsGeneAutomate.pm \
 	HgRemoteScript.pm \
 	HgStepManager.pm \
+	AsmHub.pm
 
 SCRIPT_FILES = \
+	asmHubAssembly.pl \
+	asmHubGatewayPage.pl \
+	asmHubRmsk.pl \
+	asmHubCpG.pl \
+	asmHubGc5Percent.pl \
+	asmHubHtml.pl \
+	asmHubTrackDb.sh \
+	asmHubGap.pl \
+	asmHubSimpleRepeat.pl \
+	asmHubRepeatMasker.sh \
+	asmHubWindowMasker.pl \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
@@ -56,7 +69,7 @@ all: mkDir libFiles $(SCRIPT_FILES:%=%.all)
 
 mkDir:
 	${MKDIR} ${SCRIPTS}
-	
+
 libFiles: mkDir $(LIB_FILES:%=%.libFile)
 
 %.libFile:
@@ -66,7 +79,7 @@ libFiles: mkDir $(LIB_FILES:%=%.libFile)
 	chmod 664 ${SCRIPTS}/$*
 
 alpha: all
- 
+
 development:
 	@${MAKE} --no-print-directory SCRIPTS=${PIPELINE_PATH}/encpipeline_${USER}/bin/scripts pipelibs
 

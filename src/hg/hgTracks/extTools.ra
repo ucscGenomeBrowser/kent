@@ -27,7 +27,7 @@
 tool NCBIPrev
 shortLabel NCBI Map Viewer
 longLabel NCBI Genome Browser
-url http://www.ncbi.nlm.nih.gov/mapview/maps.cgi
+url https://www.ncbi.nlm.nih.gov/mapview/maps.cgi
 email info@ncbi.nlm.nih.gov
 onlyDbs hg19
 isHttpGet true
@@ -40,7 +40,7 @@ param build previous
 tool NCBI
 shortLabel NCBI Map Viewer
 longLabel NCBI Genome Browser
-url http://www.ncbi.nlm.nih.gov/mapview/maps.cgi
+url https://www.ncbi.nlm.nih.gov/mapview/maps.cgi
 email info@ncbi.nlm.nih.gov
 notDbs hg19
 isHttpGet true
@@ -85,7 +85,7 @@ param SEQUENCE_TEMPLATE $seq
 tool primerBlast
 shortLabel Primer-BLAST
 longLabel Primer3-based primer designer that also checks matches via NCBI BLAST
-url http://www.ncbi.nlm.nih.gov/tools/primer-blast/primertool.cgi
+url https://www.ncbi.nlm.nih.gov/tools/primer-blast/primertool.cgi
 email info@ncbi.nlm.nih.gov
 maxSize 50000
 param EXCLUDED_REGIONS 

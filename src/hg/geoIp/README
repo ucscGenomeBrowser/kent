@@ -191,3 +191,19 @@ rename tables to real:
 gbNodeReal
 geoIpNodeReal
 
+
+Make an extra backup of just the git untracked files just in case:
+
+mkdir /hive/data/outside/geoIp/
+gitu | xargs -I X cp X /hive/data/outside/geoIp/
+
+
+Make a backup of the data too:
+
+mkdir /hive/data/outside/geoIp/geoIpTableDumps
+mkdir /hive/data/outside/geoIp/geoIpTableDumps/2016-06-23
+# sadly we need to temporarily make it write-able by all so mysqld can write dump there.
+chmod 777 /hive/data/outside/geoIp/geoIpTableDumps/2016-06-23
+hgsqldump hgFixed -T 2016-06-23 continent continentToNode country countryToContinent countryToNode gbNode geoIpCountry geoIpNode
+chmod 775 /hive/data/outside/geoIp/geoIpTableDumps/2016-06-23
+

@@ -31,7 +31,7 @@ return table;
 }
 
 static void showTableFilterInstructionsEtc(struct fieldedTable *table, 
-    char *itemPlural, struct  fieldedTableSegment *largerContext)
+    char *itemPlural, struct  fieldedTableSegment *largerContext, void (*addFunc)(void))
 /* Print instructional text, and basic summary info on who passes filter, and a submit
  * button just in case user needs it */
 {
@@ -43,6 +43,8 @@ cgiMakeButton("submit", "search");
 printf("&nbsp;&nbsp;&nbsp&nbsp;");
 printf("%d&nbsp;%s&nbsp;found. ", matchCount, itemPlural);
 
+if (addFunc)
+    addFunc();
 
 printf("<BR>\n");
 printf("You can further filter search results field by field below. ");    
@@ -291,7 +293,8 @@ void webFilteredFieldedTable(struct cart *cart, struct fieldedTable *table,
     char *returnUrl, char *varPrefix,
     int maxLenField, struct hash *tagOutputWrappers, void *wrapperContext,
     boolean withFilters, char *itemPlural, 
-    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash)
+    int pageSize, struct fieldedTableSegment *largerContext, struct hash *suggestHash, 
+    void (*addFunc)(void) )
 /* Show a fielded table that can be sorted by clicking on column labels and optionally
  * that includes a row of filter controls above the labels .
  * The maxLenField is maximum character length of field before truncation with ...
@@ -302,7 +305,7 @@ if (strchr(returnUrl, '?') == NULL)
 
 
 if (withFilters)
-    showTableFilterInstructionsEtc(table, itemPlural, largerContext);
+    showTableFilterInstructionsEtc(table, itemPlural, largerContext, addFunc);
 
 /* Set up our table within table look. */
 webPrintLinkTableStart();
@@ -331,25 +334,16 @@ void webSortableFieldedTable(struct cart *cart, struct fieldedTable *table,
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, 
     maxLenField, tagOutputWrappers, wrapperContext,
     FALSE, NULL, 
-    slCount(table->rowList), NULL, NULL);
+    slCount(table->rowList), NULL, NULL, NULL);
 }
 
 
-void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
-    char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, 
-    struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash)
-/* Given a query to the database in conn that is basically a select query broken into
- * separate clauses, construct and display an HTML table around results. This HTML table has
- * column names that will sort the table, and optionally (if withFilters is set)
- * it will also allow field-by-field wildcard queries on a set of controls it draws above
- * the labels. 
- *    Much of the functionality rests on the call to webFilteredFieldedTable.  This function
- * does the work needed to bring in sections of potentially huge results sets into
- * the fieldedTable. */
+void webTableBuildQuery(struct cart *cart, char *from, char *initialWhere, 
+    char *varPrefix, char *fields, boolean withFilters, 
+    struct dyString **retQuery, struct dyString **retWhere)
+/* Construct select, from and where clauses in query, keeping an additional copy of where 
+ * Returns the SQL query and the SQL where expression as two dyStrings (need to be freed)  */
 {
-/* Construct select, from and where clauses in query, keeping an additional copy of where */
 struct dyString *query = dyStringNew(0);
 struct dyString *where = dyStringNew(0);
 struct slName *field, *fieldList = commaSepToSlNames(fields);
@@ -425,6 +419,29 @@ if (!isEmpty(orderFields))
 	dyStringPrintf(query, " order by %s", orderFields);
     }
 
+// return query and where expression
+*retQuery = query;
+*retWhere = where;
+}
+
+void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
+    char *fields, char *from, char *initialWhere,  
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) )
+/* Given a query to the database in conn that is basically a select query broken into
+ * separate clauses, construct and display an HTML table around results. This HTML table has
+ * column names that will sort the table, and optionally (if withFilters is set)
+ * it will also allow field-by-field wildcard queries on a set of controls it draws above
+ * the labels. 
+ *    Much of the functionality rests on the call to webFilteredFieldedTable.  This function
+ * does the work needed to bring in sections of potentially huge results sets into
+ * the fieldedTable. */
+{
+struct dyString *query;
+struct dyString *where;
+webTableBuildQuery(cart, from, initialWhere, varPrefix, fields, withFilters, &query, &where);
+
 /* Figure out size of query result */
 struct dyString *countQuery = dyStringNew(0);
 sqlDyStringPrintf(countQuery, "%s", ""); // TODO check with Galt on how to get reasonable checking back.
@@ -451,7 +468,7 @@ if (resultsSize > pageSize)
 
 struct fieldedTable *table = fieldedTableFromDbQuery(conn, query->string);
 webFilteredFieldedTable(cart, table, returnUrl, varPrefix, maxFieldWidth, 
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, &context, suggestHash, addFunc);
 fieldedTableFree(&table);
 
 dyStringFree(&query);

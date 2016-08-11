@@ -41,6 +41,8 @@ char brwName[64];
 char brwAddr[256];
 char signature[256];
 char returnAddr[256];
+char *hgLoginUrl = NULL;
+
 /* ---- Global helper functions ---- */
 char *cookieNameForUserName()
 /* Return the cookie name used for logged in user name like 'wikidb_mw1_UserName' */
@@ -359,14 +361,12 @@ hPrintf(
 static void redirectToLoginPage(char *paramStr)
 /* redirect to hgLogin page with given parameter string */
 {
-char *hgLoginHost = wikiLinkHost();
-char *cgiDir = cgiScriptDirUrl();
 hPrintf("<script  language=\"JavaScript\">\n"
     "<!-- \n"
-    "window.location =\"http%s://%s%shgLogin?%s\""
+    "window.location =\"%s?%s\""
     "//-->"
     "\n"
-    "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, paramStr);
+    "</script>", hgLoginUrl, paramStr);
 }
     
 void  displayActMailSuccess()
@@ -400,7 +400,8 @@ if (result == -1)
         "<p align=\"left\">"
         "</p>"
         "<h3>Error emailing to: %s</h3>"
-        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", email );
+        "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
+        hgLoginUrl, email );
     }
 else
     redirectToLoginPage("hgLogin.do.displayActMailSuccess=1");
@@ -418,8 +419,8 @@ hPrintf(
   "have been sent to that address.<BR><BR>"
     "  If <B>%s</B> is not your registered email address, you will not receive an email."
     " If you can't find the message we sent you, please contact %s for help.</p>", sendMailTo, sendMailTo, returnAddr);
-hPrintf(
-    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+        hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
@@ -447,8 +448,8 @@ if (sameString(returnAddr, "NOEMAIL"))
     "genome-www@soe.ucsc.edu. As this is a mirror website not managed by UCSC, please "
     "specify the address of the mirror in your email.</p>");
 
-hPrintf(
-    "<p><a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>");
+hPrintf("<p><a href=\"%s?hgLogin.do.displayLoginPage=1\">Return to Login</a></p>",
+        hgLoginUrl);
 cartRemove(cart, "hgLogin_helpWith");
 cartRemove(cart, "hgLogin_email");
 cartRemove(cart, "hgLogin_userName");
@@ -459,9 +460,7 @@ cartRemove(cart, "hgLogin_sendMailContain");
 void sendMailOut(char *email, char *subject, char *msg)
 /* send mail to email address */
 {
-char *hgLoginHost = wikiLinkHost();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
-char *cgiDir = cgiScriptDirUrl();
 int result;
 result = mailViaPipe(email, subject, msg, returnAddr);
 if (result == -1)
@@ -472,17 +471,17 @@ if (result == -1)
         "<p align=\"left\">"
         "</p>"
         "<h3>Error emailing %s to: %s</h3>"
-        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
-        obj, email );
+        "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>", 
+        hgLoginUrl, obj, email );
     }
 else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccess=1\""
+        "window.location =\"%s?hgLogin.do.displayMailSuccess=1\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir);
+        "</script>", hgLoginUrl);
     }
 }
 
@@ -527,8 +526,6 @@ mailUsername(email, userList);
 void sendPwdMailOut(char *email, char *subject, char *msg, char *username)
 /* send password reset mail to user at registered email address */
 {
-char *hgLoginHost = wikiLinkHost();
-char *cgiDir = cgiScriptDirUrl();
 char *obj = cartUsualString(cart, "hgLogin_helpWith", "");
 int result;
 result = mailViaPipe(email, subject, msg, returnAddr);
@@ -540,17 +537,17 @@ if (result == -1)
         "<p align=\"left\">"
         "</p>"
         "<h3>Error emailing %s to: %s</h3>"
-        "Click <a href=hgLogin?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
-        obj, email );
+        "Click <a href=%s?hgLogin.do.displayAccHelpPage=1>here</a> to return.<br>",
+        hgLoginUrl, obj, email );
     }
 else
     {
     hPrintf("<script  language=\"JavaScript\">\n"
         "<!-- \n"
-        "window.location =\"http%s://%s%shgLogin?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
+        "window.location =\"%s?hgLogin.do.displayMailSuccessPwd=1&user=%s\""
         "//-->"
         "\n"
-        "</script>", cgiAppendSForHttps(), hgLoginHost, cgiDir, username);
+        "</script>", hgLoginUrl, username);
     }
 }
 
@@ -597,10 +594,10 @@ hPrintf("<div id=\"accountHelpBox\" class=\"centeredContainer formBox\">"
     "\n", brwName);
 hPrintf("<h3>Having trouble signing in?</h3>"
     "\n"
-    "<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acctHelpForm\">"
+    "<form method=post action=\"%s\" name=\"accountLoginForm\" id=\"acctHelpForm\">"
     "\n"
     "<p><span style='color:red;'>%s</span><p>"
-    "\n", errMsg ? errMsg : "");
+    "\n", hgLoginUrl, errMsg ? errMsg : "");
 hPrintf("<div class=\"inputGroup\">"
     "<div class=\"acctHelpSection\"><input name=\"hgLogin_helpWith\" type=\"radio\" value=\"password\" id=\"password\" onclick=\"toggle('showU');\">"
     "<label for=\"password\" class=\"radioLabel\">I forgot my <b>password</b>. Send me a new one.</label></div>"
@@ -676,13 +673,11 @@ void sendActivateMail(char *email, char *username, char *encToken)
 char subject[256];
 char msg[4096];
 char activateURL[256];
-char *hgLoginHost = wikiLinkHost();
 char *remoteAddr=getenv("REMOTE_ADDR");
-char *cgiDir = cgiScriptDirUrl();
 
 safef(activateURL, sizeof(activateURL),
-    "http%s://%s%shgLogin?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
-    cgiAppendSForHttps(), hgLoginHost, cgiDir,
+    "%s?hgLogin.do.activateAccount=1&user=%s&token=%s\n",
+    hgLoginUrl,
     cgiEncode(username),
     cgiEncode(encToken));
 safef(subject, sizeof(subject),"%s account e-mail address confirmation", brwName);
@@ -722,7 +717,7 @@ if (errMsg && sameString(errMsg, "Your account has been activated."))
     hPrintf("<span style='color:green;'>%s</span>\n", errMsg ? errMsg : "");
 else
     hPrintf("<span style='color:red;'>%s</span>\n", errMsg ? errMsg : "");
-hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
+hPrintf("<form method=post action=\"%s\" name=\"accountLoginForm\" id=\"accountLoginForm\">"
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
@@ -738,21 +733,21 @@ hPrintf("<form method=post action=\"hgLogin\" name=\"accountLoginForm\" id=\"acc
     "   <input type=\"submit\" name=\"hgLogin.do.displayLogin\" value=\"Login\" class=\"largeButton\">"
     "    &nbsp;<a href=\"%s\">Cancel</a>"
     "</div>"
-    , username, getReturnToURL());
+    , hgLoginUrl, username, getReturnToURL());
 cartSaveSession(cart);
 hPrintf(
     "</form>"
     "\n"
     "\n"
     "<div id=\"helpBox\">"
-    "<a href=\"hgLogin?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
-    "Need an account? <a href=\"hgLogin?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
+    "<a href=\"%s?hgLogin.do.displayAccHelpPage=1\">Can't access your account?</a><br>"
+    "Need an account? <a href=\"%s?hgLogin.do.signupPage=1\">Sign up</a>.<br>"
     "</div><!-- END - helpBox -->"
     "</div><!-- END - loginBox -->"
     "\n"
     "\n"
     "</body>"
-    "</html>");
+    "</html>", hgLoginUrl, hgLoginUrl);
 }
 
 void activateAccount(struct sqlConnection *conn)
@@ -796,13 +791,13 @@ hPrintf(
     "\n"
     "<p> <span style='color:red;'>%s</span> </p>"
     "\n"
-    "<form method=\"post\" action=\"hgLogin\" name=\"changePasswordForm\" id=\"changePasswordForm\">"
+    "<form method=\"post\" action=\"%s\" name=\"changePasswordForm\" id=\"changePasswordForm\">"
     "\n"
     "<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
     "<input type=\"text\" name=\"hgLogin_userName\" size=\"30\" value=\"%s\" id=\"email\">"
     "</div>"
-    "\n", errMsg ? errMsg : "",
+    "\n", errMsg ? errMsg : "", hgLoginUrl,
     cartUsualString(cart, "hgLogin_userName", ""));
 hPrintf("<div class=\"inputGroup\">"
     "\n"
@@ -927,12 +922,12 @@ hPrintf("<div id=\"signUpBox\" class=\"centeredContainer formBox\">"
     "<h2>%s</h2>", brwName);
 hPrintf(
     "<p>Signing up enables you to save multiple sessions and to share your sessions with others.</p>"
-    "Already have an account? <a href=\"hgLogin?hgLogin.do.displayLoginPage=1\">Login</a>.<br>"
-    "\n");
+    "Already have an account? <a href=\"%s?hgLogin.do.displayLoginPage=1\">Login</a>.<br>"
+    "\n", hgLoginUrl);
 hPrintf("<h3>Sign Up</h3>"
-    "<form method=\"post\" action=\"hgLogin\" name=\"mainForm\">"
+    "<form method=\"post\" action=\"%s\" name=\"mainForm\">"
     "<span style='color:red;'>%s</span>"
-    "\n", errMsg ? errMsg : "");
+    "\n", hgLoginUrl, errMsg ? errMsg : "");
 hPrintf("<div class=\"inputGroup\">"
     "<label for=\"userName\">Username</label>"
     "<input type=text name=\"hgLogin_userName\" value=\"%s\" size=\"30\" id=\"userName\">"
@@ -1397,6 +1392,9 @@ htmlSetStyleSheet("../style/userAccounts.css");
 htmlSetStyle(htmlStyleUndecoratedLink);
 htmlSetBgColor(HG_CL_OUTSIDE);
 htmlSetFormClass("accountScreen");
+struct dyString *dy = dyStringCreate("http%s://%s%shgLogin",
+                                     loginUseHttps() ? "s" : "", wikiLinkHost(), cgiScriptDirUrl());
+hgLoginUrl = dyStringCannibalize(&dy);
 oldCart = hashNew(10);
 cartHtmlShell("Login - UCSC Genome Browser", doMiddle, hUserCookie(), excludeVars, oldCart);
 cgiExitTime("hgLogin", enteredMainTime);

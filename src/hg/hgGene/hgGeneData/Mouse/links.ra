@@ -3,7 +3,7 @@
 name jax
 shortLabel MGI
 tables kgXref
-idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'MGD' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
+idSql select uniProt.extDbRef.extAcc1 from uniProt.extDbRef,uniProt.extDb,kgXref where uniProt.extDb.val = 'MGI' and uniProt.extDb.id = uniProt.extDbRef.extDb and uniProt.extDbRef.acc = kgXref.spID and kgXref.kgID = '%s' 
 priority 10
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=%s
 

@@ -2194,6 +2194,24 @@ for (;;)
 *out++ = 0;
 }
 
+/* Remove any chars leaving digits only */
+void eraseNonDigits(char *s)
+{
+char *in, *out;
+char c;
+
+in = out = s;
+for (;;)
+    {
+    c = *in++;
+    if (c == 0)
+        break;
+    if (isdigit(c))
+        *out++ = c;
+    }
+*out = 0;
+}
+
 /* Remove non-alphanumeric chars from string */
 void eraseNonAlphaNum(char *s)
 {

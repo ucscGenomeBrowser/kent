@@ -34,9 +34,7 @@
 #include "bbiFile.h"
 #include "bigWig.h"
 #include "bigBed.h"
-#ifdef USE_BAM
 #include "hgBam.h"
-#endif//def USE_BAM
 #include "vcf.h"
 #include "makeItemsItem.h"
 #include "bedDetail.h"
@@ -2304,7 +2302,6 @@ static struct customFactory bigBedFactory =
     };
 
 
-#ifdef USE_BAM
 /*** BAM Factory - for client-side BAM alignment files ***/
 
 static boolean bamRecognizer(struct customFactory *fac,	struct customPp *cpp, char *type,
@@ -2352,9 +2349,7 @@ static struct customFactory bamFactory =
     bamRecognizer,
     bamLoader,
     };
-#endif//def USE_BAM
 
-#ifdef USE_TABIX
 /*** VCF+tabix Factory - client-side Variant Call Format files compressed & indexed by tabix ***/
 
 static boolean vcfTabixRecognizer(struct customFactory *fac, struct customPp *cpp, char *type,
@@ -2408,7 +2403,6 @@ static struct customFactory vcfTabixFactory =
     vcfTabixRecognizer,
     vcfTabixLoader,
     };
-#endif//def USE_TABIX
 
 /*** makeItems Factory - for track where user interactively creates items. ***/
 
@@ -2772,12 +2766,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &encodePeakFactory);
     slAddTail(&factoryList, &bedDetailFactory);
     slAddTail(&factoryList, &adjacencyFactory);
-#ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
-#endif//def USE_BAM
-#ifdef USE_TABIX
     slAddTail(&factoryList, &vcfTabixFactory);
-#endif//def USE_TABIX
     slAddTail(&factoryList, &makeItemsFactory);
     slAddTail(&factoryList, &bigDataOopsFactory);
     }

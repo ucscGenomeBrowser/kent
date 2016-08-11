@@ -1028,7 +1028,7 @@ NCBI genome/$ncbiGenomeId ($scientificName)</A><BR>
 NCBI assembly/$ncbiAssemblyId ($assemblyLabel)</A><BR>
 
 <B>BioProject information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioProject" TARGET="_blank"> NCBI Bioproject: $ncbiBioProject</A>
-<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample" TARGET="_blank"> NCBI Bioproject: $ncbiBioSample</A>
+<B>BioSample information:</B></I> <A HREF="http://www.ncbi.nlm.nih.gov/bioproject/$ncbiBioSample" TARGET="_blank"> NCBI Biosample: $ncbiBioSample</A>
 </P>
 <HR>
 <P>
@@ -1231,7 +1231,7 @@ This track shows the sequences used in the $assemblyDate $em\$organism$noEm geno
 </P>
 <P>
 Genome assembly procedures are covered in the NCBI
-<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+<A HREF="https://www.ncbi.nlm.nih.gov/assembly/basics/"
 TARGET=_blank>assembly documentation</A>.<BR>
 NCBI also provides
 <A HREF="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
@@ -1241,7 +1241,7 @@ TARGET="_blank">specific information about this assembly</A>.
 The definition of this assembly is from the
 <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/$db/bigZips/$db.agp.gz"
 TARGET=_blank>AGP file</A> delivered with the sequence.  The NCBI document
-<A HREF="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+<A HREF="https://www.ncbi.nlm.nih.gov/assembly/agp/AGP_Specification/"
 TARGET=_blank>AGP Specification</A> describes the format of the AGP file.
 </P>
 <P>

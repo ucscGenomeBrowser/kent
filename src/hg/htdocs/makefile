@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 
 GIT = git
@@ -34,9 +35,9 @@ beta:
 	${MAKE} doInstall destDir=qateam@hgwbeta:${DOCUMENTROOT} 
 	${MAKE} doInstall destDir=${DOCUMENTROOT}-beta
 
-# Run rsync.  Care is taking to preserve times and mode on files.  rsync is
-# smart about recreating file under the current users so that times and
-# permissions maybe modified.  However, problems happen when a directory
+# Run rsync. Care is taken to preserve times and modes on files.  rsync is
+# smart about recreating files under the current users so that times and
+# permissions may be modified.  However, problems happen when a directory
 # is not owned by the current users.  These options attemp to work around it.
 # use care in changing
 rsyncOpts = --times --recursive --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl' --exclude='style/*'

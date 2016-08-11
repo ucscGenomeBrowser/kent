@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build encode loader
 
 include ../../../inc/common.mk

@@ -1,0 +1,31 @@
+# config parameters for makeGenomeDb.pl:
+db gorGor5
+clade mammal
+genomeCladePriority 35
+scientificName Gorilla gorilla gorilla
+commonName GoriLla
+assemblyDate Mar. 2016
+assemblyLabel UNIVERSITY OF WASHINGTON
+assemblyShortLabel GSMRT3
+orderKey 23180
+# no mito sequence in this assembly
+# gorGor3.1 used refseq sequence: NC_011120.1
+# reuse the 'official' one from gorGor4: LN611626.1
+mitoAcc LN611626.1
+fastaFiles /hive/data/genomes/gorGor5/ucsc/*.fa.gz
+# agpFiles /hive/data/genomes/gorGor5/ucsc/*.agp
+# there are zero gaps (N's) in these contigs
+#  these numbers can be small with no effect:
+fakeAgpMinContigGap 1
+fakeAgpMinScaffoldGap 100
+# qualFiles none
+dbDbSpeciesDir gorilla
+photoCreditURL https://commons.wikimedia.org/wiki/User:Arpingstone
+photoCreditName Wikimedia Commons/Adrian Pingstone
+ncbiGenomeId 2156
+ncbiAssemblyId 705391
+ncbiAssemblyName GSMRT3
+ncbiBioProject PRJEB10880
+ncbiBioSample SAMEA3541598
+genBankAccessionID GCA_900006654.1
+taxId 9595

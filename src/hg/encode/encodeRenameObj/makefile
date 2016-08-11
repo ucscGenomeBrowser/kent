@@ -1,3 +1,4 @@
+kentSrc = ../../..
 COPT= -g
 include ../../../inc/common.mk
 

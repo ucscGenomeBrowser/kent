@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 include ../../inc/cgi_build_rules.mk
 

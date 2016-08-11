@@ -40,6 +40,21 @@ if ((wikiHost!=NULL) && sameString(wikiHost, "HTTPHOST"))
 return cloneString(wikiHost);
 }
 
+boolean loginUseHttps()
+/* Return TRUE unless https is disabled in hg.conf. */
+{
+return cfgOptionBooleanDefault(CFG_LOGIN_USE_HTTPS, TRUE);
+}
+
+static char *loginUrl()
+/* Return the URL for the login host. */
+{
+char buf[2048];
+safef(buf, sizeof(buf), "http%s://%s/cgi-bin/hgLogin",
+      loginUseHttps() ? "s" : "", wikiLinkHost());
+return cloneString(buf);
+}
+
 boolean wikiLinkEnabled()
 /* Return TRUE if all wiki.* parameters are defined in hg.conf . */
 {
@@ -102,8 +117,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLoginUrl called when login system is not enabled "
            "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
+        "%s?hgLogin.do.displayLoginPage=1&returnto=%s",
+        loginUrl(), returnUrl);
     } 
 else 
     {
@@ -136,8 +151,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserLogoutUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.displayLogout=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), returnUrl);
+        "%s?hgLogin.do.displayLogout=1&returnto=%s",
+        loginUrl(), returnUrl);
     } 
 else
     {
@@ -172,8 +187,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkUserSignupUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.signupPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        "%s?hgLogin.do.signupPage=1&returnto=%s",
+        loginUrl(), retEnc);
     }
 else
     {
@@ -200,8 +215,8 @@ if (loginSystemEnabled())
         errAbort("wikiLinkChangePasswordUrl called when login system is not enabled "
             "(specified in hg.conf).");
     safef(buf, sizeof(buf),
-        "http%s://%s/cgi-bin/hgLogin?hgLogin.do.changePasswordPage=1&returnto=%s",
-        cgiAppendSForHttps(), wikiLinkHost(), retEnc);
+        "%s?hgLogin.do.changePasswordPage=1&returnto=%s",
+        loginUrl(), retEnc);
     }
 else
     {

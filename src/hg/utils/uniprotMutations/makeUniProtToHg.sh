@@ -4,17 +4,22 @@
 # *ALL* was stolen from Markd's script LS-SNP pipeline
 # file: snpProtein/build/Makefile
 
+# parameters:
+# $1 = the uniprotToTab output directory
+# $2 = the UCSC database name, e.g. hg19 or hg38 or else
+# currently requires a knownGene table in this database
+
 if [ "$1" == "" ]; then
-        echo Please specify a db
+        echo Please specify a uniprotToTab directory and a db
         exit 0
 fi
-hgDb=$1
+
+# this has to be created by the uniprotToTab parser (originally from the publications track code)
+UNIPROTFAGZ=$1/uniprot.9606.fa.gz
+hgDb=$2
 
 # if you change BLASTDIR, also must change the cluster script mapUniprot_doBlast
 BLASTDIR=/cluster/bin/blast/x86_64/blast-2.2.16/bin
-
-# this was created by the uniprot parser as part of the publications source code
-UNIPROTFAGZ=/hive/data/inside/pubs/parsedDbs/uniprot.9606.fa.gz
 
 CLUSTER=ku
 # stop on errors
@@ -50,4 +55,5 @@ ssh $CLUSTER "cd `pwd`/upMap/work && para make jobList"
 # sort, pick the best alignments for each protein and then pslMap through them
 find upMap/work/aligns -name '*.psl' | xargs cat | pslSelect -qtPairs=upMap/work/ucscUniProt.pairs stdin stdout | sort -k 14,14 -k 16,16n -k 17,17n > upMap/work/uniProtVsUcscMRna.psl
 pslMap upMap/work/uniProtVsUcscMRna.psl upMap/work/ucscMRna.psl upMap/work/uniProtVsGenome.psl
-sort -k10,10 upMap/work/uniProtVsGenome.psl | pslCDnaFilter stdin -globalNearBest=0  -bestOverlap -filterWeirdOverlapped stdout | sort | uniq > ./uniProtTo$hgDb.psl
+# 2016: lowering to 99% identity due to hg38 alt loci taking away our alignments
+sort -k10,10 upMap/work/uniProtVsGenome.psl | pslCDnaFilter stdin -globalNearBest=0.99  -bestOverlap -filterWeirdOverlapped stdout | sort | uniq > ./uniProtTo$hgDb.psl

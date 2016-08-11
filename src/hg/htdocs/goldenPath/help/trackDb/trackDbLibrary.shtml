@@ -160,6 +160,9 @@
     <A onclick="return jumpTo(this);" HREF="#">bedGraph</A>,
     <A onclick="return jumpTo(this);" HREF="#">bedRnaElements</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigBed</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigPsl</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigChain</A>,
+    <A onclick="return jumpTo(this);" HREF="#">bigMaf</A>,
     <A onclick="return jumpTo(this);" HREF="#">bigWig</A>,
     <A onclick="return jumpTo(this);" HREF="#">broadPeak</A>,
     <A onclick="return jumpTo(this);" HREF="#">chain</A>,
@@ -487,14 +490,17 @@
     <LI>$T - database table name</LI>
     <LI>$S - chromomosome name (scaffold name on
     scaffold assemblies)</LI>
-    <LI>$[ - chromStart location (relative to zero)</LI>
-    <LI>$] - chromEnd location (relative to one)</LI>
+    <LI>$[ - left-most position of current viewing window (relative to zero)</LI>
+    <LI>$] - right-most position of current viewing window (relative to one)</LI>
+    <LI>${ - start location of clicked item (relative to zero)</LI>
+    <LI>$} - end location of clicked item (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
     <LI>  $D - database name (e.g. "hg19")</LI>
     <LI>  $P - item name portion before first : in name</LI>
-    <LI>  $p - item name portion after first : in name
-    up to next colon</LI>
+    <LI>  $p - item name portion after first : in name up to next colon</LI>
+    <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
+    <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
     </UL>
 
     <P>The URL can either be a full external URL or local to the web site.</P>
@@ -600,7 +606,7 @@
     description and configuration pages.
     This setting has three parts:</P>
     <UL>
-    <LI>icon -  Currently must refer to an icon in the Browser's images directory in the 
+    <LI>icon -  Can be fully qualified URL (http, https, ftp) to an image file,  or the name of an image in the Browser's images directory in the 
     Browser source tree.</LI>
     <LI>html - A relative or full html path to a description document explaining the
     icon's meaning.  This page displays when the user clicks on the icon.</LI>
@@ -693,14 +699,17 @@
     <LI>$T - database table name</LI>
     <LI>$S - chromomosome name (scaffold name on
     scaffold assemblies)</LI>
-    <LI>$[ - chromStart location (relative to zero)</LI>
-    <LI>$] - chromEnd location (relative to one)</LI>
+    <LI>$[ - left-most position of current viewing window (relative to zero)</LI>
+    <LI>$] - right-most position of current viewing window (relative to one)</LI>
+    <LI>${ - start location of clicked item (relative to zero)</LI>
+    <LI>$} - end location of clicked item (relative to one)</LI>
     <LI>$s - chromosome name without <i>chr</i> prefix (or without <i>scaffold_</i> or 
     <i>Scaffold_</i> prefix on scaffold assemblies)</LI>
     <LI>  $D - database name (e.g. "hg19")</LI>
     <LI>  $P - item name portion before first : in name</LI>
-    <LI>  $p - item name portion after first : in name
-    up to next colon</LI>
+    <LI>  $p - item name portion after first : in name, up to next colon</LI>
+    <LI>  $taxId - NCBI Taxon ID of current organism (from hgCentral.dbDb)</LI>
+    <LI>  $n - Scientific Name of current organism (from hgCentral.dbDb)</LI>
     </UL>
     <P>The default prompt the user will see for this url is "outside link:".  Use
     <code>urlLabel</code> to provide a more informative prompt.
@@ -841,9 +850,9 @@
     then the mouse over will fallback to the name field. </P>
     <P>
     To make this work, create a bigBed file with at least 8 columns and put the
-    text for the mouse over into extended an bigBed field as
+    text for the mouse over into an extended bigBed field as
     explained in example 3 of the <a href="/goldenPath/help/bigBed.html">bigBed documentation</a>.
-    The field name from your .as file is the field name referenced in this statement.
+    The field name from your .as file is the field name for this statement.
     </P> 
 
     <P><B>Example:</B></P>

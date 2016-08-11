@@ -1,155 +1,35 @@
-<!-- News Section ============================================- -->  
-<TABLE style="background-color:#888888; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-    <TR><TD>        
-    <TABLE style="background-color:#fffee8; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-        <TR><TD>        
-        <TABLE style="background-color:#D9E4F8; background-image: url('images/hr.gif'); width: 100%; border: 0px">
-            <TR><TD>
-            <!--cheap trick to get background on row to be continuous-->
-            <TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-                <TR><TD ALIGN="left">
-                 <font size="4"><a name="TOC"></a><b>&nbsp; News</b></font><a href="http://www.twitter.com/GenomeBrowser" target="_blank"><img src="http://twitter-badges.s3.amazonaws.com/t_small-a.png" title="Follow &#64;GenomeBrowser on Twitter" alt="Follow &#64;GenomeBrowser on Twitter" style="vertical-align:text-bottom; margin-left: 15px;"></a>
-                 <a title="Genome Browser Facebook page"
-                 href="http://www.facebook.com/ucscGenomeBrowser"
-                 target="_blank"><img
-                 src="/images/FB-f-Logo__blue_22.jpg"
-                 style="vertical-align:text-bottom; margin-left: 15px;"
-                 alt="Genome Browser Facebook page"></a>
-                 <a href="https://plus.google.com/107643636314131661344" rel="publisher"></a>
-               </TD>
-                <TD ALIGN="right"><A HREF="goldenPath/newsarch.html"><IMG 
-                SRC="images/news.jpg" ALT="" ALIGN="right" BORDER=0></A>
-            </TD></TR></TABLE>
-        </TD></TR></TABLE>
-        <TABLE style="background-color:#fffee8; width: 100%; padding: 0px">
-          <TR><TH HEIGHT=3></TH></TR>
-          <TR><TD WIDTH=10></TD>
-          <TD>
-          <P>
-          To receive announcements of new genome 
-          assembly releases, new software features, updates and 
-          training seminars by email, subscribe to the
-          <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
-          TARGET=_blank>genome-announce</A> mailing list. Please see our
-          <a href="http://genome.ucsc.edu/blog"
-          target=_blank>blog</a> for posts about Genome Browser tools, features, projects and more.
-          </p>
-   
-     <hr>      
-    <!-- start news -->
+<!-- News item template:
 
-  <font color="#006666" size="4"><b>15 June 2016 - New Official Asian Mirror Released</b></font>
-  <p>
-  We are pleased to announce the introduction of a new supported Genome Browser mirror 
-  to serve our users in Asia. The genome-asia server 
-  <a href="http://genome-asia.ucsc.edu" target="_blank">(http://genome-asia.ucsc.edu)</a>, 
-  which is administered by UCSC, is physically located at the 
-  <a href="http://www.yokohama.riken.jp/english/" target="_blank">RIKEN Yokohama Campus</a>
-  in Japan.
-  </p>
-  <p>
-  Genome-asia is intended as an alternate, faster access point for those Browser users 
-  who are geographically closer to Asia than to the western United States. The mirror 
-  is functionally identical to the U.S.-based server, with one exception. Custom tracks 
-  residing on the U.S. server are not automatically accessible from the genome-asia mirror; 
-  therefore, the use of these custom tracks and saved sessions containing them will require 
-  some manual intervention.
-  </p>
-  <p>
-  Genome Browser users located in Asia will be automatically redirected to genome-asia 
-  when they click the "Genomes" menu item on the Genome Browser home page, but will have 
-  the option to remain on the U.S.-based server. In addition to the 
-  genome-asia mirror, we continue to support a Europe-based Genome Browser mirror 
-  <a href="http://genome-euro.ucsc.edu" target="_blank">(http://genome-euro.ucsc.edu)</a>
-  in Bielefeld, Germany. A third-party mirror in 
-  <a href="http://genome-mirror.moma.ki.au.dk/" target="_blank">Aarhus, Denmark</a>, 
-  is available as an emergency backup in the rare event 
-  that our three supported sites are offline.
-  </p>
-  <p>
-  We wish to express our special thanks to Dr. Hideya Kawaji at the 
-  <a href="http://www.riken.jp/en/research/labs/accc/" target="_blank">RIKEN Advanced 
-  Center for Computing and Communication</a> for making this possible. We would also 
-  like to acknowledge the following members of the UCSC Genome Browser team for their efforts: 
-  Galt Barber, Robert Kuhn, Jorge Garcia, and Luvina Guruvadoo.
-  </p>
-  <hr>
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    __DATE__ -
+    <a href="goldenPath/newsarch.html#__MMDDYY__">
+      __HEADLINE__
+    </a></div>
 
-  <font color="#006666" size="4"><b>6 June 2016 - New video:  Exon-only mode</b></font>
-  </P>
-  We are pleased to announce the release to our YouTube channel of a new
-  training <A HREF = "https://www.youtube.com/watch?v=mNEJBOkf_Gk" TARGET = _BLANK>video</A>,
-  in which we demonstrate the recently released Multi-Region feature in
-  exon-only mode.  This feature is useful for those studying gene expression or
-  undertaking whole-exome sequencing.  By removing intronic and intergenic regions,
-  exon-only mode shows the portion (sometimes as little as a few percent) of the
-  genome most useful for these analyses.
-  </P>
-  <P>
-  This video is
-  <A HREF ="training/vids/#vid09" TARGET = _BLANK>indexed</A> 
-  to allow easy access to relevant sections and comes with a transcript for the
-  hard-of-hearing.
-  </P>
-  <P>
-  Thanks to Robert Kuhn and David Gibson for production.
-  </P>
-  <hr>
-
-  <font color="#006666" size="4"><b>1 June 2016 - New Density Graph Feature!</b></font>
-  <p>
-  The Genome Browser is proud to announce a new &quot;density graph&quot; feature for
-  a variety of tracks, including BAM custom tracks, that converts data into a summary display.</p>
-  <p>
-  The density graph feature enables certain track types to be displayed as a bar graph where
-  the height is proportional to the number of reads mapped to each genomic position.
-  Through dynamic calculation of items in the current window, this feature plots a line
-  similar to a wiggle graph that can be customized with a number of
-  <a href="goldenPath/help/hgWiggleTrackHelp.html"
-  target="_blank">graph-based configuration options</a> such as drawing indicator lines,
-  smoothing plots, adjusting graph height and vertical range, and switching from bars to
-  points. Please note that the feature is best displayed with Display mode set to full
-  and that the default is auto-scale data to view. Please note that using this
-  feature on a <a href="goldenPath/help/gbib.html#GbibMirroring"
-  target="_blank">virtual machine Genome Browser in a Box (GBiB)</a> may benefit from
-  increasing memory.</p> 
-  <p>
-  To turn on the feature click into the track controls for certain track types,
-  such as a BAM custom track, and check the box next to &quot;Display data as a
-  density graph&quot; to see graph configurations and then click &quot;Submit&quot;.
-  To see the new density graph feature in use, please see this example
-  <a href="cgi-bin/hgTracks?hgS_doLoadUrl=submit&hgS_loadUrlName=http://genome.ucsc.edu/goldenPath/help/examples/sessions/session.hg19.densityGraph&hgct_customText=track%20type=bam%20name=bamExample%20visibility=full%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/bamExample.bam%20doWiggle=1"
-  target="_blank">session</a>.
-  <p>
-  Thanks to Brian Raney for the implementation of this feature.</p>
-  <hr>
-
-<!-- start archives -->
-<!--staged for future release
-       <p>
-        <font color="#006666" size="4"><b>6 June 2016 - New video:  Exon-only mode</b></font>
-        We are proud to announce a new <A HREF = "">video</A> demonstrating the
-        exon-only feature.  This feature is useful in gene-expresson studies and
-        for those doing whole-exome sequencing.
-        <a href="goldenPath/newsarch.html#060616">Read more</a>.
-       </p>
-
-        <p>
-        <font color="#006666" size="4"><b>1 June 2016 - New Density Graph Feature!</b></font>
-        The Genome Browser is proud to announce a new &quot;density graph&quot; feature for
-        a variety of tracks, including BAM custom tracks, that converts data into a summary display.
-	<a href="goldenPath/newsarch.html#060116">Read more</a>.
-        </p>
+  1. Replace __DATE__ with something like 'Apr. 29, 2016'
+  2. Replace __MMDDYY__ with something like '042916'
+  3. Replace __HEADLINE__ with the news item's headline like 'Awesome New Feature'
+     Be sure to follow the CORRECT STYLE for the headline: 
+        - capitalize first letter of headline -- no other caps except for proper nouns and acronyms
+        - check that headline char count doesn't exceed the line length (otherwise will truncate)
+  4. Drop the bottom item from the list (limit of 3 items at a time)
 -->
-        <p>
-        <font color="#006666" size="4"><b>10 May 2016 - New Gateway Page!</b>: </font>
-        The UCSC Genome Browser team is proud to announce a newly redesigned
-        <a href="../../cgi-bin/hgGateway" target="_blank">Genome Browser Gateway page</a>.
-        Please see our <a href="https://youtu.be/5zc9sqd4SD4"
-        target="_blank">Gateway video</a> for an introduction to these new features.
-        <a href="goldenPath/newsarch.html#051016">Read more</a>.
-       </p>
-            </TD><TD WIDTH=15>
-         </TD></TR></TABLE>
-    <BR></TD></TR></TABLE>
-</TD></TR></TABLE>
+
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016_2">
+      CRAM files now supported
+    </a></div>
+
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016">
+      Updated human and mouse genes tracks
+    </a></div>
+
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Jun. 28, 2016 -
+    <a href="goldenPath/newsarch.html#062816">
+      New way to share sessions - Public Sessions!
+    </a></div>
+

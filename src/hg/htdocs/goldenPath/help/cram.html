@@ -1,0 +1,245 @@
+<!doctype html public "-//w3c//dtd html 3.2//en">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html;CHARSET=iso-8859-1">
+	<title>UCSC Genome Browser: CRAM Track Format</title>
+	<link rel="stylesheet" href="../../style/HGStyle.css">
+</head>
+<body bgcolor="FFF9D2" link="0000CC" vlink="#330066" alink="#330066">
+<a name="top"></a>
+
+
+<table border=0 cellpadding=0 cellspacing=0 width="100%"><tr><th colspan=2
+align="left"><img src="../../images/title.jpg"></th></tr>
+
+<tr><td colspan=2 height=40><!--#include virtual="../../cgi-bin/hgMenubar"--></td></tr>
+<!--content tables------------------------------------------------------->
+<tr><td colspan=2 cellpadding=10>	
+  	<!--outer table is for border purposes-->
+  	<table width="100%" bgcolor="#888888" border="0" cellspacing="0" cellpadding="1"><tr><td>	
+    <table bgcolor="fffee8" width="100%"  border="0" cellspacing="0" cellpadding="0"><tr><td>	
+	<table bgcolor="d9e4f8" background="../../images/hr.gif" width=100%><tr><td>
+		<font size="4"><b>&nbsp; CRAM Track Format</b></font>
+	</td></tr></table>
+	<table bgcolor="fffee8" width="100%" cellpadding=0><tr><th height=10></th></tr>
+	<tr><td width=10>&nbsp;</td><td>
+
+<p>
+The UCSC Genome Browser is capable of displaying both
+the BAM  and CRAM file formats. While
+BAM files contain all sequence data within a file, CRAM
+files are smaller by taking advantage of an additional
+external &quot;reference sequence&quot; file. This file
+is needed to both compress and decompress the read information.
+</p>
+
+<p>
+Since CRAM files are more dense than BAM files, many groups
+are switching to the CRAM format to save disk space. For
+CRAM tracks to load there is an expectation that the checksum of the
+reference sequence used to create the CRAM will be in the CRAM header.
+A file with a matching checksum is also expected to be
+accessible from the EBI CRAM reference registry
+(see <a href="#refs">References</a> for CRAM resources).
+Otherwise, users must specify a <tt>refUrl</tt> setting that will
+point to a server that is offering up the reference sequences (see
+<a href="#example4">Example Four</a>).
+</p>
+
+<p>
+Since the loading of CRAM data requires the specific reference sequence
+used to create the CRAM file, it is very important that the exact same
+reference sequence is used for compression and decompression. When a
+CRAM file is first loaded on a given chromosome, a check for the preexistence
+in a special browser &quot;cramCache&quot; directory of the specified reference
+checksum will take place. If the reference sequence information specific
+for that CRAM for the currently viewed chromosome region does not exist, a message
+will display about the file not being found along with a note about downloading
+the reference from the EBI CRAM reference registry if it is available (or from
+the specified <tt>refUrl</tt>).
+A refresh of the page once the download is
+complete will display the CRAM data as if it were a BAM file.
+</p>
+
+<p>
+The track lines to describe CRAM tracks are identical to track
+lines for BAM tracks. This includes the <tt>type</tt> parameter,
+which is still <tt>bam</tt> even for CRAM tracks. The only
+difference is that instead of providing the URL to a BAM file,
+the URL instead points to a CRAM file.
+</p>
+
+<p>
+Please also note that just as a BAM file
+requires an associated BAM.bai index file, a CRAM file will
+require an associated CRAM.crai index file in the same location to load.
+</p>
+
+<p>
+<h3>Example One</h3>
+</p>
+
+<p>
+Here is an example CRAM track that displays around the gene SOD1
+on hg19 that can be cut and pasted as text into the
+<a href="/cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks</a>
+page:
+</p>
+
+<ul>
+<tt>
+track type=bam db=hg19 name=exampleCRAM bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram
+</tt>
+</ul>
+
+<p>
+Please note at the above URL location there is also a
+<tt>http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram.crai</tt> file.
+</p>
+
+<p>
+Clicking this following link will also load the above track. The information
+following <tt>hgct_customText</tt> is equivalent to pasting the text in to 
+the Custom Tracks page:
+</p> 
+<ul><a href="http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&hgct_customText=track%20type=bam%20name=exampleCRAM%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram"
+target="_blank"><tt>http://genome.ucsc.edu/cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&<b>hgct_customText=</b>track%20type=bam%20name=exampleCRAM%20bigDataUrl=http://genome.ucsc.edu/goldenPath/help/examples/cramExample.cram</tt></a>
+</p>
+</ul>
+
+<p>
+<h3>Example Two</h3>
+</p>
+
+<p>
+If the URL to a CRAM file ends with .cram, you can paste the URL directly
+into the custom track management page, click submit and view it in the Browser.
+The track name will then be the name of the file. If you want to configure
+the track name and descriptions, you will need to create a track line, as shown
+in the above example. Learn more about track line options and configuring custom
+tracks <a href="hgTracksHelp.html#TRACK" target="_blank">here</a>.
+</p>
+<p>
+Here is an example URL to a CRAM file from the 1000 Genomes Project
+that can be pasted directly into the
+<a href="/cgi-bin/hgCustom?db=hg19" target="_blank">Custom Tracks</a>
+page:
+</p>
+<ul>
+<tt>
+ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/exome_alignment/HG00096.mapped.ILLUMINA.bwa.GBR.exome.20120522.bam.cram
+</tt>
+</ul>
+
+<p>
+You can see by adding the above link the Browser automatically assigns the 
+<tt>type=bam</tt> and the <tt>track name=HG00096.mapped.ILLUMINA.bwa.GBR.exome.20120522.bam</tt>
+to the created track to browse.
+</p>
+
+<p>
+Clicking the following image will load a CRAM file from
+the 1000 Genomes Project.
+</p>
+<ul>
+<a href="../../cgi-bin/hgTracks?db=hg19&position=chr21%3A33031597-33041570&hgct_customText=track%20type=bam%20name=%22CRAM Example%22%20description=%22A%201000%20Genomes%20CRAM%20file%22%20visibility=full%20bigDataUrl=ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00139/exome_alignment/HG00139.mapped.ILLUMINA.bwa.GBR.exome.20121211.bam.cram%20doWiggle=1"
+target="_blank"><img src="../../images/session.hg19.cramExample.png"></a>
+<p>
+</ul>
+
+<p>
+This CRAM display takes advantage of using the new &quot;density graph&quot;
+feature where the bam.cram reads are displayed as a bar graph by
+checking the box next to &quot;Display data as a density graph&quot;
+on the Custom Track Settings page.
+</p>
+
+<p>
+<h3>Example Three</h3>
+</p>
+
+<p>
+The CRAM format is also supported in track hubs.  Below is an example
+trackDb.txt stanza that would display a CRAM files from the 1000 Genomes
+Project. To learn more about using Track Hubs see the <a href="hgTrackHubHelp.html"
+target="_blank">User Guide</a> and associated Quick Start Guides to building
+hubs. Note that <tt>type bam</tt> is used to display CRAM files in hubs, just
+as <tt>type bam</tt>  is used in custom CRAM tracks.
+</p>
+
+<pre>
+track cram61
+type bam
+shortLabel HG00361
+longLabel This CRAM file is from the 1000 Genomes Project HG00361
+visibility pack
+bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00361/exome_alignment/HG00361.mapped.ILLUMINA.bwa.FIN.exome.20120522.bam.cram
+</pre>
+
+<p>
+<a name="example4"</a>
+<h3>Example Four</h3>
+</p>
+
+<p>If users do not register their reference sequence with the EBI CRAM reference
+registry then there is the option to use a <tt>refUrl</tt> setting to point the
+browser to the appropriarte place to find the reference sequence. The below example
+is a hub track stanza using the  <tt>refUrl</tt> option:
+<p>
+<pre>
+track cramExample
+type bam
+visibility full
+shortLabel cramExRefUrl
+longLabel This CRAM file points to a reference sequence specified by refUrl
+refUrl http://university.edu/URL/cramRef/%s
+bigDataUrl ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/alignment/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram
+</pre>
+
+<p>
+The use of <tt>refUrl</tt> can also be employed on a custom track line:<br>
+<tt>
+track type=bam db=hg19 name=cramExRefUrl refUrl=http://university.edu/URL/cramRef/%s bigDataUrl=ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase3/data/HG00096/alignment/HG00096.mapped.ILLUMINA.bwa.GBR.low_coverage.20120522.bam.cram 
+</tt>
+</p>
+
+<a name="refs"</a>
+<h3>References</h3>
+
+The below are a collection of helpful CRAM resources:
+<ul>
+<li><a href="http://www.ebi.ac.uk/ena/software/cram-toolkit"
+target="_blank">CRAM toolkit</a></li>
+<li><a href="http://www.ebi.ac.uk/ena/software/cram-reference-registry"
+target="_blank">CRAM reference registry</a></li>
+<li><a href="http://samtools.github.io/hts-specs/CRAMv3.pdf"
+target="_blank">CRAM format specification (version 3.0)</a></li>
+<li><a href="http://www.htslib.org/workflow/#mapping_to_cram"
+target="_blank">Using CRAM within Samtools</a></li>
+<li><a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/README_using_1000genomes_cram.md"
+target="_blank"> International Genome Sample Resource (IGSR) CRAM Tutorial</a></li>
+<li><a href="http://davetang.org/muse/2014/09/26/bam-to-cram/"
+target="_blank">Dave Tang blog post about  &quot;BAM to CRAM&quot</a></li>
+</p>
+</ul>
+
+<h3>Sharing Your Data with Others</h3>
+<p>
+If you would like to share your CRAM data track with a colleague, learn
+how to create a URL by looking at <b><em>Example 11</em></b> on
+<a href="customTrack.html#SHARE">this</a> page.
+</p>
+
+<h3>Activating CRAM support for the Genome Browser</h3>
+<p>
+To find documentation on how to set up CRAM support on a mirror of
+the UCSC Genome Browser please see this following
+<a href="http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=blob_plain;f=src/product/README.cram"
+target="_blank">README.cram</a> file.
+</p>
+
+	</td><td width=15></td></tr></table>
+	<br></td></tr></table>
+	</td></tr></table>
+</td></tr></table>
+</body></html>

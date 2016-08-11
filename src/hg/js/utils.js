@@ -602,10 +602,6 @@ function metadataShowHide(trackName,showLonglabel,showShortLabel)
                 $(cfg).hide();
         }
 
-        if ($(divit).find('table').length === 0) {
-            lookupMetadata(trackName,showLonglabel,showShortLabel);
-            return false;
-        }
     }
     var tr = $(divit).parents('tr');
     if (tr.length > 0) {

@@ -3,7 +3,6 @@
 
 /* Copyright (C) 2014 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
-#ifdef USE_BAM
 
 #include "common.h"
 #include "hash.h"
@@ -134,11 +133,7 @@ singleBamDetails(rightBam);
 printf("</TD></TR></TABLE>\n");
 }
 
-#ifdef USE_HTS
 static int oneBam(const bam1_t *bam, void *data, bam_hdr_t *header)
-#else
-static int oneBam(const bam1_t *bam, void *data)
-#endif
 /* This is called on each record retrieved from a .bam file. */
 {
 const bam1_core_t *core = &bam->core;
@@ -245,4 +240,3 @@ if (isPaired)
     }
 }
 
-#endif//def USE_BAM

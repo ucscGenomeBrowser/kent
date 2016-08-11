@@ -1,3 +1,4 @@
+kentSrc = ../../..
 XINC = -I${MYSQLINC}
 include ../../../inc/common.mk
 

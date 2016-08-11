@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 #pslMap = valgrind --tool=memcheck --num-callers=25 pslMap

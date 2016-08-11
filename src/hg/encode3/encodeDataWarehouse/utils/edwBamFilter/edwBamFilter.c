@@ -46,11 +46,7 @@ void edwBamFilter(char *inBam, char *outBam, char *chrom, boolean multimapped, b
 {
 /* Open file and get header for it. */
 samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
-#ifdef USE_HTS
 bam_hdr_t *head = sam_hdr_read(in);
-#else
-bam_header_t *head = in->header;
-#endif
 unsigned char *skipChrom = needLargeZeroedMem(head->n_targets);
 
 /* Find out index number of chromosome and force it to be skipped. */
@@ -99,11 +95,7 @@ int readCount = 0, writeCount = 0;
 for (;;)
     {
     /* Read next record. */
-#ifdef USE_HTS
     if (sam_read1(in, head, &one)  < 0)
-#else
-    if (samread(in, &one) < 0)
-#endif
 	break;
     ++readCount;
 
@@ -121,11 +113,7 @@ for (;;)
             continue;
 	}
     
-#ifdef USE_HTS
     sam_write1(out, head, &one);
-#else
-    samwrite(out, &one);
-#endif
     ++writeCount;
     }
 samclose(in);

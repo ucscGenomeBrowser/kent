@@ -1,3 +1,4 @@
+kentSrc = ..
 include ../inc/common.mk
 
 O = bandExt.o crudeali.o ffAliHelp.o ffSeedExtend.o fuzzyFind.o \

@@ -17,6 +17,7 @@
 char *restrictFile = NULL;
 double threshold = FLT_MAX;
 boolean rootNames = FALSE;
+boolean ignoreMissing = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -32,6 +33,8 @@ errAbort(
   "   -threshold=N.N - clip values to this threshold\n"
   "   -rootNames - if set just report the root (minus directory and suffix) of file\n"
   "                names when using listOfFiles\n"
+  "   -ignoreMissing - if set do not correlate where either side is missing data\n"
+  "                Normally missing data is treated as zeros\n"
   );
 }
 
@@ -40,6 +43,7 @@ static struct optionSpec options[] = {
    {"restrict", OPTION_STRING},
    {"threshold", OPTION_DOUBLE},
    {"rootNames", OPTION_BOOLEAN},
+   {"ignoreMissing", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -50,21 +54,26 @@ static void addBwCorrelations(struct bbiChromInfo *chrom, struct genomeRangeTree
 /* Find bits of a and b that overlap and also overlap with targetRanges.  Do correlations there */
 {
 struct rbTree *targetRanges = NULL;
+boolean useMissing = !ignoreMissing;
 if (targetGrt != NULL)
     targetRanges = genomeRangeTreeFindRangeTree(targetGrt, chrom->name);
 if (bigWigValsOnChromFetchData(aVals, chrom->name, aBbi) &&
     bigWigValsOnChromFetchData(bVals, chrom->name, bBbi) )
     {
     double *a = aVals->valBuf, *b = bVals->valBuf;
+    Bits *aCov = aVals->covBuf, *bCov = bVals->covBuf;
     if (targetRanges == NULL)
 	{
 	int i, end = chrom->size;
 	for (i=0; i<end; ++i)
 	    {
-	    double aVal = a[i], bVal = b[i];
-	    if (aVal > aThreshold) aVal = aThreshold;
-	    if (bVal > bThreshold) bVal = bThreshold;
-	    correlateNext(c, aVal, bVal);
+	    if (useMissing || (bitReadOne(aCov,i) && bitReadOne(bCov,i)))
+		{
+		double aVal = a[i], bVal = b[i];
+		if (aVal > aThreshold) aVal = aThreshold;
+		if (bVal > bThreshold) bVal = bThreshold;
+		correlateNext(c, aVal, bVal);
+		}
 	    }
 	}
     else
@@ -76,10 +85,13 @@ if (bigWigValsOnChromFetchData(aVals, chrom->name, aBbi) &&
 	    int i;
 	    for (i=start; i<end; ++i)
 		{
-		double aVal = a[i], bVal = b[i];
-		if (aVal > aThreshold) aVal = aThreshold;
-		if (bVal > bThreshold) bVal = bThreshold;
-		correlateNext(c, aVal, bVal);
+		if (useMissing || (bitReadOne(aCov,i) && bitReadOne(bCov,i)))
+		    {
+		    double aVal = a[i], bVal = b[i];
+		    if (aVal > aThreshold) aVal = aThreshold;
+		    if (bVal > bThreshold) bVal = bThreshold;
+		    correlateNext(c, aVal, bVal);
+		    }
 		}
 	    }
 	}
@@ -182,6 +194,7 @@ if (argc != 2 && argc != 3)
 restrictFile = optionVal("restrict", restrictFile);
 threshold = optionDouble("threshold", threshold);
 rootNames = optionExists("rootNames");
+ignoreMissing = optionExists("ignoreMissing");
 if (argc == 3)
     bigWigCorrelatePair(argv[1], argv[2]);
 else

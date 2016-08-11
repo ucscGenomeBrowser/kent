@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 gff3ToPsl = ${DESTBINDIR}/gff3ToPsl

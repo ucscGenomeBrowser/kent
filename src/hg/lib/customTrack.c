@@ -668,7 +668,7 @@ if (endsWith(fileName, ".bb") || endsWith(fileName, ".bigBed") || endsWith(fileN
 if (endsWith(fileName, ".bw") || endsWith(fileName, ".bigWig") ||  
             endsWith(fileName, ".bigwig") || endsWith(fileName, ".bwig"))
     return cloneString("bigWig");
-if (endsWith(fileName, ".bam"))
+if (endsWith(fileName, ".bam") || endsWith(fileName, ".cram"))
     return cloneString("bam");
 if (endsWith(fileName, ".vcf.gz"))
     return cloneString("vcfTabix");

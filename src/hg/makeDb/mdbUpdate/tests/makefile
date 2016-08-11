@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 all: expTest1 chipSeqTest1

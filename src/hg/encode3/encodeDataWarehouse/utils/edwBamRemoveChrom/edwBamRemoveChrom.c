@@ -29,11 +29,7 @@ void edwBamRemoveChrom(char *inBam, char *chrom, char *outBam)
 {
 /* Open file and get header for it. */
 samfile_t *in = bamMustOpenLocal(inBam, "rb", NULL);
-#ifdef USE_HTS
 bam_hdr_t *head = sam_hdr_read(in);
-#else
-bam_header_t *head = in->header;
-#endif
 
 /* Find out index number of chromosome. */
 int i;
@@ -60,11 +56,7 @@ ZeroVar(&one);	// This seems to be necessary!
 for (;;)
     {
     /* Read next record. */
-#ifdef USE_HTS
     if (sam_read1(in, head, &one) < 0)
-#else
-    if (samread(in, &one) < 0)
-#endif
 	break;
 
     /* Just consider mapped reads. */
@@ -73,11 +65,7 @@ for (;;)
 	if (one.core.tid == rmTid)
 	    ++rmCount;
 	else
-#ifdef USE_HTS
 	    sam_write1(out, head, &one);
-#else
-	    samwrite(out, &one);
-#endif
 	}
     }
 samclose(in);

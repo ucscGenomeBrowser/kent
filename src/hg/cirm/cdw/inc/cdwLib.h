@@ -347,11 +347,19 @@ void cdwAsPath(char *format, char path[PATH_LEN]);
 void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage,
-    double *retUniqueMapRatio);
+    double *retUniqueMapRatio, char *assay);
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. */
 
 void cdwMakeTempFastqSample(char *source, int size, char dest[PATH_LEN]);
 /* Copy size records from source into a new temporary dest.  Fills in dest */
+
+void cdwCleanupTrimReads(char *fastqPath, char trimmedPath[PATH_LEN]);
+/* Remove trimmed sample file.  Does nothing if fastqPath and trimmedPath the same. */
+
+boolean cdwTrimReadsForAssay(char *fastqPath, char trimmedPath[PATH_LEN], char *assay);
+/* Look at assay and see if it's one that needs trimming.  If so make a new trimmed
+ * file and put file name in trimmedPath.  Otherwise just copy fastqPath to trimmed
+ * path and return FALSE. */
 
 void cdwMakeFastqStatsAndSample(struct sqlConnection *conn, long long fileId);
 /* Run fastqStatsAndSubsample, and put results into cdwFastqFile table. */
@@ -386,7 +394,7 @@ struct cdwVcfFile *cdwVcfFileFromFileId(struct sqlConnection *conn, long long fi
 char *cdwOppositePairedEndString(char *end);
 /* Return "1" for "2" and vice versa */
 
-struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwValidFile *vf);
+struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValidFile *vf);
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 
 struct cdwQaPairedEndFastq *cdwQaPairedEndFastqFromVfs(struct sqlConnection *conn,
@@ -450,6 +458,9 @@ struct tagStorm *cdwTagStorm(struct sqlConnection *conn);
 /* Load  cdwMetaTags.tags, cdwFile.tags, and select other fields into a tag
  * storm for searching */
 
+char *cdwLookupTag(struct cgiParsedVars *list, char *tag); 
+/* Return first occurence of tag on list, or empty string if not found */
+
 struct tagStorm *cdwUserTagStorm(struct sqlConnection *conn, struct cdwUser *user);
 /* Return tag storm just for files user has access to. */
 
@@ -472,5 +483,9 @@ struct slRef *tagStanzasMatchingQuery(struct tagStorm *tags, char *query);
 struct cgiParsedVars *cdwMetaVarsList(struct sqlConnection *conn, struct cdwFile *ef);
 /* Return list of cgiParsedVars dictionaries for metadata for file.  Free this up 
  * with cgiParsedVarsFreeList() */
+
+void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really);
+/* Remove all records of file from database and from Unix file system if 
+ * the really flag is set.  Otherwise just print some info on the file. */
 
 #endif /* CDWLIB_H */

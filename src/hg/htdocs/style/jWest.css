@@ -92,11 +92,11 @@ div.jwColumn {
 }
 
 div.jwStaticLeftColumn {
-    width: 400px;
+    width: 450px;
 }
 
 div.jwStaticRightColumn {
-    width: 500px;
+    width: 450px;
 }
 
 div.jwFloatLeft {
@@ -187,6 +187,10 @@ li.jwSquareBullet::before {
     left: -1em;
 }
 
+.jwNewsItem {
+    line-height: 30px;
+}
+
 .jwTextBlue {
     color: #003a72;
 }
@@ -201,12 +205,17 @@ div.jwWarningBox {
     text-align: center;
 }
 
+div.jwWarningBoxStatic {
+    width: 875px;
+    margin-left: 5px;
+}
+
 .jwSingleLineRightColumn {
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    width: 455px;
+    width: 425px;
 }
 
 .jwSmallText {
@@ -397,6 +406,7 @@ div.jwFooterIcons {
 
 div.jwFooterContainer {
     background-color: #f9f9f9;
+    margin-top: 20px;
     padding: 20px;
     padding-left: 100px;
     font-size: 14px;
@@ -417,6 +427,12 @@ div.jwFooterCopyright {
 .jwAnchorArrow {
     vertical-align: middle;
     font-size: 0.5em;
+}
+
+.jwSurveyContainer {
+    display: inline-block;
+    padding: 10px;
+    float: right;
 }
 
 /* Layout tweaks for hgGateway.html */

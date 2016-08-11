@@ -19,6 +19,7 @@
 #include "hgConfig.h"
 #include "sessionThumbnail.h"
 #include "jsHelper.h"
+#include "verbose.h"
 
 struct galleryEntry
 /* Holds data for a single session in the gallery*/
@@ -118,7 +119,7 @@ char otherConstraints[80] = "", query[2048], **row;
 
 sqlSafef (query, sizeof(query),
     "select m.realName, s.userName, m.idx, s.sessionName, s.useCount, s.settings, s.contents, s.firstUse from "
-    "%s s left join gbMembers m on m.userName = s.userName where shared = 2%s limit 30"
+    "%s s left join gbMembers m on m.userName = s.userName where shared = 2%s"
     , namedSessionTable, otherConstraints);
 sr = sqlGetResult(conn, query);
 
@@ -293,6 +294,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+setUdcCacheDir();
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

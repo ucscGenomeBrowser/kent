@@ -5,8 +5,8 @@
 track wgEncodeGencodeV22
 compositeTrack on
 superTrack wgEncodeGencodeSuper hide
-shortLabel All GENCODE v22
-longLabel All GENCODE transcripts including comprehensive set v22
+shortLabel All GENCODE V22
+longLabel All GENCODE transcripts including comprehensive set V22
 group genes
 dragAndDrop subTracks
 priority 34.183

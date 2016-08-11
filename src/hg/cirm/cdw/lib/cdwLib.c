@@ -1439,6 +1439,62 @@ vf->experiment = cloneString(experiment);
 #endif
 }
 
+void cdwRemoveQaRecords(struct sqlConnection *conn, long long fileId)
+/* Remove records associated with a file from all of the cdwQaXxx and cdwXxxFile
+ * tables */
+{
+char query[1024];
+sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query),
+    "delete from cdwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), "delete from cdwQaRepeat where fileId=%lld", fileId);
+sqlUpdate(conn, query);
+sqlSafef(query, sizeof(query), 
+    "delete from cdwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
+    fileId, fileId);
+sqlUpdate(conn, query);
+}
+
+void cdwReallyRemoveFile(struct sqlConnection *conn, long long fileId, boolean really)
+/* Remove all records of file from database and from Unix file system if 
+ * the really flag is set.  Otherwise just print some info on the file. */
+{
+struct cdwFile *ef = cdwFileFromId(conn, fileId);
+char *path = cdwPathForFileId(conn, fileId);
+verbose(1, "removing id=%u, submitFileName=%s, path=%s\n", 
+    ef->id, ef->submitFileName, path);
+if (really)
+    {
+    char query[1024];
+    cdwRemoveQaRecords(conn, fileId);
+    sqlSafef(query, sizeof(query),
+	"delete from cdwGroupFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwValidFile where fileId=%lld", fileId);
+    sqlUpdate(conn, query);
+    sqlSafef(query, sizeof(query), "delete from cdwFile where id=%lld", fileId);
+    sqlUpdate(conn, query);
+    mustRemove(path);
+    }
+freez(&path);
+cdwFileFree(&ef);
+}
+
 void cdwFileResetTags(struct sqlConnection *conn, struct cdwFile *ef, char *newTags, 
     boolean revalidate, int submitId)
 /* Reset tags on file, strip out old validation and QA,  schedule new validation and QA. */
@@ -1459,30 +1515,7 @@ if (revalidate)
     sqlUpdate(conn, query);
 
     /* Get rid of records referring to file in other validation and qa tables. */
-    sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwVcfFile where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwQaPairSampleOverlap where elderFileId=%lld or youngerFileId=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query),
-	"delete from cdwQaPairCorrelation where elderFileId=%lld or youngerFileId=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaEnrich where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaContam where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), "delete from cdwQaRepeat where fileId=%lld", fileId);
-    sqlUpdate(conn, query);
-    sqlSafef(query, sizeof(query), 
-	"delete from cdwQaPairedEndFastq where fileId1=%lld or fileId2=%lld",
-	fileId, fileId);
-    sqlUpdate(conn, query);
+    cdwRemoveQaRecords(conn, fileId);
 
     /* schedule validator */
     cdwAddQaJob(conn, ef->id, submitId);
@@ -1506,22 +1539,13 @@ static void scanSam(char *samIn, FILE *f, struct genomeRangeTree *grt, long long
  * miss target during mapping phase, copying those that hit to a little bed file, and 
  * also defining regions covered in a genomeRangeTree. */
 {
-#ifdef USE_BAM
 samfile_t *sf = samopen(samIn, "r", NULL);
-#ifdef USE_HTS
 bam_hdr_t *bamHeader = sam_hdr_read(sf);
-#else
-bam_header_t *bamHeader = sf->header;
-#endif
 bam1_t one;
 ZeroVar(&one);
 int err;
 long long hit = 0, miss = 0, unique = 0, totalBasesInHits = 0;
-#ifdef USE_HTS
 while ((err = sam_read1(sf, bamHeader, &one)) >= 0)
-#else
-while ((err = samread(sf, &one)) >= 0)
-#endif
     {
     int32_t tid = one.core.tid;
     if (tid < 0)
@@ -1552,9 +1576,6 @@ samclose(sf);
 *retMiss = miss;
 *retTotalBasesInHits = totalBasesInHits;
 *retUniqueHitCount = unique;
-#else // no USE_BAM
-warn(COMPILE_WITH_SAMTOOLS, "scanSam");
-#endif//ndef USE_BAM
 }
 
 void cdwReserveTempFile(char *path)
@@ -1564,6 +1585,8 @@ void cdwReserveTempFile(char *path)
 int fd = mkstemp(path);
 if (fd == -1)
      errnoAbort("Couldn't create temp file %s", path);
+if (fchmod(fd, 0664) == -1)
+    errnoAbort("Couldn't change permissions on temp file %s", path);
 mustCloseFd(&fd);
 }
 
@@ -1581,25 +1604,61 @@ void cdwAsPath(char *format, char path[PATH_LEN])
 safef(path, PATH_LEN, "%sas/%s.as", cdwValDataDir, format);
 }
 
+boolean cdwTrimReadsForAssay(char *fastqPath, char trimmedPath[PATH_LEN], char *assay)
+/* Look at assay and see if it's one that needs trimming.  If so make a new trimmed
+ * file and put file name in trimmedPath.  Otherwise just copy fastqPath to trimmed
+ * path and return FALSE. */
+{
+if (sameString(assay, "long-RNA-seq"))
+    {
+    char cmd[3*PATH_LEN];
+    // Make up temp file name for poly-A trimmed file
+    safef(trimmedPath, PATH_LEN, "%scdwFastqPolyFilterXXXXXX", cdwTempDir());
+    cdwReserveTempFile(trimmedPath);
+
+    // Run cdwFastqPolyFilter on the new file then pass the output into BWA. 
+    safef(cmd, sizeof(cmd), "cdwFastqPolyFilter %s %s", 
+	fastqPath, trimmedPath); 
+    mustSystem(cmd);
+    return TRUE;
+    }
+else
+    {
+    strcpy(trimmedPath, fastqPath);
+    return FALSE;
+    }
+}
+
+void cdwCleanupTrimReads(char *fastqPath, char trimmedPath[PATH_LEN])
+/* Remove trimmed sample file.  Does nothing if fastqPath and trimmedPath the same. */
+{
+if (!sameString(fastqPath, trimmedPath))
+    remove(trimmedPath);
+}
+
 void cdwAlignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
     char *fastqPath, struct cdwValidFile *vf, FILE *bedF,
     double *retMapRatio,  double *retDepth,  double *retSampleCoverage, 
-    double *retUniqueMapRatio)
+    double *retUniqueMapRatio, char *assay)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
  * bedF and all the ret parameters can be NULL. */
 {
-/* Hmm, tried doing this with Mark's pipeline code, but somehow it would be flaky the
- * second time it was run in same app.  Resorting therefore to temp files. */
+// Figure out BWA index
 char genoFile[PATH_LEN];
 cdwBwaIndexPath(assembly, genoFile);
 
-char cmd[3*PATH_LEN];
-char *saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, fastqPath, saiName);
+// Trim reads if need be
+char trimmedFile[PATH_LEN];
+cdwTrimReadsForAssay(fastqPath, trimmedFile, assay);
+
+// Run BWA alignment
+char cmd[3*PATH_LEN], *saiName, *samName;
+saiName = cloneString(rTempName(cdwTempDir(), "cdwSample1", ".sai"));
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, trimmedFile, saiName);
 mustSystem(cmd);
 
-char *samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
-safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, fastqPath, samName);
+samName = cloneString(rTempName(cdwTempDir(), "ewdSample1", ".sam"));
+safef(cmd, sizeof(cmd), "bwa samse %s %s %s > %s", genoFile, saiName, trimmedFile, samName);
 mustSystem(cmd);
 remove(saiName);
 
@@ -1620,6 +1679,9 @@ if (retSampleCoverage)
     *retSampleCoverage = (double)basesHitBySample/assembly->baseCount;
 if (retUniqueMapRatio)
     *retUniqueMapRatio = (double)uniqueHitCount/(hitCount+missCount);
+
+// Clean up and go home
+cdwCleanupTrimReads(fastqPath, trimmedFile);
 genomeRangeTreeFree(&grt);
 remove(samName);
 }
@@ -1673,18 +1735,20 @@ if (fqf == NULL)
     {
     char *path = cdwPathForFileId(conn, fileId);
     char statsFile[PATH_LEN], sampleFile[PATH_LEN];
+    char command[3*PATH_LEN];
+    // Cut adapt on RNA seq files. 
     safef(statsFile, PATH_LEN, "%scdwFastqStatsXXXXXX", cdwTempDir());
     cdwReserveTempFile(statsFile);
     char dayTempDir[PATH_LEN];
     safef(sampleFile, PATH_LEN, "%scdwFastqSampleXXXXXX", cdwTempDirForToday(dayTempDir));
     cdwReserveTempFile(sampleFile);
-    char command[3*PATH_LEN];
+    // For RNA seq files run on the fastqTrimmed output, otherwise run on the unaltered CDW file.  
     safef(command, sizeof(command), "fastqStatsAndSubsample -sampleSize=%d -smallOk %s %s %s",
 	cdwSampleTargetSize, path, statsFile, sampleFile);
     mustSystem(command);
-    safef(command, sizeof(command), "gzip %s", sampleFile);
+    safef(command, sizeof(command), "gzip -c %s > %s.fastq.gz", sampleFile, sampleFile);
     mustSystem(command);
-    strcat(sampleFile, ".gz");
+    strcat(sampleFile, ".fastq.gz");
     fqf = cdwFastqFileOneFromRa(statsFile);
     fqf->fileId = fileId;
     fqf->sampleFileName = cloneString(sampleFile);
@@ -1864,16 +1928,16 @@ else
     }
 }
 
-struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwValidFile *vf)
+struct cdwValidFile *cdwOppositePairedEnd(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValidFile *vf)
 /* Given one file of a paired end set of fastqs, find the file with opposite ends. */
 {
 char *otherEnd = cdwOppositePairedEndString(vf->pairedEnd);
 char query[1024];
 sqlSafef(query, sizeof(query), 
     "select cdwValidFile.* from cdwValidFile join cdwFile on cdwValidFile.fileId=cdwFile.id"
-    " where experiment='%s' and outputType='%s' and replicate='%s' "
+    " where experiment='%s' and submitDirId=%d and outputType='%s' and replicate='%s' "
     " and part='%s' and pairedEnd='%s' and itemCount=%lld and deprecated=''"
-    , vf->experiment, vf->outputType, vf->replicate, vf->part, otherEnd
+    , vf->experiment, ef->submitDirId, vf->outputType, vf->replicate, vf->part, otherEnd
     , vf->itemCount);
 struct cdwValidFile *otherVf = cdwValidFileLoadByQuery(conn, query);
 if (otherVf == NULL)

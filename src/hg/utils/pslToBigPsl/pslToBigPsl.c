@@ -46,6 +46,13 @@ struct bigPsl bigPsl;
 if (psl->blockCount > MAX_BLOCKS)
     errAbort("psl has more than %d blocks, make MAX_BLOCKS bigger in source", MAX_BLOCKS);
 
+// make sure blocks are represented on reference's positive strand as required by BED format
+boolean didRc = FALSE;
+if (psl->strand[1] == '-')
+    {
+    didRc = TRUE;
+    pslRc(psl); 
+    }
 
 bigPsl.chrom = psl->tName;
 bigPsl.chromSize = psl->tSize;
@@ -64,8 +71,8 @@ bigPsl.name = psl->qName;
 bigPsl.score = 1000;
 bigPsl.strand[0] = psl->strand[0];
 bigPsl.strand[1] = 0;
-if (psl->strand[1])
-    bigPsl.oStrand[0] = psl->strand[1];
+if (didRc)
+    bigPsl.oStrand[0] = '-';
 else
     bigPsl.oStrand[0] = '+';
 bigPsl.oStrand[1] = 0;
@@ -75,6 +82,7 @@ bigPsl.blockSizes = (int *)blockSizes;
 bigPsl.chromStarts = (int *)blockStarts;
 bigPsl.oChromStarts = (int *)oBlockStarts;
 bigPsl.oSequence = "";
+bigPsl.oCDS = "";
 int ii;
 for(ii=0; ii < bigPsl.blockCount; ii++)
     {
@@ -124,6 +132,9 @@ void pslToBigPsl(char *pslFile, char *bigPslOutput, char *fastaFile, char *cdsFi
 struct psl *psl = pslLoadAll(pslFile);
 struct hash *fastHash = NULL;
 struct hash *cdsHash = NULL;
+
+if (pslIsProtein(psl))
+    errAbort("error: bigPsl does not support protein psls");
 
 if (fastaFile != NULL)
     {

@@ -6,13 +6,11 @@
 #include "dnaseq.h"
 #include "dystring.h"
 
-#ifdef USE_BAM
 
 // bam.h is incomplete without _IOLIB set to 1, 2 or 3.  2 is used by Makefile.generic:
 #ifndef _IOLIB
 #define _IOLIB 2
 #endif
-#ifdef USE_HTS
 #include "htslib/sam.h"
 typedef samFile samfile_t;
 typedef hts_idx_t bam_index_t;
@@ -28,25 +26,7 @@ typedef int (*bam_fetch_f)(const bam1_t *bam, void *data, bam_hdr_t *header) ;
 #define bam1_seqi bam_seqi
 #define bam_nt16_rev_table seq_nt16_str
 #define data_len l_data
-#else
-#include "bam.h"
-#include "sam.h"
-#endif
 
-#else // no USE_BAM
-typedef struct { } bam1_t;
-typedef struct { } bam_index_t;
-typedef struct { } samfile_t;
-typedef int (*bam_fetch_f)(const bam1_t *b, void *data);
-
-#define COMPILE_WITH_SAMTOOLS "%s: in order to use this functionality you must " \
-    "install the samtools library (<A HREF=\"http://samtools.sourceforge.net\" " \
-    "TARGET=_BLANK>http://samtools.sourceforge.net</A>) and recompile kent/src with " \
-    "USE_BAM=1 in your environment " \
-    "(see <A HREF=\"http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables\" " \
-    "TARGET=_BLANK>http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables</A>)."
-
-#endif // USE_BAM
 
 struct bamChromInfo
     {
@@ -76,11 +56,7 @@ samfile_t *bamMustOpenLocal(char *fileName, char *mode, void *extraHeader);
  * The implementation is just a wrapper around samopen from the samtools library
  * that aborts with error message if there's a problem with the open. */
 
-#ifdef USE_HTS
 void bamFetchAlreadyOpen(samfile_t *samfile, bam_hdr_t *header,  bam_index_t *idx, char *bamFileName, 
-#else
-void bamFetchAlreadyOpen(samfile_t *samfile, bam_index_t *idx, char *bamFileName, 
-#endif
 			 char *position, bam_fetch_f callbackFunc, void *callbackData);
 /* With the open bam file, return items the same way with the callbacks as with bamFetch() */
 /* except in this case use an already-open bam file and index (use bam_index_load and free() for */
@@ -116,7 +92,6 @@ INLINE int bamUnpackCigarElement(unsigned int packed, char *retOp)
  * array of BAM-enhanced-CIGAR ASCII characters (operations), store operation 
  * char into *retOp (retOp must not be NULL) and return the number of bases. */
 {
-#ifdef USE_BAM
 // decoding lifted from samtools bam.c bam_format1_core(), long may it remain stable:
 #define BAM_DOT_C_OPCODE_STRING "MIDNSHP=X"
 int n = packed>>BAM_CIGAR_SHIFT;
@@ -128,10 +103,6 @@ if (opcode >= strlen(BAM_DOT_C_OPCODE_STRING))
 	     opcode, (unsigned long)(strlen(BAM_DOT_C_OPCODE_STRING)-1));
 *retOp = BAM_DOT_C_OPCODE_STRING[opcode];
 return n;
-#else // no USE_BAM
-errAbort(COMPILE_WITH_SAMTOOLS, "bamUnpackCigarElement");
-return 0;
-#endif// USE_BAM
 }
 
 void bamGetSoftClipping(const bam1_t *bam, int *retLow, int *retHigh, int *retClippedQLen);

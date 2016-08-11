@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build all directories in makeDb 
 
 include ../../../inc/common.mk

@@ -182,7 +182,7 @@ ncbiAssemblyReportFile GCF_000*.assembly.txt
     if the RefSeq folks alter a chromosome or contig, the mapping will have to
     be deduced by you from NCBI Nucleotide sequence descriptions.
     HOW TO find this file for your assembly:
-    1. Search in Entrez Assembly (http://www.ncbi.nlm.nih.gov/assembly/)
+    1. Search in Entrez Assembly (https://www.ncbi.nlm.nih.gov/assembly/)
        for the refAssemblyLabel value (see above)
     2. Select the most recent matching assembly
     3. Find the link labeled 'Download the full sequence report' and copy
@@ -359,7 +359,6 @@ cd $assemblyDir
 $wget ftp://ftp.ncbi.nih.gov/snp/00readme.txt
 cd $assemblyDir/data
 set orgDir = $orgDir
-set orgDirTrimmed = $orgDirTrimmed
 # $ContigLoc table has coords, orientation, loc_type, and refNCBI allele
 $wget $ftpSnpDb/$ContigLoc.bcp.gz
 # $ContigLocusId table has functional annotations
@@ -386,6 +385,9 @@ $wget $ftpSharedSchema/dbSNP_main_table.sql.gz
 # using headers of fasta files for molType, class, observed
 cd $assemblyDir/rs_fasta
 $wget ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/rs_fasta/\\*.gz
+
+# Make all files group writeable so others can update them if necessary
+find $buildDir -user \$USER -not -perm -660 | xargs chmod ug+w
 
 # Extract the set of assembly labels in case we need to exclude any.
 zcat $assemblyDir/data/$ContigInfo.bcp.gz | cut -f $groupLabelCol | uniq | sort -u \\
@@ -616,7 +618,7 @@ sub getNcbiAssemblyReportFile() {
   # with multiple assembly report files.
   my $assemblyLabel = $assemblyLabels[0];
   my $ua = LWP::UserAgent->new;
-  my $eUtilBase = 'http://eutils.ncbi.nlm.nih.gov/entrez/eutils';
+  my $eUtilBase = 'https://eutils.ncbi.nlm.nih.gov/entrez/eutils';
   my $assemblyIdQuery = "$eUtilBase/esearch.fcgi?db=assembly&term=$assemblyLabel";
   my $assemblyId = eUtilQuery($ua, $assemblyIdQuery, '<Id>(\d+)<');
   if (! defined $assemblyId) {
@@ -661,27 +663,31 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
     my (undef, $seqRole, $chr, undef, $gbAcc, $hopefullyEqual, $refSeqAcc) = split("\t");
     (my $rsaTrimmed = $refSeqAcc) =~ s/\.\d+$//;
     (my $gbaTrimmed = $gbAcc) =~ s/\.\d+$//;
-    # hg38 contig names keep the version number, replacing the '.' with 'v':
-    if ($db eq 'hg38') {
-      ($gbaTrimmed = $gbAcc) =~ s/\./v/;
-    }
+    # contig names for more recent assemblies keep the version number, replacing the '.' with 'v':
+    (my $altTrimmed = $gbAcc) =~ s/\./v/;
     if (exists $missingContigs{$rsaTrimmed}) {
       my $ucscName;
       if ($chr eq "na") {
-	if ($db eq 'susScr3') {
-	  $ucscName = $gbAcc;
-	  $ucscName =~ s/\./-/;
-	} else {
-	  $ucscName = "chrUn_$gbaTrimmed";
-	}
+        if ($db eq 'susScr3') {
+          $ucscName = $gbAcc;
+          $ucscName =~ s/\./-/;
+        } else {
+          $ucscName = "chrUn_$gbaTrimmed";
+        }
       } else {
-	$chr = "M" if ($chr eq "MT");
-	$chr = "chr$chr" unless ($chr =~ /^chr/);
-	my $suffix = 'random';
-	if ($db eq 'hg38' && $seqRole eq 'alt-scaffold') {
-	  $suffix = 'alt';
-	}
-	$ucscName = join('_', $chr, $gbaTrimmed, $suffix);
+        $chr = "M" if ($chr eq "MT");
+        $chr = "chr$chr" unless ($chr =~ /^chr/);
+        my $suffix = 'random';
+        if ($db eq 'hg38' && $seqRole eq 'alt-scaffold') {
+          $suffix = 'alt';
+        }
+        $ucscName = join('_', $chr, $gbaTrimmed, $suffix);
+      }
+      # If a ucsc name without the version number isn't found, try it with.
+      # (e.g., chrUn_GJ057137 vs. chrUn_GJ057137v1)
+      (my $altName = $ucscName) =~ s/$gbaTrimmed/$altTrimmed/;
+      if (!exists $chromSizes->{$ucscName}) {
+        ($ucscName, $altName) = ($altName, $ucscName);
       }
       if (exists $chromSizes->{$ucscName}) {
 	if ($hopefullyEqual ne '=') {
@@ -700,7 +706,7 @@ sub tryToMakeLiftUpFromNcbiAssemblyReportFile {
 	  $liftUpCount++;
 	}
       } else {
-	push @missingInfo, [ "$seqRole (no $ucscName in chrom.sizes)", $rsaTrimmed, $chr ];
+	push @missingInfo, [ "$seqRole (no $ucscName or $altName in chrom.sizes)", $rsaTrimmed, $chr ];
       }
     } # else this contig is not in our missing list; ignore it.
   }
@@ -1432,6 +1438,7 @@ sub codingDbSnp {
   my $whatItDoes = "It processes dbSNP's functional annotations into ${snpBase}CodingDbSnp.";
   my $bossScript = new HgRemoteScript("$runDir/coding.csh",
 				      $dbHost, $runDir, $whatItDoes, $CONFIG);
+  $liftUp = "$runDir/$liftUp" if ($liftUp !~ /^\//);
   $bossScript->add(<<_EOF_
     zcat ncbiFuncAnnotations.txt.gz \\
     | $Bin/fixNcbiFuncCoords.pl ncbiFuncInsertions.ctg.bed.gz \\
@@ -1442,7 +1449,7 @@ sub codingDbSnp {
     cut -f 6 ncbiFuncAnnotationsFixed.txt \\
     | sort -n | uniq -c
     $Bin/collectNcbiFuncAnnotations.pl ncbiFuncAnnotationsFixed.txt \\
-    | liftUp ${snpBase}CodingDbSnp.bed suggested.lft warn stdin
+    | liftUp ${snpBase}CodingDbSnp.bed $liftUp warn stdin
     hgLoadBed $db ${snpBase}CodingDbSnp -sqlTable=\$HOME/kent/src/hg/lib/snp125Coding.sql \\
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \\
       ${snpBase}CodingDbSnp.bed

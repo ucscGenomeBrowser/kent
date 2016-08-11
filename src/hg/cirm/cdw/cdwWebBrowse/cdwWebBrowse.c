@@ -18,6 +18,8 @@
 #include "rql.h"
 #include "intValTree.h"
 #include "cart.h"
+#include "cartDb.h"
+#include "jksql.h"
 #include "cdw.h"
 #include "cdwLib.h"
 #include "cdwValid.h"
@@ -35,6 +37,8 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 
+char *excludeVars[] = {"cdwCommand", "submit", NULL};
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -42,6 +46,9 @@ errAbort(
   "cdwWebBrowse is a cgi script not meant to be run from command line.\n"
   );
 }
+
+// fields/columns of the browse file table
+#define FILETABLEFIELDS "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,tem_count,body_part"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -292,9 +299,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     long long size = atoll(fileSize);
     printf("Tags associated with %s a %s format file of size ", fileName, format);
     printLongWithCommas(stdout, size);
+     
     printf("<BR>\n");
-
-
     static char *outputFields[] = {"tag", "value"};
     struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
     int fieldIx = 0;
@@ -327,6 +333,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     webSortableFieldedTable(cart, table, returnUrl, "cdwOneFile", 0, outputWrappers, NULL);
     fieldedTableFree(&table);
     }
+sqlFreeResult(&sr);
 }
 
 struct dyString *customTextForFile(struct sqlConnection *conn, struct cdwTrackViz *viz)
@@ -658,22 +665,19 @@ slFreeList(&nameList);
 return dyStringCannibalize(&dy);
 }
 
-
-void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
-    char *searchString, char *allFields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, 
-    struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize)
+void searchFilesWithAccess(struct sqlConnection *conn, char *searchString, char *allFields, \
+    char* initialWhere, struct cdwFile **retList, struct dyString **retWhere, char **retFields)
 {
-char *fields = filterFieldsToJustThoseInTable(conn, allFields, "cdwFileTags");	    // TODO - remove and show Max bug
-/* Get list of files we are authorized to see, and return early if empty */
-struct cdwFile *ef, *efList = cdwAccessibleFileList(conn, user);
+/* Get list of files that we are authorized to see and that match searchString in the trix file
+ * Returns: retList of matching files, retWhere with sql where expression for these files, retFields
+ * If nothing to see, retList is NULL
+ * */
+char *fields = filterFieldsToJustThoseInTable(conn, allFields, "cdwFileTags");
+struct cdwFile *efList = cdwAccessibleFileList(conn, user);
+
 if (efList == NULL)
     {
-    if (user != NULL && user->isAdmin)
-	printf("<BR>The file database is empty.");
-    else
-	printf("<BR>Unfortunately there are no %s you are authorized to see.", itemPlural);
+    *retList = NULL;
     return;
     }
 
@@ -702,6 +706,7 @@ if (!isEmpty(initialWhere))
      dyStringPrintf(where, "(%s) and ", initialWhere);
 dyStringPrintf(where, "file_id in (0");	 // initial 0 never found, just makes code smaller
 int accessCount = 0;
+struct cdwFile *ef;
 for (ef = efList; ef != NULL; ef = ef->next)
     {
     if (searchPassTree == NULL || intValTreeFind(searchPassTree, ef->id) != NULL)
@@ -712,15 +717,110 @@ for (ef = efList; ef != NULL; ef = ef->next)
     }
 dyStringAppendC(where, ')');
 
+rbTreeFree(&searchPassTree);
+
+// return three variables
+*retWhere  = where;
+*retList   = efList;
+*retFields = fields;
+}
+
+
+struct cdwFile* findDownloadableFiles(struct sqlConnection *conn, struct cart *cart,
+    char* initialWhere, char *searchString)
+/* return list of files that we are allowed to see and that match current filters */
+{
+// get query of files that match and where we have access
+struct cdwFile *efList = NULL;
+struct dyString *accWhere;
+char *fields;
+searchFilesWithAccess(conn, searchString, FILETABLEFIELDS, initialWhere, &efList, &accWhere, &fields);
+
+// reduce query to those that match our filters
+struct dyString *dummy;
+struct dyString *filteredWhere;
+webTableBuildQuery(cart, "cdwFileTags", accWhere->string, "cdwBrowseFiles", FILETABLEFIELDS, TRUE, &dummy, &filteredWhere);
+
+// get their fileIds
+struct dyString *tagQuery = dyStringNew(0);
+dyStringAppend(tagQuery, NOSQLINJ "SELECT file_id from cdwFileTags "); // XX ask Jim is secure query needed / how to do.
+dyStringAppend(tagQuery, filteredWhere->string);
+struct slName *fileIds = sqlQuickList(conn, tagQuery->string);
+
+// retrieve the cdwFiles objects for these
+char *idListStr = slNameListToString(fileIds, ',');
+struct dyString *fileQuery = dyStringNew(0);
+dyStringPrintf(fileQuery, NOSQLINJ "SELECT * FROM cdwFile WHERE id IN (%s) ", idListStr);
+return cdwFileLoadByQuery(conn, fileQuery->string);
+}
+
+static void continueSearchVars()
+/* print out hidden forms variables for the current search */
+{
+cgiContinueHiddenVar("cdwFileSearch");
+char *fieldNames[128];
+char *fileTableFields = cloneString(FILETABLEFIELDS); // cannot modify string literals
+int fieldCount = chopString(fileTableFields, ",", fieldNames, ArraySize(fieldNames));
+int i;
+for (i = 0; i<fieldCount; i++)
+    {
+    char varName[1024];
+    safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
+    cgiContinueHiddenVar(varName);
+    }
+}
+
+void makeDownloadAllButtonForm() 
+/* The "download all" button cannot be a form at this place, nested forms are
+ * not allowed in html. So create a link instead. */
+{
+printf("<A HREF=\"cdwWebBrowse?hgsid=%s&cdwCommand=downloadFiles", cartSessionId(cart));
+
+char *fieldNames[128];
+char *fileTableFields = cloneString(FILETABLEFIELDS); // cannot modify string literals
+int fieldCount = chopString(fileTableFields, ",", fieldNames, ArraySize(fieldNames));
+int i;
+for (i = 0; i<fieldCount; i++)
+    {
+    char varName[1024];
+    safef(varName, sizeof(varName), "cdwBrowseFiles_f_%s", fieldNames[i]);
+    printf("&%s=%s", varName, cartCgiUsualString(cart, varName, ""));
+    }
+
+printf("&cdwFileSearch=%s", cartCgiUsualString(cart, "cdwFileSearch", ""));
+printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));
+printf("\">Download All</A>");
+}
+
+void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
+    char *searchString, char *allFields, char *from, char *initialWhere,  
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
+    boolean withFilters, char *itemPlural, int pageSize)
+{
+struct cdwFile *efList = NULL;
+struct dyString *where;
+char *fields;
+searchFilesWithAccess(conn, searchString, allFields, initialWhere, &efList, &where, &fields);
+
+if (efList == NULL)
+    {
+    if (user != NULL && user->isAdmin)
+	printf("<BR>The file database is empty.");
+    else
+	printf("<BR>Unfortunately there are no %s you are authorized to see.", itemPlural);
+    return;
+    }
+
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
 struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
+
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
-    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash);
+    tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, makeDownloadAllButtonForm);
 
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
 dyStringFree(&where);
-rbTreeFree(&searchPassTree);
 }
 
 char *showSearchControl(char *varName, char *itemPlural)
@@ -738,6 +838,188 @@ printf("  $('#%s').watermark(\"type in words or starts of words to find specific
 printf("});\n");
 printf("</script>\n");
 return varVal;
+}
+
+char *createTokenForUser()
+/* create a random token and add it to the cdwDownloadToken table with the current username.
+ * Returns token, should be freed.*/
+// 
+// table schema: CREATE TABLE cdwDownloadToken (token varchar(255) NOT NULL PRIMARY KEY, 
+// userId int NOT NULL, createTime datetime DEFAULT NOW())
+{
+struct sqlConnection *conn = hConnectCentral(); // r/w access -> has to be in hgcentral
+char *token = cartDbMakeRandomKey(80);
+char query[4096]; 
+sqlSafef(query, sizeof(query), "INSERT INTO cdwDownloadToken (token, userId) VALUES ('%s', %d)", token, user->id);
+sqlQuickQuery(conn, query, NULL, 0);
+hDisconnectCentral(&conn);
+return token;
+}
+
+void setCdwUser(struct sqlConnection *conn)
+/* set the global variable 'user' based on the current cookie */
+{
+char *userName = wikiLinkUserName();
+
+// for debugging, accept the userName on the cgiSpoof command line
+// instead of a cookie
+if (hIsPrivateHost() && userName == NULL)
+    userName = cgiOptionalString("userName");
+
+if (userName != NULL)
+    {
+    user = cdwUserFromUserName(conn, userName);
+    /* Look up email vial hgCentral table */
+    struct sqlConnection *cc = hConnectCentral();
+    char query[512];
+    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
+    char *email = sqlQuickString(cc, query);
+    hDisconnectCentral(&cc);
+    user = cdwUserFromEmail(conn, email);
+    }
+}
+
+void doDownloadUrls()
+/* serve textfile with file URLs and ask user's internet browser to save it to disk */
+{
+struct sqlConnection *conn = sqlConnect(cdwDatabase);
+setCdwUser(conn);
+
+if (user==NULL)
+    {
+    // this should never happen through normal UI use
+    puts("Content-type: text/html\n\n");
+    puts("Error: user is not logged in");
+    return;
+    }
+
+char *token = createTokenForUser();
+
+// if we recreate the submission dir structure, we need to create a shell script
+boolean createSubdirs = FALSE;
+if (sameOk(cgiOptionalString("cdwDownloadName"), "subAndDir"))
+    createSubdirs = TRUE;
+
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, FALSE);
+
+if (createSubdirs)
+    puts("Content-disposition: attachment; filename=downloadCirm.sh\n");
+else
+    puts("Content-disposition: attachment; filename=fileUrls.txt\n");
+
+char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
+
+struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
+
+char *host = hHttpHost();
+
+// user may want to download with original submitted filename, not with format <accession>.<submittedExtension>
+char *optArg = "";
+if (sameOk(cgiOptionalString("cdwDownloadName"), "sub"))
+    optArg = "&useSubmitFname=1";
+
+struct cdwFile *ef;
+for (ef = efList; ef != NULL; ef = ef->next)
+    {
+    struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
+
+    if (createSubdirs)
+        {
+        struct cdwFile *cf = cdwFileFromId(conn, vf->fileId);
+        // if we have an absolute pathname in our DB, strip the leading '/'
+        // so if someone runs the script as root, it will not start to write
+        // files in strange directories
+        char* submitFname = cf->submitFileName;
+        if ( (submitFname!=NULL) && (!isEmpty(submitFname)) && (*submitFname=='/') )
+            submitFname += 1;
+
+        printf("curl 'http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s' --create-dirs -o %s\n", \
+            host, vf->licensePlate, token, submitFname);
+        }
+    else
+        printf("http://%s/cgi-bin/cdwGetFile?acc=%s&token=%s%s\n", \
+            host, vf->licensePlate, token, optArg);
+    }
+}
+
+void doDownloadFileConfirmation(struct sqlConnection *conn)
+/* show overview page of download files */
+{
+if (user==NULL)
+    {
+    printf("Sorry, you have to log in before you can download files.");
+    return;
+    }
+
+printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "downloadUrls");
+
+continueSearchVars();
+
+char *searchString = cartUsualString(cart, "cdwFileSearch", "");
+char *initialWhere = cartUsualString(cart, "cdwFile_filter", "");
+
+struct cdwFile *efList = findDownloadableFiles(conn, cart, initialWhere, searchString);
+
+// get total size
+struct cdwFile *ef;
+long long size = 0;
+for (ef = efList; ef != NULL; ef = ef->next)
+    size += ef->size;
+int fCount = slCount(efList);
+
+char sizeStr[4096];
+sprintWithGreekByte(sizeStr, sizeof(sizeStr), size);
+
+printf("<h4>Data Download Options</h4>\n");
+printf("<b>Number of files:</b> %d<br>\n", fCount);
+printf("<b>Total size:</b> %s<p>\n", sizeStr);
+
+puts("<input class='urlListButton' type=radio name='cdwDownloadName' VALUE='acc' checked>\n");
+//cgiMakeRadioButton("cdwDownloadName", "acc", TRUE);
+puts("Name files by accession, one single directory<br>");
+//cgiMakeRadioButton("cdwDownloadName", "sub", FALSE);
+puts("<input class='urlListButton' type=radio name='cdwDownloadName' VALUE='sub'>\n");
+puts("Name files as submitted, one single directory<br>");
+//cgiMakeRadioButton("cdwDownloadName", "subAndDir", FALSE);
+puts("<input class='scriptButton' type=radio name='cdwDownloadName' VALUE='subAndDir'>\n");
+puts("Name files as submitted and put into subdirectories<p>");
+
+cgiMakeSubmitButton();
+printf("</FORM>\n");
+
+
+puts("<script>\n");
+puts("$('.scriptButton').change( function() {$('#urlListDoc').hide(); $('#scriptDoc').show()} )");
+puts("$('.urlListButton').change( function() {$('#urlListDoc').show(); $('#scriptDoc').hide()} )");
+puts("</script>\n");
+
+puts("<div id='urlListDoc'>\n");
+puts("When you click 'submit', a text file with the URLs of the files will get downloaded.\n");
+puts("The URLs are valid for one week.<p>\n");
+puts("To download the files:\n");
+puts("<ul>\n");
+puts("<li>With Firefox and <a href=\"https://addons.mozilla.org/en-US/firefox/addon/downthemall/\">DownThemAll</a>: Click Tools - DownThemAll! - Manager. Right click - Advanced - Import from file. Right-click - Select All. Right-click - Toogle All\n");
+puts("<li>With Chrome and <a href=\"https://chrome.google.com/webstore/detail/tab-save/lkngoeaeclaebmpkgapchgjdbaekacki\">TabToSave</a>: Click the T/S icon next to the URL bar, click the edit button at the bottom of the screen and paste the file contents\n");
+puts("<li>OSX/Linux: With curl and a single thread: <tt>xargs -n1 curl -JO < fileUrls.txt</tt>\n");
+puts("<li>Linux: With wget and a single thread: <tt>wget --content-disposition -i fileUrls.txt</tt>\n");
+puts("<li>With wget and 4 threads: <tt>xargs -n 1 -P 4 wget --content-disposition -q < fileUrls.txt</tt>\n");
+puts("<li>With aria2c, 16 threads and two threads per file: <tt>aria2c -x 16 -s 2 -i fileUrls.txt</tt>\n");
+puts("</ul>\n");
+puts("</div>\n");
+
+puts("<div id='scriptDoc' style='display:none'>\n");
+puts("When you click 'submit', a shell script that runs curl will get downloaded.\n");
+puts("The URLs are valid for one week.<p>\n");
+puts("To download the files:\n");
+puts("<ul>\n");
+puts("<li>Linux/OSX: With curl and a single thread: <tt>sh downloadCirm.sh</tt>\n");
+puts("<li>Linux/OSX: With curl and four threads: <tt>parallel -j4 :::: downloadCirm.sh</tt>\n");
+puts("</ul>\n");
+puts("<div>\n");
+cdwFileFreeList(&efList);
 }
 
 void doBrowseFiles(struct sqlConnection *conn)
@@ -766,7 +1048,7 @@ hashAdd(wrappers, "file_name", wrapFileName);
 hashAdd(wrappers, "ucsc_db", wrapTrackNearFileName);
 hashAdd(wrappers, "format", wrapFormat);
 accessibleFilesTable(cart, conn, searchString,
-  "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,item_count,body_part",
+  FILETABLEFIELDS,
   "cdwFileTags", where, 
   returnUrl, "cdwBrowseFiles",
   18, wrappers, conn, TRUE, "files", 100);
@@ -1309,6 +1591,10 @@ else if (sameString(command, "query"))
     {
     doQuery(conn);
     }
+else if (sameString(command, "downloadFiles"))
+    {
+    doDownloadFileConfirmation(conn);
+    }
 else if (sameString(command, "browseFiles"))
     {
     doBrowseFiles(conn);
@@ -1359,18 +1645,7 @@ void doMiddle()
 /* Menu bar has been drawn.  We are in the middle of first section. */
 {
 struct sqlConnection *conn = sqlConnect(cdwDatabase);
-char *userName = wikiLinkUserName();
-if (userName != NULL)
-    {
-    user = cdwUserFromUserName(conn, userName);
-    /* Look up email vial hgCentral table */
-    struct sqlConnection *cc = hConnectCentral();
-    char query[512];
-    sqlSafef(query, sizeof(query), "select email from gbMembers where userName='%s'", userName);
-    char *email = sqlQuickString(cc, query);
-    hDisconnectCentral(&cc);
-    user = cdwUserFromEmail(conn, email);
-    }
+setCdwUser(conn);
 dispatch(conn);
 sqlDisconnect(&conn);
 }
@@ -1469,8 +1744,6 @@ printf("</BODY></HTML>\n");
 }
 
 
-char *excludeVars[] = {"cdwCommand", "submit", NULL};
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
@@ -1479,7 +1752,11 @@ if (!isFromWeb && !cgiSpoof(&argc, argv))
     usage();
 dnaUtilOpen();
 oldVars = hashNew(0);
-cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+char *cdwCmd = cgiOptionalString("cdwCommand");
+if (sameOk(cdwCmd, "downloadUrls"))
+    doDownloadUrls();
+else
+    cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
 

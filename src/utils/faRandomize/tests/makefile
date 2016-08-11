@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Run a couple of simple sanity check tests.
 include ../../../inc/common.mk
 

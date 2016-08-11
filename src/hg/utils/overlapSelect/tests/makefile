@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 overlapSelect = ${DESTBINDIR}/overlapSelect

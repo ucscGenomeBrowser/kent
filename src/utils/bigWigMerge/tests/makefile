@@ -1,3 +1,4 @@
+kentSrc = ../../..
 A = bigWigMerge
 include ../../../inc/common.mk
 

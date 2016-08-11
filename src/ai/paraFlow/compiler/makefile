@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 O = asmCoder.o backEnd.o builtIn.o cCaseCode.o \

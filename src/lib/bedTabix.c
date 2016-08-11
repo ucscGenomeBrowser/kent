@@ -1,6 +1,7 @@
 #include "bedTabix.h"
 
 struct bedTabixFile *bedTabixFileMayOpen(char *fileOrUrl, char *chrom, int start, int end)
+/* Open a bed file that has been compressed and indexed by tabix */
 {
 struct lineFile *lf = lineFileTabixMayOpen(fileOrUrl, TRUE);
 if (lf == NULL)
@@ -13,6 +14,17 @@ if (isNotEmpty(chrom) && start != end)
     {
     lineFileSetTabixRegion(lf, chrom, start, end);
     }
+
+return btf;
+}
+
+struct bedTabixFile *bedTabixFileOpen(char *fileOrUrl, char *chrom, int start, int end)
+/* Attempt to open bedTabix file. errAbort on failure. */
+{
+struct bedTabixFile *btf = bedTabixFileMayOpen(fileOrUrl, chrom, start, end);
+
+if (btf == NULL)
+    errAbort("Cannot open bed tabix file %s\n", fileOrUrl);
 
 return btf;
 }

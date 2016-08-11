@@ -14,12 +14,16 @@
 
 /* hg.conf login system parameter -- using non-wiki login system if defined */ 
 #define CFG_LOGIN_SYSTEM_NAME "login.systemName"
+#define CFG_LOGIN_USE_HTTPS "login.https"
 
 char *loginSystemName();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
 
 boolean loginSystemEnabled();
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
+
+boolean loginUseHttps();
+/* Return TRUE unless https is disabled in hg.conf. */
 
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */

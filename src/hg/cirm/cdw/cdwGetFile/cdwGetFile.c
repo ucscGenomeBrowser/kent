@@ -81,18 +81,17 @@ else if (sameWord(format, "text"))
     printf("Content-Type: application/json\n");
 else
     {
-    printf("Content-Disposition: attachment;filename=%s\n", suggestFileName);
+    printf("Content-Disposition: attachment; filename=%s\n", suggestFileName);
     printf("Content-Type: application/octet-stream\n");
     }
 printf("X-Sendfile: %s\n\n", filePath);
 }
 
-void sendFileByAcc(struct sqlConnection *conn, char* acc)
+void sendFileByAcc(struct sqlConnection *conn, char* acc, boolean useSubmitFname)
 /* send file identified by acc (=cdwValidFile.licensePlate), suggests a canonical filename of the format
  * <licensePlate>.<originalExtension> 
  * Example URL: http://hgwdev.soe.ucsc.edu/cgi-bin/cdwGetFile?acc=SCH000FSW */
 {
-
 struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
 if (vf==NULL)
     errExit("%s is not a valid accession in the CDW.", acc);
@@ -102,13 +101,17 @@ char* filePath = cdwPathForFileId(conn, vf->fileId);
 
 mustHaveAccess(conn, ef);
 
-// use the license plate as the basename of the downloaded file.
-// Take the extension from the submitted filename, as cdwFile.format is not the same as the extension
-// e.g. format=fasta -> fa.gz
-char *submitExt = skipBeyondDelimit(basename(ef->submitFileName), '.');
-
 char suggestName[8000];
-safef(suggestName, sizeof(suggestName), "%s.%s", vf->licensePlate, submitExt);
+if (useSubmitFname)
+    safef(suggestName, sizeof(suggestName), "%s", basename(ef->submitFileName));
+else
+    {
+    // use the license plate as the basename of the downloaded file.
+    // Take the extension from the submitted filename, as cdwFile.format is not the same as the extension
+    // e.g. when database says format=fasta -> file extension should be .fa.gz
+    char *submitExt = skipBeyondDelimit(basename(ef->submitFileName), '.');
+    safef(suggestName, sizeof(suggestName), "%s.%s", vf->licensePlate, submitExt);
+    }
 
 apacheSendX(vf->format, filePath, suggestName);
 }
@@ -141,20 +144,41 @@ mustHaveAccess(conn, ef);
 apacheSendX(NULL, localPath, basename(ef->submitFileName));
 }
 
+struct cdwUser *authUserViaToken(struct sqlConnection *conn) 
+/* get the cgi variable "token" and return the cdw user for it */
+{
+char *token = cgiOptionalString("token");
+if (token==NULL)
+    return NULL;
+
+// get the userId for this token
+struct sqlConnection *central = hConnectCentral();
+char query[4096];
+sqlSafef(query, sizeof(query), "SELECT userId FROM cdwDownloadToken WHERE token='%s'", token);
+int userId = sqlQuickNum(central, query);
+if (userId==0)
+    return NULL;
+hDisconnectCentral(&central);
+
+return cdwUserFromId(conn, userId);
+}
+
 void dispatch(struct sqlConnection *conn)
 /* Dispatch page after to routine depending on cdwCommand variable */
 {
 char *userName = wikiLinkUserName();
 if (userName==NULL)
-    user = NULL;
+    // alternative to cookie is a token on the URL, for queries from wget
+    user = authUserViaToken(conn);
 else
     user = cdwUserFromUserName(conn, userName);
 
 char *acc = cgiOptionalString("acc");
 char *path = getenv("PATH_INFO"); // CGI gets trailing /x/y/z like path via this env. var.
+boolean useSubmitFname = cgiOptionalInt("useSubmitFname", 0);
 
 if (acc != NULL)
-    sendFileByAcc(conn, acc);
+    sendFileByAcc(conn, acc, useSubmitFname);
 else if (path != NULL)
     sendFileByPath(conn, path);
 else

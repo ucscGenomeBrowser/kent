@@ -1009,7 +1009,7 @@ char urlLabelSetting[32];
 // replace the $$ and other wildchards with the url given in tdb 
 char *url = getUrlSetting(tdb, "url");
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
-if (url==NULL)
+if (url==NULL || isEmpty(url))
     return;
 
 char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);
@@ -1603,7 +1603,14 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    char *entry;
+    if (sameString(fieldName, "cdsStartStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS start annotation (none, unknown, incomplete, or complete)";
+    else if (sameString(fieldName, "cdsEndStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
+    else
+        entry = col->comment;
+    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -4209,10 +4216,8 @@ else if (wordCount > 0)
         {
         doGvf(tdb, item);
         }
-#ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
-#endif // USE_BAM
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
     }
@@ -6940,6 +6945,10 @@ if (retSeq)
     *retSeq = dnaSeq;
 
 tRcAdjustedStart = tStart;
+
+if (psl->strand[1] == '-')
+    pslRc(psl);
+
 if (psl->strand[0] == '-')
     {
     if (retIsRc)
@@ -7263,7 +7272,7 @@ else if (sameString("HInvGeneMrna", aliTable))
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
-else if (sameString("ncbiRefSeqPsl", aliTable))
+else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
     {
     rnaSeq = getBaseColorSequence(acc, aliTable);
     }
@@ -8697,7 +8706,7 @@ puts("<B>Alignment Summary:</B><BR>\n");
 // sprintLongWithCommas(strBuf, altSize);
 // printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
 pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
 puts("<P>");
 total = 0;
@@ -9849,23 +9858,62 @@ char *chrom = cartString(cart, "c");
 
 printf("<H3>Patient %s </H3>", itemName);
 
-/* print phenotypes */
-sqlSafef(query, sizeof(query),
-      "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if ((row != NULL) && strlen(row[0]) >= 1)
+/* print phenotypes and other information, if available */
+if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
-    printf("<B>Phenotype: </B><UL>");
-    while (row != NULL)
+    sqlSafef(query, sizeof(query),
+        "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
+        "from decipherRaw where id = '%s'", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
         {
-	printf("<LI>");
-	printf("%s\n", row[0]);
-	row = sqlNextRow(sr);
+        char *phenoString = replaceChars(row[0], "|", "</li>\n<li>");
+        printf("<b>Phenotypes:</b>\n<ul>\n"
+               "<li>%s</li>\n"
+               "</ul>\n", phenoString);
+        // freeMem(phenoString);
         }
-    printf("</UL>");
+    if (row != NULL)
+        {
+        if (isNotEmpty(row[1]))
+            {
+            printf("<b>Mean Ratio:</b> %s\n<br>\n", row[1]);
+            }
+        if (isNotEmpty(row[2]))
+            {
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[2]);
+            }
+        if (isNotEmpty(row[3]))
+            {
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[3]);
+            }
+        if (isNotEmpty(row[4]))
+            {
+            printf("<b>Contribution:</b> %s\n<br>\n", row[4]);
+            }
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    sqlSafef(query, sizeof(query),
+          "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        printf("<B>Phenotype: </B><UL>");
+        while (row != NULL)
+            {
+        printf("<LI>");
+        printf("%s\n", row[0]);
+        row = sqlNextRow(sr);
+            }
+        printf("</UL>");
+        }
+    sqlFreeResult(&sr);
+    }
 
 /* link to Ensembl DECIPHER Patient View page */
 printf("<B>Patient View: </B>\n");
@@ -16970,6 +17018,22 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
 
 #define FOURBLANKCELLS "<TD></TD><TD></TD><TD></TD><TD></TD>"
 
+static char *abbreviateAllele(char *allele)
+/* If allele is >50bp then return an abbreviated version with first & last 20 bases and length;
+ * otherwise just return (cloned) allele. */
+{
+int length = strlen(allele);
+if (length > 50)
+    {
+    struct dyString *dyAbbr = dyStringCreate("%.20s", allele);
+    dyStringAppend(dyAbbr, "...");
+    dyStringAppend(dyAbbr, allele+length - 20);
+    dyStringPrintf(dyAbbr, " (%d bases)", length);
+    return dyStringCannibalize(&dyAbbr);
+    }
+return cloneString(allele);
+}
+
 void printSnpAlleleRows(struct snp125 *snp, int version)
 /* Print the UCSC ref allele (and dbSNP if it differs), as row(s) of a
  * 6-column table. */
@@ -16978,32 +17042,28 @@ if (sameString(snp->strand,"+") ||
     strchr(snp->refUCSC, '(')) // don't try to revComp refUCSC if it is "(N bp insertion)" etc.
     {
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refUCSC);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refUCSC));
     if (!sameString(snp->refUCSC, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     }
 else if (sameString(snp->strand,"-"))
     {
-    char refUCSCRevComp[1024];
-    if (sameString(snp->strand, "-"))
-	{
-	safef(refUCSCRevComp, sizeof(refUCSCRevComp), "%s", snp->refUCSC);
-	reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
-	}
+    char *refUCSCRevComp = cloneString(snp->refUCSC);
+    reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", refUCSCRevComp);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(refUCSCRevComp));
     if (version < 127 && !sameString(refUCSCRevComp, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     else if (version >= 127 && !sameString(snp->refUCSC, snp->refNCBI))
 	{
-	char refNCBIRevComp[1024];
-	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp->refNCBI);
-	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+	char *refNCBIRevComp = cloneString(snp->refNCBI);
+        if (! strchr(snp->refNCBI, '('))
+            reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
 	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n",
-	       refNCBIRevComp);
+	       abbreviateAllele(refNCBIRevComp));
 	}
     }
 }
@@ -17267,8 +17327,7 @@ void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTra
 			      struct genePred *gene, int exonIx, char *geneName)
 /* Show the effect of each observed allele of snp on the given exon of gene. */
 {
-char refAllele[1024];
-safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
+char *refAllele = cloneString(snp->refUCSC);
 boolean refIsAlpha = isalpha(refAllele[0]);
 boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
 if (geneIsRc && refIsAlpha)
@@ -17279,8 +17338,7 @@ int snpCodonPos = 0;
 char refCodon[4], refAA = '\0';
 if (refIsSingleBase)
     getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
-char alleleStr[1024];
-safecpy(alleleStr, sizeof(alleleStr), snp->observed);
+char *alleleStr = cloneString(snp->observed);
 char *indivAlleles[64];
 int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
 int j;
@@ -17349,7 +17407,8 @@ for (j = 0;  j < alleleCount;  j++)
 	}
     else
 	printf(firstTwoColumnsPctS "%s %s --> %s\n",
-	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"), refAllele, al);
+	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"),
+               abbreviateAllele(refAllele), abbreviateAllele(al));
     }
 }
 
@@ -20851,14 +20910,10 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
-#ifdef USE_BAM
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
-#endif//def USE_BAM
-#ifdef USE_TABIX
 else if (sameWord(type, "vcfTabix"))
     doVcfTabixDetails(ct->tdb, itemName);
-#endif//def USE_TABIX
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
 else if (sameWord(type, "makeItems"))
@@ -26146,12 +26201,10 @@ else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }
-#ifdef USE_TABIX
 else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
     {
     doVcfTabixDetails(tdb, item);
     }
-#endif // USE_TABIX
 else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);
@@ -26163,7 +26216,7 @@ else if (tdb != NULL)
 else
     {
     cartWebStart(cart, database, "%s", track);
-    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
+    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
 /* End of 1000+ line dispatch on table involving 100+ if/elses. */
 

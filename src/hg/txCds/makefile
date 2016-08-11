@@ -1,3 +1,4 @@
+kentSrc = ../..
 # Build txGraph source
 include ../../inc/common.mk
 

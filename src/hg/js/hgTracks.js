@@ -3294,6 +3294,9 @@ function addKeyboardHelpEntries() {
     html = '<span class="shortcut">s s</span>';
     $('#sessionsMenuLink').after(html);
 
+    html = '<span class="shortcut">p s</span>';
+    $('#publicSessionsMenuLink').after(html);
+
     html = '<span class="shortcut">c t</span>';
     $('#customTracksMenuLink').after(html);
 
@@ -4188,50 +4191,56 @@ var imageV2 = {
     {
         var pos;
         var hexColor = '#FFAAAA';
-        $('#highlightItem').remove();
+        $('.highlightItem').remove();
         if (hgTracks.highlight) {
-            pos = parsePositionWithDb(hgTracks.highlight);
-	    // UN-DISGUISE
-	    imageV2.undisguiseHighlight(pos);
-            if (pos) {
-                pos.start--;  // make start 0-based to match hgTracks.winStart
-                if (pos.color)
-                    hexColor = pos.color;
-            }
-        }
-        if (pos && pos.chrom === hgTracks.chromName && pos.db === getDb() 
-        &&  pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
-            var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
-            var portal = $('#imgTbl td.tdData')[0];
-            var leftPixels = $(portal).offset().left + 3; // 3 for borders and cgi item calcs ??
-            var pixelsPerBase = ($(portal).width() - 2) / portalWidthBases;
-            var clippedStartBases = Math.max(pos.start, hgTracks.imgBoxPortalStart);
-            var clippedEndBases = Math.min(pos.end, hgTracks.imgBoxPortalEnd);
-            var widthPixels = (clippedEndBases - clippedStartBases) * pixelsPerBase;
-            if (hgTracks.revCmplDisp)
-                leftPixels += (hgTracks.imgBoxPortalEnd - clippedEndBases) * pixelsPerBase - 1;
-            else
-                leftPixels += (clippedStartBases - hgTracks.imgBoxPortalStart) * pixelsPerBase;
-            // Impossible to get perfect... Okay to overrun by a pixel on each side
-            leftPixels  = Math.floor(leftPixels);
-            widthPixels = Math.ceil(widthPixels);
-            if (widthPixels < 2) {
-                widthPixels = 3;
-                leftPixels -= 1;
-            }
+            var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
+            for(var i = 0; i < hlArray.length; i++) {
+                hlString = hlArray[i];
+                console.log(hlString);
+                pos = parsePositionWithDb(hlString);
+                // UN-DISGUISE
+                imageV2.undisguiseHighlight(pos);
+                if (pos) {
+                    pos.start--;  // make start 0-based to match hgTracks.winStart
+                    if (pos.color)
+                        hexColor = pos.color;
+                }
 
-            var area = jQuery("<div id='highlightItem' class='highlightItem'></div>");
-            $(area).css({ backgroundColor: hexColor, // display: 'none'
-                        left: leftPixels + 'px', top: $('#imgTbl').offset().top + 1 + 'px',
-                        width: widthPixels + 'px',
-                        height: $('#imgTbl').css('height') });
-            $(area).data({leftPixels: leftPixels, widthPixels: widthPixels});// needed by dragScroll
-
-            // Larry originally appended to imgTbl, but discovered that doesn't work on IE 8 and 9.
-            $('body').append($(area)); 
-            // z-index is done in css class, so highlight is beneath transparent data images.
-            // NOTE: ideally highlight would be below transparent blue-lines, but THAT is a  
-            // background-image so z-index can't get below it!  PS/PDF looks better for blue-lines!
+                if (pos && pos.chrom === hgTracks.chromName && pos.db === getDb() 
+                &&  pos.start <= hgTracks.imgBoxPortalEnd && pos.end >= hgTracks.imgBoxPortalStart) {
+                    var portalWidthBases = hgTracks.imgBoxPortalEnd - hgTracks.imgBoxPortalStart;
+                    var portal = $('#imgTbl td.tdData')[0];
+                    var leftPixels = $(portal).offset().left + 3; // 3 for borders and cgi item calcs ??
+                    var pixelsPerBase = ($(portal).width() - 2) / portalWidthBases;
+                    var clippedStartBases = Math.max(pos.start, hgTracks.imgBoxPortalStart);
+                    var clippedEndBases = Math.min(pos.end, hgTracks.imgBoxPortalEnd);
+                    var widthPixels = (clippedEndBases - clippedStartBases) * pixelsPerBase;
+                    if (hgTracks.revCmplDisp)
+                        leftPixels += (hgTracks.imgBoxPortalEnd - clippedEndBases) * pixelsPerBase - 1;
+                    else
+                        leftPixels += (clippedStartBases - hgTracks.imgBoxPortalStart) * pixelsPerBase;
+                    // Impossible to get perfect... Okay to overrun by a pixel on each side
+                    leftPixels  = Math.floor(leftPixels);
+                    widthPixels = Math.ceil(widthPixels);
+                    if (widthPixels < 2) {
+                        widthPixels = 3;
+                        leftPixels -= 1;
+                    }
+    
+                    var area = jQuery("<div id='highlightItem' class='highlightItem'></div>");
+                    $(area).css({ backgroundColor: hexColor, // display: 'none'
+                                left: leftPixels + 'px', top: $('#imgTbl').offset().top + 1 + 'px',
+                                width: widthPixels + 'px',
+                                height: $('#imgTbl').css('height') });
+                    $(area).data({leftPixels: leftPixels, widthPixels: widthPixels});// needed by dragScroll
+    
+                    // Larry originally appended to imgTbl, but discovered that doesn't work on IE 8 and 9.
+                    $('body').append($(area)); 
+                    // z-index is done in css class, so highlight is beneath transparent data images.
+                    // NOTE: ideally highlight would be below transparent blue-lines, but THAT is a  
+                    // background-image so z-index can't get below it!  PS/PDF looks better for blue-lines!
+                }
+            }
         }
     },
 
@@ -4444,13 +4453,6 @@ $(document).ready(function()
     }
     initVars();
     imageV2.loadSuggestBox();
-    // Convert map AREA gets to post the form, ensuring that cart variables are kept
-    // up to date (but turn this off for search form).
-    if ($("FORM").length > 0 && $('#trackSearch').length === 0) {
-        var allLinks = $('a[class!=noPostLink]');
-        $( allLinks ).unbind('click');
-        $( allLinks ).click( posting.saveSettings );
-    }
     if ($('#pdfLink').length === 1) {
         $('#pdfLink').click(function(i) {
             var thisForm = normed($('#TrackForm'));

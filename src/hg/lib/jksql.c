@@ -1370,7 +1370,7 @@ noWarnAbort();
 }
 
 struct sqlConnection *sqlFailoverConn(struct sqlConnection *sc)
-/* returns the failover connection of a connection or NULL.
+/* Returns the failover connection of a connection or NULL.
  * (Needed because the sqlConnection is not in the .h file) */
 {
 return sc->failoverConn;
@@ -1390,6 +1390,12 @@ if ((sc->failoverConn != NULL) && differentStringNullOk(sc->db, sc->conn->db))
     }
 
 return FALSE;
+}
+
+char *sqlHostInfo(struct sqlConnection *sc)
+/* Returns the mysql host info for the connection, must be connected. */
+{
+return (char *) mysql_get_host_info(sc->conn);
 }
 
 static struct sqlResult *sqlUseOrStore(struct sqlConnection *sc,

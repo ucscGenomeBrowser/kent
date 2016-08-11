@@ -1,4 +1,4 @@
-/* bigPslToPsl - convert bigPsl file to psle. */
+/* bigPslToPsl - convert bigPsl file to psl. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,17 +11,20 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "bigPslToPsl - convert bigPsl file to psle\n"
+  "bigPslToPsl - convert bigPsl file to psl\n"
   "usage:\n"
   "   bigPslToPsl bigPsl.bb output.psl\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -collapseStrand   if target strand is '+', don't output it\n"
   );
 }
 
+boolean collapseStrand = FALSE;
+
 /* Command line validation table. */
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"collapseStrand", OPTION_BOOLEAN},
+    {NULL, 0},
 };
 
 void bigPslToPsl(char *bigPslName, char *outputName)
@@ -41,12 +44,16 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
             start, end, itemsLeft, lm);
     
     for(; bbList; bbList = bbList->next)
-	{
-	struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList, NULL, NULL);
+        {
+        struct psl *psl, *pslList = pslFromBigPsl(chromName, bbList, NULL, NULL);
 
-	for(psl=pslList; psl; psl = psl->next)
-	    pslTabOut(psl, f);
-	}
+        for(psl=pslList; psl; psl = psl->next)
+            {
+            if (collapseStrand && (psl->strand[1] == '+'))
+                psl->strand[1] = 0;
+            pslTabOut(psl, f);
+            }
+        }
     }
 }
 
@@ -56,6 +63,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+collapseStrand = optionExists("collapseStrand");
 bigPslToPsl(argv[1], argv[2]);
 return 0;
 }
