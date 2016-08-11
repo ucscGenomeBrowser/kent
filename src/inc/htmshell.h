@@ -34,9 +34,6 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
-void htmlVaEncodeErrorText(char *format, va_list args);
-/* Write an error message encoded against XSS. */
-
 void htmlHorizontalLine();
 /* Print a horizontal line. */
 
