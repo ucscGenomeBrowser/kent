@@ -2986,6 +2986,12 @@ url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel RefSeq accession:
 type bed 4
 
+searchTable ucscToRefSeq
+shortCircuit 1
+termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
+searchPriority 20
+
 track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions

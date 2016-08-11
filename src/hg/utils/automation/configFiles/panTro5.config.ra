@@ -1,0 +1,26 @@
+# config parameters for makeGenomeDb.pl:
+db panTro5
+clade mammal
+genomeCladePriority 35
+scientificName Pan troglodytes
+commonName Chimp
+assemblyDate May 2016
+assemblyLabel Chimpanzee Sequencing and Analysis Consortium
+assemblyShortLabel Pan_tro 3.0
+orderKey 3337
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001643.1
+mitoAcc none
+fastaFiles /hive/data/genomes/panTro5/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/panTro5/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir chimp
+photoCreditURL http://www.smm.org/
+photoCreditName Science Museum of Minnesota
+ncbiGenomeId 202
+ncbiAssemblyId 733711
+ncbiAssemblyName Pan_tro 3.0
+ncbiBioProject 10627
+ncbiBioSample SAMN02981217
+genBankAccessionID GCF_000001515.7
+taxId 9598

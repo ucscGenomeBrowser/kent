@@ -9261,9 +9261,9 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
-# Redmine #15767
-# previously done 9/13/13 #11200, 11/7/14 #14188
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# Redmine #17351
+# previously done 9/13/13 #11200, 11/7/14 #14188, 8/18/15 #15767
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -9271,40 +9271,40 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    set release = 2015-07-23
+    set release = 2016-05-15
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh37_hg19_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1879738 CNV     deletion
-# 153963 CNV     duplication
-# 879317 CNV     gain
-#   8657 CNV     gain+loss
-#  73442 CNV     insertion
-#3469925 CNV     loss
+#1941208 CNV     deletion
+# 165948 CNV     duplication
+# 884153 CNV     gain
+#   8663 CNV     gain+loss
+#  75564 CNV     insertion
+#3488453 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9059 CNV     novel sequence insertion
-#   7827 CNV     tandem duplication
-#    510 OTHER   complex
-#  29162 OTHER   inversion
+#  12249 CNV     tandem duplication
+#    516 OTHER   complex
+#  30767 OTHER   inversion
 #   3707 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh37_hg19_variants_$release.txt | sort | uniq -c | head -100
-# 101257 CNV     deletion
-#  21360 CNV     duplication
-#  46452 CNV     gain
-#   6902 CNV     gain+loss
-#  25610 CNV     insertion
-# 121527 CNV     loss
+# 134568 CNV     deletion
+#  29937 CNV     duplication
+#  47482 CNV     gain
+#   7062 CNV     gain+loss
+#  27603 CNV     insertion
+# 123868 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8974 CNV     novel sequence insertion
-#    517 CNV     tandem duplication
-#    466 OTHER   complex
-#   1428 OTHER   inversion
+#   3703 CNV     tandem duplication
+#    578 OTHER   complex
+#   2652 OTHER   inversion
 #   2000 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
@@ -9314,10 +9314,10 @@ _EOF_
       GRCh37_hg19_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6563735 elements of size 22 from dgvSupporting.bed
+#Read 6668715 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg19 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 340649 elements of size 22 from dgvMerged.bed
+#Read 392583 elements of size 22 from dgvMerged.bed
     rm bed.tab && gzip *.{txt,bed} &
 
 
@@ -28757,28 +28757,20 @@ _EOF_
     cd /hive/data/genomes/hg19/bed/lrg/$today
     wget ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_public_xml_files.zip
     unzip LRG_public_xml_files.zip
-    # The .atree file is useful for getting a handle on the hierarchy and types of nodes:
-    autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
+    # The .atree file was useful for getting a handle on the hierarchy and types of nodes:
+    # autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
 
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh37
     genePredCheck lrgTranscriptsUnmapped.gp
+#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 805 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
-
-    # Fix some URLs that have moved but have not yet been updated in the LRG xml --
-    # hopefully this will not be needed next time!
-    sed -re 's@http://bioinf.uta.fi/PFCbase/@http://bioinf.uta.fi/CFPbase/@; \
-             s@http://bioinf.uta.fi/@http://structure.bmc.lu.se/idbase/@; \
-             s@http://rapid.rcai.riken.jp/RAPID/diseasePhenotype@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
-             s@http://rapid.rcai.riken.jp/RAPID/mutation@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
-             s@http://ngrl.man.ac.uk/lovd2/home.php\?select_db=UBE3A@https://secure.ngrl.org.uk/LOVDv.2.0/home.php?select_db=UBE3A@;' \
-      lrg.bed > tmp
-    mv tmp lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
@@ -28790,13 +28782,19 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
     pslCheck lrg.psl
+#checked: 665 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
     pslMap lrgTranscriptsFakePsl.psl lrg.psl lrgTranscriptsHg19.psl
     mrnaToGene -genePredExt -cdsFile=lrgTranscripts.cds -keepInvalid \
       lrgTranscriptsHg19.psl lrgTranscriptsHg19NoName2.gp
+#Warning: no CDS for LRG_163t1
+#Warning: no CDS for LRG_347t1
     # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx e.g. LRG_163t1.
+    grep -l NR_ LRG_163.xml LRG_347.xml
+#LRG_163.xml
+#LRG_347.xml
     # The resulting genePredExt from that process is missing the name2 column from
     # the original; add it back:
     cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
@@ -28810,6 +28808,7 @@ _EOF_
     hgPepPred hg19 tab lrgCdna lrgCdna.tab
     hgPepPred hg19 tab lrgPep lrgPep.tab
 
+    # OPTIONAL
     # For a rough comparison of mapping methods, and to get some extra error-checking on the PSL
     # from the chain code, try this too:
     pslToChain lrg.psl lrg.chain
@@ -28820,9 +28819,10 @@ _EOF_
     # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.
     # That's why we're using MarkD's method above!
     # Ignore exonFrames and compare:
+    awk '$1 != "#" {print $1;}' noMap
     cut -f 1-14 lrgTranscriptsHg19.gp > t1
     cut -f 1-14 lrgTLiftOver.gp > t2
-    diff t1 t2
+    diff t1 t2 | awk '{print $1, $2;}'
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
     rm t1 t2
 
