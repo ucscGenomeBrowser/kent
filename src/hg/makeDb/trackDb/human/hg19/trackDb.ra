@@ -908,9 +908,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
@@ -919,25 +919,25 @@ codingAnnotations snp138CodingDbSnp,
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 
 track snp138 override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 visibility hide
 
