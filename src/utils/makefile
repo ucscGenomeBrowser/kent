@@ -159,7 +159,8 @@ SCRIPT_FILES = \
 	uniprotToTab \
 	patSeqSummarizeDocs \
 	pslProtCnv \
-	pslSameGene
+	pslSameGene \
+	matrixMerge
 
 # List of all directories to build
 

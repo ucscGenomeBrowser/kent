@@ -1489,8 +1489,7 @@ write.table(fetch.data(nbt,c("ident")), "%(clusterPath)s", quote=FALSE, sep="\t"
 if (length(levels(nbt@ident))!=1) {
     markers.all=find_all_markers(nbt,thresh.test = 2,test.use = "roc", do.print = TRUE)
     write.table(markers.all, "%(clusterGenesPath)s", quote=FALSE, sep="\t", col.names=NA)
-}
-else {
+} else {
     file.create("%(clusterGenesPath)s"); # create empty file to signal that all is OK.
 }
 

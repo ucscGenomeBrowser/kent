@@ -994,46 +994,46 @@ EOF
 
 
 ##############################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
-# Redmine #15767
-# previously done 11/07/14 #14188
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# Redmine #17351
+# previously done 11/07/14 #14188, 8/18/15 #15767
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg38/bed/dgv/$today
     cd /hive/data/genomes/hg38/bed/dgv/$today
-    set release = 2015-07-23
+    set release = 2016-05-15
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh38_hg38*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1860756 CNV     deletion
-# 151324 CNV     duplication
-# 854502 CNV     gain
-#   8269 CNV     gain+loss
-#  73351 CNV     insertion
-#3433815 CNV     loss
+#1921790 CNV     deletion
+# 163085 CNV     duplication
+# 859255 CNV     gain
+#   8274 CNV     gain+loss
+#  75467 CNV     insertion
+#3452323 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9063 CNV     novel sequence insertion
-#   7827 CNV     tandem duplication
-#    487 OTHER   complex
-#  28963 OTHER   inversion
+#  12235 CNV     tandem duplication
+#    493 OTHER   complex
+#  30556 OTHER   inversion
 #   3696 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh38_hg38_variants_$release.txt | sort | uniq -c | head -100
-#  99688 CNV     deletion
-#  21081 CNV     duplication
-#  46052 CNV     gain
-#   6709 CNV     gain+loss
-#  25566 CNV     insertion
-# 121066 CNV     loss
+# 132721 CNV     deletion
+#  29519 CNV     duplication
+#  47073 CNV     gain
+#   6867 CNV     gain+loss
+#  27553 CNV     insertion
+# 123401 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8973 CNV     novel sequence insertion
-#    517 CNV     tandem duplication
-#    456 OTHER   complex
-#   1375 OTHER   inversion
+#   3693 CNV     tandem duplication
+#    568 OTHER   complex
+#   2590 OTHER   inversion
 #   1992 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
@@ -1043,10 +1043,10 @@ EOF
       GRCh38_hg38_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg38 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6480481 elements of size 22 from dgvSupporting.bed
+#Read 6584665 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg38 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 337631 elements of size 22 from dgvMerged.bed
+#Read 389106 elements of size 22 from dgvMerged.bed
     rm bed.tab && gzip *.{txt,bed} &
 
 
