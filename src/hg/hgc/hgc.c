@@ -17521,7 +17521,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>%s</TD></TR>", geneTrack,
+           snpMisoLinkFromFunc("intergenic_variant"));
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
@@ -26216,7 +26217,7 @@ else if (tdb != NULL)
 else
     {
     cartWebStart(cart, database, "%s", track);
-    warn("Sorry, clicking there doesn't do anything yet (%s).", track);
+    printf("Sorry, clicking there doesn't do anything yet (%s).", track);
     }
 /* End of 1000+ line dispatch on table involving 100+ if/elses. */
 
