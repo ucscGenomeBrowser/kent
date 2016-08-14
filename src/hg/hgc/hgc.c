@@ -2956,7 +2956,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
-printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
+printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow", tdb->table, item);
 pslFreeList(&pslList);
 printItemDetailsHtml(tdb, item);
 }
@@ -5828,9 +5828,9 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 printf("</TT></PRE>");
 }
 
-void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+void printAlignmentsExtra(struct psl *pslList, int startFirst, char *hgcCommand, char *hgcCommandInWindow,
 		     char *tableName, char *itemIn)
-/* Print list of mRNA alignments. */
+/* Print list of mRNA alignments with special "in window" alignment function. */
 {
 if (pslList == NULL || tableName == NULL)
     return;
@@ -5850,11 +5850,18 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(itemIn),
+	hgcAnchorSomewhere(hgcCommandInWindow, cgiEncode(itemIn),
 			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
+}
+
+void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *tableName, char *itemIn)
+/* Print list of mRNA alignments. */
+{
+printAlignmentsExtra(pslList, startFirst, hgcCommand, "htcCdnaAliInWindow", tableName, itemIn);
 }
 
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
@@ -7198,6 +7205,61 @@ genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
 struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
 showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+}
+
+void htcBigPslAliInWindow(char *acc)
+/* Show alignment in window for accession in bigPsl file. */
+{
+struct psl *partPsl, *wholePsl;
+char *aliTable;
+int start;
+unsigned int cdsStart = 0, cdsEnd = 0;
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+aliTable = cartString(cart, "aliTable");
+if (isCustomTrack(aliTable))
+    {
+    struct customTrack *ct = lookupCt(aliTable);
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(trackHash, aliTable);
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+
+/* Get some environment vars. */
+start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
+
+char *seq, *cdsString = NULL;
+struct lm *lm = lmInit(0);
+char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bed *bed = bedLoadN(bedRow, 12);
+    if (sameString(bed->name, acc))
+	{
+	bb->next = NULL;
+	break;
+	}
+    }
+wholePsl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
+genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+
+if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
+    partPsl = wholePsl;
+else
+    partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
+struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
+showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
+                            NULL, cdsStart, cdsEnd);
 }
 
 static struct dnaSeq *getBaseColorSequence(char *itemName, char *table)
@@ -24975,7 +25037,7 @@ if ((!isCustomTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
-    if (sameString("htcBigPslAli", track) )
+    if (sameString("htcBigPslAli", track) || sameString("htcBigPslAliInWindow", track) )
 	{
 	char *aliTable = cartString(cart, "aliTable");
 	if (isHubTrack(aliTable))	
@@ -25670,6 +25732,10 @@ else if (sameWord(table, "htcChainAli"))
 else if (sameWord(table, "htcChainTransAli"))
     {
     htcChainTransAli(item);
+    }
+else if (sameWord(table, "htcBigPslAliInWindow"))
+    {
+    htcBigPslAliInWindow(item);
     }
 else if (sameWord(table, "htcBigPslAli"))
     {
