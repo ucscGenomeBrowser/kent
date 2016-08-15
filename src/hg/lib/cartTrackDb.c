@@ -16,7 +16,7 @@
 
 /* Static globals */
 static boolean useAC = FALSE;
-static struct trackDb *forbiddenTrackList = NULL;
+static struct slRef *accessControlTrackRefList = NULL;
 
 static struct trackDb *getFullTrackList(struct cart *cart, char *db, struct grp **pHubGroups)
 {
@@ -38,8 +38,13 @@ for (tdb = list;  tdb != NULL;  tdb = nextTdb)
         }
 
     char *tbOff = trackDbSetting(tdb, "tableBrowser");
-    if (useAC && tbOff != NULL && startsWithWord("off", tbOff))
-	slAddHead(&forbiddenTrackList, tdb);
+    if (useAC && tbOff != NULL &&
+        (startsWithWord("off", tbOff) || startsWithWord("noGenome", tbOff)))
+        {
+        slAddHead(&accessControlTrackRefList, slRefNew(tdb));
+        if (! startsWithWord("off", tbOff))
+            slAddHead(&newList, tdb);
+        }
     else
 	slAddHead(&newList, tdb);
     }
@@ -176,54 +181,118 @@ if (ptr != NULL)
 return string;
 }
 
-static void hashAddSlName(struct hash *hash, char *key, char *val)
-/* If key is already in hash, add an slName for val to the head of the list;
- * otherwise just store key -> slName for val. */
+struct accessControl
+/* Restricted permission settings for a table */
+    {
+    struct slName *hostList;       // List of hosts that are allowed to view this table
+    boolean isNoGenome;            // True if it's OK for position range but not genome-wide query
+    };
+
+void accessControlAddHost(struct accessControl *ac, char *host)
+/* Alloc an slName for host (unless NULL or empty) and add it to ac->hostList. */
 {
-struct slName *sln = slNameNew(val);
-struct hashEl *hel = hashLookup(hash, key);
-if (hel == NULL)
-    hashAdd(hash, key, sln);
-else
-    slAddHead(&(hel->val), sln);
+if (isNotEmpty(host))
+    slAddHead(&ac->hostList, slNameNew(host));
 }
 
-static struct hash *accessControlInit(struct sqlConnection *conn)
-/* Return a hash associating restricted table/track names in the given db/conn
- * with virtual hosts, or NULL if there is no tableAccessControl table and no
- * forbiddenTrackList (see getFullTrackList). */
+struct accessControl *accessControlNew(char *host, boolean isNoGenome)
+/* Alloc, init & return accessControl. */
 {
-struct hash *acHash = NULL;
-if (sqlTableExists(conn, "tableAccessControl"))
+struct accessControl *ac;
+AllocVar(ac);
+accessControlAddHost(ac, host);
+ac->isNoGenome = isNoGenome;
+return ac;
+}
+
+static void acHashAddOneTable(struct hash *acHash, char *table, char *host, boolean isNoGenome)
+/* If table is already in acHash, update its accessControl fields; otherwise store a
+ * new accessControl for table. */
+{
+struct hashEl *hel = hashLookup(acHash, table);
+if (hel == NULL)
     {
-    struct sqlResult *sr = NULL;
-    char **row = NULL;
-    acHash = newHash(0);
-    sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
-    while ((row = sqlNextRow(sr)) != NULL)
-	hashAddSlName(acHash, row[0], chopAtFirstDot(row[1]));
-    sqlFreeResult(&sr);
+    struct accessControl *ac = accessControlNew(host, isNoGenome);
+    hashAdd(acHash, table, ac);
     }
-if (forbiddenTrackList != NULL)
+else
     {
-    if (acHash == NULL)
-	acHash = newHash(0);
-    struct trackDb *tdb;
-    for (tdb = forbiddenTrackList;  tdb != NULL;  tdb = tdb->next)
-	{
-	char *tbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
-	if (isEmpty(tbOff))
-	    errAbort("bug: tdb for %s is in forbiddenTrackList without 'tableBrowser off' setting",
-		     tdb->track);
-	hashAddSlName(acHash, tdb->table, "-");
-	// skip "off" and look for additional table names:
-	nextWord(&tbOff);
-	char *tbl;
-	while ((tbl = nextWord(&tbOff)) != NULL)
-	    hashAddSlName(acHash, tbl, "-");
-	}
+    struct accessControl *ac = hel->val;
+    ac->isNoGenome = isNoGenome;
+    accessControlAddHost(ac, host);
+    }
+}
+
+static struct hash *accessControlInit(char *db)
+/* Return a hash associating restricted table/track names in the given db/conn
+ * with virtual hosts -- hash is empty if there is no tableAccessControl table and no
+ * accessControlTrackRefList (see getFullTrackList). */
+{
+struct hash *acHash = hashNew(0);
+if (! trackHubDatabase(db))
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    if (sqlTableExists(conn, "tableAccessControl"))
+        {
+        struct sqlResult *sr = NULL;
+        char **row = NULL;
+        acHash = newHash(0);
+        sr = sqlGetResult(conn, NOSQLINJ "select name,host from tableAccessControl");
+        while ((row = sqlNextRow(sr)) != NULL)
+            acHashAddOneTable(acHash, row[0], chopAtFirstDot(row[1]), FALSE);
+        sqlFreeResult(&sr);
+        }
+    hFreeConn(&conn);
+    }
+struct slRef *tdbRef;
+for (tdbRef = accessControlTrackRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    struct trackDb *tdb = tdbRef->val;
+    char *tbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
+    if (isEmpty(tbOff))
+        errAbort("accessControlInit bug: tdb for %s does not have tableBrowser setting",
+                 tdb->track);
+    // First word is "off" or "noGenome":
+    char *type = nextWord(&tbOff);
+    boolean isNoGenome = sameString(type, "noGenome");
+    // Add track table to acHash:
+    acHashAddOneTable(acHash, tdb->table, NULL, isNoGenome);
+    // Remaining words are additional table names to add:
+    char *tbl;
+    while ((tbl = nextWord(&tbOff)) != NULL)
+        acHashAddOneTable(acHash, tbl, NULL, isNoGenome);
     }
 return acHash;
+}
+
+static struct hash *getCachedAcHash(char *db)
+/* Returns a hash that maps table names to accessControl, creating it if necessary. */
+{
+static struct hash *dbToAcHash = NULL;
+if (dbToAcHash == NULL)
+    dbToAcHash = hashNew(0);
+struct hash *acHash = hashFindVal(dbToAcHash, db);
+if (acHash == NULL)
+    {
+    acHash = accessControlInit(db);
+    hashAdd(dbToAcHash, db, acHash);
+    }
+return acHash;
+}
+
+static char *getCachedCurrentHost()
+/* Return the current host name chopped at the first '.' or NULL if not in the CGI environment. */
+{
+static char *currentHost = NULL;
+if (currentHost == NULL)
+    {
+    currentHost = cloneString(cgiServerName());
+    if (currentHost == NULL)
+	return NULL;
+    else
+	chopAtFirstDot(currentHost);
+    }
+return currentHost;
 }
 
 boolean cartTrackDbIsAccessDenied(char *db, char *table)
@@ -231,49 +300,27 @@ boolean cartTrackDbIsAccessDenied(char *db, char *table)
  * if access to table is denied (at least on this host) by 'tableBrowser off'
  * or by the tableAccessControl table. */
 {
-static char *currentHost = NULL;
-static struct hash *dbToAcHash = NULL;
-
 if (!useAC)
     return FALSE;
 
-struct slName *enabledHosts = NULL;
-struct slName *sln = NULL;
-
-if (dbToAcHash == NULL)
-    dbToAcHash = hashNew(0);
-
-struct hash *acHash = hashFindVal(dbToAcHash, db);
-if (acHash == NULL)
-    {
-    struct sqlConnection *conn = hAllocConn(db);
-    acHash = accessControlInit(conn);
-    hFreeConn(&conn);
-    hashAdd(dbToAcHash, db, acHash);
-    }
-
-if (acHash == NULL)
+struct hash *acHash = getCachedAcHash(db);
+struct accessControl *ac = hashFindVal(acHash, table);
+if (ac == NULL)
     return FALSE;
-enabledHosts = (struct slName *)hashFindVal(acHash, table);
-if (enabledHosts == NULL)
+if (ac->isNoGenome && ac->hostList == NULL)
     return FALSE;
+char *currentHost = getCachedCurrentHost();
 if (currentHost == NULL)
-    {
-    currentHost = cloneString(cgiServerName());
-    if (currentHost == NULL)
-	{
-	warn("accessControl: unable to determine current host");
-	return FALSE;
-	}
-    else
-	chopAtFirstDot(currentHost);
-    }
-for (sln = enabledHosts;  sln != NULL;  sln = sln->next)
-    {
-    if (sameString(currentHost, sln->name))
-	return FALSE;
-    }
-return TRUE;
+    warn("accessControl: unable to determine current host");
+return (! slNameInList(ac->hostList, currentHost));
+}
+
+boolean cartTrackDbIsNoGenome(char *db, char *table)
+/* Return TRUE if range queries, but not genome-queries, are permitted for this table. */
+{
+struct hash *acHash = getCachedAcHash(db);
+struct accessControl *ac = hashFindVal(acHash, table);
+return (ac != NULL && ac->isNoGenome);
 }
 
 static void addTablesAccordingToTrackType(char *db, struct slName **pList, struct hash *uniqHash,

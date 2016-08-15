@@ -56,7 +56,7 @@
 	<ul style="display: none; visibility: hidden;">
 	<li class="first"><a href="http://hgdownload.soe.ucsc.edu/downloads.html">Genome Data</a></li>
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#source_downloads">Source Code</a></li>
-  <li><a class="noPostLink" href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
+  <li><a href="https://genome-store.ucsc.edu">Genome Browser Store</a></li>
 	<li><a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">Utilities</a></li>
 	<li class="last"><a href="../goldenPath/help/ftp.html">FTP</a></li>
 	<li class="last"><a href="../goldenPath/help/mysql.html">MySQL Access</a></li>
@@ -64,7 +64,8 @@
 </li>
 <li class="menuparent" id="myData"><span>My Data</span>
 	<ul style="display: none; visibility: hidden;">
-	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">Sessions</a></li>
+	<li><a id="sessionsMenuLink" href="../cgi-bin/hgSession?hgS_doMainPage=1">My Sessions</a></li>
+	<li><a id="publicSessionsMenuLink" href="../cgi-bin/hgPublicSessions">Public Sessions</a></li>
 	<li><a id="trackHubsMenuLink" href="../cgi-bin/hgHubConnect">Track Hubs</a></li>
 	<li class="last"><a id="customTracksMenuLink" href="../cgi-bin/hgCustom">Custom Tracks</a></li>
 	</ul>

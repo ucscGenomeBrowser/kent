@@ -102,6 +102,9 @@ struct hash *sqlHashOfDatabases(void);
 struct slName *sqlListOfDatabases(void);
 /* Get list of all databases that are online. */
 
+char *sqlHostInfo(struct sqlConnection *sc);
+/* Returns the mysql host info for the connection, must be connected. */
+
 void sqlDisconnect(struct sqlConnection **pSc);
 /* Close down connection. */
 

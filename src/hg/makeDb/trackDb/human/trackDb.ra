@@ -877,9 +877,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -895,9 +895,9 @@ snpExceptionDesc snp141ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -915,9 +915,9 @@ defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -932,9 +932,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -951,9 +951,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
@@ -970,9 +970,9 @@ snpExceptionDesc snp142ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
@@ -991,9 +991,9 @@ defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
@@ -1009,9 +1009,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
@@ -1030,9 +1030,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1049,9 +1049,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1070,9 +1070,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1088,9 +1088,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1108,9 +1108,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 priority 1
@@ -1128,9 +1128,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 
@@ -1149,9 +1149,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 
@@ -1167,11 +1167,90 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
+
+track snp147Common
+shortLabel Common SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Found in >= 1% of Samples
+group varRep
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
+chimpDb panTro4
+orangDb ponAbe2
+macaqueDb rheMac3
+hapmapPhase III
+codingAnnotations snp147CodingDbSnp,
+priority 1
+
+track snp147Flagged
+shortLabel Flagged SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) Flagged by dbSNP as Clinically Assoc
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
+chimpDb panTro4
+orangDb ponAbe2
+macaqueDb rheMac3
+hapmapPhase III
+codingAnnotations snp147CodingDbSnp,
+
+track snp147Mult
+shortLabel Mult. SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147) That Map to Multiple Genomic Loci
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+snpSeq snp147Seq
+snpExceptionDesc snp147ExceptionDesc
+defaultGeneTracks knownGene
+defaultMaxWeight 3
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
+chimpDb panTro4
+orangDb ponAbe2
+macaqueDb rheMac3
+hapmapPhase III
+codingAnnotations snp147CodingDbSnp,
+
+track snp147
+shortLabel All SNPs(147)
+longLabel Simple Nucleotide Polymorphisms (dbSNP 147)
+group varRep
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP:
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+trackHandler snp125
+chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
+chimpDb panTro4
+orangDb ponAbe2
+macaqueDb rheMac3
+hapmapPhase III
+codingAnnotations snp147CodingDbSnp,
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -1446,7 +1525,25 @@ exonNumbers off
 urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion July 23, 2015
+dataVersion 2016-05-15
+release alpha
+
+track dgvPlus
+compositeTrack on
+shortLabel DGV Struct Var
+longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
+group varRep
+visibility hide
+itemRgb on
+type bed 9 +
+noScoreFilter .
+exonArrows off
+exonNumbers off
+urlLabel DGV Browser and Report:
+url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
+coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
+dataVersion 2015-07-23
+release beta,public
 
     track dgvMerged
     parent dgvPlus
@@ -3107,7 +3204,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off
+tableBrowser noGenome
 
 track omimGene2
 shortLabel OMIM Genes
@@ -3118,7 +3215,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimGeneMap omimPhenotype omimGeneSymbol omim2gene
+tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
 shortLabel OMIM AV SNPs
@@ -3129,7 +3226,7 @@ color 0, 80, 0
 type bed 4
 hgsid on
 url http://www.omim.org/entry/
-tableBrowser off omimAv omimAvRepl
+tableBrowser noGenome omimAv omimAvRepl
 
 track cosmic
 shortLabel COSMIC
@@ -3182,7 +3279,7 @@ group phenDis
 visibility hide
 type bigBed 12 .
 itemRgb on
-urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/"
+urls rcvAcc="http://www.ncbi.nlm.nih.gov/clinvar/$$/" geneId="http://www.ncbi.nlm.nih.gov/gene/$$" snpId="http://www.ncbi.nlm.nih.gov/projects/SNP/snp_ref.cgi?rs=$$" nsvId="http://www.ncbi.nlm.nih.gov/dbvar/variants/$$/" origName="http://www.ncbi.nlm.nih.gov/clinvar/variation/$$/"
 mouseOverField clinSign
 noScoreFilter on
 
@@ -4608,6 +4705,38 @@ searchType bed
 semiShortCircuit 1
 termRegex rs[0-9]+
 searchPriority 12.954
+padding 250
+
+searchTable snp147Common
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9846
+padding 250
+
+searchTable snp147Flagged
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9847
+padding 250
+
+searchTable snp147Mult
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.9848
+padding 250
+
+searchTable snp147
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.953
 padding 250
 
 include cloneEnd.trackDb.ra

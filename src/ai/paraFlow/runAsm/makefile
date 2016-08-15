@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 O = asmLong.o asmString.o asmToOld.o

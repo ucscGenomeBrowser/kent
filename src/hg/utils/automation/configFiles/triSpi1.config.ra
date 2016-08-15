@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db triSpi1
+clade worm
+genomeCladePriority 68
+scientificName Trichinella spiralis
+commonName T. spiralis
+assemblyDate Jan. 2011
+assemblyLabel WashU School of Medicine T. spiralis genome project
+assemblyShortLabel WS225/Trichinella_spiralis-3.7.1
+orderKey 20030
+mitoAcc AF293969.1
+fastaFiles /hive/data/genomes/triSpi1/ucsc/triSpi1.fa.gz
+agpFiles /hive/data/genomes/triSpi1/ucsc/triSpi1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/dpdx/trichinellosis/gallery.html#larvaebear
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 238
+ncbiAssemblyId 245458
+ncbiAssemblyName WS225/Trichinella_spiralis-3.7.1
+ncbiBioProject 12603
+genBankAccessionID GCA_000181795.2
+taxId 6334

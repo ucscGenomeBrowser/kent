@@ -32,6 +32,10 @@ errAbort(
   "The way around this is to include spaces on either side of the equal\n"
   "options:\n"
   "   -dry - if set just print what we _would_ change access to.\n"
+  "example:\n"
+  "    cdwChangeAccess a+r ' data_set_id=\"quakeBrainGeo\"'\n"
+  "This would make all files associated with the data set quakeBrainGeo readable for all,\n"
+  "something you might do when a data set is published.\n"
   );
 }
 

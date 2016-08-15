@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db caeAng2
+clade worm
+# genomeCladePriority 70
+scientificName Caenorhabditis angaria
+commonName C. angaria
+assemblyDate Mar. 2012
+assemblyShortLabel WS245
+assemblyLabel Division of Biology, California Institute of Technology
+orderKey 3004
+mitoAcc none
+fastaFiles /hive/data/genomes/caeAng2/ucsc/caeAng2.fa.gz
+agpFiles /hive/data/genomes/caeAng2/ucsc/caeAng2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/c_angaria#0--10
+photoCreditName reference to WormBase C. angaria
+ncbiGenomeId 3127
+ncbiAssemblyId 200968
+ncbiAssemblyName Cang2012_03_13
+ncbiBioProject 51225
+genBankAccessionID GCA_000165025.1
+taxId 860376

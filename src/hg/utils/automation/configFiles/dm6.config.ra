@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db dm6
+clade insect
+genomeCladePriority 10
+scientificName Drosophila melanogaster
+commonName D. melanogaster
+assemblyDate Aug. 2014
+assemblyLabel The FlyBase Consortium/Berkeley Drosophila Genome Project/Celera Genomics
+assemblyShortLabel BDGP Release 6 + ISO1 MT
+orderKey 9060
+# chrM mito sequence KJ947872.2 included
+mitoAcc none
+fastaFiles /hive/data/genomes/dm6/ucsc/chr*.fa
+agpFiles /hive/data/genomes/dm6/ucsc/chr*.agp
+# qualFiles /dev/null
+dbDbSpeciesDir drosophila
+photoCreditURL http://de.wikipedia.org/wiki/Benutzer:Mr.checker
+photoCreditName Wikimedia Commons/Mr.checker
+ncbiGenomeId 47
+ncbiAssemblyId 202931
+ncbiAssemblyName BDGP Release 6 + ISO1 MT
+ncbiBioProject 164
+genBankAccessionID GCA_000001215.4
+taxId 7227

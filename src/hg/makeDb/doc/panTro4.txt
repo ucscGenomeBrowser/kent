@@ -555,7 +555,6 @@ liftUp  /hive/data/genomes/panTro4/jkStuff/ensToUcsc.lift
     cd /hive/data/genomes/panTro4/bed/genscan
     time doGenscan.pl panTro4 > do.log 2>&1
     # recovering after a power failure
-XXX - running - Thu Apr 26 14:41:32 PDT 2012
     time ./lastJobs.sh
     #   real    431m5.600s
 
@@ -983,3 +982,233 @@ http://genome.crg.es/genepredictions/P.troglodytes/panTro4/geneid_v1.4/panTro4.g
 #    enrich 62.50x
 
 ##########################################################################
+# LASTZ chimp/panTro4 Gorilla/gorGor4 - (DONE - 2016-06-09 - Hiram)
+    mkdir /hive/data/genomes/panTro4/bed/lastzGorGor4.2016-06-09
+    cd /hive/data/genomes/panTro4/bed/lastzGorGor4.2016-06-09
+
+    printf '# chimp vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: chimp panTro4
+SEQ1_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ1_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor4
+SEQ2_DIR=/hive/data/genomes/gorGor4/gorGor4.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro4/bed/lastzGorGor4.2016-06-09
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    147m1.230s
+
+    cat fb.panTro4.chainGorGor4Link.txt
+    # 2695509206 bases of 2902338967 (92.874%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro4 gorGor4) \
+      > rbest.log 2>&1 &
+    # real    273m52.556s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor4/bed/blastz.panTro4.swap
+    cd /hive/data/genomes/gorGor4/bed/blastz.panTro4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panTro4/bed/lastzGorGor4.2016-06-09/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    91m7.838s
+
+    cat fb.gorGor4.chainPanTro4Link.txt
+    # 2663327780 bases of 2917333143 (91.293%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` gorGor4 panTro4) \
+       > rbest.log 2>&1
+    # real    288m9.024s
+
+#########################################################################
+# LIFTOVER TO panTro5 (DONE - 2016-08-02 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/panTro4/bed/blat.panTro5.2016-08-02
+    cd /hive/data/genomes/panTro4/bed/blat.panTro5.2016-08-02
+    doSameSpeciesLiftOver.pl -verbose=2 \
+        -debug -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/panTro4/jkStuff/panTro4.11.ooc \
+         panTro4 panTro5
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -ooc=/hive/data/genomes/panTro4/jkStuff/panTro4.11.ooc \
+         panTro4 panTro5) > doLiftOverToGalGal4.log 2>&1
+    # real    1170m40.479s
+
+    # see if the liftOver menus function in the browser from panTro4 to panTro5
+
+##########################################################################
+# LASTZ chimp/panTro4 Gorilla/rheMac8 - (DONE - 2016-08-02 - Hiram)
+    # had incorrect year on this directory name
+    mkdir /hive/data/genomes/panTro4/bed/lastzRheMac8.2017-08-02
+    cd /hive/data/genomes/panTro4/bed/lastzRheMac8.2017-08-02
+
+    printf '# chimp vs rhesus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Chimp PanTro4
+SEQ1_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ1_LEN=//hive/data/genomes/panTro4/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+SEQ1_LIMIT=200
+
+# QUERY: Rhesus RheMac8
+SEQ2_DIR=/hive/data/genomes/rheMac8/rheMac8.2bit
+SEQ2_LEN=/hive/data/genomes/rheMac8/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=1000
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/panTro4/bed/lastzRheMac8.2017-08-02
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    520m46.562s
+
+    cat fb.panTro4.chainRheMac8Link.txt
+    # 2464376195 bases of 2902338967 (84.910%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro4 rheMac8) \
+      > rbest.log 2>&1 &
+    # real    522m24.688s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/rheMac8/bed/blastz.panTro4.swap
+    cd /hive/data/genomes/rheMac8/bed/blastz.panTro4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panTro4/bed/lastzRheMac8.2017-08-02/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    256m2.899s
+
+    cat fb.rheMac8.chainPanTro4Link.txt
+    # 2440747905 bases of 3142093174 (77.679%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` rheMac8 panTro4) \
+       > rbest.log 2>&1
+    # real    806m12.036s
+
+#########################################################################
+# LASTZ chimp/panTro4 Gorilla/gorGor5 - (DONE - 2016-08-02 - Hiram)
+    mkdir /hive/data/genomes/panTro4/bed/lastzGorGor5.2016-08-02
+    cd /hive/data/genomes/panTro4/bed/lastzGorGor5.2016-08-02
+
+    printf '# chimp vs. gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_L=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: chimp panTro4
+SEQ1_DIR=/hive/data/genomes/panTro4/panTro4.2bit
+SEQ1_LEN=/hive/data/genomes/panTro4/chrom.sizes
+SEQ1_CHUNK=40000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Gorilla gorGor5
+SEQ2_DIR=/hive/data/genomes/gorGor5/gorGor5.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=400
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/panTro4/bed/lastzGorGor5.2016-08-02
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # 489m52.825s
+
+    cat fb.panTro4.chainGorGor5Link.txt
+    # 2742736579 bases of 2902338967 (94.501%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro4 gorGor5) \
+      > rbest.log 2>&1 &
+    # real    139m21.411s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor5/bed/blastz.panTro4.swap
+    cd /hive/data/genomes/gorGor5/bed/blastz.panTro4.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/panTro4/bed/lastzGorGor5.2016-08-02/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    90m4.932s
+
+    cat fb.gorGor5.chainPanTro4Link.txt
+    # 2690786592 bases of 3080431298 (87.351%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` gorGor5 panTro4) \
+       > rbest.log 2>&1
+    # real    148m7.108s
+
+#########################################################################

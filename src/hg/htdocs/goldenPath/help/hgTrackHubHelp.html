@@ -135,7 +135,8 @@ Genome assemblies that UCSC does not support can be loaded and viewed with assoc
 <P>
 The data underlying the tracks and optional sequence in a hub reside on the remote 
 server of the data provider rather than at UCSC. 
-Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, HAL or VCF
+Genomic annotations are stored in compressed binary indexed files in bigBed, bigGenePred,
+bigPsl, bigChain, bigMaf, bigWig, BAM, CRAM, HAL or VCF
 format that contain the data at several resolutions.
 In the case of assemblies that UCSC does not support,
 genomic sequence is stored in the efficient twoBit format.
@@ -330,7 +331,8 @@ To create your own hub you will need:</p>
 <UL>
 <LI>
 one or more data sets formatted in one of the compressed binary index formats
-supported by the Genome Browser: bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM, HAL or VCF
+supported by the Genome Browser: bigBed, bigGenePred, bigPsl, bigChain, bigMaf, bigWig, BAM,
+CRAM, HAL or VCF
 <LI>
 a set of text files that specify properties for the track hub and for each of
 the data tracks within it
@@ -402,8 +404,10 @@ compressed binary index formats supported by the Genome Browser:
 <A HREF="bigGenePred.html">bigGenePred</A>,
 <A HREF="bigChain.html">bigChain</A>, 
 <A HREF="bigPsl.html">bigPsl</A>, 
+<A HREF="bigMaf.html">bigMaf</A>,
 <A HREF="bigWig.html">bigWig</A>, 
-<A HREF="bam.html">BAM</A>, HAL or
+<A HREF="bam.html">BAM</A>,
+<A HREF="cram.html">CRAM</A>, HAL or
 <A HREF="vcf.html">VCF</A>.</p>
 
 <P><em>bigWig</em> - 
@@ -436,6 +440,24 @@ or more related regions on the same chromosome, such as all the exons of a gene.
 See the <A HREF="bigBed.html">bigBed Track Format</A> help page for 
 information on creating and configuring bigBed tracks. 
 
+<P><em>bigPsl</em> - 
+BigPsl files are binary indexed versions of <A HREF="../../FAQ/FAQformat.html#format2">PSL</A>
+files. BigPsl format is useful for large data sets created by BLAT or other tools.
+See the <A HREF="bigPsl.html">bigPsl Track Format</A> help page for more information
+on creating and configuring bigPsl tracks.
+
+<P><em>bigChain</em> - 
+BigChain files are binary indexed versions of <A HREF="chain.html">chain</A> files.
+BigChain format is useful for large pairwise alignment data sets.
+See the <A HREF="bigChain.html">bigChain Track Format</A> help page for more information
+on creating and configuring bigChain tracks.
+
+<P><em>bigMaf</em> - 
+BigMaf files are binary indexed versions of <A HREF="../../FAQ/FAQformat.html#format5">MAF</A>
+files. BigMaf format is useful for large multiple alignment data sets.
+See the <A HREF="bigMaf.html">bigMaf Track Format</A> help page for more information
+on creating and configuring bigMaf tracks.
+
 <P><em>BAM</em> -
 BAM files contain alignments of (generally short) DNA reads to a
 reference sequence, usually a complete genome. BAM files are binary
@@ -446,6 +468,15 @@ index for a BAM file is in a separate file, which the track hub
 expects to be in the same directory with the same root name as the BAM file
 with the addition of a <em>.bai</em> suffix.  
 See the <A HREF="bam.html">BAM Track Format</A> help page for 
+more information.</p>
+
+<p><em>CRAM</em> -
+The CRAM file format is a more dense form of <a href="bam.html">BAM</a>
+files with the benefit of saving much disk space. While BAM files contain
+all sequence data within a file, CRAM files are smaller by taking
+advantage of an additional external &quot;reference sequence&quot; file.
+This file is needed to both compress and decompress the read information.
+See the <A HREF="cram.html">CRAM Track Format</A> help page for
 more information.</p>
 
 <P><em>HAL</em> -
@@ -682,7 +713,9 @@ displayed in the configuration and track settings, and on the
 details pages. Suggested maximum length is 80 characters.</p>
  
 <P><em>type</em> - the format of the file specified by bigDataUrl. Must be either 
-<em>bigWig</em>, <em>bigBed</em>, <em>bigGenePred</em>, <em>bigChain</em>, <em>bigPsl</em>, <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em>.  If the type
+<em>bigWig</em>, <em>bigBed</em>, <em>bigGenePred</em>, <em>bigChain</em>,
+<em>bigPsl</em>, <em>bigMaf</em>, <em>bam</em>, <em>halSnake</em> or <em>vcfTabix</em>
+(Note: use <em> type bam</em> for CRAM files).  If the type
 is <em>bigBed</em>, it may be followed by an optional number denoting the number
 of fields in the bigBed file (e.g., "type bigBed 12" for a file with 12 fields).
 If no number is given, a default value of 3 is assumed (a very limited display

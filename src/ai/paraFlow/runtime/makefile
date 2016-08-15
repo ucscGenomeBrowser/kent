@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 O = argsEnv.o array.o msort.o cacheQueue.o dir.o fileLib.o getObj.o initVar.o \

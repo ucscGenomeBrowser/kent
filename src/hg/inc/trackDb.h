@@ -607,13 +607,19 @@ void tdbSetCartVisibility(struct trackDb *tdb, struct cart *cart, char *vis);
 INLINE boolean tdbIsBigBed(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
-return startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type) || startsWithWord("bigMaf", tdb->type);
+return startsWithWord("bigBed", tdb->type) || startsWithWord("bigGenePred", tdb->type) || startsWithWord("bigMaf", tdb->type) || startsWithWord("bigPsl", tdb->type) || startsWithWord("bigChain", tdb->type);
 }
 
 INLINE boolean tdbIsBigWig(struct trackDb *tdb)
 // Local test to see if something is big bed.  Handles hub tracks unlike hIsBigBed.
 {
 return startsWithWord("bigWig", tdb->type);
+}
+
+INLINE boolean tdbIsLongTabix(struct trackDb *tdb)
+// Return TRUE if tdb corresponds to a long tabix file.
+{
+return startsWithWord("longTabix", tdb->type);
 }
 
 INLINE boolean tdbIsBam(struct trackDb *tdb)

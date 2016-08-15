@@ -10,5 +10,5 @@ print $username, $password;
 my $sftp = Net::SFTP::Foreign->new(host=> $host, password => $password, user => $username);
 $sftp->die_on_error("Unable to establish SFTP connection");
 $sftp->setcwd("decipher-dda/pub") or die "unable to change cwd: " . $sftp->error;
-my ($file) = $sftp->glob("decipher*txt.gpg", names_only => 1);
+my ($file) = $sftp->glob("decipher-cnvs*txt.gpg", names_only => 1);
 $sftp->get($file, $file) or die "get failed: " . $sftp->error;

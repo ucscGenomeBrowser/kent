@@ -1009,7 +1009,7 @@ char urlLabelSetting[32];
 // replace the $$ and other wildchards with the url given in tdb 
 char *url = getUrlSetting(tdb, "url");
 //char* eUrl = constructUrl(tdb, url, itemName, encode);
-if (url==NULL)
+if (url==NULL || isEmpty(url))
     return;
 
 char* eUrl = replaceInUrl(url, itemName, cart, database, seqName, winStart, winEnd, tdb->track, encode);
@@ -1603,7 +1603,14 @@ for (;col != NULL && count < fieldCount;col=col->next)
         printf("</tr></table>\n<p>\n<table class='bedExtraTbl'>");
 
     // field description
-    printf("<tr><td>%s</td>", col->comment); // bold style now in HGStyle.css
+    char *entry;
+    if (sameString(fieldName, "cdsStartStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS start annotation (none, unknown, incomplete, or complete)";
+    else if (sameString(fieldName, "cdsEndStat") && sameString("enum('none','unk','incmpl','cmpl')", col->comment))
+        entry = "Status of CDS end annotation (none, unknown, incomplete, or complete)";
+    else
+        entry = col->comment;
+    printf("<tr><td>%s</td>", entry); // bold style now in HGStyle.css
 
     if (col->isList || col->isArray || col->lowType->stringy || asTypesIsInt(col->lowType->type))
         printIdOrLinks(col, fieldToUrl, tdb, fields[ix]);
@@ -2949,7 +2956,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 pslList = pslFromBigPsl(seqName, bb, NULL, NULL);
 
 printf("<H3>%s/Genomic Alignments</H3>", item);
-printAlignments(pslList, start, "htcBigPslAli", tdb->table, item);
+printAlignmentsExtra(pslList, start, "htcBigPslAli", "htcBigPslAliInWindow", tdb->table, item);
 pslFreeList(&pslList);
 printItemDetailsHtml(tdb, item);
 }
@@ -3921,14 +3928,14 @@ else
     }
 }
 
-
 static void doLongTabix(struct trackDb *tdb, char *item)
+/* Handle a click on a long range interaction */
 {
 char *bigDataUrl = hashFindVal(tdb->settingsHash, "bigDataUrl");
 struct bedTabixFile *btf = bedTabixFileMayOpen(bigDataUrl, NULL, 0, 0);
 char *chromName = cartString(cart, "c");
 struct bed *list = bedTabixReadBeds(btf, chromName, winStart, winEnd, bedLoad5);
-bedTabixFileClose(btf);
+bedTabixFileClose(&btf);
 unsigned maxWidth;
 struct longRange *longRangeList = parseLongTabix(list, &maxWidth, 0);
 struct longRange *longRange, *ourLongRange = NULL;
@@ -3956,19 +3963,61 @@ struct aveStats *as = aveStatsCalc(doubleArray, count);
 printf("Item you clicked on:<BR>\n");
 printf("<B>Score:</B> %g<BR>\n", ourLongRange->score);
 printf("<B>ID:</B> %u<BR>\n", ourLongRange->id);
-//printf("<A HREF=\"hgTracks?position=%s:%d-%d\" TARGET=_BLANK><B>Link to other block </A><BR>\n",  otherChrom, s, e);
+unsigned padding =  (ourLongRange->e - ourLongRange->s) / 10;
+int s = ourLongRange->s - padding; 
+int e = ourLongRange->e + padding; 
+if (s < 0 ) 
+    s = 0;
+int chromSize = hChromSize(database, seqName);
+if (e > chromSize)
+    e = chromSize;
 
-printf("<BR>All items in window:\n");
+char num1Buf[1024],num2Buf[1024];
+char num3Buf[1024],num4Buf[1024];
+char num5Buf[1024],num6Buf[1024];
+char num7Buf[1024];
+sprintLongWithCommas(num1Buf, ourLongRange->s - ourLongRange->sw/2);
+sprintLongWithCommas(num2Buf, ourLongRange->s + ourLongRange->sw/2);
+sprintLongWithCommas(num3Buf, ourLongRange->e - ourLongRange->ew/2);
+sprintLongWithCommas(num4Buf, ourLongRange->e + ourLongRange->ew/2);
+sprintLongWithCommas(num5Buf, ourLongRange->sw);
+sprintLongWithCommas(num6Buf, ourLongRange->ew);
+sprintLongWithCommas(num7Buf, ourLongRange->ew + ourLongRange->e - ourLongRange->s);
+if (differentString(ourLongRange->sChrom, ourLongRange->eChrom))
+    {
+    printf("<B>Current region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
+        ourLongRange->sChrom, num1Buf,num2Buf,ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<B>Paired region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
+    }
+else
+    {
+    printf("<B>Lower region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)</A><BR>\n",  
+        ourLongRange->sChrom, num1Buf,num2Buf, ourLongRange->sChrom, num1Buf,num2Buf, num5Buf);
+    printf("<B>Upper region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num3Buf, num4Buf, ourLongRange->eChrom, num3Buf, num4Buf, num6Buf);
+    printf("<B>Intrachromasomal interaction region: </B>");
+    printf("<A HREF=\"hgTracks?position=%s:%s-%s \" TARGET=_BLANK>%s:%s-%s (%sbp)<BR></A><BR>\n",  
+        ourLongRange->eChrom, num1Buf, num4Buf, ourLongRange->eChrom, num1Buf, num4Buf, num7Buf);
+    }
 
-printf("<BR>Q1 %f\n", as->q1);
-printf("<BR>median %f\n", as->median);
-printf("<BR>Q3 %f\n", as->q3);
-printf("<BR>average %f\n", as->average);
-printf("<BR>min %f\n", as->minVal);
-printf("<BR>max %f\n", as->maxVal);
-printf("<BR>count %d\n", as->count);
-printf("<BR>total %f\n", as->total);
-printf("<BR>standard deviation %f\n", as->stdDev);
+printf("<BR>Statistics on the scores of all items in window (go to track controls to set minimum score to display):\n");
+
+printf("<TABLE BORDER=1>\n");
+printf("<TR><TD><B>Q1</B></TD><TD>%f</TD></TR>\n", as->q1);
+printf("<TR><TD><B>median</B></TD><TD>%f</TD></TR>\n", as->median);
+printf("<TR><TD><B>Q3</B></TD><TD>%f</TD></TR>\n", as->q3);
+printf("<TR><TD><B>average</B></TD><TD>%f</TD></TR>\n", as->average);
+printf("<TR><TD><B>min</B></TD><TD>%f</TD></TR>\n", as->minVal);
+printf("<TR><TD><B>max</B></TD><TD>%f</TD></TR>\n", as->maxVal);
+printf("<TR><TD><B>count</B></TD><TD>%d</TD></TR>\n", as->count);
+printf("<TR><TD><B>total</B></TD><TD>%f</TD></TR>\n", as->total);
+printf("<TR><TD><B>standard deviation</B></TD><TD>%f</TD></TR>\n", as->stdDev);
+printf("</TABLE>\n");
 }
 
 void genericClickHandlerPlus(
@@ -4167,10 +4216,8 @@ else if (wordCount > 0)
         {
         doGvf(tdb, item);
         }
-#ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
-#endif // USE_BAM
     else if ( startsWith("longTabix", type))
 	doLongTabix(tdb, item);
     }
@@ -5781,9 +5828,9 @@ for (isClicked = 1; isClicked >= 0; isClicked -= 1)
 printf("</TT></PRE>");
 }
 
-void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+void printAlignmentsExtra(struct psl *pslList, int startFirst, char *hgcCommand, char *hgcCommandInWindow,
 		     char *tableName, char *itemIn)
-/* Print list of mRNA alignments. */
+/* Print list of mRNA alignments with special "in window" alignment function. */
 {
 if (pslList == NULL || tableName == NULL)
     return;
@@ -5803,11 +5850,18 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere("htcCdnaAliInWindow", cgiEncode(itemIn),
+	hgcAnchorSomewhere(hgcCommandInWindow, cgiEncode(itemIn),
 			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
+}
+
+void printAlignments(struct psl *pslList, int startFirst, char *hgcCommand,
+		     char *tableName, char *itemIn)
+/* Print list of mRNA alignments. */
+{
+printAlignmentsExtra(pslList, startFirst, hgcCommand, "htcCdnaAliInWindow", tableName, itemIn);
 }
 
 struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc)
@@ -6898,6 +6952,10 @@ if (retSeq)
     *retSeq = dnaSeq;
 
 tRcAdjustedStart = tStart;
+
+if (psl->strand[1] == '-')
+    pslRc(psl);
+
 if (psl->strand[0] == '-')
     {
     if (retIsRc)
@@ -7149,6 +7207,61 @@ struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
 showSomeAlignment(psl, rnaSeq, gftRna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
 }
 
+void htcBigPslAliInWindow(char *acc)
+/* Show alignment in window for accession in bigPsl file. */
+{
+struct psl *partPsl, *wholePsl;
+char *aliTable;
+int start;
+unsigned int cdsStart = 0, cdsEnd = 0;
+
+/* Print start of HTML. */
+writeFramesetType();
+puts("<HTML>");
+aliTable = cartString(cart, "aliTable");
+if (isCustomTrack(aliTable))
+    {
+    struct customTrack *ct = lookupCt(aliTable);
+    tdb = ct->tdb;
+    }
+else
+    tdb = hashFindVal(trackHash, aliTable);
+printf("<HEAD>\n<TITLE>%s vs Genomic [%s]</TITLE>\n</HEAD>\n\n", acc, aliTable);
+
+/* Get some environment vars. */
+start = cartInt(cart, "l");
+int end = cartInt(cart, "r");
+char *chrom = cartString(cart, "c");
+
+char *seq, *cdsString = NULL;
+struct lm *lm = lmInit(0);
+char *fileName = bbiNameFromSettingOrTable(tdb, NULL, tdb->table);
+struct bbiFile *bbi = bigBedFileOpen(fileName);
+struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, chrom, start, end, 0, lm);
+char *bedRow[32];
+char startBuf[16], endBuf[16];
+for (bb = bbList; bb != NULL; bb = bb->next)
+    {
+    bigBedIntervalToRow(bb, seqName, startBuf, endBuf, bedRow, ArraySize(bedRow));
+    struct bed *bed = bedLoadN(bedRow, 12);
+    if (sameString(bed->name, acc))
+	{
+	bb->next = NULL;
+	break;
+	}
+    }
+wholePsl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
+genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
+
+if (wholePsl->tStart >= winStart && wholePsl->tEnd <= winEnd)
+    partPsl = wholePsl;
+else
+    partPsl = pslTrimToTargetRange(wholePsl, winStart, winEnd);
+struct dnaSeq *rnaSeq = newDnaSeq(seq, strlen(seq), acc);
+showSomePartialDnaAlignment(partPsl, wholePsl, rnaSeq,
+                            NULL, cdsStart, cdsEnd);
+}
+
 static struct dnaSeq *getBaseColorSequence(char *itemName, char *table)
 /* Grab sequence using the sequence and extFile table names out of BASE_COLOR_USE_SEQUENCE. */
 {
@@ -7221,7 +7334,7 @@ else if (sameString("HInvGeneMrna", aliTable))
     sqlSafef(query, sizeof query, "select mrnaAcc from HInv where geneId='%s'", acc);
     rnaSeq = hRnaSeq(database, sqlQuickString(conn, query));
     }
-else if (sameString("ncbiRefSeqPsl", aliTable))
+else if (sameString("ncbiRefSeqPsl", aliTable) || startsWith("altSeqLiftOverPsl", aliTable))
     {
     rnaSeq = getBaseColorSequence(acc, aliTable);
     }
@@ -8655,7 +8768,7 @@ puts("<B>Alignment Summary:</B><BR>\n");
 // sprintLongWithCommas(strBuf, altSize);
 // printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
 pslList = getAlignments(conn, tdb->table, item);
-printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAli", tdb->table, item);
 
 puts("<P>");
 total = 0;
@@ -9807,23 +9920,62 @@ char *chrom = cartString(cart, "c");
 
 printf("<H3>Patient %s </H3>", itemName);
 
-/* print phenotypes */
-sqlSafef(query, sizeof(query),
-      "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-if ((row != NULL) && strlen(row[0]) >= 1)
+/* print phenotypes and other information, if available */
+if (sqlFieldIndex(conn, "decipherRaw", "phenotypes") >= 0)
     {
-    printf("<B>Phenotype: </B><UL>");
-    while (row != NULL)
+    sqlSafef(query, sizeof(query),
+        "select phenotypes, mean_ratio, inheritance, pathogenicity, contribution "
+        "from decipherRaw where id = '%s'", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
         {
-	printf("<LI>");
-	printf("%s\n", row[0]);
-	row = sqlNextRow(sr);
+        char *phenoString = replaceChars(row[0], "|", "</li>\n<li>");
+        printf("<b>Phenotypes:</b>\n<ul>\n"
+               "<li>%s</li>\n"
+               "</ul>\n", phenoString);
+        // freeMem(phenoString);
         }
-    printf("</UL>");
+    if (row != NULL)
+        {
+        if (isNotEmpty(row[1]))
+            {
+            printf("<b>Mean Ratio:</b> %s\n<br>\n", row[1]);
+            }
+        if (isNotEmpty(row[2]))
+            {
+            printf("<b>Inheritance:</b> %s\n<br>\n", row[2]);
+            }
+        if (isNotEmpty(row[3]))
+            {
+            printf("<b>Pathogenicity:</b> %s\n<br>\n", row[3]);
+            }
+        if (isNotEmpty(row[4]))
+            {
+            printf("<b>Contribution:</b> %s\n<br>\n", row[4]);
+            }
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
+else
+    {
+    sqlSafef(query, sizeof(query),
+          "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if ((row != NULL) && strlen(row[0]) >= 1)
+        {
+        printf("<B>Phenotype: </B><UL>");
+        while (row != NULL)
+            {
+        printf("<LI>");
+        printf("%s\n", row[0]);
+        row = sqlNextRow(sr);
+            }
+        printf("</UL>");
+        }
+    sqlFreeResult(&sr);
+    }
 
 /* link to Ensembl DECIPHER Patient View page */
 printf("<B>Patient View: </B>\n");
@@ -16928,6 +17080,22 @@ if (isNotEmpty(orthoTable) && hTableExists(database, orthoTable))
 
 #define FOURBLANKCELLS "<TD></TD><TD></TD><TD></TD><TD></TD>"
 
+static char *abbreviateAllele(char *allele)
+/* If allele is >50bp then return an abbreviated version with first & last 20 bases and length;
+ * otherwise just return (cloned) allele. */
+{
+int length = strlen(allele);
+if (length > 50)
+    {
+    struct dyString *dyAbbr = dyStringCreate("%.20s", allele);
+    dyStringAppend(dyAbbr, "...");
+    dyStringAppend(dyAbbr, allele+length - 20);
+    dyStringPrintf(dyAbbr, " (%d bases)", length);
+    return dyStringCannibalize(&dyAbbr);
+    }
+return cloneString(allele);
+}
+
 void printSnpAlleleRows(struct snp125 *snp, int version)
 /* Print the UCSC ref allele (and dbSNP if it differs), as row(s) of a
  * 6-column table. */
@@ -16936,32 +17104,28 @@ if (sameString(snp->strand,"+") ||
     strchr(snp->refUCSC, '(')) // don't try to revComp refUCSC if it is "(N bp insertion)" etc.
     {
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refUCSC);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refUCSC));
     if (!sameString(snp->refUCSC, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     }
 else if (sameString(snp->strand,"-"))
     {
-    char refUCSCRevComp[1024];
-    if (sameString(snp->strand, "-"))
-	{
-	safef(refUCSCRevComp, sizeof(refUCSCRevComp), "%s", snp->refUCSC);
-	reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
-	}
+    char *refUCSCRevComp = cloneString(snp->refUCSC);
+    reverseComplement(refUCSCRevComp, strlen(refUCSCRevComp));
     printf("<TR><TD><B>Reference allele:&nbsp;</B></TD>"
-	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", refUCSCRevComp);
+	   "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(refUCSCRevComp));
     if (version < 127 && !sameString(refUCSCRevComp, snp->refNCBI))
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
-	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", snp->refNCBI);
+	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n", abbreviateAllele(snp->refNCBI));
     else if (version >= 127 && !sameString(snp->refUCSC, snp->refNCBI))
 	{
-	char refNCBIRevComp[1024];
-	safecpy(refNCBIRevComp, sizeof(refNCBIRevComp), snp->refNCBI);
-	reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
+	char *refNCBIRevComp = cloneString(snp->refNCBI);
+        if (! strchr(snp->refNCBI, '('))
+            reverseComplement(refNCBIRevComp, strlen(refNCBIRevComp));
 	printf("<TR><TD><B>dbSnp reference allele:&nbsp;</B></TD>"
 	       "<TD align=center>%s</TD>"FOURBLANKCELLS"</TR>\n",
-	       refNCBIRevComp);
+	       abbreviateAllele(refNCBIRevComp));
 	}
     }
 }
@@ -17225,8 +17389,7 @@ void printSnp125FunctionInCDS(struct snp125 *snp, char *geneTable, char *geneTra
 			      struct genePred *gene, int exonIx, char *geneName)
 /* Show the effect of each observed allele of snp on the given exon of gene. */
 {
-char refAllele[1024];
-safecpy(refAllele, sizeof(refAllele), snp->refUCSC);
+char *refAllele = cloneString(snp->refUCSC);
 boolean refIsAlpha = isalpha(refAllele[0]);
 boolean geneIsRc = sameString(gene->strand, "-"), snpIsRc = sameString(snp->strand, "-");
 if (geneIsRc && refIsAlpha)
@@ -17237,8 +17400,7 @@ int snpCodonPos = 0;
 char refCodon[4], refAA = '\0';
 if (refIsSingleBase)
     getSnp125RefCodonAndSnpPos(snp, gene, exonIx, &snpCodonPos, refCodon, &refAA);
-char alleleStr[1024];
-safecpy(alleleStr, sizeof(alleleStr), snp->observed);
+char *alleleStr = cloneString(snp->observed);
 char *indivAlleles[64];
 int alleleCount = chopString(alleleStr, "/", indivAlleles, ArraySize(indivAlleles));
 int j;
@@ -17307,7 +17469,8 @@ for (j = 0;  j < alleleCount;  j++)
 	}
     else
 	printf(firstTwoColumnsPctS "%s %s --> %s\n",
-	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"), refAllele, al);
+	       geneTrack, geneName, snpMisoLinkFromFunc("cds-synonymy-unknown"),
+               abbreviateAllele(refAllele), abbreviateAllele(al));
     }
 }
 
@@ -17420,7 +17583,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 if (nearCount == 0)
-    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>intergenic</TD></TR>", geneTrack);
+    printf("<TR><TD>%s&nbsp;&nbsp;</TD><TD></TD><TD>%s</TD></TR>", geneTrack,
+           snpMisoLinkFromFunc("intergenic_variant"));
 }
 
 static struct genePred *getGPsWithFrames(struct sqlConnection *conn, char *geneTable,
@@ -20809,14 +20973,10 @@ else if (sameWord(type, "bigMaf"))
     genericMafClick(NULL, ct->tdb, item, start);
 else if (sameWord(type, "bigBed") || sameWord(type, "bigGenePred"))
     bigBedCustomClick(ct->tdb);
-#ifdef USE_BAM
 else if (sameWord(type, "bam"))
     doBamDetails(ct->tdb, itemName);
-#endif//def USE_BAM
-#ifdef USE_TABIX
 else if (sameWord(type, "vcfTabix"))
     doVcfTabixDetails(ct->tdb, itemName);
-#endif//def USE_TABIX
 else if (sameWord(type, "vcf"))
     doVcfDetails(ct->tdb, itemName);
 else if (sameWord(type, "makeItems"))
@@ -24767,6 +24927,31 @@ va_end(args);
 return res;
 }
 
+void printAddWbr(char *text, int distance) 
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
+{
+int i;
+i = 0;
+char *c;
+c = text;
+bool doNotBreak = FALSE;
+while (*c != 0) 
+    {
+    if ((*c=='&') || (*c=='<'))
+       doNotBreak = TRUE;
+    if (*c==';' || (*c =='>'))
+       doNotBreak = FALSE;
+
+    printf("%c", *c);
+    if (i % distance == 0 && ! doNotBreak) 
+        printf("<wbr>");
+    c++;
+    i++;
+    }
+}
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -24852,7 +25037,7 @@ if ((!isCustomTrack(track) && dbIsFound)
 ||  ((ct!= NULL) && (((ct->dbTrackType != NULL) &&  sameString(ct->dbTrackType, "maf"))|| sameString(ct->tdb->type, "bigMaf"))))
     {
     trackHash = makeTrackHashWithComposites(database, seqName, TRUE);
-    if (sameString("htcBigPslAli", track) )
+    if (sameString("htcBigPslAli", track) || sameString("htcBigPslAliInWindow", track) )
 	{
 	char *aliTable = cartString(cart, "aliTable");
 	if (isHubTrack(aliTable))	
@@ -25548,6 +25733,10 @@ else if (sameWord(table, "htcChainTransAli"))
     {
     htcChainTransAli(item);
     }
+else if (sameWord(table, "htcBigPslAliInWindow"))
+    {
+    htcBigPslAliInWindow(item);
+    }
 else if (sameWord(table, "htcBigPslAli"))
     {
     htcBigPslAli(item);
@@ -26079,12 +26268,10 @@ else if (startsWith("snake", trackHubSkipHubName(table)))
     {
     doSnakeClick(tdb, item);
     }
-#ifdef USE_TABIX
 else if (tdb != NULL && startsWithWord("vcfTabix", tdb->type))
     {
     doVcfTabixDetails(tdb, item);
     }
-#endif // USE_TABIX
 else if (tdb != NULL && startsWithWord("vcf", tdb->type))
     {
     doVcfDetails(tdb, item);

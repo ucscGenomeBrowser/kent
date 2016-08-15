@@ -4,9 +4,9 @@
 ##
 track wgEncodeGencodeV23
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
-shortLabel All GENCODE v23
-longLabel All GENCODE transcripts including comprehensive set v23
+superTrack wgEncodeGencodeSuper hide
+shortLabel All GENCODE V23
+longLabel All GENCODE transcripts including comprehensive set V23
 group genes
 dragAndDrop subTracks
 priority 34.182

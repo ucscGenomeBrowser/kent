@@ -1,102 +1,148 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<HTML>
-<HEAD>
-        <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-        <META name="description" content="UCSC Genome Browser">
-        <META name="keywords" content="genome, genome browser, human genome, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, SNPs, EST, mRNA, mouse genome, rat genome, chicken genome, chimp genome, dog genome, fruitfly genome, zebrafish genome, xenopus, frog genome, rhesus, opossum, danio rerio genome, drosophila, fugu, yeast, ciona,  comparative genomics, human variation, hapMap">
-        <TITLE>UCSC Genome Browser Home</TITLE>
-        <LINK REL="STYLESHEET" HREF="style/HGStyle.css">
-<meta name="verify-v1" content="PCwOyGxw6+Ib1t4DtxiRLG45cL2xihRrRVgsqKtIP84=">
-</HEAD>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+    <meta name="description" content="UCSC Genome Browser">
+    <meta name="keywords" content="genome, genome browser, human genome, genome assembly, Blat, UCSC, bioinformatics, gene prediction, SNP, SNPs, EST, mRNA, mouse genome, rat genome, chicken genome, chimp genome, dog genome, fruitfly genome, zebrafish genome, xenopus, frog genome, rhesus, opossum, danio rerio genome, drosophila, fugu, yeast, ciona,  comparative genomics, human variation, hapMap">
+    <title>UCSC Genome Browser Home</title>
+    <link href='https://fonts.googleapis.com/css?family=Oswald:700|Lato:700,700italic,300,400,400italic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../style/HGStyle.css">
+    <link rel="stylesheet" href="../style/jWest.css">
+  </head>
 
-<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF">
-<A NAME="TOP"></A>
+  <body>
 
-<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="images/title.jpg" ALT="UCSC Genome Bioinformatics"></TH></TR>
+    <!-- Banner -->
+    <div id="banner" class="jwBanner">
+        <a class="jwAnchor" href="http://www.ucsc.edu/">
+          <div class="jwUcscLogoWrapper">
+            <!--#include virtual="images/ucscLogo.svg"-->
+          </div>
+        </a>
+        <img src="../images/ucscHelixLogo.png" class="jwBannerHelixLogo">
+        <div class="jwBannerTitle">
+          Genome Browser
+        </div>
+    </div>
 
-<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="cgi-bin/hgMenubar"--></TD></TR>
+    <!-- Menu bar / hotlinks / blue bar: -->
+    <div>
+      <!--#include virtual="cgi-bin/hgMenubar"-->
+    </div>
 
-<!-- Left Sidebar Menu === -->  
-    <TR style="height:100%; vertical-align:top">
-    <TD ROWSPAN="3" VALIGN="top" HEIGHT="100%"> 
-    <!-- outer table is to align leftbar & content boxes at top of page -->
-    <TABLE WIDTH="100%" BORDER=0 CELLPADDING=0 CELLSPACING=0>
-        <TR><TD><IMG SRC="images/DOT.gif" ALT="" HEIGHT="7"></TD></TR>
-        <TR style="height:100%"><TD style="height:100%">
-        <!--outer table is for black border-->
-        <TABLE WIDTH="100%" BGCOLOR="#000000" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-            <TR><TD>
-            <TABLE WIDTH="100%" BORDER=0 CELLSPACING="0" CELLPADDING=10>
-                <TR style="height:100%">
-                <TD BGCOLOR="#738ED3" VALIGN="top" HEIGHT="100%" > 
-                <A CLASS="leftbar" HREF="cgi-bin/hgGateway">
-                        Genome Browser</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgBlat">
-                        Blat</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgTables">
-                        Table Browser</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgNear">
-                        Gene Sorter</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgPcr">
-                        In Silico PCR</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgGenome">
-                        Genome Graphs</A><HR>
-                <A CLASS="leftbar" HREF="http://galaxy.psu.edu"
-			TARGET=_blank>Galaxy</A><HR>
-                <A CLASS="leftbar" HREF="cgi-bin/hgVisiGene">
-                        VisiGene</A><HR>
-                <A CLASS="leftbar" HREF="util.html">
-                        Utilities</A><HR>
-                <A CLASS="leftbar" HREF="http://hgdownload.soe.ucsc.edu/downloads.html">
-                        Downloads</A><HR>
-                <A CLASS="leftbar" HREF="goldenPath/releaseLog.html">
-                        Release Log</A><HR>
-                <A CLASS="leftbar" HREF="goldenPath/customTracks/custTracks.html">
-                        Custom Tracks</A><HR>
-                <A CLASS="leftbar" HREF="https://genome-cancer.ucsc.edu/">
-                        Cancer Browser</A><HR>
-                <A CLASS="leftbar" HREF="http://microbes.ucsc.edu/">
-                        Microbial Genomes</A><HR>
-                <A CLASS="leftbar" HREF="ENCODE/">
-                        ENCODE</A><HR>
-                <A CLASS="leftbar" HREF="Neandertal">
-                        Neandertal</A><HR>
-                <A CLASS="leftbar" HREF="mirror.html">
-                        Mirrors</A><HR>
-                <A CLASS="leftbar" HREF="training/index.html"
-                        TARGET=_blank>
-                        Training</A><HR>
-                <A CLASS="leftbar" HREF="http://genome.ucsc.edu/blog">
-                        Blog</A><HR>
-                <A CLASS="leftbar" HREF="goldenPath/credits.html">
-                        Credits</A><HR>
-                <A CLASS="leftbar" HREF="goldenPath/pubs.html">
-                        Publications</A><HR>
-                <A CLASS="leftbar" HREF="cite.html">
-                        Cite Us</A><HR>
-                <A CLASS="leftbar" HREF="license/">
-                        Licenses</A><HR>
-                <A CLASS="leftbar" HREF="https://genomics.soe.ucsc.edu/careers/" TARGET=_blank>
-                        Jobs</A><HR>
-                  <A CLASS="leftbar" HREF="staff.html">
-                        Staff</A><HR>
-                  <A CLASS="leftbar" HREF="contacts.html">
-                        Contact Us</A><HR>
-                <BR>
-                <IMG SRC="images/DOT.gif" ALT="" HEIGHT=700 WIDTH=1>
-               </TD></TR></TABLE>
-        </TD></TR></TABLE>
-    </TD></TR></TABLE>
-    </TD>
+    <!-- Override nice-menu.css's menu background and fonts: -->
+    <link rel="stylesheet" href="../style/jWest.afterNiceMenu.css">
 
-    <TD VALIGN="top">
-      <!--outer table is for border purposes-->
-      <TABLE CELLPADDING=5 BORDER=0>
-        <TR><TD><!--#include virtual="indexIntro.html"--></TD></TR>
-        <TR><TD><!--#include virtual="indexNews.html"--></TD></TR>
-        <TR><TD><!--#include virtual="indexInfo.html"--></TD></TR>
-      </TABLE>
-   </TD></TR></TABLE>
+    <div id="staticMain" class="jwStaticMain" style="display: inline-block;">
 
-</BODY></HTML>
+      <!-- hgwdev warning (if applicable) -->
+      <!--#if expr='("$SERVER_NAME" = /hgwdev.*.ucsc.edu/ || "$SERVER_NAME" = /genome-test.*.ucsc.edu/) && "$SERVER_NAME" != /hgwdev-demo6/'-->
+      <div id="devWarningRow" class="jwRow">
+        <div id="devWarningBox" class="jwWarningBox jwWarningBoxStatic">
+          WARNING: This is the UCSC Genome Browser development site.
+          This website is used for testing purposes only and is not intended for general public
+          use.
+          Data and tools on this site are under development, have not been reviewed for quality,
+          and are subject to change at any time.
+          The high-quality, reviewed public site of the UCSC Genome Browser is available for use
+          at <a href="http://genome.ucsc.edu/">http://genome.ucsc.edu/</a>.
+        </div>
+      </div>
+      <!--#endif -->
+
+      <!-- genome-preview warning (if applicable) -->
+      <!--#if expr='"$SERVER_NAME" = /genome-preview.*.ucsc.edu/' -->
+      <div id="previewWarningRow" class="jwRow">
+        <div id="previewWarningBox" class="jwWarningBox jwWarningBoxStatic">
+          WARNING: This is the UCSC Genome Browser preview site.
+          This website is a weekly mirror of our internal development server for public access.
+          Data and tools on this site are under development, have not been reviewed for quality,
+          and are subject to change at any time.
+          We provide this site for early access, with the warning that it is less available and
+          stable than our public site.
+          The high-quality, reviewed public site of the UCSC Genome Browser is available for use
+          at <a href="http://genome.ucsc.edu/">http://genome.ucsc.edu/</a>.
+        </div> <!-- previewWarningBox -->
+      </div> <!-- previewWarningRow -->
+      <!--#endif -->
+
+      <div id="row1" class="jwRow">
+
+        <div id="pretty" class="jwColumn jwStaticLeftColumn">
+          <div id="prettyBox" class="jwSection">
+            <a href="cgi-bin/hgTracks">
+              <img src="images/dna-163466_960_720_rotated.jpg" width=438 height=517>
+            </a>
+          </div> <!-- prettyBox -->
+        </div> <!-- pretty -->
+
+        <div id="tools" class="jwColumn jwStaticRightColumn">
+          <div id="toolsBox" class="jwSection">
+            <div class="jwSectionTitle">Our tools</div>
+            <div class="jwSectionContents">
+              <ul class="jwNoBullet jwLessIndent">
+                <!--#include virtual="indexTools.html"-->
+              </ul>
+              <a href="util.html">More tools...</a>
+              <br><br>
+            </div> <!-- sectionContents -->
+          </div> <!-- toolsBox -->
+        </div> <!-- tools -->
+
+      </div> <!-- row1 -->
+
+      <div id="row2" class="jwRow">
+
+        <div id="aboutUs" class="jwColumn jwStaticRightColumn">
+          <div id="aboutUsBox" class="jwSection">
+            <div class="jwSectionTitle">Our story</div>
+            <div class="jwSectionContents">
+            <!--#include virtual="indexStory.html"-->
+            </div>
+          </div> <!-- aboutUsBox -->
+        </div> <!-- aboutUs -->
+
+        <div id="news" class="jwColumn jwStaticLeftColumn">
+          <div id="newsBox" class="jwSection">
+            <div class="jwSectionTitle">What's new</div>
+            <div class="jwSectionContents">
+              <div id="newsItems">
+                <!--#include virtual="indexNews.html"-->
+              </div> <!-- newsItems -->
+              <div class="jwNewsItem">
+                <a href="goldenPath/newsarch.html">More news...</a>
+              </div>
+              <br>
+              <!--
+              <a href="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
+                 target=_blank>Subscribe</a>
+              -->
+              <hr>
+              <em>The UCSC Genome Browser is developed and maintained by the
+              <a href="staff.html">Genome Bioinformatics Group</a>, a cross-departmental team
+              within the <a href="http://genomics.ucsc.edu/">UCSC Genomics Institute</a></em>.
+            </div> <!-- sectionContents -->
+          </div> <!-- newsBox -->
+        </div> <!-- news -->
+
+      </div> <!-- row2 -->
+
+    </div> <!-- main -->
+<!--Adding survey button and link - cath 7-13-16 -->
+<!--
+    <div style="display: inline-block; vertical-align: top; padding-top: 10px;">
+      <a href="https://www.surveymonkey.com/r/QYVSXKW" target="_blank"</a>
+      <img src="../images/surveyButton.jpg" alt="user survey" 
+      title="Your feedback is important to us! Please take our 2016 user survey."/>
+    </div> 
+-->
+<!--end survey button, leaving comments in place for next survey -->
+
+    <!-- Note: after v335 release, we should change "inc/jWestFooter.html" to
+        "/cgi-bin/hgMenubar?incFile=/inc/jWestFooter.html" so there won't be extra
+        ../'s in local links for web browsers to ignore -->
+    <!--#include virtual="inc/jWestFooter.html"-->
+
+  </body>
+</html>

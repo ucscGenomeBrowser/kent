@@ -98,9 +98,9 @@ searchName ucscRetroInfoRefSeq5
 searchTable ucscRetroAli5
 searchDescription Retroposed Genes V5, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo5
+xrefTable hgFixed.refLink, ucscRetroInfo5
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo5.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo5.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna5
@@ -150,9 +150,9 @@ searchName ucscRetroInfoRefSeq6
 searchTable ucscRetroAli6
 searchDescription Retroposed Genes V6, Including Pseudogenes 
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo6
+xrefTable hgFixed.refLink, ucscRetroInfo6
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo6.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo6.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna6
@@ -202,9 +202,9 @@ searchName ucscRetroInfoRefSeq7
 searchTable ucscRetroAli7
 searchDescription Retroposed GenesV7, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo7
+xrefTable hgFixed.refLink, ucscRetroInfo7
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo7.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo7.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna7
@@ -908,9 +908,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp138CodingDbSnp,
 # Need to request new tag
@@ -919,25 +919,25 @@ codingAnnotations snp138CodingDbSnp,
 track snp138Mult override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 
 track snp138 override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 
 track snp138Common override
 snpSeqFile /gbdb/hg19/snp/snp138.fa
 chimpOrangMacOrthoTable snp138OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 visibility hide
 

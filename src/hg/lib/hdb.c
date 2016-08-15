@@ -472,29 +472,48 @@ hDisconnectCentral(&centralConn);
 return db;
 }
 
+static char *firstExistingDbFromQuery(struct sqlConnection *conn, char *query)
+/* Perform query; result is a list of database names.  Clone and return the first database
+ * that exists, or NULL if the query has no results or none of the databases exist. */
+{
+char *db = NULL;
+struct slName *sl, *list = sqlQuickList(conn, query);
+for (sl = list;  sl != NULL;  sl = sl->next)
+    {
+    if (sqlDatabaseExists(sl->name))
+        db = cloneString(sl->name);
+    break;
+    }
+slFreeList(&list);
+return db;
+}
+
 char *hDbForTaxon(int taxon)
-/* Get defaultDb database associated with NCBI taxon number if any. */
+/* Get default database associated with NCBI taxon number, or NULL if not found. */
 {
 char *db = NULL;
 if (taxon != 0)
     {
     struct sqlConnection *centralConn = hConnectCentral();
     char query[512];
+    // First try defaultDb.  Watch out for taxIds with multiple genomes (and hence multiple
+    // defaultDb matches).  For example, 9606 (human) has patch databases, each with a different
+    // genome.  Favor the "real" genome using orderKey and make sure databases are active in dbDb.
     sqlSafef(query, sizeof(query),
              "select d.name from %s d, %s f "
-             "where d.taxId = %d "
-             "and d.name not like 'zoo%%' "
-             "and d.name = f.name ", dbDbTable(), defaultDbTable(), taxon);
-    db = sqlQuickString(centralConn, query);
+             "where d.taxId = %d and d.name = f.name "
+             "and active = 1 order by orderKey",
+             dbDbTable(), defaultDbTable(), taxon);
+    db = firstExistingDbFromQuery(centralConn, query);
     // Rarely, we have one genome (like Baboon) that actually encompasses different species
     // and taxons (P. anubis and P. hamadryas).  defaultDb only has one (P. anubis), so the
     // query comes up empty for the other.  If so, try again using orderKey instead of defaultDb:
     if (isEmpty(db))
         {
         sqlSafef(query, sizeof(query),
-                 "select name from %s where taxId = %d order by orderKey limit 1",
+                 "select name from %s where taxId = %d and active = 1 order by orderKey limit 1",
                  dbDbTable(), taxon);
-        db = sqlQuickString(centralConn, query);
+        db = firstExistingDbFromQuery(centralConn, query);
         }
     hDisconnectCentral(&centralConn);
     }
@@ -3237,7 +3256,8 @@ char *httpHost = getenv("HTTP_HOST");
 
 if (httpHost == NULL && !gethostname(host, sizeof(host)))
     // make sure this works when CGIs are run from the command line.
-    httpHost = host;
+    // small mem leak is acceptable when run from command line
+    httpHost = cloneString(host);
 
 return httpHost;
 }
@@ -3284,7 +3304,7 @@ boolean hIsPreviewHost()
 {
 if (cfgOption("test.preview"))
     return TRUE;
-return hHostHasPrefix("genome-preview");
+return hHostHasPrefix("genome-preview") || hHostHasPrefix("hgwalpha");
 }
 
 char *hBrowserName()

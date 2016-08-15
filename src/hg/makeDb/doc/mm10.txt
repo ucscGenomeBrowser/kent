@@ -11229,6 +11229,61 @@ hgsql -e 'INSERT INTO trackVersion \
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
+#
+#############################################################################
+# hgPal downloads (DONE jcasper 2016-06-22)
+#   CDS FASTA from 60-way for knownGene - rebuilt for mm10 ucsc genes v16
+
+    ssh hgwdev
+    screen -S mm10HgPal
+    mkdir /hive/data/genomes/mm10/bed/multiz60way/pal.ucsc16
+    cd /hive/data/genomes/mm10/bed/multiz60way/pal.ucsc16
+    cat ../species.list | tr '[ ]' '[\n]' > order.lst
+
+    export mz=multiz60way
+    export gp=knownGene
+    export db=mm10
+    export I=0
+    mkdir exonAA exonNuc
+    for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
+    do
+        I=`echo $I | awk '{print $1+1}'`
+	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.lst stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons $db $mz $gp order.lst stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+        if [ $I -gt 6 ]; then
+            echo "date"
+            echo "wait"
+            I=0
+        fi
+    done > $gp.jobs
+    echo "date" >> $gp.jobs
+    echo "wait" >> $gp.jobs
+
+    time nice sh -x $gp.jobs > $gp.jobs.log 2>&1
+    #   real    87m59.962s
+
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    #   real    1m48.725s
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+
+    rm -rf exonAA exonNuc
+
+    # we're only distributing exons at the moment
+    mz=multiz60way
+    gp=knownGene
+    db=mm10
+    pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
+    mkdir -p $pd
+    rm -f $pd/$gp.exonAA.fa.gz $pd/$gp.exonNuc.fa.gz $pd/md5sum.txt
+    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
+    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
+    (cd $pd && md5sum *.fa.gz) > md5sum.txt
+    ln -s `pwd`/md5sum.txt $pd/
+
+
 ###########################################################################
 # GENEID GENE PREDICTIONS (DONE - 2015-06-26 - Hiram)
     ssh hgwdev
@@ -12218,5 +12273,171 @@ TMPDIR=/dev/shm
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` pelSin1 mm10) \
        > rbest.log 2>&1
     # real    198m33.448s
+
+#########################################################################
+# LASTZ mouse/mm10 Gorilla/panPan2 - (DONE - 2016-05-24 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPanPan2.2016-05-24
+    cd /hive/data/genomes/mm10/bed/lastzPanPan2.2016-05-24
+
+    printf '# mouse vs bonobo
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: bonobo panPan2
+SEQ2_DIR=/hive/data/genomes/panPan2/panPan2.2bit
+SEQ2_LEN=/hive/data/genomes/panPan2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=30
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPanPan2.2016-05-24
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    360m9.534s
+
+    cat fb.mm10.chainPanPan2Link.txt
+    # 928638440 bases of 2652783500 (35.006%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 panPan2) \
+      > rbest.log 2>&1 &
+    # real    765m26.648s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panPan2/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panPan2/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPanPan2.2016-05-24/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    106m54.032s
+
+    cat fb.panPan2.chainMm10Link.txt
+    # 911279510 bases of 2725937399 (33.430%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan2 mm10) \
+       > rbest.log 2>&1
+    # real    620m0.039s
+
+#########################################################################
+2016-07-22: import of UCSC GENCODE group processing of GENCODE VM10 (markd)
+    # will not be pushed to the RR.
+
+    # edit hg/makeDb/outside/gencode/gencodeLoad.mk to set release and ensembl versions
+
+    # download, build and load tables
+    mkdir -p /hive/data/genomes/mm10/bed/gencodeVM10
+    pushd /hive/data/genomes/mm10/bed/gencodeVM10
+    (time nice make -j 10 -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk) >&build.1.out&
+
+    # compare tables from previous release to see if number changed makes
+    # sense.  Results are in gencode-cmp.tsv
+
+    ## Copy and update trackDb files from previous release.
+    ## Change version and use lower priority so it sorts to top of
+    ## super track page.  Follow instructions in ra file to ensure
+    ## filters are correct.
+    cd kent/src/hg/makeDb/trackDb
+    cp mouse/mm10/wgEncodeGencodeVM9.ra mouse/mm10/wgEncodeGencodeVM10.ra
+    cp mouse/mm10/wgEncodeGencodeVM9.html mouse/mm10/wgEncodeGencodeVM10.html
+
+    # edit these plus mouse/mm10/trackDb.wgEncode.ra
+    # - set priorities in wgEncodeGencodeVM10.ra tracks so newest shows up first
+    #     priority - set to previous version priority minus 0.001
+    #     searchPriority - set each to previous minus 0.001
+    # - make current track default to pack and hide previous [ONLY if it's going to be pushed]
+    #     superTrack wgEncodeGencodeSuper pack
+    # - Update wgEncodeGencodeSuper.html to describe new release and to
+    #   pick up other updates.  [ONLY if it's going to be pushed]
+
+    # update all.joiner and validate
+    # look for the last section `begin Gencode V??' in all.joiner
+    # and copy and update version
+    # repeat this until happy, editing minCheck as needed
+    # output in check/joiner.out
+    cd /hive/data/genomes/mm10/bed/gencodeVM10
+    make  -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
+
+#########################################################################
+# LASTZ mouse/mm10 Chimp/panTro5 - (DONE - 2016-08-03 - Hiram)
+    mkdir /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+    cd /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+
+    printf '# mouse vs chimp
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Mouse Mm10
+SEQ1_DIR=/scratch/data/mm10/mm10.2bit
+SEQ1_LEN=/scratch/data/mm10/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=10
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# QUERY: chimp panTro5
+SEQ2_DIR=/hive/data/genomes/panTro5/panTro5.2bit
+SEQ2_LEN=/hive/data/genomes/panTro5/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    #  real    273m27.335s
+
+    cat fb.mm10.chainPanTro5Link.txt
+    # 935711523 bases of 2652783500 (35.273%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` mm10 panTro5) \
+      > rbest.log 2>&1 &
+    # real    624m28.225s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panTro5/bed/blastz.mm10.swap
+    cd /hive/data/genomes/panTro5/bed/blastz.mm10.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/mm10/bed/lastzPanTro5.2016-08-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    98m32.623s
+
+    cat fb.panTro5.chainMm10Link.txt
+    # 965636631 bases of 3132620660 (30.825%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panTro5 mm10) \
+       > rbest.log 2>&1
+    # real    560m21.432s
 
 #########################################################################

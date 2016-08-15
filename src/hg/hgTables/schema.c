@@ -386,6 +386,8 @@ if (date != NULL)
     printf("&nbsp&nbsp<B> Data last updated:&nbsp;</B>%s<BR>\n", date);
 if (asObj != NULL)
     hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
+if (cartTrackDbIsNoGenome(db, table))
+    hPrintf(" Note: genome-wide queries are not available for this table.");
 describeFields(db, splitTable, asObj, conn);
 if (tdbForConn != NULL)
     {
@@ -441,6 +443,8 @@ if (jpList != NULL)
 	    {
 	    hPrintf("(via %s.%s)", jp->a->table, jp->a->field);
 	    }
+        if (cartTrackDbIsNoGenome(jp->b->database, jp->b->table))
+            hPrintf(" Note: genome-wide queries are not available for this table.");
 	hPrintf("<BR>\n");
 	}
     }
@@ -623,6 +627,8 @@ hubConnectAddDescription(db, tdb);
 char *type = cloneFirstWord(tdb->type);
 if (sameString(type, "bigBed"))
     showSchemaBigBed(table, tdb);
+else if (sameString(type, "longTabix"))
+    showSchemaLongTabix(table, tdb);
 else if (sameString(type, "bam"))
     showSchemaBam(table, tdb);
 else if (sameString(type, "vcfTabix"))
@@ -651,6 +657,8 @@ if (isHubTrack(table))
     showSchemaHub(db, table);
 else if (isBigBed(database, table, curTrack, ctLookupName))
     showSchemaBigBed(table, tdb);
+else if (isLongTabixTable(table))
+    showSchemaLongTabix(table, tdb);
 else if (isBamTable(table))
     showSchemaBam(table, tdb);
 else if (isVcfTable(table, &isTabix))

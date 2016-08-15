@@ -34,6 +34,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+#ifdef OLD
 void maybeDoUpdate(struct sqlConnection *conn, char *query, boolean really)
 /* If really is true than do sqlUpdate with query, otherwise just print it out. */
 {
@@ -50,6 +51,7 @@ void maybeRemoveFile(struct sqlConnection *conn, long long fileId, boolean reall
 char query[256];
 
 /* Delete from all the auxiliarry tables - tables are alphabetical to help update. */
+cdwReally
 sqlSafef(query, sizeof(query), "delete from cdwBamFile where fileId=%lld", fileId);
 maybeDoUpdate(conn, query, really);
 sqlSafef(query, sizeof(query), "delete from cdwFastqFile where fileId=%lld", fileId);
@@ -94,6 +96,7 @@ if (really)
 else
     printf("remove: %s\n", path);
 }
+#endif /* OLD */
 
 void cdwReallyRemoveFiles(char *email, char *submitUrl, int fileCount, char *fileIds[])
 /* cdwReallyRemoveFiles - Remove files from data warehouse.  Generally you want to depricate them 
@@ -133,7 +136,7 @@ for (i=0; i<fileCount; ++i)
 /* OK - paranoid checking is done, now let's remove each file from the tables it is in. */
 for (i=0; i<fileCount; ++i)
     {
-    maybeRemoveFile(conn, ids[i], really);
+    cdwReallyRemoveFile(conn, ids[i], really);
     }
 }
 

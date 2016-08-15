@@ -10,6 +10,7 @@
 #include "gff3.h"
 #include "genePred.h"
 
+#define LEAK_CHECK 0  // set to 1 to free all memory
 
 void usage()
 /* Explain usage and exit. */
@@ -20,7 +21,11 @@ errAbort(
   "   gff3ToGenePred inGff3 outGp\n"
   "options:\n"
   "  -warnAndContinue - on bad genePreds being created, put out warning but continue\n"
-  "  -useName - rather than using 'id' as names, use the 'name' tag\n"
+  "  -useName - rather than using 'id' as name, use the 'name' tag\n"
+  "  -rnaNameAttr - If this attribute exists on an RNA record, use it as the genePred\n"
+  "   name column\n"
+  "  -geneNameAttr - If this attribute exists on a gene record, use it as the genePred\n"
+  "   name2 column\n"
   "  -attrsOut=file - output attributes of mRNA record to file.  These are per-genePred row,\n"
   "   not per-GFF3 record. Thery are derived from GFF3 attributes, not the attributes themselves.\n"
   "  -unprocessedRootsOut=file - output GFF3 root records that were not used.  This will not be a\n"
@@ -67,6 +72,8 @@ static struct optionSpec options[] = {
     {"maxConvertErrors", OPTION_INT},
     {"warnAndContinue", OPTION_BOOLEAN},
     {"useName", OPTION_BOOLEAN},
+    {"rnaNameAttr", OPTION_STRING},
+    {"geneNameAttr", OPTION_STRING},
     {"honorStartStopCodons", OPTION_BOOLEAN},
     {"defaultCdsStatusToUnknown", OPTION_BOOLEAN},
     {"allowMinimalGenes", OPTION_BOOLEAN},
@@ -76,6 +83,8 @@ static struct optionSpec options[] = {
     {NULL, 0},
 };
 static boolean useName = FALSE;
+static char* rnaNameAttr = NULL;
+static char* geneNameAttr = NULL;
 static boolean warnAndContinue = FALSE;
 static boolean honorStartStopCodons = FALSE;
 static boolean defaultCdsStatusToUnknown = FALSE;
@@ -171,6 +180,40 @@ else
     }
 }
 
+
+static char* getRnaName(struct gff3Ann* mrna)
+/* return the value to use for the genePred name field */
+{
+char *name = NULL;
+if (rnaNameAttr != NULL)
+    {
+    struct gff3Attr *attr = gff3AnnFindAttr(mrna, rnaNameAttr);
+    if (attr != NULL)
+        name = attr->vals->name;
+    }
+if (isEmpty(name))
+    name = (useName ? mrna->name : mrna->id);
+if (isEmpty(name))
+    name = mrna->id;
+return name;
+}
+
+static char* getGeneName(struct gff3Ann* gene)
+/* return the value to use for the genePred name2 field,
+ * or NULL if can't be defined. */
+{
+char *name2 = NULL;
+if (geneNameAttr != NULL)
+    {
+    struct gff3Attr *attr = gff3AnnFindAttr(gene, geneNameAttr);
+    if (attr != NULL)
+        name2 = attr->vals->name;
+    }
+if (isEmpty(name2))
+    name2 = (useName ? gene->name : gene->id);
+return name2;
+}
+
 static struct genePred *makeGenePred(struct gff3Ann *gene, struct gff3Ann *mrna, struct gff3AnnRef *exons, struct gff3AnnRef *cdsBlks)
 /* construct the empty genePred, return NULL on a failure. */
 {
@@ -191,16 +234,10 @@ if ((mrna->strand == NULL) || (mrna->strand[0] == '?'))
     return NULL;
     }
 
-char *name = (useName ? mrna->name : mrna->id);
-char *name2 = (useName ? gene->name : gene->id);
-
-if (name == NULL)
-    name = mrna->id;
-
-struct genePred *gp = genePredNew(name, mrna->seqid, mrna->strand[0],
+struct genePred *gp = genePredNew(getRnaName(mrna), mrna->seqid, mrna->strand[0],
                                   txStart, txEnd, cdsStart, cdsEnd,
                                   genePredAllFlds, slCount(exons));
-gp->name2 = cloneString(name2);
+gp->name2 = cloneString(getGeneName(gene));
 
 // set start/end status based on codon features if requested
 if (honorStartStopCodons)
@@ -263,43 +300,49 @@ else
     }
 }
 
-static bool adjacentBlockDiffTypes(struct gff3AnnRef *prevBlk, struct gff3AnnRef *blk)
-/* are two block adjacent and of a different type? prevBlk can be NULL */
+static bool adjacentBlocks(struct gff3Ann *prevAnn, struct gff3Ann *ann)
+/* are two features adjacent? prevAnn can be NULL */
 {
-return (prevBlk != NULL) && (prevBlk->ann->end == blk->ann->start)
-    && !sameString(prevBlk->ann->type, blk->ann->type);
+return (prevAnn != NULL) && (prevAnn->end == ann->start);
 }
 
+static void addExon(struct genePred *gp, struct gff3Ann *prevAnn, struct gff3Ann *ann)
+/* add one block as an exon, merging adjacent blocks */
+{
+int i = gp->exonCount;
+if (adjacentBlocks(prevAnn, ann))
+    {
+    gp->exonEnds[i-1] = ann->end; // extend
+    }
+else
+    {
+    gp->exonStarts[i] = ann->start;
+    gp->exonEnds[i] = ann->end;
+    gp->exonFrames[i] = -1;
+    gp->exonCount++;
+    }
+}
+    
 static void addExons(struct genePred *gp, struct gff3AnnRef *blks)
-/* Add exons.  blks can either be exon records or utr and cds records.
- * If blks are adjacent and are of different types, they will be joined.
- * If blks are adjacent and the same type, they are not joined, which might
- * indicate a CDS frameshift.
-*/
+/* Add exons.  Blks can either be exon records or utr and cds records.  This
+ * is necessary to define genePred exons as GFF3 doesn't insist on an exact
+ * annotation hierarchy. If blks are adjacent, they will be joined.  exons
+ * records maybe split later when assigning CDS frame
+ */
 {
 struct gff3AnnRef *blk, *prevBlk = NULL;
 for (blk = blks; blk != NULL; prevBlk = blk, blk = blk->next)
     {
-    int i = gp->exonCount;
-    if (adjacentBlockDiffTypes(prevBlk, blk))
-        {
-        gp->exonEnds[i-1] = blk->ann->end; // extend
-        }
-    else
-        {
-        gp->exonStarts[i] = blk->ann->start;
-        gp->exonEnds[i] = blk->ann->end;
-        gp->exonFrames[i] = -1;
-        gp->exonCount++;
-        }
+    addExon(gp, ((prevBlk == NULL) ? NULL : prevBlk->ann), blk->ann);
     }
 }
 
-static int findCdsExon(struct genePred *gp, struct gff3Ann *cds, int iExon)
+static int findCdsExon(struct genePred *gp, struct gff3Ann *cds)
 /* search for the exon containing the CDS, starting with iExon+1, return -1 on error */
 {
 // don't use cached iExon.  Will fail on ribosomal frame-shifted genes
 // see NM_015068.
+int iExon;
 for (iExon=0; iExon < gp->exonCount; iExon++)
     {
     if ((gp->exonStarts[iExon] <= cds->start) && (cds->end <= gp->exonEnds[iExon]))
@@ -309,19 +352,119 @@ cnvError("no exon in %s contains CDS %d-%d", gp->name, cds->start, cds->end);
 return -1;
 }
 
-static boolean addCdsFrame(struct genePred *gp, struct gff3AnnRef *cdsBlks)
-/* assign frame based on CDS regions.  Return FALSE error */
+static boolean validateCds(struct genePred *gp, struct gff3AnnRef *cdsBlks)
+/* Validate that the CDS is contained within exons.  If this is not
+ * true, the code to assign frames will generate bad genePreds. */
 {
 struct gff3AnnRef *cds;
-int iExon = -1; // caches current position, start before first exon
 for (cds = cdsBlks; cds != NULL; cds = cds->next)
     {
-    iExon = findCdsExon(gp, cds->ann, iExon);
-    if (iExon < 0)
+    if (findCdsExon(gp, cds->ann) < 0)
         return FALSE; // error
-    gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);
     }
 return TRUE;
+}
+
+static struct gff3AnnRef* findCdsForExon(struct genePred *gp, int iExon, struct gff3AnnRef *cdsBlks)
+/* search for CDS records contained in an exon. Multiple maybe returned if there is
+ * are frame shift. */
+{
+struct gff3AnnRef* exonCds = NULL;
+struct gff3AnnRef *cdsBlk;
+for (cdsBlk = cdsBlks; cdsBlk != NULL; cdsBlk = cdsBlk->next)
+    {
+    if ((gp->exonStarts[iExon] <= cdsBlk->ann->start) && (cdsBlk->ann->end <= gp->exonEnds[iExon]))
+        slAddTail(&exonCds, gff3AnnRefNew(cdsBlk->ann));
+    }
+return exonCds;
+}
+
+static void expandExonArrays(struct genePred *gp, int iExon, int numEntries)
+/* expand the exon arrays by numEntries after iExon, moving subsequent entries
+ * down.  */
+{
+ExpandArray(gp->exonStarts, gp->exonCount, gp->exonCount+numEntries);
+ExpandArray(gp->exonEnds, gp->exonCount, gp->exonCount+numEntries);
+ExpandArray(gp->exonFrames, gp->exonCount, gp->exonCount+numEntries);
+
+// move down all that follow iExon
+int numMove = (gp->exonCount - iExon)-1;
+memmove(gp->exonStarts+iExon+1+numEntries, gp->exonStarts+iExon+1, numMove*sizeof(unsigned));
+memmove(gp->exonEnds+iExon+1+numEntries, gp->exonEnds+iExon+1, numMove*sizeof(unsigned));
+memmove(gp->exonFrames+iExon+1+numEntries, gp->exonFrames+iExon+1, numMove*sizeof(int));
+gp->exonCount += numEntries;
+}
+
+static void exonCdsReplacePart(struct genePred *gp, int exonStart, int exonEnd,
+                               int iExon, struct gff3AnnRef *cds, boolean isFirst)
+/* replace one exon record based on CDS. */
+{
+assert((iExon >= 0) && (iExon < gp->exonCount));
+assert(isFirst || (iExon > 0));
+
+// allow for UTR regions at start and when setting bounds
+gp->exonStarts[iExon] = isFirst ? exonStart : cds->ann->start;
+gp->exonEnds[iExon] = (cds->next == NULL) ? exonEnd : cds->ann->end;
+gp->exonFrames[iExon] = gff3PhaseToFrame(cds->ann->phase);
+
+// if the cds blocks overlap, we have a negative frameshift, correct for
+// this in the genePred.  Need to adjust frame on the plus strand only
+// since we are arbitrary deciding to move the start of the second CDS
+// block so it doesn't overlap.
+if ((!isFirst) && (gp->exonStarts[iExon] <= gp->exonEnds[iExon-1]))
+    {
+    int dist = (gp->exonEnds[iExon-1] - gp->exonStarts[iExon]);
+    gp->exonStarts[iExon] += dist;
+    if (sameString(gp->strand, "+"))
+        gp->exonFrames[iExon] = (gp->exonFrames[iExon] + dist) %3;
+    }
+}
+
+static void exonCdsReplace(struct genePred *gp, int iExon, struct gff3AnnRef *exonCds)
+/* replace an exon records based on CDS.  This deals with frame-shifting cases */
+{
+int exonStart = gp->exonStarts[iExon];
+int exonEnd = gp->exonEnds[iExon];
+expandExonArrays(gp, iExon, slCount(exonCds)-1);
+int cnt = 0;
+struct gff3AnnRef *cds;
+for (cds = exonCds; cds != NULL; cds = cds->next, cnt++, iExon++)
+    exonCdsReplacePart(gp, exonStart, exonEnd, iExon, cds, (cnt == 0));
+}
+
+static int addExonFrame(struct genePred *gp, int iExon, struct gff3AnnRef *cdsBlks)
+/* assign frame for an exon.  This might have to add exon array entries.  The next
+ * exon entry is returned.*/
+{
+struct gff3AnnRef *exonCds = findCdsForExon(gp, iExon, cdsBlks);
+int exonCdsCnt = slCount(exonCds);
+if (exonCdsCnt == 0)
+    return iExon+1;  // no CDS
+else if (exonCdsCnt == 1)
+    {
+    gp->exonFrames[iExon] = gff3PhaseToFrame(exonCds->ann->phase);
+    slFreeList(&exonCds);
+    return iExon+1;
+    }
+else
+    {
+    // slow path, must make room.  This might leave a gap if there is
+    // programmed frameshift
+    exonCdsReplace(gp, iExon, exonCds);
+    slFreeList(&exonCds);
+    return iExon+exonCdsCnt;
+    }
+}
+
+static void addExonFrames(struct genePred *gp, struct gff3AnnRef *cdsBlks)
+/* assign frames for exons. this may expand the existing exon array due to
+ * needing to track frameshifts. */
+{
+int iExon;
+for (iExon = 0; iExon < gp->exonCount;)
+    {
+    iExon = addExonFrame(gp, iExon, cdsBlks);
+    }
 }
 
 static struct gff3AnnRef *getCdsUtrBlks(struct gff3Ann *mrna)
@@ -357,8 +500,10 @@ struct genePred *gp = makeGenePred((gene != NULL) ? gene : mrna, mrna, useExons,
 if (gp != NULL)
     {
     addExons(gp, useExons);
-    if (!addCdsFrame(gp, cdsBlks))
-        genePredFree(&gp);  // got error, free it and NULL.
+    if (!validateCds(gp, cdsBlks))
+        genePredFree(&gp);
+    else
+        addExonFrames(gp, cdsBlks);
     }
 slFreeList(&exons);
 slFreeList(&cdsBlks);
@@ -511,7 +656,7 @@ if (outUnprocessedRootsFp != NULL)
 if (convertErrCnt > 0)
     errAbort("%d errors converting GFF3 file: %s", convertErrCnt, inGff3File); 
 
-#if 0  // free memory for leak debugging if 1
+#if LEAK_CHECK  // free memory for leak debugging if 1
 gff3FileFree(&gff3File);
 hashFree(&processed);
 #endif
@@ -526,6 +671,8 @@ if (argc != 3)
 
 warnAndContinue = optionExists("warnAndContinue");
 useName = optionExists("useName");
+rnaNameAttr = optionVal("rnaNameAttr", NULL);
+geneNameAttr = optionVal("geneNameAttr", NULL);
 maxParseErrors = optionInt("maxParseErrors", maxParseErrors);
 if (maxParseErrors < 0)
     maxParseErrors = INT_MAX;

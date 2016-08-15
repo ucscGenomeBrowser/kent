@@ -1,0 +1,580 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the gorGor5
+# Organism name:  Orcinus orca (killer whale)
+
+#  Must find the photograph first, can not continue until finding
+#  the photograph.
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2016-06-15 - Hiram)
+
+#  since this is not a new species, can reuse the existing Gorilla photo
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/gorGor5
+cd ~/kent/src/hg/makeDb/doc/gorGor5
+
+sed -e 's/colAng1/gorGor5/g; s/ColAng1/GorGor5/g; s/DONE/TBD/g;' ../colAng1/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/gorGor5/genbank
+cd /hive/data/genomes/gorGor5/genbank
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/genbank/vertebrate_mammalian/Gorilla_gorilla/all_assembly_versions/GCA_900006655.1_GSMRT3/ ./
+
+#  since this is not a new species, can reuse the existing Gorilla photo
+# construct the required photoReference.txt
+cd /hive/data/genomes/gorGor5
+printf "https://commons.wikimedia.org/wiki/User:Arpingstone
+Wikimedia Commons/Adrian Pingstone\n" > photoReference.txt
+
+# this information is from the top of 
+#    genbank/*_assembly_report.txt
+#    (aka: genbank/GCA_900006655.1_GSMRT3_assembly_report.txt)
+
+# Assembly name:  GSMRT3
+# Organism name:  Gorilla gorilla gorilla (western lowland gorilla)
+# Sex:  female
+# Taxid:          9595
+# BioSample:      SAMEA3541598
+# BioProject:     PRJEB10880
+# Submitter:      UNIVERSITY OF WASHINGTON
+# Date:           2016-3-4
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Contig
+# Genome representation: full
+# WGS project:    CYUI01
+# GenBank assembly accession: GCA_900006655.1
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_900006654.1              Primary Assembly
+#
+# This assembly only contains unplaced WGS contigs.
+# The WGS contigs can be viewed in the WGS Browser:
+# https://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CYUI01
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2016-06-21)
+    cd /hive/data/genomes/gorGor5
+    ~/kent/src/hg/utils/automation/prepConfig.pl gorGor5 mammal \
+      gorilla ./genbank/*_assembly_report.txt > gorGor5.config.ra
+# going to need a mitoAcc ?
+    # edit result to add note about mito sequence, reuse LN611626.1
+    # from gorGor4 and the genBankAccessionID wasn't picked up correctly
+    # and common name of Gorilla instead of Western lowland gorilla
+
+    # verify it looks sane
+    cat gorGor5.config.ra
+# config parameters for makeGenomeDb.pl:
+db gorGor5
+clade mammal
+genomeCladePriority 35
+scientificName Gorilla gorilla gorilla
+commonName GoriLla
+assemblyDate Mar. 2016
+assemblyLabel UNIVERSITY OF WASHINGTON
+assemblyShortLabel GSMRT3
+orderKey 23180
+# no mito sequence in this assembly
+# gorGor3.1 used refseq sequence: NC_011120.1
+# reuse the 'official' one from gorGor4: LN611626.1
+mitoAcc LN611626.1
+fastaFiles /hive/data/genomes/gorGor5/ucsc/*.fa.gz
+# agpFiles /hive/data/genomes/gorGor5/ucsc/*.agp
+# there are zero gaps (N's) in these contigs
+#  these numbers can be small with no effect:
+fakeAgpMinContigGap 1
+fakeAgpMinScaffoldGap 100
+# qualFiles none
+dbDbSpeciesDir gorilla
+photoCreditURL https://commons.wikimedia.org/wiki/User:Arpingstone
+photoCreditName Wikimedia Commons/Adrian Pingstone
+ncbiGenomeId 2156
+ncbiAssemblyId 705391
+ncbiAssemblyName GSMRT3
+ncbiBioProject PRJEB10880
+ncbiBioSample SAMEA3541598
+genBankAccessionID GCA_900006654.1
+taxId 9595
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-06-21 - Hiram)
+
+    mkdir /hive/data/genomes/gorGor5/ucsc
+    cd /hive/data/genomes/gorGor5/ucsc
+    # measure what is in the genbank release:
+    faSize ../genbank/GCA_900006655.1_GSMRT3_genomic.fna.gz
+# 3080414926 bases (0 N's 3080414926 real 1809316642 upper 1271098284 lower)
+#    in 15997 sequences in 1 files
+# Total size: mean 192562.0 sd 1464472.7 min 21 (CYUI01004525.1)
+#    max 36219563 (CYUI01000001.1) median 12962
+# %41.26 masked total, %41.26 masked real
+
+    # check for duplicate sequences:
+
+    time faToTwoBit -noMask ../genbank/*3_genomic.fna.gz genbank.2bit
+    #  real    1m14.328s
+
+    twoBitDup genbank.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    # there is no AGP for this assembly, just fixup the fasta names,
+    # change the .1 to v1
+    zcat ../genbank/GCA_900006655.1_GSMRT3_genomic.fna.gz \
+       | sed -e 's/.1 Gorilla.*/v1/;' | gzip > ucsc.fa.gz
+
+    # no longer need the 2bit files
+    rm genbank.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-06-21 - Hiram)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/gorGor5
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=agp gorGor5.config.ra) > agp.log 2>&1
+    # real    2m39.771s
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db gorGor5.config.ra) > db.log 2>&1
+    # real    31m13.475s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+    # the fake AGP gets the frag name incorrect for chrM:
+    hgsql -e 'update gold set frag="LN611626.1" where chrom="chrM";' gorGor5
+
+    # order key was incorrect:
+    hgsql -e 'update dbDb set orderKey=7681 where name="gorGor5";' hgcentraltest
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-06-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/gorGor5/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/gorGor5/gorGor5.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku gorGor5) > do.log 2>&1
+    # real    7m7.412s
+
+    cat fb.gorGor5.cpgIslandExtUnmasked.txt
+    # 31072911 bases of 3080431298 (1.009%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-06-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/cytoBand
+    cd /hive/data/genomes/gorGor5/bed/cytoBand
+    makeCytoBandIdeo.csh gorGor5
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2016-08-05 - Hiram)
+    # there are no other names for contigs in this assembly, there are just
+    # the contig names
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2016-08-05 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/gorilla/gorGor5
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" gorGor5 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#    15997 CYUIv1_1
+#        1 LN.1
+
+    # implies a search rule of: '[CILNUY0-9]+([v0-9_\.]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" gorGor5 | wc -l
+    # 15998
+
+    hgsql -N -e "select frag from gold;" gorGor5 \
+       | egrep -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
+    # 15998
+
+    hgsql -N -e "select frag from gold;" gorGor5 \
+       | egrep -v -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/gorGor5/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [CILNUY0-9]+([v0-9_\.]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2016-06-21 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/repeatMasker
+    cd /hive/data/genomes/gorGor5/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku gorGor5) > do.log 2>&1
+    # real    1581m32.299s
+
+    cat faSize.rmsk.txt
+# 3080431298 bases (0 N's 3080431298 real 1541684463 upper 1538746835 lower)
+#    in 15998 sequences in 1 files
+# Total size: mean 192551.0 sd 1464427.6 min 21 (CYUI01004525v1)
+#    max 36219563 (CYUI01000001v1) median 12964
+# %49.95 masked total, %49.95 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps gorGor5 rmsk
+    # 1538745117 bases of 3080431298 (49.952%) in intersection
+    # real    0m45.618s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # with high contig count assemblies, faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' gorGor5 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1538745117.000000
+    # real    0m39.613s
+
+##########################################################################
+# running simple repeat (DONE - 2016-06-21 - Hiram)
+    # this was done twice, once with the existing trf v407.b
+    # and second with the v4.09
+    # there were nearly identical results, a few more bases covered
+    # by the v4.09.  Ended up loading the v4.09 results
+
+    mkdir /hive/data/genomes/gorGor5/bed/simpleRepeat
+    cd /hive/data/genomes/gorGor5/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -trf409=6 -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        gorGor5) > do.log 2>&1
+    # real    2409m7.465s
+
+    cat fb.simpleRepeat
+    # 313503340 bases of 3080431298 (10.177%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/gorGor5
+    twoBitMask gorGor5.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed gorGor5.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa gorGor5.2bit stdout | faSize stdin > faSize.gorGor5.2bit.txt
+    cat faSize.gorGor5.2bit.txt
+# 3080431298 bases (0 N's 3080431298 real 1539728819 upper 1540702479 lower)
+#    in 15998 sequences in 1 files
+# Total size: mean 192551.0 sd 1464427.6 min 21 (CYUI01004525v1)
+#    max 36219563 (CYUI01000001v1) median 12964
+# %50.02 masked total, %50.02 masked real
+
+    rm /gbdb/gorGor5/gorGor5.2bit
+    ln -s `pwd`/gorGor5.2bit /gbdb/gorGor5/gorGor5.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-06-24 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/gorGor5/bed/microsat
+    cd /cluster/data/gorGor5/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed gorGor5 microsat microsat.bed
+    # Read 24885 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-06-23 - Hiram)
+
+    mkdir /hive/data/genomes/gorGor5/bed/windowMasker
+    cd /hive/data/genomes/gorGor5/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev gorGor5) > do.log 2>&1
+    #  real    222m34.996s
+
+    # Masking statistics
+    cat faSize.gorGor5.cleanWMSdust.txt
+# 3080431298 bases (0 N's 3080431298 real 1790074276 upper 1290357022 lower)
+#    in 15998 sequences in 1 files
+# Total size: mean 192551.0 sd 1464427.6 min 21 (CYUI01004525v1)
+#    max 36219563 (CYUI01000001v1) median 12964
+# %41.89 masked total, %41.89 masked real
+
+    cat fb.gorGor5.rmsk.windowmaskerSdust.txt
+    # 908347681 bases of 3080431298 (29.488%) in intersection
+
+#########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-06-24 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/idKeys
+    cd /hive/data/genomes/gorGor5/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  gorGor5) > do.log 2>&1
+    # real    18m10.094s
+
+    cat gorGor5.keySignature.txt
+    #   a218a7c1e57897febd1a2a7bad7bad97
+
+##########################################################################
+# ncbiRefSeq - (DONE - 2016-06-24 - Hiram)
+    # this isn't a refseq release, there are no refseq genes
+
+##########################################################################
+# cpgIslands - (DONE - 2016-06-24 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/cpgIslands
+    cd /hive/data/genomes/gorGor5/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku gorGor5) > do.log 2>&1
+    #   real    8m16.226s
+
+    cat fb.gorGor5.cpgIslandExt.txt
+    # 21459917 bases of 3080431298 (0.697%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-06-24 - Hiram)
+    mkdir /hive/data/genomes/gorGor5/bed/genscan
+    cd /hive/data/genomes/gorGor5/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku gorGor5) > do.log 2>&1
+    # real    68m0.620s
+
+    cat fb.gorGor5.genscan.txt
+    # 52474606 bases of 3080431298 (1.703%) in intersection
+
+    cat fb.gorGor5.genscanSubopt.txt
+    # 56892790 bases of 3080431298 (1.847%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2016-06-24 - Hiram)
+
+    # numerator is gorGor5 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap gorGor5 gap
+    # 0 bases of 3080431298 (0.000%) in intersection
+
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 3080431298 / 2861349177 \) \* 1024
+    #  ( 3080431298 / 2861349177 ) * 1024 = 1102.403605
+
+    # ==> use -repMatch=1100 according to size scaled up from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/gorGor5
+    blat gorGor5.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/gorGor5.11.ooc \
+        -repMatch=1100
+    #   Wrote 31384 overused 11-mers to jkStuff/gorGor5.11.ooc
+
+    # there are no non-bridged gaps (there no gaps at all)
+    hgsql -e 'select count(*) from gap;' gorGor5
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    hgsql -e 'select count(*) from gap where bridge="no";' gorGor5
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    # if there were non-bridged gaps, make up a nonBridged.lft file
+
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' gorGor5 \
+#         | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#     gapToLift -verbose=2 -minGap=100 gorGor5 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2016-07-22 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism     mrnaCnt estCnt  refSeqCnt
+    # Gorilla gorilla 591     0       88
+    # Gorilla gorilla gorilla 8       0       0
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add gorGor5 just after balAcu1
+
+# Gorilla
+gorGor5.serverGenome = /hive/data/genomes/gorGor5/gorGor5.2bit
+gorGor5.clusterGenome = /hive/data/genomes/gorGor5/gorGor5.2bit
+gorGor5.ooc = /hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc
+gorGor5.lift = no
+gorGor5.perChromTables = no
+gorGor5.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+gorGor5.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+gorGor5.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+gorGor5.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+gorGor5.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+gorGor5.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+gorGor5.downloadDir = gorGor5
+# default yes refseq.mrna.native refseq.mrna.xeno genbank.mrna.native
+# default yes genbank.est.native
+# default no genbank.mrna.xeno genbank.est.xeno
+
+    git commit -m "Added gorGor5 - Gorilla refs #17580" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial gorGor5
+    # real    67m3.917s
+
+    # logFile: var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+    # tail -2 var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+# hgwdev 2016.07.05-13:59:57 gorGor5.initalign: Succeeded: gorGor5
+# hgwdev 2016.07.05-14:00:06 gorGor5.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.gorGor5
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad gorGor5
+    # real    18m33.387s
+    tail -1 var/dbload/hgwdev/logs/2016.07.21-23:42:20.gorGor5.dbload.log
+# hgwdev 2016.07.22-00:00:53 gorGor5.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add gorGor5 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added gorGor5 - Gorilla  - refs #17580" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (DONE - 2016-06-24 - Hiram)
+
+    mkdir /hive/data/genomes/gorGor5/bed/augustus
+    cd /hive/data/genomes/gorGor5/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev gorGor5) > do.log 2>&1
+    # real    200m53.178s
+
+    cat fb.gorGor5.augustusGene.txt
+    # 55196723 bases of 3080431298 (1.792%) in intersection
+
+############################################################################
+# construct liftOver to gorGor4 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    cd /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4
+    # real    0m2.154s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4) > do.log 2>&1
+    #	real    2412m36.913s
+
+    # verify this file exists:
+    #	/gbdb/gorGor5/liftOver/gorGor5ToGorGor4.over.chain.gz
+    # and try out the conversion on genome-test from gorGor5 to gorGor4
+
+############################################################################
+# construct liftOver gorGor4 to gorGor5 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    cd /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5
+    # real    0m1.954s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5) > do.log 2>&1
+    #	real    3222m59.287s
+
+    # verify this file exists:
+    #	/gbdb/gorGor4/liftOver/gorGor4ToGorGor5.over.chain.gz
+    # and try out the conversion on genome-test from gorGor4 to gorGor5
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-08-05 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor5", "blat1d", "17868", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("gorGor5", "blat1d", "17869", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## default position same as gorGor4 EVPL gene
+#                                 (DONE - 2016-08-04 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="CYUI01015056v1:3670206-3687174"
+	where name="gorGor5";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (DONE - 2016-08-08 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=gorGor5 -tableCoverage all.joiner
+    joinerCheck -database=gorGor5 -times all.joiner
+    joinerCheck -database=gorGor5 -keys all.joiner
+
+    cd /hive/data/genomes/gorGor5
+    time (makeDownloads.pl gorGor5) > downloads.log 2>&1
+    #  real    19m52.657s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/gorGor5/pushQ
+    cd /hive/data/genomes/gorGor5/pushQ
+    time makePushQSql.pl gorGor5 > gorGor5.pushQ.sql 2> stderr.out
+    #   real    11m56.179s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: gorGor5 does not have ucscToINSDC
+    # WARNING: hgwdev does not have /gbdb/gorGor5/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/gorGor5/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/gorGor5/bbi/qualityBw/quality.bw
+    # WARNING: gorGor5 does not have seq
+    # WARNING: gorGor5 does not have extFile
+    # WARNING: gorGor5 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p gorGor5.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/gorGor5.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

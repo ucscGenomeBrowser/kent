@@ -141,7 +141,8 @@ table cdwSubmit
     lstring errorMessage; "If non-empty contains last error message. If empty submit is ok"
     uint fileIdInTransit; "cdwFile.id of file currently being transferred or zero"
     uint metaChangeCount; "Number of files where metadata changed by submission"
-    )
+    lstring wrangler; "The UNIX ID of the person who ran cdwSubmit." 
+	)
 
 table cdwSubscriber
 "Subscribers can have programs that are called at various points during data submission"
@@ -463,12 +464,13 @@ table cdwTrackViz
     )
 
 table cdwDataset
-"A dataset is a collection of files, usually associated to a paper"
+"A dataset is a collection of files, usually associated with a paper"
     (
+    uint id primary auto; "Dataset ID"
     string name unique;  "Short name of this dataset, one word, no spaces"
     string label;  "short title of the dataset, a few words"
     lstring description;  "Description of dataset, can be a complete html paragraph."
     string pmid;  "Pubmed ID of abstract"
     string pmcid;  "PubmedCentral ID of paper full text"
-    string metaDivTags; "Comma separated list of fields use to make tree out of metadata"
+    string metaDivTags; "Comma separated list of fields used to make tree out of metadata"
     )

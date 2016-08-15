@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 # make VERBOSE=-verbose=2 will echo out positions as they convert

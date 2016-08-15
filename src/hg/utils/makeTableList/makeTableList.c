@@ -186,6 +186,7 @@ if(all)
         conn = sqlConnectRemote(host, user, password, hgcentral);
     else
         conn = hConnectCentral();
+
     sr = sqlGetResult(conn, NOSQLINJ "select name from dbDb where active=1");
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -193,13 +194,14 @@ if(all)
         slNameAddHead(&dbs, cloneString(row[0]));
         }
 
+    sqlFreeResult(&sr);
+
     slNameAddHead(&dbs, cloneString("hgFixed"));
     slNameAddHead(&dbs, cloneString("go"));
     slNameAddHead(&dbs, cloneString("uniProt"));
     slNameAddHead(&dbs, cloneString("visiGene"));
+    slNameAddHead(&dbs, cloneString("proteome"));
 
-    sqlFreeResult(&sr);
-    hDisconnectCentral(&conn);
     }
 else
     {

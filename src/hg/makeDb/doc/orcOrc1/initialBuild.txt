@@ -1,0 +1,669 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the orcOrc1
+# Organism name:  Orcinus orca (killer whale)
+
+#  Must find the photograph first, can not continue until finding
+#  the photograph.
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2016-05-31 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/orcOrc1
+cd ~/kent/src/hg/makeDb/doc/orcOrc1
+
+sed -e 's/rouAeg/orcOrc/g; s/RouAeg/OrcOrc/g; s/DONE/TBD/g;' \
+   ../rouAeg1/initialBuild.txt > initialBuild.txt
+
+# the files required are probably already here, take a look into:
+#  /hive/data/outside/ncbi/genomes/refseq/<subSet>/<scientificName>/all_assembly_versions
+# and merely symlink them in:
+
+mkdir -p /hive/data/genomes/orcOrc1/refseq
+cd -p /hive/data/genomes/orcOrc1/refseq
+ln -s /hive/data/outside/ncbi/genomes/refseq/vertebrate_mammalian/Orcinus_orca/all_assembly_versions/GCF_000331955.2_Oorc_1.1/* ./
+
+# need to find the photo, check NCBI 'genome' page to see what photo they
+# display, if they do not have one, can usually find a public domain photo
+# in wikimedia commons: https://commons.wikimedia.org/wiki/Main_Page
+
+mkdir /hive/data/genomes/orcOrc1/photo
+cd /hive/data/genomes/orcOrc1/photo
+
+# this photo from: Oren Peles  https://www.linkedin.com/in/oren-peles-398aa617
+#  to commons via:  https://commons.wikimedia.org/wiki/User:MathKnight
+wget --timestamping \
+https://upload.wikimedia.org/wikipedia/commons/3/37/Killerwhales_jumping.jpg
+
+jhead -ft Killerwhales_jumping.jpg 
+
+convert -quality 80 -geometry 400x300 Killerwhales_jumping.jpg  Orcinus_orca.jpg
+
+# check this Prcomis+prca.jpg into ~/kent/src/hg/htdocs/images/
+# and copy that to /usr/local/apache/htdocs/images/
+
+# construct the required photoReference.txt
+cd /hive/data/genomes/orcOrc1
+printf "photoCreditURL http://www.afsc.noaa.gov/Quarterly/amj2005/divrptsNMML3.htm
+photoCreditName Robert Pitman (NOAA)\n" > photoReference.txt
+
+# this information is from the top of 
+#    refseq/*_assembly_report.txt
+#    (aka: refseq/GCF_000331955.2_Oorc_1.1_assembly_report.txt)
+
+# Assembly name:  Oorc_1.1
+# Organism name:  Orcinus orca (killer whale)
+# Isolate:  Morgan
+# Sex:  female
+# Taxid:          9733
+# BioSample:      SRS365047
+# BioProject:     PRJNA189949
+# Submitter:      Marine mammals
+# Date:           2013-1-31
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    ANOL02
+# Assembly method: AllPaths v. 41070; ATLAS-link v. 1.0; ATLAS-gapfill v. 2.2
+# Genome coverage: 200.0x
+# Sequencing technology: Illumina HiSeq
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000331955.2
+# RefSeq assembly accession: GCF_000331955.2
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000331965.1      GCF_000331965.1 Primary Assembly
+## GCA_000612095.1      GCF_000612095.1 non-nuclear
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2016-05-31)
+    cd /hive/data/genomes/orcOrc1
+    ~/kent/src/hg/utils/automation/prepConfig.pl orcOrc1 mammal whale \
+      ./refseq/*_assembly_report.txt
+
+    # verify it looks sane
+    cat orcOrc1.config.ra
+# config parameters for makeGenomeDb.pl:
+db orcOrc1
+clade mammal
+scientificName Orcinus orca
+commonName Killer whale
+assemblyDate Jan. 2013
+assemblyLabel Marine mammals
+assemblyShortLabel Oorc_1.1
+orderKey 11489
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_023889.1
+mitoAcc none
+fastaFiles /hive/data/genomes/orcOrc1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/orcOrc1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir whale
+photoCreditURL http://www.afsc.noaa.gov/Quarterly/amj2005/divrptsNMML3.htm
+photoCreditName Robert Pitman (NOAA)
+ncbiGenomeId 14034
+ncbiAssemblyId 556608
+ncbiAssemblyName Oorc_1.1
+ncbiBioProject 189949
+ncbiBioSample SRS365047
+genBankAccessionID GCF_000331955.2
+taxId 9733
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-05-31 - Hiram)
+
+    mkdir /hive/data/genomes/orcOrc1/ucsc
+    cd /hive/data/genomes/orcOrc1/ucsc
+    # measure what is in the refseq release:
+    faSize ../refseq/*genomic.fna.gz
+# 2372919875 bases (123337763 N's 2249582112 real 1513882205 upper
+#    735699907 lower) in 1668 sequences in 1 files
+# Total size: mean 1422613.8 sd 4344060.6 min 994 (NW_004439458.1)
+#    max 41399143 (NW_004438415.1) median 3238
+# %31.00 masked total, %32.70 masked real
+
+    # check for duplicate sequences:
+
+    time faToTwoBit -noMask ../refseq/*_genomic.fna.gz refseq.2bit
+    #  real    1m2.091s
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    # bash syntax here
+    mitoAcc=`grep "^# mitoAcc" ../orcOrc1.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+# # mitoAcc NC_023889.1
+
+
+    zcat \
+  ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+
+    # no longer need this 2bit
+    rm refseq.2bit
+
+    # the mito sequence is already named chrM
+    printf "$mitoAcc\n" > excludeMito.txt
+    # simple conversion of names .1 to v1
+    time faSomeRecords -exclude ../refseq/*_genomic.fna.gz excludeMito.txt \
+        stdout | sed -e 's/.1 Orc.*/v1/;' > ucsc.fa
+    # real    2m13.627s
+    cat chrM.fa >> ucsc.fa
+    time gzip ucsc.fa
+    # real    12m24.071s
+
+    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e 's/.1\t/v1\t/;' > ucsc.agp
+
+    # verify correspondence
+    faToTwoBit *.fa.gz test.2bit
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these 2bit files
+    rm test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-05-31 - Hiram)
+
+    # verify sequence and AGP are OK:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=seq orcOrc1.config.ra) > seq.log 2>&1
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -continue=agp -stop=agp orcOrc1.config.ra) > agp.log 2>&1
+
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db orcOrc1.config.ra) > db.log 2>&1
+    # real    20m39.022s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-05-31 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/orcOrc1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/orcOrc1/orcOrc1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku orcOrc1) > do.log 2>&1
+    # real    6m3.280s
+
+    cat fb.orcOrc1.cpgIslandExtUnmasked.txt
+    # 37760057 bases of 2249582125 (1.679%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-05-31 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/cytoBand
+    cd /hive/data/genomes/orcOrc1/bed/cytoBand
+    makeCytoBandIdeo.csh orcOrc1
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2016-05-31 - Hiram)
+    # the sequence here is working for a 'refseq' assembly with a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/orcOrc1/bed/ucscToINSDC
+    cd /hive/data/genomes/orcOrc1/bed/ucscToINSDC
+
+    # find accession for chrM
+    grep chrM ../../orcOrc1.agp
+# chrM    1       16386   1       O       NC_023889.1     1       16386   +
+
+    # use that accession here:
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly NC_023889.1
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+
+      | sed -e 's/na\b/notAvailable/;' | awk '{printf "%s\t%s\n", $2, $1}' \
+    # the sed \b means to match word
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    # 2490 insdc.refseq.txt
+    # 2490 insdcToUcsc.txt
+    # 2490 name.coordinate.tab
+    # 2490 ucscToINSDC.bed
+    # 2490 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab orcOrc1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords orcOrc1
+    # should cover %100 entirely:
+    featureBits -countGaps orcOrc1 ucscToINSDC
+    # 2372919875 bases of 2372919875 (100.000%) in intersection
+
+    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
+      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
+        | cut -f1-4 > ucscToRefSeq.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab orcOrc1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    checkTableCoords  orcOrc1 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps orcOrc1 ucscToRefSeq
+    # 2372919875 bases of 2372919875 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (DONE - 2016-06-02 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/whale/orcOrc1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" orcOrc1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+# 80099 ANOL.1
+#     1 NC_.1
+
+    # implies a search rule of: '[ACLNO_]+[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" orcOrc1 | wc -l
+    # 80100
+
+    hgsql -N -e "select frag from gold;" orcOrc1 \
+       | egrep -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 80100
+
+    hgsql -N -e "select frag from gold;" orcOrc1 \
+       | egrep -v -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/orcOrc1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACLNO_]+[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2016-05-31 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/repeatMasker
+    cd /hive/data/genomes/orcOrc1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku orcOrc1) > do.log 2>&1
+    # real    333m8.377s
+
+
+    cat faSize.rmsk.txt
+# 2372919875 bases (123337763 N's 2249582112 real 1268122803 upper
+#    981459309 lower) in 1668 sequences in 1 files
+# Total size: mean 1422613.8 sd 4344060.6 min 994 (NW_004439458v1)
+#    max 41399143 (NW_004438415v1) median 3238
+# %41.36 masked total, %43.63 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps orcOrc1 rmsk
+    # 990617945 bases of 2372919875 (41.747%) in intersection
+    # real    0m52.033s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # with high contig count assemblies, faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' orcOrc1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 990617945.000000
+    # real    0m31.882s
+
+##########################################################################
+# running simple repeat (DONE - 2016-05-31 - Hiram)
+
+    mkdir /hive/data/genomes/orcOrc1/bed/simpleRepeat
+    cd /hive/data/genomes/orcOrc1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        orcOrc1) > do.log 2>&1
+    # real    203m10.885s
+
+    cat fb.simpleRepeat
+    # 26818967 bases of 2249582125 (1.192%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/orcOrc1
+    twoBitMask orcOrc1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed orcOrc1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa orcOrc1.2bit stdout | faSize stdin > faSize.orcOrc1.2bit.txt
+    cat faSize.orcOrc1.2bit.txt
+# 2372919875 bases (123337763 N's 2249582112 real 1267334294 upper
+#    982247818 lower) in 1668 sequences in 1 files
+# Total size: mean 1422613.8 sd 4344060.6 min 994 (NW_004439458v1)
+#    max 41399143 (NW_004438415v1) median 3238
+# %41.39 masked total, %43.66 masked real
+
+    rm /gbdb/orcOrc1/orcOrc1.2bit
+    ln -s `pwd`/orcOrc1.2bit /gbdb/orcOrc1/orcOrc1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-06-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/orcOrc1/bed/microsat
+    cd /cluster/data/orcOrc1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed orcOrc1 microsat microsat.bed
+    # Read 39117 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-06-01 - Hiram)
+
+    mkdir /hive/data/genomes/orcOrc1/bed/windowMasker
+    cd /hive/data/genomes/orcOrc1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev orcOrc1) > do.log 2>&1
+    #  real    221m19.392s
+
+    # Masking statistics
+    cat faSize.orcOrc1.cleanWMSdust.txt
+# 2372919875 bases (123337763 N's 2249582112 real 1501851639 upper
+#    747730473 lower) in 1668 sequences in 1 files
+# Total size: mean 1422613.8 sd 4344060.6 min 994 (NW_004439458v1)
+#    max 41399143 (NW_004438415v1) median 3238
+# %31.51 masked total, %33.24 masked real
+
+    cat fb.orcOrc1.rmsk.windowmaskerSdust.txt
+    # 524787444 bases of 2372919875 (22.116%) in intersection
+
+#########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-06-01 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/idKeys
+    cd /hive/data/genomes/orcOrc1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  orcOrc1) > do.log 2>&1
+    # real    4m49.109s
+
+    cat orcOrc1.keySignature.txt
+    #   85c3526e11108a706155e5b801d508d6
+
+##########################################################################
+# ncbiRefSeq - (DONE - 2016-06-01 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/ncbiRefSeq
+    cd /hive/data/genomes/orcOrc1/bed/ncbiRefSeq
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-stop=download \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Orcinus_orca \
+          GCF_000331955.2_Oorc_1.1 orcOrc1) > download.log 2>&1
+    # real    7m3.558s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=process -stop=process \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Orcinus_orca \
+          GCF_000331955.2_Oorc_1.1 orcOrc1) > process.log 2>&1
+    # real    2m42.862s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=load -stop=load \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Orcinus_orca \
+          GCF_000331955.2_Oorc_1.1 orcOrc1) > load.log 2>&1
+    # real    0m17.767s
+
+    featureBits -countGaps orcOrc1 ncbiRefSeq
+# 45687450 bases of 2372919875 (1.925%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-06-01 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/cpgIslands
+    cd /hive/data/genomes/orcOrc1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku orcOrc1) > do.log 2>&1
+    #   real    5m33.326s
+
+    cat fb.orcOrc1.cpgIslandExt.txt
+    # 28442572 bases of 2249582125 (1.264%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-06-01 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/genscan
+    cd /hive/data/genomes/orcOrc1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku orcOrc1) > do.log 2>&1
+    # real    25m18.870s
+    # one job broken, run with window of 2,000,000:
+    ./lastRunGsBig.csh NW_004438481v1 000 gtf/000/NW_004438481v1.gtf pep/000/NW_004438481v1.pep subopt/000/NW_004438481v1.bed
+    # real    12m47.728s
+
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -continue=makeBed -bigClusterHub=ku orcOrc1) > makeBed.log 2>&1
+    #   real    1m0.711s
+    cat fb.orcOrc1.genscan.txt
+    # 52075483 bases of 2249582125 (2.315%) in intersection
+
+    cat fb.orcOrc1.genscanSubopt.txt
+    # 49181696 bases of 2249582125 (2.186%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2016-06-01 - Hiram)
+
+    # numerator is orcOrc1 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap orcOrc1 gap
+    # 123337750 bases of 2249582125 (5.483%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2249582125 / 2861349177 \) \* 1024
+    #  ( 2249582125 / 2861349177 ) * 1024 = 805.065007
+
+    # ==> use -repMatch=800 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/orcOrc1
+    blat orcOrc1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/orcOrc1.11.ooc \
+        -repMatch=800
+    #   Wrote 28974 overused 11-mers to jkStuff/orcOrc1.11.ooc
+
+
+    # there are no non-bridged gaps
+    hgsql -e 'select count(*) from gap;' orcOrc1
+# +----------+
+# | count(*) |
+# +----------+
+# |    78432 |
+# +----------+
+
+    hgsql -e 'select count(*) from gap where bridge="no";' orcOrc1
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    # if there were non-bridged gaps, make up a nonBridged.lft file
+
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' orcOrc1 \
+#         | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#     gapToLift -verbose=2 -minGap=100 orcOrc1 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2016-06-02 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism     mrnaCnt estCnt  refSeqCnt
+    # Orcinus orca    26      0       20
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add orcOrc1 just after balAcu1
+
+# orcOrc1 (killer whale)
+orcOrc1.serverGenome = /hive/data/genomes/orcOrc1/orcOrc1.2bit
+orcOrc1.clusterGenome = /hive/data/genomes/orcOrc1/orcOrc1.2bit
+orcOrc1.ooc = /hive/data/genomes/orcOrc1/jkStuff/orcOrc1.11.ooc
+orcOrc1.lift = no
+orcOrc1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+orcOrc1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+orcOrc1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+orcOrc1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+orcOrc1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+orcOrc1.refseq.mrna.native.load = no
+orcOrc1.refseq.mrna.xeno.load = yes
+orcOrc1.genbank.mrna.xeno.load = no
+orcOrc1.genbank.est.native.load = no
+orcOrc1.genbank.mrna.native.load = no
+orcOrc1.genbank.mrna.native.loadDesc = no
+orcOrc1.downloadDir = orcOrc1
+orcOrc1.perChromTables = no
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+orcOrc1.genbank.est.native.load = no
+
+    git commit -m "Added orcOrc - Orcinus orca (killer whale) refs #17425" etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial orcOrc1
+    # logFile: var/build/logs/2016.06.01-11:32:53.orcOrc1.initalign.log
+    #   real    167m43.804s
+
+     tail -2 var/build/logs/2016.06.01-11:32:53.orcOrc1.initalign.log
+# hgwdev 2016.06.01-14:18:58 orcOrc1.initalign: Succeeded: orcOrc1
+# hgwdev 2016.06.01-14:20:36 orcOrc1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.orcOrc1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad orcOrc1
+    # logFile: var/dbload/hgwdev/logs/2016.06.02-10:36:16.orcOrc1.dbload.log
+    # real    5m35.289s
+    tail -1 var/dbload/hgwdev/logs/2016.06.02-10:36:16.orcOrc1.dbload.log
+# hgwdev 2016.06.02-10:41:51 orcOrc1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add orcOrc1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added orcOrc1 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (DONE - 2016-06-01 - Hiram)
+
+    mkdir /hive/data/genomes/orcOrc1/bed/augustus
+    cd /hive/data/genomes/orcOrc1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev orcOrc1) > do.log 2>&1
+    # real    153m58.477s
+
+    cat fb.orcOrc1.augustusGene.txt
+    # 47282944 bases of 2249582125 (2.102%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-06-02 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("orcOrc1", "blat1a", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("orcOrc1", "blat1a", "17863", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## default position to casein beta (CSN2) gene (milk production)
+#                                 (DONE - 2016-06-02 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_004438441v1:339887-349875"
+	where name="orcOrc1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=orcOrc1 -tableCoverage all.joiner
+    joinerCheck -database=orcOrc1 -times all.joiner
+    joinerCheck -database=orcOrc1 -keys all.joiner
+
+    cd /hive/data/genomes/orcOrc1
+    time (makeDownloads.pl orcOrc1) > downloads.log 2>&1
+    #  real    15m52.648s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/orcOrc1/pushQ
+    cd /hive/data/genomes/orcOrc1/pushQ
+    time makePushQSql.pl orcOrc1 > orcOrc1.pushQ.sql 2> stderr.out
+    #   real    11m56.179s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/orcOrc1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/orcOrc1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/orcOrc1/bbi/quality.bw
+    # WARNING: orcOrc1 does not have seq
+    # WARNING: orcOrc1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p orcOrc1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/orcOrc1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

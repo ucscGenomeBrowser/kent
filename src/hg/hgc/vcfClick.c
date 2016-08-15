@@ -554,7 +554,6 @@ printTrackHtml(tdb);
 }
 
 
-#ifdef USE_TABIX
 
 void doVcfTabixDetails(struct trackDb *tdb, char *item)
 /* Show details of an alignment from a VCF file compressed and indexed by tabix. */
@@ -569,7 +568,6 @@ doVcfDetailsCore(tdb, fileOrUrl, TRUE);
 }
 
 
-#endif // no USE_TABIX
 
 
 void doVcfDetails(struct trackDb *tdb, char *item)

@@ -92,17 +92,27 @@ hPrintf("var %s='%s';\n", jsVar, val);
 hPrintf("</SCRIPT>\n");
 }
 
+void jsMakeTrackingRadioButtonExtraHtml(char *cgiVar, char *jsVar,
+                                        char *val, char *selVal, char *extraHtml)
+/* Make a radio button with extra HTML attributes that also sets tracking variable
+ * in javascript. */
+{
+hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", cgiVar);
+hPrintf(" VALUE=\"%s\"", val);
+if (isNotEmpty(extraHtml))
+    hPrintf(" %s", extraHtml);
+hPrintf(" onClick=\"%s='%s';\"", jsVar, val);
+if (sameString(val, selVal))
+    hPrintf(" CHECKED");
+hPrintf(">");
+}
+
 void jsMakeTrackingRadioButton(char *cgiVar, char *jsVar,
 	char *val, char *selVal)
 /* Make a radio button that also sets tracking variable
  * in javascript. */
 {
-hPrintf("<INPUT TYPE=RADIO NAME=\"%s\"", cgiVar);
-hPrintf(" VALUE=\"%s\"", val);
-hPrintf(" onClick=\"%s='%s';\"", jsVar, val);
-if (sameString(val, selVal))
-    hPrintf(" CHECKED");
-hPrintf(">");
+jsMakeTrackingRadioButtonExtraHtml(cgiVar, jsVar, val, selVal, NULL);
 }
 
 void jsMakeTrackingCheckBox(struct cart *cart,
@@ -256,6 +266,50 @@ puts("<script src=\"../js/PathUpdate.js\"></script>");
 puts("<script src=\"../js/PathUpdateOptional.js\"></script>");
 puts("<script src=\"../js/ImmutableUpdate.js\"></script>");
 puts("<script src=\"../js/reactLibBundle.js\"></script>");
+}
+
+void jsIncludeDataTablesLibs()
+/* Prints out <script src="..."> tags for external libraries: jQuery 1.12.3, the jQuery DataTables
+ * plugin (version 1.10.12), and the accompanying standard CSS file for DataTables. */
+{
+puts("<link rel=\"stylesheet\" type=\"text/css\" "
+    "href=\"https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css\">\n");
+puts("<script type=\"text/javascript\" "
+    "src=\"https://code.jquery.com/jquery-1.12.3.min.js\"\"></script>");
+puts("<script type=\"text/javascript\" "
+    "src=\"https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js\"\"></script>");
+}
+
+char *jsDataTableStateSave (char *cartPrefix)
+/* Prints out a javascript function to save the state of a DataTables jQuery plugin-enabled
+ * table to the cart, using the specified cart prefix to help name the variable. */
+{
+static char saveFunction[4096];
+safef(saveFunction, sizeof(saveFunction),
+    "function saveTableState (settings, data) { "
+    "var cartVarName  = \"%s\".concat(\"%s\"); "
+    "var stateString = JSON.stringify(data); "
+    "setCartVar(cartVarName,  encodeURIComponent(stateString)); "
+    "}"
+    , cartPrefix, dataTableStateName);
+return saveFunction;
+}
+
+char *jsDataTableStateLoad (char *cartPrefix, struct cart *cart)
+/* Prints out a javascript function to load the state of a DataTables jQuery plugin-enabled
+ * table from the cart variable whose prefix is specified in the first argument */
+{
+    char *stateVariable = catTwoStrings(cartPrefix, "DataTableState");
+    char *stateString = cartUsualString(cart, stateVariable, "{}");
+    static char loadFunction [4096];
+    safef(loadFunction, sizeof(loadFunction),
+        "function loadTableState (settings) { "
+        "var stateString = decodeURIComponent(\"%s\"); "
+        "var data = JSON.parse(stateString); "
+        "return data; "
+        "}"
+        , stateString);
+    return loadFunction;
 }
 
 char *jsCheckAllOnClickHandler(char *idPrefix, boolean state)

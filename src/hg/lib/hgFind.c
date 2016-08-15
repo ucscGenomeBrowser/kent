@@ -1616,19 +1616,9 @@ for (el = *pAccList; el != NULL; el = el->next)
     acc = el->name;
 
     /* check if item matches xeno criterion */
-    if (hTableExists(db, "gbStatus"))
-	{
-	sqlSafef(query, sizeof(query),
-          "select (orgCat = 'native' && srcDb != 'RefSeq') from gbStatus where acc = '%s'", acc); /* redmine #3301 */
-	if (isXeno == sqlQuickNum(conn, query))
-	    continue;
-	}
-    else
-	{
-	int itemOrganismID = hashIntVal(accOrgHash, acc);
-	if (isXeno == (itemOrganismID == organismID))
-	    continue;
-	}
+    int itemOrganismID = hashIntVal(accOrgHash, acc);
+    if (isXeno == (itemOrganismID == organismID))
+        continue;
 
     /* check if item matches alignment criterion */
     if (aligns != (mrnaTableExists && mrnaAligns(conn, mrnaTable, acc)))

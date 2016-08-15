@@ -864,9 +864,6 @@ int len = 0;
 char del[2];
 char *s;
 
-if (list == NULL)
-    return cloneString("");
-
 del[0] = delimiter;
 del[1] = '\0';
 
@@ -2195,6 +2192,24 @@ for (;;)
 	*out++ = c;
     }
 *out++ = 0;
+}
+
+/* Remove any chars leaving digits only */
+void eraseNonDigits(char *s)
+{
+char *in, *out;
+char c;
+
+in = out = s;
+for (;;)
+    {
+    c = *in++;
+    if (c == 0)
+        break;
+    if (isdigit(c))
+        *out++ = c;
+    }
+*out = 0;
 }
 
 /* Remove non-alphanumeric chars from string */

@@ -2,10 +2,10 @@ name global
 knownGene ensGene
 knownGenePep ensPep
 knownToRef ensToRefSeq
-summaryTables refSeqSummary ensXRefZfish
+summaryTables hgFixed.refSeqSummary ensXRefZfish
 nameSql select gene from ensGtp where transcript = '%s'
 descriptionSql select description from ensXRefZfish where ensGeneId = '%s'
 proteinSql select uniProtId from ensXRefZfish where ensGeneId = '%s'
-summarySql select summary from refSeqSummary,ensXRefZfish where ensXRefZfish.ensGeneId ='%s' and refSeqSummary.mrnaAcc=ensXRefZfish.refSeq
+summarySql select summary from hgFixed.refSeqSummary,ensXRefZfish where ensXRefZfish.ensGeneId ='%s' and hgFixed.refSeqSummary.mrnaAcc=ensXRefZfish.refSeq
 summaryIdSql select value from knownToRefSeq where name='%s'
 summarySource RefSeq Summary

@@ -97,11 +97,18 @@ jsDropDownCarryOver(dy, hgtaTable);
 return jsOnChangeEnd(&dy);
 }
 
+void makeRegionButtonExtraHtml(char *val, char *selVal, char *extraHtml)
+/* Make region radio button including a little Javascript to save selection state
+ * and optional extra html attributes. */
+{
+jsMakeTrackingRadioButtonExtraHtml(hgtaRegionType, "regionType", val, selVal, extraHtml);
+}
+
 void makeRegionButton(char *val, char *selVal)
 /* Make region radio button including a little Javascript
  * to save selection state. */
 {
-jsMakeTrackingRadioButton(hgtaRegionType, "regionType", val, selVal);
+makeRegionButtonExtraHtml(val, selVal, NULL);
 }
 
 struct grp *showGroupField(char *groupVar, char *groupScript,
@@ -156,8 +163,8 @@ slFreeList(&dbList);
 return selDb;
 }
 
-struct trackDb *showTrackField(struct grp *selGroup,
-	char *trackVar, char *trackScript)
+struct trackDb *showTrackField(struct grp *selGroup, char *trackVar, char *trackScript,
+                               boolean disableNoGenome)
 /* Show track control. Returns selected track. */
 {
 struct trackDb *track, *selTrack = NULL;
@@ -191,15 +198,30 @@ else
 	{
 	selTrack = findSelectedTrack(fullTrackList, selGroup, trackVar);
 	}
+    boolean selTrackIsDisabled = FALSE;
+    struct trackDb *firstEnabled = NULL;
     for (track = fullTrackList; track != NULL; track = track->next)
 	{
 	if (allTracks || sameString(selGroup->name, track->grp))
 	    {
-	    hPrintf(" <OPTION VALUE=\"%s\"%s>%s\n", track->track,
-		(track == selTrack ? " SELECTED" : ""),
-		track->shortLabel);
+	    hPrintf(" <OPTION VALUE=\"%s\"", track->track);
+            if (cartTrackDbIsNoGenome(database, track->table))
+                hPrintf(NO_GENOME_CLASS);
+            if (disableNoGenome && isNoGenomeDisabled(database, track->table))
+                {
+                hPrintf(" DISABLED");
+                if (track == selTrack)
+                    selTrackIsDisabled = TRUE;
+                }
+            else if (firstEnabled == NULL)
+                firstEnabled = track;
+            if (track == selTrack && !selTrackIsDisabled)
+                hPrintf(" SELECTED");
+            hPrintf(">%s</OPTION>", track->shortLabel);
 	    }
 	}
+    if (selTrackIsDisabled)
+        selTrack = firstEnabled;
     hPrintf("</SELECT>\n");
     }
 hPrintf("\n");
@@ -234,11 +256,13 @@ struct hash *uniqHash = newHash(0);
 hFreeConn(&conn);
 for (raw = rawList; raw != NULL; raw = raw->next)
     {
+    if (cartTrackDbIsAccessDenied(db, raw->name))
+        continue;
     if (isGenomeDb)
 	{
 	/* Deal with tables split across chromosomes. */
 	char *root = unsplitTableName(raw->name);
-	if (cartTrackDbIsAccessDenied(db, root) || cartTrackDbIsAccessDenied(db, raw->name))
+	if (cartTrackDbIsAccessDenied(db, root))
 	    continue;
 	if (!hashLookup(uniqHash, root))
 	    {
@@ -250,8 +274,6 @@ for (raw = rawList; raw != NULL; raw = raw->next)
     else
         {
 	char dbTable[256];
-	if (cartTrackDbIsAccessDenied(db, raw->name))
-	    continue;
 	safef(dbTable, sizeof(dbTable), "%s.%s", db, raw->name);
 	cooked = slNameNew(dbTable);
 	slAddHead(&cookedList, cooked);
@@ -290,7 +312,12 @@ for (name = nameList; name != NULL; name = name->next)
     if (track != NULL)
 	tdb = findTdbForTable(database,track,name->name, ctLookupName);
     hPrintf("<OPTION VALUE=\"%s\"", name->name);
-    if (sameString(selTable, name->name))
+    // Disable options for related tables that are noGenome -- if a non-positional table
+    // is selected then we output its entire contents.
+    if (cartTrackDbIsNoGenome(database, name->name) &&
+        (track == NULL || differentString(track->table, name->name)))
+        hPrintf(" DISABLED"NO_GENOME_CLASS);
+    else if (sameString(selTable, name->name))
         {
         hPrintf(" SELECTED");
         selTdb = tdb;
@@ -495,7 +522,7 @@ void showMainControlTable(struct sqlConnection *conn)
 {
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE,
-        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE;
+        isChromGraphCt = FALSE, isPal = FALSE, isArray = FALSE, isBam = FALSE, isVcf = FALSE, isHalSnake = FALSE, isLongTabix = FALSE;
 boolean gotClade = hGotClade();
 struct hTableInfo *hti = NULL;
 
@@ -527,7 +554,7 @@ hPrintf("<TABLE BORDER=0>\n");
     hPrintf("<TR><TD>");
     selGroup = showGroupField(hgtaGroup, onChangeGroupOrTrack(), conn, hAllowAllTables());
     nbSpaces(3);
-    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack());
+    curTrack = showTrackField(selGroup, hgtaTrack, onChangeGroupOrTrack(), FALSE);
     nbSpaces(3);
     boolean hasCustomTracks = FALSE;
     struct trackDb *t;
@@ -558,6 +585,7 @@ hPrintf("<TABLE BORDER=0>\n");
         hti = getHti(database, curTable, conn);
         isPositional = htiIsPositional(hti);
         }
+    isLongTabix = isLongTabixTable( curTable);
     isBam = isBamTable( curTable);
     isVcf = isVcfTable(curTable, NULL);
     isWig = isWiggle(database, curTable);
@@ -610,9 +638,24 @@ if (isPositional)
 	 userRegionsFileName() == NULL) ||
 	(sameString(regionType, hgtaRegionTypeEncode) && !doEncode))
 	regionType = hgtaRegionTypeGenome;
+    // Is "genome" is not allowed because of tdb 'tableBrowser noGenome'?
+    boolean disableGenome = ((curTrack && cartTrackDbIsNoGenome(database, curTrack->table)) ||
+                             (curTable && cartTrackDbIsNoGenome(database, curTable)));
+    // If "genome" is selected but not allowed, force it to "range":
+    if (sameString(regionType, hgtaRegionTypeGenome) && disableGenome)
+        regionType = hgtaRegionTypeRange;
     jsTrackingVar("regionType", regionType);
-    makeRegionButton(hgtaRegionTypeGenome, regionType);
-    hPrintf("&nbsp;genome&nbsp;");
+    if (disableGenome)
+        {
+        makeRegionButtonExtraHtml(hgtaRegionTypeGenome, regionType, "DISABLED");
+        hPrintf("&nbsp;<span"NO_GENOME_CLASS">genome (unavailable for selected track)</span>"
+                "&nbsp;");
+        }
+    else
+        {
+        makeRegionButton(hgtaRegionTypeGenome, regionType);
+        hPrintf("&nbsp;genome&nbsp;");
+        }
     if (doEncode)
         {
 	makeRegionButton(hgtaRegionTypeEncode, regionType);
@@ -682,7 +725,7 @@ hPrintf("</TD></TR>\n");
 }
 
 /* Composite track subtrack merge line. */
-boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf);
+boolean canSubtrackMerge = (curTrack && tdbIsComposite(curTrack) && !isBam && !isVcf && !isLongTabix);
 if (canSubtrackMerge)
     {
     hPrintf("<TR><TD><B>subtrack merge:</B>\n");
@@ -709,13 +752,14 @@ if (isPositional)
 	cgiMakeButton(hgtaDoIntersectPage, "edit");
 	hPrintf(" ");
 	cgiMakeButton(hgtaDoClearIntersect, "clear");
+        hPrintf("</TD></TR>\n");
 	}
     else if (canIntersect(database, curTable))
         {
 	hPrintf("<TR><TD><B>intersection:</B>\n");
 	cgiMakeButton(hgtaDoIntersectPage, "create");
+        hPrintf("</TD></TR>\n");
 	}
-    hPrintf("</TD></TR>\n");
     }
 
 /* Correlation line. */
@@ -724,7 +768,7 @@ if (correlateTrackTableOK(tdb, curTable))
     {
     char *table2 = cartUsualString(cart, hgtaCorrelateTable, "none");
     hPrintf("<TR><TD><B>correlation:</B>\n");
-    if (differentWord(table2,"none") && strlen(table2))
+    if (differentWord(table2, "none") && strlen(table2) && ! isNoGenomeDisabled(database, table2))
         {
         struct grp *groupList = fullGroupList;
         struct grp *selGroup = findSelectedGroup(groupList, hgtaCorrelateGroup);
@@ -795,7 +839,7 @@ hPrintf("</TABLE>\n");
 /* Submit buttons. */
     {
     hPrintf("<BR>\n");
-    if (isWig || isBam || isVcf)
+    if (isWig || isBam || isVcf || isLongTabix)
 	{
 	char *name;
 	extern char *maxOutMenu[];
@@ -815,7 +859,7 @@ hPrintf("</TABLE>\n");
 		" a very large file that contains the original data values (not"
 		" compressed into the wiggle format) -- see the Downloads page."
 		"</I><BR>", maxOutput);
-	else if (isBam || isVcf)
+	else if (isBam || isVcf || isLongTabix)
 	    hPrintf(
 		"<I>Note: to return more than %s lines, change the filter setting"
 		" (above). Please consider downloading the entire data from our Download pages."
@@ -895,6 +939,7 @@ hPrintf(
    );
 
 hPrintf("<script type=\"text/javascript\">\n");
+// When GREAT is selected, disable the other checkboxes and force output to BED
 hPrintf("function onSelectGreat() {\n");
 hPrintf("document.getElementById('checkboxGalaxy').checked=false;\n");
 if (isGenomeSpaceEnabled())
@@ -902,8 +947,20 @@ if (isGenomeSpaceEnabled())
 hPrintf("document.getElementById('outBed').selected=true;\n");
 hPrintf("return true;\n");
 hPrintf("}\n");
-hPrintf("</script>\n");
-
+// Disable/enable noGenome tracks depending on whether region is genome.
+hPrintf("function maybeDisableNoGenome() {\n"
+        "   var regionTypeSelected = $('input[name=\"hgta_regionType\"]:checked').val();\n"
+        "   var regionIsGenome = (regionTypeSelected === 'genome');\n"
+        "   var $noGenomeOptions = $('select[name=\"hgta_track\"] option.hgtaNoGenome');\n"
+        "   $noGenomeOptions.attr('disabled', regionIsGenome)\n"
+        "                   .css('color', regionIsGenome ? '' : 'black');\n"
+        "}\n"
+        "$(document).ready(function() {\n"
+        // once when the page loads, and every time the user changes the region type:
+        "    maybeDisableNoGenome();\n"
+        "    $('input[name=\"hgta_regionType\"]').change(maybeDisableNoGenome);\n"
+        "});\n"
+        "</script>\n");
 
 /* Main form. */
 hPrintf("<FORM ACTION=\"%s\" NAME=\"mainForm\" METHOD=%s>\n",

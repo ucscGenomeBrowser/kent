@@ -175,6 +175,7 @@ CREATE TABLE cdwSubmit (
     errorMessage longblob,	# If non-empty contains last error message. If empty submit is ok
     fileIdInTransit int unsigned default 0,	# cdwFile.id of file currently being transferred or zero
     metaChangeCount int unsigned default 0,	# Number of files where metadata changed by submission
+    wrangler longblob,	# The UNIX ID of the person who ran cdwSubmit.
               #Indices
     PRIMARY KEY(id),
     INDEX(url(32)),
@@ -547,14 +548,16 @@ CREATE TABLE cdwTrackViz (
     PRIMARY KEY(id)
 );
 
-#A dataset is a collection of files, usually associated to a paper
+#A dataset is a collection of files, usually associated with a paper
 CREATE TABLE cdwDataset (
+    id int unsigned auto_increment,	# Dataset ID
     name varchar(255) default '',	# Short name of this dataset, one word, no spaces
     label varchar(255) default '',	# short title of the dataset, a few words
     description longblob,	# Description of dataset, can be a complete html paragraph.
     pmid varchar(255) default '',	# Pubmed ID of abstract
     pmcid varchar(255) default '',	# PubmedCentral ID of paper full text
-    metaDivTags varchar(255) default '',	# Comma separated list of fields use to make tree out of metadata
+    metaDivTags varchar(255) default '',	# Comma separated list of fields used to make tree out of metadata
               #Indices
+    PRIMARY KEY(id),
     UNIQUE(name)
 );

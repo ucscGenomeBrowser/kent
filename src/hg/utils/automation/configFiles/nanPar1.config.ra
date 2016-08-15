@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db nanPar1
+clade vertebrate
+genomeCladePriority 50
+scientificName Nanorana parkeri
+commonName Tibetan frog
+assemblyDate Mar. 2015
+assemblyLabel ASM93562v1
+assemblyShortLabel BGI_ZX_2015
+orderKey 20312
+mitoAcc none
+fastaFiles /hive/data/genomes/nanPar1/ucsc/*.fa
+agpFiles /hive/data/genomes/nanPar1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir frog
+photoCreditURL http://wangwenzhiwen.blog.163.com/
+photoCreditName Copyright (C) 2013 Kai Wang
+ncbiGenomeId 36384
+ncbiAssemblyId 302061
+ncbiAssemblyName ASM93562v1
+ncbiBioProject 243398
+genBankAccessionID GCA_000935625.1
+taxId 125878

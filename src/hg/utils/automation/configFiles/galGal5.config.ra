@@ -1,0 +1,24 @@
+# config parameters for makeGenomeDb.pl:
+db galGal5
+clade vertebrate
+scientificName Gallus gallus
+commonName Chicken
+assemblyDate Dec 2015
+assemblyLabel International Chicken Genome Consortium
+assemblyShortLabel Gallus_gallus-5.0
+orderKey 3314
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_001323.1
+mitoAcc none
+fastaFiles /hive/data/genomes/galGal5/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/galGal5/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir chicken
+photoCreditURL http://www.genome.gov/dmd/img.cfm?node=Photos/Animals/Red%20Jungle%20Fowl&id=2120
+photoCreditName NHGRI Press Photos
+ncbiGenomeId 111
+ncbiAssemblyId 595851
+ncbiAssemblyName Gallus_gallus-5.0
+ncbiBioProject 10808
+genBankAccessionID GCF_000002315.4
+taxId 9031

@@ -98,6 +98,10 @@ void printAlignments(struct psl *pslList,
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 /* Print list of mRNA alignments. */
 
+void printAlignmentsExtra(struct psl *pslList,
+		     int startFirst, char *hgcCommand, char *hgcCommandInWindow, char *typeName, char *itemIn);
+/* Print list of mRNA alignments with special "in window" alignment function. */
+
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq,
 		       enum gfType qType, int qStart, int qEnd,
 		       char *qName, int cdsS, int cdsE);
@@ -467,6 +471,11 @@ void doPeptideAtlas(struct trackDb *tdb, char *item);
 
 void doGtexGeneExpr(struct trackDb *tdb, char *item);
 /* Details of GTEX gene expression item */
+
+void printAddWbr(char *text, int distance);
+/* a crazy hack for firefox/mozilla that is unable to break long words in tables
+ * We need to add a <wbr> tag every x characters in the text to make text breakable.
+ */
 
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.

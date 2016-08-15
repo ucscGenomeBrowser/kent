@@ -55,29 +55,21 @@ static struct optionSpec options[] = {
 };
 
 void alignFastqMakeBed(struct cdwFile *ef, struct cdwAssembly *assembly,
-    char *fastqPath, struct cdwValidFile *vf, FILE *bedF)
+    char *fastqPath, struct cdwValidFile *vf, FILE *bedF, char *assay)
 /* Take a sample fastq and run bwa on it, and then convert that file to a bed. 
  * Update vf->mapRatio and related fields. */
 {
 cdwAlignFastqMakeBed(ef, assembly, fastqPath, vf, bedF, 
-    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio);
-}
-
-int makeReadableTemp(char *fileName)
-/* Make temp file that other people can read. */
-{
-int fd = mkstemp(fileName);
-if (fchmod(fd, 0664) == -1)
-    errnoAbort("Couldn't change permissions on temp file %s", fileName);
-return fd;
+    &vf->mapRatio, &vf->depth, &vf->sampleCoverage, &vf->uniqueMapRatio, assay);
 }
 
 void makeValidFastq( struct sqlConnection *conn, char *path, struct cdwFile *ef, 
-	struct cdwAssembly *assembly, struct cdwValidFile *vf)
+	struct cdwAssembly *assembly, struct cdwValidFile *vf, char *assay)
 /* Fill out fields of vf.  Create sample subset. */
 {
 /* Make cdwFastqFile record. */
 long long fileId = ef->id;
+
 cdwMakeFastqStatsAndSample(conn, fileId);
 struct cdwFastqFile *fqf = cdwFastqFileFromFileId(conn, fileId);
 verbose(1, "Made sample fastq with %lld reads\n", fqf->sampleCount);
@@ -91,9 +83,9 @@ vf->basesInSample = fqf->basesInSample;
 /* Align fastq and turn results into bed. */
 char sampleBedName[PATH_LEN], temp[PATH_LEN];
 safef(sampleBedName, PATH_LEN, "%scdwSampleBedXXXXXX", cdwTempDirForToday(temp));
-int bedFd = makeReadableTemp(sampleBedName);
-FILE *bedF = fdopen(bedFd, "w");
-alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF);
+cdwReserveTempFile(sampleBedName);
+FILE *bedF = mustOpen(sampleBedName, "w");
+alignFastqMakeBed(ef, assembly, fqf->sampleFileName, vf, bedF, assay);
 carefulClose(&bedF);
 vf->sampleBed = cloneString(sampleBedName);
 
@@ -470,8 +462,8 @@ if (!gff->isGtf)
 /* Convert it to a somewhat smaller less informative bed file for sampling purposes. */
 char sampleFileName[PATH_LEN], temp[PATH_LEN];
 safef(sampleFileName, PATH_LEN, "%scdwGffBedXXXXXX", cdwTempDirForToday(temp));
-int sampleFd = makeReadableTemp(sampleFileName);
-FILE *f = fdopen(sampleFd, "w");
+cdwReserveTempFile(sampleFileName);
+FILE *f = fopen(sampleFileName, "w");
 struct genomeRangeTree *grt = genomeRangeTreeNew();
 
 /* Loop through lines writing out simple bed and adding to genome range tree. */
@@ -583,7 +575,6 @@ if (assembly == NULL)
 	(long long)ef->id, ef->submitFileName, format);
 }
 
-
 void mustMakeValidFile(struct sqlConnection *conn, struct cdwFile *ef, struct cgiParsedVars *tags,
     long long oldValidId)
 /* If possible make a cdwValidFile record for this.  Makes sure all the right tags are there,
@@ -625,8 +616,9 @@ if (vf->format)	// We only can validate if we have something for format
 
     if (sameString(format, "fastq"))
 	{
+	char *assay = cdwLookupTag(tags, "assay");
 	needAssembly(ef, format, assembly);
-	makeValidFastq(conn, path, ef, assembly, vf);
+	makeValidFastq(conn, path, ef, assembly, vf, assay);
 	suffix = ".fastq.gz";
 	}
     else if (cdwIsSupportedBigBedFormat(format))

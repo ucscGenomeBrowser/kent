@@ -1,0 +1,26 @@
+# config parameters for makeGenomeDb.pl:
+db colAng1
+clade mammal
+genomeCladePriority 35
+scientificName Colobus angolensis palliatus
+commonName Angolan colobus
+assemblyDate Mar. 2015
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Cang.pa_1.0
+orderKey 1505
+# there is a mitochondrial sequence, but is indicated in genbank as
+# unconfirmed KT626001.1
+mitoAcc none
+fastaFiles /hive/data/genomes/colAng1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/colAng1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir oldWorldMonkeys
+photoCreditURL https://www.flickr.com/photos/ekilby/14393774092/
+photoCreditName Eric Kilby (flickr)
+ncbiGenomeId 36539
+ncbiAssemblyId 311101
+ncbiAssemblyName Cang.pa_1.0
+ncbiBioProject 279495
+ncbiBioSample SAMN03121814
+genBankAccessionID GCF_000951035.1
+taxId 336983

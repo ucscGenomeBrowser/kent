@@ -12,6 +12,8 @@
 #include "cheapcgi.h"
 #include "cart.h"
 #include "cartTrackDb.h"
+#include "genbank.h"
+#include "hgConfig.h"
 #include "hui.h"
 #include "grp.h"
 #include "hCommon.h"
@@ -784,6 +786,39 @@ boolean hasGencodeTags()
 return knownGeneHasGencodeTags() || (getGencodeTagVersions() != NULL);
 }
 
+void genbankGetDbTable(char *db, char *gbTable, char **retGenbankDb, char **retTableName)
+/* Genbank tables (e.g. gbCdnaInfoTable) may now include a 'db.' prefix, e.g.
+ * hgFixed.gbCdnaInfo.  If so, separate out the database and table name.  If gbTable
+ * does not have a 'db.' prefix then use the configured genbankDb if given, else db. */
+{
+char *genbankDb = cfgOptionEnv("GENBANKDB", "genbankDb");
+char *tableName = gbTable;
+char tableCopy[strlen(gbTable)+1];
+safecpy(tableCopy, sizeof(tableCopy), gbTable);
+char *words[2];
+int wordCount = chopByChar(tableCopy, '.', words, ArraySize(words));
+if (wordCount == 2)
+    {
+    genbankDb = words[0];
+    tableName = words[1];
+    }
+else if (isEmpty(genbankDb))
+    genbankDb = db;
+if (retGenbankDb)
+    *retGenbankDb = cloneString(genbankDb);
+if (retTableName)
+    *retTableName = cloneString(tableName);
+}
+
+boolean genbankTableExists(char *db, char *gbTable)
+/* Return TRUE if table (which may or may not be prefixed by genbankDb) exists in
+ * genbankDb or db. */
+{
+char *genbankDb=NULL, *tableName=NULL;
+genbankGetDbTable(db, gbTable, &genbankDb, &tableName);
+return hTableExists(genbankDb, tableName);
+}
+
 boolean hasTxStatus()
 /* Return TRUE if any gene track in database has some kind of transcript status info
  * like knownCanonical, GENCODE tags and/or RefSeq status. */
@@ -792,7 +827,7 @@ if (hasGencodeTags())
     return TRUE;
 if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonical"))
     return TRUE;
-if (hTableExists(database, "refGene") && hTableExists(database, "refSeqStatus"))
+if (hTableExists(database, "refGene") && genbankTableExists(database, refSeqStatusTable))
     return TRUE;
 return FALSE;
 }
@@ -905,7 +940,7 @@ if (hTableExists(database, "knownGene") && hTableExists(database, "knownCanonica
     printf("Indicate whether each transcript is 'canonical' (%s).<BR>\n", desc);
     puts("</div>");
     }
-if (hTableExists(database, "refGene") && hTableExists(database, "refSeqStatus"))
+if (hTableExists(database, "refGene") && genbankTableExists(database, refSeqStatusTable))
     {
     boolean isVisible = sameString(geneTrack, "refGene");
     somethingIsVisible |= isVisible;
@@ -2406,24 +2441,35 @@ if (cartUsualBoolean(cart, "hgva_txStatus_knownCanonical", FALSE) &&
     }
 if (cartUsualBoolean(cart, "hgva_txStatus_refSeqStatus", FALSE) &&
     sameString(track, "refGene") &&
-    hTableExists(db, "refSeqStatus"))
+    genbankTableExists(db, refSeqStatusTable))
     {
-    slAddHead(&txStatusExtras, joinerDtfNew(db, "refSeqStatus", "status"));
+    char *genbankDb=NULL, *tableName=NULL;
+    genbankGetDbTable(db, refSeqStatusTable, &genbankDb, &tableName);
+    slAddHead(&txStatusExtras, joinerDtfNew(genbankDb, tableName, "status"));
     }
 return txStatusExtras;
 }
 
-static void configAddTableField(struct dyString *dy, char *table, char *field, boolean *pIsFirst)
-/* Add a JSON object with table and (list of one) field. */
-// (with "." prepended to table name
-// because that's the convention for related tables in same db as track):
+static void configAddDtf(struct dyString *dy, struct joinerDtf *dtf, boolean *pIsFirst)
+/* Add a JSON object with [db].table and (list of one) field. */
 {
 if (! *pIsFirst)
     dyStringAppend(dy, ", ");
-dyStringPrintf(dy, "{ \"table\": \".%s\", \"fields\": [\"%s\"] }", table, field);
+// The convention for related tables in same db as track is to prepend "." instead of "<db>.":
+char *db = (sameString(dtf->database, database) ? "" : dtf->database);
+dyStringPrintf(dy, "{ \"table\": \"%s.%s\", \"fields\": [\"%s\"] }", db, dtf->table, dtf->field);
 *pIsFirst = FALSE;
 }
 
+static void configAddTableField(struct dyString *dy, char *table, char *field, boolean *pIsFirst)
+/* Add a JSON object with current database, table and (list of one) field. */
+{
+struct joinerDtf dtf;
+dtf.database = database;
+dtf.table = table;
+dtf.field = field;
+configAddDtf(dy, &dtf, pIsFirst);
+}
 
 static struct jsonElement *configForStreamer(char *db, struct trackDb *tdb,
                                              struct joinerDtf *txStatusExtras)
@@ -2445,7 +2491,7 @@ if (sameString(track, "knownGene") &&
     }
 struct joinerDtf *txStatDtf;
 for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->next)
-    configAddTableField(dyConfig, txStatDtf->table, txStatDtf->field, &isFirst);
+    configAddDtf(dyConfig, txStatDtf, &isFirst);
 
 // If any of the above apply, close the relatedTables list and config object
 // and parse into jsonElements.
@@ -2477,8 +2523,10 @@ for (txStatDtf = txStatusExtras;  txStatDtf != NULL;  txStatDtf = txStatDtf->nex
     {
     char *tag = NULL, *description = NULL;
     boolean isBoolean = FALSE;
-    if (differentString(txStatDtf->database, database))
-        errAbort("addTxStatusExtras: Expected db=%s in txStatDtf but got %s",
+    // Double-check that we're not joining in some table from a different assembly database:
+    if (differentString(txStatDtf->database, database) &&
+        differentString(txStatDtf->database, "hgFixed"))
+        errAbort("addTxStatusExtras: Expected db=%s or hgFixed in txStatDtf but got %s",
                  database, txStatDtf->database);
     if ((startsWith(GENCODE_PREFIX"Tag", txStatDtf->table) &&
          sameString(txStatDtf->field, "tag")) ||
@@ -2663,6 +2711,7 @@ if (startsWith("virt:", cartUsualString(cart, "position", "")))
 
 /* Set up global variables. */
 getDbAndGenome(cart, &database, &genome, oldVars);
+initGenbankTableNames(database);
 regionType = cartUsualString(cart, hgvaRegionType, hgvaRegionTypeGenome);
 if (isEmpty(cartOptionalString(cart, hgvaRange)))
     cartSetString(cart, hgvaRange, hDefaultPos(database));

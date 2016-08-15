@@ -1,0 +1,24 @@
+# Config parameters for makeGenomeDb.pl:
+db bisBis1
+clade mammal
+genomeCladePriority 31
+scientificName Bison bison bison
+commonName Bison
+assemblyDate Oct. 2014
+assemblyLabel U. Maryland
+assemblyShortLabel Bison_UMD1.0
+orderKey 2325
+# mitoAcc from the RefSeq assembly GCF_000754665.1
+mitoAcc NC_012346.1
+fastaFiles /hive/data/genomes/bisBis1/ucsc/*.fa
+agpFiles /hive/data/genomes/bisBis1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir bison
+photoCreditURL http://genetics.tamu.edu/faculty/lauren_dobson
+photoCreditName Lauren Dobson - Texas A and M University
+ncbiGenomeId 8907
+ncbiAssemblyId 237421
+ncbiAssemblyName Bison_UMD1.0
+ncbiBioProject 266339 
+genBankAccessionID GCA_000754665.1
+taxId 43346

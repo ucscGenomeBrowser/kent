@@ -17,6 +17,9 @@ gc.disable()
 # the column of the kallisto output file with the TPM value
 tpmColumnIndex = 4
 
+# keeps genes with only 0 values, uses more memory but then the output line count is always the same
+addZeros = False
+
 # === command line interface, options and help ===
 def parseArgs():
     parser = optparse.OptionParser("""usage: %prog [options] dirName
@@ -42,6 +45,8 @@ def parseArgs():
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
     parser.add_option("-t", "--threads", dest="threads", action="store", type="int", help="number of threads to use, default %default", default=10)
+    parser.add_option("-s", "--addZeros", dest="addZeros", action="store_true", help="keep genes with only 0 values, makes sure that the matrix rowcount is always the same")
+    parser.add_option("-r", "--recursive", dest="recursive", action="store_true", help="search in all subdirectories for files that end with *abundance.tsv")
     #parser.add_option("-g", "--geneLevel", dest="geneLevel", action="store_true", help="map transcripts to gene symbols and write the sum of all transcript TPMs into a file <outBase>.geneTpm.tab")
     parser.add_option("", "--transFile", dest="transFile", action="store", help="the text file with the mapping transcript-gene-symbol (sym is not used), one per line. default %default", default="/hive/data/outside/gencode/release_22/transToGene.tab")
     (options, args) = parser.parse_args()
@@ -59,30 +64,44 @@ def parseArgs():
 
 # ==== functions =====
     
-def findInputFiles(dirname):
+def findInputFiles(dirname, doRecurse):
     """ return two lists: cellIds and all paths of files */abundance.tsv in subdirs under dirname 
     subDir name is the cellId.
 
     alternative input:
     dirName can also be a directory full of *.abundance.tsv files where * is the cellId.
     """
+    logging.info("Looking for *.abundance.tsv files in %s" % dirname)
     cellIds = []
+
+
+    if doRecurse:
+        inPaths = []
+        logging.info("Looking in all subdirectories")
+        for dirpath, subdirs, files in os.walk(dirname):
+            for fname in files:
+                if fname.endswith("abundance.tsv"):
+                    inPaths.append(join(dirpath, fname))
+    else:
+        inPaths = glob.glob(join(dirname, "*"))
+
     filePaths = []
-    for inputPath in glob.glob(join(dirname, "*")):
+    for inputPath in inPaths:
         # check if it's an abundance file
         if inputPath.endswith(".abundance.tsv") and isfile(inputPath):
             cellId = basename(inputPath).split(".")[0]
             filePath = inputPath
         else:
             # check if it's a dir with the right filename in it
-            if not isdir(filePath):
+            if not isdir(inputPath):
                 continue
-            filePath = join(filePath, "abundance.tsv")
+            filePath = join(inputPath, "abundance.tsv")
             if not isfile(filePath):
                 continue
             cellId = basename(inputPath)
         cellIds.append(cellId)
         filePaths.append(filePath)
+    logging.info("Found %d input files" % len(filePaths))
     return cellIds, filePaths
 
 def parseKallisto(fname):
@@ -97,8 +116,9 @@ def parseKallisto(fname):
     d = {}
     for line in ifh:
         fs = line.rstrip("\n").split("\t")
-        if fs[tpmColumnIndex]!="0":
-            d[fs[0]] = float(fs[tpmColumnIndex])
+        if fs[tpmColumnIndex]=="0" and not addZeros:
+            continue
+        d[fs[0]] = float(fs[tpmColumnIndex])
     return d
         
 def parseDict(fname, stripDot=False):
@@ -251,12 +271,16 @@ def main():
     inDir = args[0]
     outBase = args[1]
 
+    global addZeros
+    if options.addZeros:
+        addZeros = True
+
     transOutFname = outBase+".tpm.tab"
     statOutFname = outBase+".stat.tab"
 
     writeStats(inDir, statOutFname)
 
-    cellNames, inFnames = findInputFiles(inDir)
+    cellNames, inFnames = findInputFiles(inDir, options.recursive)
     assert(len(cellNames)==len(inFnames))
 
     if len(inFnames)==0:

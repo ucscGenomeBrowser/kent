@@ -14,6 +14,7 @@
 #include "cdwLib.h"
 #include "raToStruct.h"
 #include "ra.h"
+#include "cdwLib.h"
 
 int maxInsert = 1000;
 
@@ -166,7 +167,7 @@ return one;
 #define FASTQ_SAMPLE_SIZE 10000
 
 void makeTmpSai(struct sqlConnection *conn, struct cdwValidFile *vf, char *genoFile, 
-    char **retSampleFile, char **retSaiFile)
+    char **retSampleFile, char **retSaiFile, char *assay, char *sampleFastqName, char *trimmedPath)
 /* Given a fastq file, make a subsample of it 100k reads long and align it with
  * bwa producing a sai file of given name. */
 {
@@ -177,18 +178,20 @@ if (fqf == NULL)
     errAbort("No cdwFastqFile record for file id %lld", fileId);
 
 /* Create downsampled fastq in temp directory - downsampled more than default even. */
-char sampleFastqName[PATH_LEN];
 cdwMakeTempFastqSample(fqf->sampleFileName, FASTQ_SAMPLE_SIZE, sampleFastqName);
 verbose(1, "downsampled %s into %s\n", vf->licensePlate, sampleFastqName);
+
+/* Trim long-RNA-seq files to ensure no poly-A tails remain*/
+cdwTrimReadsForAssay(sampleFastqName, trimmedPath, assay); 
 
 /* Do alignment */
 char cmd[3*PATH_LEN];
 char *saiName = cloneString(rTempName(cdwTempDir(), "cdwPairSample", ".sai"));
-safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, sampleFastqName, saiName);
+safef(cmd, sizeof(cmd), "bwa aln -t 3 %s %s > %s", genoFile, trimmedPath, saiName);
 mustSystem(cmd);
 
 /* Save return variables, clean up,  and go home. */
-*retSampleFile = cloneString(sampleFastqName);
+*retSampleFile = cloneString(trimmedPath);
 *retSaiFile = saiName;
 cdwFastqFileFree(&fqf);
 }
@@ -198,7 +201,7 @@ void pairedEndQa(struct sqlConnection *conn, struct cdwFile *ef, struct cdwValid
 {
 verbose(2, "pairedEndQa on %u %s %s\n", ef->id, ef->cdwFileName, ef->submitFileName);
 /* Get other end, return if not found. */
-struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, vf);
+struct cdwValidFile *otherVf = cdwOppositePairedEnd(conn, ef, vf);
 if (otherVf == NULL)
     return;
 
@@ -212,7 +215,6 @@ if (pair != NULL)
     cdwValidFileFree(&otherVf);
     return;
     }
-
 /* Get target assembly and figure out path for BWA index. */
 struct cdwAssembly *assembly = cdwAssemblyForUcscDb(conn, vf->ucscDb);
 assert(assembly != NULL);
@@ -224,8 +226,13 @@ verbose(1, "aligning subsamples on %u vs. %u paired reads\n", vf1->fileId, vf2->
 
 /* Make alignments of subsamples. */
 char *sample1 = NULL, *sample2 = NULL, *sai1 = NULL, *sai2 = NULL;
-makeTmpSai(conn, vf1, genoFile, &sample1, &sai1);
-makeTmpSai(conn, vf2, genoFile, &sample2, &sai2);
+char fastqPath1[PATH_LEN],trimmedPath1[PATH_LEN],fastqPath2[PATH_LEN],trimmedPath2[PATH_LEN];
+struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
+char *assay = cdwLookupTag(tags, "assay");
+makeTmpSai(conn, vf1, genoFile, &sample1, &sai1, assay, fastqPath1, trimmedPath1);
+makeTmpSai(conn, vf2, genoFile, &sample2, &sai2, assay, fastqPath2, trimmedPath2);
+
+
 
 /* Make paired end alignment */
 char *tmpSam = cloneString(rTempName(cdwTempDir(), "cdwPairSample", ".sam"));
@@ -272,6 +279,8 @@ freez(&sai1);
 freez(&sai2);
 freez(&tmpSam);
 freez(&tmpRa);
+cdwCleanupTrimReads(fastqPath1, trimmedPath1); 
+cdwCleanupTrimReads(fastqPath2, trimmedPath2); 
 cdwQaPairedEndFastqFree(&pe);
 cdwValidFileFree(&otherVf);
 }

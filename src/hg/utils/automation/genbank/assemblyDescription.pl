@@ -53,7 +53,7 @@ This track shows the sequences used in the $assemblyDate $em${organism}$noEm/$ac
 </p>
 <p>
 Genome assembly procedures are covered in the NCBI
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/assembly.shtml"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/basics/"
 target=_blank>assembly documentation</a>.<BR>
 NCBI also provides
 <a href="http://www.ncbi.nlm.nih.gov/assembly/$ncbiAssemblyId"
@@ -64,7 +64,7 @@ The definition of the sequences in this assembly is from the AGP file(s):<br>
 $agpFiles<br>
 in this <a href="/gbdb/hubs/$asmType/$selfUrl/" target=_blank>build directory</a><br>
 The NCBI document
-<a href="http://www.ncbi.nlm.nih.gov/projects/genome/assembly/agp/AGP_Specification.shtml"
+<a href="https://www.ncbi.nlm.nih.gov/assembly/agp/AGP_Specification/"
 target=_blank>AGP Specification</a> describes the format of the AGP file.
 </p>
 <p>

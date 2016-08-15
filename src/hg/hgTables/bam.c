@@ -251,8 +251,11 @@ static void addFilteredBedsOnRegion(char *fileName, struct region *region,
 /* Add relevant beds in reverse order to pBedList */
 {
 struct lm *lm = lmInit(0);
-struct samAlignment *sam, *samList = bamFetchSamAlignment(fileName, region->chrom,
-    	region->start, region->end, lm);
+struct trackDb *tdb = findTdbForTable(database, curTrack, curTable, ctLookupName);
+char *cacheDir =  cfgOption("cramRef");
+char *refUrl = trackDbSetting(tdb, "refUrl");
+struct samAlignment *sam, *samList = bamFetchSamAlignmentPlus(fileName, region->chrom,
+    	region->start, region->end, lm, refUrl, cacheDir);
 char *row[SAMALIGNMENT_NUM_COLS];
 char numBuf[BAM_NUM_BUF_SIZE];
 for (sam = samList; sam != NULL; sam = sam->next)
@@ -318,12 +321,15 @@ struct lm *lm = lmInit(0);
 int orderedCount = count * 4;
 if (orderedCount < 10000)
     orderedCount = 10000;
-#ifdef USE_HTS
 bam_hdr_t *header = sam_hdr_read(fh);
+if (fh->format.format == cram) 
+    {
+    char *cacheDir =  cfgOption("cramRef");
+    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
+    char *refUrl = trackDbSetting(tdb, "refUrl");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, orderedCount, lm);
-#else
-struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, orderedCount, lm);
-#endif
 
 /* Shuffle list and extract qNames from first count of them. */
 shuffleList(&samList);
@@ -388,12 +394,15 @@ hPrintf("</TR>\n");
 /* Fetch sample rows. */
 samfile_t *fh = bamOpen(fileName, NULL);
 struct lm *lm = lmInit(0);
-#ifdef USE_HTS
 bam_hdr_t *header = sam_hdr_read(fh);
+if (fh->format.format == cram) 
+    {
+    char *cacheDir =  cfgOption("cramRef");
+    struct trackDb *tdb = findTdbForTable(database, curTrack, table, ctLookupName);
+    char *refUrl = trackDbSetting(tdb, "refUrl");
+    cram_set_cache_url(fh, cacheDir, refUrl);  
+    }
 struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, header, 10, lm);
-#else
-struct samAlignment *sam, *samList = bamReadNextSamAlignments(fh, 10, lm);
-#endif
 
 /* Print sample lines. */
 char *row[SAMALIGNMENT_NUM_COLS];

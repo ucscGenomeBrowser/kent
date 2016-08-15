@@ -21409,9 +21409,9 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
-# Redmine #15767
-# previously done 9/13/13 #11200, 11/07/14 #14188
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# Redmine #17351
+# previously done 9/13/13 #11200, 11/07/14 #14188, 8/18/15 #15767
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -21419,20 +21419,20 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg18/bed/dgv/$today
     cd /hive/data/genomes/hg18/bed/dgv/$today
-    set release = 2015-07-23
+    set release = 2016-05-15
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/NCBI36_hg18_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 NCBI36_hg18*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 NCBI36_hg18_supportingvariants_$release.txt  | sort | uniq -c | head -100
 # 175225 CNV     deletion
 # 153007 CNV     duplication
-# 448298 CNV     gain
-#   8841 CNV     gain+loss
+# 453171 CNV     gain
+#   8847 CNV     gain+loss
 #  73225 CNV     insertion
-# 962405 CNV     loss
+# 980985 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9066 CNV     novel sequence insertion
 #   7825 CNV     tandem duplication
@@ -21444,10 +21444,10 @@ _EOF_
     cut -f 5,6 NCBI36_hg18_variants_$release.txt | sort | uniq -c | head -100
 #  29453 CNV     deletion
 #  19549 CNV     duplication
-#  36159 CNV     gain
-#   6961 CNV     gain+loss
+#  37200 CNV     gain
+#   7124 CNV     gain+loss
 #  25399 CNV     insertion
-#  79382 CNV     loss
+#  81727 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8976 CNV     novel sequence insertion
 #    516 CNV     tandem duplication
@@ -21462,10 +21462,11 @@ _EOF_
       NCBI36_hg18_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg18 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 1893045 elements of size 22 from dgvSupporting.bed
+#Read 1916504 elements of size 22 from dgvSupporting.bed
+
     hgLoadBed hg18 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 214362 elements of size 22 from dgvMerged.bed
+#Read 217911 elements of size 22 from dgvMerged.bed
     rm bed.tab && gzip *.{txt,bed} &
 
 
@@ -32330,3 +32331,143 @@ vi README
 # I renamed the table to altLocations to match use in other assemblies.
 
 #############################################################################
+# LASTZ human/hg18 Gorilla/gorGor4 - (DONE - 2016-06-23 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+    cd /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+
+    printf "# human vs gorilla
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: gorilla gorGor4
+SEQ2_DIR=/hive/data/genomes/gorGor4/gorGor4.2bit
+SEQ2_LEN=/hive/data/genomes/gorGor4/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    218m52.836s
+
+    cat fb.hg18.chainGorGor4Link.txt
+    # 2736963227 bases of 2881515245 (94.983%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg18 gorGor4) \
+      > rbest.log 2>&1 &
+    # real    237m49.499s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/gorGor4/bed/blastz.hg18.swap
+    cd /hive/data/genomes/gorGor4/bed/blastz.hg18.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg18/bed/lastzGorGor4.2016-06-23/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    114m29.315s
+
+    cat fb.gorGor4.chainHg18Link.txt
+    # 2727198742 bases of 2917333143 (93.483%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` gorGor4 hg18) \
+      > rbest.log 2>&1
+    # real    266m6.391s
+
+#############################################################################
+# LASTZ human/hg18 Bonobo/panPan1 - (DONE - 2016-07-29 - Hiram)
+    mkdir /hive/data/genomes/hg18/bed/lastzPanPan1.2016-07-29
+    cd /hive/data/genomes/hg18/bed/lastzPanPan1.2016-07-29
+
+    printf "# human vs Bonobo - Pan paniscus
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_T=2
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_M=254
+BLASTZ_K=4500
+BLASTZ_Y=15000
+BLASTZ_Q=/scratch/data/blastz/human_chimp.v2.q
+#       A     C     G     T
+# A    90  -330  -236  -356
+# C  -330   100  -318  -236
+# G  -236  -318   100  -330
+# T  -356  -236  -330    90
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg18/hg18.2bit
+SEQ1_LEN=/scratch/data/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=5
+
+# QUERY: Bonobo panPan1
+SEQ2_DIR=/hive/data/genomes/panPan1/panPan1.2bit
+SEQ2_LEN=/hive/data/genomes/panPan1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=30
+SEQ2_IN_CONTIGS=0
+
+BASE=/hive/data/genomes/hg18/bed/lastzPanPan1.2016-07-29
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    142m35.225s
+
+    cat fb.hg18.chainPanPan1Link.txt
+    # 2734401913 bases of 2881515245 (94.895%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg18 panPan1) \
+      > rbest.log 2>&1 &
+    # real    121m21.560s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/panPan1/bed/blastz.hg18.swap
+    cd /hive/data/genomes/panPan1/bed/blastz.hg18.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/hg18/bed/lastzPanPan1.2016-07-29/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    90m20.114s
+
+    cat fb.panPan1.chainHg18Link.txt
+    # 2657582373 bases of 2725905606 (97.494%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` panPan1 hg18) \
+      > rbest.log 2>&1
+    # real    114m47.574s
+
+#########################################################################

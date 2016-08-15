@@ -9261,9 +9261,9 @@ TMPDIR=/scratch/tmp
 # Old DGV format is obsolete; see the following section.
 _EOF_
 #######################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
-# Redmine #15767
-# previously done 9/13/13 #11200, 11/7/14 #14188
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# Redmine #17351
+# previously done 9/13/13 #11200, 11/7/14 #14188, 8/18/15 #15767
     # Beta last updated 2/11/13 #9401
     # 9/13/13: DGV is back out of beta, and has added some columns again for the 7/2013
     # public release.  They have also requested that we make a composite track
@@ -9271,40 +9271,40 @@ _EOF_
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg19/bed/dgv/$today
     cd /hive/data/genomes/hg19/bed/dgv/$today
-    set release = 2015-07-23
+    set release = 2016-05-15
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh37_hg19_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh37_hg19*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh37_hg19_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1879738 CNV     deletion
-# 153963 CNV     duplication
-# 879317 CNV     gain
-#   8657 CNV     gain+loss
-#  73442 CNV     insertion
-#3469925 CNV     loss
+#1941208 CNV     deletion
+# 165948 CNV     duplication
+# 884153 CNV     gain
+#   8663 CNV     gain+loss
+#  75564 CNV     insertion
+#3488453 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9059 CNV     novel sequence insertion
-#   7827 CNV     tandem duplication
-#    510 OTHER   complex
-#  29162 OTHER   inversion
+#  12249 CNV     tandem duplication
+#    516 OTHER   complex
+#  30767 OTHER   inversion
 #   3707 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh37_hg19_variants_$release.txt | sort | uniq -c | head -100
-# 101257 CNV     deletion
-#  21360 CNV     duplication
-#  46452 CNV     gain
-#   6902 CNV     gain+loss
-#  25610 CNV     insertion
-# 121527 CNV     loss
+# 134568 CNV     deletion
+#  29937 CNV     duplication
+#  47482 CNV     gain
+#   7062 CNV     gain+loss
+#  27603 CNV     insertion
+# 123868 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8974 CNV     novel sequence insertion
-#    517 CNV     tandem duplication
-#    466 OTHER   complex
-#   1428 OTHER   inversion
+#   3703 CNV     tandem duplication
+#    578 OTHER   complex
+#   2652 OTHER   inversion
 #   2000 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
@@ -9314,10 +9314,10 @@ _EOF_
       GRCh37_hg19_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg19 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6563735 elements of size 22 from dgvSupporting.bed
+#Read 6668715 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg19 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 340649 elements of size 22 from dgvMerged.bed
+#Read 392583 elements of size 22 from dgvMerged.bed
     rm bed.tab && gzip *.{txt,bed} &
 
 
@@ -28463,6 +28463,7 @@ done
 
 #############################################################################
 # hgPal downloads (DONE - 2013-09-20 - Hiram)
+# hgPal downloads (redo refGene - 2016-06-28 - braney )
 #   FASTA from 100-way for ensGene
 
     ssh hgwdev
@@ -28529,12 +28530,14 @@ done
     export gp=refGene
     export db=hg19
     export I=0
-    mkdir exonAA exonNuc
+    mkdir exonAA exonNuc refGene
+    hgsql hg19 -Ne "select concat(g.name,'.',d.version),g.* from refGene g, gbCdnaInfo d where g.name = d.acc" | cut -f 1,4- |  splitFileByColumn /dev/stdin refGene -col=2
+    :
     for C in `sort -nk2 ../../../chrom.sizes | cut -f1`
     do
         I=`echo $I | awk '{print $1+1}'`
-	echo "mafGene -chrom=$C -exons -noTrans $db $mz $gp order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
-	echo "mafGene -chrom=$C -exons $db $mz $gp order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
+	echo "mafGene -chrom=$C -exons -noTrans -useFile $db $mz refGene/$C order.list stdout | gzip -c > exonNuc/$C.exonNuc.fa.gz &"
+	echo "mafGene -chrom=$C -exons -useFile $db $mz refGene/$C order.list stdout | gzip -c > exonAA/$C.exonAA.fa.gz &"
         if [ $I -gt 6 ]; then
             echo "date"
             echo "wait"
@@ -28545,15 +28548,15 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    127m41.018s
+    #   real    162m40.981s
 
     export mz=multiz100way
     export gp=refGene
     export db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real     11m27.994s
+    #   real    3m50.277s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    18m41.606s
+    #   real    14m9.734s
     du -hsc exonAA exonNuc refGene*.fa.gz
     # 804M    exonAA
     # 1.3G    exonNuc
@@ -28754,28 +28757,20 @@ _EOF_
     cd /hive/data/genomes/hg19/bed/lrg/$today
     wget ftp://ftp.ebi.ac.uk/pub/databases/lrgex/LRG_public_xml_files.zip
     unzip LRG_public_xml_files.zip
-    # The .atree file is useful for getting a handle on the hierarchy and types of nodes:
-    autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
+    # The .atree file was useful for getting a handle on the hierarchy and types of nodes:
+    # autoDtd LRG_1.xml lrg.dtd lrg.stats -atree=lrg.atree
 
     # Run script to convert LRG*.xml files to BED+ for regions and genePredExt+fa for transcripts:
     ~/kent/src/hg/utils/automation/parseLrgXml.pl GRCh37
     genePredCheck lrgTranscriptsUnmapped.gp
+#Error: lrgTranscriptsUnmapped.gp:680: LRG_7t1 no exonFrame on CDS exon 46
+#checked: 805 failed: 1
     # If there are complaints e.g. about exonFrame, look for inconsistencies in the
     # affected transcript's coding_region/coordinates vs. exon/intron info in xml.
     # Contact Variation team leader Fiona Cunningham @EBI to resolve in the background
     # (missing exonFrame info doesn't affect our track representation because we end up using
     # psl).  We agreed to disagree about exon 46 of LRG_7t1 because that last coding exon
     # portion is only the stop codon.
-
-    # Fix some URLs that have moved but have not yet been updated in the LRG xml --
-    # hopefully this will not be needed next time!
-    sed -re 's@http://bioinf.uta.fi/PFCbase/@http://bioinf.uta.fi/CFPbase/@; \
-             s@http://bioinf.uta.fi/@http://structure.bmc.lu.se/idbase/@; \
-             s@http://rapid.rcai.riken.jp/RAPID/diseasePhenotype@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
-             s@http://rapid.rcai.riken.jp/RAPID/mutation@http://web16.kazusa.or.jp/rapid/diseasePhenotype@i; \
-             s@http://ngrl.man.ac.uk/lovd2/home.php\?select_db=UBE3A@https://secure.ngrl.org.uk/LOVDv.2.0/home.php?select_db=UBE3A@;' \
-      lrg.bed > tmp
-    mv tmp lrg.bed
 
     # Load LRG regions:
     bedToBigBed lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.bb \
@@ -28787,13 +28782,19 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
     pslCheck lrg.psl
+#checked: 665 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds
     pslMap lrgTranscriptsFakePsl.psl lrg.psl lrgTranscriptsHg19.psl
     mrnaToGene -genePredExt -cdsFile=lrgTranscripts.cds -keepInvalid \
       lrgTranscriptsHg19.psl lrgTranscriptsHg19NoName2.gp
+#Warning: no CDS for LRG_163t1
+#Warning: no CDS for LRG_347t1
     # It's OK if mrnaToGene complains about "no CDS" for a non-coding tx e.g. LRG_163t1.
+    grep -l NR_ LRG_163.xml LRG_347.xml
+#LRG_163.xml
+#LRG_347.xml
     # The resulting genePredExt from that process is missing the name2 column from
     # the original; add it back:
     cut -f 1,12 lrgTranscriptsUnmapped.gp > txName2
@@ -28807,6 +28808,7 @@ _EOF_
     hgPepPred hg19 tab lrgCdna lrgCdna.tab
     hgPepPred hg19 tab lrgPep lrgPep.tab
 
+    # OPTIONAL
     # For a rough comparison of mapping methods, and to get some extra error-checking on the PSL
     # from the chain code, try this too:
     pslToChain lrg.psl lrg.chain
@@ -28817,9 +28819,10 @@ _EOF_
     # as-is without regard to strand, so they end up being reversed for LRG's on the - strand.
     # That's why we're using MarkD's method above!
     # Ignore exonFrames and compare:
+    awk '$1 != "#" {print $1;}' noMap
     cut -f 1-14 lrgTranscriptsHg19.gp > t1
     cut -f 1-14 lrgTLiftOver.gp > t2
-    diff t1 t2
+    diff t1 t2 | awk '{print $1, $2;}'
     # Hopefully there won't be differences aside from the ones liftOver couldn't map.
     rm t1 t2
 
@@ -31486,4 +31489,245 @@ hgBbiDbLink hg19 patNonBulk /gbdb/hg19/bbi/patNonBulk.bb
     make -f ~/kent/src/hg/makeDb/outside/gencode/gencodeLoad.mk joinerCheck
 
 #########################################################################
+# killer whale/orcOrc1 Lastz run  (WORKING - 2016-06-03 - Hiram)
+    # note: incorrect date on this directory name, should be 2016-06-03
 
+    mkdir /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+    cd  /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+    printf '# human vs killer whale
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: Human Hg19
+SEQ1_DIR=/scratch/data/hg19/hg19.2bit
+SEQ1_LEN=/scratch/data/hg19/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: killer whale OrcOrc1
+SEQ2_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ2_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=20
+
+BASE=/hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl -verbose=2 `pwd`/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > do.log 2>&1
+    # real    747m9.241s
+
+    cat fb.hg19.chainOrcOrc1Link.txt
+    #  1507066837 bases of 2897316137 (52.016%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` hg19 orcOrc1) \
+      > rbest.log 2>&1 &
+    # real    517m17.718s
+
+    # running the swap
+    mkdir /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    cd /hive/data/genomes/orcOrc1/bed/blastz.hg19.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/hg19/bed/lastzOrcOrc1.2016-07-03/DEF \
+        -chainMinScore=3000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    #   real    121m53.369s
+
+    cat fb.orcOrc1.chainHg19Link.txt
+    #    1445188424 bases of 2249582125 (64.243%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 hg19) \
+      > rbest.log 2>&1 &
+    #   real    463m9.924s
+
+
+#########################################################################
+# DBSNP B147 / SNP147 (DONE 7/29/16 angie)
+# Initially done 7/1/16.  Updated 7/28/16 to fix func code bug (see below).
+    # Redmine #17209
+    mkdir -p /hive/data/outside/dbSNP/147/human_hg19
+    cd /hive/data/outside/dbSNP/147/human_hg19
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b147_GRCh37p13 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b147_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b147_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh37.p13 like b144 above, use the liftUp.lft file
+    # and ignoreDbSnpContigsFile constructed for b144.
+    cat > config.ra <<EOF
+db hg19
+orgDir human_9606_b147_GRCh37p13
+build 147
+buildAssembly 107
+liftUp ../../144/human_hg19/liftUp.lft
+refAssemblyLabel GRCh37.p13
+ignoreDbSnpContigsFile ../../144/human_hg19/patchContigs.txt
+EOF
+    # dbSNP dumped only GRCh37-specific files, not the whole complement of files
+    # that we usually download.  So make some links to hg38 download files,
+    # run doDbSnp.pl -debug to make scripts, run a subset of the commands in the
+    # download & loadDbSnp steps instead of running those steps as usual.
+    rmdir rs_fasta
+    ln -s ../human_hg38/rs_fasta .
+    rmdir schema
+    ln -s ../human_hg38/schema .
+    cd data
+    ln -s ../../human_hg38/data/[A-Z]*.bcp.gz .
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -debug
+
+    # Adapted from ../download_human_hg19_147.csh:
+    set orgDir = human_9606_b147_GRCh37p13
+    set ftpOrgData = ftp://ftp.ncbi.nih.gov/snp/organisms/$orgDir/database/organism_data
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPContigLoc_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPContigLocusId_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_ContigInfo_105.bcp.gz
+    wget --timestamping --no-verbose $ftpOrgData/b147_SNPMapInfo_105.bcp.gz
+    cd ..
+
+    # Adapted from loadDbSnp.csh, but just copying non-GRCh37 tables from hg38snp147:
+    set tmpDir = `mktemp -d $TMPDIR/doDbSnp.pl.translate.XXXXXX`
+    chmod 775 $tmpDir
+    cd $tmpDir
+    echo $tmpDir > /hive/data/outside/dbSNP/147/human_hg19/workingDir
+    hgsql -e 'create database hg19snp147'
+    # Ugh, the schema has _107 for GRCh38 but GRCh37 is 105, so substitute
+    sed -e 's/_107/_105/' /hive/data/outside/dbSNP/147/human_hg19/schema/table.sql \
+    | hgsql hg19snp147
+    # Get these empty tables out of the way -- copy from hg38snp147 using create view:
+    foreach table (Allele Batch SNP SNPAlleleFreq SNPAlleleFreq_TGP SNPSubSNPLink \
+                   SNP_bitfield SubSNP)
+      hgsql hg19snp147 -e "drop table if exists $table;"
+      hgsql hg19snp147 -e "create view $table as select * from hg38snp147.$table;"
+    end
+    foreach t (b147_ContigInfo_105 b147_SNPContigLocusId_105 b147_SNPMapInfo_105)
+      zcat /hive/data/outside/dbSNP/147/human_hg19/data/$t.bcp.gz  | grep -vwFf '/hive/data/outside/dbSNP/147/human_hg19/../../144/human_hg19/patchContigs.txt'\
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+        > tmp.tab
+      hgLoadSqlTab -oldTable hg19snp147 $t placeholder tmp.tab
+      rm tmp.tab
+    end
+    hgsql hg19snp147 -e \
+      'alter table b147_ContigInfo_105 add index (ctg_id); \
+       alter table b147_SNPContigLocusId_105 add index (ctg_id); \
+       alter table b147_SNPMapInfo_105 add index (snp_id);'
+    # Make sure there are no orient != 0 contigs among those selected.
+    set badCount = `hgsql hg19snp147 -NBe \
+                      'select count(*) from b147_ContigInfo_105 where orient != 0;'`
+    if ($badCount > 0) then
+      echo "found $badCount contigs in b147_ContigInfo_105 with orient != 0"
+    endif
+#found 695 contigs in b147_ContigInfo_105 with orient != 0
+    # Uh-oh -- looks like some HuRef and other assembly contigs weren't grepped out...
+    hgsql hg19snp147 -NBe 'select count(*) from b147_ContigInfo_105 where orient != 0 and group_label = "HuRef";'
+#695
+    # So delete those manually and continue.
+    hgsql hg19snp147 -NBe 'delete from b147_ContigInfo_105 where group_label != "GRCh37.p13";'
+    # OK, now back to stuff from loadDbSnp.csh:
+
+    # b147_SNPContigLoc_105 is huge, and we want only the reference contig mappings.
+    # Keep lines only if they have a word match to some reference contig ID.
+    # That allows some false positives from coord matches; clean those up afterward.
+    hgsql hg19snp147 -NBe 'select ctg_id from b147_ContigInfo_105' \
+    | sort -n > b147_ContigInfo_105.ctg_id.txt
+    zcat /hive/data/outside/dbSNP/147/human_hg19/data/b147_SNPContigLoc_105.bcp.gz \
+    | grep -Fwf b147_ContigInfo_105.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.\d+/$1/g; s/\t(\t|\n)/\t\\N$1/g; s/\t(\t|\n)/\t\\N$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp147 b147_SNPContigLoc_105 placeholder stdin
+    # Get rid of those false positives:
+    hgsql hg19snp147 -e 'alter table b147_SNPContigLoc_105 add index (ctg_id);'
+    hgsql hg19snp147 -e 'create table ContigLocFix select cl.* from b147_SNPContigLoc_105 as cl, b147_ContigInfo_105 as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg19snp147 -e 'alter table ContigLocFix add index (ctg_id);'
+    hgsql hg19snp147 -e 'drop table b147_SNPContigLoc_105; \
+                         rename table ContigLocFix to b147_SNPContigLoc_105;'
+    hgsql hg19snp147 -e 'alter table b147_SNPContigLoc_105 add index (snp_id);'
+
+    # Now continue with business as usual at the addToDbSnp step.
+    cd /hive/data/outside/dbSNP/147/human_hg19 
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
+    tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_105 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    ln -s ../human_hg38/rsFastaIds.txt .
+    # zcat rs_fasta/rs*.fas.gz \
+    # | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    # | sort -u > rsFastaIds.txt
+    zcat data/b147_SNPContigLoc_105.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#1 missingFromRsFasta.txt
+    cat missingFromRsFasta.txt
+#rs869025304
+    # According to http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=rs869025304 it's
+    # a pathogenic allele... better include it.
+    # Since there's only one, instead of batch query, just get its fasta from the web page.
+    cat > rs_fasta/rs_chBatchQuery.fas <<EOF
+>gnl|dbSNP|rs869025304 rs=869025304|pos=51|len=101|taxid=9606|mol="genomic"|class=in-del|alleles="TT/CCGTATAGCTGG"|build=147|allele origin=C(maternal)/+.-----(germline)|suspect=?|clinsig=Pathogenic
+TCCAAGGGAT ATCTTCTAAC CATACCGATG ATTCTCCGTA TAGCTGGTCT
+N
+TCCACCTTAT CATCCTTCCT CTGAGAAGTA TGAAAACACT AAGGTAAGGC
+EOF
+    # uh-oh -- "class=in-del" needed to be edited to "class=2" (see ../shared/SnpClassCode.bcp.gz)
+    # in order to match the download files that we parse.
+    gzip rs_fasta/rs_chBatchQuery.fas
+    # Now start over from addToDbSnp...
+    kill %1
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
+    tail -f do.log
+# *** All done!
+
+    # 7/28/16 -- Chris Lee found some NR_'s and XR_'s in snp147CodingDbSnp where they don't
+    # belong.  Turns out that dbSnp was assigning cds-indel to any deletion with length
+    # multiple of 3 that intersected an exon, whether the transcript was coding or not.
+    # Some affected variants will end up with both cds-indel and ncRNA because they hit
+    # both coding and noncoding transcripts.
+    # This does not affect ortho alleles or SNP-masked sequences.
+    # Fix the values in hg19snp147.b147_SNPContigLocusId_105 and rebuild from ucscFunc onwards.
+    # For rows in which dbSNP has assigned cds-indel (45) to a non-coding transcript (NR_ or
+    # XR_), assign ncRNA (30) instead.
+    cd /hive/data/outside/dbSNP/147/human_hg19
+    hgsql hg19snp147 -e 'update b147_SNPContigLocusId_105 set fxn_class = 30 \
+                           where fxn_class = 45 and mrna_acc like "_R\_%";'
+    # Comment out all of the parts of addToDbSnp.csh except for the part that creates ucscFunc
+    # and run the modified script.
+    mkdir -p `cat workingDir`
+    csh -efx ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Re-run the pipeline from bigJoin onward.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue bigJoin >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNP147 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/2/16 angie)
+    # Redmine #17209
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/bed/snp147Ortho.2016-07-01
+    cd /hive/data/genomes/hg19/bed/snp147Ortho.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg19 147 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP147 (DONE 7/1/16 angie)
+    # Redmine #17209
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg19/snp147Mask.2016-07-01
+    cd /hive/data/genomes/hg19/snp147Mask.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg19 147 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################

@@ -270,9 +270,9 @@ searchName ucscRetroInfoRefSeq8
 searchTable ucscRetroAli8
 searchDescription Retroposed GenesV8, Including Pseudogenes - 2014-07-08
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo8
+xrefTable hgFixed.refLink, ucscRetroInfo8
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo8.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo8.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 track mrnaBig
@@ -343,9 +343,9 @@ searchName ucscRetroInfoRefSeq9
 searchTable ucscRetroAli9
 searchDescription Retroposed Genes V9, Including Pseudogenes
 query select tName, tStart,tEnd, qName from %s where qName like '%s%%'
-xrefTable refLink, ucscRetroInfo9
+xrefTable hgFixed.refLink, ucscRetroInfo9
 dontCheckXrefQueryFormat 1
-xrefQuery select ucscRetroInfo9.name, refLink.name from %s where refLink.name like '%s%%' and refSeq = mrnaAcc 
+xrefQuery select ucscRetroInfo9.name, hgFixed.refLink.name from %s where hgFixed.refLink.name like '%s%%' and refSeq = mrnaAcc 
 searchPriority 3.52
 
 searchName ucscRetroInfoMrna9
@@ -421,13 +421,20 @@ url http://ccg.vital-it.ch/cgi-bin/tromer/tromergraph2draw.pl?db=hg38&species=H.
 
 include trackDb.cloneEnd.ra
 
-include hg38Patch6.ra
+include hg38Patch7.ra
 
-include knownGene.ra beta,public
-include knownGene.alpha.ra alpha
+#include knownGene.ra public
+include knownGene.alpha.ra
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha
+
+# track multiz145way
+# shortLabel 145way maf
+# longLabel 145-way MAF track
+# group compGeno
+# visibility hide
+# type maf
 
 track microsat override
 group rep
@@ -446,3 +453,29 @@ searchPriority 50
 track gwasCatalog override
 snpTable snp144
 snpVersion 144
+
+track ncbiRefSeqRefGene
+compositeTrack on
+shortLabel refGeneRefSeq
+longLabel comparing gene tracks refGene with ncbiRefSeq
+visibility hide
+type bed 12
+group x
+
+    track lostRefGene
+    subTrack ncbiRefSeqRefGene
+    shortLabel lostRefGene
+    longLabel refGene predictions 'lost' in NCBI RefSeq track
+    color 155,0,0
+
+    track exactRefGene
+    subTrack ncbiRefSeqRefGene
+    shortLabel exactRefGene
+    longLabel refGene predictions 'exact' in NCBI RefSeq track
+    color 0,155,0
+
+    track compatibleRefGene
+    subTrack ncbiRefSeqRefGene
+    shortLabel compatibleRefGene
+    longLabel refGene predictions 'compatible' in NCBI RefSeq track
+    color 0,0,255

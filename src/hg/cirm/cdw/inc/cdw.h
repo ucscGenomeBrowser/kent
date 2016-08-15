@@ -789,7 +789,7 @@ void cdwFileOutput(struct cdwFile *el, FILE *f, char sep, char lastSep);
 #define cdwFileCommaOut(el,f) cdwFileOutput(el,f,',',',');
 /* Print out cdwFile as a comma separated list including final comma. */
 
-#define CDWSUBMIT_NUM_COLS 17
+#define CDWSUBMIT_NUM_COLS 18
 
 extern char *cdwSubmitCommaSepFieldNames;
 
@@ -814,6 +814,7 @@ struct cdwSubmit
     char *errorMessage;	/* If non-empty contains last error message. If empty submit is ok */
     unsigned fileIdInTransit;	/* cdwFile.id of file currently being transferred or zero */
     unsigned metaChangeCount;	/* Number of files where metadata changed by submission */
+    char *wrangler;	/* The UNIX ID of the person who ran cdwSubmit. */
     };
 
 void cdwSubmitStaticLoad(char **row, struct cdwSubmit *ret);
@@ -2444,20 +2445,21 @@ void cdwTrackVizOutput(struct cdwTrackViz *el, FILE *f, char sep, char lastSep);
 #define cdwTrackVizCommaOut(el,f) cdwTrackVizOutput(el,f,',',',');
 /* Print out cdwTrackViz as a comma separated list including final comma. */
 
-#define CDWDATASET_NUM_COLS 6
+#define CDWDATASET_NUM_COLS 7
 
 extern char *cdwDatasetCommaSepFieldNames;
 
 struct cdwDataset
-/* A dataset is a collection of files, usually associated to a paper */
+/* A dataset is a collection of files, usually associated with a paper */
     {
     struct cdwDataset *next;  /* Next in singly linked list. */
+    unsigned id;	/* Dataset ID */
     char *name;	/* Short name of this dataset, one word, no spaces */
     char *label;	/* short title of the dataset, a few words */
     char *description;	/* Description of dataset, can be a complete html paragraph. */
     char *pmid;	/* Pubmed ID of abstract */
     char *pmcid;	/* PubmedCentral ID of paper full text */
-    char *metaDivTags;	/* Comma separated list of fields use to make tree out of metadata */
+    char *metaDivTags;	/* Comma separated list of fields used to make tree out of metadata */
     };
 
 void cdwDatasetStaticLoad(char **row, struct cdwDataset *ret);

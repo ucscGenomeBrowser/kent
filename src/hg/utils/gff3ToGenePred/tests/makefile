@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 gff3ToGenePred = ${DESTBINDIR}/gff3ToGenePred
@@ -9,7 +10,8 @@ all::
 
 test:: geneMRnaTest noGeneMRnaTest geneMRnaHonorTest discontinuousTest multCdsOutOfExonTest \
 	noIdTest errCases1Test bogusQuotesTest noExonsTest geneTranscriptTest transcriptCdsParentTest \
-	minimalGenesTest geneDefaultStatusUnknownTest
+	minimalGenesTest geneDefaultStatusUnknownTest useNameTest nameAttrIdTest nameAttrNameTest \
+	frameShiftTest
 
 geneMRnaTest: mkout
 	${gff3ToGenePred} input/geneMRna.gff3 output/$@.gp
@@ -70,6 +72,23 @@ minimalGenesTest: mkout
 	${gff3ToGenePred} -allowMinimalGenes -unprocessedRootsOut=output/$@.unprocessed input/ncbiRefSeq.pseudoGenes.gff3 output/$@.gp
 	diff expected/$@.gp output/$@.gp
 	diff expected/$@.unprocessed output/$@.unprocessed
+
+# set name/name2 using -useName
+useNameTest: mkout
+	${gff3ToGenePred} -useName input/transcriptCdsParent.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+nameAttrIdTest: mkout
+	${gff3ToGenePred} -rnaNameAttr=transcript_id -geneNameAttr=gene_id input/transcriptCdsParent.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+nameAttrNameTest: mkout
+	${gff3ToGenePred} -rnaNameAttr=transcript_name -geneNameAttr=gene_name input/transcriptCdsParent.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
+
+frameShiftTest: mkout
+	${gff3ToGenePred} input/frameShifts.gff3 output/$@.gp
+	diff expected/$@.gp output/$@.gp
 
 mkout:
 	@mkdir -p output

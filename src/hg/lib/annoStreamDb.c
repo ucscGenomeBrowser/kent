@@ -226,7 +226,7 @@ else
         joinerDtfToSqlFieldString(jp->b, self->db, fieldB, sizeof(fieldB));
         struct joinerField *jfA = joinerSetFindField(jp->identifier, jp->a);
         if (sameOk(jfA->separator, ","))
-            dyStringPrintf(query, " find_in_set(%s, %s)", fieldB, fieldA);
+            dyStringPrintf(query, " on find_in_set(%s, %s)", fieldB, fieldA);
         else
             dyStringPrintf(query, " on %s = %s", fieldA, fieldB);
         hasLeftJoin = TRUE;
@@ -1102,8 +1102,8 @@ if (configEl != NULL)
     struct jsonElement *relatedTablesEl = hashFindVal(config, "relatedTables");
     if (relatedTablesEl)
         {
-        // relatedTables is a list of objects whose keys are related [db.]table names
-        // and whose values are lists of fields.
+        // relatedTables is a list of objects like { table: <[db.]table name>,
+        //                                           fields: [ <field1>, <field2>, ...] }
         struct slRef *relatedTables = jsonListVal(relatedTablesEl, "relatedTables");
         struct slRef *tfRef;
         for (tfRef = relatedTables;  tfRef != NULL;  tfRef = tfRef->next)
@@ -1130,8 +1130,11 @@ if (configEl != NULL)
                     }
                 }
             }
-        slReverse(&self->relatedDtfList);
-        asObj = asdAutoSqlFromTableFields(self, asObj);
+        if (self->relatedDtfList)
+            {
+            slReverse(&self->relatedDtfList);
+            asObj = asdAutoSqlFromTableFields(self, asObj);
+            }
         }
     struct jsonElement *naForMissingEl = hashFindVal(config, "naForMissing");
     if (naForMissingEl != NULL)

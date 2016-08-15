@@ -18,5 +18,6 @@ struct aveStats
     double stdDev;
 };
 
-struct aveStats *aveStatsCalc(double *array, int count);
+struct aveStats *aveStatsCalc(double *array, unsigned count);
+/* Compute statistics on an unsorted array of doubles. Use Tukey hinge method for quartiles. */
 #endif

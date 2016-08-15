@@ -111,5 +111,54 @@
 #define	CHROM_Un_G	0xcc
 #define	CHROM_Un_B	0x3d
 
+/* scaffold color scheme, from http://mbostock.github.io/protovis/docs/color.html
+ *  for the simple purpose of categorical/ordinal organization.  Ten colors:
+ *  #1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+ * "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+ *    blue, orange, green, red, purple
+ *   brown, pink, grey, pale green, cyan
+ */
+#define SCAF_COLORS	10
+
+#define SCAF1_R	0x1f
+#define SCAF1_G	0x77
+#define SCAF1_B	0xb4
+
+#define SCAF2_R	0xff
+#define SCAF2_G	0x7f
+#define SCAF2_B	0x0e
+
+#define SCAF3_R	0x2c
+#define SCAF3_G	0xa0
+#define SCAF3_B	0x2c
+
+#define SCAF4_R	0xd6
+#define SCAF4_G	0x27
+#define SCAF4_B	0x28
+
+#define SCAF5_R	0x94
+#define SCAF5_G	0x67
+#define SCAF5_B	0xbd
+
+#define SCAF6_R	0x8c
+#define SCAF6_G	0x56
+#define SCAF6_B	0x4b
+
+#define SCAF7_R	0xe3
+#define SCAF7_G	0x77
+#define SCAF7_B	0xc2
+
+#define SCAF8_R	0x7f
+#define SCAF8_G	0x7f
+#define SCAF8_B	0x7f
+
+#define SCAF9_R	0xbc
+#define SCAF9_G	0xbd
+#define SCAF9_B	0x22
+
+#define SCAF10_R	0x17
+#define SCAF10_G	0xbe
+#define SCAF10_B	0xcf
+
 #endif
 

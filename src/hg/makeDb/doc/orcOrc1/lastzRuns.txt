@@ -1,0 +1,132 @@
+#########################################################################
+# LASTZ killer whale/orcOrc1 vs. sheep/oviAri3 - (DONE - 2016-06-03 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/lastzOviAri3.2016-06-03
+    cd /hive/data/genomes/orcOrc1/bed/lastzOviAri3.2016-06-03
+
+    printf '# Killer whale vs. Sheep
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Killer whale orcOrc1
+SEQ1_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ1_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=50
+
+# QUERY: Sheep oviAri3
+SEQ2_DIR=/hive/data/genomes/oviAri3/oviAri3.wmTrf.2bit
+SEQ2_LEN=/hive/data/genomes/oviAri3/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=80
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/orcOrc1/bed/lastzOviAri3.2016-06-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    284m1.002s
+
+    cat fb.orcOrc1.chainOviAri3Link.txt
+    # 1647057996 bases of 2249582125 (73.216%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 oviAri3) \
+        > rbest.log 2>&1 &
+    # real    796m36.497s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/oviAri3/bed/blastz.orcOrc1.swap
+    cd /hive/data/genomes/oviAri3/bed/blastz.orcOrc1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/orcOrc1/bed/lastzOviAri3.2016-06-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    268m11.052s
+
+    cat fb.oviAri3.chainOrcOrc1Link.txt
+    # 1668855009 bases of 2534335866 (65.850%) in intersection
+
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` oviAri3 orcOrc1) \
+      > rbest.log 2>&1
+    # real    908m54.965s
+
+#########################################################################
+# LASTZ killer whale/orcOrc1 vs. sheep/turTru2 - (DONE - 2016-06-03 - Hiram)
+    mkdir /hive/data/genomes/orcOrc1/bed/lastzTurTru2.2016-06-03
+    cd /hive/data/genomes/orcOrc1/bed/lastzTurTru2.2016-06-03
+
+    printf '# Killer whale vs. Dolphin
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# the default matrix is:
+#       A     C     G     T
+# A    91  -114   -31  -123
+# C  -114   100  -125   -31
+# G   -31  -125   100  -114
+# T  -123   -31  -114    91
+
+# TARGET: Killer whale orcOrc1
+SEQ1_DIR=/hive/data/genomes/orcOrc1/orcOrc1.2bit
+SEQ1_LEN=/hive/data/genomes/orcOrc1/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=200
+
+# QUERY: Dolphin turTru2
+SEQ2_DIR=/hive/data/genomes/turTru2/turTru2.2bit
+SEQ2_LEN=/hive/data/genomes/turTru2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=600
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/orcOrc1/bed/lastzTurTru2.2016-06-03
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    1109m43.604s
+
+    cat fb.orcOrc1.chainTurTru2Link.txt
+    # 2116631228 bases of 2249582125 (94.090%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` orcOrc1 turTru2) \
+      > rbest.log 2>&1 &
+    # real    103m20.994s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/turTru2/bed/blastz.orcOrc1.swap
+    cd /hive/data/genomes/turTru2/bed/blastz.orcOrc1.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/orcOrc1/bed/lastzTurTru2.2016-06-03/DEF \
+        -swap -chainMinScore=3000 -chainLinearGap=medium \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    857m47.170s
+
+    cat fb.turTru2.chainOrcOrc1Link.txt
+    # 2148433509 bases of 2332402443 (92.112%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` turTru2 orcOrc1) \
+      > rbest.log 2>&1
+    # real    202m56.678s
+
+#########################################################################

@@ -481,11 +481,6 @@ void cartLoadUserSession(struct sqlConnection *conn, char *sessionOwner,
 {
 struct sqlResult *sr = NULL;
 char **row = NULL;
-/* Validate login cookies if login is enabled */
-if (loginSystemEnabled())
-    {
-    loginValidateCookies(cart);
-    }
 char *userName = wikiLinkUserName();
 char *encSessionName = cgiEncodeFull(sessionName);
 char *encSessionOwner = cgiEncodeFull(sessionOwner);
@@ -508,11 +503,19 @@ if ((row = sqlNextRow(sr)) != NULL)
 	{
 	char *sessionVar = cartSessionVarName();
 	char *hgsid = cartSessionId(cart);
+    char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+    sessionTableString = cloneString(sessionTableString);
+    char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+    pubSessionsTableString = cloneString(pubSessionsTableString);
 	struct sqlConnection *conn2 = hConnectCentral();
 	sessionTouchLastUse(conn2, encSessionOwner, encSessionName);
 	cartRemoveLike(cart, "*");
 	cartParseOverHash(cart, row[1]);
 	cartSetString(cart, sessionVar, hgsid);
+    if (sessionTableString != NULL)
+        cartSetString(cart, hgSessionTableState, sessionTableString);
+    if (pubSessionsTableString != NULL)
+        cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
 	if (oldVars)
 	    hashEmpty(oldVars);
 	/* Overload settings explicitly passed in via CGI (except for the
@@ -546,9 +549,17 @@ char *line = NULL;
 int size = 0;
 char *sessionVar = cartSessionVarName();
 char *hgsid = cartSessionId(cart);
-
+char *sessionTableString = cartOptionalString(cart, hgSessionTableState);
+sessionTableString = cloneString(sessionTableString);
+char *pubSessionsTableString = cartOptionalString(cart, hgPublicSessionsTableState);
+pubSessionsTableString = cloneString(pubSessionsTableString);
 cartRemoveLike(cart, "*");
 cartSetString(cart, sessionVar, hgsid);
+if (sessionTableString != NULL)
+    cartSetString(cart, hgSessionTableState, sessionTableString);
+if (pubSessionsTableString != NULL)
+    cartSetString(cart, hgPublicSessionsTableState, pubSessionsTableString);
+
 while (lineFileNext(lf, &line, &size))
     {
     char *var = nextWord(&line);
@@ -1560,13 +1571,6 @@ if (geoMirrorEnabled())
         {
         printf("Set-Cookie: redirect=%s; path=/; domain=%s; expires=%s\r\n", redirect, cgiServerName(), cookieDate());
         }
-    }
-/* Validate login cookies if login is enabled */
-if (loginSystemEnabled())
-    {
-    struct slName *newCookies = loginValidateCookies(cart), *sl;
-    for (sl = newCookies;  sl != NULL;  sl = sl->next)
-        printf("Set-Cookie: %s\r\n", sl->name);
     }
 }
 
@@ -2794,9 +2798,10 @@ if (helList != NULL)
 		       "), so it may not appear as originally intended.  ");
 	}
     dyStringPrintf(dyMessage,
-		   "Custom tracks are subject to an expiration policy described in the "
-		   "<A HREF=\"../goldenPath/help/hgSessionHelp.html#CTs\" TARGET=_BLANK>"
-		   "Session documentation</A>.</P>");
+		   "These custom tracks should not expire, however, "
+		   "the UCSC Genome Browser is not a data storage service; "
+		   "<b>please keep a local backup of your sessions contents "
+		   "and custom track data</b>. </P>");
     slNameFreeList(&liveDbList);
     slNameFreeList(&expiredDbList);
     }

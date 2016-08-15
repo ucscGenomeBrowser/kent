@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 COPT=-ggdb
 include ../../../../inc/common.mk
 

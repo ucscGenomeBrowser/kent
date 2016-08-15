@@ -1027,8 +1027,6 @@ char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 void compositeViewControlNameFree(char **name);
 /* frees a string allocated by compositeViewControlNameFromTdb */
 
-#define CanDoCoverageConfVariable "canDoCoverage"
-
 void wigOption(struct cart *cart, char *name, char *title, struct trackDb *tdb);
 /* let the user choose to see the track in wiggle mode */
 

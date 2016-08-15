@@ -25,6 +25,8 @@
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
                 <LI><A HREF="#download1">Downloading sequence and annotation data</A>
+                <LI><A HREF="#download35">Metadata tables for GenBank and RefSeq moved 
+                to hgFixed database</A>
                 <LI><A HREF="#download32">Extracting sequence in batch from an assembly</A>
                 <LI><A HREF="#download23">Downloading data from the UCSC DAS server</A>
                 <LI><A HREF="#download27">Downloading the UCSC Genome Browser source</A>
@@ -131,7 +133,94 @@
 	</TD></TR>
     </TABLE>
 <BR>
+<!-- Cath's addition -->
+<!-- Content Table ============================================================================= -->
+<A NAME="download35"></A>
+<TABLE BORDER=0 WIDTH="100%">
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp;Metadata tables for GenBank and RefSeq moved 
+	   	    to hgFixed database</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			&quot;I can no longer find a metadata table like gbCdnaInfo for an assembly. 
+			Did this table move?&quot;
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			<P>
+			As of June 19, 2016, the location of metadata tables that support 
+			the GenBank and RefSeq tracks (RefSeq, Other RefSeq, mRNA, EST, etc.) 
+			have moved from directories of individual assemblies to one global 
+			database, hgFixed.</P>
+			<P>
+			A. The list of tables below (previously found per assembly) can now 
+			be downloaded from the 
+			<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/hgFixed/database/"
+			>hgFixed database</A>:
+			<div style="float: left; width: 20%;">
+			<UL> 
+				<LI> author
+				<LI> cds
+				<LI> cell
+				<LI> description
+				<LI> development
+				<LI> gbCdnaInfo
+				<LI> gbExtFile
+				<LI> gbLoaded
+				<LI> gbMiscDiff
+				<LI> gbSeq
+				<LI> gbWarn
+				<LI> geneName
+			</UL></div>
+			<div style="float: right; width: 80%;">
+			<UL>
+				<LI> imageClone
+				<LI> keyword
+				<LI> library
+				<LI> mrnaClone
+				<LI> organism
+				<LI> productName
+				<LI> refLink
+				<LI> refSeqStatus
+				<LI> refSeqSummary
+				<LI> sex
+				<LI> source
+				<LI> tissue
+			</UL></div></P>
+			<P>These tables are also accessible from:
+			<UL>
+			<LI> The <A HREF="../cgi-bin/hgTables"
+			>Table Browser</A>, as connected tables and joined fields described 
+			when clicking the &quot;describe table schema &quot; button.
+			<LI> The <A HREF="../goldenPath/help/mysql.html"
+			<A>public access MySQL server</A>.</P>
+			
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
 
+<!--End Cath's addition -->
 <!-- Content Table ============================================================================= -->
 <A NAME="download32"></A>
 <TABLE BORDER=0 WIDTH="100%">

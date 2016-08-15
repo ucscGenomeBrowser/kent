@@ -190,4 +190,7 @@ boolean endsWithWordComma(char *string, char *word);
 /* Return TRUE if string ends with word possibly followed by a comma, and the beginning
  * of word within string is the beginning of string or follows a comma. */
 
+void ensureNamesCaseUnique(struct slName *fieldList);
+/* Ensure that there would be no name conflicts in fieldList if all fields were lower-cased. */
+
 #endif /* OBSCURE_H */

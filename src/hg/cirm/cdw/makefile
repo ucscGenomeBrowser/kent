@@ -1,3 +1,4 @@
+kentSrc = ../../..
 # Build all subdirectories we care about
 
 include ../../../inc/common.mk
@@ -12,7 +13,9 @@ UTIL_DIRS = \
     cdwAddQaEnrichTarget \
     cdwAddSubscriber \
     cdwChangeFormat \
-    cdwCorrectFileTags \
+    cdwCheckDataset \
+	cdwCheckValidation \
+	cdwCorrectFileTags \
     cdwCreateUser \
     cdwFakeManifestFromSubmit \
     cdwJob \
@@ -32,15 +35,11 @@ UTIL_DIRS = \
     cdwSubmit \
     cdwSwapInSymLink \
     cdwUndeprecate \
+    utils/cdwFastqPolyFilter \
     utils/cdwVcfStats
 
 CGI_DIRS = \
-    cdwWebAuthLogin \
-    cdwWebAuthLogout \
-    cdwWebBrowse \
-    cdwWebCreateUser \
-    cdwWebDeprecate \
-    cdwWebSubmit \
+    cdwWebBrowse 
 
 TEST_DIRS = \
 	encode2BedDoctor 

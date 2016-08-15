@@ -1,3 +1,4 @@
+kentSrc = ../..
 include ../../inc/common.mk
 
 O = broadData.o paraLib.o paraMessage.o machSpec.o jobResult.o

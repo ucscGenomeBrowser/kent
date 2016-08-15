@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "cheapcgi.h"
+#include "obscure.h"
 #include "cdw.h"
 #include "cdwLib.h"
 #include "rql.h"
@@ -84,12 +85,53 @@ rInfer(tags->forest, hash);
 return hash;
 }
 
+void removeUnusedMetaTags(struct sqlConnection *conn)
+/* Remove rows from cdwMetaTags table that aren't referenced by cdwFile.metaTagsId */
+{
+/* Build up hash of used metaTagsIds */
+struct hash *hash = hashNew(0);
+char query[512];
+sqlSafef(query, sizeof(query), "select metaTagsId from cdwFile");
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+     hashAdd(hash, row[0], NULL);
+sqlFreeResult(&sr);
+
+struct dyString *dy = dyStringNew(0);
+sqlDyStringPrintf(dy, "delete from cdwMetaTags where id in (");
+boolean deleteAny = FALSE;
+sqlSafef(query, sizeof(query), "select id from cdwMetaTags");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+     {
+     char *id = row[0];
+     if (!hashLookup(hash, id))
+         {
+	 if (deleteAny)
+	     dyStringAppendC(dy, ',');
+	 else
+	     deleteAny = TRUE;
+	 dyStringAppend(dy, id);
+	 }
+     }
+dyStringPrintf(dy, ")");
+sqlFreeResult(&sr);
+
+if (deleteAny)
+    sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
 void cdwMakeFileTags(char *database, char *table)
 /* cdwMakeFileTags - Create cdwFileTags table from tagStorm on same database.. */
 {
 struct sqlConnection *conn = cdwConnect(database);
+removeUnusedMetaTags(conn);
+
 struct tagStorm *tags = cdwTagStorm(conn);
 struct slName *field, *fieldList = tagStormFieldList(tags);
+ensureNamesCaseUnique(fieldList);
 
 slSort(&fieldList, slNameCmpCase);
 struct hash *fieldHash = tagStormFieldHash(tags);
@@ -187,10 +229,9 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
-	dyStringAppend(query, connector);
-	dyStringAppendC(query, '"');
-	sqlDyAppendEscaped(query, (char*)tag->val);
-	dyStringAppendC(query, '"');
+	char *escaped = makeEscapedString(tag->val, '"');
+	dyStringPrintf(query, "%s\"%s\"", connector, escaped);
+	freeMem(escaped);
 	connector = ",";
 	}
     dyStringPrintf(query, ")");

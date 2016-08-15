@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 O = cdw.o cdwBamFileFromRa.o cdwFastqFileFromRa.o cdwLib.o cdwQaWigSpotFromRa.o cdwStep.o \
@@ -10,3 +11,6 @@ ${MACHTYPE}/cdwlib.a: ${O}
 
 clean::
 	rm -f ${O} ${MACHTYPE}/cdwlib.a
+
+cdwWebBrowse::
+	make && cd ../cdwWebBrowse && make && cd ../lib

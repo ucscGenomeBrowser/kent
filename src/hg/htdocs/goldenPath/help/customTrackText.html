@@ -57,6 +57,7 @@ Browser, including
 <A HREF="bigPsl.html">bigPsl</A>, 
 <A HREF="bigWig.html">bigWig</A>, 
 <A HREF="bam.html">BAM</A>,
+<A HREF="cram.html">CRAM</A>,
 <A HREF="vcf.html">VCF</A>,
 <A HREF="maf.html">MAF</A>, 
 <A HREF="../../FAQ/FAQformat.html#format1.7">BED detail</A>,
@@ -744,6 +745,7 @@ Genome Browser:</P>
         <LI><B>bigDataUrl=<<I>external_url</I>></B> - Defines a URL to the
         data file for
         <A HREF="../help/bam.html" TARGET="_blank">BAM</A>,
+        <A HREF="../help/cram.html" TARGET="_blank">CRAM</A>,
         <A HREF="../help/bigBed.html" TARGET="_blank">bigBed</A>,
         <A HREF="../help/bigWig.html" TARGET="_blank">bigWig</A> or
         <A HREF="../help/vcf.html" TARGET="_blank">VCF</A>
@@ -817,7 +819,10 @@ TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.
     <LI><TT>&lt;trackName&gt;=full|dense|pack|hide</TT> - show the default tracks adding a track and set
       it to full, dense, pack or hide visibility -
       <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&cytoBand=pack">example link</a>
-      to show the default or user-selected tracks and set the Chromosome Bands track to "pack" view</A></LI>
+      to show the default or user-selected tracks and set the Chromosome Bands track to "pack" view.
+      Please note that for this feature to work with custom tracks you must use their unique assigned
+      name and identifier number <tt>ct_name_####</tt>, only with the full custom track name will
+      this feature work: <tt>ct_name_####=full</tt></LI>
     <LI><TT>hideTracks=1</TT> - hide all tracks - 
       <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1">example link</A>
       to show no tracks at all</LI>
@@ -832,10 +837,10 @@ TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.
     <LI><TT>oligoMatch=pack&amp;hgt.oligoMatch=DNASEQ</TT> - switch on the Short Match track and highlight a matching sequence - 
       <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&oligoMatch=pack&hgt.oligoMatch=TATAWAR">example link</A>
       to highlight the TATAWAR motif in the ABO locus</LI>
-    <LI><TT>highlight=&lt;DB&gt;.&lt;CHROM&gt;:&lt;START&gt;-&lt;END&gt;#&lt;COLOR&gt;</TT>
-      - switch on the Short Match track and highlight a matching sequence - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&highlight=hg19.chr9:136135846-136136108#FF69B4">example link</A>
-      to highlight a part of the ABO locus in pink</LI>
+    <LI><TT>highlight=&lt;DB&gt;.&lt;CHROM&gt;:&lt;START&gt;-&lt;END&gt;#&lt;COLOR&gt;|...</TT>
+      - highlight one or more regions in a given color on the image. Note that the arguments have to be urlencoded for internet browsers, so ":" becomes "%3A", "#" becomes "%23" and "|" becomes "%7C". - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136136597-136139844&highlight=hg19.chr9%3A136138630-136139650%23AA0000%7Chg19.chr9%3A136136630-136137650%230000FF">example link</A>
+      to highlight two parts of the ABO locus in red and blue. </LI>
 </UL>
 
 <LI>If a login and password is required to access data loaded through a URL
@@ -883,7 +888,8 @@ will need a few extra parameters. Let's assume that your data is on a server
 at your institution in one of the large data formats:
 <A HREF="../../FAQ/FAQformat.html#format1.5">bigBed</A>, 
 <A HREF="../../FAQ/FAQformat.html#format6.1">bigWig</A>,
-<A HREF="../../FAQ/FAQformat.html#format5.1">BAM</A>, or
+<A HREF="../../FAQ/FAQformat.html#format5.1">BAM</A>,
+<A HREF="../../FAQ/FAQformat.html#format5.2">CRAM</A>, or
 <A HREF="../../FAQ/FAQformat.html#format10.1">VCF</A>.
 
 In this case, the URL must include an <TT>hgct_customText</TT> parameter, which 

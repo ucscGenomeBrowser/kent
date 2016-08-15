@@ -1,0 +1,28 @@
+# Config parameters for makeGenomeDb.pl:
+db rheMac8
+clade primate
+genomeCladePriority 15
+scientificName Macaca mulatta
+commonName rhesus
+assemblyDate Nov. 2015
+assemblyLabel Baylor College of Medicine Genome Sequencing Center
+assemblyShortLabel BCM Mmul_8.0.1
+orderKey 18411
+# chrM GCF_000005875.1 included in assembly
+# mitoAcc NC_005943.1
+mitoAcc none
+fastaFiles /hive/data/genomes/rheMac8/ucsc/*.fa
+agpFiles /hive/data/genomes/rheMac8/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir rhesus
+photoCreditURL http://www.wakehealth.edu/Faculty/Kaplan-Jay-R.htm
+# photoCreditURL http://caplab.yale.edu/
+# http://www.ncbi.nlm.nih.gov/sutils/static/GP_IMAGE/rhesus.jpg
+# photoCreditName Dr. Laurie Santos
+photoCreditName J.R. Kaplan
+ncbiGenomeId 215
+ncbiAssemblyId 2715158
+ncbiAssemblyName Mmul_8.0.1
+ncbiBioProject 12537
+genBankAccessionID GCF_000772875.2
+taxId 9544

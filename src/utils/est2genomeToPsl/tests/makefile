@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include ../../../inc/common.mk
 
 est2genomeToPsl=${DESTBINDIR}/est2genomeToPsl

@@ -226,6 +226,14 @@ if apt-cache policy r-base | grep "Installed: .none." > /dev/null; then
    apt-get -y autoremove
 fi
 
+# install imagemagick for the session gallery
+if apt-cache policy imagemagick | grep "Installed: .none." > /dev/null; then
+   echo - Installing imagemagick
+   apt-get update
+   apt-get --no-install-recommends install -y imagemagick
+   apt-get -y autoremove
+fi
+
 echo
 echo - Updating the genome browser software via rsync:
 
@@ -300,6 +308,28 @@ fi
 echo - Pulling other files
 # make sure we never overwrite the hg.conf.local file
 rsync $RSYNCOPTS $PUSHLOC / --exclude=hg.conf.local
+
+# July 2016: add the cram fetcher to root's crontab 
+# this has to be done after the PUSHLOC directory has been copied over
+if grep -q fetchCramReference /var/spool/cron/crontabs/root; then
+        true
+   else
+       crontab -l | awk '{print} END {print "\n# handle CRAM auto reference download\n*/1 * * * * /root/fetchCramReference.sh /data/cramCache/pending /data/cramCache/ /data/cramCache/error/\n"}' | crontab -   
+fi
+# also create the directories for the cram files
+# cram also requires that the directories are writable by the apache user
+if [ ! -d /data/cramCache ]; then
+    mkdir -p /data/cramCache/pending /data/cramCache/error
+    chown -R www-data:www-data /data/cramCache
+fi
+# -- end July 2016
+
+# July 2016: genbank tables are now in hgFixed. By touching a few files, we make sure that at least refseqStatus 
+# is rsync'ed later, otherwise gbib is really slow, refs #17842
+touch /data/mysql/hgFixed/refSeqStatus.MYI /data/mysql/hgFixed/refSeqStatus.MYD /data/mysql/hgFixed/refSeqStatus.frm 
+touch /data/mysql/hgFixed/refLink.MYI /data/mysql/hgFixed/refLink.MYD /data/mysql/hgFixed/refLink.frm 
+# we can now remove the old tables
+rm -f /data/mysql/hg19/refSeqStatus*
 
 if [ "$1" != "hgwdev" ] ; then
   echo updating MYSQL files - browser will not work during the MYSQL update

@@ -62,7 +62,7 @@ struct cdwSubmit *submitList = cdwSubmitLoadByQuery(conn, query);
 
 struct cdwSubmit *submission;
 // Keep track of the # of submissions, meta files and mani files. 
-int count = 0, metaCount = 0, maniCount = 0;	 
+int count = 0; 
 long long int totalFiles = 0, totalBytes = 0;	// Count the total files and bytes. 
 struct slName *submitters = NULL, *user;    // Keep track of the submitters.   
 // Loop over all cdwSubmit entries and gather/print out stats.  
@@ -77,8 +77,8 @@ for (submission = submitList; ; submission = submission->next)
     // Print out submission stats. 
     fprintf(f, "Sub #: %i | Sub id: %i | New files: %i | New bytes: %lld | Mani id: %i |",  
 	    count, submission->id, submission->newFiles, submission->newBytes, submission->manifestFileId);  
-    fprintf(f, " Meta id: %i | Files with new meta data values: %i | User email: %s\n",
-	    submission->metaFileId, submission->metaChangeCount, user->email); 
+    fprintf(f, " Meta id: %i | Files with new meta data values: %i | User email: %s | Wrangler: %s\n",
+	    submission->metaFileId, submission->metaChangeCount, user->email, submission->wrangler); 
     totalFiles += submission->newFiles; 
     totalBytes += submission->newBytes; 
     if (submission->next == NULL)

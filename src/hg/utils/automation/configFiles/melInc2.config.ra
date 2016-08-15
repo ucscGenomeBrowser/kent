@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db melInc2
+clade worm
+# genomeCladePriority 84
+scientificName Meloidogyne incognita
+commonName M. incognita
+assemblyDate Feb. 2008
+assemblyLabel Sanger and Genoscope
+assemblyShortLabel M. incognita WS245/PRJEA28837
+orderKey 2904
+mitoAcc KJ476151.1
+fastaFiles /hive/data/genomes/melInc2/ucsc/melInc2.fa.gz
+agpFiles /hive/data/genomes/melInc2/ucsc/melInc2.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL https://www.wormbase.org/species/m_incognita#0--10
+photoCreditName reference to WormBase C. angaria
+ncbiGenomeId 281
+ncbiAssemblyId 228078
+ncbiAssemblyName PRJEA28837
+ncbiBioProject 28837
+genBankAccessionID GCA_000180415.1
+taxId 6306

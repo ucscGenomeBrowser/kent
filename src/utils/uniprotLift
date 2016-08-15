@@ -8,8 +8,6 @@ from collections import defaultdict, namedtuple
 
 # import the publications libraries
 import sys, gzip, optparse, logging,re
-sys.path.append("/cluster/home/max/projects/pubs/tools/lib")
-import maxCommon
 
 # Globals  ---
 DEBUG = False
@@ -227,27 +225,31 @@ def makeBedLine(mut, bed, isMut):
 
 # ------ MAIN ------
 if __name__ == '__main__':
-    parser = optparse.OptionParser("""usage: %prog [options] taxonId dbName liftPslFile - lift uniprot annotations to genome. 
+    parser = optparse.OptionParser("""usage: %prog [options] uniprotTabDir taxonId chromSizesFile liftPslFile - lift uniprot annotations to genome. 
     
-    Needs a mapping PSL from uniprot nucleotide coordinates to genome positions.
+    uniprotTabDir is the directory with the output from uniprotToTab
+    
+    Needs a mapping PSL from uniprot (in faked nucleotide coordinates) to genome positions.
     - for genomes with introns, makeLiftOver.sh from
-      src/hg/utils/uniprotMutations/makeUniProtToHg.sh creates one for hg19
+      kent/src/hg/utils/uniprotMutations/makeUniProtToHg.sh creates one for hg19
     - for a quicker rough version, create one with BLAT and -q=dnax folowed by
       pslProtCnv 
-
-    Input uniprot files have to be created with the pubParseDb uniprot parser
 
     """)
     parser.add_option("", "--annot", dest="annot", action="store_true", help="lift other, non-variant annotations")
     parser.add_option("-d", "", dest="debug", action="store_true", help="debug output")
     parser.add_option("", "--filter", dest="filterAnnots", action="store_true", help="remove certain annotations that are not very useful, like helix,chain,beta, etc")
-    parser.add_option("-u", "--uniprotDir", dest="uniprotDir", action="store", help="uniprot parser directory, default %default", default="/hive/data/inside/pubs/parsedDbs")
+    #parser.add_option("-u", "--uniprotDir", dest="uniprotDir", action="store", help="uniprot parser directory, default %default", default="/hive/data/inside/pubs/parsedDbs")
     (options, args) = parser.parse_args()
 
     if options.debug:
         DEBUG=True
 
-    taxonId, db, liftFname = args
+    if len(args)==0:
+        parser.print_help()
+        sys.exit(1)
+
+    uniprotDir, taxonId, chromSizesPath, liftFname = args
 
     mutData = defaultdict(list)
 
@@ -255,7 +257,7 @@ if __name__ == '__main__':
     run(cmd)
 
     # create seq sizes for all uniprot sequences of this species
-    uniprotFa = join(options.uniprotDir, "uniprot.%s.fa" % taxonId)
+    uniprotFa = join(uniprotDir, "uniprot.%s.fa" % taxonId)
     uniprotFaGz = uniprotFa+".gz"
     if not isfile(uniprotFa):
         print "uncompressing uniprot gz fa"
@@ -283,18 +285,21 @@ if __name__ == '__main__':
     # this annotates in protein coordinates
     print "converting tab to bed"
     ofh = open("work/temp.bed", "w")
-    uniProtMutFname = join(options.uniprotDir, "uniprot.%s.mut.tab" % taxonId)
+    uniProtMutFname = join(uniprotDir, "uniprot.%s.annots.tab" % taxonId)
     print "reading %s" % uniProtMutFname
     for mut in iterTsvRows(open(uniProtMutFname)):
         if mut.acc not in speciesAccs:
+            logging.debug("skipping %s, not in work/chromSizes" % mut.acc)
             continue
         if options.filterAnnots and mut.featType in removeTypes:
+            logging.debug("skipping %s, explicitely removed annotation" % str(mut))
             continue
         mutName = mut.featType.replace(" ", "_")+":"+mut.acc+":"+mut.origAa+mut.begin+mut.mutAa
 
         # remove annotations that cover the whole protein, probably not very useful
         #print mut.begin, mut.end, mut.acc, seqSizes[mut.acc]
         if int(mut.begin)==1 and int(mut.end)==int(seqSizes[mut.acc])+1:
+            logging.debug("skipping %s, covers whole protein" % str(mut))
             continue
 
         mutPos = 3*(int(mut.begin)-1)
@@ -306,7 +311,7 @@ if __name__ == '__main__':
     
     # lift from protein sequence bed to target bed
     print "lifting"
-    cmd = "bedToPsl work/chromSizes work/temp.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > work/temp.lifted.bed" % liftFname
+    cmd = "bedToPsl work/chromSizes work/temp.bed stdout | pslMap stdin %s stdout | pslToBed stdin stdout | LC_COLLATE=C sort -k1,1 -k2,2n | bedFixBlockOverlaps /dev/stdin > work/temp.lifted.bed" % liftFname
     run(cmd)
 
     print "adding extra fields"
@@ -360,16 +365,16 @@ if __name__ == '__main__':
     #print "%d variants not mapped to genome" % len(notMapped)
 
     asFname = "bed12UniProtMut.as"
-    cmd = "bedToBigBed -as=%s spMut.bed /hive/data/genomes/%s/chrom.sizes spMut.bb -type=bed12+ -tab" % \
-        (asFname, db)
+    cmd = "bedToBigBed -as=%s spMut.bed %s spMut.bb -type=bed12+ -tab" % \
+        (asFname, chromSizesPath)
     run(cmd)
 
     asFname = "bed12UniProtAnnot.as"
-    cmd = "bedToBigBed -as=%s spAnnot.bed /hive/data/genomes/%s/chrom.sizes spAnnot.bb -type=bed12+ -tab" % \
-        (asFname, db)
+    cmd = "bedToBigBed -as=%s spAnnot.bed %s spAnnot.bb -type=bed12+ -tab" % \
+        (asFname, chromSizesPath)
     run(cmd)
-    cmd = "bedToBigBed -as=%s spStruct.bed /hive/data/genomes/%s/chrom.sizes spStruct.bb -type=bed12+ -tab" % \
-        (asFname, db)
+    cmd = "bedToBigBed -as=%s spStruct.bed %s spStruct.bb -type=bed12+ -tab" % \
+        (asFname, chromSizesPath)
     run(cmd)
 
     cmd = "rm -rf work"

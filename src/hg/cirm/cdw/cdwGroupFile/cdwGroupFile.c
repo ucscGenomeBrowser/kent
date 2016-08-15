@@ -19,10 +19,14 @@ void usage()
 errAbort(
   "cdwGroupFile - Associate a file with a group.\n"
   "usage:\n"
-  "   cdwGroupFile group 'boolean expression like after a SQL where'\n"
+  "   cdwGroupFile group ' boolean expression like after a SQL where'\n"
   "options:\n"
   "   -remove - instead of adding this group permission, subtract it\n"
   "   -dry - if set just print what we _would_ add group to.\n"
+  "example:\n"
+  "    cdwGroupFile fan_lab ' lab=\"fan\"'\n"
+  "This would add all files with the lab tag fan to the fan_lab group.  Note the\n"
+  "initial space before lab is required due to quirks in C command line option parser.\n"
   );
 }
 

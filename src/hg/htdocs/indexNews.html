@@ -1,111 +1,36 @@
-<!-- News Section ============================================- -->  
-<TABLE style="background-color:#888888; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-    <TR><TD>        
-    <TABLE style="background-color:#fffee8; width: 100%; border-width: 0px; border-spacing: 0px; padding: 0px">
-        <TR><TD>        
-        <TABLE style="background-color:#D9E4F8; background-image: url('images/hr.gif'); width: 100%; border: 0px">
-            <TR><TD>
-            <!--cheap trick to get background on row to be continuous-->
-            <TABLE CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
-                <TR><TD ALIGN="left">
-                 <font size="4"><a name="TOC"></a><b>&nbsp; News</b></font><a href="http://www.twitter.com/GenomeBrowser" target="_blank"><img src="http://twitter-badges.s3.amazonaws.com/t_small-a.png" title="Follow &#64;GenomeBrowser on Twitter" alt="Follow &#64;GenomeBrowser on Twitter" style="vertical-align:text-bottom; margin-left: 15px;"></a>
-                 <a title="Genome Browser Facebook page"
-                 href="http://www.facebook.com/ucscGenomeBrowser"
-                 target="_blank"><img
-                 src="/images/FB-f-Logo__blue_22.jpg"
-                 style="vertical-align:text-bottom; margin-left: 15px;"
-                 alt="Genome Browser Facebook page"></a>
-                 <a href="https://plus.google.com/107643636314131661344" rel="publisher"></a>
-               </TD>
-                <TD ALIGN="right"><A HREF="goldenPath/newsarch.html"><IMG 
-                SRC="images/news.jpg" ALT="" ALIGN="right" BORDER=0></A>
-            </TD></TR></TABLE>
-        </TD></TR></TABLE>
-        <TABLE style="background-color:#fffee8; width: 100%; padding: 0px">
-          <TR><TH HEIGHT=3></TH></TR>
-          <TR><TD WIDTH=10></TD>
-          <TD>
-          <P>
-          To receive announcements of new genome 
-          assembly releases, new software features, updates and 
-          training seminars by email, subscribe to the
-          <A HREF="http://groups.google.com/a/soe.ucsc.edu/group/genome-announce?hl=en"
-          TARGET=_blank>genome-announce</A> mailing list. Please see our
-          <a href="http://genome.ucsc.edu/blog"
-          target=_blank>blog</a> for posts about Genome Browser tools, features, projects and more.
-          </p>
-   
-     <hr>      
-    <!-- start news -->
-   <font color="#006666" size="4"><b>10 May 2016 - New Gateway Page!</b></font>
-  <p>
-  The UCSC Genome Browser team is proud to announce a newly redesigned 
-  <a href="../cgi-bin/hgGateway" target="_blank">Genome Browser Gateway</a> page.
-  The Gateway retains its original functionality as a central access point for all genome assemblies
-  available on our site, while sporting several helpful new features and updates:</p>
-  <ul>
-  <li>Autocomplete searching for any genome browser, genome version, or public hub</li>
-  <li>Species browsing through a scrollable visual
-  &quot;tree&quot; menu based on phylogenetic order</li>
-  <li>Quick access shortcuts to popular browsers</li>
-  <li>New style and color scheme</li>
-  </ul>
-  <p>
-  Please see our <a href="https://youtu.be/5zc9sqd4SD4"
-  target="_blank">Gateway video</a> for an introduction to these new features. 
-  </p>
-  <p>
-  The new Gateway addresses the need for streamlined access to the rapidly 
-  growing number of genome assemblies available on our public site. 
-  As an alternative to scrolling through long drop-down menus of genome assemblies, you can
-  now simply type in assembly search terms for autocomplete recognition, visually scroll
-  through our collection, or click a button to access our most popular species.
-  </p>
-  <p>
-  Note that a few browser utilities that were previously accessed through links and buttons on the 
-  Gateway page have been moved to the top menu bar:
-  </p>
-  <ul>
-  <li>Browser reset: Genome Browser > Reset All User Settings</li>
-  <li>Track search: Genome Browser > Track Search</li>
-  <li>Add custom tracks: My Data > Custom Tracks</li>
-  <li>Track hubs: My Data > Track Hubs</li>
-  <li>Configure tracks and display: Genome Browser > Configure</li>
-  </ul>
-  <p>
-  We would like to acknowledge the following people for their contributions
-  to the new Gateway: original art by Jeff West Design, concept by Robert Kuhn,
-  software design by Angie Hinrichs, and quality assurance by Cath Tyner.</p>
-  <hr>
+<!-- News item template:
 
-<!-- start archives -->
-<!--staged for future release   
-        <p>
-        <font color="#006666" size="4"><b>10 May 2016 - New Gateway Page!</b>: </font>
-        The UCSC Genome Browser team is proud to announce a newly redesigned
-        <a href="../../cgi-bin/hgGateway" target="_blank">Genome Browser Gateway page</a>.
-        Please see our <a href="https://youtu.be/5zc9sqd4SD4"
-        target="_blank">Gateway video</a> for an introduction to these new features.
-        <a href="goldenPath/newsarch.html#051016">Read more</a>. 
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    __DATE__ -
+    <a href="goldenPath/newsarch.html#__MMDDYY__">
+      __HEADLINE__
+    </a></div>
+
+  1. Replace __DATE__ with something like 'Apr. 29, 2016'
+  2. Replace __MMDDYY__ with something like '042916'
+  3. Replace __HEADLINE__ with the news item's headline like 'Awesome New Feature'
+     Be sure to follow the CORRECT STYLE for the headline: 
+        - capitalize first letter of headline -- no other caps except for proper nouns and acronyms
+        - check that headline char count doesn't exceed the line length (otherwise will truncate)
+  4. Drop the bottom item from the list (limit of 3 items at a time)
 -->
-        <p>
-	<font color="#006666" size="4"><b>22 Apr 2016
-	- Data from the Lens PatSeq Database Now Available</b>: </font>
-	We are pleased to announce the release of a set of tracks containing data from the
-	<a href="https://www.lens.org/" target="_blank">Lens</a>
-	PatSeq database in the UCSC Genome Browser.
-	<a href="goldenPath/newsarch.html#042216">Read more</a>.
-
-        <p>
-        <font color="#006666" size="4"><b>19 April 2016
-        - New Genotyping Tissue Expression Track for hg19 and hg38!</b>: </font>
-        We are excited to announce the release of a new track based on data from the 
-        <a href="http://commonfund.nih.gov/GTEx/index" 
-	TARGET = _BLANK>Genotyping Tissue Expression Consortium</a> V6 data freeze. 
-	<a href="goldenPath/newsarch.html#042016">Read more</a>.
 
 
-            </TD><TD WIDTH=15>
-         </TD></TR></TABLE>
-    <BR></TD></TR></TABLE>
-</TD></TR></TABLE>
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Aug. 12, 2016 -
+    <a href="goldenPath/newsarch.html#081216">
+      Genome Browser for Malayan flying lemur
+    </a></div>
+
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016_2">
+      CRAM files now supported
+    </a></div>
+
+  <div class="jwNewsItem jwSingleLineRightColumn">
+    Jun. 30, 2016 -
+    <a href="goldenPath/newsarch.html#063016">
+      Updated human and mouse genes tracks
+    </a></div>
+

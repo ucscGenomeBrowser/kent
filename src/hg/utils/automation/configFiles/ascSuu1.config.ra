@@ -1,0 +1,23 @@
+# Config parameters for makeGenomeDb.pl:
+db ascSuu1
+clade worm
+genomeCladePriority 68
+scientificName Ascaris suum
+commonName Pig roundworm
+assemblyDate Sep. 2012
+assemblyLabel Beijing Genomics Institute
+assemblyShortLabel WS229/AscSuum_1.0
+orderKey 16320
+mitoAcc X54253.1
+fastaFiles /hive/data/genomes/ascSuu1/ucsc/ascSuu1.fa.gz
+agpFiles /hive/data/genomes/ascSuu1/ucsc/ascSuu1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+photoCreditURL http://www.cdc.gov/parasites/ascariasis/
+photoCreditName Centers for Disease Control and Prevention
+ncbiGenomeId 350
+ncbiAssemblyId 426198
+ncbiAssemblyName WS229/AscSuum_1.0
+ncbiBioProject 80881
+genBankAccessionID GCA_000298755.1
+taxId 6253

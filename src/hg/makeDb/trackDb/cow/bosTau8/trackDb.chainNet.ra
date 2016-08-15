@@ -1,0 +1,31 @@
+track chainNetOviAri3 override
+release alpha
+priority 205.3
+matrix 16 100,-172,-55,-173,-172,95,-212,-55,-55,-212,95,-172,-173,-55,-172,100
+chainMinScore 3000
+chainLinearGap medium
+
+track chainNetOrcOrc1 override
+release alpha
+priority 209.05
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetEquCab2 override
+priority 270.3
+matrix 16 88,-111,-31,-128,-111,100,-75,-31,-31,-75,100,-111,-128,-31,-111,88
+chainMinScore 3000
+chainLinearGap medium
+
+track chainNetMm10 override
+priority 340.3
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+
+track chainNetHg38 override
+priority 460.3
+chainMinScore 3000
+chainLinearGap medium
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91

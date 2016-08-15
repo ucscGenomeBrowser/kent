@@ -1,3 +1,4 @@
+kentSrc = ../../..
 include	../../../inc/common.mk
 
 OPT = ${COPT} ${HG_WARN} ${HG_DEFS}

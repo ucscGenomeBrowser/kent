@@ -37,5 +37,9 @@ void longRangeCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *ti
 /* Complete track controls for long range interaction. */
 
 struct longRange *parseLongTabix(struct bed *beds, unsigned *maxWidth, double minScore);
+/* Parse longTabix format into longRange structures */
+
+struct asObject *longTabixAsObj();
+/* Return asObject describing fields of longTabix file. */
 
 #endif//def LONGRANGE_H

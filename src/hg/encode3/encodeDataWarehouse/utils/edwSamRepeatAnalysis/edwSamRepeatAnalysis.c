@@ -32,20 +32,12 @@ void edwSamRepeatAnalysis(char *inSam, char *outRa)
 /* Go through sam file, filling in hiLevelHash with count of each hi level repeat class we see. */
 struct hash *hiLevelHash = hashNew(0);
 samfile_t *sf = samopen(inSam, "r", NULL);
-#ifdef USE_HTS
 bam_hdr_t *bamHeader = sam_hdr_read(sf);
-#else
-bam_header_t *bamHeader = sf->header;
-#endif
 bam1_t one;
 ZeroVar(&one);
 int err;
 long long hit = 0, miss = 0;
-#ifdef USE_HTS
 while ((err = sam_read1(sf, bamHeader, &one)) >= 0)
-#else
-while ((err = samread(sf, &one)) >= 0)
-#endif
     {
     int32_t tid = one.core.tid;
     if (tid < 0)

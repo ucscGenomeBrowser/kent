@@ -1,6 +1,6 @@
 /* trfBig - Mask tandem repeats on a big sequence file.. */
 
-/* Copyright (C) 2011 The Regents of the University of California 
+/* Copyright (C) 2011 The Regents of the University of California
  * See README in this or parent directory for licensing information. */
 #include "common.h"
 #include "linefile.h"
@@ -17,6 +17,10 @@ boolean doBed = FALSE;	/* Output .bed file. */
 char *tempDir = ".";	/* By default use current dir. */
 int maxPeriod = 2000;    /* Maximum size of repeat. */
 bool keep = FALSE;       /* Don't delete tmp files */
+int trf409_l = 0;	/* trf 4.09 new option -l, from trf usage message:
+-l <n> maximum TR length expected (in millions) (eg, -l 3 or -l=3 for 3 million)
+                  Human genome HG38 would need -l 6
+*/
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] =
@@ -27,6 +31,7 @@ static struct optionSpec optionSpecs[] =
     {"trf", OPTION_STRING},
     {"maxPeriod", OPTION_INT},
     {"keep", OPTION_BOOLEAN},
+    {"l", OPTION_INT},
     {NULL, 0}
 };
 
@@ -47,11 +52,14 @@ errAbort(
   "   -tempDir=dir Where to put temp files.\n"
   "   -trf=trfExe explicitly specifies trf executable name\n"
   "   -maxPeriod=N  Maximum period size of repeat (default %d)\n"
-  "   -keep  don't delete tmp files\n",
+  "   -keep  don't delete tmp files\n"
+  "   -l=<n> when used here, for new trf v4.09 option:\n"
+  "          maximum TR length expected (in millions)\n"
+  "          (eg, -l=3 for 3 million), Human genome hg38 would need -l=6",
   maxPeriod);
 }
 
-void writeSomeDatToBed(char *inName, FILE *out, char *chromName, int chromOffset, 
+void writeSomeDatToBed(char *inName, FILE *out, char *chromName, int chromOffset,
 	int start, int end)
 /* Read dat file and write bits of it to .bed out file adding offset as necessary. */
 {
@@ -123,7 +131,11 @@ char faBase[FILENAME_LEN], faExt[FILENAME_LEN];
 splitPath(faFile, NULL, faBase, faExt);
 
 char command[1024];
-safef(command, sizeof(command), "cd %s && %s %s%s 2 7 7 80 10 50 %d -m %s", 
+if (trf409_l > 0)
+  safef(command, sizeof(command), "cd %s && %s %s%s 2 7 7 80 10 50 %d -m %s -l %d",
+      tempDir, trfExe, faBase, faExt, maxPeriod, doBed ? "-d" : "", trf409_l);
+else
+  safef(command, sizeof(command), "cd %s && %s %s%s 2 7 7 80 10 50 %d -m %s",
       tempDir, trfExe, faBase, faExt, maxPeriod, doBed ? "-d" : "");
 verbose(1, "command %s\n", command);
 fflush(stdout);
@@ -132,7 +144,7 @@ fflush(stderr);
 /* Run the system command, expecting a return code of 1, as trf
    returns the number of successfully processed sequences. */
 int status = system(command);
-if (status == -1) 
+if (status == -1)
     errnoAbort("error starting command: %s", command);
 else if (WIFSIGNALED(status))
     errAbort("command terminated by signal %d: %s", WTERMSIG(status), command);
@@ -187,7 +199,7 @@ if (sameString("stdin", seqName))
 	  rTempName(tempDir, seqName, ".tf"));
 else
     safef(tempFile, sizeof(tempFile), "%s/%s.tf", tempDir, seqName);
-if (endsWith(input, ".nib") && 
+if (endsWith(input, ".nib") &&
 	(endsWith(output, ".nib") || sameString(output, "/dev/null")))
     {
     int nibSize;
@@ -281,6 +293,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
     usage();
+trf409_l = optionInt("l", trf409_l);
 trfExe = optionVal("trf", trfExe);
 doBed = optionExists("bed") || optionExists("bedAt");
 tempDir = optionVal("tempDir", tempDir);

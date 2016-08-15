@@ -285,6 +285,9 @@ void cgiMakeCheckBoxWithId(char *name, boolean checked, char *id);
 void cgiMakeCheckBoxJS(char *name, boolean checked, char *javascript);
 /* Make check box with javascript */
 
+void cgiMakeCheckBoxEnabled(char *name, boolean checked, boolean enabled);
+/* Make check box, optionally enabled/disabled. */
+
 void cgiMakeCheckBoxIdAndJS(char *name, boolean checked, char *id, char *javascript);
 /* Make check box with ID and javascript. */
 

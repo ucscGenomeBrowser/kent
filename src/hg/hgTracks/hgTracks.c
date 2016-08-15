@@ -2097,6 +2097,7 @@ for (track = trackList; track != NULL; track = track->next)
 struct highlightVar
 // store highlight information
 {
+struct highlightVar *next;
 char *db;
 char *chrom;
 long chromStart;
@@ -2105,74 +2106,88 @@ char *hexColor;
 };
 
 struct highlightVar *parseHighlightInfo()
-// Parse highlight info from cart var
-// db.chrom:start-end#hexColor
+// Parse highlight info from cart var to a linked list of highlightVar structs
+// db.chrom:start-end#hexColor|db.chrom:start-end#hexColor|...
 {
-struct highlightVar *h = NULL;
+struct highlightVar *hlList = NULL;
 char *highlightDef = cartOptionalString(cart, "highlight");
 if(highlightDef)
     {
-    AllocVar(h);
-    h->db     = cloneNextWordByDelimiter(&highlightDef,'.');
-    h->chrom  = cloneNextWordByDelimiter(&highlightDef,':');
-    // long to handle virt chrom coordinates
-    h->chromStart = atol(cloneNextWordByDelimiter(&highlightDef,'-'));
-    h->chromEnd   = atol(cloneNextWordByDelimiter(&highlightDef,'#'));
-    h->chromStart--; // Not zero based
-    if (highlightDef && *highlightDef != '\0')
-	h->hexColor = cloneString(highlightDef);
+    char *hlArr[256];
+    int hlCount = chopByChar(cloneString(highlightDef), '|', hlArr, ArraySize(hlArr));
+    int i;
+    for (i=0; i<hlCount; i++)
+        {
+        char *oneHl = hlArr[i];
+        struct highlightVar *h;
+        AllocVar(h);
+        h->db     = cloneNextWordByDelimiter(&oneHl,'.');
+        h->chrom  = cloneNextWordByDelimiter(&oneHl,':');
+        // long to handle virt chrom coordinates
+        h->chromStart = atol(cloneNextWordByDelimiter(&oneHl,'-'));
+        h->chromEnd   = atol(cloneNextWordByDelimiter(&oneHl,'#'));
+        h->chromStart--; // Not zero based
+        if (highlightDef && *highlightDef != '\0')
+            h->hexColor = cloneString(oneHl);
+        slAddHead(&hlList, h);
+        }
+    slReverse(&hlList);
     }
-return h;
+return hlList;
 }
 
-void highlightRegion(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
-// Highlights a region in the image.  Only done if theImgBox is not defined.
+static void highlightRegions(struct cart *cart, struct hvGfx *hvg, int imagePixelHeight)
+// Highlights regions in the image.  Only done if theImgBox is not defined.
 // Thus it is done for ps/pdf and view image but the hgTracks image is highlighted via js
 {
-struct highlightVar *h = parseHighlightInfo();
+struct highlightVar *hlList = parseHighlightInfo();
 
-if(h && theImgBox == NULL) // Only highlight region when imgBox is not used. (pdf and show-image)
+if(hlList && theImgBox == NULL) // Only highlight region when imgBox is not used. (pdf and show-image)
     {
-    if (virtualSingleChrom()) // DISGUISE VMODE
-	{
-	if ((h->db && sameString(h->db, database))
-	&&  (h->chrom && sameString(h->chrom,chromName)))
-	    {
-	    char position[1024];
-	    safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
-	    char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
-	    if (startsWith("virt:", newPosition))
-		{
-		parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
-		}
-	    }	    
-	}
-
-    if ((h->db && sameString(h->db, database))
-    &&  (h->chrom && sameString(h->chrom,virtChromName))
-    &&  (h->chromEnd != 0)
-    &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
+    struct highlightVar *h;
+    for (h=hlList; h; h=h->next) 
         {
-
-        h->chromStart = max(h->chromStart, virtWinStart);
-        h->chromEnd = min(h->chromEnd, virtWinEnd);
-        double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
-        int startPixels = pixelsPerBase * (h->chromStart - virtWinStart); // floor
-        if (startPixels < 0)
-            startPixels *= -1;  // reverse complement
-        int width = pixelsPerBase * (double)(h->chromEnd - h->chromStart) + 0.5; // round up
-        if (width < 2)
-            width = 2;
-
-        // Default color to light blue, but if setting has color, use it.
-        unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
-        if (h->hexColor)
+        if (virtualSingleChrom()) // DISGUISE VMODE
             {
-            long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
-            hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+            if ((h->db && sameString(h->db, database))
+            &&  (h->chrom && sameString(h->chrom,chromName)))
+                {
+                char position[1024];
+                safef(position, sizeof position, "%s:%ld-%ld", h->chrom, h->chromStart, h->chromEnd);
+                char *newPosition = undisguisePosition(position); // UN-DISGUISE VMODE
+                if (startsWith("virt:", newPosition))
+                    {
+                    parseVPosition(newPosition, &h->chrom, &h->chromStart, &h->chromEnd);
+                    }
+                }	    
             }
 
-        hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
+        if ((h->db && sameString(h->db, database))
+        &&  (h->chrom && sameString(h->chrom,virtChromName))
+        &&  (h->chromEnd != 0)
+        &&  (h->chromStart <= virtWinEnd && h->chromEnd >= virtWinStart))
+            {
+
+            h->chromStart = max(h->chromStart, virtWinStart);
+            h->chromEnd = min(h->chromEnd, virtWinEnd);
+            double pixelsPerBase = (double)fullInsideWidth/(virtWinEnd - virtWinStart);
+            int startPixels = pixelsPerBase * (h->chromStart - virtWinStart); // floor
+            if (startPixels < 0)
+                startPixels *= -1;  // reverse complement
+            int width = pixelsPerBase * (double)(h->chromEnd - h->chromStart) + 0.5; // round up
+            if (width < 2)
+                width = 2;
+
+            // Default color to light blue, but if setting has color, use it.
+            unsigned int hexColor = MAKECOLOR_32(170, 255, 255);
+            if (h->hexColor)
+                {
+                long rgb = strtol(h->hexColor,NULL,16); // Big and little Endians
+                hexColor = MAKECOLOR_32( ((rgb>>16)&0xff), ((rgb>>8)&0xff), (rgb&0xff) );
+                }
+
+            hvGfxBox(hvg, fullInsideX + startPixels, 0, width, imagePixelHeight, hexColor);
+            }
         }
     }
 }
@@ -4013,26 +4028,6 @@ if (bedPadding > 0)
 return TRUE;
 }
 
-// TODO OBSOLETED by lastDbPosCart
-boolean restoreCartSetting(char *cartSetting)
-/* Restore cart setting from var=val setting. */
-{  
-if (!cartSetting)
-    return FALSE;
-char *eq = strchr(cartSetting,'=');
-if (!eq)  // nothing to do
-    return FALSE;
-*eq = 0;
-char *cartVar = cartSetting;
-char *cartVal = eq+1;
-if (sameString(cartVal, "(null)"))
-    cartRemove(cart, cartVar);
-else
-    cartSetString(cart, cartVar, cartVal);
-*eq = '=';
-return TRUE;
-}
-
 void restoreSavedVirtPosition()
 /* Set state from lastDbPosCart. 
  * This involves parsing the extra state that was saved.*/
@@ -4077,10 +4072,6 @@ if (saveBoth)
 boolean initRegionList()
 /* initialize window list */
 {
-
-// TODO GALT
-//  update, well by 2015-04-28 it seems like we are not going to support windows from other assemblies
-// due to difficulties with tracklist.
 
 struct virtRegion *v;
 virtRegionList = NULL;
@@ -4236,9 +4227,6 @@ else if (sameString(virtModeType, "demo1"))
 
     AllocVar(v2);
     //chr22:33,031,597-33,041,570
-    //window2->organism  = "Mouse";
-    //window2->database  = "mm10";
-    //window2->database  = "hg38";
     v2->chrom = "chr22";
     v2->start = 33031597 - 1;
     v2->end = 33041570;
@@ -4692,7 +4680,7 @@ initColors(hvg);
 hPrintf("<MAP id='map' Name=%s>\n", mapName);
 
 if (theImgBox == NULL)  // imageV2 highlighting is done by javascript. This does pdf and view-image highlight
-    highlightRegion(cart, hvg, imagePixelHeight);
+    highlightRegions(cart, hvg, imagePixelHeight);
 
 for (window=windows; window; window=window->next)
     {
@@ -6798,7 +6786,6 @@ return (startsWithWord("bigWig"  , track->tdb->type)
      || startsWithWord("bigPsl"  , track->tdb->type)
      || startsWithWord("bigGenePred"  , track->tdb->type)
      || startsWithWord("bigChain"  , track->tdb->type)
-     || startsWithWord("bigMaf"  , track->tdb->type)
      || startsWithWord("bam"     , track->tdb->type)
      || startsWithWord("halSnake", track->tdb->type)
      || startsWithWord("vcfTabix", track->tdb->type))
@@ -8798,12 +8785,13 @@ else
 
 	// For now, do this manually here:
 	// sets window to full genome size, which for these demos should be small except for allChroms
-	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly") || sameString(virtModeType, "kcGenes")) // create 1k window near middle of vchrom
+	if (sameString(virtModeType, "exonMostly") || sameString(virtModeType, "geneMostly")
+       	 || sameString(virtModeType, "customUrl") || sameString(virtModeType, "kcGenes"))
 	    {
 	    // trying to find best vchrom location corresponding to chromName, winStart, winEnd);
 	    // try to find the nearest match
 	    if (!(chromName && findNearestVirtMatch(chromName, winStart, winEnd, findNearest, &virtWinStart, &virtWinEnd))) 
-		{
+		{ // create 1k window near middle of vchrom
 		warn("Unable to find any region near the position on the chromosome in the multi-regions. Now using middle of view.");
 		virtWinStart = virtSeqBaseCount / 2;
 		virtWinEnd = virtWinStart + 1000;
@@ -8819,10 +8807,12 @@ else
 	    virtMode = TRUE;
 	    }
 	else if (!sameString(virtModeType, "default"))
-	    {
+	    { // try to set view to entire vchrom
 	    virtWinStart = 0;
 	    virtWinEnd = virtSeqBaseCount;
 	    virtMode = TRUE;
+	    // TODO what if the full-vchrom view has "too many windows"
+	    // check if virtRegionCount > 4000?
 	    }
 
 	remapHighlightPos(); 
@@ -9418,11 +9408,12 @@ hPrintf("Mousetrap.bind('d v', function() { window.location.href='%s?%s=%s&virtM
            hgTracksName(), cartSessionVarName(), cartSessionId(cart));
 
 // links to a few tools
-hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink').click()});\n");
-hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink').click()});\n");
+hPrintf("Mousetrap.bind('t b', function() { $('#blatMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('t i', function() { $('#ispMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('t t', function() { $('#tableBrowserMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('c r', function() { $('#cartResetMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('s s', function() { $('#sessionsMenuLink')[0].click()});\n");
+hPrintf("Mousetrap.bind('p s', function() { $('#publicSessionsMenuLink')[0].click()});\n");
 
 // also add an entry to the help menu that shows the keyboard shortcut help dialog
 hPrintf("$(document).ready(addKeyboardHelpEntries);");

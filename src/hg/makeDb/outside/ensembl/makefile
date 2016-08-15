@@ -1,3 +1,4 @@
+kentSrc = ../../../..
 include ../../../../inc/common.mk
 
 ensScripts = ensGeneToGenePred ensemblDbImport ensemblDownload ensemblGetAll ensemblSuperfamily ensemblVegaMap ensemblExport geneCheckAndLoad hgLoadEnsembl ensemblLoad mkRandomGoldLift mkRandomNTLift

@@ -1,0 +1,654 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the colAng1
+# Organism name:  Colobus angolensis palliatus (Angolan colobus)
+
+#  Must find the photograph first, can not continue until finding
+#  the photograph.
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2016-06-13 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/colAng1
+cd ~/kent/src/hg/makeDb/doc/colAng1
+
+sed -e 's/orcOrc/colAng/g; s/OrcOrc/ColAng/g; s/DONE/TBD/g;' ../orcOrc1/initialBuild.txt > initialBuild.txt
+
+
+mkdir -p /hive/data/genomes/colAng1/refseq
+cd /hive/data/genomes/colAng1/refseq
+
+rsync -L -a -P \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/vertebrate_mammalian/Colobus_angolensis/all_assembly_versions/GCF_000951035.1_Cang.pa_1.0/ ./
+
+# need to find the photo, check NCBI 'genome' page to see what photo they
+# display, if they do not have one, can usually find a public domain photo
+# in wikimedia commons: https://commons.wikimedia.org/wiki/Main_Page
+
+mkdir /hive/data/genomes/colAng1/photo
+cd /hive/data/genomes/colAng1/photo
+
+# this photo from: Eric Kilby  https://www.flickr.com/people/8749778@N06
+#  https://commons.wikimedia.org/wiki/File:Colobus_Monkey_Seated_(14393774092).jpg
+
+wget --timestamping \
+   "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Colobus_Monkey_Seated_%2814393774092%29.jpg/1024px-Colobus_Monkey_Seated_%2814393774092%29.jpg"
+
+# cropped that photo with ImageMagic to eliminate some of the surrounding
+#  border, then
+
+convert -quality 80 -geometry 400x300 \
+        crop_colobus.jpg Colobus_angolensis_palliatus.jpg
+
+# check this Colobus_angolensis_palliatus.jpg into
+#    ~/kent/src/hg/htdocs/images/
+# and copy that to /usr/local/apache/htdocs/images/
+
+# construct the required photoReference.txt
+cd /hive/data/genomes/colAng1
+printf "photoCreditURL https://www.flickr.com/photos/ekilby/14393774092/
+photoCreditName Eric Kilby (flickr)\n" > photoReference.txt
+
+
+# this information is from the top of 
+#    refseq/*_assembly_report.txt
+#    (aka: refseq/GCF_000951035.1_Cang.pa_1.0_assembly_report.txt)
+
+# Assembly name:  Cang.pa_1.0
+# Organism name:  Colobus angolensis palliatus (Angolan colobus)
+# Isolate:  OR3802
+# Sex:  female
+# Taxid:          336983
+# BioSample:      SAMN03121814
+# BioProject:     PRJNA279495
+# Submitter:      Baylor College of Medicine
+# Date:           2015-3-12
+# Assembly type:  haploid
+# Release type:   major
+# Assembly level: Scaffold
+# Genome representation: full
+# WGS project:    JYKR01
+# Assembly method: AllPathsLG v. 48744; Atlas Link v. 1.1; Atlas GapFill v.
+# 2.2
+# Genome coverage: 86.8x
+# Sequencing technology: Illumina
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000951035.1
+# RefSeq assembly accession: GCF_000951035.1
+# RefSeq assembly and GenBank assemblies identical: yes
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000951065.1      GCF_000951065.1 Primary Assembly
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2016-06-15)
+    cd /hive/data/genomes/colAng1
+    ~/kent/src/hg/utils/automation/prepConfig.pl colAng1 mammal \
+      oldWorldMonkeys ./refseq/*_assembly_report.txt > colAng1.config.ra
+# going to need a mitoAcc ?
+    # edit result to add note about mito sequence
+
+    # verify it looks sane
+    cat colAng1.config.ra
+# config parameters for makeGenomeDb.pl:
+db colAng1
+clade mammal
+genomeCladePriority 35
+scientificName Colobus angolensis palliatus
+commonName Angolan colobus
+assemblyDate Mar. 2015
+assemblyLabel Baylor College of Medicine
+assemblyShortLabel Cang.pa_1.0
+orderKey 1505
+# there is a mitochondrial sequence, but is indicated in genbank as
+# unconfirmed KT626001.1
+mitoAcc none
+fastaFiles /hive/data/genomes/colAng1/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/colAng1/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir oldWorldMonkeys
+photoCreditURL https://www.flickr.com/photos/ekilby/14393774092/
+photoCreditName Eric Kilby (flickr)
+ncbiGenomeId 36539
+ncbiAssemblyId 311101
+ncbiAssemblyName Cang.pa_1.0
+ncbiBioProject 279495
+ncbiBioSample SAMN03121814
+genBankAccessionID GCF_000951035.1
+taxId 336983
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-06-15 - Hiram)
+
+    mkdir /hive/data/genomes/colAng1/ucsc
+    cd /hive/data/genomes/colAng1/ucsc
+    # measure what is in the refseq release:
+    faSize ../refseq/*0_genomic.fna.gz
+# 2970124662 bases (290151526 N's 2679973136 real 1742869490 upper
+#    937103646 lower) in 13124 sequences in 1 files
+# Total size: mean 226312.5 sd 1445798.8 min 1000 (NW_012122403.1)
+#    max 35326507 (NW_012118487.1) median 3162
+# %31.55 masked total, %34.97 masked real
+
+    # check for duplicate sequences:
+
+    time faToTwoBit -noMask ../refseq/*0_genomic.fna.gz refseq.2bit
+    #  real    1m13.425s
+
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    # no mito sequence to use, otherwise would fix it up here
+
+    # since this is all unplaced scaffold sequence, merely fixup the .1 names
+    # simple conversion of names .1 to v1
+    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/AGP/unplaced.scaf.agp.gz \
+        | sed -e 's/.1\t/v1\t/;' > ucsc.agp
+
+    zcat ../refseq/*_assembly_structure/Primary_Assembly/unplaced_scaffolds/FASTA/unplaced.scaf.fna.gz \
+        | sed -e 's/.1 Colobus.*/v1/;' | gzip > ucsc.fa.gz
+
+    # verify correspondence
+    time faToTwoBit *.fa.gz test.2bit
+    # real    1m19.049s
+
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail
+    # All AGP and FASTA entries agree - both files are valid
+
+    # no longer need these 2bit files
+    rm test.2bit refseq.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-06-15 - Hiram)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/colAng1
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -stop=seq colAng1.config.ra) > seq.log 2>&1
+    # real    2m18.688s
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         -continue=agp -stop=agp colAng1.config.ra) > agp.log 2>&1
+    # real    0m21.077s
+    # then finish it off:
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev \
+       -fileServer=hgwdev -continue=db colAng1.config.ra) > db.log 2>&1
+    # real    21m48.313s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-06-15 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/colAng1/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/colAng1/colAng1.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku colAng1) > do.log 2>&1
+    # real    6m43.150s
+
+    cat fb.colAng1.cpgIslandExtUnmasked.txt
+    # 24367499 bases of 2679973137 (0.909%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-06-15 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/cytoBand
+    cd /hive/data/genomes/colAng1/bed/cytoBand
+    makeCytoBandIdeo.csh colAng1
+
+#############################################################################
+# ucscToINSDC table/track (DONE - 2016-06-15 - Hiram)
+    # the sequence here is working for a 'refseq' assembly *without* a chrM
+    # situation may be specific depending upon what is available in the assembly
+
+    mkdir /hive/data/genomes/colAng1/bed/ucscToINSDC
+    cd /hive/data/genomes/colAng1/bed/ucscToINSDC
+
+    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
+        ../../refseq/GCF_*structure/Primary_Assembly
+    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
+
+    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
+      | awk '{printf "%s\t%s\n", $2, $1}' \
+         | sort > insdc.refseq.txt
+
+    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
+         | sort > name.coordinate.tab
+
+    # the tr commands avoid the problem of trying to use the -t argument
+    # to the join command which doesn't accept -t'\t' but instead has
+    # to use the unseen/can not copy command ctrl-v i
+    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
+       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
+           > ucscToINSDC.bed
+
+    # should be same line counts throughout:
+    wc -l *
+    #  13124 insdc.refseq.txt
+    #  13124 insdcToUcsc.txt
+    #  13124 name.coordinate.tab
+    #  13124 ucscToINSDC.bed
+    #  13124 ucscToINSDC.txt
+
+    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+         | hgLoadSqlTab colAng1 ucscToINSDC stdin ucscToINSDC.bed
+    checkTableCoords colAng1
+    # should cover %100 entirely:
+    featureBits -countGaps colAng1 ucscToINSDC
+    # 2970124662 bases of 2970124662 (100.000%) in intersection
+
+    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
+      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
+        | cut -f1-4 > ucscToRefSeq.bed
+    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
+    # 14
+    # use the 14 in this sed
+    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
+       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
+    hgLoadSqlTab colAng1 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
+
+    checkTableCoords  colAng1 -table=ucscToRefSeq
+    # should cover %100 all bases:
+    featureBits -countGaps colAng1 ucscToRefSeq
+    # 2970124662 bases of 2970124662 (100.000%) in intersection
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2016-06-02 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/whale/colAng1
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" colAng1 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+# 80099 ANOL.1
+#     1 NC_.1
+
+    # implies a search rule of: '[ACLNO_]+[0-9]+(\.[0-9]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" colAng1 | wc -l
+    # 80100
+
+    hgsql -N -e "select frag from gold;" colAng1 \
+       | egrep -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 80100
+
+    hgsql -N -e "select frag from gold;" colAng1 \
+       | egrep -v -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/colAng1/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [ACLNO_]+[0-9]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2016-06-15 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/repeatMasker
+    cd /hive/data/genomes/colAng1/bed/repeatMasker
+    time  (doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku colAng1) > do.log 2>&1
+XXX - running - Wed Jun 15 11:15:23 PDT 2016
+    # real    971m47.129s
+
+
+    cat faSize.rmsk.txt
+# 2970124662 bases (290151526 N's 2679973136 real 1348602558 upper
+#    1331370578 lower) in 13124 sequences in 1 files
+# Total size: mean 226312.5 sd 1445798.8 min 1000 (NW_012122403v1)
+#    max 35326507 (NW_012118487v1) median 3162
+# %44.83 masked total, %49.68 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps colAng1 rmsk
+    # 1333003423 bases of 2970124662 (44.880%) in intersection
+    # real    0m51.170s
+
+    # why is it different than the faSize above ?
+    # because rmsk masks out some N's as well as bases, the faSize count above
+    #   separates out the N's from the bases, it doesn't show lower case N's
+
+    # with high contig count assemblies, faster way to get a similar result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' colAng1 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 1333003423.000000
+    # real    0m37.908s
+
+##########################################################################
+# running simple repeat (DONE - 2016-06-15 - Hiram)
+
+    mkdir /hive/data/genomes/colAng1/bed/simpleRepeat
+    cd /hive/data/genomes/colAng1/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        colAng1) > do.log 2>&1
+    # real    6m4.160s
+
+    cat fb.simpleRepeat
+    # 61072817 bases of 2679973137 (2.279%) in intersection
+
+    # add to rmsk after it is done:
+    cd /hive/data/genomes/colAng1
+    twoBitMask colAng1.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed colAng1.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa colAng1.2bit stdout | faSize stdin > faSize.colAng1.2bit.txt
+    cat faSize.colAng1.2bit.txt
+# 2970124662 bases (290151526 N's 2679973136 real 1347488473 upper
+#    1332484663 # lower) in 13124 sequences in 1 files
+# Total size: mean 226312.5 sd 1445798.8 min 1000 (NW_012122403v1)
+#    max 35326507 (NW_012118487v1) median 3162
+# %44.86 masked total, %49.72 masked real
+
+    rm /gbdb/colAng1/colAng1.2bit
+    ln -s `pwd`/colAng1.2bit /gbdb/colAng1/colAng1.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-06-17 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/colAng1/bed/microsat
+    cd /cluster/data/colAng1/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed colAng1 microsat microsat.bed
+    # Read 20365 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-06-17 - Hiram)
+
+    mkdir /hive/data/genomes/colAng1/bed/windowMasker
+    cd /hive/data/genomes/colAng1/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev colAng1) > do.log 2>&1
+    #  real    255m31.780s
+
+    # Masking statistics
+    cat faSize.colAng1.cleanWMSdust.txt
+# 2970124662 bases (290151526 N's 2679973136 real 1728634448 upper
+#    951338688 lower) in 13124 sequences in 1 files
+# Total size: mean 226312.5 sd 1445798.8 min 1000 (NW_012122403v1)
+#    max 35326507 (NW_012118487v1) median 3162
+# %32.03 masked total, %35.50 masked real
+
+    cat fb.colAng1.rmsk.windowmaskerSdust.txt
+    # 726653964 bases of 2970124662 (24.465%) in intersection
+
+#########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-06-17 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/idKeys
+    cd /hive/data/genomes/colAng1/bed/idKeys
+
+    time (doIdKeys.pl -buildDir=`pwd`  colAng1) > do.log 2>&1
+    # real    12m32.106s
+
+    cat colAng1.keySignature.txt
+    #   d75c00e0e61c84d9ac35edcf1437d4f4
+
+##########################################################################
+# ncbiRefSeq - (DONE - 2016-06-17 - Hiram)
+    # must have previously run idKeys
+    mkdir /hive/data/genomes/colAng1/bed/ncbiRefSeq
+    cd /hive/data/genomes/colAng1/bed/ncbiRefSeq
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-stop=download \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Colobus_angolensis \
+          GCF_000951035.1_Cang.pa_1.0 colAng1) > download.log 2>&1
+    # real    14m38.791s
+    # lost the download.log
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=process -stop=process \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Colobus_angolensis \
+          GCF_000951035.1_Cang.pa_1.0 colAng1) > process.log 2>&1
+    # real    2m27.949s
+
+    time (~/kent/src/hg/utils/automation/doNcbiRefSeq.pl \
+       -buildDir=`pwd` -bigClusterHub=ku -dbHost=hgwdev \
+-continue=load -stop=load \
+      -fileServer=hgwdev -smallClusterHub=ku -workhorse=hgwdev \
+        refseq vertebrate_mammalian Colobus_angolensis \
+          GCF_000951035.1_Cang.pa_1.0 colAng1) > load.log 2>&1
+    # real    0m23.690s
+
+    featureBits -countGaps colAng1 ncbiRefSeq
+# 64656476 bases of 2970124662 (2.177%) in intersection
+
+##########################################################################
+# cpgIslands - (DONE - 2016-06-17 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/cpgIslands
+    cd /hive/data/genomes/colAng1/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku colAng1) > do.log 2>&1
+    #   real    6m59.048s
+
+    cat fb.colAng1.cpgIslandExt.txt
+    # 14582855 bases of 2679973137 (0.544%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-06-17 - Hiram)
+    mkdir /hive/data/genomes/colAng1/bed/genscan
+    cd /hive/data/genomes/colAng1/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku colAng1) > do.log 2>&1
+    # real    32m12.877s
+
+    cat fb.colAng1.genscan.txt
+    # 49704578 bases of 2679973137 (1.855%) in intersection
+
+    cat fb.colAng1.genscanSubopt.txt
+    # 51121942 bases of 2679973137 (1.908%) in intersection
+
+########################################################################
+# Create kluster run files (DONE - 2016-06-17 - Hiram)
+
+    cd /hive/data/genomes/colAng1
+    # numerator is colAng1 gapless bases "real" as reported by:
+    head -1 faSize.colAng1.2bit.txt
+# 2970124662 bases (290151526 N's 2679973136 real 1347488473 upper 1332484663 lower) in 13124 sequences in 1 files
+
+    # if there were lots of randoms and haplotypes:
+    # featureBits -noRandom -noHap colAng1 gap
+    # 290151525 bases of 2679973137 (10.827%) in intersection
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 2679973136 / 2861349177 \) \* 1024
+    #  ( 2679973136 / 2861349177 ) * 1024 = 959.090388
+
+    # ==> use -repMatch=900 according to size scaled down from 1024 for human.
+    #   and rounded down to nearest 50
+    blat colAng1.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/colAng1.11.ooc \
+        -repMatch=900
+    #   Wrote 29536 overused 11-mers to jkStuff/colAng1.11.ooc
+
+
+    # there are no non-bridged gaps
+    hgsql -e 'select count(*) from gap;' colAng1
+# +----------+
+# | count(*) |
+# +----------+
+# |   184000 |
+# +----------+
+
+    hgsql -e 'select count(*) from gap where bridge="no";' colAng1
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    # if there were non-bridged gaps, make up a nonBridged.lft file
+
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' colAng1 \
+#         | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#     gapToLift -verbose=2 -minGap=100 colAng1 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (TBD - 2016-06-02 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism     mrnaCnt estCnt  refSeqCnt
+    # Orcinus orca    26      0       20
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add colAng1 just after balAcu1
+
+# colAng1 (killer whale)
+colAng1.serverGenome = /hive/data/genomes/colAng1/colAng1.2bit
+colAng1.clusterGenome = /hive/data/genomes/colAng1/colAng1.2bit
+colAng1.ooc = /hive/data/genomes/colAng1/jkStuff/colAng1.11.ooc
+colAng1.lift = no
+colAng1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+colAng1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+colAng1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+colAng1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+colAng1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+colAng1.refseq.mrna.native.load = no
+colAng1.refseq.mrna.xeno.load = yes
+colAng1.genbank.mrna.xeno.load = no
+colAng1.genbank.est.native.load = no
+colAng1.genbank.mrna.native.load = no
+colAng1.genbank.mrna.native.loadDesc = no
+colAng1.downloadDir = colAng1
+colAng1.perChromTables = no
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+colAng1.genbank.est.native.load = no
+
+    git commit -m "Added colAng - Orcinus orca (killer whale) refs #17425" etc/genbank.conf src/lib/gbGenome.c
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+    make install-server
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial colAng1
+    # logFile: var/build/logs/2016.06.01-11:32:53.colAng1.initalign.log
+    #   real    167m43.804s
+
+     tail -2 var/build/logs/2016.06.01-11:32:53.colAng1.initalign.log
+# hgwdev 2016.06.01-14:18:58 colAng1.initalign: Succeeded: colAng1
+# hgwdev 2016.06.01-14:20:36 colAng1.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.colAng1
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad colAng1
+    # logFile: var/dbload/hgwdev/logs/2016.06.02-10:36:16.colAng1.dbload.log
+    # real    5m35.289s
+    tail -1 var/dbload/hgwdev/logs/2016.06.02-10:36:16.colAng1.dbload.log
+# hgwdev 2016.06.02-10:41:51 colAng1.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add colAng1 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added colAng1 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (TBD - 2016-06-01 - Hiram)
+
+    mkdir /hive/data/genomes/colAng1/bed/augustus
+    cd /hive/data/genomes/colAng1/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev \
+           -workhorse=hgwdev colAng1) > do.log 2>&1
+    # real    153m58.477s
+
+    cat fb.colAng1.augustusGene.txt
+    # 47282944 bases of 2249582125 (2.102%) in intersection
+
+#########################################################################
+#  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("colAng1", "blat1a", "17862", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("colAng1", "blat1a", "17863", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## default position to casein beta (CSN2) gene (milk production)
+#                                 (TBD - 2016-06-02 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="NW_004438441v1:339887-349875"
+	where name="colAng1";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=colAng1 -tableCoverage all.joiner
+    joinerCheck -database=colAng1 -times all.joiner
+    joinerCheck -database=colAng1 -keys all.joiner
+
+    cd /hive/data/genomes/colAng1
+    time (makeDownloads.pl colAng1) > downloads.log 2>&1
+    #  real    15m52.648s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/colAng1/pushQ
+    cd /hive/data/genomes/colAng1/pushQ
+    time makePushQSql.pl colAng1 > colAng1.pushQ.sql 2> stderr.out
+    #   real    11m56.179s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: hgwdev does not have /gbdb/colAng1/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/colAng1/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/colAng1/bbi/quality.bw
+    # WARNING: colAng1 does not have seq
+    # WARNING: colAng1 does not have extFile
+
+    #   copy it to hgwbeta
+    scp -p colAng1.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/colAng1.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

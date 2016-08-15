@@ -8,8 +8,8 @@ priority 10
 
 name omim
 shortLabel OMIM
-tables refLink kgXref
-idSql select refLink.omimId from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0
+tables hgFixed.refLink kgXref
+idSql select hgFixed.refLink.omimId from kgXref,hgFixed.refLink where kgID = '%s' and kgXref.refseq = hgFixed.refLink.mrnaAcc and hgFixed.refLink.omimId != 0
 url http://omim.org/%s
 priority 10
 
@@ -17,7 +17,7 @@ name huge
 shortLabel HuGE
 tables huge
 idSql select huge.geneSymbol, l.value from kgXref, huge, knownToLocusLink l where kgID = '%s' and kgXref.geneSymbol = huge.geneSymbol and kgID=l.name
-url http://hugenavigator.net/HuGENavigator/searchSummary.do?firstQuery=%s&publitSearchType=now&whichContinue=firststart&check=n&dbType=publit&Mysubmit=go
+url https://phgkb.cdc.gov/HuGENavigator/searchSummary.do?firstQuery=%s&action=search&Mysubmit=Search
 priority 10
 
 name geneTests

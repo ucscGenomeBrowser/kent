@@ -1,6 +1,7 @@
-36:
+37:
      o (in 36x1) Fixed problem with -fastMap option that made it put in gaps in the
        allignment sometimes when a short mismatch would be a better choice.
+     o (in 36x2) Fixed problem with -maxIntron set to non-default value on protein query.
 
 36:
      o (in 35x1) added repMatch default values for tileSizes 16 to 18 in genoFind.c

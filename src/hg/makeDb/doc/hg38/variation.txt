@@ -994,46 +994,46 @@ EOF
 
 
 ##############################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/18/15 angie)
-# Redmine #15767
-# previously done 11/07/14 #14188
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# Redmine #17351
+# previously done 11/07/14 #14188, 8/18/15 #15767
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg38/bed/dgv/$today
     cd /hive/data/genomes/hg38/bed/dgv/$today
-    set release = 2015-07-23
+    set release = 2016-05-15
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh38_hg38*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription       genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
-#1860756 CNV     deletion
-# 151324 CNV     duplication
-# 854502 CNV     gain
-#   8269 CNV     gain+loss
-#  73351 CNV     insertion
-#3433815 CNV     loss
+#1921790 CNV     deletion
+# 163085 CNV     duplication
+# 859255 CNV     gain
+#   8274 CNV     gain+loss
+#  75467 CNV     insertion
+#3452323 CNV     loss
 #  48428 CNV     mobile element insertion
 #   9063 CNV     novel sequence insertion
-#   7827 CNV     tandem duplication
-#    487 OTHER   complex
-#  28963 OTHER   inversion
+#  12235 CNV     tandem duplication
+#    493 OTHER   complex
+#  30556 OTHER   inversion
 #   3696 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
     cut -f 5,6 GRCh38_hg38_variants_$release.txt | sort | uniq -c | head -100
-#  99688 CNV     deletion
-#  21081 CNV     duplication
-#  46052 CNV     gain
-#   6709 CNV     gain+loss
-#  25566 CNV     insertion
-# 121066 CNV     loss
+# 132721 CNV     deletion
+#  29519 CNV     duplication
+#  47073 CNV     gain
+#   6867 CNV     gain+loss
+#  27553 CNV     insertion
+# 123401 CNV     loss
 #   4156 CNV     mobile element insertion
 #   8973 CNV     novel sequence insertion
-#    517 CNV     tandem duplication
-#    456 OTHER   complex
-#   1375 OTHER   inversion
+#   3693 CNV     tandem duplication
+#    568 OTHER   complex
+#   2590 OTHER   inversion
 #   1992 OTHER   sequence alteration
 #      1 varianttype     variantsubtype
 
@@ -1043,10 +1043,10 @@ EOF
       GRCh38_hg38_variants_$release.txt > dgvMerged.bed
     hgLoadBed hg38 dgvSupporting dgvSupporting.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 6480481 elements of size 22 from dgvSupporting.bed
+#Read 6584665 elements of size 22 from dgvSupporting.bed
     hgLoadBed hg38 dgvMerged dgvMerged.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgvPlus.sql -renameSqlTable -tab
-#Read 337631 elements of size 22 from dgvMerged.bed
+#Read 389106 elements of size 22 from dgvMerged.bed
     rm bed.tab && gzip *.{txt,bed} &
 
 
@@ -1418,6 +1418,102 @@ EOF
 # *** Steps were performed in /hive/data/genomes/hg38/snp146Mask.2016-03-11
     cd /hive/data/genomes/hg38/snp146Mask.2016-03-11
     ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 146 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# DBSNP B147 / SNP147 (DONE 7/30/16 angie)
+# Initially done 7/1/16.  Updated 7/28/16 to fix func code bug (see below).
+    # Redmine #17209
+    mkdir -p /hive/data/outside/dbSNP/147/human_hg38
+    cd /hive/data/outside/dbSNP/147/human_hg38
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/organisms/
+    # to find the subdir name to use as orgDir below (human_9606_b147_GRCh38p2 in this case).
+    # Go to that subdirectory, then to database/organism_data/ and look for files
+    # whose names start with b147_* and may or may not end with a suffix that identifies
+    # the build assembly version or some annotation version.  If there is a suffix shared
+    # by all b147_* files, add that to config.ra as the "buildAssembly".
+    # Since this build is on GRCh38.p2 like b144 above, use the files usingSuggested.lft
+    # and ignoreContig constructed for b144.
+    cat > config.ra <<EOF
+db hg38
+orgDir human_9606_b147_GRCh38p2
+build 147
+buildAssembly 107
+liftUp ../../144/human_hg38/usingSuggested.lft
+refAssemblyLabel GRCh38.p2
+ignoreDbSnpContigsFile ../../144/human_hg38/ignoreContig
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >>& do.log & tail -f do.log
+
+    # While that's running, compare rs IDs in rs_fasta with b147_SNPContigLoc_107 to see
+    # which IDs (if any) were omitted from the rs_fasta dump.
+    zcat rs_fasta/rs*.fas.gz \
+    | perl -wne 'if (/^>/) { s/^>gnl\|dbSNP\|(rs\d+) .*/$1/ || die; print; }' \
+    | sort -u > rsFastaIds.txt
+    zcat data/b147_SNPContigLoc_107.bcp.gz \
+    | awk '{print "rs" $2;}' \
+    | sort -u > contigLocIds.txt
+    wc -l rsFastaIds.txt contigLocIds.txt
+# 153950629 rsFastaIds.txt
+# 152450925 contigLocIds.txt
+    comm -13 rsFastaIds.txt contigLocIds.txt > missingFromRsFasta.txt
+    wc -l missingFromRsFasta.txt
+#1 missingFromRsFasta.txt
+    cat missingFromRsFasta.txt
+#rs869025304
+    # Sequence for rs869025304 was added to the shared file rs_fasta/rs_chBatchQuery.fas.gz --
+    # see ../hg19.txt.
+    # Now start over from addToDbSnp...
+    mkdir -p `cat workingDir`
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue addToDbSnp >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+    # 7/28/16 -- Chris Lee found some NR_'s and XR_'s in snp147CodingDbSnp where they don't
+    # belong.  Turns out that dbSnp was assigning cds-indel to any deletion with length
+    # multiple of 3 that intersected an exon, whether the transcript was coding or not.
+    # Some affected variants will end up with both cds-indel and ncRNA because they hit
+    # both coding and noncoding transcripts.
+    # This does not affect ortho alleles or SNP-masked sequences.
+    # Fix the values in hg38snp147.b147_SNPContigLocusId_107 and rebuild from ucscFunc onwards.
+    # For rows in which dbSNP has assigned cds-indel (45) to a non-coding transcript (NR_ or
+    # XR_), assign ncRNA (30) instead.
+    cd /hive/data/outside/dbSNP/147/human_hg38
+    hgsql hg38snp147 -e 'update b147_SNPContigLocusId_107 set fxn_class = 30 \
+                           where fxn_class = 45 and mrna_acc like "_R\_%";'
+    # Comment out all of the parts of addToDbSnp.csh except for the part that creates ucscFunc
+    # and run the modified script.
+    mkdir -p `cat workingDir`
+    csh -efx ./addToDbSnp.csh >>& do.log & tail -f do.log
+    # Re-run the pipeline from bigJoin onward.
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra --continue bigJoin >>& do.log &
+    tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNP147 ORTHOLOGOUS ALLELES IN CHIMP, ORANG, MACAQUE (DONE 7/2/16 angie)
+    # Redmine #17209
+    screen -S ortho -t ortho
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg38/bed/snp147Ortho.2016-07-01
+    cd /hive/data/genomes/hg38/bed/snp147Ortho.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpOrthoAlleles.pl hg38 147 \
+      >>& do.log & tail -f do.log
+# *** All done!
+
+
+##############################################################################
+# SNPMASKED SEQUENCE FOR SNP147 (DONE 7/1/16 angie)
+    # Redmine #17209
+    screen -S mask -t mask
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 147 -debug
+# *** Steps were performed in /hive/data/genomes/hg38/snp147Mask.2016-07-01
+    cd /hive/data/genomes/hg38/snp147Mask.2016-07-01
+    ~/kent/src/hg/utils/automation/doDbSnpMaskSequence.pl hg38 147 \
       >>& do.log & tail -f do.log
 # *** All done!
 

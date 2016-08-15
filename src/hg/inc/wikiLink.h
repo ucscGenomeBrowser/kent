@@ -12,15 +12,9 @@
 #define CFG_WIKI_LOGGED_IN_COOKIE "wiki.loggedInCookie"
 #define CFG_WIKI_SESSION_COOKIE "wiki.sessionCookie"
 
-/* hg.conf login system parameter -- using non-wiki login system (hgLogin) if defined */
+/* hg.conf login system parameter -- using non-wiki login system if defined */ 
 #define CFG_LOGIN_SYSTEM_NAME "login.systemName"
-/* hg.conf optional cookie names to override default */
-#define CFG_LOGIN_IDKEY_COOKIE "login.tokenCookie"
-#define CFG_LOGIN_USER_NAME_COOKIE "login.userNameCookie"
-
-/* hg.conf central db parameters */
-#define CFG_CENTRAL_DOMAIN "central.domain"
-#define CFG_CENTRAL_COOKIE "central.cookie"
+#define CFG_LOGIN_USE_HTTPS "login.https"
 
 char *loginSystemName();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */
@@ -28,18 +22,8 @@ char *loginSystemName();
 boolean loginSystemEnabled();
 /* Return TRUE if login.systemName  parameter is defined in hg.conf . */
 
-struct slName *loginLoginUser(char *userName, uint idx);
-/* Return cookie strings to set for user so we'll recognize that user is logged in.
- * Call this after validating userName's password. */
-
-struct slName *loginLogoutUser();
-/* Return cookie strings to set (deleting the login cookies). */
-
-struct slName *loginValidateCookies();
-/* Return possibly empty list of cookie strings for the caller to set.
- * If login cookies are obsolete but (formerly) valid, the results sets updated cookies.
- * If login cookies are present but invalid, the result deletes/expires the cookies.
- * Otherwise returns NULL (no change to cookies). */
+boolean loginUseHttps();
+/* Return TRUE unless https is disabled in hg.conf. */
 
 char *wikiLinkHost();
 /* Return the wiki host specified in hg.conf, or NULL.  Allocd here. */

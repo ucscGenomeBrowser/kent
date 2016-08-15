@@ -176,6 +176,9 @@ login.browserName=UCSC Genome Browser Mirror
 login.browserAddr=http://127.0.0.1
 # signature written at the bottom of hgLogin system emails
 login.mailSignature=None
+# the browser login page by default uses https. This setting can be used to 
+# used to make it work over http (not recommended)
+#login.https=off
 
 # Credentials to access the local mysql server
 db.host=localhost
@@ -592,7 +595,8 @@ function installRedhat () {
     echo2 Installing EPEL, ghostscript, libpng
     waitKey
     # make sure we have and EPEL and ghostscript and rsync (not installed on vagrant boxes)
-    yum -y install epel-release ghostscript rsync
+    # imagemagick is required for the session gallery
+    yum -y install epel-release ghostscript rsync ImageMagick
 
     # centos 7 and fedora 20 do not provide libpng by default
     if ldconfig -p | grep libpng12.so > /dev/null; then
@@ -823,13 +827,9 @@ function installDebian ()
        touch /tmp/browserInstall.aptGetUpdateDone
     fi
 
-    # use dpkg to check if ghostscript is installed
-    if dpkg-query -W ghostscript 2>&1 | grep "no packages found" > /dev/null; then 
-        echo2
-        echo2 Installing ghostscript
-        waitKey
-        apt-get --assume-yes install ghostscript
-    fi
+    echo2 Installing ghostscript and imagemagick
+    waitKey
+    apt-get --assume-yes install ghostscript imagemagick
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1162,24 +1162,27 @@ function mysqlDbSetup ()
 # main function, installs the browser on Redhat/Debian and potentially even on OSX
 function installBrowser () 
 {
-    if [ ! -f $COMPLETEFLAG ]; then
-        echo '--------------------------------'
-        echo UCSC Genome Browser installation
-        echo '--------------------------------'
-        echo Detected OS: $OS/$DIST, $VER
-        echo 
-        echo This script will go through three steps:
-        echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
-        echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
-        echo "3 - optional: download genome assembly databases into mysql and /gbdb"
-        echo
-        echo This script will now install and configure Mysql and Apache if they are not yet installed. 
-        echo "Your distribution's package manager will be used for this."
-        echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
-        echo
-        echo This script will also deactivate SELinux if active and open port 80/http.
-        waitKey
+    if [ -f $COMPLETEFLAG ]; then
+        echo2 error: the file $COMPLETEFLAG exists. It seems that you have installed the browser already.
+        exit 246
     fi
+
+    echo '--------------------------------'
+    echo UCSC Genome Browser installation
+    echo '--------------------------------'
+    echo Detected OS: $OS/$DIST, $VER
+    echo 
+    echo This script will go through three steps:
+    echo "1 - setup apache and mysql, open port 80, deactivate SELinux"
+    echo "2 - copy CGI binaries into $CGIBINDIR, html files into HTDOCDIR"
+    echo "3 - optional: download genome assembly databases into mysql and /gbdb"
+    echo
+    echo This script will now install and configure Mysql and Apache if they are not yet installed. 
+    echo "Your distribution's package manager will be used for this."
+    echo If Mysql is not installed yet, it will be installed, secured and a root password defined.
+    echo
+    echo This script will also deactivate SELinux if active and open port 80/http.
+    waitKey
 
     # -----  OS - SPECIFIC part -----
     if [ ! -f $COMPLETEFLAG ]; then
@@ -1387,7 +1390,7 @@ function downloadGenomes
 
     showMyAddress
 
-    echo2 If have not downloaded the human hg38 assembly and you get an error message 
+    echo2 If you have not downloaded the human hg38 assembly and you get an error message 
     echo2 'Could not connect to database' on the genome selection page, then modify 
     echo2 the hg.conf file and change the organism, e.g. to Mouse if you downloaded mouse.
     echo2 with a command like "'nano /usr/local/apache/cgi-bin/hg.conf'"
@@ -1396,7 +1399,7 @@ function downloadGenomes
     echo2 If the assembly is not the default for this organism, you also have to change 
     echo2 the mysql table hgcentral.defaultDb to the correct database for your organism, 
     echo2 e.g. '"mm9"' for Mouse, with a command like
-    echo2 mysql hgcentral -e \''update defaultDb set name="mm10" where genome="Mouse"'\'
+    echo2 mysql hgcentral -e \''update defaultDb set name="mm9" where genome="Mouse"'\'
     echo2 
     echo2 Note that the installation assumes that emails cannot be sent from
     echo2 this machine. New Genome Browser user accounts will not receive confirmation emails.
@@ -1502,7 +1505,9 @@ function checkDownloadUdr ()
 function cleanTrash () 
 {
     echo2 Removing files older than one day in $TRASHDIR, not running on $TRASHDIR/ct
-    find $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
+    # -L = follow symlinks
+    # -atime +1 = files older than one day
+    find -L $TRASHDIR -not -path $TRASHDIR/ct/\* -and -type f -atime +1 -exec rm -f {} \;
 }
 
 function cgiUpdate ()
@@ -1585,7 +1590,7 @@ while getopts ":baut:hof" opt; do
       elif [[ "$val" == "main" ]]; then
           # gbCdnaInfo
           # SNP table selection explained in #17335
-          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
+          RSYNCOPTS="-m --include=grp.* --include=*gold* --include=augustusGene.* --include=chromInfo.* --include=cpgIslandExt.* --include=cpgIslandExtUnmasked.* --include=cytoBandIdeo.* --include=genscan.* --include=microsat.* --include=simpleRepeat.* --include=tableDescriptions.* --include=ucscToINSDC.* --include=windowmaskerSdust.*  --include=gold.* --include=chromInfo.* --include=trackDb* --include=hgFindSpec.* --include=gap.* --include=*.2bit --include=html/description.html --include=refGene* --include=refLink.* --include=wgEncodeGencode* --include=snp146Common* --include=snp130* --include=snp142Common* --include=snp128* --include=gencode* --include=rmsk* --include=*/ --exclude=*"
           ONLYGENOMES=1 # do not download hgFixed,go,proteome etc
       else
           echo "Unrecognized -t value. Please read the help message, by running bash $0 -h"
@@ -1689,7 +1694,7 @@ fi
 
 lastArg=${*: -1:1}
 if [[ "$#" -gt "1" && ( "${2:0:1}" == "-" ) || ( "${lastArg:0:1}" == "-" )  ]]; then
-  echo "Error: The options have to be specfied before the command, not after it."
+  echo "Error: The options have to be specified before the command, not after it."
   echo
   echo "$HELP_STR"
   exit 1
