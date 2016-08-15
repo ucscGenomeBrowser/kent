@@ -187,7 +187,10 @@ for (stanzaRef = stanzaList; stanzaRef != NULL; stanzaRef = stanzaRef->next)
     connector = "";
     for (tag = tagList; tag != NULL; tag = tag->next)
         {
-	dyStringPrintf(query, "%s\"%s\"", connector, (char*)tag->val);
+	dyStringAppend(query, connector);
+	dyStringAppendC(query, '"');
+	sqlDyAppendEscaped(query, (char*)tag->val);
+	dyStringAppendC(query, '"');
 	connector = ",";
 	}
     dyStringPrintf(query, ")");
