@@ -55,7 +55,7 @@ if (trimSize > minTrim)
 }
 
 void cdwFastqPolyFilter(char *inName, char *outName)
-/* cdwFastqPolyFilter - Filter out runs of poly-A from a fastq file.. */
+/* cdwFastqPolyFilter - Filter out runs of poly-A and poly-T from a fastq file.. */
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
