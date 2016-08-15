@@ -294,103 +294,114 @@ searchPriority 8
     cd /hive/data/genomes/ancCey1
     # numerator is ancCey1 gapless bases "real" as reported by:
     head -1 faSize.ancCey1.2bit.txt
-# 94076581 bases (7759220 N's 86317361 real 53341517 upper 32975844 lower)
-#    in 9780 sequences in 1 files
+# 313092710 bases (12191100 N's 300901610 real 234535031 upper 66366579 lower)
+# in 1736 sequences in 1 files
+
     # numerator is 'real' base count
     # denominator is hg19 gapless bases as reported by:
     #   featureBits -noRandom -noHap hg19 gap
     #     234344806 bases of 2861349177 (8.190%) in intersection
     # 1024 is threshold used for human -repMatch:
-    calc \( 86317361 / 2861349177 \) \* 1024
-    # ( 86317361 / 2861349177 ) * 1024 = 30.890665
+    calc \( 300901610 / 2861349177 \) \* 1024
+    # ( 300901610 / 2861349177 ) * 1024 = 107.684602
 
-    # ==> use -repMatch=100 since 30 or 50 masks too much
+    # ==> use -repMatch=150 since 100 makes quite a few (Wrote 13661 overused)
     cd /hive/data/genomes/ancCey1
-    time blat ancCey1.2bit \
-         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/ancCey1.11.ooc \
-        -repMatch=100
-    # Wrote 8527 overused 11-mers to jkStuff/ancCey1.11.ooc
-    #  real    0m1.846s
+    time blat ancCey1.2bit /dev/null /dev/null -tileSize=11 \
+       -makeOoc=jkStuff/ancCey1.11.ooc -repMatch=150
+    # Wrote 4676 overused 11-mers to jkStuff/ancCey1.11.ooc
+    #  real    0m4.930s
 
-    # there are a few non-bridged gaps
+    # there are no non-bridged gaps
     #   check non-bridged gaps to see what the typical size is:
-    hgsql -N -e 'select * from gap where bridge="no" order by size;' ancCey1 \
-       | ave -tableOut -col=7 stdin
+#    hgsql -N -e 'select * from gap where bridge="no" order by size;' ancCey1 \
+#       | ave -tableOut -col=7 stdin
 # min Q1 median Q3 max mean N sum stddev
 # 78831 79056 79362 79503 79503 79162.5 4 316650 320.991
 
     # note the minimum non-bridged gap size is 78,831
-    gapToLift -verbose=2 -minGap=50000 ancCey1 jkStuff/ancCey1.nonBridged.lft \
-         -bedFile=jkStuff/ancCey1.nonBridged.bed
+#    gapToLift -verbose=2 -minGap=50000 ancCey1 jkStuff/ancCey1.nonBridged.lft \
+#         -bedFile=jkStuff/ancCey1.nonBridged.bed
 
     # survey sizes:
     n50.pl chrom.sizes
 #       reading: chrom.sizes
-#       contig count: 9780, total size: 94076581, one half size: 47038290
+#       contig count: 1736, total size: 313092710, one half size: 156546355
 # cumulative    N50 count       contig  contig size
-# 46960459        61      Bmal_v3_scaffold61      194773
-# 47038290 one half size
-# 47151548        62      Bmal_v3_scaffold62      191089
+# 156517762       107     JARK01001443v1  669185
+# 156546355 one half size
+# 157186174       108     JARK01001444v1  668412
 
 #############################################################################
-# GENBANK AUTO UPDATE (TBD - 2015-06-09 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2015-08-26 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
     # /cluster/data/genbank/data/organism.lst shows:
     # #organism               mrnaCnt estCnt  refSeqCnt
-    #  Pristionchus pacificus  97      37470   0
+    #  Ancylostoma ceylanicum  40      10651   0
 
-    # edit etc/genbank.conf to add ancCey1 just before priPac1
+    # edit etc/genbank.conf to add ancCey1 just before priPac3
 
-# ancCey1 (P. pacificus)
+# ancCey1 (A. ceylanicum)
 ancCey1.serverGenome = /hive/data/genomes/ancCey1/ancCey1.2bit
 ancCey1.clusterGenome = /hive/data/genomes/ancCey1/ancCey1.2bit
 ancCey1.ooc = /hive/data/genomes/ancCey1/jkStuff/ancCey1.11.ooc
-ancCey1.lift = /hive/data/genomes/ancCey1/jkStuff/ancCey1.nonBridged.lft
-ancCey1.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
-ancCey1.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
-ancCey1.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
-ancCey1.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
-ancCey1.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
-ancCey1.refseq.mrna.native.load = yes
-ancCey1.refseq.mrna.xeno.load  = yes
-ancCey1.refseq.mrna.xeno.loadDesc = yes
-# DO NOT NEED genbank.mrna.xeno except for human, mouse
-ancCey1.genbank.mrna.xeno.load = no
-ancCey1.genbank.est.native.load = yes
-ancCey1.genbank.est.native.loadDesc = no
-ancCey1.downloadDir = ancCey1
+ancCey1.lift = no
+# the nematodes have small introns
+ancCey1.maxIntron = 10
 ancCey1.perChromTables = no
+ancCey1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+ancCey1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+ancCey1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+ancCey1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+ancCey1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+# refseq.mrna native and xeno are default yes
+# genbank.mrna and genbank.est native are default yes, the xeno is default no
+ancCey1.downloadDir = ancCey1
 
-    git commit -m "Added ancCey1 - P. pacificus refs #15209" etc/genbank.conf
+    git commit -m "Added ancCey1 - A. ceylanicum refs #15209" etc/genbank.conf
     git push
     # update /cluster/data/genbank/etc/:
     make etc-update
+
+    # adding ancCeyNames to src/lib/gbGenome.c
+    git pull
+    git commit -m "Added ancCeyNames - A. ceylanicum refs #15209" \
+       src/lib/gbGenome.c
+    git push
+    make install-server
 
     screen      #  control this business with a screen since it takes a while
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial ancCey1
-    # logFile: var/build/logs/2015.07.02-11:39:01.ancCey1.initalign.log
+    # logFile: var/build/logs/2015.08.26-14:37:55.ancCey1.initalign.log
     # real    91m20.362s
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.ancCey1
 
+    # to avoid failed load:
+    cd /cluster/data/genbank/data/aligned/refseq.71/ancCey1
+    # find file with illegal name:
+    grep AC_ */*xeno*
+    # daily.2015.0725/mrna.xeno.alidx:AC_000192       1       0
+    # remove that line from that file
+
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad ancCey1
-    # logFile: var/dbload/hgwdev/logs/2015.07.06-09:51:31.ancCey1.dbload.log
-    # real    18m34.687s
+    # logFile: var/dbload/hgwdev/logs/2015.09.08-10:45:06.ancCey1.dbload.log
+    # real    17m10.671s
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     git pull
     # add ancCey1 to:
     #   vi etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added ancCey1 - Pristionchus pacificus refs #15209" \
+    git commit -m "Added ancCey1 - Ancylostoma ceylanicum refs #15209" \
       etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update

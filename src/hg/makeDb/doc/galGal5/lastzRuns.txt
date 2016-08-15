@@ -133,3 +133,62 @@ TMPDIR=/dev/shm
     # real    83m20.585s
 
 #########################################################################
+# LASTZ chicken/galGal5 vs. Chinese softshell turtle - (DONE - 2016-05-10 - Hiram)
+    mkdir /hive/data/genomes/galGal5/bed/lastzPelSin1.2016-05-10
+    cd /hive/data/genomes/galGal5/bed/lastzPelSin1.2016-05-10
+
+    printf '# chicken vs. Chinese softshell turtle
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_M=254
+
+# TARGET: chicken galGal5
+SEQ1_DIR=/hive/data/genomes/galGal5/galGal5.2bit
+SEQ1_LEN=/hive/data/genomes/galGal5/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LIMIT=100
+SEQ1_LAP=10000
+
+# QUERY: Chinese softshell turtle pelSin1
+SEQ2_DIR=/hive/data/genomes/pelSin1/pelSin1.2bit
+SEQ2_LEN=/hive/data/genomes/pelSin1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/hive/data/genomes/galGal5/bed/lastzPelSin1.2016-05-10
+TMPDIR=/dev/shm
+' > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > do.log 2>&1
+    # real    137m44.965s
+
+    cat fb.galGal5.chainPelSin1Link.txt
+    #  269146297 bases of 1218501075 (22.088%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` galGal5 pelSin1) \
+          > rbest.log 2>&1 &
+    #  real    68m22.787s
+
+    # and for the swap:
+    mkdir /hive/data/genomes/pelSin1/bed/blastz.galGal5.swap
+    cd /hive/data/genomes/pelSin1/bed/blastz.galGal5.swap
+
+    time (doBlastzChainNet.pl -verbose=2 \
+      /hive/data/genomes/galGal5/bed/lastzPelSin1.2016-05-10/DEF \
+        -swap -chainMinScore=5000 -chainLinearGap=loose \
+          -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+            -syntenicNet) > swap.log 2>&1
+    #  real    38m32.377s
+
+    cat fb.pelSin1.chainGalGal5Link.txt
+    # 275358706 bases of 2106639384 (13.071%) in intersection
+
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` pelSin1 galGal5) \
+       > rbest.log 2>&1
+    # real    132m33.263s
+
+#########################################################################

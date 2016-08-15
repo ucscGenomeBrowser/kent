@@ -45,3 +45,58 @@ switch (termNumber)
     }
 return "ERROR"; // never get here
 }
+
+// Map term strings back to integer IDs:
+struct strId
+{
+    char *str;
+    int id;
+};
+
+static struct strId strToId[] =
+    {
+      { "regulatory_region_variant", regulatory_region_variant },
+      { "stop_retained_variant", stop_retained_variant },
+      { "exon_loss", exon_loss },
+      { "splice_acceptor_variant", splice_acceptor_variant },
+      { "splice_donor_variant", splice_donor_variant },
+      { "complex_transcript_variant", complex_transcript_variant },
+      { "stop_lost", stop_lost },
+      { "coding_sequence_variant", coding_sequence_variant },
+      { "initiator_codon_variant", initiator_codon_variant },
+      { "missense_variant", missense_variant },
+      { "stop_gained", stop_gained },
+      { "frameshift_variant", frameshift_variant },
+      { "nc_transcript_variant", nc_transcript_variant },
+      { "mature_miRNA_variant", mature_miRNA_variant },
+      { "NMD_transcript_variant", NMD_transcript_variant },
+      { "5_prime_UTR_variant", _5_prime_UTR_variant },
+      { "3_prime_UTR_variant", _3_prime_UTR_variant },
+      { "incomplete_terminal_codon_variant", incomplete_terminal_codon_variant },
+      { "intron_variant", intron_variant },
+      { "intergenic_variant", intergenic_variant },
+      { "splice_region_variant", splice_region_variant },
+      { "upstream_gene_variant", upstream_gene_variant },
+      { "downstream_gene_variant", downstream_gene_variant },
+      { "TF_binding_site_variant", TF_binding_site_variant },
+      { "non_coding_exon_variant", non_coding_exon_variant },
+      { "protein_altering_variant", protein_altering_variant },
+      { "synonymous_variant", synonymous_variant },
+      { "inframe_insertion", inframe_insertion },
+      { "inframe_deletion", inframe_deletion },
+      { NULL, 0 }
+    };
+
+int soTermStringToId(char *soTermStr)
+/* Translate soTermStr into its numeric ID.  Return -1 if soTermStr is not recognized. */
+{
+if (isEmpty(soTermStr))
+    return -1;
+int i;
+for (i = 0;  strToId[i].str != NULL;  i++)
+    {
+    if (sameString(soTermStr, strToId[i].str))
+        return strToId[i].id;
+    }
+return -1;
+}

@@ -144,8 +144,13 @@ taxId 9595
        -fileServer=hgwdev -continue=db gorGor5.config.ra) > db.log 2>&1
     # real    31m13.475s
 
-
     # check in the trackDb files created and add to trackDb/makefile
+
+    # the fake AGP gets the frag name incorrect for chrM:
+    hgsql -e 'update gold set frag="LN611626.1" where chrom="chrM";' gorGor5
+
+    # order key was incorrect:
+    hgsql -e 'update dbDb set orderKey=7681 where name="gorGor5";' hgcentraltest
 
 ##############################################################################
 # cpgIslands on UNMASKED sequence (DONE - 2016-06-21 - Hiram)
@@ -156,11 +161,10 @@ taxId 9595
        -tableName=cpgIslandExtUnmasked \
           -maskedSeq=/hive/data/genomes/gorGor5/gorGor5.unmasked.2bit \
              -workhorse=hgwdev -smallClusterHub=ku gorGor5) > do.log 2>&1
-XXX - running - Tue Jun 21 11:14:07 PDT 2016
-    # real    6m3.280s
+    # real    7m7.412s
 
     cat fb.gorGor5.cpgIslandExtUnmasked.txt
-    # 37760057 bases of 2249582125 (1.679%) in intersection
+    # 31072911 bases of 3080431298 (1.009%) in intersection
 
 #############################################################################
 # cytoBandIdeo - (DONE - 2016-06-21 - Hiram)
@@ -169,92 +173,38 @@ XXX - running - Tue Jun 21 11:14:07 PDT 2016
     makeCytoBandIdeo.csh gorGor5
 
 #############################################################################
-# ucscToINSDC table/track (TBD - 2016-05-31 - Hiram)
-    # the sequence here is working for a 'refseq' assembly *without* a chrM
-    # situation may be specific depending upon what is available in the assembly
-
-    mkdir /hive/data/genomes/gorGor5/bed/ucscToINSDC
-    cd /hive/data/genomes/gorGor5/bed/ucscToINSDC
-
-    ~/kent/src/hg/utils/automation/ucscToINSDC.sh \
-        ../../refseq/GCF_*structure/Primary_Assembly
-    awk '{printf "%s\t%s\n", $2, $1}' ucscToINSDC.txt | sort > insdcToUcsc.txt
-
-    grep -v "^#" ../../refseq/GCF*_assembly_report.txt | cut -f5,7 \
-      | awk '{printf "%s\t%s\n", $2, $1}' \
-         | sort > insdc.refseq.txt
-
-    awk '{printf "%s\t0\t%d\n", $1,$2}' ../../chrom.sizes \
-         | sort > name.coordinate.tab
-
-    # the tr commands avoid the problem of trying to use the -t argument
-    # to the join command which doesn't accept -t'\t' but instead has
-    # to use the unseen/can not copy command ctrl-v i
-    join insdc.refseq.txt insdcToUcsc.txt | tr '[ ]' '[\t]' | sort -k3 \
-       | join -2 3 name.coordinate.tab - | tr '[ ]' '[\t]' | cut -f1-3,5 \
-           > ucscToINSDC.bed
-
-    # should be same line counts throughout:
-    wc -l *
-    #  13124 insdc.refseq.txt
-    #  13124 insdcToUcsc.txt
-    #  13124 name.coordinate.tab
-    #  13124 ucscToINSDC.bed
-    #  13124 ucscToINSDC.txt
-
-    cut -f1 ucscToINSDC.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 14
-    # use the 14 in this sed
-    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-         | hgLoadSqlTab gorGor5 ucscToINSDC stdin ucscToINSDC.bed
-    checkTableCoords gorGor5
-    # should cover %100 entirely:
-    featureBits -countGaps gorGor5 ucscToINSDC
-    # 2970124662 bases of 2970124662 (100.000%) in intersection
-
-    join -1 2 <(sort -k2 ucscToINSDC.txt) insdc.refseq.txt | tr '[ ]' '[\t]' \
-      | sort -k2 | join -2 2 name.coordinate.tab - |  tr '[ ]' '[\t]' \
-        | cut -f1-4 > ucscToRefSeq.bed
-    cut -f1 ucscToRefSeq.bed | awk '{print length($0)}' | sort -n | tail -1
-    # 14
-    # use the 14 in this sed
-    sed -e "s/21/14/" $HOME/kent/src/hg/lib/ucscToINSDC.sql \
-       | sed -e 's/INSDC/RefSeq/g;' > ucscToRefSeq.sql
-    hgLoadSqlTab gorGor5 ucscToRefSeq ./ucscToRefSeq.sql ucscToRefSeq.bed
-
-    checkTableCoords  gorGor5 -table=ucscToRefSeq
-    # should cover %100 all bases:
-    featureBits -countGaps gorGor5 ucscToRefSeq
-    # 2970124662 bases of 2970124662 (100.000%) in intersection
+# ucscToINSDC table/track (DONE - 2016-08-05 - Hiram)
+    # there are no other names for contigs in this assembly, there are just
+    # the contig names
 
 #########################################################################
-# fixup search rule for assembly track/gold table (TBD - 2016-06-02 - Hiram)
+# fixup search rule for assembly track/gold table (DONE - 2016-08-05 - Hiram)
 
-    cd ~/kent/src/hg/makeDb/trackDb/whale/gorGor5
+    cd ~/kent/src/hg/makeDb/trackDb/gorilla/gorGor5
     # preview prefixes and suffixes:
     hgsql -N -e "select frag from gold;" gorGor5 \
       | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
-# 80099 ANOL.1
-#     1 NC_.1
+#    15997 CYUIv1_1
+#        1 LN.1
 
-    # implies a search rule of: '[ACLNO_]+[0-9]+(\.[0-9]+)?'
+    # implies a search rule of: '[CILNUY0-9]+([v0-9_\.]+)?'
 
     # verify this rule will find them all or eliminate them all:
     hgsql -N -e "select frag from gold;" gorGor5 | wc -l
-    # 80100
+    # 15998
 
     hgsql -N -e "select frag from gold;" gorGor5 \
-       | egrep -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
-    # 80100
+       | egrep -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
+    # 15998
 
     hgsql -N -e "select frag from gold;" gorGor5 \
-       | egrep -v -e '[ACLNO_]+[0-9]+(\.[0-9]+)?' | wc -l
+       | egrep -v -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
     # 0
 
     # hence, add to trackDb/rhesus/gorGor5/trackDb.ra
 searchTable gold
 shortCircuit 1
-termRegex [ACLNO_]+[0-9]+(\.[0-9]+)?
+termRegex [CILNUY0-9]+([v0-9_\.]+)?
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
 searchPriority 8
 
@@ -392,20 +342,13 @@ searchPriority 8
     cd /hive/data/genomes/gorGor5/bed/genscan
     time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
       -bigClusterHub=ku gorGor5) > do.log 2>&1
-XXX - running - Fri Jun 24 12:17:14 PDT 2016
-    # real    25m18.870s
-    # one job broken, run with window of 2,000,000:
-    ./lastRunGsBig.csh NW_004438481v1 000 gtf/000/NW_004438481v1.gtf pep/000/NW_004438481v1.pep subopt/000/NW_004438481v1.bed
-    # real    12m47.728s
+    # real    68m0.620s
 
-    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
-      -continue=makeBed -bigClusterHub=ku gorGor5) > makeBed.log 2>&1
-    #   real    1m0.711s
     cat fb.gorGor5.genscan.txt
-    # 52075483 bases of 2249582125 (2.315%) in intersection
+    # 52474606 bases of 3080431298 (1.703%) in intersection
 
     cat fb.gorGor5.genscanSubopt.txt
-    # 49181696 bases of 2249582125 (2.186%) in intersection
+    # 56892790 bases of 3080431298 (1.847%) in intersection
 
 ########################################################################
 # Create kluster run files (DONE - 2016-06-24 - Hiram)
@@ -459,7 +402,7 @@ XXX - running - Fri Jun 24 12:17:14 PDT 2016
 #         -bedFile=jkStuff/nonBridged.bed
 
 ########################################################################
-# GENBANK AUTO UPDATE (TBD - 2016-06-02 - Hiram)
+# GENBANK AUTO UPDATE (DONE - 2016-07-22 - Hiram)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/genbank
     git pull
@@ -498,13 +441,12 @@ gorGor5.downloadDir = gorGor5
     cd /cluster/data/genbank
 
     time ./bin/gbAlignStep -initial gorGor5
-    # logFile: var/build/logs/2016.06.24-13:09:46.gorGor5.initalign.log
-XXX - running - Fri Jun 24 13:10:19 PDT 2016
-    #   real    167m43.804s
+    # real    67m3.917s
 
-     tail -2 var/build/logs/2016.06.24-13:09:46.gorGor5.initalign.log
-# hgwdev 2016.06.01-14:18:58 gorGor5.initalign: Succeeded: gorGor5
-# hgwdev 2016.06.01-14:20:36 gorGor5.initalign: finish
+    # logFile: var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+    # tail -2 var/build/logs/2016.07.05-12:53:02.gorGor5.initalign.log
+# hgwdev 2016.07.05-13:59:57 gorGor5.initalign: Succeeded: gorGor5
+# hgwdev 2016.07.05-14:00:06 gorGor5.initalign: finish
 
     #   To re-do, rm the dir first:
     #     /cluster/data/genbank/work/initial.gorGor5
@@ -513,10 +455,9 @@ XXX - running - Fri Jun 24 13:10:19 PDT 2016
     ssh hgwdev
     cd /cluster/data/genbank
     time ./bin/gbDbLoadStep -drop -initialLoad gorGor5
-    # logFile: var/dbload/hgwdev/logs/2016.06.02-10:36:16.gorGor5.dbload.log
-    # real    5m35.289s
-    tail -1 var/dbload/hgwdev/logs/2016.06.02-10:36:16.gorGor5.dbload.log
-# hgwdev 2016.06.02-10:41:51 gorGor5.dbload: finish
+    # real    18m33.387s
+    tail -1 var/dbload/hgwdev/logs/2016.07.21-23:42:20.gorGor5.dbload.log
+# hgwdev 2016.07.22-00:00:53 gorGor5.dbload: finish
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -524,45 +465,86 @@ XXX - running - Fri Jun 24 13:10:19 PDT 2016
     # add gorGor5 to:
     #   etc/align.dbs etc/hgwdev.dbs
     git add etc/align.dbs etc/hgwdev.dbs
-    git commit -m "Added gorGor5 - killer whale - Orcinus orca - refs #17425" etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added gorGor5 - Gorilla  - refs #17580" etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
 
 #############################################################################
-# augustus gene track (TBD - 2016-06-01 - Hiram)
+# augustus gene track (DONE - 2016-06-24 - Hiram)
 
     mkdir /hive/data/genomes/gorGor5/bed/augustus
     cd /hive/data/genomes/gorGor5/bed/augustus
     time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
         -species=human -dbHost=hgwdev \
            -workhorse=hgwdev gorGor5) > do.log 2>&1
-XXX - running - Fri Jun 24 12:17:14 PDT 2016
-    # real    153m58.477s
+    # real    200m53.178s
 
     cat fb.gorGor5.augustusGene.txt
-    # 47282944 bases of 2249582125 (2.102%) in intersection
+    # 55196723 bases of 3080431298 (1.792%) in intersection
 
-#########################################################################
-#  BLATSERVERS ENTRY (TBD - 2016-06-02 - Hiram)
+############################################################################
+# construct liftOver to gorGor4 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    cd /hive/data/genomes/gorGor5/bed/blat.gorGor4.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4
+    # real    0m2.154s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor5/jkStuff/gorGor5.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor5 gorGor4) > do.log 2>&1
+    #	real    2412m36.913s
+
+    # verify this file exists:
+    #	/gbdb/gorGor5/liftOver/gorGor5ToGorGor4.over.chain.gz
+    # and try out the conversion on genome-test from gorGor5 to gorGor4
+
+############################################################################
+# construct liftOver gorGor4 to gorGor5 (DONE - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    cd /hive/data/genomes/gorGor4/bed/blat.gorGor5.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5
+    # real    0m1.954s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/gorGor4/jkStuff/gorGor4.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev gorGor4 gorGor5) > do.log 2>&1
+    #	real    3222m59.287s
+
+    # verify this file exists:
+    #	/gbdb/gorGor4/liftOver/gorGor4ToGorGor5.over.chain.gz
+    # and try out the conversion on genome-test from gorGor4 to gorGor5
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-08-05 - Hiram)
 #	After getting a blat server assigned by the Blat Server Gods,
     ssh hgwdev
 
     hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("gorGor5", "blat1a", "17862", "1", "0"); \
+	VALUES ("gorGor5", "blat1d", "17868", "1", "0"); \
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
-	VALUES ("gorGor5", "blat1a", "17863", "0", "1");' \
+	VALUES ("gorGor5", "blat1d", "17869", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
 
 ############################################################################
-## default position to casein beta (CSN2) gene (milk production)
-#                                 (TBD - 2016-06-02 - Hiram)
+## default position same as gorGor4 EVPL gene
+#                                 (DONE - 2016-08-04 - Hiram)
     ssh hgwdev
-    hgsql -e 'update dbDb set defaultPos="NW_004438441v1:339887-349875"
+    hgsql -e 'update dbDb set defaultPos="CYUI01015056v1:3670206-3687174"
 	where name="gorGor5";' hgcentraltest
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (TBD 2014-10-21 - Hiram)
+# all.joiner update, downloads and in pushQ - (DONE - 2016-08-08 - Hiram)
     cd $HOME/kent/src/hg/makeDb/schema
     # fixup all.joiner until this is a clean output
     joinerCheck -database=gorGor5 -tableCoverage all.joiner
@@ -571,7 +553,7 @@ XXX - running - Fri Jun 24 12:17:14 PDT 2016
 
     cd /hive/data/genomes/gorGor5
     time (makeDownloads.pl gorGor5) > downloads.log 2>&1
-    #  real    15m52.648s
+    #  real    19m52.657s
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/gorGor5/pushQ
@@ -580,11 +562,13 @@ XXX - running - Fri Jun 24 12:17:14 PDT 2016
     #   real    11m56.179s
 
     #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: gorGor5 does not have ucscToINSDC
     # WARNING: hgwdev does not have /gbdb/gorGor5/wib/gc5Base.wib
     # WARNING: hgwdev does not have /gbdb/gorGor5/wib/quality.wib
-    # WARNING: hgwdev does not have /gbdb/gorGor5/bbi/quality.bw
+    # WARNING: hgwdev does not have /gbdb/gorGor5/bbi/qualityBw/quality.bw
     # WARNING: gorGor5 does not have seq
     # WARNING: gorGor5 does not have extFile
+    # WARNING: gorGor5 does not have estOrientInfo
 
     #   copy it to hgwbeta
     scp -p gorGor5.pushQ.sql qateam@hgwbeta:/tmp/

@@ -15,14 +15,14 @@ test:: singleStrand doubleStrand
 singleStrand: mkout
 	${pslToBigPsl} input/$@.psl output/$@.tmp
 	sort -k1,1 -k2,2n output/$@.tmp > output/$@.bigPslInput
-	${bedToBigBed} -type=bed12+12 -tab -as=input/bigPsl.as output/$@.bigPslInput input/chrom.sizes output/$@.bb
+	${bedToBigBed} -type=bed12+12 -tab -as=${kentSrc}/hg/lib/bigPsl.as output/$@.bigPslInput input/chrom.sizes output/$@.bb 2> /dev/null
 	${bigPslToPsl} -collapseStrand output/$@.bb output/$@.psl
 	cmp input/$@.psl output/$@.psl
 
 doubleStrand: mkout
 	${pslToBigPsl} input/$@.psl output/$@.tmp
 	sort -k1,1 -k2,2n output/$@.tmp > output/$@.bigPslInput
-	${bedToBigBed} -type=bed12+12 -tab -as=input/bigPsl.as output/$@.bigPslInput input/chrom.sizes output/$@.bb
+	${bedToBigBed} -type=bed12+12 -tab -as=${kentSrc}/hg/lib/bigPsl.as output/$@.bigPslInput input/chrom.sizes output/$@.bb 2> /dev/null
 	${bigPslToPsl} output/$@.bb output/$@.psl
 	cmp input/$@.psl output/$@.psl
 

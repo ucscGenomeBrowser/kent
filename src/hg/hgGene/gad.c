@@ -50,7 +50,7 @@ struct dyString *currentCgiUrl;
 char *upperDisease;
 
 char *url = 
-cloneString("http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=gene=");
+cloneString("http://geneticassociationdb.nih.gov");
 char *itemName;
 
 if (url != NULL && url[0] != 0)
@@ -69,8 +69,8 @@ if (url != NULL && url[0] != 0)
 	}
     currentCgiUrl = cgiUrlString();
    
-    printf("<B>Genetic Association Database: ");
-    printf("<A HREF=\"%s'%s'\" target=_blank>", url, itemName);
+    printf("<B>Genetic Association Database (archive): ");
+    printf("<A HREF=\"%s\" target=_blank>", url);
     printf("%s</B></A>\n", itemName);
 
     printf("<BR><B>CDC HuGE Published Literature:  ");
@@ -92,9 +92,7 @@ if (url != NULL && url[0] != 0)
 	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
 	printf("<BR><B>Positive Disease Associations:  </B>");
-	printf("<A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf("<A HREF=\"http://geneticassociationdb.nih.gov\" target=_blank>");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
     	}
@@ -102,9 +100,7 @@ if (url != NULL && url[0] != 0)
         {
 	upperDisease = replaceChars(row[0], "'", "''");
 	touppers(upperDisease);
-	printf(", <A HREF=\"%s%s%s%s%s\" target=_blank>",
-	"http://geneticassociationdb.nih.gov/cgi-bin/tableview.cgi?table=allview&cond=upper(DISEASE)%20like%20'%25",
-	cgiEncode(upperDisease), "%25'%20AND%20upper(GENE)%20%20like%20'%25", itemName, "%25'");
+	printf(", <A HREF=\"http://geneticassociationdb.nih.gov\" target=_blank>");
 	printf("%s</B></A>\n", row[0]);
         row = sqlNextRow(sr);
 	}

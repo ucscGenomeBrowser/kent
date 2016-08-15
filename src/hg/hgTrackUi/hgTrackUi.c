@@ -682,7 +682,7 @@ switch (colorSourceCart)
                                      snp132BitfieldArraySize);
                 break;
     case snp125ColorSourceAlleleFreq:
-                printf("<P>Items are be colored by allele frequency on a red-blue spectrum, "
+                printf("<P>Items are colored by allele frequency on a red-blue spectrum, "
                        "with red representing rare alleles and blue representing common alleles. "
                        "Items with no allele frequency data are colored black.</P>");
                 break;

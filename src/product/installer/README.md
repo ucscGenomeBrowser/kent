@@ -59,9 +59,9 @@ as fast as the UCSC site.
 
 # **The commands**
 
-The first argumentof the script is called 'command' in the following. The first
-commmand that you will need is "install", it installs the browser dependencies,
-binaries and basic Mysql infrastructure:
+The first argument of the script is called 'command' in the following. The first
+command that you will need is "install", it installs the browser dependencies,
+binaries and basic MySQL infrastructure:
 
     sudo bash browserSetup.sh install
 
@@ -123,7 +123,7 @@ However, software may break or not work correctly if the needed data is not avai
 Thus in most circumstances we recommend you use the `mirror` or `update` commands instead
 of `cgiUpdate`.
 
-You will probably also want to add a cleaning command to your crontab to remove 
+You will also want to add a cleaning command to your crontab to remove 
 the temporary files that are created during normal genome browser usage. They accumulate
 in /usr/local/apache/trash and can quickly take up a lot of space. A command like
 this should be added to your crontab file:
@@ -202,5 +202,7 @@ options:
 ```
 
 # **Credits**
+* Max Haeussler for writing the script.
+* Christopher Lee for testing and QA.
 * Daniel Vera (bio.fsu.edu) for his RHEL install notes.
-* Bruce O'Neill, Malcolm Cook for feedback
+* Bruce O'Neill, Malcolm Cook for feedback.

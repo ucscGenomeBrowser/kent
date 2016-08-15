@@ -5,6 +5,7 @@
 #include "snp125Ui.h"
 #include "snp125.h"
 #include "common.h"
+#include "soTerm.h"
 
 
 char *snp125OrthoTable(struct trackDb *tdb, int *retSpeciesCount)
@@ -326,66 +327,52 @@ static char *snp125FuncOldIncludeVars[] = {
 
 int snp125FuncArraySize   = ArraySize(snp125FuncLabels);
 
-// Map func terms (from all snpNNN to date) to Sequence Ontology terms and IDs:
+// Map func terms (from all snpNNN to date) to Sequence Ontology terms:
 struct snpFuncSO
     {
     char *funcTerm;	// term found in snpNNN.func
     char *soTerm;	// corresponding Sequence Ontology term
-    char *soId;		// corresponding Sequence Ontology accession
     };
 
 static struct snpFuncSO snpFuncToSO[] = {
-    { "locus", "feature_variant", "SO:0001878" },
-    { "locus-region", "feature_variant", "SO:0001878" },
-    { "coding", "coding_sequence_variant", "SO:0001580" },
-    { "coding-synon", "synonymous_variant", "SO:0001819" },
-    { "coding-nonsynon", "protein_altering_variant", "SO:0001818" },
-    { "untranslated", "UTR_variant", "SO:0001622" },
-    { "mrna-utr", "UTR_variant", "SO:0001622" },
-    { "intron", "intron_variant", "SO:0001627" },
-    { "splice-site", "splice_site_variant", "SO:0001629" },
-    { "cds-reference", "coding_sequence_variant", "SO:0001580" },
-    { "cds-synonymy-unknown", "coding_sequence_variant", "SO:0001580" },
-    { "near-gene-3", "downstream_gene_variant", "SO:0001632" },
-    { "near-gene-5", "upstream_gene_variant", "SO:0001631" },
-    { "ncRNA", "nc_transcript_variant", "SO:0001619" },
-    { "nonsense", "stop_gained", "SO:0001587" },
-    { "missense", "missense_variant", "SO:0001583" },
-    { "stop-loss", "stop_lost", "SO:0001578" },
-    { "frameshift", "frameshift_variant", "SO:0001589" },
-    { "cds-indel", "inframe_indel", "SO:0001820" },
-    { "untranslated-3", "3_prime_UTR_variant", "SO:0001624" },
-    { "untranslated-5", "5_prime_UTR_variant", "SO:0001623" },
-    { "splice-3", "splice_acceptor_variant", "SO:0001574" },
-    { "splice-5", "splice_donor_variant", "SO:0001575" },
-    // And some that dbSNP doesn't use at this point, but we do, to match Ensembl:
-    { "inframe_insertion", "inframe_insertion", "SO:0001821" },
-    { "inframe_deletion", "inframe_deletion", "SO:0001822" },
-    { "stop_retained_variant", "stop_retained_variant", "SO:0001567" },
-    { "splice_region_variant", "splice_region_variant", "SO:0001630" },
-    { NULL, NULL, NULL }
+    { "locus", "feature_variant" },
+    { "locus-region", "feature_variant" },
+    { "coding", "coding_sequence_variant" },
+    { "coding-synon", "synonymous_variant" },
+    { "coding-nonsynon", "protein_altering_variant" },
+    { "untranslated", "UTR_variant" },
+    { "mrna-utr", "UTR_variant" },
+    { "intron", "intron_variant" },
+    { "splice-site", "splice_site_variant" },
+    { "cds-reference", "coding_sequence_variant" },
+    { "cds-synonymy-unknown", "coding_sequence_variant" },
+    { "near-gene-3", "downstream_gene_variant" },
+    { "near-gene-5", "upstream_gene_variant" },
+    { "ncRNA", "nc_transcript_variant" },
+    { "nonsense", "stop_gained" },
+    { "missense", "missense_variant" },
+    { "stop-loss", "stop_lost" },
+    { "frameshift", "frameshift_variant" },
+    { "cds-indel", "inframe_indel" },
+    { "untranslated-3", "3_prime_UTR_variant" },
+    { "untranslated-5", "5_prime_UTR_variant" },
+    { "splice-3", "splice_acceptor_variant" },
+    { "splice-5", "splice_donor_variant" },
+    { NULL, NULL }
 };
 
-static boolean snpSOFromFunc(char *funcTerm, char **retSoTerm, char **retSoId)
-/* Look up snpNNN.func term (or SO term) in static array snpFuncToSO and set
- * corresponding Sequence Ontology term and accession; return TRUE if found. */
+static char *snpSOFromFunc(char *funcTerm)
+/* Look up snpNNN.func term in static array snpFuncToSO and return SO term if found, else NULL. */
 {
 if (isEmpty(funcTerm))
-    return FALSE;
+    return NULL;
 int i;
 for (i = 0;  snpFuncToSO[i].funcTerm != NULL;  i++)
     {
-    struct snpFuncSO *info = &(snpFuncToSO[i]);
-    if (sameString(funcTerm, info->funcTerm) || sameString(funcTerm, info->soTerm))
-	{
-	if (retSoTerm != NULL)
-	    *retSoTerm = info->soTerm;
-	if (retSoId != NULL)
-	    *retSoId = info->soId;
-	return TRUE;
-	}
+    if (sameString(funcTerm, snpFuncToSO[i].funcTerm))
+	return snpFuncToSO[i].soTerm;
     }
-return FALSE;
+return NULL;
 }
 
 #define MISO_BASE_URL "http://sequenceontology.org/browser/current_release/term/"
@@ -394,7 +381,6 @@ char *snpMisoLinkFromFunc(char *funcTerm)
 /* If we can map funcTerm to a Sequence Ontology term, return a link to the MISO SO browser;
  * otherwise just return the same term. funcTerm may be a comma-separated list of terms. */
 {
-char *soId = NULL, *soTerm = NULL;
 struct dyString *dy = dyStringNew(256);
 char *terms[128];
 int termCount = chopCommas(cloneString(funcTerm), terms);
@@ -403,9 +389,15 @@ for (i = 0;  i < termCount;  i++)
     {
     if (i > 0)
 	dyStringAppend(dy, ", ");
-    boolean gotSO = snpSOFromFunc(terms[i], &soTerm, &soId);
-    if (gotSO)
-	dyStringPrintf(dy, "<A HREF=\""MISO_BASE_URL"%s\" TARGET=_BLANK>%s</A>", soId, soTerm);
+    char *soTerm = terms[i];
+    int soId = soTermStringToId(soTerm);
+    if (soId < 0)
+        {
+        soTerm = snpSOFromFunc(terms[i]);
+        soId = soTermStringToId(soTerm);
+        }
+    if (soId >= 0)
+	dyStringPrintf(dy, "<A HREF=\""MISO_BASE_URL"SO:%07d\" TARGET=_BLANK>%s</A>", soId, soTerm);
     else
 	dyStringAppend(dy, terms[i]);
     }

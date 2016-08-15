@@ -125,8 +125,8 @@ TMPDIR=/dev/shm
     cat fb.turTru2.chainOrcOrc1Link.txt
     # 2148433509 bases of 2332402443 (92.112%) in intersection
 
-
     time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` turTru2 orcOrc1) \
       > rbest.log 2>&1
+    # real    202m56.678s
 
 #########################################################################

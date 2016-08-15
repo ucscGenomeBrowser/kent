@@ -2986,6 +2986,12 @@ url http://www.ncbi.nlm.nih.gov/nuccore/$$
 urlLabel RefSeq accession:
 type bed 4
 
+searchTable ucscToRefSeq
+shortCircuit 1
+termRegex ^[A-Za-z0-9_]+(\.[0-9]+)?
+query select chrom,chromStart,chromEnd,name from %s where name like '%s%%'
+searchPriority 20
+
 track spMut
 shortLabel UniProt Variants
 longLabel UniProt/SwissProt Amino Acid Substitutions
@@ -3029,6 +3035,34 @@ compositeTrack on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
+
+track crispr
+compositeTrack on
+shortLabel CRISPR targets
+longLabel CRISPR/Cas9 Sp. Pyog. target sites
+group genes
+visibility hide
+type bed 4
+dragAndDrop subTracks
+release alpha
+
+    track crisprRanges
+    shortLabel CRISPR/Cas9 analyzed genomic regions
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
+    visibility dense
+    color 110,110,110
+    type bed 3
+    release alpha
+
+    track crisprTargets
+    shortLabel CRISPR/Cas9 Targets
+    longLabel CRISPR/Cas9 -NGG Targets
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    release alpha
+    mouseOverField _mouseOver
+    skipFields _mouseOver,_crisprScanColor,_specColor
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps

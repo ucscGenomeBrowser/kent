@@ -5,7 +5,7 @@ O = paraNode.o
 
 paraNode: $(O)
 	${MKDIR} ../bin
-	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNode $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a ${L}
+	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNode $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a ${L} -lz
 	${STRIP} ../bin/paraNode${EXE}
 
 clean::
