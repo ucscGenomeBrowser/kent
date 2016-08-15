@@ -11,7 +11,7 @@ table gtexAse
     uint thickEnd;      "n/a"
     uint itemRgb;       "Color based on median ASE value"
     float medianASE;    "Allelic imbalance (0-.5) median"
-    float coverage;     "RNA-seq reads overlapping this position"
+    float coverage;     "RNA-seq reads overlapping this position (median)"
     uint samples;       "Sample count"
     uint donors;        "Donor count"
     float minASE;       "Minimum ASE"

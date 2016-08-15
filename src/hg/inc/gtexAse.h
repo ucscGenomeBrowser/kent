@@ -24,7 +24,7 @@ struct gtexAse
     unsigned thickEnd;	/* n/a */
     unsigned itemRgb;	/* Color by binned ASE value (none, moderate, strong) */
     float medianASE;	/* Allelic imbalance (0-.5) median */
-    float coverage;	/* RNA-seq reads overlapping this position */
+    float coverage;	/* RNA-seq reads overlapping this position (median) */
     unsigned samples;	/* Sample count */
     unsigned donors;	/* Donor count */
     float minASE;	/* Minimum ASE */

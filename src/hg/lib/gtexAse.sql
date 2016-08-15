@@ -15,7 +15,7 @@ CREATE TABLE gtexAse (
     thickEnd int unsigned not null,	# n/a
     itemRgb int unsigned not null,	# Color by ASE value
     medianASE float not null,	# Allelic imbalance (0-.5) median
-    coverage float not null,	# RNA-seq reads overlapping this position
+    coverage float not null,	# RNA-seq reads overlapping this position (median)
     samples int unsigned not null,	# Sample count
     donors int unsigned not null,	# Donor count
     minASE float not null,	# Minimum ASE
