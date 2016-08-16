@@ -98,6 +98,10 @@ void printAlignments(struct psl *pslList,
 		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 /* Print list of mRNA alignments. */
 
+void printAlignmentsExtra(struct psl *pslList,
+		     int startFirst, char *hgcCommand, char *hgcCommandInWindow, char *typeName, char *itemIn);
+/* Print list of mRNA alignments with special "in window" alignment function. */
+
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq,
 		       enum gfType qType, int qStart, int qEnd,
 		       char *qName, int cdsS, int cdsE);

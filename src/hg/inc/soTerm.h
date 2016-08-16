@@ -48,4 +48,7 @@ enum soTerm	// the various variant effects
 char *soTermToString(enum soTerm termNumber);
 /* Translate termNumber to its string equivalent.  Do not modify or free result. */
 
+int soTermStringToId(char *soTermStr);
+/* Translate soTermStr into its numeric ID.  Return -1 if soTermStr is not recognized. */
+
 #endif /* SOTERM_H */
