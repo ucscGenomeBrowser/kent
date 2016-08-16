@@ -64,7 +64,7 @@ table bigPsl
 
     uint    oChromStart;"Start position in other chromosome"
     uint    oChromEnd;  "End position in other chromosome"
-    char[1] oStrand;    "+ or -, - implies doing a reverse complement on the psl on output"
+    char[1] oStrand;    "+ or -, - means that psl was reversed into BED-compatible coordinates" 
     uint    oChromSize; "Size of other chromosome."
     int[blockCount] oChromStarts; "Start positions relative to oChromStart or from oChromStart+oChromSize depending on strand"
   

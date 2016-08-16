@@ -178,7 +178,7 @@ login.browserAddr=http://127.0.0.1
 login.mailSignature=None
 # the browser login page by default uses https. This setting can be used to 
 # used to make it work over http (not recommended)
-#login.https=off
+login.https=off
 
 # Credentials to access the local mysql server
 db.host=localhost

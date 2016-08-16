@@ -877,9 +877,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -895,9 +895,9 @@ snpExceptionDesc snp141ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -915,9 +915,9 @@ defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -932,9 +932,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp141OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp141CodingDbSnp,
 
@@ -951,9 +951,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Common_bugFix
@@ -970,9 +970,9 @@ snpExceptionDesc snp142ExceptionDesc
 defaultGeneTracks knownGene
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Flagged_bugFix
@@ -991,9 +991,9 @@ defaultMaxWeight 3
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142Mult_bugFix
@@ -1009,9 +1009,9 @@ defaultGeneTracks knownGene
 maxWindowToDraw 10000000
 type bed 6 +
 chimpOrangMacOrthoTable snp142OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp142CodingDbSnp,
 html snp142_bugFix
@@ -1030,9 +1030,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1049,9 +1049,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1070,9 +1070,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1088,9 +1088,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp144OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp144CodingDbSnp,
 
@@ -1108,9 +1108,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 priority 1
@@ -1128,9 +1128,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 
@@ -1149,9 +1149,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 
@@ -1167,9 +1167,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp146OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp146CodingDbSnp,
 
@@ -1187,9 +1187,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
 priority 1
@@ -1207,9 +1207,9 @@ defaultGeneTracks knownGene
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
 
@@ -1228,9 +1228,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
 
@@ -1246,9 +1246,9 @@ maxWindowToDraw 10000000
 type bed 6 +
 trackHandler snp125
 chimpOrangMacOrthoTable snp147OrthoPt4Pa2Rm3
-chimpDb panTro3
+chimpDb panTro4
 orangDb ponAbe2
-macaqueDb rheMac2
+macaqueDb rheMac3
 hapmapPhase III
 codingAnnotations snp147CodingDbSnp,
 

@@ -843,15 +843,19 @@ return varVal;
 char *createTokenForUser()
 /* create a random token and add it to the cdwDownloadToken table with the current username.
  * Returns token, should be freed.*/
-// 
-// table schema: CREATE TABLE cdwDownloadToken (token varchar(255) NOT NULL PRIMARY KEY, 
-// userId int NOT NULL, createTime datetime DEFAULT NOW())
 {
 struct sqlConnection *conn = hConnectCentral(); // r/w access -> has to be in hgcentral
-char *token = cartDbMakeRandomKey(80);
 char query[4096]; 
+if (!sqlTableExists(conn, "cdwDownloadToken"))
+     {
+     sqlSafef(query, sizeof(query),
+         "CREATE TABLE cdwDownloadToken (token varchar(255) NOT NULL PRIMARY KEY, "
+	 "userId int NOT NULL, createTime datetime DEFAULT NOW())");
+     sqlUpdate(conn, query);
+     }
+char *token = cartDbMakeRandomKey(80);
 sqlSafef(query, sizeof(query), "INSERT INTO cdwDownloadToken (token, userId) VALUES ('%s', %d)", token, user->id);
-sqlQuickQuery(conn, query, NULL, 0);
+sqlUpdate(conn, query);
 hDisconnectCentral(&conn);
 return token;
 }

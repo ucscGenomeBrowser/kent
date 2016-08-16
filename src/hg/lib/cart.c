@@ -1652,7 +1652,7 @@ if (!initted)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-htmlVaEncodeErrorText(format,args);
+htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 
 /* write warning/error message to stderr so they get logged. */
