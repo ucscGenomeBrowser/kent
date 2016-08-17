@@ -3047,7 +3047,7 @@ dragAndDrop subTracks
 release alpha
 
     track crisprRanges
-    shortLabel CRISPR/Cas9 analyzed genomic regions
+    shortLabel CRISPR regions
     longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
     visibility dense
     color 110,110,110
