@@ -3060,7 +3060,7 @@ release alpha
     shortLabel CRISPR/Cas9 Targets
     longLabel CRISPR/Cas9 -NGG Targets
     priority 2
-    visibility pack
+    visibility dense
     type bigBed 9 +
     itemRgb on
     release alpha
