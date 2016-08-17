@@ -439,7 +439,7 @@ char *sequencer[] =
 "Illumina MiSeq Dx",
 "Illumina MiSeq FGx",
 "Illumina NextSeq 500",
-"Illumina unknown",
+"Illumina (unknown)",
 "PacBio RS II",
 "Ion Torrent Ion Proton",
 "Ion Torrent Ion PGM",

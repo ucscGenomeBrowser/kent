@@ -6,7 +6,7 @@
 #define GTEXTISSUE_H
 
 #include "jksql.h"
-#define GTEXTISSUE_NUM_COLS 5
+#define GTEXTISSUE_NUM_COLS 6
 
 extern char *gtexTissueCommaSepFieldNames;
 
@@ -19,6 +19,7 @@ struct gtexTissue
     char *description;	/* GTEX tissue type detail */
     char *organ;	/* GTEX tissue collection area */
     unsigned color;	/* GTEX assigned color */
+    char *abbrev;	/* GTEX tissue abbreviation */
     };
 
 void gtexTissueStaticLoad(char **row, struct gtexTissue *ret);
@@ -95,4 +96,3 @@ char *gtexGetTissueDescription(int id, char *version);
  * Use for single queries (o/w use gtexGetTissues) */
 
 #endif /* GTEXTISSUE_H */
-

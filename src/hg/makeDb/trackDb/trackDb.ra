@@ -3062,7 +3062,7 @@ release alpha
     itemRgb on
     release alpha
     mouseOverField _mouseOver
-    skipField
+    skipFields _mouseOver,_crisprScanColor,_specColor
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps

@@ -1098,7 +1098,7 @@ track snp146Common
 shortLabel Common SNPs(146)
 longLabel Simple Nucleotide Polymorphisms (dbSNP 146) Found in >= 1% of Samples
 group varRep
-visibility dense
+visibility hide
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP:
 snpSeq snp146Seq

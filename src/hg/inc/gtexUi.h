@@ -58,6 +58,10 @@
 #define GTEX_SHOW_EXONS         "showExons"
 #define GTEX_SHOW_EXONS_DEFAULT FALSE
 
+/* Suppress whiteout behind graph (to show highlight and blue lines) */
+#define GTEX_NO_WHITEOUT         "noWhiteout"
+#define GTEX_NO_WHITEOUT_DEFAULT        FALSE
+
 void gtexPortalLink(char *geneId);
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 
