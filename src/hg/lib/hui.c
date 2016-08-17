@@ -8498,7 +8498,7 @@ for (i=0; i<subCount; ++i)
 return s;
 }
 
-char *replaceInUrl(char* url, char *idInUrl, struct cart* cart, char *db, char* seqName, int winStart, \
+char *replaceInUrl(char *url, char *idInUrl, struct cart* cart, char *db, char *seqName, int winStart, \
     int winEnd, char *track, boolean encode) 
 /* replace $$ in url with idInUrl. Supports many other wildchards 
  * XX Do we have readable docs for these parameters somewhere?
@@ -8572,8 +8572,8 @@ ins[9] = "${";
 ins[10] = "$}";
 if (cartOptionalString(cart, "o") && cartOptionalString(cart, "t"))
     {
-    char* itemBeg = cartString(cart, "o"); // unexpected commas?
-    char* itemEnd = cartString(cart, "t");
+    char *itemBeg = cartString(cart, "o"); // unexpected commas?
+    char *itemEnd = cartString(cart, "t");
     outs[9] = itemBeg;
     outs[10] = itemEnd;
     }
