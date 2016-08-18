@@ -20,6 +20,7 @@ use vars qw/
     $opt_maskedSeq
     $opt_species
     $opt_utr
+    $opt_noDbGenePredCheck
     /;
 
 # Specify the steps supported with -continue / -stop:
@@ -40,6 +41,7 @@ my $dbHost = 'hgwdev';
 my $defaultWorkhorse = 'hgwdev';
 my $maskedSeq = "$HgAutomate::clusterData/\$db/\$db.2bit";
 my $utr = "off";
+my $noDbGenePredCheck = 1;    # default yes, use -db for genePredCheck
 my $species = "human";
 my $augustusConfig="/hive/data/outside/augustus/augustus.3.1/config";
 
@@ -62,6 +64,7 @@ options:
     -maskedSeq seq.2bit   Use seq.2bit as the masked input sequence instead
                           of default ($maskedSeq).
     -utr                  Obsolete, now is automatic (was: Use augustus arg: --UTR=on, default is --UTR=off)
+    -noDbGenePredCheck    do not use -db= on genePredCheck, there is no real db
     -species <name>       name from list: human chicken zebrafish, default: human
 _EOF_
   ;
@@ -102,6 +105,7 @@ sub checkOptions {
 		      'maskedSeq=s',
 		      'species=s',
 		      'utr',
+		      'noDbGenePredCheck',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -277,15 +281,18 @@ sub doMakeGp {
     die "doMakeGp: the previous step augustus did not complete \n" .
       "successfully ($buildDir/run.augustus/run.time does not exist).\nPlease " .
       "complete the previous step: -continue=augustus\n";
-  } elsif (-e "$runDir/augustus.gp" || -e "$runDir/augustus.gp.gz" ) {
+  } elsif (-e "$runDir/$db.augustus.bb" ) {
     die "doMakeGp: looks like this was run successfully already\n" .
-      "(augustus.gp exists).  Either run with -continue load or cleanup\n" .
-	"or move aside/remove $runDir/augustus.gp\nand run again.\n";
+      "($db.augustus.bb exists).  Either run with -continue load or cleanup\n" .
+	"or move aside/remove $runDir/$db.augustus.bb\nand run again.\n";
   }
 
   my $whatItDoes = "Makes genePred file from augustus gff output.";
   my $bossScript = newBash HgRemoteScript("$runDir/makeGp.bash", $workhorse,
 				      $runDir, $whatItDoes);
+
+  my $dbCheck = "-db=$db";
+  $dbCheck = "" if (0 == $noDbGenePredCheck);
 
   $bossScript->add(<<_EOF_
 export db=$db
@@ -297,7 +304,11 @@ find ./run.augustus/gtf -type f | grep ".gtf.gz\$" \\
           | grep -P "\\t(CDS|exon|stop_codon|start_codon|tts|tss)\\t" \\
             > \$db.augustus.gtf
 gtfToGenePred -genePredExt -infoOut=\$db.info \$db.augustus.gtf \$db.augustus.gp
-genePredCheck -db=\$db \$db.augustus.gp
+genePredCheck $dbCheck \$db.augustus.gp
+genePredToBigGenePred \$db.augustus.gp stdout | sort -k1,1 -k2,2n > \$db.augustus.bgp
+bedToBigBed -type=bed12+8 -tab -as=$ENV{'HOME'}/kent/src/hg/lib/bigGenePred.as \$db.augustus.bgp partition/\$db.chrom.sizes \$db.augustus.bb
+getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa
+getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
@@ -323,17 +334,18 @@ sub doLoadAugustus {
   my $bossScript = newBash HgRemoteScript("$runDir/loadAugustus.bash", $dbHost,
 				      $runDir, $whatItDoes);
 
+  my $dbCheck = "-db=$db";
+  $dbCheck = "" if (0 == $noDbGenePredCheck);
+
   $bossScript->add(<<_EOF_
 export db="$db"
 export table="$tableName"
-genePredCheck -db=\$db \$db.augustus.gp
+genePredCheck $dbCheck \$db.augustus.gp
 hgLoadGenePred \$db -genePredExt \$table \$db.augustus.gp
-genePredCheck -db=\$db \$table
+genePredCheck $dbCheck \$table
 featureBits \$db \$table > fb.\$db.\$table.txt 2>&1
 checkTableCoords -verboseBlocks -table=\$table \$db
 cat fb.\$db.\$table.txt
-getRnaPred -genePredExt -keepMasking -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.rna.fa
-getRnaPred -genePredExt -peptides -genomeSeqs=$maskedSeq \$db \$db.augustus.gp all \$db.augustusGene.faa
 _EOF_
   );
   $bossScript->execute();
@@ -358,6 +370,7 @@ rm -fr $buildDir/fasta
 rm -fr $buildDir/run.augustus/err/
 rm -f $buildDir/run.augustus/batch.bak
 rm -fr $buildDir/run.augustus/augErr
+rm -f $buildDir/\$db.augustus.bgp
 gzip $buildDir/\$db.augustus.gtf
 gzip $buildDir/\$db.augustus.gp
 gzip $buildDir/\$db.augustusGene.rna.fa
@@ -383,6 +396,8 @@ chomp $secondsStart;
 # Force debug and verbose until this is looking pretty solid:
 #$opt_debug = 1;
 #$opt_verbose = 3 if ($opt_verbose < 3);
+
+$noDbGenePredCheck = $opt_noDbGenePredCheck ? 0 : $noDbGenePredCheck;
 
 # Establish what directory we will work in.
 $buildDir = $opt_buildDir ? $opt_buildDir :
