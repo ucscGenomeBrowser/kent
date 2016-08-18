@@ -3037,30 +3037,34 @@ compositeTrack on
         noScoreFilter on
 
 track crispr
-compositeTrack on
 shortLabel CRISPR targets
 longLabel CRISPR/Cas9 Sp. Pyog. target sites
 group genes
 visibility hide
 type bed 4
 dragAndDrop subTracks
+compositeTrack on
 release alpha
 
     track crisprRanges
-    shortLabel CRISPR/Cas9 analyzed genomic regions
+    shortLabel CRISPR regions
     longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
     visibility dense
+    priority 1
     color 110,110,110
     type bed 3
     release alpha
+    parent crispr
 
     track crisprTargets
     shortLabel CRISPR/Cas9 Targets
     longLabel CRISPR/Cas9 -NGG Targets
+    priority 2
     visibility pack
     type bigBed 9 +
     itemRgb on
     release alpha
+    parent crispr
     mouseOverField _mouseOver
     skipFields _mouseOver,_crisprScanColor,_specColor
 

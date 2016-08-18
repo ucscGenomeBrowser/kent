@@ -1460,3 +1460,35 @@ do
 done
 
 ##############################################################################
+# ensemblToRgd (TBD - 2016-08-17 - jcasper)
+# We would like to have otherOrgs links from other species be able to link to
+# RGD pages, but this requires RGD identifiers.  Long term solution involves
+# incorporating that data from GenBank, medium term involves building an RGD
+# Genes track, but short term (this) is to cook up a table that gives RGD
+# IDs for the Ensembl transcript IDs that we have on rn6.
+
+screen -S ensToRgd
+BASEDIR=/hive/data/genomes/rn6/bed/ensToRgd
+mkdir -p ${BASEDIR}
+cd ${BASEDIR}
+
+mkdir rgdDownload
+cd rgdDownload
+wget ftp://ftp.rgd.mcw.edu/pub/data_release/GENES_RAT.txt
+cd ${BASEDIR}
+grep -v '^#' rgdDownload/GENES_RAT.txt | tail -n +2 | tawk '$38 ~ /[A-Z]/ {print $38, $1}' > ensGAndRgd.tab
+perl -ne '($genes, $rgd) = split; foreach $gene (split /;/, $genes) {print "$gene\t$rgd\n";}' < ensGAndRgd.tab | sort > ensGToRgd.tab
+# Halfway there - have Ensembl gene identifier translation, but need
+# transcript identifier translation.  NB: RGD doesn't use version
+# numbers for the Ensembl gene IDs.
+hgsql rn6 -Ne 'select substring_index(gene, ".", 1), transcript from ensGtp' | sort > ensGToEnsT.tab
+# Workaround for join being awkward on tabs:
+TAB=$(printf "\t")
+join -t "$TAB" ensGToEnsT.tab ensGToRgd.tab | tawk '{print $2, $3}' > ensToRgd.tab
+# Use a generic name/value table structure to load the data
+hgLoadSqlTab rn6 ensToRgd ${HOME}/kent/src/hg/lib/knownTo.sql ensToRgd.tab
+
+# Edit hgGene/hgGeneData otherOrgs.ra files for hg38 and mm10 to grab IDs from
+# the ensToRgd table in rn6 and use them to link to RGD.
+
+##############################################################################

@@ -874,4 +874,74 @@ TMPDIR=/dev/shm
        > rbest.log 2>&1
     # real    515m19.362s
 
-#########################################################################
+############################################################################
+# DBSNP B148 / SNP148 (DONE 8/1/16 jcasper)
+    # RedMine #16846
+    screen
+    mkdir -p /hive/data/outside/dbSNP/148/cow_bosTau8
+    cd /hive/data/outside/dbSNP/148/cow_bosTau8
+    # Look at the directory listing of ftp://ftp.ncbi.nih.gov/snp/database/organism_data/
+    # to find the subdir name to use as orgDir below (cow_9913 in this case).
+    # Then click into that directory and look for file names like
+    #    b(1[0-9][0-9])_
+    # -- use the first num for build setting in config.ra
+    # Note that there are two cow entries - 9913 and 30522.  30522, however,
+    # has B128 as its most recent build.
+    # The buildAssembly setting in config.ra is empty because dbSNP stopped including
+    # that in file names.
+    # Had to fetch
+    # ftp://ftp.ncbi.nlm.nih.gov/genomes/ASSEMBLY_REPORTS/All/GCF_000003055.6.assembly.txt
+    # manually and install it in the config file because NCBI's FTP server
+    # appears to be having some problems with providing the right header
+    # information (curl and wget on our server complain about it, anyway).
+    cat > config.ra <<EOF
+db bosTau8
+build 148
+buildAssembly
+orgDir cow_9913
+refAssemblyLabel Bos_taurus_UMD_3.1.1
+ncbiAssemblyReportFile GCF_000003055.6.assembly.txt
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra >& do.log & tail -f do.log
+    # Some trial and error is always required to get the config.ra just right.
+    # First stop:
+#*** 2 lines of b148_ContigInfo.bcp.gz contained contig names that
+#*** could not be mapped to chrom.size via their GenBank contig mappings; see
+#*** /hive/data/outside/dbSNP/148/cow_bosTau8/cantLiftUpSeqNames.txt .
+#
+#*** You must account for all 6337 contig_acc values in config.ra,
+#*** using the liftUp and/or ignoreDbSnpContigsFile settings (see -help output).
+#*** Check the auto-generated suggested.lft to see if it covers all
+#*** 6337 contigs; if it does, add 'liftUp suggested.lft' to config.ra.
+#*** Then run again with -continue=loadDbSnp .
+
+    cat cantLiftUpSeqNames.txt
+#unplaced-scaffold (no chrUn_GJ058435v1 in chrom.sizes)  NW_003099180    na
+#unplaced-scaffold (no chrUn_GJ058447v1 in chrom.sizes)  NW_003099192    na
+
+# These GenBank contigs (GJ058435.1 and GJ058447.1) were added in the most
+# recent version of the Bos_taurus_UMD_3.1.1 assembly - the one with accession
+# number GCF_000003055.6.  Our bosTau8 is build from GCF_000003055.5.
+# Handling this by dropping those two contigs from the build.
+
+    tawk '{print $2}' cantLiftUpSeqNames.txt > ignoreDbSnpContigs.txt
+    echo 'ignoreDbSnpContigsFile ignoreDbSnpContigs.txt' >> config.ra
+
+    cat >> config.ra <<EOF
+liftUp suggested.lft
+EOF
+    ~/kent/src/hg/utils/automation/doDbSnp.pl config.ra -continue=loadDbSnp >> do.log 2>&1 &
+    tail -f do.log
+
+# *** All done!
+
+    zcat snp148.bed.gz \
+    | ~/kent/src/hg/utils/automation/categorizeSnps.pl
+#Mult:     120755
+#Common:   10469
+#Flagged:  0
+#leftover: 99100955
+    # 10,469 SNPs out of ~100M that meet the threshold for Common... that's
+    # pretty sparse.  Not sure it's worth pushing out as a separate subtrack.
+
+##############################################################################
