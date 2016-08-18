@@ -118,7 +118,7 @@ for (table = hgp->tableList; table != NULL; table = table->next)
 		    }
 		}
 	    jsonWriteString(jw, "hgFindMatches", encMatches);
-	    jsonWriteString(jw, "posName", htmlEncodeText(pos->name, FALSE));
+	    jsonWriteString(jw, "posName", htmlEncode(pos->name));
 	    if (pos->description)
 		{
 		stripString(pos->description, "\n");

@@ -55,14 +55,13 @@ char *htmlTextStripTags(char *s);
 char *htmlTextReplaceTagsWithChar(char *s, char ch);
 /* Returns a cloned string with all html tags replaced with given char (useful for tokenizing) */
 
-char *htmlEncodeText(char *s, boolean tagsOkay);
+char *htmlEncode(char *s);
 /* Returns a cloned string with quotes replaced by html codes.
-   Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
+   Changes ',",\n and >,<,& to code equivalents.
    This differs from cgiEncode as it handles text that will
    be displayed in an html page or tooltip style title.  */
-#define htmlEncode(s) htmlEncodeText(s,FALSE)
 
-char *attributeEncode(char *str);
+char *attributeEncode(char *s);
 // encode double and single quotes in a string to be used as an element attribute
 
 void htmlMemDeath();
@@ -194,3 +193,28 @@ void htmlIncludeWebFile(char *file);
 
 /* Include an HTML file in a CGI */
 void htmlIncludeFile(char *path);
+
+/* ===== Html printf-style escaping functions ====== */
+
+int htmlSafefAbort(boolean noAbort, char *format, ...)
+/* handle noAbort stderror logging and errAbort */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+;
+
+int vaHtmlSafefNoAbort(char *buffer, int bufSize, char *format, va_list args, boolean noAbort);
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Automatically escapes string values.
+ * This function should be efficient on statements with many strings to be escaped. */
+
+int htmlSafef(char *buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * Escapes string parameters. */
+#ifdef __GNUC__
+__attribute__((format(printf, 3, 4)))
+#endif
+;
+
