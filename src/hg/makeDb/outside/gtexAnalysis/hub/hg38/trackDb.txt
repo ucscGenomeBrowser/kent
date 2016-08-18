@@ -1,6 +1,6 @@
 track gtexAwgAseDensity
 shortLabel ASE Density
-longLabel Allele-Specific Expression Density in All Tissues from GTEx Analysis (NY Genome Center)
+longLabel Allele-Specific Expression Density from GTEx Analysis (NY Genome Center)
 type bigWig 0 .5
 bigDataUrl gtexAwgAseDensity.bw
 maxHeightPixels 8:48:100
@@ -10,8 +10,8 @@ visibility full
 priority 1
 
 track gtexAwgAseCombined
-shortLabel ASE Combined Sites
-longLabel Median Allele-Specific Expression in All Tissues from GTEx Analysis (NY Genome Center)
+shortLabel ASE Sites
+longLabel Allele-Specific Expression Sites from GTEx Analysis (NY Genome Center)
 type bigBed 9 +
 bigDataUrl gtexAwgAseCombined.bb
 sepFields minASE
@@ -24,7 +24,7 @@ priority 2
 
 track gtexAwgAse
 compositeTrack on
-shortLabel ASE Sites By Tissue
+shortLabel ASE By Tissue
 longLabel Allele-Specific Expression in 53 Tissues from GTEx Analysis (NY Genome Center)
 itemRgb on
 darkerLabels on
@@ -39,7 +39,7 @@ priority 3
     track gtexAwgAseAdiposeSubcut
     parent gtexAwgAse off
     shortLabel adiposeSubcut
-    longLabel Median Allele-Specific Expression in Adipose - Subcutaneous from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Adipose - Subcutaneous from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseAdiposeSubcut.bb
     color 255,165,79
@@ -47,7 +47,7 @@ priority 3
     track gtexAwgAseAdiposeVisceral
     parent gtexAwgAse on
     shortLabel adiposeVisceral
-    longLabel Median Allele-Specific Expression in Adipose - Visceral (Omentum) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Adipose - Visceral (Omentum) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseAdiposeVisceral.bb
     color 238,154,0
@@ -55,7 +55,7 @@ priority 3
     track gtexAwgAseAdrenalGland
     parent gtexAwgAse off
     shortLabel adrenalGland
-    longLabel Median Allele-Specific Expression in Adrenal Gland from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Adrenal Gland from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseAdrenalGland.bb
     color 143,188,143
@@ -63,7 +63,7 @@ priority 3
     track gtexAwgAseArteryAorta
     parent gtexAwgAse on
     shortLabel arteryAorta
-    longLabel Median Allele-Specific Expression in Artery - Aorta from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Artery - Aorta from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseArteryAorta.bb
     color 139,28,98
@@ -71,7 +71,7 @@ priority 3
     track gtexAwgAseArteryCoronary
     parent gtexAwgAse off
     shortLabel arteryCoronary
-    longLabel Median Allele-Specific Expression in Artery - Coronary from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Artery - Coronary from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseArteryCoronary.bb
     color 238,106,80
@@ -79,7 +79,7 @@ priority 3
     track gtexAwgAseArteryTibial
     parent gtexAwgAse off
     shortLabel arteryTibial
-    longLabel Median Allele-Specific Expression in Artery - Tibial from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Artery - Tibial from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseArteryTibial.bb
     color 255,0,0
@@ -87,7 +87,7 @@ priority 3
     track gtexAwgAseBladder
     parent gtexAwgAse off
     shortLabel bladder
-    longLabel Median Allele-Specific Expression in Bladder from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Bladder from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBladder.bb
     color 205,183,158
@@ -95,7 +95,7 @@ priority 3
     track gtexAwgAseBreastMamTissue
     parent gtexAwgAse on
     shortLabel breastMamTissue
-    longLabel Median Allele-Specific Expression in Breast - Mammary Tissue from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Breast - Mammary Tissue from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBreastMamTissue.bb
     color 0,205,205
@@ -103,7 +103,7 @@ priority 3
     track gtexAwgAseBrainAnCinCortex
     parent gtexAwgAse off
     shortLabel brainAnCinCortex
-    longLabel Median Allele-Specific Expression in Brain - Anterior cingulate cortex (BA24) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Anterior cingulate cortex (BA24) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainAnCinCortex.bb
     color 238,238,0
@@ -111,7 +111,7 @@ priority 3
     track gtexAwgAseBrainAmygdala
     parent gtexAwgAse off
     shortLabel brainAmygdala
-    longLabel Median Allele-Specific Expression in Brain - Amygdala from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Amygdala from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainAmygdala.bb
     color 238,238,0
@@ -119,7 +119,7 @@ priority 3
     track gtexAwgAseBrainCaudate
     parent gtexAwgAse off
     shortLabel brainCaudate
-    longLabel Median Allele-Specific Expression in Brain - Caudate (basal ganglia) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Caudate (basal ganglia) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainCaudate.bb
     color 238,238,0
@@ -127,7 +127,7 @@ priority 3
     track gtexAwgAseBrainCerebellum
     parent gtexAwgAse on
     shortLabel brainCerebellum
-    longLabel Median Allele-Specific Expression in Brain - Cerebellum from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Cerebellum from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainCerebellum.bb
     color 238,238,0
@@ -135,7 +135,7 @@ priority 3
     track gtexAwgAseBrainCerebelHemi
     parent gtexAwgAse off
     shortLabel brainCerebelHemi
-    longLabel Median Allele-Specific Expression in Brain - Cerebellar Hemisphere from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Cerebellar Hemisphere from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainCerebelHemi.bb
     color 238,238,0
@@ -143,7 +143,7 @@ priority 3
     track gtexAwgAseBrainCortex
     parent gtexAwgAse off
     shortLabel brainCortex
-    longLabel Median Allele-Specific Expression in Brain - Cortex from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Cortex from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainCortex.bb
     color 238,238,0
@@ -151,7 +151,7 @@ priority 3
     track gtexAwgAseBrainFrontCortex
     parent gtexAwgAse on
     shortLabel brainFrontCortex
-    longLabel Median Allele-Specific Expression in Brain - Frontal Cortex (BA9) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Frontal Cortex (BA9) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainFrontCortex.bb
     color 238,238,0
@@ -159,7 +159,7 @@ priority 3
     track gtexAwgAseBrainHippocampus
     parent gtexAwgAse off
     shortLabel brainHippocampus
-    longLabel Median Allele-Specific Expression in Brain - Hippocampus from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Hippocampus from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainHippocampus.bb
     color 238,238,0
@@ -167,7 +167,7 @@ priority 3
     track gtexAwgAseBrainHypothalamus
     parent gtexAwgAse off
     shortLabel brainHypothalamus
-    longLabel Median Allele-Specific Expression in Brain - Hypothalamus from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Hypothalamus from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainHypothalamus.bb
     color 238,238,0
@@ -175,7 +175,7 @@ priority 3
     track gtexAwgAseBrainNucAccumbens
     parent gtexAwgAse off
     shortLabel brainNucAccumbens
-    longLabel Median Allele-Specific Expression in Brain - Nucleus accumbens (basal ganglia) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Nucleus accumbens (basal ganglia) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainNucAccumbens.bb
     color 238,238,0
@@ -183,7 +183,7 @@ priority 3
     track gtexAwgAseBrainPutamen
     parent gtexAwgAse off
     shortLabel brainPutamen
-    longLabel Median Allele-Specific Expression in Brain - Putamen (basal ganglia) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Putamen (basal ganglia) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainPutamen.bb
     color 238,238,0
@@ -191,7 +191,7 @@ priority 3
     track gtexAwgAseBrainSubstanNigra
     parent gtexAwgAse off
     shortLabel brainSubstanNigra
-    longLabel Median Allele-Specific Expression in Brain - Substantia nigra from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Substantia nigra from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainSubstanNigra.bb
     color 238,238,0
@@ -199,7 +199,7 @@ priority 3
     track gtexAwgAseBrainSpinalcord
     parent gtexAwgAse off
     shortLabel brainSpinalcord
-    longLabel Median Allele-Specific Expression in Brain - Spinal cord (cervical c-1) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Brain - Spinal cord (cervical c-1) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseBrainSpinalcord.bb
     color 238,238,0
@@ -207,7 +207,7 @@ priority 3
     track gtexAwgAseColonSigmoid
     parent gtexAwgAse off
     shortLabel colonSigmoid
-    longLabel Median Allele-Specific Expression in Colon - Sigmoid from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Colon - Sigmoid from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseColonSigmoid.bb
     color 205,183,158
@@ -215,7 +215,7 @@ priority 3
     track gtexAwgAseColonTransverse
     parent gtexAwgAse off
     shortLabel colonTransverse
-    longLabel Median Allele-Specific Expression in Colon - Transverse from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Colon - Transverse from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseColonTransverse.bb
     color 238,197,145
@@ -223,7 +223,7 @@ priority 3
     track gtexAwgAseEndocervix
     parent gtexAwgAse off
     shortLabel endocervix
-    longLabel Median Allele-Specific Expression in Cervix - Endocervix from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Cervix - Endocervix from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseEndocervix.bb
     color 238,213,210
@@ -231,7 +231,7 @@ priority 3
     track gtexAwgAseEctocervix
     parent gtexAwgAse off
     shortLabel ectocervix
-    longLabel Median Allele-Specific Expression in Cervix - Ectocervix from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Cervix - Ectocervix from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseEctocervix.bb
     color 238,213,210
@@ -239,7 +239,7 @@ priority 3
     track gtexAwgAseEsophagusJunction
     parent gtexAwgAse off
     shortLabel esophagusJunction
-    longLabel Median Allele-Specific Expression in Esophagus - Gastroesophageal Junction from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Esophagus - Gastroesophageal Junction from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseEsophagusJunction.bb
     color 139,115,85
@@ -247,7 +247,7 @@ priority 3
     track gtexAwgAseEsophagusMucosa
     parent gtexAwgAse off
     shortLabel esophagusMucosa
-    longLabel Median Allele-Specific Expression in Esophagus - Mucosa from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Esophagus - Mucosa from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseEsophagusMucosa.bb
     color 139,115,85
@@ -255,7 +255,7 @@ priority 3
     track gtexAwgAseEsophagusMuscular
     parent gtexAwgAse off
     shortLabel esophagusMuscular
-    longLabel Median Allele-Specific Expression in Esophagus - Muscularis from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Esophagus - Muscularis from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseEsophagusMuscular.bb
     color 205,170,125
@@ -263,7 +263,7 @@ priority 3
     track gtexAwgAseXformedfibroblasts
     parent gtexAwgAse off
     shortLabel xformedfibroblasts
-    longLabel Median Allele-Specific Expression in Cells - Transformed fibroblasts from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Cells - Transformed fibroblasts from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseXformedfibroblasts.bb
     color 154,192,205
@@ -271,7 +271,7 @@ priority 3
     track gtexAwgAseFallopianTube
     parent gtexAwgAse off
     shortLabel fallopianTube
-    longLabel Median Allele-Specific Expression in Fallopian Tube from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Fallopian Tube from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseFallopianTube.bb
     color 238,213,210
@@ -279,7 +279,7 @@ priority 3
     track gtexAwgAseHeartAtrialAppend
     parent gtexAwgAse off
     shortLabel heartAtrialAppend
-    longLabel Median Allele-Specific Expression in Heart - Atrial Appendage from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Heart - Atrial Appendage from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseHeartAtrialAppend.bb
     color 180,82,205
@@ -287,7 +287,7 @@ priority 3
     track gtexAwgAseHeartLeftVentricl
     parent gtexAwgAse on
     shortLabel heartLeftVentricl
-    longLabel Median Allele-Specific Expression in Heart - Left Ventricle from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Heart - Left Ventricle from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseHeartLeftVentricl.bb
     color 122,55,139
@@ -295,7 +295,7 @@ priority 3
     track gtexAwgAseKidneyCortex
     parent gtexAwgAse off
     shortLabel kidneyCortex
-    longLabel Median Allele-Specific Expression in Kidney - Cortex from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Kidney - Cortex from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseKidneyCortex.bb
     color 205,183,158
@@ -303,7 +303,7 @@ priority 3
     track gtexAwgAseXformedlymphocytes
     parent gtexAwgAse off
     shortLabel xformedlymphocytes
-    longLabel Median Allele-Specific Expression in Cells - EBV-transformed lymphocytes from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Cells - EBV-transformed lymphocytes from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseXformedlymphocytes.bb
     color 238,130,238
@@ -311,7 +311,7 @@ priority 3
     track gtexAwgAseLiver
     parent gtexAwgAse on
     shortLabel liver
-    longLabel Median Allele-Specific Expression in Liver from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Liver from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseLiver.bb
     color 205,183,158
@@ -319,7 +319,7 @@ priority 3
     track gtexAwgAseLung
     parent gtexAwgAse on
     shortLabel lung
-    longLabel Median Allele-Specific Expression in Lung from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Lung from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseLung.bb
     color 154,205,50
@@ -327,7 +327,7 @@ priority 3
     track gtexAwgAseMuscleSkeletal
     parent gtexAwgAse on
     shortLabel muscleSkeletal
-    longLabel Median Allele-Specific Expression in Muscle - Skeletal from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Muscle - Skeletal from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseMuscleSkeletal.bb
     color 122,103,238
@@ -335,7 +335,7 @@ priority 3
     track gtexAwgAseNerveTibial
     parent gtexAwgAse off
     shortLabel nerveTibial
-    longLabel Median Allele-Specific Expression in Nerve - Tibial from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Nerve - Tibial from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseNerveTibial.bb
     color 255,215,0
@@ -343,7 +343,7 @@ priority 3
     track gtexAwgAseOvary
     parent gtexAwgAse off
     shortLabel ovary
-    longLabel Median Allele-Specific Expression in Ovary from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Ovary from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseOvary.bb
     color 255,182,193
@@ -351,7 +351,7 @@ priority 3
     track gtexAwgAsePancreas
     parent gtexAwgAse off
     shortLabel pancreas
-    longLabel Median Allele-Specific Expression in Pancreas from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Pancreas from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAsePancreas.bb
     color 205,155,29
@@ -359,7 +359,7 @@ priority 3
     track gtexAwgAseProstate
     parent gtexAwgAse off
     shortLabel prostate
-    longLabel Median Allele-Specific Expression in Prostate from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Prostate from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseProstate.bb
     color 217,217,217
@@ -367,7 +367,7 @@ priority 3
     track gtexAwgAsePituitary
     parent gtexAwgAse on
     shortLabel pituitary
-    longLabel Median Allele-Specific Expression in Pituitary from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Pituitary from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAsePituitary.bb
     color 180,238,180
@@ -375,7 +375,7 @@ priority 3
     track gtexAwgAseSkinNotExposed
     parent gtexAwgAse on
     shortLabel skinNotExposed
-    longLabel Median Allele-Specific Expression in Skin - Not Sun Exposed (Suprapubic) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Skin - Not Sun Exposed (Suprapubic) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseSkinNotExposed.bb
     color 58,95,205
@@ -383,7 +383,7 @@ priority 3
     track gtexAwgAseSkinExposed
     parent gtexAwgAse off
     shortLabel skinExposed
-    longLabel Median Allele-Specific Expression in Skin - Sun Exposed (Lower leg) from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Skin - Sun Exposed (Lower leg) from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseSkinExposed.bb
     color 30,144,255
@@ -391,7 +391,7 @@ priority 3
     track gtexAwgAseMinorSalivGland
     parent gtexAwgAse off
     shortLabel minorSalivGland
-    longLabel Median Allele-Specific Expression in Minor Salivary Gland from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Minor Salivary Gland from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseMinorSalivGland.bb
     color 205,183,158
@@ -399,7 +399,7 @@ priority 3
     track gtexAwgAseSmallIntestine
     parent gtexAwgAse off
     shortLabel smallIntestine
-    longLabel Median Allele-Specific Expression in Small Intestine - Terminal Ileum from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Small Intestine - Terminal Ileum from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseSmallIntestine.bb
     color 205,183,158
@@ -407,7 +407,7 @@ priority 3
     track gtexAwgAseSpleen
     parent gtexAwgAse off
     shortLabel spleen
-    longLabel Median Allele-Specific Expression in Spleen from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Spleen from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseSpleen.bb
     color 205,183,158
@@ -415,7 +415,7 @@ priority 3
     track gtexAwgAseStomach
     parent gtexAwgAse off
     shortLabel stomach
-    longLabel Median Allele-Specific Expression in Stomach from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Stomach from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseStomach.bb
     color 255,211,155
@@ -423,7 +423,7 @@ priority 3
     track gtexAwgAseTestis
     parent gtexAwgAse off
     shortLabel testis
-    longLabel Median Allele-Specific Expression in Testis from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Testis from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseTestis.bb
     color 166,166,166
@@ -431,7 +431,7 @@ priority 3
     track gtexAwgAseThyroid
     parent gtexAwgAse on
     shortLabel thyroid
-    longLabel Median Allele-Specific Expression in Thyroid from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Thyroid from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseThyroid.bb
     color 0,139,69
@@ -439,7 +439,7 @@ priority 3
     track gtexAwgAseUterus
     parent gtexAwgAse off
     shortLabel uterus
-    longLabel Median Allele-Specific Expression in Uterus from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Uterus from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseUterus.bb
     color 238,213,210
@@ -447,7 +447,7 @@ priority 3
     track gtexAwgAseVagina
     parent gtexAwgAse off
     shortLabel vagina
-    longLabel Median Allele-Specific Expression in Vagina from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Vagina from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseVagina.bb
     color 238,213,210
@@ -455,7 +455,7 @@ priority 3
     track gtexAwgAseWholeBlood
     parent gtexAwgAse on
     shortLabel wholeBlood
-    longLabel Median Allele-Specific Expression in Whole Blood from GTEx Analysis (NY Genome Center)
+    longLabel Allele-Specific Expression in Whole Blood from GTEx Analysis (NY Genome Center)
     type bigBed 9 +
     bigDataUrl gtexAwgAseWholeBlood.bb
     color 255,0,255
