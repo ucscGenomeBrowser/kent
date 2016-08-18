@@ -5393,7 +5393,7 @@ if (setting)
                                                                   &minVal,  &maxVal);
         safef(varName, sizeof(varName), "%s.%s%s", name, scoreName, _MIN);
         safef(altLabel, sizeof(altLabel), "%s%s", (filterByRange ? "Minimum " : ""),
-              htmlEncodeText(htmlTextStripTags(label),FALSE));
+              htmlEncode(htmlTextStripTags(label)));
         cgiMakeDoubleVarWithLimits(varName,minVal, altLabel, 0,minLimit, maxLimit);
         if (filterByRange)
             {
@@ -8097,7 +8097,7 @@ char * setting = trackDbSetting(tdb, "pennantIcon");
 if (setting != NULL)
     {
     setting = cloneString(setting);
-    char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    char *icon = htmlEncode(nextWord(&setting));
     char buffer[4096];
     char *src = NULL;
     
@@ -8115,7 +8115,7 @@ if (setting != NULL)
 	url = nextWord(&setting);
     char *hint = NULL;
     if (setting != NULL)
-	hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+	hint = htmlEncode(stripEnclosingDoubleQuotes(setting));
 
     if (!isEmpty(url))
         {
@@ -8156,7 +8156,7 @@ if (setting != NULL)
     setting = cloneString(setting);
     char buffer[4096];
     char *src = NULL;
-    char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    char *icon = htmlEncode(nextWord(&setting));
     if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
         startsWith("https://", icon))
         src = icon;
@@ -8171,7 +8171,7 @@ if (setting != NULL)
         char *url = nextWord(&setting);
         if (setting)
             {
-            char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+            char *hint = htmlEncode(stripEnclosingDoubleQuotes(setting));
             hPrintf("<a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' "
                     "src='%s'></a>\n",hint,url,src);
             freeMem(hint);

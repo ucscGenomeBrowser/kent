@@ -20,6 +20,11 @@
 #include <unistd.h>
 #include <limits.h>
 
+#ifndef HOST_NAME_MAX
+// needed for OS/X
+#define HOST_NAME_MAX _POSIX_HOST_NAME_MAX
+#endif
+
 #define MAX_ATTEMPTS 10
 
 

@@ -39,7 +39,7 @@ my $basesCovered = `bigBedInfo $wmBbi | egrep "basesCovered:" | sed -e 's/basesC
 chomp $basesCovered;
 my $bases = $basesCovered;
 $bases =~ s/,//g;
-my $asmSize = &AsmHub::asmSize($chromSizes)
+my $asmSize = &AsmHub::asmSize($chromSizes);
 my $percentCoverage = sprintf("%.2f", (100.0 * $bases) / $asmSize);
 $asmSize = &AsmHub::commify($asmSize);
 
