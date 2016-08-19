@@ -1,7 +1,7 @@
 name gtex
 shortLabel Expression (GTEx)
 longLabel Difference in Expression with Selected Gene According to GTEx
-type pair gtexDistanceV6 query target distance 1
+type pair gtexDistance query target distance 1
 priority 0.5
 
 name vidalP2p
