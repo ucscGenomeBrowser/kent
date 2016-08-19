@@ -4234,6 +4234,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $danRer.mmBlastTab.query
     $danRer.rnBlastTab.query
     $danRer.scBlastTab.query
+    rn6.ensToRgd.name minCheck=0.01
 
 identifier obsoleteEnsemblTranscriptId external=Ensembl dependency
 "Ensembl Transcript ID"

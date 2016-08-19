@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "gff3ToPsl - convert a GFF3 CIGAR file to a PSL file\n"
   "usage:\n"
-  "   gff3ToPsl queryChromSizes targetChomSizes inGff3 out.psl\n"
+  "   gff3ToPsl [options] queryChromSizes targetChomSizes inGff3 out.psl\n"
   "arguments:\n"
   "   queryChromSizes file with query (main coordinates) chromosome sizes  .\n"
   "               File formatted:  chromeName<tab>chromSize\n"
@@ -24,6 +24,8 @@ errAbort(
   "   inGff3     GFF3 formatted file with Gap attribute in match records\n"
   "   out.psl    PSL formatted output\n"
   "options:\n"
+  "   -dropQ     drop record when query not found in queryChromSizes\n"
+  "   -dropT     drop record when target not found in targetChromSizes\n"
   "This converts:\n"
   "The first step is to parse GFF3 file, up to 50 errors are reported before\n"
   "aborting.  If the GFF3 files is successfully parse, it is converted to PSL\n"
@@ -33,13 +35,18 @@ errAbort(
   );
 }
 
-static struct optionSpec options[] = {
-    {NULL, 0},
+static struct optionSpec options[] =
+{
+    {"dropQ", OPTION_BOOLEAN},
+    {"dropT", OPTION_BOOLEAN},
+    {NULL, 0}
 };
 
 static int maxParseErrs = 50;  // maximum number of errors during parse
 static int maxConvertErrs = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
+static boolean dropQ = FALSE;
+static boolean dropT = FALSE;
 
 struct nameAndSize
 {
@@ -96,12 +103,21 @@ static void processSourceLine(FILE *pslF, struct gff3Ann *node)
 // what to do?
 }
 
-static struct nameAndSize *getNameAndSize(struct hash *hash, char *name)
-/* Find size of name in hash or die trying. */
+static struct nameAndSize *getNameAndSize(struct hash *hash, char *name, boolean target)
+/* Find size of name in hash or die trying if allowed to. */
 {
 struct hashEl *hel = hashLookup(hash, name);
 if (hel == NULL)
-    errAbort("couldn't find %s in chrom.sizes file", name);
+{
+    if (target)
+       {
+       if (dropT)
+          return NULL;
+       }
+    else if (dropQ)
+            return NULL;
+    errAbort("couldn't find %s in %s.chrom.sizes file", name, target ? "target" : "query");
+}
 return hel->val;
 }
 
@@ -142,8 +158,10 @@ char *cigar = NULL;
 if (!((attr == NULL) || (attr->vals == NULL) || isEmpty(attr->vals->name)))
     cigar = attr->vals->name;
 
-struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId);
-struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid);
+struct nameAndSize *nsT = getNameAndSize(targetChromSizes, node->targetId, TRUE);
+struct nameAndSize *nsQ = getNameAndSize(queryChromSizes, node->seqid, FALSE);
+if (NULL == nsT || NULL == nsQ)
+    return; // can not find chrom.sizes
 if (!checkTarget(node, nsT))
     return; // invalid Target
 char strand[3];
@@ -235,6 +253,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 5)
     usage();
+dropQ = optionExists("dropQ");
+dropT = optionExists("dropT");
 gff3ToPsl(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }

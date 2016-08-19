@@ -1,14 +1,6 @@
 name ensembl
 itemUrl http://www.ensembl.org/Homo_sapiens/geneview?transcript=%s
 
-name gnfHumanAtlas2Id
-shortLabel GNF Atlas 2 ID
-longLabel ID of Associated GNF Atlas 2 Expression Data
-priority 2.60
-visibility off
-type lookup knownToGnfAtlas2 name value
-search exact
-
 name expId
 shortLabel U133 ID
 longLabel ID of Associated Affymetrix U133 Expression Data 
@@ -32,6 +24,26 @@ priority 2.62
 visibility off
 type lookup knownToU95 name value
 search exact
+
+name gtex
+shortLabel GTEx
+longLabel GTEx Gene Expression
+priority 2.65
+visibility on
+type expMulti knownToGtex
+selected gtexTissue gtexTissueMedianRatio gtexTissueMedian 12,11,7,46,-1,42,1,40,32,-1,35,33,34,39,48
+median gtexTissue gtexTissueMedianRatio gtexTissueMedian 0,1,2,3,4,5,6,-1,7,8,9,10,11,12,13,14,15,16,17,18,19,-1,20,21,22,23,24,25,26,-1,27,28,29,30,31,32,-1,33,34,35,36,37,38,39,-1,40,41,42,43,44,45,46,-1,47,48,49,50,51,52
+ratioMax 3.0
+absoluteMax 10000 
+#ratioMax 12.53
+#absoluteMax 219395
+
+name gtexDistance
+shortLabel GTEx Delta
+longLabel Normalized Difference in GTEx Expression from Selected Gene
+priority 2.66
+visibility off
+type distance gtexDistance query target distance
 
 name gnfHumanAtlas2
 shortLabel GNF Atlas 2
@@ -58,6 +70,14 @@ longLabel Normalized Difference in GNF Expression Atlas 2 from Selected Gene
 priority 2.72
 visibility off
 type distance gnfAtlas2Distance query target distance
+
+name gnfHumanAtlas2Id
+shortLabel GNF Atlas 2 ID
+longLabel ID of Associated GNF Atlas 2 Expression Data
+priority 2.73
+visibility off
+type lookup knownToGnfAtlas2 name value
+search exact
 
 name expDense
 shortLabel Short Expression
@@ -114,7 +134,7 @@ type distance gnfU95Distance query target distance
 name HInv
 shortLabel H-Inv
 longLabel H-Invitational Gene Database
-priority 2.7
+priority 2.63
 visibility off
 type association knownToHInv
 queryFull select name,value from knownToHInv
