@@ -69,9 +69,9 @@ def updateDuplicativeTable(dupTable, splitLine):
     """
     n = len(dupTable.keys())
     newTable = dict()
-    for i in range(n): 
-        if (dupTable.get(i) == splitLine[i]):
-            newTable.setdefault(i, splitLine[i])
+    for k,v in dupTable.items():
+        if (dupTable.get(k) == splitLine[k]):
+            newTable.setdefault(k, splitLine[k])
     return newTable   
 
 
@@ -97,7 +97,9 @@ def main(args):
             dupTable = getDuplicativeTable(splitLine)
         if (redTable != []): redTable = updateRedundancyTable(redTable, splitLine)
         if (dupTable != {}): dupTable = updateDuplicativeTable(dupTable, splitLine)
-
+    if (redTable == {} and dupTable == []):
+            os.system("cp %s %s"%(options.inputFile.name, options.outputFile.name))
+            exit(0) 
     # Make a list of bad columns and tell the user. 
     badColList = []
     if (redTable != []):
