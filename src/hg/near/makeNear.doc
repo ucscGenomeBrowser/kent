@@ -630,3 +630,33 @@ hgMedianMicroarray mm8 affyExonTissuesGs mm8.affyExonTissuesGsExps \
    affyExonTissuesGs.ra affyExonTissuesGsMedian mm8.affyExonTissuesGsMedianExps
 hgExpDistance mm8 affyExonTissuesGsMedian \
    affyExonTissuesGsMedianExps affyExonTissuesGsMedianDist
+
+###############################################################
+## GTEx
+## (2016-08-16, kate)
+
+# Create a table that maps between known genes and GTEx (GENCODE V19) gene ids
+#hgMapToGene "-type=bed 12" hg19 gtexGeneModelV6 knownGene knownToGtexV6
+cd /hive/data/genomes/hg19/bed/gtex
+hgMapToGene hg19 -type=genePred gtexGeneModelV6 knownGene knownToGtexV6
+hgMapToGene hg38 -type=genePred gtexGeneModelV6 knownGene knownToGtexV6
+
+# Create expression distance table from median table.  This will take about an hour.
+#cd ~/src/hg/near/hgExpDistance
+# TODO: Consider adding weights file
+
+hgExpDistance hg19 -verbose=2 -lookup=knownToGtexV6 \
+        hgFixed.gtexTissueMedianV6 hgFixed.gtexTissue \
+                gtexDistanceV6 >&! distance.log &
+
+# Create ratio table.  
+# TODO: Consider adding -clump file, minAbsVal
+hgRatioMicroarray -database=hgFixed gtexTissueMedianV6 gtexTissueMedianRatioV6
+
+# Get max scores for columnDb.ra
+hgMaxExp hgFixed gtexTissueMedianV6
+# 219385.91
+ 
+hgMaxExp hgFixed gtexTissueMedianRatioV6
+# 12.53
+
