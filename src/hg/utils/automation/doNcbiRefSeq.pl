@@ -290,7 +290,7 @@ zcat \$asmId.\$db.gp.gz | cut -f1 | sort -u > \$asmId.\$db.name.list
 join -t'\t' \$asmId.\$db.name.list \$asmId.refLink.tab > \$asmId.\$db.ncbiRefSeqLink.tab
 
 # curated subset of all genes
-zegrep "^N(M|R)_|^YP_" \$asmId.\$db.gp.gz || true > \$db.curated.gp
+(zegrep "^N(M|R)_|^YP_" \$asmId.\$db.gp.gz || true) > \$db.curated.gp
 # may not be any curated genes
 if [ ! -s \$db.curated.gp ]; then
   rm -f \$db.curated.gp
@@ -312,17 +312,19 @@ genePredCheck -db=\$db \$db.other.gp
 (zgrep "^#" \$downloadDir/\${asmId}_genomic.gff.gz | head || true) > gffForPsl.gff
 zegrep -v "NG_" \$downloadDir/\${asmId}_genomic.gff.gz \\
   | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.chrom.sizes \\
+gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.chrom.sizes \\
   gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
 simpleChain -outPsl \$asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout \$downloadDir/\${asmId}To\${db}.lift drop stdin \\
    | gzip -c > \$db.psl.gz
 pslCheck -db=\$db \$db.psl.gz
 genePredToFakePsl \$db \$asmId.\$db.gp.gz \$db.fake.psl \$db.fake.cds
-zcat \$db.psl.gz | headRest 5 stdin | cut -f10 > \$db.psl.names
+pslCat -nohead \$db.psl.gz | cut -f10 > \$db.psl.names
 pslSomeRecords -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
 pslSort dirs stdout \\
-   ./tmpdir \$db.psl.gz \$db.someRecords.psl | gzip -c > \$asmId.\$db.psl.gz
+ ./tmpdir \$db.psl.gz \$db.someRecords.psl \\
+   | (pslCheck -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
+     | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=\$db \$asmId.\$db.psl.gz
 
@@ -411,7 +413,7 @@ hgLoadSqlTab \$db ncbiRefSeqPepTable ~/kent/src/hg/lib/pepPred.sql \\
    \$db.ncbiRefSeqPepTable.tab
 
 # and load the fasta peptides, again, only those for items that exist
-zcat process/\$asmId.\$db.psl.gz | cut -f10 | headRest 5 stdin \\
+pslCat -nohead process/\$asmId.\$db.psl.gz | cut -f10 \\
    | sort -u > \$db.psl.used.rna.list
 cut -f5 process/\$asmId.\$db.ncbiRefSeqLink.tab | grep -v "n/a" | sort -u > \$db.mrnaAcc.name.list
 sort -u \$db.psl.used.rna.list \$db.mrnaAcc.name.list > \$db.rna.select.list
