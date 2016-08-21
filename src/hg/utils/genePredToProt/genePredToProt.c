@@ -136,9 +136,12 @@ if (frame != cds->nextFrame)
     else
         exonCdsEnd -= frame;
     }
-int chromSize = 0;
-addCdsExonBases(genomeSeqs, genePred, exonCdsStart, exonCdsEnd, cds, &chromSize);
-addCdsExonPslBlock(genePred, exonCdsStart, exonCdsEnd, chromSize, cds);
+if (exonCdsStart < exonCdsEnd)
+    {
+    int chromSize = 0;
+    addCdsExonBases(genomeSeqs, genePred, exonCdsStart, exonCdsEnd, cds, &chromSize);
+    addCdsExonPslBlock(genePred, exonCdsStart, exonCdsEnd, chromSize, cds);
+    }
 }
 
 static char* getCdsCodons(struct genePred *genePred, struct nibTwoCache* genomeSeqs, struct psl **cdsPsl,
