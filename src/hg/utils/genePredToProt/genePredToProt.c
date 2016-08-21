@@ -63,7 +63,7 @@ static void removePartialCodon(struct cds* cds)
 int iCdsNew = cds->iCds - cds->nextFrame;
 if (iCdsNew < 0)
     iCdsNew = 0;
-zeroBytes(cds->bases, (cds->iCds - iCdsNew));
+zeroBytes(cds->bases+iCdsNew, (cds->iCds - iCdsNew));
 cds->iCds = iCdsNew;
 cds->nextFrame = 0;
 }
