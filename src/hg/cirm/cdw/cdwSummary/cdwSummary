@@ -550,7 +550,7 @@ def addCdwDatasetInfo(datasetId, sumData):
     " get info from the table cdw.cdwDataset and add to sumData "
     # temp file will be removed at the end of the function automatically
     tempFh = tempfile.NamedTemporaryFile()
-    cmd = '''hgsql cdw -NBe 'select * from cdwDataset where name="%s"' > %s''' % (datasetId, tempFh.name)
+    cmd = '''hgsql cdw -NBe 'select name, label, description, pmid from cdwDataset where name="%s"' > %s''' % (datasetId, tempFh.name)
     os.system(cmd)
     row = tempFh.readline().rstrip("\n").split("\t")
     if len(row)==1:
