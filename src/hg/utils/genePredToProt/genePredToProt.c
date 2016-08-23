@@ -23,8 +23,14 @@ errAbort(
   "  -cdsFa=fasta - output FASTA with CDS that was used to generate protein.\n"
   "                 This will not include dropped partial codons.\n"
   "  -cdsPsl=psl - output a PSL with alignment of the CDS region to the genome.\n"
-  "  -protIdSuffix - add this string to the end of the name for protein FASTA\n"
-  "  -cdsIdSuffix - add this string to the end of the name for CDS FASTA and PSL\n"
+  "  -protIdSuffix=str - add this string to the end of the name for protein FASTA\n"
+  "  -cdsIdSuffix=str - add this string to the end of the name for CDS FASTA and PSL\n"
+  "  -translateSeleno - assume internal TGA code for selenocysteine and translate to `U'.\n"
+  "  -includeStop - If the CDS ends with a stop codon, represent it as a `*'\n"
+  "  -starForInframeStops - use `*' instead of `X' for in-frame stop codons.\n"
+  "                  This will result in selenocysteine's being `*', with only codons\n"
+  "                  containing `N' being translated to `X'.  This doesn't include terminal\n"
+  "                  stop\n"
   );
 }
 
@@ -34,8 +40,17 @@ static struct optionSpec options[] = {
     {"cdsPsl", OPTION_STRING},
     {"protIdSuffix", OPTION_STRING},
     {"cdsIdSuffix", OPTION_STRING},
+    {"translateSeleno", OPTION_BOOLEAN},
+    {"includeStop", OPTION_BOOLEAN},
+    {"starForInframeStops", OPTION_BOOLEAN},
     {NULL, 0},
 };
+
+static char *protIdSuffix = "";
+static char *cdsIdSuffix = "";
+static boolean translateSeleno = FALSE;
+static boolean includeStop = FALSE;
+static boolean starForInframeStops = FALSE;
 
 struct cds
 /* CDS sequence being assembled */
@@ -136,13 +151,15 @@ if (frame != cds->nextFrame)
     else
         exonCdsEnd -= frame;
     }
-int chromSize = 0;
-addCdsExonBases(genomeSeqs, genePred, exonCdsStart, exonCdsEnd, cds, &chromSize);
-addCdsExonPslBlock(genePred, exonCdsStart, exonCdsEnd, chromSize, cds);
+if (exonCdsStart < exonCdsEnd)
+    {
+    int chromSize = 0;
+    addCdsExonBases(genomeSeqs, genePred, exonCdsStart, exonCdsEnd, cds, &chromSize);
+    addCdsExonPslBlock(genePred, exonCdsStart, exonCdsEnd, chromSize, cds);
+    }
 }
 
-static char* getCdsCodons(struct genePred *genePred, struct nibTwoCache* genomeSeqs, struct psl **cdsPsl,
-                          char* cdsIdSuffix)
+static char* getCdsCodons(struct genePred *genePred, struct nibTwoCache* genomeSeqs, struct psl **cdsPsl)
 /* get the CDS sequence, dropping partial codons */
 {
 struct cds cds;
@@ -174,6 +191,40 @@ finishCdsPsl(cds.cdsPsl);
 return cds.bases;
 }
 
+static char translateCodon(boolean isChrM, char* codon, bool lastCodon)
+/* translate the first three bases starting at codon, handling weird
+ * biology as requested giving */
+{
+char aa = isChrM ? lookupMitoCodon(codon) : lookupCodon(codon);
+if (aa == '\0')
+    {
+    // stop, contains `N' or selenocysteine
+    boolean isStopOrSelno = isStopCodon(codon);
+    boolean isRealStop = isReallyStopCodon(codon, !lastCodon); // internal could be selenocysteine
+    if (lastCodon)
+        {
+        if (includeStop)
+            aa = '*';
+        else if (!isRealStop)
+            aa = 'X';
+        // others, \0' will terminate
+        }
+    else if (translateSeleno && isStopOrSelno && !isRealStop)
+        {
+        aa = 'U';
+        }
+    else if (isRealStop && starForInframeStops)
+        {
+        aa = '*';
+        }
+    else
+        {
+        aa = 'X';
+        }
+    }
+return aa;
+}
+
 static char* translateCds(char* chrom, char* cds)
 /* translate the CDS */
 {
@@ -182,12 +233,7 @@ char *prot = needMem((cdsLen/3)+1);
 boolean isChrM = sameString(chrom, "chrM");
 int iCds, iProt;
 for (iCds = 0, iProt = 0; iCds < cdsLen; iCds+=3, iProt++)
-    {
-    prot[iProt] = isChrM ? lookupMitoCodon(cds+iCds)
-        : lookupCodon(cds+iCds);
-    if ((prot[iProt] == '\0') && (iCds < cdsLen-3))  
-        prot[iProt] = 'X';  // selenocysteine
-    }
+    prot[iProt] = translateCodon(isChrM, cds+iCds, (iCds == cdsLen-3));
 return prot;
 }
 
@@ -201,14 +247,13 @@ faWriteNext(faFh, startLine, seq, strlen(seq));
 }
 
 static void translateGenePred(struct genePred *genePred, struct nibTwoCache* genomeSeqs,
-                              FILE* protFaFh, FILE* cdsFaFh, FILE* cdsPslFh,
-                              char* protIdSuffix, char* cdsIdSuffix)
+                              FILE* protFaFh, FILE* cdsFaFh, FILE* cdsPslFh)
 /* translate one genePred record. */
 {
 if (genePred->exonFrames == NULL)
     genePredAddExonFrames(genePred);  // assume correct frame if not included
 struct psl *cdsPsl = NULL;
-char* cds = getCdsCodons(genePred, genomeSeqs, &cdsPsl, cdsIdSuffix);
+char* cds = getCdsCodons(genePred, genomeSeqs, &cdsPsl);
 char *prot = translateCds(genePred->chrom, cds);
 writeFa(genePred, prot, protFaFh, protIdSuffix);
 if (cdsFaFh != NULL)
@@ -221,7 +266,7 @@ freeMem(cds);
 }
 
 void genePredToProt(char *genePredFile, char* genomeSeqsFile, char* protFaFile,
-                    char *cdsFaFile, char *cdsPslFile, char* protIdSuffix, char* cdsIdSuffix)
+                    char *cdsFaFile, char *cdsPslFile)
 /* genePredToProt - create protein sequences by translating gene annotations. */
 {
 struct genePred *genePreds = genePredReaderLoadFile(genePredFile, NULL);
@@ -235,8 +280,7 @@ struct genePred *genePred;
 for (genePred = genePreds; genePred != NULL; genePred = genePred->next)
     {
     if (genePred->cdsStart < genePred->cdsEnd)
-        translateGenePred(genePred, genomeSeqs, protFaFh, cdsFaFh, cdsPslFh,
-                          protIdSuffix, cdsIdSuffix);
+        translateGenePred(genePred, genomeSeqs, protFaFh, cdsFaFh, cdsPslFh);
     }
 
 carefulClose(&protFaFh);
@@ -252,10 +296,14 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+protIdSuffix = optionVal("protIdSuffix", ""),
+cdsIdSuffix = optionVal("cdsIdSuffix", "");
+translateSeleno = optionExists("translateSeleno");
+includeStop = optionExists("includeStop");
+starForInframeStops = optionExists("starForInframeStops");
+
 genePredToProt(argv[1], argv[2], argv[3],
                optionVal("cdsFa", NULL),
-               optionVal("cdsPsl", NULL),
-               optionVal("protIdSuffix", ""),
-               optionVal("cdsIdSuffix", ""));
+               optionVal("cdsPsl", NULL));
 return 0;
 }
