@@ -117,9 +117,10 @@ sqlDyStringPrintf(query, "select * from %s", table);
 if (where != NULL)
     dyStringPrintf(query, " where %s", where);
 sr = sqlGetResult(conn, query->string);
+int off = sqlFieldColumn(sr, "bin") + 1; // offset of data
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = estOrientInfoLoad(row);
+    el = estOrientInfoLoad(row+off);
     slAddHead(&list, el);
     }
 slReverse(&list);
