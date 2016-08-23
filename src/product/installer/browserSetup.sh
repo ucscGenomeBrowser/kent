@@ -193,7 +193,7 @@ db.socket=/var/run/mysqld/mysqld.sock
 # To disable on-the-fly loading of files, comment out these lines, 
 # the slow-db.* section below and the showTableCache statement.
 gbdbLoc1=/gbdb/
-gbdbLoc2=http://hgdownload.cse.ucsc.edu/gbdb/
+gbdbLoc2=http://hgdownload.soe.ucsc.edu/gbdb/
 
 # The location of the mysql server that is used if data cannot be found locally
 # (e.g. chromosome annotations, alignment summaries, etc)
@@ -559,7 +559,7 @@ function setupCgiOsx ()
     cd $APACHEDIR
     # get the kent src tree
     if [ ! -d kent ]; then
-       downloadFile http://hgdownload.cse.ucsc.edu/admin/jksrc.zip > jksrc.zip
+       downloadFile http://hgdownload.soe.ucsc.edu/admin/jksrc.zip > jksrc.zip
        unzip jksrc.zip
        rm -f jksrc.zip
     fi
@@ -1484,8 +1484,8 @@ function downloadMinimal
     echo2 The mirror should be functional now. It contains some basic assembly tables 
     echo2 and will download missing data from the UCSC servers. This requires
     echo2 two open ports, outgoing, TCP, from this machine:
-    echo2 - to genome-mysql.cse.ucsc.edu, port 3306, to load MySQL tables
-    echo2 - to hgdownload.cse.ucsc.edu, port 80, to download non-MySQL data files
+    echo2 - to genome-mysql.soe.ucsc.edu, port 3306, to load MySQL tables
+    echo2 - to hgdownload.soe.ucsc.edu, port 80, to download non-MySQL data files
     echo2
     showMyAddress
     goOnline
