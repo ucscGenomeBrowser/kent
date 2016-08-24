@@ -652,17 +652,14 @@ hgMapToGene hg38 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
 hgsql hgFixed -e select 1.0, id, name from gtexTissue > gtex.weights
 # edit to downweight brain (13 tissues total)
 
-hgExpDistance hg19 -verbose=2 -lookup=knownToGtex \
-        hgFixed.gtexTissueMedian hgFixed.gtexTissue \
-                gtexDistance >&! distance.log &
-
 hgExpDistance hg19 -verbose=2 -lookup=knownToGtex -weights=gtex.weights \
         hgFixed.gtexTissueMedian hgFixed.gtexTissue \
                 gtexDistance2 >&! distance2.log &
 
 # Create ratio table.  
-# TODO: Consider adding -clump file, minAbsVal
-hgRatioMicroarray -database=hgFixed gtexTissueMedian gtexTissueMedianRatio
+# TODO: Consider adding -clump file
+# Defaults for microarray are too high -- RPKM is significant >2 roughly
+hgRatioMicroarray -minAbsVal=2 -minMaxVal=5 -database=hgFixed gtexTissueMedian gtexTissueMedianRatio2
 
 # Get max scores for columnDb.ra
 hgMaxExp hgFixed gtexTissueMedian
