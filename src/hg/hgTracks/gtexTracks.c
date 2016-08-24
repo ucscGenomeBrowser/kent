@@ -14,6 +14,25 @@
 #include "gtexUi.h"
 #include "spaceSaver.h"
 
+enum geneLabelStyle
+    {
+    LABEL_GENE_SYMBOL = 0,
+    LABEL_GENE_ACCESSION = 1,
+    LABEL_BOTH = 2
+    };
+
+static enum geneLabelStyle getLabelStyle(char *cartVar)
+/* Get enum corresponding to cart var */
+{
+    if (sameString(GTEX_LABEL_SYMBOL, cartVar))
+        return LABEL_GENE_SYMBOL;
+    if (sameString(GTEX_LABEL_ACCESSION, cartVar))
+        return LABEL_GENE_ACCESSION;
+    if (sameString(GTEX_LABEL_BOTH, cartVar))
+        return LABEL_BOTH;
+    return LABEL_GENE_SYMBOL;
+}
+
 struct gtexGeneExtras 
 /* Track info */
     {
@@ -21,6 +40,7 @@ struct gtexGeneExtras
     boolean codingOnly;         /* User filter to limit display to coding genes */
     boolean showExons;          /* Show gene model exons */
     boolean noWhiteout;         /* Suppress whiteout of graph background (allow highlight, blue lines) */
+    enum geneLabelStyle labelStyle;  /* Show gene symbol, accession, or both */ 
     double maxMedian;           /* Maximum median rpkm for all tissues */
     boolean isComparison;       /* Comparison of two sample sets (e.g. male/female). */
     boolean isDifference;       /* True if comparison is shown as a single difference graph. 
@@ -39,6 +59,7 @@ struct gtexGeneInfo
     struct gtexGeneBed *geneBed;/* Gene name, id, type, exp count and medians 
                                         from BED table */
     struct genePred *geneModel; /* Gene structure from model table */
+    char *label;                /* Name, accession, or both */
     char *description;          /* Gene description */
     double *medians1;            /* Computed medians */
     double *medians2;            /* Computed medians for comparison (inverse) graph */
@@ -400,6 +421,8 @@ extras->showExons = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_SHO
                                                         GTEX_SHOW_EXONS_DEFAULT);
 extras->noWhiteout = cartUsualBooleanClosestToHome(cart, tg->tdb, FALSE, GTEX_NO_WHITEOUT,
                                                         GTEX_NO_WHITEOUT_DEFAULT);
+extras->labelStyle = getLabelStyle(cartUsualStringClosestToHome(cart, tg->tdb, FALSE, GTEX_LABEL,
+                                                        GTEX_LABEL_DEFAULT));
 /* Get geneModels in range */
 char buf[256];
 char *modelTable = "gtexGeneModel";
@@ -445,6 +468,22 @@ while (geneBed != NULL)
         }
     AllocVar(geneInfo);
     geneInfo->geneBed = geneBed;
+    
+    // set label
+    if (extras->labelStyle == LABEL_GENE_SYMBOL)
+        geneInfo->label = geneBed->name;
+    else if (extras->labelStyle == LABEL_GENE_ACCESSION)
+        geneInfo->label = geneBed->geneId;
+    else if (extras->labelStyle == LABEL_BOTH)
+        {
+        char buf[256];
+        safef(buf, sizeof(buf), "%s/%s", geneBed->name, geneBed->geneId);
+        geneInfo->label = cloneString(buf);
+        }
+    else
+        geneInfo->label = "";
+
+    // get description
     geneInfo->geneModel = hashFindVal(modelHash, geneBed->geneId); // sometimes this is missing, hash returns NULL. do we check?
     // NOTE: Consider loading all gene descriptions to save queries
     char query[256];
@@ -469,13 +508,16 @@ while (geneBed != NULL)
         }
     else
         geneInfo->description = geneInfo->geneBed->name;
+
     slAddHead(&list, geneInfo);
     geneBed = geneBed->next;
     geneInfo->geneBed->next = NULL;
+
     if (extras->isComparison && (tg->visibility == tvFull || tg->visibility == tvPack))
         // compute medians based on configuration (comparisons, and later, filters)
         loadComputedMedians(geneInfo, extras);
     geneInfo->height = gtexGeneItemHeight(tg, geneInfo);
+
     }
 slReverse(&list);
 tg->items = list;
@@ -1034,8 +1076,7 @@ static char *gtexGeneItemName(struct track *tg, void *item)
 /* Return gene name */
 {
 struct gtexGeneInfo *geneInfo = (struct gtexGeneInfo *)item;
-struct gtexGeneBed *geneBed = geneInfo->geneBed;
-return geneBed->name;
+return geneInfo->label;
 }
 
 static int gtexGeneHeight(void *item)
