@@ -43,6 +43,7 @@ my $stepper = new HgStepManager(
       { name => 'addMask',   func => \&doAddMask },
       { name => 'windowMasker',   func => \&doWindowMasker },
       { name => 'cpgIslands',   func => \&doCpgIslands },
+      { name => 'augustus',   func => \&doAugustus },
       { name => 'trackDb',   func => \&doTrackDb },
       { name => 'cleanup', func => \&doCleanup },
     ]
@@ -53,9 +54,9 @@ my $dbHost = 'hgwdev';
 my $sourceDir = "/hive/data/outside/ncbi/genomes";
 my $ucscNames = 0;  # default 'FALSE' (== 0)
 my $workhorse = "hgwdev";  # default workhorse when none chosen
-my $fileServer = "hgwdev";  # default workhorse when none chosen
-my $bigClusterHub = "ku";  # default workhorse when none chosen
-my $smallClusterHub = "ku";  # default workhorse when none chosen
+my $fileServer = "hgwdev";  # default when none chosen
+my $bigClusterHub = "ku";  # default when none chosen
+my $smallClusterHub = "ku";  # default when none chosen
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -774,11 +775,11 @@ export buildDir=$buildDir
 if [ \$buildDir/\$asmId.2bit -nt trfMask.bed.gz ]; then
   doSimpleRepeat.pl -stop=filter -buildDir=`pwd` \\
     -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
         -workhorse=$workhorse \$asmId
   doSimpleRepeat.pl -buildDir=`pwd` \\
     -continue=cleanup -stop=cleanup -unmaskedSeq=\$buildDir/\$asmId.2bit \\
-      -trf409=6 -dbHost=$dbHost -smallClusterHub=$bigClusterHub \\
+      -trf409=6 -dbHost=$dbHost -smallClusterHub=$smallClusterHub \\
         -workhorse=$workhorse \$asmId
   gzip simpleRepeat.bed trfMask.bed
 fi
@@ -959,8 +960,8 @@ export asmId=$asmId
 
 ### if [ ../../\$asmId.unmasked.2bit -nt fb.\$asmId.rmsk.windowmaskerSdust.txt ]; then
 if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.wmsk.sdust.txt ]; then
-  \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=hgwdev \\
-    -workhorse=hgwdev -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
+  \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -stop=twobit -buildDir=`pwd` -dbHost=$dbHost \\
+    -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
   bedInvert.pl ../../\$asmId.chrom.sizes ../allGaps/\$asmId.allGaps.bed \\
     > not.gap.bed
   bedIntersect -minCoverage=0.0000000014 windowmasker.sdust.bed \\
@@ -983,8 +984,8 @@ if [ ../../\$asmId.unmasked.2bit -nt faSize.\$asmId.wmsk.sdust.txt ]; then
   rm -f not.gap.bed rmsk.bed
   bedToBigBed -type=bed3 cleanWMask.bed \$asmId.windowMasker.bb
   gzip cleanWMask.bed
-  \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=hgwdev \\
-    -workhorse=hgwdev -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
+  \$HOME/kent/src/hg/utils/automation/doWindowMasker.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
+    -workhorse=$workhorse -unmaskedSeq=$buildDir/\$asmId.unmasked.2bit \$asmId
 else
   printf "# windowMasker step previously completed\\n" 1>&2
   exit 0
@@ -1011,32 +1012,61 @@ export asmId=$asmId
 mkdir -p masked unmasked
 cd unmasked
 if [ ../../../\$asmId.unmasked.2bit -nt \$asmId.cpgIslandExtUnmasked.bb ]; then
-  doCpgIslands.pl -stop=makeBed -buildDir=`pwd` -dbHost=hgwdev \\
-    -smallClusterHub=ku -bigClusterHub=ku -tableName=cpgIslandExtUnmasked \\
-    -workhorse=hgwdev -maskedSeq=$buildDir/\$asmId.unmasked.2bit \\
+  doCpgIslands.pl -stop=makeBed -buildDir=`pwd` -dbHost=$dbHost \\
+    -smallClusterHub=$smallClusterHub -bigClusterHub=$bigClusterHub -tableName=cpgIslandExtUnmasked \\
+    -workhorse=$workhorse -maskedSeq=$buildDir/\$asmId.unmasked.2bit \\
     -chromSizes=$buildDir/\$asmId.chrom.sizes \$asmId
   doCpgIslands.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` \\
-    -dbHost=hgwdev \\
-    -smallClusterHub=ku -bigClusterHub=ku -tableName=cpgIslandExtUnmasked \\
-    -workhorse=hgwdev -maskedSeq=$buildDir/\$asmId.unmasked.2bit \\
+    -dbHost=$dbHost \\
+    -smallClusterHub=$smallClusterHub -bigClusterHub=$bigClusterHub -tableName=cpgIslandExtUnmasked \\
+    -workhorse=$workhorse -maskedSeq=$buildDir/\$asmId.unmasked.2bit \\
     -chromSizes=$buildDir/\$asmId.chrom.sizes \$asmId
 else
-  printf "# windowMasker unmasked previously completed\\n" 1>&2
+  printf "# cpgIslands unmasked previously completed\\n" 1>&2
 fi
 cd ../masked
 if [ ../../addMask/\$asmId.trfRM.2bit -nt \$asmId.cpgIslandExt.bb ]; then
-  doCpgIslands.pl -stop=makeBed -buildDir=`pwd` -dbHost=hgwdev \\
-    -smallClusterHub=ku -bigClusterHub=ku -workhorse=hgwdev \\
+  doCpgIslands.pl -stop=makeBed -buildDir=`pwd` -dbHost=$dbHost \\
+    -smallClusterHub=$smallClusterHub -bigClusterHub=$bigClusterHub -workhorse=$workhorse \\
     -maskedSeq=$buildDir/trackData/addMask/\$asmId.trfRM.2bit \\
     -chromSizes=$buildDir/\$asmId.chrom.sizes \$asmId
   doCpgIslands.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` \\
-    -dbHost=hgwdev \\
-    -smallClusterHub=ku -bigClusterHub=ku -workhorse=hgwdev \\
+    -dbHost=$dbHost \\
+    -smallClusterHub=$smallClusterHub -bigClusterHub=$bigClusterHub -workhorse=$workhorse \\
     -maskedSeq=$buildDir/trackData/addMask/\$asmId.trfRM.2bit \\
     -chromSizes=$buildDir/\$asmId.chrom.sizes \$asmId
 else
-  printf "# windowMasker masked previously completed\\n" 1>&2
+  printf "# cpgIslands masked previously completed\\n" 1>&2
   exit 0
+fi
+_EOF_
+  );
+  $bossScript->execute();
+} # sub doCpgIslands
+
+#########################################################################
+# * step: augustus [workhorse]
+sub doAugustus {
+  my $runDir = "$buildDir/trackData/augustus";
+
+  &HgAutomate::mustMkdir($runDir);
+
+  my $whatItDoes = "run Augustus gene prediction procedures";
+  my $bossScript = newBash HgRemoteScript("$runDir/doAugustus.bash",
+                    $workhorse, $runDir, $whatItDoes);
+
+  $bossScript->add(<<_EOF_
+export asmId=$asmId
+
+if [ $buildDir/\$asmId.2bit -nt \$asmId.augustus.bb ]; then
+  time (/cluster/home/hiram/kent/src/hg/utils/automation/doAugustus.pl -continue=makeGp -stop=makeGp -buildDir=`pwd` -dbHost=$dbHost \\
+    -bigClusterHub=$bigClusterHub -species=human -workhorse=$workhorse \\
+    -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > makeDb.log 2>&1
+  time (/cluster/home/hiram/kent/src/hg/utils/automation/doAugustus.pl -continue=cleanup -stop=cleanup -buildDir=`pwd` -dbHost=$dbHost \\
+    -bigClusterHub=$bigClusterHub -species=human -workhorse=$workhorse \\
+    -noDbGenePredCheck -maskedSeq=$buildDir/\$asmId.2bit \$asmId) > cleanup.log 2>&1
+else
+  printf "# augustus genes previously completed\\n" 1>&2
 fi
 _EOF_
   );

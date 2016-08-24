@@ -38,7 +38,7 @@ char *imageCloneTable = "imageClone";
 char *gbMiscDiffTable = "gbMiscDiff";
 
 #define MYBUFSIZE 2048
-inline char *addDatabase(char *database, char *buffer, char *table)
+static inline char *addDatabase(char *database, char *buffer, char *table)
 {
 safef(buffer, MYBUFSIZE, "%s.%s",database,table);
 return cloneString(buffer);

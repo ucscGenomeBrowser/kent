@@ -227,9 +227,8 @@ if (cgi)
 else
     {
     fprintf(f, 
-    "kentSrc = %s\n"
     "A = %s\n"
-    "include $(kentSrc)/inc/userApp.mk\n", upLevel, progName);
+    "include $(kentSrc)/inc/userApp.mk\n", progName);
     }
 
 fclose(f);

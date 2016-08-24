@@ -60,7 +60,7 @@ if ($descriptionFile =~ m/.gz$/) {
 while (my $line = <FH>) {
   chomp $line;
   my ($name, $description) = split('\t', $line, 2);
-  $descriptionData{$name} = $description;
+  $descriptionData{$name} = $description if (defined($name));
 }
 close (FH);
 
@@ -99,7 +99,7 @@ while (my $line = <FH>) {
        next if (exists($dynamicTags{$tag})); # do not record dynamic tags
        if (exists($idDataPtr->{$tag})) {
           if ($idDataPtr->{$tag} ne $tags{$tag}) {
-            printf STDERR "warning: tag '%s' data '%s' being overwritted '%s'\n", $tag, $idDataPtr->{$tag}, $tags{$tag};
+            printf STDERR "warning: tag '%s' data '%s' being overwritten '%s'\n", $tag, $idDataPtr->{$tag}, $tags{$tag};
           }
        } else {
           $idDataPtr->{$tag} = $tags{$tag};
@@ -123,7 +123,7 @@ while (my $line = <FH>) {
        $parentPtr->{'source'} = $a[1];  # capture column 2 'source'
        if (exists($idDataPtr->{'source'})) {
          if ($idDataPtr->{'source'} ne $a[1]) {
-            printf STDERR "warning: tag '%s' data '%s' being overwritted '%s'\n", "source", $idDataPtr->{'source'}, $a[1];
+            printf STDERR "warning: tag '%s' data '%s' being overwritten '%s'\n", "source", $idDataPtr->{'source'}, $a[1];
          }
        } else {
          $idDataPtr->{'source'} = $a[1];

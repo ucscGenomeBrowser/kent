@@ -23,6 +23,7 @@
 #include "cart.h"
 #include "hgFind.h"
 #include "hgFindSpec.h"
+#include "hgHgvs.h"
 #include "snp.h"
 #include "refLink.h"
 #include "kgAlias.h"
@@ -2513,7 +2514,7 @@ for (i = 0;  i < termCount;  i++)
     if (hgp == NULL || hgp->posCount == 0)
 	{
 	hgPositionsFree(&hgp);
-	warn("Sorry, couldn't locate %s in genome database\n", htmlEncode(terms[i]));
+	warn("Sorry, couldn't locate %s in genome database\n", terms[i]);
 	if (multiTerm)
 	    hUserAbort("%s not uniquely determined -- "
 		     "can't do multi-position search.", terms[i]);
@@ -3052,6 +3053,64 @@ if (foundIt)
 return foundIt;
 }
 
+static int getDotVersion(char *acc)
+/* If acc ends with a .version, return the version, else 0. */
+{
+char *p = strchr(acc, '.');
+if (p)
+    return atoi(p+1);
+return 0;
+}
+
+static boolean matchesHgvs(char *db, char *term, struct hgPositions *hgp)
+/* Return TRUE if the search term looks like a variant encoded using the HGVS nomenclature */
+/* See http://varnomen.hgvs.org/ */
+{
+boolean foundIt = FALSE;
+struct hgvsVariant *hgvs = hgvsParseTerm(term);
+if (hgvs == NULL)
+    hgvs = hgvsParsePseudoHgvs(db, term);
+if (hgvs)
+    {
+    char *foundAcc = NULL, *diffRefAllele = NULL;
+    int foundVersion = 0;
+    boolean coordsOk = hgvsValidate(db, hgvs, &foundAcc, &foundVersion, &diffRefAllele);
+    if (foundAcc == NULL)
+        warn("Can't find accession for HGVS term '%s'", term);
+    else
+        {
+        int hgvsVersion = getDotVersion(hgvs->seqAcc);
+        char foundAccWithV[strlen(foundAcc)+20];
+        if (foundVersion)
+            safef(foundAccWithV, sizeof(foundAccWithV), "%s.%d", foundAcc, foundVersion);
+        else
+            safecpy(foundAccWithV, sizeof(foundAccWithV), foundAcc);
+        if (hgvsVersion && hgvsVersion != foundVersion)
+            warn("HGVS term '%s' is based on %s but UCSC has version %s",
+                 term, hgvs->seqAcc, foundAccWithV);
+        if (! coordsOk)
+            warn("HGVS term '%s' has coordinates outside the bounds of %s", term, foundAccWithV);
+        else if (diffRefAllele != NULL)
+            warn ("HGVS term '%s' reference value '%s' does not match %s value '%s'",
+                  term, hgvs->refAllele, foundAccWithV, diffRefAllele);
+        if (coordsOk)
+            {
+            char *pslTable = NULL;
+            struct psl *mapping = hgvsMapToGenome(db, hgvs, &pslTable);
+            if (mapping)
+                {
+                int padding = 5;
+                char *trackTable = startsWith("lrg", pslTable) ? "lrgTranscriptAli" : "refGene";
+                singlePos(hgp, "HGVS", NULL, trackTable, term, "",
+                          mapping->tName, mapping->tStart-padding, mapping->tEnd+padding);
+                foundIt = TRUE;
+                }
+            }
+        }
+    }
+return foundIt;
+}
+
 struct hgPositions *hgPositionsFind(char *db, char *term, char *extraCgi,
 	char *hgAppNameIn, struct cart *cart, boolean multiTerm)
 /* Return table of positions that match term or NULL if none such. */
@@ -3153,7 +3212,7 @@ if (hgOfficialChromName(db, term) != NULL) // this mangles the term
     singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
 	      "", chrom, start, end);
     }
-else
+else if (!matchesHgvs(db, term, hgp))
     {
     struct hgFindSpec *shortList = NULL, *longList = NULL;
     struct hgFindSpec *hfs;

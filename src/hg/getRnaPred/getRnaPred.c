@@ -37,6 +37,8 @@ errAbort(
   "   -suffix=suf - append suffix to each id to avoid confusion with mRNAs\n"
   "    use to define the genes.\n"
   "   -peptides - out the translation of the CDS to a peptide sequence.\n"
+  "    The newer program genePredToProt maybe produce better results in cases\n"
+  "    were there are frame-shifting indels in the CDS.\n"
   "   -exonIndices - output indices of exon boundaries after sequence name,\n"
   "    e.g., \"103 243 290\" says positions 1-103 are from the first exon,\n"
   "    positions 104-243 are from the second exon, etc. \n"
@@ -50,13 +52,6 @@ errAbort(
   "   -genePredExt - (for use with -peptides) use extended genePred format,\n"
   "    and consider frame information when translating (Warning: only\n"
   "    considers offset at 5' end, not frameshifts between blocks)\n"
-#if 0
-  /* Not implemented, not sure it's worth the complexity */
-  "If frame\n"
-  "    is in genePred and blocks don't have contiguous frame, it will output a '*'\n"
-  "    where the frameshift occured and continue to translated based on the frame\n"
-  "    specification.\n"
-#endif
   );
 }
 
