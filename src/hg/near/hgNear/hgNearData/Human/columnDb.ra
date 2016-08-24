@@ -38,10 +38,18 @@ absoluteMax 10000
 #ratioMax 12.53
 #absoluteMax 219395
 
+name gtexId
+shortLabel GTEx ID
+longLabel GTEx Gene ID (ENS)
+priority 2.66
+visibility off
+type lookup knownToGtex name value
+search exact
+
 name gtexDistance
 shortLabel GTEx Delta
 longLabel Normalized Difference in GTEx Expression from Selected Gene
-priority 2.66
+priority 2.67
 visibility off
 type distance gtexDistance query target distance
 
