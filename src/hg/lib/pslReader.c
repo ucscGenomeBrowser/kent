@@ -316,6 +316,19 @@ pslReaderFree(&pr);
 return pslList;
 }
 
+struct psl *pslReaderLoadDb(char* db, char* table, char* where)
+/* Function that encapsulates reading a PSLs from a database If where is not
+* null, it is added as a where clause.  It will determine if pslx columns are
+* in the table. */
+{
+struct sqlConnection *conn = sqlConnect(db);
+struct pslReader *reader = pslReaderQuery(conn, table, where);
+struct psl *psls = pslReaderAll(reader);
+pslReaderFree(&reader);
+sqlDisconnect(&conn);
+return psls;
+}
+
 struct psl *pslReaderLoadFile(char* pslFile, char* chrom)
 /* Function that encapsulates reading a psl file */
 {

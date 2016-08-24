@@ -91,3 +91,47 @@ boolean regexMatchSubstrNoCase(const char *string, const char *exp,
 return regexMatchSubstrMaybeCase(string, exp, substrArr, substrArrSize, TRUE);
 }
 
+void regexSubstringCopy(const char *string, const regmatch_t substr,
+                        char *buf, size_t bufSize)
+/* Copy a substring from string into buf using start and end offsets from substr.
+ * If the substring was not matched then make buf an empty string. */
+{
+if (regexSubstrMatched(substr))
+    safencpy(buf, bufSize, string + substr.rm_so, substr.rm_eo - substr.rm_so);
+else
+    *buf = '\0';
+}
+
+char *regexSubstringClone(const char *string, const regmatch_t substr)
+/* Clone and return a substring from string using start and end offsets from substr.
+ * If the substring was not matched then return a cloned empty string. */
+{
+char *clone = NULL;
+if (regexSubstrMatched(substr))
+    {
+    int len = substr.rm_eo - substr.rm_so;
+    clone = needMem(len + 1);
+    regexSubstringCopy(string, substr, clone, len + 1);
+    }
+else
+    clone = cloneString("");
+return clone;
+}
+
+int regexSubstringInt(const char *string, const regmatch_t substr)
+/* Return the integer value of the substring specified by substr.
+ * If substr was not matched, return 0; you can check first with regexSubstrMatched() if
+ * that's not the desired behavior for unmatched substr. */
+{
+int val = 0;
+if (regexSubstrMatched(substr))
+    {
+    int len = substr.rm_eo - substr.rm_so;
+    char buf[len+1];
+    regexSubstringCopy(string, substr, buf, sizeof(buf));
+    val = atoi(buf);
+    }
+else
+    val = 0;
+return val;
+}
