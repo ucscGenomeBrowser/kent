@@ -814,32 +814,34 @@ TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.
 (Note: Display may vary if you have conflicting cart variables, for example having both hide all and highlight features.)
 <UL>
     <LI><TT>hgFind.matches=listOfNames</TT> - highlight features given their names - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgFind.matches=uc010naf.1,uc011mcz.1">example link</a> 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgFind.matches=uc010naf.1,uc011mcz.1" target="_blank">
+      example link</a> 
       to highlight two transcripts of the ABO gene</LI>
     <LI><TT>&lt;trackName&gt;=full|dense|pack|hide</TT> - show the default tracks adding a track and set
       it to full, dense, pack or hide visibility -
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&cytoBand=pack">example link</a>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&cytoBand=pack" target="_blank">example link</a>
       to show the default or user-selected tracks and set the Chromosome Bands track to "pack" view.
       Please note that for this feature to work with custom tracks you must use their unique assigned
       name and identifier number <tt>ct_name_####</tt>, only with the full custom track name will
       this feature work: <tt>ct_name_####=full</tt></LI>
     <LI><TT>hideTracks=1</TT> - hide all tracks - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1">example link</A>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1" target="_blank">example link</A>
       to show no tracks at all</LI>
     <LI><TT>hideTracks=1&amp;&lt;trackName&gt;=full|dense|pack|hide</TT> - hide all tracks and show other tracks - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1&cytoBand=pack">example link</A>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hideTracks=1&cytoBand=pack" target="_blank">example link</A>
       to show only the Chromosome Bands track and nothing else</LI>
     <LI><TT>hgt.reset=1</TT> - show only the default tracks - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.reset=1">example link</A></LI>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.reset=1" target="_blank" >example link</A></LI>
     <LI><TT>hgt.toggleRevCmplDisp=1</TT> - show the reverse-complement -
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.toggleRevCmplDisp=1">example link</A>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.toggleRevCmplDisp=1" target="_blank">example link</A>
       to show the reverse-complement of the ABO gene</LI>
     <LI><TT>oligoMatch=pack&amp;hgt.oligoMatch=DNASEQ</TT> - switch on the Short Match track and highlight a matching sequence - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&oligoMatch=pack&hgt.oligoMatch=TATAWAR">example link</A>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&oligoMatch=pack&hgt.oligoMatch=TATAWAR" target="_blank" >
+      example link</A>
       to highlight the TATAWAR motif in the ABO locus</LI>
     <LI><TT>highlight=&lt;DB&gt;.&lt;CHROM&gt;:&lt;START&gt;-&lt;END&gt;#&lt;COLOR&gt;|...</TT>
       - highlight one or more regions in a given color on the image. Note that the arguments have to be urlencoded for internet browsers, so ":" becomes "%3A", "#" becomes "%23" and "|" becomes "%7C". - 
-      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136136597-136139844&highlight=hg19.chr9%3A136138630-136139650%23AA0000%7Chg19.chr9%3A136136630-136137650%230000FF">example link</A>
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136136597-136139844&highlight=hg19.chr9%3A136138630-136139650%23AA0000%7Chg19.chr9%3A136136630-136137650%230000FF" target="_blank">example link</A>
       to highlight two parts of the ABO locus in red and blue. </LI>
 </UL>
 
@@ -852,7 +854,7 @@ password contains a non-alphanumeric character, such as &#36;, the character mus
 replaced by the hexadecimal representation for that character. For example, in
 the password mypwd&#36;wk, the &#36; character should be replaced by %24, resulting in
 the modified password mypwd%24wk.</LI>
-<LI>For integration into your own website e.g. in an html IFRAME, you can obtain the track image only, without the rest of the genome browser user interface, by replacing hgTracks in the URL with hgRenderTracks, like in this example:  <tt><a href="http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630</a></tt>.</LI>
+<LI>For integration into your own website e.g. in an html IFRAME, you can obtain the track image only, without the rest of the genome browser user interface, by replacing hgTracks in the URL with hgRenderTracks, like in this example:  <tt><a href="http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630" target="_blank">http://genome.ucsc.edu/cgi-bin/hgRenderTracks?db=hg19&position=chr9%3A136130563-136150630</a></tt>.</LI>
 
 </UL>
 
