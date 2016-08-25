@@ -636,8 +636,8 @@ hgExpDistance mm8 affyExonTissuesGsMedian \
 ## (2016-08-16, kate)
 
 # Create a table that maps between known genes and GTEx (GENCODE V19) gene ids
-#hgMapToGene "-type=bed 12" hg19 gtexGeneModel knownGene knownToGtex
 cd /hive/data/genomes/hg19/bed/gtex
+
 #hgMapToGene hg19 -type=genePred gtexGeneModelV6 knownGene knownToGtex
 hgMapToGene hg19 -noLoad -all -type=genePred gtexGeneModelV6 knownGene knownToGtex.all
 hgMapToGene hg19 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
@@ -654,7 +654,11 @@ hgsql hgFixed -e select 1.0, id, name from gtexTissue > gtex.weights
 
 hgExpDistance hg19 -verbose=2 -lookup=knownToGtex -weights=gtex.weights \
         hgFixed.gtexTissueMedian hgFixed.gtexTissue \
-                gtexDistance2 >&! distance2.log &
+                gtexDistance
+
+hgExpDistance hg19 -verbose=2 -lookup=knownToGtex -weights=gtex.weights \
+        hgFixed.gtexTissueMedian hgFixed.gtexTissue \
+                gtexDistance
 
 # Create ratio table.  
 # TODO: Consider adding -clump file
