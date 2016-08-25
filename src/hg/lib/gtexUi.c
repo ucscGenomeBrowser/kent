@@ -297,6 +297,20 @@ printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>",
 char cartVar[1024];
 char buf[512];
 
+/* Gene labels  */
+printf("<div>");
+char *geneLabel = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track), 
+                        GTEX_LABEL, GTEX_LABEL_DEFAULT);
+printf("<b>Label:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LABEL);
+cgiMakeRadioButton(cartVar, GTEX_LABEL_SYMBOL , sameString(GTEX_LABEL_SYMBOL, geneLabel));
+printf("%s ", "gene symbol");
+cgiMakeRadioButton(cartVar, GTEX_LABEL_ACCESSION, sameString(GTEX_LABEL_ACCESSION, geneLabel));
+printf("%s ", "accession");
+cgiMakeRadioButton(cartVar, GTEX_LABEL_BOTH, sameString(GTEX_LABEL_BOTH, geneLabel));
+printf("%s ", "both");
+printf("</div>\n");
+
 /* Filter on coding genes */
 printf("<div>");
 printf("<b>Limit to protein coding genes:</b>\n");

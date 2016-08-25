@@ -29,24 +29,29 @@ enum soTerm	// the various variant effects
     nc_transcript_variant=1619,
     mature_miRNA_variant=1620,
     NMD_transcript_variant=1621,
+    UTR_variant=1622,
     _5_prime_UTR_variant=1623,
     _3_prime_UTR_variant=1624,
     incomplete_terminal_codon_variant=1626,
     intron_variant=1627,
     intergenic_variant=1628,
+    splice_site_variant=1629,
     splice_region_variant=1630,
     upstream_gene_variant=1631,
     downstream_gene_variant=1632,
     TF_binding_site_variant=1782,
-    non_coding_exon_variant=1792,
+    non_coding_transcript_exon_variant=1792,
     protein_altering_variant=1818,
     synonymous_variant=1819,
+    inframe_indel=1820,
     inframe_insertion=1821,
     inframe_deletion=1822,
+    feature_variant=1878,
     };
 
 char *soTermToString(enum soTerm termNumber);
-/* Translate termNumber to its string equivalent.  Do not modify or free result. */
+/* Translate termNumber to its string equivalent; errAbort if not found.
+ * Do not modify or free result. */
 
 int soTermStringToId(char *soTermStr);
 /* Translate soTermStr into its numeric ID.  Return -1 if soTermStr is not recognized. */

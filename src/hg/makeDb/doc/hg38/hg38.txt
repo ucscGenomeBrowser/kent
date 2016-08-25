@@ -3645,7 +3645,8 @@ TMPDIR=/dev/shm
 
 _EOF_
 #############################################################################
-# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 8/11/14 angie)
+# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 8/11/16 angie)
+# previously done 7/7/14
     set today = `date +%Y_%m_%d`
     mkdir -p /hive/data/genomes/hg38/bed/lrg/$today
     cd /hive/data/genomes/hg38/bed/lrg/$today

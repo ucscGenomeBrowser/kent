@@ -33,15 +33,23 @@ visibility on
 type expMulti knownToGtex
 selected gtexTissue gtexTissueMedianRatio gtexTissueMedian 12,11,7,46,-1,42,1,40,32,-1,35,33,34,39,48
 median gtexTissue gtexTissueMedianRatio gtexTissueMedian 0,1,2,3,4,5,6,-1,7,8,9,10,11,12,-1,13,14,15,16,17,18,19,-1,20,21,22,23,24,25,26,-1,27,28,29,30,31,32,-1,33,34,35,36,37,38,39,-1,40,41,42,43,44,45,-1,46,47,48,49,50,51,52
-ratioMax 3.0
-absoluteMax 10000 
+ratioMax 5.0
+absoluteMax 5000
 #ratioMax 12.53
 #absoluteMax 219395
+
+name gtexId
+shortLabel GTEx ID
+longLabel GTEx Gene ID (ENS)
+priority 2.66
+visibility off
+type lookup knownToGtex name value
+search exact
 
 name gtexDistance
 shortLabel GTEx Delta
 longLabel Normalized Difference in GTEx Expression from Selected Gene
-priority 2.66
+priority 2.67
 visibility off
 type distance gtexDistance query target distance
 

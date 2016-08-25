@@ -15,23 +15,28 @@ The GTEx project was initiated by the NIH as a sample and data resource for stud
 on the relationship between genetic variation and gene expression in multiple human tissues.
 The data presented here is from the GTEx midpoint milestone data release (V6, October 2015).
 For additional information, see the 
-<a target="_blank" href="gtexAnalysisHub.html">GTEx Analysis hub description</a>.</p>
+<a target="_blank" 
+href="http://genome-test.soe.ucsc.edu/gbdb/hubs/gtexAnalysis/gtexAnalysisHub.html">
+<!-- Replace with below when releasing to hgdownload -->
+<!-- href="http://hgdownload.soe.ucsc.edu/hubs/gtexAnalysis/gtexAnalysisHub.html">-->
+GTEx Analysis hub description</a>.</p>
 
 <p>
 For detailed analysis of ASE patterns in GTEx, the full ASE data is available via dbGap.
 
 <h2>Display Conventions</h2>
 <p>
-There is a summary track of ASE sites for each of the 53 tissues assayed by the GTEx Consortium.
-Each site is identified by the SNP ID, or if none assigned, then by chromosomal start position.
-Sites are colored based on the median ASE for the site across all samples of the tissue;
-shaded from gray (low) 
-to the GTEx convention tissue color (high) with an intermediate color representing
-moderate ASE level.</p>
+The <em>ASE Density</em> track provides a cross-tissue summary of ASE via a density graph
+of median allelic imbalance across all tissues in a sliding window.<p>
 <p>
-Cross-tissue summaries are provided by the ASE Sites track which shows the median allelic 
-imbalance at each SNP across all tissues with ASE data, and a Density graph, 
-which shows the median allelic imbalance across tissues in a sliding window.
+The <em>ASE Sites</em> track shows all SNPs with evidence of ASE in any tissue.
+Each site is identified by the SNP ID, or if none assigned, then by chromosomal start position.</p>
+<p>
+The <em>ASE by Tissue</em> track contains a subtrack showing ASE sites for each of the 
+53 tissues assayed.
+Sites are colored based on the median ASE for the site across all samples of the tissue;
+shaded from gray (low) to the GTEx convention tissue color (high) with an intermediate 
+color representing moderate ASE level.</p>
 
 <h2>Methods</h2>
 <p>
@@ -55,7 +60,15 @@ Data and suggestions for track design were provided by the Lappalainen lab at th
 
 <h2>Contacts</h2>
 <p>
-Stephane Castel (scastel@nygenome.org), Lappalainen Lab, NY Genome Center.</p>
+For questions about the methods or interpretation of the ASE data presented here, contact
+<a HREF="mailto:&#115;c&#97;&#115;&#116;e&#108;&#64;&#110;&#121;&#103;&#101;&#110;&#111;m&#101;.
+o&#114;&#103;"> Stephane Castel</a>,
+<!-- above address is scastel at nygenome.org -->
+Lappalainen Lab, NY Genome Center. 
+For questions about this track hub,  contact the
+<a HREF="http://genome.ucsc.edu/contacts.html">
+UCSC Genome Browser mailing list</a>.</p>
+
 
 <h2>References</h2>
 <p>

@@ -11,7 +11,7 @@ priority 1
 
 track gtexAwgAseCombined
 shortLabel ASE Sites
-longLabel Allele-Specific Expression Sites from GTEx Analysis (NY Genome Center)
+longLabel Allele-Specific Expression Combined Sites from GTEx Analysis (NY Genome Center)
 type bigBed 9 +
 bigDataUrl gtexAwgAseCombined.bb
 sepFields minASE
