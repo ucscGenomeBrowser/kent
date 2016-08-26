@@ -567,17 +567,19 @@ chosen to not match with the genome at the corresponding position.<br>
 <B><I>Protein Query:</I></B><BR>
 A protein query consists of amino acids. 
 To align amino acids against a database of nucleic acids,
-each target chromosome gets translated into amino acids in 3 different versions, one for each frame.
-The protein PSL is a hybrid, because the query fields are all in amino acid coordinates and sizes,
+each target chromosome is first translated into amino acids for
+each of the six different reading frames.
+The resulting protein PSL is a hybrid; the query fields are all in amino acid coordinates and sizes,
 while the target database fields are in nucleic acid chromosome coordinates and sizes.
 The fields shared by query and target are blockCount and blockSizes. 
 But blockSizes differ between query (AA) and target (NA), so a single field cannot represent both.
 A choice was therefore made to report the blockSizes field in amino acids since it is a protein query.
 <br>
 <br>
-Use <b>blockSizes[exonNumber]*3</b> to find the size of a target exon in nucleic acids.
+To find the size of a target exon in nucleic acids, use the formula <b>blockSizes[exonNumber]*3</b>.
 <br>
-Use tStarts[exonNumber] + <b>(blockSizes[exonNumber]*3)</b> to find the end-position of a target exon.
+Or, to find the end position of a target exon, use the formula <b>tStarts[exonNumber] +
+(blockSizes[exonNumber]*3)</b>.
 
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>
