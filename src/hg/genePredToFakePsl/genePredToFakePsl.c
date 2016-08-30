@@ -13,11 +13,14 @@
 
 
 /* Command line switches. */
-char *chromSizes = NULL;  /* read chrom sizes from file instead of database . */
+static char *chromSizes = NULL;  /* read chrom sizes from file instead of database . */
+static char *qSizes = NULL;  /* read query sizes from file */
+static struct hash *qSizeHash = NULL;  /* key is name, value is size */
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"chromSize", OPTION_STRING},
+    {"qSizes", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -41,6 +44,8 @@ errAbort(
   "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"
   "             sizefile contains two white space separated fields per line:\n"
   "		chrom name and size\n"
+  "   -qSizes=qSizesFile\tRead in query sizes to fixup qSize and qStarts\n"
+
   "\n");
 }
 
@@ -80,16 +85,29 @@ if (chromSize == 0)
     errAbort("Couldn't find chromosome/scaffold '%s' in chromInfo", gp->chrom);
 int e = 0, qSize=0;
 
+
 for (e = 0; e < gp->exonCount; ++e)
     qSize+=(gp->exonEnds[e] - gp->exonStarts[e]);
-struct psl *psl = pslNew(gp->name, qSize, 0, qSize,
+
+int sizeAdjust = 0;
+if (qSizes != NULL)
+    {
+    int realSize = hashIntValDefault(qSizeHash, gp->name, 0);
+    if (realSize > 0)
+       sizeAdjust = realSize - qSize;
+    }
+
+struct psl *psl = pslNew(gp->name, qSize+sizeAdjust, 0, qSize,
                          gp->chrom, chromSize, gp->txStart, gp->txEnd,
                          gp->strand, gp->exonCount, 0);
+/* no size adjustment to qStarts for positive strand */
+if (gp->strand[0] == '+')
+   sizeAdjust = 0;
 psl->blockCount = gp->exonCount;		    
 for (e = 0; e < gp->exonCount; ++e)
     {
     psl->blockSizes[e] = (gp->exonEnds[e] - gp->exonStarts[e]);
-    psl->qStarts[e] = e==0 ? 0 : psl->qStarts[e-1] + psl->blockSizes[e-1];
+    psl->qStarts[e] = e==0 ? 0 + sizeAdjust : psl->qStarts[e-1] + psl->blockSizes[e-1];
     psl->tStarts[e] = gp->exonStarts[e];
     }
 psl->match = qSize;	
@@ -147,8 +165,11 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 chromSizes = optionVal("chromSize", NULL);
+qSizes = optionVal("qSizes", NULL);
 if (argc != 5)
     usage();
+if (qSizes != NULL)
+    qSizeHash = hChromSizeHashFromFile(qSizes);
 fakePslFromGenePred(argv[1],argv[2],argv[3],argv[4]);
 return 0;
 }
