@@ -290,9 +290,9 @@ struct searchResult *knownGeneSearchResult(struct sqlConnection *conn,
 {
 struct searchResult *sr;
 struct dyString *dy = dyStringNew(1024);
-char description[512];
 char query[256];
 char name[64];
+char *description = NULL;
 
 /* Allocate and fill in with geneID. */
 AllocVar(sr);
@@ -313,7 +313,8 @@ if (alias != NULL && !sameWord(name, alias))
 /* Add description to long label. */
 sqlSafef(query, sizeof(query), 
     "select description from kgXref where kgID = '%s'", kgID);
-if (sqlQuickQuery(conn, query, description, sizeof(description)))
+description = sqlQuickString(conn, query);
+if (description != NULL)
     dyStringAppend(dy, description);
 sr->longLabel = cloneString(dy->string);
 
