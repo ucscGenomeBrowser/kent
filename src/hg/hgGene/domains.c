@@ -95,7 +95,7 @@ if (kgVersion == KG_III)
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-	    hPrintf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
+	    hPrintf("<A HREF=\"http://pfam.xfam.org/family?acc=%s\" TARGET=_blank>", 
 	    	    el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
@@ -142,7 +142,7 @@ else
 	    description = sqlQuickString(conn, query);
 	    if (description == NULL)
 	    	description = cloneString("n/a");
-		hPrintf("<A HREF=\"http://pfam.sanger.ac.uk/family?acc=%s\" TARGET=_blank>", 
+		hPrintf("<A HREF=\"http://pfam.xfam.org/family?acc=%s\" TARGET=_blank>", 
 	    	        el->name);
 	    hPrintf("%s</A> - %s<BR>\n", el->name, description);
 	    freez(&description);
