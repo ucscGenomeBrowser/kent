@@ -227,8 +227,8 @@ int htmlEncodeTextExtended(char *s, char *out, int outSize)
 /* Replaces required punctuation characters with html entities to fight XSS. 
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 boolean FF = FALSE;
@@ -300,8 +300,8 @@ int nonAlphaNumericHexEncodeTextExtended(char *s, char *out, int outSize,
  * with <prefix>HH<postfix> hex codes to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 int total = 0;
@@ -351,8 +351,8 @@ int attrEncodeTextExtended(char *s, char *out, int outSize)
  * with html entities &#xHH; to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "&#x", ";", 6);
@@ -379,8 +379,8 @@ int cssEncodeTextExtended(char *s, char *out, int outSize)
  * (Yes, the trailing space is critical.)
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\", " ", 4);
@@ -406,8 +406,8 @@ int javascriptEncodeTextExtended(char *s, char *out, int outSize)
 /* For javascript, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\x", "", 4);
@@ -433,8 +433,8 @@ int urlEncodeTextExtended(char *s, char *out, int outSize)
 /* For URL parameters, it replaces non-alphanumeric characters with "%HH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
- * Pass in NULL for out to just get the final encoded size. 
- * Pass in 0 for outSize to find the size of the final string.
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
 return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "%", "", 3);
