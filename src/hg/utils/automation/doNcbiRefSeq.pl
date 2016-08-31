@@ -197,7 +197,7 @@ ln -s /hive/data/genomes/\$db/bed/idKeys/\$db.idKeys.txt ./ucsc.\$db.idKeys.txt
 twoBitInfo \$asmId.ncbi.2bit stdout | sort -k2nr > \$asmId.chrom.sizes
 zcat \${asmId}_rna.fna.gz | sed -e 's/ .*//;' | gzip -c > \$asmId.rna.fa.gz
 faToTwoBit \$asmId.rna.fa.gz t.2bit
-twoBitInfo t.2bit stdout | sort -k2nr > rna.chrom.sizes
+twoBitInfo t.2bit stdout | sort -k2nr > rna.sizes
 rm -f t.2bit
 
 # joining the idKeys establishes a lift file to translate chrom names
@@ -312,19 +312,20 @@ genePredCheck -db=\$db \$db.other.gp
 (zgrep "^#" \$downloadDir/\${asmId}_genomic.gff.gz | head || true) > gffForPsl.gff
 zegrep -v "NG_" \$downloadDir/\${asmId}_genomic.gff.gz \\
   | awk -F'\\t' '\$3 == "cDNA_match" || \$3 == "match"' >> gffForPsl.gff
-gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.chrom.sizes \\
+gff3ToPsl -dropT \$downloadDir/\$asmId.chrom.sizes \$downloadDir/rna.sizes \\
   gffForPsl.gff stdout | pslPosTarget stdin \$asmId.psl
 simpleChain -outPsl \$asmId.psl stdout | pslSwap stdin stdout \\
   | liftUp -type=.psl stdout \$downloadDir/\${asmId}To\${db}.lift drop stdin \\
    | gzip -c > \$db.psl.gz
-pslCheck -db=\$db \$db.psl.gz
-genePredToFakePsl \$db \$asmId.\$db.gp.gz \$db.fake.psl \$db.fake.cds
+pslCheck -targetSizes=/hive/data/genomes/\$db/chrom.sizes \\
+   -querySizes=\$downloadDir/rna.sizes -db=\$db \$db.psl.gz
+genePredToFakePsl -qSizes=\$downloadDir/rna.sizes  \$db \$asmId.\$db.gp.gz \$db.fake.psl \$db.fake.cds
 pslCat -nohead \$db.psl.gz | cut -f10 > \$db.psl.names
 pslSomeRecords -not \$db.fake.psl \$db.psl.names \$db.someRecords.psl
 pslSort dirs stdout \\
  ./tmpdir \$db.psl.gz \$db.someRecords.psl \\
-   | (pslCheck -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
-     | gzip -c > \$asmId.\$db.psl.gz
+   | (pslCheck -quiet -db=\$db -pass=stdout -fail=\$asmId.\$db.fail.psl stdin || true) \\
+     | sort -k14,14 -k16,16n | gzip -c > \$asmId.\$db.psl.gz
 rm -fr ./tmpdir
 pslCheck -db=\$db \$asmId.\$db.psl.gz
 

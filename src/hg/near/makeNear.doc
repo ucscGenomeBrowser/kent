@@ -636,25 +636,19 @@ hgExpDistance mm8 affyExonTissuesGsMedian \
 ## (2016-08-16, kate)
 
 # Create a table that maps between known genes and GTEx (GENCODE V19) gene ids
-#hgMapToGene "-type=bed 12" hg19 gtexGeneModel knownGene knownToGtex
 cd /hive/data/genomes/hg19/bed/gtex
+
 #hgMapToGene hg19 -type=genePred gtexGeneModelV6 knownGene knownToGtex
 hgMapToGene hg19 -noLoad -all -type=genePred gtexGeneModelV6 knownGene knownToGtex.all
 hgMapToGene hg19 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
 
-#hgMapToGene hg38 -type=genePred gtexGeneModelV6 knownGene knownToGtex
-hgMapToGene hg38 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
-
 # Create expression distance table from median table.  This will take about an hour.
 #cd ~/src/hg/near/hgExpDistance
-# TODO: Consider adding weights file
-
+# edit to downweight brain to .5 (13 tissues total)
 hgsql hgFixed -e select 1.0, id, name from gtexTissue > gtex.weights
-# edit to downweight brain (13 tissues total)
-
 hgExpDistance hg19 -verbose=2 -lookup=knownToGtex -weights=gtex.weights \
         hgFixed.gtexTissueMedian hgFixed.gtexTissue \
-                gtexDistance2 >&! distance2.log &
+                gtexDistance
 
 # Create ratio table.  
 # TODO: Consider adding -clump file
@@ -667,4 +661,13 @@ hgMaxExp hgFixed gtexTissueMedian
  
 hgMaxExp hgFixed gtexTissueMedianRatio
 # 12.53
+
+cd /hive/data/genomes/hg38/bed/gtex
+#hgMapToGene hg38 -type=genePred gtexGeneModelV6 knownGene knownToGtex
+hgMapToGene hg38 -all -type=genePred gtexGeneModelV6 knownGene knownToGtex
+
+hgExpDistance hg38 -verbose=2 -lookup=knownToGtex -weights=gtex.weights \
+        hgFixed.gtexTissueMedian hgFixed.gtexTissue \
+                gtexDistance
+# 4 hours ?
 
