@@ -47,6 +47,18 @@ errAbort(
   );
 }
 
+void printHash(char *label, struct hash *hash)
+/* Print out keys in hash alphabetically. */
+{
+struct hashEl *list, *el;
+list = hashElListHash(hash);
+slSort(&list, hashElCmp);
+printf("%s:\n", label);
+for (el = list; el != NULL; el = el->next)
+    printf("    %s\n", el->name);
+hashElFreeList(&list);
+}
+
 // fields/columns of the browse file table
 #define FILETABLEFIELDS "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,tem_count,body_part"
 
@@ -818,6 +830,13 @@ struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
     tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, makeDownloadAllButtonForm);
 
+printf("%s  %s  %s  %s  %s\n", fields, from, initialWhere, returnUrl, varPrefix); 
+/*void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
+    char *fields, char *from, char *initialWhere,  
+    char *returnUrl, char *varPrefix, int maxFieldWidth, 
+    struct hash *tagOutWrappers, void *wrapperContext,
+    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) )
+*/
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
 dyStringFree(&where);
@@ -1104,27 +1123,21 @@ return descs;
 void doBrowseDatasets(struct sqlConnection *conn, char *tag)
 /* show datasets and links to dataset summary pages. */
 {
-struct tagStorm *tags = cdwUserTagStorm(conn, user);
-struct hash *hash = tagStormCountTagVals(tags, tag);
-struct hashEl *hel, *helList = hashElListHash(hash);
-slSort(&helList, hashElCmpIntValDesc);
-int valIx = 0, maxValIx = 100;
 printf("<UL>\n");
+char query[PATH_LEN]; 
+sqlSafef(query, sizeof(query), "select * from cdwDataset"); 
+struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
 
-struct hash *descs = loadDatasetDescs(conn);
-
-for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
+for (iter = cD; iter != NULL; iter = iter->next)
     {
-    struct cdwDataset *dataset = hashFindVal(descs, hel->name);
-
     char *label;
     char *desc;
-    if (dataset == NULL)
+    if (iter == NULL)
         continue;
-    label = dataset->label;
-    desc = dataset->description;
+    label = iter->label;
+    desc = iter->description;
 
-    char *datasetId = hel->name;
+    char *datasetId = iter->name;
 
     // check if we have a dataset summary page in the CDW
     char summFname[8000];
@@ -1136,12 +1149,12 @@ for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
         printf("<B>%s</B><BR>\n", label);
     else
         printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
-    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)\n", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", iter->name);  
+    long long fileCount = sqlQuickLongLong(conn, query);
+    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%lld files</A>)\n", desc, datasetId, cartSidUrlString(cart), fileCount);
     printf("</LI>\n");
-    cdwDatasetFree(&dataset);
     }
-printf("</UL>\n");
-hashFree(&descs);
+cdwDatasetFree(&cD);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
@@ -1286,7 +1299,7 @@ for (iter = pairList; iter != NULL; iter = iter->next)
     // Make a new name value pair which may get added to the existing string. 
     safef(temp, sizeof(temp),"%s (%s)", iter->name, (char *)iter->val); 
     int newStringLen = ((int) strlen(valValueString))+((int) strlen(temp));
-    if (newStringLen >= 110) // Check if the new string is acceptable size. 
+    if (newStringLen >= 107) // Check if the new string is acceptable size. 
 	{
 	// The hairpin is set to false once the full line is made, this stops the line from growing. 
 	if (hairpin) 
@@ -1422,7 +1435,7 @@ printf("<BR>\n");
 
 /* Print out some pie charts on important fields */
 static char *pieTags[] = 
-    {"lab", "format", "data_set_id", };
+    {"lab", "format", "assay", };
 int i;
 printf("<TABLE style=\"display:inline\"><TR>\n");
 for (i=0; i<ArraySize(pieTags); ++i)
@@ -1493,94 +1506,6 @@ printf("constants. String constants need to be surrounded by quotes - either sin
 printf("<BR><BR>");
 }
 
-void doTest(struct sqlConnection *conn)
-/* Test out something */
-{
-printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
-cartSaveSession(cart);
-cgiMakeHiddenVar("cdwCommand", "test");
-
-char *id = "test_id_12";
-
-/* Print out input control and some text. */
-// printf("<input type=\"text\" class=\"%s\" name=\"cdw_f_%s\" id=\"f_%s\" size=12>", 
-  //   "positionInput", field, field);
-printf("Hello from the test page");
-printf("<input type=\"text\" id=\"%s\">", id);
-
-/* Print out javascript to wrap data picker around this */
-printf("<script>");
-printf("$(function () {\n");
-printf("  $('#%s').datepicker();\n", id);
-printf("});\n");
-printf("</script>");
-
-/* Try a menu, why not */
-printf("<BR>\n");
-printf("<ul id=\"menu_xyz\">\n");
-printf("<li id=\"xyz_1\">xyz 1</li>\n");
-printf("<li id=\"xyz_2\">xyz 2</li>\n");
-printf("</ul>\n");
-
-printf("<script>\n");
-printf("$(function () {\n");
-printf("$('#menu_xyz').menu({\n");
-printf("  select: function(event, ui) {alert('hi');}\n");
-printf("});\n");
-printf("});\n");
-printf("</script>\n");
-#ifdef SOON
-#endif /* SOON */
-
-printf("<button id='just_a_button'>say hello button</button>\n");
-printf("<script>\n");
-printf("$(function () {\n");
-printf("  $('#just_a_button').click(function (event) {\n");
-printf("    alert(\"A hi that doesn't submit\");\n");
-printf("    event.preventDefault();\n");
-printf("    event.stopPropagation();\n");
-printf("  });\n");
-printf("});\n");
-printf("</script>\n");
-
-printf("<button>submit me</button>\n");
-printf("<BR>");
-
-char *varName = "cdw_test_foo_23";
-char *val = cartUsualString(cart, varName, "");
-printf("<input name=\"%s\" type=\"text\" id=\"watered\" value=\"%s\">", varName, val);
-printf("<script>\n");
-printf("$(function () {\n");
-printf("  $('#watered').watermark(\"why hello there\");\n");
-printf("});\n");
-printf("</script>\n");
-
-char *colVar = "cdw_test_col";
-char *colVal = cartUsualString(cart, colVar, "xyz");
-printf("<input name=\"%s\" type=\"text\" id=\"%s\" value=\"%s\">", colVar, colVar, colVal);
-#ifdef SOON
-printf("<script>\n");
-printf("$(function () {\n");
-printf("  $('#%s').colorPicker();\n", colVar);
-printf("});\n");
-printf("</script>\n");
-#endif /* SOON */
-
-/* Make a pie chart */
-    {
-    struct slPair *dataList = NULL;
-    slPairAdd(&dataList, "A", "2");
-    slPairAdd(&dataList, "B", "3");
-    slPairAdd(&dataList, "C", "4");
-    slPairAdd(&dataList, "D", "5");
-    printf("<DIV id=\"pie1\">");
-    drawPrettyPieGraph(dataList, "pie1", "abcd", "bigger and bigger");
-    printf("</DIV>\n");
-    }
-
-printf("</FORM>");
-}
-
 void dispatch(struct sqlConnection *conn)
 /* Dispatch page after to routine depending on cdwCommand variable */
 {
@@ -1636,10 +1561,6 @@ else if (sameString(command, "oneTag"))
 else if (sameString(command, "help"))
     {
     doHelp(conn);
-    }
-else if (sameString(command, "test"))
-    {
-    doTest(conn);
     }
 else
     {
