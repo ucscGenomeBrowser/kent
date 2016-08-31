@@ -182,7 +182,7 @@ html *
 htmlFile customTracks
 htmlUrl customTracks
 idInUrlSql altGraphX genePred chain factorSource bed
-idXref genePred
+idXref genePred psl
 iframeUrl *
 iframeOptions *
 indelDoubleInsert psl bam bigBed bigPsl
