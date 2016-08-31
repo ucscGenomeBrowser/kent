@@ -259,7 +259,8 @@ function matSubCBsCheck(state)
         } else {//if (arguments.length === 2) { // Requested dim ABC (or only 1 dim so harmless)
             var matXY = $("input.matCB").not(".abc");  // check X&Y state
             matXY = $( matXY ).filter(":checked");
-            subCBs.each( function (i) { matSubCBcheckOne(this,state); });
+            if (matXY.length === 0)
+                subCBs.each( function (i) { matSubCBcheckOne(this,state); });
             for (var mIx=0;mIx<matXY.length;mIx++) {
                 classes = $(matXY[mIx]).attr("class").split(' ');
                 classes = aryRemove(classes,["matCB","changed","disabled"]);
