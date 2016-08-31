@@ -1123,27 +1123,21 @@ return descs;
 void doBrowseDatasets(struct sqlConnection *conn, char *tag)
 /* show datasets and links to dataset summary pages. */
 {
-struct tagStorm *tags = cdwUserTagStorm(conn, user);
-struct hash *hash = tagStormCountTagVals(tags, tag);
-struct hashEl *hel, *helList = hashElListHash(hash);
-slSort(&helList, hashElCmpIntValDesc);
-int valIx = 0, maxValIx = 100;
 printf("<UL>\n");
+char query[PATH_LEN]; 
+sqlSafef(query, sizeof(query), "select * from cdwDataset"); 
+struct cdwDataset *iter, *cD = cdwDatasetLoadByQuery(conn, query);
 
-struct hash *descs = loadDatasetDescs(conn);
-
-for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
+for (iter = cD; iter != NULL; iter = iter->next)
     {
-    struct cdwDataset *dataset = hashFindVal(descs, hel->name);
-
     char *label;
     char *desc;
-    if (dataset == NULL)
+    if (iter == NULL)
         continue;
-    label = dataset->label;
-    desc = dataset->description;
+    label = iter->label;
+    desc = iter->description;
 
-    char *datasetId = hel->name;
+    char *datasetId = iter->name;
 
     // check if we have a dataset summary page in the CDW
     char summFname[8000];
@@ -1155,12 +1149,12 @@ for (hel = helList; hel != NULL && ++valIx <= maxValIx; hel = hel->next)
         printf("<B>%s</B><BR>\n", label);
     else
         printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
-    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%d files</A>)\n", desc, datasetId, cartSidUrlString(cart), ptToInt(hel->val));
+    sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", iter->name);  
+    long long fileCount = sqlQuickLongLong(conn, query);
+    printf("%s (<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%lld files</A>)\n", desc, datasetId, cartSidUrlString(cart), fileCount);
     printf("</LI>\n");
-    cdwDatasetFree(&dataset);
     }
-printf("</UL>\n");
-hashFree(&descs);
+cdwDatasetFree(&cD);
 }
 
 void doBrowseFormat(struct sqlConnection *conn)
