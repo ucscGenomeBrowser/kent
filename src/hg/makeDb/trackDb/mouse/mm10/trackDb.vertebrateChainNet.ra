@@ -240,8 +240,7 @@ html vertebrateChainNet
         type netAlign melUnd1 chainMelUnd1
         otherDb melUnd1
 
-include chainNetGalGal4.ra beta,public
-include chainNetGalGal5.ra alpha
+include chainNetGalGal5.ra
 
         track netTaeGut1
         subTrack vertebrateChainNetViewnet on
