@@ -2300,7 +2300,7 @@ static int cram_populate_ref(cram_fd *fd, int id, ref_entry *r) {
 
 #ifdef UCSC_CRAM
     // don't download cram reference, just pass the file name upward
-    sprintf(fd->md5Ref, tag->str+3);
+    sprintf(fd->md5Ref, "%s", tag->str+3);
     return -1;
 #endif
 

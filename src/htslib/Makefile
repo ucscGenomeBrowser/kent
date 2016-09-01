@@ -22,13 +22,15 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 
-CC     = gcc
+kentSrc = ..
+include ${kentSrc}/inc/common.mk
+#CC     = gcc -p
 AR     = ar
 RANLIB = ranlib
 
 CPPFLAGS =
 # TODO: probably update cram code to make it compile cleanly with -Wc++-compat
-CFLAGS   = -ggdb -Wall -DKNETFILE_HOOKS -DUCSC_CRAM
+CFLAGS   += -DKNETFILE_HOOKS -DUCSC_CRAM
 EXTRA_CFLAGS_PIC = -fpic
 LDFLAGS  =
 LIBS     =

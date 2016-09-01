@@ -68,8 +68,8 @@ void cram_stats_add(cram_stats *st, int32_t val) {
 	    kh_val(st->h, k)++;
 	else if (r != -1)
 	    kh_val(st->h, k) = 1;
-	else
-	    ; // FIXME: handle error
+	//else
+	    //; // FIXME: handle error
     }
 }
 
