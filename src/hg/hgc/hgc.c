@@ -11813,10 +11813,13 @@ if (!sameString(tdb->track, "ncbiRefSeqPsl"))
 
 printf("<h3>Links to sequence:</h3>\n");
 printf("<ul>\n");
-puts("<li>\n");
-hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
-printf("Predicted Protein</a> \n");
-puts("</li>\n");
+if (differentWord("n/a", nrl->protAcc))
+    {
+    puts("<li>\n");
+    hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
+    printf("Predicted Protein</a> \n");
+    puts("</li>\n");
+    }
 puts("<li>\n");
 hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
 printf("%s</a> may be different from the genomic sequence.\n",
