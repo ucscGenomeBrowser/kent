@@ -335,7 +335,7 @@ for(; chromList; chromList = chromList->next)
     {
     AllocVar(ci);
     ci->chrom = cloneString(chromList->name);
-    ci->fileName = genome->twoBitPath;
+    ci->fileName = cloneString(genome->twoBitPath);
     ci->size = twoBitSeqSize(genome->tbf, chromList->name);
     slAddHead(&ciList, ci);
     }
