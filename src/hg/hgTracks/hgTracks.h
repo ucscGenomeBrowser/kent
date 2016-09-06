@@ -382,6 +382,7 @@ struct linkedFeatures
     boolean isHalSnake;
     struct hal_target_dupe_list_t *dupeList;
 #endif
+    boolean isBigGenePred;
     };
 
 struct linkedFeaturesSeries

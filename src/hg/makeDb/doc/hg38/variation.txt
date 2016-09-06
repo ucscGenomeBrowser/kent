@@ -994,18 +994,18 @@ EOF
 
 
 ##############################################################################
-# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 8/10/16 angie)
+# DGV (DATABASE OF GENOMIC VARIANTS) (DONE 9/6/16 angie)
 # Redmine #17351
-# previously done 11/07/14 #14188, 8/18/15 #15767
+# previously done 11/07/14 #14188, 8/18/15 #15767, 8/10/16 #17351 (bug)
     set today = `date +%y%m%d`
     mkdir -p /hive/data/genomes/hg38/bed/dgv/$today
     cd /hive/data/genomes/hg38/bed/dgv/$today
-    set release = 2016-05-15
+    set release = 2016-08-31
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_variants_$release.txt
     wget http://dgv.tcag.ca/dgv/docs/GRCh38_hg38_supportingvariants_$release.txt
     # These are the latest columns; if any changes, update translateDgvPlus.pl:
     head -1 GRCh38_hg38*.txt
-#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription      genes   samples
+#variantaccession        chr     start   end     varianttype     variantsubtype  reference       pubmedid        method  platform        mergedvariants  supportingvariants      mergedorsample  frequency       samplesize      observedgains   observedlosses  cohortdescription genes   samples
     # Eyeball the categories of variants:
     cut -f 5,6 GRCh38_hg38_supportingvariants_$release.txt  | sort | uniq -c | head -100
 #1921790 CNV     deletion

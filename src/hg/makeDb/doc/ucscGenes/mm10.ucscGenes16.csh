@@ -1550,3 +1550,11 @@ rm -r run.*/out
 # Last step in setting up isPCR: after the new UCSC Genes with the new Known Gene isPcr
 # is released, take down the old isPcr gfServer  
 #
+
+# make bigKnownGene.bb
+set genomes = /hive/data/genomes
+set dir = $genomes/mm10/bed/ucsc.16.1
+cd $dir
+makeBigKnown mm10
+rm -f /gbdb/mm10/knownGene.bb
+ln -s `pwd`/mm10.knownGene.bb /gbdb/mm10/knownGene.bb

@@ -387,7 +387,7 @@ for(; rows; rows = rows->next)
     {
     struct genePred *gp;
     if (isBig)
-        gp = genePredFromBigGenePredRow(rows->data);
+        gp = (struct genePred *)genePredFromBigGenePredRow(rows->data);
     else
         {
         // work around genePredLoad's trashing its input

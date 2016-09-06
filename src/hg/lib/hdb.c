@@ -5365,6 +5365,8 @@ char *bbiNameFromSettingOrTableChrom(struct trackDb *tdb, struct sqlConnection *
 {
 char *fileName = hReplaceGbdb(trackDbSetting(tdb, "bigDataUrl"));
 if (fileName == NULL)
+    fileName = hReplaceGbdb(trackDbSetting(tdb, "bigGeneDataUrl"));
+if (fileName == NULL)
     fileName = bbiNameFromTableChrom(conn, table, seqName);
 return fileName;
 }

@@ -67,6 +67,39 @@ enum genePredFields
     genePredAllFlds       = 0xFF   /* include all extended fields */
 };
 
+struct genePredExt
+/* A gene prediction, with extended fields. */
+{
+    struct genePredExt *next;  /* Next in singly linked list. */
+    char *name;	/* Name of loci, transcript, mRNA, etc */
+    char *chrom;	/* Chromosome name */
+    char strand[2];	/* + or - for strand */
+    unsigned txStart;	/* Transcription start position */
+    unsigned txEnd;	/* Transcription end position */
+    unsigned cdsStart;	/* Coding region start */
+    unsigned cdsEnd;	/* Coding region end */
+    unsigned exonCount;	/* Number of exons */
+    unsigned *exonStarts;	/* Exon start positions */
+    unsigned *exonEnds;	/* Exon end positions */
+
+    /* optional fields */
+    unsigned optFields;           /* which optional fields are used (not in
+                                   * database) */
+    int score;                    /* score */
+    char *name2;                  /* Secondary name. (e.g. name of gene), or
+                                   * empty if none, NULL if field not
+                                   * requested */
+    enum cdsStatus cdsStartStat;  /* Status of cdsStart annotation */
+    enum cdsStatus cdsEndStat;    /* Status of cdsEnd annotation */
+    int *exonFrames;              /* List of frame for each exon, or -1
+                                   * if no frame or not known. NULL if not
+                                   * available. */
+    char *type;
+    char *geneName;  
+    char *geneName2;
+    char *geneType;
+};
+
 struct genePred
 /* A gene prediction, with optional fields. */
 {
@@ -144,12 +177,18 @@ void genePredOutput(struct genePred *el, FILE *f, char sep, char lastSep);
 
 /* ---------  Start of hand generated code. ---------------------------- */
 
+struct genePred *genePredKnownLoad(char **row, int numCols);
+/* Load all genePreds with from tab-separated file in knownGene format */
+
 struct genePred *genePredExtLoad(char **row, int numCols);
 /* Load a genePred with from a row, with optional fields.  The row must
  * contain columns in the order in the struct, and they must be present up to
  * the last specfied optional field.  Missing intermediate fields must have
  * zero or empty columns, they may not be omitted.  Fields at the end can be
  * omitted. Dispose of this with genePredFree(). */
+
+struct genePred *genePredKnownLoadAll(char *fileName);
+/* Load all genePreds with from tab-separated file in knownGene format */
 
 struct genePred *genePredExtLoadAll(char *fileName);
 /* Load all genePreds with from tab-separated file, possibly with optional
@@ -327,10 +366,10 @@ int genePredBaseToCodingPos(struct genePred *gp, int basePos,
 // Returns -1 when outside of coding exons unless OPTIONAL isCoding pointer to boolean is
 // provided. In that case, returns last valid position and sets isCoding to FALSE.
 
-struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb);
+struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb);
 /* build a genePred from a bigGenePred interval */
 
-struct genePred  *genePredFromBigGenePredRow(char **row);
+struct genePredExt  *genePredFromBigGenePredRow(char **row);
 /* build a genePred from a bigGenePred row */
 #endif /* GENEPRED_H */
 

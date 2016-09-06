@@ -915,3 +915,10 @@ $join ensTransUcsc.tab ensTransProt.tab | awk '{if (NF==3)print $3, $2}' | sort 
 $join ensProtToUc.tab ensToTreefam.tab | sort -u | awk 'BEGIN {OFS="\t"} {print $2,$3}' | sort -u > knownToTreefam.tab
 $hgLoadSqlTab $tempDb knownToTreefam $kent/src/hg/lib/knownTo.sql knownToTreefam.tab
 #end section not done
+
+# make bigKnownGene.bb
+export dir=/cluster/data/hg38/bed/ucsc.17.1
+cd $dir
+makeBigKnown hg38
+rm -f /gbdb/hg38/knownGene.bb
+ln -s `pwd`/hg38.knownGene.bb /gbdb/hg38/knownGene.bb
