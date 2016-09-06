@@ -405,7 +405,7 @@ int sqlResultFieldArray(struct sqlResult *sr, char ***retArray);
 
 int sqlFieldColumn(struct sqlResult *sr, char *colName);
 /* get the column number of the specified field in the result, or
- * -1 if the result doesn't contailed the field.*/
+ * -1 if the result doesn't contain the field.*/
 
 int sqlTableSize(struct sqlConnection *conn, char *table);
 /* Find number of rows in table. */

@@ -373,7 +373,7 @@ options:
                     except Gencode genes, saves 4TB/6TB for hg19
          bestEncode = our ENCODE recommendation, all summary tracks, saves
                     2TB/6TB for hg19
-         main = only RefSeq/Gencode genes and common SNPs, total 5GB for hg19
+         main = only Gencode genes and common SNPs, 5GB for hg19
   -u   - use UDR (fast UDP) file transfers for the download.
          Requires at least one open UDP incoming port 9000-9100.
          (UDR is not available for Mac OSX)
@@ -1371,6 +1371,10 @@ function downloadGenomes
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
+    echo2 Downloading hgFixed.refLink, required for all RefSeq tracks
+    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
+    chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/hgFixed
+
     # download /gbdb files
     for db in $DBS; do
        echo2 Downloading $GBDBDIR files for assembly $db
@@ -1406,7 +1410,7 @@ function downloadGenomes
     echo2 To change this, edit the file $APACHEDIR/cgi-bin/hg.conf and modify the settings
     echo2 'that start with "login.", mainly "login.mailReturnAddr"'.
     echo2
-    echo2 Please send any other questions to the mailing list, genome-mirror@soe.ucsc.edu .
+    echo2 Feel free to send any questions to our mailing list genome-mirror@soe.ucsc.edu .
     waitKey
 }
 
@@ -1464,8 +1468,10 @@ function downloadMinimal
        chown -R $MYSQLUSER:$MYSQLUSER $MYSQLDIR/$db
     done
 
-    echo2 Copying hgFixed.trackVersion
+    echo2 Copying hgFixed.trackVersion, required for most tracks
     $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/trackVersion.* $MYSQLDIR/hgFixed/ 
+    echo2 Copying hgFixed.refLink, required for RefSeq tracks across all species
+    $RSYNC --progress -avzp $RSYNCOPTS $HGDOWNLOAD::mysql/hgFixed/refLink.* $MYSQLDIR/hgFixed/ 
 
     startMysql
 
@@ -1616,12 +1622,6 @@ while getopts ":baut:hof" opt; do
       if [ ! -f $APACHEDIR/cgi-bin/hg.conf ]; then
          echo Please install a browser first, then switch the data loading mode.
       fi
-
-      # allow on-the-fly loading of sql, file data and allow local table name caching
-      sed -i 's/^#slow-db\./slow-db\./g' $APACHEDIR/cgi-bin/hg.conf
-      sed -i 's/^#gbdbLoc1=/gbdbLoc1=/g' $APACHEDIR/cgi-bin/hg.conf
-      sed -i 's/^#gbdbLoc2=/gbdbLoc2=/g' $APACHEDIR/cgi-bin/hg.conf
-      sed -i 's/^#showTableCache=/showTableCache=/g' $APACHEDIR/cgi-bin/hg.conf
 
       echo $APACHEDIR/cgi-bin/hg.conf was modified. 
       echo On-the-fly mode activated: data is loaded from UCSC when not present locally.

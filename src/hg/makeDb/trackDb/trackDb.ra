@@ -264,6 +264,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
+maxItems 100000
 
 track knownAlt
 shortLabel UCSC Alt Events
@@ -3165,6 +3166,7 @@ allButtonPair on
         subGroups view=aGenes
         longLabel NCBI RefSeq annotations, all subsets
         html refGene.new
+        idXref ncbiRefSeqLink mrnaAcc name
         priority 1
 
 	track ncbiRefSeqCurated
@@ -3173,6 +3175,7 @@ allButtonPair on
 	shortLabel NCBI Curated
         subGroups view=aGenes
 	longLabel NCBI RefSeq curated subset (NM_*, NR_*, and YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
         priority 2
 
 	track ncbiRefSeqPredicted
@@ -3181,6 +3184,7 @@ allButtonPair on
 	shortLabel NCBI Predicted
         subGroups view=aGenes
 	longLabel NCBI RefSeq predicted subset (XM_* and XR_*)
+        idXref ncbiRefSeqLink mrnaAcc name
         priority 3
 
 	track ncbiRefSeqOther
@@ -3189,6 +3193,7 @@ allButtonPair on
 	shortLabel NCBI Other
         subGroups view=aGenes
 	longLabel NCBI RefSeq other genes subset, not (NM_*, NR_*, XM_*, XR_*, or YP_*)
+        idXref ncbiRefSeqLink mrnaAcc name
         priority 4
 
         track refGene
@@ -3231,6 +3236,7 @@ allButtonPair on
         pslSequence no
         baseColorUseSequence extFile seqNcbiRefSeq extNcbiRefSeq
         baseColorUseCds table ncbiRefSeqCds
+        idXref ncbiRefSeqLink mrnaAcc name
 
 	track refSeqAli
         release alpha
@@ -3250,6 +3256,7 @@ allButtonPair on
         pslSequence no
         baseColorUseCds table gbCdnaInfo
         baseColorUseSequence extFile seq gbSeq
+        idXref hgFixed.refLink mrnaAcc name
 
 searchName refSeqCompositeAccession
 searchTable ncbiRefSeq

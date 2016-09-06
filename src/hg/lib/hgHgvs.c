@@ -88,7 +88,7 @@
 //                                                     7......  replacement sequence
 
 // Pseudo-HGVS in common usage
-#define pseudoHgvsGeneSymbolSubstExp "^" geneSymbolExp "[: ]" hgvsAminoAcidSubstExp
+#define pseudoHgvsGeneSymbolSubstExp "^" geneSymbolExp "[: p.]+" hgvsAminoAcidSubstExp
 //      0.....................................................  whole matching string
 //      1...................                                    gene symbol
 //                                   2.....                     original sequence
