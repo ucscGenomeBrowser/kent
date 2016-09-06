@@ -1845,7 +1845,7 @@ static void addGpFromRow(struct genePred **pGpList, struct annoRow *row,
 /* If row is coding and we need a coding gp, add it to pGpList and update pNeedCoding;
  * likewise for noncoding. */
 {
-struct genePred *gp = isBig ? genePredFromBigGenePredRow(row->data) : genePredLoad(row->data);
+struct genePred *gp = isBig ? (struct genePred *)genePredFromBigGenePredRow(row->data) : genePredLoad(row->data);
 if (gp->cdsStart != gp->cdsEnd && *pNeedCoding)
     {
     slAddHead(pGpList, gp);

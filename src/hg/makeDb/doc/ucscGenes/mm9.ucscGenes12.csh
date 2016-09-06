@@ -1332,3 +1332,11 @@ gzip run.*/all.tab
 exit $status # BRACKET
 
 
+# make knownGene.bb
+set genomes = /hive/data/genomes
+set dir = $genomes/mm9/bed/ucsc.12
+cd $dir
+makeBigKnown mm9
+rm -f /gbdb/mm9/knownGene.bb
+ln -s `pwd`/mm9.knownGene.bb /gbdb/mm9/knownGene.bb
+

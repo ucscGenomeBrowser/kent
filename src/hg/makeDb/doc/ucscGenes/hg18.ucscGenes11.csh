@@ -1114,3 +1114,9 @@ ln -s $dir/index/knownGene.ixx /gbdb/$db/knownGene.ixx
     cp -Rfp knownGeneList/$db/* /usr/local/apache/htdocs/knownGeneList/$db
 
 #
+# make bigKnownGene.bb
+set dir = /cluster/data/hg18/bed/ucsc.11
+cd $dir
+makeBigKnown hg18
+rm -f /gbdb/hg18/knownGene.bb
+ln -s `pwd`/hg18.knownGene.bb /gbdb/hg18/knownGene.bb

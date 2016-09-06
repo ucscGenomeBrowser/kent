@@ -3489,7 +3489,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
         struct hvGfx *hvg, Color *retColor, Color *retBarbColor)
 /* Figure out color to draw linked feature in. */
 {
-if (!((lf->filterColor == 0) || (lf->filterColor == -1)))
+if (!((lf->isBigGenePred) ||(lf->filterColor == 0)|| (lf->filterColor == -1)))
     {
     if (lf->extra == (void *)USE_ITEM_RGB)
 	{
@@ -3521,6 +3521,17 @@ else
     *retColor = tg->ixColor;
     *retBarbColor = tg->ixAltColor;
     }
+}
+
+Color bigGenePredColor(struct track *tg, void *item,  struct hvGfx *hvg)
+/* Determine the color of the name for the bigGenePred linked feature. */
+{
+struct linkedFeatures *lf = item;
+struct rgbColor itemRgb;
+itemRgb.r = (lf->filterColor & 0xff0000) >> 16;
+itemRgb.g = (lf->filterColor & 0xff00) >> 8;
+itemRgb.b = lf->filterColor & 0xff;
+return hvGfxFindColorIx(hvg, itemRgb.r, itemRgb.g, itemRgb.b);
 }
 
 Color linkedFeaturesNameColor(struct track *tg, void *item, struct hvGfx *hvg)
@@ -5991,7 +6002,7 @@ safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, ((struct knownGenesExtra *
 return(cloneString(str2));
 }
 
-void lookupKnownGeneNames(struct linkedFeatures *lfList)
+void lookupKnownGeneNames(struct linkedFeatures *lfList, boolean isBigGenePred)
 /* This converts the known gene ID to a gene symbol */
 {
 struct linkedFeatures *lf;
@@ -6051,12 +6062,20 @@ if (hTableExists(database, "kgXref"))
 	{
         struct dyString *name = dyStringNew(SMALLDYBUF);
         struct knownGenesExtra *kgE;
+        struct genePredExt *gp = lf->original;
         AllocVar(kgE);
         labelStarted = FALSE; /* reset between items */
         if (useGeneSymbol)
             {
-            sqlSafefFrag(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
-            geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
+            if ( isBigGenePred )
+                {
+                geneSymbol = gp->geneName;
+                }
+            else
+                {
+                sqlSafefFrag(cond_str, sizeof cond_str,"kgID='%s'", lf->name);
+                geneSymbol = sqlGetField(database, "kgXref", "geneSymbol", cond_str);
+                }
             if (geneSymbol != NULL)
                 {
                 dyStringAppend(name, geneSymbol);
@@ -6067,8 +6086,15 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-	    sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
-	    gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+            if ( isBigGenePred )
+                {
+                gencodeId = gp->name2;
+                }
+            else
+                {
+                sqlSafefFrag(cond_str, sizeof(cond_str), "name='%s'", lf->name);
+                gencodeId = sqlGetField(database, "knownGene", "alignID", cond_str);
+                }
 	    dyStringAppend(name, gencodeId);
 	    }
         if (useKgId)
@@ -6081,15 +6107,22 @@ if (hTableExists(database, "kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-            if (lf->extra != NULL)
+            if ( isBigGenePred )
                 {
-                dyStringAppend(name, (char *)lf->extra);
+                dyStringAppend(name, gp->geneName2);
                 }
             else
                 {
-	        sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
-                protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
-                dyStringAppend(name, protDisplayId);
+                if (lf->extra != NULL)
+                    {
+                    dyStringAppend(name, (char *)lf->extra);
+                    }
+                else
+                    {
+                    sqlSafefFrag(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+                    protDisplayId = sqlGetField(database, "kgXref", "spDisplayID", cond_str);
+                    dyStringAppend(name, protDisplayId);
+                    }
                 }
 	    }
         if (useMimId && sqlTableExists(conn, refLinkTable))
@@ -6124,6 +6157,26 @@ slReverse(&newList);
 return newList;
 }
 
+#define BIT_BASIC       (1 << 0)        // transcript is in basic set
+#define BIT_CANON       (1 << 1)        // transcript is in canonical set
+
+struct linkedFeatures *stripLinkedFeaturesWithoutBitInScore (struct linkedFeatures *list, unsigned bit)
+/* Remove features that don't have this bit set in the score. */
+{
+struct linkedFeatures *newList = NULL, *el, *next;
+for (el = list; el != NULL; el = next)
+    {
+    next = el->next;
+    el->next = NULL;
+    if ((unsigned)el->score & bit)
+        {
+        slAddHead(&newList, el);
+        }
+    }
+slReverse(&newList);
+return newList;
+}
+
 struct linkedFeatures *stripLinkedFeaturesNotInHash(struct linkedFeatures *list, struct hash *hash)
 /* Remove linked features not in hash from list. */
 {
@@ -6138,13 +6191,48 @@ slReverse(&newList);
 return newList;
 }
 
+static void loadKnownBigGenePred(struct track *tg, boolean isGencode)
+/* Load knownGene features from a bigGenePred. */
+{
+int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
+struct linkedFeatures *lfList = NULL;
+tg->parallelLoading = TRUE;  // set so bigBed code will look at bigDataUrl
+bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
+      scoreMin, scoreMax, TRUE, 12, &lfList);
+struct linkedFeatures *newList = lfList;
+
+if (isGencode)
+    {
+    char varName[SMALLBUF];
+    safef(varName, sizeof(varName), "%s.show.comprehensive", tg->tdb->track);
+    boolean showComprehensive = cartUsualBoolean(cart, varName, FALSE);
+    if (!showComprehensive)
+        newList = stripLinkedFeaturesWithoutBitInScore(lfList,  BIT_BASIC);
+    }
+
+slSort(&newList, linkedFeaturesCmp);
+tg->items = newList;
+tg->itemColor   = bigGenePredColor;
+tg->itemNameColor = bigGenePredColor;
+}
+
 void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 struct trackDb *tdb = tg->tdb;
 char *isGencode = trackDbSetting(tdb, "isGencode");
+char *bigGenePred = trackDbSetting(tdb, "bigGeneDataUrl");
+struct udcFile *file;
+boolean isBigGenePred = FALSE;
 
-if (isGencode == NULL)
+if ((bigGenePred != NULL) && ((file = udcFileMayOpen(bigGenePred, udcDefaultDir())) != NULL))
+    {
+    isBigGenePred = TRUE;
+    udcFileClose(&file);
+    loadKnownBigGenePred(tg, isGencode != NULL);
+    }
+else if (isGencode == NULL)
     loadGenePredWithName2(tg);
 else
     loadKnownGencode(tg);
@@ -6158,29 +6246,36 @@ if (!showNoncoding)
     tg->items = stripShortLinkedFeatures(tg->items);
 if (!showSpliceVariants)
     {
-    char *canonicalTable = trackDbSettingOrDefault(tdb, "canonicalTable", "knownCanonical");
-    if (hTableExists(database, canonicalTable))
+    if (isBigGenePred)
         {
-	/* Create hash of items in canonical table in region. */
-	struct sqlConnection *conn = hAllocConn(database);
-        struct hash *hash = hashNew(0);
-        char query[512];
-        sqlSafef(query, sizeof(query),
-                "select transcript from %s where chrom=\"%s\" and chromStart < %d && chromEnd > %d",
-                canonicalTable, chromName, winEnd, winStart);
-        struct sqlResult *sr = sqlGetResult(conn, query);
-        char **row;
-        while ((row = sqlNextRow(sr)) != NULL)
-	    hashAdd(hash, row[0], NULL);
-	sqlFreeResult(&sr);
-	hFreeConn(&conn);
+        tg->items = stripLinkedFeaturesWithoutBitInScore(tg->items,  BIT_CANON);
+        }
+    else
+        {
+        char *canonicalTable = trackDbSettingOrDefault(tdb, "canonicalTable", "knownCanonical");
+        if (hTableExists(database, canonicalTable))
+            {
+            /* Create hash of items in canonical table in region. */
+            struct sqlConnection *conn = hAllocConn(database);
+            struct hash *hash = hashNew(0);
+            char query[512];
+            sqlSafef(query, sizeof(query),
+                    "select transcript from %s where chrom=\"%s\" and chromStart < %d && chromEnd > %d",
+                    canonicalTable, chromName, winEnd, winStart);
+            struct sqlResult *sr = sqlGetResult(conn, query);
+            char **row;
+            while ((row = sqlNextRow(sr)) != NULL)
+                hashAdd(hash, row[0], NULL);
+            sqlFreeResult(&sr);
+            hFreeConn(&conn);
 
-	/* Get rid of non-canonical items. */
-	tg->items = stripLinkedFeaturesNotInHash(tg->items, hash);
-	hashFree(&hash);
-	}
+            /* Get rid of non-canonical items. */
+            tg->items = stripLinkedFeaturesNotInHash(tg->items, hash);
+            hashFree(&hash);
+            }
+        }
     }
-lookupKnownGeneNames(tg->items);
+lookupKnownGeneNames(tg->items, isBigGenePred);
 limitVisibility(tg);
 }
 
