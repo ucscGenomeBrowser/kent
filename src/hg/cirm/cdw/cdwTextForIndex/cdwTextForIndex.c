@@ -24,7 +24,7 @@ static struct optionSpec options[] = {
 };
 
 /* Fields that should go first, in the order they should go */
-char *priorityFields[] = { "accession", "keywords", "body_part", "data_set_id", "lab", "age", 
+char *priorityFields[] = { "accession", "keywords", "sample_label", "data_set_id", "lab", "age", 
     "age_unit", "donor", "file_name", "meta", "output", "pipeline", };
 
 struct hash *hashTextFields(struct sqlConnection *conn, char *table)
