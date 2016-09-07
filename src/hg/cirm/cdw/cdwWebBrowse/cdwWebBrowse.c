@@ -830,13 +830,6 @@ struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
 webFilteredSqlTable(cart, conn, fields, from, where->string, returnUrl, varPrefix, maxFieldWidth,
     tagOutWrappers, wrapperContext, withFilters, itemPlural, pageSize, suggestHash, makeDownloadAllButtonForm);
 
-printf("%s  %s  %s  %s  %s\n", fields, from, initialWhere, returnUrl, varPrefix); 
-/*void webFilteredSqlTable(struct cart *cart, struct sqlConnection *conn, 
-    char *fields, char *from, char *initialWhere,  
-    char *returnUrl, char *varPrefix, int maxFieldWidth, 
-    struct hash *tagOutWrappers, void *wrapperContext,
-    boolean withFilters, char *itemPlural, int pageSize, struct hash *suggestHash, void (*addFunc)(void) )
-*/
 /* Clean up and go home. */
 cdwFileFreeList(&efList);
 dyStringFree(&where);

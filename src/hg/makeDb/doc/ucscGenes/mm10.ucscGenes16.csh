@@ -82,15 +82,18 @@ set yeastFa = $genomes/$yeastDb/bed/sgdAnnotations/blastTab/sacCer3.sgd.faa
 
 # Other files needed
 
-mkdir /hive/data/outside/bioCyc/160330
-cd /hive/data/outside/bioCyc/160330
+# NOTE: Adjust the download file and directory names as appropriate for your
+# assembly.  Had to rebuild this later (Aug 24, 2016) because I used human
+# data the first time.
+mkdir /hive/data/outside/bioCyc/160824
+cd /hive/data/outside/bioCyc/160824
 mkdir download
 cd download
-wget --timestamping --no-directories --recursive --user=biocyc-flatfiles --password=data-20541 "http://brg.ai.sri.com/ecocyc/dist/flatfiles-52983746/human.tar.gz"
-tar xzvf human.tar.gz
+wget --timestamping --no-directories --recursive --user=biocyc-flatfiles --password=data-20541 "http://brg.ai.sri.com/ecocyc/dist/flatfiles-52983746/mouse.tar.gz"
+tar xzvf mouse.tar.gz
 
-set bioCycPathways = /hive/data/outside/bioCyc/160330/19.5/data/pathways.col
-set bioCycGenes = /hive/data/outside/bioCyc/160330/19.5/data/genes.col
+set bioCycPathways = /hive/data/outside/bioCyc/160824/download/1.7.1/data/pathways.col
+set bioCycGenes = /hive/data/outside/bioCyc/160824/download/1.7.1/data/genes.col
 
 # Get the blocks in this genome that are syntenic to the $xdb genome
 cd $dir
@@ -484,7 +487,7 @@ faSplit sequence txWalk.fa 200 txFaSplit/
 # wc $testingDir/txWalk.intersect.bed
 #
 
-# Fetch human protein set and table that describes if curated or not.
+# Fetch mouse protein set and table that describes if curated or not.
 # Takes about a minute
 hgsql -N $spDb -e \
   "select p.acc, p.val from protein p, accToTaxon x where x.taxon=$taxon and p.acc=x.acc" \
