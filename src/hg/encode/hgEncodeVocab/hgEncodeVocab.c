@@ -96,7 +96,7 @@ if (s != NULL)
             if (count>0)
                 printf("<BR>");
             count++;
-            docTitle = htmlEncodeText(strSwapChar(docTitle,'_',' '),FALSE);
+            docTitle = htmlEncode(strSwapChar(docTitle,'_',' '));
             if (sameWord(fileName,"missing"))
                 printf("%s<em>missing</em>\n",docTitle);
             else

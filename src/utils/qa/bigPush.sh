@@ -19,8 +19,7 @@ umask 002
 
 dbList=""
 tableList=""
-verboseMode=""
-outputMode=""
+outputMode="> /dev/null"
 
 ##### Functions #####
 
@@ -67,7 +66,7 @@ do
                         exit 0
                         ;;
                 v)
-                        verboseMode=true
+			outputMode=""
                         ;;
                 '?')
                         showHelp >&2
@@ -91,17 +90,6 @@ else
 fi
 
 ##### Main Program #####
-
-# Adjust output mode based on specified verbose mode 
-if [[ "$verboseMode" == "true" ]]
-then
-	# Will cause output to be sent to stdout
-	outputMode=""
-else
-	# if no verbose mode specified just send output to /dev/null
-	outputMode="> /dev/null"
-fi
-
 
 # First check if dbList is a file.
 # If not, skips down to "# Here"

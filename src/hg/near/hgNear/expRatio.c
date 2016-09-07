@@ -668,7 +668,8 @@ if (col->table == NULL)
 /* Check that we have at least one set of experiments to display,
  * and set the current experiments. */
 makeEmd(col, "all", "all replicates", &emdList);
-makeEmd(col, "median", "median of replicates", &emdList);
+// customize otherwise confusing menu option for GTEx.  Simply, this option selects all tissues.
+makeEmd(col, "median", startsWith("gtex", col->name) ? "all" : "median of replicates", &emdList);
 makeEmd(col, "selected", "selected", &emdList);
 if (emdList == NULL)
    errAbort("Need at least one of all/median/selected for %s", col->name);

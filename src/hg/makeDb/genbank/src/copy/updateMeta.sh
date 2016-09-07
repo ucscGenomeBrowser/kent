@@ -1,1 +1,1 @@
-updateDb.sh gbMeta gbTmp /cluster/home/braney/.hg.conf.beta metaTables.txt
+./updateDb.sh hgFixed gbMeta /cluster/home/braney/.hg.conf.beta metaTables.txt

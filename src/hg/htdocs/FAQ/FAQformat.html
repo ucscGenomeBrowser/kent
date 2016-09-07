@@ -555,9 +555,9 @@ Look for the alignment on the negative strand (-) of chr21, which
 conveniently aligns to the window chr21:10,000,001-10,000,061.<br>
 
 <br>
-Browser window coordinates are 1-based [start,end] while psl coordinates are 0-based [start,end), so a start of 10,000,001
-in the browser corresponds to a start of 10,000,000 in the psl. Subtracting 10,000,000 from the target (chromosome) position
-in psl gives the query negative strand coordinate above.<br>
+Browser window coordinates are 1-based [start,end] while PSL coordinates are 0-based [start,end), so a start of 10,000,001
+in the browser corresponds to a start of 10,000,000 in the PSL. Subtracting 10,000,000 from the target (chromosome) position
+in PSL gives the query negative strand coordinate above.<br>
 
 <br>
 The 4, 14, and 5 bases at beginning, middle, and end were
@@ -566,18 +566,20 @@ chosen to not match with the genome at the corresponding position.<br>
 <br>
 <B><I>Protein Query:</I></B><BR>
 A protein query consists of amino acids. 
-To align against a database of nucleic acids, 
-each target chromosome gets translated into amino-acids in 3 different versions, one for each frame. 
-The protein psl is a hybrid, because the query fields are all in amino-acid coordinates and sizes,
-while the target database fields are in nucleic-acid chromosome coordinates and sizes.
+To align amino acids against a database of nucleic acids,
+each target chromosome is first translated into amino acids for
+each of the six different reading frames.
+The resulting protein PSL is a hybrid; the query fields are all in amino acid coordinates and sizes,
+while the target database fields are in nucleic acid chromosome coordinates and sizes.
 The fields shared by query and target are blockCount and blockSizes. 
 But blockSizes differ between query (AA) and target (NA), so a single field cannot represent both.
 A choice was therefore made to report the blockSizes field in amino acids since it is a protein query.
 <br>
 <br>
-Use <b>blockSizes[exonNumber]*3</b> to find the size of a target exon in nucleic-acids.
+To find the size of a target exon in nucleic acids, use the formula <b>blockSizes[exonNumber]*3</b>.
 <br>
-Use tStarts[exonNumber] + <b>(blockSizes[exonNumber]*3)</b> to find the end-position of a target exon.
+Or, to find the end position of a target exon, use the formula <b>tStarts[exonNumber] +
+(blockSizes[exonNumber]*3)</b>.
 
 			    </TD><TD WIDTH=15></TD></TR>
 	    		</TABLE><BR>

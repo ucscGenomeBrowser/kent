@@ -37,7 +37,8 @@ static void getXrefInfo(struct sqlConnection *conn,
 			char **retAliasField)
 /* See if curTrack specifies an xref/alias table for lookup of IDs. */
 {
-char *xrefSpec = curTrack ? trackDbSetting(curTrack, "idXref") : NULL;
+struct trackDb *tdb  = hTrackDbForTrack(database, curTable);
+char *xrefSpec = tdb ? trackDbSettingClosestToHomeOrDefault(tdb, "idXref",NULL) : NULL;
 char *xrefTable = NULL, *idField = NULL, *aliasField = NULL;
 if (xrefSpec != NULL)
     {
@@ -493,14 +494,13 @@ if (isNotEmpty(idText))
 	    }
 	carefulClose(&f);
 
-	dyStringPrintf(exampleMissingIds, "\n<a href=%s>Complete list of missing identifiers<a>\n", tn.forHtml);
-
 	warn("Note: %d of the %d given identifiers have no match in "
 	     "table %s, field %s%s%s%s%s.  "
 	     "Try the \"describe table schema\" button for more "
 	     "information about the table and field.\n"
 	     "%d %smissing identifier(s):\n"
-	     "%s\n",
+	     "%s\n"
+	     "<a href='%-s'>Complete list of missing identifiers<a>\n", 
 	     (totalTerms - foundTerms), totalTerms,
 	     curTable, idField,
 	     (xrefTable ? (xrefIsSame ? "" : " or in alias table ") : ""),
@@ -509,7 +509,8 @@ if (isNotEmpty(idText))
 	     (xrefTable ? aliasField : ""),
 	     exampleCount,
 	     exampleCount < missingCount ? "example " : "",
-	     exampleMissingIds->string
+	     exampleMissingIds->string,
+	     tn.forHtml
 	    );
 	webNewSection("Table Browser");
 	}

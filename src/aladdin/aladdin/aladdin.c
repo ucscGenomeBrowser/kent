@@ -329,19 +329,19 @@ typedef int Mark0[5];
 typedef int Mark1[5][5];
 typedef int Mark2[5][5][5];
 
-inline int prob0(Mark0 m, DNA base)
+static inline int prob0(Mark0 m, DNA base)
 /* Return probability of base considering 0 before */
 {
 return m[ntVal[(int)base]+1];
 }
 
-inline int prob1(Mark1 m, DNA *dna)
+static inline int prob1(Mark1 m, DNA *dna)
 /* Return probability of base considering 1 before */
 {
 return m[ntVal[(int)dna[-1]]+1][ntVal[(int)dna[0]]+1];
 }
 
-inline int prob2(Mark2 m, DNA *dna)
+static inline int prob2(Mark2 m, DNA *dna)
 /* Return probability of base considering 2 before */
 {
 return m[ntVal[(int)dna[-2]]+1][ntVal[(int)dna[-1]]+1][ntVal[(int)dna[0]]+1];

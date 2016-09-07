@@ -180,7 +180,7 @@ static char *keyFields[] =  {
     "lab",
     "read_size",
     "item_count",
-    "body_part",
+    "sample_label",
     "submit_dir",
     "species",
 };

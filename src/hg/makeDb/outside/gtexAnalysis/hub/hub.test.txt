@@ -1,0 +1,8 @@
+hub GTEx Analysis
+shortLabel GTEx Analysis Hub
+longLabel Allele-Specific Expression in 53 tissues from GTEx Analysis (NY Genome Center)
+genomesFile genomes.txt
+email genome@soe.ucsc.edu
+descriptionUrl http://genome-test.soe.ucsc.edu/gbdb/hubs/gtexAnalysis/gtexAnalysisHub.html
+
+

@@ -5,6 +5,10 @@ L += -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
+hgMaxExp: hgMaxExp.o ${MYLIBS}
+	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgMaxExp $@.o ${MYLIBS} $L
+	${STRIP} ${DESTDIR}${BINDIR}/hgMaxExp${EXE}
+
 hgExpDistance_fq: hgExpDistance_fq.o ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/hgExpDistance $@.o ${MYLIBS} $L -lpthread
 	${STRIP} ${DESTDIR}${BINDIR}/hgExpDistance${EXE}

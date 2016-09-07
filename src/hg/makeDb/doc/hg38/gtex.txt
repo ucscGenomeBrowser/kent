@@ -77,6 +77,7 @@ hgLoadBed hg38 -noBin -tab -type=bed6+4 \
         -as=$lib/gtexGeneBed.as -sqlTable=$lib/gtexGeneBed.sql -renameSqlTable \
                 gtexGeneBedNewV6 gtexGeneBedV6.bed
 
-
+# Add GTEx to Gene Sorter (2016-08-18 kate)
+# See hg/near/makeNear.doc
 
 

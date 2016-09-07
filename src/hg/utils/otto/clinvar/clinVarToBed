@@ -194,6 +194,10 @@ for line in ifh:
     if start=="" or end=="":
         print "undefined start or end coordinate. record %s"% irvcAcc
         continue
+
+    if chrom=="chr17" and (end=="217748468" or end=="84062405"):
+        print "blacklisted feature"
+        continue
         
     # sometimes they seem to inverse their coordinates
     if int(start)>int(end):
@@ -231,7 +235,7 @@ for line in ifh:
     if geneSymbol=="more than 10":
         geneSymbol = "not shown, more than 10 genes"
         
-    name = alleleId+"|"+name
+    name = varId+"|"+name
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, allType, geneId, geneSymbol,

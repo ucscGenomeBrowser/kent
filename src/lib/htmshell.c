@@ -43,6 +43,22 @@ void htmlDoEscape()
 NoEscape = FALSE;
 }
 
+void htmlVaEncodeErrorText(char *format, va_list args)
+/* Write an error message encoded against XSS. */
+{
+char warning[1024];
+int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE);
+if (sz < 0)
+    {
+    safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
+fprintf(stdout, "%s\n", warning);
+}
+
+
 void htmlVaParagraph(char *line, va_list args)
 /* Print a line in it's own paragraph. */
 {
@@ -186,51 +202,261 @@ while(*from!='\0')
 return scrubbed;
 }
 
-char *htmlEncodeText(char *s,boolean tagsOkay)
-/* Returns a cloned string with quotes replaced by html codes.
-   Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
-   This differs from cgiEncode as it handles text that will
-   be displayed in an html page or tooltip style title.  */
-{
-int size = strlen(s) + 3; // Add some slop
-if (tagsOkay)
-    size += countChars(s,'\n') * 4;
-else
-    {
-    size += countChars(s,'>' ) * 4;
-    size += countChars(s,'<' ) * 4;
-    size += countChars(s,'&' ) * 5;
-    size += countChars(s,'\n') * 6;
-    }
-size += countChars(s,'"' ) * 6;
-size += countChars(s,'\'') * 5;
-char *cleanQuote = needMem(size);
-safecpy(cleanQuote,size,s);
 
-// NOTE: While some internal HTML should work, a single quote (') will will screw it up!
-if (tagsOkay)
-    strSwapStrs(cleanQuote, size,"\n","<BR>" ); // new lines also break the html
+char *htmlWarnEncode(char *s)
+/* Returns a cloned string with newlines replaced by BR tag.
+   Meant to be displayed with warn popup box. */
+{
+int size = strlen(s);
+size += countChars(s,'\n') * 4;
+char *cleanQuote = needMem(size+1);
+safecpy(cleanQuote,size+1,s);
+
+strSwapStrs(cleanQuote, size,"\n","<BR>" ); // use BR tag for new lines
+if (cgiClientBrowser(NULL,NULL,NULL) == btFF) // Firefox
+    strSwapStrs(cleanQuote, size, "&#124;", "<BR>"); // replace with BR tag
 else
-    {
-    strSwapStrs(cleanQuote, size,"&","&amp;" );  // '&' is not the start of a control char
-    strSwapStrs(cleanQuote, size,">","&gt;"  );  // '>' is not the close of a tag
-    strSwapStrs(cleanQuote, size,"<","&lt;"  );  // '<' is not the open of a tag
-    if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-        strSwapStrs(cleanQuote, size,"\n","&#124;"); // FF does not support!  Use "&#124;" for '|'
-                                                     // instead
-    else
-        strSwapStrs(cleanQuote, size,"\n","&#x0A;"); // '\n' is supported on some browsers
-    }
-strSwapStrs(cleanQuote, size,"\"","&quot;"); // Shield double quotes
-strSwapStrs(cleanQuote, size,"'" ,"&#39;" ); // Shield single quotes
+    strSwapStrs(cleanQuote, size, "&#x0A;", "<BR>"); // replace with BR tag
 
 return cleanQuote;
 }
 
-char *attributeEncode(char *str)
+
+
+int htmlEncodeTextExtended(char *s, char *out, int outSize)
+/* Replaces required punctuation characters with html entities to fight XSS. 
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
 {
-return htmlEncodeText(str, FALSE);
+boolean FF = FALSE;
+if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+    FF = TRUE;
+int total = 0;
+char c = 0;
+do
+    {
+    c=*s++;
+    int size = 1;
+    char *newString = NULL; 
+    if (c == '&') { size = 5; newString = "&amp;"; } // '&' start a control char
+    if (c == '>') { size = 4; newString = "&gt;" ; } // '>' close of tag
+    if (c == '<') { size = 4; newString = "&lt;" ; } // '<' open  of tag
+    if (c == '\n') 
+	{
+	size = 6;
+	if (FF)
+	    newString = "&#124;"; // FF does not support!  Use "&#124;" for '|' instead
+	else
+	    newString = "&#x0A;"; // '\n' is supported on some browsers
+	}
+    if (c == '/')  { size = 6; newString = "&#x2F;"; } // forward slash helps end an HTML entity
+    if (c == '"')  { size = 6; newString = "&quot;"; } // double quote
+    if (c == '\'') { size = 5; newString = "&#39;" ; } // single quote
+    if (out)
+	{
+	if (outSize > 0 && (total+size+1) > outSize) // 1 for terminator
+	    {
+	    *out = 0;
+	    return -1;
+	    }
+	if (size == 1)
+	    *out++ = c;
+	else
+	    {
+	    strncpy(out, newString, size);
+	    out += size;
+	    }
+	}
+    total += size;
+    } while (c != 0);
+return total - 1; // do not count terminating 0
 }
+
+int htmlEncodeTextSize(char *s)
+/* Returns what the encoded size will be after replacing characters with html codes or entities. */
+{
+return htmlEncodeTextExtended(s, NULL, 0);
+}
+
+
+char *htmlEncode(char *s)
+/* Returns a cloned string with quotes replaced by html codes.
+   Changes ',",\n and >,<,& to code equivalents.
+   This differs from cgiEncode as it handles text that will
+   be displayed in an html page or tooltip style title.  */
+{
+int size = htmlEncodeTextSize(s);
+char *out = needMem(size+1);
+htmlEncodeTextExtended(s, out, size+1);
+return out;
+}
+
+int nonAlphaNumericHexEncodeTextExtended(char *s, char *out, int outSize, 
+   char *prefix, char *postfix, int encodedSize)
+/* For html tag attributes, it replaces non-alphanumeric characters
+ * with <prefix>HH<postfix> hex codes to fight XSS.
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
+{
+int total = 0;
+char c = 0;
+do
+    {
+    c=*s++;
+    int size = 1;
+    if (!isalnum(c)) // alpha-numeric
+	{
+	size = encodedSize;
+	}
+    if (c == 0)
+	size = 1;    // do not encode the terminating 0
+    if (out)
+	{
+	if (outSize > 0 && (total+size+1) > outSize) // 1 for terminator
+	    {
+	    *out = 0;
+	    return -1;
+	    }
+	if (size == 1)
+	    *out++ = c;
+	else
+	    {
+	    char x;
+	    char *pf = prefix;
+	    while ((x = *pf++) != 0)
+		*out++ = x;
+	    char h1 = (c >> 4 ) + 0x30; if (h1 > 0x39) h1 += 7;
+	    *out++ = h1;
+	    char h2 = (c & 0xF) + 0x30; if (h2 > 0x39) h2 += 7;
+	    *out++ = h2;
+	    pf = postfix;
+	    while ((x = *pf++) != 0)
+		*out++ = x;
+	    }
+	}
+    total += size;
+    } while (c != 0);
+return total - 1; // do not count terminating 0
+}
+
+
+int attrEncodeTextExtended(char *s, char *out, int outSize)
+/* For html tag attributes, it replaces non-alphanumeric characters
+ * with html entities &#xHH; to fight XSS.
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
+{
+return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "&#x", ";", 6);
+}
+
+int attrEncodeTextSize(char *s)
+/* Returns what the encoded size will be after replacing characters with escape codes. */
+{
+return attrEncodeTextExtended(s, NULL, 0);
+}
+
+char *attributeEncode(char *s)
+/* Returns a cloned string with non-alphanumeric characters replaced by escape codes. */
+{
+int size = attrEncodeTextSize(s);
+char *out = needMem(size+1);
+attrEncodeTextExtended(s, out, size+1);
+return out;
+}
+
+
+int cssEncodeTextExtended(char *s, char *out, int outSize)
+/* For CSS, it replaces non-alphanumeric characters with "\HH " to fight XSS.
+ * (Yes, the trailing space is critical.)
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
+{
+return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\", " ", 4);
+}
+
+int cssEncodeTextSize(char *s)
+/* Returns what the encoded size will be after replacing characters with escape codes. */
+{
+return cssEncodeTextExtended(s, NULL, 0);
+}
+
+char *cssEncode(char *s)
+/* Returns a cloned string with non-alphanumeric characters replaced by escape codes. */
+{
+int size = cssEncodeTextSize(s);
+char *out = needMem(size+1);
+cssEncodeTextExtended(s, out, size+1);
+return out;
+}
+
+
+int javascriptEncodeTextExtended(char *s, char *out, int outSize)
+/* For javascript, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
+{
+return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\x", "", 4);
+}
+
+int javascriptEncodeTextSize(char *s)
+/* Returns what the encoded size will be after replacing characters with escape codes. */
+{
+return javascriptEncodeTextExtended(s, NULL, 0);
+}
+
+char *javascriptEncode(char *s)
+/* Returns a cloned string with non-alphanumeric characters replaced by escape codes. */
+{
+int size = javascriptEncodeTextSize(s);
+char *out = needMem(size+1);
+javascriptEncodeTextExtended(s, out, size+1);
+return out;
+}
+
+
+int urlEncodeTextExtended(char *s, char *out, int outSize)
+/* For URL parameters, it replaces non-alphanumeric characters with "%HH" to fight XSS.
+ * out result must be large enough to receive the encoded string.
+ * Returns size of encoded string or -1 if output larger than outSize. 
+ * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
+ * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
+ */
+{
+return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "%", "", 3);
+}
+
+int urlEncodeTextSize(char *s)
+/* Returns what the encoded size will be after replacing characters with escape codes. */
+{
+return urlEncodeTextExtended(s, NULL, 0);
+}
+
+char *urlEncode(char *s)
+/* Returns a cloned string with non-alphanumeric characters replaced by escape codes. */
+{
+int size = urlEncodeTextSize(s);
+char *out = needMem(size+1);
+urlEncodeTextExtended(s, out, size+1);
+return out;
+}
+
+
+
 
 char *htmlWarnStartPattern()
 /* Return starting pattern for warning message. */
@@ -293,22 +519,38 @@ va_list argscp;
 va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
-vsnprintf(warning,sizeof(warning),format, args);
-char *encodedMessage = htmlEncodeText(warning,TRUE); // NOTE: While some internal HTML should work,
-                                                     // a single quote (') will will screw it up!
+
+// html-encode arguments to fight XSS
+int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE);
+if (sz < 0)
+    {
+    safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
+    }
+
+// Replace newlines with BR tag
+char *warningBR = htmlWarnEncode(warning); 
+
+// Javascript-encode the entire message because it is
+// going to appear as a javascript string literal
+// as it gets appended to the warnList html.
+// JS-encoding here both allows us to use any character in the message
+// and keeps js-encodings in events like onmouseover="stuff %s|js| stuff" secure.
+char *jsEncodedMessage = javascriptEncode (warningBR); 
+freeMem(warningBR);
 printf("<script type='text/javascript'>{showWarnBox();"
-        "var warnList=document.getElementById('warnList');"
-        "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",encodedMessage); 
-                                     // NOTE that "--ERROR --" is needed at the end of this print!!
-freeMem(encodedMessage);
+	"var warnList=document.getElementById('warnList');"
+	"warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n", jsEncodedMessage); 
+				     // NOTE that "--ERROR --" is needed at the end of this print!!
+freeMem(jsEncodedMessage);
 
 /* Log useful CGI info to stderr */
 logCgiToStderr();
 
 /* write warning/error message to stderr so they get logged. */
 vfprintf(stderr, format, argscp);
-va_end(argscp);
+fprintf(stderr, "\n");
 fflush(stderr);
+va_end(argscp);
 }
 
 void htmlVaBadRequestAbort(char *format, va_list args)
@@ -690,5 +932,297 @@ char *docRoot = "/usr/local/apache/htdocs";
 
 safef(path, sizeof path, "%s/%s", docRoot, file);
 htmlIncludeFile(path);
+}
+
+
+/* ===== HTML printf-style escaping functions ===== */
+
+int htmlSafefAbort(boolean noAbort, char *format, ...)
+/* handle noAbort stderror logging and errAbort */
+{
+va_list args;
+va_start(args, format);
+if (noAbort)
+    {
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+    fflush(stderr);
+    }
+else
+    {
+    vaErrAbort(format, args);
+    }
+va_end(args);
+return -1;
+}
+
+
+
+#define htmlSafefPunc 0x01  // using char 1 as special char to denote strings needing escaping
+enum htmlSafefEncoding {dummyzero, html, js, css, attr, url};
+
+int htmlEscapeAllStrings(char *buffer, char *s, int bufSize, boolean noAbort)
+/* Escape all strings. *
+ * Returns final size not including terminating 0. 
+ * User needs to pre-allocate enough space that escape functions will never run out of space.
+ * This function should be efficient on statements with many strings to be escaped. */
+{
+char *sOrig = s;
+int sz = 0;
+int remainder = bufSize;
+boolean done = FALSE;
+while (1)
+    {
+    char *start = strchr(s, htmlSafefPunc);
+    char *end = NULL;
+    if (start)
+	{
+    	end = strchr(start+1, htmlSafefPunc); // skip over punc mark
+	if (!end)
+	    {
+	    return htmlSafefAbort(noAbort, "Unexpected error in htmlEscapeAllStrings. s=[%s]", sOrig);
+	    }
+	}
+    else
+	{
+	// just copy remainder of the input string to output
+    	start = strchr(s, 0); // find end of string
+	done = TRUE;	
+	}
+    // move any non-escaped part
+    int moveSize = start - s;
+    if (moveSize > remainder)
+	{
+	return htmlSafefAbort(noAbort, "Buffer too small in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	}
+    memmove(buffer, s, moveSize);
+    buffer += moveSize;
+    sz += moveSize;
+    remainder -= moveSize;
+    if (done)
+	{
+	if (remainder < 1)
+	    {
+	    return htmlSafefAbort(noAbort, "Buffer too small for terminating zero in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	    }
+	--remainder;
+	*buffer++ = 0;  // terminating 0
+	// do not include term 0 in sz count;
+	break;
+	}
+    // escape the quoted part
+    s = start + 1;
+    *end = 0;  // mark end of "input" string, replacing htmlSafefPunc. input string is temporary anyway.
+
+    int escSize;
+    char enc = *(end+1);
+    if (enc == (enum htmlSafefEncoding) html)
+	{
+	escSize = htmlEncodeTextExtended(s,buffer,remainder);
+	}
+    else if (enc == (enum htmlSafefEncoding) js)
+	escSize = javascriptEncodeTextExtended(s,buffer,remainder);
+    else if (enc == (enum htmlSafefEncoding) css)
+	escSize = cssEncodeTextExtended(s,buffer,remainder);
+    else if (enc == (enum htmlSafefEncoding) attr)
+	escSize = attrEncodeTextExtended(s,buffer,remainder);
+    else if (enc == (enum htmlSafefEncoding) url)
+	{
+	escSize = urlEncodeTextExtended(s,buffer,remainder);
+	}
+    else 
+	{
+	return htmlSafefAbort(noAbort, "Unexpected error in htmlEscapeAllStrings. (enum htmlSafefEncoding)=%c", *(end+1));
+	}
+    *end = htmlSafefPunc;  // restore mark, helps error message
+	
+    if (escSize < 0)
+	{
+	return htmlSafefAbort(noAbort, "Buffer too small for escaping in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	}
+
+    buffer += escSize;
+    sz += escSize;
+    remainder -= escSize;
+    s = end + 2; // skip past htmlSafefPunc and htmlSafefEncoding (encoding type)
+    }
+return sz;
+}
+
+char htmlSpecifierToEncoding(char *format, int *pI, boolean noAbort)
+/* translate specifier to encoding type */
+{
+int i = *pI + 1;
+int cnt =  0;
+char enc;
+char spec[7+1];  // only check for 7 characters after |spec| starts.
+spec[0] = 0;
+if (format[i] == '|')
+    {
+    ++i;
+    while (TRUE)
+	{
+	char c = format[i++];
+	if ((c == 0) || (cnt >= 7)) // end of format string
+	    {
+	    i = *pI + 1;
+	    spec[0] = 0;
+	    break;
+	    }
+	if (c == '|')
+	    {
+	    spec[cnt] = 0; // terminate spec
+	    if (cnt == 0) // double || escapes itself
+		i--;      // retain the last | char
+	    break;
+	    }
+	else
+	    {
+	    spec[cnt++] = c;
+	    }
+	}
+    }
+if (sameString(spec,"js"))
+    enc  = (enum htmlSafefEncoding) js;
+else if (sameString(spec,"css"))
+    enc = (enum htmlSafefEncoding) css;
+else if (sameString(spec,"attr"))
+    enc = (enum htmlSafefEncoding) attr;
+else if (sameString(spec,"url"))
+    enc = (enum htmlSafefEncoding) url;
+else if (sameString(spec,""))
+    enc = (enum htmlSafefEncoding) html;
+else
+    {
+    htmlSafefAbort(noAbort, "Unknown spec [%s] in format string [%s].", spec, format);
+    return 0;
+    }
+
+*pI = i - 1;
+return enc;
+}
+
+
+int vaHtmlSafefNoAbort(char* buffer, int bufSize, char *format, va_list args, boolean noAbort)
+/* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte.
+ * Automatically escapes string values.
+ * This function should be efficient on statements with many strings to be escaped. */
+{
+int formatLen = strlen(format);
+
+char *newFormat = NULL;
+int newFormatSize = 2*formatLen + 1;
+newFormat = needMem(newFormatSize);
+char *nf = newFormat;
+char *lastPct = NULL;
+int escStringsCount = 0;
+
+char c = 0;
+int i = 0;
+boolean inPct = FALSE;
+boolean isNegated = FALSE;
+while (i < formatLen)
+    {
+    c = format[i];
+    *nf++ = c;
+    if (c == '%' && !inPct)
+	{
+	inPct = TRUE;
+	lastPct = nf - 1;  // remember where the start was.
+	}
+    else if (c == '%' && inPct)
+	inPct = FALSE;
+    else if (inPct) 
+        {
+	if (c == 'l')
+	    { // used to handle 'l' long
+	    }
+	else if (strchr("diuoxXeEfFgGpcs",c))
+	    {
+	    inPct = FALSE;
+	    // we finally have the expected format
+	    // finally, the string we care about!
+	    if (c == 's')
+		{
+		if (!isNegated) // Not a Pre-escaped String
+		    {
+		    // go back and insert htmlSafefPunc before the leading % char saved in lastPct
+		    // move the accumulated %s descriptor
+		    memmove(lastPct+1, lastPct, nf - lastPct); // this is typically very small, src and dest overlap.
+		    ++nf;
+		    *lastPct = htmlSafefPunc;
+		    *nf++ = htmlSafefPunc;
+		    char enc = htmlSpecifierToEncoding(format, &i, noAbort);
+		    if (enc == 0)
+			return -1;
+		    *nf++ = enc;
+		    ++escStringsCount;
+		    }
+		}
+
+	    isNegated = FALSE;
+	    }
+	else if (strchr("+-.1234567890",c))
+	    {
+	    if (c == '-')
+		isNegated = TRUE;
+	    }
+	else
+	    {
+	    return htmlSafefAbort(noAbort, "String format not understood in vaHtmlSafef: %s", format);
+	    }
+	}
+    ++i;	    
+    }
+
+int sz = 0; 
+boolean overflow = FALSE;
+if (escStringsCount > 0)
+    {
+    int tempSize = bufSize + 3*escStringsCount;  // allow for temporary escPunc chars + spectype-char
+    char *tempBuf = needMem(tempSize);
+    sz = vsnprintf(tempBuf, tempSize, newFormat, args);
+    /* note that some versions return -1 if too small */
+    if (sz != -1 && sz + 1 <= tempSize)
+	{
+	sz = htmlEscapeAllStrings(buffer, tempBuf, bufSize, noAbort);
+	}
+    else
+	overflow = TRUE;
+    freeMem(tempBuf);
+    }
+else
+    {
+    sz = vsnprintf(buffer, bufSize, newFormat, args);
+    /* note that some version return -1 if too small */
+    if ((sz < 0) || (sz >= bufSize))
+	overflow = TRUE;
+    }
+if (overflow)
+    {
+    buffer[bufSize-1] = (char) 0;
+    htmlSafefAbort(noAbort, "buffer overflow, size %d, format: %s", bufSize, format);
+    sz = -1;
+    }
+
+freeMem(newFormat);
+va_end(args);
+
+return sz;
+
+}
+
+int htmlSafef(char* buffer, int bufSize, char *format, ...)
+/* Format string to buffer, vsprintf style, only with buffer overflow
+ * checking.  The resulting string is always terminated with zero byte. 
+ * Escapes string parameters. */
+{
+int sz;
+va_list args;
+va_start(args, format);
+sz = vaHtmlSafefNoAbort(buffer, bufSize, format, args, TRUE);
+va_end(args);
+return sz;
 }
 

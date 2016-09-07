@@ -43,11 +43,18 @@ struct twoBitFile
     struct hash *hash;	/* Hash of sequences. */
     struct bptFile *bpt;	/* Alternative index. */
 
+        
+    struct twoBit *seqCache; /* Cache information about last sequence accessed, including
+                              * nBlock and mask block.  This doesn't include the data.
+                              * This speeds fragment reads.  */
+    bits64 dataOffsetCache;  /* file offset of data for seqCache seqeunce */
+
     /* the routines we use to access the twoBit.
      * These may be UDC routines, or stdio
      */
     void (*ourSeek)(void *file, bits64 offset);
     void (*ourSeekCur)(void *file, bits64 offset);
+    bits64 (*ourTell)(void *file);
     bits32 (*ourReadBits32)(void *f, boolean isSwapped);
     void (*ourClose)(void *pFile);
     boolean (*ourFastReadString)(void *f, char buf[256]);

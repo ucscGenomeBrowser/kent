@@ -309,8 +309,8 @@ static struct gpFx *gpFxChangedNoncodingExon(struct allele *allele, struct geneP
 					     struct txCoords *txc, int exonIx, struct lm *lm)
 /* generate an effect for a variant in a non-coding transcript */
 {
-struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_exon_variant, nonCodingExon,
-			    lm);
+struct gpFx *gpFx = gpFxNew(allele->sequence, pred->name, non_coding_transcript_exon_variant,
+                            nonCodingExon, lm);
 setNCExonVals(gpFx, exonIx, txc->startInCdna);
 return gpFx;
 }

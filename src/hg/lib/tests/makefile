@@ -11,9 +11,10 @@ all: 	${BIN_DIR}/genePredTester \
 	${BIN_DIR}/annoGratorTester \
 	${BIN_DIR}/binTest \
 	${BIN_DIR}/customTrackTester \
+	${BIN_DIR}/hgvsTester \
 	${BIN_DIR}/sqlCheck 
 
-test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest annoGratorTest customTrackTest hgvsTest
 	rm -r output
 	echo tested all
 
@@ -48,6 +49,9 @@ customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
 	rm -f loader
 
+hgvsTest: ${BIN_DIR}/hgvsTester mkdirs
+	${MAKE} -f hgvsTests.mk test
+
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
 
@@ -64,6 +68,10 @@ ${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 ${BIN_DIR}/annoGratorTester: annoGratorTester.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/hgvsTester: hgvsTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 

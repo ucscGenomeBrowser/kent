@@ -32,6 +32,11 @@ static void udcSeekWrap(void *file, bits64 offset)
 udcSeek((struct udcFile *)file, offset);
 }
 
+static bits64 udcTellWrap(void *file)
+{
+return udcTell((struct udcFile *)file);
+}
+
 static void udcMustReadWrap(void *file, void *buf, size_t size)
 {
 udcMustRead((struct udcFile *)file, buf, size);
@@ -63,6 +68,11 @@ static void seekWrap(void *file, bits64 offset)
 fseek((FILE *)file, offset, SEEK_SET);
 }
 
+static bits64 tellWrap(void *file)
+{
+return ftell((FILE *)file);
+}
+
 static void mustReadWrap(void *file, void *buf, size_t size)
 {
 mustRead((FILE *)file, buf, size);
@@ -92,6 +102,7 @@ if (useUdc)
     {
     tbf->ourSeekCur = udcSeekCurWrap;
     tbf->ourSeek = udcSeekWrap;
+    tbf->ourTell = udcTellWrap;
     tbf->ourReadBits32 = udcReadBits32Wrap;
     tbf->ourFastReadString = udcFastReadStringWrap;
     tbf->ourClose = udcFileCloseWrap;
@@ -101,6 +112,7 @@ else
     {
     tbf->ourSeekCur = seekCurWrap;
     tbf->ourSeek = seekWrap;
+    tbf->ourTell = tellWrap;
     tbf->ourReadBits32 = readBits32Wrap;
     tbf->ourFastReadString = fastReadStringWrap;
     tbf->ourClose = fileCloseWrap;
@@ -363,6 +375,7 @@ void twoBitClose(struct twoBitFile **pTbf)
 struct twoBitFile *tbf = *pTbf;
 if (tbf != NULL)
     {
+    twoBitFree(&tbf->seqCache);
     freez(&tbf->fileName);
     (*tbf->ourClose)(&tbf->f);
     hashFree(&tbf->hash);
@@ -554,10 +567,10 @@ else
     }
 }
 
-struct twoBit *twoBitOneFromFile(struct twoBitFile *tbf, char *name)
-/* Get single sequence as two bit. */
+static struct twoBit *readTwoBitSeqHeader(struct twoBitFile *tbf, char *name)
+/* read a sequence header, nBlocks and maskBlocks from a twoBit file,
+ * leaving file pointer at data block */
 {
-bits32 packByteCount;
 boolean isSwapped = tbf->isSwapped;
 struct twoBit *twoBit;
 AllocVar(twoBit);
@@ -580,6 +593,16 @@ readBlockCoords(tbf, isSwapped, &(twoBit->maskBlockCount),
 
 /* Reserved word. */
 twoBit->reserved = (*tbf->ourReadBits32)(f, isSwapped);
+
+return twoBit;
+}
+
+struct twoBit *twoBitOneFromFile(struct twoBitFile *tbf, char *name)
+/* Get single sequence as two bit. */
+{
+struct twoBit *twoBit = readTwoBitSeqHeader(tbf, name);
+bits32 packByteCount;
+void *f = tbf->f;
 
 /* Read in data. */
 packByteCount = packedSize(twoBit->size);
@@ -635,6 +658,24 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
+static struct twoBit *getTwoBitSeqHeader(struct twoBitFile *tbf, char *name)
+/* get the sequence header information using the cache.  Position file
+ * right at data. */
+{
+if ((tbf->seqCache != NULL) && (sameString(tbf->seqCache->name, name)))
+    {
+    // use cached
+    (*tbf->ourSeek)(tbf->f, tbf->dataOffsetCache);
+    }
+else
+    {
+    // fetch new and cache
+    twoBitFree(&tbf->seqCache);
+    tbf->seqCache = readTwoBitSeqHeader(tbf, name);
+    tbf->dataOffsetCache = (*tbf->ourTell)(tbf->f);
+    }
+return tbf->seqCache;
+}
 
 struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd, boolean doMask, int *retFullSize)
@@ -644,11 +685,6 @@ struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
  * if doMask is true. */
 {
 struct dnaSeq *seq;
-bits32 seqSize;
-bits32 nBlockCount, maskBlockCount;
-bits32 *nStarts = NULL, *nSizes = NULL;
-bits32 *maskStarts = NULL, *maskSizes = NULL;
-boolean isSwapped = tbf->isSwapped;
 void *f = tbf->f;
 int i;
 int packByteCount, packedStart, packedEnd, remainder, midStart, midEnd;
@@ -656,32 +692,22 @@ int outSize;
 UBYTE *packed, *packedAlloc;
 DNA *dna;
 
-/* Find offset in index and seek to it */
+/* get sequence header information, which is cached */
 dnaUtilOpen();
-twoBitSeekTo(tbf, name);
+struct twoBit *twoBit = getTwoBitSeqHeader(tbf, name);
 
-/* Read in seqSize. */
-seqSize = (*tbf->ourReadBits32)(f, isSwapped);
+/* validate range. */
 if (fragEnd == 0)
-    fragEnd = seqSize;
-if (fragEnd > seqSize)
-    errAbort("twoBitReadSeqFrag in %s end (%d) >= seqSize (%d)", name, fragEnd, seqSize);
+    fragEnd = twoBit->size;
+if (fragEnd > twoBit->size)
+    errAbort("twoBitReadSeqFrag in %s end (%d) >= seqSize (%d)", name, fragEnd, twoBit->size);
 outSize = fragEnd - fragStart;
 if (outSize < 1)
     errAbort("twoBitReadSeqFrag in %s start (%d) >= end (%d)", name, fragStart, fragEnd);
 
-/* Read in blocks of N. */
-readBlockCoords(tbf, isSwapped, &nBlockCount, &nStarts, &nSizes);
-
-/* Read in masked blocks. */
-readBlockCoords(tbf, isSwapped, &maskBlockCount, &maskStarts, &maskSizes);
-
-/* Skip over reserved word. */
-(*tbf->ourReadBits32)(f, isSwapped);
-
 /* Allocate dnaSeq, and fill in zero tag at end of sequence. */
 AllocVar(seq);
-if (outSize == seqSize)
+if (outSize == twoBit->size)
     seq->name = cloneString(name);
 else
     {
@@ -761,13 +787,13 @@ else
     }
 freez(&packedAlloc);
 
-if (nBlockCount > 0)
+if (twoBit->nBlockCount > 0)
     {
-    int startIx = findGreatestLowerBound(nBlockCount, nStarts, fragStart);
-    for (i=startIx; i<nBlockCount; ++i)
+    int startIx = findGreatestLowerBound(twoBit->nBlockCount, twoBit->nStarts, fragStart);
+    for (i=startIx; i<twoBit->nBlockCount; ++i)
         {
-	int s = nStarts[i];
-	int e = s + nSizes[i];
+	int s = twoBit->nStarts[i];
+	int e = s + twoBit->nSizes[i];
 	if (s >= fragEnd)
 	    break;
 	if (s < fragStart)
@@ -782,14 +808,14 @@ if (nBlockCount > 0)
 if (doMask)
     {
     toUpperN(seq->dna, seq->size);
-    if (maskBlockCount > 0)
+    if (twoBit->maskBlockCount > 0)
 	{
-	int startIx = findGreatestLowerBound(maskBlockCount, maskStarts, 
+	int startIx = findGreatestLowerBound(twoBit->maskBlockCount, twoBit->maskStarts,
 		fragStart);
-	for (i=startIx; i<maskBlockCount; ++i)
+	for (i=startIx; i<twoBit->maskBlockCount; ++i)
 	    {
-	    int s = maskStarts[i];
-	    int e = s + maskSizes[i];
+	    int s = twoBit->maskStarts[i];
+	    int e = s + twoBit->maskSizes[i];
 	    if (s >= fragEnd)
 		break;
 	    if (s < fragStart)
@@ -801,12 +827,8 @@ if (doMask)
 	    }
 	}
     }
-freez(&nStarts);
-freez(&nSizes);
-freez(&maskStarts);
-freez(&maskSizes);
 if (retFullSize != NULL)
-    *retFullSize = seqSize;
+    *retFullSize = twoBit->size;
 return seq;
 }
 

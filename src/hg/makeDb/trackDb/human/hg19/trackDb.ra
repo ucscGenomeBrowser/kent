@@ -2239,6 +2239,7 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
+bigGeneDataUrl /gbdb/hg19/knownGene.bb
 
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA

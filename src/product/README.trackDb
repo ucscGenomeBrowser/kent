@@ -138,7 +138,7 @@ $ make
 
 This builds everything cleanly, all CGI binaries, all database
 loaders, all utilities.  Perform this sequence each time you
-do a 'cvs update' on your source tree.  The 'make clean' step
+do a 'git pull' on your source tree.  The 'make clean' step
 is especially important since the makefile hierarchy does not
 have built in dependencies and will not rebuild items that
 depend upon each other.  The traditional dependency on the

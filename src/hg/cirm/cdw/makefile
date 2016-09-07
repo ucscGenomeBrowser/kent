@@ -29,6 +29,7 @@ UTIL_DIRS = \
     cdwMakeValidFile \
     cdwQaEvaluate \
     cdwReallyRemoveFiles \
+    cdwReallyRemoveDataset \
     cdwRetryJob \
     cdwRunDaemon \
     cdwRunOnIds \

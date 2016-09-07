@@ -79,11 +79,13 @@ printf("<br><b>Total median expression: </b> %0.2f RPKM<br><br>\n", totalLevel);
 struct tempName pngTn;
 if (gtexGeneBoxplot(ensGene, NULL, GTEX_DEFAULT_VERSION, FALSE, &pngTn))
     hPrintf("<img src = '%s' border=1><br>\n", pngTn.forHtml);
-hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&gtexGene=pack'>"
-                "View in GTEx track of Genome Browser</a>", cartSidUrlString(cart));
+hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&position=%s:%d-%d&gtexGene=pack'>"
+                "View in GTEx track of Genome Browser</a>", 
+                        cartSidUrlString(cart), curGeneChrom, curGeneStart, curGeneEnd);
 
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
-gtexPortalLink(ensGene);
+//gtexPortalLink(ensGene);
+// Link is broken as of 8/23/16. Broad has been alerted.
 }
 
 struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa)
