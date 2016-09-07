@@ -48,7 +48,7 @@ errAbort(
 }
 
 // fields/columns of the browse file table
-#define FILETABLEFIELDS "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,tem_count,body_part"
+#define FILETABLEFIELDS "file_name,file_size,ucsc_db,lab,assay,data_set_id,output,format,read_size,tem_count,sample_label"
 
 struct dyString *printPopularTags(struct hash *hash, int maxSize)
 /* Get all hash elements, sorted by count, and print all the ones that fit */
@@ -1078,7 +1078,7 @@ hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
 char *searchString = showSearchControl("cdwTrackSearch", "tracks");
 accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
-    "enriched_in,body_part,submit_file_name",
+    "enriched_in,sample_lable,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdw_track_filter", 
     22, wrappers, conn, TRUE, "tracks", 100);
@@ -1385,7 +1385,7 @@ char *tagPopularityFields[] = { "tag name", "vals", "popular values (files)...",
 void doHome(struct sqlConnection *conn)
 /* Put up home/summary page */
 {
-struct tagStorm *tags = cdwTagStorm(conn);
+struct tagStorm *tags = cdwTagStorm(conn);  // Consider switching to queries on cdwFileTags instead
 printf("<table><tr><td>");
 printf("<img src=\"../images/freeStemCell.jpg\" width=%d height=%d>\n", 200, 275);
 printf("</td><td>");
@@ -1438,7 +1438,7 @@ printf("</td></tr></table>\n");
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
-    "body_part", "species"};
+    "sample_lable", "species"};
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
