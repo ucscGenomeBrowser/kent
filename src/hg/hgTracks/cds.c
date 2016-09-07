@@ -1827,7 +1827,10 @@ void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
  * two supported track types -- bed, psl etc. are subclasses of these). */
 {
 enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
-if (drawOpt <= baseColorDrawOff)
+boolean indelShowDoubleInsert, indelShowQueryInsert, indelShowPolyA;
+indelEnabled(cart, (tg ? tg->tdb : NULL), basesPerPixel,
+	     &indelShowDoubleInsert, &indelShowQueryInsert, &indelShowPolyA);
+if (drawOpt <= baseColorDrawOff && !(indelShowQueryInsert || indelShowPolyA))
     return;
 
 setGc();
