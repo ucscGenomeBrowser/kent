@@ -264,7 +264,6 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
-maxItems 100000
 
 track knownAlt
 shortLabel UCSC Alt Events
