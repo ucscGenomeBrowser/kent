@@ -1097,7 +1097,7 @@ hashAdd(wrappers, "ucsc_db", wrapTrackNearAccession);
 char *searchString = showSearchControl("cdwTrackSearch", "tracks");
 accessibleFilesTable(cart, conn, searchString,
     "ucsc_db,chrom,accession,format,file_size,lab,assay,data_set_id,output,"
-    "enriched_in,sample_lable,submit_file_name",
+    "enriched_in,sample_label,submit_file_name",
     "cdwFileTags,cdwTrackViz", where, 
     returnUrl, "cdw_track_filter", 
     22, wrappers, conn, TRUE, "tracks", 100);
@@ -1454,7 +1454,7 @@ printf("</td></tr></table>\n");
 /* Print out high level tags table */
 static char *highLevelTags[] = 
     {"data_set_id", "lab", "assay", "format", "read_size",
-    "sample_lable", "species"};
+    "sample_label", "species"};
 
 struct fieldedTable *table = fieldedTableNew("Important tags", tagPopularityFields, 
     ArraySize(tagPopularityFields));
