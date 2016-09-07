@@ -1,4 +1,5 @@
 #!/bin/sh -e
+# ./updateMetaDev.sh hg38 hgFixed braNey1 ../metaTables.txt
 
 if [ "$#" -ne 4 ]; then
     echo "Illegal number of parameters ($#) should be zero (4)"
@@ -44,7 +45,7 @@ do
 echo "drop table if exists "$i | hgsql $tmpDb
 done
 
-# rsync contents of temporary database to hgwbeta temporary database
+# rsync contents of temporary database to temporary database
 for i in $list
 do  
     rsync -av --progress /var/lib/mysql/$srcDb/$i.* /var/lib/mysql/$tmpDb

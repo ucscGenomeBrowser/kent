@@ -18,6 +18,7 @@
 #include "cartJson.h"
 #include "cartTrackDb.h"
 #include "cheapcgi.h"
+#include "genbank.h"
 #include "hAnno.h"
 #include "hCommon.h"
 #include "hdb.h"
@@ -588,8 +589,13 @@ void doCartJson()
 {
 // When cart is brand new, we need to set db in the cart because several cartJson functions
 // require it to be there.
-if (! cartOptionalString(cart, "db"))
-    cartSetString(cart, "db", hDefaultDb());
+char *db = cartOptionalString(cart, "db");
+if (! db)
+    {
+    db = hDefaultDb();
+    cartSetString(cart, "db", db);
+    }
+initGenbankTableNames(db);
 struct cartJson *cj = cartJsonNew(cart);
 cartJsonRegisterHandler(cj, "getQueryState", getQueryState);
 cartJsonRegisterHandler(cj, "getFields", getFields);
@@ -882,6 +888,7 @@ struct slRef *dataSources = jsonListVal(jsonFindNamedField(queryObj, "queryObj",
 // Get trackDb, assembly and regionList.
 struct trackDb *fullTrackList = getFullTrackList(cart);
 char *db = cartString(cart, "db");
+initGenbankTableNames(db);
 struct annoAssembly *assembly = hAnnoGetAssembly(db);
 char regionDesc[PATH_LEN];
 struct bed4 *regionList = getRegionList(db, dataSources, fullTrackList,
@@ -922,6 +929,7 @@ void doMainPage()
 {
 char *db = NULL, *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+initGenbankTableNames(db);
 webStartWrapperDetailedNoArgs(cart, trackHubSkipHubName(db),
                               "", "Data Integrator",
                               TRUE, FALSE, TRUE, TRUE);

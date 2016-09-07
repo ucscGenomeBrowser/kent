@@ -8297,7 +8297,7 @@ struct bigBedInterval *bb, *bbList = bigBedIntervalQuery(bbi, seqName, winStart,
 struct genePred *gpList = NULL;
 for (bb = bbList; bb != NULL; bb = bb->next)
     {
-    struct genePred *gp = genePredFromBigGenePred(seqName, bb); 
+    struct genePred *gp = (struct genePred *)genePredFromBigGenePred(seqName, bb); 
     if (sameString(gp->name, geneName))
 	slAddHead(&gpList, gp);
     }

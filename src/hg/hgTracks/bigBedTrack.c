@@ -35,6 +35,8 @@ if (bbi == NULL)
     if (track->parallelLoading) // do not use mysql during parallel fetch
 	{
 	fileName = cloneString(trackDbSetting(track->tdb, "bigDataUrl"));
+        if (fileName == NULL)
+            fileName = cloneString(trackDbSetting(track->tdb, "bigGeneDataUrl"));
 	}
     else 
 	{
@@ -167,8 +169,12 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	    scoreMin, scoreMax, useItemRgb);
 	}
 
-    if (sameString(track->tdb->type, "bigGenePred"))
-	lf->original = genePredFromBigGenePred(chromName, bb); 
+    if (sameString(track->tdb->type, "bigGenePred") || startsWith("genePred", track->tdb->type))
+        {
+        struct genePred  *gp = lf->original = genePredFromBigGenePred(chromName, bb); 
+        lf->extra = gp->name2;
+        lf->isBigGenePred = TRUE;
+        }
 
     char* mouseOver = restField(bb, mouseOverIdx);
     lf->mouseOver   = mouseOver; // leaks some memory, cloneString handles NULL ifself 

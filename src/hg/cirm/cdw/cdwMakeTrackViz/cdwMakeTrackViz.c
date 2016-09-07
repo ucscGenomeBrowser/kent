@@ -109,7 +109,7 @@ if (stanza != NULL)
     addIfNotTooLong(dy, stanza, NULL, "donor", 100);
     addIfNotTooLong(dy, stanza, NULL, "strain", 100);
     addIfNotTooLong(dy, stanza, NULL, "disease", 100);
-    addIfNotTooLong(dy, stanza, NULL, "body_part", 100);
+    addIfNotTooLong(dy, stanza, NULL, "sample_label", 100);
     addIfNotTooLong(dy, stanza, NULL, "submit_file_name", 100);
     }
 

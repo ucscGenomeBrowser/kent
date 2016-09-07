@@ -6,6 +6,7 @@ priority 1
 # Genes and Gene Prediction Tracks
 
 track knownGene override
+bigGeneDataUrl /gbdb/mm9/knownGene.bb
 priority 1
 
 track ensGene override
