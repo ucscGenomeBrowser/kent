@@ -787,7 +787,7 @@ for (row = table->rowList; row != NULL; row = row->next)
 
     if (justTest)
         {
-	static char *otherForcedFields[] = {"body_part", "data_set_id", "assay", "lab", 
+	static char *otherForcedFields[] = {"sample_label", "data_set_id", "assay", "lab", 
 	    "ucsc_db"};
 	int i;
 	for (i=0; i<ArraySize(otherForcedFields); ++i)

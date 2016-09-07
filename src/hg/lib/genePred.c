@@ -301,6 +301,33 @@ errAbort("invalid genePred cdsStatus: \"%s\"", statStr);
 return cdsNone;  /* make compiler happy */
 }
 
+struct genePred *genePredKnownLoad(char **row, int numCols)
+/* Load a genePred in knownGene format from row. */
+{
+struct genePred *ret;
+int sizeOne;
+
+AllocVar(ret);
+ret->exonCount = sqlUnsigned(row[7]);
+ret->name = cloneString(row[0]);
+ret->chrom = cloneString(row[1]);
+strcpy(ret->strand, row[2]);
+ret->txStart = sqlUnsigned(row[3]);
+ret->txEnd = sqlUnsigned(row[4]);
+ret->cdsStart = sqlUnsigned(row[5]);
+ret->cdsEnd = sqlUnsigned(row[6]);
+sqlUnsignedDynamicArray(row[8], &ret->exonStarts, &sizeOne);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonStarts (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
+sqlUnsignedDynamicArray(row[9], &ret->exonEnds, &sizeOne);
+if (sizeOne != ret->exonCount)
+    errAbort("genePred: %s number of exonEnds (%d) != number of exons (%d)",
+             ret->name, sizeOne, ret->exonCount);
+
+ret->name2 = cloneString(row[11]);
+return ret;
+}
 struct genePred *genePredExtLoad(char **row, int numCols)
 /* Load a genePred with from a row, with optional fields.  The row must
  * contain columns in the order in the struct, and they must be present up to
@@ -361,6 +388,25 @@ if (iCol < numCols)
     ret->optFields |= genePredExonFramesFld;
     }
 return ret;
+}
+
+struct genePred *genePredKnownLoadAll(char *fileName)
+/* Load all genePreds with from tab-separated file in knownGene format */
+{
+struct genePred *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[GENEPREDX_NUM_COLS];
+int numCols;
+
+while ((numCols = lineFileChopNextTab(lf, row, ArraySize(row))) > 0)
+    {
+    lineFileExpectAtLeast(lf, GENEPRED_NUM_COLS, numCols);
+    el = genePredKnownLoad(row, numCols);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 struct genePred *genePredExtLoadAll(char *fileName)
@@ -2095,7 +2141,7 @@ if (isCoding != NULL && codingBasesSoFar > 0)
 return -1;  // introns not okay
 }
 
-struct genePred  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb)
+struct genePredExt  *genePredFromBigGenePred( char *chrom, struct bigBedInterval *bb)
 /* build a genePred from a bigGenePred */
 {
 char *extra = cloneString(bb->rest);
@@ -2104,7 +2150,7 @@ char *row[numCols];
 int wordCount = chopByChar(extra, '\t', row, numCols);
 assert(wordCount == numCols);
 
-struct genePred *gp;
+struct genePredExt *gp;
 AllocVar(gp);
 
 gp->chrom = chrom;
@@ -2137,6 +2183,10 @@ sqlSignedDynamicArray(row[ 12],  &gp->exonFrames, &numBlocks);
 gp->optFields |= genePredExonFramesFld;
 assert (numBlocks == gp->exonCount);
 
+gp->type = cloneString(row[13]);
+gp->geneName = cloneString(row[14]);
+gp->geneName2 = cloneString(row[15]);
+
 return gp;
 }
 
@@ -2148,10 +2198,10 @@ safecpy(copy, sizeof(copy), s);
 sqlUnsignedDynamicArray(copy, retArray, retSize);
 }
 
-struct genePred  *genePredFromBigGenePredRow(char **row)
+struct genePredExt  *genePredFromBigGenePredRow(char **row)
 /* build a genePred from a bigGenePred row */
 {
-struct genePred *gp;
+struct genePredExt *gp;
 AllocVar(gp);
 gp->chrom = cloneString(row[0]);
 gp->txStart = sqlUnsigned(row[1]);
@@ -2182,5 +2232,8 @@ gp->optFields |= genePredCdsStatFld;
 sqlSignedDynamicArray(row[15],  &gp->exonFrames, &numBlocks);
 assert (numBlocks == gp->exonCount);
 gp->optFields |= genePredExonFramesFld;
+gp->type = cloneString(row[16]);
+gp->geneName = cloneString(row[17]);
+gp->geneName2 = cloneString(row[18]);
 return gp;
 }

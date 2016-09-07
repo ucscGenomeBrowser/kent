@@ -1,6 +1,7 @@
 # Genes and Gene Prediction Tracks
 
 track knownGene override
+bigGeneDataUrl /gbdb/mm10/knownGene.bb
 priority 1
 
 track ensGene override
