@@ -1605,3 +1605,11 @@ cd $dir/wikipedia
 hgsql hg19 -e "select geneSymbol,name from knownGene g, kgXref x where g.name=x.kgId " | sort > hg19.symbolToId.txt
 join -t $'\t'   /hive/groups/browser/wikipediaScrape/symbolToPage.txt hg19.symbolToId.txt | tawk '{print $3,$2}' | sort | uniq > hg19.idToPage.txt
 hgLoadSqlTab hg19 knownToWikipedia $HOME/kent/src/hg/lib/knownTo.sql hg19.idToPage.txt
+
+# make bigKnownGene.bb
+set genomes = /hive/data/genomes
+set dir = $genomes/hg19/bed/ucsc.14.3
+cd $dir
+makeBigKnown hg19
+rm -f /gbdb/hg19/knownGene.bb
+ln -s `pwd`/hg19.knownGene.bb /gbdb/hg19/knownGene.bb

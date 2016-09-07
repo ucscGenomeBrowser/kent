@@ -97,7 +97,7 @@ if (filt->cdsSyn && term == synonymous_variant)
 if (filt->cdsNonSyn && term != synonymous_variant
     && (gpFx->detailType == codingChange || term == complex_transcript_variant))
     return TRUE;
-if (filt->nonCodingExon && term == non_coding_exon_variant)
+if (filt->nonCodingExon && term == non_coding_transcript_exon_variant)
     return TRUE;
 if (filt->splice && (term == splice_donor_variant || term == splice_acceptor_variant ||
 		     term == splice_region_variant))
@@ -387,7 +387,7 @@ for(; rows; rows = rows->next)
     {
     struct genePred *gp;
     if (isBig)
-        gp = genePredFromBigGenePredRow(rows->data);
+        gp = (struct genePred *)genePredFromBigGenePredRow(rows->data);
     else
         {
         // work around genePredLoad's trashing its input

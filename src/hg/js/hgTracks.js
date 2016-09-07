@@ -4194,9 +4194,8 @@ var imageV2 = {
         $('.highlightItem').remove();
         if (hgTracks.highlight) {
             var hlArray = hgTracks.highlight.split("|"); // support multiple highlight items
-            for(var i = 0; i < hlArray.length; i++) {
+            for (var i = 0; i < hlArray.length; i++) {
                 hlString = hlArray[i];
-                console.log(hlString);
                 pos = parsePositionWithDb(hlString);
                 // UN-DISGUISE
                 imageV2.undisguiseHighlight(pos);

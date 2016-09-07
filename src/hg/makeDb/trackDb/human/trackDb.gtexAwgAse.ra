@@ -1,0 +1,110 @@
+track gtexAwgAse
+compositeTrack on
+shortLabel GTEx ASE
+longLabel Median Allele-Specific Expression in 53 tissues from GTEx Analysis Group
+subGroup1 view Views ASE=ASE COV=Coverage SAMPLE=Sample_Count
+subGroup2 tissue Tissue \
+        adiposeSubcut=adiposeSubcut \
+        muscleSkeletal=muscleSkeletal \
+        wholeBlood=wholeBlood 
+dimensions dimX=tissue
+sortOrder tissue=+ view=+ 
+dragAndDrop subTracks
+group expression
+priority 10.14
+darkerLabels on
+type bed 3
+
+    track gtexAwgAseBed
+    parent gtexAwgAse
+    shortLabel ASE
+    view ASE
+    type bed 9+
+itemRgb on
+
+        track gtexAwgAseBedAdiposeSubcut
+        parent gtexAwgAseBed
+        shortLabel adiposeSub ASE
+        longLabel  Median Allele-Specific Expression in Adipose - Subcutaneous from GTEx Analysis Group 
+        subGroups tissue=adiposeSubcut view=ASE
+        color 255,165,79
+
+        track gtexAwgAseBedMuscleSkeletal
+        parent gtexAwgAseBed
+        shortLabel muscleSkeletal ASE
+        longLabel  Median Allele-Specific Expression in Muscle - Skeletal from GTEx Analysis Group
+        subGroups tissue=muscleSkeletal view=ASE
+        color 110,86,255
+
+        track gtexAwgAseBedWholeBlood
+        parent gtexAwgAseBed
+        shortLabel wholeBlood ASE
+        longLabel  Median Allele-Specific Expression in Whole Blood from GTEx Analysis Group
+        subGroups tissue=wholeBlood view=ASE
+        color 255,0,255
+
+    track gtexAwgAseCoverage
+    parent gtexAwgAse
+    shortLabel Coverage
+    type bigWig
+    maxHeightPixels 128:24:8
+    viewLimits 0:500
+    view COV
+
+        track gtexAwgAseCoverageAdiposeSubcut
+        type bigWig 8.0 7226.5
+        parent gtexAwgAseCoverage
+        shortLabel adiposeSubcut cov
+        longLabel Coverage of ASE Sites in Adipose - Subcutaneous from GTEx Analysis Group
+        subGroups tissue=adiposeSubcut view=COV
+        color 255,165,79
+
+        track gtexAwgAseCoverageMuscleSkeletal
+        parent gtexAwgAseCoverage
+        shortLabel muscleSkeletal cov
+        longLabel Coverage of ASE Sites in Muscle - Skeletal from GTEx Analysis Group
+        subGroups tissue=muscleSkeletal view=COV
+        type bigWig 8.0 9625.0
+        color 110,86,255
+
+        track gtexAwgAseCoverageWholeBlood
+        parent gtexAwgAseCoverage
+        shortLabel wholeBlood cov
+        longLabel Coverage of ASE Sites in Whole Blood from GTEx Analysis Group
+        type bigWig 8.0 9574.0
+        subGroups tissue=wholeBlood view=COV
+        color 255,0,255
+
+    track gtexAwgAseSampleCount
+    parent gtexAwgAse
+    shortLabel Sample_Count
+    type bigWig
+    maxHeightPixels 128:24:8
+    viewLimits 0:100
+    view SAMPLE
+
+        track gtexAwgAseSampleCountAdiposeSubcut
+        type bigWig 1 180
+        parent gtexAwgAseSampleCount
+        shortLabel adiposeSubcut N
+        longLabel Sample Count at ASE Sites in Adipose - Subcutaneous from GTEx Analysis Group
+        subGroups tissue=adiposeSubcut view=SAMPLE
+        color 255,165,79
+
+        track gtexAwgAseSampleCountMuscleSkeletal
+        parent gtexAwgAseSampleCount N
+        shortLabel muscleSkeletal
+        longLabel Sample Count at ASE Sites in Muscle - Skeletal from GTEx Analysis Group
+        subGroups tissue=muscleSkeletal view=SAMPLE
+        type bigWig 1 209
+        color 110,86,255
+
+        track gtexAwgAseSampleCountWholeBlood
+        parent gtexAwgAseSampleCount
+        shortLabel wholeBlood N
+        longLabel Sample Count at ASE Sites in Whole Blood from GTEx Analysis Group
+        type bigWig 1 199
+        subGroups tissue=wholeBlood view=SAMPLE
+        color 255,0,255
+
+

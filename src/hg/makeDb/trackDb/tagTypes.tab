@@ -32,6 +32,7 @@ baseQualRange bam
 bedFilter bed
 bedNameLabel bed
 bigDataUrl customTracks bigBed bigWig bam vcfTabix bigPsl
+bigGeneDataUrl genePred
 blastRef psl bigPsl
 boxedCfg *
 browserLines customTracks
@@ -182,7 +183,7 @@ html *
 htmlFile customTracks
 htmlUrl customTracks
 idInUrlSql altGraphX genePred chain factorSource bed
-idXref genePred
+idXref genePred psl
 iframeUrl *
 iframeOptions *
 indelDoubleInsert psl bam bigBed bigPsl

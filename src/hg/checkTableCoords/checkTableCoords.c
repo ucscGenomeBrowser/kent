@@ -506,6 +506,19 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 		bedFreeList(&bedList);
 		}
 	    }
+        else
+            {
+            // For scaffold-based databases, compare the number of rows with chrom found in
+            // chromInfo to the number of rows -- if not the same, then some rows have bad chrom.
+            int rowCount = sqlRowCount(conn, table);
+            char query[2048];
+            sqlSafef(query, sizeof(query), "select count(*) from %s, chromInfo "
+                     "where %s.%s = chromInfo.chrom", table, table, hti->chromField);
+            int okChromRowCount = sqlQuickNum(conn, query);
+            int badChromRowCount = rowCount - okChromRowCount;
+            if (badChromRowCount)
+		gotError |= reportErrors(BAD_CHROM, table, badChromRowCount);
+            }
 	}
     }
 return gotError;

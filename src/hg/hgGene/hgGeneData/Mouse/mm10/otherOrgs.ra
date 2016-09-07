@@ -21,8 +21,9 @@ name rat
 db rn6
 pepTable ensPep
 geneTable ensGene
-otherName Ensembl
-otherUrl http://www.ensembl.org/Rattus_norvegicus/transview?transcript=%s
+otherName RGD
+otherIdSql select value from ensToRgd where name = '%s'
+otherUrl http://rgd.mcw.edu/query/query.cgi?id=%s
 
 name cElegans
 db ce11

@@ -92,13 +92,13 @@ for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	}
     else if (matches)
 	{
-	verbose(1, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
+	verbose(2, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
 		isNotEmpty(hfs->xrefTable) ? " and/or " : "",
 		isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
 	}
     else
 	{
-	verbose(1, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
+	verbose(2, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
 	}
     }
 endMs = clock1000();
@@ -120,13 +120,13 @@ for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	}
     else if (matches)
 	{
-	verbose(1, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
+	verbose(2, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
 		isNotEmpty(hfs->xrefTable) ? " and/or " : "",
 		isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
 	}
     else
 	{
-	verbose(1, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
+	verbose(2, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
 	}
     }
 endMs = clock1000();

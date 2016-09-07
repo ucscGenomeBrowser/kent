@@ -58,6 +58,17 @@
 #define GTEX_SHOW_EXONS         "showExons"
 #define GTEX_SHOW_EXONS_DEFAULT FALSE
 
+/* Suppress whiteout behind graph (to show highlight and blue lines) */
+#define GTEX_NO_WHITEOUT         "noWhiteout"
+#define GTEX_NO_WHITEOUT_DEFAULT        FALSE
+
+/* Item name is gene symbol, accession, or both */
+#define GTEX_LABEL                "label"
+#define GTEX_LABEL_SYMBOL         "name"
+#define GTEX_LABEL_ACCESSION      "accession"
+#define GTEX_LABEL_BOTH           "both"
+#define GTEX_LABEL_DEFAULT  GTEX_LABEL_SYMBOL
+
 void gtexPortalLink(char *geneId);
 /* print URL to GTEX portal gene expression page using Ensembl Gene Id*/
 

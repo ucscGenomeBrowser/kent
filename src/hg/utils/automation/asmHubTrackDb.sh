@@ -354,3 +354,20 @@ type bigBed 3
 bigDataUrl bbi/%s.allGaps.bb
 html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
 fi
+
+###################################################################
+# augustus genes
+if [ -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ]; then
+rm -f ${buildDir}/bbi/${asmId}.augustus.bb
+ln -s ${buildDir}/trackData/augustus/${asmId}.augustus.bb ${buildDir}/bbi/${asmId}.augustus.bb
+
+printf "track augustus
+shortLabel Augustus
+longLabel Augustus Gene Predictions
+group genes
+visibility dense
+color 180,0,0
+type bigGenePred
+bigDataUrl bbi/%s.augustus.bb
+html html/%s.augustus\n\n" "${asmId}" "${asmId}"
+fi

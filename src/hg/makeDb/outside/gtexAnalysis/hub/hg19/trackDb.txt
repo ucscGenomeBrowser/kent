@@ -1,0 +1,462 @@
+track gtexAwgAseDensity
+shortLabel ASE Density
+longLabel Allele-Specific Expression Density from GTEx Analysis (NY Genome Center)
+type bigWig 0 .5
+bigDataUrl gtexAwgAseDensity.bw
+maxHeightPixels 8:48:100
+autoScale off
+html ../gtexAse.html
+visibility full
+priority 1
+
+track gtexAwgAseCombined
+shortLabel ASE Sites
+longLabel Allele-Specific Expression Combined Sites from GTEx Analysis (NY Genome Center)
+type bigBed 9 +
+bigDataUrl gtexAwgAseCombined.bb
+sepFields minASE
+spectrum on
+scoreFilter 500
+color 0,0,0
+html ../gtexAse.html
+visibility dense
+priority 2
+
+track gtexAwgAse
+compositeTrack on
+shortLabel ASE By Tissue
+longLabel Allele-Specific Expression in 53 Tissues from GTEx Analysis (NY Genome Center)
+itemRgb on
+darkerLabels on
+type bigBed 9 +
+sepFields minASE
+showSubtrackColorOnUi on
+scoreFilter 500
+html ../gtexAse.html
+visibility dense
+priority 3
+
+    track gtexAwgAseAdiposeSubcut
+    parent gtexAwgAse off
+    shortLabel adiposeSubcut
+    longLabel Allele-Specific Expression in Adipose - Subcutaneous from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseAdiposeSubcut.bb
+    color 255,165,79
+
+    track gtexAwgAseAdiposeVisceral
+    parent gtexAwgAse on
+    shortLabel adiposeVisceral
+    longLabel Allele-Specific Expression in Adipose - Visceral (Omentum) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseAdiposeVisceral.bb
+    color 238,154,0
+
+    track gtexAwgAseAdrenalGland
+    parent gtexAwgAse off
+    shortLabel adrenalGland
+    longLabel Allele-Specific Expression in Adrenal Gland from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseAdrenalGland.bb
+    color 143,188,143
+
+    track gtexAwgAseArteryAorta
+    parent gtexAwgAse on
+    shortLabel arteryAorta
+    longLabel Allele-Specific Expression in Artery - Aorta from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseArteryAorta.bb
+    color 139,28,98
+
+    track gtexAwgAseArteryCoronary
+    parent gtexAwgAse off
+    shortLabel arteryCoronary
+    longLabel Allele-Specific Expression in Artery - Coronary from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseArteryCoronary.bb
+    color 238,106,80
+
+    track gtexAwgAseArteryTibial
+    parent gtexAwgAse off
+    shortLabel arteryTibial
+    longLabel Allele-Specific Expression in Artery - Tibial from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseArteryTibial.bb
+    color 255,0,0
+
+    track gtexAwgAseBladder
+    parent gtexAwgAse off
+    shortLabel bladder
+    longLabel Allele-Specific Expression in Bladder from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBladder.bb
+    color 205,183,158
+
+    track gtexAwgAseBreastMamTissue
+    parent gtexAwgAse on
+    shortLabel breastMamTissue
+    longLabel Allele-Specific Expression in Breast - Mammary Tissue from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBreastMamTissue.bb
+    color 0,205,205
+
+    track gtexAwgAseBrainAnCinCortex
+    parent gtexAwgAse off
+    shortLabel brainAnCinCortex
+    longLabel Allele-Specific Expression in Brain - Anterior cingulate cortex (BA24) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainAnCinCortex.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainAmygdala
+    parent gtexAwgAse off
+    shortLabel brainAmygdala
+    longLabel Allele-Specific Expression in Brain - Amygdala from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainAmygdala.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainCaudate
+    parent gtexAwgAse off
+    shortLabel brainCaudate
+    longLabel Allele-Specific Expression in Brain - Caudate (basal ganglia) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainCaudate.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainCerebellum
+    parent gtexAwgAse on
+    shortLabel brainCerebellum
+    longLabel Allele-Specific Expression in Brain - Cerebellum from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainCerebellum.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainCerebelHemi
+    parent gtexAwgAse off
+    shortLabel brainCerebelHemi
+    longLabel Allele-Specific Expression in Brain - Cerebellar Hemisphere from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainCerebelHemi.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainCortex
+    parent gtexAwgAse off
+    shortLabel brainCortex
+    longLabel Allele-Specific Expression in Brain - Cortex from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainCortex.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainFrontCortex
+    parent gtexAwgAse on
+    shortLabel brainFrontCortex
+    longLabel Allele-Specific Expression in Brain - Frontal Cortex (BA9) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainFrontCortex.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainHippocampus
+    parent gtexAwgAse off
+    shortLabel brainHippocampus
+    longLabel Allele-Specific Expression in Brain - Hippocampus from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainHippocampus.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainHypothalamus
+    parent gtexAwgAse off
+    shortLabel brainHypothalamus
+    longLabel Allele-Specific Expression in Brain - Hypothalamus from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainHypothalamus.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainNucAccumbens
+    parent gtexAwgAse off
+    shortLabel brainNucAccumbens
+    longLabel Allele-Specific Expression in Brain - Nucleus accumbens (basal ganglia) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainNucAccumbens.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainPutamen
+    parent gtexAwgAse off
+    shortLabel brainPutamen
+    longLabel Allele-Specific Expression in Brain - Putamen (basal ganglia) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainPutamen.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainSubstanNigra
+    parent gtexAwgAse off
+    shortLabel brainSubstanNigra
+    longLabel Allele-Specific Expression in Brain - Substantia nigra from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainSubstanNigra.bb
+    color 238,238,0
+
+    track gtexAwgAseBrainSpinalcord
+    parent gtexAwgAse off
+    shortLabel brainSpinalcord
+    longLabel Allele-Specific Expression in Brain - Spinal cord (cervical c-1) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseBrainSpinalcord.bb
+    color 238,238,0
+
+    track gtexAwgAseColonSigmoid
+    parent gtexAwgAse off
+    shortLabel colonSigmoid
+    longLabel Allele-Specific Expression in Colon - Sigmoid from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseColonSigmoid.bb
+    color 205,183,158
+
+    track gtexAwgAseColonTransverse
+    parent gtexAwgAse off
+    shortLabel colonTransverse
+    longLabel Allele-Specific Expression in Colon - Transverse from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseColonTransverse.bb
+    color 238,197,145
+
+    track gtexAwgAseEndocervix
+    parent gtexAwgAse off
+    shortLabel endocervix
+    longLabel Allele-Specific Expression in Cervix - Endocervix from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseEndocervix.bb
+    color 238,213,210
+
+    track gtexAwgAseEctocervix
+    parent gtexAwgAse off
+    shortLabel ectocervix
+    longLabel Allele-Specific Expression in Cervix - Ectocervix from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseEctocervix.bb
+    color 238,213,210
+
+    track gtexAwgAseEsophagusJunction
+    parent gtexAwgAse off
+    shortLabel esophagusJunction
+    longLabel Allele-Specific Expression in Esophagus - Gastroesophageal Junction from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseEsophagusJunction.bb
+    color 139,115,85
+
+    track gtexAwgAseEsophagusMucosa
+    parent gtexAwgAse off
+    shortLabel esophagusMucosa
+    longLabel Allele-Specific Expression in Esophagus - Mucosa from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseEsophagusMucosa.bb
+    color 139,115,85
+
+    track gtexAwgAseEsophagusMuscular
+    parent gtexAwgAse off
+    shortLabel esophagusMuscular
+    longLabel Allele-Specific Expression in Esophagus - Muscularis from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseEsophagusMuscular.bb
+    color 205,170,125
+
+    track gtexAwgAseXformedfibroblasts
+    parent gtexAwgAse off
+    shortLabel xformedfibroblasts
+    longLabel Allele-Specific Expression in Cells - Transformed fibroblasts from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseXformedfibroblasts.bb
+    color 154,192,205
+
+    track gtexAwgAseFallopianTube
+    parent gtexAwgAse off
+    shortLabel fallopianTube
+    longLabel Allele-Specific Expression in Fallopian Tube from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseFallopianTube.bb
+    color 238,213,210
+
+    track gtexAwgAseHeartAtrialAppend
+    parent gtexAwgAse off
+    shortLabel heartAtrialAppend
+    longLabel Allele-Specific Expression in Heart - Atrial Appendage from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseHeartAtrialAppend.bb
+    color 180,82,205
+
+    track gtexAwgAseHeartLeftVentricl
+    parent gtexAwgAse on
+    shortLabel heartLeftVentricl
+    longLabel Allele-Specific Expression in Heart - Left Ventricle from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseHeartLeftVentricl.bb
+    color 122,55,139
+
+    track gtexAwgAseKidneyCortex
+    parent gtexAwgAse off
+    shortLabel kidneyCortex
+    longLabel Allele-Specific Expression in Kidney - Cortex from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseKidneyCortex.bb
+    color 205,183,158
+
+    track gtexAwgAseXformedlymphocytes
+    parent gtexAwgAse off
+    shortLabel xformedlymphocytes
+    longLabel Allele-Specific Expression in Cells - EBV-transformed lymphocytes from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseXformedlymphocytes.bb
+    color 238,130,238
+
+    track gtexAwgAseLiver
+    parent gtexAwgAse on
+    shortLabel liver
+    longLabel Allele-Specific Expression in Liver from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseLiver.bb
+    color 205,183,158
+
+    track gtexAwgAseLung
+    parent gtexAwgAse on
+    shortLabel lung
+    longLabel Allele-Specific Expression in Lung from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseLung.bb
+    color 154,205,50
+
+    track gtexAwgAseMuscleSkeletal
+    parent gtexAwgAse on
+    shortLabel muscleSkeletal
+    longLabel Allele-Specific Expression in Muscle - Skeletal from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseMuscleSkeletal.bb
+    color 122,103,238
+
+    track gtexAwgAseNerveTibial
+    parent gtexAwgAse off
+    shortLabel nerveTibial
+    longLabel Allele-Specific Expression in Nerve - Tibial from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseNerveTibial.bb
+    color 255,215,0
+
+    track gtexAwgAseOvary
+    parent gtexAwgAse off
+    shortLabel ovary
+    longLabel Allele-Specific Expression in Ovary from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseOvary.bb
+    color 255,182,193
+
+    track gtexAwgAsePancreas
+    parent gtexAwgAse off
+    shortLabel pancreas
+    longLabel Allele-Specific Expression in Pancreas from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAsePancreas.bb
+    color 205,155,29
+
+    track gtexAwgAseProstate
+    parent gtexAwgAse off
+    shortLabel prostate
+    longLabel Allele-Specific Expression in Prostate from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseProstate.bb
+    color 217,217,217
+
+    track gtexAwgAsePituitary
+    parent gtexAwgAse on
+    shortLabel pituitary
+    longLabel Allele-Specific Expression in Pituitary from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAsePituitary.bb
+    color 180,238,180
+
+    track gtexAwgAseSkinNotExposed
+    parent gtexAwgAse on
+    shortLabel skinNotExposed
+    longLabel Allele-Specific Expression in Skin - Not Sun Exposed (Suprapubic) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseSkinNotExposed.bb
+    color 58,95,205
+
+    track gtexAwgAseSkinExposed
+    parent gtexAwgAse off
+    shortLabel skinExposed
+    longLabel Allele-Specific Expression in Skin - Sun Exposed (Lower leg) from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseSkinExposed.bb
+    color 30,144,255
+
+    track gtexAwgAseMinorSalivGland
+    parent gtexAwgAse off
+    shortLabel minorSalivGland
+    longLabel Allele-Specific Expression in Minor Salivary Gland from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseMinorSalivGland.bb
+    color 205,183,158
+
+    track gtexAwgAseSmallIntestine
+    parent gtexAwgAse off
+    shortLabel smallIntestine
+    longLabel Allele-Specific Expression in Small Intestine - Terminal Ileum from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseSmallIntestine.bb
+    color 205,183,158
+
+    track gtexAwgAseSpleen
+    parent gtexAwgAse off
+    shortLabel spleen
+    longLabel Allele-Specific Expression in Spleen from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseSpleen.bb
+    color 205,183,158
+
+    track gtexAwgAseStomach
+    parent gtexAwgAse off
+    shortLabel stomach
+    longLabel Allele-Specific Expression in Stomach from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseStomach.bb
+    color 255,211,155
+
+    track gtexAwgAseTestis
+    parent gtexAwgAse off
+    shortLabel testis
+    longLabel Allele-Specific Expression in Testis from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseTestis.bb
+    color 166,166,166
+
+    track gtexAwgAseThyroid
+    parent gtexAwgAse on
+    shortLabel thyroid
+    longLabel Allele-Specific Expression in Thyroid from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseThyroid.bb
+    color 0,139,69
+
+    track gtexAwgAseUterus
+    parent gtexAwgAse off
+    shortLabel uterus
+    longLabel Allele-Specific Expression in Uterus from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseUterus.bb
+    color 238,213,210
+
+    track gtexAwgAseVagina
+    parent gtexAwgAse off
+    shortLabel vagina
+    longLabel Allele-Specific Expression in Vagina from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseVagina.bb
+    color 238,213,210
+
+    track gtexAwgAseWholeBlood
+    parent gtexAwgAse on
+    shortLabel wholeBlood
+    longLabel Allele-Specific Expression in Whole Blood from GTEx Analysis (NY Genome Center)
+    type bigBed 9 +
+    bigDataUrl gtexAwgAseWholeBlood.bb
+    color 255,0,255
+

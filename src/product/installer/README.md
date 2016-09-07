@@ -51,7 +51,7 @@ MariaDB, deactivating SELinux, finding the right path for your Apache install
 and adapting the MySQL socket config.
 
 This will leave you with a genome browser accessible on localhost that loads its data 
-through from genome-mysql.cse.ucsc.edu:3306 and hgdownload.cse.ucsc.edu:80. If
+through from genome-mysql.soe.ucsc.edu:3306 and hgdownload.soe.ucsc.edu:80. If
 you are not on the US West Coast, it will be too slow for normal use but good 
 enough to test that your setup is working. You can then use the script to download 
 assemblies of interest to your local Genome Browser, which will make it at least 
@@ -133,7 +133,7 @@ this should be added to your crontab file:
 If you find a bug or your Linux distribution is not supported, please contact 
 [genome-mirror@soe.ucsc.edu](mailto:genome-mirror@soe.ucsc.edu). More details about the 
 Genome Browser installation are at
-<http://genome-source.cse.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
+<http://genome-source.soe.ucsc.edu/gitweb/?p=kent.git;a=tree;f=src/product>
  
 # **All options**
 

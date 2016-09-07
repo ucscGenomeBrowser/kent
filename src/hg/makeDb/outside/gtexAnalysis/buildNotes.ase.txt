@@ -1,0 +1,158 @@
+##################
+# ASE (Allele-Specific Expression) from Lappalainen lab, NY Genome Center
+# (1016-06-20 kate)
+
+cd /hive/data/outside/GTEx/V6
+makdir ase
+cd ase
+
+###################3
+# June 28 full dataset from Stephane
+
+# Move earlier experiments to old/ directory.
+
+# combined:  all*txt
+
+# filter to >1 sample, >30 reads at the site
+
+# extract highest scoring:
+awk '$3 > 1 && $4 > 30 {print}' *.txt > all.1-30.txt
+
+awk '$5==.5 && $6==.5 && $7==.5 && $8==.5 {print}' all.1-30.txt > all.high.txt
+
+awk '{printf "chr%d %d %d rsNNNN %.2f %d %.1f \n", $1, $2-1, $2, $5, $3, $4}' all.high.txt | sed 's/ /\t/g' > all.high.bed
+
+# limit further - cov=100, donors=20
+awk '$6>100 {print}' ../all*txt | awk '$5>20' > ../all-100-20.txt
+[kate@hgwdev results]$ wc -l !$
+wc -l ../all-100-20.txt
+
+
+#2780
+
+$ textHistogram -col=5 -real -skip=1 -binSize=.1 all.1-30.txt
+0.000000 ************************************************************ 82477
+0.100000 *********** 15192
+0.200000 *** 3852
+0.300000 * 1529
+0.400000 * 1130
+0.500000 *** 4155
+
+
+# Load GTEx tissue abbreviations into new column (abbrev) of gtexTissue table
+#       alter table gtexTissue add column abbrev varchar(255) after color
+# (Actually, use hgLoadSqlTab for this)
+
+
+# Parse per-tissue ASE files into BED 9+9 format  (gtexAse.as)
+cd /hive/data/outside/GTEx/V6/ase
+mkdir -p out/hg19 out/hg38
+mkdir -p hub/hg19 hub/hg38
+set bin = ~/bin/x86_64
+$bin/hgGtexAse hg19 gtexAwgAse lab/results out/hg19 -verbose=3
+
+cd out/hg19
+set lib = ~/kent/src/hg/lib
+set sizes = /hive/data/genomes/hg19/chrom.sizes
+foreach f (`ls *.tab`)
+    set t = $f:r
+    echo $t
+    bedToBigBed -type=bed9+9 -as=$lib/gtexAse.as $t.tab $sizes ../../hub/hg19/$t.bb
+end
+
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+set sizes = /hive/data/genomes/hg38/chrom.sizes
+set files = `ls *.tab`
+foreach f ($files)
+    set t = $f:r
+    echo "Lifting $t"
+    liftOver -bedPlus=9 $f $chain stdout ../hg38/$t.unmapped  | bedSort stdin ../hg38/$f
+    echo "Biggifying $t"
+    bedToBigBed -type=bed9+9 -as=$lib/gtexAse.as ../hg38/$f $sizes ../hg38/$t.bb
+end
+
+# Combined track
+cd /hive/data/outside/GTEx/V6/ase
+set bin = ~/bin/x86_64
+$bin/hgGtexAse hg19 gtexAwgAse lab/all out/hg19 -verbose=3
+cd out/hg19
+set t = gtexAwgAseCombined
+set lib = ~/kent/src/hg/lib
+set sizes = /hive/data/genomes/hg19/chrom.sizes
+bedToBigBed -type=bed9+9 -as=$lib/gtexAse.as $t.tab $sizes ../../hub/hg19/$t.bb
+
+# lift to hg38
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+set sizes = /hive/data/genomes/hg38/chrom.sizes
+liftOver -bedPlus=9 $t.tab $chain stdout ../hg38/$t.unmapped  | bedSort stdin ../hg38/$t.tab
+bedToBigBed -type=bed8+10 -as=$lib/gtexAse.as ../hg38/$t.tab $sizes ../../hub/hg38/$t.bb
+
+###############
+# Cross-tissue sliding window analysis from Stephane (on 7/28).  After review during the July
+# meeting, he suggested this would be more informative as summary than the Combined track.
+
+cd /hive/data/outside/GTEx/V6/ase
+mkdir windows; cd windows
+
+# process file from dropbox
+gunzip -c all_tissues.ase_stats.window.10.2.bedgraph.gz | \
+        sed 's/^/chr/' | sort -k1,1 -k2,2n > ase.hg19.bg
+
+# To remove overlaps in bedGraph, but maintain shape of graph:
+# break into 1bp segments, replace overlaps w/ median, merge, as per S. Castel
+# Really inefficient way to do this, but let's give it a go.
+cat > break.pl << 'EOF'
+while (<>) {
+    ($chr, $s, $e, $val) = split;
+    $s--; # correct start base
+    while ($s lt $e) {
+        print $chr, "\t", $s, "\t", $s+1, "\t", $val, "\n";
+        $s++;
+    }
+}
+'EOF'
+perl break.pl < ase.hg19.bg > ase.hg19.bases.bg
+# this takes a few hours
+
+bedSplitOnChrom ase.hg19.bases.bg split
+cd split
+
+cat > merge.csh << 'EOF'
+foreach f (*.bed)
+    echo $f
+    bedSort $f $f.sorted
+    /cluster/bin/bedtools/mergeBed -i $f.sorted -c 4 -o median > $f.merged
+    bedGraphPack $f.merged $f.packed
+end
+'EOF'
+
+csh merge.csh > merge.log
+cat *.packed > ../out/ase_density.hg19.bg
+
+# create hg38 version
+cd out
+set chain = /hive/data/genomes/hg19/bed/liftOver/hg19ToHg38.over.chain.gz
+liftOver -bedPlus=3 ase_density.hg19.bg $chain stdout unmapped.txt  | \
+        bedSort stdin ase_density.hg38.bg
+
+# convert to bigWig
+foreach db (hg19 hg38)
+    set sizes = /hive/data/genomes/$db/chrom.sizes
+    bedGraphToBigWig ase_density.$db.bg $sizes gtexAwgAseDensity.$db.bw
+end
+
+###########
+# Hub construction
+
+cd /hive/data/gbdb
+ln -s /hive/data/outside/gtex/analysis/hub gtexAnalysis
+
+cp gtex/hub.test.txt gtexAnalysis
+cp -rp gtex/images gtexAnalysis
+cd gtexAnalysis
+
+# create filelist.txt (for push to hgdownload)
+
+echo hub.txt genomes.txt gtexAnalysis.html > filelist.txt
+find images hg19 hg38 -type f -print >> filelist.txt
+

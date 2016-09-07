@@ -6,4 +6,5 @@ table gtexTissue
 	string description; "GTEX tissue type detail"
 	string organ; "GTEX tissue collection area"
         uint color; "GTEX assigned color"
+        string abbrev; "GTEX tissue abbreviation"
 )

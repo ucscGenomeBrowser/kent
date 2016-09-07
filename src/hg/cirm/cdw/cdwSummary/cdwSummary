@@ -550,7 +550,7 @@ def addCdwDatasetInfo(datasetId, sumData):
     " get info from the table cdw.cdwDataset and add to sumData "
     # temp file will be removed at the end of the function automatically
     tempFh = tempfile.NamedTemporaryFile()
-    cmd = '''hgsql cdw -NBe 'select * from cdwDataset where name="%s"' > %s''' % (datasetId, tempFh.name)
+    cmd = '''hgsql cdw -NBe 'select name, label, description, pmid from cdwDataset where name="%s"' > %s''' % (datasetId, tempFh.name)
     os.system(cmd)
     row = tempFh.readline().rstrip("\n").split("\t")
     if len(row)==1:
@@ -776,8 +776,8 @@ def writeSummarySection(summData, htmlFh):
         <br><b>Article:</b> %(firstAuthor)s et al: <a href="http://www.ncbi.nlm.nih.gov/pubmed/%(art_pmid)s">%(art_title)s</a><br>
         <b>Journal:</b> %(art_journalShort)s %(art_year)s<br>
         <b>Article Abstract:</b> <span class="collapse in">%(art_abstract)s</span><br>
-        </div>
         """ % summData)
+    htmlFh.write("</div>\n")
 
 def writeHeatmapHeader(ofh):
     " write html header for the heatmap page "
@@ -1195,8 +1195,9 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
 
 <div id="pcaChartDiv"><svg style="width:800px;height:400px"></svg>
     <div style="margin-left: 100px">
+    <form action="no">
     X-Axis: 
-    <select id="xAxisSelect">
+    <select name="no" id="xAxisSelect">
     <option value="pc1" selected="selected">PC1</option>
     <option value="pc2">PC2</option>
     <option value="pc3">PC3</option>
@@ -1205,7 +1206,7 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
     </select>
 
     Y-Axis: 
-    <select id="yAxisSelect">
+    <select name="no" id="yAxisSelect">
     <option value="pc1">PC1</option>
     <option value="pc2" selected="selected">PC2</option>
     <option value="pc3">PC3</option>
@@ -1214,21 +1215,22 @@ def writePcaSection(htmlFh, matrixFname, exprMatrix, markerGenes, cellInfo, outD
     </select>
 
     &nbsp&nbsp&nbspColor By: 
-    <select id="pcaGroupSelect">
+    <select name="no" id="pcaGroupSelect">
 """)
 
     if not options.showAllTags:
         for extName, intName, label in cellInfoTags:
-            htmlFh.write("   <option value='%s'>%s</option>\n" % (intName, label))
+            htmlFh.write("   <option NAME='no' value='%s'>%s</option>\n" % (intName, label))
     else:
         for tagName, _ in cellInfo.values()[0].iteritems():
-            htmlFh.write("   <option value='%s'>%s</option>\n" % (tagName, tagName))
+            htmlFh.write("   <option NAME='no' value='%s'>%s</option>\n" % (tagName, tagName))
 
     #for extName, intName, label in cellInfoTags:
         #htmlFh.write("   <option value='%s'>%s</option>\n" % (intName, label))
 
     htmlFh.write("""
     </select>
+    </form>
     </div>
 </div>
 
@@ -1592,7 +1594,8 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
 <div id="seuratChartDiv"><svg style="width:800px;height:%dpx"></svg>
     <div style="margin-left: 100px">
     Color By: 
-    <select id="tsneGroupSelect">
+    <form action="no">
+    <select name="no" id="tsneGroupSelect">
 """ % seuratHeight)
 
     colorBy = options.colorBy # pull global into local variable scope
@@ -1618,6 +1621,7 @@ def writeSeuratSection(htmlFh, matrixFname, exprMatrix, cellInfo, geneToSym, tag
 
     htmlFh.write("""
     </select>
+    </form>
     </div>
 </div>
 

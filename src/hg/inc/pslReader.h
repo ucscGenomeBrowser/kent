@@ -64,6 +64,11 @@ struct psl *pslReaderLoadRangeQuery(struct sqlConnection* conn,
                                     char* extraWhere);
 /* Function that encapsulates doing a range query and loading the results */
 
+struct psl *pslReaderLoadDb(char* db, char* table, char* where);
+/* Function that encapsulates reading a PSLs from a database If where is not
+* null, it is added as a where clause.  It will determine if pslx columns are
+* in the table. */
+
 struct psl *pslReaderLoadFile(char* pslFile, char* chrom);
 /* Function that encapsulates reading a psl file */
 

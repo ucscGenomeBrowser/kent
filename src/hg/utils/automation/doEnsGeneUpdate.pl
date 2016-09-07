@@ -285,7 +285,7 @@ hgLoadSqlTab $db ensemblToGeneName process/ensemblToGeneName.sql process/ensembl
 hgLoadSqlTab $db ensemblSource process/ensemblSource.sql process/ensemblSource.tab
 # verify names in ensGene is a superset of names in ensPep
 hgsql -N -e "select name from ensPep;" $db | sort > ensPep.name
-hgsql -N -e "select name from ensGene;" $db | sed -e 's/\\.[0-9][0-9]*\$//;' | sort > ensGene.name
+hgsql -N -e "select name from ensGene;" $db | sort > ensGene.name
 set geneCount = `cat ensGene.name | wc -l`
 set pepCount = `cat ensPep.name | wc -l`
 set commonCount = `comm -12 ensPep.name ensGene.name | wc -l`

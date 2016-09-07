@@ -423,8 +423,7 @@ include trackDb.cloneEnd.ra
 
 include hg38Patch7.ra
 
-#include knownGene.ra public
-include knownGene.alpha.ra
+include knownGene.ra 
 
 include trackDb.100way.ra
 include trackDb.145way.ra alpha

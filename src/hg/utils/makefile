@@ -30,6 +30,7 @@ UTILS_APPLIST = \
 	gapToLift \
 	genePredFilter \
 	genePredToBigGenePred \
+	genePredToProt \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
@@ -66,6 +67,7 @@ DIRS = ${buildRefresh} \
 
 TEST_DIRS = \
 	genePredFilter \
+	genePredToProt \
 	gff3ToGenePred \
 	gff3ToPsl \
 	gtfToGenePred \
