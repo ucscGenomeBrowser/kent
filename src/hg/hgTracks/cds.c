@@ -1826,6 +1826,10 @@ void baseColorInitTrack(struct hvGfx *hvg, struct track *tg)
  * tg is linkedFeatures or linkedFeaturesSeries (currently the only
  * two supported track types -- bed, psl etc. are subclasses of these). */
 {
+enum baseColorDrawOpt drawOpt = baseColorGetDrawOpt(tg);
+if (drawOpt <= baseColorDrawOff)
+    return;
+
 setGc();
 if (initedTrack == NULL || differentString(tg->track, initedTrack))
     {
