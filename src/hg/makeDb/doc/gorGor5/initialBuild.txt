@@ -1,7 +1,7 @@
 # for emacs: -*- mode: sh; -*-
 
 # This file describes browser build for the gorGor5
-# Organism name:  Orcinus orca (killer whale)
+# Organism name:  Gorilla gorilla gorilla (Gorilla)
 
 #  Must find the photograph first, can not continue until finding
 #  the photograph.
