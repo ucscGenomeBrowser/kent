@@ -84,8 +84,7 @@ hPrintf("<br><a target='_blank' href='../cgi-bin/hgTracks?%s&position=%s:%d-%d&g
                         cartSidUrlString(cart), curGeneChrom, curGeneStart, curGeneEnd);
 
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;");
-//gtexPortalLink(ensGene);
-// Link is broken as of 8/23/16. Broad has been alerted.
+gtexPortalLink(ensGene);
 }
 
 struct section *gtexSection(struct sqlConnection *conn, struct hash *sectionRa)
