@@ -136,7 +136,6 @@ struct tempName pngTn;
 if (gtexGeneBoxplot(gtexGene->geneId, gtexGene->name, version, doLogTransform, &pngTn))
     printf("<img src = \"%s\" border=1><br>\n", pngTn.forHtml);
 printf("<br>");
-//gtexPortalLink(gtexGene->geneId);
-// Link broken as of 8/23/16.  Broad has been alerted.
+gtexPortalLink(gtexGene->geneId);
 printTrackHtml(tdb);
 }
