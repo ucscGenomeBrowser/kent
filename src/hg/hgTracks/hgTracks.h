@@ -808,15 +808,22 @@ struct linkedFeatures *bedMungToLinkedFeatures(struct bed **pBed, struct trackDb
 	int fieldCount, int scoreMin, int scoreMax, boolean useItemRgb);
 /* Convert bed to a linkedFeature, destroying bed in the process. */
 
-struct bigBedInterval *bigBedSelectRange(struct track *track,
-	char *chrom, int start, int end, struct lm *lm);
+struct bigBedInterval *bigBedSelectRangeExt(struct track *track,
+	char *chrom, int start, int end, struct lm *lm, int maxItems);
 /* Return list of intervals in range. */
 
-void bigBedAddLinkedFeaturesFrom(struct track *track,
+#define bigBedSelectRange(track, chrom, start, end, lm)  \
+    bigBedSelectRangeExt(track, chrom,start, end, lm,  min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track)))
+/* Return list of intervals in range. */
+
+void bigBedAddLinkedFeaturesFromExt(struct track *track,
 	char *chrom, int start, int end, int scoreMin, int scoreMax, boolean useItemRgb,
-	int fieldCount, struct linkedFeatures **pLfList);
+	int fieldCount, struct linkedFeatures **pLfList, int maxItems);
 /* Read in items in chrom:start-end from bigBed file named in track->bbiFileName, convert
  * them to linkedFeatures, and add to head of list. */
+
+#define bigBedAddLinkedFeaturesFrom(track, chrom, start, end, scoreMin, scoreMax, useItemRgb, fieldCount, pLfList) \
+    bigBedAddLinkedFeaturesFromExt(track, chrom, start, end, scoreMin, scoreMax, useItemRgb, fieldCount, pLfList, min(BIGBEDMAXIMUMITEMS, maximumTrackItems(track))) 
 
 boolean canDrawBigBedDense(struct track *tg);
 /* Return TRUE if conditions are such that can do the fast bigBed dense data fetch and

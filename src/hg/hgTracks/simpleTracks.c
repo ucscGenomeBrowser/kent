@@ -6198,8 +6198,8 @@ int scoreMin = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMin", "0
 int scoreMax = atoi(trackDbSettingClosestToHomeOrDefault(tg->tdb, "scoreMax", "1000"));
 struct linkedFeatures *lfList = NULL;
 tg->parallelLoading = TRUE;  // set so bigBed code will look at bigDataUrl
-bigBedAddLinkedFeaturesFrom(tg, chromName, winStart, winEnd,
-      scoreMin, scoreMax, TRUE, 12, &lfList);
+bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd,
+      scoreMin, scoreMax, TRUE, 12, &lfList, BIGBEDMAXIMUMITEMS);
 struct linkedFeatures *newList = lfList;
 
 if (isGencode)
