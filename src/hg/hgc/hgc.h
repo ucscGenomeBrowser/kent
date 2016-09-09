@@ -477,6 +477,9 @@ void printAddWbr(char *text, int distance);
  * We need to add a <wbr> tag every x characters in the text to make text breakable.
  */
 
+struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount);
+/* return the extra field names and their values as a list of slPairs */
+
 int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount);
 // Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
 // sr may be null for bigBeds.

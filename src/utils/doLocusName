@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+
+import logging, sys, optparse, subprocess, tempfile, os
+from collections import defaultdict
+from os.path import join, basename, dirname, isfile
+
+# ==== functions =====
+    
+def parseArgs():
+    " setup logging, parse command line arguments and options. -h shows auto-generated help page "
+    parser = optparse.OptionParser("usage: %prog [options] db geneTableName - create and fill locusNames, a BED4 table that covers all chromosomes and assigns a name to all ranges. ensGene usually works well as the gene table.")
+
+    parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages")
+    (options, args) = parser.parse_args()
+
+    if args==[]:
+        parser.print_help()
+        exit(1)
+
+    if options.debug:
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+    return args, options
+
+def runSql(db, query):
+    " yield rows from sql query "
+    proc = subprocess.Popen(['hgsql', db, "-NB", "-e", query], stdout=subprocess.PIPE)
+    for line in  proc.stdout:
+        yield line.rstrip("\n").split("\t")
+
+def runCmd(cmd, mustRun=True):
+    " wrapper around os.system that prints error messages "
+    print ("Running: "+ cmd)
+    ret = os.system(cmd)
+    if ret!=0 and mustRun:
+        print "Could not run command %s" % cmd
+        sys.exit(1)
+    return ret
+
+def doLocusName(db, geneTableName):
+    " create and fill the locusName table for db "
+    tempFh = tempfile.NamedTemporaryFile()
+    for row in runSql(db, "SELECT * from ensemblToGeneName"):
+        tempFh.write("\t".join(row)+"\n")
+    tempFh.flush()
+    tempFname = tempFh.name
+
+    chromSizesFname = "/cluster/data/%s/chrom.sizes" % db
+    outTmp = "locusName.tmp.bed"
+
+    cmd = "hgsql %(db)s -NB -e 'SELECT * from %(geneTableName)s'| cut -f2- |" # get genePred
+    "genePredToBed stdin stdout | bedToExons stdin stdout | " # break into exons
+    "tabRepl %(tempFname)s 3 /dev/stdin | sort -u | " # replace transcript with symbol, skip dupes
+    "bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout |" # merge adjacent exons
+    "bedBetween stdin /dev/stdout -a -s %(chromSizesFname)s |" # annotate regions
+    "bedSort stdin %(outTmp)s" % locals()
+    runCmd(cmd)
+
+    cmd = "hgLoadBed %s locusName %s" % (db, outTmp)
+    runCmd(cmd)
+
+    os.remove(outTmp)
+
+# ----------- main --------------
+def main():
+    args, options = parseArgs()
+
+    db, geneTable = args
+    doLocusName(db, geneTable)
+
+main()
