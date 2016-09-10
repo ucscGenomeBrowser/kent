@@ -160,7 +160,12 @@ SCRIPT_FILES = \
 	patSeqSummarizeDocs \
 	pslProtCnv \
 	pslSameGene \
-	matrixMerge
+	matrixMerge \
+	bedOverlapMerge \
+	tabRepl \
+	doLocusName \
+	bedBetween
+
 
 # List of all directories to build
 

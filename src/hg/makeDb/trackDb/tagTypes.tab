@@ -76,6 +76,7 @@ dateUnrestricted bed
 db *
 dbProfile *
 dbTrackType customTracks
+detailsTabUrls bigBed bigGenePred bigPsl
 defaultGeneTracks bed
 defaultMaxWeight bed
 defaultLinkedTables genePred
@@ -343,6 +344,7 @@ scoreFilterLimits broadPeak narrowPeak bed interaction bedlogR peptideMapping bi
 scoreFilterMax bed bedlogR peptideMapping bigBed
 scoreMax bed bedlogR interaction peptideMapping narrowPeak bigBed
 scoreMin broadPeak narrowPeak bed bedlogR interaction peptideMapping bigBed
+scoreLabel bed bigBed bigPsl bigGenePred
 searchIndex bigBed
 searchTrix bigBed
 selectSubject psl bigPsl

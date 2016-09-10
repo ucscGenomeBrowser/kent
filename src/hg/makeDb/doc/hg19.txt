@@ -28750,7 +28750,8 @@ cp clinvarCnv.bb /hive/data/genomes/hg19/bed/clinvar/
 
 _EOF_
 #########################################################################
-# LOCUS REFERENCE GENOME (LRG) REGIONS AND TRANSCRIPTS (DONE 8/11/16 angie)
+# LOCUS REFERENCE GENOMIC (LRG) REGIONS AND TRANSCRIPTS (DONE 9/9/16 angie)
+# Redmine #13359
 # previously done 7/7/14
     screen -S lrg -t lrg
     set today = `date +%Y_%m_%d`
@@ -28783,7 +28784,7 @@ _EOF_
     # Map LRG fixed_annotation transcripts from LRG coords to hg19 coords (HT MarkD):
     lrgToPsl lrg.bed /hive/data/genomes/hg19/chrom.sizes lrg.psl
     pslCheck lrg.psl
-#checked: 665 failed: 0 errors: 0
+#checked: 666 failed: 0 errors: 0
     awk '{print $10 "\t" $11;}' lrg.psl > lrg.sizes
     genePredToFakePsl -chromSize=lrg.sizes placeholder \
       lrgTranscriptsUnmapped.gp lrgTranscriptsFakePsl.psl lrgTranscripts.cds

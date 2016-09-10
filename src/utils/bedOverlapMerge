@@ -1,0 +1,67 @@
+#!/usr/bin/python
+
+import sys
+from optparse import OptionParser
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = OptionParser("usage: %prog [options] file - merge overlapping bed features, join their names")
+
+#parser.add_option("-v", "--inverse", dest="inverse", action="store_true", help="inverse restult, only print lines that DO overlap",default=False) 
+
+(options, args) = parser.parse_args()
+if len(args)==0:
+    parser.print_help()
+    sys.exit(0)
+
+# ==== FUNCTIONs =====
+def coordOverlap(start1, end1, start2, end2):
+    """ returns true if two Features overlap """
+    result = (( start2 <= start1 and end2 > start1) or \
+            (start2 < end1 and end2 >= end1) or \
+            (start1 >= start2 and end1 <= end2) or \
+            (start2 >= start1 and end2 <= end1))
+    #print result, start1, end1, start2, end2
+    return result
+
+def printLine(chrom, start, end, names):
+    row = [lastChrom, str(start), str(end), "/".join(names)]
+    print "\t".join(row)
+
+# ==== MAIN ====
+infname = args[0]
+
+lastChrom, lastStart, lastEnd = None, None, None
+names = []
+
+for line in open(infname):
+    #print line
+    chrom, start, end, name = line.rstrip("\n").split("\t")[:4]
+    start = int(start)
+    end = int(end)
+
+    # if first feature on chromosome and we have some lastX data: output lastX data
+    if lastChrom!=None and lastChrom!=chrom:
+        printLine(lastChrom, lastStart, lastEnd, names)
+        lastChrom=None
+
+    # if first feature on chromosome: save lastX data and continue
+    if lastChrom==None:
+        lastChrom, lastStart, lastEnd = chrom, start, end
+        names = [name]
+        continue
+
+    assert(start>=lastStart) # features must be sorted by start position
+
+    # if overlap: extend last feature
+    if coordOverlap(lastStart, lastEnd, start, end):
+        lastStart = min(start, lastStart)
+        lastEnd = max(end, lastEnd)
+        if name not in names:
+            names.append(name)
+    # no overlap: print last feature and update lastX data
+    else:
+        printLine(lastChrom, lastStart, lastEnd, names)
+        lastChrom, lastStart, lastEnd = chrom, start, end
+        names = [name]
+
+printLine(lastChrom, lastStart, lastEnd, names)
