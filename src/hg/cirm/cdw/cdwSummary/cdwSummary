@@ -82,13 +82,13 @@ def parseCmdLine():
     """)
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default="/hive/groups/cirm/annotation/markers/darmanis2015/fig1/barres.tab")
+    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default=os.getenv("CIRM")+"/annotation/ensToHugo/barres.tab")
     parser.add_option("", "--symbols", dest="useSyms", action="store_true", help="set this option if the rows in the input matrix file are symbols, not ENSGxxxx gene identifiers. This will read only symbols from the file specified with the -m option")
     parser.add_option("-o", "--offline", dest="offline", action="store_true", help="copy all required style and js files into the output directory")
     parser.add_option("-f", "--force", dest="force", action="store_true", help="do not use the results cache (e.g. summary.tmp) but recreate all input data")
     parser.add_option("-j", "--cellTreeJson", dest="cellTreeJson", action="store", help="a file with the D3-JSON-encoded cell clustering results, default %default", default=None)
     parser.add_option("-c", "--meta", dest="meta", action="store", help="name of the meta table column where the filename is stored. This field is used to link the meta table and RNA-seq output together. Default value:'%default'", default="meta")
-    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default="/hive/data/outside/gencode/release_22/transToGene.tab")
+    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default=os.getenv("CIRM")+"annotation/ensToHugo/genes.hg38") 
     parser.add_option("-a", "--showAllTags", dest="showAllTags", action="store_true", help="show all tags on mouse over, not just our favorite ones (cellInfoTags)")
     parser.add_option("", "--tagLabels", dest="tagLabels", action="store", help="short labels of tags, tab-sep file with two fields, tag name and label for it")
     parser.add_option("", "--seuratAllGenes", dest="seuratAllGenes", action="store_true", help="by default, Seurat is only run on genes that have a symbol. This parameter runs Seurat on all genes.")
@@ -1763,7 +1763,7 @@ def writeSeuratGenes(htmlFh, geneToSym, clusterGenesPath, minPower, minAuc, outD
     htmlFh.write("<h2>Seurat cluster-specific genes with power &gt; %.2f and AUC &gt; %.2f </h2>\n" % (minPower, minAuc))
 
     clusterToGenes = parseSeuratGenes(clusterGenesPath)
-    geneAnnots = parseAnnots(["/hive/groups/cirm/annotation/panther.tab", "/hive/groups/cirm/annotation/markers/pollen/all.tab"])
+    geneAnnots = parseAnnots([os.getenv("CIRM")+"/annotation/panther.tab",os.getenv("CIRM")+"annotation/markers/pollen/all.tab"])
 
     # filter rows
     filtClusterGenes = []
