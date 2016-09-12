@@ -5577,7 +5577,7 @@ identifier mouseStrains
 
 identifier lrgTranscriptId
 "ID of Locus Reference Genomic (LRG) transcript"
-    $hg.lrgTranscriptAli.qName
+    $hg.lrgTranscriptAli.qName dupeOk
     $hg.lrgCdna.name
     $hg.lrgPep.name
     $hg.lrgCds.id
