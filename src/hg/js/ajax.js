@@ -164,9 +164,9 @@ function setCartVars(names, values, errFunc, async)
         return;
 
     if (!errFunc)
-	errFunc = errorHandler;
+        errFunc = errorHandler;
     if (async === null || async === undefined) // async is boolean so be explicit!
-	async = true;
+        async = true;
 
     // Set up constant portion of url
     var loc = window.location.href;
@@ -281,7 +281,7 @@ function errorHandler(request, textStatus)
         this.disabledEle.removeAttr('disabled');
     }
     if (this.loadingId) {
-	hideLoadingImage(this.loadingId);
+        hideLoadingImage(this.loadingId);
     }
 }
 
@@ -515,9 +515,9 @@ var loadingImage = function ()
             }
         },
         abort: function() {
-	    imgEle.hide();
-	    msgEle.hide();
-	    jQuery('body').css('cursor', '');
-	}
+            imgEle.hide();
+            msgEle.hide();
+            jQuery('body').css('cursor', '');
+        }
     };
 }();
