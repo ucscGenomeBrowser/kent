@@ -38,6 +38,10 @@ static void getXrefInfo(struct sqlConnection *conn,
 /* See if curTrack specifies an xref/alias table for lookup of IDs. */
 {
 struct trackDb *tdb  = hTrackDbForTrack(database, curTable);
+
+if (tdb == NULL)
+    tdb = curTrack;
+
 char *xrefSpec = tdb ? trackDbSettingClosestToHomeOrDefault(tdb, "idXref",NULL) : NULL;
 char *xrefTable = NULL, *idField = NULL, *aliasField = NULL;
 if (xrefSpec != NULL)

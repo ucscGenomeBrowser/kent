@@ -10,15 +10,17 @@ set -euo pipefail
 set -e
 set -o pipefail
 # path to a git clone of the crispor github repo, must be under /hive
-CRISPOR=/hive/users/max/projects/crispor/crispor
+CRISPOR=/hive/data/outside/crisprTrack/crispor
 
 if [ ! -f $CRISPOR/crispor.py ]; then
     echo error: cannot find $CRISPOR/crispor.py
     exit 1
 fi
 
-# path to the crispr track tools, should be on /hive, from kent/src/utils/crisprTrack
-crisprTrack=/hive/groups/browser/crisprTrack
+# path to the crispr track pipeline scripts
+# look at ~/kent/src/hg/makeDb/crisprTrack/README.txt for
+# more info about these scripts in there
+crisprTrack= /hive/data/outside/crisprTrack/scripts
 
 db=$1
 geneTrackName=$2
