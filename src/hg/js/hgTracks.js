@@ -957,7 +957,7 @@ var vis = {
     },
 
     restoreFromBackButton: function()
-    // Re-enabling vis dropdowns is necessarty because intiForAjax() disables them on submit.
+    // Re-enabling vis dropdowns is necessary because initForAjax() disables them on submit.
     {
         $('select.normalText,select.hiddenText').attr('disabled',false);
     }
@@ -1112,7 +1112,7 @@ var dragSelect = {
                         } else {
                             $('body').css('cursor', 'wait');
                             if (!hgTracks.enableHighlightingDialog)
-                                cart.setVarsObj({'enableHighlightingDialog': 0 });
+                                cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
