@@ -1,5 +1,5 @@
-table bigGenePred
-"bigGenePred gene models"
+table crispr
+"CRISPR guides: bed9+, external fields in a tab-sep file with blobs for off-targets"
    (
    string chrom;       "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in chromosome"
