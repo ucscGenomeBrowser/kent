@@ -629,7 +629,7 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
     var retval = true;
     var hidden = normed($("input[name='"+hiddenPrefix+"_"+prefix+"_close']"));
     if (button && hidden) {
-	var newVal = -1;
+        var newVal = -1;
         if (arguments.length > 5)
             newVal = arguments[5] ? 0 : 1;
         var oldSrc = $(button).attr("src");
@@ -666,9 +666,9 @@ function setTableRowVisibility(button, prefix, hiddenPrefix, titleDesc, doAjax)
             contents.show().trigger('show');
         }
         $(hidden).val(newVal);
-	if (doAjax) {
-	    setCartVar(hiddenPrefix+"_"+prefix+"_close", newVal);
-	}
+        if (doAjax) {
+            setCartVar(hiddenPrefix+"_"+prefix+"_close", newVal);
+        }
         retval = false;
     }
     return retval;
@@ -793,7 +793,7 @@ function debugDumpFormCollection(collectionName,vars)
 { // dumps form vars collection in an alert
     var debugStr = ""; 
     for (var thisVar in vars) {
-	debugStr += thisVar + "==" + vars[thisVar]+"\n";
+        debugStr += thisVar + "==" + vars[thisVar]+"\n";
     }
     alert("DEBUG "+ collectionName + ":\n"+debugStr);  
 }
@@ -1085,15 +1085,15 @@ Rectangle.prototype.contains = function(x, y)  // DEAD CODE?
 
 function commify (str) {
     if (typeof(str) === "number")
-	str = str + "";
+        str = str + "";
     var n = str.length;
     if (n <= 3) {
-	return str;
+        return str;
     } else {
-	var pre = str.substring(0, n-3);
-	var post = str.substring(n-3);
-	pre = commify(pre);
-	return pre + "," + post;
+        var pre = str.substring(0, n-3);
+        var post = str.substring(n-3);
+        pre = commify(pre);
+        return pre + "," + post;
     }
 }
 
@@ -1492,7 +1492,7 @@ function stripMainMenu(returnedHtml, debug, whatWeDid)
     var cleanHtml = returnedHtml;
     // embedded javascript?
     while (cleanHtml.length > 0) {
-	
+        
         var begPattern = '<div id="main-menu-whole">';
         var endPattern = '</div><!-- end main-menu-whole -->';
         var bounds = bindings.outside(begPattern,endPattern,cleanHtml);
