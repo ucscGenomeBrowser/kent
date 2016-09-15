@@ -7241,6 +7241,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
+if (bb == NULL)
+    errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
+             acc, chrom, start, end, tdb->table, fileName);
 psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
