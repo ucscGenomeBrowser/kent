@@ -26,9 +26,10 @@ usage: $base assemblyPrefix
   exit $status;
 } # usage
 
-sub findAssemblyMapping {
-  # Return the dom node of the <mapping> for the desired assembly (disregarding GRC patch suffix)
+sub findAssemblyMappings {
+  # Return the dom node(s) of the <mapping> for the desired assembly (disregarding GRC patch suffix)
   my ($dom, $assemblyPrefix) = @_;
+  my @mappings = ();
   my @annotationSets = $dom->findnodes("/lrg/updatable_annotation/annotation_set");
   # There are usually several annotation sets; the one with source/name "LRG" has
   # the reference assembly mapping that we're looking for;
@@ -41,12 +42,12 @@ sub findAssemblyMapping {
 	# Check the assembly name and make sure this is for a chrom, not patch etc.
 	my $assembly = $m->findvalue('@coord_system');
 	my $otherId = $m->findvalue('@other_id');
-	return $m if ($assembly =~ /^$assemblyPrefix/ && $otherId =~ /^NC_/);
+	push @mappings, $m if ($assembly =~ /^$assemblyPrefix/ && $otherId =~ /^NC_/);
       }
     }
   }
-  return undef;
-} # findAssemblyMapping
+  return @mappings;
+} # findAssemblyMappings
 
 sub utf8ToHtml {
   my ($word) = @_;
@@ -67,69 +68,12 @@ sub parseOneLrg {
   my ($xmlIn, $bedF, $gpF, $cdnaF, $pepF) = @_;
   my $dom = XML::LibXML->load_xml( location => $xmlIn );
 
-  my $refMapping = findAssemblyMapping($dom, $assemblyPrefix);
-  if (! defined $refMapping) {
+  my @refMappings = findAssemblyMappings($dom, $assemblyPrefix);
+  if (@refMappings == 0) {
     die "LRG mapping for $assemblyPrefix not found in $xmlIn.";
   }
 
-  # Find BED 12+ fields.
-  my $seq = $refMapping->findvalue('@other_name');
-  $seq = 'chr' . $seq unless ($seq =~ /^chr/);
-  my $start = $refMapping->findvalue('@other_start') - 1;
-  my $end = $refMapping->findvalue('@other_end');
   my $lrgName = $dom->findvalue('/lrg/fixed_annotation/id');
-  my @mappingSpans = $refMapping->findnodes('mapping_span');
-  die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
-  my $span = $mappingSpans[0];
-  my $lrgStart = $span->findvalue('@lrg_start') - 1;
-  die "$xmlIn: Unexpected $assemblyPrefix mapping_span lrgStart $lrgStart" if ($lrgStart != 0);
-  my $lrgEnd = $span->findvalue('@lrg_end');
-  my $strand = $span->findvalue('@strand');
-  $strand = ($strand == 1 ? '+' : '-');
-
-  # Sort out indels and mismatches when building block coords:
-  my @blockSizes = ();
-  my @blockStarts = (0);
-  my @mismatches = ();
-  my @indels = ();
-  my @diffs = $refMapping->findnodes('mapping_span/diff');
-  # Sort @diffs by ascending assembly start coords, so the loop below has sorted inputs:
-  @diffs = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @diffs;
-  foreach my $d (@diffs) {
-    my $lrgStart = $d->findvalue('@lrg_start') - 1;
-    my $lrgEnd = $d->findvalue('@lrg_end');
-    my $blkStart = $d->findvalue('@other_start') - 1 - $start;
-    my $blkEnd = $d->findvalue('@other_end') - $start;
-    my $lrgSeq = $d->findvalue('@lrg_sequence');
-    my $refSeq = $d->findvalue('@other_sequence');
-    my $type = $d->findvalue('@type');
-    my $lastBlkStart = $blockStarts[$#blockStarts];
-    if ($type eq 'mismatch') {
-      push @mismatches, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-    } elsif ($type eq 'lrg_ins') {
-      # LRG has sequence where assembly has none; adjust assembly coords to start=end
-      $blkStart++;  $blkEnd--;  die "weird lrg_ins other_ coords" if ($blkStart != $blkEnd);
-      push @blockSizes, ($blkStart - $lastBlkStart);
-      push @blockStarts, $blkStart;
-      push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-    } elsif ($type eq 'other_ins') {
-      # assembly has sequence where LRG has none; adjust LRG coords to be start=end
-      $lrgStart++;  $lrgEnd--;  die "weird other_ins lrg_ coords" if ($lrgStart != $lrgEnd);
-      push @blockSizes, ($blkStart - $lastBlkStart);
-      push @blockStarts, $blkEnd;
-      push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
-    } else {
-      die "Unrecognized diff type '$type' in $xmlIn";
-    }
-  }
-  push @blockSizes, ($end - $start - $blockStarts[$#blockStarts]);
-  my $blockCount = @blockStarts;
-  die unless ($blockCount == @blockSizes);
-  my $blockSizesStr = join(',', @blockSizes) . ',';
-  my $blockStartsStr = join(',', @blockStarts) . ',';
-  my $mismatchesStr = join(',', @mismatches);
-  my $indelsStr = join(',', @indels);
-
   # HGNC id & symbol
   my $hgncId = $dom->findvalue('/lrg/fixed_annotation/hgnc_id');
   my $hgncSymbol = $dom->findvalue('/lrg/updatable_annotation/annotation_set/lrg_locus[@source="HGNC"]');
@@ -146,17 +90,75 @@ sub parseOneLrg {
     $lrgSource = utf8ToHtml($lrgSources[0]->findvalue('name'));
     $lrgSourceUrl = $lrgSources[0]->findvalue('url');
   }
-  my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
-
   # watch out for stray tab chars:
   $lrgSource =~ s/^\s*(.*?)\s*$/$1/;
   $lrgSourceUrl =~ s/^\s*(.*?)\s*$/$1/;
+  my $creationDate = $dom->findvalue('/lrg/fixed_annotation/creation_date');
 
-  print $bedF join("\t", $seq, $start, $end, $lrgName, 0, $strand, $start, $end, 0,
-		   $blockCount, $blockSizesStr, $blockStartsStr,
-		   $mismatchesStr, $indelsStr, $lrgEnd,
-		   $hgncId, $hgncSymbol, $lrgNcbiAcc,
-		   $lrgSource, $lrgSourceUrl, $creationDate) . "\n";
+  foreach my $refMapping (@refMappings) {
+    # Find BED 12+ fields.
+    my $seq = $refMapping->findvalue('@other_name');
+    $seq = 'chr' . $seq unless ($seq =~ /^chr/);
+    my $start = $refMapping->findvalue('@other_start') - 1;
+    my $end = $refMapping->findvalue('@other_end');
+    my @mappingSpans = $refMapping->findnodes('mapping_span');
+    die 'Unusual number of mapping_spans' if (@mappingSpans != 1);
+    my $span = $mappingSpans[0];
+    my $lrgStart = $span->findvalue('@lrg_start') - 1;
+    die "$xmlIn: Unexpected $assemblyPrefix mapping_span lrgStart $lrgStart" if ($lrgStart != 0);
+    my $lrgEnd = $span->findvalue('@lrg_end');
+    my $strand = $span->findvalue('@strand');
+    $strand = ($strand == 1 ? '+' : '-');
+
+    # Sort out indels and mismatches when building block coords:
+    my @blockSizes = ();
+    my @blockStarts = (0);
+    my @mismatches = ();
+    my @indels = ();
+    my @diffs = $refMapping->findnodes('mapping_span/diff');
+    # Sort @diffs by ascending assembly start coords, so the loop below has sorted inputs:
+    @diffs = sort { $a->findvalue('@other_start') <=> $b->findvalue('@other_start') } @diffs;
+    foreach my $d (@diffs) {
+      my $lrgStart = $d->findvalue('@lrg_start') - 1;
+      my $lrgEnd = $d->findvalue('@lrg_end');
+      my $blkStart = $d->findvalue('@other_start') - 1 - $start;
+      my $blkEnd = $d->findvalue('@other_end') - $start;
+      my $lrgSeq = $d->findvalue('@lrg_sequence');
+      my $refSeq = $d->findvalue('@other_sequence');
+      my $type = $d->findvalue('@type');
+      my $lastBlkStart = $blockStarts[$#blockStarts];
+      if ($type eq 'mismatch') {
+        push @mismatches, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+      } elsif ($type eq 'lrg_ins') {
+        # LRG has sequence where assembly has none; adjust assembly coords to start=end
+        $blkStart++;  $blkEnd--;  die "weird lrg_ins other_ coords" if ($blkStart != $blkEnd);
+        push @blockSizes, ($blkStart - $lastBlkStart);
+        push @blockStarts, $blkStart;
+        push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+      } elsif ($type eq 'other_ins') {
+        # assembly has sequence where LRG has none; adjust LRG coords to be start=end
+        $lrgStart++;  $lrgEnd--;  die "weird other_ins lrg_ coords" if ($lrgStart != $lrgEnd);
+        push @blockSizes, ($blkStart - $lastBlkStart);
+        push @blockStarts, $blkEnd;
+        push @indels, join(':', $blkStart, $lrgStart, $refSeq, $lrgSeq);
+      } else {
+        die "Unrecognized diff type '$type' in $xmlIn";
+      }
+    }
+    push @blockSizes, ($end - $start - $blockStarts[$#blockStarts]);
+    my $blockCount = @blockStarts;
+    die unless ($blockCount == @blockSizes);
+    my $blockSizesStr = join(',', @blockSizes) . ',';
+    my $blockStartsStr = join(',', @blockStarts) . ',';
+    my $mismatchesStr = join(',', @mismatches);
+    my $indelsStr = join(',', @indels);
+
+    print $bedF join("\t", $seq, $start, $end, $lrgName, 0, $strand, $start, $end, 0,
+                     $blockCount, $blockSizesStr, $blockStartsStr,
+                     $mismatchesStr, $indelsStr, $lrgEnd,
+                     $hgncId, $hgncSymbol, $lrgNcbiAcc,
+                     $lrgSource, $lrgSourceUrl, $creationDate) . "\n";
+  } # each refMapping
 
   # Now convert fixed transcript annotation to genePredExt and fasta for mrna and protein.
   my @fixedTs = $dom->findnodes('/lrg/fixed_annotation/transcript');

@@ -1454,6 +1454,16 @@
     <pre>   bedNameLabel Gene Id</pre>
 </DIV>
 
+<DIV class="scoreLabel"><span class="types bed bigBed bigPsl bigGenePred"></span>
+<div class="format"><code>scoreLabel &lt;label&gt;</code></div>
+    <P>When a user clicks on a track item in the Browser image, 
+    the item detail page is shown. This setting specifies an 
+    alternate label for the score on that page. Without this
+    setting, the label will be "Score:".</P>
+    <P><B>Example:</B></P>
+    <pre>   scoreLabel Log of binding Score * 1000</pre>
+</DIV>
+
 <DIV class="linkIdInName"><span class="types bed bigBed"></span>
 <div class="format"><code>linkIdInName on</code></div>
     <P>This setting changes the meaning of the bed name field

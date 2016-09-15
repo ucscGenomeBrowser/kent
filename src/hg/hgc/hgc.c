@@ -525,9 +525,11 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
+char *itemSafe = cgiEncode(item);
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
+       hgcPathAndSettings(), group, itemSafe, chrom, winStart, winEnd, other,
        tbl);
+freeMem(itemSafe);
 }
 
 void hgcAnchorPosition(char *group, char *item)
@@ -792,7 +794,10 @@ if (bedSize >= 4 && bed->name[0] != 0)
 if (bedSize >= 5)
     {
     if (!tdb || !trackDbSetting(tdb, "noScoreFilter"))
-	printf("<B>Score:</B> %d<BR>\n", bed->score);
+        {
+        char *scoreLabel = trackDbSettingOrDefault(tdb, "scoreLabel", "Score");
+	printf("<B>%s:</B> %d<BR>\n", scoreLabel, bed->score);
+        }
     }
 if (bedSize >= 6)
    {
@@ -1525,20 +1530,9 @@ freeMem(slIds);
 //freeMem(idNames);
 }
 
-int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
-// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
-// sr may be null for bigBeds.
-// Returns number of extra fields actually printed.
+int extraFieldsStart(struct trackDb *tdb, int fieldCount, struct asObject *as)
+/* return the index of the first extra field */
 {
-struct sqlConnection *conn = NULL ;
-if (!trackHubDatabase(database))
-    conn = hAllocConnTrack(database, tdb);
-struct asObject *as = asForTdb(conn, tdb);
-hFreeConn(&conn);
-if (as == NULL)
-    return 0;
-
-// We are trying to print extra fields so we need to figure out how many fields to skip
 int start = 0;
 char *type = cloneString(tdb->type);
 char *word = nextWord(&type);
@@ -1549,7 +1543,53 @@ if (word && (sameWord(word,"bed") || sameWord(word,"bigBed") || sameWord(word,"b
     else // custom beds and bigBeds may not have full type "begBed 9 +"
         start = max(0,slCount(as->columnList) - fieldCount);
     }
+return start;
+}
+
+struct slPair* getExtraFields(struct trackDb *tdb, char **fields, int fieldCount)
+/* return the extra field names and their values as a list of slPairs.  */
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return NULL;
+struct asColumn *col = as->columnList;
+
+int start = extraFieldsStart(tdb, fieldCount, as);
+// skip past known fields
+for (;start !=0 && col != NULL;col=col->next)
+    if (start > 0)
+        start--;
+
+struct slPair *extraFields = 0;
 int count = 0;
+for (;col != NULL && count < fieldCount;col=col->next)
+    {
+    struct slPair *slp;
+    AllocVar(slp);
+    char *fieldName = col->name;
+    char *fieldVal = fields[count];
+    slp->name = fieldName;
+    slp->val = fieldVal;
+    slAddHead(&extraFields, slp);
+    count++;
+    //printf("name %s, val %s, idx %d<br>", fieldName, fieldVal, count);
+    }
+slReverse(extraFields);
+return extraFields;
+}
+
+int extraFieldsPrint(struct trackDb *tdb,struct sqlResult *sr,char **fields,int fieldCount)
+// Any extra bed or bigBed fields (defined in as and occurring after N in bed N + types.
+// sr may be null for bigBeds.
+// Returns number of extra fields actually printed.
+{
+struct asObject *as = asForDb(tdb, database);
+if (as == NULL)
+    return 0;
+
+// We are trying to print extra fields so we need to figure out how many fields to skip
+int start = extraFieldsStart(tdb, fieldCount, as);
+
 struct asColumn *col = as->columnList;
 char *urlsStr = trackDbSetting(tdb, "urls");
 struct hash* fieldToUrl = hashFromString(urlsStr);
@@ -1568,6 +1608,7 @@ if (sepFieldsStr)
     sepFields = slNameListFromComma(sepFieldsStr);
 
 // iterate over fields, print as table rows
+int count = 0;
 for (;col != NULL && count < fieldCount;col=col->next)
     {
     if (start > 0)  // skip past already known fields
@@ -1591,7 +1632,9 @@ for (;col != NULL && count < fieldCount;col=col->next)
     count++;
 
     // do not print a row if the fieldName from the .as file is in the "skipFields" list
-    if (skipIds && slNameInList(skipIds, fieldName))
+    // or if a field name starts with _. This maked bigBed extra fields consistent with
+    // external extra fields in that _ field names have some meaning and are not shown
+    if (startsWith("_", fieldName) || (skipIds && slNameInList(skipIds, fieldName)))
         continue;
 
     // skip this row if it's empty and "skipEmptyFields" option is set
@@ -1679,6 +1722,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         bedPrintPos(bed, bedSize, tdb);
 
     extraFieldsPrint(tdb,sr,row,sqlCountColumns(sr));
+
     // check for seq1 and seq2 in columns 7+8 (eg, pairedTagAlign)
     char *setting = trackDbSetting(tdb, BASE_COLOR_USE_SEQUENCE);
     if (bedSize == 6 && setting && sameString(setting, "seq1Seq2"))
@@ -5850,8 +5894,7 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere(hgcCommandInWindow, cgiEncode(itemIn),
-			   otherString, psl->tName);
+	hgcAnchorSomewhere(hgcCommandInWindow, itemIn, otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
@@ -7199,6 +7242,9 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	break;
 	}
     }
+if (bb == NULL)
+    errAbort("item %s not found in range %s:%d-%d in bigBed %s (%s)",
+             acc, chrom, start, end, tdb->table, fileName);
 psl = pslFromBigPsl(seqName, bb, &seq, &cdsString);
 genbankParseCds(cdsString,  &cdsStart, &cdsEnd);
 
@@ -20801,7 +20847,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
 			      otherDb, thisPsl, pslTableName );
 	    safef(otherString, sizeof otherString, "%d&win=T", thisPsl->tStart );
-	    hgcAnchorSomewhere( tdb->track, cgiEncode(item), otherString, thisPsl->tName );
+	    hgcAnchorSomewhere( tdb->track, item, otherString, thisPsl->tName );
 	    printf("View individual alignment windows\n</a>");
 	    printf("<br><br>");
 	    }
@@ -22960,7 +23006,7 @@ if(info->stop >0)
 
 
 /* show genome sequence */
-hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->track, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", info->name, tdb->track, seqName);
 printf("View DNA for this putative fragment</A><BR>\n");
 
 /* show the detail alignment */
@@ -22974,7 +23020,7 @@ if(row != NULL)
     {
     safef(otherString, sizeof otherString, "&db=%s&pslTable=%s&chrom=%s&cStart=%d&cEnd=%d&strand=%s&qStrand=%s",
 	    database, pslTable, info->chrom,info->chromStart, info->chromEnd, info->strand, parts[2]);
-    hgcAnchorSomewhere("potentPsl", cgiEncode(parts[0]), otherString, info->chrom);
+    hgcAnchorSomewhere("potentPsl", parts[0], otherString, info->chrom);
     printf("<BR>View details of parts of alignment </A>.</BR>\n");
     }
 sqlFreeResult(&sr);

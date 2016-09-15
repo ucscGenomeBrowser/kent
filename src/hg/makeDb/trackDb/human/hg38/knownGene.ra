@@ -18,7 +18,6 @@ intronGap 12
 isGencode on
 html knownGene
 bigGeneDataUrl /gbdb/hg38/knownGene.bb
-maxItems 100000
 
 track knownGeneOld9
 shortLabel Old UCSC Genes

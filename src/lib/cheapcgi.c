@@ -1557,7 +1557,7 @@ cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
 }
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
-/* Make a text area that can be disabled. The rea has rowCount X
+/* Make a text area that can be disabled. The area has rowCount X
  * columnCount and with text: intialVal */
 {
 printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,

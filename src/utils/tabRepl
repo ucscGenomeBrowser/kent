@@ -1,0 +1,56 @@
+#!/usr/bin/env python2.7
+
+from sys import *
+from optparse import OptionParser
+import logging
+
+# === COMMAND LINE INTERFACE, OPTIONS AND HELP ===
+parser = OptionParser("usage: %prog [options] replaceFile columnIndex tableFile - replace values in a column with values from a 2nd <oldVal>tab<newVal>-file") 
+
+parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
+parser.add_option("-s", "--skip", dest="skip", action="store_true", help="skip lines without replacement values") 
+(options, args) = parser.parse_args()
+
+if options.debug:
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
+# ==== FUNCTIONs =====
+    
+def parseDict(fname):
+    " parse key-val tab-sep file and return as dict "
+    ret = {}
+    for line in open(fname):
+        key, val = line.rstrip("\n").split('\t')
+        ret[key] = val
+    return ret
+
+# ----------- MAIN --------------
+if args==[]: 
+    parser.print_help()
+    exit(1)
+
+replaceFilename, fieldIdx, tableFilename = args
+
+fieldIdx = int(fieldIdx)
+
+logging.info("Reading replace values...\n")
+replaceValues = parseDict(replaceFilename)
+
+tableFile = open(tableFilename, "rb")
+
+lineNo = 0
+for line in tableFile:
+    row = line.rstrip("\n").split("\t")
+    key = row[fieldIdx]
+    if key in replaceValues:
+        replaceValue = replaceValues[key]
+    else:
+        logging.warn("line %d: %s not found in replaceFile" % (lineNo, key))
+        replaceValue = key
+        if options.skip:
+            continue
+
+    row[fieldIdx] = replaceValue
+    print "\t".join(row)
+    lineNo+=1

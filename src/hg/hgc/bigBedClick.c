@@ -11,6 +11,7 @@
 #include "hgColors.h"
 #include "bigBed.h"
 #include "hui.h"
+#include "subText.h"
 
 static void bigGenePredLinks(char *track, char *item)
 /* output links to genePred driven sequence dumps */
@@ -32,6 +33,269 @@ hgcAnchorSomewhere("htcGeneInGenome", item, track, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 printf("</UL>\n");
+}
+
+void printMismatchString(char *a, char *b) 
+/* given two strings of same length, print . for every match and for mismatches, the letter of b */
+{
+int i = 0;
+while (TRUE)
+    {
+    if (a[i]=='\0' || b[i]=='\0')
+        break;
+    if (a[i]==b[i])
+        printf(".");
+    else
+        printf("%c", (b[i]));
+    i++;
+    }
+}
+
+static void extFieldMismatchCounts(char *val)
+/* crispr track: number of mismatches. A comma-sep string of integers */
+{
+printf("<tr><td>Number of potential off-targets</td>\n");
+printf("<td>\n");
+char *words[255];
+int wordCount = chopByChar(val, ',', words, ArraySize(words));
+int i;
+printf("<table style='border-style: hidden'><tr>\n");
+for (i=0; i<wordCount; i++)
+    printf("<td style='border:1px solid #CCCCCC; font-weight: normal; width:auto'><b>%d mismatches:</b><br>%s off-targets</td>", i, words[i]);
+printf("</tr></table>\n");
+}
+
+static void extFieldCrisprOfftargets(char *val, struct slPair *extraFields)
+/* crispr track: locations of off-targets. A |-separated string of coords, including strand and 
+ a score
+ e.g. chr15;63615585-;71|chr16;8835640+;70 */
+{
+printf("<tr><td>Potential Off-targets</td>\n");
+
+printf("<td>\n");
+char *coords[65536];
+int coordCount = chopByChar(val, '|', coords, ArraySize(coords));
+int i;
+
+struct subText *subList = NULL;
+slSafeAddHead(&subList, subTextNew("ig:", "intergenic "));
+slSafeAddHead(&subList, subTextNew("ex:", "exon "));
+slSafeAddHead(&subList, subTextNew("in:", "intron "));
+slSafeAddHead(&subList, subTextNew("|", "-"));
+
+struct sqlConnection *conn = hAllocConn(database);
+
+boolean hasLocus = sqlTableExists(conn, "locusName");
+
+printf("<table style='border-collapse:collapse; font-size:12px; table-layout:fixed'>\n");
+printf("<tr>\n"
+       "<th style='width:26em'>Mismatched nucleotides</th>\n"
+       "<th style='width:9em'>CFD Score</th>\n");
+if (hasLocus)
+       printf("<th style='width:40em'>Locus</th>\n");
+printf("<th style='width:30em'>Position</th></tr>\n");
+
+boolean collapsed = FALSE;
+for (i=0; i<coordCount; i++)
+    {
+    if (i>10)
+        {
+        collapsed = TRUE;
+        printf("<tr class='crisprLinkHidden' style='display:none'>\n");
+        }
+    else
+        printf("<tr>\n");
+
+    // parse single coordinate string
+    // chr15;63615585-;71 = chrom;startPosStrand;scoreAsInt
+    char *parts[3];
+    chopByChar(coords[i], ';', parts, 3);
+    char* chrom = parts[0];
+    char* posStrand = parts[1];
+    char* scoreStr = parts[2];
+
+    // get score and strand
+    char strand = *(posStrand+strlen(posStrand)-1);
+    int pos = atol(posStrand);
+    int scoreInt = atoi(scoreStr);
+    float score = (float)scoreInt/1000;
+
+    // get the DNA sequence - this is slow! twoBit currently does not cache
+    // if the input is not sorted and this list is sorted by off-target score (CFD)
+    struct dnaSeq *seq = hDnaFromSeq(database, chrom, pos, pos+23, dnaUpper);
+    if (strand=='-')
+        reverseComplement(seq->dna, seq->size);
+    char *guideSeq = (char*)slPairFindVal(extraFields, "guideSeq");
+    // PAM = the last three chars of the off-target
+    char *pam = seq->dna+20;
+        
+    // print sequence + PAM
+    printf("<td><tt>");
+    printMismatchString(guideSeq, seq->dna);
+    printf("&nbsp;%s", pam);
+    printf("</tt></td>\n");
+
+    // print score of off-target
+    printf("<td>%0.3f</td>", score);
+
+    // print name of this locus
+    if (hasLocus)
+        {
+        struct sqlResult *sr = hRangeQuery(conn, "locusName", chrom, pos, pos+23, NULL, 0);
+        char **row;
+        row = sqlNextRow(sr);
+        if (row != NULL)
+            {
+            char *desc = row[4];
+            char *descLong = subTextString(subList, desc);
+            printf("<td>%s</td>", descLong);
+            freeMem(descLong);
+            }
+        sqlFreeResult(&sr);
+        }
+    
+    // print link to location
+    printf("<td><a href='%s&db=%s&position=%s%%3A%d-%d'>%s:%d (%c)</a></td>\n", 
+        hgTracksPathAndSettings(), database,
+        chrom, pos+1, pos+23, chrom, pos+1, strand);
+
+    printf("</tr>\n");
+    }
+hFreeConn(&conn);
+printf("<tr>\n");
+printf("</table>\n");
+if (collapsed)
+    {
+    printf("<p><a id='crisprShowAllLink' href='javascript:crisprShowAll()'>"
+        "Show all %d off-targets...</a>\n", coordCount);
+    // inline .js is bad style but why pollute our global .js files for such a rare
+    // case? Maybe we should have a generic "collapsible" class, like bootstrap?
+    printf("<script>\n");
+    printf("function crisprShowAll() {\n");
+    printf("    $('#crisprShowAllLink').hide();\n");
+    printf("    $('.crisprLinkHidden').show();\n");
+    printf("    return false;\n");
+    printf("}\n");
+    printf("</script>\n");
+    }
+}
+
+static void detailsTabPrintSpecial(char *name, char *val, struct slPair *extraFields)
+/* some extra fields require special printing code, they all start with '_'  */
+{
+if (sameWord(name, "_mismatchCounts"))
+    extFieldMismatchCounts(val);
+else if (sameWord(name, "_crisprOfftargets"))
+    extFieldCrisprOfftargets(val, extraFields);
+}
+
+static void seekAndPrintTable(char *url, off_t offset, struct slPair *extraFields)
+/* seek to 0 at url, get headers, then seek to offset, read tab-sep fields and output 
+ * (extraFields are needed for some special field handlers) */
+{
+char *detailsUrl = replaceChars(url, "$db", database);
+
+// open the URL
+struct lineFile *lf = lineFileUdcMayOpen(detailsUrl, FALSE);
+if (lf==NULL)
+    {
+    printf("Error: Could not open the URL referenced in detailsTabUrls, %s", detailsUrl);
+    return;
+    }
+
+// get the headers
+char *headLine;
+int lineSize;
+lineFileNext(lf, &headLine, &lineSize);
+char *headers[1024];
+int headerCount = chopTabs(headLine, headers);
+
+lineFileSeek(lf, offset, SEEK_SET);
+
+// read a line
+char *detailsLine;
+lineFileNext(lf, &detailsLine, &lineSize);
+if (!detailsLine || isEmpty(detailsLine))
+    return;
+char *fields[1024];
+int fieldCount = chopTabs(detailsLine, fields);
+
+if (fieldCount!=headerCount)
+    {
+    printf("Error encountered when reading %s:<br>", detailsUrl);
+    printf("The header line of the tab-sep file has a different number of fields compared ");
+    printf("with the line pointed to by offset %lld in the bigBed file.<br>", (long long int)offset);
+    printf("Number of headers: %d", headerCount);
+    printf("Number of fields at offset: %d", fieldCount);
+    return;
+    }
+
+// print the table for all external extra fields 
+printf("<br><table class='bedExtraTbl'>\n");
+fieldCount = min(fieldCount, headerCount);
+int i;
+for (i=0; i<fieldCount; i++)
+{
+    char *name = headers[i];
+    char *val  = fields[i];
+    
+    if (startsWith("_", name))
+        detailsTabPrintSpecial(name, val, extraFields);
+    else
+        {
+        printf("<tr><td>%s</td>\n", name);
+        printf("<td>%s</td></tr>\n", val);
+        }
+}
+printf("</table>\n");
+
+lineFileClose(&lf);
+freez(&detailsUrl);
+}
+
+static void printAllExternalExtraFields(struct trackDb *tdb, struct slPair *extraFields)
+/* handle the "detailsTabUrls" trackDb setting: 
+ * For each field, print a separate html table with all field names and values
+ * from the external tab-sep file */
+
+{
+char *detailsUrlsStr = trackDbSetting(tdb, "detailsTabUrls");
+if (!detailsUrlsStr)
+    return;
+
+struct slPair *detailsUrls = slPairListFromString(detailsUrlsStr, TRUE);
+if (!detailsUrls)
+    {
+    printf("Problem when parsing trackDb setting detailsTabUrls<br>\n");
+    printf("Expected: a space-separated key=val list, like 'fieldName1=URL1 fieldName2=URL2'<br>\n");
+    printf("But got: '%s'<br>", detailsUrlsStr);
+    return;
+    }
+
+struct slPair *pair;
+for (pair = detailsUrls; pair != NULL; pair = pair->next)
+    {
+    char *fieldName = pair->name;
+    char *detailsUrl = pair->val;
+
+    // get extra bigBed field (=the offset) and seek to it
+    void *p = slPairFindVal(extraFields, fieldName);
+    if (p==NULL)
+        {
+        printf("Error when parsing trackDb detailsTabUrls statement:<br>\n");
+        printf("Cannot find extra bigBed field with name %s\n", fieldName);
+        return;
+        }
+    char *offsetStr = (char*)p;
+
+    if (offsetStr==NULL || sameWord(offsetStr, "0"))
+        // empty or "0" value in bigBed means that the lookup should not be performed
+        continue;
+    off_t offset = atoll(offsetStr);
+
+    seekAndPrintTable(detailsUrl, offset, extraFields);
+    }
+slPairFreeValsAndList(&detailsUrls);
 }
 
 static void bigBedClick(char *fileName, struct trackDb *tdb,
@@ -119,7 +383,14 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	int restBedFields = bedSize - 3;
 	if (restCount > restBedFields)
 	    {
-            if (0 == extraFieldsPrint(tdb,NULL,restFields + restBedFields,restCount - restBedFields))
+            char **extraFields = (restFields + restBedFields);
+            int extraFieldCount = restCount - restBedFields;
+            int printCount = extraFieldsPrint(tdb,NULL,extraFields, extraFieldCount);
+
+            struct slPair* extraFieldPairs = getExtraFields(tdb, extraFields, extraFieldCount);
+            printAllExternalExtraFields(tdb, extraFieldPairs);
+
+            if (printCount == 0)
                 {
                 int i;
                 char label[20];
@@ -134,6 +405,8 @@ for (bb = bbList; bb != NULL; bb = bb->next)
 	if (sameString(tdb->type, "bigGenePred"))
 	    bigGenePredLinks(tdb->track, item);
 	}
+
+
     if (isCustomTrack(tdb->track))
 	{
 	time_t timep = bbiUpdateTime(bbi);

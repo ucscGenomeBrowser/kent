@@ -388,7 +388,7 @@ else
     return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY, id);
 }
 
-struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
+struct mapItem *doMapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
                                     int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
                                     char *id)
 // Finds or adds the map item
@@ -398,6 +398,25 @@ if (item != NULL)
     return item;
 else
     return mapSetItemAdd(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id);
+}
+
+struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,
+                                    int topLeftX,int topLeftY,int bottomRightX,int bottomRightY,
+                                    char *id)
+// Function to allow conf variable to turn off or on the searching of overlapping
+// previous boxes.
+{
+static struct mapItem *(*mapFunc)() = NULL;
+
+if (mapFunc == NULL)
+    {
+    if (cfgOption("restoreMapFind"))
+        mapFunc = doMapSetItemFindOrAdd;
+    else
+        mapFunc = mapSetItemAdd;
+    }
+
+return (*mapFunc)(map,link,title,topLeftX,topLeftY,bottomRightX,bottomRightY,id);
 }
 
 void mapItemFree(struct mapItem **pItem)

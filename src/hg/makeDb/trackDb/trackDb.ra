@@ -264,7 +264,6 @@ baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
-maxItems 100000
 
 track knownAlt
 shortLabel UCSC Alt Events
@@ -3043,7 +3042,6 @@ longLabel CRISPR/Cas9 Sp. Pyog. target sites
 group genes
 visibility hide
 type bed 4
-dragAndDrop subTracks
 compositeTrack on
 release alpha
 
@@ -3067,7 +3065,10 @@ release alpha
     release alpha
     parent crispr
     mouseOverField _mouseOver
-    skipFields _mouseOver,_crisprScanColor,_specColor
+    scoreLabel MIT Specificity Score
+    detailsTabUrls _offset=/gbdb/$db/bbi/crisprDetails.tab
+    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
+    urlLabel Click here to annotate this guide on Crispor.org (expression oligos, PCR validation primers, ...)
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps

@@ -8448,6 +8448,17 @@ errCatchFree(&errCatch);
 return asObj;
 }
 
+struct asObject *asForDb(struct trackDb *tdb, char* database)
+/* return asObject given the database. NULL if not found */
+{
+struct sqlConnection *conn = NULL ;
+if (!trackHubDatabase(database))
+    conn = hAllocConnTrack(database, tdb);
+struct asObject *as = asForTdb(conn, tdb);
+hFreeConn(&conn);
+return as;
+}
+
 #ifdef OLD /* This got moved to main library . */
 struct asColumn *asColumnFind(struct asObject *asObj, char *name)
 // Return named column.

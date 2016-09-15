@@ -1373,6 +1373,9 @@ struct asObject *asFromTableDescriptions(struct sqlConnection *conn, char *table
 struct asObject *asForTdb(struct sqlConnection *conn, struct trackDb *tdb);
 // Get autoSQL description if any associated with table, ignoring errAborts if any.
 
+struct asObject *asForDb(struct trackDb *tdb, char* database);
+/* return asObject given a database name. NULL if not found */
+
 struct asColumn *asColumnFind(struct asObject *asObj, char *name);
 // Return named column.
 

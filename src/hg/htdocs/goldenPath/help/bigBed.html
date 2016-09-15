@@ -214,7 +214,20 @@ for more information. For example, if you ran your bedToBigBed with the
 option of "-extraIndex=name", you will only be able to search on the name field by
 adding the following line, "searchIndex name" to the stanza about your bigBed
 in the hub's trackDb.txt file. 
-</UL>
+ <LI>Extra fields can contain text for the mouse over or labels (if the BED name field is needed 
+ for something that is not the label),
+ see the trackDb settings <A href="trackDb/trackDbHub.html#mouseOverField">mouseOverField</A> and 
+ <A href="trackDb/trackDbHub.html#labelField">labelField</A>. 
+ <LI>When you click on features, the contents of all extra fields are shown as
+ a table. You can modify the layout of the resulting page with the trackDb
+ settings <A
+ href="trackDb/trackDbHub.html#skipFields">skipFields</A>, <A
+  href="trackDb/trackDbHub.html#sepFields">sepFields</A>, <A
+    href="trackDb/trackDbHub.html#skipEmptyFields">skipEmptyFields</A>and
+    transform text fields into links with the <A
+    href="trackDb/trackDbHub.html#urls">urls</A> trackDb setting.
+ <LI>Extra fields that start with the character "_" are reserved for internal
+ use (special display code) and their contents are not shown on the details page. </UL>
 
 <H3>Sharing Your Data with Others</H3>
 <P>
