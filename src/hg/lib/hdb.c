@@ -197,7 +197,22 @@ ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else
+    {
+    if (hTableExists(db, "chromXref"))
+       {
+       struct sqlConnection *conn = hAllocConn(db);
+       char query[512];
+       char *chrName;
+       sqlSafef(query, sizeof(query),
+          "select ucsc from chromXref where refseq='%s' or genbank='%s' or ensembl='%s' limit 1",
+      name, name, name);
+       chrName = sqlQuickString(conn, query);
+       hFreeConn(&conn);
+       if (isNotEmpty(chrName))  // chrName is already a cloneString result
+         return chrName;
+       }
     return NULL;
+    }
 }
 
 boolean hgIsOfficialChromName(char *db, char *name)
