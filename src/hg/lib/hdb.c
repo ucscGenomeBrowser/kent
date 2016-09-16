@@ -198,18 +198,17 @@ if (ci != NULL)
     return cloneString(ci->chrom);
 else
     {
-    if (hTableExists(db, "chromXref"))
+    if (hTableExists(db, "chromAlias"))
        {
        struct sqlConnection *conn = hAllocConn(db);
        char query[512];
-       char *chrName;
+       char *chrom;
        sqlSafef(query, sizeof(query),
-          "select ucsc from chromXref where refseq='%s' or genbank='%s' or ensembl='%s' limit 1",
-      name, name, name);
-       chrName = sqlQuickString(conn, query);
+          "select chrom from chromAlias where alias='%s'", name);
+       chrom = sqlQuickString(conn, query);
        hFreeConn(&conn);
-       if (isNotEmpty(chrName))  // chrName is already a cloneString result
-         return chrName;
+       if (isNotEmpty(chrom))  // chrom is already a cloneString result
+         return chrom;
        }
     return NULL;
     }
