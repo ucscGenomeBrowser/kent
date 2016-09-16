@@ -3948,7 +3948,6 @@ else
 
 freeMem(newFormat);
 va_end(orig_args);
-va_end(args);
 
 return sz;
 
