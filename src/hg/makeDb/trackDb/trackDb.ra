@@ -284,6 +284,39 @@ type genePred
 baseColorUseCds given
 baseColorDefault genomicCodons
 
+track crispr
+shortLabel CRISPR
+longLabel CRISPR/Cas9 Sp. Pyog. target sites
+group genes
+visibility hide
+type bed 3
+superTrack on
+release alpha
+
+    track crisprRanges
+    shortLabel CRISPR regions
+    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
+    visibility dense
+    color 110,110,110
+    type bed 3
+    release alpha
+    parent crispr
+
+    track crisprTargets
+    shortLabel CRISPR Targets
+    longLabel CRISPR/Cas9 -NGG Targets
+    visibility pack
+    type bigBed 9 +
+    itemRgb on
+    release alpha
+    parent crispr
+    mouseOverField _mouseOver
+    scoreLabel MIT Guide Specificity Score
+    # details page is not using a mysql table but a tab-sep file
+    detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
+    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
+    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+
 track augustus
 shortLabel Augustus
 longLabel Augustus Gene Predictions
@@ -3035,40 +3068,6 @@ compositeTrack on
         urls uniProtId="http://www.uniprot.org/uniprot/$$#section_features" pmids="http://www.ncbi.nlm.nih.gov/pubmed/$$"
         mouseOverField comments
         noScoreFilter on
-
-track crispr
-shortLabel CRISPR
-longLabel CRISPR/Cas9 Sp. Pyog. target sites
-group genes
-visibility hide
-type bed 4
-compositeTrack on
-release alpha
-
-    track crisprRanges
-    shortLabel CRISPR regions
-    longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
-    visibility dense
-    priority 1
-    color 110,110,110
-    type bed 3
-    release alpha
-    parent crispr
-
-    track crisprTargets
-    shortLabel CRISPR/Cas9 Targets
-    longLabel CRISPR/Cas9 -NGG Targets
-    priority 2
-    visibility dense
-    type bigBed 9 +
-    itemRgb on
-    release alpha
-    parent crispr
-    mouseOverField _mouseOver
-    scoreLabel MIT Guide Specificity Score
-    detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
-    url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
-    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps
