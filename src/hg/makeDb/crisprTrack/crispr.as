@@ -1,5 +1,5 @@
-table bigGenePred
-"bigGenePred gene models"
+table crispr
+"CRISPR guides: bed9+, external fields in a tab-sep file with blobs for off-targets"
    (
    string chrom;       "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in chromosome"
@@ -15,8 +15,8 @@ table bigGenePred
    string guideSeq;     "Guide Sequence"
    string pam;          "Protospacer Adjacent Motif (PAM)"
    string scoreDesc;    "MIT Guide Specificity Score"
-   string fusi;         "Efficiency: Doench et al. 2016 Score"
-   string crisprScan;   "Efficiency: Moreno-Mateos (In-vitro) Score"
+   string fusi;         "Efficiency: Doench et al. 2016 Score Percentile"
+   string crisprScan;   "Efficiency: Moreno-Mateos (In-vitro) Score Percentile"
    string doench;       "Efficiency: Doench et al 2014 Score"
    string oof;          "Bae et al. Out-of-Frame Score"
    string _mouseOver;    "Label for Mouse-over"

@@ -3037,7 +3037,7 @@ compositeTrack on
         noScoreFilter on
 
 track crispr
-shortLabel CRISPR targets
+shortLabel CRISPR
 longLabel CRISPR/Cas9 Sp. Pyog. target sites
 group genes
 visibility hide
@@ -3065,10 +3065,10 @@ release alpha
     release alpha
     parent crispr
     mouseOverField _mouseOver
-    scoreLabel MIT Specificity Score
-    detailsTabUrls _offset=/gbdb/$db/bbi/crisprDetails.tab
+    scoreLabel MIT Guide Specificity Score
+    detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
-    urlLabel Click here to annotate this guide on Crispor.org (expression oligos, PCR validation primers, ...)
+    urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
 
 track ncbiRefOverlap
 shortLabel NCBI Overlaps

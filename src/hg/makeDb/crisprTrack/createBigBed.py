@@ -75,14 +75,6 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         name, seq, pam = nameSeqPam.split("_")
         specScore = int(specScores.get(seq, -1))
 
-        # grey -> not specific
-        # grey -> not scored
-
-        #if specScore >= 30:
-            #color = "255,255,0"
-        #if specScore >= 50:
-            #color = "0,255,0"
-
         scoreDesc = str(specScore)
         if specScore in [-1, -2]:
             if specScore==-1:
@@ -105,7 +97,7 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
 
         fusiPerc = fusiToPerc.get(fusi, None)
         if fusiPerc is not None:
-            fusiHover = str(fusiPerc)
+            fusiHover = str(fusiPerc)+"%"
             fusi = "%d%% (%d)" % (fusiPerc, fusi)
         else:
             fusiHover = "%s (raw)" % str(fusi)
@@ -113,7 +105,7 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
 
         morenoPerc = morenoToPercent.get(moreno, None)
         if morenoPerc is not None:
-            morenoHover = str(morenoPerc)
+            morenoHover = str(morenoPerc)+"%"
             moreno = "%d%% (%d)" % (morenoPerc, moreno)
         else:
             morenoHover = "%s (raw)" % str(moreno)
@@ -122,31 +114,37 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         # not unique -> light grey
         if specScore == -1:
             color = "150,150,150"
-            fusiColor = "150,150,150"
+            altColor = "150,150,150"
         # too many off-targets -> darker grey
         elif specScore == -2:
             color = "120,120,120"
-            fusiColor = "120,120,120"
+            altColor = "120,120,120"
         # spec score low -> darkest grey
         elif specScore < 50:
             color = "80,80,80"
-            fusiColor = "80,80,80"
+            altColor = "80,80,80"
         else:
             # color primarily by fusi score
-            if fusi > 55:
-                color =  "0,128,0"
-            elif fusi > 30:
-                color =  "255,255,0"
+            if fusiPerc is not None:
+                if fusiPerc > 55:
+                    color =  "0,200,0"
+                elif fusiPerc > 30:
+                    color =  "255,255,0"
+                else:
+                    color = "255,100,100"
             else:
-                color = "255,0,0"
+                color = "0,0,100"
 
             # alternative color by moreno score
-            if moreno > 60:
-                fusiColor =  "0,128,0"
-            elif moreno > 30:
-                fusiColor =  "255,255,0"
+            if morenoPerc is not None:
+                if morenoPerc > 60:
+                    altColor =  "0,200,0"
+                elif morenoPerc > 30:
+                    altColor =  "255,255,0"
+                else:
+                    altColor = "255,100,100"
             else:
-                fusiColor = "255,0,0"
+                altColor = "0,0,100"
         
         if specScore > 70:
             specColor = "0,255,0"
@@ -159,7 +157,7 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
 
         offset = otOffsets.get(seq, "0")
         row = [chrom, start, end, "", score, strand, start, end,
-                color, fusiColor, specColor, seq, pam, scoreDesc]
+                color, altColor, specColor, seq, pam, scoreDesc]
 
         row.extend([fusi, moreno, doench, oof])
 

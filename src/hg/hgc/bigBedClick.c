@@ -87,14 +87,20 @@ struct sqlConnection *conn = hAllocConn(database);
 
 boolean hasLocus = sqlTableExists(conn, "locusName");
 
-printf("<table style='border-collapse:collapse; font-size:12px; table-layout:fixed'>\n");
-printf("<tr>\n"
-       "<th style='width:26em'>Mismatched nucleotides</th>\n"
-       "<th style='width:9em'>CFD Score</th>\n");
-if (hasLocus)
-       printf("<th style='width:40em'>Locus</th>\n");
-printf("<th style='width:30em'>Position</th></tr>\n");
+if (coordCount==0)
+    puts("Too many off-targets found to display or no off-targets. Please use the Crispor.org link at the top of the page to show all off-targets.\n");
+else
+    {
+    printf("<table style='border-collapse:collapse; font-size:12px; table-layout:fixed'>\n");
+    printf("<tr>\n"
+           "<th style='width:26em'>Mismatched nucleotides</th>\n"
+           "<th style='width:9em'>CFD Score</th>\n");
+    if (hasLocus)
+           printf("<th style='width:40em'>Locus</th>\n");
+    printf("<th style='width:30em'>Position</th></tr>\n");
+    }
 
+    
 boolean collapsed = FALSE;
 for (i=0; i<coordCount; i++)
     {
@@ -163,7 +169,8 @@ for (i=0; i<coordCount; i++)
     }
 hFreeConn(&conn);
 printf("<tr>\n");
-printf("</table>\n");
+if (coordCount!=0)
+    printf("</table>\n");
 if (collapsed)
     {
     printf("<p><a id='crisprShowAllLink' href='javascript:crisprShowAll()'>"
