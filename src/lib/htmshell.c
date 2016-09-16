@@ -959,7 +959,7 @@ return -1;
 
 
 #define htmlSafefPunc 0x01  // using char 1 as special char to denote strings needing escaping
-enum htmlSafefEncoding {dummyzero, html, js, css, attr, url};
+enum htmlSafefEncoding {dummyzero, none, html, js, css, attr, url};
 
 int htmlEscapeAllStrings(char *buffer, char *s, int bufSize, boolean noAbort)
 /* Escape all strings. *
@@ -1092,6 +1092,8 @@ else if (sameString(spec,"url"))
     enc = (enum htmlSafefEncoding) url;
 else if (sameString(spec,""))
     enc = (enum htmlSafefEncoding) html;
+else if (sameString(spec,"none"))
+    enc = (enum htmlSafefEncoding) none;
 else
     {
     htmlSafefAbort(noAbort, "Unknown spec [%s] in format string [%s].", spec, format);
@@ -1121,7 +1123,6 @@ int escStringsCount = 0;
 char c = 0;
 int i = 0;
 boolean inPct = FALSE;
-boolean isNegated = FALSE;
 while (i < formatLen)
     {
     c = format[i];
@@ -1145,7 +1146,10 @@ while (i < formatLen)
 	    // finally, the string we care about!
 	    if (c == 's')
 		{
-		if (!isNegated) // Not a Pre-escaped String
+		char enc = htmlSpecifierToEncoding(format, &i, noAbort);
+		if (enc == 0)
+		    return -1;
+		if (enc != (enum htmlSafefEncoding) none) // Not a Pre-escaped String
 		    {
 		    // go back and insert htmlSafefPunc before the leading % char saved in lastPct
 		    // move the accumulated %s descriptor
@@ -1153,20 +1157,14 @@ while (i < formatLen)
 		    ++nf;
 		    *lastPct = htmlSafefPunc;
 		    *nf++ = htmlSafefPunc;
-		    char enc = htmlSpecifierToEncoding(format, &i, noAbort);
-		    if (enc == 0)
-			return -1;
 		    *nf++ = enc;
 		    ++escStringsCount;
 		    }
 		}
-
-	    isNegated = FALSE;
 	    }
 	else if (strchr("+-.1234567890",c))
 	    {
-	    if (c == '-')
-		isNegated = TRUE;
+	    // Do nothing.
 	    }
 	else
 	    {
