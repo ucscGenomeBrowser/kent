@@ -11,6 +11,7 @@
 #include "linefile.h"
 #include "errAbort.h"
 #include "filePath.h"
+#include "htmshell.h"
 #ifndef GBROWSE
 #include "mime.h"
 #endif /* GBROWSE */
@@ -1560,7 +1561,7 @@ void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, i
 /* Make a text area that can be disabled. The area has rowCount X
  * columnCount and with text: intialVal */
 {
-printf("<TEXTAREA NAME=\"%s\" ROWS=%d COLS=%d %s>%s</TEXTAREA>", varName,
+htmlPrintf("<TEXTAREA NAME='%s|attr|' ROWS=%d COLS=%d %s|none|>%s</TEXTAREA>", varName,
        rowCount, columnCount, disabled ? "DISABLED" : "",
        (initialVal != NULL ? initialVal : ""));
 }
