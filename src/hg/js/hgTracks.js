@@ -136,125 +136,125 @@ var genomePos = {
 
     undisguisePosition: function(position) // UN-DISGUISE VMODE
     {   // find the virt position
-	//  position should be real chrom span
-	var pos = parsePosition(position);
-	if (!pos)
-	    return position; // some parsing error, return original
+        //  position should be real chrom span
+        var pos = parsePosition(position);
+        if (!pos)
+            return position; // some parsing error, return original
         var start = pos.start - 1;
         var end = pos.end;
-	var chromName = hgTracks.windows[0].chromName;
-	if (pos.chrom !== chromName)
-	    return position; // return original
-	var newStart = -1;
-	var newEnd = -1;
-	var lastW = null;
-	var windows = null;
-	for (j=0; j < 3; ++j) {
-	    if (j === 0) windows = hgTracks.windowsBefore;
-	    if (j === 1) windows = hgTracks.windows;
-	    if (j === 2) windows = hgTracks.windowsAfter;
-	    for (i=0,len=windows.length; i < len; ++i) {
-		var w = windows[i];
-		//  double check chrom is same thoughout all windows, otherwise warning, return original value
-		if (w.chromName != chromName) {
-		    return position; // return original
-		}
-		// check that the regions are ascending and non-overlapping
-		if (lastW && w.winStart < lastW.winEnd) {
-		    return position; // return original
-		}
-		// overlap with position?
-		//  if intersection, 
-		if (w.winEnd > start && end > w.winStart) {
-		    var s = Math.max(start, w.winStart);
-		    var e = Math.min(end, w.winEnd);
-		    var cs = s - w.winStart + w.virtStart;
-		    var ce = e - w.winStart + w.virtStart;
-		    if (newStart === -1)
-			newStart = cs;
-		    newEnd = ce;
-		}
-		lastW = w;
-	    }
-	}
+        var chromName = hgTracks.windows[0].chromName;
+        if (pos.chrom !== chromName)
+            return position; // return original
+        var newStart = -1;
+        var newEnd = -1;
+        var lastW = null;
+        var windows = null;
+        for (j=0; j < 3; ++j) {
+            if (j === 0) windows = hgTracks.windowsBefore;
+            if (j === 1) windows = hgTracks.windows;
+            if (j === 2) windows = hgTracks.windowsAfter;
+            for (i=0,len=windows.length; i < len; ++i) {
+                var w = windows[i];
+                //  double check chrom is same thoughout all windows, otherwise warning, return original value
+                if (w.chromName != chromName) {
+                    return position; // return original
+                }
+                // check that the regions are ascending and non-overlapping
+                if (lastW && w.winStart < lastW.winEnd) {
+                    return position; // return original
+                }
+                // overlap with position?
+                //  if intersection, 
+                if (w.winEnd > start && end > w.winStart) {
+                    var s = Math.max(start, w.winStart);
+                    var e = Math.min(end, w.winEnd);
+                    var cs = s - w.winStart + w.virtStart;
+                    var ce = e - w.winStart + w.virtStart;
+                    if (newStart === -1)
+                        newStart = cs;
+                    newEnd = ce;
+                }
+                lastW = w;
+            }
+        }
         //  return new virt undisguised position as a string
-	var newPos = "virt:" + (newStart+1) + "-" + newEnd;
-	return newPos;
+        var newPos = "virt:" + (newStart+1) + "-" + newEnd;
+        return newPos;
     },
 
     disguiseSize: function(position) // DISGUISE VMODE
     {   // find the real size of the windows spanned
-	//  position should be a real chrom span
-	var pos = parsePosition(position);
-	if (!pos)
-	    return 0;
+        //  position should be a real chrom span
+        var pos = parsePosition(position);
+        if (!pos)
+            return 0;
         var start = pos.start - 1;
         var end = pos.end;
-	var newSize = 0;
-	var windows = null;
-	for (j=0; j < 3; ++j) {
-	    if (j === 0) windows = hgTracks.windowsBefore;
-	    if (j === 1) windows = hgTracks.windows;
-	    if (j === 2) windows = hgTracks.windowsAfter;
-	    for (i=0,len=windows.length; i < len; ++i) {
-		var w = windows[i];
-		// overlap with position?
-		//  if intersection, 
-		if (w.winEnd > start && end > w.winStart) {
-		    var s = Math.max(start, w.winStart);
-		    var e = Math.min(end, w.winEnd);
-		    newSize += (e - s);
-		}
-	    }
-	}
+        var newSize = 0;
+        var windows = null;
+        for (j=0; j < 3; ++j) {
+            if (j === 0) windows = hgTracks.windowsBefore;
+            if (j === 1) windows = hgTracks.windows;
+            if (j === 2) windows = hgTracks.windowsAfter;
+            for (i=0,len=windows.length; i < len; ++i) {
+                var w = windows[i];
+                // overlap with position?
+                //  if intersection, 
+                if (w.winEnd > start && end > w.winStart) {
+                    var s = Math.max(start, w.winStart);
+                    var e = Math.min(end, w.winEnd);
+                    newSize += (e - s);
+                }
+            }
+        }
         //  return real size of the disguised position 
-	return newSize;
+        return newSize;
     },
 
     disguisePosition: function(position) // DISGUISE VMODE
     {   // find the single-chrom range spanned
-	//  position should be virt
-	var pos = parsePosition(position);
-	if (!pos)
-	    return position; // some parsing error, return original
+        //  position should be virt
+        var pos = parsePosition(position);
+        if (!pos)
+            return position; // some parsing error, return original
         var start = pos.start - 1;
         var end = pos.end;
-	var chromName = hgTracks.windows[0].chromName;
-	var newStart = -1;
-	var newEnd = -1;
-	var lastW = null;
-	var windows = null;
-	for (j=0; j < 3; ++j) {
-	    if (j === 0) windows = hgTracks.windowsBefore;
-	    if (j === 1) windows = hgTracks.windows;
-	    if (j === 2) windows = hgTracks.windowsAfter;
-	    for (i=0,len=windows.length; i < len; ++i) {
-		var w = windows[i];
-		//  double check chrom is same thoughout all windows, otherwise warning, return original value
-		if (w.chromName != chromName) {
-		    return position; // return undisguised original
-		}
-		// check that the regions are ascending and non-overlapping
-		if (lastW && w.winStart < lastW.winEnd) {
-		    return position; // return undisguised original
-		}
-		// overlap with position?
-		//  if intersection, 
-		if (w.virtEnd > start && end > w.virtStart) {
-		    var s = Math.max(start, w.virtStart);
-		    var e = Math.min(end, w.virtEnd);
-		    var cs = s - w.virtStart + w.winStart;
-		    var ce = e - w.virtStart + w.winStart;
-		    if (newStart === -1)
-			newStart = cs;
-		    newEnd = ce;
-		}
-		lastW = w;
-	    }
-	}
+        var chromName = hgTracks.windows[0].chromName;
+        var newStart = -1;
+        var newEnd = -1;
+        var lastW = null;
+        var windows = null;
+        for (j=0; j < 3; ++j) {
+            if (j === 0) windows = hgTracks.windowsBefore;
+            if (j === 1) windows = hgTracks.windows;
+            if (j === 2) windows = hgTracks.windowsAfter;
+            for (i=0,len=windows.length; i < len; ++i) {
+                var w = windows[i];
+                //  double check chrom is same thoughout all windows, otherwise warning, return original value
+                if (w.chromName != chromName) {
+                    return position; // return undisguised original
+                }
+                // check that the regions are ascending and non-overlapping
+                if (lastW && w.winStart < lastW.winEnd) {
+                    return position; // return undisguised original
+                }
+                // overlap with position?
+                //  if intersection, 
+                if (w.virtEnd > start && end > w.virtStart) {
+                    var s = Math.max(start, w.virtStart);
+                    var e = Math.min(end, w.virtEnd);
+                    var cs = s - w.virtStart + w.winStart;
+                    var ce = e - w.virtStart + w.winStart;
+                    if (newStart === -1)
+                        newStart = cs;
+                    newEnd = ce;
+                }
+                lastW = w;
+            }
+        }
         //  return new non-virt disguised position as a string
-	var newPos = chromName + ":" + (newStart+1) + "-" + newEnd;
-	return newPos;
+        var newPos = chromName + ":" + (newStart+1) + "-" + newEnd;
+        return newPos;
     },
 
     set: function (position, size)
@@ -262,48 +262,48 @@ var genomePos = {
         // We assume size has already been commified.
         // Either position or size may be null.
 
-	// stack dump  // DEBUG
-	//console.trace();
-	// NOT work on safari
-	//var obj = {};
-	//Error.captureStackTrace(obj);
-	//warn("genomePos.set() called "+obj.stack);
+        // stack dump  // DEBUG
+        //console.trace();
+        // NOT work on safari
+        //var obj = {};
+        //Error.captureStackTrace(obj);
+        //warn("genomePos.set() called "+obj.stack);
 
-	position = position.replace(/,/g, ""); // strip out any commas
+        position = position.replace(/,/g, ""); // strip out any commas
 
-	if (position) {
-	    // DISGUISE VMODE
-	    //warn("genomePos.set() called, position = "+position);
-	    if (hgTracks.virtualSingleChrom && (position.search("virt:")===0)) {
-		var newPosition = genomePos.disguisePosition(position);
-		//warn("genomePos.set() position = "+position+", newPosition = "+newPosition);
-		position = newPosition;
-	    }
-	}
+        if (position) {
+            // DISGUISE VMODE
+            //warn("genomePos.set() called, position = "+position);
+            if (hgTracks.virtualSingleChrom && (position.search("virt:")===0)) {
+                var newPosition = genomePos.disguisePosition(position);
+                //warn("genomePos.set() position = "+position+", newPosition = "+newPosition);
+                position = newPosition;
+            }
+        }
         if (position) {
             // There are multiple tags with name === "position"
             // (one in TrackHeaderForm and another in TrackForm).
             var tags = document.getElementsByName("position");
             for (var i = 0; i < tags.length; i++) {
                 var ele = tags[i];
-		ele.value = position;
+                ele.value = position;
             }
         }
         var pos = parsePosition(position);
         if ($('#positionDisplay').length) {
-	    // add commas to positionDisplay
-	    var commaPosition = position;
-	    if (pos)
-		commaPosition = pos.chrom+":"+commify(pos.start)+"-"+commify(pos.end);  
-	    $('#positionDisplay').text(commaPosition);
+            // add commas to positionDisplay
+            var commaPosition = position;
+            if (pos)
+                commaPosition = pos.chrom+":"+commify(pos.start)+"-"+commify(pos.end);  
+            $('#positionDisplay').text(commaPosition);
         }
         if (size) {
-	    if (hgTracks.virtualSingleChrom && (position.search("virt:")!==0)) {
-		var newSize = genomePos.disguiseSize(position);
-		//warn("genomePos.set() position = "+position+", newSize = "+newSize);
-		if (newSize > 0)
-		    size = newSize;
-	    }
+            if (hgTracks.virtualSingleChrom && (position.search("virt:")!==0)) {
+                var newSize = genomePos.disguiseSize(position);
+                //warn("genomePos.set() position = "+position+", newSize = "+newSize);
+                if (newSize > 0)
+                    size = newSize;
+            }
             $('#size').text(commify(size)); // add commas
         }
         if (pos) {
@@ -405,36 +405,36 @@ var genomePos = {
 
     chromToVirtChrom: function (chrom, chromStart, chromEnd)
     {   // Convert regular chromosome position to virtual chrom coordinates using hgTracks.windows list
-	// Consider the first contiguous set of overlapping regions to define the match (for now).
-	// only works for regions covered by the current hgTracks.windows
-	var virtStart = -1, virtEnd = -1;
-	var s,e;
-	var i, len;
-	for (i = 0, len = hgTracks.windows.length; i < len; ++i) {
-	    var w = hgTracks.windows[i];
-	    var overlap = (chrom == w.chromName && chromEnd > w.winStart && w.winEnd > chromStart);
-	    if (virtStart == -1) {
-		if (overlap) {
-		    // when they overlap the first time
-		    s = Math.max(chromStart, w.winStart);
-		    e = Math.min(chromEnd, w.winEnd);
-		    virtStart = w.virtStart + (s - w.winStart);
-		    virtEnd   = w.virtStart + (e - w.winStart);
-		} else {
-		    // until they overlap
-		    // do nothing
-		}
-	    } else {
-		if (overlap) {
-		    // while they continue to overlap, extend
-		    e = Math.min(chromEnd, w.winEnd);
-		    virtEnd   = w.virtStart + (e - w.winStart);
-		} else {
-		    // when they do not overlap anymore, stop
-		    break;
-		}
-	    }
-	}
+        // Consider the first contiguous set of overlapping regions to define the match (for now).
+        // only works for regions covered by the current hgTracks.windows
+        var virtStart = -1, virtEnd = -1;
+        var s,e;
+        var i, len;
+        for (i = 0, len = hgTracks.windows.length; i < len; ++i) {
+            var w = hgTracks.windows[i];
+            var overlap = (chrom == w.chromName && chromEnd > w.winStart && w.winEnd > chromStart);
+            if (virtStart == -1) {
+                if (overlap) {
+                    // when they overlap the first time
+                    s = Math.max(chromStart, w.winStart);
+                    e = Math.min(chromEnd, w.winEnd);
+                    virtStart = w.virtStart + (s - w.winStart);
+                    virtEnd   = w.virtStart + (e - w.winStart);
+                } else {
+                    // until they overlap
+                    // do nothing
+                }
+            } else {
+                if (overlap) {
+                    // while they continue to overlap, extend
+                    e = Math.min(chromEnd, w.winEnd);
+                    virtEnd   = w.virtStart + (e - w.winStart);
+                } else {
+                    // when they do not overlap anymore, stop
+                    break;
+                }
+            }
+        }
         return {chromStart : virtStart, chromEnd : virtEnd};
     },
 
@@ -453,15 +453,15 @@ var genomePos = {
             var center = (pos.chromStart + pos.chromEnd)/2;
             pos.chromStart = Math.floor(center - hgTracks.newWinWidth/2);
             pos.chromEnd = pos.chromStart + hgTracks.newWinWidth;
-	    // clip
-	    if (pos.chromStart < hgTracks.chromStart)
-		pos.chromStart = hgTracks.chromStart; // usually  1
-	    if (pos.chromEnd > hgTracks.chromEnd)
-		pos.chromEnd = hgTracks.chromEnd; // usually virt chrom size
+            // clip
+            if (pos.chromStart < hgTracks.chromStart)
+                pos.chromStart = hgTracks.chromStart; // usually  1
+            if (pos.chromEnd > hgTracks.chromEnd)
+                pos.chromEnd = hgTracks.chromEnd; // usually virt chrom size
 
-	    // save current position so that that it may be restored after highlight or cancel.
-    	    genomePos.original = genomePos.getOriginalPos();
-	    genomePos.originalSize = $('#size').text().replace(/,/g, ""); // strip out any commas
+            // save current position so that that it may be restored after highlight or cancel.
+            genomePos.original = genomePos.getOriginalPos();
+            genomePos.originalSize = $('#size').text().replace(/,/g, ""); // strip out any commas
 
         }
         var newPosition = genomePos.setByCoordinates(hgTracks.chromName,
@@ -494,24 +494,24 @@ var genomePos = {
 
     handleConvertChromPosToVirtCoords: function (response, status)
     {
-	var virtStart = -1, virtEnd = -1;
+        var virtStart = -1, virtEnd = -1;
         var newJson = scrapeVariable(response, "convertChromToVirtChrom");
         if (!newJson) {
-	    warn("convertChromToVirtChrom object is missing from the response");
+            warn("convertChromToVirtChrom object is missing from the response");
         } else {
             virtStart = newJson.virtWinStart;
             virtEnd   = newJson.virtWinEnd;
-	}
-	genomePos.convertedVirtCoords = {chromStart : virtStart, chromEnd : virtEnd};
+        }
+        genomePos.convertedVirtCoords = {chromStart : virtStart, chromEnd : virtEnd};
     },
 
     convertChromPosToVirtCoords: function (chrom, chromStart, chromEnd)
     {   // code to convert chrom position to virt coords
-	genomePos.convertedVirtCoords = {chromStart : -1, chromEnd : -1};  // reset
-	var pos = chrom+":"+(chromStart+1)+"-"+chromEnd; // easier to pass 1 parameter than 3
+        genomePos.convertedVirtCoords = {chromStart : -1, chromEnd : -1};  // reset
+        var pos = chrom+":"+(chromStart+1)+"-"+chromEnd; // easier to pass 1 parameter than 3
         $.ajax({
                 type: "GET",
-		async: false, // wait for result
+                async: false, // wait for result
                 url: "../cgi-bin/hgTracks",
                 data: cart.varsToUrlData({ 'hgt.convertChromToVirtChrom': pos, 'hgt.trackImgOnly' : 1, 'hgsid': getHgsid() }),
                 dataType: "html",
@@ -526,29 +526,29 @@ var genomePos = {
     positionDisplayDialog: function ()
     // Show the virtual and real positions of the windows
     {   
-	var position = genomePos.get();
+        var position = genomePos.get();
         var positionDialog = $("#positionDialog")[0];
         if (!positionDialog) {
             $("body").append("<div id='positionDialog'><span id='positionDisplayPosition'></span>");
             positionDialog = $("#positionDialog")[0];
         }
-	if (hgTracks.windows) {
-	    var i,len;
-	    var str = position;
-	    if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
-		str += "<br>\n";
-		str += "<br>\n";
-		str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
-		for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-		    var w = hgTracks.windows[i];
-		    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</li>\n";
-		}
-		str += "</ul>\n";
-	    }
-	    $("#positionDisplayPosition").html(str);
-	} else {
-	    $("#positionDisplayPosition").html(position);
-	}
+        if (hgTracks.windows) {
+            var i,len;
+            var str = position;
+            if (!(hgTracks.virtualSingleChrom && (hgTracks.windows.length === 1))) {
+                str += "<br>\n";
+                str += "<br>\n";
+                str += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
+                for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                    var w = hgTracks.windows[i];
+                    str += "<li>" + w.chromName + ":" + (w.winStart+1) + "-" + w.winEnd + "</li>\n";
+                }
+                str += "</ul>\n";
+            }
+            $("#positionDisplayPosition").html(str);
+        } else {
+            $("#positionDisplayPosition").html(position);
+        }
         $(positionDialog).dialog({
                 modal: true,
                 title: "Window-Positions",
@@ -570,7 +570,7 @@ var genomePos = {
                 close: function() {
                     // All exits to dialog should go through this
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
-		    $(this).hide();
+                    $(this).hide();
                     $('body').css('cursor', ''); // Occasionally wait cursor got left behind
                 }
         });
@@ -957,7 +957,7 @@ var vis = {
     },
 
     restoreFromBackButton: function()
-    // Re-enabling vis dropdowns is necessarty because intiForAjax() disables them on submit.
+    // Re-enabling vis dropdowns is necessary because initForAjax() disables them on submit.
     {
         $('select.normalText,select.hiddenText').attr('disabled',false);
     }
@@ -999,46 +999,46 @@ var dragSelect = {
     highlightThisRegion: function(newPosition)
     // set highlighting newPosition in server-side cart and apply the highlighting in local UI.
     {
-	var pos = parsePosition(newPosition);
-	var start = pos.start;
-	var end = pos.end;
+        var pos = parsePosition(newPosition);
+        var start = pos.start;
+        var end = pos.end;
         hgTracks.highlight = getDb() + "." + pos.chrom + ":" + start + "-" + end + '#AAFFFF';
         hgTracks.highlight = imageV2.disguiseHighlight(hgTracks.highlight);
         // we include enableHighlightingDialog because it may have been changed by the dialog
         var cartSettings = {             'highlight': hgTracks.highlight, 
                           'enableHighlightingDialog': hgTracks.enableHighlightingDialog ? 1 : 0 };
 
-	if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
-	    var nonVirtChrom = "";
-	    var nonVirtStart = -1; 
-	    var nonVirtEnd   = -1; 
-	    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-		var w = hgTracks.windows[i];
-		// overlap with new position?
-		if (w.virtEnd > start && end > w.virtStart) {
-		    var s = Math.max(start, w.virtStart);
-		    var e = Math.min(end, w.virtEnd);
-		    var cs = s - w.virtStart + w.winStart;
-		    var ce = e - w.virtStart + w.winStart;
-		    if (nonVirtChrom === "") {
-			nonVirtChrom = w.chromName;
-			nonVirtStart = cs; 
-			nonVirtEnd   = ce;
-		    } else {
-			if (w.chromName === nonVirtChrom) {
-			    nonVirtEnd = Math.max(ce, nonVirtEnd);
-			} else {
-			    break;
-			}
-		    }
-		}
-	    }
-	    if (nonVirtChrom !== "")
-		cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + '#AAFFFF';
-	} else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
-		cartSettings.nonVirtHighlight = hgTracks.highlight;
-	}
-	// TODO if not virt, do we need to erase cart nonVirtHighlight ?
+        if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
+            var nonVirtChrom = "";
+            var nonVirtStart = -1; 
+            var nonVirtEnd   = -1; 
+            for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                var w = hgTracks.windows[i];
+                // overlap with new position?
+                if (w.virtEnd > start && end > w.virtStart) {
+                    var s = Math.max(start, w.virtStart);
+                    var e = Math.min(end, w.virtEnd);
+                    var cs = s - w.virtStart + w.winStart;
+                    var ce = e - w.virtStart + w.winStart;
+                    if (nonVirtChrom === "") {
+                        nonVirtChrom = w.chromName;
+                        nonVirtStart = cs; 
+                        nonVirtEnd   = ce;
+                    } else {
+                        if (w.chromName === nonVirtChrom) {
+                            nonVirtEnd = Math.max(ce, nonVirtEnd);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (nonVirtChrom !== "")
+                cartSettings.nonVirtHighlight = getDb() + '.' + nonVirtChrom + ':' + nonVirtStart + '-' + (nonVirtEnd+1) + '#AAFFFF';
+        } else if (hgTracks.windows && hgTracks.virtualSingleChrom) {
+                cartSettings.nonVirtHighlight = hgTracks.highlight;
+        }
+        // TODO if not virt, do we need to erase cart nonVirtHighlight ?
         cart.setVarsObj(cartSettings);
         imageV2.highlightRegion();
     },
@@ -1054,39 +1054,39 @@ var dragSelect = {
                              "(Re-enable highlight via the 'configure' menu at any time.)</p>");
             dragSelectDialog = $("#dragSelectDialog")[0];
         }
-	if (hgTracks.windows) {
-	    var i,len;
-	    var newerPosition = newPosition;
-	    if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
-		newerPosition = genomePos.disguisePosition(newPosition);
-	    }
-	    var str = newerPosition + "<br>\n";
-	    var str2 = "<br>\n";
-	    str2 += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
-	    var pos = parsePosition(newPosition);
-	    var start = pos.start - 1;
-	    var end = pos.end;
-	    var selectedRegions = 0;
-	    for (i=0,len=hgTracks.windows.length; i < len; ++i) {
-		var w = hgTracks.windows[i];
-		// overlap with new position?
-		if (w.virtEnd > start && end > w.virtStart) {
-		    var s = Math.max(start, w.virtStart);
-		    var e = Math.min(end, w.virtEnd);
-		    var cs = s - w.virtStart + w.winStart;
-		    var ce = e - w.virtStart + w.winStart;
-		    str2 += "<li>" + w.chromName + ":" + (cs+1) + "-" + ce + "</li>\n";
-		    selectedRegions += 1;
-		}
-	    }
-	    str2 += "</ul>\n";
-	    if (!(hgTracks.virtualSingleChrom && (selectedRegions === 1))) {
-		str += str2;
-	    }
-	    $("#dragSelectPosition").html(str);
-	} else {
-	    $("#dragSelectPosition").html(newPosition);
-	}
+        if (hgTracks.windows) {
+            var i,len;
+            var newerPosition = newPosition;
+            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                newerPosition = genomePos.disguisePosition(newPosition);
+            }
+            var str = newerPosition + "<br>\n";
+            var str2 = "<br>\n";
+            str2 += "<ul style='list-style-type:none; max-height:200px; padding:0; width:80%; overflow:hidden; overflow-y:scroll;'>\n";
+            var pos = parsePosition(newPosition);
+            var start = pos.start - 1;
+            var end = pos.end;
+            var selectedRegions = 0;
+            for (i=0,len=hgTracks.windows.length; i < len; ++i) {
+                var w = hgTracks.windows[i];
+                // overlap with new position?
+                if (w.virtEnd > start && end > w.virtStart) {
+                    var s = Math.max(start, w.virtStart);
+                    var e = Math.min(end, w.virtEnd);
+                    var cs = s - w.virtStart + w.winStart;
+                    var ce = e - w.virtStart + w.winStart;
+                    str2 += "<li>" + w.chromName + ":" + (cs+1) + "-" + ce + "</li>\n";
+                    selectedRegions += 1;
+                }
+            }
+            str2 += "</ul>\n";
+            if (!(hgTracks.virtualSingleChrom && (selectedRegions === 1))) {
+                str += str2;
+            }
+            $("#dragSelectPosition").html(str);
+        } else {
+            $("#dragSelectPosition").html(newPosition);
+        }
         $(dragSelectDialog).dialog({
                 modal: true,
                 title: "Drag-and-select",
@@ -1102,9 +1102,9 @@ var dragSelect = {
                         if ($("#disableDragHighlight").attr('checked'))
                             hgTracks.enableHighlightingDialog = false;
                         if (imageV2.inPlaceUpdate) {
-			    if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
-				newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
-			    }
+                            if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                                newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                            }
                             var params = "position=" + newPosition;
                             if (!hgTracks.enableHighlightingDialog)
                                 params += "&enableHighlightingDialog=0";
@@ -1112,7 +1112,7 @@ var dragSelect = {
                         } else {
                             $('body').css('cursor', 'wait');
                             if (!hgTracks.enableHighlightingDialog)
-                                cart.setVarsObj({'enableHighlightingDialog': 0 });
+                                cart.setVarsObj({'enableHighlightingDialog': 0 },null,false); // async=false
                             document.TrackHeaderForm.submit();
                         }
                         $(this).dialog("close");
@@ -1174,9 +1174,9 @@ var dragSelect = {
                 else {
                     $(imageV2.imgTbl).imgAreaSelect({hide:true});
                     if (imageV2.inPlaceUpdate) {
-			if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
-			    newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
-			}
+                        if (hgTracks.virtualSingleChrom && (newPosition.search("virt:")===0)) {
+                            newPosition = genomePos.disguisePosition(newPosition); // DISGUISE
+                        }
                         imageV2.navigateInPlace("position=" + newPosition, null, true);
                     } else {
                         jQuery('body').css('cursor', 'wait');
@@ -1364,7 +1364,7 @@ this.each(function(){
                         if (imageV2.backSupport) {
                             imageV2.navigateInPlace("position=" +  
                                     encodeURIComponent(genomePos.get().replace(/,/g,'')) + 
-				    "&findNearest=1",null,true);
+                                    "&findNearest=1",null,true);
                             hiliteCancel();
                         } else
                             document.TrackHeaderForm.submit();
@@ -1718,7 +1718,7 @@ var dragReorder = {
         var countN=0;
         for (var ix=0; ix<rows.length; ix++) {    // Need to have buttons in order
             var btn = $( rows[ix] ).find("p.btn");
-	    var side = $( rows[ix] ).find(".sliceDiv.sideLab"); // added by GALT
+            var side = $( rows[ix] ).find(".sliceDiv.sideLab"); // added by GALT
             if (btn.length === 0)
                 continue;
             var classList = $( btn ).attr("class").split(" ");
@@ -1738,16 +1738,16 @@ var dragReorder = {
                 $( lastBtn ).removeClass('btnN btnU btnL btnD');
                 if (curMatchesLast && lastMatchesLast) {
                     $( lastBtn ).addClass('btnL');
-		    $( lastBtn ).css('height', $( lastSide ).height() - 0);  // added by GALT
+                    $( lastBtn ).css('height', $( lastSide ).height() - 0);  // added by GALT
                 } else if (lastMatchesLast) {
                     $( lastBtn ).addClass('btnU');
-		    $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
+                    $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
                 } else if (curMatchesLast) {
                     $( lastBtn ).addClass('btnD');
-		    $( lastBtn ).css('height', $( lastSide ).height() - 2);  // added by GALT
+                    $( lastBtn ).css('height', $( lastSide ).height() - 2);  // added by GALT
                 } else {
                     $( lastBtn ).addClass('btnN');
-		    $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
+                    $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
                     countN++;
                 }
                 count++;
@@ -1769,10 +1769,10 @@ var dragReorder = {
             $( lastBtn ).removeClass('btnN btnU btnL btnD');
             if (lastMatchesLast) {
                 $( lastBtn ).addClass('btnU');
-		$( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
+                $( lastBtn ).css('height', $( lastSide ).height() - 1);  // added by GALT
             } else {
                 $( lastBtn ).addClass('btnN');
-		$( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
+                $( lastBtn ).css('height', $( lastSide ).height() - 3);  // added by GALT
                 countN++;
             }
             if (altColors) {
@@ -1869,21 +1869,21 @@ var dragReorder = {
                 rightClick.currentMapItem.href = this.href;
                 rightClick.currentMapItem.title = this.title;
 
-		// Handle linked features with separate clickmaps for each exon/intron 
-		if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
-		    // if the title is Exon ... or Intron ... 
-		    // then search for the sibling with the same href
-		    // that has the real title item label
-		    var elem = this.parentNode.firstChild;
-		    while (elem) {
-			if ((elem.href === this.href)
-			    && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
-			    rightClick.currentMapItem.title = elem.title;
-			    break;
-			}
-			elem = elem.nextSibling;
-		    }
-		}
+                // Handle linked features with separate clickmaps for each exon/intron 
+                if ((this.title.indexOf('Exon ') === 0) || (this.title.indexOf('Intron ') === 0)) {
+                    // if the title is Exon ... or Intron ... 
+                    // then search for the sibling with the same href
+                    // that has the real title item label
+                    var elem = this.parentNode.firstChild;
+                    while (elem) {
+                        if ((elem.href === this.href)
+                            && !((elem.title.indexOf('Exon ') === 0) || (elem.title.indexOf('Intron ') === 0))) {
+                            rightClick.currentMapItem.title = elem.title;
+                            break;
+                        }
+                        elem = elem.nextSibling;
+                    }
+                }
 
             }
         }
@@ -2400,7 +2400,7 @@ var rightClick = {
                 var chrom, chromStart, chromEnd;
                 // Many links leave out the chrom (b/c it's in the server side cart as "c")
                 // var chrom = hgTracks.chromName; // This is no longer acceptable
-		// with multi-window capability drawing multiple positions on multiple chroms.
+                // with multi-window capability drawing multiple positions on multiple chroms.
                 var a = /hgg_chrom=(\w+)&/.exec(href);
                 if (a) {
                     if (a && a[1])
@@ -2435,26 +2435,26 @@ var rightClick = {
                             rightClick.windowOpenFailedMsg();
                         }
                     } else if (cmd === 'highlightItem') {
-			if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
-			    // orig way only worked if the entire item was visible in the windows.
-			    //var result = genomePos.chromToVirtChrom(chrom, parseInt(chromStart-1), parseInt(chromEnd));
+                        if (hgTracks.windows && !hgTracks.virtualSingleChrom) {
+                            // orig way only worked if the entire item was visible in the windows.
+                            //var result = genomePos.chromToVirtChrom(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
-			    var result = genomePos.convertChromPosToVirtCoords(chrom, parseInt(chromStart-1), parseInt(chromEnd));
+                            var result = genomePos.convertChromPosToVirtCoords(chrom, parseInt(chromStart-1), parseInt(chromEnd));
 
-			    if (result.chromStart != -1)
-				{
-				var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
-				dragSelect.highlightThisRegion(newPos2);
-				}
+                            if (result.chromStart != -1)
+                                {
+                                var newPos2 = hgTracks.chromName+":"+(result.chromStart+1)+"-"+result.chromEnd;
+                                dragSelect.highlightThisRegion(newPos2);
+                                }
 
-			} else {
-			    var newChrom = hgTracks.chromName;
-			    if (hgTracks.windows && hgTracks.virtualSingleChrom) {
-				newChrom = hgTracks.windows[0].chromName;
-			    }
-			    var newPos3 = newChrom+":"+(parseInt(chromStart))+"-"+parseInt(chromEnd);
-			    dragSelect.highlightThisRegion(newPos3);
-			}
+                        } else {
+                            var newChrom = hgTracks.chromName;
+                            if (hgTracks.windows && hgTracks.virtualSingleChrom) {
+                                newChrom = hgTracks.windows[0].chromName;
+                            }
+                            var newPos3 = newChrom+":"+(parseInt(chromStart))+"-"+parseInt(chromEnd);
+                            dragSelect.highlightThisRegion(newPos3);
+                        }
                     } else {
                         var newPosition = genomePos.setByCoordinates(chrom, chromStart, chromEnd);
                         var reg = new RegExp("hgg_gene=([^&]+)");
@@ -3112,8 +3112,8 @@ function showExtToolDialog() {
         content = htmlLines.join("");
             
         var title = hgTracks.chromName + ":" + (hgTracks.winStart+1) + "-" + hgTracks.winEnd;
-	if (hgTracks.nonVirtPosition)
-	    title = hgTracks.nonVirtPosition;
+        if (hgTracks.nonVirtPosition)
+            title = hgTracks.nonVirtPosition;
         title += " on another website";
         $("body").append("<div id='extToolDialog' title='"+title+"'><p>" + content + "</p>");
 
@@ -3157,8 +3157,8 @@ var popUpHgt = {
         if ($('#hgTracksDialog').html().length > 0 ) {
             // clear out html after close to prevent problems caused by duplicate html elements
             $('#hgTracksDialog').html("");
-	    popUpHgt.whichHgTracksMethod = "";
-	    popUpHgt.title = "";
+            popUpHgt.whichHgTracksMethod = "";
+            popUpHgt.title = "";
         }
     },
 
@@ -3166,10 +3166,10 @@ var popUpHgt = {
     { // popup cfg dialog
         popUpHgt.whichHgTracksMethod = whichHgTracksMethod;
         var myLink = "../cgi-bin/hgTracks?hgsid=" + getHgsid() + "&db=" + getDb();
-	if (popUpHgt.whichHgTracksMethod === "multi-region config") {
-    	    myLink += "&hgTracksConfigMultiRegionPage=multi-region";
-	    popUpHgt.title = "Configure Multi-Region View";
-	}
+        if (popUpHgt.whichHgTracksMethod === "multi-region config") {
+            myLink += "&hgTracksConfigMultiRegionPage=multi-region";
+            popUpHgt.title = "Configure Multi-Region View";
+        }
 
         $.ajax({
                     type: "GET",
@@ -3217,8 +3217,8 @@ var popUpHgt = {
         //   as soon as the cleanHtml is added
         //   Since there are many possible popup cfg dialogs, the ready should be all inclusive.
 
-	// -- popup.ready() -- Here is the place to do things that might otherwise go
-	//                     into a $('#pop').ready() routine!
+        // -- popup.ready() -- Here is the place to do things that might otherwise go
+        //                     into a $('#pop').ready() routine!
 
         // Searching for some semblance of size suitability
         var popMaxHeight = ($(window).height() - 40);
@@ -3243,29 +3243,29 @@ var popUpHgt = {
             closeOnEscape: true,
             autoOpen: false,
             buttons: { 
-		/* NOT NOW
-		"OK": function() {
-		    popUpHgt.uiDialogOk($('#pop'));
+                /* NOT NOW
+                "OK": function() {
+                    popUpHgt.uiDialogOk($('#pop'));
                     $(this).dialog("close");
-		}
-		*/
-	    },
+                }
+                */
+            },
             // popup.ready() doesn't seem to work in open.
 
-	    //create: function () { 
-		//$(this).siblings().find(".ui-dialog-title").html('<span style="">Test </span>'); 
-		//$(this).siblings().find(".ui-dialog-title").html('<span style="	visibility: hidden;"></span>'); 
-	    //},
+            //create: function () { 
+                //$(this).siblings().find(".ui-dialog-title").html('<span style="">Test </span>'); 
+                //$(this).siblings().find(".ui-dialog-title").html('<span style="       visibility: hidden;"></span>'); 
+            //},
             
             open: function () {
-		$('#hgTracksDialog').find('.filterBy,.filterComp').each(
-		    function(i) {  // ddcl.js is dropdown checklist lib support
-			if ($(this).hasClass('filterComp'))
-			    ddcl.setup(this);
-			else
-			    ddcl.setup(this, 'noneIsAll');
-		    }
-		);
+                $('#hgTracksDialog').find('.filterBy,.filterComp').each(
+                    function(i) {  // ddcl.js is dropdown checklist lib support
+                        if ($(this).hasClass('filterComp'))
+                            ddcl.setup(this);
+                        else
+                            ddcl.setup(this, 'noneIsAll');
+                    }
+                );
             },
 
             close: function() {
@@ -3274,8 +3274,8 @@ var popUpHgt = {
         });
         
     
-	$('#hgTracksDialog').dialog('option' , 'title' , popUpHgt.title);
-	$('#hgTracksDialog').dialog('open');
+        $('#hgTracksDialog').dialog('option' , 'title' , popUpHgt.title);
+        $('#hgTracksDialog').dialog('open');
     
     }
 };
@@ -3327,14 +3327,14 @@ function addKeyboardHelpEntries() {
 function gotoGetDnaPage() {
     var position = hgTracks.chromName+":"+hgTracks.winStart+"-"+hgTracks.winEnd;
     if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
-	position = genomePos.get().replace(/,/g,'');
+        position = genomePos.get().replace(/,/g,'');
     } else if (hgTracks.windows && hgTracks.nonVirtPosition) {
-	position = hgTracks.nonVirtPosition;
+        position = hgTracks.nonVirtPosition;
     }
     var pos = parsePosition(position);
     if (pos) {
-	var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+pos.start+"&r="+pos.end+"&db="+getDb();
-	window.location.href = url;
+        var url = "hgc?hgsid="+getHgsid()+"&g=getDna&i=mixed&c="+pos.chrom+"&l="+pos.start+"&r="+pos.end+"&db="+getDb();
+        window.location.href = url;
     }
     return false;
 }
@@ -3402,24 +3402,24 @@ var popUp = {
         var subtrack = tdbIsSubtrack(rec) ? trackName : undefined;  // subtrack vis rules differ
         // For unknown reasons IE8 fails to find $('#pop'), occasionally
         var allVars = getAllVars($('#hgTrackUiDialog'), subtrack );
-	//  Since 2010, when Tim changed this to only report changed vars instead of all form vars,
+        //  Since 2010, when Tim changed this to only report changed vars instead of all form vars,
         // it no longer matches the behavior of hgTrackUi when called the non-popup way.
         // A few places in the hgTracks C code have been patched to explicitly set the cart vars
         // for some default checkboxes. So now this still means that QA must explicitly test
         // both paths through the code: as a separate full hgTracksUi page, and as a popup config window.
-	// hgTrackUi always sends in its form all variables causing them to be explicitly set in the cart.  
-	// The popup only sends things that have changed, causing those changes to appear explicitly
+        // hgTrackUi always sends in its form all variables causing them to be explicitly set in the cart.  
+        // The popup only sends things that have changed, causing those changes to appear explicitly
         // and even then it skips over disabled form items.
-	// There is some C code that was written before the popup config, 
-	// and it expects all the variables are set or none are.
-	// If just some are set, and not the default ones, it gets confused.
+        // There is some C code that was written before the popup config, 
+        // and it expects all the variables are set or none are.
+        // If just some are set, and not the default ones, it gets confused.
         // I fixed just such a bug in the code that handles refSeq.
-	// See commit daf92c0f9eb331ea60740e6802aabd241d4be363.
+        // See commit daf92c0f9eb331ea60740e6802aabd241d4be363.
         var changedVars = varHashChanges(allVars,popUp.saveAllVars);
-	 // DEBUG Examples:
-	//debugDumpFormCollection("saveAllVars", popUp.saveAllVars);
-	//debugDumpFormCollection("allVars", allVars);
-	//debugDumpFormCollection("changedVars", changedVars);
+         // DEBUG Examples:
+        //debugDumpFormCollection("saveAllVars", popUp.saveAllVars);
+        //debugDumpFormCollection("allVars", allVars);
+        //debugDumpFormCollection("changedVars", changedVars);
         var newVis = changedVars[trackName];
         // subtracks do not have "hide", thus '[]'
         var hide = (newVis && (newVis === 'hide' || newVis === '[]'));  
@@ -3636,16 +3636,16 @@ var imageV2 = {
     loadSuggestBox: function ()
     {
         if ($('#positionInput').length) {
-	    if (!suggestBox.initialized) { // only call init once
-		 suggestBox.init(getDb(), 
-			    $("#suggestTrack").length > 0,
+            if (!suggestBox.initialized) { // only call init once
+                 suggestBox.init(getDb(), 
+                            $("#suggestTrack").length > 0,
                             function (item) {
                                 genomePos.set(item.id, getSizeFromCoordinates(item.id));
                             },
                             function (position) {
                                 genomePos.set(position, getSizeFromCoordinates(position));
                             });
-	    }
+            }
             // Make sure suggestTrack is visible when user chooses via gene select (#3484).
             if ($("#suggestTrack").length) {
                 $(document.TrackForm || document.TrackHeaderForm).submit(function(event) {
@@ -3793,7 +3793,7 @@ var imageV2 = {
     {   // Parse out new chrom 'ideoGram' (if available)
         // e.g.: <IMG SRC = "../trash/hgtIdeo/hgtIdeo_hgwdev_larrym_61d1_8b4a80.gif"
         //                BORDER=1 WIDTH=1039 HEIGHT=21 USEMAP=#ideoMap id='chrom' style='display: inline;'>
-	// If the ideo is hidden or missing, we supply a place-holder for dynamic update later.
+        // If the ideo is hidden or missing, we supply a place-holder for dynamic update later.
         // e.g.: <IMG SRC = ""
         //                BORDER=1 WIDTH=1039 HEIGHT=0 USEMAP=#ideoMap id='chrom' style='display: none'>
         // Larry's regex voodoo:
@@ -3802,14 +3802,14 @@ var imageV2 = {
             var b = /SRC\s*=\s*"([^")]*)"/.exec(a[1]);
             if (b) { // tolerate empty SRC= string when no ideo
                 $('#chrom').attr('src', b[1]);
-		var c = /style\s*=\s*'([^')]+)'/.exec(a[1]);
-    		if (c && c[1]) {
-		    $('#chrom').attr('style', c[1]);
-		}
-		var d = /HEIGHT\s*=\s*(\d*)/.exec(a[1]);
-    		if (d && d[1]) {
-		    $('#chrom').attr('HEIGHT', d[1]);
-		}
+                var c = /style\s*=\s*'([^')]+)'/.exec(a[1]);
+                if (c && c[1]) {
+                    $('#chrom').attr('style', c[1]);
+                }
+                var d = /HEIGHT\s*=\s*(\d*)/.exec(a[1]);
+                if (d && d[1]) {
+                    $('#chrom').attr('HEIGHT', d[1]);
+                }
                 // Even if we're on the same chrom, ideoMap may change because the label
                 // on the left changes width depending on band name, and that changes px scaling.
                 var ideoMapMatch = /<MAP Name=ideoMap>[\s\S]+?<\/MAP>/.exec(response);
@@ -3831,16 +3831,16 @@ var imageV2 = {
 
     updateBackground: function (response)
     {
-	// Added by galt to update window separators
+        // Added by galt to update window separators
         // Parse out background image url
         // background-image:url("../trash/hgt/blueLines1563-118-12_hgwdev_galt_9df9_e33b30.png")
         // background-image:url("../trash/hgt/winSeparators_hgwdev_galt_5bcb_baff60.png")
-	// This will only need to update when multi-region is on and is using winSeparators.
+        // This will only need to update when multi-region is on and is using winSeparators.
 
         var a = /background-image:url\("(..\/trash\/hgt\/winSeparators[^"]+[.]png)"\)/.exec(response);
         if (a && a[1]) {
-	    $('td.tdData').css("background-image", "url("+a[1]+")");
-	}
+            $('td.tdData').css("background-image", "url("+a[1]+")");
+        }
 
     },
 
@@ -3901,7 +3901,7 @@ var imageV2 = {
 
         var newJson = scrapeVariable(response, "hgTracks");
 
-	//alert(JSON.stringify(newJson)); // DEBUG Example
+        //alert(JSON.stringify(newJson)); // DEBUG Example
 
         var oldJson = hgTracks;
         var valid = false;
@@ -3945,7 +3945,7 @@ var imageV2 = {
                 var id = this.id;
                 if (imageV2.updateImgForId(response, id, false)) {
                     imageV2.afterReload(id);
-		    imageV2.updateBackground(response);  // Added by galt to update window separators
+                    imageV2.updateBackground(response);  // Added by galt to update window separators
                 } else {
                     warn("Couldn't parse out new image for id: " + id);
                     // Very helpful when debugging and alert doesn't render the html:
@@ -3954,7 +3954,7 @@ var imageV2 = {
             } else {
                 if (imageV2.enabled) {
                     // Implement in-place updating of hgTracks image
-		    // GALT delaying this until after newJson updated in hgTracks so disguising works
+                    // GALT delaying this until after newJson updated in hgTracks so disguising works
                     //genomePos.setByCoordinates(newJson.chromName, newJson.winStart + 1, newJson.winEnd);
                     $("input[name='c']").val(newJson.chromName);
                     $("input[name='l']").val(newJson.winStart);
@@ -3972,7 +3972,7 @@ var imageV2 = {
                         imageV2.updateBackground(response);  // Added by galt to update window separators
                         hgTracks = newJson;
                         genomePos.original = undefined;
-			genomePos.setByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd); // MOVED HERE GALT
+                        genomePos.setByCoordinates(hgTracks.chromName, hgTracks.winStart + 1, hgTracks.winEnd); // MOVED HERE GALT
                         initVars();
                         imageV2.afterReload();
                     }
@@ -4157,33 +4157,33 @@ var imageV2 = {
     disguiseHighlight: function(position)
     // disguise highlight position
     {
-	pos = parsePositionWithDb(position);
-	// DISGUISE
-	if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
-	    var positionStr = pos.chrom+":"+pos.start+"-"+pos.end;
-	    var newPosition = genomePos.disguisePosition(positionStr);
-	    var newPos = parsePosition(newPosition);
-	    pos.chrom = newPos.chrom;
-	    pos.start = newPos.start;
-	    pos.end   = newPos.end;
-	}
-	return pos.db+"."+pos.chrom+":"+pos.start+"-"+pos.end+pos.color;
+        pos = parsePositionWithDb(position);
+        // DISGUISE
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") === 0)) {
+            var positionStr = pos.chrom+":"+pos.start+"-"+pos.end;
+            var newPosition = genomePos.disguisePosition(positionStr);
+            var newPos = parsePosition(newPosition);
+            pos.chrom = newPos.chrom;
+            pos.start = newPos.start;
+            pos.end   = newPos.end;
+        }
+        return pos.db+"."+pos.chrom+":"+pos.start+"-"+pos.end+pos.color;
     },
 
     undisguiseHighlight: function(pos)
     // undisguise highlight pos
     {
-	// UN-DISGUISE
-	if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
-	    var position = pos.chrom+":"+pos.start+"-"+pos.end;
-	    var newPosition = genomePos.undisguisePosition(position);
-	    var newPos = parsePosition(newPosition);
-	    if (newPos) {
-		pos.chrom = newPos.chrom;
-		pos.start = newPos.start;
-		pos.end   = newPos.end;
-	    }
-	}
+        // UN-DISGUISE
+        if (hgTracks.virtualSingleChrom && (pos.chrom.search("virt") !== 0)) {
+            var position = pos.chrom+":"+pos.start+"-"+pos.end;
+            var newPosition = genomePos.undisguisePosition(position);
+            var newPos = parsePosition(newPosition);
+            if (newPos) {
+                pos.chrom = newPos.chrom;
+                pos.start = newPos.start;
+                pos.end   = newPos.end;
+            }
+        }
     },
 
     highlightRegion: function()
@@ -4284,7 +4284,7 @@ var imageV2 = {
         // This ensures that the 'go' and 'refresh' button will do so unless the chrom changes.
         $("input[value='go'],input[value='refresh']").click(function () {
             var newPos = genomePos.get().replace(/,/g,'');
-	    var newDbPos = hgTracks.lastDbPos;
+            var newDbPos = hgTracks.lastDbPos;
             if ( ! imageV2.manyTracks() ) {
                 var newChrom = newPos.split(':')[0];
                 var oldChrom  = genomePos.getOriginalPos().split(':')[0];
@@ -4314,7 +4314,7 @@ var imageV2 = {
         //    B1) Dirty page: at least one non-position change (e.g. 1 track vis changed in b)
         //    B2) Clean page: only position changes from A->b->| 
         var curPos = encodeURIComponent(genomePos.get().replace(/,/g,''));
-	var curDbPos = hgTracks.lastDbPos;
+        var curDbPos = hgTracks.lastDbPos;
         var cachedPos = imageV2.history.getState().data.position;
         var cachedDbPos = imageV2.history.getState().data.lastDbPos;
         // A) Forward: Full page retrieval: hgTracks is first navigated to (or chrom change)
@@ -4363,11 +4363,11 @@ var imageV2 = {
             var title = $('TITLE')[0].text;
             var ttlWords = title.split(' ');
             if (ttlWords.length >= 2) {
-		for (var i=1; i < ttlWords.length; i++) {
-		    if (ttlWords[i].indexOf(':') >= 0) {
+                for (var i=1; i < ttlWords.length; i++) {
+                    if (ttlWords[i].indexOf(':') >= 0) {
                         ttlWords[i] = genomePos.get();
-		    }
-		}
+                    }
+                }
                 title = ttlWords.join(' ');
             } else
                 title = genomePos.get();

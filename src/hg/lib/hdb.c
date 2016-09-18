@@ -197,7 +197,21 @@ ci = hGetChromInfo(db, buf);
 if (ci != NULL)
     return cloneString(ci->chrom);
 else
+    {
+    if (hTableExists(db, "chromAlias"))
+       {
+       struct sqlConnection *conn = hAllocConn(db);
+       char query[512];
+       char *chrom;
+       sqlSafef(query, sizeof(query),
+          "select chrom from chromAlias where alias='%s'", name);
+       chrom = sqlQuickString(conn, query);
+       hFreeConn(&conn);
+       if (isNotEmpty(chrom))  // chrom is already a cloneString result
+         return chrom;
+       }
     return NULL;
+    }
 }
 
 boolean hgIsOfficialChromName(char *db, char *name)

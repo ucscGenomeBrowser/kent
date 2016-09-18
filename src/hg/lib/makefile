@@ -18,7 +18,7 @@ O = acemblyClass.o adjacency.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o a
     ccdsInfo.o ccdsNotes.o ccdsGeneMap.o celeraCoverage.o \
     celeraDupPositive.o cgapSage/cgapSage.o cgapSage/cgapSageLib.o cgh.o chainCart.o \
     chainDb.o chainLink.o chainNet.o chainNetDbLoad.o \
-    chicken13kInfo.o chromBins.o chr18deletions.o \
+    chicken13kInfo.o chromBins.o chromAlias.o chr18deletions.o \
     chromGraph.o chromGraphFactory.o chromInfo.o chromInserts.o chromKeeper.o \
     clonePos.o codeBlast.o codeBlastScore.o cogs.o cogsxra.o columnInfo.o \
     contigAcc.o coordConv.o \
