@@ -7,9 +7,7 @@
 #ifndef CHEAPCGI_H
 #define CHEAPCGI_H
 
-#ifndef DYSTRING_H
 #include "dystring.h"
-#endif
 
 #ifndef HASH_H
 #include "hash.h"
