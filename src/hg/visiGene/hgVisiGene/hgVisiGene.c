@@ -303,7 +303,7 @@ if (count != imageCount)
 else
     {
     printf("%d images for:<BR>", imageCount);
-    printf("&nbsp;%s<BR>\n", listSpec);
+    htmlPrintf("&nbsp;%s<BR>\n", listSpec);
     }
 cartRemove(cart, hgpStartAt);
 htmlEnd();

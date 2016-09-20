@@ -16,5 +16,5 @@ with Hiram's utility bdfToGem.
 Added the new font to src/lib/font/
 Added the declaration to src/inc/memgfx.h
 
-Added checkbox to phyloGif to allow optional
+Added checkbox to phyloPng to allow optional
 use of the monospace font.
