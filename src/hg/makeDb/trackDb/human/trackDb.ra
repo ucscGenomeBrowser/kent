@@ -1525,7 +1525,7 @@ urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2016-05-15
-release alpha
+release alpha,beta
 
 track dgvPlus
 compositeTrack on
@@ -1542,7 +1542,7 @@ urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2015-07-23
-release beta,public
+release public
 
     track dgvMerged
     parent dgvPlus
