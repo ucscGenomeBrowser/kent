@@ -6327,6 +6327,7 @@ tablesIgnored $dm
     fbRole
     fbUniProt
     mzD%
+    refGenePfam
 
 tablesIgnored $galGal
     bgiCov
