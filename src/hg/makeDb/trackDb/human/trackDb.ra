@@ -1525,24 +1525,6 @@ urlLabel DGV Browser and Report:
 url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
 coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
 dataVersion 2016-05-15
-release alpha,beta
-
-track dgvPlus
-compositeTrack on
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-visibility hide
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-exonNumbers off
-urlLabel DGV Browser and Report:
-url http://dgv.tcag.ca/dgv/app/variant?id=$$&ref=$D
-coriellUrlBase http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=
-dataVersion 2015-07-23
-release public
 
     track dgvMerged
     parent dgvPlus
@@ -1555,7 +1537,6 @@ release public
     shortLabel DGV Supp Var
     longLabel Database of Genomic Variants: Supporting Structural Var (CNV, Inversion, In/del)
     priority 2
-
 
 track covMask1kGPilotLowCov
 compositeTrack on
