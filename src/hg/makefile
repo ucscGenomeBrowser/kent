@@ -11,7 +11,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert hgHubConnect \
 	hgLiftOver hgVai visiGene/hgVisiGene hgMenubar hgPublicSessions \
 	encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab encode/hgEncodeApi \
-	phyloGif hgCustom hgPal hgFileUi hgFileSearch\
+	phyloPng hgCustom hgPal hgFileUi hgFileSearch\
 	makeDb/hgCgiData js htdocs/style hgMirror hgBeacon
 
 ifdef LOWELAB
