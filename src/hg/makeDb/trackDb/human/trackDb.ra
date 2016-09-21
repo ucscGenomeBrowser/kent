@@ -3198,8 +3198,8 @@ url http://www.omim.org/entry/
 tableBrowser noGenome omimGeneMap omimPhenotype omimGeneSymbol omim2gene
 
 track omimAvSnp
-shortLabel OMIM AV SNPs
-longLabel OMIM Allelic Variant SNPs
+shortLabel OMIM Alleles
+longLabel OMIM Allelic Variants
 group phenDis
 visibility hide
 color 0, 80, 0
