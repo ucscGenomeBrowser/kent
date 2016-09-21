@@ -1577,10 +1577,10 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=\"%s\"", varName,
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s'", varName,
         charSize, initialVal);
 if (isNotEmpty(script))
-    printf(" onkeypress=\"%s\"", script);
+    printf(" onkeypress='%s'", script);
 printf(">\n");
 }
 
@@ -1601,8 +1601,8 @@ if (width==0)
 if (width==0)
     width = 100;
 
-printf("<INPUT TYPE=TEXT class='inputBox' NAME=\"%s\" style='width: %dpx' VALUE=\"%s\"",
-       varName,width, initialVal);
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s'",
+       varName, width, initialVal);
 if (isNotEmpty(extra))
     printf(" %s",extra);
 printf(">\n");
@@ -1612,7 +1612,7 @@ void cgiMakeIntVarWithExtra(char *varName, int initialVal, int maxDigits, char *
 /* Make a text control filled with initial value and optional extra HTML.  */
 {
 if (maxDigits == 0) maxDigits = 4;
-printf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d %s>", 
+htmlPrintf("<INPUT TYPE=TEXT NAME=\"%s\" SIZE=%d VALUE=%d %s>", 
                 varName, maxDigits, initialVal, extra ? extra : "");
 }
 
