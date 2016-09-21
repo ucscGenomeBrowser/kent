@@ -293,7 +293,8 @@ char *extra = cloneString(bb->rest);
 int numCols = 12 + 12 - 3;
 char *row[numCols];
 int wordCount = chopByChar(extra, '\t', row, numCols);
-assert(wordCount == numCols);
+if (wordCount != numCols)
+    errAbort("pslFromBigPsl: expected %d columns in `rest' field, found %d columns", numCols, wordCount);
 
 struct psl *psl;
 int ii;

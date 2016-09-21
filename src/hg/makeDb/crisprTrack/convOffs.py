@@ -89,6 +89,8 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
     twoBitFname = '/scratch/data/%s/%s.2bit' % (db, db)
     if not isfile(twoBitFname): # can happen these days, says Hiram
         twoBitFname = '/gbdb/%s/%s.2bit' % (db, db)
+    if not isfile(twoBitFname): # can happen these days, says Hiram
+        twoBitFname = '/cluster/data/%s/%s.2bit' % (db, db)
     genome = TwoBitFile(twoBitFname)
 
     # get sequences

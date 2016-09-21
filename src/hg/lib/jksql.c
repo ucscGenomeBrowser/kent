@@ -922,7 +922,7 @@ char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE \"%s\"", likeExpr);
 
 struct slName *list = NULL, *el;
 
@@ -3948,7 +3948,6 @@ else
 
 freeMem(newFormat);
 va_end(orig_args);
-va_end(args);
 
 return sz;
 

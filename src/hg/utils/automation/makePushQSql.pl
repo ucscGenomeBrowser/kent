@@ -394,7 +394,7 @@ sub getTrackEntries {
 	  } elsif (&HgAutomate::machineHasFile($dbHost, $png)) {
 	    $entry{'files'} .= $png . '\r\n';
 	  } else {
-	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloGif-" .
+	    &HgAutomate::verbose(0, "WARNING: $dbHost does not have phyloPng-" .
 				    "generated $gif (or png) for $table.\n");
 	  }
 	}

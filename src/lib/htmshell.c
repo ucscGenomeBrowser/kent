@@ -47,7 +47,7 @@ void htmlVaEncodeErrorText(char *format, va_list args)
 /* Write an error message encoded against XSS. */
 {
 char warning[1024];
-int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE);
+int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
 if (sz < 0)
     {
     safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
@@ -521,7 +521,7 @@ htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 
 // html-encode arguments to fight XSS
-int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE);
+int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
 if (sz < 0)
     {
     safecpy(warning, sizeof(warning), "Low level error in htmlSafef. See error logs for details.");
@@ -937,7 +937,7 @@ htmlIncludeFile(path);
 
 /* ===== HTML printf-style escaping functions ===== */
 
-int htmlSafefAbort(boolean noAbort, char *format, ...)
+int htmlSafefAbort(boolean noAbort, int errCode, char *format, ...)
 /* handle noAbort stderror logging and errAbort */
 {
 va_list args;
@@ -953,15 +953,15 @@ else
     vaErrAbort(format, args);
     }
 va_end(args);
-return -1;
+return errCode;
 }
 
 
 
 #define htmlSafefPunc 0x01  // using char 1 as special char to denote strings needing escaping
-enum htmlSafefEncoding {dummyzero, html, js, css, attr, url};
+enum htmlSafefEncoding {dummyzero, none, html, js, css, attr, url};
 
-int htmlEscapeAllStrings(char *buffer, char *s, int bufSize, boolean noAbort)
+int htmlEscapeAllStrings(char *buffer, char *s, int bufSize, boolean noAbort, boolean noWarnOverflow)
 /* Escape all strings. *
  * Returns final size not including terminating 0. 
  * User needs to pre-allocate enough space that escape functions will never run out of space.
@@ -980,7 +980,7 @@ while (1)
     	end = strchr(start+1, htmlSafefPunc); // skip over punc mark
 	if (!end)
 	    {
-	    return htmlSafefAbort(noAbort, "Unexpected error in htmlEscapeAllStrings. s=[%s]", sOrig);
+	    return htmlSafefAbort(noAbort, -2, "Unexpected error in htmlEscapeAllStrings. s=[%s]", sOrig);
 	    }
 	}
     else
@@ -993,7 +993,8 @@ while (1)
     int moveSize = start - s;
     if (moveSize > remainder)
 	{
-	return htmlSafefAbort(noAbort, "Buffer too small in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	if (noWarnOverflow) return -1; // speed
+	return htmlSafefAbort(noAbort, -1, "Buffer too small in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
 	}
     memmove(buffer, s, moveSize);
     buffer += moveSize;
@@ -1003,7 +1004,8 @@ while (1)
 	{
 	if (remainder < 1)
 	    {
-	    return htmlSafefAbort(noAbort, "Buffer too small for terminating zero in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	    if (noWarnOverflow) return -1; // speed
+	    return htmlSafefAbort(noAbort, -1, "Buffer too small for terminating zero in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
 	    }
 	--remainder;
 	*buffer++ = 0;  // terminating 0
@@ -1032,13 +1034,14 @@ while (1)
 	}
     else 
 	{
-	return htmlSafefAbort(noAbort, "Unexpected error in htmlEscapeAllStrings. (enum htmlSafefEncoding)=%c", *(end+1));
+	return htmlSafefAbort(noAbort, -2, "Unexpected error in htmlEscapeAllStrings. (enum htmlSafefEncoding)=%c", *(end+1));
 	}
     *end = htmlSafefPunc;  // restore mark, helps error message
 	
     if (escSize < 0)
 	{
-	return htmlSafefAbort(noAbort, "Buffer too small for escaping in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
+	if (noWarnOverflow) return -1; // speed
+	return htmlSafefAbort(noAbort, -1, "Buffer too small for escaping in htmlEscapeAllStrings. s=[%s] bufSize = %d", sOrig, bufSize);
 	}
 
     buffer += escSize;
@@ -1092,9 +1095,11 @@ else if (sameString(spec,"url"))
     enc = (enum htmlSafefEncoding) url;
 else if (sameString(spec,""))
     enc = (enum htmlSafefEncoding) html;
+else if (sameString(spec,"none"))
+    enc = (enum htmlSafefEncoding) none;
 else
     {
-    htmlSafefAbort(noAbort, "Unknown spec [%s] in format string [%s].", spec, format);
+    htmlSafefAbort(noAbort, -2, "Unknown spec [%s] in format string [%s].", spec, format);
     return 0;
     }
 
@@ -1103,10 +1108,11 @@ return enc;
 }
 
 
-int vaHtmlSafefNoAbort(char* buffer, int bufSize, char *format, va_list args, boolean noAbort)
+int vaHtmlSafefNoAbort(char* buffer, int bufSize, char *format, va_list args, boolean noAbort, boolean noWarnOverflow)
 /* VarArgs Format string to buffer, vsprintf style, only with buffer overflow
  * checking.  The resulting string is always terminated with zero byte.
  * Automatically escapes string values.
+ * Returns count of bytes written or -1 for overflow or -2 for other errors.
  * This function should be efficient on statements with many strings to be escaped. */
 {
 int formatLen = strlen(format);
@@ -1121,7 +1127,6 @@ int escStringsCount = 0;
 char c = 0;
 int i = 0;
 boolean inPct = FALSE;
-boolean isNegated = FALSE;
 while (i < formatLen)
     {
     c = format[i];
@@ -1145,7 +1150,10 @@ while (i < formatLen)
 	    // finally, the string we care about!
 	    if (c == 's')
 		{
-		if (!isNegated) // Not a Pre-escaped String
+		char enc = htmlSpecifierToEncoding(format, &i, noAbort);
+		if (enc == 0)
+		    return -2;
+		if (enc != (enum htmlSafefEncoding) none) // Not a Pre-escaped String
 		    {
 		    // go back and insert htmlSafefPunc before the leading % char saved in lastPct
 		    // move the accumulated %s descriptor
@@ -1153,24 +1161,18 @@ while (i < formatLen)
 		    ++nf;
 		    *lastPct = htmlSafefPunc;
 		    *nf++ = htmlSafefPunc;
-		    char enc = htmlSpecifierToEncoding(format, &i, noAbort);
-		    if (enc == 0)
-			return -1;
 		    *nf++ = enc;
 		    ++escStringsCount;
 		    }
 		}
-
-	    isNegated = FALSE;
 	    }
 	else if (strchr("+-.1234567890",c))
 	    {
-	    if (c == '-')
-		isNegated = TRUE;
+	    // Do nothing.
 	    }
 	else
 	    {
-	    return htmlSafefAbort(noAbort, "String format not understood in vaHtmlSafef: %s", format);
+	    return htmlSafefAbort(noAbort, -2, "String format not understood in vaHtmlSafef: %s", format);
 	    }
 	}
     ++i;	    
@@ -1186,7 +1188,7 @@ if (escStringsCount > 0)
     /* note that some versions return -1 if too small */
     if (sz != -1 && sz + 1 <= tempSize)
 	{
-	sz = htmlEscapeAllStrings(buffer, tempBuf, bufSize, noAbort);
+	sz = htmlEscapeAllStrings(buffer, tempBuf, bufSize, noAbort, noWarnOverflow);
 	}
     else
 	overflow = TRUE;
@@ -1202,7 +1204,8 @@ else
 if (overflow)
     {
     buffer[bufSize-1] = (char) 0;
-    htmlSafefAbort(noAbort, "buffer overflow, size %d, format: %s", bufSize, format);
+    if (!noWarnOverflow)
+	htmlSafefAbort(noAbort, -1, "buffer overflow, size %d, format: %s", bufSize, format);
     sz = -1;
     }
 
@@ -1221,8 +1224,83 @@ int htmlSafef(char* buffer, int bufSize, char *format, ...)
 int sz;
 va_list args;
 va_start(args, format);
-sz = vaHtmlSafefNoAbort(buffer, bufSize, format, args, TRUE);
+sz = vaHtmlSafefNoAbort(buffer, bufSize, format, args, FALSE, FALSE);
 va_end(args);
 return sz;
 }
+
+
+void vaHtmlDyStringPrintf(struct dyString *ds, char *format, va_list args)
+/* VarArgs Printf append to dyString
+ * Strings are escaped according to format type. */
+{
+/* attempt to format the string in the current space.  If there
+ * is not enough room, increase the buffer size and try again */
+int avail, sz;
+while (TRUE)
+    {
+    va_list argscp;
+    va_copy(argscp, args);
+    avail = ds->bufSize - ds->stringSize;
+    if (avail <= 0)
+        {
+        /* Don't pass zero sized buffers to vsnprintf, because who knows
+         * if the library function will handle it. */
+        dyStringBumpBufSize(ds, ds->bufSize+ds->bufSize);
+        avail = ds->bufSize - ds->stringSize;
+        }
+    sz = vaHtmlSafefNoAbort(ds->string + ds->stringSize, avail, format, argscp, FALSE, TRUE);
+    va_end(argscp);
+    /* note that some version return -1 if too small */
+    if ((sz < 0) || (sz >= avail))
+	{
+        dyStringBumpBufSize(ds, ds->bufSize+ds->bufSize);
+	}
+    else
+        {
+        ds->stringSize += sz;
+        break;
+        }
+    }
+}
+
+void htmlDyStringPrintf(struct dyString *ds, char *format, ...)
+/* VarArgs Printf append to dyString
+ * Strings are escaped according to format type. */
+{
+va_list args;
+va_start(args, format);
+vaHtmlDyStringPrintf(ds, format, args);
+va_end(args);
+}
+
+void vaHtmlFprintf(FILE *f, char *format, va_list args)
+/* fprintf using html encoding types */
+{
+struct dyString *ds = newDyString(1024);
+vaHtmlDyStringPrintf(ds, format, args);
+fputs(ds->string, f);  // does not append newline
+freeDyString(&ds);
+}
+
+
+void htmlFprintf(FILE *f, char *format, ...)
+/* fprintf using html encoding types */
+{
+va_list args;
+va_start(args, format);
+vaHtmlFprintf(f, format, args);
+va_end(args);
+}
+
+
+void htmlPrintf(char *format, ...)
+/* fprintf using html encoding types */
+{
+va_list args;
+va_start(args, format);
+vaHtmlFprintf(stdout, format, args);
+va_end(args);
+}
+
 

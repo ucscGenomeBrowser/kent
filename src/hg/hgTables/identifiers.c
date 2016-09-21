@@ -504,7 +504,7 @@ if (isNotEmpty(idText))
 	     "information about the table and field.\n"
 	     "%d %smissing identifier(s):\n"
 	     "%s\n"
-	     "<a href='%-s'>Complete list of missing identifiers<a>\n", 
+	     "<a href='%s|none|'>Complete list of missing identifiers<a>\n",
 	     (totalTerms - foundTerms), totalTerms,
 	     curTable, idField,
 	     (xrefTable ? (xrefIsSame ? "" : " or in alias table ") : ""),

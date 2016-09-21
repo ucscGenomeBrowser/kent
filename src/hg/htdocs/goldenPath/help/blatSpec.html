@@ -828,8 +828,8 @@ Options:
 	<pre>
     cd /data/genomes
     mkdir twoBit
-    faToTwoBit human/hg16/*.fa  twoBit/hg16.2bit
-    faToTwoBit mouse/mm4/*.fa  twoBit/mm4.2bit
+    faToTwoBit human/hg19/*.fa  twoBit/hg19.2bit
+    faToTwoBit mouse/mm10/*.fa  twoBit/mm10.2bit
 	</pre>
 	</p
 	<p>
@@ -854,8 +854,8 @@ Options:
 	<pre>
     ssh bigRamMachine
     cd /data/genomes/twoBit
-    gfServer start bigRamMachine 17779 hg16.2bit &
-    gfServer -trans -mask start bigRamMachine 17778 hg16.2bit &
+    gfServer start bigRamMachine 17779 hg19.2bit &
+    gfServer -trans -mask start bigRamMachine 17778 hg19.2bit &
 	</pre>
 	</p>
 	<p>
@@ -864,7 +864,7 @@ Options:
 	<p>
 	To build an untranslated index to be shared with in-silico PCR:
 	<pre>
-    gfServer -stepSize=5 bigRamMachine 17779 hg16.2bit &
+    gfServer -stepSize=5 bigRamMachine 17779 hg19.2bit &
 	</pre>
 	<p>
 	This index will be slightly more sensitive with blat, particularly for small query
@@ -903,10 +903,10 @@ Options:
 	<pre>
     company Awesome Research Amalgamated
     background /images/dnaPaper.jpg
-    gfServer bigRamMachine 17778 /data/genomes/2bit/hg16.2bit Human Genome
-    gfServer bigRamMachine 17779 /data/genomes/2bit/hg16.2bit Human Genome
-    gfServer mouseServer 17780 /data/genomes/2bit/mm4.2bit Mouse Genome
-    gfServer mouseServer 17781 /data/genomes/2bit/mm4.2bit Mouse Genome
+    gfServerTrans bigRamMachine 17778 /data/genomes/twoBit/hg19.2bit Human Genome
+    gfServer bigRamMachine 17779 /data/genomes/twoBit/hg19.2bit Human Genome
+    gfServerTrans mouseServer 17780 /data/genomes/twoBit/mm10.2bit Mouse Genome
+    gfServer mouseServer 17781 /data/genomes/twoBit/mm10.2bit Mouse Genome
     tempDir ../trash
 	</pre>
 	</p>
@@ -920,7 +920,7 @@ Options:
 	<pre>
      ssh webServer
      cd kent/webBlat
-     cp webBlat webBlat.cfg /usr/local/apache/cgi-bin
+     cp webBlat webBlat.cfg /usr/local/apache/cgi-bin/
      mkdir /usr/local/apache/trash
      chmod 777 /usr/local/apache/trash
 	</pre>
@@ -932,7 +932,7 @@ Options:
 	<p>
 	Here is an example of an installation on Mac OS X:
 	<pre>
-     cp webBlat webBlat.cfg /Library/WebServer/CGI-Executables
+     cp webBlat webBlat.cfg /Library/WebServer/CGI-Executables/
      mkdir /Library/WebServer/trash
      chmod 777 /Library/WebServer/trash
 	</pre>
