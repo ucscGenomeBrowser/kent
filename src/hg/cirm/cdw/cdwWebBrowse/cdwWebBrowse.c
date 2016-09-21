@@ -1489,14 +1489,9 @@ tagStormFree(&tags);
 void doHelp(struct sqlConnection *conn)
 /* Put up help page */
 {
-printf("This being a prototype, there's not much help available.  Try clicking and hovering over the Browse link on the top bar to expose a menu. The trickiest part of the system is the query link.");
-printf("The query link has you type in a SQL-like query. ");
-printf("Try 'select * from files where accession' to get all metadata tags ");
-printf("from files that have passed basic format validations. Instead of '*' you ");
-printf("could use a comma separated list of tag names. ");
-printf("Instead of 'accession' you could put in a boolean expression involving field names and ");
-printf("constants. String constants need to be surrounded by quotes - either single or double.");
-printf("<BR><BR>");
+puts(
+#include "cdwHelp.h"
+);
 }
 
 void dispatch(struct sqlConnection *conn)
@@ -1656,7 +1651,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.50");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.51");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();
