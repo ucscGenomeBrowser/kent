@@ -2905,7 +2905,7 @@ searchDescription tRNAscan-SE tRNA Name
 searchPriority 63
 
 track refGenePfam
-shortLabel Pfam in RefSeq Gene
+shortLabel Pfam in RefSeq
 longLabel Pfam Domains in RefSeq Genes
 group genes
 type bed 12

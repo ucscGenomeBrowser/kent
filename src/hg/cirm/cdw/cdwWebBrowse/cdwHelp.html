@@ -1,0 +1,157 @@
+
+<ul>
+<li><a href="#About">About</a></li>
+<li><a href="#Privacy">Privacy</a></li>
+<li><a href="#Quickstart">Quickstart</a></li>
+<li><a href="#Account">Account</a></li>
+<li><a href="#Finding">Finding data</a></li>
+<li><a href="#Downloading">Downloading data</a></li>
+<li><a href="#Definitions">Definitions</a></li>
+</ul>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="About"></a>
+<h3>About</h3>
+
+<p><span style="color:#0066CC; font-weight:bold;">The CIRM Data Warehouse</span></p>
+
+<p>The stem cell hub is a data warehouse for stem cell genomic files. It houses primary
+data files such as DNA reads in fastq format, as well as many types of files derived
+from mapping and other analysis of the primary data, and PDF and other document
+files describing protocols. It has a small but flexible system for associating metadata
+tags with a file. Any CIRM-genomic associated lab can submit data. Once submitted
+data is treated as prepublication human sequence data, and access is only allowed to
+authorized users.</p>
+
+<a name="Wranglers"></a>
+<p><span style="color:#0066CC; font-weight:bold;">Data wranglers</span></p>
+The data wranglers assist labs with bringing data into the CIRM Data Warehouse and with downloading submitted data.<br/><br/>
+Clay Fischer &lt;<span style="color:#0066CC"><em>clmfisch@ucsc.edu</em></span>&gt;<br />
+Parisa Nejad &lt;<span style="color:#0066CC"><em>pnejad@ucsc.edu</em></span>&gt;<br />
+Nick Fong &lt;<span style="color:#0066CC"><em>nfong@ucsc.edu</em></span>&gt;
+
+<br /><br/>
+<strong>Engineers</strong><br/>
+You can contact the engineers with information about data pipelines and submission summary pages.<br/><br/>
+Chris Eisenhart &lt;<span style="color:#0066CC"><em>ceisenha@ucsc.edu</em></span>&gt;<br/><br/>
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Privacy"></a>
+<h3>Privacy</h3>
+
+<span style="color:#0066CC; font-weight:bold;">Data is private between labs</span>
+<p>Currently, <strong>most data is restricted</strong>. This means the data is only accessible by members of the lab which submitted it. If you wish to view restricted data for your lab, contact a wrangler to be granted access. </p>
+
+<span style="color:#0066CC; font-weight:bold;">Data is private from the public</span>
+<p>Currently, data is protected from the public with use of a VPN. This requires setting up an account with our system administrators (<em>cluster-admin@soe.ucsc.edu</em>).</p>
+<p>An SSL certificate is in the process of being set up, adding HTTPS encryption to your cirm-01 account. At That point we will remove the VPN requirement. When tumor maps are integrated, they will use your account authentication as well if dealing with restricted data.</p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Quickstart"></a>
+<h3>Quickstart</h3>
+<p><span style="color:#0066CC; font-weight:bold;">Login or create an account</span></p>
+<p>Login to the website. If you don't have an account, you can make one.</a>
+<p><span style="color:#0066CC; font-weight:bold;">Browse files</span></p>
+<p>At the top navigation, click the browse button and go to <a href="http://cirm-01/cgi-bin/cdwWebBrowse?cdwCommand=browseFiles&cdwFile_filter=">Files</a>:</p>
+<img src="../images/cdwImages/navigation.png" alt="Top navigation should be displayed" />
+<p>This will bring you to a list of files.</p>
+<img src="../images/cdwImages/files.png" alt="file browser should be displayed" />
+<br />
+<p><span style="color:#0066CC; font-weight:bold;">Filter results</span></p>
+<p>If have not used filters, the filters will be blank, as shown above. You can edit the cells and press enter to filter your results.</p>
+<p>When your cursor is in the cell, hit the down arrow on your keyboard to show a drop-down list of every item you can filter to.</p>
+<img src="../images/cdwImages/dropdown.png" alt="file browser should be displayed" />
+<p>Filters take advantage of basic UNIX wildcard syntax. It looks for an exact match unless asterisks are used:</p>
+<img src="../images/cdwImages/filtered.png" alt="file browser should be displayed" />
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Account"></a>
+<h3>Account (CDW website)</h3>
+<p>The top navigation bar will have the option to <a href="http://cirm-01/cgi-bin/hgLogin?hgLogin.do.displayLoginPage=1">login</a>:</p>
+
+<img src="../images/cdwImages/loginScreen.png" alt="login screen should be displayed" />
+
+<p>If you do not currently have an account, at the bottom you will see an option to create an account.</p>
+
+<img src="../images/cdwImages/createAccount.png" alt="account creation screen should be displayed" />
+
+<p>To view restricted data, contact a <a href="#Wranglers">data wrangler</a> and they will be able to assist with granting access to your data.</p>
+
+<h3>Account (VPN)</h3>
+<p>Data is restricted from the public with the use of a VPN, currently. </p>
+<p>It is assumed you have VPN access already if you are reading this, but you may need to set it up for other members in your lab.</p>
+<p>Contact a <a href="#Wranglers">data wrangler</a> and they can coordinate a time with you and our system administators to set up your VPN account over the phone.</p>
+<p>You will need to install <a href="https://tunnelblick.net/" target="_blank">Tunnelblick</a> before your call.</p>
+
+<h3>Account (Server)</h3>
+<p> We no longer grant command line access to our  server and are in the process of removing accounts.</p>
+
+<h3>Account (Tumor Map)</h3>
+This feature is currently being implemented. It will share authentication with your CDW website account.
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Finding Data"></a>
+<h3>Finding data</h3>
+
+
+<p><span style="color:#0066CC; font-weight:bold;">Files</span></p>
+Under ‘browse’ go to Files. Click into the text box of a column and hit the drop-down. This shows everything for that column which you have the authorization to view. You can filter the columns down with the select list, or typing what you want with a wildcard. For example:
+
+Under sample_label, try *liver* and you’ll get any data sets with sample_labels.
+
+<p><span style="color:#0066CC; font-weight:bold;">Tracks</span></p>
+
+<p><span style="color:#0066CC; font-weight:bold;">Tags</span></p>
+
+<p><span style="color:#0066CC; font-weight:bold;">Data sets</span></p>
+<p>This contains descriptions of the data sets submitted, and summaries of the submission including vizualizations.</p>
+
+<p><span style="color:#0066CC; font-weight:bold;">Query</span></p>
+http://cirm-01/cgi-bin/cdwWebBrowse?cdwCommand=query
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Downloading"></a>
+<h3>Downloading</h3>
+<p>Note to labs: your data may only be obtained from the CIRM Data Warehouse website. It cannot be downloaded until complete sequence data and metadata are available.</p>
+<p><span style="color:#0066CC; font-weight:bold;">One file</span></p>
+
+<p><span style="color:#0066CC; font-weight:bold;">Batch downloads</span></p>
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<a name="Submitting"></a>
+<h3>Definitions</h3>
+<p><span style="color:#0066CC; font-weight:bold;">Help submitting data</span></p>
+<p></p>
+
+
+
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Break section
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+<hr />
+<h3>Deprecated</h3>
+This being a prototype, there's not much help available.  Try clicking and hovering over the Browse link on the top bar to expose a menu. The trickiest part of the system is the query link.The query link has you type in a SQL-like query. Try 'select * from files where accession' to get all metadata tags from files that have passed basic format validations. Instead of '*' you could use a comma separated list of tag names. Instead of 'accession' you could put in a boolean expression involving field names and constants. String constants need to be surrounded by quotes - either single or double.
+
+<br><br>
