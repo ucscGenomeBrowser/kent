@@ -31,6 +31,7 @@ for (bb = bbList; bb != NULL; bb = bb->next)
     struct lrg *lrg = lrgLoad(lrgRow);
     slAddHead(&(tg->items), lrgToLf(lrg));
     }
+slReverse(&(tg->items));
 lmCleanup(&lm);
 }
 
