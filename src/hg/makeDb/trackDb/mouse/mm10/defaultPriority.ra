@@ -1,7 +1,9 @@
 # Genes and Gene Prediction Tracks
 
+#remove this comment and "release alpha,beta" when releasing the bigGeneDataUrl feature.
 track knownGene override
 bigGeneDataUrl /gbdb/mm10/knownGene.bb
+release alpha,beta
 priority 1
 
 track ensGene override
