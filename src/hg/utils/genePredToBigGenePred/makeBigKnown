@@ -8,7 +8,7 @@ hgsql $db -Ne "select * from knownToTag" | grep basic |  sed 's/basic/1/' > $tmp
 sort $tmp/knownCanon.txt $tmp/knownTag.txt | awk '{if ($1 != last) {print last, sum; sum=$2; last=$1}  else {sum += $2; }} END {print last, sum}' | tail -n +2  > $tmp/knownScore.txt
 hgsql $db -Ne "select * from kgColor" > $tmp/colors.txt
 hgsql $db -Ne "select * from knownGene" > $tmp/knownGene.txt
-hgsql $db -Ne "select kgId, geneSymbol, spDisplayId from kgXref" > $tmp/geneNames.txt
-genePredToBigGenePred -score=$tmp/knownScore.txt  -colors=$tmp/colors.txt -geneNames=$tmp/geneNames.txt  -known $tmp/knownGene.txt stdout | sort -k1,1 -k2,2n > $tmp/knownGene.bgpInput
+hgsql $db -Ne "select kgId, geneSymbol, spID from kgXref" > $tmp/geneNames.txt
+genePredToBigGenePred -score=$tmp/knownScore.txt  -colors=$tmp/colors.txt -geneNames=$tmp/geneNames.txt  -known $tmp/knownGene.txt  $tmp/knownGene.bgpInput
 bedToBigBed -type=bed12+8 -tab -as=$HOME/kent/src/hg/lib/bigGenePred.as $tmp/knownGene.bgpInput /cluster/data/$db/chrom.sizes $db.knownGene.bb
 rm -rf $tmp
