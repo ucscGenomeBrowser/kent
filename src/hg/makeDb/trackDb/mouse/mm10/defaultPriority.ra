@@ -6,6 +6,11 @@ bigGeneDataUrl /gbdb/mm10/knownGene.bb
 release alpha,beta
 priority 1
 
+#remove this stanza when releasing above 
+track knownGene override
+release public
+priority 1
+
 track ensGene override
 visibility hide
 

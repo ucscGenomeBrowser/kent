@@ -6,6 +6,14 @@ bigGeneDataUrl /gbdb/hg18/knownGene.bb
 release alpha,beta
 priority 1
 
+#remove this stanza when releasing the above
+track knownGene override
+release public
+priority 1
+
+
+
+
 track refGene override
 release beta,public
 priority 2
