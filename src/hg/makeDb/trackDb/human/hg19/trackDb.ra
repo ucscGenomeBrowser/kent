@@ -2240,6 +2240,27 @@ baseColorDefault genomicCodons
 defaultLinkedTables kgXref
 intronGap 12
 bigGeneDataUrl /gbdb/hg19/knownGene.bb
+release alpha,beta
+#remove this comment and "release alpha,beta" when releasing the bigGeneDataUrl feature.
+
+#remove this entire stanza at the same time when releasing the above.
+track knownGene
+release public
+shortLabel UCSC Genes
+longLabel UCSC Genes (RefSeq, GenBank, CCDS, Rfam, tRNAs & Comparative Genomics)
+group genes
+visibility pack
+priority 1
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+idXref kgAlias kgID alias
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+baseColorUseCds given
+baseColorDefault genomicCodons
+defaultLinkedTables kgXref
+intronGap 12
 
 #
 # This is a temporary track constructed for the purpose of helping Brooke QA

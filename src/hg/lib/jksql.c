@@ -916,13 +916,14 @@ return list;
 }
 
 static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *likeExpr)
-/* run SHOW TABLES on connection and return a slName list */
+/* run SHOW TABLES on connection and return a slName list.  LIKE expression
+ * can be NULL or string e.g. "LIKE 'snp%'" */
 {
 char query[256];
 if (likeExpr == NULL)
     safef(query, sizeof(query), NOSQLINJ "SHOW TABLES");
 else
-    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES LIKE \"%s\"", likeExpr);
+    safef(query, sizeof(query), NOSQLINJ "SHOW TABLES %s", likeExpr);
 
 struct slName *list = NULL, *el;
 
