@@ -7758,9 +7758,9 @@ TMPDIR=/dev/shm
     # real    467m24.661s
 
 #########################################################################
-# LASTZ human/hg38 Gorilla/gorGor4 - (DONE - 2016-06-24 - Hiram)
-    mkdir /hive/data/genomes/hg38/bed/lastzGorGor4.2016-06-24
-    cd /hive/data/genomes/hg38/bed/lastzGorGor4.2016-06-24
+# LASTZ human/hg38 Gorilla/gorGor5 - (DONE - 2016-06-24 - Hiram)
+    mkdir /hive/data/genomes/hg38/bed/lastzGorGor5.2016-06-24
+    cd /hive/data/genomes/hg38/bed/lastzGorGor5.2016-06-24
 
     printf '# human vs gorilla
 BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz

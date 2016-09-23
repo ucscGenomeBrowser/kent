@@ -3609,7 +3609,8 @@ done
     rm -rf exonAA exonNuc
 
 #############################################################################
-# make refGenePfam table
+# make refGenePfam table (Done - 2016-09-19 - Brian Raney)
+# Pfam in Refseq Genes
 
 export dir=/cluster/data/dm6/bed/pfam
 mkdir -p $dir
