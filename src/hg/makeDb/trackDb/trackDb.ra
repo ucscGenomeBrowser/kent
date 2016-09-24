@@ -294,7 +294,7 @@ superTrack on
 release alpha
 
     track crisprRanges
-    shortLabel CRISPR regions
+    shortLabel CRISPR Regions
     longLabel Genome regions processed to find CRISPR/Cas9 target sites (exons +/- 200bp)
     visibility dense
     color 110,110,110

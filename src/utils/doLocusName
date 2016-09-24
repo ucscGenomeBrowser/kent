@@ -49,13 +49,20 @@ def doLocusName(db, geneTableName):
     chromSizesFname = "/cluster/data/%s/chrom.sizes" % db
     outTmp = "locusName.tmp.bed"
 
-    cmd = "hgsql %(db)s -NB -e 'SELECT * from %(geneTableName)s'| cut -f2- |" # get genePred
-    "genePredToBed stdin stdout | bedToExons stdin stdout | " # break into exons
-    "tabRepl %(tempFname)s 3 /dev/stdin | sort -u | " # replace transcript with symbol, skip dupes
-    "bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout |" # merge adjacent exons
-    "bedBetween stdin /dev/stdout -a -s %(chromSizesFname)s |" # annotate regions
-    "bedSort stdin %(outTmp)s" % locals()
-    runCmd(cmd)
+    cmdParts = []
+    # get genePred
+    cmdParts.append("hgsql %(db)s -NB -e 'SELECT * from %(geneTableName)s'| cut -f2- |")
+    # break genes into exons
+    cmdParts.append("genePredToBed stdin stdout | bedToExons stdin stdout | ")
+    # replace transcript with symbol, skip dupes
+    cmdParts.append("tabRepl %(tempFname)s 3 /dev/stdin | sort -u | ")
+    # merge adjacent exons
+    cmdParts.append("bedSort stdin stdout | bedOverlapMerge /dev/stdin /dev/stdout |")
+    # annotate regions
+    cmdParts.append("bedBetween stdin /dev/stdout -a -s %(chromSizesFname)s -m 100 |")
+    # and sort
+    cmdParts.append("bedSort stdin %(outTmp)s")
+    runCmd(("".join(cmdParts)) % locals())
 
     cmd = "hgLoadBed %s locusName %s" % (db, outTmp)
     runCmd(cmd)
