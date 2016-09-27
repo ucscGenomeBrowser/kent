@@ -24,5 +24,8 @@ CREATE TABLE ncbiRefSeqLink (
     note varchar(255) not null,	# other notes from genbank record
     description longblob not null,	# description from rna gbff record via gbProcess
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    index(name),
+    index(mrnaAcc),
+    index(protAcc)
 );

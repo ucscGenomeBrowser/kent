@@ -1183,22 +1183,6 @@ if (!opened)
     }
 }
 
-boolean aaToArbitraryCodon(char aa, char *dest)
-/* Reverse-translate aa back into one of its codons, return TRUE if successful.
- * Writes 3 characters at the start of dest; does not null-terminate the codon string. */
-{
-int ix;
-for (ix = 0;  ix < ArraySize(codonTable);  ix++)
-    {
-    if (toupper(aa) == codonTable[ix].protCode)
-        {
-        strncpy(dest, codonTable[ix].codon, 3);
-        return TRUE;
-        }
-    }
-return FALSE;
-}
-
 char aaAbbrToLetter(char *abbr)
 /* Convert an AA abbreviation such as "Ala", "Asp" etc., to its single letter code
  * such as "A", "D" etc.  Return the null char '\0' if abbr is not found. */

@@ -3091,18 +3091,24 @@ if (hgvs)
         if (! coordsOk)
             warn("HGVS term '%s' has coordinates outside the bounds of %s", term, foundAccWithV);
         else if (diffRefAllele != NULL)
-            warn ("HGVS term '%s' reference value '%s' does not match %s value '%s'",
-                  term, hgvs->refAllele, foundAccWithV, diffRefAllele);
+            warn ("HGVS term '%s' reference value does not match %s value '%s'",
+                  term, foundAccWithV, diffRefAllele);
         if (coordsOk)
             {
             char *pslTable = NULL;
-            struct psl *mapping = hgvsMapToGenome(db, hgvs, &pslTable);
+            struct bed3 *mapping = hgvsMapToGenome(db, hgvs, &pslTable);
             if (mapping)
                 {
                 int padding = 5;
-                char *trackTable = startsWith("lrg", pslTable) ? "lrgTranscriptAli" : "refGene";
+                char *trackTable;
+                if (isEmpty(pslTable))
+                    trackTable = "chromInfo";
+                else if (startsWith("lrg", pslTable))
+                    trackTable = "lrgTranscriptAli";
+                else
+                    trackTable = "refGene";
                 singlePos(hgp, "HGVS", NULL, trackTable, term, "",
-                          mapping->tName, mapping->tStart-padding, mapping->tEnd+padding);
+                          mapping->chrom, mapping->chromStart-padding, mapping->chromEnd+padding);
                 foundIt = TRUE;
                 }
             }
