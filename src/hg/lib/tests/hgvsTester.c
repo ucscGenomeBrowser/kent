@@ -34,18 +34,27 @@ struct lineFile *lf = lineFileOpen(inputFile, TRUE);
 printf("# db: %s\n"
        "# inputFile: %s\n", db, inputFile);
 char *line;
-while (lineFileNextReal(lf, &line))
+while (lineFileNext(lf, &line, NULL))
     {
     char *term = trimSpaces(line);
+    if (term[0] == '\0' || term[0] == '#')
+        {
+        puts(line);
+        continue;
+        }
     struct hgvsVariant *hgvs = hgvsParseTerm(term);
     if (hgvs == NULL)
         hgvs = hgvsParsePseudoHgvs(db, term);
     if (hgvs == NULL)
-        errAbort("Failed to parse '%s' as HGVS", term);
-    struct psl *psl = hgvsMapToGenome(db, hgvs, NULL);
-    if (psl == NULL)
-        errAbort("Failed to map '%s' to %s assembly", term, db);
-    printf("%s\t%d\t%d\t%s\n", psl->tName, psl->tStart, psl->tEnd, term);
+        printf("# Failed to parse '%s' as HGVS\n", term);
+    else
+        {
+        struct bed3 *region = hgvsMapToGenome(db, hgvs, NULL);
+        if (region == NULL)
+            printf("# Failed to map '%s' to %s assembly\n", term, db);
+        else
+            printf("%s\t%d\t%d\t%s\n", region->chrom, region->chromStart, region->chromEnd, term);
+        }
     }
 lineFileClose(&lf);
 carefulCheckHeap();

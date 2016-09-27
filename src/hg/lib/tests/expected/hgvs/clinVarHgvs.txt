@@ -1,0 +1,79 @@
+# db: hg38
+# inputFile: input/hgvs/clinVarHgvs.txt
+# These are some HGVS-mostly terms taken from ClinVar.  In order to test conversion to genomic
+# coordinates, I used Mutalyzer's web API to get coords for the ClinVar c. expressions using
+# this command in lib/tests/:
+#
+#foreach t (`grep -v ^# input/hgvs/clinVarHgvs.txt | grep -F c.`)
+#  set tEnc = `echo -n "$t" | cgiEncode.pl`
+#  curl -s "https://mutalyzer.nl/json/numberConversion?build=hg38&variant=$tEnc" \
+#  | perl -wpe 'if (m/^\["NC_0+(\d+)\.\d+:g\.([\d_]+).*/) { \
+#                 $c = $1; $p = $2; \
+#                 if ($p =~ m/(\d+)_(\d+)/) { \
+#                   $s = $1 - 1; $e = $2; \
+#                 } else { \
+#                   $s = $p - 1;  $e = $p; \
+#                 }  $_ = "chr$c\t$s\t$e\t'"$t"'\n"; }'
+#  sleep 2
+#end
+# There was a glitch which I repeated manually and a couple terms that Mutalyzer didn't
+# like as-is, so I used modified terms to get genomic coords from Mutalyzer.
+chr1	9264352	9264354	NM_004285.3(H6PD):c.1860_1861insACAGGTGGTTGACCTGTGGCCGGGTCTGA
+chr1	40258320	40258321	NM_005857.4(ZMPSTE24):c.50delA
+chr1	27549570	27549587	NM_001029882.3(AHDC1):c.2529_2545del17
+chr1	40258324	40258325	NM_005857.4(ZMPSTE24):c.54dupT
+chr1	17028689	17028693	NM_003000.2(SDHB):c.330_333dupTCTA
+chr1	11801333	11801372	NM_005957.4(MTHFR):c.264_302dup39
+chr1	10629865	10629867	NM_004565.2(PEX14):c.1013_1014delACinsGT
+chr1	40092119	40092136	NM_000310.3(PPT1):c.271_287del17insTT
+chr1	23796488	23796489	NM_001008216.1(GALE):c.873+20C>T
+chr1	11256193	11256194	NM_004958.3(MTOR):c.505-2A>G
+chr1	11966984	11966985	NM_000302.3(PLOD1):c.1651-2delA
+chr1	10258485	10258487	NM_015074.3(KIF1B):c.184-7_184-6delTT
+chr1	10267565	10267566	NM_015074.3(KIF1B):c.608+8dupA
+chr1	197122045	197122046	NM_018136.4(ASPM):c.3742-3dup
+chr1	17027878	17027881	NM_003000.2(SDHB):c.424-16_424-14dupTTC
+chr1	11134341	11134343	NM_004958.3(MTOR):c.5246+8_5246+9delCCinsGT
+chr1	17023966	17023973	NM_003000.2(SDHB):c.642_642+6delGGTGAGG
+chr1	231573657	231677388	NM_001164556.1(DISC1):c.-53210_67+50454dup
+chr1	40257002	40257003	NM_005857.4(ZMPSTE24):c.-211-1058C>G
+chr1	11981954	11981955	NM_014874.3(MFN2):c.-149-15T>G
+chr1	11803155	11803157	NM_005957.4(MTHFR):c.-13-28_-13-27delCT
+chr1	7961867	7961885	NM_007262.4(PARK7):c.-24+75_-24+92dup
+chr1	40073531	40073535	NM_000310.3(PPT1):c.*526_*529delATCA
+chr1	11022736	11022737	NM_007375.3(TARDBP):c.*83T>C
+chr1	11846007	11846009	NM_006172.3(NPPA):c.456_*1delAA
+chr19	18786046	18786049	NM_000095.2(COMP):c.1405_1407GAC[7]
+chr11	2585249	2585250	NM_000218.2(KCNQ1):c.1071G>Y
+chr11	14968068	14968072	NM_001033952.2(CALCA):c.*727_*730T[4]
+chr14	50628429	50628430	NM_001127713.1(ATL1):c.1519dupA
+chrX	18564525	18564527	NM_003159.2(CDKL5):c.145+4_145+5AT[15]
+# This one actually falls on a part of the transcript that is not aligned to hg38!
+# NM_003000.2(SDHB):c.*159_*184delinsGAACCTGTTCCTTTACTTGCCCCAA
+# Mutalyzer could not parse this one:
+# NM_001128425.1(MUTYH):c.349-?_*(1_?)del
+# so save it for when we have a real HGVS parser.
+# Mutalyzer did not like NM_000478.5(ALPL):c.330C=
+# It parsed NM_000478.5(ALPL):c.330C>C but it doesn't have the .5 version
+# It accepted NM_000478.4(ALPL):c.330C>C and fortunately the coords match hgvsTester output...
+chr1	21563141	21563142	NM_000478.5(ALPL):c.330C=
+# For p. terms I manually used the mutalyzer "Back Translator" to get NM_:c. terms,
+# and then used the Position Converter to get hg38 positions.
+chr1	8361232	8361235	NP_036234.3:p.Thr758Serfs
+chr1	155240657	155240660	NP_001005741.1:p.Leu29Alafs*18
+chr1	9262270	9262273	NP_004276.2:p.Val320=
+chr1	11801329	11801335	NP_005948.3:p.Pro101_Gly102insLeuTyrIleAspValThrTrpHisProAlaGlyAspPro
+chr1	32806523	32806535	NP_003671.1:p.Val153_Val156del
+chr1	11966259	11966262	NP_000293.2:p.Glu532del
+chr1	40092118	40092136	NP_000301.1:p.Gln91_Cys96delinsPhe
+# Note: the following three actually have .10 (hg19) in ClinVar, edited to .11 here.
+chr1	11850845	11867218	NC_000001.11:g.11850846_11867218dup16373
+chr1	16782350	17359598	NC_000001.11:g.16782351_17359598del577248
+chr1	35570363	35656664	NC_000001.11:g.35570364_35656664dup86301
+# Mutalyzer could not parse this one:
+# NC_000001.11:g.(?_42925375)_(42959176_?)del
+#chr1	42925374	42959176	NC_000001.11:g.(?_42925375)_(42959176_?)del
+# Sometimes they only use a gene symbol -- Mutalyzer requires that to be converted to versioned NM_:
+chr13	113731320	113731321	GRK1:c.1172C>A
+chr16	15798698	15798701	MYH11:c.503-14_503-12del
+chr17	49404262	49404263	PHB:c.*729C>T
