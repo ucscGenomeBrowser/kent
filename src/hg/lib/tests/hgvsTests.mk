@@ -8,9 +8,13 @@ EXP_DIR = expected/hgvs
 OUT_DIR = output/hgvs
 DB=hg38
 
-test: validTerms
+test: validTerms clinVarHgvs
 
 validTerms: mkout
+	${TESTER} ${DB} ${IN_DIR}/$@.txt > ${OUT_DIR}/$@.txt
+	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
+
+clinVarHgvs: mkout
 	${TESTER} ${DB} ${IN_DIR}/$@.txt > ${OUT_DIR}/$@.txt
 	diff -u ${EXP_DIR}/$@.txt ${OUT_DIR}/$@.txt
 
