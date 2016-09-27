@@ -1,11 +1,31 @@
 # db: hg38
 # inputFile: input/hgvs/validTerms.txt
+# A variant that is famously known as "MTHFR C677T" or "MTHFR 677C>T" -- but the 677 is incorrect (from an old sequence ~1995):
 chr1	11796320	11796321	NM_005957.4:c.665C>T
+# Same variant in LRG transcript coords:
 chr1	11796320	11796321	LRG_726t1:c.665C>T
+
+# These three are equivalent (although p. is less specific):
 chr11	112088972	112088973	NM_003002.3:c.276C>A
 chr11	112088970	112088973	NP_002993.1:p.Asp92Glu
 chr11	112088970	112088973	NP_002993.1:p.D92E
+
+# This is not HGVS but seems to be a commonly requested format and is easy to transform into the internal representation of HGVS:
 chr2	29193604	29193607	ALK G1494E
+
+# More gene symbol HGVS-ish
+chr1	8361232	8361235	RERE:Thr758Serfs
+chr1	155240657	155240660	GBA:p.Leu29Alafs*18
+chr1	9262270	9262273	H6PD Val320=
+chr1	11801329	11801335	MTHFR Pro101_Gly102insLeuTyrIleAspValThrTrpHisProAlaGlyAspPro
+chr1	32806523	32806535	YARS p.Val153_Val156del
+chr1	11966259	11966262	PLOD1 Glu532del
+chr1	40092118	40092136	PPT1 p.Gln91_Cys96delinsPhe
+chr1	11966259	11966262	PLOD1:p.532
+# From a user via b0b:
+chr3	38597785	38597788	NM_198056.2:pAla735Val
+chr3	38555661	38555664	NM_198056.2:pArg1512Trp
+
 chr20	33443333	33443334	NM_003098.2:c.287G>C
 chr17	43093299	43093300	NM_007294.3:c.2231C>A
 chr17	43093299	43093300	NM_007294.3(BRCA1):c.2231C>A
