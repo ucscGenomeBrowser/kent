@@ -1238,7 +1238,7 @@ void doAnalysisQuery(struct sqlConnection *conn)
 /* Do stuff that keeps us here after a routine submit */
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
-cgiMakeHiddenVar("cdwCommand", "query");
+cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 
 /* Get values from text inputs and make up an RQL query string out of fields, where, limit
  * clauses */
