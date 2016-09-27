@@ -61,9 +61,10 @@ echo `wc -l ranges/genes.gp` >> doCrispr.log
 echo break genes into exons and add 200 bp on each side
 genePredToBed ranges/genes.gp stdout | grep -v hap | grep -v chrUn | bedToExons stdin stdout | awk '{$2=$2-200; $3=$3+200; $6="+"; print}'| bedClip stdin /hive/data/genomes/$db/chrom.sizes stdout | grep -v _alt | grep -i -v hap > ranges/ranges.bed
 
-echo get sequence. this can take 10-15 minutes due to our old twoBit.c bug
+echo Get sequence, removing gaps. This can take 10-15 minutes 
 echo featureBits of target ranges >> doCrispr.log
-featureBits $db ranges/ranges.bed -faMerge -fa=ranges/ranges.fa -minSize=20 -bed=stdout | cut -f-3 2>> doCrispr.log > crisprRanges.bed 
+featureBits $db -not gap -bed=ranges/notGap.bed
+featureBits $db ranges/ranges.bed ranges/notGap.bed -faMerge -fa=ranges/ranges.fa -minSize=20 -bed=stdout | cut -f-3 2>> doCrispr.log > crisprRanges.bed 
 
 echo split the sequence file into pieces for the cluster
 mkdir -p ranges/inFa/ ranges/outGuides

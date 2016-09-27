@@ -76,7 +76,9 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         specScore = int(specScores.get(seq, -1))
 
         scoreDesc = str(specScore)
-        if specScore in [-1, -2]:
+        if "N" in seq:
+            scoreDesc = "This guide sequence includes an N character and could therefore not be processed"
+        elif specScore in [-1, -2]:
             if specScore==-1:
                 scoreDesc = "This guide sequence is not unique in the genome. The specificity scores were not determined."
             elif specScore==-2:
