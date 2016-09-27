@@ -3675,7 +3675,6 @@ cat refSeq.faa | sed 's/\.[0-9]*//' > refSeq.noVers.faa
 cat refSeq.fa | sed 's/\.[0-9]*//' > refSeq.noVers.fa
 sort ucscPfam.tab | sed 's/\.[0-9]*//' > sortPfam.tab
 faCount refSeq.noVers.faa | awk '{print $1, $2}' > protein.sizes
-cut -f 1-4 sortPfam.tab | bedToPsl protein.sizes stdin domainToProtein.psl
 
 hgsql dm6 -Ne "select protAcc, mrnaAcc from refLink, refGene where mrnaAcc=refGene.name" | awk '{if (NF == 2) print}' |sort > sortMap.txt
 while read prot mrna 
@@ -3686,8 +3685,11 @@ done > blat.jobs < sortMap.txt
 ssh ku  "cd $dir; para make blat.jobs"
 
 cat results/* > proteinToMrna.psl
+tawk '{print $10, $16, $17}'  proteinToMrna.psl | sort > sortCdsOut.tab
+awk '{print $10, $11}' refGene.psl > gene.sizes
+join sortCdsOut.tab sortPfam.tab |  join /dev/stdin sortMap.txt | awk '{print $9, $2 + 3 * $4, $2  + 3 * $5, $6}' | bedToPsl gene.sizes stdin domainToGene.psl
 
-pslMap domainToProtein.psl proteinToMrna.psl stdout | pslMap stdin refGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed 
+pslMap domainToGene.psl refGene.psl stdout | pslToBed stdin stdout | bedOrBlocks -useName stdin domainToGenome.bed 
 
 hgLoadBed dm6 refGenePfam domainToGenome.bed
 
