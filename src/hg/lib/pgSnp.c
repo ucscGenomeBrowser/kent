@@ -841,7 +841,10 @@ pgs->chromEnd = rec->chromEnd;
 // Build up slash-separated allele string from rec->alleles, starting with ref allele:
 dyStringAppend(dy, rec->alleles[0]);
 int alCount = rec->alleleCount, i;
-if (rec->alleleCount == 2 && sameString(rec->alleles[1], "."))
+if (rec->alleleCount == 2 &&
+    (sameString(rec->alleles[1], ".") ||
+     sameString(rec->alleles[1], "<X>") ||
+     sameString(rec->alleles[1], "<*>")))
     // ignore N/A alternate allele
     alCount = 1;
 else if (rec->alleleCount >= 2)
