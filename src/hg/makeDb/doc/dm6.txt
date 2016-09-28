@@ -3693,6 +3693,6 @@ pslMap domainToGene.psl refGene.psl stdout | pslToBed stdin stdout | bedOrBlocks
 
 hgLoadBed dm6 refGenePfam domainToGenome.bed
 
-# Crispr track. See ../crispr/README.txt (2016-09-15 max)
+# Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
 # Command: doCrispr.sh dm6 ensGene
 ##############################################################################

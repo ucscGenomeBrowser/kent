@@ -31793,6 +31793,6 @@ TMPDIR=/dev/shm
     #   real    437m16.453s
 
 #########################################################################
-# Crispr track. See ../crispr/README.txt (2016-09-15 max)
+# Crispr track. See ../crisprTrack/README.txt (2016-09-15 max)
 # Command: doCrispr.sh hg19 ensGene
 ##############################################################################
