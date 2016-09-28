@@ -594,6 +594,25 @@ if (inSummaryMode(cart, track->tdb, winBaseCount) && isCustomTrack(track->table)
 /* Make up tracks for display. */
 if (track->limitedVis == tvFull || track->limitedVis == tvPack)
     {
+    char *defaultOn = trackDbSetting(track->tdb, "speciesDefaultOn");
+    char *defaultMaf = trackDbSetting(track->tdb, "defaultMaf");
+
+    // check to see if all species that are on are in defaultMaf
+    if (defaultOn && defaultMaf && hTableExists(database, defaultMaf))
+        {
+        struct wigMafItem *speciesList = newSpeciesItems(track, tl.fontHeight), *wmi;
+        struct slName *defaultNames = slNameListFromString(defaultOn, ' ');
+        
+        boolean allOnInDefault = TRUE;
+        for(wmi = speciesList; wmi; wmi = wmi->next)
+            {
+            if (!slNameInList(defaultNames, wmi->db))
+                allOnInDefault = FALSE;
+            }
+
+        if (allOnInDefault)
+            track->table = defaultMaf;
+        }
     if (isBaseLevel)
 	{
 	miList = loadBaseByBaseItems(track);

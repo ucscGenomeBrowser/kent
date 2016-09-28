@@ -78,6 +78,7 @@ dbProfile *
 dbTrackType customTracks
 detailsTabUrls bigBed bigGenePred bigPsl
 defaultGeneTracks bed
+defaultMaf wigMaf
 defaultMaxWeight bed
 defaultLinkedTables genePred
 dimensionAchecked *
@@ -377,6 +378,7 @@ sourceTable factorSource bed
 spanList *
 speciesCodonDefault wigMafProt wigMaf
 speciesDefaultOff wigMaf
+speciesDefaultOn wigMaf
 speciesGroups wigMafProt wigMaf
 speciesOrder bed maf wigMaf
 speciesTarget wigMaf
