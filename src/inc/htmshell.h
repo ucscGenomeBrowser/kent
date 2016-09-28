@@ -72,6 +72,18 @@ char *htmlEncode(char *s);
 char *attributeEncode(char *s);
 // encode double and single quotes in a string to be used as an element attribute
 
+void attributeDecode(char *s);
+/* For html tag attribute values decode html entities &#xHH; */
+
+void cssDecode(char *s);
+/* For CSS values decode "\HH " */
+
+void jsDecode(char *s);
+/* For JS string values decode "\xHH" */
+
+void urlDecode(char *s);
+/* For URL paramter values decode "%HH" */
+
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */
 

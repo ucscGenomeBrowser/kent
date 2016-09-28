@@ -164,7 +164,7 @@ foreach c ( $regular $random )
 end
 
 if ( $histo == "true" ) then
-  cat Xout$$ | grep chr | egrep -v "random|hap|Un|$db" | sed "s/chr//" \
+  cat Xout$$ | grep chr | egrep -v "random|hap|Un|alt|$db" | sed "s/chr//" \
     | sort -n -k1,1  > XgraphFile0$$
   set max1=`cat XgraphFile0$$ | awk '{print $2}' | sort -n | tail -1`
   set max=$max1
