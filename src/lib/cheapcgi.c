@@ -1577,7 +1577,7 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s'", varName,
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s|attr|'", varName,
         charSize, initialVal);
 if (isNotEmpty(script))
     printf(" onkeypress='%s'", script); // TODO XSS
@@ -1601,7 +1601,7 @@ if (width==0)
 if (width==0)
     width = 100;
 
-htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s'",
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s|attr|'",
        varName, width, initialVal);
 if (isNotEmpty(extra))
     printf(" %s",extra); // TODO XSS
