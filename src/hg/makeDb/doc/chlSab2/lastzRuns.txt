@@ -1,0 +1,27 @@
+##############################################################################
+# SWAP from chimp/rheMac8 Lastz run (DONE - 2016-08-27 - Hiram)
+
+    # primary alignment
+    cd /hive/data/genomes/rheMac8/bed/lastzChlSab2.2016-08-27
+
+    cat fb.rheMac8.chainChlSab2Link.txt
+    # 2674926475 bases of 3142093174 (85.132%) in intersection
+
+    # running the swap
+    mkdir /hive/data/genomes/chlSab2/bed/blastz.rheMac8.swap
+    cd /hive/data/genomes/chlSab2/bed/blastz.rheMac8.swap
+    time (doBlastzChainNet.pl -verbose=2 \
+        -swap /hive/data/genomes/rheMac8/bed/lastzChlSab2.2016-08-27/DEF \
+        -chainMinScore=5000 -chainLinearGap=medium \
+        -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku \
+        -syntenicNet) > swap.log 2>&1
+    # real    89m19.998s
+
+    cat fb.chlSab2.chainRheMac8Link.txt
+    # 2596129666 bases of 2752019208 (94.335%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
+        chlSab2 rheMac8) > rbest.log 2>&1
+    # real    278m9.306s
+
+#############################################################################

@@ -1136,10 +1136,30 @@ for (iter = cD; iter != NULL; iter = iter->next)
     char summFname[8000];
     safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
     int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+    safef(query, sizeof(query), "select * from cdwValidFile where fileId=%d", fileId);
+
+    char query[512];
+    // Check access, no user can only see access 'all' files. Users can see the files that share their group id. 
+    if (user == NULL)
+    {
+	sqlSafef(query, sizeof(query), "select access from cdwFileTags where file_id=%d", fileId);
+	char access[10];
+	sqlQuickQuery(conn, query, access, sizeof(access)); 
+	if (strcmp(access, "all")) fileId = 0; 
+    }
+    else
+	{
+	sqlSafef(query, sizeof(query), "select count(*) from cdwGroupUser,cdwGroupFile "
+	    " where cdwGroupUser.groupId = cdwGroupFile.groupId "
+	    " and cdwGroupUser.userId = %d and cdwGroupFile.fileId = %d"
+	    , user->id, fileId);
+	// This person doesn't have permission to see the page. 
+	if (sqlQuickNum(conn, query) == 0) fileId=0;
+	}
 
     printf("<LI>\n");
-    if (fileId == 0)
-        printf("<B>%s</B><BR>\n", label);
+    if (fileId == 0) 
+	printf("<B>%s</B><BR>\n", label);
     else
         printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
     sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", iter->name);  
@@ -1212,13 +1232,13 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, outputWrappers, NUL
 fieldedTableFree(&table);
 }
 
-void doQuery(struct sqlConnection *conn)
+void doAnalysisQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
 /* Do stuff that keeps us here after a routine submit */
 printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
-cgiMakeHiddenVar("cdwCommand", "query");
+cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 
 /* Get values from text inputs and make up an RQL query string out of fields, where, limit
  * clauses */
@@ -1264,6 +1284,72 @@ printf(" files match\n\n");
 showMatchingAsRa(rqlQuery->string, limit, tags);
 printf("</TT></PRE>\n");
 printf("</FORM>\n");
+}
+
+void doAnalysisJointPages(struct sqlConnection *conn, char *tag)
+/* show datasets and links to dataset summary pages. */
+{
+printf("<UL>\n");
+char query[PATH_LEN]; 
+sqlSafef(query, sizeof(query), "select * from cdwJointDataset"); 
+struct cdwJointDataset *iter, *cJD = cdwJointDatasetLoadByQuery(conn, query);
+
+for (iter = cJD; iter != NULL; iter = iter->next)
+    {
+    char *label;
+    char *desc;
+    if (iter == NULL)
+        continue;
+    label = iter->label;
+    desc = iter->description;
+
+    char *datasetId = iter->name;
+
+    // check if we have a dataset summary page in the CDW
+    char summFname[8000];
+    safef(summFname, sizeof(summFname), "%s/summary/index.html", datasetId);
+    int fileId = cdwFileIdFromPathSuffix(conn, summFname);
+    safef(query, sizeof(query), "select * from cdwValidFile where fileId=%d", fileId);
+
+    char query[512];
+    // Check access, no user can only see access 'all' files. Users can see the files that share their group id. 
+    if (user == NULL)
+    {
+	sqlSafef(query, sizeof(query), "select access from cdwFileTags where file_id=%d", fileId);
+	char access[10];
+	sqlQuickQuery(conn, query, access, sizeof(access)); 
+	if (strcmp(access, "all")) fileId = 0; 
+    }
+    else
+	{
+	sqlSafef(query, sizeof(query), "select count(*) from cdwGroupUser,cdwGroupFile "
+	    " where cdwGroupUser.groupId = cdwGroupFile.groupId "
+	    " and cdwGroupUser.userId = %d and cdwGroupFile.fileId = %d"
+	    , user->id, fileId);
+	// This person doesn't have permission to see the page. 
+	if (sqlQuickNum(conn, query) == 0) fileId=0;
+	}
+
+    printf("<LI>\n");
+    if (fileId == 0) 
+	printf("<B>%s</B><BR>\n", label);
+    else
+        printf("<B><A href=\"cdwGetFile/%s/summary/index.html\">%s</A></B><BR>\n", datasetId, label);
+    
+    struct slName *dataset, *dataSetNames=charSepToSlNames(iter->childrenNames, *",");
+    printf("%s (", desc); 
+    long long fileCount = 0; 
+    for (dataset = dataSetNames; dataset != NULL; dataset=dataset->next)
+	{
+	sqlSafef(query, sizeof(query), "select count(*) from cdwFileTags where data_set_id='%s'", dataset->name); 
+	fileCount += sqlQuickLongLong(conn, query); 
+	printf("<A HREF=\"cdwWebBrowse?cdwCommand=browseFiles&cdwBrowseFiles_f_data_set_id=%s&%s\">%s</A>\n", dataset->name, cartSidUrlString(cart), dataset->name);
+	if (dataset->next != NULL) printf(","); 
+	}
+    printf(") (Total files: %lld)",fileCount); 
+    printf("</LI>\n");
+    }
+cdwJointDatasetFree(&cJD);
 }
 
 void tagSummaryRow(struct fieldedTable *table, struct sqlConnection *conn, char *tag)
@@ -1506,9 +1592,13 @@ else if (sameString(command, "home"))
     {
     doHome(conn);
     }
-else if (sameString(command, "query"))
+else if (sameString(command, "analysisQuery"))
     {
-    doQuery(conn);
+    doAnalysisQuery(conn);
+    }
+else if (sameString(command, "analysisJointPages"))
+    {
+    doAnalysisJointPages(conn, "data_set_id");
     }
 else if (sameString(command, "downloadFiles"))
     {

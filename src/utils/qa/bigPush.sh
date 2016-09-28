@@ -36,8 +36,7 @@ Usage: `basename $0` [-hv] \$database(s) \$table(s)
 
 	Optional arguments:
         -h                  Display this help and exit.
-	-v VERBOSE MODE	    Output details of push; 1 for results to stdout,
-			    2 for results to stdout and file.
+	-v VERBOSE MODE	    Output details of push to stdout.
 
 Push a table or list of tables from Dev to Beta for a single database or list
 of databases.

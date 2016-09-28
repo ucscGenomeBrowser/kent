@@ -845,6 +845,7 @@ matrixHeader A, C, G, T
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 type chain hg18
 otherDb hg18
+group varRep
 
 track netSelf
 shortLabel Self Net

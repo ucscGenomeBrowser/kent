@@ -8053,6 +8053,12 @@ if (!hideControls)
                     group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
             hPrintf("</td><td style='text-align:center; width:90%%;'>\n<B>%s</B>", group->label);
             hPrintf("</td><td style='text-align:right;'>\n");
+            if (isHubTrack(group->name))
+                hPrintf("<input name=\"hubDisconnectButton\""
+                    "onClick="
+                    "\" document.disconnectHubForm.elements['hubId'].value= '%s';"
+                    "document.disconnectHubForm.submit();return true;\" "
+                    "type=\"button\" value=\"disconnect\">\n", &group->name[sizeof hubTrackPrefix - 1]);
             hPrintf("<input type='submit' name='hgt.refresh' value='refresh' "
                     "title='Update image with your changes'>\n");
             hPrintf("</td></tr></table></th>\n");
@@ -8180,6 +8186,14 @@ hPrintf("</FORM>\n");
 hPrintf("<FORM ACTION='%s' NAME='trackHubForm'>", hgHubConnectName());
 cartSaveSession(cart);
 hPrintf("</FORM>\n");
+
+// this is the form for the disconnect hub button
+hPrintf("<FORM ACTION=\"%s\" NAME=\"disconnectHubForm\">\n",  "../cgi-bin/hgTracks");
+cgiMakeHiddenVar("hubId", "");
+cgiMakeHiddenVar(hgHubDoDisconnect, "on");
+cgiMakeHiddenVar(hgHubConnectRemakeTrackHub, "on");
+cartSaveSession(cart);
+puts("</FORM>");
 
 // TODO GALT nothing to do here.
 pruneRedundantCartVis(trackList);
