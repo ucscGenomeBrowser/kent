@@ -1,0 +1,16 @@
+track chainNetHg38 override
+visibility pack
+matrixHeader A, C, G, T
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium
+
+track chainNetTarSyr2 override
+matrixHeader A, C, G, T
+matrix 16 100,-174,-26,-122,-174,96,-174,-26,-26,-174,96,-174,-122,-26,-174,100
+
+track chainNetRheMac8 override
+matrixHeader A, C, G, T
+matrix 16 90,-330,-236,-356,-330,100,-318,-236,-236,-318,100,-330,-356,-236,-330,90
+chainMinScore 5000
+chainLinearGap medium

@@ -6517,7 +6517,6 @@ int start = cartInt(cart, "o");
 struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
-char *encItem = cgiEncode(item);
 enum gfType qt, tt;
 
 cartWebStart(cart, database, "BLAT Search Alignments");
@@ -6538,7 +6537,7 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slReverse(&pslList);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", encItem);
+printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
 webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 }
@@ -11747,66 +11746,66 @@ printEntrezNucleotideUrl(stdout, nrl->id);
 printf("' target=_blank>%s</a>", nrl->id);
 printf("&nbsp;&nbsp;<b>Status: </b>%s<br>\n", nrl->status);
 printf("<b>Description:</b> %s<br>\n", nrl->product);
-if (differentWord(nrl->gbkey, "n/a"))
+if (differentWord(nrl->gbkey, ""))
     {
     printf("<b>Molecule type:</b> %s<br>\n", nrl->gbkey);
     }
-if (differentWord(nrl->pseudo, "n/a"))
+if (differentWord(nrl->pseudo, ""))
     {
     printf("<b>Pseudogene:</b> %s<br>\n", nrl->pseudo);
     }
-if (differentWord(nrl->source, "n/a"))
+if (differentWord(nrl->source, ""))
     {
     printf("<b>Source:</b> %s<br>\n", nrl->source);
     }
-if (differentWord(nrl->gene_biotype, "n/a"))
+if (differentWord(nrl->gene_biotype, ""))
     {
     printf("<b>Biotype:</b> %s<br>\n", nrl->gene_biotype);
     }
-if (differentWord(nrl->gene_synonym, "n/a"))
+if (differentWord(nrl->gene_synonym, ""))
     {
     printf("<b>Synonyms:</b> %s<br>\n", nrl->gene_synonym);
     }
-if (differentWord(nrl->ncrna_class, "n/a"))
+if (differentWord(nrl->ncrna_class, ""))
     {
     printf("<b>ncRNA class:</b> %s<br>\n", nrl->ncrna_class);
     }
-if (differentWord(nrl->note, "n/a"))
+if (differentWord(nrl->note, ""))
     {
     printf("<b>Other notes:</b> %s<br>\n", nrl->note);
     }
-if (differentWord(nrl->omimId, "n/a"))
+if (differentWord(nrl->omimId, ""))
     {
     printf("<b>OMIM:</b> <a href='");
     printEntrezOMIMUrl(stdout, sqlSigned(nrl->omimId));
     printf("' target=_blank>%s</a><br>\n", nrl->omimId);
     }
-if (differentWord(nrl->mrnaAcc, "n/a") && differentWord(nrl->mrnaAcc,nrl->id))
+if (differentWord(nrl->mrnaAcc, "") && differentWord(nrl->mrnaAcc,nrl->id))
     {
     printf("<b>mRNA:</b> ");
     printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->mrnaAcc);
     printf("%s</a><br>\n", nrl->mrnaAcc);
     }
-if (differentWord(nrl->genbank, "n/a") && differentWord(nrl->genbank,nrl->id))
+if (differentWord(nrl->genbank, "") && differentWord(nrl->genbank,nrl->id))
     {
     printf("<b>Genbank:</b> ");
     printf("<a href='http://www.ncbi.nlm.nih.gov/nuccore/%s' target=_blank>", nrl->genbank);
     printf("%s</a><br>\n", nrl->genbank);
     }
-if (differentWord(nrl->protAcc, "n/a"))
+if (differentWord(nrl->protAcc, ""))
     {
     printf("<b>Protein:</b> ");
     printf("<a href='http://www.ncbi.nlm.nih.gov/protein/%s' target=_blank>", nrl->protAcc);
     printf("%s</a><br>\n", nrl->protAcc);
     }
-if (differentWord(nrl->hgnc, "n/a"))
+if (differentWord(nrl->hgnc, ""))
     {
     printf("<b>HGNC:</b> ");
     printf("<a href='http://www.genenames.org/cgi-bin/gene_symbol_report?hgnc_id=HGNC:%s' target=_blank>", nrl->hgnc);
     printf("%s</a><br>\n", nrl->hgnc);
     }
 
-if (differentWord(nrl->locusLinkId, "n/a"))
+if (differentWord(nrl->locusLinkId, ""))
     {
     printf("<b>Entrez Gene:</b> ");
     printf("<a href='http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s' TARGET=_blank>",
@@ -11814,7 +11813,7 @@ if (differentWord(nrl->locusLinkId, "n/a"))
     printf("%s</a><br>\n", nrl->locusLinkId);
     }
 
-if (differentWord(nrl->name,"n/a"))
+if (differentWord(nrl->name,""))
     {
     printGeneCards(nrl->name);
     if (startsWith("hg", database))
@@ -11831,7 +11830,7 @@ if ((trackVersion != NULL) && !isEmpty(trackVersion->version))
     }
 
 htmlHorizontalLine();
-if (differentWord("n/a", nrl->description))
+if (differentWord("", nrl->description))
     {
     printf("Summary of <b>%s</b><br>\n%s<br>\n", nrl->name, nrl->description);
     htmlHorizontalLine();
@@ -11859,7 +11858,7 @@ if (!sameString(tdb->track, "ncbiRefSeqPsl"))
 
 printf("<h3>Links to sequence:</h3>\n");
 printf("<ul>\n");
-if (differentWord("n/a", nrl->protAcc))
+if (differentWord("", nrl->protAcc))
     {
     puts("<li>\n");
     hgcAnchorSomewhere("htcTranslatedProtein", nrl->protAcc, "ncbiRefSeqPepTable", seqName);
@@ -13627,7 +13626,6 @@ void longXenoPsl1Given(struct trackDb *tdb, char *item,
  * sequence is in a nib file, AND psl record is given. */
 {
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13650,10 +13648,9 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
-freez(&cgiItem);
 }
 
 /*
@@ -13666,7 +13663,6 @@ void longXenoPsl1(struct trackDb *tdb, char *item,
 {
 struct psl *psl = NULL;
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13690,7 +13686,7 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 /* joni */
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 
@@ -13698,7 +13694,6 @@ if (containsStringNoCase(otherDb, "zoo"))
     printf("<P><A HREF='%s&db=%s'>Go to the browser view of the %s</A><BR>\n",
 	   hgTracksPathAndSettings(), otherDb, otherOrg);
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 /* Multipurpose function to show alignments in details pages where applicable
@@ -13745,7 +13740,6 @@ void longXenoPsl1zoo2(struct trackDb *tdb, char *item,
 struct psl *psl = NULL;
 char otherString[256];
 char anotherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13773,11 +13767,10 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
         tdb->table, otherOrg, otherChromTable);
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 void doAlignmentOtherDb(struct trackDb *tdb, char *item)
@@ -20725,16 +20718,14 @@ void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
 {
 char otherString[256];
 char pslItem[1024];
-char *cgiPslItem;
 
 safef(pslItem, sizeof pslItem, "%s:%d-%d %s:%d-%d", 
     thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
-cgiPslItem = cgiEncode(pslItem);
 safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart,
 	pslTableName, otherOrg, "chromInfo" , otherDb );
 if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
     {
-    hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
+    hgcAnchorWindow("htcLongXenoPsl2", pslItem, thisWinStart,
 		    thisWinEnd, otherString, thisPsl->tName);
     printf("%s</A>\n", winStr );
     }
