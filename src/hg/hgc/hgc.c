@@ -6517,7 +6517,6 @@ int start = cartInt(cart, "o");
 struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
-char *encItem = cgiEncode(item);
 enum gfType qt, tt;
 
 cartWebStart(cart, database, "BLAT Search Alignments");
@@ -6538,7 +6537,7 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slReverse(&pslList);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", encItem);
+printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
 webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 }
@@ -13627,7 +13626,6 @@ void longXenoPsl1Given(struct trackDb *tdb, char *item,
  * sequence is in a nib file, AND psl record is given. */
 {
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13650,10 +13648,9 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
-freez(&cgiItem);
 }
 
 /*
@@ -13666,7 +13663,6 @@ void longXenoPsl1(struct trackDb *tdb, char *item,
 {
 struct psl *psl = NULL;
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13690,7 +13686,7 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 /* joni */
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 
@@ -13698,7 +13694,6 @@ if (containsStringNoCase(otherDb, "zoo"))
     printf("<P><A HREF='%s&db=%s'>Go to the browser view of the %s</A><BR>\n",
 	   hgTracksPathAndSettings(), otherDb, otherOrg);
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 /* Multipurpose function to show alignments in details pages where applicable
@@ -13745,7 +13740,6 @@ void longXenoPsl1zoo2(struct trackDb *tdb, char *item,
 struct psl *psl = NULL;
 char otherString[256];
 char anotherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13773,11 +13767,10 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
         tdb->table, otherOrg, otherChromTable);
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 void doAlignmentOtherDb(struct trackDb *tdb, char *item)
@@ -20725,16 +20718,14 @@ void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
 {
 char otherString[256];
 char pslItem[1024];
-char *cgiPslItem;
 
 safef(pslItem, sizeof pslItem, "%s:%d-%d %s:%d-%d", 
     thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
-cgiPslItem = cgiEncode(pslItem);
 safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart,
 	pslTableName, otherOrg, "chromInfo" , otherDb );
 if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
     {
-    hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
+    hgcAnchorWindow("htcLongXenoPsl2", pslItem, thisWinStart,
 		    thisWinEnd, otherString, thisPsl->tName);
     printf("%s</A>\n", winStr );
     }
