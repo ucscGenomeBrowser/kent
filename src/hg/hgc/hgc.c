@@ -525,11 +525,9 @@ void hgcAnchorSomewhere(char *group, char *item, char *other, char *chrom)
  * and other parameters. */
 {
 char *tbl = cgiUsualString("table", cgiString("g"));
-char *itemSafe = cgiEncode(item);
 printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&table=%s\">",
-       hgcPathAndSettings(), group, itemSafe, chrom, winStart, winEnd, other,
+       hgcPathAndSettings(), group, item, chrom, winStart, winEnd, other,
        tbl);
-freeMem(itemSafe);
 }
 
 void hgcAnchorPosition(char *group, char *item)
@@ -5894,7 +5892,8 @@ for (psl = pslList; psl != NULL; psl = psl->next)
         char otherString[512];
 	safef(otherString, sizeof(otherString), "%d&aliTable=%s",
 	      psl->tStart, tableName);
-	hgcAnchorSomewhere(hgcCommandInWindow, itemIn, otherString, psl->tName);
+	hgcAnchorSomewhere(hgcCommandInWindow, cgiEncode(itemIn),
+			   otherString, psl->tName);
 	printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
 	}
     }
@@ -20847,7 +20846,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    longXenoPsl1Given(tdb, thisItem, otherOrg, "chromInfo",
 			      otherDb, thisPsl, pslTableName );
 	    safef(otherString, sizeof otherString, "%d&win=T", thisPsl->tStart );
-	    hgcAnchorSomewhere( tdb->track, item, otherString, thisPsl->tName );
+	    hgcAnchorSomewhere( tdb->track, cgiEncode(item), otherString, thisPsl->tName );
 	    printf("View individual alignment windows\n</a>");
 	    printf("<br><br>");
 	    }
@@ -23006,7 +23005,7 @@ if(info->stop >0)
 
 
 /* show genome sequence */
-hgcAnchorSomewhere("htcGeneInGenome", info->name, tdb->track, seqName);
+hgcAnchorSomewhere("htcGeneInGenome", cgiEncode(info->name), tdb->track, seqName);
 printf("View DNA for this putative fragment</A><BR>\n");
 
 /* show the detail alignment */
@@ -23020,7 +23019,7 @@ if(row != NULL)
     {
     safef(otherString, sizeof otherString, "&db=%s&pslTable=%s&chrom=%s&cStart=%d&cEnd=%d&strand=%s&qStrand=%s",
 	    database, pslTable, info->chrom,info->chromStart, info->chromEnd, info->strand, parts[2]);
-    hgcAnchorSomewhere("potentPsl", parts[0], otherString, info->chrom);
+    hgcAnchorSomewhere("potentPsl", cgiEncode(parts[0]), otherString, info->chrom);
     printf("<BR>View details of parts of alignment </A>.</BR>\n");
     }
 sqlFreeResult(&sr);
