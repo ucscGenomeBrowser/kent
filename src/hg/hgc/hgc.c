@@ -6517,7 +6517,6 @@ int start = cartInt(cart, "o");
 struct lineFile *lf;
 struct psl *pslList = NULL, *psl;
 char *pslName, *faName, *qName;
-char *encItem = cgiEncode(item);
 enum gfType qt, tt;
 
 cartWebStart(cart, database, "BLAT Search Alignments");
@@ -6538,7 +6537,7 @@ while ((psl = pslNext(lf)) != NULL)
     }
 slReverse(&pslList);
 lineFileClose(&lf);
-printAlignments(pslList, start, "htcUserAli", "user", encItem);
+printAlignments(pslList, start, "htcUserAli", "user", item);
 pslFreeList(&pslList);
 webIncludeHelpFile(USER_PSL_TRACK_NAME, TRUE);
 }
@@ -7396,10 +7395,17 @@ else
 	rnaSeq = hRnaSeq(database, acc);
     }
 
-if (startsWith("xeno", aliTable))
-    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+if (NULL == rnaSeq)
+    {
+	printf("RNA sequence not found: '%s'", acc);
+    }
 else
-    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    {
+    if (startsWith("xeno", aliTable))
+        showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    else
+        showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    }
 hFreeConn(&conn);
 }
 
@@ -11837,15 +11843,28 @@ if (differentWord("", nrl->description))
     htmlHorizontalLine();
     }
 
+static boolean hasSequence = TRUE;
 struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
 // if the itemName isn't found, it might be found as the nrl->mrnaAcc
 if (! pslList)
     pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
 if (pslList)
     {
-    int start = cartInt(cart, "o");
-    printf("<H3>mRNA/Genomic Alignments</H3>");
-    printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+    char query[256];
+    /* verify itemName has RNA sequence to work with */
+    sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
+    char * result= sqlQuickString(conn, query);
+    if (isEmpty(result))
+        {
+        printf ("<h4>there is NO alignment for %s</h4>\n", itemName);
+        hasSequence = FALSE;
+        }
+    else
+        {
+        printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
+        int start = cartInt(cart, "o");
+        printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+        }
     }
 else
     {
@@ -11866,11 +11885,14 @@ if (differentWord("", nrl->protAcc))
     printf("Predicted Protein</a> \n");
     puts("</li>\n");
     }
-puts("<li>\n");
-hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
-printf("%s</a> may be different from the genomic sequence.\n",
+if (hasSequence)
+    {
+    puts("<li>\n");
+    hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
+    printf("%s</a> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
-puts("</li>\n");
+    puts("</li>\n");
+    }
 puts("<LI>\n");
 hgcAnchorSomewhere("getDna", itemName, tdb->track, seqName);
 printf("Genomic Sequence</A> from assembly\n");
@@ -13627,7 +13649,6 @@ void longXenoPsl1Given(struct trackDb *tdb, char *item,
  * sequence is in a nib file, AND psl record is given. */
 {
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13650,10 +13671,9 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
-freez(&cgiItem);
 }
 
 /*
@@ -13666,7 +13686,6 @@ void longXenoPsl1(struct trackDb *tdb, char *item,
 {
 struct psl *psl = NULL;
 char otherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13690,7 +13709,7 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
 /* joni */
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 
@@ -13698,7 +13717,6 @@ if (containsStringNoCase(otherDb, "zoo"))
     printf("<P><A HREF='%s&db=%s'>Go to the browser view of the %s</A><BR>\n",
 	   hgTracksPathAndSettings(), otherDb, otherOrg);
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 /* Multipurpose function to show alignments in details pages where applicable
@@ -13745,7 +13763,6 @@ void longXenoPsl1zoo2(struct trackDb *tdb, char *item,
 struct psl *psl = NULL;
 char otherString[256];
 char anotherString[256];
-char *cgiItem = cgiEncode(item);
 char *thisOrg = hOrganism(database);
 
 cartWebStart(cart, database, "%s", tdb->longLabel);
@@ -13773,11 +13790,10 @@ safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTab
         tdb->table, otherOrg, otherChromTable);
 if (pslTrimToTargetRange(psl, winStart, winEnd) != NULL)
     {
-    hgcAnchorSomewhere("htcLongXenoPsl2", cgiItem, otherString, psl->tName);
+    hgcAnchorSomewhere("htcLongXenoPsl2", item, otherString, psl->tName);
     printf("<BR>View details of parts of alignment within browser window</A>.<BR>\n");
     }
 printTrackHtml(tdb);
-freez(&cgiItem);
 }
 
 void doAlignmentOtherDb(struct trackDb *tdb, char *item)
@@ -20725,16 +20741,14 @@ void printSampleWindow( struct psl *thisPsl, int thisWinStart, int
 {
 char otherString[256];
 char pslItem[1024];
-char *cgiPslItem;
 
 safef(pslItem, sizeof pslItem, "%s:%d-%d %s:%d-%d", 
     thisPsl->qName, thisPsl->qStart, thisPsl->qEnd, thisPsl->tName, thisPsl->tStart, thisPsl->tEnd );
-cgiPslItem = cgiEncode(pslItem);
 safef(otherString, sizeof otherString, "%d&pslTable=%s&otherOrg=%s&otherChromTable=%s&otherDb=%s", thisPsl->tStart,
 	pslTableName, otherOrg, "chromInfo" , otherDb );
 if (pslTrimToTargetRange(thisPsl, thisWinStart, thisWinEnd) != NULL)
     {
-    hgcAnchorWindow("htcLongXenoPsl2", cgiPslItem, thisWinStart,
+    hgcAnchorWindow("htcLongXenoPsl2", pslItem, thisWinStart,
 		    thisWinEnd, otherString, thisPsl->tName);
     printf("%s</A>\n", winStr );
     }

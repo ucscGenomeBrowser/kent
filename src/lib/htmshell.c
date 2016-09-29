@@ -294,7 +294,7 @@ htmlEncodeTextExtended(s, out, size+1);
 return out;
 }
 
-int nonAlphaNumericHexEncodeTextExtended(char *s, char *out, int outSize, 
+int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize, 
    char *prefix, char *postfix, int encodedSize)
 /* For html tag attributes, it replaces non-alphanumeric characters
  * with <prefix>HH<postfix> hex codes to fight XSS.
@@ -346,8 +346,117 @@ return total - 1; // do not count terminating 0
 }
 
 
+void nonAlphaNumericHexDecodeText(char *s, char *prefix, char *postfix)
+/* For html tag attributes, it decodes non-alphanumeric characters
+ * with <prefix>HH<postfix> hex codes.
+ * Decoding happens in-place, changing the input string s.
+ * prefix must not be empty string or null, but postfix can be empty string.
+ * Because the decoded string is always equal to or shorter than the input string,
+ * the decoding is just done in-place modifying the input string.
+ * Accepts upper and lower case values in entities.
+ */
+{
+char c = 0;
+char *d = s;  // where are we decoding to right nowA
+int pfxLen = strlen(prefix);
+int pfxMatch = 0;
+int postLen = strlen(postfix);
+int postMatch = 0;
+int state = 0;  // 0=copy 1=prefix
+                // 2=hex-started 3=hex-completed 
+                // 4=postfix 5=postfix
+                // 5 = failed to match, abandon fantasy. append from s2 to s onto e2. set e to e2.
+                //  and set state to 0.
+char *s2 = NULL; // save s when prefix started
+char *d2 = NULL; // save d when prefix started.
+char de = 0;
+do
+    {
+    c=*s++;
+    if (state == 0) // default string
+	{
+	if (tolower(c) == prefix[0])
+	    {
+	    state = 1;
+	    pfxMatch = 0;
+	    s2 = s - 1;  // back up to real start of s without ++
+	    d2 = d;
+	    }
+	else
+	    {
+	    *d++ = c;  // copy string
+	    }
+	}
+
+    if (state == 1)
+	{
+	if (tolower(c) == prefix[pfxMatch])
+	    {
+	    ++pfxMatch;
+	    if (pfxMatch == pfxLen)
+		{
+		state = 2;
+		de = 0;
+		}
+	    }
+	else
+	    {
+	    state = 5; // mismatch in prefix, abandon
+	    }
+	}
+    else if (state == 2 || state == 3)
+	{  // expecting 2 hex chars
+	if (state == 3)
+	    de *= 16;
+	++state;
+	if (c >= '0' && c <= '9')
+	    de += (c - '0');	    
+	else if (c >= 'A' && c <= 'F')
+	    de += (c - 'A' + 10);	    
+	else if (c >= 'a' && c <= 'f')
+	    de += (c - 'a' + 10);	    
+	else
+	    {
+	    state = 5; // not hex chars, abandon to another state.
+	    }
+	if (state == 4)
+	    {
+	    *d++ = de;
+	    postMatch = 0;
+	    if (postMatch == postLen) // bale out without consuming
+		{
+		state = 0;
+		}
+	    }
+	}	
+    else if (state == 4)
+	{
+	if (tolower(c) == postfix[postMatch])
+	    {
+	    ++postMatch;
+	    if (postMatch == postLen)
+		{
+		state = 0;
+		}
+	    }
+	else
+	    {
+	    state = 5;
+	    }
+	}
+
+    if (state == 5) // false match did not complete, just advance one character
+	{
+	s = s2;
+        d = d2;
+	*d++ = c = *s++;  // consume one character to avoid infinite loop.
+	state = 0;	
+	}
+    } while (c != 0);
+}
+
 int attrEncodeTextExtended(char *s, char *out, int outSize)
-/* For html tag attributes, it replaces non-alphanumeric characters
+/* For html tag attribute values, it replaces non-alphanumeric characters
  * with html entities &#xHH; to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
@@ -355,7 +464,7 @@ int attrEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "&#x", ";", 6);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "&#x", ";", 6);
 }
 
 int attrEncodeTextSize(char *s)
@@ -373,9 +482,16 @@ attrEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void attributeDecode(char *s)
+/* For html tag attribute values decode html entities &#xHH; */
+{
+return nonAlphaNumericHexDecodeText(s, "&#x", ";");
+}
+
+
 
 int cssEncodeTextExtended(char *s, char *out, int outSize)
-/* For CSS, it replaces non-alphanumeric characters with "\HH " to fight XSS.
+/* For CSS values, it replaces non-alphanumeric characters with "\HH " to fight XSS.
  * (Yes, the trailing space is critical.)
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
@@ -383,7 +499,7 @@ int cssEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\", " ", 4);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "\\", " ", 4);
 }
 
 int cssEncodeTextSize(char *s)
@@ -401,16 +517,24 @@ cssEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void cssDecode(char *s)
+/* For CSS values decode "\HH " 
+ * (Yes, the trailing space is critical.) */
+{
+return nonAlphaNumericHexDecodeText(s, "\\", " ");
+}
+
+
 
 int javascriptEncodeTextExtended(char *s, char *out, int outSize)
-/* For javascript, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
+/* For javascript string values, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
  * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\x", "", 4);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "\\x", "", 4);
 }
 
 int javascriptEncodeTextSize(char *s)
@@ -428,16 +552,22 @@ javascriptEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void jsDecode(char *s)
+/* For JS string values decode "\xHH" */
+{
+return nonAlphaNumericHexDecodeText(s, "\\x", "");
+}
+
 
 int urlEncodeTextExtended(char *s, char *out, int outSize)
-/* For URL parameters, it replaces non-alphanumeric characters with "%HH" to fight XSS.
+/* For URL parameter values, it replaces non-alphanumeric characters with "%HH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
  * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "%", "", 3);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "%", "", 3);
 }
 
 int urlEncodeTextSize(char *s)
@@ -453,6 +583,12 @@ int size = urlEncodeTextSize(s);
 char *out = needMem(size+1);
 urlEncodeTextExtended(s, out, size+1);
 return out;
+}
+
+void urlDecode(char *s)
+/* For URL paramter values decode "%HH" */
+{
+return nonAlphaNumericHexDecodeText(s, "%", "");
 }
 
 
