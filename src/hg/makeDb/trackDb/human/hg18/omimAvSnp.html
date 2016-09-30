@@ -7,18 +7,18 @@ This track shows the <B>allelic variants</B> in the Online Mendelian Inheritance
 (<A HREF="http://www.omim.org/" TARGET=_blank>OMIM</A>) database that have associated
 <A HREF="http://www.ncbi.nlm.nih.gov/projects/SNP/" TARGET=_blank>dbSNP</A> identifiers.
 </P>
-<P><B><FONT COLOR=RED>Note: The latest OMIM annotation contains many SNPs found only in dbSNP
+<P><B><FONT COLOR=RED>Note: The latest OMIM annotation contains many variants found only in dbSNP
 build 132, which is available only for the GRCh37/hg19 assembly. This (hg18) track was built with
 dbSNP build 130 annotations and is therefore missing many entries. We srongly encourage users to
-use the GRCh37/hg19 OMIM Allelic Variant SNPs track instead of this one if possible.</FONT>
+use the GRCh37/hg19 OMIM Alleles track instead of this one if possible.</FONT>
 </B></P>
  
 <H2>Display Conventions and Configuration</H2>
 
-<P>Genomic positions of OMIM allelic variant SNPs are marked by solid blocks, which appear
+<P>Genomic positions of OMIM allelic variants are marked by solid blocks, which appear
 as tick marks when zoomed out.  
 <P> The details page for each variant displays the allelic variant description, the amino
-acid replacement, and the dbSNP identifier, with a link to that SNP's details page in the
+acid replacement, and the dbSNP identifier, with a link to that variant's details page in the
 &quot;SNPs (130)&quot; track.
 </P>
 <P>The descriptions of OMIM entries are shown on the main browser display when Full display
@@ -31,7 +31,7 @@ This track was constructed as follows:
 <UL>
 <LI>The OMIM allelic variant data file <TT>mimAV.txt</TT> was obtained from OMIM and
 loaded into the MySQL table <TT>omimAv</TT>.
-<LI>The genomic position for each allelic variant SNP in <TT>omimAv</TT> with an associated
+<LI>The genomic position for each allelic variant in <TT>omimAv</TT> with an associated
 dbSnp identifier was obtained from the <TT>snp130</TT> table. The OMIM AV identifiers and
 their corresponding genomic positions from dbSNP were then loaded into the <TT>omimAvSnp</TT>
 table.

@@ -2486,5 +2486,9 @@ group rep
 track pubsBingBlat override
 group phenDis
 
+# override to use hg19 specific html page
+track crispr override
+html crispr
+
 include defaultPriority.ra
 include trackDb.cloneEnd.ra

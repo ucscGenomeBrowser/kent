@@ -725,7 +725,10 @@ if (!initted && !errorsNoHeader)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-htmlVaParagraph(format,args);
+// old way htmlVaParagraph(format,args); cannot use without XSS-protections
+fputs("<P>", stdout);
+htmlVaEncodeErrorText(format,args);
+fputs("</P>\n", stdout);
 printf("%s", htmlWarnEndPattern());
 }
 
