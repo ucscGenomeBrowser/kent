@@ -3174,7 +3174,7 @@ allButtonPair on
 	track ncbiRefSeq
         release alpha
         parent ncbiRefGenesView off
-        shortLabel NCBI RefSeq
+        shortLabel RefSeq All
         subGroups view=aGenes
         longLabel NCBI RefSeq annotations, all subsets
         html refGene.new
@@ -3184,7 +3184,7 @@ allButtonPair on
 	track ncbiRefSeqCurated
         release alpha
 	parent ncbiRefGenesView off
-	shortLabel NCBI Curated
+	shortLabel RefSeq Curated
         subGroups view=aGenes
 	longLabel NCBI RefSeq curated subset (NM_*, NR_*, and YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
@@ -3193,7 +3193,7 @@ allButtonPair on
 	track ncbiRefSeqPredicted
         release alpha
 	parent ncbiRefGenesView off
-	shortLabel NCBI Predicted
+	shortLabel RefSeq Predicted
         subGroups view=aGenes
 	longLabel NCBI RefSeq predicted subset (XM_* and XR_*)
         idXref ncbiRefSeqLink mrnaAcc name
@@ -3202,23 +3202,23 @@ allButtonPair on
 	track ncbiRefSeqOther
         release alpha
 	parent ncbiRefGenesView off
-	shortLabel NCBI Other
+	shortLabel RefSeq Other
         subGroups view=aGenes
-	longLabel NCBI RefSeq other genes subset, not (NM_*, NR_*, XM_*, XR_*, or YP_*)
+	longLabel NCBI RefSeq other genes subset (not NM_*, NR_*, XM_*, XR_*, or YP_*)
         idXref ncbiRefSeqLink mrnaAcc name
         priority 4
 
         track refGene
         release alpha
 	parent ncbiRefGenesView on
-        shortLabel UCSC Alignments
-        longLabel UCSC alignments of RefSeq mRNAs (NM_* and NR_*)
+        shortLabel UCSC RefSeq
+        longLabel UCSC annotations of RefSeq RNAs (NM_* and NR_*)
         subGroups view=aGenes
         color 12,12,120
         type genePred refPep refMrna
         idXref hgFixed.refLink mrnaAcc name
         html refGene.new
-        priority 7
+        priority 5
 
     track ncbiRefAlignView
     release alpha
@@ -3232,11 +3232,11 @@ allButtonPair on
 
 	track ncbiRefSeqPsl
         release alpha
-        priority 5
+        priority 6
 	parent ncbiRefAlignView off
-	shortLabel NCBI Alignments
+	shortLabel RefSeq Alignments
         subGroups view=zAlign
-	longLabel NCBI Alignments of RefSeq mRNAs
+	longLabel RefSeq Alignments of RNAs
         type psl
         indelDoubleInsert on
         indelQueryInsert on
@@ -3252,11 +3252,11 @@ allButtonPair on
 
 	track refSeqAli
         release alpha
-        priority 6
+        priority 7
 	parent ncbiRefAlignView off
-	shortLabel UCSC Alignments
+	shortLabel UCSC RefSeq Ali
         subGroups view=zAlign
-	longLabel UCSC Alignments of RefSeq mRNAs
+	longLabel UCSC Alignments of RefSeq RNAs (NM_* and NR_*)
         type psl
         indelDoubleInsert on
         indelQueryInsert on
