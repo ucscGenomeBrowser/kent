@@ -7395,10 +7395,17 @@ else
 	rnaSeq = hRnaSeq(database, acc);
     }
 
-if (startsWith("xeno", aliTable))
-    showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+if (NULL == rnaSeq)
+    {
+	printf("RNA sequence not found: '%s'", acc);
+    }
 else
-    showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    {
+    if (startsWith("xeno", aliTable))
+        showSomeAlignment(psl, rnaSeq, gftDnaX, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    else
+        showSomeAlignment(psl, rnaSeq, gftDna, 0, rnaSeq->size, NULL, cdsStart, cdsEnd);
+    }
 hFreeConn(&conn);
 }
 
@@ -11836,15 +11843,28 @@ if (differentWord("", nrl->description))
     htmlHorizontalLine();
     }
 
+static boolean hasSequence = TRUE;
 struct psl *pslList = getAlignments(conn, "ncbiRefSeqPsl", itemName);
 // if the itemName isn't found, it might be found as the nrl->mrnaAcc
 if (! pslList)
     pslList = getAlignments(conn, "ncbiRefSeqPsl", nrl->mrnaAcc);
 if (pslList)
     {
-    int start = cartInt(cart, "o");
-    printf("<H3>mRNA/Genomic Alignments</H3>");
-    printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+    char query[256];
+    /* verify itemName has RNA sequence to work with */
+    sqlSafef(query, sizeof(query), "select id from seqNcbiRefSeq where acc='%s' limit 1", itemName);
+    char * result= sqlQuickString(conn, query);
+    if (isEmpty(result))
+        {
+        printf ("<h4>there is NO alignment for %s</h4>\n", itemName);
+        hasSequence = FALSE;
+        }
+    else
+        {
+        printf("<H3>mRNA/Genomic Alignments (%s)</H3>", itemName);
+        int start = cartInt(cart, "o");
+        printAlignments(pslList, start, "htcCdnaAli", "ncbiRefSeqPsl", itemName);
+        }
     }
 else
     {
@@ -11865,11 +11885,14 @@ if (differentWord("", nrl->protAcc))
     printf("Predicted Protein</a> \n");
     puts("</li>\n");
     }
-puts("<li>\n");
-hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
-printf("%s</a> may be different from the genomic sequence.\n",
+if (hasSequence)
+    {
+    puts("<li>\n");
+    hgcAnchorSomewhere("ncbiRefSeqSequence", itemName, "ncbiRefSeqPsl", seqName);
+    printf("%s</a> may be different from the genomic sequence.\n",
 	   "Predicted mRNA");
-puts("</li>\n");
+    puts("</li>\n");
+    }
 puts("<LI>\n");
 hgcAnchorSomewhere("getDna", itemName, tdb->track, seqName);
 printf("Genomic Sequence</A> from assembly\n");
