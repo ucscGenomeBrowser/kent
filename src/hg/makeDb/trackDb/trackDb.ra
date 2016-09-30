@@ -292,6 +292,7 @@ visibility hide
 type bed 3
 superTrack on
 release alpha
+html crispr
 
     track crisprRanges
     shortLabel CRISPR Regions
@@ -301,6 +302,7 @@ release alpha
     type bed 3
     release alpha
     parent crispr
+    html crispr
 
     track crisprTargets
     shortLabel CRISPR Targets
@@ -316,6 +318,7 @@ release alpha
     detailsTabUrls _offset=/gbdb/$db/crispr/crisprDetails.tab
     url http://crispor.org/crispor.py?org=$D&pos=$S:${&pam=NGG
     urlLabel Click here to show this guide on Crispor.org, with expression oligos, validation primers and more
+    html crispr
 
 track augustus
 shortLabel Augustus

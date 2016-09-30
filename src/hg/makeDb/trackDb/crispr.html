@@ -21,7 +21,7 @@ Ensembl (=Gencode Comprehensive) transcript models.</p>
 The track "CRISPR Targets" shows the target sites in these regions. They
 are colored to reflect both predicted specificity and efficiency. Specificity
 reflects the "uniqueness" of a 20mer sequence in the genome: the less unique a
-sequence is, the more likely is cleavage at other locations of the genome
+sequence is, the more likely it is to cleave other locations of the genome
 (off-target effects). Efficiency is the frequency of cleavage at the target
 site (on-target efficiency).</p>
 
@@ -47,7 +47,7 @@ Mouse-over a target site to show predicted specificity and efficiency scores:<br
 0-100. The higher the number, the fewer off-target effects are expected. We
 recommend guides with an MIT specificity &gt; 50.</li>
 <li>The efficiency score tries to predict if a guide leads to rather strong or
-weak cleavage. According to (Haeussler et al. 2016), the <a
+weak cleavage. According to <a href="#References">(Haeussler et al. 2016)</a>, the <a
 href="http://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design">Doench
 2016 Efficiency score</a> should be used to select the guide with the highest
 cleavage efficiency when expressing guides from RNA PolIII Promoters such as
@@ -80,8 +80,7 @@ false-positives.</p>
 Like most algorithms, the MIT specificity score is not always a perfect
 predictor of off-target effects. Despite low scores, many tested guides 
 caused few and/or weak off-target cleavage when tested with whole-genome assays
-(Figure 2 from <a
-href="http://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1012-2">Haeussler
+(Figure 2 from <a href="#References">Haeussler
 et al. 2016</a>), as shown below, and the published data contains few data points
 with high specificity scores. Overall though, the assays showed that the higher
 the specificity score, the lower the off-target effects.</p>
@@ -101,7 +100,7 @@ inefficient guides drops with increasing efficiency scores:
 their own training data here. Especially for the Moreno-Mateos score, the
 results are too optimistic, due to over-fitting. When evaluated on independent
 datasets, the correlation of the prediction with other assays was around 25%
-lower, see Haeussler et al. 2016. At the time of writing, there is no
+lower, see <a href="#References">Haeussler et al. 2016</a>. At the time of writing, there is no
 independent dataset available yet to determine the Moreno-Mateos accuracy for
 each score percentile range.</p>
 
@@ -138,7 +137,7 @@ http://hgdownload.cse.ucsc.edu/gbdb/hg19/crispr/crispr.bb -chrom=chr21
 <p>
 Track created by Maximilian Haeussler, with helpful input from Jean-Paul Concordet (MNHN Paris) and Alberto Stolfi (NYU).
 </p>
-
+<a name="References"></a>
 <h2>References</h2>
 
 <!-- References created by: descPageRefHtml 27380939 24972169 26780180 26322839 23873081 -->
