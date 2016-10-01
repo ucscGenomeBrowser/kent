@@ -102,6 +102,8 @@ if (filt->nonCodingExon && term == non_coding_transcript_exon_variant)
 if (filt->splice && (term == splice_donor_variant || term == splice_acceptor_variant ||
 		     term == splice_region_variant))
     return TRUE;
+if (filt->noVariation && term == no_sequence_alteration)
+    return TRUE;
 return FALSE;
 }
 
@@ -467,14 +469,14 @@ void annoGratorGpVarSetFuncFilter(struct annoGrator *gSelf,
 /* If funcFilter is non-NULL, it specifies which functional categories
  * to include in output; if NULL, by default intergenic variants are excluded and
  * all other categories are included.
- * NOTE: After calling this, call gpVar->setOverlapRule() because implementation
- * of that depends on filter settings.  */
+ * NOTE: This calls gSelf->setOverlapRule() with the currently set overlap rule because
+ * overlapRule is affected by filter settings.  */
 {
 struct annoGratorGpVar *self = (struct annoGratorGpVar *)gSelf;
 freez(&self->funcFilter);
 if (funcFilter != NULL)
     self->funcFilter = CloneVar(funcFilter);
 // Since our overlapRule behavior depends on filter settings, reevaluate:
-aggvSetOverlapRule(gSelf, self->gpVarOverlapRule);
+gSelf->setOverlapRule(gSelf, self->gpVarOverlapRule);
 }
 

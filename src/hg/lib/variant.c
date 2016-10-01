@@ -93,7 +93,9 @@ for( ; alleleNumber < numAlleles; alleleNumber++)
 	}
 
     boolean isRefAllele = (sameWord(thisAlleleString, refAllele) ||
-			   (isEmpty(refAllele) && sameString(thisAlleleString, "-")));
+			   (isEmpty(refAllele) && sameString(thisAlleleString, "-")) ||
+			   sameString(thisAlleleString, "<X>") || // samtools mpileup no variation
+			   sameString(thisAlleleString, "<*>"));  // gVCF no variation
     int alleleStringLength = strlen(thisAlleleString);
     if (isDash(thisAlleleString))
 	{

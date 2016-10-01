@@ -1263,7 +1263,7 @@ int vaHtmlSafefNoAbort(char* buffer, int bufSize, char *format, va_list args, bo
 int formatLen = strlen(format);
 
 char *newFormat = NULL;
-int newFormatSize = 2*formatLen + 1;
+int newFormatSize = 3*formatLen + 1;
 newFormat = needMem(newFormatSize);
 char *nf = newFormat;
 char *lastPct = NULL;

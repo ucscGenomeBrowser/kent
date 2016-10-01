@@ -20,6 +20,7 @@ struct annoGratorGpVarFuncFilter
     boolean intron;		// Include variants in intron
     boolean splice;		// Include variants in splice site or splice region
     boolean nonCodingExon;	// Include variants in exons of non-coding genes
+    boolean noVariation;	// Include "variants" that are actually not variants
     };
 
 struct annoGrator *annoGratorGpVarNew(struct annoStreamer *mySource);
@@ -33,8 +34,8 @@ void annoGratorGpVarSetFuncFilter(struct annoGrator *gpVar,
 /* If funcFilter is non-NULL, it specifies which functional categories
  * to include in output; if NULL, by default intergenic variants are excluded and
  * all other categories are included.
- * NOTE: After calling this, call gpVar->setOverlapRule() because implementation
- * of that depends on filter settings. */
+ * NOTE: This calls gSelf->setOverlapRule() with the currently set overlap rule because
+ * overlapRule is affected by filter settings.  */
 
 struct gpFx *annoGratorGpVarGpFxFromRow(struct annoStreamer *gpVar, struct annoRow *row,
 					struct lm *lm);
