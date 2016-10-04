@@ -13,14 +13,14 @@ target=_blank>crispor.org</a>.
 <h2>Display Conventions and Configuration</h2>
 
 <p>
-The track "CRISPR Regions" shows the regions of the genome where target
+The track &quot;CRISPR Regions&quot; shows the regions of the genome where target
 sites were analyzed, i.e. within 200bp of transcribed regions as annotated by
 transcript models from the GENCODE V24 (Comprehensive set) track.</p>
 
 <p>
-The track "CRISPR Targets" shows the target sites in these regions. They
+The track &quot;CRISPR Targets&quot; shows the target sites in these regions. They
 are colored to reflect both predicted specificity and efficiency. Specificity
-reflects the "uniqueness" of a 20mer sequence in the genome: the less unique a
+reflects the &quot;uniqueness&quot; of a 20mer sequence in the genome: the less unique a
 sequence is, the more likely it is to cleave other locations of the genome
 (off-target effects). Efficiency is the frequency of cleavage at the target
 site (on-target efficiency).</p>
@@ -51,7 +51,7 @@ weak cleavage. According to <a href="#References">(Haeussler et al. 2016)</a>, t
 href="http://portals.broadinstitute.org/gpp/public/analysis-tools/sgrna-design">Doench
 2016 Efficiency score</a> should be used to select the guide with the highest
 cleavage efficiency when expressing guides from RNA PolIII Promoters such as
-U6. Scores are given as percentiles, e.g. "70%" means that 70% of mammalian
+U6. Scores are given as percentiles, e.g. &quot;70%&quot; means that 70% of mammalian
 guides have a score equal or lower than this guide. The raw score number is
 also shown in parentheses after the percentile.</li>
 <li>The <a
@@ -62,12 +62,13 @@ Xenopus embryos. The Moreno-Mateos score is given in percentiles and the raw val
 </p>
 
 <p>Click onto features to show all scores and predicted off-targets with up to
-four mismatches. The Out-of-Frame score by Bae et al. 2014 is correlated with
+four mismatches. The Out-of-Frame score by <a href="#References">Bae et al. 2014</a>
+is correlated with
 the probability that mutations induced by the guide RNA will disrupt the open
 reading frame. The authors recommend out-of-frame scores &gt; 66 to create
 knock-outs with a single guide efficiently.<p>
 
-<p>Off-target sites on this page are sorted by the CFD score (<a href="http://www.nature.com/nbt/journal/v34/n2/full/nbt.3437.html">Doench et al. 2016</a>). 
+<p>Off-target sites are sorted by the CFD score (<a href="http://www.nature.com/nbt/journal/v34/n2/full/nbt.3437.html">Doench et al. 2016</a>). 
 The higher the CFD score, the more likely is off-target cleavage at a site. The
 large majority of predicted off-targets with CFD scores &lt; 0.02 were
 false-positives.</p>
@@ -89,15 +90,15 @@ the specificity score, the lower the off-target effects.</p>
 
 <p>Similarily, efficiency scoring is not very accurate: guides with low
 scores can be efficient and vice versa. As a general rule, however, the higher
-the score, the less likely is it that a guide is very inefficient. The
+the score, the less likely that a guide is very inefficient. The
 following histograms illustrate, for each type of score, how the share of
 inefficient guides drops with increasing efficiency scores:
 </p>
 
 <img src="../images/crisprFig_effScores.png">
 
-<p>When reading this plot, keep in mind that both scores are evaluated on
-their own training data here. Especially for the Moreno-Mateos score, the
+<p>When reading this plot, keep in mind that both scores were evaluated on
+their own training data. Especially for the Moreno-Mateos score, the
 results are too optimistic, due to over-fitting. When evaluated on independent
 datasets, the correlation of the prediction with other assays was around 25%
 lower, see <a href="#References">Haeussler et al. 2016</a>. At the time of writing, there is no
@@ -106,7 +107,7 @@ each score percentile range.</p>
 
 <h3>Track methods</h3>
 <p>
-Exons as predicted by Ensembl Gene models were used, extended by 200 basepairs
+Exons as predicted by GENCODE V24 (Comprehensive set) gene models were used, extended by 200 basepairs
 on each side, searched for the -NGG motif. Flanking 20mer guide sequences were
 aligned to the genome with BWA and scored with MIT Specificity scores using the
 command-line version of crispor.org.  Non-unique guide sequences were skipped.
@@ -140,7 +141,6 @@ Track created by Maximilian Haeussler, with helpful input from Jean-Paul Concord
 <a name="References"></a>
 <h2>References</h2>
 
-<!-- References created by: descPageRefHtml 27380939 24972169 26780180 26322839 23873081 -->
 <p>
 Bae S, Kweon J, Kim HS, Kim JS.
 <a href="http://dx.doi.org/10.1038/nmeth.3015" target="_blank">
