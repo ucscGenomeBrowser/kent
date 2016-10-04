@@ -22,6 +22,11 @@ errAbort(
 "   to use \" or \'\n"
 "   type can be any of these: attr css js url\n"
 "   -verbose=2 to mirror [any characters]\n"
+"  HH stands for 2 hex digits 0-9 A-F a-f\n"
+"attr \"&#xHH;\"\n"
+"css \"\\HH \" (trailing space critical)\n" 
+"js \"\\xHH\"\n"
+"url \"%%HH\"\n"
 );
 }
 
