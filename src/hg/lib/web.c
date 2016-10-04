@@ -430,13 +430,21 @@ if(!webInTextMode)
     }
 }
 
-void webStartJWest(struct cart *cart, char *db, char *title)
-/* Start HTML with new banner design by jWest (with modifications). */
+void webStartJWestOptionalBanner(struct cart *cart, char *db, char *title, boolean doBanner)
+/* Start HTML with new header and footer design by JWest.  
+   Optionally display banner above menubar
+ */
 {
 puts("Content-type:text/html\n");
 printf(
-#include "jWestBanner.h"
-       , title, title);
+    #include "jWestHeader.h"
+           , title);
+if (doBanner)
+    {
+    printf(
+        #include "jWestBanner.h"
+           , title);
+    }
 webPushErrHandlersCartDb(cart, db);
 htmlWarnBoxSetup(stdout);
 
@@ -450,6 +458,18 @@ if (navBar)
     }
 webHeadAlreadyOutputed = TRUE;
 errAbortSetDoContentType(FALSE);
+}
+
+void webStartJWest(struct cart *cart, char *db, char *title)
+/* Start HTML with new banner and footer design by jWest (with modifications). */
+{
+webStartJWestOptionalBanner(cart, db, title, TRUE);
+}
+
+void webStartJWestNoBanner(struct cart *cart, char *db, char *title)
+/* Start HTML with new header and footer design by jWest, but no banner */
+{
+webStartJWestOptionalBanner(cart, db, title, FALSE);
 }
 
 void webEndJWest()

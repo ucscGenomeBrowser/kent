@@ -44,8 +44,6 @@ static void doJsIncludes()
 //puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
 puts("<script src=\"../js/cart.js\"></script>");
 
-jsIncludeDataTablesLibs();
-
 webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.watermarkinput.js", NULL);
@@ -62,8 +60,7 @@ getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 // char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 //char *track = cartString(cart, "g");
 
-webStartJWest(cart, db, 
-        "Genome Browser Track Settings");
+webStartJWestNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel=\"stylesheet\" href=\"../style/bootstrap.min.css\">");
 puts("<link rel=\"stylesheet\" href=\"../style/hgGtexTrackSettings.css\">");
 
