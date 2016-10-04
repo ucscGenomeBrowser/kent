@@ -20,7 +20,7 @@ Ensembl transcript models.</p>
 <p>
 The track &quot;CRISPR Targets&quot; shows the target sites in these regions. They
 are colored to reflect both predicted specificity and efficiency. Specificity
-reflects the &quot;uniqueness&quot; of a 20mer sequence in the genome: the less unique a
+reflects the &quot;uniqueness&quot; of a 20mer sequence in the genome; the less unique a
 sequence is, the more likely it is to cleave other locations of the genome
 (off-target effects). Efficiency is the frequency of cleavage at the target
 site (on-target efficiency).</p>
@@ -69,7 +69,7 @@ reading frame. The authors recommend out-of-frame scores &gt; 66 to create
 knock-outs with a single guide efficiently.<p>
 
 <p>Off-target sites are sorted by the CFD score (<a href="http://www.nature.com/nbt/journal/v34/n2/full/nbt.3437.html">Doench et al. 2016</a>). 
-The higher the CFD score, the more likely is off-target cleavage at a site. The
+The higher the CFD score, the more likely there is off-target cleavage at that site. The
 large majority of predicted off-targets with CFD scores &lt; 0.02 were
 false-positives.</p>
 
@@ -125,7 +125,7 @@ For automated analysis, the genome annotation is stored in a bigBed file that
 can be downloaded from
 <a href="http://hgdownload.cse.ucsc.edu/gbdb/$db/crispr/" target="_blank">our download server</a>.
 The files for this track are called <tt>crispr.bb</tt> and <tt>crisprDetails.tab</tt>. Individual
-regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>
+regions or the whole genome annotation can be obtained using our tool <tt>bigBedToBed</tt>,
 which can be compiled from the source code or downloaded as a precompiled
 binary for your system. Instructions for downloading source code and binaries can be found
 <a href="http://hgdownload.soe.ucsc.edu/downloads.html#utilities_downloads">here</a>. The tool
