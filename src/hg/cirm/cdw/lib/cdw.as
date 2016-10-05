@@ -474,3 +474,14 @@ table cdwDataset
     string pmcid;  "PubmedCentral ID of paper full text"
     string metaDivTags; "Comma separated list of fields used to make tree out of metadata"
     )
+
+table cdwJointDataset
+"A joint dataset is a collection of datasets, usually associated with a common trait."
+    (
+    uint id primary auto; "Dataset ID"
+    string name unique;  "Short name of this dataset, one word, no spaces"
+    string label;  "short title of the dataset, a few words"
+    lstring description;  "Description of dataset, can be a complete html paragraph."
+    string childrenNames;   "Comma separated list of children data set names." 
+    string metaDivTags; "Comma separated list of fields used to make tree out of metadata"
+    )
