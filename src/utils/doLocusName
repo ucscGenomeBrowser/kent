@@ -40,8 +40,16 @@ def runCmd(cmd, mustRun=True):
 
 def doLocusName(db, geneTableName):
     " create and fill the locusName table for db "
+    if geneTableName=="ensGene":
+        query = "SELECT * from ensemblToGeneName"
+    elif geneTableName=="knownGene":
+        query = "SELECT kgID, geneSymbol from kgXref where geneSymbol<>'' and geneSymbol not like '% %'"
+    else:
+        assert(False) # no support for this gene table yet
+
     tempFh = tempfile.NamedTemporaryFile()
-    for row in runSql(db, "SELECT * from ensemblToGeneName"):
+    #tempFh = open("temp.tmp", "w")
+    for row in runSql(db, query):
         tempFh.write("\t".join(row)+"\n")
     tempFh.flush()
     tempFname = tempFh.name
@@ -51,7 +59,10 @@ def doLocusName(db, geneTableName):
 
     cmdParts = []
     # get genePred
-    cmdParts.append("hgsql %(db)s -NB -e 'SELECT * from %(geneTableName)s'| cut -f2- |")
+    cmdParts.append("hgsql %(db)s -NB -e 'SELECT * from %(geneTableName)s'| ")
+    # only known Gene has no bin field
+    if geneTableName!="knownGene":
+        cmdParts.append("cut -f2- |")
     # break genes into exons
     cmdParts.append("genePredToBed stdin stdout | bedToExons stdin stdout | ")
     # replace transcript with symbol, skip dupes

@@ -6007,6 +6007,8 @@ tablesIgnored $gbd
     cloneEnds%
     contamination
     cpgIsland%
+    crisprRanges
+    crisprTargets
     ctgPos
     ctgPos2
     cytoBand
