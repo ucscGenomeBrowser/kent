@@ -291,7 +291,6 @@ group genes
 visibility hide
 type bed 3
 superTrack on
-release alpha
 html crispr
 
     track crisprRanges
@@ -300,7 +299,6 @@ html crispr
     visibility dense
     color 110,110,110
     type bed 3
-    release alpha
     parent crispr
     html crispr
 
@@ -310,7 +308,6 @@ html crispr
     visibility pack
     type bigBed 9 +
     itemRgb on
-    release alpha
     parent crispr
     mouseOverField _mouseOver
     scoreLabel MIT Guide Specificity Score
