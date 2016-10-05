@@ -33,7 +33,7 @@ What to do to update:
   2. Update trackDbHub.html to point to the new html file.
   <!--#include virtual="trackDbHub.v#.html"-->
 
-  3. From that point forward the previous version remains unchanging.
+  3. From that point forward the previous version remains unchanged.
 
 How to push:
   To release changes it will be easier if you push the trackDbLibrary.shtml (note .shtml)
