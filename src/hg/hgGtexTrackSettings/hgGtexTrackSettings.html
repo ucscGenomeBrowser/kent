@@ -22,8 +22,8 @@
         </div>
     </div>
 
-    <div id="configureSectionTitle" class="row gbSectionTitle">
-            <div class="col-md-10">Configure</div>
+    <div id="configureSectionTitle" class="row gbSectionBanner">
+            <div class="gbSectionTitle col-md-10">Configure</div>
             <div class="col-md-2 text-right">
                 <div class="goButtonContainer" title="Go to the Genome Browser">
                     <div class="gbGoButton">GO</div>
@@ -32,50 +32,59 @@
             </div>
     </div>
 
+<!-- row 1 -->
     <div class="row">
         <div class="configurator col-md-4">
-            <b>Label</b>: 
+            <b>Label</b>:&nbsp;&nbsp; 
                 <input type="radio" name="gtexGene.label" value="name"> gene symbol
                 <input type="radio" name="gtexGene.label" value="accession"> accession
                 <input type="radio" name="gtexGene.label" value="both"> both
         </div>
-        <div class="configurator col-md-4">
-<b>Limit to protein coding genes:</b>
-<INPUT TYPE=CHECKBOX NAME="gtexGene.codingOnly" VALUE=on ><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.codingOnly' VALUE='0' class='cbShadow'>
-        </div>
-        <div class="configurator col-md-4">
+        <div class="configurator col-md-8">
 <b>Show GTEx gene model</b>
 <INPUT TYPE=CHECKBOX NAME="gtexGene.showExons" VALUE=on ><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.showExons' VALUE='0' class='cbShadow'>
         </div>
-    </div>
-    <div class="row">
 
+    </div>
+
+<!-- row 2 -->
+    <div class="row">
         <div class="configurator col-md-4">
-<b>Log10 transform:</b>
-<INPUT TYPE=CHECKBOX NAME="gtexGene.logTransform" VALUE=on onchange='gtexTransformChanged("gtexGene")' CHECKED><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.logTransform' VALUE='0' class='cbShadow'>
+            <b>Log10 transform:</b>
+                <INPUT TYPE=CHECKBOX NAME="gtexGene.logTransform" VALUE=on onchange='gtexTransformChanged("gtexGene")' CHECKED><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.logTransform' VALUE='0' class='cbShadow'>
         </div>
         <div class="configurator col-md-8">
-<span class='gtexGeneViewLimitsMaxLabel disabled'><b>View limits maximum:</b></span>
+            <span class='gtexGeneViewLimitsMaxLabel disabled'><b>View limits maximum:</b></span>
 <INPUT TYPE=TEXT NAME="gtexGene.maxLimit" SIZE=4 VALUE=300 disabled><span class='gtexGeneViewLimitsMaxLabel disabled'>  RPKM (range 0-711778)</span>
         </div>
     </div>
 
+<!-- row 3 -->
     <div class="row">
-        <div class="configurator col-md-12">
-            <b>Show only items with score at or above:</b> 
+        <div class="configurator col-md-4">
+            <b>Limit to protein coding genes:</b>
+                <INPUT TYPE=CHECKBOX NAME="gtexGene.codingOnly" VALUE=on ><INPUT TYPE=HIDDEN NAME='boolshad.gtexGene.codingOnly' VALUE='0' class='cbShadow'>
+        </div>
+
+        <div class="configurator col-md-8">
+            <b>Limit to genes scored at or above:</b> 
             <input id="scoreInput" value="" size="8">
             (range 0-1000)
         </div>
     </div>
 
-    <!--<div class="gbPanel">&nbsp;</div> -->
+    <!--<div class="spacer">&nbsp;</div> */ -->
 
-    <div id="tissueSectionTitle" class="row gbSectionTitle"">
-        <div class="col-md-6">Choose Tissues</div>
+<!-- end configure panel -->
+
+<!-- tissue chooser panel -->
+
+    <div id="tissueSectionTitle" class="row gbSectionBanner"">
+        <div class="gbSectionTitle col-md-6">Choose Tissues</div>
         <div class="col-md-6 text-right">
 
-            <div class="goButtonContainer gbWhiteButton">set all</div>
-            <div class="goButtonContainer gbWhiteButton">clear all</div>
+            <div class="goButtonContainer gtButton gbWhiteButton">set all</div>
+            <div class="goButtonContainer gtButton gbWhiteButton">clear all</div>
             <input class="gbSearch" TYPE="text" VALUE="Search" class="gbButton">&nbsp;
 
             <div class="goButtonContainer" title="Go to the Genome Browser">
@@ -86,96 +95,97 @@
     </div>
 
     <div id="tissueSection" class="row">
-        <div id="bodyMap" class="col-md-6">
+        <div id="bodyMap" class="col-md-7">
             <!--<img height="800px" class="gbImage gtexBodyMap" src="/images/bodyMap/jwBody.png">-->
             <!--<img height="800px" class="gbImage gtexBodyMap" src="/images/bodyMap/bodyMap.svg"> -->
             <!--<object type="image/svg+xml" height="800px" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">-->
-            <object type="image/svg+xml" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">
+            <object id="bodyMapSvg" type="image/svg+xml" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">
                 Body Map illustration not found
             </object>
         </div>
-        <div id="tissueTable" class="col-md-6">
+        <div class="col-md-5">
 <p>
-            <table>
-<tr class='tissueRow'><td bgcolor=#FFA54F>&nbsp;&nbsp;&nbsp;</td><td class=tissueCell id='adiposeSubcut'>&nbsp;Adipose - Subcutaneous</td>
-     <td bgcolor=#EEC591>&nbsp;&nbsp;&nbsp;</td><td id='colonTransverse'>&nbsp;Colon - Transverse</td></tr> 
+            <table class='tissueTable'>
 
-<tr class='tissueRow' ><td bgcolor=#EE9A00>&nbsp;&nbsp;&nbsp;</td><td id='adiposeVisceral'>&nbsp;Adipose - Visceral (Omentum)</td> 
-    <td bgcolor=#8B7355>&nbsp;&nbsp;&nbsp;</td><td id='esophagusJunction'>&nbsp;Esophagus - Gastroesophageal Junction</td></tr> 
+<tr class='tissueRow'><td class='tissueColor' bgcolor=#FFA54F>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='adiposeSubcut'>&nbsp;Adipose - Subcutaneous</td>
+     <td class='tissueColor' bgcolor=#EEC591>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='colonTransverse'>&nbsp;Colon - Transverse</td></tr> 
 
-<tr class='tissueRow' ><td bgcolor=#8FBC8F>&nbsp;&nbsp;&nbsp;</td><td id='adrenalGland'>&nbsp;Adrenal Gland</td>
-    <td bgcolor=#8B7355>&nbsp;&nbsp;&nbsp;</td><td id='esophagusMucosa'>&nbsp;Esophagus - Mucosa</td></tr> 
+<tr class='tissueRow' ><td class='tissueColor' bgcolor=#EE9A00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='adiposeVisceral'>&nbsp;Adipose - Visceral (Omentum)</td> 
+    <td class='tissueColor' bgcolor=#8B7355>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='esophagusJunction'>&nbsp;Esophagus - Gastroesophageal Junction</td></tr> 
 
-<tr class='tissueRow' id='arteryAorta'><td bgcolor=#8B1C62>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Artery - Aorta</td>
-    <td bgcolor=#CDAA7D>&nbsp;&nbsp;&nbsp;</td><td id='esophagusMuscular'>&nbsp;Esophagus - Muscularis</td></tr> 
+<tr class='tissueRow' ><td class='tissueColor' bgcolor=#8FBC8F>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='adrenalGland'>&nbsp;Adrenal Gland</td>
+    <td class='tissueColor' bgcolor=#8B7355>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='esophagusMucosa'>&nbsp;Esophagus - Mucosa</td></tr> 
 
-<tr class='tissueRow' id='arteryCoronary'><td bgcolor=#EE6A50>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Artery - Coronary</td>
-    <td bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td id='fallopianTube'>&nbsp;Fallopian Tube</td></tr> 
+<tr class='tissueRow' id='arteryAorta'><td class='tissueColor' bgcolor=#8B1C62>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Artery - Aorta</td>
+    <td class='tissueColor' bgcolor=#CDAA7D>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='esophagusMuscular'>&nbsp;Esophagus - Muscularis</td></tr> 
 
-<tr class='tissueRow' id='arteryTibial'><td bgcolor=#FF0000>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Artery - Tibial</td>
-    <td bgcolor=#B452CD>&nbsp;&nbsp;&nbsp;</td><td id='heartAtrialAppend'>&nbsp;Heart - Atrial Appendage</td></tr> 
+<tr class='tissueRow' id='arteryCoronary'><td class='tissueColor' bgcolor=#EE6A50>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Artery - Coronary</td>
+    <td class='tissueColor' bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='fallopianTube'>&nbsp;Fallopian Tube</td></tr> 
 
-<tr class='tissueRow' id='bladder'><td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Bladder</td>
-    <td bgcolor=#7A378B>&nbsp;&nbsp;&nbsp;</td><td id='heartLeftVentricl'>&nbsp;Heart - Left Ventricle</td></tr> 
+<tr class='tissueRow' id='arteryTibial'><td class='tissueColor' bgcolor=#FF0000>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Artery - Tibial</td>
+    <td class='tissueColor' bgcolor=#B452CD>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='heartAtrialAppend'>&nbsp;Heart - Atrial Appendage</td></tr> 
 
-<tr class='tissueRow' id='brainAmygdala'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Amygdala</td>
-    <td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td id='kidneyCortex'>&nbsp;Kidney - Cortex</td></tr> 
+<tr class='tissueRow' id='bladder'><td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Bladder</td>
+    <td class='tissueColor' bgcolor=#7A378B>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='heartLeftVentricl'>&nbsp;Heart - Left Ventricle</td></tr> 
 
-<tr class='tissueRow' id='brainAnCinCortex'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Anterior cingulate cortex (BA24)</td>
-    <td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td id='liver'>&nbsp;Liver</td></tr> 
+<tr class='tissueRow' id='brainAmygdala'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Amygdala</td>
+    <td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='kidneyCortex'>&nbsp;Kidney - Cortex</td></tr> 
 
-<tr class='tissueRow' id='brainCaudate'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Caudate (basal ganglia)</td>
-    <td bgcolor=#9ACD32>&nbsp;&nbsp;&nbsp;</td><td id='lung'>&nbsp;Lung</td></tr> 
+<tr class='tissueRow' id='brainAnCinCortex'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Anterior cingulate cortex (BA24)</td>
+    <td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='liver'>&nbsp;Liver</td></tr> 
 
-<tr class='tissueRow' id='brainCerebelHemi'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Cerebellar Hemisphere</td>
-    <td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td id='minorSalivGland'>&nbsp;Minor Salivary Gland</td></tr> 
+<tr class='tissueRow' id='brainCaudate'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Caudate (basal ganglia)</td>
+    <td class='tissueColor' bgcolor=#9ACD32>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='lung'>&nbsp;Lung</td></tr> 
 
-<tr class='tissueRow' id='brainCerebellum'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Cerebellum</td>
-    <td bgcolor=#7A67EE>&nbsp;&nbsp;&nbsp;</td><td id='muscleSkeletal'>&nbsp;Muscle - Skeletal</td></tr> 
+<tr class='tissueRow' id='brainCerebelHemi'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Cerebellar Hemisphere</td>
+    <td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='minorSalivGland'>&nbsp;Minor Salivary Gland</td></tr> 
 
-<tr class='tissueRow' id='brainCortex'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Cortex</td>
-    <td bgcolor=#FFD700>&nbsp;&nbsp;&nbsp;</td><td id='nerveTibial'>&nbsp;Nerve - Tibial</td></tr> 
+<tr class='tissueRow' id='brainCerebellum'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Cerebellum</td>
+    <td class='tissueColor' bgcolor=#7A67EE>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='muscleSkeletal'>&nbsp;Muscle - Skeletal</td></tr> 
 
-<tr class='tissueRow' id='brainFrontCortex'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Frontal Cortex (BA9)</td>
-    <td bgcolor=#FFB6C1>&nbsp;&nbsp;&nbsp;</td><td id='ovary'>&nbsp;Ovary</td></tr> 
+<tr class='tissueRow' id='brainCortex'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Cortex</td>
+    <td class='tissueColor' bgcolor=#FFD700>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='nerveTibial'>&nbsp;Nerve - Tibial</td></tr> 
 
-<tr class='tissueRow' id='brainHippocampus'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Hippocampus</td>
-    <td bgcolor=#CD9B1D>&nbsp;&nbsp;&nbsp;</td><td id='pancreas'>&nbsp;Pancreas</td></tr> 
+<tr class='tissueRow' id='brainFrontCortex'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Frontal Cortex (BA9)</td>
+    <td class='tissueColor' bgcolor=#FFB6C1>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='ovary'>&nbsp;Ovary</td></tr> 
 
-<tr class='tissueRow' id='brainHypothalamus'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Hypothalamus</td>
-    <td bgcolor=#B4EEB4>&nbsp;&nbsp;&nbsp;</td><td id='pituitary'>&nbsp;Pituitary</td></tr> 
+<tr class='tissueRow' id='brainHippocampus'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Hippocampus</td>
+    <td class='tissueColor' bgcolor=#CD9B1D>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='pancreas'>&nbsp;Pancreas</td></tr> 
 
-<tr class='tissueRow' id='brainNucAccumbens'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Nucleus accumbens (basal ganglia)</td>
-    <td bgcolor=#D9D9D9>&nbsp;&nbsp;&nbsp;</td><td id='prostate'>&nbsp;Prostate</td></tr> 
+<tr class='tissueRow' id='brainHypothalamus'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Hypothalamus</td>
+    <td class='tissueColor' bgcolor=#B4EEB4>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='pituitary'>&nbsp;Pituitary</td></tr> 
 
-<tr class='tissueRow' id='brainPutamen'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Putamen (basal ganglia)</td>
-    <td bgcolor=#3A5FCD>&nbsp;&nbsp;&nbsp;</td><td id='skinNotExposed'>&nbsp;Skin - Not Sun Exposed (Suprapubic)</td></tr> 
+<tr class='tissueRow' id='brainNucAccumbens'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Nucleus accumbens (basal ganglia)</td>
+    <td class='tissueColor' bgcolor=#D9D9D9>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='prostate'>&nbsp;Prostate</td></tr> 
 
-<tr class='tissueRow' id='brainSpinalcord'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Spinal cord (cervical c-1)</td>
-    <td bgcolor=#1E90FF>&nbsp;&nbsp;&nbsp;</td><td id='skinExposed'>&nbsp;Skin - Sun Exposed (Lower leg)</td></tr> 
+<tr class='tissueRow' id='brainPutamen'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Putamen (basal ganglia)</td>
+    <td class='tissueColor' bgcolor=#3A5FCD>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='skinNotExposed'>&nbsp;Skin - Not Sun Exposed (Suprapubic)</td></tr> 
 
-<tr class='tissueRow' id='brainSubstanNigra'><td bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Brain - Substantia nigra</td>
-    <td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td id='smallIntestine'>&nbsp;Small Intestine - Terminal Ileum</td></tr> 
+<tr class='tissueRow' id='brainSpinalcord'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Spinal cord (cervical c-1)</td>
+    <td class='tissueColor' bgcolor=#1E90FF>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='skinExposed'>&nbsp;Skin - Sun Exposed (Lower leg)</td></tr> 
 
-<tr class='tissueRow' id='breastMamTissue'><td bgcolor=#CDCD>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Breast - Mammary Tissue</td>
-    <td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td id='spleen'>&nbsp;Spleen</td></tr> 
+<tr class='tissueRow' id='brainSubstanNigra'><td class='tissueColor' bgcolor=#EEEE00>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Brain - Substantia nigra</td>
+    <td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='smallIntestine'>&nbsp;Small Intestine - Terminal Ileum</td></tr> 
 
-<tr class='tissueRow' id='xformedlymphocytes'><td bgcolor=#EE82EE>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Cells - EBV-transformed lymphocytes</td>
-    <td bgcolor=#FFD39B>&nbsp;&nbsp;&nbsp;</td><td id='stomach'>&nbsp;Stomach</td></tr> 
+<tr class='tissueRow' id='breastMamTissue'><td class='tissueColor' bgcolor=#CDCD>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Breast - Mammary Tissue</td>
+    <td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='spleen'>&nbsp;Spleen</td></tr> 
 
-<tr class='tissueRow' id='xformedfibroblasts'><td bgcolor=#9AC0CD>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Cells - Transformed fibroblasts</td>
-    <td bgcolor=#A6A6A6>&nbsp;&nbsp;&nbsp;</td><td id='testis'>&nbsp;Testis</td></tr> 
+<tr class='tissueRow' id='xformedlymphocytes'><td class='tissueColor' bgcolor=#EE82EE>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Cells - EBV-transformed lymphocytes</td>
+    <td class='tissueColor' bgcolor=#FFD39B>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='stomach'>&nbsp;Stomach</td></tr> 
 
-<tr class='tissueRow' id='ectocervix'><td bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Cervix - Ectocervix</td>
-    <td bgcolor=#8B45>&nbsp;&nbsp;&nbsp;</td><td id='thyroid'>&nbsp;Thyroid</td></tr> 
+<tr class='tissueRow' id='xformedfibroblasts'><td class='tissueColor' bgcolor=#9AC0CD>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Cells - Transformed fibroblasts</td>
+    <td class='tissueColor' bgcolor=#A6A6A6>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='testis'>&nbsp;Testis</td></tr> 
 
-<tr class='tissueRow' id='endocervix'><td bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Cervix - Endocervix</td>
-    <td bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td id='uterus'>&nbsp;Uterus</td></tr> 
+<tr class='tissueRow' id='ectocervix'><td class='tissueColor' bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Cervix - Ectocervix</td>
+    <td class='tissueColor' bgcolor=#8B45>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='thyroid'>&nbsp;Thyroid</td></tr> 
 
-<tr class='tissueRow' id='colonSigmoid'><td bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Colon - Sigmoid</td>
-    <td bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td id='vagina'>&nbsp;Vagina</td></tr> 
+<tr class='tissueRow' id='endocervix'><td class='tissueColor' bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Cervix - Endocervix</td>
+    <td class='tissueColor' bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='uterus'>&nbsp;Uterus</td></tr> 
 
-<tr class='tissueRow' id='wholeBlood'><td bgcolor=#FF00FF>&nbsp;&nbsp;&nbsp;</td><td>&nbsp;Whole Blood</td></tr> 
+<tr class='tissueRow' id='colonSigmoid'><td class='tissueColor' bgcolor=#CDB79E>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Colon - Sigmoid</td>
+    <td class='tissueColor' bgcolor=#EED5D2>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel' id='vagina'>&nbsp;Vagina</td></tr> 
+
+<tr class='tissueRow' id='wholeBlood'><td class='tissueColor' bgcolor=#FF00FF>&nbsp;&nbsp;&nbsp;</td><td class='tissueLabel'>&nbsp;Whole Blood</td></tr> 
             </table>
         </div>
     </div>

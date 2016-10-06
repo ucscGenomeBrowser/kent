@@ -149,8 +149,11 @@ div.gbWhiteButton {
 div.gtButton {
     padding-top: 1px;
     padding-bottom: 1px;
-    width: 6em;
+    padding-left: 8px;
+    padding-right: 8px;
+    width: 5em;
     text-align: center;
+    font-weight: normal;
 }
 
 span#home-link {
@@ -163,4 +166,19 @@ span#home-link {
     height: 32px;
     background-position: 0 0;
     margin-left: -9px;
+}
+
+.tissueTable {
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 6px 6px;
+    border: 1px solid black;
+    font-size: 12px;
+}
+.tissueColor {
+    padding: 0 10px;
+}
+
+.tissueLabel {
+    padding-right: 6px;
 }
