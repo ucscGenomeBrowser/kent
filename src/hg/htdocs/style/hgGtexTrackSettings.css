@@ -40,6 +40,7 @@
     padding: 5px;
     font-weight: normal;
     font-style: italic;
+    font-size: 13px;
     color: #555;
 }
 
@@ -190,3 +191,5 @@ span#home-link {
 #bodyMap {
     padding: 0;
 }
+
+
