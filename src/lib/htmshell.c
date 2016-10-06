@@ -46,6 +46,8 @@ NoEscape = FALSE;
 void htmlVaEncodeErrorText(char *format, va_list args)
 /* Write an error message encoded against XSS. */
 {
+va_list argscp;
+va_copy(argscp, args);
 char warning[1024];
 int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
 if (sz < 0)
@@ -56,6 +58,11 @@ if (sz < 0)
     fflush(stderr);
     }
 fprintf(stdout, "%s\n", warning);
+/* write warning/error message to stderr so they get logged. */
+vfprintf(stderr, format, argscp);
+fprintf(stderr, "\n");
+fflush(stderr);
+va_end(argscp);
 }
 
 

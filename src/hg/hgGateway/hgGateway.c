@@ -820,6 +820,7 @@ int main(int argc, char *argv[])
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
 char *excludeVars[] = {SEARCH_TERM, CARTJSON_COMMAND, NULL,};
+htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 setUdcCacheDir();
 if (cgiOptionalString(SEARCH_TERM))
