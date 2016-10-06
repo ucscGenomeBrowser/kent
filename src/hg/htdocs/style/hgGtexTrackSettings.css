@@ -80,7 +80,7 @@
 }
 
 .spacer {
-    font-size: 4px;
+    padding-top: 8px;
 }
 
 .gbSelect {
@@ -176,9 +176,17 @@ span#home-link {
     font-size: 12px;
 }
 .tissueColor {
-    padding: 0 10px;
+    padding: 0 6px;
 }
 
 .tissueLabel {
     padding-right: 6px;
+}
+
+#bodyMapSvg {
+    margin-top: 0;
+}
+
+#bodyMap {
+    padding: 0;
 }
