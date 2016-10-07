@@ -586,12 +586,15 @@ safef(itemString, sizeof(itemString), "%d", item);
 return commaSepFindIx(itemString, s);
 }
 
-static char *commaSepWordFromIx(int ix, char *s, struct lm *lm)
+static char *commaSepWordFromIxOrWhole(int ix, char *s, struct lm *lm)
 /* Treating comma-separated, non-NULL s as an array of words,
- * return the word at ix in the array. This errAborts if ix is not valid. */
+ * return the word at ix in the array -- but if s has no commas,
+ * just return (lmCloned) s.  errAborts if s is comma-sep but ix is out of bounds. */
 {
 int i = 0;
 char *p = strchr(s, ',');
+if (p == NULL)
+    return lmCloneString(lm, s);
 while (p != NULL)
     {
     if (i == ix)
@@ -602,7 +605,7 @@ while (p != NULL)
     }
 if (i == ix)
     return lmCloneString(lm, s);
-errAbort("commaSepWordFromIx: Bad index %d for string '%s'", ix, s);
+errAbort("commaSepWordFromIxOrWhole: Bad index %d for string '%s'", ix, s);
 return NULL;
 }
 
@@ -738,7 +741,7 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	char *pred = (predIx < 0) ? NULL : words[predIx];
 	if (pred == NULL || sameString(pred, "."))
 	    continue;
-	pred = commaSepWordFromIx(txIx, pred, self->lm);
+	pred = commaSepWordFromIxOrWhole(txIx, pred, self->lm);
 	if (isNotEmpty(pred))
 	    {
 	    if (count == 0)
@@ -748,7 +751,7 @@ for (row = extraRows;  row != NULL;  row = row->next)
 		}
 	    else
 		fputc(',', self->f);
-	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIx(txIx, words[scoreIx], self->lm);
+	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIxOrWhole(txIx, words[scoreIx], self->lm);
 	    fprintf(self->f, "%s(%s)", pred, score);
 	    count++;
 	    }
@@ -1005,7 +1008,7 @@ for (i = 0;  i < gratorCount;  i++)
 	    {
 	    if (sameString(words[4], "."))
 		return ".";
-	    char *ensTxId = commaSepWordFromIx(txIx, words[4], self->lm);
+	    char *ensTxId = commaSepWordFromIxOrWhole(txIx, words[4], self->lm);
 	    return ensTxId;
 	    }
 	}
