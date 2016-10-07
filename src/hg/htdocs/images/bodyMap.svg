@@ -794,7 +794,7 @@
 		c-0.38-1.33-0.19-2.47-3.23-1.52c-3.04,0.95-7.03,3.04-7.22,4.37C274.93,359.72,281.01,356.68,285.95,365.99z"/>
 	<path id="Adrenal" display="none" fill="#E8C775" stroke="#231F20" d="M285.97,365.99l-0.38-10.45c-0.38-1.33-0.19-2.47-3.23-1.52
 		c-3.04,0.95-7.03,3.04-7.22,4.37C274.95,359.72,281.03,356.68,285.97,365.99z"/>
-	<text id="TEXT_kidneyCortex" transform="matrix(1 0 0 1 117.207 363.5166)" font-family="'Lato-Regular'" font-size="12px">Kidney - Cortex</text>
+	<text id="TEXT_kidneyCortex" transform="matrix(1 0 0 1 117.207 363.5166)" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Kidney - Cortex</text>
 	
 		<polyline id="LL_kidneyCortex" fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" points="
 		196.94,359.53 237.88,359.53 271.8,367.98 	"/>
@@ -990,7 +990,7 @@
 		</g>
 	</g>
 	<g id="RO_arteryAorta_GROUP_1_">
-		<text id="TYPE_arteryAorta_1_" transform="matrix(1 0 0 1 399.084 254.3613)" font-family="'Lato-Regular'" font-size="12px">Artery - Aorta</text>
+		<text id="TYPE_arteryAorta_1_" transform="matrix(1 0 0 1 399.084 254.3613)" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Aorta</text>
 		
 			<polyline id="LL_arteryAorta_1_" fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" points="
 			396.92,250.42 352.84,250.42 298.88,273.22 		"/>
@@ -1013,62 +1013,62 @@
 	</g>
 </g>
 <g id="CALLOUTS">
-	<text transform="matrix(1 0 0 1 399.084 254.3613)" fill="#737373" font-family="'Lato-Light'" font-size="12px">Artery - Aorta</text>
-	<text transform="matrix(1 0 0 1 399.084 398.8594)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Adipose - Visceral (Omentum)</text>
-	<text transform="matrix(1 0 0 1 66.7329 563.5381)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Adipose - Subcutaneous</text>
-	<text transform="matrix(1 0 0 1 399.084 89.4395)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Hippocampus</text>
-	<text transform="matrix(1 0 0 1 158.9814 398.3359)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Uterus</text>
-	<text transform="matrix(1 0 0 1 22.1147 709.1279)"><tspan x="0" y="0" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">EBV-Transformed</tspan><tspan x="10.16" y="15" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Lymphocytes</tspan><tspan x="24.62" y="30" fill="#737373" font-family="'Lato-Light'" font-size="12.5px" letter-spacing="38">	</tspan></text>
-	<text transform="matrix(1 0 0 1 303.8027 709.1279)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Whole Blood</text>
-	<text transform="matrix(1 0 0 1 474.8701 505.5898)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Nerve - Tibial</text>
-	<text transform="matrix(1 0 0 1 399.084 212.6582)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Esophagus - Mucosa</text>
-	<text transform="matrix(1 0 0 1 399.084 314.3081)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Esophagus - Gastroesophageal Junction</text>
-	<text transform="matrix(1 0 0 1 118.7446 348.8887)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Adrenal Gland</text>
-	<text transform="matrix(1 0 0 1 166.6821 303.2876)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Lung</text>
-	<text transform="matrix(1 0 0 1 86.1201 214.3672)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Minor Salivary Gland</text>
-	<text transform="matrix(1 0 0 1 153.4316 242.4888)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Thyroid</text>
-	<text transform="matrix(1 0 0 1 168.2065 333.4976)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Liver</text>
-	<text transform="matrix(1 0 0 1 102.1206 533.6592)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Muscle - Skeleton</text>
-	<text transform="matrix(1 0 0 1 31.7085 443.6523)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Small Intestine - terminal ileum</text>
-	<text transform="matrix(1 0 0 1 399.084 383.8467)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Spleen</text>
-	<text transform="matrix(1 0 0 1 146.8564 378.5249)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Pancreas</text>
-	<text transform="matrix(1 0 0 1 473.8623 475.7988)"><tspan x="0" y="0" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Skin - Lower Leg </tspan><tspan x="0" y="13.68" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">    (Sun exposed)</tspan></text>
-	<text transform="matrix(1 0 0 1 338.0088 500.3203)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Testis</text>
-	<text transform="matrix(1 0 0 1 117.0444 100.6475)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Hypothalamus</text>
-	<text transform="matrix(1 0 0 1 161.2422 488.7324)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Colon</text>
-	<text transform="matrix(1 0 0 1 399.084 414.0078)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Skin - Suprapubic (Not sun exposed)</text>
-	<text transform="matrix(1 0 0 1 123.9951 593.2168)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Artery - Tibial</text>
-	<text transform="matrix(1 0 0 1 136.2065 709.1289)"><tspan x="0" y="0" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Transformed</tspan><tspan x="4.67" y="15" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Fibroblasts</tspan></text>
-	<text transform="matrix(1 0 0 1 272.1211 134.7593)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Brain</text>
-	<text transform="matrix(1 0 0 1 140.394 131.0005)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Amygdala</text>
-	<text transform="matrix(1 0 0 1 10.8838 70.998)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Nucleus accumbens (basal ganglia)</text>
-	<text transform="matrix(1 0 0 1 88.6826 55.4541)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Frontal Cortex (BA9)</text>
-	<text transform="matrix(1 0 0 1 399.084 197.459)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Spinal cord (cervical c-1)</text>
-	<text transform="matrix(1 0 0 1 159.0063 40.4243)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Cortex</text>
-	<text transform="matrix(1 0 0 1 399.084 60.0894)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Putamen (basal ganglia) </text>
-	<text transform="matrix(1 0 0 1 399.084 134.2778)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Spinal cord (cervical c-1)</text>
+	<text id='arteryAorta' transform="matrix(1 0 0 1 399.084 254.3613)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Aorta</text>
+	<text id='adiposeVisceral' transform="matrix(1 0 0 1 399.084 398.8594)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Adipose - Visceral (Omentum)</text>
+	<text id='adiposeSubcut' transform="matrix(1 0 0 1 66.7329 563.5381)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Adipose - Subcutaneous</text>
+	<text id='brainHippocampus' transform="matrix(1 0 0 1 399.084 89.4395)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Hippocampus</text>
+	<text id='uterus' transform="matrix(1 0 0 1 158.9814 398.3359)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Uterus</text>
+	<text id='xformedlymphocytes' transform="matrix(1 0 0 1 22.1147 709.1279)"><tspan x="0" y="0" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">EBV-Transformed</tspan><tspan x="10.16" y="15" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Lymphocytes</tspan><tspan x="24.62" y="30" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px" letter-spacing="38">	</tspan></text>
+	<text id='wholeBlood' transform="matrix(1 0 0 1 303.8027 709.1279)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Whole Blood</text>
+	<text id='nerveTibial' transform="matrix(1 0 0 1 474.8701 505.5898)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Nerve - Tibial</text>
+	<text id='esophagusMucosa' transform="matrix(1 0 0 1 399.084 212.6582)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Esophagus - Mucosa</text>
+	<text id='esophagusJunction' transform="matrix(1 0 0 1 399.084 314.3081)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Esophagus - Gastroesophageal Junction</text>
+	<text id='adrenalGland' transform="matrix(1 0 0 1 118.7446 348.8887)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Adrenal Gland</text>
+	<text id='lung' transform="matrix(1 0 0 1 166.6821 303.2876)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Lung</text>
+	<text id='minorSalivGland' transform="matrix(1 0 0 1 86.1201 214.3672)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Minor Salivary Gland</text>
+	<text id='thyroid' transform="matrix(1 0 0 1 153.4316 242.4888)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Thyroid</text>
+	<text id='liver' transform="matrix(1 0 0 1 168.2065 333.4976)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Liver</text>
+	<text id='muscleSkeletal' transform="matrix(1 0 0 1 102.1206 533.6592)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Muscle - Skeleton</text>
+	<text id='smallIntestine' transform="matrix(1 0 0 1 31.7085 443.6523)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Small Intestine - terminal ileum</text>
+	<text id='spleen' transform="matrix(1 0 0 1 399.084 383.8467)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Spleen</text>
+	<text id='pancreas' transform="matrix(1 0 0 1 146.8564 378.5249)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Pancreas</text>
+	<text id='skinExposed' transform="matrix(1 0 0 1 473.8623 475.7988)"><tspan x="0" y="0" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Skin - Lower Leg </tspan><tspan x="0" y="13.68" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">    (Sun exposed)</tspan></text>
+	<text id='testis' transform="matrix(1 0 0 1 338.0088 500.3203)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Testis</text>
+	<text id='brainHypothalamus' transform="matrix(1 0 0 1 117.0444 100.6475)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Hypothalamus</text>
+	<text id='colon' transform="matrix(1 0 0 1 161.2422 488.7324)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Colon</text>
+	<text id='skinExposed' transform="matrix(1 0 0 1 399.084 414.0078)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Skin - Suprapubic (Not sun exposed)</text>
+	<text id='arteryTibial' transform="matrix(1 0 0 1 123.9951 593.2168)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Tibial</text>
+	<text id='xformedfibroblasts' transform="matrix(1 0 0 1 136.2065 709.1289)"><tspan x="0" y="0" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Transformed</tspan><tspan x="4.67" y="15" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Fibroblasts</tspan></text>
+	<text id='brain' transform="matrix(1 0 0 1 272.1211 134.7593)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Brain</text>
+	<text id='brainAmygdala' transform="matrix(1 0 0 1 140.394 131.0005)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Amygdala</text>
+	<text id='brainNucAccumbens' transform="matrix(1 0 0 1 10.8838 70.998)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Nucleus accumbens (basal ganglia)</text>
+	<text id='brainFrontCortex' transform="matrix(1 0 0 1 88.6826 55.4541)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Frontal Cortex (BA9)</text>
+	<text id='brainSpinalcord' transform="matrix(1 0 0 1 399.084 197.459)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Spinal cord (cervical c-1)</text>
+	<text id='brainCortex' transform="matrix(1 0 0 1 159.0063 40.4243)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Cortex</text>
+	<text id='brainPutamen' transform="matrix(1 0 0 1 399.084 60.0894)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Putamen (basal ganglia) </text>
+	<text transform="matrix(1 0 0 1 399.084 134.2778)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Spinal cord (cervical c-1)</text>
 	<path fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" d="M305.14,460.8"/>
-	<text transform="matrix(1 0 0 1 399.084 328.8394)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Stomach</text>
-	<text transform="matrix(1 0 0 1 473.4805 445.5996)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Bladder</text>
-	<text transform="matrix(1 0 0 1 473.29 460.7559)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Prostate</text>
-	<text transform="matrix(1 0 0 1 98.5083 473.6758)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Cervix - Ectocervix</text>
+	<text id='stomach' transform="matrix(1 0 0 1 399.084 328.8394)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Stomach</text>
+	<text id='bladder' transform="matrix(1 0 0 1 473.4805 445.5996)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Bladder</text>
+	<text id='prostate' transform="matrix(1 0 0 1 473.29 460.7559)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Prostate</text>
+	<text id='ectocervix' transform="matrix(1 0 0 1 98.5083 473.6758)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Cervix - Ectocervix</text>
 	<path fill="#231F20" d="M192.89,477.71"/>
-	<text transform="matrix(1 0 0 1 338.0088 485.3096)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Vagina</text>
-	<text transform="matrix(1 0 0 1 94.2588 459.0898)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Cervix - Endocervix</text>
-	<text transform="matrix(1 0 0 1 23.397 85.792)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Anterior Cingulate Cortex (BA24)</text>
-	<text transform="matrix(1 0 0 1 116.0454 116)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Pituitary Gland</text>
-	<text transform="matrix(1 0 0 1 399.084 44)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Caudate (basal ganglia)</text>
-	<text transform="matrix(1 0 0 1 399.084 75)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Substantia Negra</text>
-	<text transform="matrix(1 0 0 1 399.084 104.7344)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Cerebellar Hemisphere</text>
-	<text transform="matrix(1 0 0 1 399.084 119.001)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Cerebellum</text>
-	<text transform="matrix(1 0 0 1 66.333 318.666)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Breast - Mammary tissue</text>
-	<text transform="matrix(1 0 0 1 117.207 363.5166)" fill="#737373" font-family="'Lato-Light'" font-size="12px">Kidney - Cortex</text>
-	<text transform="matrix(1 0 0 1 162.7695 428.667)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Ovary</text>
-	<text transform="matrix(1 0 0 1 116.3955 413.3325)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Fallopian Tube</text>
-	<text transform="matrix(1 0 0 1 399.084 299.5)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Heart - Left Ventricle</text>
-	<text transform="matrix(1 0 0 1 399.084 284)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Heart - Atrial Appendage</text>
-	<text transform="matrix(1 0 0 1 399.084 268.9995)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Artery - Coronary</text>
-	<text transform="matrix(1 0 0 1 399.084 227.584)" fill="#737373" font-family="'Lato-Light'" font-size="12.5px">Esophagus - Muscularis</text>
+	<text id='vagina' transform="matrix(1 0 0 1 338.0088 485.3096)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Vagina</text>
+	<text id='endocervix' transform="matrix(1 0 0 1 94.2588 459.0898)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Cervix - Endocervix</text>
+	<text id='brainAnCinCortex' transform="matrix(1 0 0 1 23.397 85.792)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Anterior Cingulate Cortex (BA24)</text>
+	<text id='pituitary' transform="matrix(1 0 0 1 116.0454 116)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Pituitary Gland</text>
+	<text id='brainCaudate' transform="matrix(1 0 0 1 399.084 44)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Caudate (basal ganglia)</text>
+	<text id='brainSubstanNigra' transform="matrix(1 0 0 1 399.084 75)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Substantia Negra</text>
+	<text id='brainCerebelHemi' transform="matrix(1 0 0 1 399.084 104.7344)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Cerebellar Hemisphere</text>
+	<text id='brainCerebellum' transform="matrix(1 0 0 1 399.084 119.001)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Cerebellum</text>
+	<text id='breastMamTissue' transform="matrix(1 0 0 1 66.333 318.666)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Breast - Mammary tissue</text>
+	<text id='kidneyCortex' transform="matrix(1 0 0 1 117.207 363.5166)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Kidney - Cortex</text>
+	<text id='ovary' transform="matrix(1 0 0 1 162.7695 428.667)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Ovary</text>
+	<text id='fallopianTube' transform="matrix(1 0 0 1 116.3955 413.3325)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Fallopian Tube</text>
+	<text id='heartLeftVentricl' transform="matrix(1 0 0 1 399.084 299.5)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Heart - Left Ventricle</text>
+	<text id='heartAtrialAppend' transform="matrix(1 0 0 1 399.084 284)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Heart - Atrial Appendage</text>
+	<text id='arteryCoronary' transform="matrix(1 0 0 1 399.084 268.9995)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Coronary</text>
+	<text id='esophagusMuscular' transform="matrix(1 0 0 1 399.084 227.584)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Esophagus - Muscularis</text>
 </g>
 <g id="Leader_Lines_1_" display="none">
 	
@@ -1198,65 +1198,5 @@
 	
 		<polyline display="inline" fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" points="
 		197.65,395.82 239.45,395.82 299.11,430.4 	"/>
-</g>
-<g id="RO_Type" display="none">
-	<g display="inline">
-		<text transform="matrix(1 0 0 1 399.084 254.1953)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Artery - Aorta</text>
-		<text transform="matrix(1 0 0 1 399.084 398.6934)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Adipose - Visceral (Omentum)</text>
-		<text transform="matrix(1 0 0 1 68.9609 563.3721)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Adipose - Subcutaneous</text>
-		<text transform="matrix(1 0 0 1 399.084 89.2734)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Hippocampus</text>
-		<text transform="matrix(1 0 0 1 159.4985 398.1699)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Uterus</text>
-		<text transform="matrix(1 0 0 1 22.8481 708.9619)"><tspan x="0" y="0" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">EBV-Transformed</tspan><tspan x="9.94" y="15.05" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Lymphocytes</tspan><tspan x="23.89" y="30.1" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px" letter-spacing="38">	</tspan></text>
-		<text transform="matrix(1 0 0 1 304.3228 708.9619)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Whole Blood</text>
-		<text transform="matrix(1 0 0 1 474.8701 505.4238)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Nerve - Tibial</text>
-		<text transform="matrix(1 0 0 1 399.084 212.4922)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Esophagus - Mucosa</text>
-		<text transform="matrix(1 0 0 1 399.084 314.1421)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Esophagus - Gastroesophageal Junction</text>
-		<text transform="matrix(1 0 0 1 120.0107 348.7227)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Adrenal Gland</text>
-		<text transform="matrix(1 0 0 1 166.9727 303.1216)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Lung</text>
-		<text transform="matrix(1 0 0 1 88.1597 214.2012)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Minor Salivary Gland</text>
-		<text transform="matrix(1 0 0 1 154.0562 242.3228)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Thyroid</text>
-		<text transform="matrix(1 0 0 1 168.6279 333.3315)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Liver</text>
-		<text transform="matrix(1 0 0 1 103.835 533.4932)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Muscle - Skeleton</text>
-		<text transform="matrix(1 0 0 1 35.0791 443.4863)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Small Intestine - terminal ileum</text>
-		<text transform="matrix(1 0 0 1 399.084 383.6807)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Spleen</text>
-		<text transform="matrix(1 0 0 1 147.5854 378.3589)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Pancreas</text>
-		<text transform="matrix(1 0 0 1 473.8623 475.6328)"><tspan x="0" y="0" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Skin - Lower Leg </tspan><tspan x="0" y="14" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px"> </tspan><tspan x="2.53" y="14" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.5px">   (Sun exposed)</tspan></text>
-		<text transform="matrix(1 0 0 1 338.0088 500.1543)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Testis</text>
-		<text transform="matrix(1 0 0 1 118.1797 100.4814)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Hypothalamus</text>
-		<text transform="matrix(1 0 0 1 161.2422 488.5664)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Colon</text>
-		<text transform="matrix(1 0 0 1 399.084 413.8418)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Skin - Suprapubic (Not sun exposed)</text>
-		<text transform="matrix(1 0 0 1 125.5283 593.0508)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Artery - Tibial</text>
-		<text transform="matrix(1 0 0 1 136.7271 708.9619)"><tspan x="0" y="0" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Transformed</tspan><tspan x="4.69" y="15.05" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Fibroblasts</tspan></text>
-		<text transform="matrix(1 0 0 1 272.5371 134.5933)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Brain</text>
-		<text transform="matrix(1 0 0 1 141.1025 130.8345)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Amygdala</text>
-		<text transform="matrix(1 0 0 1 14.313 70.8799)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Nucleus accumbens (basal ganglia)</text>
-		<text transform="matrix(1 0 0 1 90.7305 55.2881)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Frontal Cortex (BA9)</text>
-		<text transform="matrix(1 0 0 1 399.084 197.293)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Spinal cord (cervical c-1)</text>
-		<text transform="matrix(1 0 0 1 159.5234 40.2583)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Cortex</text>
-		<text transform="matrix(1 0 0 1 399.084 59.9233)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Putamen (basal ganglia) </text>
-		<text transform="matrix(1 0 0 1 399.084 134.1118)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Spinal cord (cervical c-1)</text>
-		<path fill="#0000FF" d="M305.14,460.63"/>
-		<text transform="matrix(1 0 0 1 399.084 328.6733)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Stomach</text>
-		<text transform="matrix(1 0 0 1 473.4805 445.4336)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Bladder</text>
-		<text transform="matrix(1 0 0 1 473.29 460.5898)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Prostate</text>
-		<text transform="matrix(1 0 0 1 100.4619 473.5098)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Cervix - Ectocervix</text>
-		<path fill="#0000FF" d="M192.89,477.54"/>
-		<text transform="matrix(1 0 0 1 338.0088 485.1436)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Vagina</text>
-		<text transform="matrix(1 0 0 1 96.1987 458.9238)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Cervix - Endocervix</text>
-		<text transform="matrix(1 0 0 1 26.7407 85.626)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Anterior Cingulate Cortex (BA24)</text>
-		<text transform="matrix(1 0 0 1 117.5532 115.834)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Pituitary Gland</text>
-		<text transform="matrix(1 0 0 1 399.084 43.834)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Caudate (basal ganglia)</text>
-		<text transform="matrix(1 0 0 1 399.084 74.834)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Substantia Negra</text>
-		<text transform="matrix(1 0 0 1 399.084 104.5684)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Cerebellar Hemisphere</text>
-		<text transform="matrix(1 0 0 1 399.084 118.835)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Cerebellum</text>
-		<text transform="matrix(1 0 0 1 68.6851 318.501)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Breast - Mammary tissue</text>
-		<text transform="matrix(1 0 0 1 115.5342 363.3506)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Kidney - Cortex</text>
-		<text transform="matrix(1 0 0 1 163.1733 428.501)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Ovary</text>
-		<text transform="matrix(1 0 0 1 117.7793 413.1675)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Fallopian Tube</text>
-		<text transform="matrix(1 0 0 1 399.084 299.334)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Heart - Left Ventricle</text>
-		<text transform="matrix(1 0 0 1 399.084 283.834)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Heart - Atrial Appendage</text>
-		<text transform="matrix(1 0 0 1 399.084 268.8345)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Artery - Coronary</text>
-		<text transform="matrix(1 0 0 1 399.084 227.417)" fill="#0000FF" font-family="'Lato-Regular'" font-size="12.54px">Esophagus - Muscularis</text>
-	</g>
 </g>
 </svg>
