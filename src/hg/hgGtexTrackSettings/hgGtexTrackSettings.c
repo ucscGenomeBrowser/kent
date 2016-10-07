@@ -24,6 +24,9 @@
 #include "trix.h"
 #include "web.h"
 
+#include "gtexInfo.h"
+#include "gtexTissue.h"
+
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
@@ -50,6 +53,44 @@ jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
 }
 
+static void printTissueTable(char *version)
+/* Output HTML with tissue labels and colors, in 2 columns, to fit next to body map */
+{
+struct gtexTissue *tis, *tissues = gtexGetTissues(version);
+struct gtexTissue **tisTable = NULL;
+int count = slCount(tissues);
+AllocArray(tisTable, count);
+int i=0, col=0;
+int cols = 2;
+int last = count/2 + 1;
+
+puts("<table class='tissueTable'>");
+puts("<tr>");
+for (tis = tissues; tis != NULL; tis = tis->next)
+    {
+    if (tis->id < last)
+        i = tis->id * 2;
+    else
+        i = (tis->id - last) * 2 + 1;
+    tisTable[i] = tis;
+    }
+for (i=0; i<count; i++)
+    {
+    tis = tisTable[i];
+    printf("<td class='tissueColor' bgcolor=%06X></td>"
+           "<td class='tissueLabel' id='%s'>%s</td>", 
+                tis->color, tis->name, tis->description);
+    col++;
+    if (col > cols-1)
+        {
+        puts("</tr>\n<tr>");
+        col = 0;
+        }
+    }
+puts("</tr>\n");
+puts("</table>");
+}
+
 static void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
@@ -64,11 +105,23 @@ webStartJWestNoBanner(cart, db, "Genome Browser GTEx Track Settings");
 puts("<link rel=\"stylesheet\" href=\"../style/bootstrap.min.css\">");
 puts("<link rel=\"stylesheet\" href=\"../style/hgGtexTrackSettings.css\">");
 
-// The visible page elements are all in ./hgGtexTrackSettings.html, which is transformed into a quoted .h
+// The initial visible page elements are hgGtexTrackSettings.html, 
+// which is transformed into a quoted .h
 // file containing a string constant that we #include and print here (see makefile).
 puts(
 #include "hgGtexTrackSettings.html.h"
 );
+
+//struct tdb *tdbList = NULL;
+//struct trackDb *tdb = tdbForTrack(db, track, &tdbList);
+//printTissueTable(gtexGetVersion(tdb->table));
+
+char *table = "gtexGene";
+
+printTissueTable(gtexVersion(table));
+
+// end panel, section and body layout container 
+puts("</div></div></div");
 
 // JS libraries
 doJsIncludes();
