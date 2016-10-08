@@ -1559,7 +1559,14 @@ cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
 /* Make a text area that can be disabled. The area has rowCount X
- * columnCount and with text: intialVal */
+ * columnCount and with text: intialVal
+ *
+ * We found out the hard way be very careful with linefeeds and their encoding inside the text "initialVal".
+ * All browsers submit the textarea values with CR LF newlines.
+ * If there is a lone CR or LF, the browser will insert the missing partner to form a new CR LF pair. 
+ * This can lead to exponential doubling of newline characters or their html entities,
+ * if one of CR or LF is encoded and the other is not.
+ */
 {
 htmlPrintf("<TEXTAREA NAME='%s|attr|' ROWS=%d COLS=%d %s|none|>%s</TEXTAREA>", varName,
        rowCount, columnCount, disabled ? "DISABLED" : "",
