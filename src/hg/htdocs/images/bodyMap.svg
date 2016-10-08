@@ -1,5 +1,8 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="10 10 600 730" enable-background="new 0 0 620 750" xml:space="preserve">
+    <defs>
+        <link rel="stylesheet" href="../style/hgGtexTrackSettings.css" xmlns="http://www.w3.org/1999/xhtml"/>
+    </defs>
 <g id="BODY_BASE">
 	<path fill="#EBE9EB" d="M513.38,724.14H399.76l-2.66-3.42c0,0-1.9-3.04-4.94-3.42c-3.04-0.38-3.04,0.76-3.04-4.56
 		c0-5.32-2.28-61.94,15.2-84.36c17.48-22.42,27.74-33.82,33.44-34.2c5.7-0.38,17.1,0,21.28,0.76c4.18,0.76,15.96,0.38,17.86,0
@@ -990,14 +993,14 @@
 		</g>
 	</g>
 	<g id="RO_arteryAorta_GROUP_1_">
-		<text id="TYPE_arteryAorta_1_" transform="matrix(1 0 0 1 399.084 254.3613)" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Aorta</text>
+		<text id="TYPE_arteryAorta" transform="matrix(1 0 0 1 399.084 254.3613)" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Aorta</text>
 		
-			<polyline id="LL_arteryAorta_1_" fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" points="
+			<polyline id="LL_arteryAorta" fill="none" stroke="#EC1C24" stroke-width="1.71" stroke-linecap="round" stroke-dasharray="0,3.42" points="
 			396.92,250.42 352.84,250.42 298.88,273.22 		"/>
-		<path id="WHITE_arteryAorta_1_" fill="none" stroke="#FFFFFF" stroke-width="4" d="M303.26,277.24c1.78-0.81,3.44-0.89,3.44-0.89
+		<path id="WHITE_arteryAorta" fill="none" stroke="#FFFFFF" stroke-width="4" d="M303.26,277.24c1.78-0.81,3.44-0.89,3.44-0.89
 			l3.96,0.01c-1.66-4.56-6.02-7.83-11.15-7.83c-6.56,0-11.9,5.34-11.9,11.9l-0.02,7.36c-0.05,2.31,1.56,2.5,3.46,2.31
 			c0.95-0.09,3.42-1.89,3.42-3.16l0.01-6.66c0-2.73,2.22-4.88,4.95-4.88C300.99,275.4,302.36,276.13,303.26,277.24z"/>
-		<path id="RO_arteryAorta_1_" fill="#9F0050" stroke="#000000" d="M303.2,277.22c1.78-0.81,3.44-0.89,3.44-0.89l3.96,0.01
+		<path id="RO_arteryAorta" fill="#9F0050" stroke="#000000" d="M303.2,277.22c1.78-0.81,3.44-0.89,3.44-0.89l3.96,0.01
 			c-1.66-4.56-6.02-7.83-11.15-7.83c-6.56,0-11.9,5.34-11.9,11.9l-0.02,7.36c-0.05,2.31,1.56,2.5,3.46,2.31
 			c0.95-0.09,3.42-1.89,3.42-3.16l0.01-6.66c0-2.73,2.22-4.88,4.95-4.88C300.93,275.38,302.3,276.11,303.2,277.22z"/>
 	</g>
@@ -1035,7 +1038,7 @@
 	<text id='skinExposed' transform="matrix(1 0 0 1 473.8623 475.7988)"><tspan x="0" y="0" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Skin - Lower Leg </tspan><tspan x="0" y="13.68" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">    (Sun exposed)</tspan></text>
 	<text id='testis' transform="matrix(1 0 0 1 338.0088 500.3203)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Testis</text>
 	<text id='brainHypothalamus' transform="matrix(1 0 0 1 117.0444 100.6475)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Hypothalamus</text>
-	<text id='colon' transform="matrix(1 0 0 1 161.2422 488.7324)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Colon</text>
+	<text id='colonSigmoid' transform="matrix(1 0 0 1 161.2422 488.7324)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Colon</text>
 	<text id='skinExposed' transform="matrix(1 0 0 1 399.084 414.0078)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Skin - Suprapubic (Not sun exposed)</text>
 	<text id='arteryTibial' transform="matrix(1 0 0 1 123.9951 593.2168)" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Artery - Tibial</text>
 	<text id='xformedfibroblasts' transform="matrix(1 0 0 1 136.2065 709.1289)"><tspan x="0" y="0" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Transformed</tspan><tspan x="4.67" y="15" fill="#737373" font-family="Lato,Arial,Helvetica,sans-serif" font-size="12.5px">Fibroblasts</tspan></text>

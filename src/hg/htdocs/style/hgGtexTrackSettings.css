@@ -177,11 +177,12 @@ span#home-link {
     font-size: 12px;
 }
 .tissueColor {
-    padding: 0 6px;
+    padding: 0 10px;
 }
 
 .tissueLabel {
     padding-right: 6px;
+    cursor: pointer;
 }
 
 #bodyMapSvg {
@@ -192,4 +193,23 @@ span#home-link {
     padding: 0;
 }
 
+/* SVG */
+.mapTissueSelected {
+    fill: black;
+}
 
+/* HTML */
+.tableTissueSelected {
+    font-weight: bold;
+}
+
+.tissueHovered {
+    color: blue;
+    fill: blue;
+}
+
+/*
+.tissueLabel:hover {
+    color: blue;
+}
+*/
