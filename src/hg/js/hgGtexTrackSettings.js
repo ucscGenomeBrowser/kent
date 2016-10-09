@@ -26,25 +26,26 @@ var gtexTrackSettings = (function() {
     
     function initBodyMap(svg, doc) {
         // Set organs to unhighlighted state
+        /*
         var line = $("#LL_kidneyCortex", svg)[0];
         $(line).hide();
         var white = $("#WHITE_kidneyCortex", svg);
         $(white).hide();
         var organ = $("#RO_kidneyCortex", svg);
         $(organ).hide();
-        /*
-        line = $("#LL_arteryAorta", svg);
-        $(line).hide();
-        white = $("#WHITE_arteryAorta", svg);
-        $(white).hide();
         */
         // jQuery not working here, maybe figure this out later
         // var label = $("arteryAorta", svg);
         // $(label).css("fill", "blue");
-
-        organ = doc.getElementById('arteryAorta');
+        organ = doc.getElementById('kidneyCortex');
         organ.style.fill = "blue";
+
+        line = $("#LL_arteryAorta", svg);
+        $(line).hide();
+        white = $("#WHITE_arteryAorta", svg);
+        $(white).hide();
     }
+
 
     function onClickToggleTissue(tis) {
         // mark selected in tissue table
@@ -80,11 +81,32 @@ var gtexTrackSettings = (function() {
     function onHoverTissue() {
         // HTML
         $(this).toggleClass('tissueHovered');
+        var isOn = $(this).hasClass('tissueHovered');
 
         // SVG
         var el = _svgDoc.getElementById(this.id);
         if (el !== null) {
             el.classList.toggle('tissueHovered');
+            if (this.id === "arteryAorta") {
+                var line = $("#LL_arteryAorta", _svgRoot);
+                var white = $("#WHITE_arteryAorta", _svgRoot);
+                if (isOn) {
+                    $(line).show();
+                    $(white).show();
+                } else {
+                    $(white).hide();
+                    $(line).hide();
+                }
+/*
+                el = _svgDoc.getElementById("LL_arteryAorta");
+                if (el !== null) {
+                    el.classList.toggle('mapTissueHovered');
+                }
+                el = _svgDoc.getElementById("WHITE_arteryAorta");
+                if (el !== null) {
+                    el.classList.toggle('mapTissueHovered');
+*/
+            }
         }
     }
 
