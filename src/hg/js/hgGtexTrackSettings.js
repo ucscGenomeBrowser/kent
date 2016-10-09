@@ -7,6 +7,8 @@ var gtexTrackSettings = (function() {
     // SVG has it's own DOM
     var _svgDoc;
     var _svgRoot;
+    var _htmlDoc;
+    var _htmlRoot;
 
     var tissues = [
         'adiposeSubcut', 'adiposeVisceral', 'adrenalGland', 'arteryAorta', 'arteryCoronary', 
@@ -60,6 +62,20 @@ var gtexTrackSettings = (function() {
         }
     }
 
+    function onMapClickToggleTissue(ev) {
+        var tis = ev.target.id;
+        var el = _htmlDoc.getElementById(tis);
+        if (el !== null) {
+            el.classList.toggle('tableTissueSelected');
+        }
+        // below can likely replace 3 lines after
+        //this.classList.toggle('tableTissueSelected');
+        el = _svgDoc.getElementById(tis);
+        if (el !== null) {
+            el.classList.toggle('tableTissueSelected');
+        }
+    }
+
     function onClickSetTissue(tis) {
         // mark selected in tissue table
         $(tis).addClass('tableTissueSelected');
@@ -75,6 +91,36 @@ var gtexTrackSettings = (function() {
         var el = _svgDoc.getElementById(tis);
         if (el !== null) {
             el.classList.remove('tableTissueSelected');
+        }
+    }
+
+    function onMapHoverTissue(ev) {
+        var isOn = false;
+        var tis = ev.target.id;
+        var el = _htmlDoc.getElementById(tis);
+        if (el !== null) {
+            el.classList.toggle('tissueHovered');
+            if (el.classList.contains('tissueHovered')) {
+                isOn = true;
+            }
+        }
+
+        // below can likely replace 3 lines after
+        //this.classList.toggle('tableTissueSelected');
+        el = _svgDoc.getElementById(tis);
+        if (el !== null) {
+            el.classList.toggle('tissueHovered');
+            if (this.id === "arteryAorta") {
+                var line = $("#LL_arteryAorta", _svgRoot);
+                var white = $("#WHITE_arteryAorta", _svgRoot);
+                if (isOn) {
+                    $(line).show();
+                    $(white).show();
+                } else {
+                    $(white).hide();
+                    $(line).hide();
+                }
+            }
         }
     }
 
@@ -116,6 +162,16 @@ var gtexTrackSettings = (function() {
         // add handlers to tissue table
         $('#' + tis).click(tis, onClickToggleTissue);
         $('#' + tis).hover(onHoverTissue, onHoverTissue);
+
+        var el = _svgDoc.getElementById(tis);
+        if (el !== null) {
+            el.addEventListener("click", onMapClickToggleTissue);
+            el.addEventListener("mouseenter", onMapHoverTissue);
+            el.addEventListener("mouseleave", onMapHoverTissue);
+            // mouseover, mouseout ?
+        }
+
+        
     }
 
     function animateTissues() {
@@ -155,6 +211,8 @@ var gtexTrackSettings = (function() {
             var bodyMapSvg = document.getElementById("bodyMapSvg");
             globalSvg = bodyMapSvg;
 
+            _htmlDoc = document;
+            _htmlRoot = document.documentElement;
 
             // wait for SVG to load
             bodyMapSvg.addEventListener("load", function() {
