@@ -28463,7 +28463,8 @@ done
 
 #############################################################################
 # hgPal downloads (DONE - 2013-09-20 - Hiram)
-# hgPal downloads (redo refGene - 2016-06-28 - braney )
+# hgPal downloads (redo refGene - 2016-10-10 - braney )
+# hgPal downloads (redo knownGene - 2016-10-04 - braney )
 #   FASTA from 100-way for ensGene
 
     ssh hgwdev
@@ -28473,7 +28474,7 @@ done
     cat ../species.list | tr '[ ]' '[\n]' > order.list
 
     export mz=multiz100way
-    export gp=ensGene
+    export gp=knownGene
     export db=hg19
     export I=0
     mkdir exonAA exonNuc
@@ -28492,27 +28493,26 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
-    #   real    301m26.885s
+    #   real    237m38.310s
 
     export mz=multiz100way
-    export gp=ensGene
+    export gp=knownGene
     export db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real     11m27.994s
+    #   real    4m34.089s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
     #   real    18m41.606s
     du -hsc exonAA exonNuc *.fa.gz
-    # 1.3G    exonAA
-    # 2.0G    exonNuc
-    # 1.3G    ensGene.multiz100way.exonAA.fa.gz
-    # 2.0G    ensGene.multiz100way.exonNuc.fa.gz
-    # 6.4G    total
+    # 2.5G    exonAA
+    # 4.0G    exonNuc
+    # 2.5G    knownGene.multiz100way.exonAA.fa.gz
+    # 4.0G    knownGene.multiz100way.exonNuc.fa.gz
 
     rm -rf exonAA exonNuc
 
     # we're only distributing exons at the moment
     export mz=multiz100way
-    export gp=ensGene
+    export gp=knownGene
     export db=hg19
     export pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
@@ -28521,7 +28521,6 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    ### need other gene track alignments also
     # running up refGene
     # screen control for long running job business
     screen -S alignments100
@@ -28548,22 +28547,21 @@ done
     echo "wait" >> $gp.jobs
 
     time sh -x $gp.jobs > $gp.jobs.log 2>&1
-    #   real    162m40.981s
+    #   real    173m1.000s
 
     export mz=multiz100way
     export gp=refGene
     export db=hg19
     time zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    #   real    3m50.277s
+    #   real    3m34.210s
     time zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    #   real    14m9.734s
+    #   real    14m4.669s
     du -hsc exonAA exonNuc refGene*.fa.gz
-    # 804M    exonAA
-    # 1.3G    exonNuc
-    # 804M    refGene.multiz100way.exonAA.fa.gz
-    # 1.3G    refGene.multiz100way.exonNuc.fa.gz
-    # 4.2G    total
-
+    # 2.0G    exonAA
+    # 3.2G    exonNuc
+    # 2.0G    refGene.multiz100way.exonAA.fa.gz
+    # 3.2G    refGene.multiz100way.exonNuc.fa.gz
+    # 11G     total
 
     rm -rf exonAA exonNuc
 
@@ -28578,34 +28576,34 @@ done
     ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
     ln -s `pwd`/md5sum.txt $pd/
 
-    ### And ensCanonical
+    ### And knownCanonical
     cd /hive/data/genomes/hg19/bed/multiz100way/pal
     export mz=multiz100way
-    export gp=ensCanonical
+    export gp=knownCanonical
     export db=hg19
-    mkdir exonAA exonNuc ppredAA ppredNuc ensCanonical
+    mkdir exonAA exonNuc ppredAA ppredNuc knownCanonical
 
     cut -f1 ../../../chrom.sizes | while read C
     do
         echo $C
-	hgsql hg19 -N -e "select chrom, chromStart, chromEnd, transcript from ensCanonical where chrom='$C'" > ensCanonical/$C.ens.bed
+	hgsql hg19 -N -e "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$C'" > knownCanonical/$C.known.bed
     done
 
-    ls ensCanonical/*.ens.bed | while read F
+    ls knownCanonical/*.known.bed | while read F
     do
       if [ -s $F ]; then
-         echo $F | sed -e 's#ensCanonical/##; s/.ens.bed//'
+         echo $F | sed -e 's#knownCanonical/##; s/.known.bed//'
       fi
     done | while read C
     do
 	echo "date"
-	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed  $db $mz ensGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed  $db $mz knownGene order.list stdout | \
 	    gzip -c > ppredAA/$C.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -noTrans $db $mz ensGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -noTrans $db $mz knownGene order.list stdout | \
 	    gzip -c > ppredNuc/$C.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -exons -noTrans $db $mz ensGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons -noTrans $db $mz knownGene order.list stdout | \
 	    gzip -c > exonNuc/$C.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=ensCanonical/$C.ens.bed -exons $db $mz ensGene order.list stdout | \
+	echo "mafGene -geneBeds=knownCanonical/$C.known.bed -exons $db $mz knownGene order.list stdout | \
 	    gzip -c > exonAA/$C.exonAA.fa.gz"
     done > $gp.$mz.jobs
 
@@ -28613,9 +28611,9 @@ done
     # real    1033m6.639s
 XXXX
 
-    rm *.ens.bed
+    rm *.known.bed
     mz=multiz100way
-    gp=ensCanonical
+    gp=knownCanonical
     db=hg19
     zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz &
     zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz &
@@ -28625,7 +28623,7 @@ XXXX
     rm -rf exonAA exonNuc ppredAA ppredNuc
 
     mz=multiz100way
-    gp=ensCanonical
+    gp=knownCanonical
     db=hg19
     pd=/usr/local/apache/htdocs-hgdownload/goldenPath/$db/$mz/alignments
     mkdir -p $pd
