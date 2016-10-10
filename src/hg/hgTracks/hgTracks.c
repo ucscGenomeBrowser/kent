@@ -6538,6 +6538,15 @@ for (track = trackList; track != NULL; track = track->next)
     char *s = cartOptionalString(cart, track->track);
     if (cgiOptionalString("hideTracks"))
 	{
+        if (tdbIsSuperTrackChild(track->tdb))
+            {
+            s = cgiOptionalString(track->tdb->parent->track);
+            if (s)
+                {
+                cartSetString(cart, track->tdb->parent->track, s);
+                track->tdb->parent->visibility = hTvFromString(s) ;
+                }
+            }
 	s = cgiOptionalString(track->track);
 	if (s != NULL)
 	    {
