@@ -1270,6 +1270,7 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     gt->id = vcff->genotypeIds[i];
     gt->infoCount = gtWordCount;
     gt->infoElements = vcfFileAlloc(vcff, gtWordCount * sizeof(struct vcfInfoElement));
+    gt->hapIxA = gt->hapIxB = -1;
     boolean foundGT = FALSE;
     int j;
     for (j = 0;  j < gtWordCount;  j++)
