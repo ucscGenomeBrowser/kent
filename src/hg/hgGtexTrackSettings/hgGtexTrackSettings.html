@@ -69,12 +69,12 @@
 
 <!-- tissue chooser panel -->
 
-    <div id="gbeSectionTitle" class="row gbSectionBanner">
+    <div id="gbSectionTitle" class="row gbSectionBanner">
         <div class="col-md-4">Tissues</div>
-        <div class="col-md-3 gbSectionInfo">
-        Click label below to set or clear a tissue
+        <div class="col-md-5 gbSectionInfo">
+        Click label in Body Map or Tissue List to set or clear a tissue
         </div>
-        <div class="col-md-5">
+        <div class="col-md-3 gbButtonContainer">
             <div id="setAll" class="goButtonContainer gtButton gbWhiteButton">set all</div>
             <div id="clearAll" class="goButtonContainer gtButton gbWhiteButton">clear all</div>
         </div>
@@ -82,14 +82,12 @@
 
     <div id="tissueSection" class="row">
         <div id="bodyMap" class="col-md-6">
-            <div class="gbSubsectionBanner">Body Map</div>
+          <div class="gbSubsectionBanner">Body Map</div>
+            <!--<object type="image/svg+xml" height="800px" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">-->
             <object id="bodyMapSvg" type="image/svg+xml" class="gbImage gtexBodyMap" data="/images/bodyMap.svg">
                 Body Map illustration not found
             </object>
         </div>
-
         <div class="col-md-6">
-<p>
-        <!--<div class="spacer"></div> -->
-        <!--><div class="gbSubsectionBanner>Tissue List</div>-->
+          <div class="gbSubsectionBanner">Tissue List</div>
 
