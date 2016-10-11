@@ -130,6 +130,21 @@
     color: white;
 }
 
+.gbSectionInfo {
+    font-size: 13px;
+    font-style: italic;
+    margin-top: 3px;
+    color: lightgray;
+}
+
+.gbSubsectionBanner {
+    margin-left: 20px;
+    background-color: #eee;
+    margin-left: 25px;
+    padding: 3px;
+    padding-left: 5px;
+}
+
 .gbSectionTitle {
     margin-top: 3px;
 }
