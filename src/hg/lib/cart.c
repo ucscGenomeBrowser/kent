@@ -1596,10 +1596,7 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 {
-if (doContentType)
-    htmlPushEarlyHandlers();
-else
-    pushWarnHandler(cartEarlyWarningHandler);
+htmlPushEarlyHandlers();
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
 cartWriteCookie(cart, cookieName);
@@ -2856,19 +2853,11 @@ if (sameOk(cgiOptionalString("position"), "lastDbPos"))
     char *dbLocalPosContent = cartUsualString(cart, dbPosKey, NULL);
     if (dbLocalPosContent)
 	{
-	//warn("dbLocalPosContent=%s",dbLocalPosContent); // DEBUG REMOVE
 	if (strchr(dbLocalPosContent, '='))
 	    {
 	    gotCart = TRUE;
 	    cartParseOverHash(lastDbPosCart, cloneString(dbLocalPosContent)); // this function chews up input
 	    position = cloneString(cartUsualString(lastDbPosCart, "position", NULL));
-	    //warn("gotCart position=%s",position); // DEBUG REMOVE
-
-	    // DEBUG REMOVE:
-	    //struct dyString *dbPosValue = newDyString(4096);
-	    //cartEncodeState(lastDbPosCart, dbPosValue);
-	    //warn("gotCart dbPosValue->string=[%s]",dbPosValue->string);
-
 	    }
 	else
 	    {

@@ -3249,7 +3249,7 @@ if (mdbByVarsPtr != NULL && *mdbByVarsPtr != NULL)
 #define MDB_NOT_FOUND ((struct mdbObj *)-666)
 #define METADATA_NOT_FOUND ((struct mdbObj *)-999)
 
-static struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
+struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb)
 // Returns the metadata for a table from a tdb setting.
 {
 char *setting = trackDbSetting(tdb, MDB_METADATA_KEY);

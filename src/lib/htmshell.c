@@ -46,6 +46,8 @@ NoEscape = FALSE;
 void htmlVaEncodeErrorText(char *format, va_list args)
 /* Write an error message encoded against XSS. */
 {
+va_list argscp;
+va_copy(argscp, args);
 char warning[1024];
 int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
 if (sz < 0)
@@ -56,6 +58,11 @@ if (sz < 0)
     fflush(stderr);
     }
 fprintf(stdout, "%s\n", warning);
+/* write warning/error message to stderr so they get logged. */
+vfprintf(stderr, format, argscp);
+fprintf(stderr, "\n");
+fflush(stderr);
+va_end(argscp);
 }
 
 
@@ -213,12 +220,6 @@ char *cleanQuote = needMem(size+1);
 safecpy(cleanQuote,size+1,s);
 
 strSwapStrs(cleanQuote, size,"\n","<BR>" ); // use BR tag for new lines
-// No Longer necessary. They mess up textareas which have CR LF when posted.
-// I am commenting them out now 2016-10-01. TODO REMOVE if not needed.
-//if (cgiClientBrowser(NULL,NULL,NULL) == btFF) // Firefox
-//    strSwapStrs(cleanQuote, size, "&#124;", "<BR>"); // replace with BR tag
-//else
-//    strSwapStrs(cleanQuote, size, "&#x0A;", "<BR>"); // replace with BR tag
 
 return cleanQuote;
 }
@@ -233,11 +234,6 @@ int htmlEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-// No Longer necessary. They mess up textareas which have CR LF when posted.
-// I am commenting them out now 2016-10-01. TODO REMOVE if not needed.
-//boolean FF = FALSE;
-//if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-//    FF = TRUE;
 int total = 0;
 char c = 0;
 do
@@ -248,16 +244,6 @@ do
     if (c == '&') { size = 5; newString = "&amp;"; } // '&' start a control char
     if (c == '>') { size = 4; newString = "&gt;" ; } // '>' close of tag
     if (c == '<') { size = 4; newString = "&lt;" ; } // '<' open  of tag
-    // No Longer necessary. They mess up textareas which have CR LF when posted.
-    // I am commenting them out now 2016-10-01. TODO REMOVE if not needed.
-    //if (c == '\n') 
-	//{
-	//size = 6;
-	//if (FF)
-	    //newString = "&#124;"; // FF does not support!  Use "&#124;" for '|' instead
-	//else
-	    //newString = "&#x0A;"; // '\n' is supported on some browsers
-	//}
     if (c == '/')  { size = 6; newString = "&#x2F;"; } // forward slash helps end an HTML entity
     if (c == '"')  { size = 6; newString = "&quot;"; } // double quote
     if (c == '\'') { size = 5; newString = "&#39;" ; } // single quote

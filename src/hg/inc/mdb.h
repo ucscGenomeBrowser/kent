@@ -565,4 +565,6 @@ struct slPair *mdbVarsSearchable(struct sqlConnection *conn, boolean hasTableNam
 // Searchable vars are only for table or file objects.
 // Further restrict to vars associated with tableName, fileName or both.
 
+struct mdbObj *metadataForTableFromTdb(struct trackDb *tdb);
+// Returns the metadata for a table from a tdb setting.
 #endif /* MDB_H */
