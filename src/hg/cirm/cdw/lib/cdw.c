@@ -6397,5 +6397,183 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
+
+char *cdwJointDatasetCommaSepFieldNames = "id,name,label,description,childrenNames,metaDivTags";
+
+void cdwJointDatasetStaticLoad(char **row, struct cdwJointDataset *ret)
+/* Load a row from cdwJointDataset table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->id = sqlUnsigned(row[0]);
+ret->name = row[1];
+ret->label = row[2];
+ret->description = row[3];
+ret->childrenNames = row[4];
+ret->metaDivTags = row[5];
+}
+
+struct cdwJointDataset *cdwJointDatasetLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all cdwJointDataset from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+{
+struct cdwJointDataset *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = cdwJointDatasetLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void cdwJointDatasetSaveToDb(struct sqlConnection *conn, struct cdwJointDataset *el, char *tableName, int updateSize)
+/* Save cdwJointDataset as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+{
+struct dyString *update = newDyString(updateSize);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->label,  el->description,  el->childrenNames,  el->metaDivTags);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+struct cdwJointDataset *cdwJointDatasetLoad(char **row)
+/* Load a cdwJointDataset from row fetched with select * from cdwJointDataset
+ * from database.  Dispose of this with cdwJointDatasetFree(). */
+{
+struct cdwJointDataset *ret;
+
+AllocVar(ret);
+ret->id = sqlUnsigned(row[0]);
+ret->name = cloneString(row[1]);
+ret->label = cloneString(row[2]);
+ret->description = cloneString(row[3]);
+ret->childrenNames = cloneString(row[4]);
+ret->metaDivTags = cloneString(row[5]);
+return ret;
+}
+
+struct cdwJointDataset *cdwJointDatasetLoadAll(char *fileName) 
+/* Load all cdwJointDataset from a whitespace-separated file.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+{
+struct cdwJointDataset *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileRow(lf, row))
+    {
+    el = cdwJointDatasetLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwJointDataset *cdwJointDatasetLoadAllByChar(char *fileName, char chopper) 
+/* Load all cdwJointDataset from a chopper separated file.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+{
+struct cdwJointDataset *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[6];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = cdwJointDatasetLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct cdwJointDataset *cdwJointDatasetCommaIn(char **pS, struct cdwJointDataset *ret)
+/* Create a cdwJointDataset out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwJointDataset */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->id = sqlUnsignedComma(&s);
+ret->name = sqlStringComma(&s);
+ret->label = sqlStringComma(&s);
+ret->description = sqlStringComma(&s);
+ret->childrenNames = sqlStringComma(&s);
+ret->metaDivTags = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void cdwJointDatasetFree(struct cdwJointDataset **pEl)
+/* Free a single dynamically allocated cdwJointDataset such as created
+ * with cdwJointDatasetLoad(). */
+{
+struct cdwJointDataset *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->name);
+freeMem(el->label);
+freeMem(el->description);
+freeMem(el->childrenNames);
+freeMem(el->metaDivTags);
+freez(pEl);
+}
+
+void cdwJointDatasetFreeList(struct cdwJointDataset **pList)
+/* Free a list of dynamically allocated cdwJointDataset's */
+{
+struct cdwJointDataset *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    cdwJointDatasetFree(&el);
+    }
+*pList = NULL;
+}
+
+void cdwJointDatasetOutput(struct cdwJointDataset *el, FILE *f, char sep, char lastSep) 
+/* Print out cdwJointDataset.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->id);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->name);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->label);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->description);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->childrenNames);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaDivTags);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
