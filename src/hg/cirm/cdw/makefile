@@ -40,6 +40,7 @@ UTIL_DIRS = \
     utils/cdwVcfStats
 
 CGI_DIRS = \
+    cdwGetFile \
     cdwWebBrowse 
 
 TEST_DIRS = \
