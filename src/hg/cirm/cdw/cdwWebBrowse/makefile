@@ -6,8 +6,8 @@ MYLIBDIR = $(kentSrc)/lib/${MACHTYPE}
 MYLIBS =  ../lib/$(MACHTYPE)/cdwlib.a ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = cdwWebBrowse
-
-O = $A.o 
+B = cdwFlowCharts
+O = $A.o $B.o
 
 include $(kentSrc)/inc/cgi_build_rules.mk
 
