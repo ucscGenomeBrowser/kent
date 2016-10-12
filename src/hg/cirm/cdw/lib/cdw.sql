@@ -561,3 +561,16 @@ CREATE TABLE cdwDataset (
     PRIMARY KEY(id),
     UNIQUE(name)
 );
+
+#A joint dataset is a collection of datasets, usually associated with a common trait.
+CREATE TABLE cdwJointDataset (
+    id int unsigned auto_increment,	# Dataset ID
+    name varchar(255) default '',	# Short name of this dataset, one word, no spaces
+    label varchar(255) default '',	# short title of the dataset, a few words
+    description longblob,	# Description of dataset, can be a complete html paragraph.
+    childrenNames varchar(255) default '',	# Comma separated list of children data set names.
+    metaDivTags varchar(255) default '',	# Comma separated list of fields used to make tree out of metadata
+              #Indices
+    PRIMARY KEY(id),
+    UNIQUE(name)
+);
