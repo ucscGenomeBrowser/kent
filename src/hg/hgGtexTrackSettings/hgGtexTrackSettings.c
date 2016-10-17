@@ -30,6 +30,7 @@
 /* Global Variables */
 struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
+char *db = NULL;
 
 static void doCartJson()
 /* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
@@ -51,6 +52,22 @@ webIncludeResourceFile("jquery-ui.css");
 jsIncludeFile("jquery-ui.js", NULL);
 jsIncludeFile("jquery.watermarkinput.js", NULL);
 jsIncludeFile("utils.js",NULL);
+}
+
+static void printTrackDescription()
+{
+puts("<div class='row gbSectionBanner gbSimpleBanner'>Track Description</div>");
+puts("<a name='TRACK_HTML'></a>");
+struct sqlConnection *conn = sqlConnect(db);
+char query[256];
+sqlSafef(query, sizeof(query), "select html from trackDb where tableName='gtexGene'");
+char *html = sqlQuickString(conn, query);
+sqlDisconnect(&conn);
+puts("<div class='trackDescriptionPanel'>");
+puts("<div class='trackDescription'>");
+puts(html);
+puts("</div></div>");
+puts("</div>");
 }
 
 static void printTissueTable(char *version)
@@ -95,7 +112,7 @@ static void doMainPage()
 /* Send HTML with javascript to bootstrap the user interface. */
 {
 // Start web page with new banner
-char *db = NULL, *genome = NULL, *clade = NULL;
+char *genome = NULL, *clade = NULL;
 getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
 
 // char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
@@ -119,9 +136,14 @@ puts(
 char *table = "gtexGene";
 
 printTissueTable(gtexVersion(table));
+puts("</div></div></div></div>");
+
+printTrackDescription();
+puts("</div>");
 
 // end panel, section and body layout container 
-puts("</div></div></div");
+
+// Track description
 
 // JS libraries
 doJsIncludes();

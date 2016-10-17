@@ -131,6 +131,10 @@
     color: white;
 }
 
+.gbSimpleBanner {
+    padding-left: 30px;
+}
+
 .gbSectionInfo {
     font-size: 13px;
     font-style: italic;
@@ -242,6 +246,33 @@ span#home-link {
     color: blue;
     fill: blue;
 }
+
+.trackDescription {
+    margin-left: 20px;
+}
+
+.trackDescription h2{
+    font-size: 24px;
+    color: #003a72
+}
+
+.trackDescription h2:first-child {
+    margin-top: 0;
+    padding-top: 15px;
+}
+
+.trackDescription img {
+    border: 1px solid black;
+}
+
+.trackDescriptionPanel {
+    margin-top: 0;
+    background-color: #f5f5f5;
+    padding-bottom: 20px;
+    border-bottom: 1px solid lightgray;
+}
+    
+    
 
 /*
 .tissueLabel:hover {
