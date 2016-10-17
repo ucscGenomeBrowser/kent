@@ -84,14 +84,16 @@
     margin-top: 4px;
 }
 
-.spacer {
-    padding-top: 8px;
+/*.spacer {
+    padding-top: 1px;
 }
+*/
 
 .gbSelect {
     /* font-height: 12px; */
     font-size: 14px;
     font-weight: normal;
+    color: black;
     margin: 0 5px;
 }
 
@@ -111,11 +113,6 @@
     margin: 8px;
 }
 
-.gtexTissueTable {
-    border: 5px #DDD solid;
-    margin: 20px;
-    margin-right: 30px;
-}
 
 .gtexBodyMap {
     margin: 4px;
@@ -139,6 +136,7 @@
     font-style: italic;
     margin-top: 3px;
     color: lightgray;
+    text-align: right;
 }
 
 .gbSubsectionBanner {
@@ -151,6 +149,12 @@
 .gbSectionTitle {
     margin-top: 3px;
 }
+
+/*
+* {
+    border: 1px solid red;
+}
+*/
 
 div.gbWhiteButton {
     display: inline-block;
@@ -191,11 +195,22 @@ span#home-link {
     table-layout: auto;
     width: 100%;
     border-collapse: separate;
-    border-spacing: 6px 6px;
-    border: 2px solid #aaa;
-    font-size: 12px;
-    margin-top: 15px;
+    border-spacing: 8px 8px;
+    /* border: 2px solid #aaa; */
+    font-size: 12.5px;
+    margin-top: 5px;
+    font-family: Lato, Arial, Helvetica;
+    font-weight: normal;
 }
+
+/*
+.gtexTissueTable {
+    border: 5px #DDD solid;
+    margin: 20px;
+    margin-right: 30px;
+}
+*/
+
 .tissueColor {
     padding: 0 10px;
 }
