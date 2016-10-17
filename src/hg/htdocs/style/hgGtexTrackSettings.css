@@ -39,7 +39,7 @@
     background-color: #EFD5A9;
     padding: 5px;
     font-weight: normal;
-    font-style: italic;
+    /* font-style: italic; */
     font-size: 13px;
     color: #555;
 }
