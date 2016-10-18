@@ -8949,8 +8949,13 @@ if (gpList && gpList->name2)
     if ((strlen(gpList->name2) < 1) || sameString(gpList->name2, "noXref"))
        printf("none<BR>\n");
     else
+       {
        printf("<A HREF=\"%s/geneview?gene=%s\" "
 	    "target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
+       printf("<B>Ensembl Gene Tree: </B>");
+       printf("<A HREF=\"%s/Gene/Compara_Tree?g=%s&t=%s\" "
+             "target=_blank>%s</A><br>", ensUrl, gpList->name2, shortItemName, gpList->name2);
+       }
     }
 genePredFreeList(&gpList);
 
