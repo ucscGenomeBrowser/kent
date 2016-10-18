@@ -43,8 +43,21 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+char *removeBracketingQuotes(char *input)
+// Remove quotes from string if they are matching and at the beginning and end of string
+{
+int length = strlen(input);
+if ((*input == '\"') && (input[length - 1] == '\"'))
+    {
+    input[length - 1] = 0;
+    return &input[1];
+    }
+else
+    return input;
+}
+
 void outputTrackMeta(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, FILE *output)
-/* Check remote file exists and is of correct type. Wrap this in error catcher */
+// Output a track stanza.
 {
 char *metaData = trackDbSetting(tdb, "metadata");
 if (metaData != NULL)
@@ -54,9 +67,18 @@ if (metaData != NULL)
     fprintf(output, "track\t%s\n", trackHubSkipHubName(tdb->track));
     for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)  
         {      
+        if (sameString(mdbVar->var, "objType"))
+            continue;
         mdbVar->var = replaceChars(mdbVar->var, " ", "_");
         mdbVar->var = replaceChars(mdbVar->var, "\"", " ");
         mdbVar->var = trimSpaces(mdbVar->var);
+        mdbVar->val = trimSpaces(mdbVar->val);
+        mdbVar->val = removeBracketingQuotes(mdbVar->val);
+        mdbVar->val = trimSpaces(mdbVar->val);
+
+        if (isEmpty(mdbVar->val))
+            continue;
+        
         fprintf(output, "%s\t%s\n", mdbVar->var,mdbVar->val);
         }
     fprintf(output,"\n");
@@ -65,6 +87,7 @@ if (metaData != NULL)
 
 
 int outTrackDb(struct trackHub *hub, struct trackHubGenome *genome, struct trackDb *tdb, FILE *output)
+// Open a track hub and output a RA file with its metadata.
 {
 int retVal = 0;
 
