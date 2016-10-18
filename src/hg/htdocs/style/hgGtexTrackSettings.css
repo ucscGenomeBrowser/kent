@@ -26,22 +26,31 @@
     padding-bottom: 6px;
     font-weight: bold;
     font-size: 17px;
-    /*margin-top: -3px; */
+    /* color: #003a72; */
+    color: black;
 }
 
 .gbTrackName {
     background-color: #F3E0BE;
     padding: 5px;
     margin: -10px;
+    /* color: #003a72; */
+    black;
 }
 
 .gbAssembly {
     background-color: #EFD5A9;
     padding: 5px;
+    margin-left: 10px;
     font-weight: normal;
     /* font-style: italic; */
     font-size: 13px;
     color: #555;
+}
+
+.gbAssemblySub {
+    color: gray;
+    font-weight: normal;
 }
 
 .goButtonContainer {
@@ -75,8 +84,20 @@
 .gbGoIcon {
     display: inline-block;
     color: #003a72; /* dark blue */
+    cursor: pointer;
 }
 
+.gbFaStack {
+    font-size: 70%;
+}
+
+.gbIconText {
+    color: white;
+}
+
+.gbBannerIcon {
+    color: white;
+}
 
 
 .configurator {

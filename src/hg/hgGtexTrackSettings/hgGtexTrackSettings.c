@@ -56,8 +56,15 @@ jsIncludeFile("utils.js",NULL);
 
 static void printTrackDescription()
 {
-puts("<div class='row gbSectionBanner gbSimpleBanner'>Track Description</div>");
 puts("<a name='TRACK_HTML'></a>");
+puts("<div class='row gbSectionBanner gbSimpleBanner'>");
+puts("<div class='col-md-11'>Track Description</div>");
+puts("<div class='col-md-1'>"
+        "<a href='#TRACK_TOP' title='Jump to top of page'>"
+        "<i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>"
+        //"<i class='gbBannerIcon gbGoIcon fa fa-lg fa-level-up'></i>"
+        "</a></div>");
+puts("</div>");
 struct sqlConnection *conn = sqlConnect(db);
 char query[256];
 sqlSafef(query, sizeof(query), "select html from trackDb where tableName='gtexGene'");
