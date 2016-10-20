@@ -1,0 +1,56 @@
+This CGI is based on a Body Map illustration created by Jeff West Design.  The artwork is
+provided in Adobe Illlustrator (.ai) and EPS formats, which must be exported to SVG format
+for use in code.  There are also some minor edits applied to the SVG for code compatibility.
+Instructions below.
+
+In Adobe Illustrator:
+
+(0. Set naming convention for elements (Preferences, Units, Identify Objects By: XML ID)
+
+1. Open file (File Open from top menu)
+
+2. Crop to minimize whitespace and remove title (Artboards tab in right panel, crop icon)
+
+        Name: BodyMap_Draft04_Cropped (or whatever)
+
+        Width: 620 pt, X: 125pt
+        Height: 750 pt, Y: 80 pt
+
+   NOTE:  the X, Y may need some tweaking -- use crop box viz to guide
+
+    Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.  600, 730, 10, 10
+
+3. Remove male/female symbols (click and delete, or click on eye image in right panel to hide from export)
+
+4. Save in SVG format (Save As, Format: SVG)
+
+        * check Use Artboard ?
+        - on SVG options, 
+                * SVG 1.1
+                * Fonts:  SVG, None
+                * uncheck 'Preserve Illustrator Editing'
+                * CSS Properties: Style Elements
+                * check 'Output fewer <tspan> elements
+                * check 'Responsive'
+                * Decimal places: 1 (or 2 for higher res)
+                (Fonts (SVG/Only Glyphs ? -- if need to include fonts in SVG)
+                (Use <textpath>) -- n/a here  (e.g. curving text)
+                ( Link ) -- n/a here (e.g. images embedded in illustration)
+
+From script/editor:
+
+1. Strip XML header and comment from Adobe (first line should be <svg>)
+
+2. Clean up identifiers (replace _x5F_ with _ if needed)
+
+    sed 's/_x5F_/_/g' file.svg > bodyMap.svg
+    mv bodyMap.svg ~/kent/src/hg/htdocs/images
+
+3. Adjust viewbox if needed
+
+70 45 600 730
+(check aspect ratio)
+        
+        
+
+
