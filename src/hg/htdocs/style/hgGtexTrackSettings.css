@@ -32,16 +32,17 @@
 
 .gbTrackName {
     background-color: #F3E0BE;
-    padding: 5px;
+    padding: 2px 8px;
     margin: -10px;
+    font-weight: normal;
     /* color: #003a72; */
     black;
 }
 
 .gbAssembly {
-    background-color: #EFD5A9;
-    padding: 5px;
-    margin-left: 10px;
+    /* background-color: #EFD5A9; */
+    /* padding: 5px; */
+    margin-left: 6px;
     font-weight: normal;
     /* font-style: italic; */
     font-size: 13px;
