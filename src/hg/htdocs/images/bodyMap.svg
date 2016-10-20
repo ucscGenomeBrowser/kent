@@ -1,5 +1,9 @@
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="70 45 600 730" style="enable-background:new 0 0 703 817;" xml:space="preserve">
+<defs>
+    <link rel="stylesheet" href="../style/hgGtexTrackSettings.css" xmlns="http://www.w3.org/1999/xhtml"/>
+</defs>
+
 <style type="text/css">
 	.st0{fill:#EBE9EB;}
 	.st1{fill:#E1DEDB;}
@@ -22,8 +26,8 @@
 	.st18{fill:#F3E5CD;stroke:#000000;}
 	.st19{fill:none;stroke:#0000FF;stroke-width:4;}
 	.st20{fill:#737373;}
-	.st21{font-family:'Lato-Regular';}
-	.st22{font-size:12.5px;}
+	.st21{font-family:Lato,Arial,Helvetica;}
+	.st22{font-size:11px;}
 	.st23{fill:#CDC8CD;stroke:#000000;}
 	.st24{fill:#D9AF65;stroke:#E8CE9F;stroke-width:1.14;}
 	.st25{fill:#8D9DC1;stroke:#000000;}
@@ -1720,7 +1724,7 @@
 			<polyline id="vagina_5_" class="st27" points="363.1,482 363.1,495.8 368.8,506.3 365.6,506.3 364.1,508.6 356.2,495.6 
 				356.1,482 			"/>
 		</g>
-		<text id="vagina_Text_hi" transform="matrix(1 0 0 1 398.0088 524.3096)" class="st20 st21 st22">Vagina</text>
+		<text id="vagina_Text_Hi" transform="matrix(1 0 0 1 398.0088 524.3096)" class="st20 st21 st22">Vagina</text>
 		<polyline id="vagina_Lead_Hi" class="st37" points="395.8,520.6 385,520.5 363,500.2 		"/>
 	</g>
 	<g id="uterus_GROUP">
@@ -1834,7 +1838,7 @@
 			<ellipse id="testis_left_Pic_Hi" class="st156" cx="359.6" cy="509.3" rx="4.4" ry="5.9"/>
 		</g>
 		<polyline id="testis_Lead_Hi" class="st37" points="396.7,534 385.4,534 363,512.2 		"/>
-		<text id="testis_text_Hi" transform="matrix(1 0 0 1 398.0088 539.3164)" class="st20 st21 st22">Testis</text>
+		<text id="testis_Text_Hi" transform="matrix(1 0 0 1 398.0088 539.3164)" class="st20 st21 st22">Testis</text>
 	</g>
 </g>
 <g id="heart_GROUP">
@@ -1980,9 +1984,7 @@
 	<path class="st169" d="M257.7,109"/>
 	<path class="st169" d="M113.3,109"/>
 	<text transform="matrix(1 0 0 1 533.3232 499.6436)" class="st169 st170 st22">Colon - Sigmoid</text>
-	<text id="skinNotExposed_Text_Hi_1_" transform="matrix(1 0 0 1 459.0845 453.0078)" class="st169 st170 st22">Skin - Suprapubic (Not sun exposed)</text>
-	<g id="arteryAorta_Text_Hi" class="st171">
-		<text transform="matrix(1 0 0 1 459.584 293.8613)" class="st20 st170 st22">Artery - Aorta</text>
-	</g>
+	<text transform="matrix(1 0 0 1 459.0845 453.0078)" class="st169 st170 st22">Skin - Suprapubic (Not sun exposed)</text>
+        <text transform="matrix(1 0 0 1 459.584 293.8613)" class="st20 st170 st22">Artery - Aorta</text>
 </g>
 </svg>
