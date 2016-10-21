@@ -130,11 +130,9 @@ var gtexTrackSettings = (function() {
     }
 
 
-    function onMapHoverTissue(ev) {
+    function toggleHighlightTissue(tis) {
         var i;
         var isOn = false;
-        var svgId = ev.target.id;
-        var tis = tissueFromSvgId(svgId);
         var el = _htmlDoc.getElementById(tis);
         if (el !== null) {
             el.classList.toggle('tissueHovered');
@@ -145,8 +143,9 @@ var gtexTrackSettings = (function() {
         // below can likely replace 3 lines after
         //this.classList.toggle('tissueSelected');
         el = _svgDoc.getElementById(tis + '_Text_Hi');
-        if (el === null)
+        if (el === null) {
             return;
+        }
         el.classList.toggle('tissueHovered');
         var line = $("#" + tis + "_Lead_Hi", _svgRoot);
         var pic = $("#" + tis + "_Pic_Hi", _svgRoot);
@@ -172,36 +171,15 @@ var gtexTrackSettings = (function() {
         }
     }
 
-    function onHoverTissue() {
-        // HTML
-        $(this).toggleClass('tissueHovered');
-        var isOn = $(this).hasClass('tissueHovered');
+    function onMapHoverTissue(ev) {
+        var svgId = ev.target.id;
+        var tis = tissueFromSvgId(svgId);
+        toggleHighlightTissue(tis);
+    }
 
-        // SVG
-        var el = _svgDoc.getElementById(this.id + '_Text_Hi');
-        if (el !== null) {
-            el.classList.toggle('tissueHovered');
-            if (this.id === "arteryAorta") {
-                var line = $("#LL_arteryAorta", _svgRoot);
-                var white = $("#WHITE_arteryAorta", _svgRoot);
-                if (isOn) {
-                    $(line).show();
-                    $(white).show();
-                } else {
-                    $(white).hide();
-                    $(line).hide();
-                }
-/*
-                el = _svgDoc.getElementById("LL_arteryAorta");
-                if (el !== null) {
-                    el.classList.toggle('mapTissueHovered');
-                }
-                el = _svgDoc.getElementById("WHITE_arteryAorta");
-                if (el !== null) {
-                    el.classList.toggle('mapTissueHovered');
-*/
-            }
-        }
+    function onHoverTissue() {
+        var tis = this.id;
+        toggleHighlightTissue(tis);
     }
 
     //function animateTissue(tis, i, ignore) {
