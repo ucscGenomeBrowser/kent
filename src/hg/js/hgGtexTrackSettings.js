@@ -1,10 +1,11 @@
 // Module: gtexTrackSettings
 
+
 var gtexTrackSettings = (function() {
 
     // Data
     
-    // SVG has it's own DOM
+    // SVG has its own DOM
     var _svgDoc;
     var _svgRoot;
     var _htmlDoc;
@@ -25,72 +26,96 @@ var gtexTrackSettings = (function() {
     ];
 
     // Convenience functions
-    
+    function tissueFromSvgId(svgId) {
+    // Get tissue name from an SVG id. Convention here is <tis>_*
+            return svgId.split('_')[0];
+    }
+
+    function initTissue(tis) {
+        // Set tissue to unhighlighted state
+        $("#" + tis + "_Pic_Hi", _svgRoot).hide();
+        $("#" + tis + "_Lead_Hi", _svgRoot).hide();
+
+        // mark tissue labels in svg
+        var el = _svgDoc.getElementById(tis + "_Text_Hi");
+        if (el !== null) {
+            el.classList.add('tissueLabel');
+        }
+        $("#" + tis + "_Aura_Hi", _svgRoot).hide();
+    }
+
+    function highlightTissue(tis) {
+        // 
+    }
+
     function initBodyMap(svg, doc) {
         // Set organs to unhighlighted state
-        /*
-        var line = $("#LL_kidneyCortex", svg)[0];
-        $(line).hide();
-        var white = $("#WHITE_kidneyCortex", svg);
-        $(white).hide();
-        var organ = $("#RO_kidneyCortex", svg);
-        $(organ).hide();
-        */
-        // jQuery not working here, maybe figure this out later
-        // var label = $("arteryAorta", svg);
-        // $(label).css("fill", "blue");
-        organ = doc.getElementById('kidneyCortex');
-        organ.style.fill = "blue";
-
-        line = $("#LL_arteryAorta", svg);
-        $(line).hide();
-        white = $("#WHITE_arteryAorta", svg);
-        $(white).hide();
+        tissues.forEach(initTissue);
     }
 
 
     function onClickToggleTissue(tis) {
         // mark selected in tissue table
-        $(this).toggleClass('tableTissueSelected');
+        $(this).toggleClass('tissueSelected');
 
         // jQuery addClass doesn't work on SVG elements, using classList
         // May need a shim so this works on IE9 and Opera mini (as if Dec 2014)
         // https://martinwolf.org/blog/2014/12/adding-and-removing-classes-from-svg-elements-with-jquery
-        var el = _svgDoc.getElementById(this.id);
+        var el = _svgDoc.getElementById(this.id + '_Text_Hi');
         if (el !== null) {
-            el.classList.toggle('tableTissueSelected');
+            el.classList.toggle('tissueSelected');
         }
     }
 
     function onMapClickToggleTissue(ev) {
-        var tis = ev.target.id;
+        var isOn = false;
+        var svgId = ev.target.id;
+        var tis = tissueFromSvgId(svgId);
         var el = _htmlDoc.getElementById(tis);
         if (el !== null) {
-            el.classList.toggle('tableTissueSelected');
+            el.classList.toggle('tissueSelected');
+        }
+        if (el.classList.contains('tissueSelected')) {
+            isOn = true;
         }
         // below can likely replace 3 lines after
-        //this.classList.toggle('tableTissueSelected');
-        el = _svgDoc.getElementById(tis);
+        //this.classList.toggle('tissueSelected');
+        el = _svgDoc.getElementById(svgId);
         if (el !== null) {
-            el.classList.toggle('tableTissueSelected');
+            el.classList.toggle('tissueSelected');
+            if (isOn) {
+                el.style.fill = "black";
+            } else {
+                el.style.fill = "#737373";
+            }
         }
     }
 
     function onClickSetTissue(tis) {
         // mark selected in tissue table
-        $(tis).addClass('tableTissueSelected');
-        var el = _svgDoc.getElementById(tis);
+        $(tis).addClass('tissueSelected');
+        var el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
-            el.classList.add('tableTissueSelected');
+            el.classList.add('tissueSelected');
+            el.style.fill = "black";
+            var count = el.childElementCount;
+            for (var i = 0; i < count; i++) {
+                el.children[i].style.fill = "black";
+            }
         }
     }
 
     function onClickClearTissue(tis) {
         // mark selected in tissue table
-        $(tis).removeClass('tableTissueSelected');
-        var el = _svgDoc.getElementById(tis);
+        $(tis).removeClass('tissueSelected');
+        var el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
-            el.classList.remove('tableTissueSelected');
+            el.classList.remove('tissueSelected');
+            el.style.fill = "#737373";
+            var count = el.childElementCount;
+            for (var i = 0; i < count; i++) {
+                el.children[i].style.fill = "#737373";
+            }
         }
     }
 
@@ -106,8 +131,8 @@ var gtexTrackSettings = (function() {
         }
 
         // below can likely replace 3 lines after
-        //this.classList.toggle('tableTissueSelected');
-        el = _svgDoc.getElementById(tis);
+        //this.classList.toggle('tissueSelected');
+        el = _svgDoc.getElementById(tis + '_Text_Hi');
         if (el !== null) {
             el.classList.toggle('tissueHovered');
             if (this.id === "arteryAorta") {
@@ -130,7 +155,7 @@ var gtexTrackSettings = (function() {
         var isOn = $(this).hasClass('tissueHovered');
 
         // SVG
-        var el = _svgDoc.getElementById(this.id);
+        var el = _svgDoc.getElementById(this.id + '_Text_Hi');
         if (el !== null) {
             el.classList.toggle('tissueHovered');
             if (this.id === "arteryAorta") {
@@ -163,7 +188,7 @@ var gtexTrackSettings = (function() {
         $('#' + tis).click(tis, onClickToggleTissue);
         $('#' + tis).hover(onHoverTissue, onHoverTissue);
 
-        var el = _svgDoc.getElementById(tis);
+        var el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
             el.addEventListener("click", onMapClickToggleTissue);
             el.addEventListener("mouseenter", onMapHoverTissue);
@@ -185,15 +210,16 @@ var gtexTrackSettings = (function() {
     // UI event handlers
 
     function onClickSetAll() {
-        // set font-weight: bold on table, set text fill: black on svg
-        // NOTE: this shouldn't be needed (needs debugging in onClickSet)
+        // set all on body map
         tissues.forEach(onClickSetTissue);
-        $('.tissueLabel').addClass('tableTissueSelected');
+        // set all on tissue table
+        // NOTE: this shouldn't be needed (needs debugging in onClickSet)
+        $('.tissueLabel').addClass('tissueSelected');
     }
 
     function onClickClearAll() {
         tissues.forEach(onClickClearTissue);
-        $('.tissueLabel').removeClass("tableTissueSelected");
+        $('.tissueLabel').removeClass("tissueSelected");
     }
 
     function onClickMapTissue() {

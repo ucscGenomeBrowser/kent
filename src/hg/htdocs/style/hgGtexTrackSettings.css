@@ -260,8 +260,9 @@ span#home-link {
 }
 
 /* HTML */
-.tableTissueSelected {
+.tissueSelected {
     font-weight: bold;
+    color: black;
 }
 
 .tissueHovered {
