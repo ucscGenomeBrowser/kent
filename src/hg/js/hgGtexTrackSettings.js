@@ -42,6 +42,9 @@ var gtexTrackSettings = (function() {
             el.classList.add('tissueLabel');
         }
         $("#" + tis + "_Aura_Hi", _svgRoot).hide();
+
+        // force tissue to selected on init (till we have cart hooked up)
+        //onClickSetTissue(tis);
     }
 
     function highlightTissue(tis) {
@@ -56,6 +59,7 @@ var gtexTrackSettings = (function() {
 
     function onClickToggleTissue(tis) {
         // mark selected in tissue table
+        tis = this.id;  // arg bad
         $(this).toggleClass('tissueSelected');
 
         // jQuery addClass doesn't work on SVG elements, using classList
@@ -64,6 +68,11 @@ var gtexTrackSettings = (function() {
         var el = _svgDoc.getElementById(this.id + '_Text_Hi');
         if (el !== null) {
             el.classList.toggle('tissueSelected');
+            if ($(this).hasClass('tissueSelected')) {
+                onClickSetTissue(tis);
+            } else {
+                onClickClearTissue(tis);
+            }
         }
     }
 
@@ -91,9 +100,10 @@ var gtexTrackSettings = (function() {
         }
     }
 
+
     function onClickSetTissue(tis) {
         // mark selected in tissue table
-        $(tis).addClass('tissueSelected');
+        $('#' + tis).addClass('tissueSelected');
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
             el.classList.add('tissueSelected');
