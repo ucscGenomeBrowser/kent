@@ -41,9 +41,10 @@ From script/editor:
 
 1. Strip XML header and comment from Adobe (first line should be <svg>)
 
-2. Clean up identifiers (replace _x5F_ with _ if needed)
-
-    sed 's/_x5F_/_/g' file.svg > bodyMap.svg
+2. Clean up identifiers (replace _x5F_ with _ if needed.  Investigate/fix 
+        text ids suffixed w/ _1_.
+        
+    sed -e 's/_x5F_/_/g' file.svg > bodyMap.svg
     mv bodyMap.svg ~/kent/src/hg/htdocs/images
 
 3. Adjust viewbox if needed
