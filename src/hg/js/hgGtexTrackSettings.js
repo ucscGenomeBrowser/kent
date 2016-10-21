@@ -119,9 +119,12 @@ var gtexTrackSettings = (function() {
         }
     }
 
+
     function onMapHoverTissue(ev) {
+        var i;
         var isOn = false;
-        var tis = ev.target.id;
+        var svgId = ev.target.id;
+        var tis = tissueFromSvgId(svgId);
         var el = _htmlDoc.getElementById(tis);
         if (el !== null) {
             el.classList.toggle('tissueHovered');
@@ -129,23 +132,33 @@ var gtexTrackSettings = (function() {
                 isOn = true;
             }
         }
-
         // below can likely replace 3 lines after
         //this.classList.toggle('tissueSelected');
         el = _svgDoc.getElementById(tis + '_Text_Hi');
-        if (el !== null) {
-            el.classList.toggle('tissueHovered');
-            if (this.id === "arteryAorta") {
-                var line = $("#LL_arteryAorta", _svgRoot);
-                var white = $("#WHITE_arteryAorta", _svgRoot);
-                if (isOn) {
-                    $(line).show();
-                    $(white).show();
-                } else {
-                    $(white).hide();
-                    $(line).hide();
-                }
+        if (el === null)
+            return;
+        el.classList.toggle('tissueHovered');
+        var line = $("#" + tis + "_Lead_Hi", _svgRoot);
+        var pic = $("#" + tis + "_Pic_Hi", _svgRoot);
+        var white = $("#" + tis + "_Aura_Hi", _svgRoot);
+        var count = el.childElementCount;
+        if (isOn) {
+            el.style.fill = 'blue';
+            for (i = 0; i < count; i++) {
+                el.children[i].style.fill = "blue";
             }
+            $(line).show();
+            $(pic).show();
+            $(white).show();
+        } else {
+            var color = el.classList.contains('tissueSelected') ? 'black' : '#737373';
+            el.style.fill = color;
+            for (i = 0; i < count; i++) {
+                el.children[i].style.fill = color;
+            }
+            $(white).hide();
+            $(pic).hide();
+            $(line).hide();
         }
     }
 
