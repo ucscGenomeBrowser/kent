@@ -66,13 +66,18 @@ puts("<div class='col-md-1'>"
         "</a></div>");
 puts("</div>");
 struct sqlConnection *conn = sqlConnect(db);
+if (conn == NULL)
+    errAbort("Can't connect to database %s\n", db);
 char query[256];
 sqlSafef(query, sizeof(query), "select html from trackDb where tableName='gtexGene'");
 char *html = sqlQuickString(conn, query);
-sqlDisconnect(&conn);
-puts("<div class='trackDescriptionPanel'>");
-puts("<div class='trackDescription'>");
+if (html != NULL)
+    {
+    puts("<div class='trackDescriptionPanel'>");
+    puts("<div class='trackDescription'>");
 puts(html);
+    }
+sqlDisconnect(&conn);
 puts("</div></div>");
 puts("</div>");
 }
@@ -120,7 +125,13 @@ static void doMainPage()
 {
 // Start web page with new banner
 char *genome = NULL, *clade = NULL;
-getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+//getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+
+/* hardcode for now -- later, check for hg19 or hg38 */
+
+db = "hg19";
+genome = "human";
+clade = "mammal";
 
 // char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
 //char *track = cartString(cart, "g");
@@ -156,7 +167,7 @@ puts("</div>");
 doJsIncludes();
 
 // Main JS
-puts("<script src=\"../js/hgGtexTrackSettings.js\"></script>");
+puts("<script src='../js/hgGtexTrackSettings.js'></script>");
 
 webIncludeFile("inc/jWestFooter.html");
 
