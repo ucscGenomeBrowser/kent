@@ -186,18 +186,26 @@ var gtexTrackSettings = (function() {
     function animateTissue(tis) {
         //console.log(tis);
         // add handlers to tissue table
+        var el;
         $('#' + tis).click(tis, onClickToggleTissue);
         $('#' + tis).hover(onHoverTissue, onHoverTissue);
 
-        var el = _svgDoc.getElementById(tis + "_Text_Hi");
+        // add mouseover handler to tissue label
+        el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
             el.addEventListener("click", onMapClickToggleTissue);
             el.addEventListener("mouseenter", onMapHoverTissue);
             el.addEventListener("mouseleave", onMapHoverTissue);
             // mouseover, mouseout ?
         }
-
-        
+        // add mouseover handler to tissue shape
+        el = _svgDoc.getElementById(tis + "_Pic_Lo");
+        if (el !== null) {
+            el.addEventListener("click", onMapClickToggleTissue);
+            el.addEventListener("mouseenter", onMapHoverTissue);
+            el.addEventListener("mouseleave", onMapHoverTissue);
+            // mouseover, mouseout ?
+        }
     }
 
     function animateTissues() {
