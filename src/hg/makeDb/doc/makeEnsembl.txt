@@ -5,12 +5,156 @@
 #	Robert's experiments with an automated process.
 #
 ############################################################################
+# ensembl 86 update (DONE - 2016-10-18 - Hiram)
+############################################################################
 # when all done, reset the dateReference:  (DONE - 2015-08-04 - Hiram)
-     # next time, this first one will be v81 at 'jul2015'
+     # next time, this first one will be v86 at 'oct2016'
      hgsql -e \
-'update trackVersion set dateReference="mar2015" where name="ensGene" AND version="79";' hgFixed
+'update trackVersion set dateReference="jul2016" where name="ensGene" AND version="85";' hgFixed
      hgsql -e \
-'update trackVersion set dateReference="current" where name="ensGene" AND version="81";' hgFixed
+'update trackVersion set dateReference="current" where name="ensGene" AND version="86";' hgFixed
+
+############################################################################
+# ensembl 86 update (DONE - 2016-10-18 - Hiram)
+
+    # to pick up the new file listings from Ensembl, in the source tree:
+    cd ~/kent/src/hg/utils/automation
+    ./findEnsFtpNames.sh 86
+# -rw-rw-r-- 1    5577 Oct 10 06:16 release.86.gtf.names
+# -rw-rw-r-- 1    3302 Oct 10 06:16 release.86.MySQL.names
+# -rw-rw-r-- 1    6328 Oct 10 06:16 release.86.fasta.names
+
+    # which are edited into: EnsGeneAutomate.pm, verify it is good:
+    ./ensVersions 86 2> /dev/null | grep -v "NOT FOUND" | wc -l
+    #  68
+    # when it is good and checked in, it is copied to /cluster/bin/scripts
+    # then, working in:
+    mkdir /hive/data/outside/ensembl/ensGene/v86
+    cd /hive/data/outside/ensembl/ensGene/v86
+    # construct db work list:
+    ../mkList.sh
+    # creates the file: ens.86.update.list
+    # the scripts work off of this list:
+    time ../runUpdate.sh > update.log.0 2>&1
+    # about 1.5 hours
+    # there was an issue with this update since gtfToGenePred was now adding
+    # version numbers.  All the checks of names lists between gene names and
+    # corresponding protein names failed.  This was fixed up manually after
+    # all was done.
+    # to verify done, and find the broken ones:
+    ../checkStatus.sh | grep -v "ALL DONE"
+    # there were a couple of fixups for:
+    # canFam3 danRer10 dasNov3 eriEur1 musFur1 papAnu2 rn6 ce11
+    # the name test was removing the versions from the gene names
+    # do not need to do that
+
+    # gadMor1 fixups:
+    cd /hive/data/genomes/gadMor1/bed/ensGene.86/process
+    cp -p ../../ensGene.81/process/extraLifting.sh .
+    ./extraLifting.sh
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting gadMor1.all.needLifting.gp
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting gadMor1.all.contigs.gp
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting ensemblGeneScaffolds.gadMor1.needLifting.bed
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting ensemblGeneScaffolds.gadMor1.lifting.bed
+
+    cd /hive/data/genomes/gadMor1
+    time (doEnsGeneUpdate.pl -continue=load -ensVersion=86 \
+       gadMor1.ensGene.ra ) >> ensGene.86.log 2>&1
+
+    # fixup for gasAcu1
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.86/process
+    cp ../../ensGene.85/process/extraLift.sh .
+    ./extraLift.sh
+# Got 1935 lifts in ../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft
+# Lifting gasAcu1.allGenes.gp.needLifting.gz
+# checked: 29245 failed: 0
+# pass1 - making usageList (23 chroms): 25 millis
+# pass2 - checking and writing primary data (29245 records, 12 fields): 817 millis
+# Sorting and writing extra index 0: 19 millis
+
+    cd /hive/data/genomes/gasAcu1
+    time (doEnsGeneUpdate.pl -continue=load  -ensVersion=86 \
+       gasAcu1.ensGene.ra) >> ensGene.86.log 2>&1
+
+############################################################################
+# ensembl 85 update (DONE - 2016-08-15 - Hiram)
+############################################################################
+# when all done, reset the dateReference:  (DONE - 2015-08-04 - Hiram)
+     # next time, this first one will be v85 at 'oct2016'
+     hgsql -e \
+'update trackVersion set dateReference="dec2015" where name="ensGene" AND version="83";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where name="ensGene" AND version="85";' hgFixed
+
+############################################################################
+# ensembl 85 update (DONE - 2016-08-15 - Hiram)
+
+    # to pick up the new file listings from Ensembl, in the source tree:
+    cd ~/kent/src/hg/utils/automation
+    ./findEnsFtpNames.sh 81
+# -rw-rw-r-- 1 4510 Aug  8 15:23 release.85.gtf.names
+# -rw-rw-r-- 1 2660 Aug  8 15:23 release.85.MySQL.names
+# -rw-rw-r-- 1 5062 Aug  8 15:23 release.85.fasta.names
+
+    # which are edited into: EnsGeneAutomate.pm, verify it is good:
+    ./ensVersions 85 2> /dev/null | grep -v "NOT FOUND" | wc -l
+    #  68
+    # when it is good and checked in, it is copied to /cluster/bin/scripts
+    # then, working in:
+    mkdir /hive/data/outside/ensembl/ensGene/v85
+    cd /hive/data/outside/ensembl/ensGene/v85
+    # construct db work list:
+    ../mkList.sh
+    # creates the file: ens.85.update.list
+    # the scripts work off of this list:
+    time ../runUpdate.sh > update.log.0 2>&1
+    # about 1.5 hours
+    # there was an issue with this update since gtfToGenePred was now adding
+    # version numbers.  All the checks of names lists between gene names and
+    # corresponding protein names failed.  This was fixed up manually after
+    # all was done.
+    # to verify done, and find the broken ones:
+    ../checkStatus.sh | grep -v "ALL DONE"
+    # there were a couple of fixups for:
+    # canFam3 danRer10 dasNov3 eriEur1 musFur1 papAnu2 rn6 ce11
+    # the name test was removing the versions from the gene names
+    # do not need to do that
+
+    # gadMor1 fixups:
+    cd /hive/data/genomes/gadMor1/bed/ensGene.85/process
+    cp -p ../../ensGene.81/process/extraLifting.sh .
+    ./extraLifting.sh
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting gadMor1.all.needLifting.gp
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting gadMor1.all.contigs.gp
+# Got 554869 lifts in ../../ucscToEnsembl/componentsToCAEA01.lift
+# Lifting ensemblGeneScaffolds.gadMor1.needLifting.bed
+# Got 554870 lifts in ../../ucscToEnsembl/contigScaffold.lift
+# Lifting ensemblGeneScaffolds.gadMor1.lifting.bed
+
+    cd /hive/data/genomes/gadMor1
+    time (doEnsGeneUpdate.pl -continue=load -ensVersion=85 \
+       gadMor1.ensGene.ra ) >> ensGene.85.log 2>&1
+
+    # fixup for gasAcu1
+    cd /hive/data/genomes/gasAcu1/bed/ensGene.85/process
+    cp ../../ensGene.81/process/extraLift.sh .
+    ./extraLift.sh
+# Got 1935 lifts in ../../../jkStuff/UCSC.chromToScaffoldSansGaps.lft
+# Lifting gasAcu1.allGenes.gp.needLifting.gz
+# checked: 29245 failed: 0
+# pass1 - making usageList (23 chroms): 25 millis
+# pass2 - checking and writing primary data (29245 records, 12 fields): 817 millis
+# Sorting and writing extra index 0: 19 millis
+
+    cd /hive/data/genomes/gasAcu1
+    time (doEnsGeneUpdate.pl -continue=load  -ensVersion=85 \
+       gasAcu1.ensGene.ra) >> ensGene.85.log 2>&1
 
 ############################################################################
 # ensembl 81 update (DONE - 2015-07-04 - Hiram)
@@ -643,12 +787,12 @@ db hg38
 # haplotype lift-down from Ensembl full chrom coordinates
 #       to UCSC simple haplotype coordinates
 haplotypeLift /hive/data/genomes/hg38/jkStuff/ensembl.alts.lift
-    
+
 # Ensembl has different names for everything
 liftUp /hive/data/genomes/hg38/jkStuff/ensembl.lift
 '_EOF_'
 #  << happy emacs
-    
+
     doEnsGeneUpdate.pl  -ensVersion=78 hg38.ensGene.ra
     ssh hgwdev
     cd /hive/data/genomes/hg38/bed/ensGene.78
@@ -788,7 +932,7 @@ db mm10
 nameTranslation "/MG[0-9][0-9]*_PATCH/d; /CHR_MMCHR1_CHORI29_IDD5_1/d; s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/i"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
-# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
+# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc,
 #    create the lft file to handle this.
 liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
 
@@ -800,7 +944,7 @@ liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
     cd /hive/data/genomes/mm10/bed/ensGene.78
     featureBits mm10 ensGene
     # 97786799 bases of 2652783500 (3.686%) in intersection
- 
+
 ############################################################################
 #  monDom5 - Opossum - Ensembl Genes version 78  (DONE - 2014-12-03 - hiram)
     ssh hgwdev
@@ -2154,7 +2298,7 @@ db mm10
 nameTranslation "/MG[0-9][0-9]*_PATCH/d; s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/i"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
-# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
+# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc,
 #    create the lft file to handle this.
 liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
 
@@ -3445,7 +3589,7 @@ db mm10
 nameTranslation "/MG[0-9][0-9]*_PATCH/d; s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/i"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
-# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
+# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc,
 #    create the lft file to handle this.
 liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
 
@@ -4515,7 +4659,7 @@ liftUp /cluster/data/fr2/jkStuff/liftAll.lft
 
 ############################################################################
 #  gadMor1 - Atlantic cod - Ensembl Genes version 73  (DONE - 2013-09-05 -
-#  hiram)   
+#  hiram)
     ssh hgwdev
     cd /hive/data/genomes/gadMor1
     cat << '_EOF_' > gadMor1.ensGene.ra
@@ -4743,7 +4887,7 @@ db mm10
 nameTranslation "/MG[0-9][0-9]*_PATCH/d; s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/i"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
-# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
+# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc,
 #    create the lft file to handle this.
 liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
 
@@ -5522,14 +5666,14 @@ name='ensGene' AND db='gasAcu1' AND version='71';"
 
 ############################################################################
 # ensembl 70 update (DONE - 2013-02-25 - Chin)
-# 
+#
 # After ensemble 69 update perfomrd on 2013-01-24, we have decide to
 # skip it and release v70 update instead.
 #
 #
 # Notable 4 new items in v70:
 #   felCat5 and rn5: update from previos release
-#   melGal1 and  hg19: MT to chrM liftOver 
+#   melGal1 and  hg19: MT to chrM liftOver
 # 35 items identical to v68.
 # 19 assemblies are new or updated with v70:
 #    anoCar2, calJac3, danRer7, dm3, equCab2, felCat5, hg19,
@@ -6097,7 +6241,7 @@ liftUp /hive/data/genomes/hg19/jkStuff/ens.68.lft
  *** Steps were performed in /hive/data/genomes/hg19/bed/ensGene.70
 
     # requires extra attention after the process step
-    # for gene located in patch sequences, remove their 
+    # for gene located in patch sequences, remove their
     # corresponding peptides before load step
     cd /hive/data/genomes/hg19/bed/ensGene.70/download
     mv Homo_sapiens.GRCh37.70.pep.all.fa.gz Homo_sapiens.GRCh37.70.pep.all.beforeRmPATCH.fa.gz
@@ -6959,13 +7103,13 @@ nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/"
 ############################################################################
 # ensembl 68 update (DONE - 2012-08-29 - Chin)
 #
-# Notable 11 new items in v68: 
+# Notable 11 new items in v68:
 #    canFam3, danRer7, hg19, latCha1, mm10, oreNil1
 #    otoGar3, sarHar1, speTri2, susScr3, taeGut1
 #
 # 42 items identical to v65:
-# Due to script error on finding previous version, all eneGene tables 
-# of the 42 assemblies get reloaded on 2012-08-24. 
+# Due to script error on finding previous version, all eneGene tables
+# of the 42 assemblies get reloaded on 2012-08-24.
 #    ailMel1, anoCar2, bosTau6, calJac3, cavPor3, choHof1
 #    cioSav2, dasNov2, dipOrd1, echTel1, equCab2, eriEur1
 #    felCat3, fr2, galGal3, gasAcu1, gorGor3, loxAfr3
@@ -7543,7 +7687,7 @@ chain 1550477 chrM_rCRS 16569 + 0 16569 chrM 16571 + 0 16571 526
     # 37
 
     # remove old chrM entries from process/hg19.allGenes.gp.gz
-    zcat process/hg19.allGenes.gp.gz | grep -vw chrM > hg19.allGenes.gp 
+    zcat process/hg19.allGenes.gp.gz | grep -vw chrM > hg19.allGenes.gp
     wc -l  hg19.allGenes.gp
     # 191854 hg19.allGenes.gp
     cat chrM.gp >> hg19.allGenes.gp
@@ -7654,7 +7798,7 @@ db mm10
 nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
 # optionally update the knownToEnsembl table after ensGene updated
 knownToEnsembl yes
-# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc, 
+# Ensembl 68 does not meta data like chr5_JH584299_random as ucsc,
 #    create the lft file to handle this.
 liftUp /hive/data/genomes/mm10/jkStuff/ens.68.lft
 
@@ -9408,7 +9552,7 @@ skipInvalid yes
 
 ############################################################################
 #  xenTro3 - X. tropicalis - Ensembl Genes version 65  (DONE - 2011-12-15 -
-#  hiram) 
+#  hiram)
     ssh hgwdev
     cd /hive/data/genomes/xenTro3
     cat << '_EOF_' > xenTro3.ensGene.ra
@@ -9423,7 +9567,7 @@ nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/"
     cd /hive/data/genomes/xenTro3/bed/ensGene.65
     featureBits xenTro3 ensGene
     # 36906921 bases of 1358334882 (2.717%) in intersection
-    
+
 ############################################################################
 ############################################################################
 # ensembl 64 update (DONE - 2011-10-12 - Hiram)
@@ -10742,10 +10886,10 @@ db nomLeu1
 # optional nameTranslation, the sed command that will transform
 #       Ensemble names to UCSC names.  With single quotes to protect
 #       everything in perl
-nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;'   
+nameTranslation 's/^GL\([0-9][0-9]*\).1/GL\1/; s/^ADFV\([0-9][0-9]*\).1/ADFV\1/;'
 '_EOF_'
 #  << happy emacs
-    
+
     doEnsGeneUpdate.pl  -ensVersion=62 nomLeu1.ensGene.ra
     ssh hgwdev
     cd /hive/data/genomes/nomLeu1/bed/ensGene.62
@@ -13125,7 +13269,7 @@ CREATE TABLE ensGtp (
   INDEX(gene(11)),
   UNIQUE(transcript(11)),
   INDEX(protein(26))
-) 
+)
 '_EOF_'
     # << happy emacs
 
@@ -14472,7 +14616,7 @@ CREATE TABLE ensGtp (
   INDEX(gene(19)),
   UNIQUE(transcript(19)),
   INDEX(protein(23))
-) 
+)
 '_EOF_'
     # << happy emacs
 
@@ -16016,7 +16160,7 @@ nameTranslation "s/^\([0-9UX][0-9n]*\)/chr\1/; s/^MT/chrM/"
     ssh hgwdev
     cd /hive/data/genomes/bosTau4
     doEnsGeneUpdate.pl  -ensVersion=57 -continue=load bosTau4.ensGene.ra \
-	> ens.57.load 
+	> ens.57.load
     cd /hive/data/genomes/bosTau4/bed/ensGene.57
     featureBits bosTau4 ensGene
     # 42207115 bases of 2731830700 (1.545%) in intersection
@@ -16100,7 +16244,7 @@ CREATE TABLE ensGtp (
   INDEX(gene(19)),
   UNIQUE(transcript(19)),
   INDEX(protein(23))
-) 
+)
 '_EOF_'
     # << happy emacs
 
@@ -17675,7 +17819,7 @@ CREATE TABLE ensGtp (
   INDEX(gene(19)),
   UNIQUE(transcript(19)),
   INDEX(protein(23))
-) 
+)
 '_EOF_'
     # << happy emacs
 
@@ -18592,7 +18736,7 @@ db xenTro2
     #	to specify the files for each release.
     #	Fixups:
     #	version correspondence with their date strings:
-    #	add $verToDate[##] = "monYYYY"; 
+    #	add $verToDate[##] = "monYYYY";
     #	add new ## to @versionList
     #	create lists for FtpFileNames_##, FtpPeptideFileNames_## and
     #	FtpMySqlFileNames_##
@@ -19729,7 +19873,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/"
     cd /cluster/data/danRer5/bed/ensGene.49
     featureBits danRer5 ensGene
     # 36884539 bases of 1435609608 (2.569%) in intersection
- 
+
 ############################################################################
 #  dasNov1 - Armadillo - Ensembl Genes (DONE - 2008-03-31 - hiram)
     ssh kkstore04
@@ -20687,8 +20831,8 @@ db xenTro2
 #scripts used:
 #hgLoadEnsembl - main driver script that calls ensemblDownload, ensemblDbImport and loadEnsembl
 #ensemblDownload - downloads data from ensembl ftp site to directory, creates tables.tmp containing list of ensembl tables to be loaded
-#ensemblDbImport - loads tables into temporary database using the native ensembl mysql table structure 
-#exportEnsembl - creates genePred files from the ensembl temporary database 
+#ensemblDbImport - loads tables into temporary database using the native ensembl mysql table structure
+#exportEnsembl - creates genePred files from the ensembl temporary database
 #geneCheckAndLoad - runs gene-check on a genePred and loads the two details tables into the database.
 #ensemblSuperfamily -  load superfamily track using Ensembl cross reference
 #loadEnsembl - loads data created by exportEnsembl into ensGene, creates and loads ensInfo table with attributes

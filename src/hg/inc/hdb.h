@@ -98,10 +98,6 @@ struct slName *hTrackTablesOfType(struct sqlConnection *conn, char *type);
 char *hPdbFromGdb(char *genomeDb);
 /* return the name of the proteome database given the genome database name */
 
-boolean hArchiveDbExists(char *database);
-/* Function to check if this is a valid db name in the dbDbArch table
-   of archived databases. */
-
 boolean hDbExists(char *database);
 /* Function to check if this is a valid db name */
 
@@ -443,27 +439,14 @@ struct dbDb *hDbDbListMaybeCheck(boolean doCheck);
  * The list includes the name, description, and where to
  * find the nib-formatted DNA files. Free this with dbDbFree. */
 
-struct dbDb *hArchiveDbDbList(void);
-/* Return list of databases in archive central dbDb.
- * Free this with dbDbFree. */
-
 struct hash *hDbDbHash();
 /* The hashed-up version of the entire dbDb table, keyed on the db */
-/* this is likely better to use than hArchiveOrganism if it's likely to be */
-/* repeatedly called */
-
-struct hash *hDbDbAndArchiveHash();
-/* hDbDbHash() plus the dbDb rows from the archive table */
 
 int hDbDbCmpOrderKey(const void *va, const void *vb);
 /* Compare to sort based on order key */
 
 char *hDbDbNibPath(char *database);
 /* return nibPath from dbDb for database */
-
-struct sqlConnection *hMaybeConnectArchiveCentral(void);
-/* Connect to central database for archives.
- * Free this up with hDisconnectCentralArchive(). */
 
 char *hHttpHost();
 /* return http host from apache or hostname if run from command line  */
@@ -734,19 +717,6 @@ struct dbDb *hGetLiftOverToDatabases(char *fromDb);
  * to convert from the fromDb assembly.
  * Dispose of this with dbDbFreeList. */
 
-struct dbDb *hGetAxtInfoDbs(char *db);
-/* Get list of db's where we have axt files listed in axtInfo .
- * The db's with the same organism as organism go last.
- * Dispose of this with dbDbFreeList. */
-
-struct axtInfo *hGetAxtAlignments(char *db, char *otherDb);
-/* Get list of alignments where we have axt files listed in axtInfo .
- * Dispose of this with axtInfoFreeList. */
-
-struct axtInfo *hGetAxtAlignmentsChrom(char *db, char *otherDb, char *chrom);
-/* Get list of alignments where we have axt files listed in axtInfo for a specified chromosome .
- * Dispose of this with axtInfoFreeList. */
-
 struct dbDb *hGetBlatIndexedDatabases(void);
 /* Get list of databases for which there is a BLAT index.
  * Dispose of this with dbDbFreeList. */
@@ -767,11 +737,6 @@ char *hDefaultPos(char *database);
 char *hOrganism(char *database);
 /* Return organism associated with database.   Use freeMem on
  * return value when done. */
-
-char *hArchiveOrganism(char *database);
-/* Return organism associated with database.   Use freeMem on
- * return value when done. This one checks the normal central
- * DB first, then the archive dbDb. */
 
 int hOrganismID(char *database);
 /* Get organism ID from relational organism table */
@@ -796,9 +761,6 @@ char *hFreezeDateOpt(char *database);
 
 int hTaxId(char *database);
 /* Return taxId (NCBI Taxonomy ID) associated with database. */
-
-char *hGenomeOrArchive(char *database);
-/* Return genome name associated from the regular or the archive database. */
 
 char *hGenome(char *database);
 /* Return genome associated with database.   Use freeMem on

@@ -2517,6 +2517,77 @@ void cdwDatasetOutput(struct cdwDataset *el, FILE *f, char sep, char lastSep);
 #define cdwDatasetCommaOut(el,f) cdwDatasetOutput(el,f,',',',');
 /* Print out cdwDataset as a comma separated list including final comma. */
 
+#define CDWJOINTDATASET_NUM_COLS 6
+
+extern char *cdwJointDatasetCommaSepFieldNames;
+
+struct cdwJointDataset
+/* A joint dataset is a collection of datasets, usually associated with a common trait. */
+    {
+    struct cdwJointDataset *next;  /* Next in singly linked list. */
+    unsigned id;	/* Dataset ID */
+    char *name;	/* Short name of this dataset, one word, no spaces */
+    char *label;	/* short title of the dataset, a few words */
+    char *description;	/* Description of dataset, can be a complete html paragraph. */
+    char *childrenNames;	/* Comma separated list of children data set names. */
+    char *metaDivTags;	/* Comma separated list of fields used to make tree out of metadata */
+    };
+
+void cdwJointDatasetStaticLoad(char **row, struct cdwJointDataset *ret);
+/* Load a row from cdwJointDataset table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct cdwJointDataset *cdwJointDatasetLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all cdwJointDataset from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+
+void cdwJointDatasetSaveToDb(struct sqlConnection *conn, struct cdwJointDataset *el, char *tableName, int updateSize);
+/* Save cdwJointDataset as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. This function automatically escapes quoted strings for mysql. */
+
+struct cdwJointDataset *cdwJointDatasetLoad(char **row);
+/* Load a cdwJointDataset from row fetched with select * from cdwJointDataset
+ * from database.  Dispose of this with cdwJointDatasetFree(). */
+
+struct cdwJointDataset *cdwJointDatasetLoadAll(char *fileName);
+/* Load all cdwJointDataset from whitespace-separated file.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+
+struct cdwJointDataset *cdwJointDatasetLoadAllByChar(char *fileName, char chopper);
+/* Load all cdwJointDataset from chopper separated file.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+
+#define cdwJointDatasetLoadAllByTab(a) cdwJointDatasetLoadAllByChar(a, '\t');
+/* Load all cdwJointDataset from tab separated file.
+ * Dispose of this with cdwJointDatasetFreeList(). */
+
+struct cdwJointDataset *cdwJointDatasetCommaIn(char **pS, struct cdwJointDataset *ret);
+/* Create a cdwJointDataset out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new cdwJointDataset */
+
+void cdwJointDatasetFree(struct cdwJointDataset **pEl);
+/* Free a single dynamically allocated cdwJointDataset such as created
+ * with cdwJointDatasetLoad(). */
+
+void cdwJointDatasetFreeList(struct cdwJointDataset **pList);
+/* Free a list of dynamically allocated cdwJointDataset's */
+
+void cdwJointDatasetOutput(struct cdwJointDataset *el, FILE *f, char sep, char lastSep);
+/* Print out cdwJointDataset.  Separate fields with sep. Follow last field with lastSep. */
+
+#define cdwJointDatasetTabOut(el,f) cdwJointDatasetOutput(el,f,'\t','\n');
+/* Print out cdwJointDataset as a line in a tab-separated file. */
+
+#define cdwJointDatasetCommaOut(el,f) cdwJointDatasetOutput(el,f,',',',');
+/* Print out cdwJointDataset as a comma separated list including final comma. */
+
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* CDW_H */

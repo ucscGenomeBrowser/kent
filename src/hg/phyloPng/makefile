@@ -5,11 +5,13 @@ L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A = phyloGif
+A = phyloPng
 
 O = ${A}.o
 
 include ../../inc/cgi_build_rules.mk
+
+# phyloPng is both a utilitiy that can be run from the commandline, and a CGI.
 
 my:: compile
 	if [ -d "${BINDIR}" ] && [ ! ${CGI_BIN}-${USER}/$A -ef ${DESTDIR}${BINDIR}/$A ] ; then \
@@ -22,12 +24,12 @@ compile: $O
 	chmod a+rx $A${EXE}
 
 test: compile
-	${DESTDIR}${BINDIR}/phyloGif -phyloGif_tree=17way.nh > test.gif
-	file test.gif
+	${DESTDIR}${BINDIR}/phyloPng -phyloPng_tree=17way.nh > test.png
+	file test.png
 
 testWeb: compile
-	wget -O testWeb.gif 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1);'
-	file testWeb.gif
+	wget -O testWeb.png 'http://hgwdev.cse.ucsc.edu/cgi-bin/phyloPng?phyloPng_tree=(A:0.1,B:0.1);'
+	file testWeb.png
 
 clean::
-	rm -f test.gif testWeb.gif
+	rm -f test.png testWeb.png

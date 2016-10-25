@@ -1021,7 +1021,8 @@ if (justTest)
 int submitId = makeNewEmptySubmitRecord(conn, submitUrl, user->id);
 
 /* Create a backup of the previous submission */
-char cmd[PATH_LEN]; 
+char cmd[PATH_LEN];
+if (getenv("CIRM") == NULL) errAbort("Please set up your CIRM environment variable."); 
 safef(cmd, sizeof(cmd), "cdwBackup %scdw/db.backups/cdwSubmit.%i", getenv("CIRM"), submitId -1);  
 mustSystem(cmd); 
 

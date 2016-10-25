@@ -7,30 +7,36 @@ set -euo pipefail
 # - get 200bp-regions around exons
 # - get the 20bp-GG sequences in them
 # - take only the unique ones and split these into chunks
-set -e
-set -o pipefail
+
 # path to a git clone of the crispor github repo, must be under /hive
-CRISPOR=/hive/users/max/projects/crispor/crispor
+CRISPOR=/hive/data/outside/crisprTrack/crispor
+
+# name of parasol cluster to ssh into
+CLUSTER=ku
 
 if [ ! -f $CRISPOR/crispor.py ]; then
     echo error: cannot find $CRISPOR/crispor.py
     exit 1
 fi
 
-# path to the crispr track tools, should be on /hive, from kent/src/utils/crisprTrack
-crisprTrack=/hive/groups/browser/crisprTrack
+# path to the crispr track pipeline scripts
+# look at ~/kent/src/hg/makeDb/crisprTrack/README.txt for
+# more info about these scripts in there
+crisprTrack=/hive/data/outside/crisprTrack/scripts
 
-db=$1
-geneTrackName=$2
-
-chromSizesPath=/hive/data/genomes/$db/chrom.sizes
-
+set +eu
 if [[ -z "$1" || -z "$2" ]]; then
     echo to build a crispr track, you need to specify two arguments:
     echo 1 - genome db
     echo 2 - name of a gene track
     exit 1
 fi
+set -eu
+
+db=$1
+geneTrackName=$2
+
+chromSizesPath=/hive/data/genomes/$db/chrom.sizes
 
 genomeFname=$CRISPOR/genomes/$db/$db.fa.bwt
 
@@ -55,9 +61,10 @@ echo `wc -l ranges/genes.gp` >> doCrispr.log
 echo break genes into exons and add 200 bp on each side
 genePredToBed ranges/genes.gp stdout | grep -v hap | grep -v chrUn | bedToExons stdin stdout | awk '{$2=$2-200; $3=$3+200; $6="+"; print}'| bedClip stdin /hive/data/genomes/$db/chrom.sizes stdout | grep -v _alt | grep -i -v hap > ranges/ranges.bed
 
-echo get sequence. this can take 10-15 minutes due to our old twoBit.c bug
+echo Get sequence, removing gaps. This can take 10-15 minutes 
 echo featureBits of target ranges >> doCrispr.log
-featureBits $db ranges/ranges.bed -faMerge -fa=ranges/ranges.fa -minSize=20 -bed=stdout | cut -f-3 2>> doCrispr.log > crisprRanges.bed 
+featureBits $db -not gap -bed=ranges/notGap.bed
+featureBits $db ranges/ranges.bed ranges/notGap.bed -faMerge -fa=ranges/ranges.fa -minSize=20 -bed=stdout | cut -f-3 2>> doCrispr.log > crisprRanges.bed 
 
 echo split the sequence file into pieces for the cluster
 mkdir -p ranges/inFa/ ranges/outGuides
@@ -70,7 +77,7 @@ echo find all guides in the pieces
 for i in ranges/inFa/*.fa; do echo python $crisprTrack/findGuides.py {check in exists inFa/`basename $i`} {check in exists $chromSizesPath} outGuides/`basename $i .fa`.bed {check out exists outGuides/`basename $i`}; done > ranges/jobList
 
 # actually just a few minutes on the cluster
-ssh ku "cd `pwd`/ranges; para freeBatch; para make jobList"
+ssh $CLUSTER "cd `pwd`/ranges; para freeBatch; para make jobList"
 
 echo concat all guides that were found
 cat ranges/outGuides/*.fa | grep -v \> > allGuides.txt
@@ -93,7 +100,7 @@ python $crisprTrack/splitGuidesSpecScore.py allGuides.txt specScores/jobs/inFa s
 echo creating a jobList file from the pieces
 # make the big jobList file, I used python, but not really necessary
 python $crisprTrack/makeSpecJoblist.py specScores/jobNames.txt $CRISPOR $db specScores/jobList
-ssh ku "cd `pwd`/specScores; para freeBatch; para make jobList"
+ssh $CLUSTER "cd `pwd`/specScores; para freeBatch; para make jobList"
 
 # also calc the efficiency scores
 python $crisprTrack/splitGuidesEffScore.py $chromSizesPath allGuides.bed effScores/jobs effScores/jobNames.txt
@@ -101,7 +108,7 @@ python $crisprTrack/splitGuidesEffScore.py $chromSizesPath allGuides.bed effScor
 # cannot get $db substitution to work with a bash heredoc
 for i in `find effScores/jobs/bed -type f`; do echo /cluster/software/bin/python $crisprTrack/jobCalcEffScores.py $CRISPOR $db {check in exists jobs/bed/`basename $i`} {check out exists jobs/out/`basename $i .bed`.tab}; done > effScores/jobList
 
-ssh ku "cd `pwd`/effScores; para freeBatch; para make jobList"
+ssh $CLUSTER "cd `pwd`/effScores; para freeBatch; para make jobList"
 
 # now concat the cluster job output back into two files
 # around 10 mins each
@@ -117,15 +124,21 @@ echo converting off-targets
 mkdir specScores/catJobs/inFnames specScores/catJobs/out/ -p
 echo specScores/jobs/outOffs/*.tab | tr ' ' '\n' | sed -e s/specScores/../g > specScores/otFnames.txt
 splitFile specScores/otFnames.txt 20 specScores/catJobs/inFnames/otJob
-for i in specScores/catJobs/inFnames/otJob*; do fname=`basename $i`; echo python /hive/groups/browser/crisprTrack/convOffs.py $db {check in exists inFnames/$fname} {check out exists out/$fname};  done > specScores/catJobs/jobList
+for i in specScores/catJobs/inFnames/otJob*; do fname=`basename $i`; echo python $crisprTrack/convOffs.py $db {check in exists inFnames/$fname} {check out exists out/$fname};  done > specScores/catJobs/jobList
+
+ssh $CLUSTER "cd `pwd`/specScores/catJobs; para freeBatch; para make jobList"
+
 echo concating and indexing the off-targets 
-catAndIndex specScores/catJobs/out offtargets.tab offtargets.offsets.tab
+catAndIndex specScores/catJobs/out crisprDetails.tab offtargets.offsets.tab --headers=_mismatchCounts,_crisprOfftargets
 
 # create the bigBed file
 # approx 30 mins on human
 echo creating a bigBed file
 time python $crisprTrack/createBigBed.py $db allGuides.bed specScores.tab effScores.tab offtargets.offsets.tab
-ln -s `pwd`/crispr.bb /gbdb/$db/bbi/crispr.bb
-hgBbiDbLink $db crisprTargets /gbdb/$db/bbi/crispr.bb
-hgLoadBed $db crisprRanges crisprRanges.bed
 
+# now link it into gbdb
+mkdir -p /gbdb/$db/crispr/
+ln -sf `pwd`/crispr.bb /gbdb/$db/crispr/crispr.bb
+ln -sf `pwd`/crisprDetails.tab /gbdb/$db/crispr/crisprDetails.tab
+hgBbiDbLink $db crisprTargets /gbdb/$db/crispr/crispr.bb
+hgLoadBed $db crisprRanges crisprRanges.bed

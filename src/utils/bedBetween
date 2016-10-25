@@ -18,6 +18,8 @@ parser.add_option("-u", "--upstream", dest="upstream", action="store_true", \
         help="only report intergenic regions that are upstream (if between -/+ neighbors, two features are created)", default=False)
 parser.add_option("-l", "--limit", dest="limit", action="store", \
         help="if -u is set: limit the length of upstream regions to this size", default=0, type="int")
+parser.add_option("-m", "--maxLen", dest="maxLen", action="store", \
+        help="limit names of features to this many characters in output bed file", default=None, type="int")
 parser.add_option("", "--uniqueNames", dest="uniqueNames", action="store_true", \
         help="keep only the first feature, if identical names")
 parser.add_option("-a", "--all", dest="all", action="store_true", \
@@ -26,6 +28,8 @@ parser.add_option("-a", "--all", dest="all", action="store_true", \
 (options, args) = parser.parse_args()
 
 doAll = False
+
+maxNameLen = None
 
 # ==== FUNCTIONs =====
 
@@ -41,6 +45,9 @@ def truncSize(start, end, limit, onLeft):
 def writeBeds(outf, chrom, posList, names, type):
     for i in range(0, len(names)):
         name = names[i]
+        if maxNameLen is not None and len(name)>maxNameLen:
+            name = name[:maxNameLen-3]+"..."
+
         start, end = posList[i]
         # skip 0-length features
         if start==end:
@@ -283,6 +290,8 @@ limit = options.limit
 chromSize=None
 if options.chromSizes!=None:
     chromSize = slurpdict(options.chromSizes)
+
+maxNameLen = options.maxLen
 
 stderr.write("Reading beds ...\n")
 beds = parseBedFilename(infile)

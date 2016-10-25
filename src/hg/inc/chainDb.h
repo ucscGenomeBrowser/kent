@@ -37,10 +37,10 @@ struct chain *chainHeadCommaIn(char **pS, struct chain *ret);
 void chainHeadOutput(struct chain *el, FILE *f, char sep, char lastSep);
 /* Print out chain.  Separate fields with sep. Follow last field with lastSep. */
 
-#define chainHeadTabOut(el,f) chainOutput(el,f,'\t','\n');
+#define chainHeadTabOut(el,f) chainHeadOutput(el,f,'\t','\n');
 /* Print out chain as a line in a tab-separated file. */
 
-#define chainHeadCommaOut(el,f) chainOutput(el,f,',',',');
+#define chainHeadCommaOut(el,f) chainHeadOutput(el,f,',',',');
 /* Print out chain as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */

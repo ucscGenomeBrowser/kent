@@ -1,13 +1,13 @@
 /* Copyright (C) 2012 The Regents of the University of California 
  * See README in this or parent directory for licensing information. */
 
-/* phyloGif.c for parsing phylo tree and outputting a gif.
+/* phyloPng.c for parsing phylo tree and outputting a png.
  *
  *  Author: Galt Barber 2006 
  * 
  *  Designed to be run either as a cgi or as a command-line utility.
  *  The input file spec matches the .nh tree format e.g. (cat:0.5,dog:0.6):1.2;
- *  The output gif layout was originally designed to ignore branch lengths.
+ *  The output png layout was originally designed to ignore branch lengths.
  *  However, options have now been added to allow it to use branchlengths,
  *  and to label the length of the branches.
  *  Any _suffix is stripped from labels both because pyloTree.c 
@@ -22,14 +22,14 @@
  *  
  *
  *  One may use as a cgi in html GET: 
- *    <IMG SRC="../cgi-bin/phyloGif?phyloGif_width=120&phyloGif_height=120&phyloGif_tree=(a:1,b:1);" >
+ *    <IMG SRC="../cgi-bin/phyloPng?phyloPng_width=120&phyloPng_height=120&phyloPng_tree=(a:1,b:1);" >
  *
  *  Or as cgi in html POST:
-<form method="POST" action="../cgi-bin/phyloGif/phylo.gif" name="mainForm">
+<form method="POST" action="../cgi-bin/phyloPng/phylo.png" name="mainForm">
 <table>
-<tr><td>width:</td><td><INPUT type="text" name="phyloGif_width" value="240" size="4"></td></tr>
-<tr><td>height:</td><td><INPUT type="text" name="phyloGif_height" value="512" size="4"></td></tr>
-<tr><td>tree:</td><td><textarea name="phyloGif_tree" rows=14 cols=70>
+<tr><td>width:</td><td><INPUT type="text" name="phyloPng_width" value="240" size="4"></td></tr>
+<tr><td>height:</td><td><INPUT type="text" name="phyloPng_height" value="512" size="4"></td></tr>
+<tr><td>tree:</td><td><textarea name="phyloPng_tree" rows=14 cols=70>
 (((((((((
 (human_hg18:0.00669,chimp_panTro1:0.00757):0.0243,
   macaque_rheMac2:0.0592):0.0240,
@@ -44,7 +44,7 @@
 	  ((tetraodon_tetNig1:0.199,fugu_fr1:0.239):0.493,
 	      zebrafish_danRer3:0.783):0.156);
 </textarea></td></tr>
-<tr><td>&nbsp;</td><td><INPUT type="submit" name="phyloGif_submit" value="submit"></td></tr>
+<tr><td>&nbsp;</td><td><INPUT type="submit" name="phyloPng_submit" value="submit"></td></tr>
 </table>
 </form>
  
@@ -90,38 +90,38 @@ char layoutErrMsg[1024] = "";
 
 /* Null terminated list of CGI Variables we don't want to save
  * permanently. */
-char *excludeVars[] = {"Submit", "submit", "phyloGif_submit", "phyloGif_restore", NULL};
+char *excludeVars[] = {"Submit", "submit", "phyloPng_submit", "phyloPng_restore", NULL};
 
 void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort(
     "%s\n\n"
-    "phyloGif - parse and display phyloGenetic tree\n"
+    "phyloPng - parse and display phyloGenetic tree\n"
     "\n"
     "Command-line Usage Examples:\n"
-    "   phyloGif -phyloGif_tree=tree.nh [options] > phylo.gif \n"
-    "   phyloGif -phyloGif_tree='(A:0.1,B:0.1)' [options] > phylo.gif \n"
+    "   phyloPng -phyloPng_tree=tree.nh [options] > phylo.png \n"
+    "   phyloPng -phyloPng_tree='(A:0.1,B:0.1)' [options] > phylo.png \n"
     "CGI Usage Examples:\n"
     "   Create an interactive form:\n"
-    "     http://someserver.com/cgi-bin/phyloGif\n"
+    "     http://someserver.com/cgi-bin/phyloPng\n"
     "   Create an image dynamically via URL:\n"
-    "     http://someserver.com/cgi-bin/phyloGif?phyloGif_tree=(A:0.1,B:0.1)\n"
+    "     http://someserver.com/cgi-bin/phyloPng?phyloPng_tree=(A:0.1,B:0.1)\n"
     "Options/CGI-vars:\n"
-    "  -phyloGif_width=N - width of output GIF, default %d\n"
-    "  -phyloGif_height=N - height of output GIF, default %d\n"
-    "  -phyloGif_tree= - data in format (nodeA:0.5,nodeB:0.6):1.2;\n"
+    "  -phyloPng_width=N - width of output PNG, default %d\n"
+    "  -phyloPng_height=N - height of output PNG, default %d\n"
+    "  -phyloPng_tree= - data in format (nodeA:0.5,nodeB:0.6):1.2;\n"
     "     If running at the command-line, can put filename here or stdin\n"
     "     (this is actually required)\n"
-    "  -phyloGif_branchLengths - use branch lengths for layout\n"
-    "  -phyloGif_lengthLegend - show length ruler at bottom\n"
-    "  -phyloGif_branchLabels - show length of branch as label\n"
-    "     (used with -phyloGif_branchLengths)\n"
-    "  -phyloGif_branchDecimals=N - show length of branch to N decimals, default %d\n"
-    "  -phyloGif_branchMultiplier=N - multiply branch length by N default %d\n"
-    "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
-    "  -phyloGif_underscores - preserve underscores in input as spaces in output\n"
-    "  -phyloGif_monospace - use a monospace proportional font\n"
+    "  -phyloPng_branchLengths - use branch lengths for layout\n"
+    "  -phyloPng_lengthLegend - show length ruler at bottom\n"
+    "  -phyloPng_branchLabels - show length of branch as label\n"
+    "     (used with -phyloPng_branchLengths)\n"
+    "  -phyloPng_branchDecimals=N - show length of branch to N decimals, default %d\n"
+    "  -phyloPng_branchMultiplier=N - multiply branch length by N default %d\n"
+    "  -phyloPng_htmlPage - wrap the output in an html page (cgi only)\n"
+    "  -phyloPng_underscores - preserve underscores in input as spaces in output\n"
+    "  -phyloPng_monospace - use a monospace proportional font\n"
     , msg, width, height, branchDecimals, branchMultiplier);
 }
 
@@ -256,10 +256,10 @@ else
 
 }
 
-static void phyloTreeGif(struct phyloTree *phyloTree, 
+static void phyloTreePng(struct phyloTree *phyloTree, 
     int maxDepth, int numLeafs, int maxLabelWidth, 
     int width, int height, struct memGfx *mg, MgFont *font)
-/* do a depth-first recursion over the tree, printing tree to gif */
+/* do a depth-first recursion over the tree, printing tree to png */
 {
 struct phyloLayout *this = (struct phyloLayout *) phyloTree->priv;
 int fHeight = mgFontPixelHeight(font);
@@ -280,8 +280,8 @@ if (phyloTree->numEdges == 2)
     {
     struct phyloLayout *that0 = (struct phyloLayout *) phyloTree->edges[0]->priv;
     struct phyloLayout *that1 = (struct phyloLayout *) phyloTree->edges[1]->priv;
-    phyloTreeGif(phyloTree->edges[0], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
-    phyloTreeGif(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
+    phyloTreePng(phyloTree->edges[0], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
+    phyloTreePng(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
     mgDrawLine(mg, hr-this->depth*deltaH, that0->vPos*vdelta+fHeight/2+MARGIN, 
                    hr-this->depth*deltaH, that1->vPos*vdelta+fHeight/2+MARGIN, MG_BLACK);
     if (phyloTree->ident->name)
@@ -297,10 +297,10 @@ else
 
 }
 
-static void phyloTreeGifBL(struct phyloTree *phyloTree, 
+static void phyloTreePngBL(struct phyloTree *phyloTree, 
     int maxDepth, int numLeafs, int maxLabelWidth, 
     int width, int height, struct memGfx *mg, MgFont *font, double minMaxFactor, boolean isRightEdge)
-/* do a depth-first recursion over the tree, printing tree to gif */
+/* do a depth-first recursion over the tree, printing tree to png */
 {
 struct phyloLayout *this = (struct phyloLayout *) phyloTree->priv;
 int fHeight = mgFontPixelHeight(font);
@@ -325,8 +325,8 @@ if (phyloTree->numEdges == 2)
     {
     struct phyloLayout *that0 = (struct phyloLayout *) phyloTree->edges[0]->priv;
     struct phyloLayout *that1 = (struct phyloLayout *) phyloTree->edges[1]->priv;
-    phyloTreeGifBL(phyloTree->edges[0], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
-    phyloTreeGifBL(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, TRUE);
+    phyloTreePngBL(phyloTree->edges[0], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
+    phyloTreePngBL(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, TRUE);
     mgDrawLine(mg, MARGIN+this->hPos*minMaxFactor, that0->vPos*vdelta+fHeight/2+MARGIN, 
                    MARGIN+this->hPos*minMaxFactor, that1->vPos*vdelta+fHeight/2+MARGIN, MG_BLACK);
     if (phyloTree->ident->name)
@@ -371,56 +371,53 @@ if (onWeb)
     }
 else    
     {
-    if (!cgiOptionalString("phyloGif_tree"))
-    	usage("-phyloGif_tree is a required 'option' or cgi variable.");
+    if (!cgiOptionalString("phyloPng_tree"))
+    	usage("-phyloPng_tree is a required 'option' or cgi variable.");
     }
 
-//cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
+useCart = (!cgiOptionalString("phyloPng_tree") || cgiVarExists("phyloPng_restore"));
 
-
-useCart = (!cgiOptionalString("phyloGif_tree") || cgiVarExists("phyloGif_restore"));
-
-htmlPageWrapper = cgiVarExists("phyloGif_htmlPage"); /* wrap output in a page */
+htmlPageWrapper = cgiVarExists("phyloPng_htmlPage"); /* wrap output in a page */
 
 if (onWeb && sameString(getenv("REQUEST_METHOD"),"HEAD"))
     { /* tell browser it's static just so it can save it */
     if (htmlPageWrapper)
     	printf("Content-type: text/html\r\n");
     else
-    	printf("Content-type: image/gif\r\n");
+    	printf("Content-type: image/png\r\n");
     printf("\r\n");
     return 0;
     }
 
 if (useCart)
     {
-    width = cartUsualInt(cart,"phyloGif_width",width);    
-    height = cartUsualInt(cart,"phyloGif_height",height);    
-    phyloData = cloneString(cartOptionalString(cart,"phyloGif_tree"));
-    branchLengths = cartVarExists(cart,"phyloGif_branchLengths");
-    lengthLegend = cartVarExists(cart,"phyloGif_lengthLegend");
-    branchLabels = cartVarExists(cart,"phyloGif_branchLabels");
-    branchDecimals = cartUsualInt(cart,"phyloGif_branchDecimals", branchDecimals);
-    branchMultiplier = cartUsualInt(cart,"phyloGif_branchMultiplier", branchMultiplier);
-    stripUnderscoreSuff = cartVarExists(cart,"phyloGif_undersuff_strip");
-    dashToSpace = cartVarExists(cart,"phyloGif_dash_to_space");
-    underToSpace = cartVarExists(cart,"phyloGif_under_to_space");
-    monospace = cartVarExists(cart, "phyloGif_monospace");
+    width = cartUsualInt(cart,"phyloPng_width",width);    
+    height = cartUsualInt(cart,"phyloPng_height",height);    
+    phyloData = cloneString(cartOptionalString(cart,"phyloPng_tree"));
+    branchLengths = cartVarExists(cart,"phyloPng_branchLengths");
+    lengthLegend = cartVarExists(cart,"phyloPng_lengthLegend");
+    branchLabels = cartVarExists(cart,"phyloPng_branchLabels");
+    branchDecimals = cartUsualInt(cart,"phyloPng_branchDecimals", branchDecimals);
+    branchMultiplier = cartUsualInt(cart,"phyloPng_branchMultiplier", branchMultiplier);
+    stripUnderscoreSuff = cartVarExists(cart,"phyloPng_undersuff_strip");
+    dashToSpace = cartVarExists(cart,"phyloPng_dash_to_space");
+    underToSpace = cartVarExists(cart,"phyloPng_under_to_space");
+    monospace = cartVarExists(cart, "phyloPng_monospace");
     }
 else
     {
-    width = cgiUsualInt("phyloGif_width",width);    
-    height = cgiUsualInt("phyloGif_height",height);    
-    phyloData = cloneString(cgiOptionalString("phyloGif_tree"));
-    branchLengths = cgiVarExists("phyloGif_branchLengths");
-    lengthLegend = cgiVarExists("phyloGif_lengthLegend");
-    branchLabels = cgiVarExists("phyloGif_branchLabels");
-    branchDecimals = cgiUsualInt("phyloGif_branchDecimals", branchDecimals);
-    branchMultiplier = cgiUsualInt("phyloGif_branchMultiplier", branchMultiplier);
-    stripUnderscoreSuff = cgiVarExists("phyloGif_undersuff_strip");
-    dashToSpace = cgiVarExists("phyloGif_dash_to_space");
-    underToSpace = cgiVarExists("phyloGif_under_to_space");
-    monospace = cgiVarExists("phyloGif_monospace");
+    width = cgiUsualInt("phyloPng_width",width);    
+    height = cgiUsualInt("phyloPng_height",height);    
+    phyloData = cloneString(cgiOptionalString("phyloPng_tree"));
+    branchLengths = cgiVarExists("phyloPng_branchLengths");
+    lengthLegend = cgiVarExists("phyloPng_lengthLegend");
+    branchLabels = cgiVarExists("phyloPng_branchLabels");
+    branchDecimals = cgiUsualInt("phyloPng_branchDecimals", branchDecimals);
+    branchMultiplier = cgiUsualInt("phyloPng_branchMultiplier", branchMultiplier);
+    stripUnderscoreSuff = cgiVarExists("phyloPng_undersuff_strip");
+    dashToSpace = cgiVarExists("phyloPng_dash_to_space");
+    underToSpace = cgiVarExists("phyloPng_under_to_space");
+    monospace = cgiVarExists("phyloPng_monospace");
     }
     
 if (useCart)
@@ -429,33 +426,33 @@ if (useCart)
 	{
     	printf("Content-type: text/html\r\n");
 	printf("\r\n");
-	cartWebStart(cart, NULL, "%s", "phyloGif Interactive Phylogenetic Tree Gif Maker");
+	cartWebStart(cart, NULL, "%s", "phyloPng Interactive Phylogenetic Tree Png Maker");
 
 	if (isMSIE)  /* cannot handle long urls */
-	    puts("<form method=\"POST\" action=\"phyloGif\" name=\"mainForm\">");
+	    puts("<form method=\"POST\" action=\"phyloPng\" name=\"mainForm\">");
 	else
-	    puts("<form method=\"GET\" action=\"phyloGif\" name=\"mainForm\">");
+	    puts("<form method=\"GET\" action=\"phyloPng\" name=\"mainForm\">");
 
 	cartSaveSession(cart);
 	puts("<table>");
-	puts("<tr><td>Width:</td><td>"); cartMakeIntVar(cart, "phyloGif_width", width, 4); puts("</td></tr>");
-	puts("<tr><td>Height:</td><td>"); cartMakeIntVar(cart, "phyloGif_height", height, 4); puts("</td></tr>");
-	puts("<tr><td>Use branch lengths?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLengths", branchLengths); puts("</td></tr>");
-	puts("<tr><td>&nbsp; Show length ruler?</td><td>"); cartMakeCheckBox(cart, "phyloGif_lengthLegend", lengthLegend); puts("</td></tr>");
-	puts("<tr><td>&nbsp; Show length values?</td><td>"); cartMakeCheckBox(cart, "phyloGif_branchLabels", branchLabels); puts("</td></tr>");
-	puts("<tr><td>&nbsp; How many decimal places?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchDecimals", branchDecimals,1); puts("</td></tr>");
-	puts("<tr><td>&nbsp; Multiply branch length by factor?</td><td>"); cartMakeIntVar(cart, "phyloGif_branchMultiplier", branchMultiplier,5); puts("</td></tr>");
-	puts("<tr><td>Strip underscore-suffixes?</td><td>"); cartMakeCheckBox(cart, "phyloGif_undersuff_strip", stripUnderscoreSuff); puts("</td></tr>");
-	puts("<tr><td>Change dash to space?</td><td>"); cartMakeCheckBox(cart, "phyloGif_dash_to_space", dashToSpace); puts("</td></tr>");
-	puts("<tr><td>Change underscore to space?</td><td>"); cartMakeCheckBox(cart, "phyloGif_under_to_space", underToSpace); puts("</td></tr>");
-	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloGif_htmlPage", htmlPageWrapper); puts("</td></tr>");
-	puts("<tr><td>Monospace font?</td><td>"); cartMakeCheckBox(cart, "phyloGif_monospace", monospace); puts("</td></tr>");
+	puts("<tr><td>Width:</td><td>"); cartMakeIntVar(cart, "phyloPng_width", width, 4); puts("</td></tr>");
+	puts("<tr><td>Height:</td><td>"); cartMakeIntVar(cart, "phyloPng_height", height, 4); puts("</td></tr>");
+	puts("<tr><td>Use branch lengths?</td><td>"); cartMakeCheckBox(cart, "phyloPng_branchLengths", branchLengths); puts("</td></tr>");
+	puts("<tr><td>&nbsp; Show length ruler?</td><td>"); cartMakeCheckBox(cart, "phyloPng_lengthLegend", lengthLegend); puts("</td></tr>");
+	puts("<tr><td>&nbsp; Show length values?</td><td>"); cartMakeCheckBox(cart, "phyloPng_branchLabels", branchLabels); puts("</td></tr>");
+	puts("<tr><td>&nbsp; How many decimal places?</td><td>"); cartMakeIntVar(cart, "phyloPng_branchDecimals", branchDecimals,1); puts("</td></tr>");
+	puts("<tr><td>&nbsp; Multiply branch length by factor?</td><td>"); cartMakeIntVar(cart, "phyloPng_branchMultiplier", branchMultiplier,5); puts("</td></tr>");
+	puts("<tr><td>Strip underscore-suffixes?</td><td>"); cartMakeCheckBox(cart, "phyloPng_undersuff_strip", stripUnderscoreSuff); puts("</td></tr>");
+	puts("<tr><td>Change dash to space?</td><td>"); cartMakeCheckBox(cart, "phyloPng_dash_to_space", dashToSpace); puts("</td></tr>");
+	puts("<tr><td>Change underscore to space?</td><td>"); cartMakeCheckBox(cart, "phyloPng_under_to_space", underToSpace); puts("</td></tr>");
+	puts("<tr><td>Wrap in html page?</td><td>"); cartMakeCheckBox(cart, "phyloPng_htmlPage", htmlPageWrapper); puts("</td></tr>");
+	puts("<tr><td>Monospace font?</td><td>"); cartMakeCheckBox(cart, "phyloPng_monospace", monospace); puts("</td></tr>");
 
         printf("<tr><td><big>TREE:</big>");
-	puts("<br><br><INPUT type=\"submit\" name=\"phyloGif_restore\" value=\"restore default\">");
+	puts("<br><br><INPUT type=\"submit\" name=\"phyloPng_restore\" value=\"restore default\">");
 	
-	puts("</td><td><textarea name=\"phyloGif_tree\" rows=14 cols=70>");
-	if (NULL == phyloData || phyloData[0] == '\0' || cgiVarExists("phyloGif_restore"))
+	puts("</td><td><textarea name=\"phyloPng_tree\" rows=14 cols=70>");
+	if (NULL == phyloData || phyloData[0] == '\0' || cgiVarExists("phyloPng_restore"))
 	    {
 	    puts(
 "(((((((((\n"
@@ -480,7 +477,7 @@ if (useCart)
 	puts("</TEXTAREA>");
 	puts("</td></tr>");
 	puts("<tr><td>&nbsp;</td><td>");
-	puts("<INPUT type=\"submit\" name=\"phyloGif_submit\" value=\"submit\">");
+	puts("<INPUT type=\"submit\" name=\"phyloPng_submit\" value=\"submit\">");
 	puts("</td></tr>");
 	puts("</table>");
 	puts("</form>");
@@ -502,12 +499,12 @@ if (useCart)
 "<tr><td><PRE>\n"
 "((A:0.1,B:0.1):0.2,C:0.15);\n"
 "</PRE></td><td>\n"
-"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((A:0.1,B:0.1):0.2,C:0.15);\">\n"
+"<IMG SRC=\"?phyloPng_width=200&phyloPng_height=120&phyloPng_branchLengths=1&phyloPng_tree=((A:0.1,B:0.1):0.2,C:0.15);\">\n"
 "</td></tr>\n"
 "<tr><td><PRE>\n"
 "((A:0.1,B:0.1)D:0.2,C:0.15)E;\n"
 "</PRE></td><td>\n"
-"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((A:0.1,B:0.1)D:0.2,C:0.15)E;\">\n"
+"<IMG SRC=\"?phyloPng_width=200&phyloPng_height=120&phyloPng_branchLengths=1&phyloPng_tree=((A:0.1,B:0.1)D:0.2,C:0.15)E;\">\n"
 "<br>(internal or ancestral node labels)\n"
 "</td></tr>\n"
 "<tr><td><PRE>\n"
@@ -521,7 +518,7 @@ if (useCart)
 "     xenopus),\n"
 "    (tetraodon,zebrafish));\n"
 "</PRE></td><td>\n"
-"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=200&phyloGif_tree=(((((((mouse,rat),human),(dog,cow)),opossum),chicken),xenopus),(tetraodon,zebrafish));\">\n"
+"<IMG SRC=\"?phyloPng_width=200&phyloPng_height=200&phyloPng_tree=(((((((mouse,rat),human),(dog,cow)),opossum),chicken),xenopus),(tetraodon,zebrafish));\">\n"
 "</td></tr>\n"
 "<tr><td>\n"
 "We have extended the Newick format to allow spaces <br>\n"
@@ -533,7 +530,7 @@ if (useCart)
 "  White-tailed eagle:0.1):0.2,\n"
 " S. purpuratus:0.15);\n"
 "</PRE></td><td>\n"
-"<IMG SRC=\"?phyloGif_width=200&phyloGif_height=120&phyloGif_branchLengths=1&phyloGif_tree=((Brandt's myotis \\(bat\\):0.1,White-tailed eagle:0.1):0.2,S. purpuratus:0.15);\">\n"
+"<IMG SRC=\"?phyloPng_width=200&phyloPng_height=120&phyloPng_branchLengths=1&phyloPng_tree=((Brandt's myotis \\(bat\\):0.1,White-tailed eagle:0.1):0.2,S. purpuratus:0.15);\">\n"
 "</td></tr>\n"
 "</table>\n"
 "5. PhastCons branch lengths are expected substitutions per site, allowing for\n"
@@ -554,7 +551,7 @@ if (useCart)
 	return 0;
 	}
     else	    
-    	usage("-phyloGif_tree is a required 'option' or cgi variable.");
+    	usage("-phyloPng_tree is a required 'option' or cgi variable.");
     }
 
 if (htmlPageWrapper)
@@ -563,26 +560,26 @@ if (htmlPageWrapper)
     printf("\r\n");
     puts("<html><head><title>Phylogenetic Tree</title></head><body>");
     printf("<IMAGE SRC=\"http://%s%s"
-	    "?phyloGif_width=%d"
-	    "&phyloGif_height=%d"
-	    "&phyloGif_tree=%s"
+	    "?phyloPng_width=%d"
+	    "&phyloPng_height=%d"
+	    "&phyloPng_tree=%s"
 	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
     if (branchLengths)
-	printf("&phyloGif_branchLengths=1");
+	printf("&phyloPng_branchLengths=1");
     if (lengthLegend)
-	printf("&phyloGif_lengthLegend=1");
+	printf("&phyloPng_lengthLegend=1");
     if (branchLabels)
-	printf("&phyloGif_branchLabels=1");
-    printf("&phyloGif_branchDecimals=%d",branchDecimals);
-    printf("&phyloGif_branchMultipliers=%d",branchMultiplier);
+	printf("&phyloPng_branchLabels=1");
+    printf("&phyloPng_branchDecimals=%d",branchDecimals);
+    printf("&phyloPng_branchMultipliers=%d",branchMultiplier);
     if (stripUnderscoreSuff)
-	printf("&phyloGif_underscores=1");
+	printf("&phyloPng_underscores=1");
     if (dashToSpace)
-	printf("&phyloGif_dash_to_space=1");
+	printf("&phyloPng_dash_to_space=1");
     if (underToSpace)
-	printf("&phyloGif_under_to_space=1");
+	printf("&phyloPng_under_to_space=1");
     if (monospace)
-	printf("&phyloGif_monospace=1");
+	printf("&phyloPng_monospace=1");
     puts("\"></body></html>");
     freez(&phyloData);
     return 0;
@@ -642,8 +639,8 @@ if (errMsg)
 	puts("<html><head><title>PhyloTree parse error</title></head><body><pre>");
 	/* we dont think the specific error message coming back are correct or useful
 	 * so supply a generic err msg */
-    	printf("Original input tree:\n[%s]\n\n",cgiString("phyloGif_tree"));
-    	printf("Input tree as passed to parser:\n[%s]\n\n",phyloData);
+    	htmlPrintf("Original input tree:\n[%s]\n\n",cgiString("phyloPng_tree"));
+    	htmlPrintf("Input tree as passed to parser:\n[%s]\n\n",phyloData);
     	printf("Parser syntax error:\n%s",errMsg);
     	puts("</pre></body></html>");
 	}
@@ -687,7 +684,7 @@ if (phyloTree)
 	    printf("Content-type: text/html\r\n");
 	    printf("\r\n");
 	    puts("<html><head><title>PhyloTree error</title></head><body><pre>");
-	    printf("input tree: [%s]\n\n%s",cgiString("phyloGif_tree"),layoutErrMsg);
+	    printf("input tree: [%s]\n\n%s",cgiString("phyloPng_tree"),layoutErrMsg);
 	    puts("</pre></body></html>");
 	    }
 	else
@@ -700,10 +697,10 @@ if (phyloTree)
 	}
 
     if (branchLengths)
-        phyloTreeGifBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, 
+        phyloTreePngBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, 
 	    mg, font, minMaxFactor, FALSE);
     else	    
-        phyloTreeGif(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
+        phyloTreePng(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
 
     if (lengthLegend)
 	{
@@ -756,7 +753,7 @@ if (!mgSaveToPng(stdout, mg, FALSE))
     errAbort("Couldn't save png to stdout");
     }
 
-if (cgiOptionalString("phyloGif_submit"))
+if (cgiOptionalString("phyloPng_submit"))
     cartCheckout(&cart);
 
 /* there's no code for freeing the phyloTree yet in phyloTree.c */

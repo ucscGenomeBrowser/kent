@@ -22,8 +22,9 @@ struct mafPriv *getMafPriv(struct track *track);
 static inline boolean inSummaryMode(struct cart *cart, struct trackDb *tdb, int winSize)
 {
 char *snpTable = trackDbSetting(tdb, "snpTable");
+unsigned summaryWindowSize = cartOrTdbInt(cart, tdb, "summaryWindowSize", 1000000);
 
-boolean windowBigEnough =  (winSize > 1000000);
+boolean windowBigEnough =  (winSize > summaryWindowSize);
 boolean doSnpMode = (snpTable != NULL) && cartOrTdbBoolean(cart, tdb, MAF_SHOW_SNP,FALSE);
 return windowBigEnough && !doSnpMode;
 }

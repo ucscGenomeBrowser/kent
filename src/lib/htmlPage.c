@@ -24,6 +24,7 @@
 #include "obscure.h"
 #include "filePath.h"
 #include "net.h"
+#include "htmshell.h"
 #include "htmlPage.h"
 
 
@@ -633,6 +634,7 @@ for (;;)
 		AllocVar(att);
 		att->name = cloneString(name);
 		att->val = cloneString(val);
+		attributeDecode(att->val);
 		slAddTail(&tag->attributes, att);
 		s = e;
 		if (gotEnd)

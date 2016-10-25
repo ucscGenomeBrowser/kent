@@ -10,7 +10,7 @@
  *            format narrowPeak
  *
  *            file hg19/chipSeq/helaH3K4me3.broadPeak.bigBed
- *            formet broadPeak
+ *            format broadPeak
  *
  *         target CTCF
  *         antibody abCamAntiCtcf
@@ -19,7 +19,7 @@
  *            format narrowPeak
  *
  *            file hg19/chipSeq/helaCTCF.broadPeak.bigBed
- *            formet broadPeak
+ *            format broadPeak
  *
  * The file is interpreted so that lower level stanzas inherit tags from higher level ones.
  */
@@ -152,7 +152,9 @@ int indentStack[maxDepth];
 indentStack[0] = 0;
 
 /* Open up file first thing.  Abort if there's a problem here. */
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct lineFile *lf = lineFileUdcMayOpen(fileName, TRUE);
+if (lf == NULL)
+    errAbort("Cannot open tagStorm file %s\n", fileName);
 
 /* Set up new empty tag storm and get local pointer to memory pool. */
 struct tagStorm *tagStorm = tagStormNew(fileName);

@@ -48,10 +48,12 @@ const char *vcfGtGenotype = "GT";	// Integer allele indices separated by "/" (un
 					// 2 for the second allele in ALT and so on.
 const char *vcfGtDepth = "DP";		// Read depth at this position for this sample
 const char *vcfGtFilter = "FT";		// Analogous to variant's FILTER field
-const char *vcfGtLikelihoods = "GL";	// Three floating point log10-scaled likelihoods for
-					// AA,AB,BB genotypes where A=ref and B=alt;
-					// not applicable if site is not biallelic.
+const char *vcfGtLikelihoods = "GL";	// Floating point log10-scaled likelihoods for genotypes.
+					// If bi-allelic, order of genotypes is AA,AB,BB
+					// where A=ref and B=alt.
+					// If tri-allelic, AA,AB,BB,AC,BC,CC.
 const char *vcfGtPhred = "PL";		// Phred-scaled genotype likelihoods rounded to closest int
+					// Same ordering as GL
 const char *vcfGtConditionalQual = "GQ";// Conditional genotype quality
 					// i.e. phred quality -10log_10 P(genotype call is wrong,
 					// conditioned on the site's being variant)
@@ -265,7 +267,7 @@ static const char *fileformatRegex = "^##(file)?format=VCFv([0-9]+)(\\.([0-9]+))
 static const char *infoOrFormatRegex =
     "^##(INFO|FORMAT)="
     "<ID=([\\.+A-Za-z0-9_:-]+),"
-    "Number=(\\.|A|G|[0-9-]+),"
+    "Number=([\\.AGR]|[0-9-]+),"
     "Type=([A-Za-z]+),"
     "Description=\"?(.*)\"?>$";
 static const char *filterOrAltRegex =
@@ -345,6 +347,10 @@ else if (startsWith("##INFO=", line) || startsWith("##FORMAT=", line))
 	if (line[substrs[5].rm_eo-1] == '"')
 	    line[substrs[5].rm_eo-1] = '\0';
 	def->description = vcfFileCloneSubstr(vcff, line, substrs[5]);
+        char *p = NULL;
+        if ((p = strstr(def->description, "\",Source=\"")) ||
+            (p = strstr(def->description, "\",Version=\"")))
+            *p = '\0';
 	slAddHead((isInfo ? &(vcff->infoDefs) : &(vcff->gtFormatDefs)), def);
 	}
     else
@@ -760,9 +766,15 @@ for (i = 1;  i < alleleCount;  i++)
 	    // Different first base implies unpadded alleles.
 	    hasPaddingBase = FALSE;
 	}
+    else if (sameString(alleles[i], "<X>") || sameString(alleles[i], "<*>"))
+        {
+        // Special case for samtools mpileup "<X>" or gVCF "<*>" (no alternate allele observed) --
+        // being symbolic doesn't make this an indel and ref base is not necessarily padded.
+        hasPaddingBase = FALSE;
+        }
     else
 	{
-	// Symbolic ALT allele: REF must have the padding base.
+	// Symbolic ALT allele: Indel, so REF must have the padding base.
 	hasPaddingBase = TRUE;
 	break;
 	}
@@ -1142,6 +1154,78 @@ struct vcfInfoDef *def = vcfInfoDefForGtKey(vcff, key);
 return def ? def->type : vcfInfoString;
 }
 
+static void parseGt(char *genotype, struct vcfGenotype *gt)
+/* Parse genotype, which should be something like "0/0", "0/1", "1|0" or "0/." into gt fields. */
+{
+char *sep = strchr(genotype, '|');
+if (sep != NULL)
+    gt->isPhased = TRUE;
+else
+    sep = strchr(genotype, '/');
+if (genotype[0] == '.')
+    gt->hapIxA = -1;
+else
+    gt->hapIxA = atoi(genotype);
+if (sep == NULL)
+    gt->isHaploid = TRUE;
+else if (sep[1] == '.')
+    gt->hapIxB = -1;
+else
+    gt->hapIxB = atoi(sep+1);
+}
+
+static void parsePlAsGt(char *pl, struct vcfGenotype *gt)
+/* Parse PL value, which is usually a list of 3 numbers, one of which is 0 (the selected haplotype),
+ * into gt fields. */
+{
+char plCopy[strlen(pl)+1];
+safecpy(plCopy, sizeof(plCopy), pl);
+char *words[32];
+int wordCount = chopCommas(plCopy, words);
+if (wordCount > 0 && sameString(words[0], "0"))
+    {
+    // genotype is AA (ref/ref)
+    gt->hapIxA = 0;
+    gt->hapIxB = 0;
+    }
+else if (wordCount > 1 && sameString(words[1], "0"))
+    {
+    // genotype is AB (ref/alt)
+    gt->hapIxA = 0;
+    gt->hapIxB = 1;
+    }
+else if (wordCount > 2 && sameString(words[2], "0"))
+    {
+    // genotype is BB (alt/alt)
+    gt->hapIxA = 1;
+    gt->hapIxB = 1;
+    }
+else if (wordCount > 3 && sameString(words[3], "0"))
+    {
+    // genotype is AC (ref/alt1)
+    gt->hapIxA = 0;
+    gt->hapIxB = 2;
+    }
+else if (wordCount > 4 && sameString(words[4], "0"))
+    {
+    // genotype is BC (alt/alt1)
+    gt->hapIxA = 1;
+    gt->hapIxB = 2;
+    }
+else if (wordCount > 5 && sameString(words[5], "0"))
+    {
+    // genotype is CC (alt1/alt1)
+    gt->hapIxA = 2;
+    gt->hapIxB = 2;
+    }
+else
+    {
+    // too fancy, treat as "./."
+    gt->hapIxA = -1;
+    gt->hapIxB = -1;
+    }
+}
+
 #define VCF_MAX_FORMAT VCF_MAX_INFO
 #define VCF_MAX_FORMAT_LEN (VCF_MAX_FORMAT * 4)
 
@@ -1163,9 +1247,6 @@ if (formatWordCount >= VCF_MAX_FORMAT)
 	       "VCF_MAX_FORMAT may need to be increased in vcf.c!", VCF_MAX_FORMAT);
     formatWordCount = VCF_MAX_FORMAT;
     }
-if (differentString(formatWords[0], vcfGtGenotype))
-    vcfFileErr(vcff, "FORMAT column should begin with \"%s\" but begins with \"%s\"",
-	       vcfGtGenotype, formatWords[0]);
 int i;
 // Store the pooled format word pointers and associated types for use in inner loop below.
 enum vcfInfoType formatTypes[VCF_MAX_FORMAT];
@@ -1189,29 +1270,22 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
     gt->id = vcff->genotypeIds[i];
     gt->infoCount = gtWordCount;
     gt->infoElements = vcfFileAlloc(vcff, gtWordCount * sizeof(struct vcfInfoElement));
+    gt->hapIxA = gt->hapIxB = -1;
+    boolean foundGT = FALSE;
     int j;
     for (j = 0;  j < gtWordCount;  j++)
 	{
 	// Special parsing of genotype:
 	if (sameString(formatWords[j], vcfGtGenotype))
 	    {
-	    char *genotype = gtWords[j];
-	    char *sep = strchr(genotype, '|');
-	    if (sep != NULL)
-		gt->isPhased = TRUE;
-	    else
-		sep = strchr(genotype, '/');
-	    if (genotype[0] == '.')
-		gt->hapIxA = -1;
-	    else
-		gt->hapIxA = atoi(genotype);
-	    if (sep == NULL)
-		gt->isHaploid = TRUE;
-	    else if (sep[1] == '.')
-		gt->hapIxB = -1;
-	    else
-		gt->hapIxB = atoi(sep+1);
+            parseGt(gtWords[j], gt);
+            foundGT = TRUE;
 	    }
+        else if (!foundGT && sameString(formatWords[j], vcfGtPhred))
+            {
+            parsePlAsGt(gtWords[j], gt);
+            foundGT = TRUE;
+            }
 	struct vcfInfoElement *el = &(gt->infoElements[j]);
 	el->key = formatWords[j];
 	el->count = parseInfoValue(record, formatWords[j], formatTypes[j], gtWords[j],
@@ -1222,6 +1296,9 @@ for (i = 0;  i < vcff->genotypeCount;  i++)
 		       "VCF_MAX_INFO may need to be increased in vcf.c!",
 		       gt->id, VCF_MAX_INFO);
 	}
+    if (i == 0 && !foundGT)
+        vcfFileErr(vcff,
+                   "Genotype FORMAT column includes neither GT nor PL; unable to parse genotypes.");
     }
 record->genotypeUnparsedStrings = NULL;
 }

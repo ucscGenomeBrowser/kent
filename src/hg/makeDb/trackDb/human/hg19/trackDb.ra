@@ -2198,6 +2198,7 @@ speciesOrder ornAna1 galGal3 taeGut1 anoCar2 pytMol0 chrPic0 pelSin0 cheMyd0 all
 
 track numtSeq override
 html numtSeqHg19
+group rep
 
 track hg19FosEndPairs
 shortLabel hg19 Fosmid End Pairs
@@ -2463,6 +2464,10 @@ group rep
 
 track pubsBingBlat override
 group phenDis
+
+# override to use hg19 specific html page
+track crispr override
+html crispr
 
 include defaultPriority.ra
 include trackDb.cloneEnd.ra

@@ -38,6 +38,10 @@ static void getXrefInfo(struct sqlConnection *conn,
 /* See if curTrack specifies an xref/alias table for lookup of IDs. */
 {
 struct trackDb *tdb  = hTrackDbForTrack(database, curTable);
+
+if (tdb == NULL)
+    tdb = curTrack;
+
 char *xrefSpec = tdb ? trackDbSettingClosestToHomeOrDefault(tdb, "idXref",NULL) : NULL;
 char *xrefTable = NULL, *idField = NULL, *aliasField = NULL;
 if (xrefSpec != NULL)
@@ -500,7 +504,7 @@ if (isNotEmpty(idText))
 	     "information about the table and field.\n"
 	     "%d %smissing identifier(s):\n"
 	     "%s\n"
-	     "<a href='%-s'>Complete list of missing identifiers<a>\n", 
+	     "<a href='%s|none|'>Complete list of missing identifiers<a>\n",
 	     (totalTerms - foundTerms), totalTerms,
 	     curTable, idField,
 	     (xrefTable ? (xrefIsSame ? "" : " or in alias table ") : ""),

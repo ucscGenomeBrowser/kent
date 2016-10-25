@@ -46,6 +46,7 @@
 #include "genbank.h"
 #include "htmlPage.h"
 #include "longRange.h"
+#include "tagStorm.h"
 
 #define SMALLBUF 256
 #define MAX_SUBGROUP 9
@@ -184,9 +185,53 @@ freeMem(encValue);
 return dyStringCannibalize(&dyLink);
 }
 
+// static global that maps tagStorm file names to hashes on the "track" value
+static struct hash *tagStanzaHash;
+
+char *tagStormAsHtmlTable(char *tagStormFile, struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
+/* Return a string which is an HTML table of the tags for this track. */
+{
+if (tagStanzaHash == NULL)
+    tagStanzaHash = newHash(5);
+struct hash *stanzaHash = hashFindVal(tagStanzaHash, tagStormFile);
+if (stanzaHash == NULL)
+    {
+    struct tagStorm *tags = tagStormFromFile(tagStormFile);
+    stanzaHash = tagStormUniqueIndex(tags, "track");
+    hashAdd(tagStanzaHash, tagStormFile, stanzaHash);
+    }
+
+struct tagStanza *stanza = hashFindVal(stanzaHash, trackHubSkipHubName(tdb->track));
+if (stanza == NULL)
+    return "";
+
+struct slPair *pairs = tagListIncludingParents(stanza);
+struct dyString *dyTable = dyStringCreate("<table style='display:inline-table;'>");
+
+if (showLongLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td colspan=2 nowrap>%s</td></tr>",tdb->longLabel);
+if (showShortLabel)
+    dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>shortLabel:</i></td>"
+                           "<td nowrap>%s</td></tr>",tdb->shortLabel);
+
+for(; pairs; pairs = pairs->next)
+    {
+    if (!isEmpty((char *)pairs->val))
+        dyStringPrintf(dyTable,"<tr valign='bottom'><td align='right' nowrap><i>%s:</i></td>"
+                           "<td nowrap>%s</td></tr>",pairs->name, (char *)pairs->val);
+    }
+dyStringAppend(dyTable,"</table>");
+return dyStringCannibalize(&dyTable);
+}
+
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel)
 // If metadata from metaDb exists, return string of html with table definition
 {
+char *tagStormFile = trackDbSetting(tdb, "tagStorm");
+
+if (tagStormFile)
+    return tagStormAsHtmlTable(tagStormFile, tdb, showLongLabel, showShortLabel);
+
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
 if (safeObj == NULL || safeObj->vars == NULL)
     return NULL;

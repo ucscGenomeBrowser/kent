@@ -321,3 +321,10 @@ testOutOfMem: testOutOfMem.o ${MYLIBS} mkdirs
 
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest
+
+${BIN_DIR}/testDecodedString: mkdirs testDecodedString.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testDecodedString testDecodedString.o ${MYLIBS} ${L}
+
+testDecodedString:	${BIN_DIR}/testDecodedString mkdirs
+	${BIN_DIR}/testDecodedString -verbose=2 quote this\\ following
+

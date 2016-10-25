@@ -916,7 +916,8 @@ return list;
 }
 
 static struct slName *sqlListTablesForConn(struct sqlConnection *conn, char *likeExpr)
-/* run SHOW TABLES on connection and return a slName list */
+/* run SHOW TABLES on connection and return a slName list.  LIKE expression
+ * can be NULL or string e.g. "LIKE 'snp%'" */
 {
 char query[256];
 if (likeExpr == NULL)
@@ -3948,7 +3949,6 @@ else
 
 freeMem(newFormat);
 va_end(orig_args);
-va_end(args);
 
 return sz;
 
