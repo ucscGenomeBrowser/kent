@@ -63,3 +63,7 @@ From script/editor:
 
 6. Remove Text_Lo group (or set CSS display:none)
 
+7. Some id's will need stripping of terminal _1.  Unclear to me when/why these are added in cases where there's only 1!
+
+* e.g. arteryAorta_Text_Hi_1_
+
