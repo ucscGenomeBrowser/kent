@@ -20,9 +20,7 @@ In Adobe Illustrator:
 
     Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.  600, 730, 10, 10
 
-3. Remove male/female symbols (click and delete, or click on eye image in right panel to hide from export)
-
-4. Save in SVG format (Save As, Format: SVG)
+3. Save in SVG format (Save As, Format: SVG)
 
         * check Use Artboard ?
         - on SVG options, 
@@ -52,6 +50,16 @@ From script/editor:
 70 45 600 730
 (check aspect ratio)
         
-        
+4. Change fonts to match Genome Browser and generally work well with page:
 
+        font-family:  Lato-Regular -> Lato,Arial,Helvetica
+        font-size: 12.5px -> 11px 
+
+5. Add CSS link to svg (just after header)
+
+<defs>
+    <link rel="stylesheet" href="../style/hgGtexTrackSettings.css" xmlns="http://www.w3.org/1999/xhtml"/>
+</defs>
+
+6. Remove Text_Lo group (or set CSS display:none)
 
