@@ -10,6 +10,8 @@ var gtexTrackSettings = (function() {
     var _svgRoot;
     var _htmlDoc;
     var _htmlRoot;
+    var _topTissue;
+    var _topAura;
 
     var tissues = [
         'adiposeSubcut', 'adiposeVisceral', 'adrenalGland', 'arteryAorta', 'arteryCoronary', 
@@ -151,6 +153,8 @@ var gtexTrackSettings = (function() {
         var pic = $("#" + tis + "_Pic_Hi", _svgRoot);
         var white = $("#" + tis + "_Aura_Hi", _svgRoot);
         var count = el.childElementCount;
+        var hiEl = _svgDoc.getElementById(tis + '_Pic_Hi');
+        var auraEl = _svgDoc.getElementById(tis + '_Aura_Hi');
         if (isOn) {
             el.style.fill = 'blue';
             for (i = 0; i < count; i++) {
@@ -159,6 +163,14 @@ var gtexTrackSettings = (function() {
             $(line).show();
             $(pic).show();
             $(white).show();
+
+            var topAura = auraEl.cloneNode(true);
+            topAura.id = "topAura";
+            _topAura = _svgRoot.appendChild(topAura);
+        
+            var topTissue = hiEl.cloneNode(true);
+            topTissue.id = "topTissue";
+            _topTissue = _svgRoot.appendChild(topTissue);
         } else {
             var color = el.classList.contains('tissueSelected') ? 'black' : '#737373';
             el.style.fill = color;
@@ -168,6 +180,8 @@ var gtexTrackSettings = (function() {
             $(white).hide();
             $(pic).hide();
             $(line).hide();
+            _svgRoot.removeChild(_topTissue);
+            _svgRoot.removeChild(_topAura);
         }
     }
 
