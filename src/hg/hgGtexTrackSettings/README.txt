@@ -67,3 +67,6 @@ From script/editor:
 
 * e.g. arteryAorta_Text_Hi_1_
 
+8. Tweak style for leader line color if desired.  e.g. now set to paler (pink) on non-hover.
+
+ e.g.   .st37{fill:none;stroke:#F69296;.....
