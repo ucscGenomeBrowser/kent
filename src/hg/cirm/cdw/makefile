@@ -17,6 +17,7 @@ UTIL_DIRS = \
 	cdwCheckValidation \
 	cdwCorrectFileTags \
     cdwCreateUser \
+    cdwDumpManiFiles \
     cdwFakeManifestFromSubmit \
     cdwJob \
     cdwMakeContaminationQa \
