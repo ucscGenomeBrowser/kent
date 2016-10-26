@@ -36,7 +36,8 @@ var gtexTrackSettings = (function() {
     function initTissue(tis) {
         // Set tissue to unhighlighted state
         $("#" + tis + "_Pic_Hi", _svgRoot).hide();
-        $("#" + tis + "_Lead_Hi", _svgRoot).hide();
+
+        // $("#" + tis + "_Lead_Hi", _svgRoot).hide();
 
         // mark tissue labels in svg
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
@@ -134,52 +135,69 @@ var gtexTrackSettings = (function() {
 
     function toggleHighlightTissue(tis) {
         var i;
-        var isOn = false;
+        var isHovered = false;
         var el = _htmlDoc.getElementById(tis);
+        var $tis = $("#" + tis);
         if (el !== null) {
             el.classList.toggle('tissueHovered');
+            var colorPatch = $tis.prev(".tissueColor");
+            colorPatch.toggleClass('tissueHoveredColor');
             if (el.classList.contains('tissueHovered')) {
-                isOn = true;
+                isHovered = true;
             }
         }
         // below can likely replace 3 lines after
         //this.classList.toggle('tissueSelected');
-        el = _svgDoc.getElementById(tis + '_Text_Hi');
-        if (el === null) {
+        textEl = _svgDoc.getElementById(tis + '_Text_Hi');
+        if (textEl === null) {
             return;
         }
-        el.classList.toggle('tissueHovered');
+        textEl.classList.toggle('tissueHovered');
         var line = $("#" + tis + "_Lead_Hi", _svgRoot);
+        var lineEl = _svgDoc.getElementById(tis + '_Lead_Hi');
         var pic = $("#" + tis + "_Pic_Hi", _svgRoot);
-        var white = $("#" + tis + "_Aura_Hi", _svgRoot);
-        var count = el.childElementCount;
-        var hiEl = _svgDoc.getElementById(tis + '_Pic_Hi');
+        var picEl = _svgDoc.getElementById(tis + '_Pic_Hi');
+        var aura = $("#" + tis + "_Aura_Hi", _svgRoot);
         var auraEl = _svgDoc.getElementById(tis + '_Aura_Hi');
-        if (isOn) {
-            el.style.fill = 'blue';
-            for (i = 0; i < count; i++) {
-                el.children[i].style.fill = "blue";
+        var textLineCount = textEl.childElementCount;
+        if (isHovered) {
+            textEl.style.fill = 'blue';
+            for (i = 0; i < textLineCount; i++) {
+                textEl.children[i].style.fill = "blue";
             }
-            $(line).show();
+            //$(line).show();
+            //lineEl.style.stroke = '#EC1C24';
+            //lineEl.style.stroke = 'red';
+            if (lineEl !== null) {     // cell types lack leader lines
+            lineEl.style.stroke = 'blue';
+            }
+            //lineEl.setAttribute("style", "stroke-width: 3; stroke: red;");
+            //
             $(pic).show();
-            $(white).show();
+            $(aura).show();
 
             var topAura = auraEl.cloneNode(true);
             topAura.id = "topAura";
             _topAura = _svgRoot.appendChild(topAura);
         
-            var topTissue = hiEl.cloneNode(true);
+            var topTissue = picEl.cloneNode(true);
             topTissue.id = "topTissue";
             _topTissue = _svgRoot.appendChild(topTissue);
         } else {
-            var color = el.classList.contains('tissueSelected') ? 'black' : '#737373';
-            el.style.fill = color;
-            for (i = 0; i < count; i++) {
-                el.children[i].style.fill = color;
+            var color = textEl.classList.contains('tissueSelected') ? 'black' : '#737373';
+            textEl.style.fill = color;
+            for (i = 0; i < textLineCount; i++) {
+                textEl.children[i].style.fill = color;
             }
-            $(white).hide();
+            $(aura).hide();
             $(pic).hide();
-            $(line).hide();
+            //$(line).hide();
+            //lineEl.style.stroke = '#EC1C24';      // red
+            if (lineEl !== null) {     // cell types lack leader lines
+                lineEl.style.stroke = '#F69296';      // pink
+            }
+            //lineEl.setAttribute("style", "stroke-width: 1.7; stroke: #F69296;");
+            //
             _svgRoot.removeChild(_topTissue);
             _svgRoot.removeChild(_topAura);
         }
@@ -200,24 +218,25 @@ var gtexTrackSettings = (function() {
     function animateTissue(tis) {
         //console.log(tis);
         // add handlers to tissue table
-        var el;
+        var textEl;
+        var picEl;
         $('#' + tis).click(tis, onClickToggleTissue);
         $('#' + tis).hover(onHoverTissue, onHoverTissue);
 
         // add mouseover handler to tissue label
-        el = _svgDoc.getElementById(tis + "_Text_Hi");
-        if (el !== null) {
-            el.addEventListener("click", onMapClickToggleTissue);
-            el.addEventListener("mouseenter", onMapHoverTissue);
-            el.addEventListener("mouseleave", onMapHoverTissue);
+        textEl = _svgDoc.getElementById(tis + "_Text_Hi");
+        if (textEl !== null) {
+            textEl.addEventListener("click", onMapClickToggleTissue);
+            textEl.addEventListener("mouseenter", onMapHoverTissue);
+            textEl.addEventListener("mouseleave", onMapHoverTissue);
             // mouseover, mouseout ?
         }
         // add mouseover handler to tissue shape
-        el = _svgDoc.getElementById(tis + "_Pic_Lo");
-        if (el !== null) {
-            el.addEventListener("click", onMapClickToggleTissue);
-            el.addEventListener("mouseenter", onMapHoverTissue);
-            el.addEventListener("mouseleave", onMapHoverTissue);
+        picEl = _svgDoc.getElementById(tis + "_Pic_Lo");
+        if (picEl !== null) {
+            picEl.addEventListener("click", onMapClickToggleTissue);
+            picEl.addEventListener("mouseenter", onMapHoverTissue);
+            picEl.addEventListener("mouseleave", onMapHoverTissue);
             // mouseover, mouseout ?
         }
     }

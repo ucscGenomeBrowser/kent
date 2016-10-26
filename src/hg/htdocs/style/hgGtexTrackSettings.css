@@ -270,6 +270,10 @@ span#home-link {
     fill: blue;
 }
 
+.tissueHoveredColor {
+    border: 2px solid blue;
+}
+
 .trackDescription {
     margin-left: 20px;
 }
