@@ -3,8 +3,6 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/hg/utils/automation/doEnsGeneUpdate.pl instead.
 
-# $Id: doEnsGeneUpdate.pl,v 1.24 2010/04/02 16:34:50 hiram Exp $
-
 use Getopt::Long;
 use warnings;
 use strict;
@@ -24,6 +22,7 @@ use vars qw/
     $opt_ensVersion
     $opt_vegaGene
     $opt_buildDir
+    $opt_chromSizes
     /;
 
 
@@ -67,6 +66,8 @@ other options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/ensGene.<ensVersion #>
                           (necessary if experimenting with builds).
+    -chromSizes filePath  Use filePath for chrom.size file instead of database
+                          chromInfo request
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -133,6 +134,7 @@ Assumptions:
    database/assembly \$db.
 2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
    \$db.2bit.
+   (can be changed with the -chromSizes option)
 3. The \$db.2bit files have already been distributed to cluster-scratch
    (/scratch/hg or /iscratch, /san etc).
 4. anything else here ?
@@ -147,7 +149,7 @@ _EOF_
 # Globals:
 my ($species, $ensGtfUrl, $ensGtfFile, $ensPepUrl, $ensPepFile,
     $ensMySqlUrl, $ensVersionDateReference, $previousEnsVersion, $buildDir,
-    $previousBuildDir, $vegaGene);
+    $chromSizes, $previousBuildDir, $vegaGene);
 # Command line argument:
 my $CONFIG;
 # Required command line arguments:
@@ -160,6 +162,7 @@ my ($liftRandoms, $nameTranslation, $geneScaffolds, $knownToEnsembl,
 # Other globals:
 my ($topDir, $chromBased);
 my ($bedDir, $scriptDir, $endNotes);
+my ($secondsStart, $secondsEnd);
 
 sub checkOptions {
   # Make sure command line options are valid/supported.
@@ -167,6 +170,7 @@ sub checkOptions {
 		      'ensVersion=s',
 		      'vegaGene',
 		      'buildDir=s',
+		      'chromSizes=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);
@@ -474,18 +478,41 @@ genePredCheck -db=$db not.vegaPseudo.gp.gz
 _EOF_
 	  );
       }
+      if (-s "$chromSizes") {
+      $bossScript->add(<<_EOF_
+genePredCheck -chromSizes=$chromSizes $db.allGenes.gp.gz
+_EOF_
+         );
+      } else {
       $bossScript->add(<<_EOF_
 genePredCheck -db=$db $db.allGenes.gp.gz
+_EOF_
+         );
+      }
+      $bossScript->add(<<_EOF_
 # construct bigBed and index for assembly hub
 mkdir -p bbi
 genePredToBed $db.allGenes.gp.gz stdout | sort -k1,1 -k2,2n > $db.ensGene.bed
+_EOF_
+	  );
+      if (-s "$chromSizes") {
+      $bossScript->add(<<_EOF_
+bedToBigBed -extraIndex=name $db.ensGene.bed $chromSizes bbi/$db.ensGene.bb
+_EOF_
+	  );
+      } else {
+      $bossScript->add(<<_EOF_
 bedToBigBed -extraIndex=name $db.ensGene.bed ../../../chrom.sizes bbi/$db.ensGene.bb
+_EOF_
+	  );
+      }
+      $bossScript->add(<<_EOF_
 grep -v "^#" infoOut.txt | awk '{printf "%s\\t%s,%s,%s,%s,%s\\n", \$1,\$2,\$3,\$8,\$9,\$10}' > $db.ensGene.nameIndex.txt
 ixIxx $db.ensGene.nameIndex.txt $db.ensGene.name.ix $db.ensGene.name.ixx
 
 _EOF_
 	  );
-  }
+      }
   $bossScript->execute();
 } # doProcess
 
@@ -723,6 +750,9 @@ sub parseConfig {
 &checkOptions();
 &usage(1) if (scalar(@ARGV) != 1);
 
+$secondsStart = `date "+%s"`;
+chomp $secondsStart;
+
 if (!defined $ENV{'USER'}) {
     print STDERR "ERROR: your shell environment does not define a USER";
     print STDERR "The USER identity is required for history";
@@ -756,6 +786,7 @@ $previousEnsVersion = `hgsql -Ne 'select max(version) from trackVersion where na
 chomp $previousEnsVersion;
 if ( $previousEnsVersion eq 'NULL') { $previousEnsVersion=0;}
 
+$chromSizes = $opt_chromSizes ? $opt_chromSizes: "";
 
 # Establish what directory we will work in, tack on the ensembl version ID.
 if ($opt_vegaGene) {
@@ -807,13 +838,19 @@ $ensPepFile = basename($ensPepUrl);
 # Do everything.
 $stepper->execute();
 
+$secondsEnd = `date "+%s"`;
+chomp $secondsEnd;
+my $elapsedSeconds = $secondsEnd - $secondsStart;
+my $elapsedMinutes = int($elapsedSeconds/60);
+$elapsedSeconds -= $elapsedMinutes * 60;
+
 # Tell the user anything they should know.
 my $stopStep = $stepper->getStopStep();
 my $upThrough = ($stopStep eq 'cleanup') ? "" :
   "  (through the '$stopStep' step)";
 
 &HgAutomate::verbose(1,
-	"\n *** All done!$upThrough\n");
+	"\n *** All done !$upThrough  Elapsed time: ${elapsedMinutes}m${elapsedSeconds}s\n");
 &HgAutomate::verbose(1,
 	" *** Steps were performed in $buildDir\n");
 &HgAutomate::verbose(1, "\n");
