@@ -40,12 +40,18 @@ static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
  * libified, probably in cart.h. */
 void removeCartVars(struct cart *cart, char **vars, int varCount);
 
+boolean hasBigDataUrl(char *db, char *table)
+{
+struct trackDb *tdb = hashFindVal(fullTableToTdbHash, table);
+return (tdb && isNotEmpty(trackDbSetting(tdb, "bigDataUrl")));
+}
+
 boolean canIntersect(char *db, char *table)
 /* Return true if table exists and is positional. */
 {
 if (isCustomTrack(table) && ctLookupName(table) != NULL)
     return TRUE;
-if (! hTableOrSplitExists(db, table))
+if (! hTableOrSplitExists(db, table) && ! hasBigDataUrl(db, table))
     return FALSE;
 if (isLongTabixTable(table))
     return TRUE;

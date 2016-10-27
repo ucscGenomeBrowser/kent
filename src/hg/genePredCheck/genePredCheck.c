@@ -30,15 +30,14 @@ errAbort(
   "usage:\n"
   "   genePredCheck [options] fileTbl ..\n"
   "\n"
-  "If fileTbl is an existing file, then it is check.  Otherwise, if -db\n"
-  "is provided, then a table by this name is checked.\n"
+  "If fileTbl is an existing file, then it is checked.  Otherwise, if -db\n"
+  "is provided, then a table by this name in db is checked.\n"
   "\n"
   "options:\n"
   "   -db=db - If specified, then this database is used to\n"
-  "    get chromosome sizes, and perhaps the table to check.\n"
-  "   -chromSizes=chromSizes - return chromSizes from tab separated\n"
-  "    file\n"
-  "\n");
+  "          get chromosome sizes, and perhaps the table to check.\n"
+  "   -chromSizes=file.chrom.sizes - use chrom sizes from tab separated\n"
+  "          file (name,size) instead of from chromInfo table in specified db.");
 }
 
 static void checkAGenePred(char *fileTbl, int iRec, struct genePred *gp,
