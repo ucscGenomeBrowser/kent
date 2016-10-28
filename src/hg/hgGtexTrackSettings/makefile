@@ -13,15 +13,7 @@ O = $A.o
 
 include ../../inc/cgi_build_rules.mk
 
-$A.html.h: $A.html
-	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' $A.html > $A.html.h
-
-${A}.c: $A.html.h
-
-${A}.o: ${A}.c $A.html.h
-
-clean::
-	rm -f $A.html.h
+${A}.o: ${A}.c
 
 compile:: $O
 	${CC} $O ${MYLIBS} ${L}
