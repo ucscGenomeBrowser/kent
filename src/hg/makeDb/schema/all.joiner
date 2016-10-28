@@ -6014,6 +6014,7 @@ tablesIgnored $gbd
     cpgIsland%
     crisprRanges
     crisprTargets
+    locusName
     ctgPos
     ctgPos2
     cytoBand
