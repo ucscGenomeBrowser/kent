@@ -328,8 +328,12 @@ else
     }
 struct slRef *partingFields = NULL;
 struct fieldInfo *partingField = NULL;
+
 if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &partingField))
     {
+    verbose(3, "leaf rPartition table of %d cols, %d rows\n", 
+	table->fieldCount, slCount(table->rowList));
+
     // Here is where we should output whole table... 
     struct fieldedRow *row;
     for (row = table->rowList; row != NULL; row = row->next)
@@ -342,7 +346,10 @@ if (!doParting(table, allFields, doPrepart, prepartField, &partingFields, &parti
     return;
     }
 
+
 int partingFieldIx = partingField->ix;
+verbose(3, "node rPartition table of %d cols, %d rows, fieldName %s, %d locked\n", 
+    table->fieldCount, slCount(table->rowList), partingField->name, slCount(partingFields));
 
 
 /* Scan through table once outputting constant bits into a tag-storm */
