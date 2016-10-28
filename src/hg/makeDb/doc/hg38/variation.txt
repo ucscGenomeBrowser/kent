@@ -1519,3 +1519,21 @@ EOF
 
 
 ##############################################################################
+# SNP147 BED4 BIGBED FOR VAI (DONE 10/13/16 angie)
+    # Redmine #18222 -- probably should fold this into dbSNP pipeline...
+    screen -S snp -t snp
+    cd /hive/data/outside/dbSNP/147/human_hg38
+    # Make bigBed with just the first 4 columns of snp147
+    zcat snp147.bed.gz \
+    | cut -f 1-4 \
+    | sort -k1,1 -k2n,2n \
+      > $TMPDIR/hg38.snp147.bed4
+    bigBedToBed $TMPDIR/hg38.snp147.bed4 /hive/data/genomes/hg38/chrom.sizes snp147.bed4.bb
+    # Install in location that hgVai will check:
+    mkdir -p /gbdb/hg38/vai
+    ln -s `pwd`/snp147.bed4.bb /gbdb/hg38/vai/
+    # Clean up
+    rm $TMPDIR/hg38.snp147.bed4
+
+
+##############################################################################

@@ -489,6 +489,14 @@ else if (regexMatch(rec->name, "^[en]ss?v[0-9]+$"))
     printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/dbvar/variants/%s/\" "
 	   "TARGET=_BLANK>%s</A><BR>\n", rec->name, rec->name);
     }
+if (sameString(tdb->track, "exacVariants"))
+    {
+    printf("<b>ExAC:</b> "
+           "<a href=\"http://exac.broadinstitute.org/variant/%s-%d-%s-%s\" "
+           "target=_blank>%s-%d-%s-%s</a><br>\n",
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1],
+           skipChr(rec->chrom), rec->chromStart+1, rec->alleles[0], rec->alleles[1]);
+    }
 printCustomUrl(tdb, rec->name, TRUE);
 boolean hapClustEnabled = cartOrTdbBoolean(cart, tdb, VCF_HAP_ENABLED_VAR, TRUE);
 if (hapClustEnabled)

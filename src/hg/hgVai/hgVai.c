@@ -2632,7 +2632,7 @@ struct hash *gratorsByName = hashNew(8);
 
 struct annoGrator *snpGrator = NULL;
 char *snpDesc = NULL;
-if (cartUsualBoolean(cart, "hgva_rsId", FALSE))
+if (cartUsualBoolean(cart, "hgva_rsId", TRUE))
     snpGrator = gratorForSnpBed4(gratorsByName, "", assembly, chrom, agoNoConstraint, &snpDesc);
 
 // Now construct gratorList in the order in which annoFormatVep wants to see them,

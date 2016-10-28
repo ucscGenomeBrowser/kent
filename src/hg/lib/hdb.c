@@ -2407,8 +2407,7 @@ return ok;
 char *hCentralDbDbOptionalField(char *database, char *field)
 /* Look up field in dbDb table keyed by database,
  * Return NULL if database doesn't exist.
- * Free this string when you are done. Look in
- * either the regular or the archive dbDb table for .
+ * Free this string when you are done.
  * The name for this function may be a little silly. */
 {
 struct sqlConnection *conn = hConnectCentral();
@@ -4532,7 +4531,7 @@ struct dbDb *allDbList = NULL, *dbDb;
 struct hash *dbNameHash = newHash(3);
 int rank = 0;
 
-/* Get list of all current and archived databases */
+/* Get list of all databases */
 allDbList = hDbDbListDeadOrAlive();
 
 /* Create a hash all dbs with rank number */
@@ -4569,7 +4568,7 @@ for (chain = chainList; chain != NULL; chain = chain->next)
         hashAdd(hash, chain->fromDb, chain->fromDb);
     }
 
-/* Get list of all current and archived databases */
+/* Get list of all databases */
 allDbList = hDbDbList();
 
 /* Create a new dbDb list of all entries in the liftOver hash */

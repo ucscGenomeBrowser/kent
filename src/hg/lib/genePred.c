@@ -1699,6 +1699,24 @@ errorCnt += genePredCheck(desc, errFh, chromSize, gp);
 return errorCnt;
 }
 
+int genePredCheckChromSizes(char *desc, FILE* errFh, struct genePred* gp,
+                            struct hash* chromSizes)
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file errFh (open /dev/null to discard).  Lookup chromosome size in hash.
+ */
+{
+int errorCnt = 0;
+int chromSize = hashIntValDefault(chromSizes, gp->chrom, -1);
+if (chromSize < 0)
+    {
+    fprintf(errFh, "Error: %s: %s has invalid chrom for: %s\n", desc, gp->name, gp->chrom);
+    errorCnt++;
+    }
+else
+    errorCnt += genePredCheck(desc, errFh, chromSize, gp);
+return errorCnt;
+}
+
 boolean genePredNmdTarget(struct genePred *gp) 
 /* Return TRUE if cds end is more than 50bp upstream of
    last intron. */

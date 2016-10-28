@@ -1,5 +1,5 @@
 /* cdwFlowCharts - Library functions to look through SQL tables and generate dagger d3 flowcharts.*/
-
+#include "cart.h"
 #ifndef CDWFLOWCHARTS_H
 #define CDWFLOWCHARTS_H
 
