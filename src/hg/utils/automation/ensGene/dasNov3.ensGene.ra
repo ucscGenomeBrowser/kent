@@ -1,0 +1,6 @@
+# required db variable
+db dasNov3
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# correct name for chrM
+nameTranslation "s/NC_001821/chrM/; s/\.1//;"

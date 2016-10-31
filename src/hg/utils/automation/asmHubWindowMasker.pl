@@ -23,7 +23,7 @@ my $wmBbi = "$buildDir/bbi/$asmId.windowMasker.bb";
 my $chromSizes = "$buildDir/$asmId.chrom.sizes";
 
 if ( ! -s $wmBbi ) {
-  printf STDERR "ERROR: can not find CpG masked file:\n\t'%s'\n", $wmBbi;
+  printf STDERR "ERROR: can not find windowMasker bbi file:\n\t'%s'\n", $wmBbi;
   exit 255;
 }
 

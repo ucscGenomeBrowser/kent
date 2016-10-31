@@ -1,0 +1,6 @@
+# required db variable
+db lepOcu1
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# add chr or chrUn_ and remove the duplicate contig
+nameTranslation "/AHAT01044173/d; s/^\([L]\)/chr\1/; s/\.1//; s/MT/chrM/; s/^\([JA]\)/chrUn_\1/;"
