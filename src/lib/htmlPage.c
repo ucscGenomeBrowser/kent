@@ -1834,10 +1834,12 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	errAbort("No tags");
     if (!sameWord(tag->name, "HTML"))
 	errAbort("Doesn't start with <HTML> tag");
-    if ((tag = nextTagOfTypeInList(tag->next, "HEAD")) == NULL)
+    struct htmlTag *headTag = nextTagOfTypeInList(tag->next, "HEAD");
+    if (headTag == NULL)
         warn("No <HEAD> tag after <HTML> tag");
     else
 	{
+	tag = headTag;
 	for (;;)
 	    {
 	    tag = tag->next;
