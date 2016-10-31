@@ -1,0 +1,4 @@
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10091	Mus musculus castaneus (southeastern Asian house mouse)	Wellcome Trust Sanger Institute	CAST_EiJ_v1	Mus musculus castaneus (southeastern Asian house mouse)	SAMN04489822	haploid	Chromosome	26 Apr 2016	GCA_001624445.1
+# reading chrom.sizes file:
+#	'../GCA_001624445.1_CAST_EiJ_v1.chrom.sizes'

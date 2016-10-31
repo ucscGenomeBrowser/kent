@@ -1,0 +1,6 @@
+hub mouseStrains
+shortLabel mouse strain assemblies
+longLabel various mouse strain assemblies
+genomesFile genomes.txt
+email genome-www@soe.ucsc.edu
+descriptionUrl hubIndex.html
