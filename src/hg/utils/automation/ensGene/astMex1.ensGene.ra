@@ -1,0 +1,6 @@
+# required db variable
+db astMex1
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# add chr or chrUn_ and remove the duplicate contig
+nameTranslation "s/\.1//; s/MT/chrM/;"

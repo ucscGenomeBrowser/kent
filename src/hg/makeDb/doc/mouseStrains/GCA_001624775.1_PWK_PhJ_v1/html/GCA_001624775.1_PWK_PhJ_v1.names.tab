@@ -1,0 +1,4 @@
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+39442	Mus musculus musculus (eastern European house mouse)	Wellcome Trust Sanger Institute	PWK_PhJ_v1	Mus musculus musculus (eastern European house mouse)	SAMN04489829	haploid	Chromosome	26 Apr 2016	GCA_001624775.1
+# reading chrom.sizes file:
+#	'../GCA_001624775.1_PWK_PhJ_v1.chrom.sizes'

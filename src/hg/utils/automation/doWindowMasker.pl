@@ -54,6 +54,8 @@ options:
     -buildDir dir         Use dir instead of default
                           $HgAutomate::clusterData/\$db/$HgAutomate::trackBuild/WindowMasker.\$date
                           (necessary when continuing at a later date).
+    -unmaskedSeq <file.2bit>  Use file.2bit for unmasked sequence, default is:
+                          $unmaskedSeq
 _EOF_
   ;
   print STDERR &HgAutomate::getCommonOptionHelp('dbHost' => $dbHost,
@@ -90,6 +92,7 @@ sub checkOptions {
   # Make sure command line options are valid/supported.
   my $ok = GetOptions(@HgStepManager::optionSpec,
 		      'buildDir=s',
+		      'unmaskedSeq=s',
 		      @HgAutomate::commonOptionSpec,
 		      );
   &usage(1) if (!$ok);

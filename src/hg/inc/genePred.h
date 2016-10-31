@@ -307,6 +307,12 @@ int genePredCheckDb(char *desc, FILE* errFh, char* db, struct genePred* gp);
  * to file errFh (open /dev/null to discard).  Lookup chromosome size in database if
  * db is not NULL. Returns count of errors. */
 
+int genePredCheckChromSizes(char *desc, FILE* errFh, struct genePred* gp,
+                            struct hash* chromSizes);
+/* Validate a genePred for consistency.  desc is printed the error messages
+ * to file errFh (open /dev/null to discard).  Lookup chromosome size in hash.
+ */
+
 boolean genePredNmdTarget(struct genePred *gp);
 /* Return TRUE if cds end is more than 50bp upstream of
    last intron. */

@@ -5691,6 +5691,11 @@ identifier gtexTissue
     hgFixed.gtexSampleData.tissue dupeOk
     hgFixed.gtexTissue.name
 
+identifier chromAlias
+"Chromosome name correspondence to Ensembl, RefSeq, GenBank assemblies"
+    $gbd.chromAlias.chrom dupeOk
+    $gbd.chromInfo.chrom
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -6009,6 +6014,7 @@ tablesIgnored $gbd
     cpgIsland%
     crisprRanges
     crisprTargets
+    locusName
     ctgPos
     ctgPos2
     cytoBand

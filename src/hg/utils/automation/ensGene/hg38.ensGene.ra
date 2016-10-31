@@ -1,0 +1,9 @@
+# required db variable
+db hg38
+
+# haplotype lift-down from Ensembl full chrom coordinates
+#	to UCSC simple haplotype coordinates
+haplotypeLift /hive/data/genomes/hg38/jkStuff/ensembl.alts.lift
+
+# Ensembl has different names for everything
+liftUp /hive/data/genomes/hg38/jkStuff/ensembl.lift

@@ -10,6 +10,7 @@
 #include "hdb.h"
 #include "pslTransMap.h"
 #include "regexHelper.h"
+#include "trackHub.h"
 
 // Regular expressions for HGVS-recognized sequence accessions: LRG or versioned RefSeq:
 #define lrgTranscriptExp "(LRG_[0-9]+t[0-9+])"
@@ -421,7 +422,6 @@ return (hTableExists(db, "ncbiRefSeq") && hTableExists(db, "ncbiRefSeqPsl") &&
 static char *npForGeneSymbol(char *db, char *geneSymbol)
 /* Given a gene symbol, look up and return its NP_ accession; if not found return NULL. */
 {
-struct sqlConnection *conn = hAllocConn(db);
 char query[2048];
 if (dbHasNcbiRefSeq(db))
     {
@@ -430,7 +430,7 @@ if (dbHasNcbiRefSeq(db))
              "order by length(protAcc), protAcc",
              geneSymbol);
     }
-else
+else if (hTableExists(db, "refGene"))
     {
     // Join with refGene to make sure it's an NP for this species.
     sqlSafef(query, sizeof(query), "select l.protAcc from %s l, refGene r "
@@ -438,6 +438,9 @@ else
              "and l.protAcc != '' order by length(l.protAcc), l.protAcc"
              , refLinkTable, geneSymbol);
     }
+else
+    return NULL;
+struct sqlConnection *conn = hAllocConn(db);
 char *npAcc = sqlQuickString(conn, query);
 hFreeConn(&conn);
 return npAcc;
@@ -446,11 +449,19 @@ return npAcc;
 static char *nmForGeneSymbol(char *db, char *geneSymbol)
 /* Given a gene symbol, look up and return its NM_ accession; if not found return NULL. */
 {
-struct sqlConnection *conn = hAllocConn(db);
+if (trackHubDatabase(db))
+    return NULL;
 char query[2048];
-char *geneTable = (dbHasNcbiRefSeq(db) ? "ncbiRefSeq" : "refGene");
+char *geneTable = NULL;
+if (dbHasNcbiRefSeq(db))
+    geneTable = "ncbiRefSeq";
+else if (hTableExists(db, "refGene"))
+    geneTable = "refGene";
+if (geneTable == NULL)
+    return NULL;
 sqlSafef(query, sizeof(query), "select name from %s where name2 = '%s' "
          "order by length(name), name", geneTable, geneSymbol);
+struct sqlConnection *conn = hAllocConn(db);
 char *nmAcc = sqlQuickString(conn, query);
 hFreeConn(&conn);
 return nmAcc;
@@ -459,7 +470,8 @@ return nmAcc;
 static char *npForNm(char *db, char *nmAcc)
 /* Given an NM_ accession, look up and return its NP_ accession; if not found return NULL. */
 {
-struct sqlConnection *conn = hAllocConn(db);
+if (trackHubDatabase(db))
+    return NULL;
 char query[2048];
 if (dbHasNcbiRefSeq(db))
     {
@@ -471,7 +483,7 @@ if (dbHasNcbiRefSeq(db))
         sqlSafef(query, sizeof(query), "select protAcc from ncbiRefSeqLink where id like '%s.%%'",
                  nmAcc);
     }
-else
+else if (hTableExists(db, "refGene"))
     {
     // Trim .version if present since our genbank tables don't use versioned names.
     char *trimmed = cloneFirstWordByDelimiter(nmAcc, '.');
@@ -480,6 +492,8 @@ else
              "and l.protAcc != '' order by length(l.protAcc), l.protAcc",
              refLinkTable, trimmed);
     }
+else return NULL;
+struct sqlConnection *conn = hAllocConn(db);
 char *npAcc = sqlQuickString(conn, query);
 hFreeConn(&conn);
 return npAcc;
@@ -488,6 +502,8 @@ return npAcc;
 static char *getProteinSeq(char *db, char *acc)
 /* Return amino acid sequence for acc, or NULL if not found. */
 {
+if (trackHubDatabase(db))
+    return NULL;
 char *seq = NULL;
 if (startsWith("LRG_", acc))
     {
@@ -526,7 +542,7 @@ static char refBaseForNp(char *db, char *npAcc, int pos)
 // Get the amino acid base in NP_'s sequence at 1-based offset pos.
 {
 char *seq = getProteinSeq(db, npAcc);
-char base = seq[pos-1];
+char base = seq ? seq[pos-1] : '\0';
 freeMem(seq);
 return base;
 }
@@ -695,6 +711,8 @@ return coordsOK;
 static char *getCdnaSeq(char *db, char *acc)
 /* Return cdna sequence for acc, or NULL if not found. */
 {
+if (trackHubDatabase(db))
+    return NULL;
 char *seq = NULL;
 if (startsWith("LRG_", acc))
     {
@@ -723,6 +741,8 @@ return seq;
 static boolean getCds(char *db, char *acc, struct genbankCds *retCds)
 /* Get the CDS info for genbank or LRG acc; return FALSE if not found or not applicable. */
 {
+if (trackHubDatabase(db))
+    return FALSE;
 boolean gotCds = FALSE;
 char query[1024];
 if (startsWith("LRG_", acc))
@@ -807,6 +827,8 @@ if (hgvs->type == hgvstProtein && *retDiffRefAllele == NULL)
 static int getGbVersion(char *db, char *acc)
 /* Return the local version that we have for acc. */
 {
+if (trackHubDatabase(db))
+    return 0;
 char query[2048];
 sqlSafef(query, sizeof(query), "select version from %s where acc = '%s'", gbSeqTable, acc);
 struct sqlConnection *conn = hAllocConn(db);
@@ -823,6 +845,8 @@ static char *normalizeVersion(char *db, char *acc, int *retFoundVersion)
  * If instead we're using genbank tables, return acc with no version.
  * That ensures that acc will be found in our local tables. */
 {
+if (trackHubDatabase(db))
+    return NULL;
 char *normalizedAcc = NULL;
 int foundVersion = 0;
 if (startsWith("LRG_", acc))
@@ -1085,7 +1109,7 @@ return mappedToGenome;
 
 static char *pslTableForAcc(char *db, char *acc)
 /* Based on acc (and whether db has NCBI RefSeq alignments), pick a PSL table where
- * acc should be found.  Don't free the returned string. */
+ * acc should be found (table may or may not exist).  Don't free the returned string. */
 {
 char *pslTable = NULL;
 if (startsWith("LRG_", acc))
@@ -1199,9 +1223,11 @@ if (acc && startsWith("NP_", acc))
     if (dbHasNcbiRefSeq(db))
         sqlSafef(query, sizeof(query), "select mrnaAcc from ncbiRefSeqLink where protAcc = '%s'",
                  acc);
-    else
+    else if (hTableExists(db, "refGene"))
         sqlSafef(query, sizeof(query), "select mrnaAcc from %s l, refGene r "
                  "where l.protAcc = '%s' and r.name = l.mrnaAcc", refLinkTable, acc);
+    else
+        return NULL;
     char *nmAcc = sqlQuickString(conn, query);
     hFreeConn(&conn);
     if (nmAcc)

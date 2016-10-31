@@ -714,6 +714,10 @@ else
 	cgiContinueHiddenVar("g");
 	cgiContinueHiddenVar("c");
 	cgiContinueHiddenVar("i");
+	cgiContinueHiddenVar("o");
+	cgiContinueHiddenVar("t");
+	cgiContinueHiddenVar("l");
+	cgiContinueHiddenVar("r");
 	printf("Capitalize ");
         cgiMakeDropListFull(codeVarName, codeAll, codeAll,
 	    ArraySize(codeAll), codeVarVal, autoSubmit);

@@ -1,0 +1,104 @@
+<!-- Display image in righthand corner -->
+<table align=right border=0 width=415 height=196>
+  <tr><td align=RIGHT><a href="http://www.ncbi.nlm.nih.gov/assembly/GCA_001624445.1" 
+    target=_blank>
+    <img src="http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/GCA_001624445.1_CAST_EiJ_v1/html/GCA_001624445.1_CAST_EiJ_v1.jpg" width=400 height=196 alt="Mus musculus castaneus (southeastern Asian house mouse)"></a>
+  </td></tr>
+  <tr><td align=right>
+    <font size=-1> <em>Mus musculus castaneus (southeastern Asian house mouse)</em><BR>
+    </font>
+    <font size=-2> (Photo courtesy of
+      <a href="http://www.jax.org/" target=_blank>The Jackson Laboratory</a>)
+    </font>
+  </td></tr>
+</table>
+
+<p>
+<b>Common name: Mus musculus castaneus (southeastern Asian house mouse)</b><br>
+<b>Taxonomic name: Mus musculus castaneus (southeastern Asian house mouse), taxonomy ID:</b> <a href="http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10091" target=_"_blank"> 10091</a><br>
+<b>Sequencing/Assembly provider ID:</b> Wellcome Trust Sanger Institute<br>
+<b>Assembly date:</b> 26 Apr 2016<br>
+<b>Assembly type:</b> haploid<br>
+<b>Assembly level:</b> Chromosome<br>
+<b>Biosample:</b> <a href="http://www.ncbi.nlm.nih.gov/biosample/?term=SAMN04489822" target="_blank">SAMN04489822</a><br>
+<b>Assembly accession ID:</b> <a href="http://www.ncbi.nlm.nih.gov/assembly/GCA_001624445.1" target="_blank">GCA_001624445.1</a><br>
+<b>Assembly FTP location:</b> <a href="ftp://ftp.ncbi.nlm.nih.gov/genomes/all/GCA_001624445.1_CAST_EiJ_v1" target="_blank">GCA_001624445.1_CAST_EiJ_v1</a><br>
+
+<b>Total assembly nucleotides:</b> 2,653,990,650<br>
+<b>Assembly contig count:</b> 2,977<br>
+<b>N50 size:</b> 133,752,109<br>
+</p>
+<hr>
+<p>
+<b>Download files for this assembly hub:</b><br>
+To use the data from this assembly for a local hub instance at your
+institution, download these data as indicated by these instructions.<br>
+See also: <a href="/goldenPath/help/hgTrackHubHelp.html" target=_blank>track hub help</a> documentation.<br>
+<br>
+To download these data, issue this <em>wget</em> command:
+<pre>
+wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \
+   --reject "index.html*" -P "GCA_001624445.1_CAST_EiJ_v1" \
+       http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/GCA_001624445.1_CAST_EiJ_v1/
+</pre>
+to download the files for this assembly,<br>
+creating the local directory: "GCA_001624445.1_CAST_EiJ_v1"<br>
+<br>
+There is an included GCA_001624445.1_CAST_EiJ_v1.genomes.txt file in that download
+data to use for your local track hub instance.<br>
+You will need to add a hub.txt file to point to this genomes.txt file.<br>
+Something like:
+<pre>
+hub myLocalHub
+shortLabel myLocalHub
+longLabel genomes from RefSeq assemblies
+genomesFile GCA_001624445.1_CAST_EiJ_v1.genomes.txt
+email yourEmail@yourdomain.edu
+descriptionUrl html/GCA_001624445.1_CAST_EiJ_v1.description.html
+</pre>
+The <em>html/GCA_001624445.1_CAST_EiJ_v1.description.html</em> page is information for your users to
+describe this assembly.  This WEB page with these instructions
+is an instance of html/GCA_001624445.1_CAST_EiJ_v1.description.html file.
+</p>
+<hr>
+<p>
+To operate a blat server on this assembly, in the directory where you have
+the GCA_001624445.1_CAST_EiJ_v1.2bit file:
+<pre>
+gfServer -log=GCA_001624445.1_CAST_EiJ_v1.gfServer.trans.log -ipLog -canStop start \
+    yourserver.domain.edu 76543 -trans -mask GCA_001624445.1_CAST_EiJ_v1.2bit &
+gfServer -log=GCA_001624445.1_CAST_EiJ_v1.gfServer.log -ipLog -canStop start \
+    yourserver.domain.edu 76542 -stepSize=5 GCA_001624445.1_CAST_EiJ_v1.2bit &
+</pre>
+Adjust the port numbers <em>76543</em> <em>76542</em> and the
+<em>yourserver.domain.edu</em> for your local circumstances.<br>
+Enter the following specifications in your genomes.txt file:
+<pre>
+transBlat yourserver.domain.edu 76543
+blat yourserver.domain.edu 76542
+</pre>
+See also: <a href="https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blat"
+target=_blank>Blat for an Assembly Hub</a>
+</p>
+<hr>
+<p>
+<b>Search the assembly:</b>
+<ul>
+<li>
+<b>By position or search term: </b> Use the &quot;position or search term&quot;
+box to find areas of the genome associated with many different attributes, such
+as a specific chromosomal coordinate range; mRNA, EST, or STS marker names; or
+keywords from the GenBank description of an mRNA.
+<a href="http://genome.ucsc.edu/goldenPath/help/query.html">More information</a>, including sample queries.</li>
+<li>
+<b>By gene name: </b> Type a gene name into the &quot;search term&quot; box,
+choose your gene from the drop-down list, then press &quot;submit&quot; to go 
+directly to the assembly location associated with that gene.
+<a href="http://genome.ucsc.edu/goldenPath/help/geneSearchBox.html">More information</a>.</li>
+<li>
+<b>By track type: </b> Click the &quot;track search&quot; button
+to find Genome Browser tracks that match specific selection criteria.
+<a href="http://genome.ucsc.edu/goldenPath/help/trackSearch.html">More information</a>.</li>
+</ul>
+</p>
+<hr>

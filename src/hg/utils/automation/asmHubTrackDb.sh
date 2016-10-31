@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -beEu -o pipefail
+set -beEux -o pipefail
 
 if [ $# -ne 2 ]; then
   printf "usage: trackDb.sh <asmId> <pathTo/assembly hub build directory> > trackDb.txt\n" 1>&2
@@ -11,6 +11,7 @@ fi
 
 export asmId=$1
 export buildDir=$2
+export hubLinks="/hive/data/genomes/asmHubs/hubLinks"
 
 mkdir -p $buildDir/bbi
 mkdir -p $buildDir/ixIxx
@@ -353,6 +354,7 @@ visibility dense
 type bigBed 3
 bigDataUrl bbi/%s.allGaps.bb
 html html/%s.allGaps\n\n" "${asmId}" "${asmId}"
+asmHubAllGaps.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/$asmId.agp.gz /gbdb/hubs/mouseStrains/$asmId $buildDir/bbi/$asmId > $buildDir/html/$asmId.allGaps.html
 fi
 
 ###################################################################
@@ -370,4 +372,32 @@ color 180,0,0
 type bigGenePred
 bigDataUrl bbi/%s.augustus.bb
 html html/%s.augustus\n\n" "${asmId}" "${asmId}"
+asmHubAugustusGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.augustus.html
+fi
+
+printf "# Plink: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
+###################################################################
+# Ensembl genes
+if [ -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ]; then
+printf "# link: ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb\n" 1>&2
+rm -f ${buildDir}/bbi/${asmId}.ensGene.bb
+ln -s ${buildDir}/trackData/ensGene/process/bbi/${asmId}.ensGene.bb ${buildDir}/bbi/${asmId}.ensGene.bb
+
+printf "track ensGene
+shortLabel Ensembl genes
+longLabel Ensembl genes v86
+group genes
+priority 40
+visibility pack
+color 150,0,0
+type bigBed 12 .
+bigDataUrl bbi/%s.ensGene.bb
+searchIndex name
+searchTrix ixIxx/%s.ensGene.name.ix
+html html/%s.ensGene\n\n" "${asmId}" "${asmId}" "${asmId}"
+asmHubEnsGene.pl $asmId $buildDir/html/$asmId.names.tab $buildDir/bbi/$asmId > $buildDir/html/$asmId.ensGene.html
+fi
+
+if [ -s ${hubLinks}/${asmId}/rnaSeqData/$asmId.trackDb.txt ]; then
+  printf "include rnaSeqData/%s.trackDb.txt\n\n" "${asmId}"
 fi
