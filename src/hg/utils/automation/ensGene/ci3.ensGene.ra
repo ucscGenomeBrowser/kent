@@ -1,0 +1,4 @@
+# required db variable
+db ci3
+# this liftUp will translate all the Ensembl names to UCSC names
+liftUp /hive/data/genomes/ci3/jkStuff/ensToUcsc.lift

@@ -1,0 +1,3 @@
+# required db variable
+db chlSab2
+liftUp /hive/data/genomes/chlSab2/jkStuff/ensToUcsc.lift

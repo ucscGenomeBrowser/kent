@@ -1,0 +1,6 @@
+# required db variable
+db papAnu2
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# UCSC does not have the chrMt, and add chr to the chrom names
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; /^MT/d; s/\.1//"
