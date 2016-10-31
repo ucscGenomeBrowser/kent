@@ -1,0 +1,9 @@
+# required db variable
+db micMur2
+# optional nameTranslation, the sed command that will transform
+# There is no chrM in the UCSC assembly, and 4 are broken:
+nameTranslation '/^MT/d; /ENSMICT00000050304/d; /ENSMICT00000039077/d; /ENSMICT00000052172/d; /ENSMICT00000028495/d'
+# all the transformations are in this lift file generated from the idKeys
+#     joining results
+liftUp /hive/data/genomes/micMur2/jkStuff/ensToUcsc.lift
+
