@@ -1660,13 +1660,13 @@ static char *bodyNesters[] =
     "ADDRESS", "DIV", "H1", "H2", "H3", "H4", "H5", "H6",
     "ACRONYM", "BLOCKQUOTE", "CITE", "CODE", "DEL", "DFN"
     "DIR", "DL", "MENU", "OL", "UL", "CAPTION", "TABLE", 
-    "A", "MAP", "OBJECT", "FORM"
+    "A", "MAP", "OBJECT", "FORM", "DIV", "SCRIPT", "SVG"
 };
 
 static char *headNesters[] =
 /* Nesting tags that appear in header. */
 {
-    "TITLE",
+    "TITLE", "DIV", "SCRIPT"
 };
 
 static struct htmlTag *validateBody(struct htmlPage *page, struct htmlTag *startTag)
