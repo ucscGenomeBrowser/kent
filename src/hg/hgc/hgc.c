@@ -8952,9 +8952,12 @@ if (gpList && gpList->name2)
        {
        printf("<A HREF=\"%s/geneview?gene=%s\" "
 	    "target=_blank>%s</A><BR>", ensUrl, gpList->name2, gpList->name2);
-       printf("<B>Ensembl Gene Tree: </B>");
-       printf("<A HREF=\"%s/Gene/Compara_Tree?g=%s&t=%s\" "
+       if (! (ensemblSource && differentString("protein_coding",ensemblSource)))
+          {
+          printf("<B>Ensembl Gene Tree: </B>");
+          printf("<A HREF=\"%s/Gene/Compara_Tree?g=%s&t=%s\" "
              "target=_blank>%s</A><br>", ensUrl, gpList->name2, shortItemName, gpList->name2);
+          }
        }
     }
 genePredFreeList(&gpList);
