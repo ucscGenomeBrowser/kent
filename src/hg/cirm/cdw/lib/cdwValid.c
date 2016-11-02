@@ -284,6 +284,129 @@ char *cdwAllowedTags[] = {
     "version",
     };
 
+char *misceAllowedTags[] = {
+    "access",
+    "biosample_source_age_value",
+    "biosample_source_age_unit",
+    "immunoprecipitation_reagents",
+    "assay",
+    "assay_method",
+    "assay_seq",
+    "average_insert_size",
+    "biosample_id",
+    "biosample_repository",
+    "biosample_repository_sample_id",
+    "biosample_date",
+    "cell_count",
+    "cell_culture_type",
+    "cell_enrichment",
+    "cell_line",
+    "cell_pair",
+    "biosample_cell_type",
+    "characteristic_being_measured",
+    "chrom",
+    "biosample_collector_name",
+    "biosample_collector's_email",
+    "biosample_collector's_institution", 
+    "consent",
+    "control",
+    "data_set_id",
+    "differentiation",
+    "direct_reprogrammed_cell_culture_id",
+    "cellular_reprogramming_method",
+    "cellular_reprogramming_reagents",
+    "biosample_source_health_status",
+    "biosample_disease_stage",
+    "dna_concentration",
+    "biosample_source_id",
+    "data_processing_description",
+    "data_processor_institution",
+    "data_processing_method_algorithm",
+    "data_processor_name",
+    "data_processing_protocol_id", 
+    "data_processing_software", 
+    "enriched_in",
+    "experiment",
+    "output_data",
+    "file",
+    "file_part",
+    "fluidics_chip",
+    "format",
+    "genetic_transformed_cell_culture_id",
+    "genetic_tranformation_method",
+    "genetic_tranformation_reagents",
+    "geo_sample",
+    "geo_series",
+    "direct_reprogramming_method",
+    "direct_reprogramming_reagents",
+    "input_data",
+    "immunoprecipitated_material_id",
+    "immunoprecipitation_method",
+    "ips",
+    "induced_pluripotent_cell_culture_id",
+    "ips_origin_cell",
+    "karyotype",
+    "keywords",
+    "lab",
+    "lane",
+    "biosample_sourcelife_stage",
+    "md5",
+    "meta",
+    "multiplex_barcode",
+    "ncbi_bio_project",
+    "ncbi_bio_sample",
+    "organ_anatomical_name",
+    "output",
+    "paired_end",
+    "passage_number",
+    "pcr_cycles",
+    "pipeline",
+    "pmid",
+    "ratio_260_280",
+    "replicate",
+    "rin",
+    "rna_spike_in",
+    "sample_label",
+    "seq_library",
+    "seq_library_prep",
+    "seq_library_prep",
+    "seq_sample",
+    "assay_platform",
+    "biosample_source_gender",
+    "sorting",
+    "species",
+    "species_source_common_name",
+    "sra_run",
+    "sra_sample",
+    "sra_study",
+    "strain",
+    "submission_date",
+    "submitter",
+    "t",
+    "t_unit",
+    "immunoprecipitation_target",
+    "target_gene",
+    "biosample_tissue_type",
+    "title",
+    "treatment",
+    "reference_data",
+    "ucsc_db",
+    "update_date",
+    "version",
+    "analyte",
+    "analyte_detector",
+    "analyte_reporter_fluorochrome",
+    "biosample_ancestry_population",
+    "biosample_characterization_protocol_id",
+    "biosample_isolation_protocol_id",
+    "cellular_reprogramming_protocol_id", 
+    "direct_reprogramming_protocol_id", 
+    "genetic_tranformation_protocol_id",
+    "immunoprecipitation_protocol_id", 
+    "input_material", 
+    "protocol_id",
+    };
+
 struct hash *cdwAllowedTagsHash()
 /* Get hash of all allowed tags */
 {
@@ -298,6 +421,20 @@ if (allowedHash == NULL)
 return allowedHash;
 }
 
+struct hash *misceAllowedTagsHash()
+/* Get hash of all allowed tags */
+{
+static struct hash *allowedHash = NULL;
+if (allowedHash == NULL)
+    {
+    allowedHash = hashNew(7);
+    int i;
+    for (i=0; i<ArraySize(misceAllowedTags); ++i)
+	hashAdd(allowedHash, misceAllowedTags[i], NULL);
+    }
+return allowedHash;
+}
+
 void cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
@@ -306,7 +443,7 @@ char *geoPrefix = "GEO_";
 if (!isSymbolString(tag))
     errAbort("Bad tag symbol %s.", tag);
 // First see if it is in hash of allowed tags.
-struct hash *allowedHash = cdwAllowedTagsHash();
+struct hash *allowedHash = misceAllowedTagsHash();
 if (hashLookup(allowedHash, tag) != NULL)
     return;
 // Otherwise see if it's one of the prefixes that allows anything afterwords 
