@@ -266,7 +266,7 @@ searchName wgEncodeGencode2wayConsPseudoVM11
 searchTable wgEncodeGencode2wayConsPseudoVM11
 searchMethod exact
 searchType genePred
-termRegex PGOMOU[0-9.]+
+termRegex (PGOMOU[0-9.]+)|(NA_[0-9]+)
 searchPriority 2.26216
 
 

@@ -44,6 +44,19 @@
 <a name="2016"></a>
 
 <!-- add <hr> to bottom of first entry when pushing down-->
+<a name="110716">
+  <font color="#006666" size="4"><b>24 October 2016 - New chromosome aliases search support</b></font>
+  <p>
+    Have you ever wanted to use 1 instead of chr1 to search for a chromosome position?
+    The hg38 assembly now supports a new feature of matching different chromosome aliases.
+    Equivalent entries only exist in the new table, chromAlias, when an exact sequence
+    match has been verified. This feature is limited to searching coordinates, it is not
+    yet supported for custom tracks. For example, aliases that now map to chr1 are
+    NC_000001.11, CM000663.2, and 1, so that a hg38 search such as CM000663.2 
+    16,560,000 16,615,000 will be equivalent to chr1 16,560,000 16,615,000.
+  </p>
+  <hr>
+
 <a name="102416">
   <font color="#006666" size="4"><b>24 October 2016 - Genome Browser for Chimpanzee, Green Monkey and
   Gorilla Now Available</b></font>
