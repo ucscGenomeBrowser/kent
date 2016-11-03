@@ -94,6 +94,9 @@ static void printTissueTable()
 /* Output HTML with tissue labels and colors, in 2 columns, to fit next to body map */
 {
 struct gtexTissue *tis, *tissues = gtexGetTissues(version);
+char var[512];
+safef(var, sizeof var, "%s.%s", tdb->track, GTEX_TISSUE_SELECT);
+struct hash *selectedHash = cartHashList(cart, var);
 struct gtexTissue **tisTable = NULL;
 int count = slCount(tissues);
 AllocArray(tisTable, count);
@@ -128,9 +131,11 @@ for (tis = tissues; tis != NULL; tis = tis->next)
 for (i=0; i<count; i++)
     {
     tis = tisTable[i];
+    boolean isChecked = (hashLookup(selectedHash, tis->name) != NULL);
     printf("<td class='tissueColor' bgcolor=%06X></td>"
-           "<td class='tissueLabel' id='%s'>%s</td>", 
-                tis->color, tis->name, tis->description);
+           "<td class='tissueLabel %s' id='%s'>%s</td>", 
+                tis->color, 
+                isChecked ? "tissueSelected" : "", tis->name, tis->description);
     col++;
     if (col > cols-1)
         {

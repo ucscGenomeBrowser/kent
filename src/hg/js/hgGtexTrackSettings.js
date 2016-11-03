@@ -103,11 +103,8 @@ var gtexTrackSettings = (function() {
         }
     }
 
-
-    function onClickSetTissue(tis) {
-        // mark selected in tissue table
-        $('#' + tis).addClass('tissueSelected');
-        var el = _svgDoc.getElementById(tis + "_Text_Hi");
+    function setMapTissueEl(el) {
+        // set label dark
         if (el !== null) {
             el.classList.add('tissueSelected');
             el.style.fill = "black";
@@ -116,6 +113,13 @@ var gtexTrackSettings = (function() {
                 el.children[i].style.fill = "black";
             }
         }
+    }
+
+    function onClickSetTissue(tis) {
+        // mark selected in tissue table
+        $('#' + tis).addClass('tissueSelected');
+        var el = _svgDoc.getElementById(tis + "_Text_Hi");
+        setMapTissueEl(el);
     }
 
     function onClickClearTissue(tis) {
@@ -226,6 +230,9 @@ var gtexTrackSettings = (function() {
         // add mouseover handler to tissue label
         textEl = _svgDoc.getElementById(tis + "_Text_Hi");
         if (textEl !== null) {
+            if ($('#' + tis).hasClass('tissueSelected')) {
+                setMapTissueEl(textEl);
+            }
             textEl.addEventListener("click", onMapClickToggleTissue);
             textEl.addEventListener("mouseenter", onMapHoverTissue);
             textEl.addEventListener("mouseleave", onMapHoverTissue);
