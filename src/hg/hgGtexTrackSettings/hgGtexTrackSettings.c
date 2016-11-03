@@ -283,11 +283,14 @@ puts(
 puts(
 "                <div class='configurator col-md-7'>\n"
 );
-puts("<b>Limit to genes scored at or above:</b>\n");
-puts(
-"                    <input id='scoreInput' value='' size='8'>\n"
-"                    (range 0-1000)\n"
-);
+puts("           <b>Limit to genes scored at or above:</b>\n");
+safef(buf, sizeof(buf), "%s.%s",  tdb->track, SCORE_FILTER);
+int score = cartUsualInt(cart, buf, 0);
+int minScore = 0, maxScore = 1000;
+cgiMakeIntVarWithLimits(buf, score, "Minimum score", 0, minScore, maxScore);
+printf(
+                                        "                    (range %d-%d)\n", 
+                                                                        minScore, maxScore);
 puts(
 "               </div>\n"
 );
