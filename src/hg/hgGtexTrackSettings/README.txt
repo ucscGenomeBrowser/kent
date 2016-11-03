@@ -18,7 +18,7 @@ In Adobe Illustrator:
 
    NOTE:  the X, Y may need some tweaking -- use crop box viz to guide
 
-    Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.  600, 730, 10, 10
+    ** Alternatively, if OK to retain title in .svg, one can edit viewbox in SVG.  600, 730, 10, 10
 
 3. Save in SVG format (Save As, Format: SVG)
 
