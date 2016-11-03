@@ -131,7 +131,7 @@ endif
 jWestBanner.h: jWestBanner.html
 	sed -e 's/\\/\\\\/g; s/"/\\"/g; s/^/"/; s/$$/\\n"/;' jWestBanner.html > jWestBanner.h
 
-web.c: jWestBanner.h
+web.o: jWestBanner.h
 
 clean:
 	rm -f $(O);
