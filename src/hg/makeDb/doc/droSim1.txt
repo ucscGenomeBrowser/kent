@@ -1814,4 +1814,18 @@ chainMergeSort $1*.chain > $2
     cat fb.droSim1.chainDm6Link.txt
     # 113676741 bases of 127256433 (89.329%) in intersection
 
-###########################################################################
+############################################################################
+# LIFTOVER TO droSim2 (DONE - 2016-11-01 - Hiram)
+
+    ssh hgwdev
+    mkdir /hive/data/genomes/droSim1/bed/blat.droSim2.2016-11-01
+    cd /hive/data/genomes/droSim1/bed/blat.droSim2.2016-11-01
+    time (doSameSpeciesLiftOver.pl -verbose=2 \
+    -ooc=/hive/data/genomes/droSim1/jkStuff/droSim1.11.ooc \
+      -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev droSim1 droSim2) \
+        > run.log 2>&1
+    # real    10m28.155s
+
+    # see if the liftOver menus function in the browser from droSim1 to droSim2
+
+##############################################################################

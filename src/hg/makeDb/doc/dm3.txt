@@ -3360,3 +3360,72 @@ chainOne $(path1)
 
     rm -rf blastOut
 #end tblastn
+
+###########################################################################
+# D. simulans lastz run (DONE - 2016-11-01 - Hiram)
+    screen -S hg38PanTro5      # use a screen to manage this longish running job
+    mkdir /hive/data/genomes/dm3/bed/lastzDroSim2.2016-11-01
+    cd /hive/data/genomes/dm3/bed/lastzDroSim2.2016-11-01
+
+    # always set the BLASTZ program so we know what version was used
+    printf "# D. melanogaster vs. D. simulans
+
+BLASTZ=/cluster/bin/penn/lastz-distrib-1.03.66/bin/lastz
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/scratch/data/blastz/HoxD55.q
+#      A    C    G    T
+#     91  -90  -25 -100
+#    -90  100 -100  -25
+#    -25 -100  100  -90
+#   -100  -25  -90  91
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/scratch/data/dm3/dm3.2bit
+SEQ1_CHUNK=5000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm3/chrom.sizes
+
+# QUERY - D. simulans
+SEQ2_DIR=/hive/data/genomes/droSim2/droSim2.2bit
+SEQ2_LEN=/hive/data/genomes/droSim2/chrom.sizes
+SEQ2_CHUNK=5000000
+SEQ2_LAP=10000
+
+BASE=/hive/data/genomes/dm3/bed/lastzDroSim2.2016-11-01
+TMPDIR=/dev/shm
+" > DEF
+
+    time (doBlastzChainNet.pl `pwd`/DEF \
+    -syntenicNet -fileServer=hgwdev \
+      -chainMinScore=3000  -chainLinearGap=loose \
+       -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > do.log 2>&1
+    # real    21m56.123s
+
+    cat fb.dm3.chainDroSim2Link.txt
+    # 120747482 bases of 162367812 (74.367%) in intersection
+
+    # filter with doRecipBest.pl
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` dm3 droSim2) \
+        > rbest.log 2>&1
+    # real    12m18.023s
+
+    # running the swap
+    mkdir /hive/data/genomes/droSim2/bed/blastz.dm3.swap
+    cd /hive/data/genomes/droSim2/bed/blastz.dm3.swap
+    time (doBlastzChainNet.pl /hive/data/genomes/dm3/bed/lastzDroSim2.2016-11-01/DEF \
+    -swap -syntenicNet -fileServer=hgwdev \
+      -chainMinScore=3000  -chainLinearGap=loose \
+       -workhorse=hgwdev -smallClusterHub=ku -bigClusterHub=ku) > swap.log 2>&1
+    # real    6m42.731s
+
+    cat fb.droSim2.chainDm3Link.txt
+    # 115794791 bases of 124963774 (92.663%) in intersection
+
+    time (doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` droSim2 dm3) \
+        > rbest.log 2>&1
+    # real    11m5.598s
+
+#############################################################################

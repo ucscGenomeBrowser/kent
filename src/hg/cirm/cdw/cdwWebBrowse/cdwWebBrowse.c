@@ -1361,7 +1361,7 @@ for (iter = pairList; iter != NULL; iter = iter->next)
     total += atoi( ((char*) iter->val)); // Calculate the total of the values for files column.
     if (hairpin == FALSE) continue; 
 
-    char temp[PATH_LEN]; 
+    char temp[4*1024]; 
     // Make a new name value pair which may get added to the existing string. 
     safef(temp, sizeof(temp),"%s (%s)", iter->name, (char *)iter->val); 
     int newStringLen = ((int) strlen(valValueString))+((int) strlen(temp));
