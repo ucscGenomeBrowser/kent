@@ -89,6 +89,9 @@ var gtexTrackSettings = (function() {
         }
         if (el.classList.contains('tissueSelected')) {
             isOn = true;
+            onClickSetTissue(tis);
+        } else {
+           onClickClearTissue(tis);
         }
         // below can likely replace 3 lines after
         //this.classList.toggle('tissueSelected');
@@ -117,14 +120,20 @@ var gtexTrackSettings = (function() {
 
     function onClickSetTissue(tis) {
         // mark selected in tissue table
-        $('#' + tis).addClass('tissueSelected');
+        var $tis = $('#' + tis);
+        $tis.addClass('tissueSelected');
+        var $checkbox = $('#' + tis + ' > input');
+        $checkbox.attr("checked", true);
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
         setMapTissueEl(el);
     }
 
     function onClickClearTissue(tis) {
         // mark selected in tissue table
-        $(tis).removeClass('tissueSelected');
+        var $tis = $('#' + tis);
+        $tis.removeClass('tissueSelected');
+        var $checkbox = $('#' + tis + ' > input');
+        $checkbox.attr("checked", false);
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
         if (el !== null) {
             el.classList.remove('tissueSelected');
@@ -276,6 +285,14 @@ var gtexTrackSettings = (function() {
         //document.getElementById("bodyMapSvg").contentDocument.getElementById('endocervix').style.fill = "black";
     }
 
+    function submitForm() {
+    // Submit form from go button (see hgGateway.js)
+    // Show a spinner -- sometimes it takes a while for hgTracks to start displaying.
+    $('.jwGoIcon').removeClass('fa-play').addClass('fa-spinner fa-spin');
+    $form = $('form');
+    $form.submit();
+    }
+
     // Initialization
 
     function init() {
@@ -299,6 +316,7 @@ var gtexTrackSettings = (function() {
                 animateTissues();
             }, false);
 
+            $('.goButtonContainer').click(submitForm);
         });
     }
 

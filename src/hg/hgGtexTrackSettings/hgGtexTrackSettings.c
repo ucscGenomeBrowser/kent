@@ -112,8 +112,8 @@ puts(
      "      Click label below or in Body Map to set or clear a tissue"
      "  </div>"
      "  <div class='col-md-4 gbButtonContainer'>"
-     "      <div id='setAll' class='goButtonContainer gtButton gbWhiteButton'>set all</div>"
-     "      <div id='clearAll' class='goButtonContainer gtButton gbWhiteButton'>clear all</div>"
+     "      <div id='setAll' class='gbButtonContainer gtButton gbWhiteButton'>set all</div>"
+     "      <div id='clearAll' class='gbButtonContainer gtButton gbWhiteButton'>clear all</div>"
      "  </div>"
      "</div>"
     );
@@ -128,14 +128,18 @@ for (tis = tissues; tis != NULL; tis = tis->next)
         i = (tis->id - last) * 2 + 1;
     tisTable[i] = tis;
     }
+boolean all = (hashNumEntries(selectedHash) == 0) ? TRUE : FALSE;
 for (i=0; i<count; i++)
     {
     tis = tisTable[i];
-    boolean isChecked = (hashLookup(selectedHash, tis->name) != NULL);
+    boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
     printf("<td class='tissueColor' bgcolor=%06X></td>"
-           "<td class='tissueLabel %s' id='%s'>%s</td>", 
+           "<td class='tissueLabel %s' id='%s'>%s",
                 tis->color, 
                 isChecked ? "tissueSelected" : "", tis->name, tis->description);
+    printf("<input type='checkbox' name='%s' value='%s' %s style='display: none;'>", 
+                var, tis->name, isChecked ? "checked" : "");
+    puts("</td>");
     col++;
     if (col > cols-1)
         {
@@ -145,6 +149,9 @@ for (i=0; i<count; i++)
     }
 puts("</tr>\n");
 puts("</table>");
+char buf[512];
+safef(buf, sizeof(buf), "%s%s.%s", cgiMultListShadowPrefix(), tdb->track, GTEX_TISSUE_SELECT);
+cgiMakeHiddenVar(buf, "0");
 }
 
 static void printBodyMap()
@@ -383,11 +390,17 @@ sqlDisconnect(&conn);
 if (!tdb)
     errAbort("No GTEx track found in database %s\n", db);
 
+printf("<FORM ACTION='%s' NAME='MAIN_FORM' METHOD=%s>\n\n",
+       hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 puts(
-"<div class='container-fluid'>\n"
+        "<div class='container-fluid'>\n"
 );
 printTrackHeader();
 printTrackConfig();
+puts(
+        "</FORM>"
+);
+
 printTrackDescription();
 puts("</div>");
 

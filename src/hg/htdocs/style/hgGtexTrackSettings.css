@@ -54,12 +54,13 @@
     font-weight: normal;
 }
 
-.goButtonContainer {
+.gbButtonContainer .goButtonContainer {
     display: inline-block;
     margin-top: 2px;
     cursor: pointer;
     font-size: 10px;
 }
+
 
 .gbButtonContainer {
     text-align: right;
