@@ -8,6 +8,7 @@
 #include "bamFile.h"
 #include "htmshell.h"
 #include "udc.h"
+#include "psl.h"
 
 // If KNETFILE_HOOKS is used (as recommended!), then we can simply call bam_index_load
 // without worrying about the samtools lib creating local cache files in cgi-bin:
@@ -588,5 +589,82 @@ for (el = *pList; el != NULL; el = next)
     bamChromInfoFree(&el);
     }
 *pList = NULL;
+}
+
+struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr)
+/* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
+ * no scoring info) */
+{
+const bam1_core_t *core = &bam->core;
+struct psl *psl;
+AllocVar(psl);
+boolean isRc = (core->flag & BAM_FREVERSE);
+psl->strand[0] = isRc ? '-' : '+';
+psl->qName = cloneString(bam1_qname(bam));
+psl->tName = cloneString(hdr->target_name[core->tid]);
+unsigned blockCount = 0;
+unsigned *blockSizes, *qStarts, *tStarts;
+AllocArray(blockSizes, core->n_cigar);
+AllocArray(qStarts, core->n_cigar);
+AllocArray(tStarts, core->n_cigar);
+int tPos = core->pos, qPos = 0, qLength = 0;
+unsigned int *cigar = bam1_cigar(bam);
+int i;
+for (i = 0;  i < core->n_cigar;  i++)
+    {
+    char op;
+    int n = bamUnpackCigarElement(cigar[i], &op);
+    switch (op)
+	{
+	case 'X': // mismatch (gapless aligned block)
+	case '=': // match (gapless aligned block)
+	case 'M': // match or mismatch (gapless aligned block)
+	    blockSizes[blockCount] = n;
+	    qStarts[blockCount] = qPos;
+	    tStarts[blockCount] = tPos;
+	    blockCount++;
+	    tPos += n;
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'I': // inserted in query
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'D': // deleted from query
+	case 'N': // long deletion from query (intron as opposed to small del)
+	    tPos += n;
+	    break;
+	case 'S': // skipped query bases at beginning or end ("soft clipping")
+	    qPos += n;
+	    qLength += n;
+	    break;
+	case 'H': // skipped query bases not stored in record's query sequence ("hard clipping")
+	case 'P': // P="silent deletion from padded reference sequence" -- ignore these.
+	    break;
+	default:
+	    errAbort("bamToPsl: unrecognized CIGAR op %c -- update me", op);
+	}
+    }
+
+if (blockCount == 0)
+    {
+    pslFree(&psl);
+    return NULL;
+    }
+
+psl->tSize = hdr->target_len[core->tid];
+psl->tStart = tStarts[0];
+psl->tEnd = tStarts[blockCount-1] + blockSizes[blockCount-1];
+psl->qSize = qLength;
+psl->qStart = qStarts[0];
+psl->qEnd = qStarts[blockCount-1] + blockSizes[blockCount-1];
+if (isRc)
+    reverseIntRange(&psl->qStart, &psl->qEnd, psl->qSize);
+psl->blockCount = blockCount;
+psl->blockSizes = blockSizes;
+psl->qStarts = qStarts;
+psl->tStarts = tStarts;
+return psl;
 }
 

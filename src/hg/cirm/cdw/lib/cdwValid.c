@@ -204,152 +204,85 @@ return bedType;
 
 char *cdwAllowedTags[] = {
     "access",
-    "age",
-    "age_unit",
-    "antibody",
-    "assay",
-    "assay_seq",
-    "average_insert_size",
-    "biomaterial_provider",
-    "biosample_date",
-    "cell_count",
-    "cell_culture_type",
-    "cell_enrichment",
-    "cell_line",
-    "cell_pair",
-    "cell_type",
-    "chrom",
-    "consent",
-    "control",
-    "data_set_id",
-    "differentiation",
-    "disease",
-    "disease_stage",
-    "dna_concentration",
-    "donor",
-    "enriched_in",
-    "experiment",
-    "file",
-    "file_part",
-    "fluidics_chip",
-    "format",
-    "geo_sample",
-    "geo_series",
-    "inputs",
-    "ips",
-    "karyotype",
-    "keywords",
-    "lab",
-    "lane",
-    "life_stage",
-    "md5",
-    "meta",
-    "multiplex_barcode",
-    "ncbi_bio_project",
-    "ncbi_bio_sample",
-    "organ",
-    "output",
-    "paired_end",
-    "passage_number",
-    "pcr_cycles",
-    "pipeline",
-    "pmid",
-    "ratio_260_280",
-    "replicate",
-    "rin",
-    "rna_spike_in",
-    "sample_label",
-    "seq_library",
-    "seq_library_prep",
-    "seq_library_prep",
-    "seq_sample",
-    "sequencer",
-    "sex",
-    "sorting",
-    "species",
-    "sra_run",
-    "sra_sample",
-    "sra_study",
-    "strain",
-    "submission_date",
-    "submitter",
-    "t",
-    "t_unit",
-    "target_epitope",
-    "target_gene",
-    "title",
-    "treatment",
-    "ucsc_db",
-    "update_date",
-    "version",
-    };
-
-char *misceAllowedTags[] = {
-    "access",
-    "biosample_source_age_value",
-    "biosample_source_age_unit",
-    "immunoprecipitation_reagents",
+    "analyte",
+    "analyte_detector",
+    "analyte_reporter_fluorochrome",
     "assay",
     "assay_method",
+    "assay_platform",
     "assay_seq",
     "average_insert_size",
+    "biosample_ancestry_population",
+    "biosample_cell_type",
+    "biosample_characterization_protocol_id",
+    "biosample_collectors_email",
+    "biosample_collectors_institution",
+    "biosample_collector_name",
+    "biosample_date",
+    "biosample_disease_stage",
     "biosample_id",
+    "biosample_isolation_protocol_id",
     "biosample_repository",
     "biosample_repository_sample_id",
-    "biosample_date",
+    "biosample_source_age_unit",
+    "biosample_source_age_value",
+    "biosample_source_gender",
+    "biosample_source_health_status",
+    "biosample_source_id",
+    "biosample_source_life_stage",
+    "biosample_tissue_type",
     "cell_count",
     "cell_culture_type",
     "cell_enrichment",
     "cell_line",
     "cell_pair",
-    "biosample_cell_type",
+    "cellular_reprogramming_method",
+    "cellular_reprogramming_protocol_id",
+    "cellular_reprogramming_reagents",
     "characteristic_being_measured",
     "chrom",
-    "biosample_collector_name",
-    "biosample_collector's_email",
-    "biosample_collector's_institution", 
     "consent",
-    "control",
+    "control_association",
+    "control_type",
+    "data_processing_description",
+    "data_processing_method_algorithm",
+    "data_processing_protocol_id",
+    "data_processing_software",
+    "data_processor_institution",
+    "data_processor_name",
     "data_set_id",
     "differentiation",
     "direct_reprogrammed_cell_culture_id",
-    "cellular_reprogramming_method",
-    "cellular_reprogramming_reagents",
-    "biosample_source_health_status",
-    "biosample_disease_stage",
+    "direct_reprogramming_method",
+    "direct_reprogramming_protocol_id",
+    "direct_reprogramming_reagents",
     "dna_concentration",
-    "biosample_source_id",
-    "data_processing_description",
-    "data_processor_institution",
-    "data_processing_method_algorithm",
-    "data_processor_name",
-    "data_processing_protocol_id", 
-    "data_processing_software", 
     "enriched_in",
     "experiment",
-    "output_data",
     "file",
     "file_part",
     "fluidics_chip",
     "format",
+    "genetic_tranformation_protocol_id",
+    "genetic_transformation_method",
+    "genetic_transformation_reagents",
     "genetic_transformed_cell_culture_id",
-    "genetic_tranformation_method",
-    "genetic_tranformation_reagents",
     "geo_sample",
     "geo_series",
-    "direct_reprogramming_method",
-    "direct_reprogramming_reagents",
-    "input_data",
     "immunoprecipitated_material_id",
     "immunoprecipitation_method",
-    "ips",
+    "immunoprecipitation_protocol_id",
+    "immunoprecipitation_reagents",
+    "immunoprecipitation_target",
     "induced_pluripotent_cell_culture_id",
+    "input_data",
+    "input_material",
+    "ips",
     "ips_origin_cell",
     "karyotype",
     "keywords",
     "lab",
     "lane",
-    "biosample_sourcelife_stage",
     "md5",
     "meta",
     "multiplex_barcode",
@@ -357,12 +290,15 @@ char *misceAllowedTags[] = {
     "ncbi_bio_sample",
     "organ_anatomical_name",
     "output",
+    "output_data",
     "paired_end",
     "passage_number",
     "pcr_cycles",
     "pipeline",
     "pmid",
+    "protocol_id",
     "ratio_260_280",
+    "reference_data",
     "replicate",
     "rin",
     "rna_spike_in",
@@ -371,8 +307,6 @@ char *misceAllowedTags[] = {
     "seq_library_prep",
     "seq_library_prep",
     "seq_sample",
-    "assay_platform",
-    "biosample_source_gender",
     "sorting",
     "species",
     "species_source_common_name",
@@ -384,27 +318,12 @@ char *misceAllowedTags[] = {
     "submitter",
     "t",
     "t_unit",
-    "immunoprecipitation_target",
     "target_gene",
-    "biosample_tissue_type",
     "title",
     "treatment",
-    "reference_data",
     "ucsc_db",
     "update_date",
     "version",
-    "analyte",
-    "analyte_detector",
-    "analyte_reporter_fluorochrome",
-    "biosample_ancestry_population",
-    "biosample_characterization_protocol_id",
-    "biosample_isolation_protocol_id",
-    "cellular_reprogramming_protocol_id", 
-    "direct_reprogramming_protocol_id", 
-    "genetic_tranformation_protocol_id",
-    "immunoprecipitation_protocol_id", 
-    "input_material", 
-    "protocol_id",
     };
 
 struct hash *cdwAllowedTagsHash()
@@ -421,20 +340,6 @@ if (allowedHash == NULL)
 return allowedHash;
 }
 
-struct hash *misceAllowedTagsHash()
-/* Get hash of all allowed tags */
-{
-static struct hash *allowedHash = NULL;
-if (allowedHash == NULL)
-    {
-    allowedHash = hashNew(7);
-    int i;
-    for (i=0; i<ArraySize(misceAllowedTags); ++i)
-	hashAdd(allowedHash, misceAllowedTags[i], NULL);
-    }
-return allowedHash;
-}
-
 void cdwValidateTagName(char *tag)
 /* Make sure that tag is one of the allowed ones. */
 {
@@ -443,7 +348,7 @@ char *geoPrefix = "GEO_";
 if (!isSymbolString(tag))
     errAbort("Bad tag symbol %s.", tag);
 // First see if it is in hash of allowed tags.
-struct hash *allowedHash = misceAllowedTagsHash();
+struct hash *allowedHash = cdwAllowedTagsHash();
 if (hashLookup(allowedHash, tag) != NULL)
     return;
 // Otherwise see if it's one of the prefixes that allows anything afterwords 
@@ -515,15 +420,16 @@ char *assay[] =
 "WGBS",
 "WGS",
 };
-char *control[] =
+char *control_type[] =
 {
 "untreated",
 "input",
 "mock IP",
 };
-char *disease[] =
+char *biosample_source_health_status[] =
 {
 "acute promyelocytic leukemia",
+"amyotrophic lateral sclerosis",
 "chronic myelogenous leukemia (CML)",
 "DCM",
 "HCM",
@@ -545,7 +451,7 @@ char *enriched_in[] =
 "utr3",
 "utr5",
 };
-char *formats[] =
+char *format[] =
 {
 "bam",
 "bam.bai",
@@ -565,7 +471,7 @@ char *formats[] =
 "vcf",
 "unknown",
 };
-char *sequencer[] =
+char *assay_platform[] =
 {
 "Illumina HiSeq",
 "Illumina HiSeq 2000",
@@ -602,7 +508,7 @@ char *strain[] =
 "Sftpc-Cre-ER-T2A-rtta -/- teto-GFP-H2B +/-",
 "Aqp5-Cre-ER +/- mtmg-tdTomato -/-",
 };
-char *target_epitope[] =
+char *immunoprecipitation_target[] =
 {
 "H3K4Me1",
 "H3K4Me3",
@@ -614,14 +520,16 @@ char *target_epitope[] =
 
 struct hash *hash = hashNew(0);
 hashAdd(hash, "assay", makeStringHash(assay, ArraySize(assay)));
-hashAdd(hash, "control", makeStringHash(control, ArraySize(control)));
-hashAdd(hash, "disease", makeStringHash(disease, ArraySize(disease)));
+hashAdd(hash, "control_type", makeStringHash(control_type, ArraySize(control_type)));
+hashAdd(hash, "biosample_source_health_status", 
+    makeStringHash(biosample_source_health_status, ArraySize(biosample_source_health_status)));
 hashAdd(hash, "enriched_in", makeStringHash(enriched_in, ArraySize(enriched_in)));
-hashAdd(hash, "formats", makeStringHash(formats, ArraySize(formats)));
-hashAdd(hash, "sequencer", makeStringHash(sequencer, ArraySize(sequencer)));
+hashAdd(hash, "format", makeStringHash(format, ArraySize(format)));
+hashAdd(hash, "assay_platform", makeStringHash(assay_platform, ArraySize(assay_platform)));
 hashAdd(hash, "species", makeStringHash(species, ArraySize(species)));
 hashAdd(hash, "strain", makeStringHash(strain, ArraySize(strain)));
-hashAdd(hash, "target_epitope", makeStringHash(target_epitope, ArraySize(target_epitope)));
+hashAdd(hash, "immunoprecipitation_target", 
+    makeStringHash(immunoprecipitation_target, ArraySize(immunoprecipitation_target)));
 return hash;
 }
 

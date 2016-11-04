@@ -94,7 +94,7 @@ char *tagsFileName = rql->tableList->name;
 struct tagStorm *tags = tagStormFromFile(tagsFileName);
 
 /* Expand any field names with wildcards. */
-struct slName *allFieldList = tagTreeFieldList(tags);
+struct slName *allFieldList = tagStormFieldList(tags);
 rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
 
 /* Traverse tree applying query */
