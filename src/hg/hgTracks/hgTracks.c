@@ -408,10 +408,13 @@ char *trackUrl(char *mapName, char *chromName)
 {
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
+char *hgTrackUi = hgTrackUiName();
+if (startsWith("gtexGene", mapName))
+    hgTrackUi = "../cgi-bin/hgGtexTrackSettings";	/* Path to click processing program. */
 if(chromName == NULL)
-    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), encodedMapName);
 else
-    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUiName(), cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
+    safef(buf, sizeof(buf), "%s?%s=%s&c=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), chromName, encodedMapName);
 freeMem(encodedMapName);
 return(cloneString(buf));
 }
