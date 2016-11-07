@@ -3,7 +3,6 @@ description 26 Apr 2016/129S1_SvImJ_v1
 trackDb GCA_001624185.1_129S1_SvImJ_v1/GCA_001624185.1_129S1_SvImJ_v1.trackDb.txt
 groups groups.txt
 twoBitPath GCA_001624185.1_129S1_SvImJ_v1/GCA_001624185.1_129S1_SvImJ_v1.2bit
-GCA_001624185.1_129S1_SvImJ_v1
 transBlat blat1a.soe.ucsc.edu 17864
 blat blat1a.soe.ucsc.edu 17865
 organism house mouse
