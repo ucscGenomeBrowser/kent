@@ -351,3 +351,11 @@ searchType genePred
 searchMethod prefix
 termRegex chr[0-9MUXYn]+[GHJLv0-9_]+(alt_|random_)?[0-9]+(\.[0-9]+)?
 searchPriority 50
+
+track strainSNPs
+shortLabel Mouse SNPs
+longLabel Annotated SNPs from mouse strain comparison analysis
+group varRep
+type vcfTabix
+visibility hide
+hapClusterHeight 78
