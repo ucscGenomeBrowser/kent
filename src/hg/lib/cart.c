@@ -1596,9 +1596,12 @@ struct cart *cartAndCookieWithHtml(char *cookieName, char **exclude,
  * and optionally content-type part HTTP preamble to web page.  Don't
  * write any HTML though. */
 {
+// Note: early abort works fine but early warn does not
 htmlPushEarlyHandlers();
 struct cart *cart = cartForSession(cookieName, exclude, oldVars);
 popWarnHandler();
+popAbortHandler();
+
 cartWriteCookie(cart, cookieName);
 if (doContentType)
     {

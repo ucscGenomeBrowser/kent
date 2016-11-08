@@ -687,7 +687,7 @@ for (region = regionList; region != NULL; region = region->next)
         break;
     }
 if (curOut >= maxOut)
-    warn("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", curOut);
+    errAbort("Reached output limit of %d data values, please make region smaller,\n\tor set a higher output line limit with the filter settings.", curOut);
 }
 
 

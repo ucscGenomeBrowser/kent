@@ -1,0 +1,84 @@
+Please note, I would like to clarify a bit how this thing is being
+put together.  I noticed some confusion this past week.
+
+In the ideal world (a bit in the future) y'all as 'third party developers'
+could construct your data sets as independent track hubs all in your
+own domains, data storage systems, and apache servers.  Such track
+hubs (shortly, with future additions to the genome browser) could then
+be displayed along with the assembly hubs I have constructed and everything
+together would be a single URL reference which could be in a table
+of 'mouse strain data' for users to get to everything.  Everything
+would be seamless, it would all appear as one set of data in the
+genome browser.
+
+We have one feature currently missing that doesn't allow this, and that
+is the connection of a track hub to an existing assembly hub.  That feature
+is shortly in the future.
+
+As the current work-around, here is what I am doing.
+
+You can still develop your data sets independently, in your own
+data storage systems on the /hive/, just make sure it is known that
+such data sets and areas are off limits to changes once you have them in
+place.  This is the way all data for the genome browser is done,
+it sits on /hive/ in a known location and doesn't change after
+it is done and released.  You would be doing this even in the ideal
+world where a track hub could connect to an assembly hub.
+
+The trick now is that I symlink your data set into the constructed
+assembly hub hierarchy and add an 'include' statement into the
+master trackDb.txt for each assembly to include your trackDb.txt
+definitions *AND HTML TRACK DESCRIPTION* files for your data sets.
+With these symlinks in place and that include statement for the trackDb.txt
+track definition, your data set appears in the assembly hub as part
+of the assembly hub.  It isn't separate at all, it is part of
+the assembly hub.  During this development phase, with the symlinks
+in place you can tweak your data and your trackDb.txt definitions
+and view them on hgwdev via the access portal:
+  http://genome-test.soe.ucsc.edu/gbdb/hubs/mouseStrains/hgwdev.hubIndex.html
+
+This is the special 'development' access point to make it use the
+files as they exist on hgwdev. The 'public' portal access point:
+  http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/hubIndex.html
+also known on hgwdev as:
+  http://genome-test.soe.ucsc.edu/gbdb/hubs/mouseStrains/hubIndex.html
+causes all references to go to the public released data which sits on
+hgdownload.  The hgdownload data is a copy of the development data from
+hgwdev /hive/ filesystem.  This is how a 'release' of the data is done,
+it is copied from the /hive/ to hgdownload.  During our development we
+can update the hgdownload data as necessary to see what it really looks
+like to the public and verify all links function correctly.  As long
+as all links are relative correctly, they will work on both machines.
+
+But once we are done and the release is finished, the copy on hgdownload
+becomes 'static' in the sense that we will not update it unless we really
+need to make a change for some good reason.  And the development data
+on hgwdev /hive/ after this release needs to be left alone as it represents
+the backup second copy of the public data.
+
+By the time we are all done with this, we will most likely have in place
+that feature of allowing track hubs to connect to an assembly hub, and then
+external third party developers can add their own track hubs to our existing
+assembly hub.
+
+FYI: My construction of the assembly hub is taking place on hgwdev in:
+      /hive/data/genomes/asmHubs/
+The development data is constructed in:
+      /hive/data/genomes/asmHubs/genbank/vertebrate_mammalian/Mus*/...
+which represents the hierarchy of released data files from the NCBI assembly
+FTP site.  There is a set of auto scripts in the source tree that builds
+all of the required assembly hub files in that development data hierarchy:
+     ~/kent/src/hg/utils/automation/asmHub*
+which are used in turn for each step by the master control script:
+     ~/kent/src/hg/utils/automation/doAssemblyHub.pl
+
+The final layout of the assembly hub files takes place in:
+     /hive/data/genomes/asmHubs/hubLinks/
+which is a set of symlinks into the development data to make only
+the required files for the assembly hub to appear as one hierarchy.
+This is where the symlinks to your data files would be found.
+
+Finally, there are a few symlinks from:
+    /gbdb/hubs/mouseStrains/ to /hive/data/genomes/asmHubs/hubLinks/
+to make the assembly hub appear at this known URL location for
+the genome-test Apache server.

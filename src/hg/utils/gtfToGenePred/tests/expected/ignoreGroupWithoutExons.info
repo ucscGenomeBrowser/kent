@@ -1,0 +1,6 @@
+#transId	geneId	source	chrom	start	end	strand	proteinId	geneName	transcriptName	geneType	transcriptType
+ENSG00000223972.4	ENSG00000223972.4	HAVANA	chr1	11868	14412	+		DDX11L1	DDX11L1	pseudogene	pseudogene
+ENST00000456328.2	ENSG00000223972.4	HAVANA	chr1	11868	14409	+		DDX11L1	DDX11L1-002	pseudogene	processed_transcript
+ENST00000515242.2	ENSG00000223972.4	ENSEMBL	chr1	11871	14412	+		DDX11L1	DDX11L1-201	pseudogene	unprocessed_pseudogene
+ENST00000518655.2	ENSG00000223972.4	ENSEMBL	chr1	11873	14409	+		DDX11L1	DDX11L1-202	pseudogene	unprocessed_pseudogene
+ENST00000450305.2	ENSG00000223972.4	HAVANA	chr1	12009	13670	+		DDX11L1	DDX11L1-001	pseudogene	transcribed_unprocessed_pseudogene
