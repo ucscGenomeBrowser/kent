@@ -58,6 +58,12 @@ def writeGuideRow(db, guideSeq, otRows, ofh):
         #mismString, mismCount = showMism(guideSeq, row[4][:20])
         #row[4] = compressAln(mismString)
         mismCount = countMm(guideSeq, row[4][:20])
+
+        if mismCount == 0: # because of our initial filtering, 0-mismatch
+        # off-targets cannot happen. We do this because it is not obvious
+        # to distinguish 0-mismatch off-target from the real on-target
+            continue
+
         if mismCount <= 4: # very very rare >4: only when there are Ns in the off-target seq
             mismCounts[mismCount] += 1
         #if mismCount >= 4:

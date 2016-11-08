@@ -8,6 +8,9 @@ import string, unicodedata
 from collections import defaultdict, Counter, namedtuple
 from os.path import join, basename, dirname, isfile, isdir, getsize
 
+# default directory with fixed data files, e.g. geneId -> sumbol mappings
+DEFAULTDATADIR = "/hive/groups/cirm/"
+
 # no need for garbage collection here
 import gc
 gc.disable()
@@ -82,13 +85,13 @@ def parseCmdLine():
     """)
 
     parser.add_option("-d", "--debug", dest="debug", action="store_true", help="show debug messages") 
-    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default=os.getenv("CIRM")+"/annotation/ensToHugo/barres.tab")
+    parser.add_option("-m", "--markerFile", dest="markerFile", action="store", help="a file that defines marker genes for cell types, format: symbol,gene,cellType, default %default, the mouse version is /hive/groups/cirm/annotation/markers/darmanis2015/top500/mouseMarkers.tab", default=os.getenv("CIRM", DEFAULTDATADIR)+"annotation/ensToHugo/barres.tab")
     parser.add_option("", "--symbols", dest="useSyms", action="store_true", help="set this option if the rows in the input matrix file are symbols, not ENSGxxxx gene identifiers. This will read only symbols from the file specified with the -m option")
     parser.add_option("-o", "--offline", dest="offline", action="store_true", help="copy all required style and js files into the output directory")
     parser.add_option("-f", "--force", dest="force", action="store_true", help="do not use the results cache (e.g. summary.tmp) but recreate all input data")
     parser.add_option("-j", "--cellTreeJson", dest="cellTreeJson", action="store", help="a file with the D3-JSON-encoded cell clustering results, default %default", default=None)
     parser.add_option("-c", "--meta", dest="meta", action="store", help="name of the meta table column where the filename is stored. This field is used to link the meta table and RNA-seq output together. Default value:'%default'", default="meta")
-    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default=os.getenv("CIRM")+"annotation/ensToHugo/genes.hg38") 
+    parser.add_option("-s", "--symTable", dest="symTable", action="store", help="use a table (transcriptId, geneId, symbol) to convert incoming gene identifiers to symbols, default %default, a version for mouse is /hive/groups/cirm/annotation/ensToHugo/genes.mm10", default=os.getenv("CIRM", DEFAULTDATADIR)+"annotation/ensToHugo/genes.hg38") 
     parser.add_option("-a", "--showAllTags", dest="showAllTags", action="store_true", help="show all tags on mouse over, not just our favorite ones (cellInfoTags)")
     parser.add_option("", "--tagLabels", dest="tagLabels", action="store", help="short labels of tags, tab-sep file with two fields, tag name and label for it")
     parser.add_option("", "--seuratAllGenes", dest="seuratAllGenes", action="store_true", help="by default, Seurat is only run on genes that have a symbol. This parameter runs Seurat on all genes.")
@@ -205,7 +208,9 @@ def writeHeader(ofh, title):
 <html>
 <head>
 <meta charset="utf-8">
-<link rel='STYLESHEET' href='../../style/HGStyle.css' TYPE='text/css' />
+<link rel='STYLESHEET' href='/style/HGStyle.css' TYPE='text/css' />
+<link rel='stylesheet' href='/style/jquery.css' type='text/css'>
+<link rel='stylesheet' href='/style/nice_menu.css' type='text/css'>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
@@ -229,11 +234,22 @@ def writeHeader(ofh, title):
         <script src="//demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
         """)
 
-    ofh.write("""
-    <title>%s</title>
-</head>
+    ofh.write("""<title>%s</title>""" % title)
 
+    # function to insert the menubar into the html. The menubar is dynamic and has to be 
+    # inserted at runtime and SSI doesn't work with the X-Sendfile we use to deliver restricted html files
+    ofh.write("""
+<script> 
+$(function(){
+$("#menuBarPlaceholder").load("/cgi-bin/cdwWebBrowse?cdwCommand=menubar"); 
+});
+</script> 
+</head>
+""")
+
+    ofh.write("""
 <body>
+<div id="menuBarPlaceholder"></div>
 
 <style>
 body {
@@ -259,7 +275,7 @@ body {
    }
 </style>
 
-    """ % title)
+    """)
     # <script type='text/javascript' SRC='../../js/jquery.js'></script>
     #<script type='text/javascript' SRC='../../js/jquery.plugins.js'></script>
     #<script type='text/javascript' SRC='../../js/jquery-ui.js'></script>
@@ -1763,7 +1779,7 @@ def writeSeuratGenes(htmlFh, geneToSym, clusterGenesPath, minPower, minAuc, outD
     htmlFh.write("<h2>Seurat cluster-specific genes with power &gt; %.2f and AUC &gt; %.2f </h2>\n" % (minPower, minAuc))
 
     clusterToGenes = parseSeuratGenes(clusterGenesPath)
-    geneAnnots = parseAnnots([os.getenv("CIRM")+"/annotation/panther.tab",os.getenv("CIRM")+"annotation/markers/pollen/all.tab"])
+    geneAnnots = parseAnnots([os.getenv("CIRM", DEFAULTDATADIR)+"annotation/panther.tab",os.getenv("CIRM", DEFAULTDATADIR)+"annotation/markers/pollen/all.tab"])
 
     # filter rows
     filtClusterGenes = []

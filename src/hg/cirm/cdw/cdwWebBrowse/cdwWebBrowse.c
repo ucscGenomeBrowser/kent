@@ -1660,6 +1660,17 @@ dyStringPrintf(dy,
 return menuBarAddUiVars(dy->string, "/cgi-bin/cdw", cartSidUrlString(cart));
 }
 
+static void doSendMenubar()
+/* print http header and menu bar string */
+{
+oldVars = hashNew(0);
+cart = cartAndCookieWithHtml(hUserCookie(), excludeVars, oldVars, TRUE);
+//cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
+//puts("Content-Type: text/html\n\n");
+char* mb = localMenuBar();
+puts(mb);
+}
+
 void localWebStartWrapper(char *titleString)
 /* Output a HTML header with the given title.  Start table layout.  Draw menu bar. */
 {
@@ -1717,6 +1728,8 @@ oldVars = hashNew(0);
 char *cdwCmd = cgiOptionalString("cdwCommand");
 if (sameOk(cdwCmd, "downloadUrls"))
     doDownloadUrls();
+else if (sameOk(cdwCmd, "menubar"))
+    doSendMenubar();
 else
     cartEmptyShell(localWebWrap, hUserCookie(), excludeVars, oldVars);
 return 0;
