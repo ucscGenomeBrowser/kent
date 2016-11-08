@@ -24,9 +24,6 @@ to the library routines,  and in a few specific applications.
 The applications are scattered in other directories.  Many of them are web based.  
 The UCSC Genome Browser in particular is mostly found in src/hg/hgTracks.
 
-Source code version: see src/hg/inc/versionInfo.h 
-Website Version: see title of http://genome.ucsc.edu/cgi-bin/hgTracks
-
 GENERAL INSTALL INSTRUCTIONS
 
 1. Get the code.  The best way to do this now for

@@ -90,7 +90,6 @@ struct connInfo
     bits64 offset;		/* Current file offset of socket. */
     int ctrlSocket;             /* (FTP only) Control socket descriptor or 0. */
     char *redirUrl;             /* (HTTP(S) only) use redirected url */
-    char *tmpRedirUrl; 
     };
 
 typedef int (*UdcDataCallback)(char *url, bits64 offset, int size, void *buffer,
@@ -447,9 +446,6 @@ int udcDataViaHttpOrFtp( char *url, bits64 offset, int size, void *buffer, struc
  * Does an errAbort on error.
  * Typically will be called with size in the 8k-64k range. */
 {
-if (file->connInfo.tmpRedirUrl)
-    url = file->connInfo.tmpRedirUrl;
-    
 if (startsWith("http://",url) || startsWith("https://",url) || startsWith("ftp://",url))
     verbose(4, "reading http/https/ftp data - %d bytes at %lld - on %s\n", size, offset, url);
 else
@@ -476,21 +472,6 @@ else
 return total;
 }
 
-static int followOneRedirect(int status, struct hash **hashPtr, struct udcRemoteFileInfo *retInfo)
-// if needed, follow a single redirect and add new URL to retInfo->ci.tmpRedirUrl
-{
-struct hash *hash = *hashPtr;
-if (status != 302 || !hashFindValUpperCase(hash, "Location:"))
-    return status;
-
-char *newUrl = cloneString((char *)hashFindValUpperCase(hash, "Location:"));
-retInfo->ci.tmpRedirUrl = cloneString(newUrl);
-freeHashAndVals(&hash);
-hash = newHash(0);
-status = netUrlHead(newUrl, hash);
-return status;
-}
-
 boolean udcInfoViaHttp(char *url, struct udcRemoteFileInfo *retInfo)
 /* Gets size and last modified time of URL
  * and returns status of HEAD GET. */
@@ -503,18 +484,10 @@ while (TRUE)
     {
     hash = newHash(0);
     status = netUrlHead(url, hash);
-
-    // dropbox/box.com/onedrive redirect up to twice, 
-    // the redirect has to be re-done every time
-    status = followOneRedirect(status, &hash, retInfo);
-    status = followOneRedirect(status, &hash, retInfo);
-
     if (status == 200)
 	break;
-    
     if (status != 301 && status != 302)  
 	return FALSE;
-
     ++redirectCount;
     if (redirectCount > 5)
 	{
