@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeVM9
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE VM9 (Ensembl 84)
 longLabel Gene Annotations from ENCODE/GENCODE Version M9 (Ensembl 84)
 group genes
