@@ -1,7 +1,29 @@
 <h2>RNA-seq analysis and raw data</h2>
-<p>
-Strain-specific RNA-seq data was extracted from NCBI SRA or provided directly to UCSC and aligned to the strain specific assembly using STAR. For each tissue, expression wiggle tracks were generated and normalized by bamCoverage, then averaged by wiggletools. High confidence splice junctions were parsed from the STAR splice junction tab file. Scores are on a 0-1000 range and measure the proportion of individual accessions that support this junction.
+<h3>Description</h3>
+<p>RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly. This track shows RNA-seq data performed by a variety of labs on a variety of tissues for the mouse strains sequenced and assembled for the Mouse Genomes Project.</p>
+<h3>Display Conventions and Configuration</h3>
+<p>This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <a href="/goldenPath/help/multiView.html" TARGET='blank'>here</A>.
+The following views are in this track:
+<DL>
+<DT><I>Expression</I></DT>
+<DD>Density graph of signal enrichment based on a normalized aligned
+read density (reads per kilobase of mapped reads for each subtrack). This
+normalized measure assists in visualizing the relative abundance of exons and of transcripts between tissue types.</DD>
+<DT><I>Splice_Junctions</I></DT>
+<DD>High confidence splice junctions output by STAR. Color determines strand where STAR made this determination. Splice junction calls are assigned a score on the range 0-1000 where the number  represents the proportion of individual accessions that support this junction in the tissue type in question.</DD>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments view shows raw reads mapped to the genome by STAR in BAM format.</DD>
+</DL>
 </p>
+<h3>Methods</h3>
+<p>Strain-specific RNA-seq data was extracted from NCBI SRA or provided directly to UCSC and aligned to the strain specific assembly using STAR with the ENCODE standard parameters. For each tissue, expression wiggle tracks were generated and normalized by bamCoverage, then averaged by wiggletools. High confidence splice junctions were parsed from the STAR splice junction tab file and combined between replicates. Scores are on a 0-1000 range and measure the proportion of individual accessions that support this junction.</p>
+<h3>Credits</h3>
+<p>These sequencing data were generated in a variety of institutes and labs, including the Jackson Lab, UNC, EBI and the Sanger Institute. Please see the individual accessions on NCBI SRA for more information. Thanks to Thomas Keane for collating and providing these data to UCSC. Ian Fiddes performed the alignments and data processing.</p>
+<h3>Input Data Breakdown</h3>
+<p>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: left;">
@@ -188,3 +210,11 @@ Strain-specific RNA-seq data was extracted from NCBI SRA or provided directly to
     </tr>
   </tbody>
 </table>
+</p>
+<h3>References</h3>
+<p>
+Alexander Dobin, Carrie A. Davis, Felix Schlesinger, Jorg Drenkow, Chris Zaleski, Sonali Jha, Philippe Batut, Mark Chaisson, and Thomas R. Gingeras.
+<a href="http://bioinformatics.oxfordjournals.org/content/29/1/15.short" target="_blank">
+STAR: ultrafast universal RNA-seq aligner</a>.
+<em>Bioinformatics</em> (2013) 29 (1): 15-21 first published online October 25, 2012 doi:10.1093/bioinformatics/bts635
+</p>
