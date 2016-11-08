@@ -240,6 +240,11 @@ span#home-link {
 
 .tissueColor {
     padding: 0 10px;
+    border-width: 2px;
+}
+
+.tissueNotSelectedColor {
+    background-color: white !important;
 }
 
 .tissueLabel {
@@ -272,7 +277,7 @@ span#home-link {
 }
 
 .tissueHoveredColor {
-    border: 2px solid blue;
+    border-color: blue !important;
 }
 
 .trackDescription {

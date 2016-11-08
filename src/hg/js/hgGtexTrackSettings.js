@@ -66,7 +66,7 @@ var gtexTrackSettings = (function() {
         $(this).toggleClass('tissueSelected');
 
         // jQuery addClass doesn't work on SVG elements, using classList
-        // May need a shim so this works on IE9 and Opera mini (as if Dec 2014)
+        // May need a shim so this works on IE9 and Opera mini (as of Dec 2014)
         // https://martinwolf.org/blog/2014/12/adding-and-removing-classes-from-svg-elements-with-jquery
         var el = _svgDoc.getElementById(this.id + '_Text_Hi');
         if (el !== null) {
@@ -80,28 +80,19 @@ var gtexTrackSettings = (function() {
     }
 
     function onMapClickToggleTissue(ev) {
-        var isOn = false;
         var svgId = ev.target.id;
+        var el = _svgDoc.getElementById(svgId);
+        if (el !== null) {
+            el.classList.toggle('tissueSelected');
+        }
         var tis = tissueFromSvgId(svgId);
-        var el = _htmlDoc.getElementById(tis);
+        el = _htmlDoc.getElementById(tis);
         if (el !== null) {
             el.classList.toggle('tissueSelected');
-        }
-        if (el.classList.contains('tissueSelected')) {
-            isOn = true;
-            onClickSetTissue(tis);
-        } else {
-           onClickClearTissue(tis);
-        }
-        // below can likely replace 3 lines after
-        //this.classList.toggle('tissueSelected');
-        el = _svgDoc.getElementById(svgId);
-        if (el !== null) {
-            el.classList.toggle('tissueSelected');
-            if (isOn) {
-                el.style.fill = "black";
+            if (el.classList.contains('tissueSelected')) {
+                onClickSetTissue(tis);
             } else {
-                el.style.fill = "#737373";
+               onClickClearTissue(tis);
             }
         }
     }
@@ -122,6 +113,10 @@ var gtexTrackSettings = (function() {
         // mark selected in tissue table
         var $tis = $('#' + tis);
         $tis.addClass('tissueSelected');
+        var colorPatch = $tis.prev(".tissueColor");
+        colorPatch.removeClass('tissueNotSelectedColor');
+        var tisColor = colorPatch.data('tissueColor');
+        colorPatch.css('background-color', tisColor);
         var $checkbox = $('#' + tis + ' > input');
         $checkbox.attr("checked", true);
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
@@ -129,9 +124,11 @@ var gtexTrackSettings = (function() {
     }
 
     function onClickClearTissue(tis) {
-        // mark selected in tissue table
+        // unselect in tissue table
         var $tis = $('#' + tis);
         $tis.removeClass('tissueSelected');
+        colorPatch = $tis.prev(".tissueColor");
+        colorPatch.addClass('tissueNotSelectedColor');
         var $checkbox = $('#' + tis + ' > input');
         $checkbox.attr("checked", false);
         var el = _svgDoc.getElementById(tis + "_Text_Hi");
@@ -236,7 +233,7 @@ var gtexTrackSettings = (function() {
         $('#' + tis).click(tis, onClickToggleTissue);
         $('#' + tis).hover(onHoverTissue, onHoverTissue);
 
-        // add mouseover handler to tissue label
+        // add mouseover and click handlers to tissue label
         textEl = _svgDoc.getElementById(tis + "_Text_Hi");
         if (textEl !== null) {
             if ($('#' + tis).hasClass('tissueSelected')) {
@@ -247,7 +244,7 @@ var gtexTrackSettings = (function() {
             textEl.addEventListener("mouseleave", onMapHoverTissue);
             // mouseover, mouseout ?
         }
-        // add mouseover handler to tissue shape
+        // add mouseover and click handlers to tissue shape
         picEl = _svgDoc.getElementById(tis + "_Pic_Lo");
         if (picEl !== null) {
             picEl.addEventListener("click", onMapClickToggleTissue);

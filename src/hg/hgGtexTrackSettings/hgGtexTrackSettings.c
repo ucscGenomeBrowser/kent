@@ -133,10 +133,12 @@ for (i=0; i<count; i++)
     {
     tis = tisTable[i];
     boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
-    printf("<td class='tissueColor' bgcolor=%06X></td>"
+    printf("<td class='tissueColor %s' data-tissueColor=#%06X style='background-color: #%06X; border-style: solid; border-width: 2px; border-color: #%06X;'></td>"
            "<td class='tissueLabel %s' id='%s'>%s",
-                tis->color, 
+                isChecked ? "" : "tissueNotSelectedColor", tis->color,
+                    isChecked ? tis->color : 0xFFFFFF, tis->color,
                 isChecked ? "tissueSelected" : "", tis->name, tis->description);
+
     printf("<input type='checkbox' name='%s' value='%s' %s style='display: none;'>", 
                 var, tis->name, isChecked ? "checked" : "");
     puts("</td>");
