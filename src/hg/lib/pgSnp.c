@@ -714,6 +714,17 @@ return item;
 
 #define VCF_MAX_ALLELE_LEN 80
 
+static char *alleleCountsFromVcfTumorAd(const struct vcfInfoElement *ad)
+/* Build up comma-sep list of read counts supporting tumor alleles */
+{
+struct dyString *dy = dyStringNew(0);
+// Assume only one alternate allele
+int r = ad->values[0].datInt;
+int a = ad->values[1].datInt;
+dyStringPrintf(dy, "%d,%d", r, a);
+return dyStringCannibalize(&dy);
+}
+
 static char *alleleCountsFromVcfRecord(struct vcfRecord *rec, int alDescCount)
 /* Build up comma-sep list of per-allele counts, if available, up to alDescCount
  * which may be less than rec->alleleCount: */
@@ -828,10 +839,106 @@ else if (!gotTotalCount && !gotAltCounts && rec->file->genotypeCount > 0)
 return dyStringCannibalize(&dy);
 }
 
+static void pgSnpFromVcfSgtIndelRecord(struct vcfRecord *rec, struct pgSnp *pgs)
+/* parse alleles and frequency from vcf file with SGT for indels */
+{
+pgs->alleleCount = 2; // assume always 2: normal->tumor
+struct dyString *dy = dyStringCreate("%s/%s", rec->alleles[0], rec->alleles[1]);
+pgs->name = dyStringCannibalize(&dy);
+int refCnt = -1, altCnt = -1;
+const struct vcfGenotype *gt = vcfRecordFindGenotype(rec, "TUMOR");
+if (gt)
+    {
+    const struct vcfInfoElement *dp = vcfGenotypeFindInfo(gt, "DP");
+    const struct vcfInfoElement *tar = vcfGenotypeFindInfo(gt, "TAR");
+    if (dp && tar)
+        {
+        int totCnt = dp->values[0].datInt;
+        altCnt = tar->values[0].datInt;
+        refCnt = totCnt - altCnt;
+        }
+    }
+if (refCnt == -1)
+    pgs->alleleFreq = cloneString("?,?");
+else
+    {
+    char freq[64];
+    safef(freq, sizeof(freq), "%d,%d", refCnt, altCnt);
+    pgs->alleleFreq = cloneString(freq);
+    }
+}
+
+static struct pgSnp *pgSnpFromVcfSgtRecord(struct vcfRecord *rec)
+/* Convert VCF rec with SGT (from Strelka) to pgSnp; don't free rec->file (vcfFile) until
+ * you're done with pgSnp because pgSnp points to rec->chrom. */
+{
+struct pgSnp *pgs;
+AllocVar(pgs);
+pgs->chrom = rec->chrom;
+pgs->chromStart = rec->chromStart;
+pgs->chromEnd = rec->chromEnd;
+pgs->alleleScores = cloneString("-1,-1");
+//set alleles from INFO SGT
+const struct vcfInfoElement *sgtEl = vcfRecordFindInfo(rec, "SGT");
+if (sgtEl)
+    {
+    char *val = sgtEl->values[0].datString;
+    // Indels encode allele frequencies differently
+    if (startsWith("ref->", val))
+        {
+        pgSnpFromVcfSgtIndelRecord(rec, pgs);
+        return pgs;
+        }
+    // Get tumor genotype, assuming SNVs only
+    char last = val[strlen(val)-1];
+    char nlast = val[strlen(val)-2];
+    struct dyString *dy = dyStringCreate("%c/%c", nlast, last);
+    pgs->name = dyStringCannibalize(&dy);
+    //add read counts to frequency field
+    if (last == nlast)
+        pgs->alleleCount = 1;
+    else
+        pgs->alleleCount = 2;
+    //set freqs from AU,CU,GU,TU for TUMOR genotype
+    const struct vcfGenotype *gt = vcfRecordFindGenotype(rec, "TUMOR");
+    if (gt)
+        {
+        // Find counts for alleles
+        int first = -1, second = -1;
+        int k;
+        for (k = 0; k < gt->infoCount; k++)
+            {
+            struct vcfInfoElement *info = &gt->infoElements[k];
+            if (sameString(info->key, "AU") ||
+                sameString(info->key, "CU") ||
+                sameString(info->key, "GU") ||
+                sameString(info->key, "TU"))
+                {
+                char base = info->key[0];
+                if (nlast == base)
+                    first = info->values[0].datInt;
+                else if (last == base)
+                    second = info->values[0].datInt;
+                }
+            }
+        struct dyString *freq = dyStringCreate("%d,%d", first, second);
+        pgs->alleleFreq = dyStringCannibalize(&freq);
+        }
+    }
+else
+    errAbort("pcfSnpFromVcfSgtRecord: no SGT found in INFO for VCF at %s:%d-%d %s",
+             rec->chrom, rec->chromStart+1, rec->chromEnd, rec->name);
+return pgs;
+}
+
 struct pgSnp *pgSnpFromVcfRecord(struct vcfRecord *rec)
 /* Convert VCF rec to pgSnp; don't free rec->file (vcfFile) until
  * you're done with pgSnp because pgSnp points to rec->chrom. */
 {
+// If this is Strelka VCF with SGT (Somatic GenoType) info then deduce genotypes from
+// other Strelka-specific info keys.
+if (vcfRecordFindInfo(rec, "SGT"))
+    return pgSnpFromVcfSgtRecord(rec);
 struct dyString *dy = dyStringNew(0);
 struct pgSnp *pgs;
 AllocVar(pgs);
@@ -855,7 +962,14 @@ else if (rec->alleleCount >= 2)
     }
 pgs->name = cloneStringZ(dy->string, dy->stringSize+1);
 pgs->alleleCount = alCount;
-pgs->alleleFreq = alleleCountsFromVcfRecord(rec, alCount);
+// If this is Mutect2 TUMOR/NORMAL VCF with AD (allelic depths for ref and alt)
+// then display read counts from tumor sample as allele counts.
+const struct vcfGenotype *tumorGt = vcfRecordFindGenotype(rec, "TUMOR");
+const struct vcfInfoElement *tumorAd = tumorGt ? vcfGenotypeFindInfo(tumorGt, "AD") : NULL;
+if (rec->file->genotypeCount == 2 && tumorAd && vcfRecordFindGenotype(rec, "NORMAL"))
+    pgs->alleleFreq = alleleCountsFromVcfTumorAd(tumorAd);
+else
+    pgs->alleleFreq = alleleCountsFromVcfRecord(rec, alCount);
 // Build up comma-sep list... supposed to be per-allele quality scores but I think
 // the VCF spec only gives us one BQ... for the reference position?  should ask.
 dyStringClear(dy);

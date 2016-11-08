@@ -1,0 +1,564 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes browser build for the droSim2
+# Organism name:  Drosophila simulans
+
+#  Must find the photograph first, can not continue until finding
+#  the photograph.
+
+#########################################################################
+#  Initial steps, find photograph (DONE - 2016-11-01 - Hiram)
+
+# To start this initialBuild.txt document, from a previous assembly document:
+
+mkdir ~/kent/src/hg/makeDb/doc/droSim2
+cd ~/kent/src/hg/makeDb/doc/droSim2
+
+sed -e 's/gorGor5/droSim2/g; s/GorGor5/DroSim2/g; s/TBD/TBD/g;' ../gorGor5/initialBuild.txt > initialBuild.txt
+
+mkdir -p /hive/data/genomes/droSim2/refseq
+cd /hive/data/genomes/droSim2/refseq
+
+rsync -a -P -L \
+rsync://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Drosophila_simulans/all_assembly_versions/GCF_000754195.2_ASM75419v2/ ./
+
+# obtain photo from wikimedia commons
+mkdir /hive/data/genomes/droSim2/photograph
+cd /hive/data/genomes/droSim2/photograph
+wget --timestamping \
+https://upload.wikimedia.org/wikipedia/commons/0/03/Drosophila_simulans-female.jpg
+
+cd /hive/data/genomes/droSim2
+printf "photoCreditURL https://commons.wikimedia.org/wiki/File:Drosophila_simulans-female.jpg
+photoCreditName Wikimedia Commons/Dr. Andrew Weeks\n" > photoReference.txt
+
+# this information is from the top of 
+#    refseq/*_assembly_report.txt
+#    (aka: refseq/GCF_000754195.2_ASM75419v2_assembly_report.txt)
+
+# Assembly name:  ASM75419v2
+# Organism name:  Drosophila simulans (flies)
+# Infraspecific name:  strain=w501
+# Taxid:          7240
+# BioSample:      SAMN01086904
+# BioProject:     PRJNA297806
+# Submitter:      Princeton University
+# Date:           2014-9-19
+# Assembly type:  haploid
+# Release type:   
+# Assembly level: Chromosome
+# Genome representation: full
+# WGS project:    JPYS01
+# Assembly method: Velvet v. 1.1.04
+# Expected final version: No
+# Genome coverage: 75.0x
+# Sequencing technology: Illumina; Sanger
+# RefSeq category: Representative Genome
+# GenBank assembly accession: GCA_000754195.2
+# RefSeq assembly accession: GCF_000754195.2
+# RefSeq assembly and GenBank assemblies identical: no
+#
+## Assembly-Units:
+## GenBank Unit Accession       RefSeq Unit Accession   Assembly-Unit name
+## GCA_000754205.2      GCF_000754205.1 Primary Assembly
+## GCA_000754215.1      GCF_000045355.1 non-nuclear
+
+
+#############################################################################
+# establish config.ra file (DONE - Hiram - 2016-11-01)
+    cd /hive/data/genomes/droSim2
+    /cluster/home/hiram/kent/src/hg/utils/automation/prepConfig.pl \
+  droSim2 insect drosophila ./refseq/*_assembly_report.txt
+
+# change commonName "Flies" to "D. simulans"
+
+    # verify it looks sane
+    cat droSim2.config.ra
+# config parameters for makeGenomeDb.pl:
+db droSim2
+clade insect
+genomeCladePriority 70
+scientificName Drosophila simulans
+commonName D. simulans
+assemblyDate Sep. 2014
+assemblyLabel Princeton University
+assemblyShortLabel ASM75419v2
+orderKey 6684
+# mitochondrial sequence included in refseq release
+# mitoAcc NC_005781.1
+mitoAcc none
+fastaFiles /hive/data/genomes/droSim2/ucsc/*.fa.gz
+agpFiles /hive/data/genomes/droSim2/ucsc/*.agp
+# qualFiles none
+dbDbSpeciesDir drosophila
+photoCreditURL https://commons.wikimedia.org/wiki/File:Drosophila_simulans-female.jpg
+photoCreditName Wikimedia Commons/Dr. Andrew Weeks
+ncbiGenomeId 200
+ncbiAssemblyId 800241
+ncbiAssemblyName ASM75419v2
+ncbiBioProject 297806
+ncbiBioSample SAMN01086904
+genBankAccessionID GCF_000754195.2
+taxId 7240
+
+#############################################################################
+# setup UCSC named files (DONE - 2016-11-01 - Hiram)
+
+    mkdir /hive/data/genomes/droSim2/ucsc
+    cd /hive/data/genomes/droSim2/ucsc
+    # measure what is in the genbank release:
+    faSize ../refseq/G*2_genomic.fna.gz
+# 124963774 bases (378345 N's 124585429 real 98768053 upper 25817376 lower)
+#   in 7619 sequences in 1 files
+# Total size: mean 16401.6 sd 603260.6 min 200 (NW_015503630.1)
+#   max 27160941 (NT_479536.1) median 320
+# %20.66 masked total, %20.72 masked real
+
+    # check for duplicate sequences, twoBitDup should be silent output:
+
+    faToTwoBit -noMask ../refseq/*2_genomic.fna.gz refseq.2bit
+    twoBitDup refseq.2bit
+    # no output is a good result, otherwise, would have to eliminate duplicates
+
+    ~/kent/src/hg/utils/automation/ucscCompositeAgp.pl \
+      ../refseq/*2_genomic.fna.gz \
+         ../refseq/*_assembly_structure/Primary_Assembly
+    # real    0m43.539s
+
+    ~/kent/src/hg/utils/automation/unplacedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+
+    ~/kent/src/hg/utils/automation/unlocalizedWithChroms.pl \
+       ../refseq/*_assembly_structure/Primary_Assembly
+    # real    0m57.496s  (two steps above)
+
+    export mitoAcc=`grep "^# mitoAcc" ../droSim2.config.ra | awk '{print $NF}'`
+    printf "# mitoAcc %s\n" "$mitoAcc"
+
+ zcat ../refseq/*_assembly_structure/non-nuclear/assem*/AGP/chrMT.comp.agp.gz \
+     | grep -v "^#" | sed -e "s/^$mitoAcc/chrM/;" > chrM.agp
+
+    printf ">chrM\n" > chrM.fa
+    twoBitToFa -noMask refseq.2bit:$mitoAcc stdout | grep -v "^>" >> chrM.fa
+    gzip chrM.fa
+
+
+    faToTwoBit *.fa.gz test.2bit
+    twoBitDup test.2bit
+    cat *.agp | checkAgpAndFa stdin test.2bit 2>&1 | tail -4
+
+    # no longer need the 2bit files
+    rm refseq.2bit test.2bit
+
+#############################################################################
+#  Initial database build (DONE - 2016-11-01 - Hiram)
+
+    # verify sequence and AGP are OK:
+    cd /hive/data/genomes/droSim2
+
+    time (makeGenomeDb.pl -workhorse=hgwdev -dbHost=hgwdev -fileServer=hgwdev \
+         droSim2.config.ra) > makeGenomeDb.log
+    # real    1m43.905s
+
+    # check in the trackDb files created and add to trackDb/makefile
+
+##############################################################################
+# cpgIslands on UNMASKED sequence (DONE - 2016-11-02 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/cpgIslandsUnmasked
+    cd /hive/data/genomes/droSim2/bed/cpgIslandsUnmasked
+
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku -buildDir=`pwd` \
+       -tableName=cpgIslandExtUnmasked \
+          -maskedSeq=/hive/data/genomes/droSim2/droSim2.unmasked.2bit \
+             -workhorse=hgwdev -smallClusterHub=ku droSim2) > do.log 2>&1
+    # real    2m17.187s
+
+    cat fb.droSim2.cpgIslandExtUnmasked.txt
+    # 21753930 bases of 124963774 (17.408%) in intersection
+
+#############################################################################
+# cytoBandIdeo - (DONE - 2016-11-01 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/cytoBand
+    cd /hive/data/genomes/droSim2/bed/cytoBand
+    makeCytoBandIdeo.csh droSim2
+
+#############################################################################
+# ucscToINSDC table/track (TBD - 2016-08-05 - Hiram)
+    # there are no other names for contigs in this assembly, there are just
+    # the contig names
+
+#########################################################################
+# fixup search rule for assembly track/gold table (TBD - 2016-08-05 - Hiram)
+
+    cd ~/kent/src/hg/makeDb/trackDb/gorilla/droSim2
+    # preview prefixes and suffixes:
+    hgsql -N -e "select frag from gold;" droSim2 \
+      | sed -e 's/[0-9][0-9]*//;' | sort | uniq -c 
+#    15997 CYUIv1_1
+#        1 LN.1
+
+    # implies a search rule of: '[CILNUY0-9]+([v0-9_\.]+)?'
+
+    # verify this rule will find them all or eliminate them all:
+    hgsql -N -e "select frag from gold;" droSim2 | wc -l
+    # 15998
+
+    hgsql -N -e "select frag from gold;" droSim2 \
+       | egrep -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
+    # 15998
+
+    hgsql -N -e "select frag from gold;" droSim2 \
+       | egrep -v -e '[CILNUY0-9]+([v0-9_\.]+)?' | wc -l
+    # 0
+
+    # hence, add to trackDb/rhesus/droSim2/trackDb.ra
+searchTable gold
+shortCircuit 1
+termRegex [CILNUY0-9]+([v0-9_\.]+)?
+query select chrom,chromStart,chromEnd,frag from %s where frag like '%s%%'
+searchPriority 8
+
+    # verify searches work in the position box
+
+##########################################################################
+# running repeat masker (DONE - 2016-11-01 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/repeatMasker
+    cd /hive/data/genomes/droSim2/bed/repeatMasker
+    # failed to create a log file, made mistake
+    doRepeatMasker.pl -buildDir=`pwd` \
+        -bigClusterHub=ku -dbHost=hgwdev -workhorse=hgwdev \
+        -smallClusterHub=ku droSim2
+    # real    1581m32.299s
+
+    cat faSize.rmsk.txt
+# 124963774 bases (378345 N's 124585429 real 111673206 upper 12912223 lower)
+#    in 7619 sequences in 1 files
+# Total size: mean 16401.6 sd 603260.6 min 200 (chrUn_NW_015503630v1)
+#    max 27160941 (chr3R) median 320
+# %10.33 masked total, %10.36 masked real
+
+    egrep -i "versi|relea" do.log
+    # RepeatMasker version open-4.0.5
+    # Search Engine: Crossmatch [ 1.090518 ]
+    # Master RepeatMasker Database: /hive/data/staging/data/RepeatMasker140131/Libraries/RepeatMaskerLib.embl ( Complete Database: 20140131 )
+
+    # RepeatMasker version open-4.0.5
+    #    January 31 2015 (open-4-0-5) version of RepeatMasker
+    # CC   RELEASE 20140131;
+
+    time featureBits -countGaps droSim2 rmsk
+    # 12951235 bases of 124963774 (10.364%) in intersection
+    # real    0m3.712s
+
+    # with high contig count assemblies, faster way to get the same result:
+    time hgsql -N -e 'select genoName,genoStart,genoEnd from rmsk;' droSim2 \
+        | bedSingleCover.pl stdin | ave -col=4 stdin | grep "^total"
+    # total 12951235.000000
+    # real    0m0.852s
+
+##########################################################################
+# running simple repeat (DONE - 2016-11-01 - Hiram)
+
+    mkdir /hive/data/genomes/droSim2/bed/simpleRepeat
+    cd /hive/data/genomes/droSim2/bed/simpleRepeat
+    time (doSimpleRepeat.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -trf409=6 -dbHost=hgwdev -workhorse=hgwdev -smallClusterHub=ku \
+        droSim2) > do.log 2>&1
+    # real    6m32.563s
+
+    cat fb.simpleRepeat
+    # 1545440 bases of 124963774 (1.237%) in intersection
+
+    # add to window masker result after it is done:
+    cd /hive/data/genomes/droSim2
+    twoBitMask bed/windowMasker/droSim2.cleanWMSdust.2bit \
+        -add bed/simpleRepeat/trfMask.bed droSim2.2bit
+    #   you can safely ignore the warning about fields >= 13
+    twoBitToFa droSim2.2bit stdout | faSize stdin > faSize.droSim2.2bit.txt
+    cat faSize.droSim2.2bit.txt
+# 124963774 bases (378345 N's 124585429 real 97540956 upper 27044473 lower)
+#    in 7619 sequences in 1 files
+# Total size: mean 16401.6 sd 603260.6 min 200 (chrUn_NW_015503630v1)
+#    max 27160941 (chr3R) median 320
+# %21.64 masked total, %21.71 masked real
+
+    rm /gbdb/droSim2/droSim2.2bit
+    ln -s `pwd`/droSim2.2bit /gbdb/droSim2/droSim2.2bit
+
+#########################################################################
+# CREATE MICROSAT TRACK (DONE - 2016-11-01 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/droSim2/bed/microsat
+    cd /cluster/data/droSim2/bed/microsat
+
+    awk '($5==2 || $5==3) && $6 >= 15 && $8 == 100 && $9 == 0 {printf("%s\t%s\t%s\t%dx%s\n", $1, $2, $3, $6, $16);}' \
+       ../simpleRepeat/simpleRepeat.bed > microsat.bed
+
+    hgLoadBed droSim2 microsat microsat.bed
+    # Read 24885 elements of size 4 from microsat.bed
+
+##########################################################################
+## WINDOWMASKER (DONE - 2016-11-01 - Hiram)
+
+    mkdir /hive/data/genomes/droSim2/bed/windowMasker
+    cd /hive/data/genomes/droSim2/bed/windowMasker
+    time (doWindowMasker.pl -buildDir=`pwd` -workhorse=hgwdev \
+        -dbHost=hgwdev droSim2) > do.log 2>&1
+    #  real    5m1.607s
+
+    # Masking statistics
+    cat faSize.droSim2.cleanWMSdust.txt
+# 124963774 bases (378345 N's 124585429 real 97623025 upper 26962404 lower)
+#    in 7619 sequences in 1 files
+# Total size: mean 16401.6 sd 603260.6 min 200 (chrUn_NW_015503630v1)
+#    max 27160941 (chr3R) median 320
+# %21.58 masked total, %21.64 masked real
+
+    cat fb.droSim2.rmsk.windowmaskerSdust.txt
+    #  6298577 bases of 124963774 (5.040%) in intersection
+
+#########################################################################
+# run up idKeys files for ncbiRefSeq (DONE - 2016-11-01 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/idKeys
+    cd /hive/data/genomes/droSim2/bed/idKeys
+
+    doIdKeys.pl -twoBit /hive/data/genomes/droSim2/droSim2.unmasked.2bit \
+       -buildDir=`pwd` droSim2
+
+    cat droSim2.keySignature.txt
+    #   42f0f3041c6956e26676c502529a0331
+
+##########################################################################
+# ncbiRefSeq - (TBD - 2016-06-24 - Hiram)
+
+##########################################################################
+# cpgIslands - (DONE - 2016-11-01 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/cpgIslands
+    cd /hive/data/genomes/droSim2/bed/cpgIslands
+    time (doCpgIslands.pl -dbHost=hgwdev -bigClusterHub=ku \
+      -workhorse=hgwdev -smallClusterHub=ku droSim2) > do.log 2>&1
+    #   real    1m3.706s
+
+    cat fb.droSim2.cpgIslandExt.txt
+    # 13417596 bases of 124963774 (10.737%) in intersection
+
+##############################################################################
+# genscan - (DONE - 2016-11-01 - Hiram)
+    mkdir /hive/data/genomes/droSim2/bed/genscan
+    cd /hive/data/genomes/droSim2/bed/genscan
+    time (doGenscan.pl -buildDir=`pwd` -workhorse=hgwdev -dbHost=hgwdev \
+      -bigClusterHub=ku droSim2) > do.log 2>&1
+    # real    20m37.096s
+
+    cat fb.droSim2.genscan.txt
+    # 17689863 bases of 124963774 (14.156%) in intersection
+
+    cat fb.droSim2.genscanSubopt.txt
+    # 605801 bases of 124963774 (0.485%) in intersection
+
+########################################################################
+# Create kluster run files (TBD - 2016-06-24 - Hiram)
+
+    # numerator is droSim2 gapless bases "real" as reported by:
+    featureBits -noRandom -noHap droSim2 gap
+    # 0 bases of 3080431298 (0.000%) in intersection
+
+
+    # denominator is hg19 gapless bases as reported by:
+    #   featureBits -noRandom -noHap hg19 gap
+    #     234344806 bases of 2861349177 (8.190%) in intersection
+    # 1024 is threshold used for human -repMatch:
+    calc \( 3080431298 / 2861349177 \) \* 1024
+    #  ( 3080431298 / 2861349177 ) * 1024 = 1102.403605
+
+    # ==> use -repMatch=1100 according to size scaled up from 1024 for human.
+    #   and rounded down to nearest 50
+    cd /hive/data/genomes/droSim2
+    blat droSim2.2bit \
+         /dev/null /dev/null -tileSize=11 -makeOoc=jkStuff/droSim2.11.ooc \
+        -repMatch=1100
+    #   Wrote 31384 overused 11-mers to jkStuff/droSim2.11.ooc
+
+    # there are no non-bridged gaps (there no gaps at all)
+    hgsql -e 'select count(*) from gap;' droSim2
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    hgsql -e 'select count(*) from gap where bridge="no";' droSim2
+# +----------+
+# | count(*) |
+# +----------+
+# |        0 |
+# +----------+
+
+    # if there were non-bridged gaps, make up a nonBridged.lft file
+
+    #   check non-bridged gaps to see what the typical size is:
+#    hgsql -N \
+#         -e 'select * from gap where bridge="no" order by size;' droSim2 \
+#         | sort -k7,7nr | ave -col=7 stdin
+    #   most non-bridged gaps have size = 100
+    #   decide on a minimum gap for this break, use either 100 or 5000 will
+    #   generate 13387 liftOver rows, but if use 6000, only got 11703 rows.
+    #   so use 100 here to get more liftOver row.
+#     gapToLift -verbose=2 -minGap=100 droSim2 jkStuff/nonBridged.lft \
+#         -bedFile=jkStuff/nonBridged.bed
+
+########################################################################
+# GENBANK AUTO UPDATE (TBD - 2016-07-22 - Hiram)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/genbank
+    git pull
+    # /cluster/data/genbank/data/organism.lst shows:
+    # #organism     mrnaCnt estCnt  refSeqCnt
+    # Gorilla gorilla 591     0       88
+    # Gorilla gorilla gorilla 8       0       0
+
+    # Edit src/lib/gbGenome.c to add new species
+
+    # edit etc/genbank.conf to add droSim2 just after balAcu1
+
+# Gorilla
+droSim2.serverGenome = /hive/data/genomes/droSim2/droSim2.2bit
+droSim2.clusterGenome = /hive/data/genomes/droSim2/droSim2.2bit
+droSim2.ooc = /hive/data/genomes/droSim2/jkStuff/droSim2.11.ooc
+droSim2.lift = no
+droSim2.perChromTables = no
+droSim2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+droSim2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+droSim2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+droSim2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+droSim2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+droSim2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+droSim2.downloadDir = droSim2
+# default yes refseq.mrna.native refseq.mrna.xeno genbank.mrna.native
+# default yes genbank.est.native
+# default no genbank.mrna.xeno genbank.est.xeno
+
+    git commit -m "Added droSim2 - Gorilla refs #17580" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    screen      #  control this business with a screen since it takes a while
+    cd /cluster/data/genbank
+
+    time ./bin/gbAlignStep -initial droSim2
+    # real    67m3.917s
+
+    # logFile: var/build/logs/2016.07.05-12:53:02.droSim2.initalign.log
+    # tail -2 var/build/logs/2016.07.05-12:53:02.droSim2.initalign.log
+# hgwdev 2016.07.05-13:59:57 droSim2.initalign: Succeeded: droSim2
+# hgwdev 2016.07.05-14:00:06 droSim2.initalign: finish
+
+    #   To re-do, rm the dir first:
+    #     /cluster/data/genbank/work/initial.droSim2
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/gbDbLoadStep -drop -initialLoad droSim2
+    # real    18m33.387s
+    tail -1 var/dbload/hgwdev/logs/2016.07.21-23:42:20.droSim2.dbload.log
+# hgwdev 2016.07.22-00:00:53 droSim2.dbload: finish
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add droSim2 to:
+    #   etc/align.dbs etc/hgwdev.dbs
+    git add etc/align.dbs etc/hgwdev.dbs
+    git commit -m "Added droSim2 - Gorilla  - refs #17580" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+#############################################################################
+# augustus gene track (DONE - 2016-11-01 - Hiram)
+
+    mkdir /hive/data/genomes/droSim2/bed/augustus
+    cd /hive/data/genomes/droSim2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=fly -dbHost=hgwdev \
+           -workhorse=hgwdev droSim2) > do.log 2>&1
+    # real    79m54.233s
+
+    cat fb.droSim2.augustusGene.txt
+    # 22385355 bases of 124963774 (17.913%) in intersection
+
+############################################################################
+# construct liftOver to gorGor4 (TBD - 2016-06-24,26 - Hiram)
+    screen -S gorGor4	# manage this longish running job in a screen
+    mkdir /hive/data/genomes/droSim2/bed/blat.gorGor4.2016-06-24
+    cd /hive/data/genomes/droSim2/bed/blat.gorGor4.2016-06-24
+    # check it with -debug first to see if it is going to work:
+    time doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/droSim2/jkStuff/droSim2.11.ooc \
+	-debug -dbHost=hgwdev -workhorse=hgwdev droSim2 gorGor4
+    # real    0m2.154s
+
+    # if that is OK, then run it:
+    time (doSameSpeciesLiftOver.pl -buildDir=`pwd` -bigClusterHub=ku \
+	-ooc=/hive/data/genomes/droSim2/jkStuff/droSim2.11.ooc \
+	-dbHost=hgwdev -workhorse=hgwdev droSim2 gorGor4) > do.log 2>&1
+    #	real    2412m36.913s
+
+    # verify this file exists:
+    #	/gbdb/droSim2/liftOver/droSim2ToGorGor4.over.chain.gz
+    # and try out the conversion on genome-test from droSim2 to gorGor4
+
+############################################################################
+#  BLATSERVERS ENTRY (TBD - 2016-08-05 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("droSim2", "blat1d", "17868", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("droSim2", "blat1d", "17869", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+## default position (TBD - 2016-08-04 - Hiram)
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="CYUI01015056v1:3670206-3687174"
+	where name="droSim2";' hgcentraltest
+
+#########################################################################
+# all.joiner update, downloads and in pushQ - (TBD - 2016-08-08 - Hiram)
+    cd $HOME/kent/src/hg/makeDb/schema
+    # fixup all.joiner until this is a clean output
+    joinerCheck -database=droSim2 -tableCoverage all.joiner
+    joinerCheck -database=droSim2 -times all.joiner
+    joinerCheck -database=droSim2 -keys all.joiner
+
+    cd /hive/data/genomes/droSim2
+    time (makeDownloads.pl droSim2) > downloads.log 2>&1
+    #  real    19m52.657s
+
+    #   now ready for pushQ entry
+    mkdir /hive/data/genomes/droSim2/pushQ
+    cd /hive/data/genomes/droSim2/pushQ
+    time makePushQSql.pl droSim2 > droSim2.pushQ.sql 2> stderr.out
+    #   real    11m56.179s
+
+    #   check for errors in stderr.out, some are OK, e.g.:
+    # WARNING: droSim2 does not have ucscToINSDC
+    # WARNING: hgwdev does not have /gbdb/droSim2/wib/gc5Base.wib
+    # WARNING: hgwdev does not have /gbdb/droSim2/wib/quality.wib
+    # WARNING: hgwdev does not have /gbdb/droSim2/bbi/qualityBw/quality.bw
+    # WARNING: droSim2 does not have seq
+    # WARNING: droSim2 does not have extFile
+    # WARNING: droSim2 does not have estOrientInfo
+
+    #   copy it to hgwbeta
+    scp -p droSim2.pushQ.sql qateam@hgwbeta:/tmp/
+    ssh qateam@hgwbeta "./bin/x86_64/hgsql qapushq < /tmp/droSim2.pushQ.sql"
+
+    #   in that pushQ entry walk through each entry and see if the
+    #   sizes will set properly
+
+#########################################################################

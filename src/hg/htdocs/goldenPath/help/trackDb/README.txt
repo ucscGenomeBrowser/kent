@@ -44,6 +44,7 @@ How to push:
 
         Please push the following files:
 
+        /usr/local/apache/htdocs/goldenPath/help/trackDb/trackDbDoc.html
         /usr/local/apache/htdocs/goldenPath/help/trackDb/trackDbHub.html
         /usr/local/apache/htdocs/goldenPath/help/trackDb/trackDbLibrary.shtml
         /usr/local/apache/htdocs/goldenPath/help/trackDb/trackDbHub.v1.html

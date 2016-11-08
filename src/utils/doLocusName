@@ -75,7 +75,7 @@ def doLocusName(db, geneTableName):
     cmdParts.append("bedSort stdin %(outTmp)s")
     runCmd(("".join(cmdParts)) % locals())
 
-    cmd = "hgLoadBed %s locusName %s" % (db, outTmp)
+    cmd = "hgLoadBed -tab %s locusName %s" % (db, outTmp)
     runCmd(cmd)
 
     os.remove(outTmp)

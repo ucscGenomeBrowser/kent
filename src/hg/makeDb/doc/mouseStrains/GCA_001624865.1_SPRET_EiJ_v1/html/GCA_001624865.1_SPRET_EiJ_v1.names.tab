@@ -1,0 +1,4 @@
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10096	Algerian mouse	Wellcome Trust Sanger Institute	SPRET_EiJ_v1	Mus spretus (western wild mouse)	SAMN04489830	haploid	Chromosome	26 Apr 2016	GCA_001624865.1
+# reading chrom.sizes file:
+#	'../GCA_001624865.1_SPRET_EiJ_v1.chrom.sizes'

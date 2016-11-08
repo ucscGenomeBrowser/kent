@@ -323,10 +323,14 @@ void htmlCheck(char *command, char *url, char *cookieFile)
 {
 char *fullText;
 struct htmlCookie *cookies = NULL;
+boolean isLocal = (stringIn("://", url) == NULL);
 
 if (cookieFile != NULL)
     cookies = readCookies(cookieFile);
-fullText = htmlSlurpWithCookies(url, cookies);
+if (isLocal)
+    readInGulp(url, &fullText, NULL);
+else
+    fullText = htmlSlurpWithCookies(url, cookies);
 if (sameString(command, "getAll"))
     mustWrite(stdout, fullText, strlen(fullText));
 else if (sameString(command, "ok"))
@@ -335,7 +339,11 @@ else if (sameString(command, "getHeader"))
     getHeader(fullText);
 else /* Do everything that requires full parsing. */
     {
-    struct htmlPage *page = htmlPageParseOk(url, fullText);
+    struct htmlPage *page = NULL;
+    if (isLocal)
+        page = htmlPageParseNoHead(url, fullText);
+    else
+        page = htmlPageParseOk(url, fullText);
     if (sameString(command, "getHtml"))
         fputs(page->htmlText, stdout);
     else if (sameString(command, "getLinks"))

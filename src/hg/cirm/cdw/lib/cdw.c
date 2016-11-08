@@ -6212,7 +6212,7 @@ fputc(lastSep,f);
 }
 
 
-char *cdwDatasetCommaSepFieldNames = "id,name,label,description,pmid,pmcid,metaDivTags";
+char *cdwDatasetCommaSepFieldNames = "id,name,label,description,pmid,pmcid,metaDivTags,metaLabelTags";
 
 void cdwDatasetStaticLoad(char **row, struct cdwDataset *ret)
 /* Load a row from cdwDataset table into ret.  The contents of ret will
@@ -6226,6 +6226,7 @@ ret->description = row[3];
 ret->pmid = row[4];
 ret->pmcid = row[5];
 ret->metaDivTags = row[6];
+ret->metaLabelTags = row[7];
 }
 
 struct cdwDataset *cdwDatasetLoadByQuery(struct sqlConnection *conn, char *query)
@@ -6258,8 +6259,8 @@ void cdwDatasetSaveToDb(struct sqlConnection *conn, struct cdwDataset *el, char 
  * inserted as NULL. This function automatically escapes quoted strings for mysql. */
 {
 struct dyString *update = newDyString(updateSize);
-sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->id,  el->name,  el->label,  el->description,  el->pmid,  el->pmcid,  el->metaDivTags);
+sqlDyStringPrintf(update, "insert into %s values ( %u,'%s','%s','%s','%s','%s','%s','%s')", 
+	tableName,  el->id,  el->name,  el->label,  el->description,  el->pmid,  el->pmcid,  el->metaDivTags,  el->metaLabelTags);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -6278,6 +6279,7 @@ ret->description = cloneString(row[3]);
 ret->pmid = cloneString(row[4]);
 ret->pmcid = cloneString(row[5]);
 ret->metaDivTags = cloneString(row[6]);
+ret->metaLabelTags = cloneString(row[7]);
 return ret;
 }
 
@@ -6287,7 +6289,7 @@ struct cdwDataset *cdwDatasetLoadAll(char *fileName)
 {
 struct cdwDataset *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -6305,7 +6307,7 @@ struct cdwDataset *cdwDatasetLoadAllByChar(char *fileName, char chopper)
 {
 struct cdwDataset *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -6333,6 +6335,7 @@ ret->description = sqlStringComma(&s);
 ret->pmid = sqlStringComma(&s);
 ret->pmcid = sqlStringComma(&s);
 ret->metaDivTags = sqlStringComma(&s);
+ret->metaLabelTags = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -6350,6 +6353,7 @@ freeMem(el->description);
 freeMem(el->pmid);
 freeMem(el->pmcid);
 freeMem(el->metaDivTags);
+freeMem(el->metaLabelTags);
 freez(pEl);
 }
 
@@ -6393,6 +6397,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->metaDivTags);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->metaLabelTags);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

@@ -1,0 +1,9 @@
+# required db variable
+db rheMac8
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With single quotes to protect
+#       everything in perl
+nameTranslation '/ENSMMUT00000058733/d; /ENSMMUT00000077038/d; /ENSMMUT00000063431/d; /ENSMMUT00000079145/d; /ENSMMUT00000069496/d;'
+# all the transformations are in this lift file generated from the idKeys
+#     joining results
+liftUp /hive/data/genomes/rheMac8/jkStuff/ensToUcsc.lift

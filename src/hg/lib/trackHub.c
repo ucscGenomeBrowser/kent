@@ -797,7 +797,11 @@ struct trackDb *tdb;
 
 // add all the track names to a hash
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    if (hashLookup(hash, tdb->track))
+        errAbort("Track %s appears more than once in genome %s.", tdb->track, genome->name);
     hashAdd(hash, tdb->track, tdb);
+    }
 
 // go through and find the container tracks
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)

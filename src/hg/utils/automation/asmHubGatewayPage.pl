@@ -10,7 +10,7 @@ use File::Basename;
 my @months = qw( 0 Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec );
 
 sub usage() {
-  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes\n";
+  printf STDERR "usage: asmHubGatewayPage.pl <pathTo>/*assembly_report.txt <pathTo>/asmId.chrom.sizes <pathTo>/image.jpg\n";
   printf STDERR "output is to stdout, redirect to file: > description.html\n";
   exit 255;
 }
@@ -88,15 +88,29 @@ sub chromSizes($) {
 
 my $argc = scalar(@ARGV);
 
-if ($argc != 2) {
+if ($argc != 3) {
   usage;
 }
 
-my ($asmReport, $chromSizes) = @ARGV;
+my ($asmReport, $chromSizes, $jpgImage) = @ARGV;
 if ( ! -s $asmReport ) {
   printf STDERR "ERROR: can not find '$asmReport'\n";
   usage;
 }
+
+my $imageSize = "";
+my $imageName = "";
+my $imageWidth = 0;
+my $imageHeight = 0;
+my $imageWidthBorder = 15;
+
+if ( -s $jpgImage ) {
+  $imageSize = `identify $jpgImage | awk '{print \$3}'`;
+  chomp $imageSize;
+  ($imageWidth, $imageHeight) = split('x', $imageSize);
+  $imageName = basename($jpgImage);
+}
+
 # transform this path name into a chrom.sizes reference
 
 my $thisDir = `pwd`;
@@ -207,7 +221,25 @@ printf STDERR "%s\t", $asmLevel;
 printf STDERR "%s\t", $asmDate;
 printf STDERR "%s\n", $asmAccession;
 
-printf "<script type='text/javascript'>var asmId='%s';</script>\n", $asmId;
+# printf "<script type='text/javascript'>var asmId='%s';</script>\n", $asmId;
+
+if (length($imageName)) {
+printf "<!-- Display image in righthand corner -->
+<table align=right border=0 width=%d height=%d>
+  <tr><td align=RIGHT><a href=\"http://www.ncbi.nlm.nih.gov/assembly/%s\" 
+    target=_blank>
+    <img src=\"http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/%s/html/%s\" width=%d height=%d alt=\"%s\"></a>
+  </td></tr>
+  <tr><td align=right>
+    <font size=-1> <em>%s</em><BR>
+    </font>
+    <font size=-2> (Photo courtesy of
+      <a href=\"http://www.jax.org/\" target=_blank>The Jackson Laboratory</a>)
+    </font>
+  </td></tr>
+</table>
+\n", $imageWidth+$imageWidthBorder, $imageHeight, $asmAccession, $asmId, $imageName, $imageWidth, $imageHeight, $commonName, $orgName
+}
 
 printf "<p>
 <b>Common name: %s</b><br>
@@ -235,7 +267,7 @@ To download these data, issue this <em>wget</em> command:
 <pre>
 wget --timestamping -m -nH -x --cut-dirs=5 -e robots=off -np -k \\
    --reject \"index.html*\" -P \"$asmId\" \\
-       http:<span id='wgetSrc'>//genome-test.cse.ucsc.edu/gbdb</span>/hubs/mouseStrains/$ftpName/
+       http://hgdownload.cse.ucsc.edu/hubs/mouseStrains/$asmId/
 </pre>
 to download the files for this assembly,<br>
 creating the local directory: \"$asmId\"<br>
@@ -274,6 +306,8 @@ Enter the following specifications in your genomes.txt file:
 transBlat yourserver.domain.edu 76543
 blat yourserver.domain.edu 76542
 </pre>
+See also: <a href=\"https://genome.ucsc.edu/goldenPath/help/hubQuickStartAssembly.html#blat\"
+target=_blank>Blat for an Assembly Hub</a>
 </p>\n", $asmId, $asmId, $asmId, $asmId;
 
 printf "<hr>
@@ -299,7 +333,7 @@ to find Genome Browser tracks that match specific selection criteria.
 </p>
 <hr>\n";
 
-printf "<script type='text/javascript' src='/js/gatewayPage.js'></script>\n";
+# printf "<script type='text/javascript' src='../js/gatewayPage.js'></script>\n";
 
 __END__
 

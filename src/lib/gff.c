@@ -240,6 +240,10 @@ for (;;)
        gl->transcriptVersion = gffFileGetStr(gff, val);
    else if (sameString("protein_version", type))
        gl->proteinVersion = gffFileGetStr(gff, val);
+   else if (sameString("gene_type", type) || sameString("gene_biotype", type))
+       gl->geneType = gffFileGetStr(gff, val);
+   else if (sameString("transcript_type", type)|| sameString("transcript_biotype", type))
+       gl->transcriptType = gffFileGetStr(gff, val);
    }
 }
 

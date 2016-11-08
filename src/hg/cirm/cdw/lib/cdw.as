@@ -473,6 +473,7 @@ table cdwDataset
     string pmid;  "Pubmed ID of abstract"
     string pmcid;  "PubmedCentral ID of paper full text"
     string metaDivTags; "Comma separated list of fields used to make tree out of metadata"
+    lstring metaLabelTags; "Comma separated list of fields good to use in labels for graphs etc."
     )
 
 table cdwJointDataset

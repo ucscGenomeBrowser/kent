@@ -281,6 +281,9 @@ struct vcfInfoDef *vcfInfoDefForGtKey(struct vcfFile *vcff, const char *key);
 /* Look up the type of genotype FORMAT component key, in the definitions from the header,
  * and failing that, from the keys reserved in the spec. */
 
+const struct vcfInfoElement *vcfGenotypeFindInfo(const struct vcfGenotype *gt, char *key);
+/* Find the genotype infoElement for key, or return NULL. */
+
 char *vcfFilePooledStr(struct vcfFile *vcff, char *str);
 /* Allocate memory for a string from vcff's shared string pool. */
 

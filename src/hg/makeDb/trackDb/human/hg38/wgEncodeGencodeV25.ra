@@ -268,7 +268,7 @@ searchName wgEncodeGencode2wayConsPseudoV25
 searchTable wgEncodeGencode2wayConsPseudoV25
 searchMethod exact
 searchType genePred
-termRegex PGOHUM[0-9.]+
+termRegex (PGOMOU[0-9.]+)|(NA_[0-9]+)
 searchPriority 2.27216
 
 
