@@ -21,6 +21,7 @@ static struct optionSpec optionSpecs[] =
     {"querySizes", OPTION_STRING},
     {"pass", OPTION_STRING},
     {"fail", OPTION_STRING},
+    {"ignoreQUniq", OPTION_BOOLEAN},
     {NULL, 0}
 };
 static char *db = NULL;
@@ -29,6 +30,7 @@ static boolean quiet = FALSE;
 static boolean noCountCheck = FALSE;
 static char *passFile = NULL;
 static char *failFile = NULL;
+static boolean ignoreQUniq = FALSE;
 static struct hash *targetSizes = NULL;
 static struct hash *querySizes = NULL;
 
@@ -56,6 +58,8 @@ errAbort(
   "    If specified, psl is check to have a valid target and target\n"
   "    coordinates.\n"
   "   -querySizes=sizesFile - file with query sizes.\n"
+  "   -ignoreQUniq - ignore everything after the last `-' in the qName field, that\n"
+  "    is sometimes used to generate a unique identifier\n"
   "   -quiet - no write error message, just filter\n");
 }
 
@@ -95,6 +99,26 @@ fprintf(errFh, "Error: invalid PSL: %s:%u-%u %s:%u-%u %s %s\n",
         psl->qName, psl->qStart, psl->qEnd,
         psl->tName, psl->tStart, psl->tEnd,
         psl->strand, pslDesc);
+}
+
+static char *getQName(char *qName)
+/* get query name, optionally dropping trailing unique identifier.
+ * WARNING: static return */
+{
+static struct dyString *buf = NULL;
+if (ignoreQUniq)
+    {
+    if (buf == NULL)
+        buf = dyStringNew(2*strlen(qName));
+    dyStringClear(buf);
+    char *dash = strrchr(qName, '-');
+    if (dash == NULL)
+        return qName;
+    dyStringAppendN(buf, qName, (dash-qName));
+    return buf->string;
+    }
+else
+    return qName;
 }
 
 static int checkSize(struct psl *psl, char *pslDesc, char *sizeDesc,
@@ -166,7 +190,7 @@ if (protCheck && !pslIsProtein(psl))
 if (targetSizes != NULL)
     numErrs += checkSize(psl, pslDesc, "target", numErrs, targetSizes, psl->tName, psl->tSize, errFh);
 if (querySizes != NULL)
-    numErrs += checkSize(psl, pslDesc, "query", numErrs, querySizes, psl->qName, psl->qSize, errFh);
+    numErrs += checkSize(psl, pslDesc, "query", numErrs, querySizes, getQName(psl->qName), psl->qSize, errFh);
 if ((passFh != NULL) && (numErrs == 0))
     pslTabOut(psl, passFh);
 if ((failFh != NULL) && (numErrs > 0))
@@ -249,6 +273,7 @@ noCountCheck = optionExists("noCountCheck");
 quiet = optionExists("quiet");
 passFile = optionVal("pass", NULL);
 failFile = optionVal("fail", NULL);
+ignoreQUniq = optionExists("ignoreQUniq");
 struct sqlConnection *conn = NULL;
 if (db != NULL)
     conn = sqlConnect(db);

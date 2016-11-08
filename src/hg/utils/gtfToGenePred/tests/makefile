@@ -55,9 +55,10 @@ splitStop: mkdirs
 	diff expected/$@.gp output/$@.gp
 
 ignoreGroupWithoutExons: mkdirs
-	${gtfToGenePred} -genePredExt -ignoreGroupsWithoutExons input/geneFeature.gtf output/$@.gp
+	${gtfToGenePred} -genePredExt -ignoreGroupsWithoutExons -infoOut=output/$@.info input/geneFeature.gtf output/$@.gp
 	${genePredCheck} -verbose=0 output/$@.gp
 	diff expected/$@.gp output/$@.gp
+	diff expected/$@.info output/$@.info
 
 # this caused assert in assigning exon frame
 ensemblSplicedStop: mkdirs

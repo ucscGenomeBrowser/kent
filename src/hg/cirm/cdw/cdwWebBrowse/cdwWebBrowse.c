@@ -38,7 +38,7 @@ struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
 
-char *excludeVars[] = {"cdwCommand", "submit", NULL};
+char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
 
 void usage()
 /* Explain usage and exit. */
@@ -101,67 +101,6 @@ for (hel = helList; hel != NULL; hel = hel->next)
     }
 hashElFreeList(&helList);
 return total;
-}
-
-static int matchCount = 0;
-static boolean doSelect = FALSE;
-
-static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
-    struct rqlStatement *rql, struct lm *lm)
-/* Recursively traverse stanzas on list outputting matching stanzas as ra. */
-{
-struct tagStanza *stanza;
-for (stanza = list; stanza != NULL; stanza = stanza->next)
-    {
-    if (rql->limit < 0 || rql->limit > matchCount)
-	{
-	if (stanza->children)
-	    rMatchesToRa(tags, stanza->children, rql, lm);
-	else    /* Just apply query to leaves */
-	    {
-	    if (cdwRqlStatementMatch(rql, stanza, lm))
-		{
-		++matchCount;
-		if (doSelect)
-		    {
-		    struct slName *field;
-		    for (field = rql->fieldList; field != NULL; field = field->next)
-			{
-			char *val = tagFindVal(stanza, field->name);
-			if (val != NULL)
-			    printf("%s\t%s\n", field->name, val);
-			}
-		    printf("\n");
-		    }
-		}
-	    }
-	}
-    }
-}
-
-void showMatchingAsRa(char *rqlQuery, int limit, struct tagStorm *tags)
-/* Show stanzas that match query */
-{
-struct dyString *dy = dyStringCreate("%s", rqlQuery);
-int maxLimit = 10000;
-if (limit > maxLimit)
-    limit = maxLimit;
-struct rqlStatement *rql = rqlStatementParseString(dy->string);
-
-/* Get list of all tag types in tree and use it to expand wildcards in the query
- * field list. */
-struct slName *allFieldList = tagStormFieldList(tags);
-slSort(&allFieldList, slNameCmpCase);
-rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
-/* Traverse tag tree outputting when rql statement matches in select case, just
- * updateing count in count case. */
-doSelect = sameWord(rql->command, "select");
-if (doSelect)
-    rql->limit = limit;
-struct lm *lm = lmInit(0);
-rMatchesToRa(tags, tags->forest, rql, lm);
-if (sameWord(rql->command, "count"))
-    printf("%d\n", matchCount);
 }
 
 int labCount(struct tagStorm *tags)
@@ -308,12 +247,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *fileSize = mustFindFieldInRow("file_size", list, row);
     char *format = mustFindFieldInRow("format", list, row);
     char *fileId = mustFindFieldInRow("file_id", list, row);
-    long long size = atoll(fileSize);
+    long long size = sqlLongLongInList(&fileSize);
     printf("Tags associated with %s a %s format file of size ", fileName, format);
     printLongWithCommas(stdout, size);
      
     printf("<BR>\n");
-    makeCdwFlowchart(atoi(fileId), cart);
+    makeCdwFlowchart(sqlSigned(fileId), cart);
     static char *outputFields[] = {"tag", "value"};
     struct fieldedTable *table = fieldedTableNew("File Tags", outputFields,ArraySize(outputFields));
     int fieldIx = 0;
@@ -1232,11 +1171,18 @@ webSortableFieldedTable(cart, table, returnUrl, "cdwLab", 0, outputWrappers, NUL
 fieldedTableFree(&table);
 }
 
+
+
 void doAnalysisQuery(struct sqlConnection *conn)
 /* Print up query page */
 {
 /* Do stuff that keeps us here after a routine submit */
-printf("<FORM ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
+printf("Enter a SQL-like query below. ");
+printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
+printf("In the box after 'where' you can put in filters <BR> based on boolean operations between ");
+printf("fields and constants. Select one of the four formats and press view to see the matching data on ");
+printf("this page. <BR> The limit can be set lower to increase the query speed. <BR><BR>");
+printf("<FORM class = \"inlineBlock\" ACTION=\"../cgi-bin/cdwWebBrowse\" METHOD=GET>\n");
 cartSaveSession(cart);
 cgiMakeHiddenVar("cdwCommand", "analysisQuery");
 
@@ -1261,10 +1207,6 @@ int limit = cartUsualInt(cart, limitVar, 10);
 struct tagStorm *tags = cdwUserTagStorm(conn, user);
 struct slRef *matchList = tagStanzasMatchingQuery(tags, rqlQuery->string);
 int matchCount = slCount(matchList);
-printf("Enter a SQL-like query below. ");
-printf("In the box after 'select' you can put in a list of tag names including wildcards. ");
-printf("In the box after 'where' you can put in filters based on boolean operations between ");
-printf("fields and constants. <BR>");
 /** Write out select [  ] from files whre [  ] limit [ ] <submit> **/
 printf("select ");
 cgiMakeTextVar(fieldsVar, fields, 40);
@@ -1273,14 +1215,31 @@ printf("where ");
 cgiMakeTextVar(whereVar, where, 40);
 printf(" limit ");
 cgiMakeIntVar(limitVar, limit, 7);
-cgiMakeSubmitButton();
+char *menu[2];
+menu[0] = "tsv";
+menu[1] = "ra";
+
+char *formatVar = "cdwQueryFormat";
+char *format = cartUsualString(cart, formatVar, menu[0]);
+cgiMakeDropList(formatVar, menu, 2, formatVar); 
+cgiMakeButton("View", "View"); 
+printf("</FORM>\n\n");
+
+
+printf("<BR>Clicking the download button will take you to a new page with all of the matching data in "); 
+printf("the selected format.<BR>");
+printf("<FORM class=\"inlineBlock\" ACTION=\"../cgi-bin/cdwGetMetadataAsFile\" METHOD=GET>\n");
+cartSaveSession(cart);
+cgiMakeHiddenVar("cdwCommand", "analysisQuery");
+cgiMakeHiddenVar("Download format", format); 
+cgiMakeButton(format, "Download"); 
+printf("</FORM>\n\n");
 
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-showMatchingAsRa(rqlQuery->string, limit, tags);
+printMatchingStanzas(rqlQuery->string, limit, tags, format);
 printf("</TT></PRE>\n");
-printf("</FORM>\n");
 }
 
 void doAnalysisJointPages(struct sqlConnection *conn, char *tag)
@@ -1358,7 +1317,7 @@ strcat(valValueString, " ");
 //Go through the pair list and generate the 'popular values (files)...' column and the 'files' column
 for (iter = pairList; iter != NULL; iter = iter->next)
     {
-    total += atoi( ((char*) iter->val)); // Calculate the total of the values for files column.
+    total += sqlSigned( ((char*) iter->val)); // Calculate the total of the values for files column.
     if (hairpin == FALSE) continue; 
 
     char temp[4*1024]; 

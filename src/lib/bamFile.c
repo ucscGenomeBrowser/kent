@@ -626,6 +626,10 @@ for (i = 0;  i < core->n_cigar;  i++)
 	    tPos += n;
 	    qPos += n;
 	    qLength += n;
+            if (op == 'X')
+               psl->misMatch += n;
+            else
+               psl->match += n;
 	    break;
 	case 'I': // inserted in query
 	    qPos += n;
@@ -665,6 +669,7 @@ psl->blockCount = blockCount;
 psl->blockSizes = blockSizes;
 psl->qStarts = qStarts;
 psl->tStarts = tStarts;
+pslComputeInsertCounts(psl);
 return psl;
 }
 
