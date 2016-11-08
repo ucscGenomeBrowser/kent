@@ -84,6 +84,7 @@ else
     printf("Content-Disposition: attachment; filename=%s\n", suggestFileName);
     printf("Content-Type: application/octet-stream\n");
     }
+printf("Content-Length: %lld\n", (long long)fileSize(suggestFileName));
 printf("X-Sendfile: %s\n\n", filePath);
 }
 
