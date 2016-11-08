@@ -72,9 +72,13 @@ if (format==NULL)
         }
 }
 
-// html files are shown directly in the internet browser, not downloaded
+// html, pdf, jpeg files are shown directly in the internet browser, not downloaded
 if (sameWord(format, "html"))
     printf("Content-Type: text/html\n");
+else if (sameWord(format, "jpg"))
+    printf("Content-Type: image/jpeg\n");
+else if (sameWord(format, "pdf"))
+    printf("Content-Type: application/pdf\n");
 else if (sameWord(format, "json"))
     printf("Content-Type: application/json\n");
 else if (sameWord(format, "text"))
@@ -84,6 +88,7 @@ else
     printf("Content-Disposition: attachment; filename=%s\n", suggestFileName);
     printf("Content-Type: application/octet-stream\n");
     }
+printf("Content-Length: %lld\n", (long long)fileSize(suggestFileName));
 printf("X-Sendfile: %s\n\n", filePath);
 }
 

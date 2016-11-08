@@ -2285,7 +2285,7 @@ for (stanza = list; stanza != NULL; stanza = stanza->next)
     }
 }
 
-void printMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format)
+void cdwPrintMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format)
 /* Show stanzas that match query */
 {
 struct dyString *dy = dyStringCreate("%s", rqlQuery);
