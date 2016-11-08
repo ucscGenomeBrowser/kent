@@ -59,7 +59,7 @@ int badGroupCount = 0;  /* count of inconsistent groups found */
 
 
 /* header for info file */
-static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\tproteinId\tgeneName\ttranscriptName\n";
+static char *infoHeader = "#transId\tgeneId\tsource\tchrom\tstart\tend\tstrand\tproteinId\tgeneName\ttranscriptName\tgeneType\ttranscriptType\n";
 
 static void saveName(char **name, char *newName)
 /* if name references NULL, and newName is not NULL, update name */
@@ -72,7 +72,8 @@ static void writeInfo(FILE *infoFh, struct gffGroup *group)
 {
 // scan lineList for group and protein ids
 struct gffLine *ll;
-char *geneId = NULL, *proteinId = NULL, *geneName = NULL, *transcriptName = NULL, *geneVersion = NULL, *transcriptVersion = NULL, *proteinVersion = NULL;
+char *geneId = NULL, *proteinId = NULL, *geneName = NULL, *transcriptName = NULL, *geneVersion = NULL,
+    *transcriptVersion = NULL, *proteinVersion = NULL, *geneType = NULL, *transcriptType = NULL;
 for (ll = group->lineList; ll != NULL; ll = ll->next)
     {
     saveName(&geneId, ll->geneId);
@@ -82,6 +83,8 @@ for (ll = group->lineList; ll != NULL; ll = ll->next)
     saveName(&geneVersion, ll->geneVersion);
     saveName(&transcriptVersion, ll->transcriptVersion);
     saveName(&proteinVersion, ll->proteinVersion);
+    saveName(&geneType, ll->geneType);
+    saveName(&transcriptType, ll->transcriptType);
     }
 
 /* add in version numbers if requested and available */
@@ -100,11 +103,11 @@ if (clIncludeVersion && (proteinId != NULL) && (proteinVersion != NULL))
 else
     safecpy(proteinIdToUse, sizeof(proteinIdToUse), emptyForNull(proteinId));
 
-fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\n",
+fprintf(infoFh, "%s\t%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\t%s\t%s\n",
         transcriptIdToUse, geneIdToUse, group->source,
         group->seq, group->start, group->end, group->strand,
-        proteinIdToUse, emptyForNull(geneName),
-        emptyForNull(transcriptName));
+        proteinIdToUse, emptyForNull(geneName), emptyForNull(transcriptName),
+        emptyForNull(geneType), emptyForNull(transcriptType));
 }
 
 static void gtfGroupToGenePred(struct gffFile *gtf, struct gffGroup *group, FILE *gpFh,
