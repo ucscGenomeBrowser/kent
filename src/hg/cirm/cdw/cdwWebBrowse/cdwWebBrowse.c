@@ -1249,7 +1249,7 @@ printf("</FORM>\n\n");
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-printMatchingStanzas(rqlQuery->string, limit, tags, format);
+cdwPrintMatchingStanzas(rqlQuery->string, limit, tags, format);
 printf("</TT></PRE>\n");
 }
 

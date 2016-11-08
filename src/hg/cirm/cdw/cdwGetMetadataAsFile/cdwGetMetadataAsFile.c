@@ -68,7 +68,7 @@ char *format = cartString(cart, "Download format");
 struct tagStorm *tags = cdwUserTagStorm(conn, user);
 
 /* Identify and print the meta data that matches the users search. */ 
-printMatchingStanzas(rqlQuery->string, 1000000, tags, format);
+cdwPrintMatchingStanzas(rqlQuery->string, 1000000, tags, format);
 }
 
 void localWebWrap(struct cart *theCart)
