@@ -1623,6 +1623,7 @@ while getopts ":baut:hof" opt; do
          echo Please install a browser first, then switch the data loading mode.
       fi
 
+      goOnline
       echo $APACHEDIR/cgi-bin/hg.conf was modified. 
       echo On-the-fly mode activated: data is loaded from UCSC when not present locally.
       echo Use the parameter -o to switch to offline mode.
