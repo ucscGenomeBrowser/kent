@@ -342,6 +342,9 @@ command is one of:
                recommended, see documentation.
   clean      - remove temporary files of the genome browser older than one 
                day, but do not delete any uploaded custom tracks
+  addTools   - copy the UCSC User Tools, e.g. blat, featureBits, overlapSelect,
+               bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
+               bedSort, ... to /usr/local/bin
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -1550,6 +1553,12 @@ function updateBrowser {
 
    echo2 update finished
 }
+
+function addTools {
+   rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
+   echo2 The UCSC User Tools were copied to /usr/local/bin
+}
+
 # ------------ end of utility functions ----------------
 
 # -- START OF SCRIPT  --- MAIN ---
@@ -1724,6 +1733,9 @@ elif [ "${1:-}" == "update" ]; then
 
 elif [ "${1:-}" == "clean" ]; then
     cleanTrash
+
+elif [ "${1:-}" == "addTools" ]; then
+    addTools
 
 else
    echo Unknown command: $1
