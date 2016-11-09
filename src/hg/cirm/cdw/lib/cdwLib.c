@@ -1526,11 +1526,14 @@ else
     /* The revalidation case relies on cdwMakeValidFile to update the cdwValidFile table.
      * Here we must do it ourselves. */
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
-    cdwValidFileFieldsFromTags(vf, tags);
-    cdwValidFileUpdateDb(conn, vf, vf->id);
-    cgiParsedVarsFreeList(&tags);
-    cdwValidFileFree(&vf);
+    if (vf != NULL)
+	{
+	struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
+	cdwValidFileFieldsFromTags(vf, tags);
+	cdwValidFileUpdateDb(conn, vf, vf->id);
+	cgiParsedVarsFreeList(&tags);
+	cdwValidFileFree(&vf);
+	}
     }
 }
 
