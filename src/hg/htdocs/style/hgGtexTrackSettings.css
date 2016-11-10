@@ -260,11 +260,6 @@ span#home-link {
     padding: 0;
 }
 
-/* SVG */
-.mapTissueSelected {
-    fill: black;
-}
-
 /* HTML */
 .tissueSelected {
     font-weight: bold;
