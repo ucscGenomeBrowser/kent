@@ -335,13 +335,16 @@ command is one of:
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
   mirror     - download a full assembly (also see the -t option below).
-               No data is downloaded on-the-fly from UCSC.
+               After completion, no data is downloaded on-the-fly from UCSC.
   update     - update the genome browser software and data, updates
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
                recommended, see documentation.
   clean      - remove temporary files of the genome browser older than one 
                day, but do not delete any uploaded custom tracks
+  addTools   - copy the UCSC User Tools, e.g. blat, featureBits, overlapSelect,
+               bedToBigBed, pslCDnaFilter, twoBitToFa, gff3ToGenePred, 
+               bedSort, ... to /usr/local/bin
 
 parameters for 'minimal', 'mirror' and 'update':
   <assemblyList>     - download Mysql + /gbdb files for a space-separated
@@ -366,7 +369,7 @@ All options have to precede the command.
 options:
   -a   - use alternative download server at SDSC
   -b   - batch mode, do not prompt for key presses
-  -t   - only download track selection, requires a value.
+  -t   - For the "mirror" command: Track selection, requires a value.
          This option is only useful for Human/Mouse assemblies.
          Download only certain tracks, possible values:
          noEncode = do not download any tables with the wgEncode prefix, 
@@ -829,7 +832,7 @@ function installDebian ()
 
     echo2 Installing ghostscript and imagemagick
     waitKey
-    apt-get --assume-yes install ghostscript imagemagick
+    apt-get --assume-yes install ghostscript imagemagick wget rsync
 
     if [ ! -f $APACHECONF ]; then
         echo2
@@ -1285,7 +1288,7 @@ function installBrowser ()
     if [ "$OS" == "OSX" ]; then
             $RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     else
-            $RSYNC -avzP $HGDOWNLOAD::htdocs/ $HTDOCDIR/
+            $RSYNC -avzP --exclude ENCODE/**.pdf $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     fi
     
     # assign all files just downloaded to a valid user. 
@@ -1550,6 +1553,12 @@ function updateBrowser {
 
    echo2 update finished
 }
+
+function addTools {
+   rsync -avP hgdownload.cse.ucsc.edu::genome/admin/exe/linux.x86_64/ /usr/local/bin/
+   echo2 The UCSC User Tools were copied to /usr/local/bin
+}
+
 # ------------ end of utility functions ----------------
 
 # -- START OF SCRIPT  --- MAIN ---
@@ -1623,6 +1632,7 @@ while getopts ":baut:hof" opt; do
          echo Please install a browser first, then switch the data loading mode.
       fi
 
+      goOnline
       echo $APACHEDIR/cgi-bin/hg.conf was modified. 
       echo On-the-fly mode activated: data is loaded from UCSC when not present locally.
       echo Use the parameter -o to switch to offline mode.
@@ -1723,6 +1733,9 @@ elif [ "${1:-}" == "update" ]; then
 
 elif [ "${1:-}" == "clean" ]; then
     cleanTrash
+
+elif [ "${1:-}" == "addTools" ]; then
+    addTools
 
 else
    echo Unknown command: $1

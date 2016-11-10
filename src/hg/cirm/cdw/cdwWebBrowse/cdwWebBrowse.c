@@ -37,6 +37,8 @@
 struct cart *cart;	// User variables saved from click to click
 struct hash *oldVars;	// Previous cart, before current round of CGI vars folded in
 struct cdwUser *user;	// Our logged in user if any
+static char *accessibleFilesToken = NULL;  // Token for file access if any
+
 
 char *excludeVars[] = {"cdwCommand", "submit", "DownloadFormat", NULL};
 
@@ -295,7 +297,11 @@ struct dyString *dy = dyStringNew(0);
 dyStringPrintf(dy, "track name=\"%s\" ", viz->shortLabel);
 dyStringPrintf(dy, "description=\"%s\" ", viz->longLabel);
 char *host = hHttpHost();
-dyStringPrintf(dy, "bigDataUrl=http://%s/cdw/%s type=%s", host, viz->bigDataFile, viz->type);
+dyStringPrintf(dy, "bigDataUrl=http://%s/cgi-bin/cdwGetFile?acc=%s", host, viz->shortLabel);
+if (accessibleFilesToken != NULL)
+    dyStringPrintf(dy, "&token=%s", accessibleFilesToken);
+    
+dyStringPrintf(dy, " type=%s", viz->type);
 return dy;
 }
 
@@ -308,12 +314,14 @@ return cdwTrackVizLoadByQuery(conn, query);
 }
 
 
-void wrapFileVis(struct sqlConnection *conn, struct cdwFile *ef, char *unwrapped)
+void wrapFileVis(struct sqlConnection *conn, char *acc, char *unwrapped)
 /* Wrap hyperlink link to file around unwrapped text.  Link goes to file in vf. */
 {
 char *host = hHttpHost();
 printf("<A HREF=\"");
-printf("http://%s/cdw/%s", host, ef->cdwFileName);
+printf("http://%s/cgi-bin/cdwGetFile?acc=%s", host, acc);
+if (accessibleFilesToken != NULL)
+    printf("&token=%s", accessibleFilesToken);
 printf("\">");
 printf("%s</A>", unwrapped);
 }
@@ -417,7 +425,7 @@ if (isWebBrowsableFormat(format))
      struct cdwValidFile *vf = cdwValidFileFromLicensePlate(conn, acc);
      struct cdwFile *ef = cdwFileFromId(conn, vf->fileId);
      if (cdwCheckAccess(conn, ef, user, cdwAccessRead))
-	   wrapFileVis(conn, ef, shortVal);
+	   wrapFileVis(conn, acc, shortVal);
      freez(&acc);
      }
 else
@@ -743,6 +751,26 @@ printf("&cdwFile_filter=%s", cartCgiUsualString(cart, "cdwFile_filter", ""));
 printf("\">Download All</A>");
 }
 
+char *createTokenForUser()
+/* create a random token and add it to the cdwDownloadToken table with the current username.
+ * Returns token, should be freed.*/
+{
+struct sqlConnection *conn = hConnectCentral(); // r/w access -> has to be in hgcentral
+char query[4096]; 
+if (!sqlTableExists(conn, "cdwDownloadToken"))
+     {
+     sqlSafef(query, sizeof(query),
+         "CREATE TABLE cdwDownloadToken (token varchar(255) NOT NULL PRIMARY KEY, "
+	 "userId int NOT NULL, createTime datetime DEFAULT NOW())");
+     sqlUpdate(conn, query);
+     }
+char *token = cartDbMakeRandomKey(80);
+sqlSafef(query, sizeof(query), "INSERT INTO cdwDownloadToken (token, userId) VALUES ('%s', %d)", token, user->id);
+sqlUpdate(conn, query);
+hDisconnectCentral(&conn);
+return token;
+}
+
 void accessibleFilesTable(struct cart *cart, struct sqlConnection *conn, 
     char *searchString, char *allFields, char *from, char *initialWhere,  
     char *returnUrl, char *varPrefix, int maxFieldWidth, 
@@ -762,6 +790,8 @@ if (efList == NULL)
 	printf("<BR>Unfortunately there are no %s you are authorized to see.", itemPlural);
     return;
     }
+
+accessibleFilesToken = createTokenForUser();
 
 /* Let the sql system handle the rest.  Might be one long 'in' clause.... */
 struct hash *suggestHash = accessibleSuggestHash(conn, fields, efList);
@@ -791,25 +821,6 @@ printf("</script>\n");
 return varVal;
 }
 
-char *createTokenForUser()
-/* create a random token and add it to the cdwDownloadToken table with the current username.
- * Returns token, should be freed.*/
-{
-struct sqlConnection *conn = hConnectCentral(); // r/w access -> has to be in hgcentral
-char query[4096]; 
-if (!sqlTableExists(conn, "cdwDownloadToken"))
-     {
-     sqlSafef(query, sizeof(query),
-         "CREATE TABLE cdwDownloadToken (token varchar(255) NOT NULL PRIMARY KEY, "
-	 "userId int NOT NULL, createTime datetime DEFAULT NOW())");
-     sqlUpdate(conn, query);
-     }
-char *token = cartDbMakeRandomKey(80);
-sqlSafef(query, sizeof(query), "INSERT INTO cdwDownloadToken (token, userId) VALUES ('%s', %d)", token, user->id);
-sqlUpdate(conn, query);
-hDisconnectCentral(&conn);
-return token;
-}
 
 void setCdwUser(struct sqlConnection *conn)
 /* set the global variable 'user' based on the current cookie */
@@ -1238,7 +1249,7 @@ printf("</FORM>\n\n");
 printf("<PRE><TT>");
 printLongWithCommas(stdout, matchCount);
 printf(" files match\n\n");
-printMatchingStanzas(rqlQuery->string, limit, tags, format);
+cdwPrintMatchingStanzas(rqlQuery->string, limit, tags, format);
 printf("</TT></PRE>\n");
 }
 
@@ -1687,7 +1698,7 @@ void localWebWrap(struct cart *theCart)
 /* We got the http stuff handled, and a cart.  Now wrap a web page around it. */
 {
 cart = theCart;
-localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.51");
+localWebStartWrapper("CIRM Stem Cell Hub Data Browser V0.52");
 pushWarnHandler(htmlVaWarn);
 doMiddle();
 webEndSectionTables();

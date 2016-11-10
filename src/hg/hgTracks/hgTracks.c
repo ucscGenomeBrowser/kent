@@ -9402,6 +9402,12 @@ hPrintf("Mousetrap.bind('ctrl+k', function() { $('input[name=\"hgt.out1\"]').cli
 hPrintf("Mousetrap.bind('k', function() { $('input[name=\"hgt.out2\"]').click() }); \n");
 hPrintf("Mousetrap.bind('K', function() { $('input[name=\"hgt.out3\"]').click() }); \n");
 hPrintf("Mousetrap.bind('0', function() { $('input[name=\"hgt.out4\"]').click() }); \n");
+hPrintf("Mousetrap.bind('1', function() { zoomTo(10);} ); \n");
+hPrintf("Mousetrap.bind('2', function() { zoomTo(100);} ); \n");
+hPrintf("Mousetrap.bind('3', function() { zoomTo(1000);} ); \n");
+hPrintf("Mousetrap.bind('4', function() { zoomTo(50000);} ); \n");
+hPrintf("Mousetrap.bind('5', function() { zoomTo(100000);} ); \n");
+hPrintf("Mousetrap.bind('6', function() { zoomTo(1000000);} ); \n");
 
 // buttons
 hPrintf("Mousetrap.bind('c f', function() { $('input[name=\"hgTracksConfigPage\"]').click() }); \n");
