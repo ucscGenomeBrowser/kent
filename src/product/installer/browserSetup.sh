@@ -832,7 +832,7 @@ function installDebian ()
 
     echo2 Installing ghostscript and imagemagick
     waitKey
-    apt-get --assume-yes install ghostscript imagemagick wget
+    apt-get --assume-yes install ghostscript imagemagick wget rsync
 
     if [ ! -f $APACHECONF ]; then
         echo2
