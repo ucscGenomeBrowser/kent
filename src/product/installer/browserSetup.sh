@@ -335,7 +335,7 @@ command is one of:
   minimal    - download only a minimal set of tables. Missing tables are
                downloaded on-the-fly from UCSC.
   mirror     - download a full assembly (also see the -t option below).
-               No data is downloaded on-the-fly from UCSC.
+               After completion, no data is downloaded on-the-fly from UCSC.
   update     - update the genome browser software and data, updates
                all tables of an assembly, like "mirror"
   cgiUpdate  - update only the genome browser software, not the data. Not 
@@ -366,7 +366,7 @@ All options have to precede the command.
 options:
   -a   - use alternative download server at SDSC
   -b   - batch mode, do not prompt for key presses
-  -t   - only download track selection, requires a value.
+  -t   - For the "mirror" command: Track selection, requires a value.
          This option is only useful for Human/Mouse assemblies.
          Download only certain tracks, possible values:
          noEncode = do not download any tables with the wgEncode prefix, 
