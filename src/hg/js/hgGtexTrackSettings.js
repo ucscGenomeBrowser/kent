@@ -19,8 +19,8 @@
 //      4. label                <text id=$tissue_Text_Hi>
 //      5. leader line          <line | polyline id=$tissue_Lead_Hi>
 //
-// Implementation note: jQuery is used below where effective.  Some SVG manipulation (e.g. add/remove/toggle 
-// classes) don't work from jQuery, so code for that is raw javascript
+// Implementation note: jQuery is used below where effective.  Some SVG manipulation 
+//  (e.g. add/remove/toggle classes) don't work from jQuery, so code for that is raw javascript
 
 var gtexTrackSettings = (function() {
 
@@ -111,7 +111,8 @@ var gtexTrackSettings = (function() {
         var colorPatch = $tis.prev('.tissueColor');
         var tisColor = colorPatch.data('tissueColor');
         colorPatch.css('background-color', tisColor);
-        colorPatch.removeClass('tissueNotSelectedColor'); // TODO: less obfuscated approach to colored border
+        colorPatch.removeClass('tissueNotSelectedColor'); 
+                // TODO: less obfuscated approach to colored border
 
         // Set hidden input checkbox, for cart
         $('#' + tis + ' > input').attr('checked', true);
@@ -208,7 +209,8 @@ var gtexTrackSettings = (function() {
             topTissue.classList.add(tis);
             _topTissue = _svgRoot.appendChild(topTissue);
         } else {
-            var color = textEl.classList.contains(CLASS_TISSUE_SELECTED) ? COLOR_SELECTED : COLOR_UNSELECTED;
+            var color = textEl.classList.contains(CLASS_TISSUE_SELECTED) ? 
+                                COLOR_SELECTED : COLOR_UNSELECTED;
             textEl.style.fill = color;
             for (i = 0; i < textLineCount; i++) {
                 textEl.children[i].style.fill = color;
