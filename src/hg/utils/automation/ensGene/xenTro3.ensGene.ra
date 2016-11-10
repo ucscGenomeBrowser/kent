@@ -1,4 +1,4 @@
 # required db variable
 db xenTro3
 # eliminate the Ensembl chrMT(NC_006839) since UCSC does not have this:
-nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/; /^NC_006839/d"
+nameTranslation "s/^GL1\([0-9][0-9][0-9][0-9][0-9]\)\.1/GL1\1/; s/^NC_006839/chrM/;"

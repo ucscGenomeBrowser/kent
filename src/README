@@ -121,6 +121,10 @@ and structures.  They generally are used for file names, database tables,
 database columns, and C macros as well, though there is a bit less
 consistency there in the existing code base.
 
+Variables that are global should begin with the small letter "g."  This
+is a relatively recent convention, and is not so widely used, but when
+maintaining code or writing new code it would be good to adopt it.
+
 ERROR HANDLING AND MEMORY ALLOCATION
 
 Another convention is that errors are reported

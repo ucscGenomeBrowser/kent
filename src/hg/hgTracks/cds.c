@@ -617,7 +617,7 @@ if (first)
     }
 if (haveGbCdnaInfo)
     {
-    char query[256], buf[256], *cdsStr;
+    char query[4096], buf[4096], *cdsStr;
     sqlSafef(query, sizeof query, "select c.name from %s g,%s c where (acc = '%s') and (g.cds = c.id)", gbCdnaInfoTable, cdsTable, acc);
     cdsStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
     if (cdsStr != NULL)
@@ -940,7 +940,7 @@ static struct dnaSeq *maybeGetSeqUpper(struct linkedFeatures *lf,
 struct dnaSeq *mrnaSeq = NULL;
 char *name = getItemDataName(tg, lf->name);
 char *seqSource = trackDbSetting(tg->tdb, BASE_COLOR_USE_SEQUENCE);
-if (sameString(tableName,"refGene"))
+if (sameString(tableName,"refGene") || sameString(tableName,"refSeqAli"))
     mrnaSeq = hGenBankGetMrna(database, name, "refMrna");
 else if (sameString(seqSource, "ss"))
     mrnaSeq = maybeGetUserSeq(name);

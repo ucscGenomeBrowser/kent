@@ -169,4 +169,8 @@ void samToBed(char *samIn, char *bedOut);
 void samToOpenBed(char *samIn, FILE *f);
 /* Like samToOpenBed, but the output is the already open file f. */
 
+struct psl *bamToPslUnscored(const bam1_t *bam, const bam_hdr_t *hdr);
+/* Translate BAM's numeric CIGAR encoding into PSL sufficient for cds.c (just coords,
+ * no scoring info) */
+
 #endif//ndef BAMFILE_H

@@ -29,8 +29,8 @@ will be converted to N.
 Here's how a typical installation might create a mouse and a human genome database:
     cd /data/genomes
     mkdir twoBit
-    faToTwoBit human/hg16/*.fa twoBit/hg16.2bit
-    faToTwoBit mouse/mm4/*.fa twoBit/mm4.2bit
+    faToTwoBit human/hg19/*.fa twoBit/hg19.2bit
+    faToTwoBit mouse/mm10/*.fa twoBit/mm10.2bit
 There's no need to put all of the databases in the same directory, but it can
 simplify bookkeeping.  
 
@@ -54,13 +54,13 @@ run on the same machine.
 A typical installation might go:
     ssh bigRamMachine
     cd /data/genomes/twoBit
-    gfServer start bigRamMachine 17779 hg16.2bit &
-    gfServer -trans -mask start bigRamMachine 17778 hg16.2bit &
+    gfServer start bigRamMachine 17779 hg19.2bit &
+    gfServer -trans -mask start bigRamMachine 17778 hg19.2bit &
 the -trans flag makes a translated index.   It will take approximately
 15 minutes to build an untranslated index, and 45 minutes to build a
 translate index.  To build an untranslated index to be shared with 
 In-silico PCR do
-    gfServer -stepSize=5 bigRamMachine 17779 hg16.2bit &
+    gfServer -stepSize=5 bigRamMachine 17779 hg19.2bit &
 This index will be slightly more sensitive, noticeably so for small query sequences,
 with blat.
 
@@ -88,10 +88,10 @@ might find at a typical installation:
 
 company Awesome Research Amalgamated
 background /images/dnaPaper.jpg
-gfServerTrans bigRamMachine 17778 /data/genomes/2bit Human Genome
-gfServer bigRamMachine 17779 /data/genomes/2bit Human Genome
-gfServerTrans mouseServer 17780 /data/genomes/2bit Mouse Genome
-gfServer mouseServer 17781 /data/genomes/2bit Mouse Genome
+gfServerTrans bigRamMachine 17778 /data/genomes/twoBit/hg19.2bit Human Genome
+gfServer bigRamMachine 17779 /data/genomes/twoBit/hg19.2bit Human Genome
+gfServerTrans bigRamMachine 17780 /data/genomes/twoBit/mm10.2bit Mouse Genome
+gfServer bigRamMachine 17781 /data/genomestwoBit/mm10.2bit Mouse Genome
 tempDir ../tmp
 
 PUTTING WEBBLAT WHERE THE WEB SERVER CAN EXECUTE IT

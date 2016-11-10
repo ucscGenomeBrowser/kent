@@ -1,2 +1,2 @@
-# See ../../crispr/README.txt (Done. 2016-09-15 max)
+# See ../../crisprTrack/README.txt (Done. 2016-09-15 max)
 doCrispr.sh hg38 knownGene

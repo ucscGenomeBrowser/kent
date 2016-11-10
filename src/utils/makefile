@@ -14,6 +14,7 @@ UTILS_APPLIST = \
 	addCols \
 	ave \
 	aveCols \
+	bamToPsl \
 	bedClip \
 	bedGraphToBigWig \
 	bedToBigBed \

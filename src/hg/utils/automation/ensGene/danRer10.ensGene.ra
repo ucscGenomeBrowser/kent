@@ -1,0 +1,4 @@
+# required db variable
+db danRer10
+# specific lifting to translate names:
+liftUp /hive/data/genomes/danRer10/jkStuff/ensToUcsc.lift

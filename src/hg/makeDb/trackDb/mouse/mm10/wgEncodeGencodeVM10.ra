@@ -6,7 +6,7 @@
 ##
 track wgEncodeGencodeVM10
 compositeTrack on
-superTrack wgEncodeGencodeSuper pack
+superTrack wgEncodeGencodeSuper hide
 shortLabel GENCODE VM10 (Ensembl 85)
 longLabel Gene Annotations from ENCODE/GENCODE Version M10 (Ensembl 85)
 group genes

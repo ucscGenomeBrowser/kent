@@ -76,12 +76,14 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
         specScore = int(specScores.get(seq, -1))
 
         scoreDesc = str(specScore)
-        if specScore in [-1, -2]:
+        if "N" in seq:
+            scoreDesc = "This guide sequence includes an N character and could therefore not be processed"
+        elif specScore in [-1, -2]:
             if specScore==-1:
                 scoreDesc = "This guide sequence is not unique in the genome. The specificity scores were not determined."
             elif specScore==-2:
                 #scoreDesc = "This guide includes N character(s). Specificity scores could not be determined."
-                scoreDesc = "This guide has so many potential off-targets that the specificity score could not be calculated."
+                scoreDesc = "This guide has too many potential off-targets. The specificity score could not be calculated."
 
         # get eff scores
         guideId = "%s:%s-%s:%s" % (chrom, start, end, strand)
@@ -161,7 +163,7 @@ def rewriteBed(inFname, specScores, effScores, otOffsetPath, dataDir):
 
         row.extend([fusi, moreno, doench, oof])
 
-        if specScore!=0:
+        if specScore>=0:
             mouseOver = "MIT Spec. Score: %d, Doench 2016: %s, Moreno-Mateos: %s" % \
                 (specScore, fusiHover, morenoHover)
         else:

@@ -173,7 +173,7 @@ if (coordCount!=0)
     printf("</table>\n");
 if (collapsed)
     {
-    printf("<p><a id='crisprShowAllLink' href='javascript:crisprShowAll()'>"
+    printf("<p><a id='crisprShowAllLink' href='#' onclick='crisprShowAll(); return false;'>"
         "Show all %d off-targets...</a>\n", coordCount);
     // inline .js is bad style but why pollute our global .js files for such a rare
     // case? Maybe we should have a generic "collapsible" class, like bootstrap?

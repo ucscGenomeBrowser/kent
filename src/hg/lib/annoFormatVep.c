@@ -13,6 +13,7 @@
 #include "dystring.h"
 #include "genePred.h"
 #include "gpFx.h"
+#include "htmshell.h"
 #include "pgSnp.h"
 #include "portable.h"
 #include "vcf.h"
@@ -116,6 +117,34 @@ else
     fputc('\n', f);
 }
 
+INLINE void afVepPuts(char *text, struct annoFormatVep *self)
+/* Write text to self->f.  If we're printing HTML, write encoded text, otherwise just write text. */
+{
+if (self->doHtml)
+    htmTextOut(self->f, text);
+else
+    fputs(text, self->f);
+}
+
+static void afVepPrintf(struct annoFormatVep *self, char *format, ...)
+/*  Printf to self->f, but if self->doHtml then encode before writing out. */
+#ifdef __GNUC__
+__attribute__((format(printf, 2, 3)))
+#endif
+    ;
+
+static void afVepPrintf(struct annoFormatVep *self, char *format, ...)
+/*  Printf to self->f, but if self->doHtml then encode before writing out. */
+{
+va_list args;
+va_start(args, format);
+if (self->doHtml)
+    vaHtmlFprintf(self->f, format, args);
+else
+    vfprintf(self->f, format, args);
+va_end(args);
+}
+
 static void afVepPrintHeaderExtraTags(struct annoFormatVep *self, char *bStart, char *bEnd)
 /* For each extra column described in config, write out its tag and a brief description.
  * bStart and bEnd are for bold output in HTML, or if not HTML, starting the line with "## ". */
@@ -201,14 +230,15 @@ char *bEnd = doHtml ? "</B>" : "";
 if (!doHtml)
     {
     // Suppress these lines from HTML output -- IMO they're better suited for a file header:
-    fprintf(f, "## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)");
+    fputs("## ENSEMBL VARIANT EFFECT PREDICTOR format (UCSC Variant Annotation Integrator)", f);
     afVepLineBreak(f, doHtml);
     afVepPrintHeaderDate(f, doHtml);
     fprintf(f, "## Connected to UCSC database %s", db);
     afVepLineBreak(f, doHtml);
     }
 struct annoFormatVepConfig *config = self->config;
-fprintf(f, "%sVariants:%s %s", bStart, bEnd, config->variantDescription);
+fprintf(f, "%sVariants:%s ", bStart, bEnd);
+afVepPrintf(self, "%s", config->variantDescription);
 if (! strstr(config->variantSource->name, "/trash/"))
     fprintf(f, " (%s)", config->variantSource->name);
 afVepLineBreak(f, doHtml);
@@ -284,20 +314,20 @@ char **varWords = (char **)(varRow->data);
 uint start1Based = varRow->start + 1;
 // Use variant name if available, otherwise construct an identifier:
 if (self->varNameIx >= 0 && !sameString(varWords[self->varNameIx], "."))
-    fputs(varWords[self->varNameIx], self->f);
+    afVepPuts(varWords[self->varNameIx], self);
 else
     {
     char *alleles = afVepGetAlleles(self, varRow);
-    fprintf(self->f, "%s_%u_%s", varRow->chrom, start1Based, alleles);
+    afVepPrintf(self, "%s_%u_%s", varRow->chrom, start1Based, alleles);
     }
 afVepNextColumn(self->f, self->doHtml);
 // Location is chr:start for single-base, chr:start-end for indels:
 if (varRow->end == start1Based)
-    fprintf(self->f, "%s:%u", varRow->chrom, start1Based);
+    afVepPrintf(self, "%s:%u", varRow->chrom, start1Based);
 else if (start1Based > varRow->end)
-    fprintf(self->f, "%s:%u-%u", varRow->chrom, varRow->end, start1Based);
+    afVepPrintf(self, "%s:%u-%u", varRow->chrom, varRow->end, start1Based);
 else
-    fprintf(self->f, "%s:%u-%u", varRow->chrom, start1Based, varRow->end);
+    afVepPrintf(self, "%s:%u-%u", varRow->chrom, start1Based, varRow->end);
 afVepNextColumn(self->f, self->doHtml);
 }
 
@@ -334,7 +364,7 @@ static void afVepPrintGene(struct annoFormatVep *self, struct annoRow *gpvRow)
 if (self->geneNameIx >= 0)
     {
     char **words = (char **)(gpvRow->data);
-    fputs(placeholderForEmpty(words[self->geneNameIx]), self->f);
+    afVepPuts(placeholderForEmpty(words[self->geneNameIx]), self);
     afVepNextColumn(self->f, self->doHtml);
     }
 else
@@ -399,12 +429,12 @@ boolean isDeletion = isEmpty(gpFx->allele);
 // variant allele used to calculate the consequence (or first alternate allele)
 char *abbrevAllele = cloneString(gpFx->allele);
 limitLength(abbrevAllele, 24, "nt");
-fputs(placeholderForEmpty(abbrevAllele), self->f);
+afVepPuts(placeholderForEmpty(abbrevAllele), self);
 afVepNextColumn(self->f, self->doHtml);
 // ID of affected gene
 afVepPrintGene(self, gpvRow);
 // ID of feature
-fprintf(self->f, "%s", placeholderForEmpty(gpFx->transcript));
+afVepPrintf(self, "%s", placeholderForEmpty(gpFx->transcript));
 afVepNextColumn(self->f, self->doHtml);
 // type of feature {Transcript, RegulatoryFeature, MotifFeature}
 if (gpFx->soNumber == intergenic_variant)
@@ -415,7 +445,7 @@ else
     afVepNextColumn(self->f, self->doHtml);
     }
 // consequence: SO term e.g. splice_region_variant
-fputs(soTermToString(gpFx->soNumber), self->f);
+afVepPuts(soTermToString(gpFx->soNumber), self);
 afVepNextColumn(self->f, self->doHtml);
 if (gpFx->detailType == codingChange)
     {
@@ -447,7 +477,12 @@ if (gpFx->detailType == codingChange)
     int upLen = min(strlen(change->codonOld+variantFrame), varRow->end - varRow->start);
     toUpperN(change->codonOld+variantFrame, upLen);
     strLower(change->codonNew);
-    int alleleLength = sameString(gpFx->allele, "") ? 0 : strlen(gpFx->allele);
+    int alleleLength = strlen(gpFx->allele);
+    // watch out for symbolic alleles:
+    if (sameString(gpFx->allele, "<X>") || sameString(gpFx->allele, "<*>"))
+        alleleLength = upLen;
+    else if (startsWith("<", gpFx->allele))
+        alleleLength = 0;
     toUpperN(change->codonNew+variantFrame, alleleLength);
     tweakStopCodonAndLimitLength(change->aaOld, change->codonOld);
     tweakStopCodonAndLimitLength(change->aaNew, change->codonNew);
@@ -470,6 +505,7 @@ else if (gpFx->detailType == nonCodingExon)
 else
     // Coding effect columns are N/A:
     afVepPrintPlaceholders(self->f, 5, self->doHtml);
+freez(&abbrevAllele);
 }
 
 static void afVepPrintExistingVar(struct annoFormatVep *self, struct annoRow *varRow,
@@ -491,7 +527,7 @@ if (self->snpNameIx >= 0)
 		{
 		if (count > 0)
 		    fputc(',', self->f);
-		fprintf(self->f, "%s", snpWords[self->snpNameIx]);
+		afVepPrintf(self, "%s", snpWords[self->snpNameIx]);
 		count++;
 		}
 	    }
@@ -550,12 +586,15 @@ safef(itemString, sizeof(itemString), "%d", item);
 return commaSepFindIx(itemString, s);
 }
 
-static char *commaSepWordFromIx(int ix, char *s, struct lm *lm)
+static char *commaSepWordFromIxOrWhole(int ix, char *s, struct lm *lm)
 /* Treating comma-separated, non-NULL s as an array of words,
- * return the word at ix in the array. This errAborts if ix is not valid. */
+ * return the word at ix in the array -- but if s has no commas,
+ * just return (lmCloned) s.  errAborts if s is comma-sep but ix is out of bounds. */
 {
 int i = 0;
 char *p = strchr(s, ',');
+if (p == NULL)
+    return lmCloneString(lm, s);
 while (p != NULL)
     {
     if (i == ix)
@@ -566,7 +605,7 @@ while (p != NULL)
     }
 if (i == ix)
     return lmCloneString(lm, s);
-errAbort("commaSepWordFromIx: Bad index %d for string '%s'", ix, s);
+errAbort("commaSepWordFromIxOrWhole: Bad index %d for string '%s'", ix, s);
 return NULL;
 }
 
@@ -702,7 +741,7 @@ for (row = extraRows;  row != NULL;  row = row->next)
 	char *pred = (predIx < 0) ? NULL : words[predIx];
 	if (pred == NULL || sameString(pred, "."))
 	    continue;
-	pred = commaSepWordFromIx(txIx, pred, self->lm);
+	pred = commaSepWordFromIxOrWhole(txIx, pred, self->lm);
 	if (isNotEmpty(pred))
 	    {
 	    if (count == 0)
@@ -712,7 +751,7 @@ for (row = extraRows;  row != NULL;  row = row->next)
 		}
 	    else
 		fputc(',', self->f);
-	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIx(txIx, words[scoreIx], self->lm);
+	    char *score = (scoreIx < 0) ? "?" : commaSepWordFromIxOrWhole(txIx, words[scoreIx], self->lm);
 	    fprintf(self->f, "%s(%s)", pred, score);
 	    count++;
 	    }
@@ -969,7 +1008,7 @@ for (i = 0;  i < gratorCount;  i++)
 	    {
 	    if (sameString(words[4], "."))
 		return ".";
-	    char *ensTxId = commaSepWordFromIx(txIx, words[4], self->lm);
+	    char *ensTxId = commaSepWordFromIxOrWhole(txIx, words[4], self->lm);
 	    return ensTxId;
 	    }
 	}
@@ -1120,10 +1159,9 @@ for (i = 0, row = extraRows;  row != NULL;  row = row->next)
     if (! extraItem->isBoolean)
         {
         // Watch out for characters that will mess up parsing of EXTRAS column:
-        // #*** When producing HTML output, it would definitely be better to HTML-encode:
         subChar(val, '=', '_');
         subChar(val, ';', '_');
-        fputs(val, self->f);
+        afVepPuts(val, self);
         }
     i++;
     }
@@ -1265,7 +1303,7 @@ static void afVepPrintPredictionsReg(struct annoFormatVep *self, struct annoRow 
 /* Print VEP allele, placeholder gene and item names, 'RegulatoryFeature',
  * 'regulatory_region_variant', and placeholder coding effect columns. */
 {
-fprintf(self->f, "%s", afVepGetFirstAltAllele(self, varRow));
+afVepPuts(afVepGetFirstAltAllele(self, varRow), self);
 afVepNextColumn(self->f, self->doHtml);
 afVepPrintPlaceholders(self->f, 2, self->doHtml);
 fputs("RegulatoryFeature", self->f);

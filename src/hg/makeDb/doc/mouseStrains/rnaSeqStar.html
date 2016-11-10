@@ -1,0 +1,220 @@
+<h2>RNA-seq analysis and raw data</h2>
+<h3>Description</h3>
+<p>RNA-Seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly. This track shows RNA-seq data performed by a variety of labs on a variety of tissues for the mouse strains sequenced and assembled for the Mouse Genomes Project.</p>
+<h3>Display Conventions and Configuration</h3>
+<p>This track is a multi-view composite track that contains multiple data types
+(<EM>views</EM>).  For each view, there are multiple subtracks that
+display individually on the browser.  Instructions for configuring multi-view
+tracks are <a href="/goldenPath/help/multiView.html" TARGET='blank'>here</A>.
+The following views are in this track:
+<DL>
+<DT><I>Expression</I></DT>
+<DD>Density graph of signal enrichment based on a normalized aligned
+read density (reads per kilobase of mapped reads for each subtrack). This
+normalized measure assists in visualizing the relative abundance of exons and of transcripts between tissue types.</DD>
+<DT><I>Splice_Junctions</I></DT>
+<DD>High confidence splice junctions output by STAR. Color determines strand where STAR made this determination. Splice junction calls are assigned a score on the range 0-1000 where the number  represents the proportion of individual accessions that support this junction in the tissue type in question.</DD>
+<DT><I>Alignments</I></DT>
+<DD>The Alignments view shows raw reads mapped to the genome by STAR in BAM format.</DD>
+</DL>
+</p>
+<h3>Methods</h3>
+<p>Strain-specific RNA-seq data was extracted from NCBI SRA or provided directly to UCSC and aligned to the strain specific assembly using STAR with the ENCODE standard parameters. For each tissue, expression wiggle tracks were generated and normalized by bamCoverage, then averaged by wiggletools. High confidence splice junctions were parsed from the STAR splice junction tab file and combined between replicates. Scores are on a 0-1000 range and measure the proportion of individual accessions that support this junction.</p>
+<h3>Credits</h3>
+<p>These sequencing data were generated in a variety of institutes and labs, including the Jackson Lab, UNC, EBI and the Sanger Institute. Please see the individual accessions on NCBI SRA for more information. Thanks to Thomas Keane for collating and providing these data to UCSC. Ian Fiddes performed the alignments and data processing.</p>
+<h3>Input Data Breakdown</h3>
+<p>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Genome</th>
+      <th>Tissue</th>
+      <th>Institute</th>
+      <th>Accessions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th rowspan="2" valign="top">129S1/SvImJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033018,ERR033019</td>
+    </tr>
+    <tr>
+      <th>liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826284,SRR826285,SRR826286,SRR826287,SRR826288,SRR826289,SRR826290,SRR826291,SRR826292,SRR826293,SRR826294,SRR826295,SRR826296,SRR826297,SRR826298,SRR826299</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">A/J</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033008,ERR033009</td>
+    </tr>
+    <tr>
+      <th>liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826300,SRR826301,SRR826302,SRR826303,SRR826304,SRR826305,SRR826306,SRR826307,SRR826308,SRR826309,SRR826310,SRR826311,SRR826312,SRR826313,SRR826314,SRR826315</td>
+    </tr>
+    <tr>
+      <th>AKR/J</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033010,ERR033011</td>
+    </tr>
+    <tr>
+      <th>BALB/cJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033005,ERR033014</td>
+    </tr>
+    <tr>
+      <th>C3H/HeJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR032995,ERR032996</td>
+    </tr>
+    <tr>
+      <th>C57BL/6NJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033015,ERR033016</td>
+    </tr>
+    <tr>
+      <th rowspan="6" valign="top">CAST/EiJ</th>
+      <th rowspan="2" valign="top">brain</th>
+      <th>Sanger</th>
+      <td>ERR032997,ERR032998</td>
+    </tr>
+    <tr>
+      <th>UNC</th>
+      <td>SRR1920268,SRR1920269,SRR1920270,SRR1921023,SRR1924463,SRR1924464,SRR1924465</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">liver</th>
+      <th>EBI</th>
+      <td>ERR120692,ERR120694</td>
+    </tr>
+    <tr>
+      <th>Jackson Labs</th>
+      <td>SRR826332,SRR826333,SRR826334,SRR826335,SRR826336,SRR826337,SRR826338,SRR826339,SRR826340,SRR826341,SRR826342,SRR826343,SRR826344,SRR826345,SRR826346,SRR826347</td>
+    </tr>
+    <tr>
+      <th>Sanger</th>
+      <td>16493_7_3</td>
+    </tr>
+    <tr>
+      <th>spleen</th>
+      <th>Sanger</th>
+      <td>16493_7_6</td>
+    </tr>
+    <tr>
+      <th>CBA/J</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR032993,ERR032994</td>
+    </tr>
+    <tr>
+      <th>DBA/2J</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033006,ERR033007</td>
+    </tr>
+    <tr>
+      <th>FVB/NJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>16493_7_8</td>
+    </tr>
+    <tr>
+      <th>LP/J</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR032992</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">NOD/ShiLtJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR032989,ERR032990,ERR032991,ERR033017</td>
+    </tr>
+    <tr>
+      <th>liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826348,SRR826349,SRR826350,SRR826351,SRR826352,SRR826353,SRR826354,SRR826355,SRR826356,SRR826357,SRR826358,SRR826359,SRR826360,SRR826361,SRR826362,SRR826363</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">NZO/HlLtJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033001,ERR033002</td>
+    </tr>
+    <tr>
+      <th>liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826364,SRR826365,SRR826366,SRR826367,SRR826368,SRR826369,SRR826370,SRR826371,SRR826372,SRR826373,SRR826374,SRR826375,SRR826376,SRR826377,SRR826378,SRR826379</td>
+    </tr>
+    <tr>
+      <th rowspan="5" valign="top">PWK/PhJ</th>
+      <th rowspan="2" valign="top">brain</th>
+      <th>Sanger</th>
+      <td>ERR033003,ERR033004</td>
+    </tr>
+    <tr>
+      <th>UNC</th>
+      <td>SRR1924499,SRR1924500,SRR1924501,SRR1924502,SRR1924503,SRR1924504,SRR1924505,SRR1924506</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826380,SRR826381,SRR826382,SRR826383,SRR826384,SRR826385,SRR826386,SRR826387,SRR826388,SRR826389,SRR826390,SRR826391,SRR826392,SRR826393,SRR826394,SRR826395</td>
+    </tr>
+    <tr>
+      <th>Sanger</th>
+      <td>16493_7_2</td>
+    </tr>
+    <tr>
+      <th>spleen</th>
+      <th>Sanger</th>
+      <td>16493_7_5</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">SPRET/EiJ</th>
+      <th>brain</th>
+      <th>Sanger</th>
+      <td>ERR033012,ERR033013</td>
+    </tr>
+    <tr>
+      <th rowspan="2" valign="top">liver</th>
+      <th>EBI</th>
+      <td>ERR476403,ERR476405,ERR476407</td>
+    </tr>
+    <tr>
+      <th>Sanger</th>
+      <td>16493_7_1</td>
+    </tr>
+    <tr>
+      <th rowspan="3" valign="top">WSB/EiJ</th>
+      <th rowspan="2" valign="top">brain</th>
+      <th>Sanger</th>
+      <td>ERR032999,ERR033000</td>
+    </tr>
+    <tr>
+      <th>UNC</th>
+      <td>SRR1924541,SRR1924542,SRR1924543,SRR1924544,SRR1924545,SRR1924546,SRR1924547,SRR1924548</td>
+    </tr>
+    <tr>
+      <th>liver</th>
+      <th>Jackson Labs</th>
+      <td>SRR826396,SRR826397,SRR826398,SRR826399,SRR826400,SRR826401,SRR826402,SRR826403,SRR826404,SRR826405,SRR826406,SRR826407,SRR826408,SRR826409,SRR826410,SRR826411</td>
+    </tr>
+  </tbody>
+</table>
+</p>
+<h3>References</h3>
+<p>
+Alexander Dobin, Carrie A. Davis, Felix Schlesinger, Jorg Drenkow, Chris Zaleski, Sonali Jha, Philippe Batut, Mark Chaisson, and Thomas R. Gingeras.
+<a href="http://bioinformatics.oxfordjournals.org/content/29/1/15.short" target="_blank">
+STAR: ultrafast universal RNA-seq aligner</a>.
+<em>Bioinformatics</em> (2013) 29 (1): 15-21 first published online October 25, 2012 doi:10.1093/bioinformatics/bts635
+</p>

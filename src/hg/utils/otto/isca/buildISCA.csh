@@ -30,8 +30,8 @@ wget -N -q "ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd
 wget -N -q "ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map/gvf/nstd45_ClinGen_Curated_Dosage_Sensitivity_Map.${grc}.*.all.germline.ucsc.gvf.gz"
 wget -N -q "ftp://ftp.ncbi.nlm.nih.gov/pub/dbVar/data/Homo_sapiens/by_study/nstd101_ClinGen_Kaminsky_et_al_2011/gvf/nstd101_ClinGen_Kaminsky_et_al_2011.${grc}.*.all.germline.ucsc.gvf.gz"
 
-rm -f *p13*gvf.gz
-
+# Remove patch contig mappings; we don't display them anyway.
+rm -f *.p*.gvf.gz
 
 zcat nstd101*.gvf.gz nstd37_ClinGen_Laboratory-Submitted*.gvf.gz \
     | ../../gvfToBed8Attrs.pl | $liftUp \

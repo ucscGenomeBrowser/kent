@@ -1,0 +1,4 @@
+#taxId	commonName	submitter	asmName	orgName	bioSample	asmType	asmLevel	asmDate	asmAccession
+10090	mouse	Wellcome Trust Sanger Institute	CBA_J_v1	Mus musculus (house mouse)	SAMN04489823	haploid	Chromosome	26 Apr 2016	GCA_001624475.1
+# reading chrom.sizes file:
+#	'../GCA_001624475.1_CBA_J_v1.chrom.sizes'

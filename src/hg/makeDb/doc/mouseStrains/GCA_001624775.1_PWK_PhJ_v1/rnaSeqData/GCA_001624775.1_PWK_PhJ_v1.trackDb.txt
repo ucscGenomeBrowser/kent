@@ -1,0 +1,425 @@
+track rnaSeqStar
+compositeTrack on
+group regulation
+shortLabel RNAseq
+longLabel RNAseq analysis and raw data
+subGroup1 view Views expression=Expression junction=Splice_Junctions alignment=Alignments
+subGroup2 tissue Tissue brain=brain liver=liver spleen=spleen
+dimensions dimensionX=view dimensionY=tissue
+sortOrder view=+ tissue=+
+visibility full
+dragAndDrop subTracks
+type bed 3
+noInherit on
+html html/rnaSeqStar
+
+    track GCA_001624775.1_PWK_PhJ_v1ExpressionStar
+    shortLabel GCA_001624775.1_PWK_PhJ_v1 Expression
+    view expression
+    visibility dense
+    subTrack rnaSeqStar
+    maxHeightPixels 100:24:16
+    autoScale on
+
+        track wigStar_GCA_001624775.1_PWK_PhJ_v1_brain
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain Expression
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_brain_Expression
+        parent GCA_001624775.1_PWK_PhJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/brain.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=brain
+
+        track wigStar_GCA_001624775.1_PWK_PhJ_v1_liver
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver Expression
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_liver_Expression
+        parent GCA_001624775.1_PWK_PhJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/liver.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=liver
+
+        track wigStar_GCA_001624775.1_PWK_PhJ_v1_spleen
+        longLabel GCA_001624775.1_PWK_PhJ_v1 spleen Expression
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_spleen_Expression
+        parent GCA_001624775.1_PWK_PhJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/spleen.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=spleen
+
+    track GCA_001624775.1_PWK_PhJ_v1_Alignments
+    shortLabel Raw Alignments
+    view alignment
+    visibility hide
+    subTrack rnaSeqStar
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_ERR033003
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments ERR033003
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_ERR033003
+        bigDataUrl rnaSeqData/brain.ERR033003.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_ERR033004
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments ERR033004
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_ERR033004
+        bigDataUrl rnaSeqData/brain.ERR033004.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924499
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924499
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924499
+        bigDataUrl rnaSeqData/brain.SRR1924499.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924500
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924500
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924500
+        bigDataUrl rnaSeqData/brain.SRR1924500.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924501
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924501
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924501
+        bigDataUrl rnaSeqData/brain.SRR1924501.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924502
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924502
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924502
+        bigDataUrl rnaSeqData/brain.SRR1924502.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924503
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924503
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924503
+        bigDataUrl rnaSeqData/brain.SRR1924503.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924504
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924504
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924504
+        bigDataUrl rnaSeqData/brain.SRR1924504.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924505
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924505
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924505
+        bigDataUrl rnaSeqData/brain.SRR1924505.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_brain_SRR1924506
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain RNASeq Alignments SRR1924506
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR1924506
+        bigDataUrl rnaSeqData/brain.SRR1924506.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_16493_7_2
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments 16493_7_2
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_16493_7_2
+        bigDataUrl rnaSeqData/liver.16493_7_2.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826380
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826380
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826380
+        bigDataUrl rnaSeqData/liver.SRR826380.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826381
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826381
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826381
+        bigDataUrl rnaSeqData/liver.SRR826381.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826382
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826382
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826382
+        bigDataUrl rnaSeqData/liver.SRR826382.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826383
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826383
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826383
+        bigDataUrl rnaSeqData/liver.SRR826383.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826384
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826384
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826384
+        bigDataUrl rnaSeqData/liver.SRR826384.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826385
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826385
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826385
+        bigDataUrl rnaSeqData/liver.SRR826385.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826386
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826386
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826386
+        bigDataUrl rnaSeqData/liver.SRR826386.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826387
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826387
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826387
+        bigDataUrl rnaSeqData/liver.SRR826387.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826388
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826388
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826388
+        bigDataUrl rnaSeqData/liver.SRR826388.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826389
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826389
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826389
+        bigDataUrl rnaSeqData/liver.SRR826389.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826390
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826390
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826390
+        bigDataUrl rnaSeqData/liver.SRR826390.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826391
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826391
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826391
+        bigDataUrl rnaSeqData/liver.SRR826391.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826392
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826392
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826392
+        bigDataUrl rnaSeqData/liver.SRR826392.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826393
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826393
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826393
+        bigDataUrl rnaSeqData/liver.SRR826393.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826394
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826394
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826394
+        bigDataUrl rnaSeqData/liver.SRR826394.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_liver_SRR826395
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver RNASeq Alignments SRR826395
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_SRR826395
+        bigDataUrl rnaSeqData/liver.SRR826395.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624775.1_PWK_PhJ_v1_spleen_16493_7_5
+        longLabel GCA_001624775.1_PWK_PhJ_v1 spleen RNASeq Alignments 16493_7_5
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_RNASeq_16493_7_5
+        bigDataUrl rnaSeqData/spleen.16493_7_5.sortedByCoord.out.bam
+        parent GCA_001624775.1_PWK_PhJ_v1_Alignments off
+        subGroups view=alignment tissue=spleen
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+    track GCA_001624775.1_PWK_PhJ_v1_SpliceJunctions
+    shortLabel Splice Junctions
+    view junction
+    visibility squish
+    subTrack rnaSeqStar
+
+        track GCA_001624775.1_PWK_PhJ_v1_brain_SpliceJunctions
+        longLabel GCA_001624775.1_PWK_PhJ_v1 brain STAR Splice Junctions
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_brain_Splice_Junctions
+        parent GCA_001624775.1_PWK_PhJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/brain.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=brain
+
+        track GCA_001624775.1_PWK_PhJ_v1_liver_SpliceJunctions
+        longLabel GCA_001624775.1_PWK_PhJ_v1 liver STAR Splice Junctions
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_liver_Splice_Junctions
+        parent GCA_001624775.1_PWK_PhJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/liver.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=liver
+
+        track GCA_001624775.1_PWK_PhJ_v1_spleen_SpliceJunctions
+        longLabel GCA_001624775.1_PWK_PhJ_v1 spleen STAR Splice Junctions
+        shortLabel GCA_001624775.1_PWK_PhJ_v1_spleen_Splice_Junctions
+        parent GCA_001624775.1_PWK_PhJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/spleen.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=spleen
+

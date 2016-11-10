@@ -6200,6 +6200,7 @@ struct linkedFeatures *lfList = NULL;
 tg->parallelLoading = TRUE;  // set so bigBed code will look at bigDataUrl
 bigBedAddLinkedFeaturesFromExt(tg, chromName, winStart, winEnd,
       scoreMin, scoreMax, TRUE, 12, &lfList, BIGBEDMAXIMUMITEMS);
+slReverse(&lfList);
 struct linkedFeatures *newList = lfList;
 
 if (isGencode)

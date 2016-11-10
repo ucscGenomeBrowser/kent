@@ -506,4 +506,29 @@ chlSab2.genbank.est.native.loadDesc = yes
     #   in that pushQ entry walk through each entry and see if the
     #   sizes will set properly
 
-#########################################################################
+#############################################################################
+# augustus gene track (DONE - 2015-05-20 - Hiram)
+
+    mkdir /hive/data/genomes/chlSab2/bed/augustus
+    cd /hive/data/genomes/chlSab2/bed/augustus
+    time (doAugustus.pl -buildDir=`pwd` -bigClusterHub=ku \
+        -species=human -dbHost=hgwdev -utr -workhorse=hgwdev chlSab2) \
+          > do.log 2>&1
+    # real    173m40.464s
+
+    cat fb.chlSab2.augustusGene.txt
+    # 48617795 bases of 2752019208 (1.767%) in intersection
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2016-09-27 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("chlSab2", "blat1c", "17874", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("chlSab2", "blat1c", "17875", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

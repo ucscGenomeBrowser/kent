@@ -843,6 +843,31 @@ TARGET=_blank>http://genome.ucsc.edu/goldenPath/help/test.bed</A></font>.
       - highlight one or more regions in a given color on the image. Note that the arguments have to be urlencoded for internet browsers, so ":" becomes "%3A", "#" becomes "%23" and "|" becomes "%7C". - 
       <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136136597-136139844&highlight=hg19.chr9%3A136138630-136139650%23AA0000%7Chg19.chr9%3A136136630-136137650%230000FF" target="_blank">example link</A>
       to highlight two parts of the ABO locus in red and blue. </LI>
+
+    <LI><TT>pix=&lt;number&gt;</TT> - set the width of the image in pixels - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&pix=300" target="_blank" >
+      example link</A>
+      to create a 300-pixel wide image</LI>
+
+    <LI><TT>hgt.labelWidth=&lt;number&gt;</TT> - set the size of the left-side label area - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&hgt.labelWidth=50" target="_blank" >
+      example link</A>
+      to increase the label area to 50 characters</LI>
+
+    <LI><TT>textSize=&lt;number&gt;</TT> - set the size of text font - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&textSize=12" target="_blank" >
+      example link</A>
+      to increase the text font size to 12 pixels</LI>
+
+    <LI><TT>guidelines=on/off</TT> - activate or deactivate the blue guidelines - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&guidelines=off" target="_blank" >
+      example link</A>
+      to switch off blue guidelines</LI>
+
+    <LI><TT>enableHighlightingDialog=0/1</TT> - activate or deactivate the highlighting/zoom dialog - 
+      <A HREF="../../cgi-bin/hgTracks?db=hg19&position=chr9%3A136130563-136150630&enableHighlightingDialog=0" target="_blank" >
+      example link</A>
+      to default to zoom mode and switch off the highlight dialog</LI>
 </UL>
 
 <LI>If a login and password is required to access data loaded through a URL

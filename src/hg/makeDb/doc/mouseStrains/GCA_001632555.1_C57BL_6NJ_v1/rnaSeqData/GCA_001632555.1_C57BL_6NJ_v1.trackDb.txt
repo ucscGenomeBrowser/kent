@@ -1,0 +1,77 @@
+track rnaSeqStar
+compositeTrack on
+group regulation
+shortLabel RNAseq
+longLabel RNAseq analysis and raw data
+subGroup1 view Views expression=Expression junction=Splice_Junctions alignment=Alignments
+subGroup2 tissue Tissue brain=brain
+dimensions dimensionX=view dimensionY=tissue
+sortOrder view=+ tissue=+
+visibility full
+dragAndDrop subTracks
+type bed 3
+noInherit on
+html html/rnaSeqStar
+
+    track GCA_001632555.1_C57BL_6NJ_v1ExpressionStar
+    shortLabel GCA_001632555.1_C57BL_6NJ_v1 Expression
+    view expression
+    visibility dense
+    subTrack rnaSeqStar
+    maxHeightPixels 100:24:16
+    autoScale on
+
+        track wigStar_GCA_001632555.1_C57BL_6NJ_v1_brain
+        longLabel GCA_001632555.1_C57BL_6NJ_v1 brain Expression
+        shortLabel GCA_001632555.1_C57BL_6NJ_v1_brain_Expression
+        parent GCA_001632555.1_C57BL_6NJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/brain.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=brain
+
+    track GCA_001632555.1_C57BL_6NJ_v1_Alignments
+    shortLabel Raw Alignments
+    view alignment
+    visibility hide
+    subTrack rnaSeqStar
+
+        track bamstar_GCA_001632555.1_C57BL_6NJ_v1_brain_ERR033015
+        longLabel GCA_001632555.1_C57BL_6NJ_v1 brain RNASeq Alignments ERR033015
+        shortLabel GCA_001632555.1_C57BL_6NJ_v1_RNASeq_ERR033015
+        bigDataUrl rnaSeqData/brain.ERR033015.sortedByCoord.out.bam
+        parent GCA_001632555.1_C57BL_6NJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001632555.1_C57BL_6NJ_v1_brain_ERR033016
+        longLabel GCA_001632555.1_C57BL_6NJ_v1 brain RNASeq Alignments ERR033016
+        shortLabel GCA_001632555.1_C57BL_6NJ_v1_RNASeq_ERR033016
+        bigDataUrl rnaSeqData/brain.ERR033016.sortedByCoord.out.bam
+        parent GCA_001632555.1_C57BL_6NJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+    track GCA_001632555.1_C57BL_6NJ_v1_SpliceJunctions
+    shortLabel Splice Junctions
+    view junction
+    visibility squish
+    subTrack rnaSeqStar
+
+        track GCA_001632555.1_C57BL_6NJ_v1_brain_SpliceJunctions
+        longLabel GCA_001632555.1_C57BL_6NJ_v1 brain STAR Splice Junctions
+        shortLabel GCA_001632555.1_C57BL_6NJ_v1_brain_Splice_Junctions
+        parent GCA_001632555.1_C57BL_6NJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/brain.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=brain
+

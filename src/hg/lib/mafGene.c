@@ -279,7 +279,10 @@ for(gi = giList; gi; gi = gi->next, exonNum++)
     struct speciesInfo *siTemp = si;
     
     if (gi->exonSize == 1)
+        {
+	siTemp->curPosString = siTemp->curPosString->next;
 	continue;
+        }
 
     for(; siTemp ; siTemp = siTemp->next)
 	{
