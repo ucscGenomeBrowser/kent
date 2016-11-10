@@ -284,6 +284,72 @@ printf("<a target='_blank' href='http://www.gtexportal.org/home/gene/%s'>"
         "View at GTEx portal</a>\n", geneId);
 }
 
+/* Convenience functions shared by hgTrackUi and hgGtexTrackSettings. hgTrackUi is for now still
+ * available from right-click */
+
+void gtexGeneUiGeneLabel(struct cart *cart, char *track, struct trackDb *tdb)
+/* Radio buttons to select format of gene label */
+{
+char cartVar[1024];
+char *geneLabel = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track), 
+                        GTEX_LABEL, GTEX_LABEL_DEFAULT);
+printf("<b>Label:</b> ");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LABEL);
+cgiMakeRadioButton(cartVar, GTEX_LABEL_SYMBOL , sameString(GTEX_LABEL_SYMBOL, geneLabel));
+printf("%s ", "gene symbol");
+cgiMakeRadioButton(cartVar, GTEX_LABEL_ACCESSION, sameString(GTEX_LABEL_ACCESSION, geneLabel));
+printf("%s ", "accession");
+cgiMakeRadioButton(cartVar, GTEX_LABEL_BOTH, sameString(GTEX_LABEL_BOTH, geneLabel));
+printf("%s ", "both");
+}
+
+void gtexGeneUiCodingFilter(struct cart *cart, char *track, struct trackDb *tdb)
+/* Checkbox to restrict display to protein coding genes */
+{
+char cartVar[1024];
+puts("<b>Limit to protein coding genes:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
+boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
+cgiMakeCheckBox(cartVar, isCodingOnly);
+}
+
+void gtexGeneUiGeneModel(struct cart *cart, char *track, struct trackDb *tdb)
+/* Checkbox to enable display of GTEx gene model */
+{
+char cartVar[1024];
+puts("&nbsp;&nbsp;<b>Show GTEx gene model</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
+boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
+cgiMakeCheckBox(cartVar, showExons);
+}
+
+void gtexGeneUiLogTransform(struct cart *cart, char *track, struct trackDb *tdb)
+/* Checkbox to select log-transformed RPKM values */
+{
+char cartVar[1024];
+char buf[512];
+puts("<b>Log10 transform:</b>\n");
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
+boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
+safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
+cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+}
+
+void gtexGeneUiViewLimits(struct cart *cart, char *track, struct trackDb *tdb)
+/* Set viewing limits if log transform not checked */
+{
+char cartVar[1024];
+char buf[512];
+boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
+safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
+printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
+safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
+int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
+cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
+char *version = gtexVersion(tdb->table);
+printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
+}
+
 void gtexGeneUi(struct cart *cart, struct trackDb *tdb, char *track, char *title, boolean boxed)
 /* GTEx (Genotype Tissue Expression) per gene data */
 {
@@ -295,53 +361,31 @@ printf("\n<table id=gtexGeneControls style='font-size:%d%%' %s>\n<tr><td>",
         isPopup ? 75 : 100, boxed ?" width='100%'":"");
 
 char cartVar[1024];
-char buf[512];
 
 /* Gene labels  */
-printf("<div>");
-char *geneLabel = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track), 
-                        GTEX_LABEL, GTEX_LABEL_DEFAULT);
-printf("<b>Label:</b> ");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LABEL);
-cgiMakeRadioButton(cartVar, GTEX_LABEL_SYMBOL , sameString(GTEX_LABEL_SYMBOL, geneLabel));
-printf("%s ", "gene symbol");
-cgiMakeRadioButton(cartVar, GTEX_LABEL_ACCESSION, sameString(GTEX_LABEL_ACCESSION, geneLabel));
-printf("%s ", "accession");
-cgiMakeRadioButton(cartVar, GTEX_LABEL_BOTH, sameString(GTEX_LABEL_BOTH, geneLabel));
-printf("%s ", "both");
-printf("</div>\n");
+puts("<div>");
+gtexGeneUiGeneLabel(cart, track, tdb);
+puts("</div>\n");
 
 /* Filter on coding genes */
-printf("<div>");
-printf("<b>Limit to protein coding genes:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
-boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
-cgiMakeCheckBox(cartVar, isCodingOnly);
+puts("<div>");
+gtexGeneUiCodingFilter(cart, track, tdb);
 
 /* Show exons in gene model */
-printf("&nbsp;&nbsp;<b>Show GTEx gene model</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
-boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
-cgiMakeCheckBox(cartVar, showExons);
-printf("</div>");
+puts("&nbsp;&nbsp;");
+gtexGeneUiGeneModel(cart, track, tdb);
+puts("</div>");
 
 /* Data transform. When selected, the next control (view limits max) is disabled */
-printf("<div><b>Log10 transform:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
-cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
+
+puts("<div>");
+gtexGeneUiLogTransform(cart, track, tdb);
 
 /* Viewing limits max.  This control is disabled if log transform is selected */
 // construct class so JS can toggle
-safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
-printf("&nbsp;&nbsp;<span class='%s'><b>View limits maximum:</b></span>\n", buf);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
-char *version = gtexVersion(tdb->table);
-printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
-printf("</div>");
+puts("&nbsp;&nbsp;");
+gtexGeneUiViewLimits(cart, track, tdb);
+puts("</div>");
 
 #ifdef COMPARISON
 /* Sample selection */
@@ -401,6 +445,7 @@ else
     jsMakeCheckboxGroupSetClearButton(cartVar, FALSE);
     }
 printf("</div>");
+char *version = gtexVersion(tdb->table);
 struct gtexTissue *tissues = gtexGetTissues(version);
 struct slName *selectedValues = NULL;
 if (cartListVarExistsAnyLevel(cart, tdb, FALSE, GTEX_TISSUE_SELECT))

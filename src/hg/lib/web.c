@@ -443,7 +443,7 @@ if (doBanner)
     {
     printf(
         #include "jWestBanner.h"
-           , title, title);
+          , title);
     }
 webPushErrHandlersCartDb(cart, db);
 htmlWarnBoxSetup(stdout);

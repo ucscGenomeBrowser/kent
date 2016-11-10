@@ -1,4 +1,4 @@
-/* hgGtexTrackSettings: Configure GTEx track
+/* hgGtexTrackSettings: Configure GTEx track, with tissues selected from  Body Map or list
  *
  * Copyright (C) 2016 The Regents of the University of California
  */
@@ -7,24 +7,11 @@
 #include "trackDb.h"
 #include "cart.h"
 #include "portable.h"
-#include "gtexUi.h"
-
-/* TODO: prune */
-#include "cartJson.h"
 #include "cheapcgi.h"
-#include "errCatch.h"
-#include "googleAnalytics.h"
-#include "hCommon.h"
-#include "hgConfig.h"
-#include "hdb.h"
-#include "htmshell.h"
-#include "hubConnect.h"
-#include "hui.h"
-#include "jsHelper.h"
-#include "jsonParse.h"
-#include "obscure.h"  // for readInGulp
 #include "web.h"
-
+#include "hCommon.h"
+#include "hui.h"
+#include "gtexUi.h"
 #include "gtexInfo.h"
 #include "gtexTissue.h"
 
@@ -33,61 +20,130 @@ struct cart *cart = NULL;             /* CGI and other variables */
 struct hash *oldVars = NULL;          /* Old contents of cart before it was updated by CGI */
 char *db = NULL;
 char *version;                        /* GTEx release */
-struct trackDb *tdb = NULL;
-
-static void doCartJson()
-/* Perform UI commands to update the cart and/or retrieve cart vars & metadata. */
-{
-struct cartJson *cj = cartJsonNew(cart);
-//e.g. cartJsonRegisterHandler(cj, "setTaxId", setTaxId);
-cartJsonExecute(cj);
-}
-
-static void doJsIncludes()
-/* Include JS libraries.  From hgGateway (think about libifying) */
-{
-//puts("<script src=\"../js/es5-shim.4.0.3.min.js\"></script>");
-//puts("<script src=\"../js/es5-sham.4.0.3.min.js\"></script>");
-//puts("<script src=\"../js/lodash.3.10.0.compat.min.js\"></script>");
-puts("<script src=\"../js/cart.js\"></script>");
-
-webIncludeResourceFile("jquery-ui.css");
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("jquery.watermarkinput.js", NULL);
-jsIncludeFile("utils.js",NULL);
-}
+struct trackDb *trackDb = NULL;
 
 static void printTrackHeader()
 /* Print top banner with track labels */
+// TODO: Try to simplify layout
 {
 char *assembly = stringBetween("(", ")", hFreezeFromDb(db));
-
 puts(
 "<a name='TRACK_TOP'></a>\n"
-"   <div class='row gbTrackTitle'>\n"
+"    <div class='row gbTrackTitle'>\n"
 "       <div class='col-md-10'>\n"
 );
-
 printf(
 "           <span class='gbTrackName'>\n"
 "               %s Track\n"
 "               <span class='gbAssembly'>%s</span>\n"
 "           </span>\n"
 "           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %s &nbsp;&nbsp;&nbsp;\n"
-, tdb->shortLabel, assembly, tdb->longLabel);
-
+, trackDb->shortLabel, assembly, trackDb->longLabel);
 puts(
-"           <a href='#TRACK_HTML' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span>"
-"           </a>"
-"       </div>"
-"       <div class='col-md-2 text-right'>"
-"           <div class='goButtonContainer' title='Go to the Genome Browser'>"
-"               <div class='gbGoButton'>GO</div>"
-"               <i class='gbGoIcon fa fa-play fa-2x'></i>"
-"           </div>"
-"       </div>"
-"   </div>"
-);
+"           <a href='#TRACK_HTML' title='Jump to the track description'><span class='gbFaStack fa-stack'><i class='gbGoIcon fa fa-circle fa-stack-2x'></i><i class='gbIconText fa fa-info fa-stack-1x'></i></span></a>\n"
+"       </div>\n"
+"       <div class='col-md-2 text-right'>\n"
+"           <div class='goButtonContainer' title='Go to the Genome Browser'>\n"
+"               <div class='gbGoButton'>GO</div>\n"
+"               <i class='gbGoIcon fa fa-play fa-2x'></i>\n"
+"           </div>\n"
+"       </div>\n"
+"   </div>\n");
+}
+
+static void printBodyMap()
+{
+puts(
+"        <!-- Body Map panel -->\n"
+"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/bodyMap.svg'>\n"
+"               Body Map illustration not found\n"
+"           </object>\n");
+}
+
+static void printVisSelect()
+/* Track visibility dropdown */
+{
+enum trackVisibility vis = trackDb->visibility;
+vis = hTvFromString(cartUsualString(cart, trackDb->track, hStringFromTv(vis)));
+boolean canPack = TRUE;
+hTvDropDownClassVisOnlyAndExtra(trackDb->track, vis, canPack, "gbSelect normalText visDD",
+                                            trackDbSetting(trackDb, "onlyVisibility"), NULL);
+}
+
+static void printScoreFilter(struct cart *cart, char *track)
+/* Filter on overall gene expression score */
+{
+char buf[512];
+puts("<b>Limit to genes scored at or above:</b>\n");
+safef(buf, sizeof(buf), "%s.%s",  trackDb->track, SCORE_FILTER);
+int score = cartUsualInt(cart, buf, 0);
+int minScore = 0, maxScore = 1000;
+cgiMakeIntVarWithLimits(buf, score, "Minimum score", 0, minScore, maxScore);
+printf(
+"                    (range %d-%d)\n", minScore, maxScore);
+}
+
+static void printConfigPanel()
+/* Controls for track configuration (except for tissues) */
+{
+char *track = trackDb->track;
+puts(
+"        <!-- Configuration panel -->\n"
+"        <div class='row gbSectionBanner'>\n"
+"            <div class='col-md-10'>Configuration</div>\n"
+"            <div class='col-md-2 text-right'>\n");
+
+/* Track vis dropdown */
+printVisSelect();
+puts(
+"            </div>\n"
+"        </div>\n");
+
+/* GTEx-specific track controls, layout in 3 rows */
+puts(
+"        <!-- row 1 -->\n"
+"        <div class='row'>\n"
+"            <div class='configurator col-md-5'>\n"
+"<b>Label</b>:&nbsp;&nbsp;");
+gtexGeneUiGeneLabel(cart, track, trackDb);
+puts(
+"            </div>\n"
+"            <div class='configurator col-md-7'>\n");
+gtexGeneUiGeneModel(cart, track, trackDb);
+puts(
+"            </div>\n"
+"        </div>\n");
+puts(
+"        <!-- row 2 -->\n"
+"        <div class='row'>\n"
+"            <div class='configurator col-md-5'>\n");
+gtexGeneUiLogTransform(cart, track, trackDb);
+puts(
+"            </div>\n");
+puts(
+"            <div class='configurator col-md-7'>\n");
+gtexGeneUiViewLimits(cart, track, trackDb);
+puts(
+"            </div>\n"
+"        </div>\n");
+puts(
+"         <!-- row 3 -->\n"
+"        <div class='row'>\n");
+puts(
+"            <div class='configurator col-md-5'>\n");
+gtexGeneUiCodingFilter(cart, track, trackDb);
+puts(
+"            </div>\n");
+
+/* Filter on score */
+puts(
+"            <div class='configurator col-md-7'>\n");
+printScoreFilter(cart, track);
+puts(
+"            </div>\n"
+"        </div>\n");
+puts(
+"        <!-- end configure panel -->\n");
 }
 
 static void printTissueTable()
@@ -95,7 +151,7 @@ static void printTissueTable()
 {
 struct gtexTissue *tis, *tissues = gtexGetTissues(version);
 char var[512];
-safef(var, sizeof var, "%s.%s", tdb->track, GTEX_TISSUE_SELECT);
+safef(var, sizeof var, "%s.%s", trackDb->track, GTEX_TISSUE_SELECT);
 struct hash *selectedHash = cartHashList(cart, var);
 struct gtexTissue **tisTable = NULL;
 int count = slCount(tissues);
@@ -105,21 +161,23 @@ int cols = 2;
 int last = count/2 + 1;
 
 puts(
-     " <!-- Tissue list -->"
-     "<div class='row gbSectionBanner'>"
-     "  <div class='col-md-1'>Tissues</div>"
-     "  <div class='col-md-7 gbSectionInfo'>"
-     "      Click label below or in Body Map to set or clear a tissue"
-     "  </div>"
-     "  <div class='col-md-4 gbButtonContainer'>"
-     "      <div id='setAll' class='gbButtonContainer gtButton gbWhiteButton'>set all</div>"
-     "      <div id='clearAll' class='gbButtonContainer gtButton gbWhiteButton'>clear all</div>"
-     "  </div>"
-     "</div>"
-    );
+ " <!-- Tissue list -->\n"
+ "<div class='row gbSectionBanner'>\n"
+ "  <div class='col-md-1'>Tissues</div>\n"
+ "  <div class='col-md-7 gbSectionInfo'>\n"
+ "      Click label below or in Body Map to set or clear a tissue\n"
+ "  </div>\n"
+ "  <div class='col-md-4 gbButtonContainer'>\n"
+ "      <div id='setAll' class='gbButtonContainer gtButton gbWhiteButton'>set all</div>\n"
+ "      <div id='clearAll' class='gbButtonContainer gtButton gbWhiteButton'>clear all</div>\n"
+ "  </div>\n"
+ "</div>\n"
+);
 
-puts("<table class='tissueTable'>");
-puts("<tr>");
+puts(
+"<table class='tissueTable'>\n");
+puts(
+"<tr>\n");
 for (tis = tissues; tis != NULL; tis = tis->next)
     {
     if (tis->id < last)
@@ -133,15 +191,23 @@ for (i=0; i<count; i++)
     {
     tis = tisTable[i];
     boolean isChecked = all || (hashLookup(selectedHash, tis->name) != NULL);
-    printf("<td class='tissueColor %s' data-tissueColor=#%06X style='background-color: #%06X; border-style: solid; border-width: 2px; border-color: #%06X;'></td>"
-           "<td class='tissueLabel %s' id='%s'>%s",
-                isChecked ? "" : "tissueNotSelectedColor", tis->color,
-                    isChecked ? tis->color : 0xFFFFFF, tis->color,
+    printf(
+            "<td class='tissueColor %s' "
+                "data-tissueColor=#%06X ",
+                    isChecked ? "" : "tissueNotSelectedColor", tis->color);
+    printf(
+                "style='background-color: #%06X;"
+                    "border-style: solid; border-width: 2px;"
+                    "border-color: #%06X;'></td>\n",
+                    isChecked ? tis->color : 0xFFFFFF, tis->color);
+    printf(
+            "<td class='tissueLabel %s' id='%s'>%s",
                 isChecked ? "tissueSelected" : "", tis->name, tis->description);
-
-    printf("<input type='checkbox' name='%s' value='%s' %s style='display: none;'>", 
+    printf(
+            "<input type='checkbox' name='%s' value='%s' %s style='display: none;'>", 
                 var, tis->name, isChecked ? "checked" : "");
-    puts("</td>");
+    puts(
+            "</td>");
     col++;
     if (col > cols-1)
         {
@@ -149,166 +215,13 @@ for (i=0; i<count; i++)
         col = 0;
         }
     }
-puts("</tr>\n");
-puts("</table>");
+puts(
+"</tr>\n");
+puts(
+"</table>");
 char buf[512];
-safef(buf, sizeof(buf), "%s%s.%s", cgiMultListShadowPrefix(), tdb->track, GTEX_TISSUE_SELECT);
+safef(buf, sizeof(buf), "%s%s.%s", cgiMultListShadowPrefix(), trackDb->track, GTEX_TISSUE_SELECT);
 cgiMakeHiddenVar(buf, "0");
-}
-
-static void printBodyMap()
-{
-puts(
-"       <!-- Body Map panel -->"
-"           <object id='bodyMapSvg' type='image/svg+xml' class='gbImage gtexBodyMap' data='/images/bodyMap.svg'>"
-"               Body Map illustration not found"
-"           </object>"
-);
-}
-
-static void printVisSelect()
-{
-enum trackVisibility vis = tdb->visibility;
-vis = hTvFromString(cartUsualString(cart, tdb->track, hStringFromTv(vis)));
-boolean canPack = TRUE;
-hTvDropDownClassVisOnlyAndExtra(tdb->track, vis, canPack, "gbSelect normalText visDD",
-                                            trackDbSetting(tdb, "onlyVisibility"), NULL);
-}
-
-static void printConfigPanel()
-/* Controls for track configuration (except for tissues) */
-{
-char cartVar[1024];
-char buf[512];
-
-char *track = tdb->track;
-
-puts(
-"            <!-- Configuration panel -->\n"
-
-/* Blue section header and track vis dropdown */
-"            <div class='row gbSectionBanner'>\n"
-"                <div class='col-md-10'>Configuration</div>\n"
-"                <div class='col-md-2 text-right'>\n"
-);
-printVisSelect();
-puts(
-"                </div>\n"
-);
-puts(
-"            </div>\n"
-);
-
-/* First row of config controls */
-puts(
-"            <!-- row 1 -->\n"
-"            <div class='row'>\n"
-
-/* Gene labels */
-"                <div class='configurator col-md-5'>\n"
-"<b>Label</b>:&nbsp;&nbsp;"
-);
-char *geneLabel = cartUsualStringClosestToHome(cart, tdb, isNameAtParentLevel(tdb, track),
-                        GTEX_LABEL, GTEX_LABEL_DEFAULT);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LABEL);
-cgiMakeRadioButton(cartVar, GTEX_LABEL_SYMBOL , sameString(GTEX_LABEL_SYMBOL, geneLabel));
-printf("%s ", "gene symbol");
-cgiMakeRadioButton(cartVar, GTEX_LABEL_ACCESSION, sameString(GTEX_LABEL_ACCESSION, geneLabel));
-printf("%s ", "accession");
-cgiMakeRadioButton(cartVar, GTEX_LABEL_BOTH, sameString(GTEX_LABEL_BOTH, geneLabel));
-printf("%s ", "both");
-puts(
-"                </div>\n"
-
-/* Show exons in gene model */
-"                <div class='configurator col-md-7'>\n"
-);
-puts("<b>Show GTEx gene model</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_SHOW_EXONS);
-boolean showExons = cartCgiUsualBoolean(cart, cartVar, GTEX_SHOW_EXONS_DEFAULT);
-cgiMakeCheckBox(cartVar, showExons);
-puts(
-"                </div>\n"
-);
-puts(
-"            </div>\n"
-);
-
-/* Row 2 */
-puts(
-"            <!-- row 2 -->\n"
-"            <div class='row'>\n"
-);
-
-/* Log transform. When selected, the next control (view limits max) is disabled */
-puts(
-"                <div class='configurator col-md-5'>\n"
-);
-puts("<b>Log10 transform:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_LOG_TRANSFORM);
-boolean isLogTransform = cartCgiUsualBoolean(cart, cartVar, GTEX_LOG_TRANSFORM_DEFAULT);
-safef(buf, sizeof buf, "onchange='gtexTransformChanged(\"%s\")'", track);
-cgiMakeCheckBoxJS(cartVar, isLogTransform, buf);
-puts(
-"                </div>\n"
-);
-/* Viewing limits max.  This control is disabled if log transform is selected */
-// construct class so JS can toggle
-puts(
-"                <div class='configurator col-md-7'>\n"
-);
-safef(buf, sizeof buf, "%sViewLimitsMaxLabel %s", track, isLogTransform ? "disabled" : "");
-printf("<span class='%s'><b>View limits maximum:</b></span>\n", buf);
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_MAX_LIMIT);
-int viewMax = cartCgiUsualInt(cart, cartVar, GTEX_MAX_LIMIT_DEFAULT);
-cgiMakeIntVarWithExtra(cartVar, viewMax, 4, isLogTransform ? "disabled" : "");
-char *version = gtexVersion(tdb->table);
-printf("<span class='%s'>  RPKM (range 0-%d)</span>\n", buf, round(gtexMaxMedianScore(version)));
-puts(
-"                </div>\n"
-);
-puts(
-"            </div>\n"
-);
-
-/* Row 3 */
-puts(
-"            <!-- row 3 -->\n"
-"            <div class='row'>\n"
-);
-/* Filter on coding genes */
-puts(
-"                <div class='configurator col-md-5'>\n"
-);
-puts("<b>Limit to protein coding genes:</b>\n");
-safef(cartVar, sizeof(cartVar), "%s.%s", track, GTEX_CODING_GENE_FILTER);
-boolean isCodingOnly = cartCgiUsualBoolean(cart, cartVar, GTEX_CODING_GENE_FILTER_DEFAULT);
-cgiMakeCheckBox(cartVar, isCodingOnly);
-puts(
-"                </div>\n"
-);
-
-/* Filter on score */
-puts(
-"                <div class='configurator col-md-7'>\n"
-);
-puts("           <b>Limit to genes scored at or above:</b>\n");
-safef(buf, sizeof(buf), "%s.%s",  tdb->track, SCORE_FILTER);
-int score = cartUsualInt(cart, buf, 0);
-int minScore = 0, maxScore = 1000;
-cgiMakeIntVarWithLimits(buf, score, "Minimum score", 0, minScore, maxScore);
-printf(
-                                        "                    (range %d-%d)\n", 
-                                                                        minScore, maxScore);
-puts(
-"               </div>\n"
-);
-puts(
-"           </div>\n"
-);
-puts(
-"            <!-- end configure panel -->\n"
-);
 }
 
 static void printTrackConfig()
@@ -319,127 +232,103 @@ and a lower panel with a tissue selection list.
 */
 {
 puts(
-"  <div class='row'>\n"
-);
-
-// TODO: remove bodyMap id here
-puts(
-"        <div id='bodyMap' class='col-md-6'>\n"
-);
+"<!-- Track Configuration Panels -->\n"
+"    <div class='row'>\n"
+"        <div class='col-md-6'>\n");
 printBodyMap();
 puts(
 "        </div>\n"
-);
-puts(
-"        <div class='col-md-6'>\n"
-);
+"        <div class='col-md-6'>\n");
 printConfigPanel();
 printTissueTable();
 puts(
 "        </div>\n"
-);
-puts(
-"  </div>\n"
-);
+"    </div>\n");
 }
 
 static void printTrackDescription()
 {
-puts("<a name='TRACK_HTML'></a>");
-puts("<div class='row gbSectionBanner gbSimpleBanner'>");
-puts("<div class='col-md-11'>Track Description</div>");
-puts("<div class='col-md-1'>"
-        "<a href='#TRACK_TOP' title='Jump to top of page'>"
-        "<i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>"
-        //"<i class='gbBannerIcon gbGoIcon fa fa-lg fa-level-up'></i>"
-        "</a></div>");
-puts("</div>");
-if (tdb->html != NULL)
-    {
-    puts("<div class='trackDescriptionPanel'>");
-    puts("<div class='trackDescription'>");
-puts(tdb->html);
-    }
-puts("</div></div>");
-puts("</div>");
+puts(
+"<a name='TRACK_HTML'></a>\n"
+"    <div class='row gbSectionBanner gbSimpleBanner'>\n"
+"        <div class='col-md-11'>Track Description</div>\n"
+"        <div class='col-md-1'>\n"
+"            <a href='#TRACK_TOP' title='Jump to top of page'>\n"
+"                <i class='gbBannerIcon gbGoIcon fa fa-lg fa-arrow-circle-up'></i>\n"
+"            </a>\n"
+"       </div>\n"
+"    </div>\n"
+"    <div class='trackDescriptionPanel'>\n"
+"       <div class='trackDescription'>\n");
+puts(trackDb->html);
+puts(
+"       </div>\n"
+"   </div>\n");
 }
 
-static void doMainPage()
-/* Send HTML with javascript to bootstrap the user interface. */
+static struct trackDb *getTrackDb(char *database, char *track)
+/* Check if this is an assembly with GTEx track and get trackDb */
 {
-// Start web page with new banner
-
-webStartJWestNoBanner(cart, db, "Genome Browser GTEx Track Settings");
-puts("<link rel=\"stylesheet\" href=\"../style/bootstrap.min.css\">");
-puts("<link rel=\"stylesheet\" href=\"../style/hgGtexTrackSettings.css\">");
-
-char *genome = NULL, *clade = NULL;
-// char *chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
-//char *track = cartString(cart, "g");
-getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
-
-// Check if this is an assembly with GTEx track
 struct sqlConnection *conn = sqlConnect(db);
 if (conn == NULL)
     errAbort("Can't connect to database %s\n", db);
-
-char *table = "gtexGene";
-version = gtexVersion(table);
-
+char where[256];
+safef(where, sizeof(where), "tableName='%s'", track);
 // TODO: use hdb, hTrackDbList to get table names of trackDb, 
-tdb = trackDbLoadWhere(conn, "trackDb", "tableName = 'gtexGene'");
+struct trackDb *tdb = trackDbLoadWhere(conn, "trackDb", where);
 sqlDisconnect(&conn);
-if (!tdb)
-    errAbort("No GTEx track found in database %s\n", db);
+return tdb;
+}
 
-printf("<FORM ACTION='%s' NAME='MAIN_FORM' METHOD=%s>\n\n",
-       hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
+static void doMiddle(struct cart *theCart)
+/* Send HTML with javascript to display the user interface. */
+{
+cart = theCart;
+
+// Start web page with new-style header
+webStartJWestNoBanner(cart, db, "Genome Browser GTEx Track Settings");
+puts("<link rel='stylesheet' href='../style/bootstrap.min.css'>");
+puts("<link rel='stylesheet' href='../style/hgGtexTrackSettings.css'>");
+
+char *genome = NULL, *clade = NULL;
+getDbGenomeClade(cart, &db, &genome, &clade, oldVars);
+char *track = cartString(cart, "g");
+trackDb = getTrackDb(db, track);
+if (!trackDb)
+    errAbort("No GTEx track %s found in database %s\n", track, db);
+version = gtexVersion(track);
+
+// Container for bootstrap grid layout
 puts(
-        "<div class='container-fluid'>\n"
-);
+"<div class='container-fluid'>\n");
+
+// Print form with configuration HTML, and track description
+printf(
+"<form action='%s' name='MAIN_FORM' method=%s>\n\n",
+                hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 printTrackHeader();
 printTrackConfig();
 puts(
-        "</FORM>"
-);
+"</form>");
+if (trackDb->html)
+    printTrackDescription();
+puts(
+"</div>");
 
-printTrackDescription();
-puts("</div>");
-
-// end panel, section and body layout container 
-
-// Track description
-
-// JS libraries
-doJsIncludes();
-
-// Main JS
+// Initialize illustration display and handle mouseover and clicks
 puts("<script src='../js/hgGtexTrackSettings.js'></script>");
 
 webIncludeFile("inc/jWestFooter.html");
-
 webEndJWest();
 }
 
 
-void doMiddle(struct cart *theCart)
-/* Display the main page or execute a command and update the page */
-{
-cart = theCart;
-if (cgiOptionalString(CARTJSON_COMMAND))
-    doCartJson();
-else
-    doMainPage();
-}
-
 int main(int argc, char *argv[])
 /* Process CGI / command line. */
 {
-/* Null terminated list of CGI Variables we don't want to save
- * permanently. */
+/* Null terminated list of CGI Variables we don't want to save to cart */
 /* TODO: check these */
-char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};
-//char *excludeVars[] = {CARTJSON_COMMAND, NULL};
+char *excludeVars[] = {"submit", "Submit", "g", NULL};
 long enteredMainTime = clock1000();
 cgiSpoof(&argc, argv);
 oldVars = hashNew(10);
