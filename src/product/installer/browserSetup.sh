@@ -1288,7 +1288,7 @@ function installBrowser ()
     if [ "$OS" == "OSX" ]; then
             $RSYNC --delete -azP --exclude=training --exclude=ENCODE --exclude=encode --exclude=rosenbloom.pdf --exclude=pubs*.pdf --exclude=*.{bb,bam,bai,bw,gz,2bit} --exclude=goldenpath $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     else
-            $RSYNC -avzP $HGDOWNLOAD::htdocs/ $HTDOCDIR/
+            $RSYNC -avzP --exclude==ENCODE/**.pdf $HGDOWNLOAD::htdocs/ $HTDOCDIR/
     fi
     
     # assign all files just downloaded to a valid user. 
