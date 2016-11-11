@@ -409,7 +409,8 @@ char *trackUrl(char *mapName, char *chromName)
 char *encodedMapName = cgiEncode(mapName);
 char buf[2048];
 char *hgTrackUi = hgTrackUiName();
-if (startsWith("gtexGene", mapName))
+// TODO: Remove cfg option when new CGI is formally released
+if (startsWith("gtexGene", mapName) && cfgOption("gtexBodyMap"))
     hgTrackUi = "../cgi-bin/hgGtexTrackSettings";	/* Path to click processing program. */
 if(chromName == NULL)
     safef(buf, sizeof(buf), "%s?%s=%s&g=%s", hgTrackUi, cartSessionVarName(), cartSessionId(cart), encodedMapName);
