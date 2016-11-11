@@ -47,6 +47,7 @@ static struct soStringToId soStringToId[] = {
     { "inframe_insertion", inframe_insertion },
     { "inframe_deletion", inframe_deletion },
     { "feature_variant", feature_variant },
+    { "no_sequence_alteration", no_sequence_alteration },
     { NULL, 0 }
 };
 

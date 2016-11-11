@@ -1,0 +1,192 @@
+genome GCA_001624185.1_129S1_SvImJ_v1
+description 26 Apr 2016/129S1_SvImJ_v1
+trackDb GCA_001624185.1_129S1_SvImJ_v1/GCA_001624185.1_129S1_SvImJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624185.1_129S1_SvImJ_v1/GCA_001624185.1_129S1_SvImJ_v1.2bit
+transBlat blat1a.soe.ucsc.edu 17864
+blat blat1a.soe.ucsc.edu 17865
+organism house mouse
+scientificName .
+defaultPos chr1:100277822-102277822
+htmlPath GCA_001624185.1_129S1_SvImJ_v1/html/GCA_001624185.1_129S1_SvImJ_v1.description.html
+
+genome GCA_001624835.1_WSB_EiJ_v1
+description 26 Apr 2016/WSB_EiJ_v1
+trackDb GCA_001624835.1_WSB_EiJ_v1/GCA_001624835.1_WSB_EiJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624835.1_WSB_EiJ_v1/GCA_001624835.1_WSB_EiJ_v1.2bit
+transBlat blat1c.soe.ucsc.edu 17880
+blat blat1c.soe.ucsc.edu 17881
+organism western European house mouse
+scientificName .
+defaultPos chr1:99055726-101055726
+htmlPath GCA_001624835.1_WSB_EiJ_v1/html/GCA_001624835.1_WSB_EiJ_v1.description.html
+
+genome GCA_001624865.1_SPRET_EiJ_v1
+description 26 Apr 2016/SPRET_EiJ_v1
+trackDb GCA_001624865.1_SPRET_EiJ_v1/GCA_001624865.1_SPRET_EiJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624865.1_SPRET_EiJ_v1/GCA_001624865.1_SPRET_EiJ_v1.2bit
+transBlat blat1c.soe.ucsc.edu 17882
+blat blat1c.soe.ucsc.edu 17883
+organism western wild mouse
+scientificName .
+defaultPos chr1:98423133-100423133
+htmlPath GCA_001624865.1_SPRET_EiJ_v1/html/GCA_001624865.1_SPRET_EiJ_v1.description.html
+
+genome GCA_001624295.1_AKR_J_v1
+description 26 Apr 2016/AKR_J_v1
+trackDb GCA_001624295.1_AKR_J_v1/GCA_001624295.1_AKR_J_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624295.1_AKR_J_v1/GCA_001624295.1_AKR_J_v1.2bit
+transBlat blat1a.soe.ucsc.edu 17868
+blat blat1a.soe.ucsc.edu 17869
+organism house mouse
+scientificName .
+defaultPos chr1:98994563-100994563
+htmlPath GCA_001624295.1_AKR_J_v1/html/GCA_001624295.1_AKR_J_v1.description.html
+
+genome GCA_001624505.1_DBA_2J_v1
+description 26 Apr 2016/DBA_2J_v1
+trackDb GCA_001624505.1_DBA_2J_v1/GCA_001624505.1_DBA_2J_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624505.1_DBA_2J_v1/GCA_001624505.1_DBA_2J_v1.2bit
+transBlat blat1b.soe.ucsc.edu 17866
+blat blat1b.soe.ucsc.edu 17867
+organism house mouse
+scientificName .
+defaultPos chr1:95464054-97464054
+htmlPath GCA_001624505.1_DBA_2J_v1/html/GCA_001624505.1_DBA_2J_v1.description.html
+
+genome GCA_001624475.1_CBA_J_v1
+description 26 Apr 2016/CBA_J_v1
+trackDb GCA_001624475.1_CBA_J_v1/GCA_001624475.1_CBA_J_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624475.1_CBA_J_v1/GCA_001624475.1_CBA_J_v1.2bit
+transBlat blat1b.soe.ucsc.edu 17864
+blat blat1b.soe.ucsc.edu 17865
+organism house mouse
+scientificName .
+defaultPos chr1:107316755-109316755
+htmlPath GCA_001624475.1_CBA_J_v1/html/GCA_001624475.1_CBA_J_v1.description.html
+
+genome GCA_001624215.1_A_J_v1
+description 26 Apr 2016/A_J_v1
+trackDb GCA_001624215.1_A_J_v1/GCA_001624215.1_A_J_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624215.1_A_J_v1/GCA_001624215.1_A_J_v1.2bit
+transBlat blat1a.soe.ucsc.edu 17866
+blat blat1a.soe.ucsc.edu 17867
+organism house mouse
+scientificName .
+defaultPos chr1:96101805-98101805
+htmlPath GCA_001624215.1_A_J_v1/html/GCA_001624215.1_A_J_v1.description.html
+
+genome GCA_001632555.1_C57BL_6NJ_v1
+description 09 May 2016/C57BL_6NJ_v1
+trackDb GCA_001632555.1_C57BL_6NJ_v1/GCA_001632555.1_C57BL_6NJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001632555.1_C57BL_6NJ_v1/GCA_001632555.1_C57BL_6NJ_v1.2bit
+transBlat blat1d.soe.ucsc.edu 17872
+blat blat1d.soe.ucsc.edu 17873
+organism house mouse
+scientificName .
+defaultPos chr1:103457502-105457502
+htmlPath GCA_001632555.1_C57BL_6NJ_v1/html/GCA_001632555.1_C57BL_6NJ_v1.description.html
+
+genome GCA_001624445.1_CAST_EiJ_v1
+description 26 Apr 2016/CAST_EiJ_v1
+trackDb GCA_001624445.1_CAST_EiJ_v1/GCA_001624445.1_CAST_EiJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624445.1_CAST_EiJ_v1/GCA_001624445.1_CAST_EiJ_v1.2bit
+transBlat blat1a.soe.ucsc.edu 17870
+blat blat1a.soe.ucsc.edu 17871
+organism southeastern Asian house mouse
+scientificName .
+defaultPos chr1:99212284-101212284
+htmlPath GCA_001624445.1_CAST_EiJ_v1/html/GCA_001624445.1_CAST_EiJ_v1.description.html
+
+genome GCA_001624775.1_PWK_PhJ_v1
+description 26 Apr 2016/PWK_PhJ_v1
+trackDb GCA_001624775.1_PWK_PhJ_v1/GCA_001624775.1_PWK_PhJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624775.1_PWK_PhJ_v1/GCA_001624775.1_PWK_PhJ_v1.2bit
+transBlat blat1c.soe.ucsc.edu 17878
+blat blat1c.soe.ucsc.edu 17879
+organism eastern European house mouse
+scientificName .
+defaultPos chr1:95105131-97105131
+htmlPath GCA_001624775.1_PWK_PhJ_v1/html/GCA_001624775.1_PWK_PhJ_v1.description.html
+
+genome GCA_001632615.1_LP_J_v1
+description 09 May 2016/LP_J_v1
+trackDb GCA_001632615.1_LP_J_v1/GCA_001632615.1_LP_J_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001632615.1_LP_J_v1/GCA_001632615.1_LP_J_v1.2bit
+transBlat blat1d.soe.ucsc.edu 17876
+blat blat1d.soe.ucsc.edu 17877
+organism house mouse
+scientificName .
+defaultPos chr1:100831781-102831781
+htmlPath GCA_001632615.1_LP_J_v1/html/GCA_001632615.1_LP_J_v1.description.html
+
+genome GCA_001632575.1_C3H_HeJ_v1
+description 09 May 2016/C3H_HeJ_v1
+trackDb GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001632575.1_C3H_HeJ_v1/GCA_001632575.1_C3H_HeJ_v1.2bit
+transBlat blat1d.soe.ucsc.edu 17874
+blat blat1d.soe.ucsc.edu 17875
+organism house mouse
+scientificName .
+defaultPos chr1:99440325-101440325
+htmlPath GCA_001632575.1_C3H_HeJ_v1/html/GCA_001632575.1_C3H_HeJ_v1.description.html
+
+genome GCA_001624745.1_NZO_HlLtJ_v1
+description 26 Apr 2016/NZO_HlLtJ_v1
+trackDb GCA_001624745.1_NZO_HlLtJ_v1/GCA_001624745.1_NZO_HlLtJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624745.1_NZO_HlLtJ_v1/GCA_001624745.1_NZO_HlLtJ_v1.2bit
+transBlat blat1c.soe.ucsc.edu 17876
+blat blat1c.soe.ucsc.edu 17877
+organism house mouse
+scientificName .
+defaultPos chr1:98901052-100901052
+htmlPath GCA_001624745.1_NZO_HlLtJ_v1/html/GCA_001624745.1_NZO_HlLtJ_v1.description.html
+
+genome GCA_001624675.1_NOD_ShiLtJ_v1
+description 26 Apr 2016/NOD_ShiLtJ_v1
+trackDb GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624675.1_NOD_ShiLtJ_v1/GCA_001624675.1_NOD_ShiLtJ_v1.2bit
+transBlat blat1b.soe.ucsc.edu 17870
+blat blat1b.soe.ucsc.edu 17871
+organism house mouse
+scientificName .
+defaultPos chr1:110666897-112666897
+htmlPath GCA_001624675.1_NOD_ShiLtJ_v1/html/GCA_001624675.1_NOD_ShiLtJ_v1.description.html
+
+genome GCA_001624535.1_FVB_NJ_v1
+description 26 Apr 2016/FVB_NJ_v1
+trackDb GCA_001624535.1_FVB_NJ_v1/GCA_001624535.1_FVB_NJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001624535.1_FVB_NJ_v1/GCA_001624535.1_FVB_NJ_v1.2bit
+transBlat blat1b.soe.ucsc.edu 17868
+blat blat1b.soe.ucsc.edu 17869
+organism house mouse
+scientificName .
+defaultPos chr1:94501997-96501997
+htmlPath GCA_001624535.1_FVB_NJ_v1/html/GCA_001624535.1_FVB_NJ_v1.description.html
+
+genome GCA_001632525.1_BALB_cJ_v1
+description 09 May 2016/BALB_cJ_v1
+trackDb GCA_001632525.1_BALB_cJ_v1/GCA_001632525.1_BALB_cJ_v1.trackDb.txt
+groups groups.txt
+twoBitPath GCA_001632525.1_BALB_cJ_v1/GCA_001632525.1_BALB_cJ_v1.2bit
+transBlat blat1d.soe.ucsc.edu 17870
+blat blat1d.soe.ucsc.edu 17871
+organism house mouse
+scientificName .
+defaultPos chr1:96454111-98454111
+htmlPath GCA_001632525.1_BALB_cJ_v1/html/GCA_001632525.1_BALB_cJ_v1.description.html
+

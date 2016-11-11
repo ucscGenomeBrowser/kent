@@ -375,9 +375,6 @@ else
     	usage("-phyloPng_tree is a required 'option' or cgi variable.");
     }
 
-//cartWarnCatcher(doMiddle, cart, cartEarlyWarningHandler);
-
-
 useCart = (!cgiOptionalString("phyloPng_tree") || cgiVarExists("phyloPng_restore"));
 
 htmlPageWrapper = cgiVarExists("phyloPng_htmlPage"); /* wrap output in a page */

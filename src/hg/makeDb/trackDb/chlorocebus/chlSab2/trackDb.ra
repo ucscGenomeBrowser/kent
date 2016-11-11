@@ -1,3 +1,5 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
@@ -5,6 +7,9 @@ html gold
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+
+track xenoRefGene override
+visibility pack
 
 searchTable gold
 shortCircuit 1

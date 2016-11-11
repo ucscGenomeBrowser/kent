@@ -46,6 +46,8 @@ NoEscape = FALSE;
 void htmlVaEncodeErrorText(char *format, va_list args)
 /* Write an error message encoded against XSS. */
 {
+va_list argscp;
+va_copy(argscp, args);
 char warning[1024];
 int sz = vaHtmlSafefNoAbort(warning, sizeof(warning), format, args, TRUE, FALSE);
 if (sz < 0)
@@ -56,6 +58,11 @@ if (sz < 0)
     fflush(stderr);
     }
 fprintf(stdout, "%s\n", warning);
+/* write warning/error message to stderr so they get logged. */
+vfprintf(stderr, format, argscp);
+fprintf(stderr, "\n");
+fflush(stderr);
+va_end(argscp);
 }
 
 
@@ -213,10 +220,6 @@ char *cleanQuote = needMem(size+1);
 safecpy(cleanQuote,size+1,s);
 
 strSwapStrs(cleanQuote, size,"\n","<BR>" ); // use BR tag for new lines
-if (cgiClientBrowser(NULL,NULL,NULL) == btFF) // Firefox
-    strSwapStrs(cleanQuote, size, "&#124;", "<BR>"); // replace with BR tag
-else
-    strSwapStrs(cleanQuote, size, "&#x0A;", "<BR>"); // replace with BR tag
 
 return cleanQuote;
 }
@@ -231,9 +234,6 @@ int htmlEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-boolean FF = FALSE;
-if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-    FF = TRUE;
 int total = 0;
 char c = 0;
 do
@@ -244,14 +244,6 @@ do
     if (c == '&') { size = 5; newString = "&amp;"; } // '&' start a control char
     if (c == '>') { size = 4; newString = "&gt;" ; } // '>' close of tag
     if (c == '<') { size = 4; newString = "&lt;" ; } // '<' open  of tag
-    if (c == '\n') 
-	{
-	size = 6;
-	if (FF)
-	    newString = "&#124;"; // FF does not support!  Use "&#124;" for '|' instead
-	else
-	    newString = "&#x0A;"; // '\n' is supported on some browsers
-	}
     if (c == '/')  { size = 6; newString = "&#x2F;"; } // forward slash helps end an HTML entity
     if (c == '"')  { size = 6; newString = "&quot;"; } // double quote
     if (c == '\'') { size = 5; newString = "&#39;" ; } // single quote
@@ -294,8 +286,8 @@ htmlEncodeTextExtended(s, out, size+1);
 return out;
 }
 
-int nonAlphaNumericHexEncodeTextExtended(char *s, char *out, int outSize, 
-   char *prefix, char *postfix, int encodedSize)
+int nonAlphaNumericHexEncodeText(char *s, char *out, int outSize, 
+   char *prefix, char *postfix)
 /* For html tag attributes, it replaces non-alphanumeric characters
  * with <prefix>HH<postfix> hex codes to fight XSS.
  * out result must be large enough to receive the encoded string.
@@ -304,6 +296,7 @@ int nonAlphaNumericHexEncodeTextExtended(char *s, char *out, int outSize,
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
+int encodedSize = strlen(prefix) + 2 + strlen(postfix);
 int total = 0;
 char c = 0;
 do
@@ -345,9 +338,62 @@ do
 return total - 1; // do not count terminating 0
 }
 
+static boolean decodeOneHexChar(char c, char *h)
+/* Return true if c is a hex char and decode it to h. */
+{
+*h = *h << 4;
+if (c >= '0' && c <= '9')
+    *h += (c - '0');	    
+else if (c >= 'A' && c <= 'F')
+    *h += (c - 'A' + 10);	    
+else if (c >= 'a' && c <= 'f')
+    *h += (c - 'a' + 10);
+else
+    return FALSE;
+return TRUE;
+}
+
+static boolean decodeTwoHexChars(char *s, char *h)
+/* Return true if hex char */
+{
+*h = 0;
+if (decodeOneHexChar(*s++, h)
+&& (decodeOneHexChar(*s  , h)))
+    return TRUE;
+return FALSE;
+}
+
+void nonAlphaNumericHexDecodeText(char *s, char *prefix, char *postfix)
+/* For html tag attributes, it decodes non-alphanumeric characters
+ * with <prefix>HH<postfix> hex codes.
+ * Decoding happens in-place, changing the input string s.
+ * prefix must not be empty string or null, but postfix can be empty string.
+ * Because the decoded string is always equal to or shorter than the input string,
+ * the decoding is just done in-place modifying the input string.
+ * Accepts upper and lower case values in entities.
+ */
+{
+char *d = s;  // where are we decoding to right now
+int pfxLen = strlen(prefix);
+int postLen = strlen(postfix);
+while (isNotEmpty(s))
+    {
+    char h;
+    if (startsWithNoCase(prefix, s) &&
+        decodeTwoHexChars(s+pfxLen, &h) &&
+        startsWithNoCase(postfix, s+pfxLen+2))
+        {
+        *d++ = h;
+        s += pfxLen + 2 + postLen;
+        }
+    else
+        *d++ = *s++;
+    }
+*d = 0;
+}
 
 int attrEncodeTextExtended(char *s, char *out, int outSize)
-/* For html tag attributes, it replaces non-alphanumeric characters
+/* For html tag attribute values, it replaces non-alphanumeric characters
  * with html entities &#xHH; to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
@@ -355,7 +401,7 @@ int attrEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "&#x", ";", 6);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "&#x", ";");
 }
 
 int attrEncodeTextSize(char *s)
@@ -373,9 +419,16 @@ attrEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void attributeDecode(char *s)
+/* For html tag attribute values decode html entities &#xHH; */
+{
+return nonAlphaNumericHexDecodeText(s, "&#x", ";");
+}
+
+
 
 int cssEncodeTextExtended(char *s, char *out, int outSize)
-/* For CSS, it replaces non-alphanumeric characters with "\HH " to fight XSS.
+/* For CSS values, it replaces non-alphanumeric characters with "\HH " to fight XSS.
  * (Yes, the trailing space is critical.)
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
@@ -383,7 +436,7 @@ int cssEncodeTextExtended(char *s, char *out, int outSize)
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\", " ", 4);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "\\", " ");
 }
 
 int cssEncodeTextSize(char *s)
@@ -401,16 +454,24 @@ cssEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void cssDecode(char *s)
+/* For CSS values decode "\HH " 
+ * (Yes, the trailing space is critical.) */
+{
+return nonAlphaNumericHexDecodeText(s, "\\", " ");
+}
+
+
 
 int javascriptEncodeTextExtended(char *s, char *out, int outSize)
-/* For javascript, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
+/* For javascript string values, it replaces non-alphanumeric characters with "\xHH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
  * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "\\x", "", 4);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "\\x", "");
 }
 
 int javascriptEncodeTextSize(char *s)
@@ -428,16 +489,22 @@ javascriptEncodeTextExtended(s, out, size+1);
 return out;
 }
 
+void jsDecode(char *s)
+/* For JS string values decode "\xHH" */
+{
+return nonAlphaNumericHexDecodeText(s, "\\x", "");
+}
+
 
 int urlEncodeTextExtended(char *s, char *out, int outSize)
-/* For URL parameters, it replaces non-alphanumeric characters with "%HH" to fight XSS.
+/* For URL parameter values, it replaces non-alphanumeric characters with "%HH" to fight XSS.
  * out result must be large enough to receive the encoded string.
  * Returns size of encoded string or -1 if output larger than outSize. 
  * To just get the final encoded size, pass in NULL for out and 0 for outSize. 
  * To output without checking sizes, pass in non-NULL for out and 0 for outSize. 
  */
 {
-return nonAlphaNumericHexEncodeTextExtended(s, out, outSize, "%", "", 3);
+return nonAlphaNumericHexEncodeText(s, out, outSize, "%", "");
 }
 
 int urlEncodeTextSize(char *s)
@@ -453,6 +520,12 @@ int size = urlEncodeTextSize(s);
 char *out = needMem(size+1);
 urlEncodeTextExtended(s, out, size+1);
 return out;
+}
+
+void urlDecode(char *s)
+/* For URL paramter values decode "%HH" */
+{
+return nonAlphaNumericHexDecodeText(s, "%", "");
 }
 
 
@@ -589,7 +662,10 @@ if (!initted && !errorsNoHeader)
     initted = TRUE;
     }
 printf("%s", htmlWarnStartPattern());
-htmlVaParagraph(format,args);
+// old way htmlVaParagraph(format,args); cannot use without XSS-protections
+fputs("<P>", stdout);
+htmlVaEncodeErrorText(format,args);
+fputs("</P>\n", stdout);
 printf("%s", htmlWarnEndPattern());
 }
 
@@ -751,7 +827,7 @@ if (printDocType)
 #endif///ndef TOO_TIMID_FOR_CURRENT_HTML_STANDARDS
     }
 fputs("<HTML>", f);
-fprintf(f,"<HEAD>\n%s<TITLE>%s</TITLE>\n", head, title);
+htmlFprintf(f,"<HEAD>\n%s|none|<TITLE>%s</TITLE>\n", head, title); // TODO "head" var. not XSS safe
 if (endsWith(title,"Login - UCSC Genome Browser")) 
     fprintf(f,"\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(f, "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
@@ -1118,7 +1194,7 @@ int vaHtmlSafefNoAbort(char* buffer, int bufSize, char *format, va_list args, bo
 int formatLen = strlen(format);
 
 char *newFormat = NULL;
-int newFormatSize = 2*formatLen + 1;
+int newFormatSize = 3*formatLen + 1;
 newFormat = needMem(newFormatSize);
 char *nf = newFormat;
 char *lastPct = NULL;

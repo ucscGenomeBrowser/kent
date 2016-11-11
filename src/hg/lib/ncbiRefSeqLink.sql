@@ -21,8 +21,11 @@ CREATE TABLE ncbiRefSeqLink (
     gene_biotype varchar(255) not null,	# bio type: protein_coding, pseudogene, C_region, J_segment_pseudogene, other
     gene_synonym varchar(255) not null,	# list of synonym names
     ncrna_class varchar(255) not null,	# type of RNA: miRNA, lncRNA, snoRNA, etc...
-    note varchar(255) not null,	# other notes from genbank record
+    note longblob not null,	        # other notes from genbank record
     description longblob not null,	# description from rna gbff record via gbProcess
               #Indices
-    PRIMARY KEY(id)
+    PRIMARY KEY(id),
+    index(name),
+    index(mrnaAcc),
+    index(protAcc)
 );

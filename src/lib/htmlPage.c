@@ -24,6 +24,7 @@
 #include "obscure.h"
 #include "filePath.h"
 #include "net.h"
+#include "htmshell.h"
 #include "htmlPage.h"
 
 
@@ -633,6 +634,7 @@ for (;;)
 		AllocVar(att);
 		att->name = cloneString(name);
 		att->val = cloneString(val);
+		attributeDecode(att->val);
 		slAddTail(&tag->attributes, att);
 		s = e;
 		if (gotEnd)
@@ -1658,13 +1660,13 @@ static char *bodyNesters[] =
     "ADDRESS", "DIV", "H1", "H2", "H3", "H4", "H5", "H6",
     "ACRONYM", "BLOCKQUOTE", "CITE", "CODE", "DEL", "DFN"
     "DIR", "DL", "MENU", "OL", "UL", "CAPTION", "TABLE", 
-    "A", "MAP", "OBJECT", "FORM"
+    "A", "MAP", "OBJECT", "FORM", "DIV", "SCRIPT", "SVG"
 };
 
 static char *headNesters[] =
 /* Nesting tags that appear in header. */
 {
-    "TITLE",
+    "TITLE", "DIV", "SCRIPT"
 };
 
 static struct htmlTag *validateBody(struct htmlPage *page, struct htmlTag *startTag)
@@ -1689,11 +1691,13 @@ checkTagIsInside(page, "DIR MENU OL UL", "LI", startTag, endTag);
 checkTagIsInside(page, "DL", "DD DT", startTag, endTag);
 checkTagIsInside(page, "COLGROUP TABLE", "COL", startTag, endTag);
 checkTagIsInside(page, "MAP", "AREA", startTag, endTag);
+#ifdef OLD   /* These days input type controls allowed outside forms because of javascript */
 checkTagIsInside(page, "FORM SCRIPT", 
 	"INPUT BUTTON /BUTTON OPTION SELECT /SELECT TEXTAREA /TEXTAREA"
 	"FIELDSET /FIELDSET"
 	, 
 	startTag, endTag);
+#endif /* OLD */
 validateNestingTags(page, startTag, endTag, bodyNesters, ArraySize(bodyNesters));
 return endTag->next;
 }
@@ -1767,6 +1771,16 @@ for (link = linkList; link != NULL; link = link->next)
 slFreeList(&linkList);
 }
 
+static struct htmlTag *nextTagOfTypeInList(struct htmlTag *tagList, char *type)
+/* Return next tag of given type in list or NULL if none. */
+{
+struct htmlTag *tag;
+for (tag = tagList; tag != NULL; tag = tag->next)
+    if (sameString(tag->name, type))
+	return tag;
+return NULL;
+}
+
 static int countTagsOfType(struct htmlTag *tagList, char *type)
 /* Count number of tags of given type. */
 {
@@ -1820,11 +1834,12 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	errAbort("No tags");
     if (!sameWord(tag->name, "HTML"))
 	errAbort("Doesn't start with <HTML> tag");
-    tag = tag->next;
-    if (tag == NULL || !sameWord(tag->name, "HEAD"))
-	warn("<HEAD> tag does not immediately follow <HTML> tag");
+    struct htmlTag *headTag = nextTagOfTypeInList(tag->next, "HEAD");
+    if (headTag == NULL)
+        warn("No <HEAD> tag after <HTML> tag");
     else
 	{
+	tag = headTag;
 	for (;;)
 	    {
 	    tag = tag->next;
@@ -1840,7 +1855,7 @@ if (contentType == NULL || startsWith("text/html", contentType))
 	validateNestingTags(page, page->tags, tag, headNesters, ArraySize(headNesters));
 	tag = tag->next;
 	}
-    if (tag == NULL || !sameWord(tag->name, "BODY"))
+    if ((tag = nextTagOfTypeInList(tag, "BODY")) == NULL)
 	errAbort("<BODY> tag does not follow <HTML> tag");
     tag = validateBody(page, tag->next);
     if (tag == NULL || !sameWord(tag->name, "/HTML"))

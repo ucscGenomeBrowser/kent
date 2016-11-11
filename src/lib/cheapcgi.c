@@ -1559,7 +1559,14 @@ cgiMakeTextAreaDisableable(varName, initialVal, rowCount, columnCount, FALSE);
 
 void cgiMakeTextAreaDisableable(char *varName, char *initialVal, int rowCount, int columnCount, boolean disabled)
 /* Make a text area that can be disabled. The area has rowCount X
- * columnCount and with text: intialVal */
+ * columnCount and with text: intialVal
+ *
+ * We found out the hard way be very careful with linefeeds and their encoding inside the text "initialVal".
+ * All browsers submit the textarea values with CR LF newlines.
+ * If there is a lone CR or LF, the browser will insert the missing partner to form a new CR LF pair. 
+ * This can lead to exponential doubling of newline characters or their html entities,
+ * if one of CR or LF is encoded and the other is not.
+ */
 {
 htmlPrintf("<TEXTAREA NAME='%s|attr|' ROWS=%d COLS=%d %s|none|>%s</TEXTAREA>", varName,
        rowCount, columnCount, disabled ? "DISABLED" : "",
@@ -1577,7 +1584,7 @@ if (initialVal == NULL)
 if (charSize == 0) charSize = strlen(initialVal);
 if (charSize == 0) charSize = 8;
 
-htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s'", varName,
+htmlPrintf("<INPUT TYPE=TEXT NAME='%s|attr|' SIZE=%d VALUE='%s|attr|'", varName,
         charSize, initialVal);
 if (isNotEmpty(script))
     printf(" onkeypress='%s'", script); // TODO XSS
@@ -1601,7 +1608,7 @@ if (width==0)
 if (width==0)
     width = 100;
 
-htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s'",
+htmlPrintf("<INPUT TYPE=TEXT class='inputBox' NAME='%s|attr|' style='width:%dpx' VALUE='%s|attr|'",
        varName, width, initialVal);
 if (isNotEmpty(extra))
     printf(" %s",extra); // TODO XSS

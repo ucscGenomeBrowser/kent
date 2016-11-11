@@ -10,11 +10,13 @@ This track shows the <B>allelic variants</B> in the Online Mendelian Inheritance
  
 <H2>Display Conventions and Configuration</H2>
 
-<P>Genomic positions of OMIM allelic variant SNPs are marked by solid blocks, which appear
+<P>Genomic positions of OMIM allelic variants are marked by solid blocks, which appear
 as tick marks when zoomed out.  
 <P> The details page for each variant displays the allelic variant description, the amino
-acid replacement, and the dbSNP identifier, with a link to that SNP's details page in the
-&quot;All SNPs (137)&quot; track.
+acid replacement, and the associated
+<a href="http://www.ncbi.nlm.nih.gov/projects/SNP/" target="_blank">dbSNP</a> and/or
+<a href="https://www.ncbi.nlm.nih.gov/clinvar/" target="_blank">ClinVar</a> identifiers with links to the
+variant's details at those resources.
 </P>
 <P>The descriptions of OMIM entries are shown on the main browser display when Full display
 mode is chosen.  In Pack mode, the descriptions are shown when mousing over each entry.
@@ -26,8 +28,8 @@ This track was constructed as follows:
 <UL>
 <LI>The OMIM allelic variant data file <TT>mimAV.txt</TT> was obtained from OMIM and
 loaded into the MySQL table <TT>omimAv</TT>.
-<LI>The genomic position for each allelic variant SNP in <TT>omimAv</TT> with an associated
-dbSnp identifier was obtained from the <TT>snp137</TT> table. The OMIM AV identifiers and
+<LI>The genomic position for each allelic variant in <TT>omimAv</TT> with an associated
+dbSnp identifier was obtained from the <TT>snp144</TT> table. The OMIM AV identifiers and
 their corresponding genomic positions from dbSNP were then loaded into the <TT>omimAvSnp</TT>
 table.
 </UL>

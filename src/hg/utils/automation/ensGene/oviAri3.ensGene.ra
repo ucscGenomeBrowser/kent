@@ -1,0 +1,6 @@
+# required db variable
+db oviAri3
+
+# remove the first .1 from the contig names in the Ensembl GTF file
+# correct name for chrM, add chrUn_ to the contigs and chr to the chrom names
+nameTranslation "s/^\([0-9X]\)/chr\1/; s/\.1//; s/MT/chrM/; s/^\([JA]\)/chrUn_\1/;"
