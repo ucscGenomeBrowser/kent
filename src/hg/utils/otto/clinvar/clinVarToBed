@@ -320,6 +320,8 @@ for line in ifh:
         geneStr = "not shown, too many genes"
         
     name = varId+"|"+name
+    otherIds = otherIds.replace(",", ", ")
+
     row = [chrom, start, end, shortName, score, strand, thickStart, thickEnd, itemRgb, \
         blockCount, blockSizes, blockStarts,
         name, clinSign, allType, geneStr,
