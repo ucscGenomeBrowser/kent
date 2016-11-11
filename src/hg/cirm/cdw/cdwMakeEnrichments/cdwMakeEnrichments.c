@@ -432,6 +432,19 @@ for (et = etList; et != NULL; et = et->next)
 return targetList;
 }
 
+char *ignoredFormats[] = {
+	"idat",
+	"customTrack",
+	"rcc",
+	"kallisto_abundance",
+	"expression_matrix",
+	"bam.bai",
+	"vcf.gz.tbi",
+	"text",
+	"html",
+	"unknown",
+	};
+
 void doEnrichments(struct sqlConnection *conn, struct cdwFile *ef, char *path, 
     struct hash *assemblyToTarget)
 /* Calculate enrichments on for all targets file. The targetList and the
@@ -492,24 +505,8 @@ if (!isEmpty(vf->enrichedIn) && !sameWord(vf->ucscDb, "unknown") && !isEmpty(vf-
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
 	else if (sameString(format, "vcf"))
 	    doEnrichmentsFromSampleBed(conn, ef, vf, assembly, targetList);
-	else if (sameString(format, "idat"))
-	    verbose(2, "Ignoring idat %s, in doEnrichments.", ef->cdwFileName);
-	else if (sameString(format, "customTrack"))
-	    verbose(2, "Ignoring customTrack %s, in doEnrichments.", ef->cdwFileName);
-	else if (sameString(format, "rcc"))
-	    verbose(2, "Ignoring rcc %s, in doEnrichments.", ef->cdwFileName);
-	else if (sameString(format, "kallisto_abundance"))
-	    verbose(2, "Ignoring kallisto_abundance %s, in doEnrichments.", ef->cdwFileName);
-	else if (sameString(format, "expression_matrix"))
-	    verbose(2, "Ignoring expression_matrix %s, in doEnrichments.", ef->cdwFileName);
-	else if (sameString(format, "bam.bai"))
-	    verbose(2, "Ignoring bam.bai %s, in doEnrichments - just and index file.", 
-		ef->cdwFileName);
-	else if (sameString(format, "vcf.gz.tbi"))
-	    verbose(2, "Ignoring vcf.gz.tbi %s, in doEnrichments - just and index file.", 
-		ef->cdwFileName);
-	else if (sameString(format, "unknown"))
-	    verbose(2, "Unknown format in doEnrichments(%s), that's ok.", ef->cdwFileName);
+	else if (stringIx(format, ignoredFormats) >= 0)
+	    verbose(2, "Ignoring %s %s in doEnrichments, that's ok", format, ef->cdwFileName);
 	else
 	    errAbort("Unrecognized format %s in doEnrichments(%s)", format, path);
 	}

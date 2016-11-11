@@ -34,6 +34,7 @@
 #include "intValTree.h"
 #include "tagStorm.h"
 #include "cdwLib.h"
+#include "trashDir.h"
 
 
 /* System globals - just a few ... for now.  Please seriously not too many more. */
@@ -1525,11 +1526,14 @@ else
     /* The revalidation case relies on cdwMakeValidFile to update the cdwValidFile table.
      * Here we must do it ourselves. */
     struct cdwValidFile *vf = cdwValidFileFromFileId(conn, ef->id);
-    struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
-    cdwValidFileFieldsFromTags(vf, tags);
-    cdwValidFileUpdateDb(conn, vf, vf->id);
-    cgiParsedVarsFreeList(&tags);
-    cdwValidFileFree(&vf);
+    if (vf != NULL)
+	{
+	struct cgiParsedVars *tags = cdwMetaVarsList(conn, ef);
+	cdwValidFileFieldsFromTags(vf, tags);
+	cdwValidFileUpdateDb(conn, vf, vf->id);
+	cgiParsedVarsFreeList(&tags);
+	cdwValidFileFree(&vf);
+	}
     }
 }
 
@@ -2190,3 +2194,124 @@ if (metaCgi != NULL)
 return tagsList;
 }
 
+static int matchCount = 0;
+static boolean doSelect = FALSE;
+static boolean first = TRUE; 
+
+static void rMatchesToRa(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm)
+/* Recursively traverse stanzas on list outputting matching stanzas as ra. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > matchCount)
+	{
+	if (stanza->children)
+	    rMatchesToRa(tags, stanza->children, rql, lm);
+	else    /* Just apply query to leaves */
+	    {
+	    if (cdwRqlStatementMatch(rql, stanza, lm))
+		{
+		++matchCount;
+		if (doSelect)
+		    {
+		    struct slName *field;
+		    for (field = rql->fieldList; field != NULL; field = field->next)
+			{
+			char *val = tagFindVal(stanza, field->name);
+			if (val != NULL)
+			    printf("%s\t%s\n", field->name, val);
+			}
+		    printf("\n");
+		    }
+		}
+	    }
+	}
+    }
+}
+
+
+static void rMatchesToTsv(struct tagStorm *tags, struct tagStanza *list, 
+    struct rqlStatement *rql, struct lm *lm)
+/* Recursively traverse stanzas on list outputting matching stanzas as a tsv file. */
+{
+struct tagStanza *stanza;
+for (stanza = list; stanza != NULL; stanza = stanza->next)
+    {
+    if (rql->limit < 0 || rql->limit > matchCount)  // We are inside the acceptable limit
+	{
+	if (stanza->children) // Recurse till we have just leaves. 
+	    rMatchesToTsv(tags, stanza->children, rql, lm);
+	else    /* Just apply query to leaves */
+	    {
+	    if (cdwRqlStatementMatch(rql, stanza, lm))
+		{
+		++matchCount;
+		if (doSelect)
+		    {
+		    struct slName *field;
+		    if (first)// For the first stanza print out a header line. 
+			{
+			first = FALSE;
+			printf("#"); 
+			for (field = rql->fieldList; field != NULL; field = field->next)
+			    {
+			    printf("%s\t", field->name); 
+			    }
+			printf("\n"); 
+			for (field = rql->fieldList; field != NULL; field = field->next)
+			    {
+			    char *val = tagFindVal(stanza, field->name);
+			    if (val != NULL)
+				printf("%s\t",  val);
+			    else 
+				printf("null\t"); 
+			    }
+			}
+		    else
+			{
+			for (field = rql->fieldList; field != NULL; field = field->next)
+			    {
+			    char *val = tagFindVal(stanza, field->name);
+			    if (val != NULL)
+				printf("%s\t", val);
+			    else 
+				printf("null\t"); 
+			    }
+			}
+		    printf("\n");
+		    }
+		}
+	    }
+	}
+    }
+}
+
+void cdwPrintMatchingStanzas(char *rqlQuery, int limit, struct tagStorm *tags, char *format)
+/* Show stanzas that match query */
+{
+struct dyString *dy = dyStringCreate("%s", rqlQuery);
+int maxLimit = 10000;
+if (limit > maxLimit)
+    limit = maxLimit;
+struct rqlStatement *rql = rqlStatementParseString(dy->string);
+
+/* Get list of all tag types in tree and use it to expand wildcards in the query
+ * field list. */
+struct slName *allFieldList = tagStormFieldList(tags);
+slSort(&allFieldList, slNameCmpCase);
+rql->fieldList = wildExpandList(allFieldList, rql->fieldList, TRUE);
+/* Traverse tag tree outputting when rql statement matches in select case, just
+ * updateing count in count case. */
+doSelect = sameWord(rql->command, "select");
+if (doSelect)
+    rql->limit = limit;
+struct lm *lm = lmInit(0);
+if (!strcmp(format, "ra"))
+    rMatchesToRa(tags, tags->forest, rql, lm);
+if (!strcmp(format, "tsv"))
+    rMatchesToTsv(tags, tags->forest, rql, lm); 
+if (sameWord(rql->command, "count"))
+    printf("%d\n", matchCount);
+}

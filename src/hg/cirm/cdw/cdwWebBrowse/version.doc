@@ -1,0 +1,5 @@
+0.52  Nov 6 2016
+   - Fixed a security hole where people could mangle a URL and gain access to unauthorized files.
+   - Added new help page
+   - Added new Analysis pull down in place of Query to accommodate as yet blank
+        joint dataset page.

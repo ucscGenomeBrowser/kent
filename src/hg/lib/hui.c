@@ -1145,7 +1145,7 @@ else if (gotCds)
         disabled = "disabled";
     printf("<br /><b><span id='%sCodonNumberingLabel' %s>Show codon numbering</b>:</span>\n", 
                 name, curOpt == baseColorDrawOff ? "class='disabled'" : "");
-    cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, FALSE), disabled);
+    cgiMakeCheckBoxJS(buf, cartUsualBooleanClosestToHome(cart, tdb, FALSE, CODON_NUMBERING_SUFFIX, TRUE), disabled);
     }
 else if (gotSeq)
     {
@@ -8142,17 +8142,17 @@ char * setting = trackDbSetting(tdb, "pennantIcon");
 if (setting != NULL)
     {
     setting = cloneString(setting);
-    char *icon = htmlEncode(nextWord(&setting));
+    char *icon = nextWord(&setting);
     char buffer[4096];
     char *src = NULL;
     
     if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
         startsWith("https://", icon))
-        src = icon;
+        src = htmlEncode(icon);
     else
         {
         safef(buffer, sizeof buffer, "../images/%s", icon);
-        src = buffer;
+        src = htmlEncode(buffer);
         }
 
     char *url = NULL;
@@ -8201,14 +8201,14 @@ if (setting != NULL)
     setting = cloneString(setting);
     char buffer[4096];
     char *src = NULL;
-    char *icon = htmlEncode(nextWord(&setting));
+    char *icon = nextWord(&setting);
     if (startsWith("http://", icon) || startsWith("ftp://", icon) ||
         startsWith("https://", icon))
-        src = icon;
+        src = htmlEncode(icon);
     else
         {
         safef(buffer, sizeof buffer, "../images/%s", icon);
-        src = buffer;
+        src = htmlEncode(buffer);
         }
 
     if (setting)

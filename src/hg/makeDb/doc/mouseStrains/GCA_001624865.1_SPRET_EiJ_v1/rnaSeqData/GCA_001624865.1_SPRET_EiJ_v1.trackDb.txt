@@ -1,0 +1,143 @@
+track rnaSeqStar
+compositeTrack on
+group regulation
+shortLabel RNAseq
+longLabel RNAseq analysis and raw data
+subGroup1 view Views expression=Expression junction=Splice_Junctions alignment=Alignments
+subGroup2 tissue Tissue brain=brain liver=liver
+dimensions dimensionX=view dimensionY=tissue
+sortOrder view=+ tissue=+
+visibility full
+dragAndDrop subTracks
+type bed 3
+noInherit on
+html html/rnaSeqStar
+
+    track GCA_001624865.1_SPRET_EiJ_v1ExpressionStar
+    shortLabel GCA_001624865.1_SPRET_EiJ_v1 Expression
+    view expression
+    visibility dense
+    subTrack rnaSeqStar
+    maxHeightPixels 100:24:16
+    autoScale on
+
+        track wigStar_GCA_001624865.1_SPRET_EiJ_v1_brain
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 brain Expression
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_brain_Expression
+        parent GCA_001624865.1_SPRET_EiJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/brain.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=brain
+
+        track wigStar_GCA_001624865.1_SPRET_EiJ_v1_liver
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver Expression
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_liver_Expression
+        parent GCA_001624865.1_SPRET_EiJ_v1ExpressionStar off
+        type bigWig
+        bigDataUrl rnaSeqData/liver.normalized_average_expression.bw
+        color 153,38,0
+        subGroups view=expression tissue=liver
+
+    track GCA_001624865.1_SPRET_EiJ_v1_Alignments
+    shortLabel Raw Alignments
+    view alignment
+    visibility hide
+    subTrack rnaSeqStar
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_brain_ERR033012
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 brain RNASeq Alignments ERR033012
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_ERR033012
+        bigDataUrl rnaSeqData/brain.ERR033012.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_brain_ERR033013
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 brain RNASeq Alignments ERR033013
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_ERR033013
+        bigDataUrl rnaSeqData/brain.ERR033013.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=brain
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_liver_16493_7_1
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver RNASeq Alignments 16493_7_1
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_16493_7_1
+        bigDataUrl rnaSeqData/liver.16493_7_1.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_liver_ERR476403
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver RNASeq Alignments ERR476403
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_ERR476403
+        bigDataUrl rnaSeqData/liver.ERR476403.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_liver_ERR476405
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver RNASeq Alignments ERR476405
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_ERR476405
+        bigDataUrl rnaSeqData/liver.ERR476405.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+        track bamstar_GCA_001624865.1_SPRET_EiJ_v1_liver_ERR476407
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver RNASeq Alignments ERR476407
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_RNASeq_ERR476407
+        bigDataUrl rnaSeqData/liver.ERR476407.sortedByCoord.out.bam
+        parent GCA_001624865.1_SPRET_EiJ_v1_Alignments off
+        subGroups view=alignment tissue=liver
+        type bam
+        indelDoubleInsert on
+        indelQueryInsert on
+        showNames off
+        pairEndsByName on
+
+    track GCA_001624865.1_SPRET_EiJ_v1_SpliceJunctions
+    shortLabel Splice Junctions
+    view junction
+    visibility squish
+    subTrack rnaSeqStar
+
+        track GCA_001624865.1_SPRET_EiJ_v1_brain_SpliceJunctions
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 brain STAR Splice Junctions
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_brain_Splice_Junctions
+        parent GCA_001624865.1_SPRET_EiJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/brain.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=brain
+
+        track GCA_001624865.1_SPRET_EiJ_v1_liver_SpliceJunctions
+        longLabel GCA_001624865.1_SPRET_EiJ_v1 liver STAR Splice Junctions
+        shortLabel GCA_001624865.1_SPRET_EiJ_v1_liver_Splice_Junctions
+        parent GCA_001624865.1_SPRET_EiJ_v1_SpliceJunctions off
+        bigDataUrl rnaSeqData/liver.filtered_splice_junctions.bb
+        type bigBed 12
+        colorByStrand 255,0,0 0,0,255
+        subGroups view=junction tissue=liver
+
