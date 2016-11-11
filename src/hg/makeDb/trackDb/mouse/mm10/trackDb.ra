@@ -359,3 +359,5 @@ group varRep
 type vcfTabix
 visibility hide
 hapClusterHeight 78
+
+include mouseStrains.cactus.trackDb.ra
